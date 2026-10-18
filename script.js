@@ -3,7 +3,7 @@
    ============================================================ */
 "use strict";
 
-var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzB0v37m5pC0jSnEmCEllIlN3IlRmgOhaPEW9giHbS6wNIYFHClxJv8Z5HyG4-AJBpdaQ/exec";
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx78bq_UH8XQzkYEZZcbDQ8_nmLku4xGF74iCqidEHUeEMRd8hkdKqUZEt-Vro9ygAZ/exec";
 var state = { 
   student: null, staff: null, progress: {}, results: {}, selfResults: {}, 
   practicalsDone: {}, practicalGrades: {}, requests: {}, allowedAttempts: {},
