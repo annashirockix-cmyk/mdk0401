@@ -1,704 +1,569 @@
 /* ============================================================
-   SPA-роутер и рендер МДК 04.01
-   Диагностика, планирование, организация работ и контроль
-   качества по ТО оборудования машиностроительного производства
-   + авторизация, трекинг результатов, отправка отчёта
+   МДК 04.01 — script.js
    ============================================================ */
+"use strict";
 
-const REPORT_EMAIL = "camelia.2110@yandex.ru";
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzB0v37m5pC0jSnEmCEllIlN3IlRmgOhaPEW9giHbS6wNIYFHClxJv8Z5HyG4-AJBpdaQ/exec";
-
-const state = {
-  student: JSON.parse(localStorage.getItem("mdk0401.student") || "null"),
-  progress: JSON.parse(localStorage.getItem("mdk0401.progress") || "{}"),
-  results: JSON.parse(localStorage.getItem("mdk0401.results") || "{}"),
-  selfResults: JSON.parse(localStorage.getItem("mdk0401.selfResults") || "{}")
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzB0v37m5pC0jSnEmCEllIlN3IlRmgOhaPEW9giHbS6wNIYFHClxJv8Z5HyG4-AJBpdaQ/exec";
+var state = { 
+  student: null, staff: null, progress: {}, results: {}, selfResults: {}, 
+  practicalsDone: {}, practicalGrades: {}, requests: {}, allowedAttempts: {},
+  favorites: [], xp: 0, shop: [], achievements: {},
+  loginStreak: 0, lastLoginDate: null, nick: null, sign: null,
+  notifications: [], schedule: [] 
 };
 
-function saveStudent(){ localStorage.setItem("mdk0401.student", JSON.stringify(state.student)); }
-function saveProgress(){ localStorage.setItem("mdk0401.progress", JSON.stringify(state.progress)); }
-function saveResults(){ localStorage.setItem("mdk0401.results", JSON.stringify(state.results)); }
-function saveSelfResults(){ localStorage.setItem("mdk0401.selfResults", JSON.stringify(state.selfResults)); }
+try { var _s = JSON.parse(localStorage.getItem("mdk0401.student") || "null"); if (_s && _s.name) state.student = _s; } catch (e){}
+try { var _st = JSON.parse(sessionStorage.getItem("mdk0401.staff") || "null"); if (_st && _st.role) state.staff = _st; } catch (e){}
 
-function el(html){
-  const t = document.createElement("template");
-  t.innerHTML = html.trim();
-  return t.content.firstChild;
+// --- УТИЛИТЫ ---
+function getCourse(){ try { return COURSE; } catch(e){} try { return window.COURSE; } catch(e){} return null; }
+function $(id){ return document.getElementById(id); }
+function el(html){ var t = document.createElement("template"); t.innerHTML = String(html).trim(); return t.content.firstChild; }
+function escapeHtml(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function findTopic(id){ var c = getCourse(); if (!c) return null; for (var i = 0; i < c.sections.length; i++){ if (!c.sections[i].topics) continue; for (var j = 0; j < c.sections[i].topics.length; j++){ if (c.sections[i].topics[j].id === id) return { section: c.sections[i], topic: c.sections[i].topics[j] }; } } return null; }
+function studentKey(s){ s = s || state.student; if (!s || !s.name) return null; return (s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase()); }
+
+window.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IMG') { e.target.style.display = 'none'; }
+}, true);
+
+window.showToast = function(msg, type) {
+  var container = document.querySelector(".toast-container");
+  if (!container) { container = document.createElement("div"); container.className = "toast-container"; document.body.appendChild(container); }
+  var toast = document.createElement("div"); toast.className = "toast " + (type || "");
+  toast.innerHTML = (type === "ok" ? "✅ " : type === "err" ? "❌ " : "ℹ️ ") + escapeHtml(msg);
+  container.appendChild(toast);
+  setTimeout(function() { toast.classList.add("out"); setTimeout(function() { if (toast.parentNode) toast.remove(); }, 300); }, 3000);
+};
+
+// --- УВЕДОМЛЕНИЯ ---
+window.addNotification = function(text, type = "info") {
+    if (!state.notifications) state.notifications = [];
+    state.notifications.unshift({ id: Date.now(), text: text, type: type, date: new Date().toISOString(), read: false });
+    if (state.notifications.length > 50) state.notifications.pop();
+    saveStudentData();
+    updateNotifBadge();
+};
+
+function updateNotifBadge() {
+    var badge = $("notifBadge");
+    if (!badge) return;
+    var unread = state.notifications.filter(n => !n.read).length;
+    if (unread > 0) { badge.textContent = unread; badge.style.display = "inline-block"; } 
+    else { badge.style.display = "none"; }
 }
 
-function findTopic(id){
-  for (const s of COURSE.sections)
-    for (const t of s.topics) if (t.id === id) return { section: s, topic: t };
-  return null;
-}
-
-/* ============================================================
-   АВТОРИЗАЦИЯ
-   ============================================================ */
-function initAuth(){
-  const overlay = document.getElementById("loginOverlay");
-  const nameInput = document.getElementById("loginName");
-  const groupInput = document.getElementById("loginGroup");
-  const btn = document.getElementById("loginBtn");
-
-  if (!state.student){
-    overlay.hidden = false;
-    document.body.style.overflow = "hidden";
-    if (nameInput) nameInput.focus();
-  } else {
-    overlay.hidden = true;
-    document.body.style.overflow = "";
-  }
-
-  btn.addEventListener("click", ()=>{
-    const name = (nameInput.value || "").trim();
-    const group = (groupInput.value || "").trim();
-    if (!name || name.length < 3){
-      nameInput.focus();
-      nameInput.style.borderColor = "var(--err)";
-      return;
-    }
-    if (!group || group.length < 2){
-      groupInput.focus();
-      groupInput.style.borderColor = "var(--err)";
-      return;
-    }
-    state.student = { name, group, loginAt: new Date().toISOString() };
-    saveStudent();
-    overlay.hidden = true;
-    document.body.style.overflow = "";
-    renderUserChip();
-    renderHome();
-  });
-
-  [nameInput, groupInput].forEach(inp=>{
-    if (!inp) return;
-    inp.addEventListener("keydown", (e)=>{
-      if (e.key === "Enter") btn.click();
+// --- ДОСТИЖЕНИЯ ---
+function checkAchievements() {
+    var achList = [
+        { id: "t1", xp: 10, title: "Новичок" },
+        { id: "t2", xp: 50, title: "Студент" },
+        { id: "t3", xp: 100, title: "Книжный червь" },
+        { id: "t4", xp: 200, title: "Умник" },
+        { id: "t5", xp: 500, title: "Знаток" },
+        { id: "t6", xp: 1000, title: "Мастер" }
+    ];
+    achList.forEach(a => {
+        if (state.xp >= a.xp && !state.achievements[a.id]) {
+            state.achievements[a.id] = true;
+            window.showToast("🏆 Достижение: " + a.title + "!", "ok");
+            addNotification("Получено достижение: " + a.title, "ok");
+        }
     });
-    inp.addEventListener("input", ()=>{ inp.style.borderColor = ""; });
-  });
+}
 
-  const chip = document.getElementById("userChip");
-  if (chip){
-    chip.addEventListener("click", ()=>{
-      if (!confirm("Сменить пользователя? Прогресс текущего пользователя будет сохранён.")) return;
-      state.student = null;
-      saveStudent();
-      const ov = document.getElementById("loginOverlay");
-      ov.hidden = false;
-      document.body.style.overflow = "hidden";
-      document.getElementById("loginName").value = "";
-      document.getElementById("loginGroup").value = "";
-      document.getElementById("loginName").focus();
-    });
+// --- ЗАГРУЗКА И СОХРАНЕНИЕ ---
+function loadStudentData(){
+  var k = studentKey(); if (!k) return; var ek = encodeURIComponent(k);
+  state.progress = JSON.parse(localStorage.getItem("mdk0401.progress." + ek) || "{}");
+  state.results = JSON.parse(localStorage.getItem("mdk0401.results." + ek) || "{}");
+  state.selfResults = JSON.parse(localStorage.getItem("mdk0401.selfResults." + ek) || "{}");
+  state.practicalsDone = JSON.parse(localStorage.getItem("mdk0401.practicalsDone." + ek) || "{}");
+  state.practicalGrades = JSON.parse(localStorage.getItem("mdk0401.practicalGrades." + ek) || "{}");
+  state.requests = JSON.parse(localStorage.getItem("mdk0401.requests." + ek) || "{}");
+  state.allowedAttempts = JSON.parse(localStorage.getItem("mdk0401.allowedAttempts." + ek) || "{}");
+  state.achievements = JSON.parse(localStorage.getItem("mdk0401.achievements." + ek) || "{}");
+  state.nick = localStorage.getItem("mdk0401.nick." + ek) || null;
+  state.sign = localStorage.getItem("mdk0401.sign." + ek) || null;
+  state.notifications = JSON.parse(localStorage.getItem("mdk0401.notifications." + ek) || "[]");
+  state.schedule = JSON.parse(localStorage.getItem("mdk0401.schedule") || "[]");
+  state.xp = parseInt(localStorage.getItem("mdk0401.xp." + ek) || "0");
+  state.shop = JSON.parse(localStorage.getItem("mdk0401.shop." + ek) || "[]");
+  state.loginStreak = parseInt(localStorage.getItem("mdk0401.loginStreak." + ek) || "0");
+  state.lastLoginDate = localStorage.getItem("mdk0401.lastLoginDate." + ek) || null;
+  
+  if ($("xpCount")) $("xpCount").textContent = "🌟 " + state.xp + " XP";
+  updateNotifBadge();
+}
+
+function saveStudentData(){
+  var k = studentKey(); if (!k) return; var ek = encodeURIComponent(k);
+  localStorage.setItem("mdk0401.progress." + ek, JSON.stringify(state.progress));
+  localStorage.setItem("mdk0401.results." + ek, JSON.stringify(state.results));
+  localStorage.setItem("mdk0401.selfResults." + ek, JSON.stringify(state.selfResults));
+  localStorage.setItem("mdk0401.practicalsDone." + ek, JSON.stringify(state.practicalsDone));
+  localStorage.setItem("mdk0401.practicalGrades." + ek, JSON.stringify(state.practicalGrades));
+  localStorage.setItem("mdk0401.requests." + ek, JSON.stringify(state.requests));
+  localStorage.setItem("mdk0401.allowedAttempts." + ek, JSON.stringify(state.allowedAttempts));
+  localStorage.setItem("mdk0401.achievements." + ek, JSON.stringify(state.achievements));
+  localStorage.setItem("mdk0401.xp." + ek, state.xp);
+  localStorage.setItem("mdk0401.shop." + ek, JSON.stringify(state.shop));
+  localStorage.setItem("mdk0401.loginStreak." + ek, state.loginStreak);
+  localStorage.setItem("mdk0401.lastLoginDate." + ek, state.lastLoginDate || "");
+  if (state.nick) localStorage.setItem("mdk0401.nick." + ek, state.nick);
+  if (state.sign) localStorage.setItem("mdk0401.sign." + ek, state.sign);
+  localStorage.setItem("mdk0401.notifications." + ek, JSON.stringify(state.notifications));
+  localStorage.setItem("mdk0401.schedule", JSON.stringify(state.schedule));
+  
+  if ($("xpCount")) $("xpCount").textContent = "🌟 " + state.xp + " XP";
+  checkAchievements();
+
+  if(APPS_SCRIPT_URL && state.student) {
+    var p = new URLSearchParams();
+    p.append("action", "save"); p.append("key", k); p.append("name", state.student.name); p.append("group", state.student.group);
+    p.append("payload", JSON.stringify({ 
+      progress: state.progress, results: state.results, selfResults: state.selfResults, 
+      practicalsDone: state.practicalsDone, practicalGrades: state.practicalGrades,
+      requests: state.requests, allowedAttempts: state.allowedAttempts, favorites: state.favorites,
+      xp: state.xp, nick: state.nick, sign: state.sign, notifications: state.notifications
+    }));
+    fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).catch(function(){});
   }
 }
+
+// --- ЕЖЕДНЕВНЫЙ ВХОД ---
+function checkDailyLogin() {
+    if (!state.student) return;
+    var today = new Date().toDateString();
+    if (state.lastLoginDate !== today) {
+        var xpGained = 10; var streakMsg = "";
+        if (state.lastLoginDate) {
+            var lastDate = new Date(state.lastLoginDate); var now = new Date(today);
+            lastDate.setHours(0,0,0,0); now.setHours(0,0,0,0);
+            var diffDays = Math.round((now - lastDate) / (1000 * 60 * 60 * 24));
+            if (diffDays === 1) {
+                state.loginStreak++;
+                var bonus = Math.min(state.loginStreak * 5, 50);
+                xpGained += bonus; streakMsg = " (🔥 Серия: " + state.loginStreak + " дней! Бонус +" + bonus + " XP)";
+            } else { state.loginStreak = 1; streakMsg = " (Серия сброшена)"; }
+        } else { state.loginStreak = 1; }
+        state.lastLoginDate = today; state.xp += xpGained;
+        saveStudentData();
+        setTimeout(function() { window.showToast("Ежедневный вход: +" + xpGained + " XP" + streakMsg, "ok"); }, 1000);
+    }
+}
+
+// --- ДЕЙСТВИЯ ---
+window.markPracticalDone = function(topicId, code) {
+    if (!state.practicalsDone[topicId]) state.practicalsDone[topicId] = {};
+    state.practicalsDone[topicId][code] = "pending";
+    saveStudentData(); renderTopic(topicId, "practice");
+    window.showToast("Заявка на проверку отправлена!", "ok");
+    addNotification("Вы отправили на проверку работу " + code, "info");
+};
+
+window.requestAttempt = function(topicId, type) {
+    var reqKey = topicId + "_" + type;
+    if (!state.requests) state.requests = {};
+    state.requests[reqKey] = "pending";
+    saveStudentData(); renderTopic(topicId, type);
+    window.showToast("Запрос на доп. попытку отправлен!", "ok");
+    addNotification("Вы запросили дополнительную попытку", "info");
+};
+
+window.approvePractical = function(studentKeyStr, topicId, code, grade) {
+    var p = new URLSearchParams();
+    p.append("action", "approvework"); p.append("key", studentKeyStr); p.append("topicId", topicId); p.append("code", code); p.append("grade", grade);
+    window.showToast("Сохранение оценки...", "info");
+    fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).then(r => r.json()).then(d => {
+        if (d.ok) {
+            window.showToast("Оценка " + grade + " выставлена!", "ok");
+            var elToRemove = document.getElementById("req_" + topicId + "_" + code);
+            if (elToRemove) elToRemove.remove();
+        } else { window.showToast("Ошибка сохранения", "err"); }
+    }).catch(err => { window.showToast("Ошибка сети", "err"); });
+};
+
+window.approveAttempt = function(studentKeyStr, reqKey) {
+    var p = new URLSearchParams();
+    p.append("action", "approveattempt"); p.append("key", studentKeyStr); p.append("reqKey", reqKey);
+    var elToRemove = document.getElementById("req_" + reqKey);
+    if (elToRemove) elToRemove.remove();
+    window.showToast("Попытка одобрена!", "ok");
+    fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).catch(console.error);
+};
+
+window.grantXP = function(studentKeyStr, studentName, presetAmount) {
+    if (!state.staff) return;
+    var amount = presetAmount || prompt("Сколько XP выдать студенту " + studentName + "?", "50");
+    if (!amount || isNaN(amount) || Number(amount) <= 0) return;
+    var p = new URLSearchParams(); p.append("action", "grantxp"); p.append("key", studentKeyStr); p.append("amount", parseInt(amount));
+    window.showToast("Начисление " + amount + " XP...", "info");
+    fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).then(r => r.json()).then(d => {
+        if (d.ok) window.showToast("Успешно начислено " + amount + " XP!", "ok"); else window.showToast("Ошибка: " + (d.error || "Неизвестно"), "err");
+    }).catch(() => window.showToast("Ошибка сети.", "err"));
+};
+
+// --- ТЕМЫ ---
+function applyTheme(theme){ document.documentElement.setAttribute("data-theme", theme); localStorage.setItem("mdk0401.theme", theme); }
+function openThemeModal(){
+  var current = document.documentElement.getAttribute("data-theme") || "light";
+  var themes = ["light", "dark", "sepia", "ocean", "forest", "matrix", "cosmos", "gold", "anime", "hacker", "cyber", "matrioska"]; 
+  var names = ["Светлая", "Тёмная", "Сепия", "Океан", "Лес", "Матрица", "Космос", "Золото", "Аниме", "Хакер", "Кибер", "Матрешка"];
+  var modal = el(`<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;" id="themeModal"><div style="background:var(--card);padding:24px;border-radius:16px;width:90%;max-width:400px; animation: popIn 0.3s;"><h3 style="margin-top:0;">Выберите тему</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;" id="themeGrid"></div><button class="btn ghost" style="width:100%" onclick="document.getElementById('themeModal').remove()">Закрыть</button></div></div>`);
+  var grid = modal.querySelector("#themeGrid");
+  themes.forEach(function(t, i){ 
+      var btn = el('<button class="btn ' + (t===current ? '' : 'ghost') + '" style="padding:12px;">' + names[i] + '</button>'); 
+      btn.onclick = function() { 
+          if (!state.staff && ["matrix", "cosmos", "gold", "anime", "hacker", "cyber", "matrioska"].includes(t) && !state.shop.includes("theme_" + t)) {
+              window.showToast("Тема не куплена!", "err"); return;
+          }
+          applyTheme(t); modal.remove(); 
+      }; 
+      grid.appendChild(btn); 
+  });
+  document.body.appendChild(modal);
+}
+
+// --- ВХОД/ВЫХОД ---
+window.doStudentLogin = function() {
+  var n = $("loginName").value.trim(); var g = $("loginGroup").value.trim();
+  if (!n || !g) { alert("Введите ФИО и Группу!"); return; }
+  state.student = { name: n, group: g.toUpperCase() };
+  localStorage.setItem("mdk0401.student", JSON.stringify(state.student));
+  $("loginOverlay").hidden = true; renderUserChip(); loadStudentData(); checkDailyLogin(); route();
+};
+window.doTeacherLogin = function() {
+  var user = $("loginStaffName").value.trim(); var pass = $("loginStaffPass").value.trim(); var btn = $("staffLoginBtn");
+  if (!user || !pass) { alert("Введите логин и пароль!"); return; }
+  btn.textContent = "Проверяем..."; btn.disabled = true;
+  fetch(APPS_SCRIPT_URL + "?action=login&username=" + encodeURIComponent(user) + "&password=" + encodeURIComponent(pass) + "&t=" + new Date().getTime())
+    .then(function(r){ return r.json(); }).then(function(d) {
+      if (d && d.ok) { state.staff = { role: d.role, name: d.name }; sessionStorage.setItem("mdk0401.staff", JSON.stringify(state.staff)); $("loginOverlay").hidden = true; renderUserChip(); route(); } 
+      else { alert("Неверный логин или пароль."); btn.textContent = "Войти как сотрудник"; btn.disabled = false; }
+    }).catch(function() { alert("Ошибка сети."); btn.textContent = "Войти как сотрудник"; btn.disabled = false; });
+};
+window.handleLogout = function() {
+  if (confirm("Выйти из аккаунта?")) {
+    state.student = null; state.staff = null; localStorage.removeItem("mdk0401.student"); sessionStorage.removeItem("mdk0401.staff");
+    $("loginOverlay").hidden = false; $("userChipName").textContent = "Гость"; $("userChipGroup").textContent = "Роль: Гость"; $("userChipAvatar").textContent = "👨‍🎓"; if ($("xpCount")) $("xpCount").textContent = "🌟 0 XP"; closeDrawer(); route();
+  }
+};
 
 function renderUserChip(){
-  const chip = document.getElementById("userChip");
-  const nameEl = document.getElementById("userChipName");
-  const groupEl = document.getElementById("userChipGroup");
-  if (!chip || !state.student) return;
-  chip.hidden = false;
-  nameEl.textContent = state.student.name;
-  groupEl.textContent = "Гр. " + state.student.group;
-}
-
-/* ============================================================
-   ТЕМА (светлая / тёмная)
-   ============================================================ */
-function initTheme(){
-  const saved = localStorage.getItem("mdk0401.theme");
-  const systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  applyTheme(saved || (systemDark ? "dark" : "light"));
-  const btn = document.getElementById("themeToggle");
-  if (btn) btn.addEventListener("click", toggleTheme);
-}
-function applyTheme(theme){
-  document.documentElement.setAttribute("data-theme", theme);
-  const icon = document.getElementById("themeIcon");
-  if (icon) icon.textContent = theme === "dark" ? "☀️" : "🌙";
-  localStorage.setItem("mdk0401.theme", theme);
-}
-function toggleTheme(){
-  const cur = document.documentElement.getAttribute("data-theme") || "light";
-  applyTheme(cur === "dark" ? "light" : "dark");
-}
-
-/* ============================================================
-   НАВИГАЦИЯ
-   ============================================================ */
-function initNav(){
-  const back = document.getElementById("navBack");
-  const fwd  = document.getElementById("navForward");
-  if (back) back.addEventListener("click", ()=>window.history.back());
-  if (fwd)  fwd.addEventListener("click", ()=>window.history.forward());
-}
-
-/* ============================================================
-   ГЛАВНАЯ
-   ============================================================ */
-function renderHome(){
-  const app = document.getElementById("app");
-  app.innerHTML = "";
-  document.getElementById("crumbs").textContent = "";
-
-  app.appendChild(el(`
-    <section class="hero">
-      <div class="meta">${COURSE.specialty} · набор 2024</div>
-      <h1>${COURSE.title}</h1>
-      <p>${COURSE.module}</p>
-      ${state.student ? `
-        <div class="hello">Вы вошли как <b>${state.student.name}</b>, группа <b>${state.student.group}</b>.</div>
-      ` : ""}
-    </section>
-  `));
-
-  app.appendChild(el(`<div class="steps-title">Как устроена тема</div>`));
-  const steps = [["01","Паспорт часов"],["02","Лекция"],["03","Практические"],["04","Самостоятельная"],["05","Контроль темы"]];
-  const stepsWrap = el(`<div class="steps"></div>`);
-  steps.forEach(([n,name])=>{
-    stepsWrap.appendChild(el(`<div class="step"><div class="num">${n}</div><div class="name">${name}</div></div>`));
-  });
-  app.appendChild(stepsWrap);
-
-  app.appendChild(el(`
-    <section class="module">
-      <div class="meta">${COURSE.module.split(" ")[0]}</div>
-      <h2>${COURSE.module}</h2>
-      <div class="kpis">
-        <div class="kpi"><div class="k-label">Всего по плану</div><div class="k-value">${COURSE.totals.plan} ч</div></div>
-        <div class="kpi"><div class="k-label">МДК</div><div class="k-value">${COURSE.totals.mdk} ч</div></div>
-        <div class="kpi"><div class="k-label">Практика</div><div class="k-value">Уч. ${COURSE.totals.uchPr} ч · Пр. ${COURSE.totals.prPr} ч</div></div>
-        <div class="kpi"><div class="k-label">Аттестация</div><div class="k-value">Экзамен ${COURSE.totals.exam} ч</div></div>
-      </div>
-      <p class="desc">Сумма по МДК: теория 82, практика 70, вместе 152. Самостоятельная работа — 8 ч.
-      Плюс учебная и производственная практика по 36 ч и комплексный экзамен 12 ч — ровно ${COURSE.totals.plan} ч.
-      Практическая подготовка модуля 70 + 36 + 36 = 142 ч.</p>
-    </section>
-  `));
-
-  // Блок «ИНФОРМАЦИЯ!»
-  if (COURSE.practiceFormatting){
-    const f = COURSE.practiceFormatting;
-    const infoBlock = el(`
-      <section class="info-block">
-        <div class="info-head">
-          <span class="info-badge">ИНФОРМАЦИЯ!</span>
-          <h2>${f.title}</h2>
-        </div>
-        <p class="info-intro">${f.intro}</p>
-        <div class="fmt-grid"></div>
-      </section>
-    `);
-    const grid = infoBlock.querySelector(".fmt-grid");
-    f.blocks.forEach(b=>{
-      grid.appendChild(el(`
-        <div class="fmt-block">
-          <h4>${b.title}</h4>
-          <ul>${b.items.map(i=>`<li>${i}</li>`).join("")}</ul>
-        </div>
-      `));
-    });
-    app.appendChild(infoBlock);
+  if (state.staff) { 
+      $("userChipName").textContent = state.staff.name; $("userChipGroup").textContent = "Учитель"; $("userChipAvatar").textContent = "👨‍🏫"; 
+      var reqEl = document.getElementById("navRequests"); if (reqEl) reqEl.style.display = "flex";
+  } 
+  else if (state.student) { 
+      $("userChipName").textContent = state.nick || state.student.name; $("userChipGroup").textContent = "Гр. " + state.student.group; 
+      if (state.shop.includes("golden") || state.staff) { $("userChipAvatar").textContent = "👑"; } else { $("userChipAvatar").textContent = "👨‍🎓"; }
   }
+  updateNotifBadge();
+}
+function closeDrawer(){ $("drawer").classList.remove("open"); $("drawerOverlay").classList.remove("open"); }
+function toggleDrawer(){ $("drawer").classList.toggle("open"); $("drawerOverlay").classList.toggle("open"); }
 
-  // Разделы и темы
-  COURSE.sections.forEach(sec=>{
-    app.appendChild(el(`<div class="steps-title">${sec.code} · ${sec.title} · ${sec.hours} ак. ч</div>`));
-    const list = el(`<div class="topics"></div>`);
-    sec.topics.forEach(t=>{
-      const totalDone = state.progress[t.id]?.done || 0;
-      const card = el(`
-        <div class="topic" data-id="${t.id}">
-          <div class="t-code">${t.code}</div>
-          <div class="t-body">
-            <div class="t-title">${t.title}</div>
-            <div class="t-meta">${t.hours.total} ак. ч / в т.ч. практическая подготовка ${t.hours.practice} ак. ч</div>
-          </div>
-          <div class="t-hours">${t.hours.total}\\${t.hours.practice}</div>
-          <div class="t-progress">${totalDone}/5</div>
-        </div>
-      `);
-      card.addEventListener("click", ()=>location.hash = "#/topic/" + t.id);
-      list.appendChild(card);
-    });
+// --- РЕНДЕР ГЛАВНОЙ ---
+function renderHome(){
+  var app = $("app"); app.innerHTML = ""; var c = getCourse();
+  if(!c) { app.innerHTML = "<p>Ошибка загрузки курса.</p>"; return; }
+  
+  app.appendChild(el('<section class="hero"><h1>' + c.title + '</h1><p>' + c.module + '</p></section>'));
+  
+  c.sections.forEach(function(sec) {
+    app.appendChild(el('<div class="steps-title">' + sec.code + ' · ' + sec.title + '</div>'));
+    var list = document.createElement("div");
+    sec.topics.forEach(function(t) { list.appendChild(el('<div class="topic" onclick="location.hash=\'#/topic/' + t.id + '\'"><span class="t-code">' + t.code + '</span><span class="t-title">' + t.title + '</span></div>')); });
     app.appendChild(list);
   });
 
-  // Паспорта станков
-  if (COURSE.passports && COURSE.passports.length){
-    app.appendChild(el(`<div class="steps-title">Паспорта станков</div>`));
-    const block = el(`<section class="module">
-      <div class="meta">Справочные материалы</div>
-      <h2>Паспорта станков</h2>
-      <p class="sub">PDF-файлы из папки <code>passport/</code>. Открываются в новой вкладке.</p>
-      <div class="doc-grid"></div>
-    </section>`);
-    const grid = block.querySelector(".doc-grid");
-    COURSE.passports.forEach(p=>{
-      grid.appendChild(el(`
-        <a class="doc-card" href="${p.file}" target="_blank" rel="noopener">
-          <div class="doc-code">${p.code}</div>
-          <div class="doc-title">${p.title}</div>
-          <div class="doc-summary">${p.summary}</div>
-          <div class="doc-action">Открыть PDF →</div>
-        </a>
-      `));
-    });
-    app.appendChild(block);
-  }
-
-  // Охрана труда
-  if (COURSE.safety && COURSE.safety.length){
-    app.appendChild(el(`<div class="steps-title">Охрана труда</div>`));
-    const block = el(`<section class="module">
-      <div class="meta">Нормативные документы</div>
-      <h2>Инструкции по охране труда</h2>
-      <p class="sub">DOCX-файлы из папки <code>ohranatruda/</code>. При клике скачиваются на компьютер.</p>
-      <div class="doc-grid"></div>
-    </section>`);
-    const grid = block.querySelector(".doc-grid");
-    COURSE.safety.forEach(s=>{
-      grid.appendChild(el(`
-        <a class="doc-card" href="${s.file}" download>
-          <div class="doc-code">${s.code}</div>
-          <div class="doc-title">${s.title}</div>
-          <div class="doc-summary">${s.summary}</div>
-          <div class="doc-action">Скачать .docx →</div>
-        </a>
-      `));
-    });
-    app.appendChild(block);
-  }
-
-  // Итоговое задание
-  if (COURSE.final){
-    app.appendChild(el(`<div class="steps-title">Итоговое задание</div>`));
-    app.appendChild(el(`
-      <section class="module">
-        <h2>${COURSE.final.title}</h2>
-        <p class="desc"><b>Задание:</b> ${COURSE.final.task}</p>
-        <h3>Требования:</h3>
-        <ul>${COURSE.final.requirements.map(r=>`<li>${r}</li>`).join("")}</ul>
-        <h3>Критерии оценки:</h3>
-        <div class="kpis">
-          ${COURSE.final.criteria.map(c=>`<div class="kpi"><div class="k-label">${c.weight}</div><div class="k-value" style="font-size:14px">${c.name}</div></div>`).join("")}
-        </div>
-        <p class="desc"><b>Срок:</b> ${COURSE.final.deadline}</p>
-      </section>
-    `));
-  }
-}
-
-/* ============================================================
-   ТЕМА
-   ============================================================ */
-function renderTopic(id, tab = "passport"){
-  const found = findTopic(id);
-  if (!found) return renderHome();
-  const { section, topic } = found;
-  const app = document.getElementById("app");
-  app.innerHTML = "";
-  document.getElementById("crumbs").textContent = topic.code + " · " + topic.title;
-
-  app.appendChild(el(`
-    <a class="backlink" href="#/" onclick="goHome(event)">← К программе</a>
-    <section class="topic-head">
-      <div class="crumb">ПМ.04 · ${topic.code} · ${section.title}</div>
-      <h1>${topic.title}</h1>
-      <div class="meta">${topic.hours.total}\\${topic.hours.practice} · ${topic.hours.total} ак. ч / в т.ч. практическая подготовка ${topic.hours.practice} ак. ч</div>
-    </section>
-  `));
-
-  const tabs = [
-    ["passport","01","Паспорт часов"],
-    ["lecture","02","Лекция"],
-    ["practice","03","Практические"],
-    ["self","04","Самостоятельная"],
-    ["test","05","Контроль темы"]
-  ];
-  const tabsWrap = el(`<div class="tabs"></div>`);
-  tabs.forEach(([key,num,name])=>{
-    const t = el(`<button class="tab ${key===tab?"active":""}"><span class="t-num">${num}</span><span class="t-name">${name}</span></button>`);
-    t.addEventListener("click", ()=>{ location.hash = `#/topic/${id}/${key}`; });
-    tabsWrap.appendChild(t);
-  });
-  app.appendChild(tabsWrap);
-
-  const panel = el(`<section class="panel"></section>`);
-  app.appendChild(panel);
-
-  if (tab === "passport") renderPassport(panel, topic);
-  if (tab === "lecture") renderLecture(panel, topic);
-  if (tab === "practice") renderPractice(panel, topic);
-  if (tab === "self") renderSelf(panel, topic);
-  if (tab === "test") renderTest(panel, topic);
-
-  markDone(topic.id, tab);
-}
-
-function markDone(topicId, tab){
-  state.progress[topicId] = state.progress[topicId] || { done: 0, tabs: {} };
-  if (!state.progress[topicId].tabs[tab]){
-    state.progress[topicId].tabs[tab] = true;
-    state.progress[topicId].done = Object.keys(state.progress[topicId].tabs).length;
-    saveProgress();
-  }
-}
-
-function renderPassport(panel, t){
-  panel.innerHTML = `
-    <h2>Паспорт часов</h2>
-    <p>Тема <b>${t.code}</b> — ${t.title}.</p>
-    <div class="kpi-row">
-      <div class="kpi"><div class="k-label">Всего по теме</div><div class="k-value">${t.hours.total} ч</div></div>
-      <div class="kpi"><div class="k-label">Теория</div><div class="k-value">${t.hours.theory} ч</div></div>
-      <div class="kpi"><div class="k-label">Практическая подготовка</div><div class="k-value">${t.hours.practice} ч</div></div>
-    </div>
-    <h3>Содержание по рабочей программе</h3>
-    <ul>${t.lectures.map(l=>`<li><b>${l.code}</b> ${l.title}</li>`).join("")}</ul>
-    ${t.practicals.length ? `<h3>Практические занятия</h3>
-    <ul>${t.practicals.map(p=>`<li><b>${p.code}</b> ${p.title}</li>`).join("")}</ul>` : ""}
-  `;
-}
-
-function renderLecture(panel, t){
-  panel.innerHTML = `<h2>Лекция</h2><p class="accent">Теория, схема, вопросы для самопроверки.</p>`;
-  t.lectures.forEach(l=>{
-    panel.appendChild(el(`<h3>${l.code}. ${l.title}</h3>`));
-    panel.appendChild(el(`<div>${l.content || "<p><i>Материал готовится.</i></p>"}</div>`));
-  });
-}
-
-function renderPractice(panel, t){
-  if (!t.practicals || !t.practicals.length){
-    panel.innerHTML = `<h2>Практические работы</h2>
-      <p class="accent">По данной теме практические занятия не предусмотрены учебным планом.</p>`;
-    return;
-  }
-  panel.innerHTML = `<h2>Практические работы с примером выполнения</h2><p class="accent">${t.hours.practice} ч практической подготовки.</p>`;
-  t.practicals.forEach(p=>{
-    const box = el(`
-      <div class="practice">
-        <div class="p-code">${p.code}</div>
-        <div class="p-title">${p.title}</div>
-        ${p.goal ? `<div class="p-goal">Цель: ${p.goal}</div>` : ""}
-        ${p.task ? `<div class="p-task"><b>Задание:</b> ${p.task}</div>` : ""}
-        ${p.example ? `<div class="p-example"><b>Пример выполнения:</b> ${p.example}</div>` : ""}
-        ${p.solution && p.solution.length ? `
-          <div class="p-solution">
-            <h4>Ход решения по этапам</h4>
-            <ol>${p.solution.map(s=>`<li>${s}</li>`).join("")}</ol>
-          </div>` : ""}
+  var eventBlock = el(`<div class="event-card" onclick="location.hash='#/event'">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+              <h2 style="margin:0 0 10px 0; font-size:24px; color:#ff003c; text-shadow: 0 0 10px rgba(255,0,60,0.5);">🚨 СМЕРТЕЛЬНАЯ ВЕЧЕРИНКА</h2>
+              <p style="margin:0; color:#aaa; font-size:14px;">Пройди викторину по диагностике, чтобы отключить протокол самоуничтожения.</p>
+          </div>
+          <div style="font-size:40px; animation: pulse 1s infinite;">💀</div>
       </div>
-    `);
-    if (p.variants && p.variants.rows && p.variants.rows.length){
-      const v = el(`<div class="variants">
-        <div class="v-title">Варианты (1–${p.variants.rows.length})</div>
-        <div class="v-scroll"></div>
-      </div>`);
-      const tbl = el(`<table class="v-table"></table>`);
-      if (p.variants.header){
-        const thead = el(`<thead><tr></tr></thead>`);
-        p.variants.header.forEach(h => thead.firstChild.appendChild(el(`<th>${h}</th>`)));
-        tbl.appendChild(thead);
-      }
-      const tbody = el(`<tbody></tbody>`);
-      p.variants.rows.forEach(row=>{
-        const tr = el(`<tr></tr>`);
-        row.forEach(cell => tr.appendChild(el(`<td>${cell}</td>`)));
-        tbody.appendChild(tr);
+      <div style="margin-top:20px; display:inline-block; background:#ff003c; color:#000; padding:8px 16px; border-radius:8px; font-weight:bold; font-size:14px;">Войти в терминал →</div>
+  </div>`);
+  app.appendChild(eventBlock);
+
+  if (c.passports && c.passports.length) {
+    app.appendChild(el('<div class="steps-title">Паспорта станков</div>'));
+    var pGrid = el('<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:16px;"></div>');
+    c.passports.forEach(function(p) {
+      var card = el('<div class="module" style="margin:0;padding:16px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;"><div><b style="color:var(--accent)">' + p.code + '</b><div style="font-weight:bold;margin:8px 0;">' + p.title + '</div><div style="font-size:12px;color:var(--muted);">' + p.summary + '</div></div><div style="margin-top:12px;color:var(--accent);font-weight:bold;">Открыть PDF →</div></div>');
+      card.onclick = (function(file) { return function() { window.open(file, "_blank"); }; })(p.file);
+      pGrid.appendChild(card);
+    });
+    app.appendChild(pGrid);
+  }
+
+  if (c.safety && c.safety.length) {
+    app.appendChild(el('<div class="steps-title">Охрана труда</div>'));
+    var sGrid = el('<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:16px;"></div>');
+    c.safety.forEach(function(s) {
+      sGrid.appendChild(el('<a class="module" href="' + s.file + '" download style="margin:0;padding:16px;display:flex;flex-direction:column;justify-content:space-between;"><div><b style="color:var(--accent)">' + s.code + '</b><div style="font-weight:bold;margin:8px 0;">' + s.title + '</div><div style="font-size:12px;color:var(--muted);">' + s.summary + '</div></div><div style="margin-top:12px;color:var(--accent);font-weight:bold;">Скачать .docx →</div></a>'));
+    });
+    app.appendChild(sGrid);
+  }
+
+  var flashCards = [
+    { q: "Что такое техническое диагностирование?", a: "Определение технического состояния объекта.", topic: "Диагностика" },
+    { q: "Какой метод основан на измерении вибрации?", a: "Виброакустический.", topic: "Методы" },
+    { q: "Что такое TPM?", a: "Всеобщее обслуживание оборудования.", topic: "ТО" },
+    { q: "Какова норма вибрации шпинделя?", a: "≤ 2,8 мм/с", topic: "Нормы" }
+  ];
+  app.appendChild(el('<div class="steps-title">Интерактив</div>'));
+  var flashBlock = el('<section class="module"><h2>🎴 Карточки знаний</h2><div class="home-flashcards-wrap" id="homeFlashcardArea"></div><div style="text-align:center;"><button class="btn ghost" id="nextHomeCard">Следующая →</button></div></section>');
+  app.appendChild(flashBlock);
+  var hArea = flashBlock.querySelector("#homeFlashcardArea"), hIndex = 0;
+  function renderHomeCard() { 
+    var card = flashCards[hIndex]; 
+    hArea.innerHTML = `<div class="flashcard" onclick="this.classList.toggle('flipped')"><div class="flashcard-inner"><div class="flashcard-front"><div style="color:var(--accent);margin-bottom:10px">${card.topic}</div><h3>${card.q}</h3></div><div class="flashcard-back"><h3>Ответ</h3><p>${card.a}</p></div></div></div>`; 
+  }
+  renderHomeCard(); 
+  flashBlock.querySelector("#nextHomeCard").addEventListener("click", ()=>{ hIndex=(hIndex+1)%flashCards.length; renderHomeCard(); });
+
+  if (c.practiceFormatting) {
+    app.appendChild(el('<div class="steps-title">' + c.practiceFormatting.title + '</div>'));
+    var fmtBlock = el('<section class="module"><p style="color:var(--text-soft); margin-bottom:20px;">' + c.practiceFormatting.intro + '</p><div id="fmtBlocks"></div></section>');
+    var fmtContainer = fmtBlock.querySelector("#fmtBlocks");
+    c.practiceFormatting.blocks.forEach(function(b) {
+      var bEl = el('<div style="margin-bottom:24px; background:var(--card-soft); padding:20px; border-radius:12px; border:1px solid var(--border);"><h3 style="margin-top:0; margin-bottom:12px; color:var(--accent);">' + b.title + '</h3><ul style="margin-top:0; padding-left:20px;"></ul></div>');
+      var ul = bEl.querySelector("ul");
+      b.items.forEach(function(item) { ul.appendChild(el('<li style="margin-bottom:8px;">' + item + '</li>')); });
+      fmtContainer.appendChild(bEl);
+    });
+    app.appendChild(fmtBlock);
+  }
+}
+
+// --- ТЕМА ---
+function renderTopic(id, tab){
+  tab = tab || "lecture"; var t = findTopic(id); if(!t) return renderHome();
+  var app = $("app"); app.innerHTML = "";
+  app.appendChild(el('<a class="backlink" href="#/">← К программе</a><section class="topic-head"><h1>' + t.topic.title + '</h1></section>'));
+  var tabs = [["lecture","01 Лекция"],["practice","02 Практика"],["self","03 Сам. работа"],["test","04 Тест"]];
+  var tw = el('<div class="tabs"></div>');
+  tabs.forEach(function(item){ tw.appendChild(el('<button class="tab ' + (item[0] === tab ? 'active' : '') + '" onclick="location.hash=\'#/topic/' + id + '/' + item[0] + '\'">' + item[1] + '</button>')); });
+  app.appendChild(tw); var panel = el('<section class="panel"></section>'); app.appendChild(panel);
+
+  if (tab === "lecture") {
+    if(t.topic.lectures) {
+      t.topic.lectures.forEach(function(l){
+        panel.appendChild(el('<h3>' + l.code + '. ' + l.title + '</h3>'));
+        panel.appendChild(el('<div class="lecture-content">' + (l.content || '<p>Материал готовится.</p>') + '</div>'));
       });
-      tbl.appendChild(tbody);
-      v.querySelector(".v-scroll").appendChild(tbl);
-      box.appendChild(v);
     }
-    panel.appendChild(box);
-  });
-}
-
-function renderSelf(panel, t){
-  panel.innerHTML = `
-    <h2>Самостоятельная работа</h2>
-    <p>Закрепление материала темы <b>${t.code}</b> «${t.title}».</p>
-    <p class="accent">Введите ответ в поле и нажмите «Проверить». Регистр и лишние пробелы не важны.</p>
-  `;
-  const tasks = (t.selfChecks && t.selfChecks.length) ? t.selfChecks : [
-    { q: "Что такое техническое диагностирование?", a: "определение технического состояния", accept: ["определение состояния"] }
-  ];
-  const form = el(`<form class="self-form"></form>`);
-  tasks.forEach((task, i)=>{
-    const block = el(`<div class="question self-q">
-      <div class="q-text">${i+1}. ${task.q}</div>
-      <div class="self-row">
-        <input type="text" class="self-input" placeholder="Ваш ответ">
-        <button type="button" class="btn ghost self-check">Проверить</button>
-      </div>
-      <div class="self-feedback"></div>
-    </div>`);
-    const input = block.querySelector(".self-input");
-    const btn = block.querySelector(".self-check");
-    const fb = block.querySelector(".self-feedback");
-    btn.addEventListener("click", ()=>{
-      const userAns = (input.value || "").trim().toLowerCase();
-      const correct = task.a.trim().toLowerCase();
-      const accepted = Array.isArray(task.accept) ? task.accept.map(x=>x.trim().toLowerCase()) : [];
-      const ok = userAns === correct || accepted.includes(userAns);
-      fb.textContent = ok ? "✔ Верно" : ("✘ Неверно. Правильный ответ: " + task.a);
-      fb.className = "self-feedback " + (ok ? "ok" : "bad");
-    });
-    input.addEventListener("keydown", (e)=>{ if (e.key === "Enter"){ e.preventDefault(); btn.click(); } });
-    form.appendChild(block);
-  });
-  const result = el(`<div class="test-result"></div>`);
-  const actions = el(`<div class="test-actions">
-    <button type="button" class="btn" id="selfCount">Подвести итог</button>
-    <button type="button" class="btn ghost" id="selfReset">Сбросить</button>
-  </div>`);
-  form.appendChild(actions);
-  form.appendChild(result);
-  form.querySelector("#selfCount").addEventListener("click", ()=>{
-    let ok = 0;
-    form.querySelectorAll(".self-q").forEach((q)=>{
-      if (q.querySelector(".self-feedback").classList.contains("ok")) ok++;
-    });
-    const total = tasks.length;
-    const pct = Math.round(ok / total * 100);
-    const grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-    result.textContent = `Верных: ${ok} из ${total} (${pct}%). Оценка: ${grade}.`;
-    result.className = "test-result " + (grade >= 3 ? "ok" : "bad");
-
-    state.selfResults[t.id] = { ok, total, pct, grade, date: new Date().toISOString() };
-    saveSelfResults();
-  });
-  form.querySelector("#selfReset").addEventListener("click", ()=>{
-    form.querySelectorAll(".self-input").forEach(i=>i.value="");
-    form.querySelectorAll(".self-feedback").forEach(f=>{ f.textContent=""; f.className="self-feedback"; });
-    result.textContent = ""; result.className = "test-result";
-  });
-  panel.appendChild(form);
-}
-
-function renderTest(panel, t){
-  panel.innerHTML = `<h2>Контроль темы</h2>
-    <p class="accent">Выберите один правильный ответ в каждом вопросе. В конце нажмите «Подвести итог».</p>`;
-  if (!t.test || !t.test.length){
-    panel.appendChild(el(`<p><i>Тест по теме готовится.</i></p>`));
-    return;
+    var isDone = state.progress[id] && state.progress[id].done >= 5;
+    var markBtn = el('<button class="btn" style="width:100%; margin-top:20px;" ' + (isDone ? 'disabled' : '') + '>' + (isDone ? '✅ Тема изучена' : 'Отметить как изученное (+20 XP)') + '</button>');
+    markBtn.onclick = function() { if (!state.progress[id]) state.progress[id] = {}; state.progress[id].done = 5; state.xp += 20; saveStudentData(); window.showToast("Лекция изучена!", "ok"); markBtn.textContent = "✅ Тема изучена"; markBtn.disabled = true; };
+    panel.appendChild(markBtn);
   }
-  const form = el(`<form></form>`);
-  t.test.forEach((q, qi)=>{
-    const qBox = el(`<div class="question">
-      <div class="q-text">${qi+1}. ${q.q}</div>
-    </div>`);
-    q.options.forEach((opt, oi)=>{
-      const optEl = el(`<label class="option">
-        <input type="radio" name="q${qi}" value="${oi}">
-        <span>${opt}</span>
-      </label>`);
-      qBox.appendChild(optEl);
-    });
-    form.appendChild(qBox);
-  });
-  const result = el(`<div class="test-result"></div>`);
-  const actions = el(`<div class="test-actions">
-    <button type="button" class="btn" id="gradeBtn">Подвести итог</button>
-    <button type="button" class="btn ghost" id="resetTest">Сбросить</button>
-  </div>`);
-  form.appendChild(actions);
-  form.appendChild(result);
-  form.querySelector("#gradeBtn").addEventListener("click", ()=>{
-    let ok = 0;
-    t.test.forEach((q, qi)=>{
-      const chosen = form.querySelector(`input[name="q${qi}"]:checked`);
-      const qBox = form.querySelectorAll(".question")[qi];
-      qBox.querySelectorAll(".option").forEach(o=>o.classList.remove("correct","wrong"));
-      if (chosen){
-        const idx = Number(chosen.value);
-        const opt = qBox.querySelectorAll(".option")[idx];
-        if (idx === q.correct){ ok++; opt.classList.add("correct"); }
-        else {
-          opt.classList.add("wrong");
-          qBox.querySelectorAll(".option")[q.correct].classList.add("correct");
+  
+  if (tab === "practice") {
+    if(t.topic.practicals) {
+      t.topic.practicals.forEach(function(p){
+        var status = state.practicalsDone[id] && state.practicalsDone[id][p.code];
+        var grade = state.practicalGrades[id] && state.practicalGrades[id][p.code];
+        
+        var html = '<div class="practice" style="margin-bottom:24px;border:1px solid var(--border);padding:20px;border-radius:12px;background:var(--card-soft);">';
+        html += '<div style="color:var(--accent);font-weight:bold;font-size:16px;">' + p.code + '</div>';
+        html += '<div style="font-weight:bold;margin:4px 0 12px 0;font-size:18px;">' + p.title + '</div>';
+        if(p.goal) html += '<div style="font-size:14px;color:var(--muted);margin-bottom:12px;"><b>Цель:</b> ' + p.goal + '</div>';
+        if(p.task) html += '<div style="margin-bottom:12px;"><b>Задание:</b> ' + p.task + '</div>';
+        if(p.example) html += '<div style="margin-bottom:12px;background:var(--accent-soft);padding:12px;border-radius:8px;border-left:4px solid var(--accent);"><b>Пример:</b> ' + p.example + '</div>';
+        
+        html += '<div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">';
+        if (status === "approved") {
+            html += '<div style="color:var(--ok); font-weight:bold;">✅ Работа подтверждена преподавателем.</div>';
+            if (grade) html += '<div style="background:var(--card); padding:8px 16px; border-radius:8px; border:1px solid var(--border);">Оценка: <b style="font-size:18px; color:var(--accent);">' + grade + '</b></div>';
+        } else if (status === "pending") {
+            html += '<div style="color:#d97706; font-weight:bold;">⏳ На проверке у преподавателя.</div>';
+        } else {
+            html += '<div style="color:var(--muted); font-size:13px; flex: 1 1 100%; margin-bottom:10px;">📌 Все работы сдаются одной папкой в конце курса.</div>';
+            html += '<button class="btn" onclick="window.markPracticalDone(\'' + id + '\', \'' + p.code + '\')">✅ Сделал</button>';
         }
-      } else {
-        qBox.querySelectorAll(".option")[q.correct].classList.add("correct");
-      }
-    });
-    const total = t.test.length;
-    const pct = Math.round(ok / total * 100);
-    let grade = 2;
-    if (pct >= 90) grade = 5; else if (pct >= 75) grade = 4; else if (pct >= 60) grade = 3;
-    result.textContent = `Верных: ${ok} из ${total} (${pct}%). Оценка: ${grade}.`;
-    result.className = "test-result " + (grade >= 3 ? "ok" : "bad");
-
-    state.results[t.id] = { ok, total, pct, grade, date: new Date().toISOString() };
-    saveResults();
-  });
-  form.querySelector("#resetTest").addEventListener("click", ()=>{
-    form.querySelectorAll("input[type=radio]").forEach(i=>i.checked=false);
-    form.querySelectorAll(".option").forEach(o=>o.classList.remove("correct","wrong"));
-    result.textContent = ""; result.className = "test-result";
-  });
-  panel.appendChild(form);
-}
-
-/* ============================================================
-   ОТЧЁТ
-   ============================================================ */
-function buildReport(){
-  const now = new Date();
-  const fmt = d => d.toLocaleString("ru-RU", { day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit" });
-  const s = state.student || { name: "—", group: "—" };
-
-  let totalTopics = 0, topicsDone = 0;
-  COURSE.sections.forEach(sec=>sec.topics.forEach(t=>{
-    totalTopics++;
-    if ((state.progress[t.id]?.done || 0) >= 5) topicsDone++;
-  }));
-
-  const lines = [];
-  lines.push("ОТЧЁТ О ПРОХОЖДЕНИИ МДК 04.01");
-  lines.push("Диагностика, планирование, организация работ и контроль качества по ТО оборудования");
-  lines.push("");
-  lines.push("Студент: " + s.name);
-  lines.push("Группа:  " + s.group);
-  lines.push("Дата:    " + fmt(now));
-  lines.push("");
-  lines.push("ОБЩИЙ ПРОГРЕСС");
-  lines.push("Пройдено тем полностью: " + topicsDone + " из " + totalTopics);
-  lines.push("");
-
-  lines.push("ПРОГРЕСС ПО ТЕМАМ");
-  COURSE.sections.forEach(sec=>{
-    lines.push("— " + sec.code + ". " + sec.title);
-    sec.topics.forEach(t=>{
-      const p = state.progress[t.id];
-      const done = p?.done || 0;
-      const mark = done >= 5 ? "✓" : (done > 0 ? "…" : "·");
-      lines.push("  " + mark + " " + t.code + " " + t.title + " — " + done + "/5 вкладок");
-    });
-  });
-  lines.push("");
-
-  const testKeys = Object.keys(state.results);
-  lines.push("РЕЗУЛЬТАТЫ КОНТРОЛЬНЫХ ТЕСТОВ");
-  if (testKeys.length === 0){
-    lines.push("  (нет пройденных тестов)");
-  } else {
-    testKeys.forEach(id=>{
-      const t = findTopic(id)?.topic;
-      const r = state.results[id];
-      lines.push("  " + (t ? t.code + " " + t.title : id) + " — " + r.ok + "/" + r.total + " (" + r.pct + "%), оценка " + r.grade + " — " + fmt(new Date(r.date)));
-    });
-  }
-  lines.push("");
-
-  const selfKeys = Object.keys(state.selfResults);
-  lines.push("РЕЗУЛЬТАТЫ САМОСТОЯТЕЛЬНЫХ РАБОТ");
-  if (selfKeys.length === 0){
-    lines.push("  (нет пройденных самостоятельных)");
-  } else {
-    selfKeys.forEach(id=>{
-      const t = findTopic(id)?.topic;
-      const r = state.selfResults[id];
-      lines.push("  " + (t ? t.code + " " + t.title : id) + " — " + r.ok + "/" + r.total + " (" + r.pct + "%), оценка " + r.grade + " — " + fmt(new Date(r.date)));
-    });
-  }
-
-  lines.push("");
-  lines.push("— Конец отчёта —");
-  return lines.join("\n");
-}
-
-function openReportModal(){
-  document.querySelectorAll(".report-overlay").forEach(x=>x.remove());
-
-  const modal = el(`
-    <div class="report-overlay">
-      <div class="report-modal">
-        <h2>Отправка отчёта</h2>
-        <p class="report-sub">Проверьте данные ниже и нажмите «Отправить». Отчёт уйдёт на <b>${REPORT_EMAIL}</b>.</p>
-        <pre></pre>
-        <div class="report-actions">
-          <button class="btn ghost" id="reportCancel">Отмена</button>
-          <button class="btn" id="reportSend">Отправить</button>
-        </div>
-        <div class="report-status"></div>
-      </div>
-    </div>
-  `);
-  modal.querySelector("pre").textContent = buildReport();
-  document.body.appendChild(modal);
-
-  modal.querySelector("#reportCancel").addEventListener("click", ()=>modal.remove());
-
-  modal.querySelector("#reportSend").addEventListener("click", async ()=>{
-    const status = modal.querySelector(".report-status");
-    const btn = modal.querySelector("#reportSend");
-    btn.disabled = true;
-    status.textContent = "Отправляем…";
-    status.className = "report-status";
-
-    const s = state.student || { name: "—", group: "—" };
-
-    const params = new URLSearchParams();
-    params.append("student", s.name);
-    params.append("group",   s.group);
-    params.append("report",  buildReport());
-
-    try {
-      await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        body: params
+        html += '</div></div>';
+        panel.appendChild(el(html));
       });
-      status.textContent = "✔ Отчёт отправлен на " + REPORT_EMAIL;
-      status.className = "report-status ok";
-      btn.textContent = "Отправлено";
-    } catch (err){
-      const subject = encodeURIComponent("МДК 04.01 — отчёт " + s.name + " (гр. " + s.group + ")");
-      const body = encodeURIComponent(buildReport());
-      const mailto = "mailto:" + REPORT_EMAIL + "?subject=" + subject + "&body=" + body;
-      status.innerHTML = "Не удалось отправить автоматически. " +
-        '<a href="' + mailto + '" style="color:var(--accent);text-decoration:underline">Открыть письмо в почтовом клиенте →</a>';
-      status.className = "report-status bad";
-      btn.disabled = false;
     }
+  }
+
+  if (tab === "self" || tab === "test") {
+    var result = state.results[id] || state.selfResults[id];
+    var reqKey = id + "_" + tab;
+    var reqStatus = state.requests && state.requests[reqKey];
+    var attempts = state.allowedAttempts && state.allowedAttempts[reqKey] ? state.allowedAttempts[reqKey] : 1;
+    
+    if (result && attempts <= 1) {
+      panel.appendChild(el(`<div style="text-align:center;padding:40px;">
+        <h2 style="font-size:28px;">✅ Работа сдана</h2>
+        <p style="font-size:18px;color:var(--text-soft);margin:16px 0;">Ваша оценка: <b style="font-size:24px;color:var(--accent);">${result.grade}</b></p>
+        ${reqStatus === 'pending' 
+            ? '<p style="color:#d97706;font-weight:bold;">⏳ Запрос на попытку отправлен</p>' 
+            : `<button class="btn" onclick="window.requestAttempt('${id}', '${tab}')">Запросить доп. попытку</button>`}
+      </div>`));
+    } else if (tab === "self" && t.topic.selfChecks) {
+      var selfWrap = el('<div></div>'); panel.appendChild(selfWrap);
+      t.topic.selfChecks.forEach(function(q, i){ selfWrap.appendChild(el('<div class="question"><div class="q-text">' + (i+1) + '. ' + q.q + '</div><input type="text" class="self-input" data-idx="' + i + '" placeholder="Ваш ответ"><div class="self-feedback" id="fb_' + i + '" style="font-size:13px; margin-top:4px;"></div></div>')); });
+      var checkBtn = el('<button class="btn" style="width:100%;margin-top:10px;">Завершить</button>');
+      panel.appendChild(checkBtn);
+      checkBtn.onclick = function() {
+        var correctCount = 0;
+        selfWrap.querySelectorAll(".self-input").forEach(function(inp) { 
+          var idx = Number(inp.getAttribute("data-idx")); var q = t.topic.selfChecks[idx]; var fb = selfWrap.querySelector("#fb_" + idx); 
+          if (inp.value.trim().toLowerCase() === q.a.trim().toLowerCase()) { fb.textContent = "✔ Верно"; fb.style.color = "var(--ok)"; correctCount++; } 
+          else { fb.textContent = "✘ Неверно. Ответ: " + q.a; fb.style.color = "var(--err)"; } 
+        });
+        var grade = Math.max(2, Math.round((correctCount/t.topic.selfChecks.length)*5)); 
+        state.selfResults[id] = { grade: grade }; saveStudentData(); window.showToast("Работа сдана!", "ok"); renderTopic(id, "self");
+      };
+    } else if (tab === "test" && t.topic.test) {
+      var timerBox = el('<div style="font-size:20px;font-weight:bold;color:var(--err);margin-bottom:16px;">⏱ 15:00</div>'); panel.appendChild(timerBox);
+      var testWrap = el('<div></div>'); panel.appendChild(testWrap);
+      t.topic.test.forEach(function(q, qi){
+        var qb = el('<div class="question"><div class="q-text">' + (qi+1) + '. ' + q.q + '</div></div>');
+        q.options.forEach(function(opt, oi){ qb.appendChild(el('<label class="option"><input type="radio" name="q' + qi + '" value="' + oi + '"><span>' + opt + '</span></label>')); });
+        testWrap.appendChild(qb);
+      });
+      var finishBtn = el('<button class="btn" style="width:100%;margin-top:10px;">Завершить тест</button>'); panel.appendChild(finishBtn);
+      var timeLeft = 15 * 60; var timerId = setInterval(function() {
+        if (!document.body.contains(timerBox)) { clearInterval(timerId); return; }
+        timeLeft--; timerBox.textContent = "⏱ " + String(Math.floor(timeLeft/60)).padStart(2,'0') + ":" + String(timeLeft%60).padStart(2,'0');
+        if (timeLeft <= 0) { clearInterval(timerId); finishBtn.click(); }
+      }, 1000);
+      finishBtn.onclick = function() {
+        clearInterval(timerId); var correct = 0;
+        t.topic.test.forEach(function(q, qi) {
+          var ch = testWrap.querySelector('input[name="q' + qi + '"]:checked');
+          if (ch && Number(ch.value) === q.correct) correct++;
+        });
+        var grade = Math.max(2, Math.round((correct / t.topic.test.length) * 5)); 
+        state.results[id] = { grade: grade }; saveStudentData(); window.showToast("Тест сдан!", "ok"); renderTopic(id, "test");
+      };
+    }
+  }
+}
+
+// --- СИМУЛЯТОР ДИАГНОСТИКИ ---
+function renderSimulatorPage(){
+  var app = $("app"); app.innerHTML = ""; app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
+  var block = el('<section class="module"><h2>🖥️ Симулятор диагностики</h2><p>Введите параметры вибрации узлов (в мм/с) через запятую, чтобы получить вердикт.</p><textarea id="simInput" style="width:100%;height:80px;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card-soft);margin-bottom:10px;font-family:monospace;">1.5, 2.0, 3.5, 4.2</textarea><button class="btn" id="runCodeBtn" style="width:100%;margin-bottom:10px;">▶ Анализировать</button><div id="simResult" style="background:var(--card-soft);border:1px solid var(--border);border-radius:8px;padding:16px;font-weight:bold;"></div></section>');
+  app.appendChild(block); 
+  var runBtn = block.querySelector("#runCodeBtn"), input = block.querySelector("#simInput"), result = block.querySelector("#simResult");
+  
+  runBtn.onclick = function() {
+    var vals = input.value.split(",").map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+    if(!vals.length) { result.innerHTML = "Ошибка ввода."; return; }
+    
+    var out = "<ul>";
+    vals.forEach((v, i) => {
+        var status = v <= 2.8 ? "✅ Норма" : (v <= 4.5 ? "⚠️ Требует внимания" : "❌ Критично (замена)");
+        var color = v <= 2.8 ? "var(--ok)" : (v <= 4.5 ? "#d97706" : "var(--err)");
+        out += `<li>Узел ${i+1}: ${v} мм/с — <span style="color:${color}">${status}</span></li>`;
+    });
+    out += "</ul>";
+    result.innerHTML = out;
+    window.showToast("Анализ завершен!", "ok");
+  };
+}
+
+// --- МАГАЗИН ---
+function renderShopPage(){
+  var app = $("app"); app.innerHTML = ""; app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
+  app.appendChild(el('<section class="hero"><h1>Магазин XP</h1><p>У вас: 🌟 <b>' + state.xp + ' XP</b></p></section>'));
+  
+  var items = [
+    { id: "golden", icon: "👑", title: "Золотой аватар", price: 100, type: "avatar" },
+    { id: "nick", icon: "🏷️", title: "Кастомный Ник", price: 200, type: "input", field: "nick", placeholder: "Введите ваш ник..." },
+    { id: "sign", icon: "✍️", title: "Подпись в профиле", price: 300, type: "input", field: "sign", placeholder: "Введите вашу подпись..." },
+    { id: "theme_matrix", icon: "🟩", title: "Тема 'Матрица'", price: 500, type: "theme", theme: "matrix" },
+    { id: "theme_cosmos", icon: "🌌", title: "Тема 'Космос'", price: 800, type: "theme", theme: "cosmos" },
+    { id: "theme_gold", icon: "🪙", title: "Тема 'Золото'", price: 1000, type: "theme", theme: "gold" },
+    { id: "theme_anime", icon: "⛩️", title: "Тема 'Аниме'", price: 1500, type: "theme", theme: "anime" },
+    { id: "theme_hacker", icon: "💻", title: "Тема 'Хакер'", price: 2000, type: "theme", theme: "hacker" },
+    { id: "theme_cyber", icon: "🤖", title: "Тема 'Кибер'", price: 2500, type: "theme", theme: "cyber" },
+    { id: "theme_matrioska", icon: "🪆", title: "Тема 'Матрешка'", price: 3000, type: "theme", theme: "matrioska" }
+  ];
+  
+  var grid = el('<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:16px;"></div>');
+  
+  items.forEach(function(it){
+    var has = state.shop.includes(it.id) || state.staff;
+    var btn = el('<button class="btn" style="width:100%;margin-top:10px;" ' + (has || state.xp < it.price ? 'disabled' : '') + '>' + (has ? 'Куплено' : (state.xp < it.price ? 'Мало XP' : 'Купить')) + '</button>');
+    
+    if (state.staff) {
+        btn.textContent = "Доступно (Учитель)"; btn.style.background = "var(--accent-soft)"; btn.style.color = "var(--accent)"; btn.style.border = "1px solid var(--accent)";
+    } else if (!has && state.xp >= it.price) { 
+        btn.onclick = function() { 
+            if (it.type === "input") { var val = prompt(it.placeholder, state[it.field] || ""); if (val === null) return; state[it.field] = val.trim(); }
+            if (it.type === "theme") { applyTheme(it.theme); }
+            state.xp -= it.price; state.shop.push(it.id); saveStudentData(); renderShopPage(); renderUserChip();
+            window.showToast("Покупка совершена!", "ok"); 
+        }; 
+    }
+    
+    var card = el(`<div style="background:var(--card);border:1px solid var(--border);padding:16px;border-radius:12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;"><div><div style="font-size:40px;margin-bottom:10px;">${it.icon}</div><div style="font-weight:bold;">${it.title}</div></div><div style="margin-top:10px;"><div style="color:var(--accent);font-weight:bold;margin-bottom:8px;">${it.price} XP</div></div></div>`);
+    card.appendChild(btn); grid.appendChild(card);
   });
+  app.appendChild(grid);
 }
 
-function initReport(){
-  const btn = document.getElementById("reportBtn");
-  if (btn) btn.addEventListener("click", openReportModal);
+function renderPortfolioPage(){
+  var app = $("app"); app.innerHTML = ""; app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
+  app.appendChild(el('<div id="portfolioPrint" class="module" style="padding:40px;"><h1 style="text-align:center;">ПОРТФОЛИО</h1><hr style="margin:20px 0;"><p><b>ФИО:</b> ' + state.student.name + '</p><p><b>Группа:</b> ' + state.student.group + '</p><p><b>XP:</b> ' + state.xp + '</p></div><button class="btn" style="margin-top:20px;width:100%;" onclick="window.print()">🖨 В PDF</button>'));
 }
 
-/* ============================================================
-   ROUTER
-   ============================================================ */
-function goHome(e){ if (e) e.preventDefault(); location.hash = "#/"; }
+// --- РОУТИНГ ---
 function route(){
-  if (!state.student){
-    document.getElementById("app").innerHTML = "";
-    return;
+  closeDrawer();
+  var hash = location.hash.replace(/^#/, "") || "/"; var parts = hash.split("/").filter(Boolean); var app = $("app"); if(!app) return;
+  if (!state.student && !state.staff) { app.innerHTML = ""; return; }
+  
+  try {
+      if (parts[0] === "topic" && parts[1]) renderTopic(parts[1], parts[2]);
+      else if (parts[0] === "simulator") renderSimulatorPage();
+      else if (parts[0] === "shop") renderShopPage();
+      else if (parts[0] === "portfolio") renderPortfolioPage();
+      else if (parts[0] === "profile") window.renderProfilePage && window.renderProfilePage();
+      else if (parts[0] === "dashboard") window.renderDashboard && window.renderDashboard();
+      else if (parts[0] === "journal") window.renderJournalPage && window.renderJournalPage();
+      else if (parts[0] === "requests") window.renderRequestsPage && window.renderRequestsPage();
+      else if (parts[0] === "notifications") window.renderNotificationsPage && window.renderNotificationsPage();
+      else if (parts[0] === "schedule") window.renderSchedulePage && window.renderSchedulePage();
+      else if (parts[0] === "rating") window.renderRatingPage && window.renderRatingPage();
+      else if (parts[0] === "links") window.renderLinksPage && window.renderLinksPage();
+      else if (parts[0] === "gcode-reference") window.renderGCodeReferencePage && window.renderGCodeReferencePage();
+      else if (parts[0] === "final-exam") window.renderFinalExamPage && window.renderFinalExamPage();
+      else if (parts[0] === "final-training") window.renderFinalTrainingPage && window.renderFinalTrainingPage();
+      else if (parts[0] === "event") window.renderDeadlyPartyPage && window.renderDeadlyPartyPage();
+      else if (parts[0] === "tictactoe") window.renderTicTacToePage && window.renderTicTacToePage();
+      else if (parts[0] === "sudoku") window.renderSudokuPage && window.renderSudokuPage();
+      else if (parts[0] === "chat") window.renderChatPage && window.renderChatPage();
+      else if (parts[0] === "comments") window.renderCommentsPage && window.renderCommentsPage();
+      else renderHome();
+  } catch (err) {
+      console.error("Routing error:", err);
+      app.innerHTML = '<div class="module" style="text-align:center; padding:40px;"><h2>Ошибка загрузки страницы</h2><p class="sub" style="color:var(--err);">' + err.message + '</p><button class="btn" onclick="location.reload()">Обновить страницу</button></div>';
   }
-  const hash = location.hash.replace(/^#/, "") || "/";
-  const parts = hash.split("/").filter(Boolean);
-  if (parts[0] === "topic" && parts[1]){
-    renderTopic(parts[1], parts[2] || "passport");
-  } else {
-    renderHome();
-  }
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 
-window.addEventListener("hashchange", route);
-window.addEventListener("DOMContentLoaded", ()=>{
-  initTheme();
-  initNav();
-  initAuth();
-  initReport();
-  renderUserChip();
-  route();
+window.addEventListener("DOMContentLoaded", function() {
+  if (!state.student && !state.staff) { $("loginOverlay").hidden = false; } else { $("loginOverlay").hidden = true; }
+  if (state.student) { loadStudentData(); checkDailyLogin(); }
+  
+  if($("themeToggle")) $("themeToggle").addEventListener("click", openThemeModal);
+  if($("burgerBtn")) $("burgerBtn").addEventListener("click", toggleDrawer);
+  if($("drawerOverlay")) $("drawerOverlay").addEventListener("click", closeDrawer);
+  if($("drawerClose")) $("drawerClose").addEventListener("click", closeDrawer);
+  document.querySelectorAll("[data-go]").forEach(function(item) { item.addEventListener("click", function(e) { e.preventDefault(); location.hash = item.getAttribute("data-go"); closeDrawer(); }); });
+  
+  if (window.initAssistantButton) window.initAssistantButton();
+  renderUserChip(); route();
 });
+window.addEventListener("hashchange", route);

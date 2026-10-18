@@ -1,0 +1,18 @@
+{
+  "name": "МДК 04.01 — Диагностика и наладка",
+  "short_name": "МДК 04.01",
+  "description": "Учебный портал по диагностике, наладке и ТО оборудования машиностроительного производства",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef2f6",
+  "theme_color": "#1e5a8a",
+  "lang": "ru",
+  "icons": [
+    { "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjM2IiBmaWxsPSIjMWU1YThhIi8+PHBhdGggZD0iTTk2IDQwIEwxMTIgOTYgTDE2OCAxMTIgTDE2OCAxMjggTDExMiAxNDQgTDk2IDIwMCBMODAgMTQ0IEwyNCAxMjggTDI0IDExMiBMODAgOTYgWiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==",
+      "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9Ijk2IiBmaWxsPSIjMWU1YThhIi8+PHBhdGggZD0iTTI1NiAxMDYgTDI5OCAyNTYgTDQ0OCAyOTggTDQ0OCAzNDIgTDI5OCAzODQgTDI1NiA1MzQgTDIxNCAzODQgTDY0IDM0MiBMNjQgMjk4IEwyMTQgMjU2IFoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=",
+      "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

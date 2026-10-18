@@ -2,76 +2,108 @@
 <html lang="ru" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1e5a8a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<title>МДК 04.01 — Диагностика, планирование и контроль качества ТО оборудования</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>МДК 04.01</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&family=Orbitron:wght@400;600;900&family=Rajdhani:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css?v=1">
+<script>
+  (function(){ try { var t = localStorage.getItem("mdk0401.theme"); if (!t || t === "auto"){ var d = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; t = d ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", t); } catch(e){} })();
+</script>
 </head>
 <body>
 
-<!-- ============ ЭКРАН ВХОДА ============ -->
 <div class="login-overlay" id="loginOverlay" hidden>
   <div class="login-card">
-    <div class="login-brand">
-      <span class="brand-badge">МДК 04.01</span>
-      <h1>Вход в систему</h1>
-    </div>
-    <p class="login-sub">
-      Введите свои данные, чтобы начать работу.
-      Они сохранятся в браузере и попадут в отчёт преподавателю.
-    </p>
-
-    <label for="loginName">ФИО студента</label>
-    <input id="loginName" type="text" placeholder="Иванов Иван Иванович" autocomplete="name">
-
-    <label for="loginGroup">Группа</label>
-    <input id="loginGroup" type="text" placeholder="ТМ-21" autocomplete="off">
-
-    <button id="loginBtn" class="btn login-btn">Войти</button>
-
-    <p class="login-hint">
-      Если вы уже заходили — данные подставятся автоматически.
-    </p>
+    <div class="login-brand" style="text-align: center; margin-bottom: 25px;"><span class="brand-badge" style="font-size: 14px; padding: 6px 12px;">МДК 04.01</span></div>
+    <h3>🎓 Вход студента</h3>
+    <input id="loginName" type="text" placeholder="ФИО (Иванов Иван)">
+    <input id="loginGroup" type="text" placeholder="Группа (ТМ-21)">
+    <button class="btn" style="width:100%; padding:12px;" onclick="window.doStudentLogin()">Войти как студент</button>
+    
+    <div style="text-align:center; margin:20px 0; color:var(--muted); font-size:13px; font-weight:bold;">─── или ───</div>
+    
+    <h3>👨‍🏫 Вход сотрудника</h3>
+    <input id="loginStaffName" type="text" placeholder="Логин (admin / teacher)">
+    <input id="loginStaffPass" type="password" placeholder="Пароль">
+    <button id="staffLoginBtn" class="btn ghost" style="width:100%; padding:12px;" onclick="window.doTeacherLogin()">Войти как сотрудник</button>
   </div>
 </div>
 
-<!-- ============ ШАПКА ============ -->
 <header class="topbar">
-  <div class="nav-group">
-    <button class="nav-btn" id="navBack" title="Назад" aria-label="Назад">←</button>
-    <button class="nav-btn" id="navForward" title="Вперёд" aria-label="Вперёд">→</button>
-    <a class="brand" href="#/" onclick="goHome(event)">
-      <span class="brand-badge">МДК 04.01</span>
-      <span class="brand-title">Диагностика и наладка оборудования</span>
-    </a>
-  </div>
-
+  <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
+  <a class="brand" href="#/"><span class="brand-badge">МДК 04.01</span></a>
   <div class="crumbs" id="crumbs"></div>
+  
+  <a href="#/notifications" class="notif-bell" id="notifBell" style="position:relative; margin-right:15px; text-decoration:none; font-size:20px; cursor:pointer;" title="Уведомления">
+      🔔 <span id="notifBadge" style="position:absolute; top:-5px; right:-8px; background:var(--err); color:#fff; font-size:10px; font-weight:bold; border-radius:50%; padding:2px 5px; display:none;">0</span>
+  </a>
 
-  <div class="user-chip" id="userChip" title="Сменить пользователя" hidden>
-    <span class="user-chip-name" id="userChipName"></span>
-    <span class="user-chip-group" id="userChipGroup"></span>
-  </div>
-
-  <button class="topbar-btn" id="reportBtn" title="Отправить отчёт преподавателю" aria-label="Отправить отчёт">
-    <span class="topbar-ico">📧</span>
-  </button>
-
-  <button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">
-    <span class="theme-icon" id="themeIcon">🌙</span>
-  </button>
+  <div class="topbar-status"><span class="status-pill" id="xpCount">🌟 0 XP</span></div>
+  <button id="themeToggle" class="btn ghost" style="padding: 8px 12px; margin-left: 10px; border-radius: 8px;">🎨 Тема</button>
 </header>
 
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" style="display:flex; flex-direction:column;">
+  <div class="drawer-head">
+    <div class="drawer-user">
+        <span id="userChipAvatar" style="font-size:24px;">👨‍🎓</span>
+        <div>
+            <div id="userChipName">Гость</div>
+            <div id="userChipGroup" style="font-size:12px;color:var(--muted)">Роль: Гость</div>
+        </div>
+    </div>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <nav class="drawer-nav" style="flex:1; overflow-y:auto;">
+    <a class="drawer-item" data-go="#/">🏠 <span>Главная</span></a>
+    <a class="drawer-item" data-go="#/profile">👤 <span>Личный кабинет</span></a>
+    <a class="drawer-item" data-go="#/notifications">🔔 <span>Уведомления</span></a>
+    <a class="drawer-item" data-go="#/schedule">📅 <span>Расписание</span></a>
+    <a class="drawer-item" data-go="#/simulator">🖥️ <span>Симулятор диагностики</span></a>
+    <a class="drawer-item" data-go="#/shop">🛒 <span>Магазин XP</span></a>
+    <a class="drawer-item" data-go="#/portfolio">🎓 <span>Портфолио</span></a>
+    <a class="drawer-item" data-go="#/dashboard">📊 <span>Статистика</span></a>
+    <a class="drawer-item" data-go="#/journal">📔 <span>Журнал</span></a>
+    
+    <a class="drawer-item" data-go="#/requests" id="navRequests" style="display:none; color:var(--accent); font-weight:bold;">📥 <span>Заявки</span></a>
+    
+    <a class="drawer-item" data-go="#/rating">🏆 <span>Рейтинг</span></a>
+    <a class="drawer-item" data-go="#/gcode-reference">📖 <span>Справочник диагноста</span></a>
+    <a class="drawer-item" data-go="#/links">📚 <span>Полезные материалы</span></a>
+    <a class="drawer-item" data-go="#/final-exam">🎓 <span>Экзамен</span></a>
+    <a class="drawer-item" data-go="#/final-training">🏋️ <span>Тренировка</span></a>
+    
+    <a class="drawer-item" data-go="#/event">💀 <span>Смертельная вечеринка</span></a>
+    <a class="drawer-item" data-go="#/tictactoe">❌ <span>Крестики-нолики</span></a>
+    <a class="drawer-item" data-go="#/sudoku">🔢 <span>Судоку</span></a>
+    
+    <a class="drawer-item" data-go="#/chat">💭 <span>Чат группы</span></a>
+    <a class="drawer-item" data-go="#/comments">💬 <span>Отзывы о курсе</span></a>
+    
+    <a class="drawer-item" style="color:var(--err); cursor:pointer; margin-top:20px;" onclick="window.handleLogout()">🚪 <span>Выйти из аккаунта</span></a>
+  </nav>
+</aside>
+
 <main id="app"></main>
+<footer class="footer">ГБПОУ МО «Луховицкий авиационный технический техникум» · МДК 04.01</footer>
 
-<footer class="footer">
-  ГБПОУ МО «Луховицкий авиационный техникум» · Профессионалитет · 2024
-</footer>
-
-<script src="data.js"></script>
-<script src="info.js"></script>
-<script src="script.js"></script>
+<script src="data.js?v=1"></script>
+<script src="data-extra.js?v=1"></script>
+<script src="info.js?v=1"></script>
+<script src="script.js?v=1"></script>
+<script src="extra.js?v=1"></script>
+<script src="final.js?v=1"></script>
+<script src="links.js?v=1"></script>
+<script src="rating.js?v=1"></script>
+<script src="journal.js?v=1"></script>
+<script src="minigames.js?v=1"></script>
+<script src="assistant.js?v=1"></script>
+<script src="easter-eggs.js?v=1"></script>
 </body>
 </html>

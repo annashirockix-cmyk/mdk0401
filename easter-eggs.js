@@ -1,0 +1,58 @@
+/* ============================================================
+   МДК 04.01 — easter-eggs.js
+   ============================================================ */
+"use strict";
+
+var konamiCode = ['t', 'p', 'm']; // TPM
+var konamiIndex = 0;
+
+document.addEventListener('keydown', function(e) {
+  var key = e.key ? e.key.toLowerCase() : "";
+  
+  if (key === konamiCode[konamiIndex]) {
+    konamiIndex++;
+    if (konamiIndex === konamiCode.length) {
+      if (window.showToast) window.showToast("⚙️ Секретный режим TPM активирован! Оборудование обслужено!", "ok");
+      if (window.celebrate) window.celebrate();
+      document.body.style.animation = "shake 0.5s";
+      setTimeout(() => { document.body.style.animation = ""; }, 500);
+      konamiIndex = 0;
+    }
+  } else { konamiIndex = 0; }
+});
+
+var logoClicks = 0;
+document.addEventListener("click", function(e) {
+  var brand = e.target.closest(".brand");
+  if (brand) {
+    logoClicks++;
+    if (logoClicks === 5) {
+      logoClicks = 0;
+      if (window.showToast) window.showToast("Вы нашли пасхалку! 🎉", "ok");
+      var badge = brand.querySelector(".brand-badge");
+      if (badge) { 
+          badge.textContent = "TOP DIAGNOST"; 
+          badge.style.background = "var(--gold)"; 
+          badge.style.color = "#000"; 
+          setTimeout(() => { 
+              badge.textContent = "МДК 04.01"; 
+              badge.style.background = ""; 
+              badge.style.color = ""; 
+          }, 3000); 
+      }
+    }
+  } else { logoClicks = 0; }
+});
+
+window.addEventListener("hashchange", function() {
+  if (Math.random() < 0.2) {
+    var memes = [
+        "Стук в коробке передач — это не фича.", 
+        "Если не работает — проверь датчик.", 
+        "Виброметр не врет, врет тот, кто его держит.", 
+        "Чистота — залог долгой работы подшипников.",
+        "Смазка всему голова."
+    ];
+    if (window.showToast) window.showToast(memes[Math.floor(Math.random() * memes.length)], "info");
+  }
+});
