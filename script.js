@@ -1,9 +1,11 @@
 /* ============================================================
-   МДК 04.01 — script.js (v85.0 — DIAGNOSTICS EDITION)
+   МДК 04.01 — script.js (v86.0 — NEW API & DIAGNOSTICS)
    ============================================================ */
 "use strict";
 
-var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx78bq_UH8XQzkYEZZcbDQ8_nmLku4xGF74iCqidEHUeEMRd8hkdKqUZEt-Vro9ygAZ/exec";
+// ВАША НОВАЯ ССЫЛКА НА APPS SCRIPT
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQ95IDuQsD4ULogpY5RjfJ-B3xcfs4yA2zFtCliM-y_am2ApKjvz8RVXJ0aQ_DHGMl/exec";
+
 var state = { 
   student: null, staff: null, progress: {}, results: {}, selfResults: {}, 
   practicalsDone: {}, practicalGrades: {}, requests: {}, allowedAttempts: {},
@@ -12,6 +14,7 @@ var state = {
   notifications: [], schedule: [] 
 };
 
+// Восстановление сессии
 try { var _s = JSON.parse(localStorage.getItem("mdk0401.student") || "null"); if (_s && _s.name) state.student = _s; } catch (e){}
 try { var _st = JSON.parse(sessionStorage.getItem("mdk0401.staff") || "null"); if (_st && _st.role) state.staff = _st; } catch (e){}
 
@@ -41,13 +44,11 @@ window.addNotification = function(text, type = "info") {
     if (!state.notifications) state.notifications = [];
     state.notifications.unshift({ id: Date.now(), text: text, type: type, date: new Date().toISOString(), read: false });
     if (state.notifications.length > 50) state.notifications.pop();
-    saveStudentData();
-    updateNotifBadge();
+    saveStudentData(); updateNotifBadge();
 };
 
 function updateNotifBadge() {
-    var badge = $("notifBadge");
-    if (!badge) return;
+    var badge = $("notifBadge"); if (!badge) return;
     var unread = state.notifications.filter(n => !n.read).length;
     if (unread > 0) { badge.textContent = unread; badge.style.display = "inline-block"; } 
     else { badge.style.display = "none"; }
@@ -56,12 +57,9 @@ function updateNotifBadge() {
 // --- ДОСТИЖЕНИЯ ---
 function checkAchievements() {
     var achList = [
-        { id: "t1", xp: 10, title: "Новичок" },
-        { id: "t2", xp: 50, title: "Студент" },
-        { id: "t3", xp: 100, title: "Книжный червь" },
-        { id: "t4", xp: 200, title: "Умник" },
-        { id: "t5", xp: 500, title: "Знаток" },
-        { id: "t6", xp: 1000, title: "Мастер" }
+        { id: "t1", xp: 10, title: "Новичок" }, { id: "t2", xp: 50, title: "Студент" }, 
+        { id: "t3", xp: 100, title: "Книжный червь" }, { id: "t4", xp: 200, title: "Умник" }, 
+        { id: "t5", xp: 500, title: "Знаток" }, { id: "t6", xp: 1000, title: "Мастер" }
     ];
     achList.forEach(a => {
         if (state.xp >= a.xp && !state.achievements[a.id]) {
@@ -72,11 +70,10 @@ function checkAchievements() {
     });
 }
 
-// --- ЗАГРУЗКА И СОХРАНЕНИЕ ДАННЫХ ---
+// --- ЗАГРУЗКА И СОХРАНЕНИЕ ---
 function loadStudentData(){
   var k = studentKey(); if (!k) return; var ek = encodeURIComponent(k);
   
-  // 1. Загружаем из локальной памяти
   state.progress = JSON.parse(localStorage.getItem("mdk0401.progress." + ek) || "{}");
   state.results = JSON.parse(localStorage.getItem("mdk0401.results." + ek) || "{}");
   state.selfResults = JSON.parse(localStorage.getItem("mdk0401.selfResults." + ek) || "{}");
@@ -97,7 +94,6 @@ function loadStudentData(){
   if ($("xpCount")) $("xpCount").textContent = "🌟 " + state.xp + " XP";
   updateNotifBadge();
 
-  // 2. Запрашиваем свежие данные с сервера (оценки, попытки)
   if (APPS_SCRIPT_URL && state.student) {
       fetch(APPS_SCRIPT_URL + "?action=getstudentdata&key=" + encodeURIComponent(k))
         .then(r => r.json())
@@ -121,7 +117,6 @@ function loadStudentData(){
                     
                     if ($("xpCount")) $("xpCount").textContent = "🌟 " + state.xp + " XP";
                     
-                    // Перерисовываем текущую страницу, чтобы применить изменения
                     if (location.hash.includes('/topic/')) {
                         var parts = location.hash.replace(/^#\//, "").split("/");
                         if(parts[0] === 'topic') renderTopic(parts[1], parts[2]);
@@ -172,26 +167,15 @@ function checkDailyLogin() {
     if (!state.student) return;
     var today = new Date().toDateString();
     if (state.lastLoginDate !== today) {
-        var xpGained = 10;
-        var streakMsg = "";
+        var xpGained = 10; var streakMsg = "";
         if (state.lastLoginDate) {
-            var lastDate = new Date(state.lastLoginDate);
-            var now = new Date(today);
+            var lastDate = new Date(state.lastLoginDate); var now = new Date(today);
             lastDate.setHours(0,0,0,0); now.setHours(0,0,0,0);
             var diffDays = Math.round((now - lastDate) / (1000 * 60 * 60 * 24));
-            if (diffDays === 1) {
-                state.loginStreak++;
-                var bonus = Math.min(state.loginStreak * 5, 50);
-                xpGained += bonus;
-                streakMsg = " (🔥 Серия: " + state.loginStreak + " дней! Бонус +" + bonus + " XP)";
-            } else {
-                state.loginStreak = 1; streakMsg = " (Серия сброшена)";
-            }
-        } else {
-            state.loginStreak = 1;
-        }
-        state.lastLoginDate = today;
-        state.xp += xpGained;
+            if (diffDays === 1) { state.loginStreak++; var bonus = Math.min(state.loginStreak * 5, 50); xpGained += bonus; streakMsg = " (🔥 Серия: " + state.loginStreak + " дней! Бонус +" + bonus + " XP)"; } 
+            else { state.loginStreak = 1; streakMsg = " (Серия сброшена)"; }
+        } else { state.loginStreak = 1; }
+        state.lastLoginDate = today; state.xp += xpGained;
         saveStudentData();
         setTimeout(function() { window.showToast("Ежедневный вход: +" + xpGained + " XP" + streakMsg, "ok"); }, 1000);
     }
@@ -218,58 +202,31 @@ window.requestAttempt = function(topicId, type) {
 // --- ДЕЙСТВИЯ (Преподаватель) ---
 window.approvePractical = function(studentKeyStr, topicId, code, grade) {
     var p = new URLSearchParams();
-    p.append("action", "approvework"); 
-    p.append("key", studentKeyStr); 
-    p.append("topicId", topicId); 
-    p.append("code", code); 
-    p.append("grade", grade);
-    
+    p.append("action", "approvework"); p.append("key", studentKeyStr); p.append("topicId", topicId); p.append("code", code); p.append("grade", grade);
     window.showToast("Сохранение оценки...", "info");
-    fetch(APPS_SCRIPT_URL, { method: "POST", body: p })
-        .then(r => r.json())
-        .then(d => {
-            if (d.ok) {
-                window.showToast("Оценка " + grade + " выставлена!", "ok");
-                var elToRemove = document.getElementById("req_" + topicId + "_" + code);
-                if (elToRemove) elToRemove.remove();
-            } else {
-                window.showToast("Ошибка сохранения", "err");
-            }
-        }).catch(err => { window.showToast("Ошибка сети", "err"); });
+    fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).then(r => r.json()).then(d => {
+        if (d.ok) { window.showToast("Оценка " + grade + " выставлена!", "ok"); var elToRemove = document.getElementById("req_" + topicId + "_" + code); if (elToRemove) elToRemove.remove(); } 
+        else { window.showToast("Ошибка сохранения", "err"); }
+    }).catch(err => { window.showToast("Ошибка сети", "err"); });
 };
 
 window.approveAttempt = function(studentKeyStr, reqKey) {
     var p = new URLSearchParams();
     p.append("action", "approveattempt"); p.append("key", studentKeyStr); p.append("reqKey", reqKey);
-    var elToRemove = document.getElementById("req_" + reqKey);
-    if (elToRemove) elToRemove.remove();
+    var elToRemove = document.getElementById("req_" + reqKey); if (elToRemove) elToRemove.remove();
     window.showToast("Попытка одобрена!", "ok");
     fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).catch(console.error);
 };
 
 window.grantXP = function(studentKeyStr, studentName, presetAmount) {
     if (!state.staff) return;
-    
-    var amount = presetAmount;
-    if (!amount) {
-        amount = prompt("Сколько XP выдать студенту " + studentName + "?", "50");
-    }
-    
+    var amount = presetAmount || prompt("Сколько XP выдать студенту " + studentName + "?", "50");
     if (!amount || isNaN(amount) || Number(amount) <= 0) return;
-    
-    var p = new URLSearchParams();
-    p.append("action", "grantxp"); 
-    p.append("key", studentKeyStr); 
-    p.append("amount", parseInt(amount));
-    
+    var p = new URLSearchParams(); p.append("action", "grantxp"); p.append("key", studentKeyStr); p.append("amount", parseInt(amount));
     window.showToast("Начисление " + amount + " XP...", "info");
-    fetch(APPS_SCRIPT_URL, { method: "POST", body: p })
-      .then(r => r.json())
-      .then(d => {
-        if (d.ok) window.showToast("Успешно начислено " + amount + " XP!", "ok");
-        else window.showToast("Ошибка: " + (d.error || "Неизвестно"), "err");
-      })
-      .catch(() => window.showToast("Ошибка сети.", "err"));
+    fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).then(r => r.json()).then(d => {
+        if (d.ok) window.showToast("Успешно начислено " + amount + " XP!", "ok"); else window.showToast("Ошибка: " + (d.error || "Неизвестно"), "err");
+    }).catch(() => window.showToast("Ошибка сети.", "err"));
 };
 
 // --- ТЕМЫ ---
@@ -280,13 +237,10 @@ function openThemeModal(){
   var names = ["Светлая", "Тёмная", "Сепия", "Океан", "Лес", "Матрица", "Космос", "Золото", "Аниме", "Хакер", "Кибер", "Матрешка"];
   var modal = el(`<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;" id="themeModal"><div style="background:var(--card);padding:24px;border-radius:16px;width:90%;max-width:400px; animation: popIn 0.3s;"><h3 style="margin-top:0;">Выберите тему</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;" id="themeGrid"></div><button class="btn ghost" style="width:100%" onclick="document.getElementById('themeModal').remove()">Закрыть</button></div></div>`);
   var grid = modal.querySelector("#themeGrid");
-  
   themes.forEach(function(t, i){ 
       var btn = el('<button class="btn ' + (t===current ? '' : 'ghost') + '" style="padding:12px;">' + names[i] + '</button>'); 
       btn.onclick = function() { 
-          if (!state.staff && ["matrix", "cosmos", "gold", "anime", "hacker", "cyber", "matrioska"].includes(t) && !state.shop.includes("theme_" + t)) {
-              window.showToast("Тема не куплена!", "err"); return;
-          }
+          if (!state.staff && ["matrix", "cosmos", "gold", "anime", "hacker", "cyber", "matrioska"].includes(t) && !state.shop.includes("theme_" + t)) { window.showToast("Тема не куплена!", "err"); return; }
           applyTheme(t); modal.remove(); 
       }; 
       grid.appendChild(btn); 
@@ -302,16 +256,43 @@ window.doStudentLogin = function() {
   localStorage.setItem("mdk0401.student", JSON.stringify(state.student));
   $("loginOverlay").hidden = true; renderUserChip(); loadStudentData(); checkDailyLogin(); route();
 };
+
 window.doTeacherLogin = function() {
-  var user = $("loginStaffName").value.trim(); var pass = $("loginStaffPass").value.trim(); var btn = $("staffLoginBtn");
+  var user = $("loginStaffName").value.trim(); 
+  var pass = $("loginStaffPass").value.trim(); 
+  var btn = $("staffLoginBtn");
+  
   if (!user || !pass) { alert("Введите логин и пароль!"); return; }
-  btn.textContent = "Проверяем..."; btn.disabled = true;
-  fetch(APPS_SCRIPT_URL + "?action=login&username=" + encodeURIComponent(user) + "&password=" + encodeURIComponent(pass) + "&t=" + new Date().getTime())
-    .then(function(r){ return r.json(); }).then(function(d) {
-      if (d && d.ok) { state.staff = { role: d.role, name: d.name }; sessionStorage.setItem("mdk0401.staff", JSON.stringify(state.staff)); $("loginOverlay").hidden = true; renderUserChip(); route(); } 
-      else { alert("Неверный логин или пароль."); btn.textContent = "Войти как сотрудник"; btn.disabled = false; }
-    }).catch(function() { alert("Ошибка сети."); btn.textContent = "Войти как сотрудник"; btn.disabled = false; });
+  
+  btn.textContent = "Проверяем..."; 
+  btn.disabled = true;
+  
+  var url = APPS_SCRIPT_URL + "?action=login&username=" + encodeURIComponent(user) + "&password=" + encodeURIComponent(pass);
+  console.log("Отправляем запрос на:", url); 
+  
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      if (d && d.ok) { 
+          state.staff = { role: d.role, name: d.name }; 
+          sessionStorage.setItem("mdk0401.staff", JSON.stringify(state.staff)); 
+          $("loginOverlay").hidden = true; 
+          renderUserChip(); 
+          route(); 
+      } 
+      else { 
+          alert("Неверный логин или пароль."); 
+          btn.textContent = "Войти как сотрудник"; 
+          btn.disabled = false; 
+      }
+    }).catch(function(err) { 
+        console.error(err);
+        alert("Ошибка сети."); 
+        btn.textContent = "Войти как сотрудник"; 
+        btn.disabled = false; 
+    });
 };
+
 window.handleLogout = function() {
   if (confirm("Выйти из аккаунта?")) {
     state.student = null; state.staff = null; localStorage.removeItem("mdk0401.student"); sessionStorage.removeItem("mdk0401.staff");
@@ -321,17 +302,12 @@ window.handleLogout = function() {
 
 function renderUserChip(){
   if (state.staff) { 
-      $("userChipName").textContent = state.staff.name; 
-      $("userChipGroup").textContent = "Учитель"; 
-      $("userChipAvatar").textContent = "👨‍🏫"; 
-      var reqEl = document.getElementById("navRequests");
-      if (reqEl) reqEl.style.display = "flex";
+      $("userChipName").textContent = state.staff.name; $("userChipGroup").textContent = "Учитель"; $("userChipAvatar").textContent = "👨‍🏫"; 
+      var reqEl = document.getElementById("navRequests"); if (reqEl) reqEl.style.display = "flex";
   } 
   else if (state.student) { 
-      $("userChipName").textContent = state.nick || state.student.name; 
-      $("userChipGroup").textContent = "Гр. " + state.student.group; 
-      if (state.shop.includes("golden") || state.staff) { $("userChipAvatar").textContent = "👑"; } 
-      else { $("userChipAvatar").textContent = "👨‍🎓"; }
+      $("userChipName").textContent = state.nick || state.student.name; $("userChipGroup").textContent = "Гр. " + state.student.group; 
+      if (state.shop.includes("golden") || state.staff) { $("userChipAvatar").textContent = "👑"; } else { $("userChipAvatar").textContent = "👨‍🎓"; }
   }
   updateNotifBadge();
 }
@@ -421,10 +397,7 @@ window.renderGCodeReferencePage = function() {
   document.getElementById("crumbs").textContent = "Справочник диагноста";
   app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
   
-  if (!window.GCODE_REFERENCE) {
-      app.appendChild(el('<div class="module">Справочник не загружен.</div>'));
-      return;
-  }
+  if (!window.GCODE_REFERENCE) { app.appendChild(el('<div class="module">Справочник не загружен.</div>')); return; }
 
   app.appendChild(el('<section class="hero"><h1>Справочник диагноста</h1><p>' + window.GCODE_REFERENCE.intro + '</p></section>'));
   
@@ -507,8 +480,7 @@ function renderTopic(id, tab){
             html += '<div style="color:var(--muted); font-size:13px; flex: 1 1 100%; margin-bottom:10px;">📌 Все работы сдаются одной папкой в конце курса.</div>';
             html += '<button class="btn" onclick="window.markPracticalDone(\'' + id + '\', \'' + p.code + '\')">✅ Сделал</button>';
         }
-        html += '</div>';
-        html += '</div>';
+        html += '</div></div>';
         panel.appendChild(el(html));
       });
     }
@@ -525,9 +497,7 @@ function renderTopic(id, tab){
         <h2 style="font-size:28px;">✅ Работа сдана</h2>
         <p style="font-size:18px;color:var(--text-soft);margin:16px 0;">Ваша оценка: <b style="font-size:24px;color:var(--accent);">${result.grade}</b></p>
         <p class="sub">Повторное прохождение закрыто.</p>
-        ${reqStatus === 'pending' 
-            ? '<p style="color:#d97706;font-weight:bold;">⏳ Запрос на попытку отправлен</p>' 
-            : `<button class="btn" onclick="window.requestAttempt('${id}', '${tab}')">Запросить доп. попытку</button>`}
+        ${reqStatus === 'pending' ? '<p style="color:#d97706;font-weight:bold;">⏳ Запрос на попытку отправлен</p>' : `<button class="btn" onclick="window.requestAttempt('${id}', '${tab}')">Запросить доп. попытку</button>`}
       </div>`));
     } else if (tab === "self" && t.topic.selfChecks) {
       var selfWrap = el('<div></div>'); panel.appendChild(selfWrap);
@@ -537,20 +507,12 @@ function renderTopic(id, tab){
       checkBtn.onclick = function() {
         var correctCount = 0;
         selfWrap.querySelectorAll(".self-input").forEach(function(inp) { 
-          var idx = Number(inp.getAttribute("data-idx")); 
-          var q = t.topic.selfChecks[idx]; 
-          var fb = selfWrap.querySelector("#fb_" + idx); 
-          if (inp.value.trim().toLowerCase() === q.a.trim().toLowerCase()) { 
-            fb.textContent = "✔ Верно"; fb.style.color = "var(--ok)"; correctCount++; 
-          } else { 
-            fb.textContent = "✘ Неверно. Ответ: " + q.a; fb.style.color = "var(--err)"; 
-          } 
+          var idx = Number(inp.getAttribute("data-idx")); var q = t.topic.selfChecks[idx]; var fb = selfWrap.querySelector("#fb_" + idx); 
+          if (inp.value.trim().toLowerCase() === q.a.trim().toLowerCase()) { fb.textContent = "✔ Верно"; fb.style.color = "var(--ok)"; correctCount++; } 
+          else { fb.textContent = "✘ Неверно. Ответ: " + q.a; fb.style.color = "var(--err)"; } 
         });
         var grade = Math.max(2, Math.round((correctCount/t.topic.selfChecks.length)*5)); 
-        state.selfResults[id] = { grade: grade }; 
-        saveStudentData();
-        window.showToast("Работа сдана!", "ok");
-        renderTopic(id, "self");
+        state.selfResults[id] = { grade: grade }; saveStudentData(); window.showToast("Работа сдана!", "ok"); renderTopic(id, "self");
       };
     } else if (tab === "test" && t.topic.test) {
       var timerBox = el('<div style="font-size:20px;font-weight:bold;color:var(--err);margin-bottom:16px;">⏱ 15:00</div>'); panel.appendChild(timerBox);
@@ -574,12 +536,8 @@ function renderTopic(id, tab){
         });
         var grade = Math.max(2, Math.round((correct / t.topic.test.length) * 5)); 
         state.results[id] = { grade: grade }; 
-        if (state.allowedAttempts && state.allowedAttempts[reqKey]) {
-            state.allowedAttempts[reqKey] = 1; 
-        }
-        saveStudentData();
-        window.showToast("Тест сдан!", "ok"); 
-        renderTopic(id, "test");
+        if (state.allowedAttempts && state.allowedAttempts[reqKey]) { state.allowedAttempts[reqKey] = 1; }
+        saveStudentData(); window.showToast("Тест сдан!", "ok"); renderTopic(id, "test");
       };
     }
   }
@@ -591,20 +549,16 @@ function renderSimulatorPage(){
   var block = el('<section class="module"><h2>🖥️ Симулятор диагностики</h2><p>Введите параметры вибрации узлов (в мм/с) через запятую, чтобы получить вердикт.</p><textarea id="simInput" style="width:100%;height:80px;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card-soft);margin-bottom:10px;font-family:monospace;">1.5, 2.0, 3.5, 4.2</textarea><button class="btn" id="runCodeBtn" style="width:100%;margin-bottom:10px;">▶ Анализировать</button><div id="simResult" style="background:var(--card-soft);border:1px solid var(--border);border-radius:8px;padding:16px;font-weight:bold;"></div></section>');
   app.appendChild(block); 
   var runBtn = block.querySelector("#runCodeBtn"), input = block.querySelector("#simInput"), result = block.querySelector("#simResult");
-  
   runBtn.onclick = function() {
     var vals = input.value.split(",").map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
     if(!vals.length) { result.innerHTML = "Ошибка ввода."; return; }
-    
     var out = "<ul>";
     vals.forEach((v, i) => {
         var status = v <= 2.8 ? "✅ Норма" : (v <= 4.5 ? "⚠️ Требует внимания" : "❌ Критично (замена)");
         var color = v <= 2.8 ? "var(--ok)" : (v <= 4.5 ? "#d97706" : "var(--err)");
         out += `<li>Узел ${i+1}: ${v} мм/с — <span style="color:${color}">${status}</span></li>`;
     });
-    out += "</ul>";
-    result.innerHTML = out;
-    localStorage.setItem("mdk0401.simulator_used", "true");
+    out += "</ul>"; result.innerHTML = out;
     window.showToast("Анализ завершен!", "ok");
   };
 }
@@ -612,7 +566,6 @@ function renderSimulatorPage(){
 function renderShopPage(){
   var app = $("app"); app.innerHTML = ""; app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
   app.appendChild(el('<section class="hero"><h1>Магазин XP</h1><p>У вас: 🌟 <b>' + state.xp + ' XP</b></p></section>'));
-  
   var items = [
     { id: "golden", icon: "👑", title: "Золотой аватар", price: 100, type: "avatar" },
     { id: "nick", icon: "🏷️", title: "Кастомный Ник", price: 200, type: "input", field: "nick", placeholder: "Введите ваш ник..." },
@@ -625,38 +578,20 @@ function renderShopPage(){
     { id: "theme_cyber", icon: "🤖", title: "Тема 'Кибер'", price: 2500, type: "theme", theme: "cyber" },
     { id: "theme_matrioska", icon: "🪆", title: "Тема 'Матрешка'", price: 3000, type: "theme", theme: "matrioska" }
   ];
-  
   var grid = el('<div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:16px;"></div>');
-  
   items.forEach(function(it){
     var has = state.shop.includes(it.id) || state.staff;
     var btn = el('<button class="btn" style="width:100%;margin-top:10px;" ' + (has || state.xp < it.price ? 'disabled' : '') + '>' + (has ? 'Куплено' : (state.xp < it.price ? 'Мало XP' : 'Купить')) + '</button>');
-    
-    if (state.staff) {
-        btn.textContent = "Доступно (Учитель)";
-        btn.style.background = "var(--accent-soft)";
-        btn.style.color = "var(--accent)";
-        btn.style.border = "1px solid var(--accent)";
-    } else if (!has && state.xp >= it.price) { 
+    if (state.staff) { btn.textContent = "Доступно (Учитель)"; btn.style.background = "var(--accent-soft)"; btn.style.color = "var(--accent)"; btn.style.border = "1px solid var(--accent)"; } 
+    else if (!has && state.xp >= it.price) { 
         btn.onclick = function() { 
-            if (it.type === "input") {
-                var val = prompt(it.placeholder, state[it.field] || "");
-                if (val === null) return;
-                state[it.field] = val.trim();
-            }
+            if (it.type === "input") { var val = prompt(it.placeholder, state[it.field] || ""); if (val === null) return; state[it.field] = val.trim(); }
             if (it.type === "theme") { applyTheme(it.theme); }
-            state.xp -= it.price; 
-            state.shop.push(it.id); 
-            saveStudentData(); 
-            renderShopPage(); 
-            renderUserChip();
-            window.showToast("Покупка совершена!", "ok"); 
+            state.xp -= it.price; state.shop.push(it.id); saveStudentData(); renderShopPage(); renderUserChip(); window.showToast("Покупка совершена!", "ok"); 
         }; 
     }
-    
     var card = el(`<div style="background:var(--card);border:1px solid var(--border);padding:16px;border-radius:12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;"><div><div style="font-size:40px;margin-bottom:10px;">${it.icon}</div><div style="font-weight:bold;">${it.title}</div></div><div style="margin-top:10px;"><div style="color:var(--accent);font-weight:bold;margin-bottom:8px;">${it.price} XP</div></div></div>`);
-    card.appendChild(btn); 
-    grid.appendChild(card);
+    card.appendChild(btn); grid.appendChild(card);
   });
   app.appendChild(grid);
 }
@@ -703,10 +638,7 @@ function route(){
 
 window.addEventListener("DOMContentLoaded", function() {
   if (!state.student && !state.staff) { $("loginOverlay").hidden = false; } else { $("loginOverlay").hidden = true; }
-  if (state.student) {
-      loadStudentData();
-      checkDailyLogin();
-  }
+  if (state.student) { loadStudentData(); checkDailyLogin(); }
   
   if($("themeToggle")) $("themeToggle").addEventListener("click", openThemeModal);
   if($("burgerBtn")) $("burgerBtn").addEventListener("click", toggleDrawer);
