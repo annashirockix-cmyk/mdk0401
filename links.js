@@ -1,6 +1,3 @@
-/* ============================================================
-   МДК 04.01 — links.js (Полезные материалы по диагностике)
-   ============================================================ */
 "use strict";
 
 window.renderLinksPage = function(){
@@ -8,7 +5,7 @@ window.renderLinksPage = function(){
   document.getElementById("crumbs").textContent = "Полезные материалы";
 
   app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
-  app.appendChild(el('<section class="hero"><h1>Полезные материалы</h1><p>Статьи, стандарты и книги по диагностике и ремонту оборудования.</p></section>'));
+  app.appendChild(el('<section class="hero"><h1>Полезные материалы</h1><p>Подборка статей, видеороликов и книг по диагностике и ремонту.</p></section>'));
 
   var data = {
     articles: [
