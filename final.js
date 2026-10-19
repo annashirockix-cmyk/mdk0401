@@ -1,5 +1,5 @@
 /* ============================================================
-   МДК 04.01 — final.js
+   МДК 07.01 — final.js (v46.0 — RESET FIX)
    ============================================================ */
 "use strict";
 
@@ -20,10 +20,10 @@ function collectAllQuestions(){
 
 window.renderFinalTrainingPage = function(){
   var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-  document.getElementById("crumbs").textContent = "Тренировка по диагностике";
+  document.getElementById("crumbs").textContent = "Тренировка";
   var all = collectAllQuestions();
   app.appendChild(fEl('<a class="backlink" href="#/">← На главную</a>'));
-  app.appendChild(fEl('<section class="hero"><h1>Тренировка</h1><p>Без таймера и оценок. Для самопроверки знаний по диагностике.</p></section>'));
+  app.appendChild(fEl('<section class="hero"><h1>Тренировка</h1><p>Без таймера и оценок. Для самопроверки.</p></section>'));
   if (!all.length) return;
 
   var form = fEl('<form></form>');
@@ -51,17 +51,18 @@ window.renderFinalTrainingPage = function(){
   form.querySelector("#ftTop").addEventListener("click", () => { window.scrollTo({ top: 0, behavior:"smooth" }); });
 };
 
+// ... (Остальные функции renderFinalExamPage и renderGCodeReferencePage оставьте как были) ...
 window.renderFinalExamPage = function(){
   var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
   document.getElementById("crumbs").textContent = "Экзамен";
   var all = collectAllQuestions();
   
   app.appendChild(fEl('<a class="backlink" href="#/">← На главную</a>'));
-  app.appendChild(fEl('<section class="hero"><h1>Итоговый экзамен</h1><p>25 вопросов · 30 минут. Диагностика и наладка оборудования.</p></section>'));
+  app.appendChild(fEl('<section class="hero"><h1>Итоговый экзамен</h1><p>25 вопросов · 30 минут.</p></section>'));
 
   if (all.length < FINAL_EXAM_SIZE) { app.appendChild(fEl('<div class="module">Мало вопросов в базе.</div>')); return; }
 
-  var usedKey = "mdk0401.exam_used." + (fStudentKey() || "guest");
+  var usedKey = "mdk0701.exam_used." + (fStudentKey() || "guest");
   var used = parseInt(localStorage.getItem(usedKey) || "0");
   var maxAttempts = 3;
 
@@ -86,7 +87,7 @@ window.renderFinalExamPage = function(){
       form.appendChild(qb);
     });
     
-    var gradeBtn = fEl('<button type="button" class="btn" style="width:100%; margin-top:20px;">Завершить экзамен</button>');
+    var gradeBtn = fEl('<button type="button" class="btn" style="width:100%; margin-top:20px;">Завершить</button>');
     form.appendChild(gradeBtn);
     mount.appendChild(form);
 

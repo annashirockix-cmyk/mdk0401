@@ -1,249 +1,196 @@
 /* ============================================================
-   МДК 04.01 — extra.js (v2.0)
+   МДК 07.01 — extra.js (v160.0)
    ============================================================ */
 "use strict";
 
-window.renderProfilePage = function() {
-  const app = document.getElementById("app"); app.innerHTML = "";
-  document.getElementById("crumbs").textContent = "Личный кабинет";
-  app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
-  
-  if (!state.student && !state.staff) return;
-  var isStaff = !!state.staff;
-  var name = isStaff ? state.staff.name : (state.nick || state.student.name);
-  var group = isStaff ? "Сотрудник" : "Группа " + state.student.group;
-  var role = isStaff ? "👨‍🏫" : ((state.shop.includes("golden") || state.staff) ? "👑" : "👨‍🎓");
-  var sign = state.sign ? `<p style="color:var(--accent); font-style:italic; margin-top:10px;">"${state.sign}"</p>` : "";
-
-  app.appendChild(el(`<div class="module" style="display:flex;gap:20px;align-items:center;padding:30px;">
-    <div style="font-size:60px;background:var(--card-soft);width:100px;height:100px;display:flex;align-items:center;justify-content:center;border-radius:20px;">${role}</div>
-    <div><h2 style="margin:0">${name}</h2><p style="color:var(--muted);margin:5px 0 0;">${group}</p>${sign}</div>
-  </div>`));
-  
-  if (!isStaff) {
-    app.appendChild(el(`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <a href="#/dashboard" class="btn" style="text-align:center;padding:15px;">📊 Статистика и Достижения</a>
-      <a href="#/portfolio" class="btn ghost" style="text-align:center;padding:15px;">🎓 Портфолио</a>
-    </div>`));
-  } else {
-      app.appendChild(el(`<div class="module" style="background:var(--accent-soft); border-color:var(--accent);">
-          <h3 style="margin-top:0; color:var(--accent);">Панель преподавателя</h3>
-          <p>Вам доступны все премиум-функции (темы, ники, аватары) без затрат XP.</p>
-      </div>`));
-  }
-};
-
-window.renderDashboard = function(){
-  var app = document.getElementById("app"); app.innerHTML = ""; document.getElementById("crumbs").textContent = "Статистика";
-  app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
-  
-  var isTeacher = state.staff && (state.staff.role === "teacher" || state.staff.role === "admin");
-  if (isTeacher) {
-    app.appendChild(el('<section class="module"><h2>📊 Панель преподавателя</h2><p>Данные доступны во вкладке "Журнал" и "Заявки".</p></section>'));
-    return;
-  }
-
-  var jokes = [
-      "Станок не прощает ошибок. Как и преподаватель.",
-      "Если сомневаешься — измерь вибрацию. Но лучше не надо.",
-      "Стружка в кармане — это не баг, это фича.",
-      "Не работает? Проверь, включен ли станок в розетку."
-  ];
-  var randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-  app.appendChild(el(`<div style="text-align:center; color:var(--muted); font-style:italic; margin-bottom:20px;">"${randomJoke}"</div>`));
-
-  app.appendChild(el(`<section class="module" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
-    <div>
-        <h2 style="margin:0 0 10px 0;">📈 Мой прогресс</h2>
-        <div style="font-size:18px; color:var(--text-soft);">🔥 Серия входов: <b style="color:var(--accent); font-size:22px;">${state.loginStreak || 0}</b> дн.</div>
-        <div style="font-size:18px; color:var(--text-soft); margin-top:5px;">🌟 Всего XP: <b style="color:var(--accent); font-size:22px;">${state.xp}</b></div>
-    </div>
-    <div style="max-width:200px; width:100%;"><canvas id="studentChart"></canvas></div>
-  </section>`));
-  
-  setTimeout(() => {
-    new Chart(document.getElementById('studentChart').getContext('2d'), { type: 'doughnut', data: { labels: ['Пройдено', 'Осталось'], datasets: [{ data: [state.xp/10, 100 - (state.xp/10)], backgroundColor: ['#2d7a4f', '#e8e2d8'] }] }, options: { cutout: '70%' } });
-  }, 100);
-
-  var achList = [
-    { id: "t1", icon: "🥉", title: "Новичок", desc: "Первый вход", check: () => state.xp >= 10 },
-    { id: "t2", icon: "🎓", title: "Студент", desc: "Накопить 50 XP", check: () => state.xp >= 50 },
-    { id: "t3", icon: "📚", title: "Книжный червь", desc: "Накопить 100 XP", check: () => state.xp >= 100 },
-    { id: "t4", icon: "🧠", title: "Умник", desc: "Накопить 500 XP", check: () => state.xp >= 500 },
-    { id: "t5", icon: "🏆", title: "Знаток", desc: "Накопить 1000 XP", check: () => state.xp >= 1000 },
-    { id: "t6", icon: "🔥", title: "В ударе", desc: "Серия входов 3 дня", check: () => state.loginStreak >= 3 }
-  ];
-
-  app.appendChild(el(`<section class="module"><h2>🏆 Мои достижения (${achList.length})</h2><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;" id="achGrid"></div></section>`));
-  var grid = document.getElementById("achGrid");
-  
-  achList.forEach(a => {
-    var isUnlocked = (state.achievements && state.achievements[a.id]) || a.check();
-    if (isUnlocked && (!state.achievements || !state.achievements[a.id])) {
-        if (!state.achievements) state.achievements = {};
-        state.achievements[a.id] = true;
-    }
-    grid.appendChild(el(`<div style="background:var(--card-soft);border:1px solid ${isUnlocked ? 'var(--gold)' : 'var(--border)'};padding:16px;border-radius:12px;text-align:center;opacity:${isUnlocked ? '1' : '0.4'};"><div style="font-size:32px;margin-bottom:8px;">${isUnlocked ? a.icon : '🔒'}</div><div style="font-weight:bold;font-size:13px;">${a.title}</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">${a.desc}</div></div>`));
-  });
-};
-
 window.renderChatPage = function(){
-  const app = document.getElementById("app"); app.innerHTML = ""; document.getElementById("crumbs").textContent = "Чат группы";
+  var app = document.getElementById("app"); app.innerHTML = "";
+  document.getElementById("crumbs").textContent = "Чат группы";
   app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
-  app.appendChild(el(`<section class="module"><h2>Чат группы ${state.student ? state.student.group : ""}</h2><div id="chatLog" style="height:400px;overflow-y:auto;background:var(--card-soft);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;"><div class="comment-empty">Загрузка сообщений...</div></div><form id="chatForm" style="display:flex;gap:10px;"><input type="text" id="chatInput" placeholder="Сообщение..." style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)"><button type="submit" class="btn">Отправить</button></form></section>`));
+  if (!state.student) { app.appendChild(el('<div class="module">Войдите как студент.</div>')); return; }
+
+  app.appendChild(el('<section class="module"><h2>Чат группы ' + escapeHtml(state.student.group) + '</h2><div id="chatLog" style="height:400px;overflow-y:auto;background:var(--card-soft);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;">Загрузка...</div><form id="chatForm" style="display:flex;gap:10px;"><input type="text" id="chatInput" placeholder="Сообщение..." style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)"><button type="submit" class="btn">Отправить</button></form></section>'));
+  var log = document.getElementById("chatLog");
   
   function loadChat() {
-    var group = state.student ? state.student.group : "ALL";
-    fetch(APPS_SCRIPT_URL + "?action=chatload&group=" + encodeURIComponent(group)).then(r=>r.json()).then(d=>{
-      var log = document.getElementById("chatLog"); if(!log) return;
-      log.innerHTML = "";
-      if(d.ok && d.messages.length) {
-        d.messages.forEach(m => {
-          log.innerHTML += `<div style="margin-bottom:12px;background:var(--card);padding:8px 12px;border-radius:8px;border:1px solid var(--border);"><b style="color:var(--accent)">${m.name}</b> <span style="font-size:10px;color:var(--muted)">${new Date(m.date).toLocaleTimeString()}</span><br>${m.text}</div>`;
-        });
-        log.scrollTop = log.scrollHeight;
-      } else {
-        log.innerHTML = '<div class="comment-empty">Пока нет сообщений.</div>';
-      }
-    }).catch(()=>{ document.getElementById("chatLog").innerHTML = "Ошибка загрузки."; });
+    API.getChat(state.student.group).then(d => {
+        log.innerHTML = "";
+        if (d && d.ok && d.messages) { d.messages.forEach(m => { log.innerHTML += '<div style="margin-bottom:12px;background:var(--card);padding:8px 12px;border-radius:8px;"><b style="color:var(--accent)">' + escapeHtml(m.name) + '</b><br>' + escapeHtml(m.text) + '</div>'; }); log.scrollTop = log.scrollHeight; } 
+        else log.innerHTML = "Нет сообщений";
+    });
   }
   loadChat();
-
-  document.getElementById("chatForm").onsubmit = (e)=>{
-    e.preventDefault(); const t = document.getElementById("chatInput").value; if(!t) return;
-    document.getElementById("chatInput").value = "";
-    var p = new URLSearchParams();
-    p.append("action", "chatsave"); p.append("group", state.student ? state.student.group : "ALL");
-    p.append("key", studentKey()); p.append("name", state.student.name); p.append("avatar", "👨‍🎓"); p.append("text", t);
-    fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).then(()=>loadChat());
+  document.getElementById("chatForm").onsubmit = function(e){
+    e.preventDefault(); var t = document.getElementById("chatInput").value.trim(); if (!t) return; document.getElementById("chatInput").value = "";
+    API.sendChat(state.student.group, studentKey(), state.student.name, t).then(loadChat);
   };
 };
 
-window.renderCommentsPage = function(){
-  const app = document.getElementById("app"); app.innerHTML = ""; document.getElementById("crumbs").textContent = "Отзывы";
-  app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
-  app.appendChild(el(`<section class="module"><h2>Отзывы о курсе</h2><div id="commentsList" style="margin-bottom:20px;"><div class="comment-empty">Загрузка...</div></div><form id="commentForm"><textarea id="commentText" placeholder="Напишите ваш отзыв..." style="width:100%;height:80px;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);margin-bottom:10px;"></textarea><button type="submit" class="btn">Отправить</button></form></section>`));
-
-  function loadComments() {
-    fetch(APPS_SCRIPT_URL + "?action=loadcomments").then(r=>r.json()).then(d=>{
-      var list = document.getElementById("commentsList"); list.innerHTML = "";
-      if(d.ok && d.comments.length) {
-        d.comments.reverse().forEach(c => {
-          list.innerHTML += `<div style="margin-bottom:12px;padding:16px;background:var(--card-soft);border-radius:12px;border:1px solid var(--border);"><b>${c.name}</b> <span style="font-size:12px;color:var(--muted)">${c.group}</span><p style="margin:8px 0 0;">${c.text}</p></div>`;
-        });
-      } else {
-        list.innerHTML = '<div class="comment-empty">Пока нет отзывов.</div>';
-      }
-    }).catch(()=>{ document.getElementById("commentsList").innerHTML = "Ошибка загрузки."; });
-  }
-  loadComments();
-
-  document.getElementById("commentForm").onsubmit = (e)=>{
-    e.preventDefault(); const t = document.getElementById("commentText").value; if(t.length < 5) return alert("Слишком короткий отзыв");
-    document.getElementById("commentText").value = "";
-    var p = new URLSearchParams();
-    p.append("action", "savecomment"); p.append("name", state.student ? state.student.name : "Гость");
-    p.append("group", state.student ? state.student.group : "—"); p.append("text", t);
-    fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).then(()=>loadComments());
-  };
-};
-
-window.renderRequestsPage = function() {
-    var app = document.getElementById("app"); app.innerHTML = ""; document.getElementById("crumbs").textContent = "Заявки";
+// ПОРТФОЛИО С PDF
+window.renderPortfolioPage = function() {
+    var app = document.getElementById("app"); app.innerHTML = "";
+    document.getElementById("crumbs").textContent = "Портфолио";
     app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
-    
-    if (!state.staff) { app.appendChild(el('<div class="module">Доступно только преподавателям.</div>')); return; }
-    
-    app.appendChild(el('<section class="hero"><h1>Входящие заявки</h1><p>Проверка практических работ и выдача попыток.</p></section>'));
-    var container = el('<section class="module"><div class="skeleton" style="height:100px;"></div></section>');
+
+    if (!state.student) { app.appendChild(el('<div class="module">Войдите.</div>')); return; }
+
+    var portfolioHtml = `
+        <div id="portfolioPrint" class="module" style="padding:40px; background:#fff; color:#000;">
+            <h1 style="text-align:center; color:#c14a2a;">ПОРТФОЛИО СТУДЕНТА</h1>
+            <hr style="margin:20px 0; border:1px solid #ccc;">
+            <p><b>ФИО:</b> ${escapeHtml(state.student.name)}</p>
+            <p><b>Группа:</b> ${escapeHtml(state.student.group)}</p>
+            <p><b>Уровень:</b> ${getLevel(state.xp)} (${getLevelTitle(getLevel(state.xp))})</p>
+            <p><b>Всего опыта (XP):</b> ${state.xp}</p>
+            
+            <h3 style="margin-top:30px; color:#c14a2a;">Достижения:</h3>
+            <ul>
+                ${Object.keys(state.achievements || {}).slice(0, 20).map(id => `<li>${id}</li>`).join('')}
+            </ul>
+        </div>
+        <div style="text-align:center; margin-top:20px;">
+            <button class="btn" id="pdfBtn">📥 Скачать PDF</button>
+        </div>
+    `;
+    app.appendChild(el(portfolioHtml));
+
+    document.getElementById("pdfBtn").onclick = function() {
+        var element = document.getElementById('portfolioPrint');
+        var opt = { margin: 10, filename: 'portfolio_' + state.student.name + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+        window.showToast("Генерация PDF...", "info");
+        html2pdf().set(opt).from(element).save().then(() => window.showToast("PDF готов!", "ok"));
+    };
+};
+
+// 3D СТАНОК
+window.render3DMachinePage = function() {
+    var app = document.getElementById("app"); app.innerHTML = "";
+    document.getElementById("crumbs").textContent = "3D Станок";
+    app.appendChild(el('<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🖥️ 3D Модель станка</h1><p>Вращайте мышкой для просмотра</p></section>'));
+
+    var container = el('<div id="3dContainer" style="width:100%; height:500px; background:var(--card-soft); border-radius:16px; overflow:hidden; position:relative;"></div>');
     app.appendChild(container);
 
-    fetch(APPS_SCRIPT_URL + "?action=getstudents").then(r => r.json()).then(d => {
-        container.innerHTML = "";
-        if (!d.ok || !d.students.length) { container.innerHTML = "Студентов пока нет."; return; }
-        
-        var hasRequests = false;
+    setTimeout(() => {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
 
-        d.students.forEach(s => {
-            try {
-                var p = JSON.parse(s.payload || "{}");
-                var sKey = (s.name + "|" + s.group).toLowerCase();
-                
-                if (p.practicalsDone) {
-                    Object.keys(p.practicalsDone).forEach(topicId => {
-                        Object.keys(p.practicalsDone[topicId]).forEach(code => {
-                            if (p.practicalsDone[topicId][code] === "pending") {
-                                hasRequests = true;
-                                var topic = findTopic(topicId);
-                                var tName = topic ? topic.topic.title : topicId;
-                                
-                                var reqCard = el(`<div class="module" style="border-left:4px solid var(--accent); padding:16px; margin-bottom:12px;" id="req_${topicId}_${code}">
-                                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
-                                        <div>
-                                            <b>${s.name}</b> (гр. ${s.group})<br>
-                                            <span style="color:var(--muted); font-size:13px;">Сдал практическую: ${tName} (${code})</span>
-                                        </div>
-                                        <div style="display:flex; gap:10px; align-items:center;">
-                                            <select id="grade_${topicId}_${code}" style="padding:8px; border-radius:6px; border:1px solid var(--border); background:var(--bg); color:var(--text);">
-                                                <option value="5">Оценка 5</option>
-                                                <option value="4">Оценка 4</option>
-                                                <option value="3">Оценка 3</option>
-                                                <option value="2">Оценка 2</option>
-                                            </select>
-                                            <button class="btn" onclick="window.approvePractical('${sKey}', '${topicId}', '${code}', document.getElementById('grade_${topicId}_${code}').value)">Подтвердить</button>
-                                        </div>
-                                    </div>
-                                </div>`);
-                                container.appendChild(reqCard);
-                            }
-                        });
-                    });
-                }
-            } catch(e) {}
-        });
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
 
-        if (!hasRequests) {
-            container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--muted);"><h3>Заявок пока нет 🎉</h3><p>Все проверено!</p></div>';
+        var machineGroup = new THREE.Group();
+        var bedGeo = new THREE.BoxGeometry(10, 1, 3);
+        var bedMat = new THREE.MeshStandardMaterial({ color: 0x888888 });
+        var bed = new THREE.Mesh(bedGeo, bedMat); bed.position.set(0, -1, 0); machineGroup.add(bed);
+
+        var headGeo = new THREE.BoxGeometry(2, 3, 3);
+        var head = new THREE.Mesh(headGeo, bedMat); head.position.set(-4, 0.5, 0); machineGroup.add(head);
+
+        var chuckGeo = new THREE.CylinderGeometry(1, 1, 1, 16);
+        var chuckMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
+        var chuck = new THREE.Mesh(chuckGeo, chuckMat); chuck.rotation.z = Math.PI / 2; chuck.position.set(-2.5, 0.5, 0); machineGroup.add(chuck);
+
+        var tailGeo = new THREE.BoxGeometry(1.5, 2, 2);
+        var tail = new THREE.Mesh(tailGeo, bedMat); tail.position.set(4, 0, 0); machineGroup.add(tail);
+
+        var toolGeo = new THREE.BoxGeometry(1, 1.5, 1);
+        var toolMat = new THREE.MeshStandardMaterial({ color: 0xc14a2a });
+        var tool = new THREE.Mesh(toolGeo, toolMat); tool.position.set(0, 0.5, 1); machineGroup.add(tool);
+
+        scene.add(machineGroup);
+        camera.position.set(8, 8, 12);
+        camera.lookAt(0, 0, 0);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            machineGroup.rotation.y += 0.005;
+            renderer.render(scene, camera);
         }
-    }).catch(() => { container.innerHTML = "Ошибка загрузки."; });
+        animate();
+    }, 100);
 };
 
-window.renderNotificationsPage = function() {
-    var app = document.getElementById("app"); app.innerHTML = ""; document.getElementById("crumbs").textContent = "Уведомления";
+// СМЕРТЕЛЬНАЯ ВЕЧЕРИНКА (30 ВОПРОСОВ)
+window.renderDeadlyPartyPage = function(){
+  var app = document.getElementById("app"); app.innerHTML = "";
+  document.getElementById("crumbs").textContent = "Смертельная вечеринка";
+  app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
+
+  var allQuestions = [
+    // === ЧПУ ===
+    { q: "Что означает G00?", options: ["Быстрое позиционирование", "Линейная интерполяция", "Пауза", "Резьба"], correct: 0 },
+    { q: "Что означает M03?", options: ["Стоп шпинделя", "Шпиндель по часовой", "Смена инструмента", "Конец"], correct: 1 },
+    { q: "Угол профиля метрической резьбы", options: ["55°", "60°", "30°", "33°"], correct: 1 },
+    { q: "Какой код отменяет постоянный цикл?", options: ["G80", "G00", "G90", "M30"], correct: 0 },
+    { q: "Что такое ЧПУ?", options: ["Числовое программное управление", "Частное производственное устройство", "Часто повторяющийся узел", "Черновая правка углов"], correct: 0 },
+    { q: "Какой код задает круговую интерполяцию по часовой стрелке?", options: ["G01", "G02", "G03", "G04"], correct: 1 },
+    { q: "Что означает M05?", options: ["Включить шпиндель", "Остановить шпиндель", "Включить СОЖ", "Пауза"], correct: 1 },
+    { q: "Как расшифровывается CAD?", options: ["Computer-Aided Design", "Computer-Aided Drafting", "Control Automatic Design", "Central Automated Device"], correct: 0 },
+    { q: "Угол профиля трапецеидальной резьбы", options: ["60°", "55°", "30°", "40°"], correct: 2 },
+    { q: "Какой инструмент используется для чистовой обработки отверстий?", options: ["Сверло", "Зенкер", "Развертка", "Метчик"], correct: 2 },
+    { q: "Что означает строка G21 G40 G54?", options: ["Дюймы, коррекция, СК", "Метры, без коррекции, СК", "Миллиметры, отмена коррекции, рабочая СК", "Градусы, цикл, СК"], correct: 2 },
+    { q: "Какая ось на токарном станке направлена вдоль шпинделя?", options: ["X", "Y", "Z", "W"], correct: 2 },
+    { q: "Сколько степеней свободы у 5D обработки?", options: ["3", "4", "5", "6"], correct: 2 },
+    { q: "Какой код вызывает подпрограмму?", options: ["M98", "M99", "M30", "G80"], correct: 0 },
+    { q: "Какой код задает паузу?", options: ["G01", "G02", "G03", "G04"], correct: 3 },
+
+    // === ANIME ===
+    { q: "Как зовут главного героя аниме «Наруто»?", options: ["Саске", "Наруто", "Какаши", "Итачи"], correct: 1 },
+    { q: "Какая техника является визитной карточкой Наруто?", options: ["Расенган", "Чидори", "Огненный шар", "Теневой клон"], correct: 0 },
+    { q: "В аниме «Атака Титанов» кто съел мать Эрена?", options: ["Титан-Колосс", "Титан-Броня", "Улыбающийся Титан", "Титан-Женщина"], correct: 2 },
+    { q: "Какой цвет волос у Гоку в форме Супер Сайяна Бога (SSG)?", options: ["Золотой", "Синий", "Красный", "Серебряный"], correct: 2 },
+    { q: "Какое дыхание использует Танджиро в «Клинке, рассекающем демонов»?", options: ["Воды", "Грома", "Солнца", "Пламени"], correct: 0 },
+
+    // === HOYOVERSE ===
+    { q: "Какой элемент у Архонта Пиро в Genshin Impact?", options: ["Пиро", "Гидро", "Электро", "Крио"], correct: 0 },
+    { q: "Как называется игра от HoYoverse про космические путешествия на поезде?", options: ["Genshin Impact", "Honkai Impact 3rd", "Honkai: Star Rail", "Zenless Zone Zero"], correct: 2 },
+    { q: "Кто является Гео Архонтом в Genshin Impact?", options: ["Венти", "Чжун Ли", "Райден", "Нахида"], correct: 1 },
+    { q: "Как зовут главного героя (Стелларон) в Honkai: Star Rail?", options: ["Трейлблейзер", "Путешественник", "Капитан", "Мастер"], correct: 0 },
+    { q: "Какая стихия у Инь Синь (Yinlin) в Wuthering Waves?", options: ["Хаос", "Электро", "Спектро", "Аэро"], correct: 1 },
+
+    // === GAMES/IT ===
+    { q: "В Atomic Heart кто является главным антагонистом (в финале)?", options: ["Нейросеть КОЛЛЕКТИВ", "Сеченов", "Петров", "Менделеев"], correct: 0 },
+    { q: "Какой робот-близнец сопровождает майора Нечаева в Atomic Heart?", options: ["Чарльз", "Нора", "Близняшки", "Баба Яга"], correct: 2 },
+    { q: "В какой игре есть персонаж по имени Кратос?", options: ["Dark Souls", "God of War", "Devil May Cry", "Bloodborne"], correct: 1 },
+    { q: "Как называется главный герой Cyberpunk 2077?", options: ["Джеки", "V", "Джонни", "Адам"], correct: 1 },
+    { q: "Что означает аббревиатура RPG?", options: ["Role-Playing Game", "Real-Playing Game", "Rocket-Propelled Grenade", "Rapid Program Generation"], correct: 0 }
+  ];
+
+  var questions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 5);
+  var currentQ = 0, lives = 3;
+
+  function renderQ(){
+    app.innerHTML = "";
     app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
-    app.appendChild(el('<section class="hero"><h1>Центр уведомлений</h1></section>'));
-
-    if (state.notifications) {
-        state.notifications.forEach(n => n.read = true);
-        if (window.saveStudentData) saveStudentData();
-        if (window.updateNotifBadge) updateNotifBadge();
-    }
-
-    var block = el('<section class="module"><div id="notifList" style="display:flex; flex-direction:column; gap:12px;"></div></section>');
-    app.appendChild(block);
-    var list = block.querySelector("#notifList");
-
-    if (!state.notifications || state.notifications.length === 0) {
-        list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--muted);"><h3>Уведомлений пока нет</h3><p>Здесь будут появляться сообщения об оценках, изменениях в расписании и начислениях XP.</p></div>';
-        return;
-    }
-
-    state.notifications.forEach(n => {
-        var icon = "ℹ️";
-        if (n.type === "ok") icon = "✅";
-        if (n.type === "err") icon = "❌";
-        if (n.text.includes("XP")) icon = "🌟";
-        if (n.text.includes("оценка") || n.text.includes("Оценка")) icon = "📝";
-
-        var dateObj = new Date(n.date);
-        var dateStr = dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString();
-
-        list.appendChild(el(`<div style="display:flex; gap:16px; background:var(--card-soft); border:1px solid var(--border); padding:16px; border-radius:12px; align-items:flex-start;">
-            <div style="font-size:24px;">${icon}</div>
-            <div style="flex:1;">
-                <div style="font-size:15px; color:var(--text); margin-bottom:4px;">${n.text}</div>
-                <div style="font-size:12px; color:var(--muted);">${dateStr}</div>
-            </div>
-        </div>`));
+    app.appendChild(el('<section class="module" style="background:#1a0a0a;border:2px solid #ff003c;color:#fff; padding:20px;"><div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:14px;"><span>Вопрос ' + (currentQ + 1) + ' / ' + questions.length + '</span><span>❤️ '.repeat(lives) + '🤍 '.repeat(3 - lives) + '</span></div><h2 style="margin:0 0 20px 0;color:#ff003c; font-size:20px; line-height:1.4;">' + escapeHtml(questions[currentQ].q) + '</h2><div id="qOptions"></div></section>'));
+    var qo = document.getElementById("qOptions");
+    questions[currentQ].options.forEach(function(opt, idx){
+      var b = el('<button class="btn" style="width:100%;margin-bottom:8px;text-align:left;background:#2a0a0a;border:1px solid #ff003c;color:#fff;font-size:14px; padding:12px;">' + escapeHtml(opt) + '</button>');
+      b.onclick = function(){
+        if (idx === questions[currentQ].correct) {
+          currentQ++;
+          if (currentQ >= questions.length) {
+            app.innerHTML = ""; app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
+            app.appendChild(el('<section class="module" style="text-align:center;background:#0a1a0a;border:2px solid #00ff00;color:#fff;padding:50px;"><h1 style="color:#00ff00;">Вы выжили!</h1><button class="btn" style="margin-top:20px;" onclick="if(window.addXP) window.addXP(100);location.hash=\'#/\'">+100 XP и на главную</button></section>'));
+          } else renderQ();
+        } else {
+          lives--;
+          if (lives <= 0) {
+            app.innerHTML = ""; app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
+            app.appendChild(el('<section class="module" style="text-align:center;background:#1a0000;border:2px solid #ff003c;color:#fff;padding:50px;"><h1 style="color:#ff003c;">Проигрыш</h1><button class="btn" style="margin-top:20px;" onclick="window.renderDeadlyPartyPage()">Заново</button></section>'));
+          } else {
+             window.showToast("❌ Неверно! Осталось жизней: " + lives, "err");
+          }
+        }
+      };
+      qo.appendChild(b);
     });
+  }
+  renderQ();
 };

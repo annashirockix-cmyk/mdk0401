@@ -1,176 +1,172 @@
 /* ============================================================
-   МДК 04.01 — journal.js (Журнал успеваемости)
+   МДК 07.01 — journal.js (v171.0 — Teacher Actions & UI)
    ============================================================ */
 "use strict";
 
 window.renderJournalPage = function() {
-  var app = document.getElementById("app"); if (!app) return; app.innerHTML = ""; document.getElementById("crumbs").textContent = "Журнал";
+  var app = document.getElementById("app"); 
+  if (!app) return; 
+  app.innerHTML = "";
+  document.getElementById("crumbs").textContent = "Журнал";
   
   app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
   app.appendChild(el('<section class="hero"><h1>Журнал успеваемости</h1></section>'));
   
-  var isTeacher = state.staff && (state.staff.role === "teacher" || state.staff.role === "admin" || state.staff.role === "curator");
+  var isTeacher = state.staff && (state.staff.role === "teacher" || state.staff.role === "admin");
   
+  // Панель быстрых действий для учителя
   if (isTeacher) {
-      var quickPanel = el(`<section class="module" style="background:var(--accent-soft); border-color:var(--accent); margin-bottom:24px;">
-          <h3 style="margin-top:0; color:var(--accent);">🎁 Быстрая выдача XP</h3>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <select id="quickStudentSelect" class="self-input" style="flex:1; min-width:200px; margin:0;"></select>
-              <input id="quickXPAmount" type="number" class="self-input" style="width:100px; margin:0;" placeholder="XP" value="50" min="1">
-              <button class="btn" id="quickGrantBtn" style="background:var(--gold); color:#000;">Выдать</button>
-          </div>
-      </section>`);
+      var quickPanel = el(
+          '<section class="module" style="background:var(--accent-soft); border-color:var(--accent); margin-bottom:24px;">' +
+              '<h3 style="margin-top:0; color:var(--accent);">🎁 Управление опытом</h3>' +
+              '<div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">' +
+                  '<select id="quickStudentSelect" class="self-input" style="flex:1; min-width:200px; margin:0;">' +
+                      '<option value="">— Выберите студента —</option>' +
+                  '</select>' +
+                  '<input id="quickXPAmount" type="number" class="self-input" style="width:110px; margin:0;" placeholder="XP" value="50" min="1">' +
+                  '<button class="btn" id="quickAddBtn" style="background:var(--gold); color:#000;">+ Начислить</button>' +
+                  '<button class="btn ghost" id="quickSubBtn" style="border-color:var(--err); color:var(--err);">− Списать</button>' +
+                  '<button class="btn" id="quickCasinoBtn" style="background:linear-gradient(45deg, #ff00cc, #333399); color:#fff;">🎰 Казино</button>' +
+              '</div>' +
+          '</section>');
       app.appendChild(quickPanel);
   }
 
-  if (isTeacher) {
-    var topPanel = el('<div style="margin-bottom:16px; display:flex; justify-content:flex-end;"><button class="btn" id="reportBtn" style="background:var(--accent); color:#fff;">📧 Отправить отчет</button></div>');
-    app.appendChild(topPanel);
-    topPanel.querySelector("#reportBtn").onclick = function() {
-      var email = prompt("Введите email для отчета:", "anna.shirockix@gmail.com"); if (!email) return;
-      var p = new URLSearchParams(); p.append("action", "journalreport"); p.append("group", state.staff.group || "ТМ-3"); p.append("email", email);
-      window.showToast("Отчет отправляется...", "info");
-      fetch(APPS_SCRIPT_URL, { method: "POST", body: p }).then(r=>r.json()).then(res=>{
-         if(res.ok) window.showToast("Отчет отправлен!", "ok"); else window.showToast("Ошибка отправки.", "err");
-      });
-    };
-  }
+  var tableWrap = el('<section class="module"><div class="skeleton" style="height:200px;"></div></section>'); 
+  app.appendChild(tableWrap);
 
-  var tableWrap = el('<section class="module"><div class="skeleton" style="height:200px;"></div></section>'); app.appendChild(tableWrap);
-
-  fetch(APPS_SCRIPT_URL + "?action=getstudents").then(r => r.json()).then(d => {
-    tableWrap.innerHTML = "";
-    if (!d.ok || !d.students.length) { tableWrap.innerHTML = "Студентов пока нет."; return; }
-    
-    if (isTeacher) {
-        var sel = document.getElementById("quickStudentSelect");
-        d.students.forEach(s => {
-            sel.appendChild(el(`<option value="${(s.name + "|" + s.group).toLowerCase()}">${s.name} (${s.group})</option>`));
-        });
-        
-        document.getElementById("quickGrantBtn").onclick = function() {
-            var sKey = sel.value;
-            var sName = sel.options[sel.selectedIndex].text.split(' (')[0];
-            var amount = parseInt(document.getElementById("quickXPAmount").value) || 50;
-            if (!sKey) return;
-            if (confirm(`Выдать ${amount} XP студенту ${sName}?`)) {
-                window.grantXP(sKey, sName, amount);
-            }
-        };
-    }
-
-    var displayStudents = d.students;
-    if (!state.staff && state.student) {
-      displayStudents = d.students.filter(function(s) {
-        return s.name.trim().toLowerCase() === state.student.name.trim().toLowerCase() && 
-               s.group.trim().toUpperCase() === state.student.group.trim().toUpperCase();
-      });
-    }
-    if (!displayStudents.length) { tableWrap.innerHTML = "<p class='sub'>Ваших данных пока нет.</p>"; return; }
-    
-    var tableContainer = el('<div class="journal-container" style="overflow-x:auto;"></div>');
-    var table = el('<table class="journal-table" style="width:100%; border-collapse:collapse; text-align:left; font-size:14px;"></table>');
-    
-    table.appendChild(el('<thead><tr>'
-        + '<th style="border-bottom:2px solid var(--border); padding:12px; width:20%;">Студент</th>'
-        + '<th style="border-bottom:2px solid var(--border); padding:12px; width:10%; text-align:center;">Средний балл</th>'
-        + '<th style="border-bottom:2px solid var(--border); padding:12px; width:45%;">Сданные темы и работы</th>'
-        + '<th style="border-bottom:2px solid var(--border); padding:12px; width:25%;">Практические</th>'
-        + '</tr></thead>'));
-        
-    var tbody = el('<tbody></tbody>');
-    
-    displayStudents.forEach(s => {
-      var tr = el('<tr style="border-bottom:1px solid var(--border);"></tr>');
-      var currentStudentKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
-      
-      var nameCellHtml = `<div style="font-weight:bold; font-size:16px;">${s.name}</div>
-                          <div style="font-size:12px;color:var(--muted);font-weight:normal;margin-bottom:8px;">гр. ${s.group}</div>`;
-      if (isTeacher) {
-          nameCellHtml += `<button class="btn" style="padding:6px 12px; font-size:12px; background:var(--gold); color:#000; font-weight:bold;" onclick="window.grantXP('${currentStudentKey}', '${s.name}')">🎁 Выдать XP</button>`;
+  // Загрузка данных
+  API.getStudents().then(d => {
+      tableWrap.innerHTML = "";
+      if (!d || !d.ok || !d.students || !d.students.length) {
+          tableWrap.innerHTML = "<div style='text-align:center; padding:20px;'>Студентов пока нет.</div>";
+          return;
       }
-      tr.appendChild(el(`<td style="padding:12px; vertical-align:top;">${nameCellHtml}</td>`));
       
-      var tdWorks = el('<td style="padding:12px; vertical-align:top;"></td>');
-      var tdPracticals = el('<td style="padding:12px; vertical-align:top;"></td>');
-      
-      var worksHtml = "";
-      var pracHtml = "";
-      var hasWorks = false;
-      var sum = 0, count = 0;
-      
-      try {
-        var p = JSON.parse(s.payload || "{}");
-        
-        if (p.results) {
-          Object.keys(p.results).forEach(k => {
-             var tName = k === "__final_exam__" ? "Итоговый экзамен" : k;
-             var topic = findTopic(k);
-             if (topic) tName = topic.topic.code + ' - ' + topic.topic.title;
-             
-             worksHtml += `<div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed var(--border);"><b>${tName}</b> <span style="font-size:11px;color:var(--muted);">(Тест)</span></div>`;
-             sum += p.results[k].grade; count++;
-             hasWorks = true;
+      // Инициализация панели
+      if (isTeacher) {
+          var sel = document.getElementById("quickStudentSelect");
+          d.students.forEach(s => {
+              var opt = el('<option></option>');
+              var sKey = (String(s.name).trim().toLowerCase() + "|" + String(s.group).trim().toLowerCase());
+              opt.value = sKey;
+              opt.textContent = String(s.name) + " (" + String(s.group) + ")";
+              sel.appendChild(opt);
           });
-        }
-        
-        if (p.selfResults) {
-          Object.keys(p.selfResults).forEach(k => { 
-            var topic = findTopic(k);
-            var tName = topic ? topic.topic.code + ' - ' + topic.topic.title : k;
-            worksHtml += `<div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed var(--border);"><b>${tName}</b> <span style="font-size:11px;color:var(--muted);">(Сам. работа)</span></div>`;
-            sum += p.selfResults[k].grade; count++;
-            hasWorks = true;
-          });
-        }
+          
+          var getSelected = () => {
+              if (!sel.value) return null;
+              return { key: sel.value, name: sel.options[sel.selectedIndex].text.replace(/\s*\([^)]*\)\s*$/, "").trim() };
+          };
+          var getAmount = () => {
+              var v = parseInt(document.getElementById("quickXPAmount").value, 10);
+              return isNaN(v) || v <= 0 ? 50 : v;
+          };
+          
+          document.getElementById("quickAddBtn").onclick = () => {
+              var info = getSelected(); if (!info) return window.showToast("Выберите студента", "err");
+              if (confirm(`Начислить +${getAmount()} XP студенту ${info.name}?`)) window.grantXP(info.key, info.name, getAmount());
+          };
+          document.getElementById("quickSubBtn").onclick = () => {
+              var info = getSelected(); if (!info) return window.showToast("Выберите студента", "err");
+              if (confirm(`Списать ${getAmount()} XP у студента ${info.name}?`)) window.grantXP(info.key, info.name, -getAmount());
+          };
+          document.getElementById("quickCasinoBtn").onclick = () => {
+              var info = getSelected(); if (!info) return window.showToast("Выберите студента", "err");
+              var win = Math.floor(Math.random() * 601) - 100;
+              if (confirm(`🎰 Рулетка для ${info.name}?\nВыпало: ${win > 0 ? '+' : ''}${win} XP\nПодтвердить?`)) window.grantXP(info.key, info.name, win);
+          };
+      }
 
-        if (p.practicalsDone) {
-            Object.keys(p.practicalsDone).forEach(topicId => {
-                Object.keys(p.practicalsDone[topicId]).forEach(pCode => {
-                    var isDone = p.practicalsDone[topicId][pCode];
-                    if (!isDone) return;
-                    
-                    var topic = findTopic(topicId);
-                    var tName = topic ? topic.topic.code : topicId;
-                    var grade = (p.practicalGrades && p.practicalGrades[topicId] && p.practicalGrades[topicId][pCode]) || "";
-                    
-                    pracHtml += `<div style="margin-bottom:8px; padding:8px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);">
-                        <div style="font-size:12px; margin-bottom:4px;"><b>${tName}</b> - ${pCode}</div>`;
-                    
-                    if (isTeacher) {
-                        pracHtml += `<select onchange="window.approvePractical('${currentStudentKey}', '${topicId}', '${pCode}', this.value)" style="padding:4px; border-radius:4px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-weight:bold;">
-                            <option value="">— Оценка —</option>
-                            <option value="5" ${grade == "5" ? "selected" : ""}>5</option>
-                            <option value="4" ${grade == "4" ? "selected" : ""}>4</option>
-                            <option value="3" ${grade == "3" ? "selected" : ""}>3</option>
-                            <option value="2" ${grade == "2" ? "selected" : ""}>2</option>
-                        </select>`;
-                    } else {
-                        pracHtml += `<span style="font-size:14px; font-weight:bold; color:var(--accent);">${grade ? "Оценка: " + grade : "На проверке"}</span>`;
-                    }
-                    pracHtml += `</div>`;
-                });
-            });
-        }
-      } catch(e) { console.error(e); }
+      // Фильтр для студента
+      var displayStudents = d.students;
+      if (!isTeacher && state.student) {
+          displayStudents = d.students.filter(s => 
+              String(s.name).trim().toLowerCase() === state.student.name.trim().toLowerCase() && 
+              String(s.group).trim().toUpperCase() === state.student.group.trim().toUpperCase()
+          );
+      }
+      if (!displayStudents.length) { tableWrap.innerHTML = "<p class='sub'>Ваших данных пока нет.</p>"; return; }
       
-      var avg = count > 0 ? (sum / count).toFixed(2) : "—";
+      // Построение таблицы
+      var tableContainer = el('<div class="journal-container" style="overflow-x:auto;"></div>');
+      var table = el('<table class="journal-table" style="width:100%; border-collapse:collapse; text-align:left; font-size:14px;"></table>');
+      table.appendChild(el('<thead><tr>' +
+          '<th style="padding:12px; border-bottom:2px solid var(--border); width:30%;">Студент</th>' +
+          '<th style="padding:12px; border-bottom:2px solid var(--border); width:10%; text-align:center;">Ср. балл</th>' +
+          '<th style="padding:12px; border-bottom:2px solid var(--border); width:20%; text-align:center;">XP</th>' +
+          (isTeacher ? '<th style="padding:12px; border-bottom:2px solid var(--border); width:40%;">Действия</th>' : '<th style="padding:12px; border-bottom:2px solid var(--border); width:40%;">Работы</th>') +
+      '</tr></thead>'));
       
-      tr.appendChild(el(`<td style="padding:12px; vertical-align:top; text-align:center; font-size:18px; font-weight:bold; color:var(--accent);">${avg}</td>`));
+      var tbody = el('<tbody></tbody>');
       
-      if (hasWorks) tdWorks.innerHTML = worksHtml;
-      else tdWorks.innerHTML = '<i style="color:var(--muted);">Нет сданных тестов</i>';
+      displayStudents.forEach(s => {
+          var tr = el('<tr style="border-bottom:1px solid var(--border);"></tr>');
+          var sKey = String(s.name).trim().toLowerCase() + "|" + String(s.group).trim().toLowerCase();
+          var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e){}
+          
+          // Ячейка с ФИО
+          var nameHtml = `<div style="font-weight:bold; font-size:16px;">${escapeHtml(s.name)}</div>
+                          <div style="font-size:12px;color:var(--muted);">гр. ${escapeHtml(s.group)}</div>`;
+          tr.appendChild(el(`<td style="padding:12px; vertical-align:top;">${nameHtml}</td>`));
+          
+          // Средний балл
+          var sum = 0, count = 0;
+          if (p.results) Object.keys(p.results).forEach(k => { sum += p.results[k].grade || 0; count++; });
+          if (p.selfResults) Object.keys(p.selfResults).forEach(k => { sum += p.selfResults[k].grade || 0; count++; });
+          var avg = count > 0 ? (sum / count).toFixed(2) : "—";
+          tr.appendChild(el(`<td style="padding:12px; text-align:center; font-weight:bold; color:var(--accent); font-size:18px;">${avg}</td>`));
+          
+          // XP
+          tr.appendChild(el(`<td style="padding:12px; text-align:center; font-weight:bold; color:var(--gold);">${p.xp || 0}</td>`));
+          
+          // Действия (для учителя) или сданные работы (для студента)
+          if (isTeacher) {
+              var actionsHtml = `<div style="display:flex; gap:5px; flex-wrap:wrap;">
+                  <a href="#/profile/${encodeURIComponent(sKey)}" class="btn" style="padding:6px 10px; font-size:12px; text-decoration:none;">👤 Профиль</a>
+                  <button class="btn" style="padding:6px 10px; font-size:12px; background:var(--gold); color:#000;" onclick="window.grantXP('${sKey}', '${escapeHtml(s.name)}')">+ XP</button>
+                  <button class="btn ghost" style="padding:6px 10px; font-size:12px; border-color:var(--err); color:var(--err);" onclick="window.deductXP('${sKey}', '${escapeHtml(s.name)}')">- XP</button>
+                  <button class="btn ghost" style="padding:6px 10px; font-size:12px; border-color:#d97706; color:#d97706;" onclick="window.levelDown('${sKey}', '${escapeHtml(s.name)}', ${p.xp || 0})">📉 Уровень</button>
+              </div>`;
+              tr.appendChild(el(`<td style="padding:12px;">${actionsHtml}</td>`));
+          } else {
+              var worksHtml = "";
+              if (p.results) Object.keys(p.results).forEach(k => worksHtml += `Тест: ${p.results[k].grade}<br>`);
+              if (p.selfResults) Object.keys(p.selfResults).forEach(k => worksHtml += `Сам.работа: ${p.selfResults[k].grade}<br>`);
+              tr.appendChild(el(`<td style="padding:12px; font-size:12px; color:var(--muted);">${worksHtml || "Нет"}</td>`));
+          }
+          tbody.appendChild(tr);
+      });
       
-      if (pracHtml) tdPracticals.innerHTML = pracHtml;
-      else tdPracticals.innerHTML = '<i style="color:var(--muted);">Нет заявок</i>';
-      
-      tr.appendChild(tdWorks);
-      tr.appendChild(tdPracticals);
-      tbody.appendChild(tr);
-    });
+      table.appendChild(tbody); tableContainer.appendChild(table); tableWrap.appendChild(tableContainer);
+  }).catch(err => {
+      console.error(err);
+      tableWrap.innerHTML = "<div style='color:var(--err); padding:20px;'>Ошибка загрузки журнала.</div>";
+  });
+};
+
+// Вспомогательные функции для учителя
+window.deductXP = function(key, name) {
+    var amount = prompt(`Сколько XP списать у ${name}?`, "10");
+    if (!amount || isNaN(amount)) return;
+    window.grantXP(key, name, -Math.abs(parseInt(amount)));
+};
+
+window.levelDown = function(key, name, currentXp) {
+    var level = getLevel(currentXp);
+    if (level <= 1) return window.showToast("Уже 1 уровень!", "err");
+    var amountToDrop = currentXp - (Math.pow(level - 1, 2) * 100) + 1;
+    if (confirm(`Понизить уровень ${name} до ${level - 1}?\n(Спишется ${amountToDrop} XP)`)) {
+        window.grantXP(key, name, -amountToDrop);
+    }
+};
+
+window.grantXP = function(key, name, amount) {
+    if (amount === undefined) amount = prompt(`Сколько XP начислить студенту ${name}?`, "50");
+    if (!amount || isNaN(amount)) return;
     
-    table.appendChild(tbody);
-    tableContainer.appendChild(table);
-    tableWrap.appendChild(tableContainer);
-  }).catch(() => { tableWrap.innerHTML = "Ошибка загрузки."; });
+    API.grantXP(key, parseInt(amount)).then(() => {
+        window.showToast(`XP изменен на ${amount}`, "ok");
+        window.renderJournalPage(); // Перерисовка
+    }).catch(() => window.showToast("Ошибка сети", "err"));
 };

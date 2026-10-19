@@ -1,3 +1,6 @@
+/* ============================================================
+   МДК 07.01 — links.js (v81.0 — HARDCODED DATA)
+   ============================================================ */
 "use strict";
 
 window.renderLinksPage = function(){
@@ -5,31 +8,34 @@ window.renderLinksPage = function(){
   document.getElementById("crumbs").textContent = "Полезные материалы";
 
   app.appendChild(el('<a class="backlink" href="#/">← На главную</a>'));
-  app.appendChild(el('<section class="hero"><h1>Полезные материалы</h1><p>Подборка статей, видеороликов и книг по диагностике и ремонту.</p></section>'));
+  app.appendChild(el('<section class="hero"><h1>Полезные материалы</h1><p>Подборка статей, видеороликов и книг по ЧПУ.</p></section>'));
 
+  // ДАННЫЕ ВШИТЫ ПРЯМО СЮДА, ЧТОБЫ ОНИ НЕ ПРОПАДАЛИ
   var data = {
     articles: [
-        { title: "Вибродиагностика подшипников качения", source: "Техническая диагностика", url: "https://vibro-labs.ru/", desc: "Основы виброакустического метода: какие частоты искать, как отличить дефект наружного кольца от внутреннего." },
-        { title: "Организация ТО и ремонта на производстве: система ТРМ", source: "Главный механик", url: "https://glavmech.ru/", desc: "Практическое руководство по внедрению Total Productive Maintenance и расчету OEE." },
-        { title: "Тепловой контроль узлов станка", source: "Автоматизация", url: "#", desc: "Как с помощью пирометров и тепловизоров выявлять перегрев подшипников на ранней стадии." }
+        { title: "Что такое G-код? Руководство по командам и программированию ЧПУ", source: "TiRapid", url: "https://tirapid.com/", desc: "Базовое руководство: из чего состоит язык G-кода, как он управляет положением инструмента, траекторией резания и режимами." },
+        { title: "Модальные коды ЧПУ: полный гид для специалиста", source: "Intervesp", url: "https://intervespco.ru/", desc: "Разбор модальных кодов: какие G-команды сохраняют действие до замены, как это влияет на структуру программы и безопасность." },
+        { title: "Программирование станков с ЧПУ: от G-кода до CAM-систем", source: "Abplanalp", url: "https://abplanalp.ua/", desc: "Обзорный материал: ручное программирование, структура программ, использование G- и M-кодов, переход к CAM." }
     ],
     videos: [
-        { title: "Диагностика станков с ЧПУ", source: "YouTube", url: "https://www.youtube.com/results?search_query=диагностика+станков+чпу", desc: "Видеоуроки по поиску неисправностей в электронике и механике станков." },
-        { title: "Наладка токарного станка с ЧПУ", source: "YouTube", url: "https://www.youtube.com/results?search_query=наладка+токарного+станка+с+чпу", desc: "Практические примеры привязки нуля и установки инструментов." }
+        { title: "ПЛАНЕТА ЧПУ — видеокурс на YouTube", source: "LOCNITI", url: "https://www.youtube.com/", desc: "Базовый видеокурс в 4K: более 54 видеоуроков по устройству и программированию станков с ЧПУ. Доступен бесплатно." },
+        { title: "NYC CNC — канал по практическому ЧПУ", source: "YouTube", url: "https://www.youtube.com/@NYCNC", desc: "Один из самых известных обучающих каналов по ЧПУ: обзоры станков, наладка, программирование, работа в CAM-системах." }
     ],
     books: [
-        { title: "Организация и планирование автоматизированных производств", author: "В. Ю. Шишмарёв", publisher: "Юрайт", year: "2023", desc: "Учебник для СПО. Основы ТО, диагностики и управления производством." },
-        { title: "Металлорежущее технологическое оборудование", author: "Л. И. Вереина", publisher: "ИНФРА-М", year: "2020", desc: "Справочник по устройству и наладке станков различных групп." }
+        { title: "Основы программирования для станков с ЧПУ", author: "И. Е. Колошкина, В. А. Селезнев", publisher: "Юрайт", year: "2025", desc: "Учебник для вузов. Начальное освоение программирования на устройстве ЧПУ HEIDENHAIN." },
+        { title: "Программирование обработки на станках с ЧПУ", author: "Р. М. Нартыжев", publisher: "КБГУ", year: "2024", desc: "Учебное пособие для направления «Конструкторско-технологическое обеспечение производств»." }
     ]
   };
 
-  var artBlock = el('<section class="module"><h2>📄 Статьи и нормативы</h2><div class="links-list" id="articlesList"></div></section>');
+  // СТАТЬИ
+  var artBlock = el('<section class="module"><h2>📄 Статьи по ЧПУ</h2><div class="links-list" id="articlesList"></div></section>');
   var artList = artBlock.querySelector("#articlesList");
   (data.articles || []).forEach(a => {
     artList.appendChild(el(`<a class="link-card" href="${a.url}" target="_blank"><div class="link-card-icon">📄</div><div class="link-card-body"><div class="link-card-title">${a.title}</div><div class="link-card-source">${a.source}</div><div class="link-card-desc">${a.desc}</div></div><div class="link-card-arrow">↗</div></a>`));
   });
   app.appendChild(artBlock);
 
+  // ВИДЕО
   var vidBlock = el('<section class="module"><h2>🎬 Видеоролики</h2><div class="links-list" id="videosList"></div></section>');
   var vidList = vidBlock.querySelector("#videosList");
   (data.videos || []).forEach(v => {
@@ -37,6 +43,7 @@ window.renderLinksPage = function(){
   });
   app.appendChild(vidBlock);
 
+  // КНИГИ
   var bookBlock = el('<section class="module"><h2>📚 Литература</h2><div class="book-list" id="booksList"></div></section>');
   var bookList = bookBlock.querySelector("#booksList");
   (data.books || []).forEach(b => {
