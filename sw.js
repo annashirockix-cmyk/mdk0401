@@ -1,5 +1,5 @@
 /* Service Worker МДК 04.01 */
-const CACHE = "mdk0401-v1";
+const CACHE = "mdk0401-v2"; // Обязательно измените версию при обновлении файлов!
 const ASSETS = [
   "./", "./index.html", "./style.css",
   "./data.js", "./info.js", "./script.js", "./extra.js", "./data-extra.js",
