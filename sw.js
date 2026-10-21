@@ -1,8 +1,8 @@
-const CACHE_NAME = 'mdk-portal-v215';
+const CACHE_NAME = 'mdk-portal-v220';
 
 const ASSETS = [
     './', './index.html', './style.css', './app.js', './api.js',
-    './data-0701.js', './data-0401.js', './journal.js', './games.js'
+    './data-0701.js', './data-0401.js', './journal.js', './games.js', './shop.js'
 ];
 
 self.addEventListener('install', (event) => {

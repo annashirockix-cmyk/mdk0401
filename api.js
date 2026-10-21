@@ -1,10 +1,14 @@
-async function fetchAPI(action, params = {}, method = "POST") {
-    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("ВАША_НОВАЯ_ССЫЛКА")) {
-        console.warn("Ссылка на Google Apps Script не указана!");
-        return { ok: false, error: "URL not configured" };
+"use strict";
+
+// Явно записываем URL в глобальный объект, чтобы все скрипты его видели
+window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3Ev3stuvLl36nxjmXU0q2zi4UsS5ViXwEj1x6q_JjlCccMJld36o6y1H__CvJn5KB/exec";
+
+async function fetchAPI(action, params = {}) {
+    if (!window.APPS_SCRIPT_URL) {
+        return { ok: false, error: "URL не настроен в api.js" };
     }
 
-    const url = new URL(APPS_SCRIPT_URL);
+    const url = new URL(window.APPS_SCRIPT_URL);
     url.searchParams.append("action", action);
     url.searchParams.append("t", Date.now()); 
     
@@ -15,13 +19,11 @@ async function fetchAPI(action, params = {}, method = "POST") {
     }
     
     try {
-        // ИСПОЛЬЗУЕМ POST с Content-Type: text/plain, чтобы избежать preflight (CORS)
+        // Отправляем POST с text/plain, чтобы избежать ошибки CORS (Preflight)
         const response = await fetch(url.toString(), {
             method: "POST",
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8", // <-- Ключевое изменение
-            },
-            body: JSON.stringify(params) // Отправляем данные в теле запроса
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(params)
         });
         
         if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
@@ -32,7 +34,6 @@ async function fetchAPI(action, params = {}, method = "POST") {
     }
 }
 
-// Остальная часть window.API остается без изменений
 window.API = {
     login: (user, pass) => fetchAPI("login", { username: user, password: pass }),
     getStudents: () => fetchAPI("getstudents"),
@@ -40,5 +41,8 @@ window.API = {
     saveStudent: (key, name, group, payload) => fetchAPI("save", { key, name, group, payload }),
     grantXP: (key, amount) => fetchAPI("grantXP", { key, amount }),
     deleteStudent: (key) => fetchAPI("deleteStudent", { key: key }),
-    // ... остальные методы
+    getChat: (group) => fetchAPI("chatload", { group }),
+    sendChat: (group, key, name, text) => fetchAPI("chatsave", { group, key, name, text }),
+    getSchedule: () => fetchAPI("getschedule"),
+    saveSchedule: (data) => fetchAPI("saveschedule", { data: JSON.stringify(data) })
 };
