@@ -15,8 +15,6 @@ try {
     var _st = JSON.parse(localStorage.getItem("mdk.staff") || "null"); 
     if (_st && _st.name) window.state.staff = _st;
     window.state.xp = parseInt(localStorage.getItem("mdk.xp") || "0");
-    window.state.certBg = localStorage.getItem("mdk.certBg") || "1.jpg";
-    window.state.suppBg = localStorage.getItem("mdk.suppBg") || "1.jpg";
 } catch (e) { console.warn("LocalStorage error", e); }
 
 // Утилиты
@@ -42,136 +40,144 @@ window.saveStudentData = async function() {
         purchasedThemes: window.state.purchasedThemes, unlockedAchievements: window.state.unlockedAchievements,
         avatar: window.state.avatar, effect: window.state.effect
     });
-    await window.API.saveStudent(key, window.state.student.name, window.state.student.group, payload);
+    if (window.API && window.API.saveStudent) {
+        await window.API.saveStudent(key, window.state.student.name, window.state.student.group, payload);
+    }
 };
 
 window.addXP = async function(amount) {
     window.state.xp += amount;
     localStorage.setItem("mdk.xp", window.state.xp);
     await window.saveStudentData();
-    window.renderUserChip();
+    updateLayout(); // Обновляем счетчик XP в сайдбаре
 };
 
-// --- ИНИЦИАЛИЗАЦИЯ И РОУТИНГ ---
+// --- ИНИЦИАЛИЗАЦИЯ ---
 document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("hashchange", router);
     router();
 });
 
+// --- РОУТИНГ ---
 function router() {
-    const hash = window.location.hash.slice(1) || "/";
-    const app = window.$("app");
-    if (!app) return;
+    var hash = window.location.hash.slice(1) || "/";
     
-    // Очищаем контейнер
-    app.innerHTML = "";
-    
-    // Если не авторизован — показываем экран входа
+    // Если не авторизован — показываем логин
     if (!window.state.student && !window.state.staff) {
+        document.body.innerHTML = ""; 
         renderLoginScreen();
         return;
     }
 
-    // Рендерим каркас (Сайдбар + Шапка + Контент)
-    app.appendChild(el(`
-        <div id="sidebar" class="sidebar">
-            <div class="sidebar-header">МДК Портал</div>
-            <div class="sidebar-course">МДК 07.01 (ЧПУ) ⌄</div>
-            <div id="xpCount" style="padding: 0 20px; color: var(--accent); font-weight: bold; cursor:pointer;" onclick="navigateTo('/shop')">★ ${window.state.xp} XP</div>
-            <div id="userChip" class="user-info" style="cursor:pointer;" onclick="navigateTo('/profile')">
-                <div class="user-avatar">👨‍🏭</div>
-                <div>
-                    <div style="font-weight: bold;">${window.state.student ? window.state.student.name : (window.state.staff ? window.state.staff.name : 'Гость')}</div>
-                    <div style="color: var(--text-muted); font-size: 0.8rem;">${window.state.student ? window.state.student.group : 'Админ'}</div>
-                </div>
-            </div>
-        </div>
-    `));
+    initLayout();
+    updateLayout();
 
-    var mainWrap = el(`<div class="main-wrapper"></div>`);
-    mainWrap.appendChild(el(`<header id="header" style="padding:20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-weight:bold; color:var(--text-muted);"><span id="crumbs">Главная</span></div>
-        <div style="display:flex; gap:10px;">
-            <button class="btn ghost" onclick="window.renderUserChip()">Профиль</button>
-            <button class="btn ghost" onclick="logout()">Выйти</button>
-        </div>
-    </header>`));
-    
-    var content = el(`<div id="content" class="main-content"></div>`);
-    mainWrap.appendChild(content);
-    
-    // Нижнее меню (как было в оригинале)
-    mainWrap.appendChild(el(`
-        <div class="bottom-nav">
-            <a href="#/">🏠 Главная</a>
-            <a href="#/journal">📓 Журнал</a>
-            <a href="#/training">🎯 Тренировка</a>
-            <a href="#/final">📋 Экзамены</a>
-            <a href="#/games">🎮 Игры</a>
-            <a href="#/shop">🛒 Магазин</a>
-            <a href="#/rating">🏆 Доска почета</a>
-            <a href="#/schedule">📅 Расписание</a>
-            <a href="#/links">📚 Полезное</a>
-        </div>
-    `));
+    var crumbs = document.getElementById("crumbs");
+    var app = document.getElementById("app");
+    if (!app) return;
 
-    app.appendChild(mainWrap);
-
-    // Маршрутизация к модулям
     if (hash === "/" || hash === "") {
-        window.$("crumbs").textContent = "Главная";
-        if (window.renderHomePage) window.renderHomePage(); 
-        else content.innerHTML = "<h1>Главная</h1><p>Модуль главной страницы не загружен.</p>";
+        if (crumbs) crumbs.textContent = "Главная";
+        if (window.renderHomePage) window.renderHomePage();
+        else renderDefaultHome();
     } 
-    else if (hash.startsWith("/topic/")) {
-        var tId = hash.split("/")[2];
-        if (window.renderTopicPage) window.renderTopicPage(tId);
-    }
     else if (hash === "/journal") {
-        window.$("crumbs").textContent = "Журнал";
+        if (crumbs) crumbs.textContent = "Журнал";
         if (window.renderJournalPage) window.renderJournalPage();
+        else app.innerHTML = "<h2>Модуль журнала не загружен</h2>";
     }
     else if (hash === "/games") {
-        window.$("crumbs").textContent = "Игровая комната";
+        if (crumbs) crumbs.textContent = "Игровая комната";
         if (window.renderArcadePage) window.renderArcadePage();
     }
     else if (hash === "/shop") {
-        window.$("crumbs").textContent = "Магазин";
+        if (crumbs) crumbs.textContent = "Магазин";
         if (window.renderShopPage) window.renderShopPage();
     }
     else if (hash === "/profile") {
-        window.$("crumbs").textContent = "Профиль";
+        if (crumbs) crumbs.textContent = "Профиль";
         if (window.renderProfilePage) window.renderProfilePage();
     }
     else if (hash === "/rating") {
-        window.$("crumbs").textContent = "Доска почета";
+        if (crumbs) crumbs.textContent = "Доска почета";
         if (window.renderRatingPage) window.renderRatingPage();
     }
     else if (hash === "/schedule") {
-        window.$("crumbs").textContent = "Расписание";
+        if (crumbs) crumbs.textContent = "Расписание";
         if (window.renderSchedulePage) window.renderSchedulePage();
     }
     else if (hash === "/training") {
-        window.$("crumbs").textContent = "Тренировка";
+        if (crumbs) crumbs.textContent = "Тренировка";
         if (window.renderTrainingPage) window.renderTrainingPage();
     }
     else if (hash === "/final") {
-        window.$("crumbs").textContent = "Экзамены";
+        if (crumbs) crumbs.textContent = "Экзамены";
         if (window.renderFinalExamPage) window.renderFinalExamPage();
     }
     else if (hash === "/links") {
-        window.$("crumbs").textContent = "Полезные материалы";
+        if (crumbs) crumbs.textContent = "Полезные материалы";
         if (window.renderLinksPage) window.renderLinksPage();
     }
     else {
-        content.innerHTML = `<h2>404 Страница не найдена</h2>`;
+        app.innerHTML = `<h2>404 Страница не найдена</h2>`;
     }
+}
+
+// --- КАРКАС САЙТА ---
+function initLayout() {
+    if (document.getElementById("app")) return; // Уже создан
+
+    document.body.innerHTML = `
+        <div style="display:flex; height:100vh; width:100%; overflow:hidden; background:var(--bg-dark);">
+            <div class="sidebar">
+                <div class="sidebar-header">МДК Портал</div>
+                <div class="sidebar-course">МДК 07.01 (ЧПУ) ⌄</div>
+                <div id="xpCount" style="padding: 0 20px; color: var(--accent); font-weight: bold; cursor:pointer;" onclick="navigateTo('/shop')">★ 0 XP</div>
+                <div id="userChip" class="user-info" style="cursor:pointer;" onclick="navigateTo('/profile')">
+                    <div class="user-avatar">👨‍🏭</div>
+                    <div>
+                        <div style="font-weight: bold;" id="sidebar-name">Гость</div>
+                        <div style="color: var(--text-muted); font-size: 0.8rem;" id="sidebar-group">-</div>
+                    </div>
+                </div>
+                <button class="btn ghost" style="margin:20px;" onclick="logout()">Выйти</button>
+            </div>
+            <div class="main-wrapper">
+                <header style="padding:20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-weight:bold; color:var(--text-muted);"><span id="crumbs">Главная</span></div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn ghost" onclick="navigateTo('/profile')">Профиль</button>
+                    </div>
+                </header>
+                <div id="app" class="main-content"></div>
+                <div class="bottom-nav">
+                    <a href="#/">🏠 Главная</a>
+                    <a href="#/journal">📓 Журнал</a>
+                    <a href="#/training">🎯 Тренировка</a>
+                    <a href="#/final">📋 Экзамены</a>
+                    <a href="#/games">🎮 Игры</a>
+                    <a href="#/shop">🛒 Магазин</a>
+                    <a href="#/rating">🏆 Доска почета</a>
+                    <a href="#/schedule">📅 Расписание</a>
+                    <a href="#/links">📚 Полезное</a>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function updateLayout() {
+    var nameEl = document.getElementById("sidebar-name");
+    var groupEl = document.getElementById("sidebar-group");
+    var xpEl = document.getElementById("xpCount");
+    if (nameEl) nameEl.textContent = window.state.student ? window.state.student.name : (window.state.staff ? window.state.staff.name : 'Гость');
+    if (groupEl) groupEl.textContent = window.state.student ? window.state.student.group : 'Админ';
+    if (xpEl) xpEl.textContent = `★ ${window.state.xp} XP`;
 }
 
 // --- ЭКРАН ВХОДА ---
 function renderLoginScreen() {
-    const app = window.$("app");
-    app.innerHTML = `
+    document.body.innerHTML = `
         <div class="main-wrapper" style="align-items: center; justify-content: flex-start; padding-top: 50px;">
             <div class="top-header" style="border: none;">
                 <p style="color: var(--accent); text-transform: uppercase; letter-spacing: 2px;">ПОРТАЛ МДК</p>
@@ -188,7 +194,7 @@ function renderLoginScreen() {
                 </div>
                 <div class="input-row">
                     <label>Группа</label>
-                    <input type="text" id="login-group" placeholder="ТМ-4" value="ТМ-4-3">
+                    <input type="text" id="login-group" placeholder="ТМ 4-3" value="ТМ 4-3">
                 </div>
                 <button class="btn" onclick="loginStudent()" style="background:var(--accent);color:#fff;">Войти</button>
             </div>
@@ -219,12 +225,18 @@ async function loginStudent() {
 
     const studentId = `${name.toLowerCase()}|${group.toLowerCase()}`;
     
-    // Регистрируем/проверяем в Google Таблице
-    await window.API.saveStudent(studentId, name, group, '{}');
+    // Пытаемся сохранить в базу
+    try { 
+        if (window.API && window.API.saveStudent) {
+            await window.API.saveStudent(studentId, name, group, '{"xp":0,"results":{}}'); 
+        }
+    } catch (e) { console.warn("Не удалось сохранить в БД", e); }
 
     window.state.student = { name, group };
+    window.state.xp = 0;
     localStorage.setItem("mdk.student", JSON.stringify(window.state.student));
     window.navigateTo("/");
+    location.reload(); // Перезагружаем, чтобы применить каркас
 }
 
 function loginTeacher() {
@@ -235,6 +247,7 @@ function loginTeacher() {
         window.state.staff = { name: "Преподаватель", role: "teacher" };
         localStorage.setItem("mdk.staff", JSON.stringify(window.state.staff));
         window.navigateTo("/journal");
+        location.reload();
     } else {
         window.showToast("Неверный логин или пароль! (teacher / teacher)", "err");
     }
@@ -249,16 +262,20 @@ function logout() {
     location.reload();
 }
 
-// Заглушка для Главной, если нет отдельного файла
+// Заглушка для Главной
 window.renderHomePage = function() {
-    var c = window.$("content");
-    var course = window.MDK_DATA[window.state.activeCourseId] || { topics: [] };
+    var c = window.$("app");
+    var course = window.MDK_DATA ? window.MDK_DATA[window.state.activeCourseId] : null;
+    if (!course) return c.innerHTML = "<p>Данные курса не загружены.</p>";
+
     var html = `<h2>Доступные темы</h2><div class="topics-grid">`;
-    course.topics.forEach(t => {
-        html += `<div class="module topic-card" onclick="navigateTo('/topic/${t.id}')" style="cursor:pointer; margin:0;">
-            <h3 style="margin-top:0;">${t.title}</h3>
-            <p style="color:var(--text-muted); font-size:14px;">${t.description || 'Перейти к изучению'}</p>
-        </div>`;
+    course.sections.forEach(sec => {
+        sec.topics.forEach(t => {
+            html += `<div class="module topic-card" onclick="navigateTo('/topic/${t.id}')" style="cursor:pointer; margin:0;">
+                <h3 style="margin-top:0;">${t.title}</h3>
+                <p style="color:var(--text-muted); font-size:14px;">${t.code || 'Перейти к изучению'}</p>
+            </div>`;
+        });
     });
     html += `</div>`;
     c.innerHTML = html;
