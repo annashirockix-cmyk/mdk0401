@@ -1,6 +1,5 @@
 "use strict";
 
-// URL вашего развернутого Google Apps Script (Web App)
 window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3Ev3stuvLl36nxjmXU0q2zi4UsS5ViXwEj1x6q_JjlCccMJld36o6y1H__CvJn5KB/exec";
 
 async function fetchAPI(action, params = {}) {
@@ -10,7 +9,7 @@ async function fetchAPI(action, params = {}) {
 
     const url = new URL(window.APPS_SCRIPT_URL);
     url.searchParams.append("action", action);
-    url.searchParams.append("t", Date.now()); // Защита от кэша
+    url.searchParams.append("t", Date.now()); 
     
     for (const key in params) { 
         if (params[key] !== undefined && params[key] !== null) {
@@ -19,22 +18,17 @@ async function fetchAPI(action, params = {}) {
     }
     
     try {
-        // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: используем POST с Content-Type: text/plain,
-        // чтобы обойти preflight-запрос CORS.
         const response = await fetch(url.toString(), {
             method: "POST",
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8",
-            },
-            body: JSON.stringify(params) // Данные передаем в теле запроса
+            // КЛЮЧЕВОЙ МОМЕНТ: text/plain обходит preflight-запрос браузера
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(params),
+            mode: "cors", // Явно указываем CORS
+            redirect: "follow" // Google часто перенаправляет запросы
         });
         
-        if (!response.ok) {
-            throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        return data;
+        if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+        return await response.json();
     } catch (err) {
         console.error(`API Error [${action}]:`, err);
         return { ok: false, error: err.message };
