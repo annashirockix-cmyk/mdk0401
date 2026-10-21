@@ -1,5 +1,5 @@
 /* ============================================================
-   МДК — journal.js (v302.0 — Безопасное создание DOM)
+   МДК — journal.js (v303.0 — Средний балл)
    ============================================================ */
 "use strict";
 
@@ -71,7 +71,6 @@ window.renderJournalPage = function() {
               contentWrap.innerHTML = "<div class='module'>В выбранной группе пока нет студентов.</div>"; return;
           }
 
-          // Безопасное создание таблицы
           var tableWrap = document.createElement("div");
           tableWrap.className = "module";
           tableWrap.style = "overflow-x:auto; padding: 10px; max-width: 100%;";
@@ -83,10 +82,17 @@ window.renderJournalPage = function() {
           var thead = document.createElement("thead");
           var trHead = document.createElement("tr");
           
+          // Заголовок ФИО
           var thName = document.createElement("th");
           thName.style = "border:1px solid var(--border); padding:8px; position:sticky; left:0; background:var(--card); z-index:2; text-align:left; min-width:180px; box-shadow: 2px 0 5px rgba(0,0,0,0.1);";
           thName.textContent = "ФИО студента / Группа";
           trHead.appendChild(thName);
+
+          // Заголовок Среднего балла
+          var thAvg = document.createElement("th");
+          thAvg.style = "border:1px solid var(--border); padding:8px; background:var(--card); color:var(--gold); font-weight:bold; position:sticky; left:180px; z-index:2; box-shadow: 2px 0 5px rgba(0,0,0,0.1);";
+          thAvg.textContent = "Ср. балл";
+          trHead.appendChild(thAvg);
 
           ACADEMIC_DATES.forEach(date => {
               var thDate = document.createElement("th");
@@ -104,7 +110,7 @@ window.renderJournalPage = function() {
               var sKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
               var tr = document.createElement("tr");
 
-              // Колонка с ФИО
+              // ФИО
               var tdName = document.createElement("td");
               tdName.style = "border:1px solid var(--border); padding:8px; text-align:left; font-weight:bold; position:sticky; left:0; background:var(--card); z-index:1; box-shadow: 2px 0 5px rgba(0,0,0,0.1);";
               tdName.innerHTML = window.escapeHtml(s.name) + "<br><span style='font-size:11px;color:var(--accent);font-weight:normal;'>гр. " + window.escapeHtml(s.group) + "</span>";
@@ -113,6 +119,24 @@ window.renderJournalPage = function() {
               var p = {};
               try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
               var manualGrades = p.manualGrades || {};
+
+              // Считаем средний балл
+              var sum = 0;
+              var count = 0;
+              for (var date in manualGrades) {
+                  var gradeVal = parseFloat(manualGrades[date]);
+                  if (!isNaN(gradeVal)) {
+                      sum += gradeVal;
+                      count++;
+                  }
+              }
+              var avg = count > 0 ? (sum / count).toFixed(2) : "—";
+
+              // Ячейка Среднего балла
+              var tdAvg = document.createElement("td");
+              tdAvg.style = "border:1px solid var(--border); padding:8px; font-weight:bold; color:" + (avg !== "—" && avg >= 4 ? "var(--ok)" : (avg !== "—" && avg < 3 ? "var(--err)" : "var(--text)")) + "; background:var(--card); position:sticky; left:180px; z-index:1; box-shadow: 2px 0 5px rgba(0,0,0,0.1);";
+              tdAvg.textContent = avg;
+              tr.appendChild(tdAvg);
 
               // Колонки с оценками
               ACADEMIC_DATES.forEach(date => {
@@ -140,6 +164,7 @@ window.renderJournalPage = function() {
                               setTimeout(() => input.style.background = "transparent", 500);
                               p = newPayload;
                               window.showToast("Сохранено", "ok");
+                              renderTable(); // Перерисовываем таблицу, чтобы обновить средний балл
                           } else {
                               window.showToast("Ошибка сохранения", "err");
                           }
