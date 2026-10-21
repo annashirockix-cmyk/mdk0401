@@ -217,14 +217,12 @@ window.renderTopic = function(topicId, activeTab) {
     var topic = null;
     var foundCourseId = null;
     
-    // 1. Ищем в текущем курсе
     if (window.COURSE && window.COURSE.sections) {
         window.COURSE.sections.forEach(s => {
             s.topics.forEach(t => { if (t.id === topicId) topic = t; });
         });
     }
     
-    // 2. Если не нашли — ищем во ВСЕХ курсах
     if (!topic && window.MDK_DATA) {
         for (var cid in window.MDK_DATA) {
             var c = window.MDK_DATA[cid];
@@ -243,7 +241,6 @@ window.renderTopic = function(topicId, activeTab) {
     
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена.</div>'; return; }
     
-    // 3. Автоматически переключаем селектор, если тема из другого МДК
     if (foundCourseId && window.state.activeCourseId !== foundCourseId) {
         window.state.activeCourseId = foundCourseId;
         window.COURSE = window.MDK_DATA[foundCourseId];
@@ -307,7 +304,7 @@ window.renderTopic = function(topicId, activeTab) {
                         </div>
                         <div id="fb_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div>
                     </div>
-                ` : '<p style="color:var(--muted); font-size:13px; margin-top:10px;">* Это задание проверяется преподавателем вручную (или добавьте ответ в tests-extra.js).</p>'}
+                ` : '<p style="color:var(--muted); font-size:13px; margin-top:10px;">* Это задание проверяется преподавателем вручную.</p>'}
             </div>`;
         });
     } 
@@ -319,8 +316,11 @@ window.renderTopic = function(topicId, activeTab) {
             var extraData = window.EXTRA_TESTS && window.EXTRA_TESTS[uniqueId];
             var isDone = window.state.results[uniqueId + "_test"] ? "background: rgba(88, 201, 138, 0.1); border-color: var(--ok);" : "";
 
+            // Исправлено: если нет кода, просто выводим название
+            var swTitle = (sw.code ? sw.code + ' ' : '') + sw.title;
+
             var html = `<div style="margin-bottom:20px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border); ${isDone}">
-                <h4 style="margin-top:0; color:var(--accent);">${sw.code} ${sw.title}</h4>
+                <h4 style="margin-top:0; color:var(--accent);">${swTitle}</h4>
                 <p><b>Задание:</b> ${sw.task}</p>`;
 
             if (extraData && extraData.questions) {
@@ -377,13 +377,15 @@ window.renderTopic = function(topicId, activeTab) {
     // --- 5. ПРЕЗЕНТАЦИИ ---
     else if (activeTab === 'presentations' && topic.presentations) {
         topic.presentations.forEach(p => {
+            var isPdf = p.file.toLowerCase().endsWith('.pdf');
             contentBox.innerHTML += `<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px;">
                 <h4 style="margin-top:0;">${p.code} ${p.title}</h4>
                 <p>${p.description}</p>
+                ${isPdf ? `
                 <div style="width: 100%; height: 500px; margin-top: 15px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
                     <iframe src="${p.file}" width="100%" height="100%" style="border: none;"></iframe>
-                </div>
-                <a href="${p.file}" target="_blank" class="btn ghost" style="margin-top:10px; font-size:12px; display:inline-block;">Открыть в новой вкладке</a>
+                </div>` : `<p style="color:var(--err); font-size:12px; margin-top:10px;">* Просмотр в браузере доступен только для PDF-файлов. Нажмите "Скачать".</p>`}
+                <a href="${p.file}" download class="btn ghost" style="margin-top:10px; font-size:12px; display:inline-block;">📥 Скачать файл</a>
             </div>`;
         });
     } 
@@ -466,7 +468,6 @@ window.submitInlineTest = function(topicId) {
     
     alert(`Результат: ${correct} из ${testQuestions.length} (${pct}%). Оценка: ${grade}`);
 };
-
 
 // ================= ДОСТИЖЕНИЯ И ПРОСТЫЕ СТРАНИЦЫ =================
 window.renderAchievementsPage = function() {
