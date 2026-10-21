@@ -179,6 +179,7 @@ window.route = function() {
     var page = parts[0] || "/";
     
     if (page === "topic") window.renderTopic(parts[1], parts[2]);
+    else if (page === "certificate") window.renderCertificatePage();
     else if (page === "profile" && window.renderProfilePage) window.renderProfilePage();
     else if (page === "videos") window.renderSimplePage("Видеоуроки", window.GLOBAL_DATA?.videos, "🎬");
     else if (page === "passports") window.renderSimplePage("Паспорта станков", window.GLOBAL_DATA?.passports, "📄");
@@ -244,12 +245,14 @@ window.renderTopic = function(topicId, activeTab) {
     var topic = null;
     var foundCourseId = null;
     
+    // Ищем тему в текущем курсе
     if (window.COURSE && window.COURSE.sections) {
         window.COURSE.sections.forEach(s => {
             s.topics.forEach(t => { if (t.id === topicId) topic = t; });
         });
     }
     
+    // Если не нашли — ищем во всех курсах
     if (!topic && window.MDK_DATA) {
         for (var cid in window.MDK_DATA) {
             var c = window.MDK_DATA[cid];
@@ -265,6 +268,7 @@ window.renderTopic = function(topicId, activeTab) {
     
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена.</div>'; return; }
     
+    // Автопереключение предмета
     if (foundCourseId && window.state.activeCourseId !== foundCourseId) {
         window.state.activeCourseId = foundCourseId;
         window.COURSE = window.MDK_DATA[foundCourseId];
@@ -302,14 +306,14 @@ window.renderTopic = function(topicId, activeTab) {
     if (activeTab === 'lectures' && topic.lectures) {
         var accordionHtml = "";
         topic.lectures.forEach((lec, i) => {
-            var openAttr = i === 0 ? "open" : "";
+            var openAttr = i === 0 ? "open" : ""; // Первая лекция открыта по умолчанию
             accordionHtml += `<details class="lec-accordion" ${openAttr}>
                 <summary><span class="lec-code">${lec.code}</span> ${lec.title}</summary>
                 <div class="lec-content">${lec.content}</div>
             </details>`;
         });
         contentBox.innerHTML = accordionHtml;
-        if(window.addXP) window.addXP(5);
+        if(window.addXP) window.addXP(5); // Бонус за прочтение
     } 
     
     // --- 2. ПРАКТИКА ---
@@ -481,6 +485,74 @@ window.gradeTest = function(prefix, uniqueId, encodedQuestions) {
     } else {
         fb.innerHTML = `<span style="color:var(--err); font-size:24px;">Оценка: ${grade}</span><br>Верно ${correct} из ${total}.<br><button class="btn ghost" style="margin-top:10px;" onclick="window.location.reload()">Попробовать снова</button>`;
         if (btn) btn.style.display = "none";
+    }
+};
+
+// ================= СЕРТИФИКАТ =================
+window.renderCertificatePage = function() {
+    var app = $("app"); if (!app) return; app.innerHTML = "";
+    app.appendChild(el('<a class="backlink no-print" href="#/" style="color:var(--accent);">← На главную</a>'));
+    
+    if (!window.state.student) return;
+
+    var p = {}; 
+    try { p = JSON.parse(localStorage.getItem("mdk.results." + encodeURIComponent(window.studentKey()))) || {}; } catch(e) {}
+    
+    // В реальном приложении здесь нужно запрашивать данные с сервера, чтобы узнать статус подтверждения
+    var isApproved = p.certificateApproved || false; 
+    
+    var html = `
+        <div class="no-print" style="margin-bottom:20px; text-align:center;">
+            <button class="btn" onclick="window.requestCertificate()" style="padding:12px 24px; font-size:16px; background:var(--gold); color:#000;">📜 Запросить / Распечатать сертификат</button>
+            <p style="color:var(--muted); font-size:13px; margin-top:10px;">Нажмите, чтобы распечатать (Ctrl+P) или сохранить в PDF. Преподаватель должен подтвердить его в журнале.</p>
+        </div>
+
+        <!-- Сама область сертификата для печати -->
+        <div id="printable-cert" style="background:#fff; color:#000; padding:50px; border-radius:12px; text-align:center; position:relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width:800px; margin:0 auto;">
+            <div style="border: 8px solid #c14a2a; padding:40px;">
+                <h1 style="font-size:36px; text-transform:uppercase; letter-spacing:2px; margin-bottom:10px; color:#c14a2a;">СЕРТИФИКАТ</h1>
+                <p style="font-size:18px; margin-bottom:30px;">подтверждает, что</p>
+                
+                <h2 style="font-size:32px; margin:20px 0; color:#000;">${window.escapeHtml(window.state.student.name)}</h2>
+                <p style="font-size:18px; margin-bottom:30px;">успешно прошел(ла) обучение по программе</p>
+                
+                <h3 style="font-size:24px; margin:20px 0; color:#000;">${window.escapeHtml(window.COURSE ? window.COURSE.title : "МДК")}</h3>
+                <p style="font-size:16px; margin-bottom:40px;">Группа: ${window.escapeHtml(window.state.student.group)}</p>
+                
+                <div style="display:flex; justify-content:space-between; margin-top:60px; font-size:16px;">
+                    <div style="text-align:left;">
+                        <p>Дата выдачи:</p>
+                        <p style="font-weight:bold;">${new Date().toLocaleDateString('ru-RU')}</p>
+                    </div>
+                    <div style="text-align:right;">
+                        <p>Подпись преподавателя:</p>
+                        <div style="border-bottom: 1px solid #000; width: 200px; height: 30px;"></div>
+                        <p style="font-size:12px; margin-top:5px;">М.П.</p>
+                    </div>
+                </div>
+                
+                <!-- Водяной знак (если не подтвержден) -->
+                ${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-30deg); font-size:80px; font-weight:bold; color:rgba(255,0,0,0.1); pointer-events:none; z-index:10;">ОБРАЗЕЦ</div>` : ""}
+            </div>
+        </div>
+    `;
+    
+    app.innerHTML += html;
+};
+
+window.requestCertificate = function() {
+    var k = window.studentKey(); if (!k) return;
+    var p = {}; 
+    try { p = JSON.parse(localStorage.getItem("mdk.results." + encodeURIComponent(k))) || {}; } catch(e) {}
+    
+    if (!p.certificateRequested) {
+        p.certificateRequested = true;
+        window.API.saveStudent(k, window.state.student.name, window.state.student.group, JSON.stringify(p)).then(() => {
+            window.showToast("Запрос отправлен! Преподаватель подтвердит его в журнале.", "ok");
+            setTimeout(() => window.print(), 500);
+        });
+    } else {
+        window.print();
     }
 };
 
