@@ -3,8 +3,8 @@
 var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3Ev3stuvLl36nxjmXU0q2zi4UsS5ViXwEj1x6q_JjlCccMJld36o6y1H__CvJn5KB/exec";
 
 async function fetchAPI(action, params = {}, method = "GET") {
-    if (APPS_SCRIPT_URL.includes("ВАША_НОВАЯ_ССЫЛКА")) {
-        alert("Ошибка: В файле api.js не указана ссылка на Google Apps Script!");
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("ВАША_НОВАЯ_ССЫЛКА")) {
+        console.warn("Внимание: Ссылка на Google Apps Script не указана в api.js!");
         return { ok: false, error: "URL not configured" };
     }
 
@@ -31,12 +31,11 @@ async function fetchAPI(action, params = {}, method = "GET") {
         clearTimeout(timeoutId);
         
         if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (err) {
         clearTimeout(timeoutId);
         console.error(`API Error [${action}]:`, err);
-        throw err;
+        return { ok: false, error: err.message };
     }
 }
 
