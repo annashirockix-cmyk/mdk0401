@@ -1,5 +1,5 @@
 /* ============================================================
-   МДК — journal.js (v304.0 — Быстрый ввод и Сертификаты)
+   МДК — journal.js (v305.0 — Экспорт в Excel)
    ============================================================ */
 "use strict";
 
@@ -8,6 +8,7 @@ function getAcademicYearDates() {
     var start = new Date(2026, 8, 1); // 1 сентября 2026
     var end = new Date(2027, 7, 1);   // 1 августа 2027
     var current = new Date(start);
+    
     while (current <= end) {
         var d = String(current.getDate()).padStart(2, '0');
         var m = String(current.getMonth() + 1).padStart(2, '0');
@@ -19,6 +20,7 @@ function getAcademicYearDates() {
 }
 
 var ACADEMIC_DATES = getAcademicYearDates();
+var CURRENT_STUDENTS_CACHE = []; // Для экспорта
 
 window.renderJournalPage = function() {
   var app = document.getElementById("app"); 
@@ -49,6 +51,7 @@ window.renderJournalPage = function() {
   // Фильтр и обновление
   var topPanel = el(`<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; align-items:center;">
       <div style="margin-left:auto; display:flex; gap:10px;">
+          <button class="btn no-print" id="btnExportExcel" style="padding:10px 20px; background:var(--ok); color:#000;">📊 Экспорт в Excel</button>
           <select id="journalGroupFilter" class="self-input no-print" style="width:auto; margin:0; padding:10px; font-weight:bold; background:var(--card-soft); color:var(--accent); border:1px solid var(--accent);">
               <option value="all">Все группы</option>
               <option value="ТМ 4-3">ТМ 4-3</option>
@@ -61,8 +64,6 @@ window.renderJournalPage = function() {
 
   var contentWrap = el('<div id="journalContent"></div>');
   app.appendChild(contentWrap);
-
-  var currentStudents = []; // Для формы быстрого ввода
 
   function renderTable() {
       var filterGroup = document.getElementById("journalGroupFilter").value;
@@ -78,9 +79,9 @@ window.renderJournalPage = function() {
           if (filterGroup !== "all") {
               students = students.filter(s => s.group === filterGroup);
           }
-          currentStudents = students;
+          CURRENT_STUDENTS_CACHE = students;
 
-          // Заполняем выпадающий список для быстрого ввода
+          // Заполняем выпадающий список
           var qgSelect = document.getElementById("qgStudent");
           if (qgSelect) {
               qgSelect.innerHTML = '<option value="">-- Выберите студента --</option>';
@@ -209,7 +210,7 @@ window.renderJournalPage = function() {
       });
   }
 
-  // Обработчик кнопки "Добавить" в быстрой форме
+  // Обработчик быстрого ввода
   document.getElementById("btnQuickAdd").onclick = function() {
       var sKey = document.getElementById("qgStudent").value;
       var date = document.getElementById("qgDate").value.trim();
@@ -217,7 +218,7 @@ window.renderJournalPage = function() {
       
       if (!sKey || !date || !grade) return window.showToast("Заполните все поля", "err");
       
-      var s = currentStudents.find(x => (x.name.trim().toLowerCase() + "|" + x.group.trim().toLowerCase()) === sKey);
+      var s = CURRENT_STUDENTS_CACHE.find(x => (x.name.trim().toLowerCase() + "|" + x.group.trim().toLowerCase()) === sKey);
       if (!s) return;
 
       var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
@@ -235,13 +236,58 @@ window.renderJournalPage = function() {
       });
   };
 
+  // ЭКСПОРТ В EXCEL (CSV)
+  document.getElementById("btnExportExcel").onclick = function() {
+      if (CURRENT_STUDENTS_CACHE.length === 0) return window.showToast("Нет данных для экспорта", "err");
+      
+      var csvContent = "\uFEFF"; // BOM для корректного отображения кириллицы в Excel
+      
+      // Заголовки
+      var headers = ["ФИО", "Группа", "Средний балл", "Сертификат"];
+      ACADEMIC_DATES.forEach(d => headers.push(d));
+      csvContent += headers.join(";") + "\n";
+      
+      // Данные
+      CURRENT_STUDENTS_CACHE.forEach(s => {
+          var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
+          var manualGrades = p.manualGrades || {};
+          
+          var sum = 0; var count = 0;
+          for (var date in manualGrades) {
+              var gradeVal = parseFloat(manualGrades[date]);
+              if (!isNaN(gradeVal)) { sum += gradeVal; count++; }
+          }
+          var avg = count > 0 ? (sum / count).toFixed(2) : "";
+          
+          var certStatus = p.certificateApproved ? "Да" : (p.certificateRequested ? "Запрошен" : "Нет");
+          
+          var row = [`"${s.name}"`, `"${s.group}"`, avg, `"${certStatus}"`];
+          ACADEMIC_DATES.forEach(d => {
+              row.push(manualGrades[d] || "");
+          });
+          
+          csvContent += row.join(";") + "\n";
+      });
+      
+      // Скачивание файла
+      var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      var link = document.createElement("a");
+      var url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Журнал_${new Date().toLocaleDateString('ru-RU').replace(/\./g, '_')}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  };
+
   document.getElementById("journalGroupFilter").onchange = renderTable;
   document.getElementById("btnRefreshJournal").onclick = renderTable;
   
   renderTable();
 };
 
-// Подтверждение сертификата преподавателем
+// Подтверждение сертификата
 window.approveCert = function(sKey) {
     window.API.getStudents().then(d => {
         var s = d.students.find(x => (x.name.trim().toLowerCase() + "|" + x.group.trim().toLowerCase()) === sKey);
