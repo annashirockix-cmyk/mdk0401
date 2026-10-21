@@ -251,13 +251,27 @@ window.renderTopic = function(topicId, activeTab) {
             contentBox.innerHTML += `<h3>${lec.code} ${lec.title}</h3><div style="line-height:1.6; margin-bottom:30px;">${lec.content}</div>`;
         });
     } 
-    else if (activeTab === 'practicals' && topic.practicals) {
-        topic.practicals.forEach(p => {
-            contentBox.innerHTML += `<div style="margin-bottom:20px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);">
+        else if (activeTab === 'practicals' && topic.practicals) {
+        topic.practicals.forEach((p, index) => {
+            var uniqueId = `prac_${topicId}_${index}`;
+            var isDone = window.state.results[uniqueId] ? "background: rgba(88, 201, 138, 0.1); border-color: var(--ok);" : "";
+            
+            contentBox.innerHTML += `<div style="margin-bottom:20px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border); ${isDone}">
                 <h4 style="margin-top:0; color:var(--accent);">${p.code} ${p.title}</h4>
                 <p><b>Цель:</b> ${p.goal}</p>
                 <p><b>Задание:</b> ${p.task}</p>
                 ${p.variants ? '<p><b>Варианты:</b></p><ul>' + p.variants.map(v => `<li>${v}</li>`).join('') + '</ul>' : ''}
+                
+                ${p.expectedAnswer ? `
+                    <div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
+                        <label style="font-weight:bold;">Введите ваш ответ (только число):</label>
+                        <div style="display:flex; gap:10px; margin-top:5px;">
+                            <input type="text" id="ans_${uniqueId}" class="self-input" style="max-width:200px; margin:0;" placeholder="Ваш ответ...">
+                            <button class="btn" onclick="window.checkPracticalAnswer('${uniqueId}', '${p.expectedAnswer}')">Проверить</button>
+                        </div>
+                        <div id="fb_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div>
+                    </div>
+                ` : '<p style="color:var(--muted); font-size:13px; margin-top:10px;">* Это задание проверяется преподавателем вручную.</p>'}
             </div>`;
         });
     } 
@@ -270,23 +284,39 @@ window.renderTopic = function(topicId, activeTab) {
             </div>`;
         });
     } 
-    else if (activeTab === 'test' && topic.test) {
-        contentBox.innerHTML = `<p>В этой теме доступен тест для проверки знаний.</p>
-            <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
-                <a href="#/training/${window.state.activeCourseId}" class="btn">🎯 Перейти к тренировке</a>
-                <a href="#/final/${window.state.activeCourseId}" class="btn ghost">📋 Пройти экзамен</a>
-            </div>`;
-    } 
-    else if (activeTab === 'presentations' && topic.presentations) {
+        else if (activeTab === 'test' && (topic.test || topic.tests)) {
+        var testQuestions = topic.test || topic.tests;
+        contentBox.innerHTML = `<h3>📝 Контрольный тест по теме</h3>
+        <p>Ответьте на вопросы, чтобы закрепить материал.</p>
+        <div id="inlineTestBox"></div>
+        <button class="btn" style="margin-top:15px;" onclick="window.submitInlineTest('${topicId}')">Завершить тест</button>`;
+        
+        var testBox = contentBox.querySelector("#inlineTestBox");
+        testQuestions.forEach((q, qi) => {
+            var qHtml = `<div style="margin-bottom:15px; padding:10px; background:var(--bg); border-radius:8px;">
+                <b>${qi + 1}. ${q.q}</b><div style="margin-top:8px;">`;
+            q.options.forEach((opt, oi) => {
+                qHtml += `<label style="display:block; margin-bottom:4px; cursor:pointer;">
+                    <input type="radio" name="inline_q_${topicId}_${qi}" value="${oi}"> ${opt}
+                </label>`;
+            });
+            qHtml += `</div></div>`;
+            testBox.innerHTML += qHtml;
+        });
+    }
+        else if (activeTab === 'presentations' && topic.presentations) {
         topic.presentations.forEach(p => {
             contentBox.innerHTML += `<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px;">
                 <h4 style="margin-top:0;">${p.code} ${p.title}</h4>
                 <p>${p.description}</p>
-                <a href="${p.file}" download class="btn ghost" style="padding:6px 12px; font-size:12px;">Скачать (${p.slides} слайдов)</a>
+                <!-- Встраиваем PDF/PPT в iframe -->
+                <div style="width: 100%; height: 500px; margin-top: 15px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+                    <iframe src="${p.file}" width="100%" height="100%" style="border: none;"></iframe>
+                </div>
+                <a href="${p.file}" target="_blank" class="btn ghost" style="margin-top:10px; font-size:12px; display:inline-block;">Открыть в новой вкладке</a>
             </div>`;
         });
-    }
-};
+    } 
 
 // ================= ДОСТИЖЕНИЯ =================
 window.renderAchievementsPage = function() {
@@ -375,10 +405,15 @@ window.addEventListener("DOMContentLoaded", function() {
   if ($("btnLoginStudent")) $("btnLoginStudent").onclick = window.doStudentLogin;
   if ($("btnLoginTeacher")) $("btnLoginTeacher").onclick = window.doTeacherLogin;
   
-  if ($("themeToggle")) {
+    if ($("themeToggle")) {
       $("themeToggle").onclick = () => { 
-          var cur = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light"; 
-          window.applyTheme(cur); 
+          // Открываем окно выбора темы
+          if(window.renderShopPage) {
+              location.hash = "#/shop";
+              setTimeout(() => {
+                  window.showToast("Выберите тему в разделе 'Темы оформления' и нажмите 'Применить'", "info");
+              }, 300);
+          }
       };
   }
   
@@ -410,3 +445,26 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 window.addEventListener("hashchange", window.route);
+window.submitInlineTest = function(topicId) {
+    var topic = null;
+    if (window.COURSE && window.COURSE.sections) {
+        window.COURSE.sections.forEach(s => s.topics.forEach(t => { if (t.id === topicId) topic = t; }));
+    }
+    if (!topic) return;
+    var testQuestions = topic.test || topic.tests;
+    var correct = 0;
+    
+    testQuestions.forEach((q, qi) => {
+        var selected = document.querySelector(`input[name="inline_q_${topicId}_${qi}"]:checked`);
+        if (selected && Number(selected.value) === q.correct) correct++;
+    });
+    
+    var pct = Math.round((correct / testQuestions.length) * 100);
+    var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
+    
+    // Сохраняем результат
+    window.state.results[topicId + "_test"] = { grade: grade, total: correct, max: testQuestions.length };
+    window.saveStudentData();
+    
+    alert(`Результат: ${correct} из ${testQuestions.length} (${pct}%). Оценка: ${grade}`);
+};
