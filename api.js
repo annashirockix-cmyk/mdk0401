@@ -31,7 +31,6 @@ async function fetchAPI(action, params = {}, method = "GET") {
         clearTimeout(timeoutId);
         
         if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
-        
         const data = await response.json();
         return data;
     } catch (err) {
@@ -51,5 +50,7 @@ window.API = {
     getChat: (group) => fetchAPI("chatload", { group }),
     sendChat: (group, key, name, text) => fetchAPI("chatsave", { group, key, name, text }, "POST"),
     getSchedule: () => fetchAPI("getschedule"),
-    saveSchedule: (data) => fetchAPI("saveschedule", { data: JSON.stringify(data) }, "POST")
+    saveSchedule: (data) => fetchAPI("saveschedule", { data: JSON.stringify(data) }, "POST"),
+    getInfo: () => fetchAPI("getinfo"),
+    saveInfo: (text) => fetchAPI("saveinfo", { text }, "POST")
 };

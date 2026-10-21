@@ -21,8 +21,9 @@ window.state = {
   activeCourseId: "07.01",
   student: null, staff: null, xp: 0, results: {},
   purchasedThemes: [], unlockedAchievements: [], avatar: null, effect: null,
-  certBg: "1.jpg", // Фон сертификата
-  suppBg: "1.jpg"  // Фон вкладыша
+  certBg: "1.jpg",
+  suppBg: "1.jpg",
+  globalInfo: "" // Будем хранить здесь новость
 };
 
 try {
@@ -502,7 +503,6 @@ window.renderCertificatePage = function() {
     
     var bgs = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
     
-    // --- ПАНЕЛЬ ВЫБОРА ФОНА СЕРТИФИКАТА ---
     var certBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;">
         <h3 style="margin-bottom:10px;">Выберите фон для сертификата:</h3>
         <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
@@ -520,7 +520,6 @@ window.renderCertificatePage = function() {
     });
     certBgSelectorHtml += `</div></div>`;
 
-    // --- ПАНЕЛЬ ВЫБОРА ФОНА ВКЛАДЫША ---
     var suppBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;">
         <h3 style="margin-bottom:10px;">Выберите фон для вкладыша (оценок):</h3>
         <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
@@ -544,7 +543,6 @@ window.renderCertificatePage = function() {
     var certBgUrl = `url('certificat/${window.state.certBg}')`;
     var suppBgUrl = `url('certificat/${window.state.suppBg}')`;
     
-    // --- Формируем данные для ВКЛАДЫША ---
     var passedItems = [];
     var totalGradesSum = 0;
     var totalGradesCount = 0;
@@ -593,7 +591,6 @@ window.renderCertificatePage = function() {
         });
     }
 
-    // --- HTML СЕРТИФИКАТА ---
     var certHtml = `
         <div id="printable-cert" style="
             background-image: ${certBgUrl}; background-size: 100% 100%; background-repeat: no-repeat; background-color: #fff;
@@ -619,7 +616,6 @@ window.renderCertificatePage = function() {
         </div>
     `;
 
-    // --- HTML ВКЛАДЫША ---
     var suppHtml = `
         <div id="printable-supplement" style="
             background-image: ${suppBgUrl}; background-size: 100% 100%; background-repeat: no-repeat; background-color: #fff;
@@ -756,28 +752,60 @@ function renderHome() {
   var c = window.COURSE;
   if (!c) { app.innerHTML = "<div class='module'>Ошибка загрузки данных курса.</div>"; return; }
   
-  var html = '<section class="hero"><h1>' + window.escapeHtml(c.title) + '</h1><p>' + window.escapeHtml(c.module || "") + '</p></section>';
-  html += '<div class="steps-title">Учебный план</div>';
-  
-  (c.sections || []).forEach(sec => {
-    html += '<div style="font-weight:bold; margin:20px 0 10px; color:var(--accent); text-transform:uppercase; font-size:12px;">' + window.escapeHtml(sec.title) + '</div>';
-    (sec.topics || []).forEach(t => {
-      var badges = []; 
-      if (t.lectures) badges.push("📖"); 
-      if (t.practicals) badges.push("🛠"); 
-      if (t.test || t.tests) badges.push("📝");
+  // Загружаем информацию
+  window.API.getInfo().then(res => {
+      var infoText = (res && res.ok) ? res.text : "";
+      window.state.globalInfo = infoText;
+      var isTeacher = !!window.state.staff;
       
-      html += `<div class="topic" onclick="location.hash='#/topic/${t.id}/lecture'">
-        <div style="flex:1;">
-            <div style="font-size:12px; color:var(--muted);">${t.code}</div>
-            <div style="font-weight:bold;">${t.title}</div>
-            <div style="font-size:13px; margin-top:4px; color:var(--muted);">${badges.join(" ")}</div>
-        </div>
-      </div>`;
-    });
+      var infoHtml = "";
+      if (infoText || isTeacher) {
+          infoHtml += `<section class="module" style="background: linear-gradient(135deg, rgba(255, 107, 61, 0.1) 0%, rgba(255, 107, 61, 0.02) 100%); border: 2px solid var(--accent); position:relative;">
+              <h3 style="margin-top:0; color:var(--accent); display:flex; align-items:center; gap:10px;">📢 Информация</h3>
+              <div style="font-size:16px; line-height:1.5; white-space:pre-wrap;">${infoText ? window.escapeHtml(infoText) : '<i style="color:var(--muted);">Новостей пока нет.</i>'}</div>
+              ${isTeacher ? `<button class="btn" style="position:absolute; top:15px; right:15px; padding:6px 12px; font-size:12px;" onclick="window.editGlobalInfo()">✏️ Изменить</button>` : ''}
+          </section>`;
+      }
+      
+      var html = '<section class="hero"><h1>' + window.escapeHtml(c.title) + '</h1><p>' + window.escapeHtml(c.module || "") + '</p></section>';
+      html += infoHtml;
+      html += '<div class="steps-title">Учебный план</div>';
+      
+      (c.sections || []).forEach(sec => {
+        html += '<div style="font-weight:bold; margin:20px 0 10px; color:var(--accent); text-transform:uppercase; font-size:12px;">' + window.escapeHtml(sec.title) + '</div>';
+        (sec.topics || []).forEach(t => {
+          var badges = []; 
+          if (t.lectures) badges.push("📖"); 
+          if (t.practicals) badges.push("🛠"); 
+          if (t.test || t.tests) badges.push("📝");
+          
+          html += `<div class="topic" onclick="location.hash='#/topic/${t.id}/lecture'">
+            <div style="flex:1;">
+                <div style="font-size:12px; color:var(--muted);">${t.code}</div>
+                <div style="font-weight:bold;">${t.title}</div>
+                <div style="font-size:13px; margin-top:4px; color:var(--muted);">${badges.join(" ")}</div>
+            </div>
+          </div>`;
+        });
+      });
+      app.innerHTML = html;
   });
-  app.innerHTML = html;
 }
+
+// Редактирование информации преподавателем
+window.editGlobalInfo = function() {
+    var newText = prompt("Введите текст объявления для всех студентов:", window.state.globalInfo);
+    if (newText !== null) {
+        window.API.saveInfo(newText).then(res => {
+            if(res.ok) {
+                window.showToast("Информация обновлена!", "ok");
+                renderHome();
+            } else {
+                window.showToast("Ошибка сохранения", "err");
+            }
+        });
+    }
+};
 
 // ================= ИНИЦИАЛИЗАЦИЯ =================
 window.addEventListener("DOMContentLoaded", function() {
