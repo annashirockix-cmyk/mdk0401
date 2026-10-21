@@ -20,13 +20,16 @@ window.showToast = function(msg, type) {
 window.state = {
   activeCourseId: "07.01",
   student: null, staff: null, xp: 0, results: {},
-  purchasedThemes: [], unlockedAchievements: [], avatar: null, effect: null
+  purchasedThemes: [], unlockedAchievements: [], avatar: null, effect: null,
+  certBg: "1.jpg" // Выбранный фон сертификата по умолчанию
 };
 
 try {
   window.state.activeCourseId = localStorage.getItem("mdk.active") || "07.01";
   var _s = JSON.parse(localStorage.getItem("mdk.student") || "null"); if (_s && _s.name) window.state.student = _s;
   var _st = JSON.parse(localStorage.getItem("mdk.staff") || "null"); if (_st && _st.name) window.state.staff = _st;
+  // Загружаем ранее выбранный фон сертификата
+  window.state.certBg = localStorage.getItem("mdk.certBg") || "1.jpg";
 } catch (e) { console.warn("LocalStorage недоступен"); }
 
 if (!window.MDK_DATA || !window.MDK_DATA[window.state.activeCourseId]) window.state.activeCourseId = "07.01";
@@ -245,14 +248,12 @@ window.renderTopic = function(topicId, activeTab) {
     var topic = null;
     var foundCourseId = null;
     
-    // Ищем тему в текущем курсе
     if (window.COURSE && window.COURSE.sections) {
         window.COURSE.sections.forEach(s => {
             s.topics.forEach(t => { if (t.id === topicId) topic = t; });
         });
     }
     
-    // Если не нашли — ищем во всех курсах
     if (!topic && window.MDK_DATA) {
         for (var cid in window.MDK_DATA) {
             var c = window.MDK_DATA[cid];
@@ -268,7 +269,6 @@ window.renderTopic = function(topicId, activeTab) {
     
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена.</div>'; return; }
     
-    // Автопереключение предмета
     if (foundCourseId && window.state.activeCourseId !== foundCourseId) {
         window.state.activeCourseId = foundCourseId;
         window.COURSE = window.MDK_DATA[foundCourseId];
@@ -302,18 +302,18 @@ window.renderTopic = function(topicId, activeTab) {
 
     var baseQuestions = topic.test || topic.tests || [];
 
-    // --- 1. ЛЕКЦИИ (АККОРДЕОН) ---
+    // --- 1. ЛЕКЦИИ ---
     if (activeTab === 'lectures' && topic.lectures) {
         var accordionHtml = "";
         topic.lectures.forEach((lec, i) => {
-            var openAttr = i === 0 ? "open" : ""; // Первая лекция открыта по умолчанию
+            var openAttr = i === 0 ? "open" : "";
             accordionHtml += `<details class="lec-accordion" ${openAttr}>
                 <summary><span class="lec-code">${lec.code}</span> ${lec.title}</summary>
                 <div class="lec-content">${lec.content}</div>
             </details>`;
         });
         contentBox.innerHTML = accordionHtml;
-        if(window.addXP) window.addXP(5); // Бонус за прочтение
+        if(window.addXP) window.addXP(5);
     } 
     
     // --- 2. ПРАКТИКА ---
@@ -497,29 +497,72 @@ window.renderCertificatePage = function() {
 
     var p = {}; 
     try { p = JSON.parse(localStorage.getItem("mdk.results." + encodeURIComponent(window.studentKey()))) || {}; } catch(e) {}
-    
-    // В реальном приложении здесь нужно запрашивать данные с сервера, чтобы узнать статус подтверждения
     var isApproved = p.certificateApproved || false; 
     
-    var html = `
-        <div class="no-print" style="margin-bottom:20px; text-align:center;">
-            <button class="btn" onclick="window.requestCertificate()" style="padding:12px 24px; font-size:16px; background:var(--gold); color:#000;">📜 Запросить / Распечатать сертификат</button>
-            <p style="color:var(--muted); font-size:13px; margin-top:10px;">Нажмите, чтобы распечатать (Ctrl+P) или сохранить в PDF. Преподаватель должен подтвердить его в журнале.</p>
-        </div>
+    // Список доступных фонов (файлы должны лежать в папке certificat)
+    var bgs = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
+    
+    // Создаем панель выбора фона (только для экрана, скрывается при печати)
+    var bgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;">
+        <h3 style="margin-bottom:10px;">Выберите фон для сертификата:</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
+    
+    bgs.forEach(bg => {
+        var isSelected = window.state.certBg === bg;
+        bgSelectorHtml += `<img src="certificat/${bg}" 
+            style="width:100px; height:140px; object-fit:cover; cursor:pointer; border-radius:8px; transition:0.2s; 
+            border: 3px solid ${isSelected ? 'var(--accent)' : 'transparent'}; 
+            box-shadow: ${isSelected ? '0 0 15px var(--accent)' : 'none'};" 
+            onclick="window.setCertBg('${bg}')"
+            onmouseover="this.style.transform='scale(1.05)'"
+            onmouseout="this.style.transform='scale(1)'"
+            title="Фон ${bg.split('.')[0]}">`;
+    });
+    
+    bgSelectorHtml += `</div>
+        <button class="btn" onclick="window.requestCertificate()" style="margin-top:20px; padding:12px 24px; font-size:16px; background:var(--gold); color:#000;">📜 Запросить / Распечатать сертификат</button>
+        <p style="color:var(--muted); font-size:13px; margin-top:10px;">Нажмите, чтобы распечатать (Ctrl+P) или сохранить в PDF. Преподаватель должен подтвердить его в журнале.</p>
+    </div>`;
 
+    // Подготавливаем стиль для фона
+    var bgUrl = `url('certificat/${window.state.certBg}')`;
+    
+    var html = bgSelectorHtml + `
         <!-- Сама область сертификата для печати -->
-        <div id="printable-cert" style="background:#fff; color:#000; padding:50px; border-radius:12px; text-align:center; position:relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width:800px; margin:0 auto;">
-            <div style="border: 8px solid #c14a2a; padding:40px;">
-                <h1 style="font-size:36px; text-transform:uppercase; letter-spacing:2px; margin-bottom:10px; color:#c14a2a;">СЕРТИФИКАТ</h1>
-                <p style="font-size:18px; margin-bottom:30px;">подтверждает, что</p>
+        <div id="printable-cert" style="
+            background-image: ${bgUrl}; 
+            background-size: 100% 100%; 
+            background-repeat: no-repeat; 
+            background-color: #fff;
+            color:#000; 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            max-width:800px; 
+            margin:0 auto;
+            position: relative;
+            aspect-ratio: 1.414 / 1; /* Пропорции A4 горизонтальный */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        ">
+            <!-- Полупрозрачная подложка для текста, чтобы он читался на любом фоне -->
+            <div style="background: rgba(255, 255, 255, 0.85); width: 100%; height: 100%; padding: 40px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; border-radius: 8px;">
                 
-                <h2 style="font-size:32px; margin:20px 0; color:#000;">${window.escapeHtml(window.state.student.name)}</h2>
-                <p style="font-size:18px; margin-bottom:30px;">успешно прошел(ла) обучение по программе</p>
+                <div>
+                    <h1 style="font-size:36px; text-transform:uppercase; letter-spacing:2px; margin-bottom:10px; color:#c14a2a;">СЕРТИФИКАТ</h1>
+                    <p style="font-size:18px; margin-bottom:30px;">подтверждает, что</p>
+                    
+                    <h2 style="font-size:36px; margin:20px 0; color:#000; border-bottom: 2px solid #ccc; display: inline-block; padding-bottom: 5px;">${window.escapeHtml(window.state.student.name)}</h2>
+                    <p style="font-size:18px; margin-top:30px; margin-bottom:30px;">успешно прошел(ла) обучение по программе</p>
+                    
+                    <h3 style="font-size:24px; margin:20px 0; color:#000;">${window.escapeHtml(window.COURSE ? window.COURSE.title : "МДК")}</h3>
+                    <p style="font-size:16px; margin-bottom:40px;">Группа: ${window.escapeHtml(window.state.student.group)}</p>
+                </div>
                 
-                <h3 style="font-size:24px; margin:20px 0; color:#000;">${window.escapeHtml(window.COURSE ? window.COURSE.title : "МДК")}</h3>
-                <p style="font-size:16px; margin-bottom:40px;">Группа: ${window.escapeHtml(window.state.student.group)}</p>
-                
-                <div style="display:flex; justify-content:space-between; margin-top:60px; font-size:16px;">
+                <div style="display:flex; justify-content:space-between; font-size:16px; margin-top:20px;">
                     <div style="text-align:left;">
                         <p>Дата выдачи:</p>
                         <p style="font-weight:bold;">${new Date().toLocaleDateString('ru-RU')}</p>
@@ -530,16 +573,25 @@ window.renderCertificatePage = function() {
                         <p style="font-size:12px; margin-top:5px;">М.П.</p>
                     </div>
                 </div>
-                
-                <!-- Водяной знак (если не подтвержден) -->
-                ${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-30deg); font-size:80px; font-weight:bold; color:rgba(255,0,0,0.1); pointer-events:none; z-index:10;">ОБРАЗЕЦ</div>` : ""}
+
             </div>
+            
+            <!-- Водяной знак (если не подтвержден) -->
+            ${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%) rotate(-30deg); font-size:100px; font-weight:bold; color:rgba(255,0,0,0.15); pointer-events:none; z-index:10; white-space:nowrap;">ОБРАЗЕЦ</div>` : ""}
         </div>
     `;
     
     app.innerHTML += html;
 };
 
+// Выбор фона
+window.setCertBg = function(bgName) {
+    window.state.certBg = bgName;
+    try { localStorage.setItem("mdk.certBg", bgName); } catch(e){}
+    window.renderCertificatePage();
+};
+
+// Запрос сертификата
 window.requestCertificate = function() {
     var k = window.studentKey(); if (!k) return;
     var p = {}; 
@@ -555,6 +607,7 @@ window.requestCertificate = function() {
         window.print();
     }
 };
+
 
 // ================= ДОСТИЖЕНИЯ И ПРОСТЫЕ СТРАНИЦЫ =================
 window.renderAchievementsPage = function() {
