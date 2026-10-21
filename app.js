@@ -211,6 +211,30 @@ window.route = function() {
   window.scrollTo(0, 0);
 };
 
+// ================= УНИВЕРСАЛЬНЫЙ РЕНДЕР ТЕСТА =================
+window.renderDynamicTest = function(prefix, uniqueId, questions) {
+    if (!questions || questions.length === 0) return "<p style='color:var(--muted);'>Вопросы для теста не найдены.</p>";
+    
+    var html = `<div id="testBox_${prefix}_${uniqueId}" style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
+        <p style="font-weight:bold; margin-bottom:10px;">Пройдите тест по заданию:</p>`;
+    
+    questions.forEach((q, qi) => {
+        html += `<div style="margin-bottom:15px; padding:10px; background:var(--bg); border-radius:8px;">
+            <b>${qi + 1}. ${q.q}</b><div style="margin-top:8px;">`;
+        q.options.forEach((opt, oi) => {
+            html += `<label style="display:block; margin-bottom:4px; cursor:pointer;">
+                <input type="radio" name="${prefix}_q_${uniqueId}_${qi}" value="${oi}"> ${opt}
+            </label>`;
+        });
+        html += `</div></div>`;
+    });
+    
+    html += `<button class="btn" onclick="window.submitDynamicTest('${prefix}', '${uniqueId}', ${JSON.stringify(questions).replace(/"/g, '&quot;')})">Проверить тест</button>
+    <div id="fb_${prefix}_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div></div>`;
+    
+    return html;
+};
+
 // ================= РЕНДЕР ТЕМЫ =================
 window.renderTopic = function(topicId, activeTab) {
     var app = $("app"); if (!app) return; app.innerHTML = "";
@@ -272,6 +296,8 @@ window.renderTopic = function(topicId, activeTab) {
     var contentBox = el('<div class="module"></div>');
     app.appendChild(contentBox);
 
+    var baseQuestions = topic.test || topic.tests || []; // Базовые вопросы для авто-тестов
+
     // --- 1. ЛЕКЦИИ ---
     if (activeTab === 'lectures' && topic.lectures) {
         topic.lectures.forEach(lec => {
@@ -289,23 +315,35 @@ window.renderTopic = function(topicId, activeTab) {
             var extraData = window.EXTRA_TESTS && window.EXTRA_TESTS[uniqueId];
             var expectedAnswer = p.expectedAnswer || (extraData && extraData.expectedAnswer);
             
-            contentBox.innerHTML += `<div style="margin-bottom:20px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border); ${isDone}">
+            var html = `<div style="margin-bottom:20px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border); ${isDone}">
                 <h4 style="margin-top:0; color:var(--accent);">${p.code} ${p.title}</h4>
                 <p><b>Цель:</b> ${p.goal}</p>
                 <p><b>Задание:</b> ${p.task}</p>
-                ${p.variants ? '<p><b>Варианты:</b></p><ul>' + p.variants.map(v => `<li>${v}</li>`).join('') + '</ul>' : ''}
+                ${p.variants ? '<p><b>Варианты:</b></p><ul>' + p.variants.map(v => `<li>${v}</li>`).join('') + '</ul>' : ''}`;
                 
-                ${expectedAnswer ? `
-                    <div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
-                        <label style="font-weight:bold;">Введите ваш ответ (только число):</label>
-                        <div style="display:flex; gap:10px; margin-top:5px;">
-                            <input type="text" id="ans_${uniqueId}" class="self-input" style="max-width:200px; margin:0;" placeholder="Ваш ответ...">
-                            <button class="btn" onclick="window.checkPracticalAnswer('${uniqueId}', '${expectedAnswer}')">Проверить</button>
-                        </div>
-                        <div id="fb_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div>
+            if (expectedAnswer) {
+                // Если есть точный ответ (число/слово)
+                html += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
+                    <label style="font-weight:bold;">Введите ваш ответ (только число):</label>
+                    <div style="display:flex; gap:10px; margin-top:5px;">
+                        <input type="text" id="ans_${uniqueId}" class="self-input" style="max-width:200px; margin:0;" placeholder="Ваш ответ...">
+                        <button class="btn" onclick="window.checkPracticalAnswer('${uniqueId}', '${expectedAnswer}')">Проверить</button>
                     </div>
-                ` : '<p style="color:var(--muted); font-size:13px; margin-top:10px;">* Это задание проверяется преподавателем вручную.</p>'}
-            </div>`;
+                    <div id="fb_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div>
+                </div>`;
+            } else if (extraData && extraData.questions) {
+                // Если есть свой тест в EXTRA_TESTS
+                html += window.renderDynamicTest("prac", uniqueId, extraData.questions);
+            } else if (baseQuestions.length > 0) {
+                // АВТОПОДБОР: Если ничего нет, берем вопросы из общего теста темы
+                html += window.renderDynamicTest("prac", uniqueId, baseQuestions);
+            } else {
+                // Если вообще нет вопросов
+                html += `<p style="color:var(--muted); font-size:13px; margin-top:10px;">* Это задание проверяется преподавателем вручную.</p>`;
+            }
+            
+            html += `</div>`;
+            contentBox.innerHTML += html;
         });
     } 
     
@@ -314,9 +352,8 @@ window.renderTopic = function(topicId, activeTab) {
         topic.selfWork.forEach((sw, index) => {
             var uniqueId = `self_${topicId}_${index}`;
             var extraData = window.EXTRA_TESTS && window.EXTRA_TESTS[uniqueId];
-            var isDone = window.state.results[uniqueId + "_test"] ? "background: rgba(88, 201, 138, 0.1); border-color: var(--ok);" : "";
+            var isDone = window.state.results[uniqueId] ? "background: rgba(88, 201, 138, 0.1); border-color: var(--ok);" : "";
 
-            // Исправлено: если нет кода, просто выводим название
             var swTitle = (sw.code ? sw.code + ' ' : '') + sw.title;
 
             var html = `<div style="margin-bottom:20px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border); ${isDone}">
@@ -324,26 +361,13 @@ window.renderTopic = function(topicId, activeTab) {
                 <p><b>Задание:</b> ${sw.task}</p>`;
 
             if (extraData && extraData.questions) {
-                html += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
-                    <p style="font-weight:bold; margin-bottom:10px;">Пройдите тест по заданию:</p>
-                    <div id="selfTestBox_${uniqueId}">`;
-                
-                extraData.questions.forEach((q, qi) => {
-                    html += `<div style="margin-bottom:15px; padding:10px; background:var(--bg); border-radius:8px;">
-                        <b>${qi + 1}. ${q.q}</b><div style="margin-top:8px;">`;
-                    q.options.forEach((opt, oi) => {
-                        html += `<label style="display:block; margin-bottom:4px; cursor:pointer;">
-                            <input type="radio" name="self_q_${uniqueId}_${qi}" value="${oi}"> ${opt}
-                        </label>`;
-                    });
-                    html += `</div></div>`;
-                });
-                
-                html += `</div>
-                    <button class="btn" onclick="window.submitSelfWorkTest('${uniqueId}')">Проверить тест</button>
-                    <div id="selfFb_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div>
-                </div>`;
+                // Если есть свой тест в EXTRA_TESTS
+                html += window.renderDynamicTest("self", uniqueId, extraData.questions);
+            } else if (baseQuestions.length > 0) {
+                // АВТОПОДБОР: Если нет своего, берем вопросы из общего теста темы
+                html += window.renderDynamicTest("self", uniqueId, baseQuestions);
             } else {
+                // Если вообще нет вопросов
                 html += `${sw.questions ? '<p><b>Контрольные вопросы (ответьте письменно):</b></p><ul>' + sw.questions.map(q => `<li>${q}</li>`).join('') + '</ul>' : ''}`;
             }
 
@@ -415,28 +439,26 @@ window.checkPracticalAnswer = function(id, expected) {
     }
 };
 
-window.submitSelfWorkTest = function(uniqueId) {
-    var extraData = window.EXTRA_TESTS && window.EXTRA_TESTS[uniqueId];
-    if (!extraData || !extraData.questions) return;
-    
+// Универсальная проверка для всех динамических тестов (Практика и Самостоятельная)
+window.submitDynamicTest = function(prefix, uniqueId, questions) {
     var correct = 0;
-    var total = extraData.questions.length;
+    var total = questions.length;
     
-    extraData.questions.forEach((q, qi) => {
-        var selected = document.querySelector(`input[name="self_q_${uniqueId}_${qi}"]:checked`);
+    questions.forEach((q, qi) => {
+        var selected = document.querySelector(`input[name="${prefix}_q_${uniqueId}_${qi}"]:checked`);
         if (selected && Number(selected.value) === q.correct) correct++;
     });
     
     var pct = Math.round((correct / total) * 100);
     var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-    var fb = document.getElementById("selfFb_" + uniqueId);
+    var fb = document.getElementById("fb_" + prefix + "_" + uniqueId);
     
     if (grade >= 3) {
         fb.textContent = `✅ Отлично! Результат: ${correct} из ${total}. Оценка: ${grade}`;
         fb.style.color = "var(--ok)";
         
-        if (!window.state.results[uniqueId + "_test"]) {
-            window.state.results[uniqueId + "_test"] = { grade: grade, total: correct, max: total };
+        if (!window.state.results[uniqueId]) {
+            window.state.results[uniqueId] = { grade: grade, total: correct, max: total };
             if (window.addXP) window.addXP(15); 
             window.saveStudentData();
         }
@@ -468,6 +490,7 @@ window.submitInlineTest = function(topicId) {
     
     alert(`Результат: ${correct} из ${testQuestions.length} (${pct}%). Оценка: ${grade}`);
 };
+
 
 // ================= ДОСТИЖЕНИЯ И ПРОСТЫЕ СТРАНИЦЫ =================
 window.renderAchievementsPage = function() {
