@@ -20,11 +20,11 @@ async function fetchAPI(action, params = {}) {
     try {
         const response = await fetch(url.toString(), {
             method: "POST",
-            // КЛЮЧЕВОЙ МОМЕНТ: text/plain обходит preflight-запрос браузера
+            // КЛЮЧЕВОЙ МОМЕНТ: text/plain обходит preflight-запрос браузера[reference:6]
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(params),
-            mode: "cors", // Явно указываем CORS
-            redirect: "follow" // Google часто перенаправляет запросы
+            mode: "cors",
+            redirect: "follow" // Google часто перенаправляет запросы[reference:7]
         });
         
         if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
