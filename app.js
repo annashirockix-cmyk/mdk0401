@@ -211,26 +211,27 @@ window.route = function() {
   window.scrollTo(0, 0);
 };
 
-// ================= УНИВЕРСАЛЬНЫЙ РЕНДЕР ТЕСТА =================
-window.renderDynamicTest = function(prefix, uniqueId, questions) {
-    if (!questions || questions.length === 0) return "<p style='color:var(--muted);'>Вопросы для теста не найдены.</p>";
+// ================= УНИВЕРСАЛЬНЫЙ ГЕНЕРАТОР ТЕСТОВ =================
+window.buildTestBlock = function(prefix, uniqueId, questions) {
+    if (!questions || questions.length === 0) return "";
     
-    var html = `<div id="testBox_${prefix}_${uniqueId}" style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
-        <p style="font-weight:bold; margin-bottom:10px;">Пройдите тест по заданию:</p>`;
+    var html = `<div style="margin-top:20px; padding-top:20px; border-top:1px dashed var(--border);">
+        <p style="font-weight:bold; margin-bottom:15px; font-size:16px;">🎯 Проверочный тест:</p>`;
     
     questions.forEach((q, qi) => {
-        html += `<div style="margin-bottom:15px; padding:10px; background:var(--bg); border-radius:8px;">
-            <b>${qi + 1}. ${q.q}</b><div style="margin-top:8px;">`;
+        html += `<div style="margin-bottom:15px; padding:15px; background:var(--bg); border-radius:8px; border: 1px solid var(--border);">
+            <b>${qi + 1}. ${q.q}</b><div style="margin-top:10px;">`;
         q.options.forEach((opt, oi) => {
-            html += `<label style="display:block; margin-bottom:4px; cursor:pointer;">
-                <input type="radio" name="${prefix}_q_${uniqueId}_${qi}" value="${oi}"> ${opt}
+            html += `<label style="display:flex; align-items:center; gap:8px; margin-bottom:6px; cursor:pointer; padding:5px; border-radius:4px; transition: background 0.2s;" onmouseover="this.style.background='var(--card-soft)'" onmouseout="this.style.background='transparent'">
+                <input type="radio" name="${prefix}_q_${uniqueId}_${qi}" value="${oi}" style="transform:scale(1.2);"> 
+                <span>${opt}</span>
             </label>`;
         });
         html += `</div></div>`;
     });
     
-    html += `<button class="btn" onclick="window.submitDynamicTest('${prefix}', '${uniqueId}', ${JSON.stringify(questions).replace(/"/g, '&quot;')})">Проверить тест</button>
-    <div id="fb_${prefix}_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div></div>`;
+    html += `<button class="btn" style="width:100%; padding:12px; font-size:16px; margin-top:10px;" onclick="window.gradeTest('${prefix}', '${uniqueId}', ${JSON.stringify(questions).replace(/"/g, '&quot;')})">Проверить результат</button>
+    <div id="fb_${prefix}_${uniqueId}" style="margin-top:15px; font-weight:bold; font-size:16px; text-align:center;"></div></div>`;
     
     return html;
 };
@@ -241,22 +242,19 @@ window.renderTopic = function(topicId, activeTab) {
     var topic = null;
     var foundCourseId = null;
     
+    // Ищем тему во всех курсах
     if (window.COURSE && window.COURSE.sections) {
         window.COURSE.sections.forEach(s => {
             s.topics.forEach(t => { if (t.id === topicId) topic = t; });
         });
     }
-    
     if (!topic && window.MDK_DATA) {
         for (var cid in window.MDK_DATA) {
             var c = window.MDK_DATA[cid];
             if (c.sections) {
                 c.sections.forEach(s => {
                     s.topics.forEach(t => { 
-                        if (t.id === topicId) { 
-                            topic = t; 
-                            foundCourseId = cid;
-                        } 
+                        if (t.id === topicId) { topic = t; foundCourseId = cid; } 
                     });
                 });
             }
@@ -264,7 +262,6 @@ window.renderTopic = function(topicId, activeTab) {
     }
     
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена.</div>'; return; }
-    
     if (foundCourseId && window.state.activeCourseId !== foundCourseId) {
         window.state.activeCourseId = foundCourseId;
         window.COURSE = window.MDK_DATA[foundCourseId];
@@ -296,7 +293,8 @@ window.renderTopic = function(topicId, activeTab) {
     var contentBox = el('<div class="module"></div>');
     app.appendChild(contentBox);
 
-    var baseQuestions = topic.test || topic.tests || []; // Базовые вопросы для авто-тестов
+    // Базовые вопросы из темы (для авто-тестов)
+    var baseQuestions = topic.test || topic.tests || [];
 
     // --- 1. ЛЕКЦИИ ---
     if (activeTab === 'lectures' && topic.lectures) {
@@ -315,31 +313,28 @@ window.renderTopic = function(topicId, activeTab) {
             var extraData = window.EXTRA_TESTS && window.EXTRA_TESTS[uniqueId];
             var expectedAnswer = p.expectedAnswer || (extraData && extraData.expectedAnswer);
             
-            var html = `<div style="margin-bottom:20px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border); ${isDone}">
-                <h4 style="margin-top:0; color:var(--accent);">${p.code} ${p.title}</h4>
+            var html = `<div style="margin-bottom:20px; padding:20px; background:var(--card-soft); border-radius:12px; border:1px solid var(--border); ${isDone}">
+                <h4 style="margin-top:0; color:var(--accent); font-size:18px;">${p.code} ${p.title}</h4>
                 <p><b>Цель:</b> ${p.goal}</p>
                 <p><b>Задание:</b> ${p.task}</p>
-                ${p.variants ? '<p><b>Варианты:</b></p><ul>' + p.variants.map(v => `<li>${v}</li>`).join('') + '</ul>' : ''}`;
+                ${p.variants ? '<p><b>Варианты:</b></p><ul style="margin-bottom:15px;">' + p.variants.map(v => `<li>${v}</li>`).join('') + '</ul>' : ''}`;
                 
             if (expectedAnswer) {
-                // Если есть точный ответ (число/слово)
                 html += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
-                    <label style="font-weight:bold;">Введите ваш ответ (только число):</label>
-                    <div style="display:flex; gap:10px; margin-top:5px;">
-                        <input type="text" id="ans_${uniqueId}" class="self-input" style="max-width:200px; margin:0;" placeholder="Ваш ответ...">
+                    <label style="font-weight:bold; display:block; margin-bottom:8px;">Введите ваш ответ:</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="ans_${uniqueId}" class="self-input" style="max-width:250px; margin:0;" placeholder="Ваш ответ...">
                         <button class="btn" onclick="window.checkPracticalAnswer('${uniqueId}', '${expectedAnswer}')">Проверить</button>
                     </div>
-                    <div id="fb_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div>
+                    <div id="fb_${uniqueId}" style="margin-top:15px; font-weight:bold; font-size:16px;"></div>
                 </div>`;
             } else if (extraData && extraData.questions) {
-                // Если есть свой тест в EXTRA_TESTS
-                html += window.renderDynamicTest("prac", uniqueId, extraData.questions);
+                html += window.buildTestBlock("prac", uniqueId, extraData.questions);
             } else if (baseQuestions.length > 0) {
-                // АВТОПОДБОР: Если ничего нет, берем вопросы из общего теста темы
-                html += window.renderDynamicTest("prac", uniqueId, baseQuestions);
+                // АВТОПОДБОР: Делаем тест из вопросов темы
+                html += window.buildTestBlock("prac", uniqueId, baseQuestions);
             } else {
-                // Если вообще нет вопросов
-                html += `<p style="color:var(--muted); font-size:13px; margin-top:10px;">* Это задание проверяется преподавателем вручную.</p>`;
+                html += `<p style="color:var(--muted); font-size:13px; margin-top:15px; font-style:italic;">* Для этой практики пока не добавлены вопросы. Обратитесь к преподавателю.</p>`;
             }
             
             html += `</div>`;
@@ -356,19 +351,17 @@ window.renderTopic = function(topicId, activeTab) {
 
             var swTitle = (sw.code ? sw.code + ' ' : '') + sw.title;
 
-            var html = `<div style="margin-bottom:20px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border); ${isDone}">
-                <h4 style="margin-top:0; color:var(--accent);">${swTitle}</h4>
+            var html = `<div style="margin-bottom:20px; padding:20px; background:var(--card-soft); border-radius:12px; border:1px solid var(--border); ${isDone}">
+                <h4 style="margin-top:0; color:var(--accent); font-size:18px;">${swTitle}</h4>
                 <p><b>Задание:</b> ${sw.task}</p>`;
 
             if (extraData && extraData.questions) {
-                // Если есть свой тест в EXTRA_TESTS
-                html += window.renderDynamicTest("self", uniqueId, extraData.questions);
+                html += window.buildTestBlock("self", uniqueId, extraData.questions);
             } else if (baseQuestions.length > 0) {
-                // АВТОПОДБОР: Если нет своего, берем вопросы из общего теста темы
-                html += window.renderDynamicTest("self", uniqueId, baseQuestions);
+                // АВТОПОДБОР: Делаем тест из вопросов темы
+                html += window.buildTestBlock("self", uniqueId, baseQuestions);
             } else {
-                // Если вообще нет вопросов
-                html += `${sw.questions ? '<p><b>Контрольные вопросы (ответьте письменно):</b></p><ul>' + sw.questions.map(q => `<li>${q}</li>`).join('') + '</ul>' : ''}`;
+                html += `<p style="color:var(--muted); font-size:13px; margin-top:15px; font-style:italic;">* Для этой работы пока не добавлены вопросы.</p>`;
             }
 
             html += `</div>`;
@@ -377,25 +370,10 @@ window.renderTopic = function(topicId, activeTab) {
     } 
     
     // --- 4. ТЕСТ (По теме) ---
-    else if (activeTab === 'test' && (topic.test || topic.tests)) {
-        var testQuestions = topic.test || topic.tests;
+    else if (activeTab === 'test' && baseQuestions.length > 0) {
         contentBox.innerHTML = `<h3>📝 Контрольный тест по теме</h3>
-        <p>Ответьте на вопросы, чтобы закрепить материал.</p>
-        <div id="inlineTestBox"></div>
-        <button class="btn" style="margin-top:15px;" onclick="window.submitInlineTest('${topicId}')">Завершить тест</button>`;
-        
-        var testBox = contentBox.querySelector("#inlineTestBox");
-        testQuestions.forEach((q, qi) => {
-            var qHtml = `<div style="margin-bottom:15px; padding:10px; background:var(--bg); border-radius:8px;">
-                <b>${qi + 1}. ${q.q}</b><div style="margin-top:8px;">`;
-            q.options.forEach((opt, oi) => {
-                qHtml += `<label style="display:block; margin-bottom:4px; cursor:pointer;">
-                    <input type="radio" name="inline_q_${topicId}_${qi}" value="${oi}"> ${opt}
-                </label>`;
-            });
-            qHtml += `</div></div>`;
-            testBox.innerHTML += qHtml;
-        });
+        <p>Ответьте на все вопросы, чтобы получить оценку.</p>
+        ${window.buildTestBlock("inline", topicId, baseQuestions)}`;
     }
     
     // --- 5. ПРЕЗЕНТАЦИИ ---
@@ -439,8 +417,8 @@ window.checkPracticalAnswer = function(id, expected) {
     }
 };
 
-// Универсальная проверка для всех динамических тестов (Практика и Самостоятельная)
-window.submitDynamicTest = function(prefix, uniqueId, questions) {
+// Единая проверка для всех тестов
+window.gradeTest = function(prefix, uniqueId, questions) {
     var correct = 0;
     var total = questions.length;
     
@@ -454,7 +432,7 @@ window.submitDynamicTest = function(prefix, uniqueId, questions) {
     var fb = document.getElementById("fb_" + prefix + "_" + uniqueId);
     
     if (grade >= 3) {
-        fb.textContent = `✅ Отлично! Результат: ${correct} из ${total}. Оценка: ${grade}`;
+        fb.textContent = `✅ Отлично! Верно ${correct} из ${total}. Оценка: ${grade}`;
         fb.style.color = "var(--ok)";
         
         if (!window.state.results[uniqueId]) {
@@ -463,32 +441,9 @@ window.submitDynamicTest = function(prefix, uniqueId, questions) {
             window.saveStudentData();
         }
     } else {
-        fb.textContent = `❌ Результат: ${correct} из ${total}. Оценка: ${grade}. Попробуйте еще раз.`;
+        fb.textContent = `❌ Верно ${correct} из ${total}. Оценка: ${grade}. Попробуйте еще раз.`;
         fb.style.color = "var(--err)";
     }
-};
-
-window.submitInlineTest = function(topicId) {
-    var topic = null;
-    if (window.COURSE && window.COURSE.sections) {
-        window.COURSE.sections.forEach(s => s.topics.forEach(t => { if (t.id === topicId) topic = t; }));
-    }
-    if (!topic) return;
-    var testQuestions = topic.test || topic.tests;
-    var correct = 0;
-    
-    testQuestions.forEach((q, qi) => {
-        var selected = document.querySelector(`input[name="inline_q_${topicId}_${qi}"]:checked`);
-        if (selected && Number(selected.value) === q.correct) correct++;
-    });
-    
-    var pct = Math.round((correct / testQuestions.length) * 100);
-    var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-    
-    window.state.results[topicId + "_test"] = { grade: grade, total: correct, max: testQuestions.length };
-    window.saveStudentData();
-    
-    alert(`Результат: ${correct} из ${testQuestions.length} (${pct}%). Оценка: ${grade}`);
 };
 
 
