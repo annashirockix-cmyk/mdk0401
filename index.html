@@ -18,15 +18,41 @@
   } catch(e) {}
 </script>
 
-<!-- СТИЛИ ДЛЯ ПЕЧАТИ СЕРТИФИКАТА -->
+<!-- СТИЛИ ДЛЯ ПЕЧАТИ СЕРТИФИКАТА И ВКЛАДЫША -->
 <style>
     @media print {
         body * { visibility: hidden; }
-        #printable-cert, #printable-cert * { visibility: visible; }
-        #printable-cert { position: absolute; left: 0; top: 0; width: 100%; padding: 40px; background: #fff; color: #000; border: none; box-shadow: none; }
+        /* Показываем только сертификат и вкладыш */
+        #printable-cert, #printable-cert *, #printable-supplement, #printable-supplement * { visibility: visible; }
+        
+        /* Настройки для первой страницы (Сертификат) */
+        #printable-cert { 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            page-break-after: always; /* Принудительный разрыв страницы после */
+            margin: 0; 
+            padding: 0; 
+            box-shadow: none; 
+            border-radius: 0;
+            background-size: 100% 100% !important;
+        }
+        
+        /* Настройки для второй страницы (Вкладыш) */
+        #printable-supplement { 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            page-break-before: always; /* Начинаем с новой страницы */
+            background-size: 100% 100% !important;
+        }
+        
         .no-print { display: none !important; }
         .topbar, .drawer, .drawer-overlay, .toast-container, #asFab { display: none !important; }
         main#app { padding: 0 !important; margin: 0 !important; }
+        body { background: #fff; margin: 0; padding: 0; }
     }
 </style>
 </head>
@@ -133,7 +159,7 @@
 <script src="data-0401.js"></script>
 
 <script src="api.js"></script>
-<script src="tests-extra.js"></script> <!-- НОВЫЙ ФАЙЛ С ОТВЕТАМИ -->
+<script src="tests-extra.js"></script> 
 
 <script src="app.js"></script>
 
