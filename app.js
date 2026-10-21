@@ -215,14 +215,41 @@ window.route = function() {
 window.renderTopic = function(topicId, activeTab) {
     var app = $("app"); if (!app) return; app.innerHTML = "";
     var topic = null;
+    var foundCourseId = null;
     
+    // 1. Ищем в текущем курсе
     if (window.COURSE && window.COURSE.sections) {
         window.COURSE.sections.forEach(s => {
             s.topics.forEach(t => { if (t.id === topicId) topic = t; });
         });
     }
-
+    
+    // 2. Если не нашли — ищем во ВСЕХ курсах
+    if (!topic && window.MDK_DATA) {
+        for (var cid in window.MDK_DATA) {
+            var c = window.MDK_DATA[cid];
+            if (c.sections) {
+                c.sections.forEach(s => {
+                    s.topics.forEach(t => { 
+                        if (t.id === topicId) { 
+                            topic = t; 
+                            foundCourseId = cid;
+                        } 
+                    });
+                });
+            }
+        }
+    }
+    
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена.</div>'; return; }
+    
+    // 3. Автоматически переключаем селектор, если тема из другого МДК
+    if (foundCourseId && window.state.activeCourseId !== foundCourseId) {
+        window.state.activeCourseId = foundCourseId;
+        window.COURSE = window.MDK_DATA[foundCourseId];
+        var selector = document.getElementById("mdkSelector");
+        if (selector) selector.value = foundCourseId;
+    }
 
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
     app.appendChild(el(`<section class="hero"><span class="brand-badge">${topic.code}</span><h1>${topic.title}</h1></section>`));
@@ -231,7 +258,7 @@ window.renderTopic = function(topicId, activeTab) {
     if (topic.lectures && topic.lectures.length) tabs.push({ id: 'lectures', label: '📖 Лекции' });
     if (topic.practicals && topic.practicals.length) tabs.push({ id: 'practicals', label: '🛠 Практика' });
     if (topic.selfWork && topic.selfWork.length) tabs.push({ id: 'selfWork', label: '✍️ Самостоятельная' });
-    if (topic.test && topic.test.length) tabs.push({ id: 'test', label: '📝 Тест' });
+    if ((topic.test && topic.test.length) || (topic.tests && topic.tests.length)) tabs.push({ id: 'test', label: '📝 Тест' });
     if (topic.presentations && topic.presentations.length) tabs.push({ id: 'presentations', label: '📊 Презентации' });
 
     if (!activeTab || activeTab === 'lecture') activeTab = 'lectures';
@@ -248,7 +275,7 @@ window.renderTopic = function(topicId, activeTab) {
     var contentBox = el('<div class="module"></div>');
     app.appendChild(contentBox);
 
-    // 1. ЛЕКЦИИ
+    // --- 1. ЛЕКЦИИ ---
     if (activeTab === 'lectures' && topic.lectures) {
         topic.lectures.forEach(lec => {
             contentBox.innerHTML += `<h3>${lec.code} ${lec.title}</h3><div style="line-height:1.6; margin-bottom:30px;">${lec.content}</div>`;
@@ -256,13 +283,12 @@ window.renderTopic = function(topicId, activeTab) {
         if(window.addXP) window.addXP(5);
     } 
     
-    // 2. ПРАКТИКА
+    // --- 2. ПРАКТИКА ---
     else if (activeTab === 'practicals' && topic.practicals) {
         topic.practicals.forEach((p, index) => {
             var uniqueId = `prac_${topicId}_${index}`;
             var isDone = window.state.results[uniqueId] ? "background: rgba(88, 201, 138, 0.1); border-color: var(--ok);" : "";
             
-            // Ищем ответ в новом файле tests-extra.js или в самом объекте задания
             var extraData = window.EXTRA_TESTS && window.EXTRA_TESTS[uniqueId];
             var expectedAnswer = p.expectedAnswer || (extraData && extraData.expectedAnswer);
             
@@ -281,12 +307,12 @@ window.renderTopic = function(topicId, activeTab) {
                         </div>
                         <div id="fb_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div>
                     </div>
-                ` : '<p style="color:var(--muted); font-size:13px; margin-top:10px;">* Это задание проверяется преподавателем вручную.</p>'}
+                ` : '<p style="color:var(--muted); font-size:13px; margin-top:10px;">* Это задание проверяется преподавателем вручную (или добавьте ответ в tests-extra.js).</p>'}
             </div>`;
         });
     } 
     
-    // 3. САМОСТОЯТЕЛЬНАЯ
+    // --- 3. САМОСТОЯТЕЛЬНАЯ ---
     else if (activeTab === 'selfWork' && topic.selfWork) {
         topic.selfWork.forEach((sw, index) => {
             var uniqueId = `self_${topicId}_${index}`;
@@ -297,7 +323,6 @@ window.renderTopic = function(topicId, activeTab) {
                 <h4 style="margin-top:0; color:var(--accent);">${sw.code} ${sw.title}</h4>
                 <p><b>Задание:</b> ${sw.task}</p>`;
 
-            // Если в tests-extra.js есть вопросы, рисуем интерактивный тест
             if (extraData && extraData.questions) {
                 html += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
                     <p style="font-weight:bold; margin-bottom:10px;">Пройдите тест по заданию:</p>
@@ -319,7 +344,6 @@ window.renderTopic = function(topicId, activeTab) {
                     <div id="selfFb_${uniqueId}" style="margin-top:10px; font-weight:bold;"></div>
                 </div>`;
             } else {
-                // Если теста нет, просто выводим вопросы
                 html += `${sw.questions ? '<p><b>Контрольные вопросы (ответьте письменно):</b></p><ul>' + sw.questions.map(q => `<li>${q}</li>`).join('') + '</ul>' : ''}`;
             }
 
@@ -328,7 +352,7 @@ window.renderTopic = function(topicId, activeTab) {
         });
     } 
     
-    // 4. ТЕСТ
+    // --- 4. ТЕСТ (По теме) ---
     else if (activeTab === 'test' && (topic.test || topic.tests)) {
         var testQuestions = topic.test || topic.tests;
         contentBox.innerHTML = `<h3>📝 Контрольный тест по теме</h3>
@@ -350,7 +374,7 @@ window.renderTopic = function(topicId, activeTab) {
         });
     }
     
-    // 5. ПРЕЗЕНТАЦИИ
+    // --- 5. ПРЕЗЕНТАЦИИ ---
     else if (activeTab === 'presentations' && topic.presentations) {
         topic.presentations.forEach(p => {
             contentBox.innerHTML += `<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px;">
@@ -367,7 +391,6 @@ window.renderTopic = function(topicId, activeTab) {
 
 // ================= ФУНКЦИИ ПРОВЕРКИ =================
 
-// Проверка практики
 window.checkPracticalAnswer = function(id, expected) {
     var input = document.getElementById("ans_" + id);
     var fb = document.getElementById("fb_" + id);
@@ -390,7 +413,6 @@ window.checkPracticalAnswer = function(id, expected) {
     }
 };
 
-// Проверка теста в самостоятельной
 window.submitSelfWorkTest = function(uniqueId) {
     var extraData = window.EXTRA_TESTS && window.EXTRA_TESTS[uniqueId];
     if (!extraData || !extraData.questions) return;
@@ -422,7 +444,6 @@ window.submitSelfWorkTest = function(uniqueId) {
     }
 };
 
-// Проверка обычного теста (из вкладки Тест)
 window.submitInlineTest = function(topicId) {
     var topic = null;
     if (window.COURSE && window.COURSE.sections) {
