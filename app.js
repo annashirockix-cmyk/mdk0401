@@ -1,18 +1,17 @@
-// --- app.js ---
+// app.js
 
+// ВАША ССЫЛКА НА GOOGLE APPS SCRIPT
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbw3Ev3stuvLl36nxjmXU0q2zi4UsS5ViXwEj1x6q_JjlCccMJld36o6y1H__CvJn5KB/exec';
 
-// === СОСТОЯНИЕ ПОЛЬЗОВАТЕЛЯ ===
-const userState = {
-    id: localStorage.getItem('student_id') || null,
-    name: localStorage.getItem('student_name') || null,
-    xp: parseInt(localStorage.getItem('student_xp')) || 0,
-    results: JSON.parse(localStorage.getItem('student_results')) || {}
+// === СОСТОЯНИЕ ===
+const state = {
+    user: JSON.parse(localStorage.getItem('portal_user')) || null, // { name, group, role, xp, results }
+    currentPage: 'home',
+    currentTopic: null,
+    data: null
 };
 
-// === УТИЛИТЫ ===
-
-// Запрос к Google Apps Script (обходит CORS)
+// === УТИЛИТЫ API ===
 async function fetchGAS(action, payload = {}) {
     try {
         const response = await fetch(GAS_URL, {
@@ -23,305 +22,327 @@ async function fetchGAS(action, payload = {}) {
         return await response.json();
     } catch (error) {
         console.error("Ошибка GAS:", error);
-        return { ok: false, error: "Ошибка соединения с сервером" };
+        return { ok: false, error: "Ошибка сети" };
     }
 }
 
-function getCourseData() {
-    return window.DATA_0401 || window.data0401 || null;
-}
-
-// Синхронизация прогресса с Google Таблицей
-async function syncProgressToGAS() {
-    if (!userState.id) return; 
-
-    const payloadStr = JSON.stringify({
-        xp: userState.xp,
-        results: userState.results
-    });
-
-    const response = await fetchGAS('updatePayload', {
-        id: userState.id,
-        payload: payloadStr
-    });
-
-    if (response && response.ok) {
-        console.log("Прогресс успешно сохранен!");
-        localStorage.setItem('student_xp', userState.xp);
-        localStorage.setItem('student_results', JSON.stringify(userState.results));
+// === ИНИЦИАЛИЗАЦИЯ ===
+document.addEventListener('DOMContentLoaded', () => {
+    // Инициализация данных курса (ожидаем, что data-0401.js загрузит глобальный объект)
+    if (window.DATA_0401 || window.data0401) {
+        state.data = window.DATA_0401 || window.data0401;
     } else {
-        console.error("Ошибка сохранения:", response?.error);
+        // Заглушка, если файл данных не подключен
+        state.data = { title: "МДК 07.01 (ЧПУ)", topics: [] };
     }
+
+    renderApp();
+    window.addEventListener('hashchange', () => {
+        parseHash();
+        renderApp();
+    });
+});
+
+function parseHash() {
+    const hash = window.location.hash.slice(1) || 'home';
+    const parts = hash.split('/');
+    state.currentPage = parts[0];
+    state.currentTopic = parts[1] || null;
 }
 
-// Начисление XP
-function addXP(amount) {
-    if (!userState.id) {
-        alert("Сначала войдите в систему через журнал!");
+// === РЕНДЕРИНГ ===
+function renderApp() {
+    const root = document.getElementById('app') || document.body;
+    
+    // Если пользователь не авторизован — показываем экран входа
+    if (!state.user) {
+        root.innerHTML = renderLoginScreen();
         return;
     }
-    userState.xp += amount;
-    syncProgressToGAS();
-    
-    // Обновляем счетчик в UI, если он есть
-    const xpDisplay = document.getElementById('xp-display');
-    if (xpDisplay) xpDisplay.textContent = `${userState.xp} XP`;
+
+    // Если авторизован — показываем портал
+    root.innerHTML = `
+        <div id="app-container">
+            ${renderSidebar()}
+            <div class="main-content">
+                ${renderHeader()}
+                <div class="content-area">
+                    ${renderPage()}
+                </div>
+                ${renderBottomNav()}
+            </div>
+        </div>
+    `;
 }
 
-// === РОУТИНГ ===
+// --- ЭКРАН ВХОДА ---
+function renderLoginScreen() {
+    return `
+        <div class="main-content" style="max-width: 800px; margin: 0 auto; width: 100%;">
+            <div class="top-header">
+                <p style="color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 10px;">ПОРТАЛ МДК</p>
+                <h1>Оператор станков с ПУ</h1>
+                <p>15.02.16 Технология машиностроения · ПМ.07</p>
+            </div>
+            
+            <div class="content-area">
+                <!-- Вход студента -->
+                <div class="login-section">
+                    <h2>Вход студента</h2>
+                    <p>Укажите ФИО и группу.</p>
+                    <div class="input-row">
+                        <label>ФИО</label>
+                        <input type="text" id="login-name" placeholder="Иванов Иван">
+                    </div>
+                    <div class="input-row">
+                        <label>Группа</label>
+                        <input type="text" id="login-group" placeholder="ТМ-4" value="ТМ-4">
+                    </div>
+                    <button class="btn btn-login" onclick="loginStudent()">Войти</button>
+                </div>
+
+                <hr style="border-color: #333; margin: 30px 0;">
+
+                <!-- Вход преподавателя -->
+                <div class="login-section">
+                    <h2>Вход преподавателя</h2>
+                    <p>Используйте <b>teacher / teacher</b></p>
+                    <div class="input-row">
+                        <label>Логин</label>
+                        <input type="text" id="teacher-login" value="teacher">
+                    </div>
+                    <div class="input-row">
+                        <label>Пароль</label>
+                        <input type="password" id="teacher-pass" value="teacher">
+                    </div>
+                    <button class="btn btn-login" onclick="loginTeacher()">Войти в журнал</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// --- САЙДБАР ---
+function renderSidebar() {
+    return `
+        <div class="sidebar">
+            <div class="sidebar-header">МДК Портал</div>
+            <div class="sidebar-course">МДК 07.01 (ЧПУ) ⌄</div>
+            <div style="padding: 0 20px; color: var(--accent-orange); font-weight: bold;">
+                ★ ${state.user.xp || 0} XP
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">👨‍🏭</div>
+                <div>
+                    <div style="font-weight: bold;">${state.user.name}</div>
+                    <div style="color: var(--text-muted); font-size: 0.8rem;">${state.user.group}</div>
+                </div>
+            </div>
+            <button class="btn" style="margin: 20px; background: #333; color: #fff;" onclick="logout()">Выйти</button>
+        </div>
+    `;
+}
+
+// --- ШАПКА ---
+function renderHeader() {
+    if (state.currentPage === 'home') {
+        return `
+            <div class="top-header">
+                <p style="color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;">ПОРТАЛ МДК</p>
+                <h1>${state.data.title || 'МДК 07.01 (ЧПУ)'}</h1>
+                <p>15.02.16 Технология машиностроения · ПМ.07</p>
+            </div>
+        `;
+    }
+    return ``;
+}
+
+// --- КОНТЕНТ СТРАНИЦ ---
+function renderPage() {
+    if (state.currentPage === 'home') {
+        return renderHome();
+    } else if (state.currentPage === 'journal' && state.user.role === 'teacher') {
+        return renderJournalHTML();
+    } else if (state.currentPage === 'topic') {
+        return renderTopicHTML();
+    } else if (state.currentPage === 'links') {
+        return `<h2>Полезные материалы</h2><p>Раздел в разработке.</p>`;
+    }
+    return `<h2>Страница не найдена</h2>`;
+}
+
+function renderHome() {
+    let html = `<div class="topics-grid">`;
+    if (state.data && state.data.topics && state.data.topics.length > 0) {
+        state.data.topics.forEach(t => {
+            html += `
+                <div class="topic-card" onclick="navigateTo('topic/${t.id}')">
+                    <h3>${t.title}</h3>
+                    <p>${t.description || 'Перейти к изучению'}</p>
+                </div>
+            `;
+        });
+    } else {
+        html += `<p>Темы пока не загружены (проверьте data-0401.js)</p>`;
+    }
+    html += `</div>`;
+    return html;
+}
+
+function renderTopicHTML() {
+    const theme = state.data.topics.find(t => t.id === state.currentTopic);
+    if (!theme) return `<h2>Тема не найдена</h2>`;
+
+    let html = `
+        <button class="btn" style="width: auto; background: #333; color: #fff; margin-bottom: 20px;" onclick="navigateTo('home')">← Назад</button>
+        <h2>${theme.title}</h2>
+        <div class="lecture-content">${theme.content || 'Текст лекции...'}</div>
+    `;
+
+    const hasTests = (theme.test && theme.test.length > 0) || (theme.tests && theme.tests.length > 0);
+    if (hasTests) {
+        html += `
+            <div style="margin-top: 20px; padding: 20px; background: #252525; border-radius: 8px;">
+                <h3>Контрольный тест</h3>
+                <button class="btn btn-primary" onclick="startTest('${theme.id}')">Пройти тест</button>
+            </div>
+        `;
+    }
+    return html;
+}
+
+// --- ЖУРНАЛ (ДЛЯ ПРЕПОДАВАТЕЛЯ) ---
+function renderJournalHTML() {
+    // Запускаем асинхронную загрузку данных
+    loadJournalData();
+    
+    return `
+        <h2>Журнал успеваемости</h2>
+        <button class="btn btn-success" onclick="loadJournalData()" style="width: auto; margin-top: 10px;">Обновить</button>
+        <div id="journal-data-container">
+            <p style="margin-top: 20px; color: #888;">Загрузка данных...</p>
+        </div>
+    `;
+}
+
+async function loadJournalData() {
+    const container = document.getElementById('journal-data-container');
+    if (!container) return;
+
+    const response = await fetchGAS('getJournal');
+    
+    if (!response || !response.ok) {
+        container.innerHTML = `<p style="color: red;">Ошибка: ${response?.error}</p>`;
+        return;
+    }
+
+    const students = response.data;
+    if (students.length === 0) {
+        container.innerHTML = `<p>Студентов пока нет.</p>`;
+        return;
+    }
+
+    let html = `<table class="journal-table">
+        <thead><tr><th>ФИО</th><th>Группа</th><th>XP</th><th>Обновлено</th></tr></thead>
+        <tbody>`;
+    
+    students.forEach(s => {
+        let xp = 0;
+        try { xp = JSON.parse(s.payload).xp || 0; } catch(e) {}
+        html += `<tr>
+            <td><strong>${s.name}</strong></td>
+            <td>${s.group}</td>
+            <td><span style="color: var(--accent-orange); font-weight: bold;">${xp}</span></td>
+            <td style="font-size: 0.8rem; color: #888;">${s.lastUpdate}</td>
+        </tr>`;
+    });
+    
+    html += `</tbody></table>`;
+    container.innerHTML = html;
+}
+
+// --- НИЖНЕЕ МЕНЮ ---
+function renderBottomNav() {
+    return `
+        <div class="bottom-nav">
+            <a href="#home">🏠 Главная</a>
+            <a href="#">👤 Личный кабинет</a>
+            <a href="#">📜 Мой сертификат</a>
+            <a href="#">🏆 Достижения</a>
+            <a href="#links">📚 Полезные материалы</a>
+            ${state.user.role === 'teacher' ? '<a href="#journal">📓 Журнал (Оценки)</a>' : ''}
+            <a href="#" onclick="logout()">🚪 Выйти</a>
+        </div>
+    `;
+}
+
+// === ЛОГИКА ===
 
 function navigateTo(hash) {
     window.location.hash = hash;
 }
 
-function handleRouting() {
-    const hash = window.location.hash.slice(1) || 'home';
-    const parts = hash.split('/');
-    const route = parts[0];
-    const param = parts[1];
-    const container = document.getElementById('app') || document.body;
+async function loginStudent() {
+    const name = document.getElementById('login-name').value.trim();
+    const group = document.getElementById('login-group').value.trim();
 
-    updateNavUI(route);
-
-    switch (route) {
-        case 'home': renderHome(container); break;
-        case 'topic': renderTopic(container, param); break;
-        case 'journal': renderJournal(container); break;
-        case 'links': renderLinks(container); break;
-        default: container.innerHTML = '<h2>404 Страница не найдена</h2>';
-    }
-}
-
-// === РЕНДЕРИНГ ===
-
-function renderHome(container) {
-    const data = getCourseData();
-    if (!data) {
-        container.innerHTML = '<p>Ошибка загрузки данных курса.</p>';
-        return;
-    }
-    
-    // Отображаем текущего пользователя
-    const userInfo = userState.name 
-        ? `<p style="color: #28a745;">Вы вошли как: <strong>${userState.name}</strong> (${userState.xp} XP)</p>` 
-        : `<p style="color: #ff6b35;">Вы не авторизованы. Перейдите в <a href="#journal" style="color:#ff6b35;">Журнал</a>, чтобы войти.</p>`;
-
-    let html = `
-        <div class="page-header">
-            <h1>${data.title || 'МДК 04.01'}</h1>
-            ${userInfo}
-        </div>
-        <div class="topics-grid">
-    `;
-    
-    (data.topics || []).forEach(topic => {
-        html += `<div class="topic-card" onclick="navigateTo('topic/${topic.id}')">
-            <h3>${topic.title}</h3><p>${topic.description || ''}</p></div>`;
-    });
-    html += `</div>`;
-    container.innerHTML = html;
-}
-
-function renderTopic(container, themeId) {
-    const data = getCourseData();
-    let theme = data && data.topics ? data.topics.find(t => t.id === themeId) : null;
-    
-    if (!theme) {
-        container.innerHTML = `<h2>Тема не найдена</h2>`;
+    if (!name || !group) {
+        alert("Заполните ФИО и группу!");
         return;
     }
 
-    let html = `
-        <button class="btn btn-back" onclick="navigateTo('home')">← На главную</button>
-        <div class="page-header"><h1>${theme.title}</h1></div>
-        <div class="lecture-box">${theme.content || ''}</div>
-    `;
+    // Формируем ID для таблицы (например: "иванов иван|тм-4")
+    const studentId = `${name.toLowerCase()}|${group.toLowerCase()}`;
 
-    // Проверка на наличие тестов (поддерживаем t.test и t.tests)
-    const hasTests = (theme.test && theme.test.length > 0) || (theme.tests && theme.tests.length > 0);
+    // Проверяем, есть ли такой студент в базе (опционально)
+    // Для простоты просто логиним и отправляем данные при первом действии.
+    // Но лучше сразу создать его в таблице.
+    await fetchGAS('addStudent', { id: studentId, name: name, group: group });
+
+    state.user = { name, group, role: 'student', xp: 0, results: {} };
+    localStorage.setItem('portal_user', JSON.stringify(state.user));
     
-    if (hasTests) {
-        html += `
-            <div class="test-section" style="margin-top: 20px; padding: 20px; background: #1e2126; border-radius: 12px; border: 1px solid #30363d;">
-                <h3>Контрольные материалы</h3>
-                <p style="color: #8b949e;">В этой теме доступен тест. За его прохождение вы получите XP.</p>
-                <button class="btn btn-primary" onclick="startTest('${theme.id}')">Пройти тест</button>
-            </div>
-        `;
-    }
-
-    container.innerHTML = html;
-}
-
-// ГЛАВНАЯ ФУНКЦИЯ ЖУРНАЛА
-async function renderJournal(container) {
-    let html = `
-        <button class="btn btn-back" onclick="navigateTo('home')">← На главную</button>
-        
-        <div class="journal-controls">
-            <div class="input-group">
-                <input type="text" id="student-id" placeholder="ID (например: иванов иван|тм 4-3)">
-                <input type="text" id="student-name" placeholder="ФИО">
-                <select id="student-group" class="btn-warning">
-                    <option value="ТМ 4-3">ТМ 4-3</option>
-                    <option value="ТМ 4-4">ТМ 4-4</option>
-                </select>
-                <button class="btn btn-primary" onclick="addStudent()">Добавить</button>
-            </div>
-            
-            <div class="action-buttons">
-                <button class="btn btn-success" onclick="exportToExcel()">Экспорт в Excel</button>
-                <button class="btn btn-primary" onclick="renderJournal(document.getElementById('app'))">Обновить</button>
-            </div>
-        </div>
-
-        <div class="journal-controls" style="border-color: #28a745;">
-            <div class="input-group">
-                <select id="login-student-select" class="btn-warning" style="min-width: 200px;">
-                    <option value="">-- Выбрать студента для входа --</option>
-                </select>
-                <button class="btn btn-success" onclick="loginStudent()">Войти в систему</button>
-                <button class="btn btn-primary" onclick="logoutStudent()" style="background: #dc3545;">Выйти</button>
-            </div>
-        </div>
-
-        <div id="journal-list" class="journal-list">
-            <div class="empty-state">Загрузка данных...</div>
-        </div>
-    `;
-    container.innerHTML = html;
-
-    const response = await fetchGAS('getJournal');
-    const listContainer = document.getElementById('journal-list');
-    const select = document.getElementById('login-student-select');
-
-    if (!response || !response.ok) {
-        listContainer.innerHTML = `<div class="empty-state" style="color: #ff6b35;">Ошибка: ${response ? response.error : 'Нет ответа'}</div>`;
-        return;
-    }
-
-    const students = response.data;
-
-    if (students.length === 0) {
-        listContainer.innerHTML = `<div class="empty-state">Студентов пока нет.</div>`;
-    } else {
-        let tableHtml = `<table class="journal-table">
-            <thead><tr>
-                <th>ID</th><th>ФИО</th><th>Группа</th><th>XP</th><th>Обновлено</th>
-            </tr></thead>
-            <tbody>`;
-            
-        students.forEach(s => {
-            // Заполняем выпадающий список для входа
-            if (select) {
-                select.innerHTML += `<option value="${s.id}" data-name="${s.name}">${s.name} (${s.group})</option>`;
-            }
-
-            // Парсим XP из Payload
-            let xp = 0;
-            try {
-                const parsed = JSON.parse(s.payload);
-                if (parsed && parsed.xp !== undefined) xp = parsed.xp;
-            } catch (e) {}
-
-            tableHtml += `<tr>
-                <td style="font-size: 12px; color: #8b949e;">${s.id}</td>
-                <td><strong>${s.name}</strong></td>
-                <td>${s.group}</td>
-                <td><span style="color: #ff6b35; font-weight: bold;">${xp} XP</span></td>
-                <td style="font-size: 12px; color: #8b949e;">${s.lastUpdate}</td>
-            </tr>`;
-        });
-        tableHtml += `</tbody></table>`;
-        listContainer.innerHTML = tableHtml;
-    }
-}
-
-// === ДЕЙСТВИЯ ===
-
-async function addStudent() {
-    const id = document.getElementById('student-id').value;
-    const name = document.getElementById('student-name').value;
-    const group = document.getElementById('student-group').value;
-
-    if (!id || !name) {
-        alert("Введите ID и ФИО!");
-        return;
-    }
-
-    const response = await fetchGAS('addStudent', { id, name, group });
-    
-    if (response && response.ok) {
-        document.getElementById('student-id').value = '';
-        document.getElementById('student-name').value = '';
-        renderJournal(document.getElementById('app'));
-    } else {
-        alert("Ошибка: " + (response ? response.error : 'Неизвестно'));
-    }
-}
-
-function loginStudent() {
-    const select = document.getElementById('login-student-select');
-    const selectedOption = select.options[select.selectedIndex];
-    
-    if (!selectedOption.value) {
-        alert("Выберите студента из списка!");
-        return;
-    }
-
-    localStorage.setItem('student_id', selectedOption.value);
-    localStorage.setItem('student_name', selectedOption.getAttribute('data-name'));
-    
-    userState.id = selectedOption.value;
-    userState.name = selectedOption.getAttribute('data-name');
-    
-    alert(`Успешный вход: ${userState.name}. Теперь ваш прогресс сохраняется.`);
     navigateTo('home');
+    renderApp();
 }
 
-function logoutStudent() {
-    localStorage.removeItem('student_id');
-    localStorage.removeItem('student_name');
-    localStorage.removeItem('student_xp');
-    localStorage.removeItem('student_results');
-    
-    userState.id = null;
-    userState.name = null;
-    userState.xp = 0;
-    userState.results = {};
-    
-    alert("Вы вышли из системы.");
-    renderJournal(document.getElementById('app'));
-}
+function loginTeacher() {
+    const login = document.getElementById('teacher-login').value;
+    const pass = document.getElementById('teacher-pass').value;
 
-function startTest(themeId) {
-    if (!userState.id) {
-        alert("Для прохождения теста необходимо авторизоваться в Журнале!");
-        return;
+    if (login === 'teacher' && pass === 'teacher') {
+        state.user = { name: 'Преподаватель', group: 'Администратор', role: 'teacher', xp: 0 };
+        localStorage.setItem('portal_user', JSON.stringify(state.user));
+        navigateTo('journal');
+        renderApp();
+    } else {
+        alert("Неверный логин или пароль!");
     }
-    // Заглушка для теста
-    alert(`Запуск теста для темы: ${themeId}. (Здесь будет ваш код тестирования)`);
-    // Пример начисления XP после теста:
-    // addXP(10); 
 }
 
-function exportToExcel() {
-    alert("Для экспорта откройте Google Таблицу и выберите Файл -> Скачать -> Excel.");
+function logout() {
+    localStorage.removeItem('portal_user');
+    state.user = null;
+    navigateTo('home');
+    renderApp();
 }
 
-function renderLinks(container) {
-    container.innerHTML = `<button class="btn btn-back" onclick="navigateTo('home')">← На главную</button>
-    <div class="page-header"><h1>Полезные материалы</h1></div>`;
-}
+// Пример функции для теста (вызывается из лекции)
+async function startTest(topicId) {
+    if (state.user.role !== 'student') return;
+    
+    // Имитация прохождения теста
+    const earnedXP = 10;
+    alert(`Вы прошли тест на ${earnedXP} XP!`);
+    
+    state.user.xp += earnedXP;
+    localStorage.setItem('portal_user', JSON.stringify(state.user));
 
-function updateNavUI(route) {
-    document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-    const activeLink = document.querySelector(`.nav-link[href="#${route}"]`);
-    if (activeLink) activeLink.classList.add('active');
+    // Отправляем в Google Таблицу
+    const studentId = `${state.user.name.toLowerCase()}|${state.user.group.toLowerCase()}`;
+    const payload = JSON.stringify({ xp: state.user.xp, results: {} });
+    
+    await fetchGAS('updatePayload', { id: studentId, payload: payload });
+    
+    renderApp(); // Обновляем интерфейс (счетчик XP в сайдбаре)
 }
-
-// === ИНИЦИАЛИЗАЦИЯ ===
-document.addEventListener('DOMContentLoaded', () => {
-    window.addEventListener('hashchange', handleRouting);
-    handleRouting();
-});
