@@ -1,6 +1,7 @@
-// app.js — Главный роутер
+// app.js — Главный роутер и управление состоянием
 "use strict";
 
+// === ГЛОБАЛЬНОЕ СОСТОЯНИЕ ===
 window.state = {
     activeCourseId: localStorage.getItem("mdk.active") || "07.01",
     student: null, staff: null, xp: 0, results: {},
@@ -13,14 +14,15 @@ try {
     var _st = JSON.parse(localStorage.getItem("mdk.staff") || "null"); 
     if (_st && _st.name) window.state.staff = _st;
     window.state.xp = parseInt(localStorage.getItem("mdk.xp") || "0");
-} catch (e) {}
+} catch (e) { console.warn("Ошибка чтения localStorage:", e); }
 
+// === УТИЛИТЫ ===
 window.$ = (id) => document.getElementById(id);
 window.navigateTo = (hash) => { window.location.hash = hash; };
 
 window.showToast = function(msg, type) {
     var t = document.createElement("div");
-    t.style = `position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:${type==='err'?'#ff4757':'#2ed573'};color:#fff;padding:12px 24px;border-radius:8px;z-index:99999;font-weight:bold;`;
+    t.style = `position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:${type==='err'?'#ff4757':'#2ed573'};color:#fff;padding:12px 24px;border-radius:8px;z-index:99999;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);`;
     t.textContent = msg;
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 3000);
@@ -44,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     router();
 });
 
+// === ОБНОВЛЕНИЕ UI ===
 function updateUI() {
     var nameEl = $("user-name");
     var groupEl = $("user-group");
@@ -54,6 +57,7 @@ function updateUI() {
     if (xpEl) xpEl.textContent = window.state.xp;
 }
 
+// === РОУТИНГ ===
 function router() {
     var hash = window.location.hash.slice(1) || "/";
     var app = $("app");
@@ -71,7 +75,6 @@ function router() {
         if (layout) layout.style.display = "flex";
     }
 
-    // Обновляем данные пользователя в сайдбаре
     updateUI();
 
     // 2. Роутинг
@@ -129,7 +132,7 @@ window.loginStudent = async function() {
     const studentId = `${name.toLowerCase()}|${group.toLowerCase()}`;
     try { 
         if (window.API) await window.API.saveStudent(studentId, name, group, '{"xp":0,"results":{}}'); 
-    } catch (e) { console.warn("Ошибка БД", e); }
+    } catch (e) { console.warn("Ошибка сохранения в БД:", e); }
 
     window.state.student = { name, group };
     window.state.xp = 0;

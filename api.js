@@ -1,16 +1,16 @@
 "use strict";
 
-// Явно записываем URL в глобальный объект, чтобы все скрипты его видели
+// URL вашего развернутого Google Apps Script (Web App)
 window.APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3Ev3stuvLl36nxjmXU0q2zi4UsS5ViXwEj1x6q_JjlCccMJld36o6y1H__CvJn5KB/exec";
 
 async function fetchAPI(action, params = {}) {
-    if (!window.APPS_SCRIPT_URL) {
+    if (!window.APPS_SCRIPT_URL || window.APPS_SCRIPT_URL.includes("ВАША_НОВАЯ_ССЫЛКА")) {
         return { ok: false, error: "URL не настроен в api.js" };
     }
 
     const url = new URL(window.APPS_SCRIPT_URL);
     url.searchParams.append("action", action);
-    url.searchParams.append("t", Date.now()); 
+    url.searchParams.append("t", Date.now()); // Защита от кэша
     
     for (const key in params) { 
         if (params[key] !== undefined && params[key] !== null) {
@@ -19,15 +19,22 @@ async function fetchAPI(action, params = {}) {
     }
     
     try {
-        // Отправляем POST с text/plain, чтобы избежать ошибки CORS (Preflight)
+        // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: используем POST с Content-Type: text/plain,
+        // чтобы обойти preflight-запрос CORS.
         const response = await fetch(url.toString(), {
             method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(params)
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8",
+            },
+            body: JSON.stringify(params) // Данные передаем в теле запроса
         });
         
-        if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
-        return await response.json();
+        if (!response.ok) {
+            throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        return data;
     } catch (err) {
         console.error(`API Error [${action}]:`, err);
         return { ok: false, error: err.message };
