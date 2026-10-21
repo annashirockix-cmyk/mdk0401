@@ -18,37 +18,13 @@
   } catch(e) {}
 </script>
 
-<!-- СТИЛИ ДЛЯ ПЕЧАТИ СЕРТИФИКАТА И ВКЛАДЫША -->
+<!-- СТИЛИ ДЛЯ ПЕЧАТИ -->
 <style>
     @media print {
         body * { visibility: hidden; }
-        /* Показываем только сертификат и вкладыш */
         #printable-cert, #printable-cert *, #printable-supplement, #printable-supplement * { visibility: visible; }
-        
-        /* Настройки для первой страницы (Сертификат) */
-        #printable-cert { 
-            position: absolute; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            page-break-after: always; /* Принудительный разрыв страницы после */
-            margin: 0; 
-            padding: 0; 
-            box-shadow: none; 
-            border-radius: 0;
-            background-size: 100% 100% !important;
-        }
-        
-        /* Настройки для второй страницы (Вкладыш) */
-        #printable-supplement { 
-            position: absolute; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            page-break-before: always; /* Начинаем с новой страницы */
-            background-size: 100% 100% !important;
-        }
-        
+        #printable-cert { position: absolute; left: 0; top: 0; width: 100%; page-break-after: always; margin: 0; padding: 0; box-shadow: none; border-radius: 0; background-size: 100% 100% !important; }
+        #printable-supplement { position: absolute; left: 0; top: 0; width: 100%; page-break-before: always; background-size: 100% 100% !important; }
         .no-print { display: none !important; }
         .topbar, .drawer, .drawer-overlay, .toast-container, #asFab { display: none !important; }
         main#app { padding: 0 !important; margin: 0 !important; }
@@ -58,7 +34,6 @@
 </head>
 <body>
 
-<!-- ОКНО ВХОДА -->
 <div class="login-overlay" id="loginOverlay">
   <div class="login-shell">
     <div class="login-brand" style="text-align: center; margin-bottom: 20px;">
@@ -78,7 +53,7 @@
 
       <div class="login-card">
         <h3>Вход преподавателя</h3>
-        <p class="login-hint">Используйте <b>teacher / teacher</b> или <b>admin / admin</b></p>
+        <p class="login-hint">Используйте <b>teacher / teacher</b></p>
         <label>Логин <input id="teacherUser" type="text" placeholder="teacher"></label>
         <label>Пароль <input id="teacherPass" type="password" placeholder="teacher"></label>
         <button type="button" id="btnLoginTeacher" class="btn ghost" style="width: 100%; margin-top: 10px;">Войти в журнал</button>
@@ -88,7 +63,6 @@
   </div>
 </div>
 
-<!-- ШАПКА -->
 <header class="topbar">
   <button class="burger-btn" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
   <a class="brand" href="#/"><span class="brand-badge">МДК Портал</span></a>
@@ -103,16 +77,11 @@
   </div>
 
   <div class="crumbs" id="crumbs" style="margin-left:auto;"></div>
-  
-  <div class="topbar-status">
-    <span class="status-pill" id="xpCount">🌟 0 XP</span>
-  </div>
-  
-  <button id="themeToggle" class="btn ghost" style="padding: 8px 12px; margin-left: 5px;" title="Сменить тему">🎨</button>
-  <button id="topbarLogout" class="btn ghost" style="padding:8px 12px; margin-left:5px;" onclick="window.handleLogout()" title="Выйти">🚪</button>
+  <div class="topbar-status"><span class="status-pill" id="xpCount">🌟 0 XP</span></div>
+  <button id="themeToggle" class="btn ghost" style="padding: 8px 12px; margin-left: 5px;">🎨</button>
+  <button id="topbarLogout" class="btn ghost" style="padding:8px 12px; margin-left:5px;" onclick="window.handleLogout()">🚪</button>
 </header>
 
-<!-- БОКОВОЕ МЕНЮ -->
 <div class="drawer-overlay" id="drawerOverlay"></div>
 <aside class="drawer" id="drawer">
   <div class="drawer-head">
@@ -139,6 +108,7 @@
     <a class="drawer-item" data-go="#/links">📚 Полезные материалы</a>
     <a class="drawer-item" data-go="#/training">🎯 Тренировка</a>
     <a class="drawer-item" data-go="#/final">📋 Итоговые экзамены</a>
+    <a class="drawer-item" data-go="#/messages">✉️ Сообщения</a>
     <a class="drawer-item" data-go="#/arcade">🎮 Игровая комната</a>
     <a class="drawer-item" data-go="#/rating">🏅 Доска почета</a>
     <a class="drawer-item" data-go="#/journal">📒 Журнал (Оценки)</a>
@@ -148,10 +118,9 @@
   </nav>
 </aside>
 
-<!-- ОСНОВНОЙ КОНТЕНТ -->
 <main id="app"></main>
 
-<!-- СКРИПТЫ (Порядок важен!) -->
+<!-- СКРИПТЫ -->
 <script src="data-global.js"></script>
 <script src="data-0701.js"></script>
 <script src="data-0201.js"></script>
@@ -160,6 +129,7 @@
 
 <script src="api.js"></script>
 <script src="tests-extra.js"></script> 
+<script src="training.js"></script> <!-- ДОБАВЛЕН -->
 
 <script src="app.js"></script>
 

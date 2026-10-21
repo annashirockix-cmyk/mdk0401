@@ -4,17 +4,24 @@ const ACHIEVEMENTS = [
     { id: "welcome", title: "Первый шаг", desc: "Войти в систему", icon: "🚪", check: (s) => !!s.student },
     { id: "reader", title: "Книжный червь", desc: "Изучить первую лекцию", icon: "📖", check: (s) => Object.keys(s.results).length > 0 },
     { id: "hacker", title: "Хакер", desc: "Пройти первый тест", icon: "💻", check: (s) => Object.keys(s.results).some(k => k.includes('_test')) },
+    { id: "practician", title: "Практик", desc: "Сдать 3 практические работы", icon: "🛠", check: (s) => Object.keys(s.results).filter(k => k.includes('prac_')).length >= 3 },
+    { id: "perfect", title: "Отличник", desc: "Сдать любой экзамен на 5", icon: "🌟", check: (s) => Object.keys(s.results).some(k => k.includes('__final__') && s.results[k].grade === 5) },
+    { id: "social", title: "Общительный", desc: "Написать в чат", icon: "💬", check: (s) => s.chatSent === true },
     { id: "gamer", title: "Геймер", desc: "Сыграть в мини-игру", icon: "🎮", check: (s) => s.xp >= 50 },
     { id: "level_5", title: "Опытный", desc: "Достичь 5 уровня", icon: "⭐", check: (s) => window.getLevel(s.xp) >= 5 },
     { id: "rich", title: "Богач", desc: "Накопить 1000 XP", icon: "💰", check: (s) => s.xp >= 1000 }
 ];
 
+// Темы (обычные и за уровень)
 const THEMES = [
     { id: "default", title: "Стандартная", price: 0, color: "#ff6b3d", type: "theme" },
     { id: "neon", title: "Киберпанк", price: 500, color: "#ff00cc", type: "theme" },
     { id: "matrix", title: "Матрица", price: 500, color: "#00ff00", type: "theme" },
     { id: "anime", title: "Аниме (Розовый)", price: 800, color: "#ffb6c1", type: "theme" },
-    { id: "rgb", title: "RGB Геймер", price: 1000, color: "#ff0055", type: "theme" }
+    { id: "rgb", title: "RGB Геймер", price: 1000, color: "#ff0055", type: "theme" },
+    // Бесплатные за уровень
+    { id: "gold", title: "Золото", price: 0, reqLevel: 5, color: "#ffd700", type: "theme" },
+    { id: "premium", title: "Премиум", price: 0, reqLevel: 10, color: "#8b5cf6", type: "theme" }
 ];
 
 const AVATARS = [
@@ -49,12 +56,27 @@ window.renderShopPage = function() {
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
     app.appendChild(el(`<section class="hero"><h1>🛒 Магазин</h1><p>Баланс: <b style="color:var(--gold); font-size:24px;">${window.state.xp} XP</b></p></section>`));
 
+    var currentLevel = window.getLevel(window.state.xp);
+
     function renderCategory(title, items, type) {
         var html = `<h3 style="margin-top:30px; border-bottom: 2px solid var(--border); padding-bottom:10px;">${title}</h3>`;
         html += `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px;">`;
         
         items.forEach(item => {
             var isOwned = (window.state.purchasedThemes || []).includes(item.id) || (window.state.avatar === item.url) || (window.state.effect === item.id);
+            
+            // Проверка уровня для премиум-тем
+            if (item.reqLevel && currentLevel < item.reqLevel && !isOwned) {
+                html += `<div class="module" style="padding:15px; text-align:center; opacity:0.6; position:relative;">
+                    <div style="position:absolute; top:10px; right:10px; font-size:20px;">🔒</div>
+                    <div style="height:40px; border-radius:8px; background:${item.color}; margin-bottom:10px;"></div>
+                    <h4 style="margin:0 0 10px 0;">${item.title}</h4>
+                    <p style="font-size:12px; color:var(--muted); margin-bottom:10px;">Откроется на ${item.reqLevel} уровне</p>
+                    <button class="btn ghost" disabled style="width:100%;">Заблокировано</button>
+                </div>`;
+                return; // Пропускаем стандартную отрисовку кнопки
+            }
+
             var isActive = false;
             if (type === 'theme') isActive = localStorage.getItem("mdk.theme_active") === item.id;
             if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar);
@@ -63,7 +85,7 @@ window.renderShopPage = function() {
             var btnHtml = "";
             if (isActive) btnHtml = `<button class="btn ghost" disabled style="border-color:var(--ok); color:var(--ok); width:100%;">✅ Активно</button>`;
             else if (isOwned) btnHtml = `<button class="btn" onclick="window.applyShopItem('${type}', '${item.id}', '${item.url || ''}')" style="width:100%; background:var(--card-soft); color:var(--text);">Применить</button>`;
-            else btnHtml = `<button class="btn" onclick="window.buyShopItem('${type}', '${item.id}', ${item.price}, '${item.url || ''}')" style="width:100%; background:var(--gold); color:#000;">Купить за ${item.price} XP</button>`;
+            else btnHtml = `<button class="btn" onclick="window.buyShopItem('${type}', '${item.id}', ${item.price}, '${item.url || ''}')" style="width:100%; background:var(--gold); color:#000;">${item.price > 0 ? 'Купить за ' + item.price + ' XP' : 'Получить бесплатно'}</button>`;
 
             var preview = "";
             if (type === 'theme') preview = `<div style="height:40px; border-radius:8px; background:${item.color}; margin-bottom:10px;"></div>`;
@@ -91,14 +113,16 @@ window.buyShopItem = function(type, id, price, url) {
         url = prompt("Введите прямую ссылку на картинку (URL, заканчивающийся на .png, .jpg, .gif):");
         if (!url || (!url.startsWith("http") && !url.startsWith("data:"))) return window.showToast("Неверный URL", "err");
     }
-    if (confirm(`Купить за ${price} XP?`)) {
+    
+    var msg = price > 0 ? `Купить за ${price} XP?` : `Получить бесплатно?`;
+    if (confirm(msg)) {
         window.state.xp -= price;
         if (type === 'theme') { if(!window.state.purchasedThemes) window.state.purchasedThemes = []; window.state.purchasedThemes.push(id); }
         if (type === 'avatar') { window.state.avatar = url; }
         if (type === 'effect') { window.state.effect = id; }
         
         window.saveStudentData();
-        window.showToast("Покупка успешна!", "ok");
+        window.showToast("Успешно!", "ok");
         window.renderShopPage();
         window.renderUserChip();
     }
@@ -130,7 +154,6 @@ window.renderProfilePage = function() {
   var effCss = window.state.effect && window.state.effect !== 'none' ? EFFECTS.find(e => e.id === window.state.effect).css : "";
   var avHtml = window.state.avatar ? `<img src="${window.state.avatar}" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">` : "👨‍🎓";
 
-  // Блок с оценками
   var resultsHtml = "";
   var results = window.state.results || {};
   var hasResults = false;
@@ -141,7 +164,6 @@ window.renderProfilePage = function() {
           var grade = results[key].grade || "?";
           var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : "var(--err)");
           
-          // Красивое название для ключа
           var displayName = key;
           if (key.includes("_test")) {
               var topicId = key.replace("_test", "");

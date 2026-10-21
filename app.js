@@ -21,9 +21,7 @@ window.state = {
   activeCourseId: "07.01",
   student: null, staff: null, xp: 0, results: {},
   purchasedThemes: [], unlockedAchievements: [], avatar: null, effect: null,
-  certBg: "1.jpg",
-  suppBg: "1.jpg",
-  globalInfo: "" // Будем хранить здесь новость
+  certBg: "1.jpg", suppBg: "1.jpg", globalInfo: "", chatSent: false
 };
 
 try {
@@ -186,16 +184,14 @@ window.route = function() {
     if (page === "topic") window.renderTopic(parts[1], parts[2]);
     else if (page === "certificate") window.renderCertificatePage();
     else if (page === "profile" && window.renderProfilePage) window.renderProfilePage();
+    else if (page === "messages") window.renderMessagesPage();
     else if (page === "videos") window.renderSimplePage("Видеоуроки", window.GLOBAL_DATA?.videos, "🎬");
     else if (page === "passports") window.renderSimplePage("Паспорта станков", window.GLOBAL_DATA?.passports, "📄");
     else if (page === "safety") window.renderSimplePage("Охрана труда", window.GLOBAL_DATA?.safety, "🦺");
     else if (page === "formatting") window.renderSimplePage("Оформление работ", [{title: "Требования к оформлению", content: "Times New Roman 14, интервал 1.5."}], "📝");
     else if (page === "links" && window.renderLinksPage) window.renderLinksPage();
     else if (page === "training") { 
-        if (window.state.activeCourseId === "02.01" && window.renderTraining_0201) window.renderTraining_0201(parts[1]); 
-        else if (window.state.activeCourseId === "02.02" && window.renderTraining_0202) window.renderTraining_0202(parts[1]); 
-        else if (window.state.activeCourseId === "04.01" && window.renderTraining_0401) window.renderTraining_0401(parts[1]); 
-        else if (window.state.activeCourseId === "07.01" && window.renderTraining_0701) window.renderTraining_0701(parts[1]); 
+        if (window.renderTrainingPage) window.renderTrainingPage(parts[1]); 
     }
     else if (page === "final") { 
         if (window.state.activeCourseId === "02.01" && window.renderFinal_0201) window.renderFinal_0201(parts[1]); 
@@ -691,6 +687,98 @@ window.requestCertificate = function() {
     }
 };
 
+// ================= СООБЩЕНИЯ (ЧАТ) =================
+window.renderMessagesPage = function() {
+    var app = $("app"); if (!app) return; app.innerHTML = "";
+    app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
+
+    if (!window.state.student && !window.state.staff) return;
+
+    var isTeacher = !!window.state.staff;
+    
+    app.appendChild(el(`<section class="hero"><h1>✉️ Сообщения</h1><p>${isTeacher ? 'Общение со студентами' : 'Задайте вопрос преподавателю'}</p></section>`));
+
+    var html = `<div class="module">
+        <div style="display:flex; gap:15px; margin-bottom:15px; align-items:center;">
+            <label style="font-weight:bold;">Группа:</label>
+            <select id="chatGroupSelect" class="self-input" style="width:200px; margin:0;"></select>
+        </div>
+        <div id="chatLog" style="height:400px; overflow-y:auto; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:15px; display:flex; flex-direction:column; gap:10px; margin-bottom:15px;">
+            <div style="text-align:center; color:var(--muted);">Загрузка...</div>
+        </div>
+        <form id="chatForm" style="display:flex; gap:10px;">
+            <input type="text" id="chatInput" class="self-input" placeholder="Ваше сообщение..." style="flex:1; margin:0;">
+            <button type="submit" class="btn" style="padding:0 25px;">Отправить</button>
+        </form>
+    </div>`;
+    app.innerHTML += html;
+
+    var groupSelect = document.getElementById("chatGroupSelect");
+    var groups = ["ТМ 4-3", "ТМ 3-4"];
+    if (!isTeacher && window.state.student) {
+        groups = [window.state.student.group];
+        groupSelect.disabled = true;
+    }
+    
+    groups.forEach(g => {
+        groupSelect.innerHTML += `<option value="${g}">${g}</option>`;
+    });
+
+    var log = document.getElementById("chatLog");
+    var form = document.getElementById("chatForm");
+    var input = document.getElementById("chatInput");
+
+    function loadMessages() {
+        var group = groupSelect.value;
+        log.innerHTML = '<div style="text-align:center; color:var(--muted);">Загрузка...</div>';
+        
+        window.API.getChat(group).then(d => {
+            log.innerHTML = "";
+            if (d && d.ok && d.messages && d.messages.length > 0) {
+                d.messages.forEach(m => {
+                    var isMe = isTeacher ? (m.name === window.state.staff.name) : (m.name === window.state.student.name);
+                    var align = isMe ? "align-self:flex-end; background:var(--accent-soft); border-color:var(--accent);" : "align-self:flex-start; background:var(--card-soft); border-color:var(--border);";
+                    var dateStr = m.time ? new Date(m.time).toLocaleString('ru-RU', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) : "";
+                    
+                    log.innerHTML += `<div style="${align} border:1px solid; padding:10px 15px; border-radius:12px; max-width:80%;">
+                        <div style="font-size:11px; color:var(--muted); margin-bottom:5px;">${window.escapeHtml(m.name)} · ${dateStr}</div>
+                        <div style="font-size:15px;">${window.escapeHtml(m.text)}</div>
+                    </div>`;
+                });
+                log.scrollTop = log.scrollHeight;
+            } else {
+                log.innerHTML = '<div style="text-align:center; color:var(--muted); margin-top:20px;">Нет сообщений. Напишите первым!</div>';
+            }
+        }).catch(() => {
+            log.innerHTML = '<div style="color:var(--err); text-align:center;">Ошибка загрузки сообщений</div>';
+        });
+    }
+
+    groupSelect.onchange = loadMessages;
+    loadMessages();
+
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        var text = input.value.trim();
+        if (!text) return;
+        
+        var name = isTeacher ? window.state.staff.name : window.state.student.name;
+        var key = isTeacher ? "teacher" : window.studentKey();
+        var group = groupSelect.value;
+        
+        input.value = "";
+        
+        // Ачивка за первое сообщение
+        if (window.state.student && !window.state.chatSent) {
+            window.state.chatSent = true;
+            if (window.checkAchievements) window.checkAchievements();
+        }
+
+        window.API.sendChat(group, key, name, text).then(() => {
+            loadMessages();
+        }).catch(() => window.showToast("Ошибка отправки", "err"));
+    };
+};
 
 // ================= ДОСТИЖЕНИЯ И ПРОСТЫЕ СТРАНИЦЫ =================
 window.renderAchievementsPage = function() {
@@ -703,6 +791,9 @@ window.renderAchievementsPage = function() {
         { id: "welcome", title: "Первый шаг", desc: "Войти в систему", icon: "🚪" },
         { id: "reader", title: "Книжный червь", desc: "Изучить первую лекцию", icon: "📖" },
         { id: "hacker", title: "Хакер", desc: "Пройти первый тест", icon: "💻" },
+        { id: "practician", title: "Практик", desc: "Сдать 3 практические работы", icon: "🛠" },
+        { id: "perfect", title: "Отличник", desc: "Сдать любой экзамен на 5", icon: "🌟" },
+        { id: "social", title: "Общительный", desc: "Написать в чат", icon: "💬" },
         { id: "gamer", title: "Геймер", desc: "Сыграть в мини-игру", icon: "🎮" },
         { id: "level_5", title: "Опытный", desc: "Достичь 5 уровня", icon: "⭐" },
         { id: "rich", title: "Богач", desc: "Накопить 1000 XP", icon: "💰" }
@@ -752,7 +843,6 @@ function renderHome() {
   var c = window.COURSE;
   if (!c) { app.innerHTML = "<div class='module'>Ошибка загрузки данных курса.</div>"; return; }
   
-  // Загружаем информацию
   window.API.getInfo().then(res => {
       var infoText = (res && res.ok) ? res.text : "";
       window.state.globalInfo = infoText;
@@ -789,10 +879,20 @@ function renderHome() {
         });
       });
       app.innerHTML = html;
+  }).catch(() => {
+      // Если API упал, показываем хотя бы план
+      var html = '<section class="hero"><h1>' + window.escapeHtml(c.title) + '</h1><p>' + window.escapeHtml(c.module || "") + '</p></section>';
+      html += '<div class="steps-title">Учебный план</div>';
+      (c.sections || []).forEach(sec => {
+        html += '<div style="font-weight:bold; margin:20px 0 10px; color:var(--accent); text-transform:uppercase; font-size:12px;">' + window.escapeHtml(sec.title) + '</div>';
+        (sec.topics || []).forEach(t => {
+          html += `<div class="topic" onclick="location.hash='#/topic/${t.id}/lecture'"><div style="flex:1;"><div style="font-weight:bold;">${t.title}</div></div></div>`;
+        });
+      });
+      app.innerHTML = html;
   });
 }
 
-// Редактирование информации преподавателем
 window.editGlobalInfo = function() {
     var newText = prompt("Введите текст объявления для всех студентов:", window.state.globalInfo);
     if (newText !== null) {
