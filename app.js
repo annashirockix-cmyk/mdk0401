@@ -215,7 +215,6 @@ window.route = function() {
 window.buildTestBlock = function(prefix, uniqueId, questions) {
     if (!questions || questions.length === 0) return "";
     
-    // Кодируем вопросы в безопасную строку, чтобы они не ломали HTML
     var safeQuestions = encodeURIComponent(JSON.stringify(questions));
     
     var html = `<div style="margin-top:20px; padding-top:20px; border-top:1px dashed var(--border);">
@@ -299,11 +298,17 @@ window.renderTopic = function(topicId, activeTab) {
 
     var baseQuestions = topic.test || topic.tests || [];
 
-    // --- 1. ЛЕКЦИИ ---
+    // --- 1. ЛЕКЦИИ (АККОРДЕОН) ---
     if (activeTab === 'lectures' && topic.lectures) {
-        topic.lectures.forEach(lec => {
-            contentBox.innerHTML += `<h3>${lec.code} ${lec.title}</h3><div style="line-height:1.6; margin-bottom:30px;">${lec.content}</div>`;
+        var accordionHtml = "";
+        topic.lectures.forEach((lec, i) => {
+            var openAttr = i === 0 ? "open" : "";
+            accordionHtml += `<details class="lec-accordion" ${openAttr}>
+                <summary><span class="lec-code">${lec.code}</span> ${lec.title}</summary>
+                <div class="lec-content">${lec.content}</div>
+            </details>`;
         });
+        contentBox.innerHTML = accordionHtml;
         if(window.addXP) window.addXP(5);
     } 
     
@@ -396,8 +401,6 @@ window.renderTopic = function(topicId, activeTab) {
 };
 
 // ================= ФУНКЦИИ ПРОВЕРКИ =================
-
-// Проверка задачи с вводом ответа (Практика)
 window.checkPracticalAnswer = function(id, expected) {
     var input = document.getElementById("ans_" + id);
     var fb = document.getElementById("fb_" + id);
@@ -426,20 +429,18 @@ window.checkPracticalAnswer = function(id, expected) {
     }
 };
 
-// Проверка тестов (кнопка "Проверить результат")
 window.gradeTest = function(prefix, uniqueId, encodedQuestions) {
     var questions = JSON.parse(decodeURIComponent(encodedQuestions));
     var correct = 0;
     var total = questions.length;
     var btn = document.getElementById("btn_" + prefix + "_" + uniqueId);
     
-    // Сначала убираем старые цвета, если тест перепроходят
     document.querySelectorAll(`[id^="opt_${prefix}_${uniqueId}_"]`).forEach(el => {
         el.style.background = "transparent";
         el.style.borderColor = "transparent";
-        el.innerHTML = el.innerHTML.replace(/<span style="color:.*?">.*?<\/span>/g, ""); // Убираем галочки/крестики
+        el.innerHTML = el.innerHTML.replace(/<span style="color:.*?">.*?<\/span>/g, "");
         var radio = el.querySelector('input');
-        if(radio) radio.disabled = true; // Блокируем инпуты после ответа
+        if(radio) radio.disabled = true;
     });
 
     questions.forEach((q, qi) => {
@@ -448,7 +449,6 @@ window.gradeTest = function(prefix, uniqueId, encodedQuestions) {
         
         if (selectedVal === q.correct) correct++;
 
-        // Подсвечиваем правильные и неправильные ответы
         for (var oi = 0; oi < q.options.length; oi++) {
             var optLabel = document.getElementById(`opt_${prefix}_${uniqueId}_${qi}_${oi}`);
             if (!optLabel) continue;
