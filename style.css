@@ -1,17 +1,10 @@
 /* ============================================================
    0. ПОДКЛЮЧЕНИЕ ШРИФТОВ
    ============================================================ */
-/* Google Fonts (Рукописный и Печатный) */
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+US:wght@100..400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;600&display=swap');
 
-/* Локальные шрифты (если они лежат в папке fonts/) */
 @font-face { font-family: 'Peter Ivanovitsch'; src: url('fonts/ofont.ru_Peter Ivanovitsch.ttf'); }
-@font-face { font-family: 'Another Danger'; src: url('fonts/ofont.ru_Another Danger.ttf'); }
-@font-face { font-family: 'Tiny5'; src: url('fonts/ofont.ru_Tiny5.ttf'); }
-@font-face { font-family: 'Scumbria'; src: url('fonts/ofont.ru_Scumbria.ttf'); }
-@font-face { font-family: 'ST-Cherry'; src: url('fonts/ofont.ru_ST-Cherry.ttf'); }
-@font-face { font-family: 'TagType'; src: url('fonts/ofont.ru_TagType.ttf'); }
 
 /* ============================================================
    1. ПЕРЕМЕННЫЕ
@@ -19,17 +12,12 @@
 :root {
   --bg: #f7f7f7;
   --card: #ffffff;
-  --card-soft: #eef3f9;
   --border: #a3b8d8;
   --text: #0044cc;
   --text-soft: #335cbf;
-  --muted: #7a92b8;
-  
   --accent: #0044cc;
   --accent-soft: #e0ebff;
-  --gold: #ff80bf;
   --danger: #cc0000;
-  
   --shadow: 2px 4px 12px rgba(0, 68, 204, 0.08);
   --font-main: 'Playwrite US', 'Segoe UI', cursive, sans-serif;
   --font-mono: 'Overpass Mono', monospace;
@@ -53,7 +41,6 @@ body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   
-  /* Рисуем линии тетради */
   background-image: linear-gradient(rgba(0, 68, 204, 0.05) 1px, transparent 1px);
   background-size: 100% var(--line-height);
   background-attachment: fixed;
@@ -65,23 +52,15 @@ body {
   padding: 20px;
 }
 
-/* ============================================================
-   3. ТИПОГРАФИКА
-   ============================================================ */
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4 {
   color: var(--accent);
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 15px;
-  line-height: 1.2;
 }
 
-p {
-  margin-bottom: 15px;
-}
-
-.meta, label, small {
+.meta, label {
   font-family: var(--font-mono);
   color: var(--text-soft);
   text-transform: uppercase;
@@ -92,7 +71,7 @@ p {
 }
 
 /* ============================================================
-   4. КАРТОЧКИ (БУМАЖНЫЕ ЛИСТЫ)
+   3. КАРТОЧКИ (БУМАЖНЫЕ ЛИСТЫ)
    ============================================================ */
 .card {
   background: var(--card);
@@ -101,11 +80,10 @@ p {
   padding: 24px;
   margin-bottom: 24px;
   box-shadow: var(--shadow);
-  position: relative;
 }
 
 /* ============================================================
-   5. ШАПКА ПОРТАЛА
+   4. ШАПКА
    ============================================================ */
 .portal-header {
   text-align: center;
@@ -127,7 +105,7 @@ p {
 }
 
 /* ============================================================
-   6. СЕТКА ДЛЯ ФОРМ ВХОДА
+   5. СЕТКА И ФОРМЫ
    ============================================================ */
 .login-grid {
   display: grid;
@@ -135,14 +113,9 @@ p {
   gap: 24px;
 }
 
-/* ============================================================
-   7. ФОРМЫ И ПОЛЯ ВВОДА
-   ============================================================ */
 input[type="text"],
 input[type="password"],
-input[type="email"],
-select,
-textarea {
+select {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
@@ -156,14 +129,11 @@ textarea {
   transition: 0.2s;
 }
 
-input:focus, 
-select:focus,
-textarea:focus {
+input:focus, select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px var(--accent-soft);
 }
 
-/* Кнопки */
 .btn {
   display: inline-block;
   width: 100%;
@@ -184,21 +154,14 @@ textarea:focus {
 .btn:hover {
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0px rgba(0,0,0,0.15);
-  background: var(--accent);
 }
 
-.btn:active {
-  transform: translate(1px, 1px);
-  box-shadow: none;
-}
-
-/* Блок выбора модуля */
 .module-selector {
   padding: 15px 24px;
 }
 
 /* ============================================================
-   8. ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ
+   6. ПРОФИЛЬ
    ============================================================ */
 .user-profile {
   display: flex;
@@ -206,7 +169,6 @@ textarea:focus {
   gap: 24px;
 }
 
-/* Левая часть: XP и иконки */
 .user-avatar-icons {
   display: flex;
   flex-direction: column;
@@ -232,7 +194,6 @@ textarea:focus {
   font-size: 1.6rem;
 }
 
-/* Правая часть: Имя и группа */
 .user-details h3 {
   margin: 0 0 5px 0;
   font-size: 1.5rem;
@@ -244,7 +205,7 @@ textarea:focus {
 }
 
 /* ============================================================
-   9. НАВИГАЦИОННОЕ МЕНЮ
+   7. НАВИГАЦИЯ (ПРОСТОЙ СПИСОК)
    ============================================================ */
 .portal-nav ul {
   list-style: none;
@@ -280,7 +241,7 @@ textarea:focus {
 }
 
 /* ============================================================
-   10. ПЛАВАЮЩАЯ КНОПКА (ЧАТ/ПОМОЩЬ)
+   8. КНОПКА ПОМОЩИ
    ============================================================ */
 .fab {
   position: fixed;
@@ -304,42 +265,33 @@ textarea:focus {
 
 .fab:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(0, 68, 204, 0.6);
 }
 
 /* ============================================================
-   11. АДАПТИВНОСТЬ (Мобильные устройства)
+   9. АДАПТИВНОСТЬ
    ============================================================ */
 @media (max-width: 768px) {
   .login-grid {
     grid-template-columns: 1fr;
-    gap: 15px;
   }
-  
   .portal-header h1 {
     font-size: 1.6rem;
   }
-  
   .portal-nav ul {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  
   .user-profile {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
   }
-  
   .user-avatar-icons {
     flex-direction: row;
-    align-items: center;
   }
 }
-/* ============================================================
-   12. ВСПЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ (TOASTS)
-   ============================================================ */
+
+/* Уведомления */
 .toast {
   position: fixed;
   top: 20px;
@@ -349,80 +301,14 @@ textarea:focus {
   color: #fff;
   padding: 12px 24px;
   border-radius: 4px;
-  font-family: var(--font-main);
-  font-size: 16px;
   box-shadow: 0 4px 12px rgba(0, 68, 204, 0.3);
   opacity: 0;
   transition: all 0.3s ease;
   z-index: 9999;
   pointer-events: none;
-  text-align: center;
 }
-
 .toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-
-.toast.error {
-  background: var(--danger, #cc0000);
-  box-shadow: 0 4px 12px rgba(204, 0, 0, 0.3);
-}
-
-.toast.success {
-  background: var(--accent);
-}
-/* Класс для скрытия элементов */
-.hidden {
-  display: none !important;
-}
-
-/* Чуть опустим уведомления, чтобы они не перекрывали заголовок */
-.toast {
-  top: 80px; /* Было 20px */
-}
-/* ============================================================
-   13. УЛУЧШЕНИЕ НАВИГАЦИИ (ВКЛАДКИ)
-   ============================================================ */
-.portal-nav ul {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-}
-
-.portal-nav a {
-  color: var(--text-soft);
-  text-decoration: none;
-  font-size: 0.95rem;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: all 0.2s;
-  border-bottom: none; /* Убираем старую линию */
-}
-
-.portal-nav a:hover {
-  background-color: var(--accent-soft);
-  color: var(--accent);
-}
-
-/* Активная вкладка */
-.portal-nav a.active {
-  background-color: var(--accent);
-  color: #fff;
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
-}
-
-.logout-link {
-  color: var(--danger) !important;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  font-size: 0.85rem !important;
-  background-color: rgba(204, 0, 0, 0.05);
-}
-
-.logout-link:hover {
-  background-color: rgba(204, 0, 0, 0.1) !important;
-}
+.toast.error { background: var(--danger); }

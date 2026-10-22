@@ -19,17 +19,19 @@
 
     <main class="container">
         
-        <!-- Блоки входа (скрываются, если пользователь вошел) -->
-        <div class="login-grid" id="loginSection">
+        <!-- Блоки входа (всегда на экране) -->
+        <div class="login-grid">
             <!-- Вход студента -->
             <section class="card login-block">
                 <h2>ВХОД СТУДЕНТА</h2>
                 <form id="studentLoginForm" action="#" onsubmit="event.preventDefault();">
                     <label for="studentName">ФИО</label>
-                    <input type="text" id="studentName" name="studentName" autocomplete="name" placeholder="Иванов Иван" value="Иванов Иван">
+                    <input type="text" id="studentName" name="studentName" autocomplete="name" placeholder="Иванов Иван">
+                    
                     <label for="studentGroup">Группа</label>
-                    <input type="text" id="studentGroup" name="studentGroup" autocomplete="off" placeholder="ТМ-4" value="ТМ-4">
-                    <button type="button" class="btn student-btn">Войти</button>
+                    <input type="text" id="studentGroup" name="studentGroup" autocomplete="off" placeholder="ТМ-4">
+                    
+                    <button type="submit" class="btn">Войти</button>
                 </form>
             </section>
 
@@ -39,19 +41,14 @@
                 <form id="teacherLoginForm" action="#" onsubmit="event.preventDefault();">
                     <label for="teacherLogin">Логин</label>
                     <input type="text" id="teacherLogin" name="username" autocomplete="username" placeholder="teacher" value="teacher">
+                    
                     <label for="teacherPass">Пароль</label>
                     <input id="teacherPass" type="password" name="password" autocomplete="current-password" placeholder="teacher" value="teacher">
-                    <button type="submit" class="btn teacher-btn">Войти в журнал</button>
+                    
+                    <button type="submit" class="btn">Войти в журнал</button>
                 </form>
             </section>
         </div>
-
-        <!-- ЭТОТ БЛОК ПОКАЗЫВАЕТСЯ ТОЛЬКО ПОСЛЕ ВХОДА -->
-        <section class="card dashboard-content hidden" id="dashboardSection">
-            <h2>Добро пожаловать в личный кабинет!</h2>
-            <p>Здесь будет отображаться ваш прогресс, расписание и доступные курсы.</p>
-            <p class="meta">Выберите нужный раздел в меню ниже.</p>
-        </section>
 
         <!-- Выбор модуля -->
         <section class="card module-selector">
@@ -66,20 +63,20 @@
             <div class="user-avatar-icons">
                 <span class="xp-badge">🌟 0 XP</span>
                 <div class="icons">
-                    <span>👨‍🎓</span>
-                    <span>📖</span>
+                    <span id="icon1">👨‍🎓</span>
+                    <span id="icon2">📖</span>
                 </div>
             </div>
             <div class="user-details">
-                <h3>Гость</h3>
-                <p class="meta">Группа</p>
+                <h3 id="profileName">Гость</h3>
+                <p class="meta" id="profileGroup">Группа</p>
             </div>
         </section>
 
-        <!-- Навигационное меню (сделаем его похожим на вкладки) -->
+        <!-- Навигационное меню (обычный текстовый список) -->
         <nav class="portal-nav card">
             <ul>
-                <li><a href="#" class="active">Главная</a></li>
+                <li><a href="#">Главная</a></li>
                 <li><a href="#">Личный кабинет</a></li>
                 <li><a href="#">Мой сертификат</a></li>
                 <li><a href="#">Достижения</a></li>
