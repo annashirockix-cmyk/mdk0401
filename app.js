@@ -1,7 +1,6 @@
-// app.js — Главный роутер и управление состоянием
+// app.js — Главный роутер
 "use strict";
 
-// === ГЛОБАЛЬНОЕ СОСТОЯНИЕ ===
 window.state = {
     activeCourseId: localStorage.getItem("mdk.active") || "07.01",
     student: null, staff: null, xp: 0, results: {},
@@ -14,20 +13,9 @@ try {
     var _st = JSON.parse(localStorage.getItem("mdk.staff") || "null"); 
     if (_st && _st.name) window.state.staff = _st;
     window.state.xp = parseInt(localStorage.getItem("mdk.xp") || "0");
-} catch (e) { console.warn("Ошибка чтения localStorage:", e); }
+} catch (e) {}
 
-// === УТИЛИТЫ ===
-window.$ = (id) => document.getElementById(id);
 window.navigateTo = (hash) => { window.location.hash = hash; };
-
-window.showToast = function(msg, type) {
-    var t = document.createElement("div");
-    t.style = `position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:${type==='err'?'#ff4757':'#2ed573'};color:#fff;padding:12px 24px;border-radius:8px;z-index:99999;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.3);`;
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
-};
-
 window.getLevel = (xp) => Math.floor(Math.sqrt(xp / 100)) + 1;
 window.studentKey = () => window.state.student ? (window.state.student.name.trim().toLowerCase() + "|" + window.state.student.group.trim().toLowerCase()) : null;
 
@@ -40,32 +28,21 @@ window.saveStudentData = async function() {
     await window.API.saveStudent(window.studentKey(), window.state.student.name, window.state.student.group, payload);
 };
 
-// === ИНИЦИАЛИЗАЦИЯ ===
 document.addEventListener("DOMContentLoaded", () => {
+    window.syncPrograms();
+    window.buildCourseSelector();
     window.addEventListener("hashchange", router);
     router();
 });
 
-// === ОБНОВЛЕНИЕ UI ===
-function updateUI() {
-    var nameEl = $("user-name");
-    var groupEl = $("user-group");
-    var xpEl = $("xp-value");
-    
-    if (nameEl) nameEl.textContent = window.state.student ? window.state.student.name : (window.state.staff ? window.state.staff.name : 'Гость');
-    if (groupEl) groupEl.textContent = window.state.student ? window.state.student.group : (window.state.staff ? 'Админ' : 'Не авторизован');
-    if (xpEl) xpEl.textContent = window.state.xp;
-}
-
-// === РОУТИНГ ===
 function router() {
     var hash = window.location.hash.slice(1) || "/";
-    var app = $("app");
-    var crumbs = $("crumbs");
-    var loginScreen = $("login-screen");
-    var layout = document.querySelector(".layout");
+    var app = document.getElementById("app");
+    var crumbs = document.getElementById("crumbs");
+    var loginScreen = document.getElementById("login-screen");
+    var layout = document.getElementById("main-layout");
 
-    // 1. Проверка авторизации
+    // Авторизация
     if (!window.state.student && !window.state.staff) {
         if (loginScreen) loginScreen.style.display = "block";
         if (layout) layout.style.display = "none";
@@ -75,11 +52,10 @@ function router() {
         if (layout) layout.style.display = "flex";
     }
 
-    updateUI();
-
-    // 2. Роутинг
+    if (window.renderUserChip) window.renderUserChip();
     if (!app) return;
 
+    // Роутинг
     if (hash === "/" || hash === "") {
         if (crumbs) crumbs.textContent = "Главная";
         renderHomePage(app);
@@ -87,7 +63,6 @@ function router() {
     else if (hash === "/journal") {
         if (crumbs) crumbs.textContent = "Журнал";
         if (window.renderJournalPage) window.renderJournalPage();
-        else app.innerHTML = "<h2>Ошибка: journal.js не загружен</h2>";
     }
     else if (hash === "/games") {
         if (crumbs) crumbs.textContent = "Игры";
@@ -117,22 +92,34 @@ function router() {
         if (crumbs) crumbs.textContent = "Полезное";
         if (window.renderLinksPage) window.renderLinksPage();
     }
+    else if (hash.indexOf("/topic/") === 0) {
+        if (crumbs) crumbs.textContent = "Тема";
+        window.renderTopicPage(hash.split("/")[2]);
+    }
+    else if (hash === "/final" || hash.indexOf("/final/") === 0) {
+        if (crumbs) crumbs.textContent = "Экзамены";
+        if (window.renderFinalExamPage) window.renderFinalExamPage(hash.split("/")[2]);
+    }
+    else if (hash.indexOf("/training/") === 0) {
+        if (crumbs) crumbs.textContent = "Тренировка";
+        if (window.renderTrainingPage) window.renderTrainingPage(hash.split("/")[2]);
+    }
     else {
         if (crumbs) crumbs.textContent = "404";
         app.innerHTML = "<h2>404 Страница не найдена</h2>";
     }
 }
 
-// === ЛОГИКА ВХОДА ===
+// === ВХОД ===
 window.loginStudent = async function() {
-    const name = $("login-name").value.trim();
-    const group = $("login-group").value.trim();
-    if (!name || !group) return window.showToast("Заполните ФИО и группу!", "err");
+    const name = document.getElementById("login-name").value.trim();
+    const group = document.getElementById("login-group").value.trim();
+    if (!name || !group) return alert("Заполните ФИО и группу!");
 
     const studentId = `${name.toLowerCase()}|${group.toLowerCase()}`;
     try { 
         if (window.API) await window.API.saveStudent(studentId, name, group, '{"xp":0,"results":{}}'); 
-    } catch (e) { console.warn("Ошибка сохранения в БД:", e); }
+    } catch (e) { console.warn(e); }
 
     window.state.student = { name, group };
     window.state.xp = 0;
@@ -142,8 +129,8 @@ window.loginStudent = async function() {
 };
 
 window.loginTeacher = function() {
-    const login = $("teacher-login").value;
-    const pass = $("teacher-pass").value;
+    const login = document.getElementById("teacher-login").value;
+    const pass = document.getElementById("teacher-pass").value;
 
     if (login === "teacher" && pass === "teacher") {
         window.state.staff = { name: "Преподаватель", role: "teacher" };
@@ -151,7 +138,7 @@ window.loginTeacher = function() {
         window.navigateTo("/journal");
         router();
     } else {
-        window.showToast("Неверный логин или пароль!", "err");
+        alert("Неверный логин или пароль!");
     }
 };
 
@@ -164,10 +151,10 @@ window.logout = function() {
     router();
 };
 
-// === ГЛАВНАЯ СТРАНИЦА ===
+// === ГЛАВНАЯ ===
 function renderHomePage(app) {
     var course = window.MDK_DATA ? window.MDK_DATA[window.state.activeCourseId] : null;
-    if (!course) return app.innerHTML = "<p>Данные курса не загружены (проверьте data-07.01.js).</p>";
+    if (!course) return app.innerHTML = "<p>Данные курса не загружены.</p>";
 
     var html = `<h2>Доступные темы</h2><div class="topics-grid">`;
     course.sections.forEach(sec => {
