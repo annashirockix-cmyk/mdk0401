@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     
-    // Элементы форм
     const studentForm = document.getElementById("studentLoginForm");
     const teacherForm = document.getElementById("teacherLoginForm");
     
@@ -10,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const teacherLoginInput = document.getElementById("teacherLogin");
     const teacherPassInput = document.getElementById("teacherPass");
     
-    // Элементы профиля
     const userProfileBlock = document.querySelector(".user-profile");
     const profileName = document.getElementById("profileName");
     const profileGroup = document.getElementById("profileGroup");
@@ -18,13 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const icon2 = document.getElementById("icon2");
     const logoutBtn = document.getElementById("logoutBtn");
 
-    // --- ОБНОВЛЕНИЕ ПРОФИЛЯ ---
+    // Обновление интерфейса
     function updateUI(user) {
         if (user) {
-            // Вошел
             profileName.textContent = user.name;
             profileGroup.textContent = user.role === 'teacher' ? 'Преподаватель' : user.group;
-            userProfileBlock.classList.add("logged-in"); // Зеленый цвет имени
+            userProfileBlock.classList.add("logged-in");
             
             if (user.role === 'teacher') {
                 icon1.textContent = "👨‍🏫";
@@ -34,30 +31,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon2.textContent = "📖";
             }
         } else {
-            // Вышел
             profileName.textContent = "Гость";
             profileGroup.textContent = "Группа";
             userProfileBlock.classList.remove("logged-in");
             icon1.textContent = "👨‍🎓";
             icon2.textContent = "📖";
             
-            // Очищаем формы
             if(studentForm) studentForm.reset();
             if(teacherForm) teacherForm.reset();
         }
     }
 
-    // Проверка: если уже заходили ранее
+    // Проверка при загрузке
     const savedUser = localStorage.getItem("mdk_user");
     if (savedUser) {
         updateUI(JSON.parse(savedUser));
     }
 
-    // --- ВХОД СТУДЕНТА ---
+    // Вход студента
     if (studentForm) {
         studentForm.addEventListener("submit", function (event) {
             event.preventDefault();
-            
             const name = studentNameInput.value.trim();
             const group = studentGroupInput.value.trim();
             
@@ -73,11 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // --- ВХОД ПРЕПОДАВАТЕЛЯ ---
+    // Вход преподавателя
     if (teacherForm) {
         teacherForm.addEventListener("submit", function (event) {
             event.preventDefault();
-            
             const login = teacherLoginInput.value.trim();
             const password = teacherPassInput.value.trim();
             
@@ -93,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // --- ВЫХОД ---
+    // Выход
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function (event) {
             event.preventDefault();
@@ -103,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // --- УВЕДОМЛЕНИЯ ---
+    // Уведомления
     function showMessage(text, type) {
         const toast = document.createElement("div");
         toast.className = `toast ${type}`;

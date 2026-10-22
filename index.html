@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Учебный портал МДК</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    
-    <!-- Правильное подключение шрифтов -->
+    <!-- Стандартные шрифты из оригинальной темы -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+US:wght@100..400&family=Overpass+Mono:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sauce+Sans:wght@400;500&family=Overpass+Mono:wght@300;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,7 +16,7 @@
 
     <header class="portal-header">
         <div class="container">
-            <div class="portal-brand">ПОРТАЛ МДК</div>
+            <div class="portal-brand">Colorloops | ПОРТАЛ МДК</div>
             <h1>ОПЕРАТОР СТАНКОВ С ПУ</h1>
             <p class="meta">15.02.16 Технология машиностроения · ПМ.07</p>
         </div>
@@ -26,44 +24,36 @@
 
     <main class="container">
         
-        <!-- Блоки входа (ВСЕГДА ВИДНЫ) -->
+        <!-- Формы входа -->
         <div class="login-grid">
             <!-- Вход студента -->
-            <section class="card login-block">
+            <section class="card">
                 <h2>ВХОД СТУДЕНТА</h2>
                 <form id="studentLoginForm" action="#" onsubmit="event.preventDefault();">
                     <label for="studentName">ФИО</label>
-                    <input type="text" id="studentName" name="studentName" autocomplete="name" placeholder="Иванов Иван">
+                    <input type="text" id="studentName" name="studentName" placeholder="Иванов Иван">
                     
                     <label for="studentGroup">Группа</label>
-                    <input type="text" id="studentGroup" name="studentGroup" autocomplete="off" placeholder="ТМ-4">
+                    <input type="text" id="studentGroup" name="studentGroup" placeholder="ТМ-4">
                     
                     <button type="submit" class="btn">Войти</button>
                 </form>
             </section>
 
             <!-- Вход преподавателя -->
-            <section class="card login-block">
+            <section class="card">
                 <h2>ВХОД ПРЕПОДАВАТЕЛЯ</h2>
                 <form id="teacherLoginForm" action="#" onsubmit="event.preventDefault();">
                     <label for="teacherLogin">Логин</label>
-                    <input type="text" id="teacherLogin" name="username" autocomplete="username" placeholder="teacher" value="teacher">
+                    <input type="text" id="teacherLogin" name="username" placeholder="teacher" value="teacher">
                     
                     <label for="teacherPass">Пароль</label>
-                    <input id="teacherPass" type="password" name="password" autocomplete="current-password" placeholder="teacher" value="teacher">
+                    <input id="teacherPass" type="password" name="password" placeholder="teacher" value="teacher">
                     
                     <button type="submit" class="btn">Войти в журнал</button>
                 </form>
             </section>
         </div>
-
-        <!-- Выбор модуля -->
-        <section class="card module-selector">
-            <label for="mdkSelector">МДК Портал</label>
-            <select id="mdkSelector" name="mdkSelector">
-                <option value="mdk-07-01">МДК 07.01 (ЧПУ)</option>
-            </select>
-        </section>
 
         <!-- Профиль пользователя -->
         <section class="card user-profile">
@@ -81,7 +71,7 @@
         </section>
 
         <!-- Навигация -->
-        <nav class="portal-nav card">
+        <nav class="card portal-nav">
             <ul>
                 <li><a href="#">Главная</a></li>
                 <li><a href="#">Личный кабинет</a></li>
@@ -108,7 +98,6 @@
 
     <button class="fab" title="Помощь">💬</button>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
