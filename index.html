@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Учебный портал МДК</title>
     
-    <!-- Иконка сайта -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     
-    <!-- ПРАВИЛЬНОЕ ПОДКЛЮЧЕНИЕ ШРИФТОВ (исправляет ошибку CORB) -->
+    <!-- Правильное подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playwrite+US:wght@100..400&family=Overpass+Mono:wght@300;600&display=swap" rel="stylesheet">
     
-    <!-- Подключение ваших стилей -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,8 +26,8 @@
 
     <main class="container">
         
-        <!-- ФОРМЫ ВХОДА (изначально видны) -->
-        <div class="login-grid" id="loginSection">
+        <!-- Блоки входа (ВСЕГДА ВИДНЫ) -->
+        <div class="login-grid">
             <!-- Вход студента -->
             <section class="card login-block">
                 <h2>ВХОД СТУДЕНТА</h2>
@@ -58,15 +56,6 @@
                 </form>
             </section>
         </div>
-
-        <!-- БЛОК УСПЕШНОГО ВХОДА (скрыт изначально, появляется после входа) -->
-        <section class="card auth-success-message hidden" id="successSection">
-            <h2>Вы успешно авторизованы!</h2>
-            <p class="meta">Текущий пользователь: <strong id="successName"></strong></p>
-            <div style="margin-top: 20px;">
-                <a href="#" class="btn" style="text-decoration: none; display: inline-block; text-align: center;">Перейти в личный кабинет</a>
-            </div>
-        </section>
 
         <!-- Выбор модуля -->
         <section class="card module-selector">

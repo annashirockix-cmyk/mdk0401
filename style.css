@@ -10,6 +10,7 @@
   --accent: #0044cc;
   --accent-soft: #e0ebff;
   --danger: #cc0000;
+  --success: #2e9e5e;
   --shadow: 2px 4px 12px rgba(0, 68, 204, 0.08);
   --font-main: 'Playwrite US', 'Segoe UI', cursive, sans-serif;
   --font-mono: 'Overpass Mono', monospace;
@@ -33,7 +34,6 @@ body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   
-  /* Тетрадный фон */
   background-image: linear-gradient(rgba(0, 68, 204, 0.05) 1px, transparent 1px);
   background-size: 100% var(--line-height);
   background-attachment: fixed;
@@ -45,14 +45,6 @@ body {
   padding: 20px;
 }
 
-/* Скрытие блоков */
-.hidden {
-  display: none !important;
-}
-
-/* ============================================================
-   ТИПОГРАФИКА И ЭЛЕМЕНТЫ
-   ============================================================ */
 h1, h2, h3, h4 {
   color: var(--accent);
   font-weight: 400;
@@ -80,7 +72,9 @@ h1, h2, h3, h4 {
   box-shadow: var(--shadow);
 }
 
-/* Шапка */
+/* ============================================================
+   ШАПКА
+   ============================================================ */
 .portal-header {
   text-align: center;
   padding: 40px 20px 20px;
@@ -101,7 +95,7 @@ h1, h2, h3, h4 {
 }
 
 /* ============================================================
-   СЕТКА И ФОРМЫ
+   ФОРМЫ И СЕТКА
    ============================================================ */
 .login-grid {
   display: grid;
@@ -145,7 +139,6 @@ input:focus, select:focus {
   letter-spacing: 1px;
   transition: all 0.2s;
   box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-  text-align: center;
 }
 
 .btn:hover {
@@ -195,10 +188,16 @@ input:focus, select:focus {
   margin: 0 0 5px 0;
   font-size: 1.5rem;
   color: var(--accent);
+  transition: color 0.3s;
 }
 
 .user-details .meta {
   margin: 0;
+}
+
+/* Подсветка профиля при входе */
+.user-profile.logged-in h3 {
+  color: var(--success);
 }
 
 /* ============================================================
@@ -256,13 +255,39 @@ input:focus, select:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s;
   z-index: 1000;
 }
 
 .fab:hover {
   transform: scale(1.1);
 }
+
+/* ============================================================
+   УВЕДОМЛЕНИЯ (TOASTS)
+   ============================================================ */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--accent);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 9999;
+  pointer-events: none;
+  font-family: var(--font-main);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast.error { background: var(--danger); }
+.toast.success { background: var(--success); }
 
 /* ============================================================
    АДАПТИВНОСТЬ
@@ -274,25 +299,3 @@ input:focus, select:focus {
   .user-profile { flex-direction: column; align-items: flex-start; }
   .user-avatar-icons { flex-direction: row; }
 }
-
-/* Уведомления */
-.toast {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  background: var(--accent);
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 68, 204, 0.3);
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: 9999;
-  pointer-events: none;
-}
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-.toast.error { background: var(--danger); }

@@ -1,9 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     
-    // Элементы форм и секций
-    const loginSection = document.getElementById("loginSection"); // Блок с формами
-    const successSection = document.getElementById("successSection"); // Блок "Вы вошли"
-    
+    // Элементы форм
     const studentForm = document.getElementById("studentLoginForm");
     const teacherForm = document.getElementById("teacherLoginForm");
     
@@ -14,20 +11,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const teacherPassInput = document.getElementById("teacherPass");
     
     // Элементы профиля
+    const userProfileBlock = document.querySelector(".user-profile");
     const profileName = document.getElementById("profileName");
     const profileGroup = document.getElementById("profileGroup");
-    const successName = document.getElementById("successName");
     const icon1 = document.getElementById("icon1");
     const icon2 = document.getElementById("icon2");
     const logoutBtn = document.getElementById("logoutBtn");
 
-    // --- ЛОГИКА ИНТЕРФЕЙСА ---
+    // --- ОБНОВЛЕНИЕ ПРОФИЛЯ ---
     function updateUI(user) {
         if (user) {
-            // 1. Обновляем профиль
+            // Вошел
             profileName.textContent = user.name;
             profileGroup.textContent = user.role === 'teacher' ? 'Преподаватель' : user.group;
-            successName.textContent = user.name;
+            userProfileBlock.classList.add("logged-in"); // Зеленый цвет имени
             
             if (user.role === 'teacher') {
                 icon1.textContent = "👨‍🏫";
@@ -36,24 +33,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon1.textContent = "👨‍🎓";
                 icon2.textContent = "📖";
             }
-            
-            // 2. СКРЫВАЕМ ФОРМЫ И ПОКАЗЫВАЕМ УСПЕХ
-            if (loginSection) loginSection.classList.add("hidden");
-            if (successSection) successSection.classList.remove("hidden");
-            
         } else {
-            // 1. Сбрасываем профиль
+            // Вышел
             profileName.textContent = "Гость";
             profileGroup.textContent = "Группа";
-            successName.textContent = "";
+            userProfileBlock.classList.remove("logged-in");
             icon1.textContent = "👨‍🎓";
             icon2.textContent = "📖";
             
-            // 2. ПОКАЗЫВАЕМ ФОРМЫ И СКРЫВАЕМ УСПЕХ
-            if (loginSection) loginSection.classList.remove("hidden");
-            if (successSection) successSection.classList.add("hidden");
-            
-            // 3. Очищаем формы
+            // Очищаем формы
             if(studentForm) studentForm.reset();
             if(teacherForm) teacherForm.reset();
         }
