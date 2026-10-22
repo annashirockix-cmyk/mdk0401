@@ -1,65 +1,103 @@
-:root {
-    --bg-dark: #121212;
-    --bg-panel: #1e1e1e;
-    --bg-hover: #2d2d2d;
-    --text-main: #e0e0e0;
-    --text-muted: #888;
-    --accent: #ff6b35;
-    --border: #333;
-    --ok: #28a745;
-    --err: #dc3545;
-    --gold: #ffd700;
+:root{
+  --bg-dark:#121212;--bg-panel:#1e1e1e;--bg-hover:#2d2d2d;
+  --text-main:#e0e0e0;--text-muted:#888;--accent:#ff6b35;--border:#333;
+  --ok:#28a745;--err:#dc3545;--gold:#ffd700;
+  /* алиасы для модулей (games, shop, rating...) */
+  --bg:var(--bg-dark);--card:var(--bg-panel);--card-soft:#252525;
+  --text:var(--text-main);--muted:var(--text-muted);--text-soft:#bbb;
+  --accent-soft:rgba(255,107,53,.18);
 }
+html[data-theme="neon"]{--accent:#ff00cc;--accent-soft:rgba(255,0,204,.18)}
+html[data-theme="matrix"]{--accent:#00ff41;--accent-soft:rgba(0,255,65,.15)}
+html[data-theme="anime"]{--accent:#ffb6c1;--accent-soft:rgba(255,182,193,.18)}
+html[data-theme="rgb"]{--accent:#ff0055;--accent-soft:rgba(255,0,85,.18)}
+html[data-theme="gold"]{--accent:#ffd700;--accent-soft:rgba(255,215,0,.15)}
+html[data-theme="premium"]{--accent:#8b5cf6;--accent-soft:rgba(139,92,246,.18)}
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+html,body{height:100%}
+body{background:var(--bg-dark);color:var(--text-main);overflow:hidden}
+a{color:inherit}
+h2,h3{margin-bottom:12px}
+p{line-height:1.55}
 
-body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; overflow: hidden; }
+/* ===== КАРКАС ===== */
+.layout{display:flex;width:100%;height:100vh;height:100dvh}
+.sidebar{width:250px;background:var(--bg-panel);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 0;flex-shrink:0;overflow-y:auto}
+.sidebar-header{padding:0 20px 16px;font-size:1.2rem;font-weight:bold;border-bottom:1px solid var(--border);color:var(--accent)}
+.sidebar-course{padding:12px 20px;font-weight:bold;background:var(--card-soft);margin:10px 0;font-size:.9rem}
+.xp-display{padding:8px 20px;color:var(--gold);font-weight:bold;cursor:pointer}
+.sidebar-nav{display:flex;flex-direction:column;gap:2px;padding:8px 10px}
+.sidebar-nav a{display:block;padding:10px 12px;border-radius:8px;color:var(--text-main);text-decoration:none;font-size:.95rem;white-space:nowrap}
+.sidebar-nav a:hover{background:var(--bg-hover)}
+.sidebar-nav a.active{background:var(--accent-soft);color:var(--accent);font-weight:bold}
+.user-info{padding:14px 20px;display:flex;align-items:center;gap:10px;border-top:1px solid var(--border);margin-top:auto;cursor:pointer}
+.user-avatar{font-size:1.6rem;width:36px;height:36px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
 
-#app { display: flex; width: 100%; height: 100%; }
-.sidebar { width: 260px; background-color: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; }
-.sidebar-header { padding: 0 20px 20px; font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid var(--border); color: var(--accent); }
-.sidebar-course { padding: 15px 20px; color: var(--text-main); font-weight: bold; background: #252525; margin: 10px 0; font-size: 0.9rem; }
-.user-info { padding: 15px 20px; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); margin-top: auto; }
-.user-avatar { font-size: 1.5rem; }
+.main-wrapper{flex:1;min-width:0;display:flex;flex-direction:column;overflow-y:auto}
+.top-header{padding:14px 24px;border-bottom:1px solid var(--border);gap:10px}
+.top-header h1{font-size:2rem;margin-bottom:10px}
+.breadcrumbs{color:var(--text-muted);font-size:.95rem}
+.content-area{padding:24px;width:100%;max-width:1000px;margin:0 auto;display:block}   /* БЫЛО display:flex — ломало всё */
 
-.main-wrapper { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
-.main-content { padding: 30px; flex: 1; max-width: 1000px; margin: 0 auto; width: 100%; }
+/* ===== ЭЛЕМЕНТЫ ===== */
+.btn{padding:10px 18px;border:1px solid var(--border);border-radius:8px;font-size:.95rem;cursor:pointer;font-weight:bold;transition:.2s;background:var(--bg-panel);color:var(--text-main);text-decoration:none;display:inline-block}
+.btn:hover{background:var(--bg-hover)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.module{background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.hero{text-align:center;padding:26px;background:var(--bg-panel);border-radius:12px;margin-bottom:20px;border:1px solid var(--border)}
+.hero h1{margin-bottom:8px;color:var(--accent);font-size:1.6rem}
+.backlink{display:inline-block;margin-bottom:16px;color:var(--accent);text-decoration:none;cursor:pointer}
+.self-input,.input-row input,select,textarea{padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg-dark);color:var(--text-main);outline:none;width:100%;font-size:1rem}
+select{width:auto}
+.topics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:16px}
+.topic-card{background:var(--bg-panel);padding:18px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:.2s}
+.topic-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.topic-card h3{margin-bottom:8px;font-size:1.05rem}
+.topic-card p{color:var(--text-muted);font-size:.85rem}
+.journal-table{width:100%;border-collapse:collapse}
+.journal-table th,.journal-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.journal-table th{background:var(--card-soft);color:var(--text-muted)}
 
-.top-header { text-align: center; padding: 40px 20px; border-bottom: 1px solid var(--border); margin-bottom: 30px; }
-.top-header h1 { font-size: 2rem; margin-bottom: 10px; }
-.top-header p { color: var(--text-muted); font-size: 0.9rem; }
+/* лекции */
+.lecture-body h2,.lecture-body h3{color:var(--accent);margin:18px 0 8px}
+.lecture-body ul,.lecture-body ol{padding-left:22px}
+.lecture-body table{border-collapse:collapse;width:100%;margin:12px 0;display:block;overflow-x:auto}
+.lecture-body th,.lecture-body td{border:1px solid var(--border);padding:8px;text-align:left}
+.lecture-body pre{background:var(--bg-dark);padding:12px;border-radius:8px;overflow-x:auto}
+.question{margin-bottom:16px;padding:14px;background:var(--card-soft);border-radius:8px}
+.q-text{font-weight:bold;margin-bottom:10px}
+.option{display:flex;gap:10px;align-items:center;padding:8px;cursor:pointer}
+.exam-timer{font-size:24px;font-weight:bold;text-align:center;color:var(--accent);margin-bottom:16px}
+.exam-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.exam-card{text-decoration:none;color:inherit;display:block}
+.exam-result{text-align:center;padding:24px}
+.exam-grade{font-size:48px;font-weight:bold}
+.brand-badge{background:var(--accent);color:#000;padding:2px 10px;border-radius:12px;font-size:.8rem;font-weight:bold}
+.skeleton{background:var(--card-soft);border-radius:8px}
+.tour-highlight{outline:3px solid var(--gold);border-radius:8px}
+.login-section{margin:0 auto 32px;max-width:500px;padding:0 16px}
+.login-section h2{color:var(--accent)}
+.login-section p{color:var(--text-muted);margin-bottom:12px}
+.input-row{display:flex;gap:12px;margin-bottom:12px;align-items:center}
+.input-row label{width:70px;color:var(--text-muted)}
+@keyframes rainbow-border{to{filter:hue-rotate(360deg)}}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-.login-section { margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
-.login-section h2 { font-size: 1.2rem; margin-bottom: 10px; color: var(--accent); }
-.login-section p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
-
-.input-row { display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
-.input-row label { width: 70px; font-size: 0.9rem; color: var(--text-muted); }
-.input-row input { flex: 1; padding: 12px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 6px; color: var(--text-main); font-size: 1rem; outline: none; }
-.input-row input:focus { border-color: var(--accent); }
-
-.btn { padding: 12px 20px; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.2s; background: var(--bg-panel); color: var(--text-main); border: 1px solid var(--border); }
-.btn:hover { background: var(--bg-hover); }
-.btn.ghost { background: transparent; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.bottom-nav { display: flex; flex-wrap: wrap; gap: 15px; padding: 15px 30px; background: var(--bg-panel); border-top: 1px solid var(--border); font-size: 0.85rem; justify-content: center; }
-.bottom-nav a { color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
-.bottom-nav a:hover { color: var(--accent); }
-
-.module { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-.journal-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-.journal-table th, .journal-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); }
-.journal-table th { background: #252525; color: var(--text-muted); }
-
-.topics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-.topic-card { background: var(--bg-panel); padding: 20px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
-.topic-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.topic-card h3 { margin-bottom: 10px; font-size: 1.1rem; }
-.topic-card p { color: var(--text-muted); font-size: 0.85rem; }
-
-/* Кастомные элементы из ваших модулей */
-.hero { text-align: center; padding: 30px; background: var(--bg-panel); border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border); }
-.hero h1 { margin-bottom: 10px; color: var(--accent); }
-.backlink { display: inline-block; margin-bottom: 20px; color: var(--accent); text-decoration: none; cursor: pointer; }
-.self-input { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-dark); color: var(--text-main); outline: none; }
+/* ===== МОБИЛЬНАЯ ВЕРСИЯ ===== */
+@media (max-width:768px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;flex-direction:row;flex-wrap:wrap;align-items:center;padding:6px 8px;border-right:0;border-bottom:1px solid var(--border);overflow:visible;gap:4px}
+  .sidebar-header{border:0;padding:0 8px;font-size:1rem}
+  .sidebar-course{margin:0;padding:6px 10px;font-size:.8rem;border-radius:6px}
+  .xp-display{padding:6px 10px;font-size:.85rem}
+  .user-info{display:none}
+  .sidebar-nav{order:9;flex-direction:row;width:100%;overflow-x:auto;padding:4px 0;-webkit-overflow-scrolling:touch}
+  .sidebar-nav a{padding:8px 12px;font-size:.85rem;background:var(--card-soft)}
+  .top-header{padding:10px 12px}
+  .content-area{padding:14px}
+  .topics-grid{grid-template-columns:1fr}
+  #asFab{bottom:14px!important;right:14px!important;width:52px!important;height:52px!important}
+}
