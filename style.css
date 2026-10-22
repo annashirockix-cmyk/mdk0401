@@ -1,195 +1,264 @@
-/*
-Theme Name: Colorloops
-Theme URI: https://wordpress.com/themes/colorloops/
-Description: Colorloops is a minimalistic theme designed to bring some color to your blogging.
-Version: 1.0.2
-Author: Automattic
-Author URI: https://automattic.com
-License: GNU General Public License v2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: colorloops
-*/
-
 /* ============================================================
-   ОРИГИНАЛЬНЫЕ СТИЛИ COLORLOOPS (сохранены)
+   ПОДКЛЮЧЕНИЕ ШРИФТОВ
    ============================================================ */
-h1, h2, h3, h4, h5, h6, blockquote, caption, figcaption {
-    text-wrap: balance;
-}
-p {
-    text-wrap: pretty;
-}
-.wp-block-button.is-style-outline>.wp-block-button__link:not(.has-background):hover {
-	background-color: var(--wp--preset--color--secondary);
-	color: var(--wp--preset--color--base);
-	border-color: var(--wp--preset--color--secondary);
-}
-a {
-	text-decoration-thickness: .0625em !important;
-	text-underline-offset: .15em;
-}
-
-/* ============================================================
-   СТИЛЬ PRIMARIUM (Тетрадный / Рукописный)
-   ============================================================ */
-
-/* --- 0. ПОДКЛЮЧЕНИЕ ШРИФТОВ --- */
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+US:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;600&display=swap');
 
+/* Локальные шрифты (если они у вас есть в папке fonts) */
 @font-face { font-family: 'Peter Ivanovitsch'; src: url('fonts/ofont.ru_Peter Ivanovitsch.ttf'); }
 @font-face { font-family: 'Another Danger'; src: url('fonts/ofont.ru_Another Danger.ttf'); }
 @font-face { font-family: 'Tiny5'; src: url('fonts/ofont.ru_Tiny5.ttf'); }
 @font-face { font-family: 'Scumbria'; src: url('fonts/ofont.ru_Scumbria.ttf'); }
-@font-face { font-family: 'ST-Cherry'; src: url('fonts/ofont.ru_ST-Cherry.ttf'); }
-@font-face { font-family: 'TagType'; src: url('fonts/ofont.ru_TagType.ttf'); }
 
-/* --- 1. ПЕРЕМЕННЫЕ --- */
+/* ============================================================
+   ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ
+   ============================================================ */
 :root {
   --bg: #f7f7f7;
   --card: #ffffff;
-  --card-soft: #eef3f9;
   --border: #a3b8d8;
   --text: #0044cc;
   --text-soft: #335cbf;
-  --muted: #7a92b8;
-  
   --accent: #0044cc;
   --accent-soft: #e0ebff;
-  --gold: #ff80bf;
-  
   --shadow: 2px 4px 12px rgba(0, 68, 204, 0.08);
   --font-main: 'Playwrite US', 'Segoe UI', cursive, sans-serif;
+  --font-mono: 'Overpass Mono', monospace;
   --line-height: 1.84;
 }
 
-/* --- 2. БАЗОВЫЕ СТИЛИ (Тетрадный фон) --- */
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: var(--font-main) !important; 
-  background-color: var(--bg) !important; 
-  color: var(--text) !important;
-  line-height: var(--line-height); 
-  -webkit-font-smoothing: antialiased; 
+  font-family: var(--font-main);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: var(--line-height);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
   
-  /* Линовка тетради */
+  /* Тетрадная линовка */
   background-image: linear-gradient(rgba(0, 68, 204, 0.05) 1px, transparent 1px);
   background-size: 100% var(--line-height);
   background-attachment: fixed;
-  
-  min-height: 100dvh; 
-  overscroll-behavior-y: none;
 }
 
-/* --- 3. АДАПТАЦИЯ БЛОКОВ COLORLOOPS --- */
-
-/* Стиль "Бумажного листа" для записей */
-.wp-block-post {
-  background: var(--card) !important;
-  border-left: 3px solid var(--accent) !important;
-  border-radius: 0 12px 12px 0 !important;
-  padding: 24px !important;
-  margin-bottom: 24px !important;
-  box-shadow: var(--shadow) !important;
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 /* Заголовки */
-.wp-block-post-title,
-.wp-block-heading,
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-main) !important;
-  color: var(--accent) !important;
-  font-weight: 400 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1px;
-}
-
-.wp-block-post-title a {
-  text-decoration: none !important;
-}
-
-/* Изображения записей */
-.wp-block-post-featured-image img {
-  border-radius: 4px;
-  border: 2px solid var(--border);
-  box-shadow: var(--shadow);
-}
-
-/* Мета-информация (Категории и Дата) */
-.wp-block-post-terms,
-.wp-block-post-date {
-  color: var(--text-soft) !important;
-  font-family: 'Overpass Mono', monospace !important; /* Оставляем моноширинный для контраста */
-  font-size: 0.85em !important;
-  text-transform: uppercase !important;
-}
-
-.wp-block-post-terms a {
-  color: var(--text-soft) !important;
-  text-decoration: none !important;
-}
-
-.wp-block-post-terms a:hover {
-  color: var(--gold) !important;
-}
-
-/* Цитаты */
-.wp-block-quote {
-  border-left: 3px solid var(--gold) !important;
-  padding-left: 20px;
-  font-style: italic;
-  color: var(--text-soft) !important;
-}
-
-/* Разделитель */
-.wp-block-separator {
-  border: none !important;
-  border-top: 2px dotted var(--accent) !important;
-  margin: 2rem 0 !important;
-}
-
-/* --- 4. КНОПКИ И ФОРМЫ --- */
-.wp-block-button__link {
-  background: var(--accent) !important;
-  color: #fff !important;
-  border-radius: 4px !important;
-  font-family: var(--font-main) !important;
+h1, h2, h3, h4 {
+  color: var(--accent);
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-  transition: all 0.2s;
+  margin-top: 0;
+  margin-bottom: 15px;
 }
 
-.wp-block-button__link:hover {
+/* Мета-информация (шрифт печатной машинки) */
+.meta, label {
+  font-family: var(--font-mono);
+  color: var(--text-soft);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ============================================================
+   КОМПОНЕНТЫ СТИЛЯ (Карточки-листы)
+   ============================================================ */
+.card {
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* Шапка */
+.portal-header {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.portal-brand {
+  font-family: var(--font-mono);
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.portal-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+/* Сетка для блоков входа */
+.login-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .login-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Поля ввода */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* Кнопки */
+.btn {
+  display: inline-block;
+  width: 100%;
+  padding: 12px 24px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-main);
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0px rgba(0,0,0,0.15);
+  background: var(--accent);
 }
 
-input[type="text"],
-input[type="email"],
-input[type="search"],
-textarea,
-.wp-block-search__input {
-  width: 100%;
-  padding: 12px !important;
-  border-radius: 4px !important;
-  border: 1px solid var(--border) !important;
-  background: var(--bg) !important;
-  color: var(--text) !important;
-  font-family: var(--font-main) !important;
+/* Блок выбора модуля */
+.module-selector {
+  padding: 15px 24px;
 }
 
-input:focus,
-textarea:focus {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 2px var(--accent-soft) !important;
-  outline: none;
+/* Профиль пользователя */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-/* --- 5. КАСТОМНЫЕ КЛАССЫ (на случай если используются) --- */
-.hero, .module { 
-  background: var(--card); 
-  border-left: 3px solid var(--accent); 
-  border-radius: 0 12px 12px 0; 
-  padding: 24px; 
-  margin-bottom: 24px; 
-  box-shadow: var(--shadow); 
+.user-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.xp-badge {
+  font-family: var(--font-mono);
+  background: var(--accent-soft);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.user-icons span {
+  font-size: 1.5rem;
+}
+
+.user-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/* Навигационное меню */
+.portal-nav {
+  padding: 24px;
+}
+
+.portal-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.portal-nav li {
+  margin: 0;
+}
+
+.portal-nav a {
+  color: var(--text-soft);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+
+.portal-nav a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+.logout-link {
+  color: var(--gold, #cc0000) !important;
+  font-weight: bold;
+}
+
+/* Плавающая кнопка */
+.fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 68, 204, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.fab:hover {
+  transform: scale(1.05);
 }

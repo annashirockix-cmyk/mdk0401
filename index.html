@@ -1,180 +1,120 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<!-- Оптимизация под мобильные (включая iPhone с "челкой") -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Учебный портал МДК</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
-
-<!-- Шрифты для магазина (Ury) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Newsreader:wght@400;700&family=Quattrocento+Sans:wght@400;700&family=Spectral:wght@400;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
-<!-- Применение сохранённой темы и шрифта ДО загрузки body -->
-<script>
-  try {
-    var savedTheme = localStorage.getItem("mdk.theme_active") || "default";
-    if (savedTheme !== "default") {
-      document.documentElement.setAttribute("data-theme", savedTheme);
-    } else {
-      document.documentElement.setAttribute("data-theme", localStorage.getItem("mdk.theme") || "dark");
-    }
-
-    var savedFont = localStorage.getItem("mdk.font") || "default";
-    var FONT_MAP = {
-      "atkinson": "'Atkinson Hyperlegible', sans-serif",
-      "newsreader": "'Newsreader', serif",
-      "spectral": "'Spectral', serif",
-      "quattrocento": "'Quattrocento Sans', sans-serif"
-    };
-    if (savedFont !== "default" && FONT_MAP[savedFont]) {
-      var styleEl = document.createElement("style");
-      styleEl.id = "customFontStyle";
-      styleEl.textContent = "body, button, input, textarea, select { font-family: " + FONT_MAP[savedFont] + " !important; }";
-      document.head.appendChild(styleEl);
-    }
-  } catch(e) {}
-</script>
-
-<!-- Стили для печати сертификатов -->
-<style>
-    @media print {
-        body * { visibility: hidden; }
-        #printable-cert, #printable-cert *, #printable-supplement, #printable-supplement * { visibility: visible; }
-        #printable-cert { position: absolute; left: 0; top: 0; width: 100%; page-break-after: always; margin: 0; padding: 0; box-shadow: none; border-radius: 0; background-size: 100% 100% !important; }
-        #printable-supplement { position: absolute; left: 0; top: 0; width: 100%; page-break-before: always; background-size: 100% 100% !important; }
-        .no-print { display: none !important; }
-        .topbar, .drawer, .drawer-overlay, .toast-container, #asFab { display: none !important; }
-        main#app { padding: 0 !important; margin: 0 !important; }
-        body { background: #fff; margin: 0; padding: 0; }
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учебный портал МДК</title>
+    <!-- Подключаем стили -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ОКНО ВХОДА -->
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-shell">
-    <div class="login-brand" style="text-align: center; margin-bottom: 20px;">
-      <span class="brand-badge">ПОРТАЛ МДК</span>
-      <h1>Оператор станков с ПУ</h1>
-      <p>15.02.16 Технология машиностроения · ПМ.07</p>
-    </div>
-    <div class="login-grid">
-      <div class="login-card">
-        <h3>Вход студента</h3>
-        <label>ФИО <input id="loginName" type="text" placeholder="Иванов Иван"></label>
-        <label>Группа <input id="loginGroup" type="text" placeholder="ТМ-4"></label>
-        <button type="button" id="btnLoginStudent" class="btn" style="width: 100%; margin-top: 10px;">Войти</button>
-      </div>
-      <div class="login-card">
-        <h3>Вход преподавателя</h3>
-        <label>Логин <input id="teacherUser" type="text" placeholder="teacher"></label>
-        <label>Пароль <input id="teacherPass" type="password" placeholder="teacher"></label>
-        <button type="button" id="btnLoginTeacher" class="btn ghost" style="width: 100%; margin-top: 10px;">Войти в журнал</button>
-        <p class="login-error" id="teacherLoginError" style="display:none; color:var(--err); margin-top:10px; font-size:13px;"></p>
-      </div>
-    </div>
-  </div>
-</div>
+    <!-- Шапка портала -->
+    <header class="portal-header">
+        <div class="container">
+            <div class="portal-brand">ПОРТАЛ МДК</div>
+            <h1>ОПЕРАТОР СТАНКОВ С ПУ</h1>
+            <p class="meta">15.02.16 Технология машиностроения · ПМ.07</p>
+        </div>
+    </header>
 
-<!-- ШАПКА -->
-<header class="topbar">
-  <button class="burger-btn" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
-  <a class="brand" href="#/"><span class="brand-badge">МДК Портал</span></a>
-  <div style="margin-left: 15px;">
-      <select id="mdkSelector" class="self-input" style="padding: 8px; font-weight: bold; background: var(--card-soft); border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; outline:none; margin:0; width:auto;">
-          <option value="07.01">МДК 07.01 (ЧПУ)</option>
-          <option value="04.01">МДК 04.01 (Диагностика)</option>
-          <option value="02.01">МДК 02.01 (Сборка)</option>
-          <option value="02.02">МДК 02.02 (Программирование сборки)</option>
-      </select>
-  </div>
-  <div class="crumbs" id="crumbs" style="margin-left:auto;"></div>
-  <div class="topbar-status">
-    <span class="status-pill" id="xpCount">🌟 0 XP</span>
-  </div>
-  <button id="themeToggle" class="btn ghost" style="padding: 8px 12px; margin-left: 5px;" title="Сменить тему">🎨</button>
-  <button id="topbarLogout" class="btn ghost" style="padding:8px 12px; margin-left:5px;" onclick="window.handleLogout()" title="Выйти">🚪</button>
-</header>
+    <main class="container">
+        
+        <!-- Блоки входа (в две колонки на больших экранах) -->
+        <div class="login-grid">
+            
+            <!-- Вход студента -->
+            <section class="card login-block">
+                <h2>ВХОД СТУДЕНТА</h2>
+                <form id="studentLoginForm" action="#">
+                    <label for="studentName">ФИО</label>
+                    <input type="text" id="studentName" placeholder="Иванов Иван" value="Иванов Иван">
+                    
+                    <label for="studentGroup">Группа</label>
+                    <input type="text" id="studentGroup" placeholder="ТМ-4" value="ТМ-4">
+                    
+                    <button type="button" class="btn">Войти</button>
+                </form>
+            </section>
 
-<!-- БОКОВОЕ МЕНЮ -->
-<div class="drawer-overlay" id="drawerOverlay"></div>
-<aside class="drawer" id="drawer">
-  <div class="drawer-head">
-    <div class="drawer-user" style="display:flex; align-items:center;">
-      <span id="userChipAvatar" style="font-size:24px;">👨‍🎓</span>
-      <div style="margin-left:10px;">
-        <div id="userChipName" style="font-weight:bold;">Гость</div>
-        <div id="userChipGroup" style="font-size:12px; color:var(--muted);">Группа</div>
-      </div>
-    </div>
-    <button class="drawer-close" id="drawerClose">✕</button>
-  </div>
-  <nav class="drawer-nav">
-    <a class="drawer-item" data-go="#/">🏠 Главная</a>
-    <a class="drawer-item" data-go="#/profile">👤 Личный кабинет</a>
-    <a class="drawer-item" data-go="#/certificate">📜 Мой сертификат</a>
-    <a class="drawer-item" data-go="#/achievements">🏆 Достижения</a>
-    <a class="drawer-item" data-go="#/shop">🛒 Магазин</a>
-    <a class="drawer-item" data-go="#/videos">🎬 Видео</a>
-    <a class="drawer-item" data-go="#/passports">📄 Паспорта</a>
-    <a class="drawer-item" data-go="#/safety">🦺 Охрана труда</a>
-    <a class="drawer-item" data-go="#/formatting">📝 Оформление</a>
-    <a class="drawer-item" data-go="#/links">📚 Полезные материалы</a>
-    <a class="drawer-item" data-go="#/training">🎯 Тренировка</a>
-    <a class="drawer-item" data-go="#/final">📋 Итоговые экзамены</a>
-    <a class="drawer-item" data-go="#/arcade">🎮 Игровая комната</a>
-    <a class="drawer-item" data-go="#/rating">🏅 Доска почета</a>
-    <a class="drawer-item" data-go="#/journal">📒 Журнал (Оценки)</a>
-    <a class="drawer-item" data-go="#/reports">📊 Отчеты по курсам</a>
-    <a class="drawer-item" data-go="#/schedule">📅 Расписание</a>
-    <a class="drawer-item" style="color:var(--err); cursor:pointer; margin-top:20px; border-top: 1px solid var(--border);" onclick="window.handleLogout()">🚪 Выйти</a>
-  </nav>
-</aside>
+            <!-- Вход преподавателя -->
+            <section class="card login-block">
+                <h2>ВХОД ПРЕПОДАВАТЕЛЯ</h2>
+                <!-- Обернуто в form, чтобы убрать предупреждение [DOM] -->
+                <form id="teacherLoginForm" action="#">
+                    <label for="teacherLogin">Логин</label>
+                    <input type="text" id="teacherLogin" placeholder="teacher" value="teacher">
+                    
+                    <label for="teacherPass">Пароль</label>
+                    <input id="teacherPass" type="password" placeholder="teacher" value="teacher">
+                    
+                    <button type="submit" class="btn">Войти в журнал</button>
+                </form>
+            </section>
 
-<!-- ОСНОВНОЙ КОНТЕНТ -->
-<main id="app"></main>
+        </div>
 
-<!-- СКРИПТЫ (Порядок важен!) -->
-<script src="data-global.js"></script>
-<script src="data-0701.js"></script>
-<script src="data-0201.js"></script>
-<script src="data-0202.js"></script>
-<script src="data-0401.js"></script>
-<script src="data-extra.js"></script>
+        <!-- Выбор модуля -->
+        <section class="card module-selector">
+            <label for="mdkSelector">МДК Портал</label>
+            <select id="mdkSelector">
+                <option value="mdk-07-01">МДК 07.01 (ЧПУ)</option>
+                <!-- Другие опции, если есть -->
+            </select>
+        </section>
 
-<script src="api.js"></script>
-<script src="tests-extra.js"></script>
-<script src="app.js"></script>
+        <!-- Профиль пользователя -->
+        <section class="card user-profile">
+            <div class="user-stats">
+                <span class="xp-badge">🌟 0 XP</span>
+                <div class="user-icons">
+                    <span>👨‍🎓</span> <!-- Иконка -->
+                    <span>📖</span> <!-- Иконка -->
+                </div>
+            </div>
+            <div class="user-info">
+                <h3>Гость</h3>
+                <p class="meta">Группа</p>
+            </div>
+        </section>
 
-<script src="exam_0201.js"></script>
-<script src="exam_0202.js"></script>
-<script src="exam_0401.js"></script>
-<script src="exam_0701.js"></script>
+        <!-- Навигационное меню -->
+        <nav class="portal-nav card">
+            <ul>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Личный кабинет</a></li>
+                <li><a href="#">Мой сертификат</a></li>
+                <li><a href="#">Достижения</a></li>
+                <li><a href="#">Магазин</a></li>
+                <li><a href="#">Видео</a></li>
+                <li><a href="#">Паспорта</a></li>
+                <li><a href="#">Охрана труда</a></li>
+                <li><a href="#">Оформление</a></li>
+                <li><a href="#">Полезные материалы</a></li>
+                <li><a href="#">Тренировка</a></li>
+                <li><a href="#">Итоговые экзамены</a></li>
+                <li><a href="#">Игровая комната</a></li>
+                <li><a href="#">Доска почета</a></li>
+                <li><a href="#">Журнал (Оценки)</a></li>
+                <li><a href="#">Отчеты по курсам</a></li>
+                <li><a href="#">Расписание</a></li>
+                <li><a href="#" class="logout-link">Выйти</a></li>
+            </ul>
+        </nav>
 
-<script src="shop.js"></script>
-<script src="reports.js"></script>
-<script src="extra.js"></script>
-<script src="info.js"></script>
-<script src="links.js"></script>
-<script src="rating.js"></script>
-<script src="journal.js"></script>
-<script src="schedule.js"></script>
+    </main>
 
-<script src="questions-setup.js"></script>
-<script src="questions-mdk.js"></script>
-<script src="questions-anime.js"></script>
-<script src="questions-games.js"></script>
-<script src="questions-logic.js"></script>
+    <!-- Плавающая кнопка (чат/помощь) -->
+    <button class="fab" title="Помощь">💬</button>
 
-<script src="games.js"></script>
-<script src="assistant.js"></script>
-<script src="easter-eggs.js"></script>
+    <!-- 
+      ВАЖНО: Сначала подключаем jQuery, 
+      чтобы в app.js не было ошибки "$ is not defined" 
+    -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- Подключаем ваш основной скрипт -->
+    <script src="app.js"></script>
 
 </body>
 </html>
