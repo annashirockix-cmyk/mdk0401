@@ -207,3 +207,48 @@ main#app { padding: 32px 24px 100px; max-width: 1100px; margin: 0 auto; min-heig
 /* Стили для скелетон-загрузки */
 .skeleton { background: linear-gradient(90deg, var(--card-soft) 25%, var(--border) 50%, var(--card-soft) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 8px; }
 @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+/* --- 15. НОВЫЕ ТЕМЫ ИЗ ФАЙЛОВ URY --- */
+[data-theme="ury-light"] {
+  --bg: #FFFFFF; --card: #f3f2ec; --card-soft: #e5e5e5; --border: #d1d1d1;
+  --text: #252525; --text-soft: #515151; --muted: #888888;
+  --accent: #000000; --accent-soft: #e0e0e0; --ok: #2e9e5e; --err: #d93838; --gold: #d4a000;
+}
+[data-theme="ury-dark"] {
+  --bg: #2b2b2b; --card: #1a1a1a; --card-soft: #383838; --border: #444444;
+  --text: #ebebeb; --text-soft: #b8b8b8; --muted: #888888;
+  --accent: #ffffff; --accent-soft: #444444; --ok: #58c98a; --err: #ff6e5e; --gold: #ffd700;
+}
+[data-theme="ury-sepia"] {
+  --bg: #f3f2ec; --card: #ffffff; --card-soft: #e8e5dc; --border: #d6d1c4;
+  --text: #252525; --text-soft: #515151; --muted: #7a776e;
+  --accent: #000000; --accent-soft: #f7e4dd; --ok: #2e9e5e; --err: #d93838; --gold: #d4a000;
+}
+
+/* --- 16. ГЛОБАЛЬНЫЕ ИСПРАВЛЕНИЯ ДЛЯ МОБИЛЬНЫХ (iOS/Android) --- */
+body { min-height: 100dvh; overscroll-behavior-y: none; }
+main#app { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+.topbar { padding-top: calc(12px + env(safe-area-inset-top)); }
+.drawer { padding-bottom: env(safe-area-inset-bottom); height: 100dvh; }
+.login-overlay { height: 100dvh; padding-bottom: env(safe-area-inset-bottom); }
+
+/* Убираем горизонтальный скролл и фиксим тач-скролл в таблицах */
+#journalContent, .module, .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 768px) {
+    /* Улучшенный вид на мобилках */
+    .topbar { flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+    .topbar .brand-badge { font-size: 12px; padding: 4px 8px; }
+    #mdkSelector { max-width: 100%; width: 100%; order: 3; margin-left: 0; margin-top: 5px; font-size: 14px; padding: 8px; }
+    .topbar-status { margin-left: auto; }
+    .hero h1 { font-size: 1.5rem; }
+    .hero p { font-size: 0.9rem; }
+    .tab { padding: 6px 12px; font-size: 13px; }
+    .journal-table th, .journal-table td { padding: 6px; font-size: 12px; }
+    .btn { padding: 10px 16px; font-size: 14px; }
+    .login-shell { margin: 10px auto; }
+}
+
+/* --- 17. СТИЛИ ДЛЯ НОВЫХ ИГР --- */
+.gcode-canvas { background: #111; border: 2px solid var(--border); border-radius: 8px; display: block; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.3); touch-action: none; }
+.diag-part { cursor: pointer; transition: 0.2s; border-radius: 8px; padding: 10px; text-align: center; background: var(--card-soft); border: 2px solid transparent; margin: 5px; }
+.diag-part:hover { border-color: var(--accent); transform: scale(1.02); }

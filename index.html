@@ -2,18 +2,19 @@
 <html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8">
+<!-- Оптимизация под мобильные (включая iPhone с "челкой") -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Учебный портал МДК</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
 
-<!-- Шрифты для тем оформления (Магазин → Шрифты) -->
+<!-- Шрифты для магазина (Ury) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Montserrat:wght@400;700&family=Lobster&family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Newsreader:wght@400;700&family=Quattrocento+Sans:wght@400;700&family=Spectral:wght@400;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 
-<!-- Применение сохранённой темы и шрифта до загрузки body (без мигания) -->
+<!-- Применение сохранённой темы и шрифта ДО загрузки body -->
 <script>
   try {
     var savedTheme = localStorage.getItem("mdk.theme_active") || "default";
@@ -23,13 +24,12 @@
       document.documentElement.setAttribute("data-theme", localStorage.getItem("mdk.theme") || "dark");
     }
 
-    // Применяем сохранённый шрифт из магазина
     var savedFont = localStorage.getItem("mdk.font") || "default";
     var FONT_MAP = {
-      "roboto": "'Roboto', sans-serif",
-      "open-sans": "'Open Sans', sans-serif",
-      "montserrat": "'Montserrat', sans-serif",
-      "lobster": "'Lobster', cursive"
+      "atkinson": "'Atkinson Hyperlegible', sans-serif",
+      "newsreader": "'Newsreader', serif",
+      "spectral": "'Spectral', serif",
+      "quattrocento": "'Quattrocento Sans', sans-serif"
     };
     if (savedFont !== "default" && FONT_MAP[savedFont]) {
       var styleEl = document.createElement("style");
@@ -40,39 +40,13 @@
   } catch(e) {}
 </script>
 
-<!-- СТИЛИ ДЛЯ ПЕЧАТИ СЕРТИФИКАТА И ВКЛАДЫША -->
+<!-- Стили для печати сертификатов -->
 <style>
     @media print {
         body * { visibility: hidden; }
-
-        /* Показываем только сертификат и вкладыш */
-        #printable-cert, #printable-cert *,
-        #printable-supplement, #printable-supplement * { visibility: visible; }
-
-        /* Первая страница (Сертификат) */
-        #printable-cert {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            page-break-after: always;
-            margin: 0;
-            padding: 0;
-            box-shadow: none;
-            border-radius: 0;
-            background-size: 100% 100% !important;
-        }
-
-        /* Вторая страница (Вкладыш) */
-        #printable-supplement {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            page-break-before: always;
-            background-size: 100% 100% !important;
-        }
-
+        #printable-cert, #printable-cert *, #printable-supplement, #printable-supplement * { visibility: visible; }
+        #printable-cert { position: absolute; left: 0; top: 0; width: 100%; page-break-after: always; margin: 0; padding: 0; box-shadow: none; border-radius: 0; background-size: 100% 100% !important; }
+        #printable-supplement { position: absolute; left: 0; top: 0; width: 100%; page-break-before: always; background-size: 100% 100% !important; }
         .no-print { display: none !important; }
         .topbar, .drawer, .drawer-overlay, .toast-container, #asFab { display: none !important; }
         main#app { padding: 0 !important; margin: 0 !important; }
@@ -90,19 +64,15 @@
       <h1>Оператор станков с ПУ</h1>
       <p>15.02.16 Технология машиностроения · ПМ.07</p>
     </div>
-
     <div class="login-grid">
       <div class="login-card">
         <h3>Вход студента</h3>
-        <p class="login-hint">Укажите ФИО и группу.</p>
         <label>ФИО <input id="loginName" type="text" placeholder="Иванов Иван"></label>
         <label>Группа <input id="loginGroup" type="text" placeholder="ТМ-4"></label>
         <button type="button" id="btnLoginStudent" class="btn" style="width: 100%; margin-top: 10px;">Войти</button>
       </div>
-
       <div class="login-card">
         <h3>Вход преподавателя</h3>
-        <p class="login-hint">Используйте <b>teacher / teacher</b> или <b>admin / admin</b></p>
         <label>Логин <input id="teacherUser" type="text" placeholder="teacher"></label>
         <label>Пароль <input id="teacherPass" type="password" placeholder="teacher"></label>
         <button type="button" id="btnLoginTeacher" class="btn ghost" style="width: 100%; margin-top: 10px;">Войти в журнал</button>
@@ -116,7 +86,6 @@
 <header class="topbar">
   <button class="burger-btn" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
   <a class="brand" href="#/"><span class="brand-badge">МДК Портал</span></a>
-
   <div style="margin-left: 15px;">
       <select id="mdkSelector" class="self-input" style="padding: 8px; font-weight: bold; background: var(--card-soft); border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; outline:none; margin:0; width:auto;">
           <option value="07.01">МДК 07.01 (ЧПУ)</option>
@@ -125,13 +94,10 @@
           <option value="02.02">МДК 02.02 (Программирование сборки)</option>
       </select>
   </div>
-
   <div class="crumbs" id="crumbs" style="margin-left:auto;"></div>
-
   <div class="topbar-status">
     <span class="status-pill" id="xpCount">🌟 0 XP</span>
   </div>
-
   <button id="themeToggle" class="btn ghost" style="padding: 8px 12px; margin-left: 5px;" title="Сменить тему">🎨</button>
   <button id="topbarLogout" class="btn ghost" style="padding:8px 12px; margin-left:5px;" onclick="window.handleLogout()" title="Выйти">🚪</button>
 </header>
@@ -149,7 +115,6 @@
     </div>
     <button class="drawer-close" id="drawerClose">✕</button>
   </div>
-
   <nav class="drawer-nav">
     <a class="drawer-item" data-go="#/">🏠 Главная</a>
     <a class="drawer-item" data-go="#/profile">👤 Личный кабинет</a>
@@ -176,7 +141,6 @@
 <main id="app"></main>
 
 <!-- СКРИПТЫ (Порядок важен!) -->
-<!-- 1. Данные курсов -->
 <script src="data-global.js"></script>
 <script src="data-0701.js"></script>
 <script src="data-0201.js"></script>
@@ -184,20 +148,15 @@
 <script src="data-0401.js"></script>
 <script src="data-extra.js"></script>
 
-<!-- 2. API и тесты -->
 <script src="api.js"></script>
 <script src="tests-extra.js"></script>
-
-<!-- 3. Основное приложение -->
 <script src="app.js"></script>
 
-<!-- 4. Экзамены и тренажёры -->
 <script src="exam_0201.js"></script>
 <script src="exam_0202.js"></script>
 <script src="exam_0401.js"></script>
 <script src="exam_0701.js"></script>
 
-<!-- 5. Функциональные модули -->
 <script src="shop.js"></script>
 <script src="reports.js"></script>
 <script src="extra.js"></script>
@@ -207,18 +166,14 @@
 <script src="journal.js"></script>
 <script src="schedule.js"></script>
 
-<!-- 6. Игры: вопросы -->
 <script src="questions-setup.js"></script>
 <script src="questions-mdk.js"></script>
 <script src="questions-anime.js"></script>
 <script src="questions-games.js"></script>
 <script src="questions-logic.js"></script>
 
-<!-- 7. Игры и помощник -->
 <script src="games.js"></script>
 <script src="assistant.js"></script>
-
-<!-- 8. Пасхалки -->
 <script src="easter-eggs.js"></script>
 
 </body>
