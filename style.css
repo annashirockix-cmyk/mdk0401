@@ -372,3 +372,12 @@ textarea:focus {
 .toast.success {
   background: var(--accent);
 }
+/* Класс для скрытия элементов */
+.hidden {
+  display: none !important;
+}
+
+/* Чуть опустим уведомления, чтобы они не перекрывали заголовок */
+.toast {
+  top: 80px; /* Было 20px */
+}

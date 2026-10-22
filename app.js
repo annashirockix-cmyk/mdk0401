@@ -2,6 +2,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     
     // --- 1. ПОЛУЧАЕМ ЭЛЕМЕНТЫ ИЗ HTML ---
+    const loginGrid = document.querySelector(".login-grid"); // Блок со всеми формами
     const studentForm = document.getElementById("studentLoginForm");
     const teacherForm = document.getElementById("teacherLoginForm");
     
@@ -20,33 +21,33 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- 2. ФУНКЦИЯ ОБНОВЛЕНИЯ ИНТЕРФЕЙСА ---
     function updateUI(user) {
         if (user) {
-            // Если пользователь вошел
+            // Если пользователь вошел:
             userNameDisplay.textContent = user.name;
             userGroupDisplay.textContent = user.role === 'teacher' ? 'Преподаватель' : user.group;
             
-            // Меняем иконки для авторизованного пользователя
+            // Меняем иконки
             document.querySelector(".user-avatar-icons .icons").innerHTML = "<span>👨‍🏫</span><span>📚</span>";
             
-            // Показываем кнопку выхода (делаем её активной)
-            logoutBtn.style.display = "inline-block";
+            // СКРЫВАЕМ ФОРМЫ ВХОДА
+            if (loginGrid) loginGrid.classList.add("hidden");
             
-            // Меняем заголовки форм (опционально, для красоты)
-            document.querySelector(".login-block h2").textContent = "ВЫ ВОШЛИ В СИСТЕМУ";
         } else {
-            // Если пользователь вышел
+            // Если пользователь вышел:
             userNameDisplay.textContent = "Гость";
             userGroupDisplay.textContent = "Группа";
             xpBadge.innerHTML = "🌟 0 XP";
             document.querySelector(".user-avatar-icons .icons").innerHTML = "<span>👨‍🎓</span><span>📖</span>";
             
-            // Сбрасываем формы
+            // ПОКАЗЫВАЕМ ФОРМЫ ВХОДА ОБРАТНО
+            if (loginGrid) loginGrid.classList.remove("hidden");
+            
+            // Очищаем поля
             if(studentForm) studentForm.reset();
             if(teacherForm) teacherForm.reset();
         }
     }
 
     // --- 3. ПРОВЕРКА СЕССИИ ПРИ ЗАГРУЗКЕ ---
-    // Если пользователь уже заходил ранее (данные есть в localStorage)
     const savedUser = localStorage.getItem("mdk_user");
     if (savedUser) {
         const user = JSON.parse(savedUser);
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- 4. ОБРАБОТКА ВХОДА СТУДЕНТА ---
     if (studentForm) {
         studentForm.addEventListener("submit", function (event) {
-            event.preventDefault(); // Останавливаем перезагрузку страницы
+            event.preventDefault();
             
             const name = studentNameInput.value.trim();
             const group = studentGroupInput.value.trim();
@@ -66,17 +67,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Создаем объект пользователя
             const user = {
                 name: name,
                 group: group,
                 role: "student"
             };
 
-            // Сохраняем в браузер (имитация базы данных)
             localStorage.setItem("mdk_user", JSON.stringify(user));
-            
-            // Обновляем интерфейс
             updateUI(user);
             showMessage(`Добро пожаловать, ${name}!`, "success");
         });
@@ -90,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const login = teacherLoginInput.value.trim();
             const password = teacherPassInput.value.trim();
             
-            // Имитация проверки пароля (в реальности это делает сервер)
             if (login === "teacher" && password === "teacher") {
                 const user = {
                     name: "Преподаватель",
@@ -110,36 +106,23 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- 6. ОБРАБОТКА ВЫХОДА ---
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function (event) {
-            event.preventDefault(); // Отменяем переход по ссылке "#"
+            event.preventDefault();
             
-            // Удаляем данные из хранилища
             localStorage.removeItem("mdk_user");
-            
-            // Обновляем интерфейс
             updateUI(null);
-            
-            // Возвращаем заголовки форм обратно (если меняли)
-            document.querySelectorAll(".login-block h2")[0].textContent = "ВХОД СТУДЕНТА";
-            document.querySelectorAll(".login-block h2")[1].textContent = "ВХОД ПРЕПОДАВАТЕЛЯ";
-            
             showMessage("Вы вышли из системы.", "success");
         });
     }
 
-    // --- 7. ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ УВЕДОМЛЕНИЙ (Toasts) ---
+    // --- 7. ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ УВЕДОМЛЕНИЙ ---
     function showMessage(text, type) {
-        // Создаем элемент уведомления
         const toast = document.createElement("div");
         toast.className = `toast ${type}`;
         toast.textContent = text;
-        
-        // Добавляем на страницу
         document.body.appendChild(toast);
         
-        // Анимация появления
         setTimeout(() => toast.classList.add("show"), 100);
         
-        // Удаляем через 3 секунды
         setTimeout(() => {
             toast.classList.remove("show");
             setTimeout(() => toast.remove(), 300);
