@@ -1,16 +1,29 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Элементы
+    // Элементы экранов
     const loginOverlay = document.getElementById("loginOverlay");
     const appContent = document.getElementById("appContent");
     
+    // Формы
     const studentForm = document.getElementById("studentForm");
     const teacherForm = document.getElementById("teacherForm");
     
+    // Данные
     const teacherLogin = document.getElementById("teacherLogin");
     const teacherPass = document.getElementById("teacherPass");
+    const studentNameInput = document.getElementById("studentName");
+    const studentGroupInput = document.getElementById("studentGroup");
     
-    const userStatus = document.getElementById("userStatus");
+    // Элементы интерфейса (Профиль)
+    const profileName = document.getElementById("profileName");
+    const profileGroup = document.getElementById("profileGroup");
+    const profileIcon1 = document.getElementById("profileIcon1");
+    const profileIcon2 = document.getElementById("profileIcon2");
+    const topbarStatus = document.getElementById("topbarStatus");
+    
+    // Кнопка выхода
     const logoutBtn = document.getElementById("logoutBtn");
+    
+    // Контейнер уведомлений
     const toastContainer = document.getElementById("toastContainer");
 
     // Функция показа уведомлений
@@ -25,16 +38,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3000);
     }
 
-    // Вход
-    function loginUser(name) {
-        // Скрываем окно входа
+    // Функция входа
+    function loginUser(user) {
+        // Скрываем оверлей, показываем портал
         loginOverlay.style.display = "none";
-        // Показываем портал
         appContent.style.display = "block";
-        // Обновляем имя в шапке
-        userStatus.textContent = name;
         
-        showToast(`Добро пожаловать, ${name}!`);
+        // Обновляем данные в профиле
+        profileName.textContent = user.name;
+        profileGroup.textContent = user.group;
+        topbarStatus.textContent = user.name;
+        
+        // Меняем иконки
+        if (user.role === 'teacher') {
+            profileIcon1.textContent = "👨‍🏫";
+            profileIcon2.textContent = "📚";
+        } else {
+            profileIcon1.textContent = "👨‍🎓";
+            profileIcon2.textContent = "📖";
+        }
+        
+        showToast(`Добро пожаловать, ${user.name}!`);
     }
 
     // Обработка формы преподавателя
@@ -45,34 +69,39 @@ document.addEventListener("DOMContentLoaded", function () {
             const pass = teacherPass.value.trim();
 
             if (login === "teacher" && pass === "teacher") {
-                loginUser("Преподаватель");
+                loginUser({ name: "Преподаватель", group: "Журнал", role: "teacher" });
             } else {
                 showToast("Неверный логин или пароль", "err");
             }
         });
     }
 
-    // Обработка формы студента (для простоты)
+    // Обработка формы студента
     if (studentForm) {
         studentForm.addEventListener("submit", function (e) {
             e.preventDefault();
-            const nameInput = document.getElementById("studentName").value.trim();
-            if (nameInput) {
-                loginUser(nameInput);
+            const name = studentNameInput.value.trim();
+            const group = studentGroupInput.value.trim();
+            
+            if (name && group) {
+                loginUser({ name: name, group: group, role: "student" });
             } else {
-                showToast("Введите ФИО", "err");
+                showToast("Заполните ФИО и Группу", "err");
             }
         });
     }
 
-    // Выход
+    // Обработка выхода
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function () {
-            // Скрываем портал
+            // Скрываем портал, показываем оверлей
             appContent.style.display = "none";
-            // Показываем окно входа
             loginOverlay.style.display = "flex";
-            userStatus.textContent = "Гость";
+            
+            // Очищаем формы
+            if(teacherForm) teacherForm.reset();
+            if(studentForm) studentForm.reset();
+            
             showToast("Вы вышли из системы");
         });
     }
