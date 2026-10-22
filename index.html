@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Учебный портал МДК</title>
+    
+    <!-- Иконка для вкладки браузера (решает ошибку favicon.ico 404) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,29 +26,29 @@
             <!-- Вход студента -->
             <section class="card login-block">
                 <h2>ВХОД СТУДЕНТА</h2>
-                <form id="studentLoginForm" action="#">
+                <!-- onsubmit предотвращает перезагрузку страницы и попадание данных в URL -->
+                <form id="studentLoginForm" action="#" onsubmit="event.preventDefault();">
                     <label for="studentName">ФИО</label>
                     <input type="text" id="studentName" name="studentName" autocomplete="name" placeholder="Иванов Иван" value="Иванов Иван">
                     
                     <label for="studentGroup">Группа</label>
                     <input type="text" id="studentGroup" name="studentGroup" autocomplete="off" placeholder="ТМ-4" value="ТМ-4">
                     
-                    <button type="button" class="btn">Войти</button>
+                    <button type="button" class="btn student-btn">Войти</button>
                 </form>
             </section>
 
             <!-- Вход преподавателя -->
             <section class="card login-block">
                 <h2>ВХОД ПРЕПОДАВАТЕЛЯ</h2>
-                <form id="teacherLoginForm" action="#">
+                <form id="teacherLoginForm" action="#" onsubmit="event.preventDefault();">
                     <label for="teacherLogin">Логин</label>
                     <input type="text" id="teacherLogin" name="username" autocomplete="username" placeholder="teacher" value="teacher">
                     
                     <label for="teacherPass">Пароль</label>
-                    <!-- Добавлен autocomplete="current-password" -->
                     <input id="teacherPass" type="password" name="password" autocomplete="current-password" placeholder="teacher" value="teacher">
                     
-                    <button type="submit" class="btn">Войти в журнал</button>
+                    <button type="submit" class="btn teacher-btn">Войти в журнал</button>
                 </form>
             </section>
         </div>
@@ -57,7 +61,7 @@
             </select>
         </section>
 
-        <!-- Профиль пользователя (обновленная структура) -->
+        <!-- Профиль пользователя -->
         <section class="card user-profile">
             <div class="user-avatar-icons">
                 <span class="xp-badge">🌟 0 XP</span>
@@ -100,6 +104,7 @@
 
     <button class="fab" title="Помощь">💬</button>
 
+    <!-- Подключение скриптов -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="app.js"></script>
 
