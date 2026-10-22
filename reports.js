@@ -2,14 +2,10 @@
 
 window.renderCourseReportsPage = function() {
   var app = document.getElementById("app"); 
-  if (!app) return; 
-  app.innerHTML = ""; 
-  var crumbs = document.getElementById("crumbs");
-  if (crumbs) crumbs.textContent = "Отчеты по курсам";
-  
+  if (!app) return; app.innerHTML = ""; 
+  document.getElementById("crumbs").textContent = "Отчеты по курсам";
   app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
 
-  // ИСПРАВЛЕНО: используем window.state
   if (!window.state.staff) { 
       app.innerHTML += '<div class="module" style="color:var(--err); padding:40px; text-align:center;">⛔ Доступ только для преподавателя.</div>'; 
       return; 
@@ -23,20 +19,15 @@ window.renderCourseReportsPage = function() {
       </div>
   </div>`);
   app.appendChild(topPanel);
-  var contentWrap = el('<div id="reportsContent"></div>'); 
-  app.appendChild(contentWrap);
+  var contentWrap = el('<div id="reportsContent"></div>'); app.appendChild(contentWrap);
 
   var cachedStudents = [];
 
   function renderTable() {
       contentWrap.innerHTML = '<div class="skeleton" style="height:200px;"></div>';
-      
       window.API.getStudents().then(d => {
           contentWrap.innerHTML = "";
-          if (!d || !d.ok || !d.students || !d.students.length) { 
-              contentWrap.innerHTML = "<div class='module'>Нет студентов.</div>"; 
-              return; 
-          }
+          if (!d || !d.ok || !d.students || !d.students.length) { contentWrap.innerHTML = "<div class='module'>Нет студентов.</div>"; return; }
           
           cachedStudents = d.students;
           var table = document.createElement("table"); 
@@ -45,13 +36,13 @@ window.renderCourseReportsPage = function() {
           table.innerHTML = `<thead><tr style="background:var(--card-soft);">
               <th style="padding:10px; border:1px solid var(--border);">Студент</th>
               <th style="padding:10px; border:1px solid var(--border); text-align:center;">XP</th>
-              <th style="padding:10px; border:1px solid var(--border); text-align:center;">Сдано работ</th>
+              <th style="padding:10px; border:1px solid var(--border); text-align:center;">Сдано</th>
               <th style="padding:10px; border:1px solid var(--border); text-align:center;">Действия</th>
           </tr></thead>`;
 
           var tbody = document.createElement("tbody");
 
-          cachedStudents.forEach((s, idx) => {
+          cachedStudents.forEach((s) => {
               var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
               var xp = p.xp || 0; 
               var results = p.results || {};
@@ -63,8 +54,10 @@ window.renderCourseReportsPage = function() {
               tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;"><span style="color:var(--gold); font-weight:bold;">${xp}</span></td>`;
               tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;"><span style="color:var(--ok); font-weight:bold;">${passedWorks}</span></td>`;
               
+              // Добавлена кнопка "- XP"
               tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;">
-                  <button class="btn" style="padding:4px 8px; font-size:12px; background:var(--gold); color:#000;" onclick="window.grantXP('${sKey}')">+ XP</button>
+                  <button class="btn" style="padding:4px 8px; font-size:12px; background:var(--gold); color:#000;" onclick="window.grantXP('${sKey}', false)">+ XP</button>
+                  <button class="btn ghost" style="padding:4px 8px; font-size:12px; border-color:var(--err); color:var(--err);" onclick="window.grantXP('${sKey}', true)">- XP</button>
                   <button class="btn ghost" style="padding:4px 8px; font-size:12px; border-color:var(--err); color:var(--err);" onclick="window.deleteStudent('${sKey}', '${window.escapeHtml(s.name)}')">🗑</button>
               </td>`;
               
@@ -81,54 +74,47 @@ window.renderCourseReportsPage = function() {
   
   document.getElementById("btnRefreshReports").onclick = renderTable;
   
-  // ЭКСПОРТ В EXCEL
   document.getElementById("btnExportExcel").onclick = function() {
       if (!cachedStudents.length) return window.showToast("Нет данных", "err");
-      
-      var csv = "\uFEFF"; // BOM для Excel
-      csv += "ФИО;Группа;XP;Сдано работ;Оценки\n";
-      
+      var csv = "\uFEFFФИО;Группа;XP;Сдано работ;Оценки\n";
       cachedStudents.forEach(s => {
           var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
           var grades = Object.keys(p.results || {}).map(k => `${k}: ${p.results[k].grade}`).join(", ");
           csv += `"${s.name}";"${s.group}";${p.xp || 0};${Object.keys(p.results || {}).length};"${grades}"\n`;
       });
-      
       var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      var link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `Отчет_Студенты_${new Date().toLocaleDateString('ru-RU')}.csv`;
-      link.click();
+      var link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+      link.download = `Отчет_Студенты_${new Date().toLocaleDateString('ru-RU')}.csv`; link.click();
   };
 
   renderTable();
 };
 
-// Добавляем функции, которые вызываются из таблицы
-window.grantXP = function(sKey) {
-    var amount = prompt("Сколько XP начислить?", "50");
-    if (!amount || isNaN(amount)) return;
+// Обновленная функция начисления/списывания XP
+window.grantXP = function(sKey, isSubtract) {
+    var action = isSubtract ? "Списать" : "Начислить";
+    var amountStr = prompt(`Сколько XP ${action.toLowerCase()}?`, "50");
+    if (!amountStr || isNaN(amountStr)) return;
     
-    window.API.grantXP(sKey, parseInt(amount)).then(res => {
+    var amount = parseInt(amountStr);
+    if (isSubtract) amount = -amount; // Делаем число отрицательным для списывания
+
+    window.API.grantXP(sKey, amount).then(res => {
         if (res && res.ok) {
-            window.showToast(`Начислено ${amount} XP!`, "ok");
-            // Обновить таблицу
+            window.showToast(`${action}но ${Math.abs(amount)} XP!`, "ok");
             if (document.getElementById("btnRefreshReports")) document.getElementById("btnRefreshReports").click();
         } else {
-            window.showToast("Ошибка начисления", "err");
+            window.showToast("Ошибка операции", "err");
         }
     });
 };
 
 window.deleteStudent = function(sKey, name) {
-    if (!confirm(`Удалить студента ${name}? Это действие необратимо.`)) return;
-    
+    if (!confirm(`Удалить студента ${name}?`)) return;
     window.API.deleteStudent(sKey).then(res => {
         if (res && res.ok) {
             window.showToast("Студент удален", "ok");
             if (document.getElementById("btnRefreshReports")) document.getElementById("btnRefreshReports").click();
-        } else {
-            window.showToast("Ошибка удаления", "err");
-        }
+        } else { window.showToast("Ошибка удаления", "err"); }
     });
 };
