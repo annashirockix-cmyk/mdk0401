@@ -1,7 +1,6 @@
-const CACHE_NAME = 'mdk-portal-v220';
-
+const CACHE_NAME = 'mdk-portal-v222';
 const ASSETS = [
-    './', './index.html', './style.css', './app.js', './api.js',
+    './', './index.html', './style.css', './app.js', './api.js', './core.js',
     './data-0701.js', './data-0401.js', './journal.js', './games.js', './shop.js'
 ];
 
