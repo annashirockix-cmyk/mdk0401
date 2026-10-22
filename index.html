@@ -29,7 +29,9 @@
       "atkinson": "'Atkinson Hyperlegible', sans-serif",
       "newsreader": "'Newsreader', serif",
       "spectral": "'Spectral', serif",
-      "quattrocento": "'Quattrocento Sans', sans-serif"
+      "quattrocento": "'Quattrocento Sans', sans-serif",
+      "orbitron": "'Orbitron', sans-serif",
+      "sharetech": "'Share Tech Mono', monospace"
     };
     if (savedFont !== "default" && FONT_MAP[savedFont]) {
       var styleEl = document.createElement("style");
@@ -65,19 +67,24 @@
       <p>15.02.16 Технология машиностроения · ПМ.07</p>
     </div>
     <div class="login-grid">
-      <div class="login-card">
+      
+      <!-- Форма студента -->
+      <form class="login-card" id="studentLoginForm" onsubmit="return false;">
         <h3>Вход студента</h3>
-        <label>ФИО <input id="loginName" type="text" placeholder="Иванов Иван"></label>
-        <label>Группа <input id="loginGroup" type="text" placeholder="ТМ-4"></label>
+        <label>ФИО <input id="loginName" type="text" placeholder="Иванов Иван" autocomplete="name" required></label>
+        <label>Группа <input id="loginGroup" type="text" placeholder="ТМ-4" autocomplete="off" required></label>
         <button type="button" id="btnLoginStudent" class="btn" style="width: 100%; margin-top: 10px;">Войти</button>
-      </div>
-      <div class="login-card">
+      </form>
+      
+      <!-- Форма преподавателя -->
+      <form class="login-card" id="teacherLoginForm" onsubmit="return false;">
         <h3>Вход преподавателя</h3>
-        <label>Логин <input id="teacherUser" type="text" placeholder="teacher"></label>
-        <label>Пароль <input id="teacherPass" type="password" placeholder="teacher"></label>
+        <label>Логин <input id="teacherUser" type="text" placeholder="teacher" autocomplete="username" required></label>
+        <label>Пароль <input id="teacherPass" type="password" placeholder="teacher" autocomplete="current-password" required></label>
         <button type="button" id="btnLoginTeacher" class="btn ghost" style="width: 100%; margin-top: 10px;">Войти в журнал</button>
         <p class="login-error" id="teacherLoginError" style="display:none; color:var(--err); margin-top:10px; font-size:13px;"></p>
-      </div>
+      </form>
+
     </div>
   </div>
 </div>
@@ -107,7 +114,7 @@
 <aside class="drawer" id="drawer">
   <div class="drawer-head">
     <div class="drawer-user" style="display:flex; align-items:center;">
-      <span id="userChipAvatar" style="font-size:24px;">👨‍🎓</span>
+      <span id="userChipAvatar" style="font-size:24px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%; overflow:hidden;">👨‍🎓</span>
       <div style="margin-left:10px;">
         <div id="userChipName" style="font-weight:bold;">Гость</div>
         <div id="userChipGroup" style="font-size:12px; color:var(--muted);">Группа</div>
