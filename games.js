@@ -1,79 +1,67 @@
-"use strict";
+window._execGcode = function() {
+    var input = document.getElementById("gcodeInput").value.toUpperCase().trim();
+    var log = document.getElementById("gcodeLog");
+    log.textContent = "";
+    if (!input) return;
 
-// ... (renderArcadePage и startGame оставляем без изменений, они нормальные) ...
+    // Улучшенный парсер: поддерживает G0/G00, G1/G01, G2/G02, G3/G03, X, Y, I, J
+    var match = input.match(/^(G0[0-3])\s*(?:X(-?\d+(?:\.\d+)?))?\s*(?:Y(-?\d+(?:\.\d+)?))?\s*(?:I(-?\d+(?:\.\d+)?))?\s*(?:J(-?\d+(?:\.\d+)?))?/);
+    if (!match) { log.textContent = "Ошибка формата. Пример: G01 X50 Y50"; return; }
 
-function startGcode(container) {
-    container.innerHTML = `<div style="text-align:center;">
-        <h3>📐 G-код Рисование</h3>
-        <p style="font-size:14px; color:var(--muted); margin-bottom:10px;">Вводите: G01 X50 Y-50</p>
-        <div style="overflow-x:auto; display:flex; justify-content:center;">
-            <canvas id="gcodeCanvas" width="300" height="300" style="background:#111; border-radius:8px; border:2px solid var(--border); touch-action:none;"></canvas>
-        </div>
-        <div style="margin-top:15px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-            <input type="text" id="gcodeInput" class="self-input" placeholder="G01 X50 Y50" style="max-width:150px; margin:0;">
-            <button class="btn" onclick="window._execGcode()">Выполнить</button>
-            <button class="btn ghost" onclick="window.startGame('gcode')">Сброс</button>
-        </div>
-        <div id="gcodeLog" style="margin-top:10px; font-size:12px; color:var(--err); height:20px;"></div>
-    </div>`;
+    var cmd = match[1];
+    var targetX = match[2] !== undefined ? parseFloat(match[2]) : null;
+    var targetY = match[3] !== undefined ? parseFloat(match[3]) : null;
+    var iVal = match[4] !== undefined ? parseFloat(match[4]) : null;
+    var jVal = match[5] !== undefined ? parseFloat(match[5]) : null;
 
-    var canvas = document.getElementById("gcodeCanvas");
-    var ctx = canvas.getContext("2d");
-    var currentX = 150, currentY = 150;
+    var newX = targetX !== null ? 150 + targetX : currentX;
+    var newY = targetY !== null ? 150 - targetY : currentY; // Инверсия Y
 
-    function drawGrid() {
-        ctx.clearRect(0,0,300,300);
-        ctx.strokeStyle = "#333"; ctx.lineWidth = 1;
-        for (var i = 0; i <= 300; i += 30) {
-            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 300); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(300, i); ctx.stroke();
-        }
-        ctx.strokeStyle = "#555";
-        ctx.beginPath(); ctx.moveTo(150, 0); ctx.lineTo(150, 300); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, 150); ctx.lineTo(300, 150); ctx.stroke();
+    if (cmd === "G00" || cmd === "G0") {
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+        ctx.setLineDash([5, 5]);
+    } else if (cmd === "G01" || cmd === "G1") {
+        ctx.strokeStyle = "#ff6b3d";
+        ctx.setLineDash([]);
+    } else if (cmd === "G02" || cmd === "G2" || cmd === "G03" || cmd === "G3") {
+        ctx.strokeStyle = "#ff6b3d";
+        ctx.setLineDash([]);
         
-        // Текущая позиция
-        ctx.fillStyle = "var(--accent)";
-        ctx.beginPath(); ctx.arc(currentX, currentY, 4, 0, Math.PI * 2); ctx.fill();
-    }
-    drawGrid();
-
-    window._execGcode = function() {
-        var input = document.getElementById("gcodeInput").value.toUpperCase().trim();
-        var log = document.getElementById("gcodeLog");
-        log.textContent = "";
-        if (!input) return;
-
-        // Простой парсер G00 и G01
-        var match = input.match(/^(G0[0-3])(?:\s*X(-?\d+(?:\.\d+)?))?(?:\s*Y(-?\d+(?:\.\d+)?))?/);
-        if (!match) { log.textContent = "Ошибка формата. Пример: G01 X50 Y50"; return; }
-
-        var cmd = match[1];
-        var targetX = match[2] !== undefined ? parseFloat(match[2]) : null;
-        var targetY = match[3] !== undefined ? parseFloat(match[3]) : null;
-
-        var newX = targetX !== null ? 150 + targetX : currentX;
-        var newY = targetY !== null ? 150 - targetY : currentY; // Инверсия Y
-
-        if (cmd === "G00") {
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
-            ctx.setLineDash([5, 5]);
-        } else if (cmd === "G01") {
-            ctx.strokeStyle = "#ff6b3d";
-            ctx.setLineDash([]);
+        // Если заданы I и J (центр дуги)
+        if (iVal !== null && jVal !== null) {
+            var centerX = currentX + iVal;
+            var centerY = currentY - jVal; // Инверсия Y для канваса
+            var radius = Math.sqrt(iVal*iVal + jVal*jVal);
+            var startAngle = Math.atan2(currentY - centerY, currentX - centerX);
+            var endAngle = Math.atan2(newY - centerY, newX - centerX);
+            
+            ctx.beginPath();
+            // Для G02 (по часовой) anticlockwise = false. Для G03 (против) = true.
+            var anticlockwise = (cmd === "G03" || cmd === "G3");
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle, anticlockwise);
+            ctx.stroke();
+        } else {
+            // Если нет I,J, рисуем прямую (упрощение)
+            ctx.beginPath();
+            ctx.moveTo(currentX, currentY);
+            ctx.lineTo(newX, newY);
+            ctx.stroke();
         }
-
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(currentX, currentY);
-        ctx.lineTo(newX, newY);
-        ctx.stroke();
-
         currentX = newX;
         currentY = newY;
         drawGrid();
         document.getElementById("gcodeInput").value = "";
-    };
-}
+        return;
+    }
 
-// ... (остальные игры startMinesweeper, startTicTacToe и т.д. оставляем как были) ...
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(currentX, currentY);
+    ctx.lineTo(newX, newY);
+    ctx.stroke();
+
+    currentX = newX;
+    currentY = newY;
+    drawGrid();
+    document.getElementById("gcodeInput").value = "";
+};

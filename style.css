@@ -1,215 +1,156 @@
 /* ============================================================
    МДК Портал — Основной файл стилей (style.css)
-   Стиль: Primarium (Тетрадный / Рукописный) + Фиксы для мобилок
    ============================================================ */
-
-/* --- 0. ПОДКЛЮЧЕНИЕ ШРИФТОВ --- */
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+US:wght@100..400&display=swap');
-
-/* Ваши локальные шрифты из папки fonts/ */
-@font-face { font-family: 'Peter Ivanovitsch'; src: url('fonts/ofont.ru_Peter Ivanovitsch.ttf'); }
-@font-face { font-family: 'Another Danger'; src: url('fonts/ofont.ru_Another Danger.ttf'); }
-@font-face { font-family: 'Tiny5'; src: url('fonts/ofont.ru_Tiny5.ttf'); }
-@font-face { font-family: 'Scumbria'; src: url('fonts/ofont.ru_Scumbria.ttf'); }
-@font-face { font-family: 'ST-Cherry'; src: url('fonts/ofont.ru_ST-Cherry.ttf'); }
-@font-face { font-family: 'TagType'; src: url('fonts/ofont.ru_TagType.ttf'); }
 
 /* --- 1. ПЕРЕМЕННЫЕ И ТЕМЫ --- */
 :root {
-  /* Цвета Primarium */
-  --bg: #f7f7f7;
-  --card: #ffffff;
-  --card-soft: #eef3f9;
-  --border: #a3b8d8;
-  --text: #0044cc;
-  --text-soft: #335cbf;
-  --muted: #7a92b8;
-  
-  --accent: #0044cc;
-  --accent-soft: #e0ebff;
-  --ok: #2e9e5e;
-  --err: #cc0000;
-  --gold: #ff80bf; /* Розовый акцент из Primarium */
-  
-  --shadow: 2px 4px 12px rgba(0, 68, 204, 0.08);
-  --font-main: 'Playwrite US', 'Segoe UI', cursive, sans-serif;
-  --line-height: 1.84;
+  --bg: #0e0e10; --card: #171719; --card-soft: #1c1c1f; --border: #2a2a2e;
+  --text: #e8e6e1; --text-soft: #c8c5bd; --muted: #8f8b80;
+  --accent: #ff6b3d; --accent-soft: #2a1c15; --ok: #58c98a; --err: #ff6e5e; --gold: #ffd700;
+  --shadow: 0 4px 12px rgba(0,0,0,0.3);
+  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-/* Темная тема (адаптированная) */
-[data-theme="dark"] {
-  --bg: #1a1a24;
-  --card: #222233;
-  --card-soft: #2d2d42;
-  --border: #445588;
-  --text: #e0e8ff;
-  --text-soft: #b3c4ff;
-  --muted: #8899cc;
-  --accent: #5577ff;
-  --accent-soft: #2a3366;
-  --gold: #ff80bf;
-  --shadow: 2px 4px 12px rgba(0,0,0,0.4);
+[data-theme="light"] {
+  --bg: #f5f2ec; --card: #ffffff; --card-soft: #f0ece4; --border: #dcd7cd;
+  --text: #2c2c2c; --text-soft: #4a4a4a; --muted: #7a776e;
+  --accent: #c14a2a; --accent-soft: #f7e4dd; --ok: #2e9e5e; --err: #d93838;
+  --gold: #d4a000; --shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* Тема Ury Light */
-[data-theme="ury-light"] {
-  --bg: #ffffff;
-  --card: #f9f9f9;
-  --card-soft: #f0f0f0;
-  --border: #d1d1d1;
-  --text: #252525;
-  --text-soft: #515151;
-  --muted: #888888;
-  --accent: #000000;
-  --accent-soft: #e0e0e0;
-  --gold: #d4a000;
-  --font-main: 'Playwrite US', 'Quattrocento Sans', sans-serif;
+[data-theme="neon"] {
+  --bg: #09090b; --card: #18181b; --card-soft: #27272a; --border: #3f3f46;
+  --text: #f4f4f5; --text-soft: #d4d4d8; --muted: #a1a1aa;
+  --accent: #ff00cc; --accent-soft: #4a003a; --ok: #00ffcc; --err: #ff0055; --gold: #fbbf24;
 }
 
-/* --- 2. БАЗОВЫЕ СТИЛИ (Тетрадный фон) --- */
+[data-theme="matrix"], [data-theme="hacker"] {
+  --bg: #000000; --card: #0a0a0a; --card-soft: #111111; --border: #003300;
+  --text: #00ff00; --text-soft: #00cc00; --muted: #008800;
+  --accent: #00ff00; --accent-soft: #002200; --ok: #00ff00; --err: #ff0000; --gold: #00ff00;
+  --font-main: 'Share Tech Mono', monospace;
+}
+[data-theme="hacker"] body {
+  background-image: linear-gradient(rgba(0, 255, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+[data-theme="cyberpunk"] {
+  --bg: #0a0015; --card: #150022; --card-soft: #200033; --border: #ff00ff;
+  --text: #00ffff; --text-soft: #ff00ff; --muted: #887799;
+  --accent: #ff00ff; --accent-soft: rgba(255, 0, 255, 0.2); --ok: #00ffff; --err: #ff0055; --gold: #ffcc00;
+  --font-main: 'Orbitron', sans-serif;
+}
+[data-theme="cyberpunk"] body {
+  background-image: radial-gradient(circle at 50% 50%, #200033 0%, #0a0015 100%);
+}
+[data-theme="cyberpunk"] .btn {
+  text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--accent); box-shadow: 0 0 10px var(--accent-soft);
+}
+
+/* --- 2. БАЗОВЫЕ СТИЛИ --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: var(--font-main); 
-  background-color: var(--bg); 
-  color: var(--text);
-  line-height: var(--line-height); 
-  -webkit-font-smoothing: antialiased; 
-  transition: background-color 0.3s, color 0.3s;
-  
-  /* Рисуем линии тетради (как в Primarium) */
-  background-image: linear-gradient(rgba(0, 68, 204, 0.05) 1px, transparent 1px);
-  background-size: 100% var(--line-height);
+  font-family: var(--font-main); background-color: var(--bg); color: var(--text);
+  line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background-color 0.3s, color 0.3s;
   background-attachment: fixed;
-  
-  min-height: 100dvh; 
-  overscroll-behavior-y: none;
 }
-
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; }
 input, textarea, select { font-family: inherit; }
-h1, h2, h3, h4, h5, h6 { 
-  line-height: 1.2; 
-  margin-bottom: 0.5em; 
-  text-transform: uppercase; 
-  font-weight: 400; /* Рукописный шрифт лучше смотрится без жирности */
-  letter-spacing: 1px;
-}
+h1, h2, h3, h4, h5, h6 { line-height: 1.2; margin-bottom: 0.5em; }
 p { margin-bottom: 1em; }
 ul, ol { margin-bottom: 1em; padding-left: 20px; }
 code { font-family: monospace; background: var(--card-soft); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
 
-/* --- 3. ТОПБАР (Пунктирная линия) --- */
+/* --- 3. ТОПБАР --- */
 .topbar {
   display: flex; align-items: center; gap: 12px; padding: 12px 20px;
-  border-bottom: 2px dotted var(--accent); 
-  background: var(--bg);
-  position: sticky; top: 0; z-index: 100; flex-wrap: wrap;
-  padding-top: calc(12px + env(safe-area-inset-top));
+  border-bottom: 1px solid var(--border); background: var(--card);
+  position: sticky; top: 0; z-index: 100; flex-wrap: wrap; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-.burger-btn { 
-  width: 42px; height: 42px; border-radius: 8px; border: 1px solid var(--accent); 
-  background: transparent; cursor: pointer; display: flex; flex-direction: column; 
-  justify-content: center; align-items: center; gap: 5px; transition: 0.2s; 
-}
-.burger-btn span { display: block; width: 20px; height: 2px; background: var(--accent); border-radius: 2px; }
-.brand-badge { font-size: 14px; padding: 6px 10px; border-radius: 4px; background: var(--accent); color: #fff; font-weight: bold; letter-spacing: 1px; }
-.status-pill { font-size: 13px; font-weight: bold; color: var(--accent); padding: 6px 12px; border-radius: 4px; background: var(--accent-soft); border: 1px solid var(--accent); white-space: nowrap; }
+.burger-btn { width: 42px; height: 42px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-soft); cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; transition: 0.2s; }
+.burger-btn:hover { background: var(--border); }
+.burger-btn span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
+.brand-badge { font-size: 14px; padding: 6px 10px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-weight: bold; letter-spacing: 0.5px; }
+.status-pill { font-size: 13px; font-weight: bold; color: var(--accent); padding: 6px 12px; border-radius: 8px; background: var(--card-soft); border: 1px solid var(--border); white-space: nowrap; }
 
 /* --- 4. БОКОВОЕ МЕНЮ --- */
-.drawer-overlay { position: fixed; inset: 0; background: rgba(0, 68, 204, 0.3); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; backdrop-filter: blur(2px); }
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; backdrop-filter: blur(2px); }
 .drawer-overlay.open { opacity: 1; pointer-events: auto; }
-.drawer { 
-  position: fixed; top: 0; left: 0; bottom: 0; width: 300px; background: var(--card); z-index: 1001; 
-  transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-  display: flex; flex-direction: column; border-right: 2px solid var(--accent);
-  height: 100dvh; padding-bottom: env(safe-area-inset-bottom);
-}
+.drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 300px; background: var(--card); z-index: 1001; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: 4px 0 20px rgba(0,0,0,0.2); }
 .drawer.open { transform: translateX(0); }
-.drawer-head { padding: 20px; border-bottom: 2px dotted var(--border); display: flex; gap: 12px; align-items: center; justify-content: space-between; }
-.drawer-close { background: none; border: none; color: var(--accent); font-size: 20px; cursor: pointer; }
+.drawer-head { padding: 20px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; align-items: center; justify-content: space-between; background: var(--card-soft); }
+.drawer-close { background: none; border: none; color: var(--text); font-size: 20px; cursor: pointer; }
 .drawer-nav { flex: 1; overflow-y: auto; padding: 10px 0; }
 .drawer-item { display: flex; align-items: center; gap: 10px; padding: 14px 20px; color: var(--text); border-left: 3px solid transparent; cursor: pointer; transition: 0.2s; }
-.drawer-item:hover { background: var(--accent-soft); border-left-color: var(--accent); }
+.drawer-item:hover { background: var(--card-soft); border-left-color: var(--accent); }
 
-/* --- 5. ОСНОВНОЙ КОНТЕНТ (Бумажные листы) --- */
-main#app { padding: 32px 24px calc(100px + env(safe-area-inset-bottom)); max-width: 1100px; margin: 0 auto; min-height: 80vh; }
-
-/* Стиль "Бумажного листа" для всех блоков */
-.hero, .module { 
-  background: var(--card); 
-  border-left: 3px solid var(--accent); 
-  border-radius: 0 12px 12px 0; 
-  padding: 24px; 
-  margin-bottom: 24px; 
-  box-shadow: var(--shadow); 
-  position: relative;
-}
-.hero { border-left-color: var(--gold); text-align: left; }
-.hero h1 { font-size: 2.2rem; margin-bottom: 10px; color: var(--accent); }
-.hero p { color: var(--text-soft); font-size: 1.1rem; }
-.steps-title { font-weight: bold; margin: 30px 0 15px; color: var(--accent); text-transform: uppercase; font-size: 13px; letter-spacing: 2px; }
+/* --- 5. ОСНОВНОЙ КОНТЕНТ --- */
+main#app { padding: 32px 24px 100px; max-width: 1100px; margin: 0 auto; min-height: 80vh; }
+.hero, .module { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); }
+.hero { text-align: center; padding: 40px 24px; }
+.hero h1 { font-size: 2rem; margin-bottom: 10px; }
+.hero p { color: var(--muted); font-size: 1.1rem; }
+.steps-title { font-weight: bold; margin: 30px 0 15px; color: var(--accent); text-transform: uppercase; font-size: 13px; letter-spacing: 1px; }
 
 /* --- 6. КНОПКИ --- */
-.btn { 
-  display: inline-block; padding: 10px 20px; border-radius: 4px; font-weight: 600; font-size: 13px; 
-  text-align: center; background: var(--accent); color: #fff; border: none; cursor: pointer; 
-  transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-}
-.btn:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0px rgba(0,0,0,0.15); }
-.btn:active { transform: translate(1px, 1px); box-shadow: none; }
+.btn { display: inline-block; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; text-align: center; background: var(--accent); color: #000; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+[data-theme="dark"] .btn, [data-theme="neon"] .btn, [data-theme="matrix"] .btn, [data-theme="hacker"] .btn { color: #fff; }
+[data-theme="hacker"] .btn { color: #000; }
+[data-theme="cyberpunk"] .btn { color: #fff; }
+.btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.btn.ghost { background: transparent; border: 2px solid var(--accent); color: var(--accent); box-shadow: none; }
-.btn.ghost:hover { background: var(--accent-soft); }
+.btn.ghost { background: transparent; border: 1px solid var(--border); color: var(--text); box-shadow: none; }
+.btn.ghost:hover { background: var(--card-soft); }
 
 /* --- 7. КАРТОЧКИ ТЕМ --- */
-.topic { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; align-items: center; cursor: pointer; margin-bottom: 12px; transition: 0.2s; }
-.topic:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: var(--shadow); }
+.topic { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; align-items: center; cursor: pointer; margin-bottom: 12px; transition: 0.2s; }
+.topic:hover { border-color: var(--accent); transform: translateX(4px); }
 
 /* --- 8. ФОРМЫ И ТЕСТЫ --- */
-.self-input { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; outline: none; transition: 0.2s; }
-.self-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.self-input { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; outline: none; transition: 0.2s; }
+.self-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 
-/* --- 9. ТАБЛИЦЫ (Скролл на мобилках) --- */
+/* --- 9. ТАБЛИЦЫ --- */
 .journal-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; background: var(--card); }
-.journal-table th { background: var(--accent-soft); padding: 14px 12px; font-weight: 600; border-bottom: 2px solid var(--accent); }
+.journal-table th { background: var(--card-soft); padding: 14px 12px; font-weight: 600; border-bottom: 2px solid var(--border); }
 .journal-table td { padding: 14px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-#journalContent, .module, .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 /* --- 10. УВЕДОМЛЕНИЯ --- */
 .toast-container { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-.toast { background: var(--accent); color: #fff; padding: 12px 20px; border-radius: 4px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: slideUp 0.3s; pointer-events: auto; font-size: 14px;}
-.toast.ok { background: var(--ok); }
-.toast.err { background: var(--err); }
+.toast { background: var(--card); border: 1px solid var(--border); padding: 12px 20px; border-radius: 8px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.2); animation: slideUp 0.3s; pointer-events: auto; }
+.toast.ok { border-color: var(--ok); color: var(--ok); }
+.toast.err { border-color: var(--err); color: var(--err); }
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 /* --- 11. ЭКРАН ВХОДА --- */
 .login-overlay { 
-  position: fixed; top: 0; left: 0; width: 100%; height: 100dvh;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: var(--bg); z-index: 99999;
-  display: none; overflow-y: auto; padding: 20px 10px; padding-bottom: env(safe-area-inset-bottom);
+  display: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 10px;
 }
 .login-shell { 
   width: 100%; max-width: 800px; background: var(--card); padding: 30px; 
-  border-radius: 8px; border-left: 4px solid var(--accent); box-shadow: 0 10px 30px rgba(0,68,204,0.15); 
-  margin: 0 auto; 
+  border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+  margin: 0 auto;
 }
 .login-grid { display: flex; gap: 20px; flex-wrap: wrap; }
-.login-card { background: var(--bg); padding: 20px; border-radius: 8px; flex: 1; min-width: 280px; border: 1px solid var(--border); }
-.login-card input { width: 100%; padding: 12px; margin-bottom: 16px; border-radius: 4px; border: 1px solid var(--border); background: var(--card); color: var(--text); outline: none; }
+.login-card { background: var(--card-soft); padding: 20px; border-radius: 12px; flex: 1; min-width: 280px; border: 1px solid var(--border); }
+.login-card input { width: 100%; padding: 12px; margin-bottom: 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; }
 
-/* --- 12. АДАПТИВНОСТЬ (Для Андроид и Айфон) --- */
+/* --- 12. АДАПТИВНОСТЬ --- */
 @media (max-width: 768px) {
-  .topbar { gap: 8px; padding: 8px 10px; padding-top: calc(8px + env(safe-area-inset-top)); justify-content: space-between; }
-  .topbar .brand-badge { font-size: 12px; padding: 4px 8px; }
-  #mdkSelector { max-width: 100%; width: 100%; order: 3; margin-left: 0; margin-top: 5px; font-size: 14px; padding: 8px; }
-  .topbar-status { margin-left: auto; }
-  
-  main#app { padding: 15px 10px calc(80px + env(safe-area-inset-bottom)); }
+  .topbar { gap: 6px; padding: 8px 10px; }
+  #mdkSelector { font-size: 12px; padding: 4px 6px; max-width: 130px; }
+  main#app { padding: 15px 10px 80px; }
   .hero { padding: 20px 15px; }
-  .hero h1 { font-size: 1.5rem; }
+  .hero h1 { font-size: 1.4rem; }
   .module { padding: 15px; }
   
   .login-shell { padding: 20px 15px; }
@@ -218,37 +159,35 @@ main#app { padding: 32px 24px calc(100px + env(safe-area-inset-bottom)); max-wid
   
   .drawer { width: 85vw; }
   #asFab { width: 50px !important; height: 50px !important; font-size: 24px !important; bottom: 15px !important; right: 15px !important; }
-  .tab { padding: 6px 12px; font-size: 13px; }
-  .journal-table th, .journal-table td { padding: 6px; font-size: 12px; }
 }
 
 /* --- 13. ВКЛАДКИ И АККОРДЕОН --- */
 .tab {
-    padding: 8px 16px; border-radius: 4px; border: 1px solid var(--accent);
-    background: transparent; color: var(--accent); cursor: pointer;
-    font-weight: 600; transition: 0.2s; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;
+    padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--card-soft); color: var(--text); cursor: pointer;
+    font-weight: 600; transition: 0.2s;
 }
-.tab:hover { background: var(--accent-soft); }
-.tab.active { background: var(--accent); color: #fff; }
+.tab:hover { border-color: var(--accent); }
+.tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-.lec-accordion { background: var(--card); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 12px; overflow: hidden; }
+.lec-accordion { background: var(--card-soft); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
 .lec-accordion summary { padding: 15px 20px; font-weight: bold; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px; transition: background 0.2s; }
 .lec-accordion summary::-webkit-details-marker { display: none; }
-.lec-accordion summary:hover { background: var(--accent-soft); }
+.lec-accordion summary:hover { background: var(--border); }
 .lec-accordion summary::before { content: "▶"; font-size: 12px; color: var(--accent); transition: transform 0.2s; }
 .lec-accordion[open] summary::before { transform: rotate(90deg); }
-.lec-accordion[open] summary { border-bottom: 1px dotted var(--border); background: var(--accent-soft); }
-.lec-content { padding: 20px; background: var(--card); line-height: var(--line-height); }
-.lec-code { color: var(--gold); font-size: 14px; }
+.lec-accordion[open] summary { border-bottom: 1px solid var(--border); background: var(--border); }
+.lec-content { padding: 20px; background: var(--card); line-height: 1.6; }
+.lec-code { color: var(--accent); font-size: 14px; }
 
-/* --- 14. КАРТОЧКИ ПОЛЕЗНЫХ МАТЕРИАЛОВ --- */
+/* --- 14. НОВЫЕ СТИЛИ ДЛЯ ПОЛЕЗНЫХ МАТЕРИАЛОВ (КАРТОЧКИ) --- */
 .links-list { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
 .link-card {
   display: flex; align-items: center; gap: 15px;
-  background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 4px;
+  background: var(--card-soft); border: 1px solid var(--border); border-radius: 8px;
   padding: 15px; text-decoration: none; color: var(--text); transition: all 0.2s ease;
 }
-.link-card:hover { border-color: var(--accent); transform: translateX(5px); box-shadow: var(--shadow); }
+.link-card:hover { border-color: var(--accent); transform: translateX(5px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 .link-card-icon { font-size: 28px; flex-shrink: 0; }
 .link-card-body { flex: 1; }
 .link-card-title { font-weight: bold; font-size: 16px; color: var(--accent); margin-bottom: 4px; }
@@ -257,7 +196,7 @@ main#app { padding: 32px 24px calc(100px + env(safe-area-inset-bottom)); max-wid
 .link-card-arrow { font-size: 20px; color: var(--muted); flex-shrink: 0; }
 
 .book-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 15px; }
-.book-card { display: flex; gap: 15px; background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 15px; }
+.book-card { display: flex; gap: 15px; background: var(--card-soft); border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
 .book-cover { font-size: 40px; flex-shrink: 0; }
 .book-body { flex: 1; }
 .book-title { font-weight: bold; font-size: 16px; color: var(--accent); margin-bottom: 4px; }
@@ -265,40 +204,73 @@ main#app { padding: 32px 24px calc(100px + env(safe-area-inset-bottom)); max-wid
 .book-meta { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
 .book-desc { font-size: 13px; color: var(--text-soft); line-height: 1.4; }
 
-/* --- 15. МОДАЛЬНОЕ ОКНО ТЕМ --- */
+/* Стили для скелетон-загрузки */
+.skeleton { background: linear-gradient(90deg, var(--card-soft) 25%, var(--border) 50%, var(--card-soft) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 8px; }
+@keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+/* --- 15. НОВЫЕ ТЕМЫ ИЗ ФАЙЛОВ URY --- */
+[data-theme="ury-light"] {
+  --bg: #FFFFFF; --card: #f3f2ec; --card-soft: #e5e5e5; --border: #d1d1d1;
+  --text: #252525; --text-soft: #515151; --muted: #888888;
+  --accent: #000000; --accent-soft: #e0e0e0; --ok: #2e9e5e; --err: #d93838; --gold: #d4a000;
+}
+[data-theme="ury-dark"] {
+  --bg: #2b2b2b; --card: #1a1a1a; --card-soft: #383838; --border: #444444;
+  --text: #ebebeb; --text-soft: #b8b8b8; --muted: #888888;
+  --accent: #ffffff; --accent-soft: #444444; --ok: #58c98a; --err: #ff6e5e; --gold: #ffd700;
+}
+[data-theme="ury-sepia"] {
+  --bg: #f3f2ec; --card: #ffffff; --card-soft: #e8e5dc; --border: #d6d1c4;
+  --text: #252525; --text-soft: #515151; --muted: #7a776e;
+  --accent: #000000; --accent-soft: #f7e4dd; --ok: #2e9e5e; --err: #d93838; --gold: #d4a000;
+}
+
+/* --- 16. ГЛОБАЛЬНЫЕ ИСПРАВЛЕНИЯ ДЛЯ МОБИЛЬНЫХ (iOS/Android) --- */
+body { min-height: 100dvh; overscroll-behavior-y: none; }
+main#app { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+.topbar { padding-top: calc(12px + env(safe-area-inset-top)); }
+.drawer { padding-bottom: env(safe-area-inset-bottom); height: 100dvh; }
+.login-overlay { height: 100dvh; padding-bottom: env(safe-area-inset-bottom); }
+
+/* Убираем горизонтальный скролл и фиксим тач-скролл в таблицах */
+#journalContent, .module, .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 768px) {
+    /* Улучшенный вид на мобилках */
+    .topbar { flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+    .topbar .brand-badge { font-size: 12px; padding: 4px 8px; }
+    #mdkSelector { max-width: 100%; width: 100%; order: 3; margin-left: 0; margin-top: 5px; font-size: 14px; padding: 8px; }
+    .topbar-status { margin-left: auto; }
+    .hero h1 { font-size: 1.5rem; }
+    .hero p { font-size: 0.9rem; }
+    .tab { padding: 6px 12px; font-size: 13px; }
+    .journal-table th, .journal-table td { padding: 6px; font-size: 12px; }
+    .btn { padding: 10px 16px; font-size: 14px; }
+    .login-shell { margin: 10px auto; }
+}
+
+/* --- 17. СТИЛИ ДЛЯ НОВЫХ ИГР --- */
+.gcode-canvas { background: #111; border: 2px solid var(--border); border-radius: 8px; display: block; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.3); touch-action: none; }
+.diag-part { cursor: pointer; transition: 0.2s; border-radius: 8px; padding: 10px; text-align: center; background: var(--card-soft); border: 2px solid transparent; margin: 5px; }
+.diag-part:hover { border-color: var(--accent); transform: scale(1.02); }
+/* --- 18. МОДАЛЬНОЕ ОКНО ТЕМ --- */
 .theme-modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100dvh;
-    background: rgba(0, 68, 204, 0.4); backdrop-filter: blur(4px);
-    z-index: 99999; display: flex; justify-content: center; align-items: center;
-    opacity: 0; pointer-events: none; transition: 0.3s;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999999;
+    display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s;
 }
 .theme-modal-overlay.open { opacity: 1; pointer-events: auto; }
-.theme-modal {
-    background: var(--card); border-left: 4px solid var(--accent); border-radius: 0 12px 12px 0;
-    padding: 24px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3); transform: translateY(20px); transition: 0.3s;
-}
-.theme-modal-overlay.open .theme-modal { transform: translateY(0); }
-.theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; margin-top: 20px; }
-.theme-card {
-    padding: 15px; border-radius: 4px; border: 1px solid var(--border);
-    cursor: pointer; text-align: center; background: var(--bg); transition: 0.2s;
-}
-.theme-card:hover { transform: scale(1.05); border-color: var(--accent); }
-.theme-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
-.theme-preview { height: 60px; border-radius: 4px; margin-bottom: 10px; border: 1px solid var(--border); }
+.theme-modal { background: var(--card); padding: 24px; border-radius: 16px; width: 90%; max-width: 600px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto;}
+.theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; margin-top: 20px; }
+.theme-card { border: 2px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; }
+.theme-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.theme-card.active { border-color: var(--accent); background: var(--accent-soft); }
+.theme-preview { width: 100%; height: 60px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; margin-bottom: 8px; }
 
-/* --- 16. ФОНЫ ДЛЯ СЕРТИФИКАТА --- */
-.cert-bg-option {
-    width: 80px; height: 110px; object-fit: cover; cursor: pointer;
-    border-radius: 4px; border: 2px solid transparent; transition: 0.2s;
-}
-.cert-bg-option:hover { transform: scale(1.05); }
-.cert-bg-option.active { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 68, 204, 0.3); }
-
-/* --- 17. СКЕЛЕТОН ЗАГРУЗКИ --- */
-.skeleton { background: linear-gradient(90deg, var(--card-soft) 25%, var(--border) 50%, var(--card-soft) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 4px; }
-@keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-/* --- 18. ИГРЫ --- */
-.gcode-canvas { background: #fff; border: 2px solid var(--accent); border-radius: 4px; display: block; margin: 0 auto; box-shadow: var(--shadow); touch-action: none; }
+/* --- 18. МОДАЛЬНОЕ ОКНО ТЕМ --- */
+.theme-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(2px); }
+.theme-modal-overlay.open { opacity: 1; pointer-events: auto; }
+.theme-modal { background: var(--card); padding: 24px; border-radius: 16px; width: 90%; max-width: 600px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+.theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; margin-top: 20px; }
+.theme-card { border: 2px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; background: var(--card-soft); }
+.theme-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.theme-card.active { border-color: var(--accent); background: var(--accent-soft); }
+.theme-preview { width: 100%; height: 60px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin-bottom: 8px; border: 1px solid rgba(0,0,0,0.1); }
