@@ -12,9 +12,10 @@ window.renderSchedulePage = function(){
   
   app.appendChild(el(`<section class="hero"><h1>Расписание занятий (1 семестр)</h1><p>${isTeacher ? 'Режим редактирования. Нажмите "Сохранить" после изменений.' : 'Расписание на семестр'}</p></section>`));
 
+  // Оставляем только нужные группы
   var groups = ["ТМ 2-5", "ТМ 2-6", "ТМ 3-4", "ТМ 4-3"];
 
-  // ИСПРАВЛЕННЫЙ БЛОК ПОНЕДЕЛЬНИКА
+  // Структура дней и пар (разное время в пн и остальные дни)
   var scheduleStructure = [
     { 
       name: "ПОНЕДЕЛЬНИК", 
@@ -81,7 +82,9 @@ window.renderSchedulePage = function(){
     }
   ];
 
+  // Предзаполненные данные из Excel (чтобы не вводить вручную)
   var defaultData = {
+    // ПОНЕДЕЛЬНИК
     "ПОНЕДЕЛЬНИК_8.00-8.45_ТМ 2-5": { sub1: "Разговор о важном", sub2: "" },
     "ПОНЕДЕЛЬНИК_8.00-8.45_ТМ 2-6": { sub1: "Разговор о важном", sub2: "" },
     "ПОНЕДЕЛЬНИК_8.00-8.45_ТМ 3-4": { sub1: "Разговор о важном", sub2: "" },
@@ -129,7 +132,7 @@ window.renderSchedulePage = function(){
     "ВТОРНИК_13.25-15.00_ТМ 4-3": { sub1: "НАЛАДКА\nСБОРКА УЗЛОВ", sub2: "" },
 
     "ВТОРНИК_15.10-16.45_ТМ 2-5": { sub1: "ИСТОРИЯ\nАлексеева", sub2: "" },
-
+    
     // СРЕДА
     "СРЕДА_8.00-9.35_ТМ 2-5": { sub1: "МАТЕМАТИКА\nЧеремушкина", sub2: "" },
     "СРЕДА_8.00-9.35_ТМ 2-6": { sub1: "ИСТОРИЯ\nАлексеева", sub2: "" },
@@ -200,6 +203,7 @@ window.renderSchedulePage = function(){
     if (res && res.ok && res.schedule) {
       try { 
           var parsed = JSON.parse(res.schedule); 
+          // Если данных с сервера нет, используем дефолтные
           if (Object.keys(parsed).length === 0) {
               scheduleData = JSON.parse(JSON.stringify(defaultData));
           } else {
@@ -237,15 +241,18 @@ window.renderSchedulePage = function(){
       times.forEach((timeObj, timeIdx) => {
         tableHtml += `<tr>`;
         
+        // Ячейка дня (объединяем строки)
         if (timeIdx === 0) {
           tableHtml += `<td rowspan="${times.length}" style="border:1px solid var(--border); font-weight:bold; background:var(--card-soft); vertical-align:middle; writing-mode:vertical-rl; transform:rotate(180deg);">${day}</td>`;
         }
 
+        // Ячейка времени + номер пары
         tableHtml += `<td style="border:1px solid var(--border); padding:4px; font-size:12px;">
             <b>${timeObj.t}</b><br>
             <span style="font-size:10px; color:var(--muted);">${timeObj.label}</span>
         </td>`;
 
+        // Ячейки для групп
         groups.forEach(group => {
           var cellKey = `${day}_${timeObj.t}_${group}`;
           var cellData = scheduleData[cellKey] || { sub1: "", sub2: "" };
