@@ -1,115 +1,180 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Учебный портал МДК</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<!-- Оптимизация под мобильные (включая iPhone с "челкой") -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Учебный портал МДК</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+
+<!-- Шрифты для магазина (Ury) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Newsreader:wght@400;700&family=Quattrocento+Sans:wght@400;700&family=Spectral:wght@400;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Применение сохранённой темы и шрифта ДО загрузки body -->
+<script>
+  try {
+    var savedTheme = localStorage.getItem("mdk.theme_active") || "default";
+    if (savedTheme !== "default") {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    } else {
+      document.documentElement.setAttribute("data-theme", localStorage.getItem("mdk.theme") || "dark");
+    }
+
+    var savedFont = localStorage.getItem("mdk.font") || "default";
+    var FONT_MAP = {
+      "atkinson": "'Atkinson Hyperlegible', sans-serif",
+      "newsreader": "'Newsreader', serif",
+      "spectral": "'Spectral', serif",
+      "quattrocento": "'Quattrocento Sans', sans-serif"
+    };
+    if (savedFont !== "default" && FONT_MAP[savedFont]) {
+      var styleEl = document.createElement("style");
+      styleEl.id = "customFontStyle";
+      styleEl.textContent = "body, button, input, textarea, select { font-family: " + FONT_MAP[savedFont] + " !important; }";
+      document.head.appendChild(styleEl);
+    }
+  } catch(e) {}
+</script>
+
+<!-- Стили для печати сертификатов -->
+<style>
+    @media print {
+        body * { visibility: hidden; }
+        #printable-cert, #printable-cert *, #printable-supplement, #printable-supplement * { visibility: visible; }
+        #printable-cert { position: absolute; left: 0; top: 0; width: 100%; page-break-after: always; margin: 0; padding: 0; box-shadow: none; border-radius: 0; background-size: 100% 100% !important; }
+        #printable-supplement { position: absolute; left: 0; top: 0; width: 100%; page-break-before: always; background-size: 100% 100% !important; }
+        .no-print { display: none !important; }
+        .topbar, .drawer, .drawer-overlay, .toast-container, #asFab { display: none !important; }
+        main#app { padding: 0 !important; margin: 0 !important; }
+        body { background: #fff; margin: 0; padding: 0; }
+    }
+</style>
 </head>
-<body data-theme="hacker">
+<body>
 
-    <!-- ЭКРАН ВХОДА (Показывается, пока не вошли) -->
-    <div class="login-overlay" id="loginOverlay">
-        <div class="login-shell">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2 style="color: var(--accent); margin-bottom: 5px;">ПОРТАЛ МДК</h2>
-                <p style="color: var(--text-soft); font-size: 14px;">ОПЕРАТОР СТАНКОВ С ПУ</p>
-            </div>
-            
-            <div class="login-grid">
-                <!-- Вход студента -->
-                <div class="login-card">
-                    <div class="steps-title" style="margin-top: 0;">ВХОД СТУДЕНТА</div>
-                    <form id="studentForm">
-                        <input type="text" id="studentName" name="studentName" autocomplete="name" placeholder="ФИО (Иванов Иван)">
-                        <input type="text" id="studentGroup" name="studentGroup" autocomplete="off" placeholder="Группа (ТМ-4)">
-                        <button type="submit" class="btn" style="width: 100%;">Войти</button>
-                    </form>
-                </div>
-
-                <!-- Вход преподавателя -->
-                <div class="login-card">
-                    <div class="steps-title" style="margin-top: 0;">ВХОД ПРЕПОДАВАТЕЛЯ</div>
-                    <form id="teacherForm">
-                        <input type="text" id="teacherLogin" name="username" autocomplete="username" placeholder="Логин" value="teacher">
-                        <input type="password" id="teacherPass" name="password" autocomplete="current-password" placeholder="Пароль" value="teacher">
-                        <button type="submit" class="btn" style="width: 100%;">Войти в журнал</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+<!-- ОКНО ВХОДА -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-shell">
+    <div class="login-brand" style="text-align: center; margin-bottom: 20px;">
+      <span class="brand-badge">ПОРТАЛ МДК</span>
+      <h1>Оператор станков с ПУ</h1>
+      <p>15.02.16 Технология машиностроения · ПМ.07</p>
     </div>
-
-    <!-- ОСНОВНОЙ ПОРТАЛ (Показывается после входа) -->
-    <div id="appContent" style="display: none;">
-        
-        <!-- Верхняя панель -->
-        <div class="topbar">
-            <div class="brand-badge">ПОРТАЛ МДК</div>
-            <div class="status-pill" id="topbarStatus">Преподаватель</div>
-            <button class="btn ghost" id="logoutBtn" style="margin-left: auto;">Выйти</button>
-        </div>
-
-        <main id="app">
-            
-            <!-- Заголовок -->
-            <div class="hero">
-                <h1>ОПЕРАТОР СТАНКОВ С ПУ</h1>
-                <p>15.02.16 Технология машиностроения · ПМ.07</p>
-            </div>
-
-            <!-- Выбор модуля -->
-            <div class="module">
-                <div class="steps-title" style="margin-top: 0;">МДК Портал</div>
-                <select class="self-input" style="margin-bottom: 0;">
-                    <option value="mdk-07-01">МДК 07.01 (ЧПУ)</option>
-                </select>
-            </div>
-
-            <!-- Профиль пользователя -->
-            <div class="module" style="display: flex; align-items: center; gap: 20px;">
-                <div style="text-align: center; min-width: 80px;">
-                    <div class="status-pill" style="margin-bottom: 8px; font-size: 12px;">🌟 0 XP</div>
-                    <div style="font-size: 24px;">
-                        <span id="profileIcon1">👨‍🏫</span> <span id="profileIcon2">📚</span>
-                    </div>
-                </div>
-                <div>
-                    <h2 id="profileName" style="margin-bottom: 2px;">Преподаватель</h2>
-                    <p style="color: var(--muted); font-size: 14px;" id="profileGroup">Преподаватель</p>
-                </div>
-            </div>
-
-            <!-- Навигационное меню -->
-            <div class="module">
-                <div style="display: flex; flex-wrap: wrap; gap: 15px 20px;">
-                    <a href="#" style="color: var(--text-soft);">Главная</a>
-                    <a href="#" style="color: var(--text-soft);">Личный кабинет</a>
-                    <a href="#" style="color: var(--text-soft);">Мой сертификат</a>
-                    <a href="#" style="color: var(--text-soft);">Достижения</a>
-                    <a href="#" style="color: var(--text-soft);">Магазин</a>
-                    <a href="#" style="color: var(--text-soft);">Видео</a>
-                    <a href="#" style="color: var(--text-soft);">Паспорта</a>
-                    <a href="#" style="color: var(--text-soft);">Охрана труда</a>
-                    <a href="#" style="color: var(--text-soft);">Оформление</a>
-                    <a href="#" style="color: var(--text-soft);">Полезные материалы</a>
-                    <a href="#" style="color: var(--text-soft);">Тренировка</a>
-                    <a href="#" style="color: var(--text-soft);">Итоговые экзамены</a>
-                    <a href="#" style="color: var(--text-soft);">Игровая комната</a>
-                    <a href="#" style="color: var(--text-soft);">Доска почета</a>
-                    <a href="#" style="color: var(--text-soft);">Журнал (Оценки)</a>
-                    <a href="#" style="color: var(--text-soft);">Отчеты по курсам</a>
-                    <a href="#" style="color: var(--text-soft);">Расписание</a>
-                </div>
-            </div>
-
-        </main>
+    <div class="login-grid">
+      <div class="login-card">
+        <h3>Вход студента</h3>
+        <label>ФИО <input id="loginName" type="text" placeholder="Иванов Иван"></label>
+        <label>Группа <input id="loginGroup" type="text" placeholder="ТМ-4"></label>
+        <button type="button" id="btnLoginStudent" class="btn" style="width: 100%; margin-top: 10px;">Войти</button>
+      </div>
+      <div class="login-card">
+        <h3>Вход преподавателя</h3>
+        <label>Логин <input id="teacherUser" type="text" placeholder="teacher"></label>
+        <label>Пароль <input id="teacherPass" type="password" placeholder="teacher"></label>
+        <button type="button" id="btnLoginTeacher" class="btn ghost" style="width: 100%; margin-top: 10px;">Войти в журнал</button>
+        <p class="login-error" id="teacherLoginError" style="display:none; color:var(--err); margin-top:10px; font-size:13px;"></p>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Контейнер для уведомлений -->
-    <div class="toast-container" id="toastContainer"></div>
+<!-- ШАПКА -->
+<header class="topbar">
+  <button class="burger-btn" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
+  <a class="brand" href="#/"><span class="brand-badge">МДК Портал</span></a>
+  <div style="margin-left: 15px;">
+      <select id="mdkSelector" class="self-input" style="padding: 8px; font-weight: bold; background: var(--card-soft); border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; outline:none; margin:0; width:auto;">
+          <option value="07.01">МДК 07.01 (ЧПУ)</option>
+          <option value="04.01">МДК 04.01 (Диагностика)</option>
+          <option value="02.01">МДК 02.01 (Сборка)</option>
+          <option value="02.02">МДК 02.02 (Программирование сборки)</option>
+      </select>
+  </div>
+  <div class="crumbs" id="crumbs" style="margin-left:auto;"></div>
+  <div class="topbar-status">
+    <span class="status-pill" id="xpCount">🌟 0 XP</span>
+  </div>
+  <button id="themeToggle" class="btn ghost" style="padding: 8px 12px; margin-left: 5px;" title="Сменить тему">🎨</button>
+  <button id="topbarLogout" class="btn ghost" style="padding:8px 12px; margin-left:5px;" onclick="window.handleLogout()" title="Выйти">🚪</button>
+</header>
 
-    <script src="app.js"></script>
+<!-- БОКОВОЕ МЕНЮ -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="drawer-user" style="display:flex; align-items:center;">
+      <span id="userChipAvatar" style="font-size:24px;">👨‍🎓</span>
+      <div style="margin-left:10px;">
+        <div id="userChipName" style="font-weight:bold;">Гость</div>
+        <div id="userChipGroup" style="font-size:12px; color:var(--muted);">Группа</div>
+      </div>
+    </div>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <nav class="drawer-nav">
+    <a class="drawer-item" data-go="#/">🏠 Главная</a>
+    <a class="drawer-item" data-go="#/profile">👤 Личный кабинет</a>
+    <a class="drawer-item" data-go="#/certificate">📜 Мой сертификат</a>
+    <a class="drawer-item" data-go="#/achievements">🏆 Достижения</a>
+    <a class="drawer-item" data-go="#/shop">🛒 Магазин</a>
+    <a class="drawer-item" data-go="#/videos">🎬 Видео</a>
+    <a class="drawer-item" data-go="#/passports">📄 Паспорта</a>
+    <a class="drawer-item" data-go="#/safety">🦺 Охрана труда</a>
+    <a class="drawer-item" data-go="#/formatting">📝 Оформление</a>
+    <a class="drawer-item" data-go="#/links">📚 Полезные материалы</a>
+    <a class="drawer-item" data-go="#/training">🎯 Тренировка</a>
+    <a class="drawer-item" data-go="#/final">📋 Итоговые экзамены</a>
+    <a class="drawer-item" data-go="#/arcade">🎮 Игровая комната</a>
+    <a class="drawer-item" data-go="#/rating">🏅 Доска почета</a>
+    <a class="drawer-item" data-go="#/journal">📒 Журнал (Оценки)</a>
+    <a class="drawer-item" data-go="#/reports">📊 Отчеты по курсам</a>
+    <a class="drawer-item" data-go="#/schedule">📅 Расписание</a>
+    <a class="drawer-item" style="color:var(--err); cursor:pointer; margin-top:20px; border-top: 1px solid var(--border);" onclick="window.handleLogout()">🚪 Выйти</a>
+  </nav>
+</aside>
+
+<!-- ОСНОВНОЙ КОНТЕНТ -->
+<main id="app"></main>
+
+<!-- СКРИПТЫ (Порядок важен!) -->
+<script src="data-global.js"></script>
+<script src="data-0701.js"></script>
+<script src="data-0201.js"></script>
+<script src="data-0202.js"></script>
+<script src="data-0401.js"></script>
+<script src="data-extra.js"></script>
+
+<script src="api.js"></script>
+<script src="tests-extra.js"></script>
+<script src="app.js"></script>
+
+<script src="exam_0201.js"></script>
+<script src="exam_0202.js"></script>
+<script src="exam_0401.js"></script>
+<script src="exam_0701.js"></script>
+
+<script src="shop.js"></script>
+<script src="reports.js"></script>
+<script src="extra.js"></script>
+<script src="info.js"></script>
+<script src="links.js"></script>
+<script src="rating.js"></script>
+<script src="journal.js"></script>
+<script src="schedule.js"></script>
+
+<script src="questions-setup.js"></script>
+<script src="questions-mdk.js"></script>
+<script src="questions-anime.js"></script>
+<script src="questions-games.js"></script>
+<script src="questions-logic.js"></script>
+
+<script src="games.js"></script>
+<script src="assistant.js"></script>
+<script src="easter-eggs.js"></script>
+
 </body>
 </html>
