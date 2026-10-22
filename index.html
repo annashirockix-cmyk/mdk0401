@@ -4,99 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Учебный портал МДК</title>
-    
-    <!-- Стандартные шрифты из оригинальной темы -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sauce+Sans:wght@400;500&family=Overpass+Mono:wght@300;600&display=swap" rel="stylesheet">
-    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<!-- Включаем тему "хакер" для зеленого неона -->
+<body data-theme="hacker">
 
-    <header class="portal-header">
-        <div class="container">
-            <div class="portal-brand">Colorloops | ПОРТАЛ МДК</div>
-            <h1>ОПЕРАТОР СТАНКОВ С ПУ</h1>
-            <p class="meta">15.02.16 Технология машиностроения · ПМ.07</p>
-        </div>
-    </header>
+    <!-- Окно входа, которое теперь всегда видно -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-shell">
+            <div class="hero" style="box-shadow: none; padding: 0 0 20px 0; background: transparent; border: none;">
+                <h1>ОПЕРАТОР СТАНКОВ С ПУ</h1>
+                <p>15.02.16 Технология машиностроения · ПМ.07</p>
+            </div>
+            
+            <div class="login-grid">
+                <!-- Вход студента -->
+                <div class="login-card">
+                    <h2 class="steps-title" style="margin-top: 0;">ВХОД СТУДЕНТА</h2>
+                    <form id="studentForm">
+                        <input type="text" id="studentName" name="studentName" autocomplete="name" placeholder="ФИО (Иванов Иван)">
+                        <input type="text" id="studentGroup" name="studentGroup" autocomplete="off" placeholder="Группа (ТМ-4)">
+                        <button type="submit" class="btn" style="width: 100%;">Войти</button>
+                    </form>
+                </div>
 
-    <main class="container">
-        
-        <!-- Формы входа -->
-        <div class="login-grid">
-            <!-- Вход студента -->
-            <section class="card">
-                <h2>ВХОД СТУДЕНТА</h2>
-                <form id="studentLoginForm" action="#" onsubmit="event.preventDefault();">
-                    <label for="studentName">ФИО</label>
-                    <input type="text" id="studentName" name="studentName" placeholder="Иванов Иван">
-                    
-                    <label for="studentGroup">Группа</label>
-                    <input type="text" id="studentGroup" name="studentGroup" placeholder="ТМ-4">
-                    
-                    <button type="submit" class="btn">Войти</button>
-                </form>
-            </section>
-
-            <!-- Вход преподавателя -->
-            <section class="card">
-                <h2>ВХОД ПРЕПОДАВАТЕЛЯ</h2>
-                <form id="teacherLoginForm" action="#" onsubmit="event.preventDefault();">
-                    <label for="teacherLogin">Логин</label>
-                    <input type="text" id="teacherLogin" name="username" placeholder="teacher" value="teacher">
-                    
-                    <label for="teacherPass">Пароль</label>
-                    <input id="teacherPass" type="password" name="password" placeholder="teacher" value="teacher">
-                    
-                    <button type="submit" class="btn">Войти в журнал</button>
-                </form>
-            </section>
-        </div>
-
-        <!-- Профиль пользователя -->
-        <section class="card user-profile">
-            <div class="user-avatar-icons">
-                <span class="xp-badge">🌟 0 XP</span>
-                <div class="icons">
-                    <span id="icon1">👨‍🎓</span>
-                    <span id="icon2">📖</span>
+                <!-- Вход преподавателя -->
+                <div class="login-card">
+                    <h2 class="steps-title" style="margin-top: 0;">ВХОД ПРЕПОДАВАТЕЛЯ</h2>
+                    <form id="teacherForm">
+                        <input type="text" id="teacherLogin" name="username" autocomplete="username" placeholder="Логин" value="teacher">
+                        <input type="password" id="teacherPass" name="password" autocomplete="current-password" placeholder="Пароль" value="teacher">
+                        <button type="submit" class="btn" style="width: 100%;">Войти в журнал</button>
+                    </form>
                 </div>
             </div>
-            <div class="user-details">
-                <h3 id="profileName">Гость</h3>
-                <p class="meta" id="profileGroup">Группа</p>
+        </div>
+    </div>
+
+    <!-- Основной контент, который будет показан после входа -->
+    <div id="appContent" style="display: none;">
+        <div class="topbar">
+            <div class="brand-badge">ПОРТАЛ МДК</div>
+            <div class="status-pill" id="userStatus">Гость</div>
+            <button class="btn ghost" id="logoutBtn" style="margin-left: auto;">Выйти</button>
+        </div>
+
+        <main id="app">
+            <div class="module">
+                <h2>Добро пожаловать в личный кабинет!</h2>
+                <p>Выберите нужный раздел в меню ниже.</p>
             </div>
-        </section>
 
-        <!-- Навигация -->
-        <nav class="card portal-nav">
-            <ul>
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Личный кабинет</a></li>
-                <li><a href="#">Мой сертификат</a></li>
-                <li><a href="#">Достижения</a></li>
-                <li><a href="#">Магазин</a></li>
-                <li><a href="#">Видео</a></li>
-                <li><a href="#">Паспорта</a></li>
-                <li><a href="#">Охрана труда</a></li>
-                <li><a href="#">Оформление</a></li>
-                <li><a href="#">Полезные материалы</a></li>
-                <li><a href="#">Тренировка</a></li>
-                <li><a href="#">Итоговые экзамены</a></li>
-                <li><a href="#">Игровая комната</a></li>
-                <li><a href="#">Доска почета</a></li>
-                <li><a href="#">Журнал (Оценки)</a></li>
-                <li><a href="#">Отчеты по курсам</a></li>
-                <li><a href="#">Расписание</a></li>
-                <li><a href="#" class="logout-link" id="logoutBtn">Выйти</a></li>
-            </ul>
-        </nav>
+            <div class="module">
+                <div class="steps-title">Навигация</div>
+                <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px;">
+                    <li><button class="tab active">Главная</button></li>
+                    <li><button class="tab">Личный кабинет</button></li>
+                    <li><button class="tab">Журнал (Оценки)</button></li>
+                    <li><button class="tab">Расписание</button></li>
+                </ul>
+            </div>
+        </main>
+    </div>
 
-    </main>
-
-    <button class="fab" title="Помощь">💬</button>
+    <!-- Уведомления -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script src="app.js"></script>
 </body>
