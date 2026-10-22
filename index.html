@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Учебный портал МДК</title>
+    
+    <!-- Иконка сайта -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    
+    <!-- ПРАВИЛЬНОЕ ПОДКЛЮЧЕНИЕ ШРИФТОВ (исправляет ошибку CORB) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+US:wght@100..400&family=Overpass+Mono:wght@300;600&display=swap" rel="stylesheet">
+    
+    <!-- Подключение ваших стилей -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,8 +28,8 @@
 
     <main class="container">
         
-        <!-- Блоки входа (всегда на экране) -->
-        <div class="login-grid">
+        <!-- ФОРМЫ ВХОДА (изначально видны) -->
+        <div class="login-grid" id="loginSection">
             <!-- Вход студента -->
             <section class="card login-block">
                 <h2>ВХОД СТУДЕНТА</h2>
@@ -50,6 +59,15 @@
             </section>
         </div>
 
+        <!-- БЛОК УСПЕШНОГО ВХОДА (скрыт изначально, появляется после входа) -->
+        <section class="card auth-success-message hidden" id="successSection">
+            <h2>Вы успешно авторизованы!</h2>
+            <p class="meta">Текущий пользователь: <strong id="successName"></strong></p>
+            <div style="margin-top: 20px;">
+                <a href="#" class="btn" style="text-decoration: none; display: inline-block; text-align: center;">Перейти в личный кабинет</a>
+            </div>
+        </section>
+
         <!-- Выбор модуля -->
         <section class="card module-selector">
             <label for="mdkSelector">МДК Портал</label>
@@ -73,7 +91,7 @@
             </div>
         </section>
 
-        <!-- Навигационное меню (обычный текстовый список) -->
+        <!-- Навигация -->
         <nav class="portal-nav card">
             <ul>
                 <li><a href="#">Главная</a></li>
@@ -93,7 +111,7 @@
                 <li><a href="#">Журнал (Оценки)</a></li>
                 <li><a href="#">Отчеты по курсам</a></li>
                 <li><a href="#">Расписание</a></li>
-                <li><a href="#" class="logout-link">Выйти</a></li>
+                <li><a href="#" class="logout-link" id="logoutBtn">Выйти</a></li>
             </ul>
         </nav>
 

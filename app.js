@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     
-    // --- ЭЛЕМЕНТЫ ---
+    // Элементы форм и секций
+    const loginSection = document.getElementById("loginSection"); // Блок с формами
+    const successSection = document.getElementById("successSection"); // Блок "Вы вошли"
+    
     const studentForm = document.getElementById("studentLoginForm");
     const teacherForm = document.getElementById("teacherLoginForm");
     
@@ -13,17 +16,19 @@ document.addEventListener("DOMContentLoaded", function () {
     // Элементы профиля
     const profileName = document.getElementById("profileName");
     const profileGroup = document.getElementById("profileGroup");
+    const successName = document.getElementById("successName");
     const icon1 = document.getElementById("icon1");
     const icon2 = document.getElementById("icon2");
-    const logoutBtn = document.querySelector(".logout-link");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    // --- ОБНОВЛЕНИЕ ПРОФИЛЯ ---
-    function updateProfile(user) {
+    // --- ЛОГИКА ИНТЕРФЕЙСА ---
+    function updateUI(user) {
         if (user) {
+            // 1. Обновляем профиль
             profileName.textContent = user.name;
             profileGroup.textContent = user.role === 'teacher' ? 'Преподаватель' : user.group;
+            successName.textContent = user.name;
             
-            // Меняем иконки для преподавателя
             if (user.role === 'teacher') {
                 icon1.textContent = "👨‍🏫";
                 icon2.textContent = "📚";
@@ -31,24 +36,39 @@ document.addEventListener("DOMContentLoaded", function () {
                 icon1.textContent = "👨‍🎓";
                 icon2.textContent = "📖";
             }
+            
+            // 2. СКРЫВАЕМ ФОРМЫ И ПОКАЗЫВАЕМ УСПЕХ
+            if (loginSection) loginSection.classList.add("hidden");
+            if (successSection) successSection.classList.remove("hidden");
+            
         } else {
+            // 1. Сбрасываем профиль
             profileName.textContent = "Гость";
             profileGroup.textContent = "Группа";
+            successName.textContent = "";
             icon1.textContent = "👨‍🎓";
             icon2.textContent = "📖";
+            
+            // 2. ПОКАЗЫВАЕМ ФОРМЫ И СКРЫВАЕМ УСПЕХ
+            if (loginSection) loginSection.classList.remove("hidden");
+            if (successSection) successSection.classList.add("hidden");
+            
+            // 3. Очищаем формы
+            if(studentForm) studentForm.reset();
+            if(teacherForm) teacherForm.reset();
         }
     }
 
-    // --- ПРОВЕРКА СЕССИИ (если уже заходили) ---
+    // Проверка: если уже заходили ранее
     const savedUser = localStorage.getItem("mdk_user");
     if (savedUser) {
-        updateProfile(JSON.parse(savedUser));
+        updateUI(JSON.parse(savedUser));
     }
 
     // --- ВХОД СТУДЕНТА ---
     if (studentForm) {
         studentForm.addEventListener("submit", function (event) {
-            event.preventDefault(); // Стоп перезагрузка
+            event.preventDefault();
             
             const name = studentNameInput.value.trim();
             const group = studentGroupInput.value.trim();
@@ -57,11 +77,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 showMessage("Заполните ФИО и Группу", "error");
                 return;
             }
-
             const user = { name: name, group: group, role: "student" };
             localStorage.setItem("mdk_user", JSON.stringify(user));
             
-            updateProfile(user);
+            updateUI(user);
             showMessage(`Добро пожаловать, ${name}!`, "success");
         });
     }
@@ -78,8 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 const user = { name: "Преподаватель", group: "Журнал", role: "teacher" };
                 localStorage.setItem("mdk_user", JSON.stringify(user));
                 
-                updateProfile(user);
-                showMessage("Вход в журнал выполнен!", "success");
+                updateUI(user);
+                showMessage("Вход выполнен успешно!", "success");
             } else {
                 showMessage("Неверный логин или пароль", "error");
             }
@@ -91,18 +110,17 @@ document.addEventListener("DOMContentLoaded", function () {
         logoutBtn.addEventListener("click", function (event) {
             event.preventDefault();
             localStorage.removeItem("mdk_user");
-            updateProfile(null);
+            updateUI(null);
             showMessage("Вы вышли из системы", "success");
         });
     }
 
-    // --- ВСПЛЫВАЮЩИЕ ОКНА ---
+    // --- УВЕДОМЛЕНИЯ ---
     function showMessage(text, type) {
         const toast = document.createElement("div");
         toast.className = `toast ${type}`;
         toast.textContent = text;
         document.body.appendChild(toast);
-        
         setTimeout(() => toast.classList.add("show"), 100);
         setTimeout(() => {
             toast.classList.remove("show");
