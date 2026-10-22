@@ -1,7 +1,7 @@
 "use strict";
 
 // ============================================================
-// 1. ГЛОБАЛЬНОЕ СОСТОЯНИЕ (ИСПРАВЛЕНИЕ ОШИБКИ state is not defined)
+// 1. ГЛОБАЛЬНОЕ СОСТОЯНИЕ
 // ============================================================
 window.state = window.state || {
     student: null,
@@ -73,7 +73,6 @@ window.renderUserChip = function() {
         if (avEl) avEl.textContent = "👨‍🏫";
     }
     
-    // Обновляем XP в топбаре
     var xpEl = document.getElementById("xpCount");
     if (xpEl) {
         xpEl.textContent = `🌟 ${window.state.xp} XP`;
@@ -162,7 +161,7 @@ window.openThemeModal = function() {
 };
 
 // ============================================================
-// 4. РЕНДЕР ПРОСТЫХ СТРАНИЦ (Видео, Паспорта, Охрана труда)
+// 4. РЕНДЕР ПРОСТЫХ СТРАНИЦ
 // ============================================================
 window.renderSimplePage = function(title, items, icon) {
     var app = document.getElementById("app"); 
@@ -182,6 +181,7 @@ window.renderSimplePage = function(title, items, icon) {
             var isYouTube = item.url && (item.url.includes('youtube.com') || item.url.includes('youtu.be'));
             var isPdf = item.file && item.file.toLowerCase().endsWith('.pdf');
             var isVideo = item.file && (item.file.toLowerCase().endsWith('.mp4') || item.file.toLowerCase().endsWith('.webm'));
+            var isDocx = item.file && item.file.toLowerCase().endsWith('.docx');
             var link = item.url || item.file;
             
             var mediaHtml = "";
@@ -189,27 +189,25 @@ window.renderSimplePage = function(title, items, icon) {
                 var vidId = "";
                 if (item.url.includes('v=')) vidId = item.url.split('v=')[1].split('&')[0];
                 else if (item.url.includes('youtu.be/')) vidId = item.url.split('youtu.be/')[1].split('?')[0];
-                else if (item.url.includes('/embed/')) vidId = item.url.split('/embed/')[1].split('?')[0];
                 
                 if (vidId) {
                     mediaHtml = `<div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; margin-top:10px;"><iframe src="https://www.youtube.com/embed/${vidId}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>`;
-                } else {
-                    mediaHtml = `<p style="color:var(--err); font-size:14px;">Неверный формат ссылки YouTube.</p>`;
                 }
             } else if (isVideo) {
                 mediaHtml = `<video controls src="${item.file}" style="width:100%; max-height:400px; border-radius:8px; margin-top:10px; background:#000;"></video>`;
             } else if (isPdf) {
-                mediaHtml = `<div style="width:100%; height:500px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center; flex-direction:column;">
-                    <p style="color:#666; margin-bottom:10px;">Если документ не отображается, проверьте наличие файла по пути: <br><b>${item.file}</b></p>
-                    <a href="${item.file}" target="_blank" class="btn" style="background:#c14a2a; color:#fff;">📥 Открыть PDF в новой вкладке</a>
+                mediaHtml = `<div style="width:100%; height:500px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;">
+                    <iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe>
                 </div>`;
+            } else if (isDocx) {
+                mediaHtml = `<p style="color:var(--muted); font-size:14px; margin-top:10px;">Документ Word (DOCX) не может быть открыт прямо в браузере. Скачайте его по кнопке ниже.</p>`;
             }
 
             list.innerHTML += `<div style="margin-bottom:20px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);">
                 <b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br>
                 <span style="font-size:14px; color:var(--muted);">${item.description || item.content || ''}</span>
                 ${mediaHtml}
-                ${link && !isYouTube && !isVideo && !isPdf ? `<br><a href="${link}" target="_blank" class="btn" style="margin-top:10px; padding:8px 16px;">📥 Открыть ссылку</a>` : ''}
+                ${link && !isYouTube && !isVideo && !isPdf ? `<br><a href="${link}" target="_blank" class="btn" style="margin-top:10px; padding:8px 16px;">📥 Открыть / Скачать файл</a>` : ''}
             </div>`;
         });
     }
@@ -217,7 +215,7 @@ window.renderSimplePage = function(title, items, icon) {
 };
 
 // ============================================================
-// 5. СЕРТИФИКАТ (С 12-ю фонами)
+// 5. СЕРТИФИКАТ
 // ============================================================
 window.renderCertificatePage = function() {
     var app = $("app"); 
@@ -249,7 +247,6 @@ window.renderCertificatePage = function() {
         return;
     }
 
-    // Сертификат для студента
     var p = window.state.results || {};
     var isApproved = p.certificateApproved || false;
     
@@ -394,7 +391,7 @@ window.renderAchievementsPage = function() {
 };
 
 // ============================================================
-// 8. ИНИЦИАЛИЗАЦИЯ И РОУТЕР
+// 8. ИНИЦИАЛИЗАЦИЯ, ЛОГИКА ВХОДА И РОУТЕР
 // ============================================================
 window.handleLogout = function() {
     window.state.student = null;
@@ -454,14 +451,123 @@ window.addEventListener("DOMContentLoaded", function() {
         };
     });
 
-    // Главный роутер
+    // ============================================================
+    // ЛОГИКА ВХОДА (Добавлено!)
+    // ============================================================
+    var loginOverlay = document.getElementById("loginOverlay");
+    
+    // Если уже вошли, скрываем окно
+    if (window.state.student || window.state.staff) {
+        if (loginOverlay) loginOverlay.style.display = "none";
+    }
+
+    // Кнопка Входа Студента
+    var btnLoginStudent = document.getElementById("btnLoginStudent");
+    if (btnLoginStudent) {
+        btnLoginStudent.onclick = function() {
+            var name = document.getElementById("loginName").value.trim();
+            var group = document.getElementById("loginGroup").value.trim();
+            if (!name || !group) return window.showToast("Введите ФИО и группу", "err");
+            
+            var key = name.toLowerCase() + "|" + group.toLowerCase();
+            btnLoginStudent.textContent = "Вход...";
+            btnLoginStudent.disabled = true;
+
+            window.API.getStudentData(key).then(res => {
+                var payload = {};
+                if (res && res.ok && res.payload) {
+                    try { payload = JSON.parse(res.payload); } catch(e){}
+                }
+                
+                // Восстанавливаем состояние
+                window.state.student = { name: name, group: group };
+                window.state.xp = payload.xp || 0;
+                window.state.results = payload.results || {};
+                window.state.avatar = payload.avatar || null;
+                window.state.nickname = payload.nickname || null;
+                window.state.purchasedThemes = payload.purchasedThemes || [];
+                window.state.purchasedFonts = payload.purchasedFonts || [];
+                window.state.font = payload.font || "default";
+                window.state.certBg = payload.certBg || "bg1.jfif";
+                
+                window.saveStudentData();
+                window.renderUserChip();
+                
+                if (loginOverlay) loginOverlay.style.display = "none";
+                window.location.hash = "#/"; 
+                window.dispatchEvent(new HashChangeEvent("hashchange"));
+                
+                btnLoginStudent.textContent = "Войти";
+                btnLoginStudent.disabled = false;
+            }).catch(err => {
+                // Если ошибка сети или не найден, создаем новый профиль локально
+                window.state.student = { name: name, group: group };
+                window.state.xp = 0;
+                window.state.results = {};
+                window.saveStudentData();
+                window.renderUserChip();
+                
+                if (loginOverlay) loginOverlay.style.display = "none";
+                window.location.hash = "#/";
+                window.dispatchEvent(new HashChangeEvent("hashchange"));
+                
+                btnLoginStudent.textContent = "Войти";
+                btnLoginStudent.disabled = false;
+            });
+        };
+    }
+
+    // Кнопка Входа Преподавателя
+    var btnLoginTeacher = document.getElementById("btnLoginTeacher");
+    if (btnLoginTeacher) {
+        btnLoginTeacher.onclick = function() {
+            var user = document.getElementById("teacherUser").value.trim();
+            var pass = document.getElementById("teacherPass").value.trim();
+            var errEl = document.getElementById("teacherLoginError");
+            if (errEl) errEl.style.display = "none";
+            
+            if (!user || !pass) return window.showToast("Введите логин и пароль", "err");
+            
+            btnLoginTeacher.textContent = "Проверка...";
+            btnLoginTeacher.disabled = true;
+
+            window.API.login(user, pass).then(res => {
+                if (res && res.ok) {
+                    window.state.staff = { name: res.name, role: res.role };
+                    window.saveStudentData();
+                    window.renderUserChip();
+                    
+                    if (loginOverlay) loginOverlay.style.display = "none";
+                    window.location.hash = "#/journal"; 
+                    window.dispatchEvent(new HashChangeEvent("hashchange"));
+                } else {
+                    if (errEl) {
+                        errEl.textContent = res.error || "Неверный логин или пароль";
+                        errEl.style.display = "block";
+                    }
+                }
+                btnLoginTeacher.textContent = "Войти в журнал";
+                btnLoginTeacher.disabled = false;
+            }).catch(err => {
+                if (errEl) {
+                    errEl.textContent = "Ошибка сервера";
+                    errEl.style.display = "block";
+                }
+                btnLoginTeacher.textContent = "Войти в журнал";
+                btnLoginTeacher.disabled = false;
+            });
+        };
+    }
+
+    // ============================================================
+    // РОУТЕР
+    // ============================================================
     function router() {
         var hash = location.hash.replace("#", "") || "/";
         var app = document.getElementById("app");
         if (!app) return;
         app.innerHTML = "";
 
-        // Проверка авторизации (если нет ни студента, ни препода — показываем оверлей)
         var loginOverlay = document.getElementById("loginOverlay");
         if (!window.state.student && !window.state.staff) {
             if (loginOverlay) loginOverlay.style.display = "flex";
