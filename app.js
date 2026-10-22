@@ -1,7 +1,87 @@
 "use strict";
 
 // ============================================================
-// БАЗОВЫЕ УТИЛИТЫ (если они не определены в другом месте)
+// 1. ГЛОБАЛЬНОЕ СОСТОЯНИЕ (ИСПРАВЛЕНИЕ ОШИБКИ state is not defined)
+// ============================================================
+window.state = window.state || {
+    student: null,
+    staff: null,
+    xp: 0,
+    activeCourseId: "07.01",
+    results: {},
+    avatar: null,
+    nickname: null,
+    purchasedThemes: [],
+    purchasedFonts: [],
+    font: "default",
+    certBg: "bg1.jfif"
+};
+
+// Восстановление данных из localStorage при загрузке
+try {
+    var savedState = localStorage.getItem("mdk.state");
+    if (savedState) {
+        var parsed = JSON.parse(savedState);
+        Object.assign(window.state, parsed);
+    }
+} catch(e) { console.warn("Ошибка загрузки state", e); }
+
+window.saveStudentData = function() {
+    try {
+        localStorage.setItem("mdk.state", JSON.stringify(window.state));
+    } catch(e) {}
+};
+
+window.studentKey = function() {
+    if (!window.state.student) return "";
+    return (window.state.student.name || "").trim().toLowerCase() + "|" + (window.state.student.group || "").trim().toLowerCase();
+};
+
+window.getLevel = function(xp) {
+    return Math.floor((xp || 0) / 100) + 1;
+};
+
+window.getLevelTitle = function(lvl) {
+    if (lvl < 3) return "Новичок";
+    if (lvl < 5) return "Ученик";
+    if (lvl < 8) return "Практикант";
+    if (lvl < 12) return "Мастер";
+    return "Эксперт";
+};
+
+window.setCertBg = function(bg) {
+    window.state.certBg = bg;
+    window.saveStudentData();
+    window.renderCertificatePage();
+};
+
+window.renderUserChip = function() {
+    var nameEl = document.getElementById("userChipName");
+    var groupEl = document.getElementById("userChipGroup");
+    var avEl = document.getElementById("userChipAvatar");
+    
+    if (window.state.student) {
+        if (nameEl) nameEl.textContent = window.state.nickname || window.state.student.name;
+        if (groupEl) groupEl.textContent = "Гр. " + window.state.student.group;
+        if (avEl) {
+            if (window.state.avatar) avEl.innerHTML = `<img src="${window.state.avatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            else avEl.textContent = "👨‍🎓";
+        }
+    } else if (window.state.staff) {
+        if (nameEl) nameEl.textContent = window.state.staff.name;
+        if (groupEl) groupEl.textContent = window.state.staff.role;
+        if (avEl) avEl.textContent = "👨‍🏫";
+    }
+    
+    // Обновляем XP в топбаре
+    var xpEl = document.getElementById("xpCount");
+    if (xpEl) {
+        xpEl.textContent = `🌟 ${window.state.xp} XP`;
+    }
+};
+
+// ============================================================
+// 2. УТИЛИТЫ
 // ============================================================
 window.$ = window.$ || function(id) { return document.getElementById(id); };
 window.el = window.el || function(html) {
@@ -28,13 +108,12 @@ window.showToast = window.showToast || function(msg, type) {
 };
 
 // ============================================================
-// МОДАЛЬНОЕ ОКНО ВЫБОРА ТЕМ (Вместо магазина)
+// 3. МОДАЛЬНОЕ ОКНО ТЕМ
 // ============================================================
 window.openThemeModal = function() {
     var modal = document.getElementById("themeModalOverlay");
     if (modal) { modal.classList.add("open"); return; }
     
-    // Темы должны совпадать с теми, что в shop.js и style.css
     var themes = [
         { id: "default", title: "Стандарт (Dark)", bg: "#0e0e10", text: "#e8e6e1" },
         { id: "ury-light", title: "Ury Light", bg: "#FFFFFF", text: "#252525" },
@@ -45,7 +124,6 @@ window.openThemeModal = function() {
         { id: "cyberpunk", title: "Cyberpunk", bg: "#0a0015", text: "#00ffff" }
     ];
 
-    // Добавляем стили, если их нет
     if (!document.getElementById("themeModalStyles")) {
         var style = document.createElement("style");
         style.id = "themeModalStyles";
@@ -84,7 +162,7 @@ window.openThemeModal = function() {
 };
 
 // ============================================================
-// РЕНДЕР ПРОСТЫХ СТРАНИЦ (Видео, Паспорта, Охрана труда)
+// 4. РЕНДЕР ПРОСТЫХ СТРАНИЦ (Видео, Паспорта, Охрана труда)
 // ============================================================
 window.renderSimplePage = function(title, items, icon) {
     var app = document.getElementById("app"); 
@@ -108,7 +186,6 @@ window.renderSimplePage = function(title, items, icon) {
             
             var mediaHtml = "";
             if (isYouTube) {
-                // Обработка ссылок вида youtu.be/ID и youtube.com/watch?v=ID
                 var vidId = "";
                 if (item.url.includes('v=')) vidId = item.url.split('v=')[1].split('&')[0];
                 else if (item.url.includes('youtu.be/')) vidId = item.url.split('youtu.be/')[1].split('?')[0];
@@ -122,8 +199,10 @@ window.renderSimplePage = function(title, items, icon) {
             } else if (isVideo) {
                 mediaHtml = `<video controls src="${item.file}" style="width:100%; max-height:400px; border-radius:8px; margin-top:10px; background:#000;"></video>`;
             } else if (isPdf) {
-                // Встроенный просмотрщик PDF
-                mediaHtml = `<div style="width:100%; height:500px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>`;
+                mediaHtml = `<div style="width:100%; height:500px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                    <p style="color:#666; margin-bottom:10px;">Если документ не отображается, проверьте наличие файла по пути: <br><b>${item.file}</b></p>
+                    <a href="${item.file}" target="_blank" class="btn" style="background:#c14a2a; color:#fff;">📥 Открыть PDF в новой вкладке</a>
+                </div>`;
             }
 
             list.innerHTML += `<div style="margin-bottom:20px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);">
@@ -138,7 +217,7 @@ window.renderSimplePage = function(title, items, icon) {
 };
 
 // ============================================================
-// СЕРТИФИКАТ (С 12-ю фонами)
+// 5. СЕРТИФИКАТ (С 12-ю фонами)
 // ============================================================
 window.renderCertificatePage = function() {
     var app = $("app"); 
@@ -150,10 +229,9 @@ window.renderCertificatePage = function() {
 
     var isTeacher = !!window.state.staff;
     var name = isTeacher ? window.state.staff.name : window.state.student.name;
-    var courseName = window.COURSE ? window.COURSE.title : "МДК";
+    var courseName = window.MDK_DATA && window.MDK_DATA[window.state.activeCourseId] ? window.MDK_DATA[window.state.activeCourseId].title : "МДК";
 
     if (isTeacher) {
-        // Грамота для преподавателя
         var teacherCert = `
             <div id="printable-cert" style="background:#fff; color:#000; padding:40px; border-radius:12px; max-width:800px; margin:0 auto; text-align:center; border: 10px double #c14a2a; box-sizing:border-box;">
                 <h1 style="font-size:40px; color:#c14a2a; text-transform:uppercase; margin-bottom:20px;">БЛАГОДАРНОСТЬ</h1>
@@ -172,10 +250,9 @@ window.renderCertificatePage = function() {
     }
 
     // Сертификат для студента
-    var p = {}; try { p = JSON.parse(localStorage.getItem("mdk.results." + encodeURIComponent(window.studentKey()))) || {}; } catch(e) {}
+    var p = window.state.results || {};
     var isApproved = p.certificateApproved || false;
     
-    // ВАШИ 12 ФОНОВ
     var bgs = [
         "bg1.jfif", "bg2.jfif", "bg3.jfif", "bg4.jfif", "bg5.jfif", "bg6.jfif",
         "bg7.jpg", "bg8.jpg", "bg9.jpg", "bg10.jpg", "bg11.jpg", "bg12.jpg"
@@ -214,7 +291,7 @@ window.renderCertificatePage = function() {
 };
 
 // ============================================================
-// ПРОФИЛЬ (С поддержкой просмотра профиля студента преподавателем)
+// 6. ПРОФИЛЬ
 // ============================================================
 window.renderProfilePage = function(route) {
     var app = document.getElementById("app"); 
@@ -225,14 +302,12 @@ window.renderProfilePage = function(route) {
     var isTeacher = !!window.state.staff;
     var targetKey = null;
     
-    // Проверяем, передан ли ключ студента в URL (например, #/profile/ivanov|tm-4)
     var parts = route.split("/");
     if (parts.length > 2 && parts[2]) {
         targetKey = decodeURIComponent(parts[2]);
     }
 
     if (isTeacher && targetKey) {
-        // Преподаватель смотрит профиль студента
         app.innerHTML = '<div class="skeleton" style="height:300px;"></div>';
         window.API.getStudentData(targetKey).then(res => {
             app.innerHTML = '<a class="backlink" href="#/journal" style="color:var(--accent);">← Назад к журналу</a>';
@@ -244,7 +319,7 @@ window.renderProfilePage = function(route) {
             var name = targetKey.split("|")[0];
             var group = targetKey.split("|")[1] || "—";
             var xp = p.xp || 0;
-            var lvl = window.getLevel ? window.getLevel(xp) : Math.floor(xp/100)+1;
+            var lvl = window.getLevel(xp);
             var avHtml = p.avatar ? `<img src="${p.avatar}" style="width:100%; height:100%; object-fit:cover;">` : "👨‍🎓";
             
             app.innerHTML += `<section class="module" style="text-align:center; padding:40px;">
@@ -259,8 +334,7 @@ window.renderProfilePage = function(route) {
             </section>`;
         });
     } else if (window.state.student) {
-        // Свой профиль (студент)
-        var lvl = window.getLevel ? window.getLevel(window.state.xp) : Math.floor(window.state.xp/100)+1;
+        var lvl = window.getLevel(window.state.xp);
         var avHtml = window.state.avatar ? `<img src="${window.state.avatar}" style="width:100%; height:100%; object-fit:cover;">` : "👨‍🎓";
 
         app.innerHTML += `<section class="module" style="text-align:center; padding:40px;">
@@ -270,13 +344,12 @@ window.renderProfilePage = function(route) {
             <h2 style="margin:0 0 10px 0;">${window.escapeHtml(window.state.nickname || window.state.student.name)}</h2>
             <p style="color:var(--muted); margin-bottom:15px;">Группа: ${window.escapeHtml(window.state.student.group)}</p>
             <div style="display:inline-block; background:var(--card-soft); padding:10px 20px; border-radius:20px; margin-bottom:20px;">
-                <b style="color:var(--gold);">${window.state.xp} XP</b> · Уровень ${lvl}
+                <b style="color:var(--gold);">${window.state.xp} XP</b> · Уровень ${lvl} (${window.getLevelTitle(lvl)})
             </div>
             <br>
             <a href="#/shop" class="btn" style="margin-top:10px;">🛒 Магазин XP</a>
         </section>`;
     } else if (isTeacher) {
-        // Профиль преподавателя
         app.innerHTML += `<section class="module" style="text-align:center; padding:40px;">
             <div style="width:120px; height:120px; margin:0 auto 20px; border-radius:50%; border:4px solid var(--accent); display:flex; align-items:center; justify-content:center; font-size:60px; background:var(--card-soft);">
                 👨‍🏫
@@ -290,10 +363,67 @@ window.renderProfilePage = function(route) {
 };
 
 // ============================================================
-// РОУТЕР И ИНИЦИАЛИЗАЦИЯ
+// 7. ДОСТИЖЕНИЯ
 // ============================================================
+window.renderAchievementsPage = function() {
+    var app = document.getElementById("app"); 
+    if (!app) return; app.innerHTML = "";
+    document.getElementById("crumbs").textContent = "Достижения";
+    app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
+    app.appendChild(el('<section class="hero"><h1>🏆 Достижения</h1><p>Твой прогресс на портале</p></section>'));
+    
+    var html = '<div class="module"><div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px;">';
+    var list = [
+        { id: "welcome", title: "Первый шаг", desc: "Войти в систему", icon: "🚪" },
+        { id: "reader", title: "Книжный червь", desc: "Изучить лекцию", icon: "📖" },
+        { id: "hacker", title: "Хакер", desc: "Пройти тест", icon: "💻" },
+        { id: "gamer", title: "Геймер", desc: "Сыграть в игру", icon: "🎮" },
+        { id: "level_5", title: "Опытный", desc: "Достичь 5 уровня", icon: "⭐" },
+        { id: "rich", title: "Богач", desc: "Накопить 1000 XP", icon: "💰" }
+    ];
+    
+    list.forEach(a => {
+        html += `<div style="background:var(--card-soft); padding:20px; border-radius:12px; text-align:center; border:1px solid var(--border); opacity:0.5;">
+            <div style="font-size:40px; margin-bottom:10px;">${a.icon}</div>
+            <div style="font-weight:bold; font-size:14px;">${a.title}</div>
+            <div style="font-size:12px; color:var(--muted); margin-top:5px;">${a.desc}</div>
+        </div>`;
+    });
+    html += '</div></div>';
+    app.innerHTML += html;
+};
+
+// ============================================================
+// 8. ИНИЦИАЛИЗАЦИЯ И РОУТЕР
+// ============================================================
+window.handleLogout = function() {
+    window.state.student = null;
+    window.state.staff = null;
+    window.saveStudentData();
+    location.reload();
+};
+
 window.addEventListener("DOMContentLoaded", function() {
-    // Кнопка смены темы
+    window.renderUserChip();
+    
+    // Восстанавливаем шрифт
+    if (window.state.font && window.state.font !== "default") {
+        var styleEl = document.getElementById("customFontStyle") || document.createElement("style");
+        styleEl.id = "customFontStyle";
+        var fontsMap = {
+            "atkinson": "'Atkinson Hyperlegible', sans-serif",
+            "newsreader": "'Newsreader', serif",
+            "spectral": "'Spectral', serif",
+            "quattrocento": "'Quattrocento Sans', sans-serif",
+            "orbitron": "'Orbitron', sans-serif",
+            "sharetech": "'Share Tech Mono', monospace"
+        };
+        if (fontsMap[window.state.font]) {
+            styleEl.textContent = "body, button, input, textarea, select { font-family: " + fontsMap[window.state.font] + " !important; }";
+            document.head.appendChild(styleEl);
+        }
+    }
+
     if ($("themeToggle")) {
         $("themeToggle").onclick = window.openThemeModal; 
     }
@@ -314,7 +444,6 @@ window.addEventListener("DOMContentLoaded", function() {
         };
     }
 
-    // Навигация в меню
     document.querySelectorAll(".drawer-item[data-go]").forEach(link => {
         link.onclick = function(e) {
             e.preventDefault();
@@ -328,18 +457,21 @@ window.addEventListener("DOMContentLoaded", function() {
     // Главный роутер
     function router() {
         var hash = location.hash.replace("#", "") || "/";
-        
-        // Сброс контейнера
         var app = document.getElementById("app");
         if (!app) return;
-        
-        // Убираем скелетоны
         app.innerHTML = "";
 
+        // Проверка авторизации (если нет ни студента, ни препода — показываем оверлей)
+        var loginOverlay = document.getElementById("loginOverlay");
+        if (!window.state.student && !window.state.staff) {
+            if (loginOverlay) loginOverlay.style.display = "flex";
+        } else {
+            if (loginOverlay) loginOverlay.style.display = "none";
+        }
+
         if (hash === "/" || hash === "") {
-            // Главная страница (рендерится в другом файле, если есть)
             if (window.renderHomePage) window.renderHomePage();
-            else app.innerHTML = '<section class="hero"><h1>Добро пожаловать!</h1></section>';
+            else app.innerHTML = '<section class="hero"><h1>Добро пожаловать!</h1><p>Выберите раздел в меню слева.</p></section>';
             
         } else if (hash === "/videos") {
             window.renderSimplePage("Видеоуроки", window.GLOBAL_DATA.videos, "🎬");
@@ -357,8 +489,7 @@ window.addEventListener("DOMContentLoaded", function() {
         } else if (hash === "/shop") {
             if (window.renderShopPage) window.renderShopPage();
         } else if (hash === "/achievements") {
-            if (window.renderAchievementsPage) window.renderAchievementsPage();
-            else app.innerHTML = '<div class="module">Раздел в разработке</div>';
+            window.renderAchievementsPage();
         } else if (hash === "/links") {
             if (window.renderLinksPage) window.renderLinksPage();
         } else if (hash === "/training") {
@@ -381,7 +512,5 @@ window.addEventListener("DOMContentLoaded", function() {
     }
 
     window.addEventListener("hashchange", router);
-    // Первый запуск роутера
-    // Примечание: Если авторизация не пройдена, логин-оверлей перекроет экран.
     router();
 });

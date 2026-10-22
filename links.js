@@ -1,13 +1,17 @@
 "use strict";
 
 window.renderLinksPage = function(){
-  var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-  document.getElementById("crumbs").textContent = "Полезные материалы";
+  var app = document.getElementById("app"); 
+  if (!app) return; 
+  app.innerHTML = "";
+  var crumbs = document.getElementById("crumbs");
+  if (crumbs) crumbs.textContent = "Полезные материалы";
 
   app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
   app.appendChild(el('<section class="hero"><h1>Полезные материалы</h1><p>Подборка статей, видеороликов и книг по ЧПУ.</p></section>'));
 
-  var courseId = window.state.activeCourseId;
+  var courseId = (window.state && window.state.activeCourseId) ? window.state.activeCourseId : "07.01";
+  
   var LINKS_DATA = {
     "07.01": {
       articles: [

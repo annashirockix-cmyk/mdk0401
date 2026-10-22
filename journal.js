@@ -22,17 +22,18 @@ window.renderJournalPage = function() {
   var app = document.getElementById("app"); 
   if (!app) return; 
   app.innerHTML = ""; 
-  document.getElementById("crumbs").textContent = "Журнал";
+  var crumbs = document.getElementById("crumbs");
+  if (crumbs) crumbs.textContent = "Журнал";
   
   app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
 
+  // ИСПРАВЛЕНО: используем window.state
   var isTeacher = window.state.staff && (window.state.staff.role === "teacher" || window.state.staff.role === "admin");
   if (!isTeacher) {
       app.innerHTML += '<div class="module" style="text-align:center; color:var(--err); font-size:18px; padding:40px;">⛔ Доступ к журналу имеет только преподаватель.</div>';
       return;
   }
 
-  // Вкладки: успеваемость по МДК и ручные оценки
   app.innerHTML += `<div style="display:flex; gap:10px; margin-bottom:20px;">
     <button class="btn" id="tabAuto" style="flex:1;">📊 Успеваемость по МДК</button>
     <button class="btn ghost" id="tabManual" style="flex:1;">📝 Ручные оценки</button>
@@ -44,13 +45,12 @@ window.renderJournalPage = function() {
   function renderAuto() {
       contentWrap.innerHTML = '<div class="skeleton" style="height:200px;"></div>';
       var courseId = window.state.activeCourseId;
-      var course = window.MDK_DATA[courseId];
+      var course = window.MDK_DATA ? window.MDK_DATA[courseId] : null;
       if (!course) {
           contentWrap.innerHTML = '<div class="module">Курс не найден.</div>';
           return;
       }
 
-      // Собираем все работы для этого МДК
       var works = [];
       course.sections.forEach(s => {
           s.topics.forEach(t => {
@@ -102,7 +102,8 @@ window.renderJournalPage = function() {
 
               var tdName = document.createElement("td");
               tdName.style = "border:1px solid var(--border); padding:8px; text-align:left; font-weight:bold; position:sticky; left:0; background:var(--card); z-index:1;";
-              tdName.innerHTML = window.escapeHtml(s.name) + "<br><span style='font-size:11px;color:var(--accent);font-weight:normal;'>гр. " + window.escapeHtml(s.group) + "</span>";
+              // Ссылка на профиль студента
+              tdName.innerHTML = `<a href="#/profile/${encodeURIComponent(sKey)}" style="color:var(--text); text-decoration:none; border-bottom:1px dashed var(--muted);"><b>${window.escapeHtml(s.name)}</b></a><br><span style='font-size:11px;color:var(--accent);font-weight:normal;'>гр. ${window.escapeHtml(s.group)}</span>`;
               tr.appendChild(tdName);
 
               works.forEach(w => {
@@ -171,7 +172,7 @@ window.renderJournalPage = function() {
 
               var tdName = document.createElement("td");
               tdName.style = "border:1px solid var(--border); padding:8px; text-align:left; font-weight:bold; position:sticky; left:0; background:var(--card); z-index:1;";
-              tdName.innerHTML = window.escapeHtml(s.name) + "<br><span style='font-size:11px;color:var(--accent);font-weight:normal;'>гр. " + window.escapeHtml(s.group) + "</span>";
+              tdName.innerHTML = `<a href="#/profile/${encodeURIComponent(sKey)}" style="color:var(--text); text-decoration:none; border-bottom:1px dashed var(--muted);"><b>${window.escapeHtml(s.name)}</b></a><br><span style='font-size:11px;color:var(--accent);font-weight:normal;'>гр. ${window.escapeHtml(s.group)}</span>`;
               tr.appendChild(tdName);
 
               ACADEMIC_DATES.forEach(date => {
@@ -195,7 +196,6 @@ window.renderJournalPage = function() {
                           if(res.ok) {
                               setTimeout(() => input.style.background = "transparent", 500);
                               p = newPayload;
-                              renderManual();
                           }
                       });
                   };
@@ -231,6 +231,5 @@ window.renderJournalPage = function() {
       renderManual();
   };
 
-  // По умолчанию показываем успеваемость по МДК
   renderAuto();
 };

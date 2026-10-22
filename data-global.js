@@ -1,22 +1,34 @@
 "use strict";
 
 window.GLOBAL_DATA = {
-  // Ссылки на YouTube (открываются прямо в iframe на сайте)
+  // ВИДЕО: Файлы лежат в папке "video", от 1.mp4 до 9.mp4
   videos: [
-    { title: "Введение в ЧПУ", description: "Основы программирования станков", url: "https://www.youtube.com/watch?v=8jPQjjsBbIc" }, 
-    { title: "Урок 2: G-коды", description: "Разбор G00, G01, G02, G03", url: "https://www.youtube.com/watch?v=1h2sQ3eY7wE" },
-    { title: "Наладка токарного станка", description: "Практические приемы", url: "https://www.youtube.com/watch?v=7q3jZ8Xm2yY" }
+    { title: "Видеоурок 1", description: "Учебный материал по ЧПУ", file: "video/1.mp4" },
+    { title: "Видеоурок 2", description: "Учебный материал по ЧПУ", file: "video/2.mp4" },
+    { title: "Видеоурок 3", description: "Учебный материал по ЧПУ", file: "video/3.mp4" },
+    { title: "Видеоурок 4", description: "Учебный материал по ЧПУ", file: "video/4.mp4" },
+    { title: "Видеоурок 5", description: "Учебный материал по ЧПУ", file: "video/5.mp4" },
+    { title: "Видеоурок 6", description: "Учебный материал по ЧПУ", file: "video/6.mp4" },
+    { title: "Видеоурок 7", description: "Учебный материал по ЧПУ", file: "video/7.mp4" },
+    { title: "Видеоурок 8", description: "Учебный материал по ЧПУ", file: "video/8.mp4" },
+    { title: "Видеоурок 9", description: "Учебный материал по ЧПУ", file: "video/9.mp4" }
   ],
   
-  // Пути к локальным PDF файлам (открываются в iframe)
+  // ПАСПОРТА: Файлы из вашей папки "passport"
   passports: [
-    { title: "Паспорт станка 16К20", description: "Токарно-винторезный", file: "passport/16k20.pdf" }, 
-    { title: "Паспорт станка 6Р82", description: "Вертикально-фрезерный", file: "passport/6r82.pdf" }
+    { title: "Паспорт станка 2Д450", description: "Радиально-сверлильный станок", file: "passport/2d450.pdf" },
+    { title: "Паспорт станка 2С108П", description: "Вертикально-сверлильный станок", file: "passport/2s108p.pdf" },
+    { title: "Паспорт станка 16К40", description: "Токарно-винторезный станок", file: "passport/16k40.pdf" },
+    { title: "Паспорт станка X6142", description: "Универсальный консольно-фрезерный станок", file: "passport/MODEL-X6142-UNIVERSAL_RU.pdf" }
   ],
   
+  // ОХРАНА ТРУДА: Файлы .docx в папке "ohranatruda"
   safety: [
-    { title: "ИОТ для токаря", description: "Инструкция по охране труда", file: "ohranatruda/tokar.pdf" },
-    { title: "ИОТ для фрезеровщика", description: "Инструкция по охране труда", file: "ohranatruda/frezer.pdf" }
+    { title: "ИОТ для токаря", description: "Инструкция по охране труда", file: "ohranatruda/иот токаря.docx" },
+    { title: "ИОТ для фрезеровщика", description: "Инструкция по охране труда", file: "ohranatruda/иот фрезер.docx" },
+    { title: "ИОТ при работе на вертикально-протяжном станке", description: "Инструкция по охране труда", file: "ohranatruda/иот при работе на вертикально-протяжном.docx" },
+    { title: "ИОТ для карабашки", description: "Инструкция по охране труда", file: "ohranatruda/иот карабашки.docx" },
+    { title: "Инструкция по охране труда (общая)", description: "Общие требования", file: "ohranatruda/Инструкция по охране труда.docx" }
   ],
   
   formatting: {

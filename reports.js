@@ -4,10 +4,16 @@ window.renderCourseReportsPage = function() {
   var app = document.getElementById("app"); 
   if (!app) return; 
   app.innerHTML = ""; 
-  document.getElementById("crumbs").textContent = "Отчеты по курсам";
+  var crumbs = document.getElementById("crumbs");
+  if (crumbs) crumbs.textContent = "Отчеты по курсам";
+  
   app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
 
-  if (!window.state.staff) { app.innerHTML += '<div class="module" style="color:var(--err); padding:40px; text-align:center;">⛔ Доступ только для преподавателя.</div>'; return; }
+  // ИСПРАВЛЕНО: используем window.state
+  if (!window.state.staff) { 
+      app.innerHTML += '<div class="module" style="color:var(--err); padding:40px; text-align:center;">⛔ Доступ только для преподавателя.</div>'; 
+      return; 
+  }
 
   var topPanel = el(`<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; align-items:center;">
       <h2 style="margin:0; font-size:20px;">📊 Отчеты</h2>
@@ -17,7 +23,8 @@ window.renderCourseReportsPage = function() {
       </div>
   </div>`);
   app.appendChild(topPanel);
-  var contentWrap = el('<div id="reportsContent"></div>'); app.appendChild(contentWrap);
+  var contentWrap = el('<div id="reportsContent"></div>'); 
+  app.appendChild(contentWrap);
 
   var cachedStudents = [];
 
@@ -58,7 +65,7 @@ window.renderCourseReportsPage = function() {
               
               tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;">
                   <button class="btn" style="padding:4px 8px; font-size:12px; background:var(--gold); color:#000;" onclick="window.grantXP('${sKey}')">+ XP</button>
-                  <button class="btn ghost" style="padding:4px 8px; font-size:12px; border-color:var(--err); color:var(--err);" onclick="window.deleteStudent('${sKey}', '${s.name}')">🗑</button>
+                  <button class="btn ghost" style="padding:4px 8px; font-size:12px; border-color:var(--err); color:var(--err);" onclick="window.deleteStudent('${sKey}', '${window.escapeHtml(s.name)}')">🗑</button>
               </td>`;
               
               tbody.appendChild(tr);
@@ -97,4 +104,31 @@ window.renderCourseReportsPage = function() {
   renderTable();
 };
 
-// (Функции grantXP, deleteStudent оставляем как были)
+// Добавляем функции, которые вызываются из таблицы
+window.grantXP = function(sKey) {
+    var amount = prompt("Сколько XP начислить?", "50");
+    if (!amount || isNaN(amount)) return;
+    
+    window.API.grantXP(sKey, parseInt(amount)).then(res => {
+        if (res && res.ok) {
+            window.showToast(`Начислено ${amount} XP!`, "ok");
+            // Обновить таблицу
+            if (document.getElementById("btnRefreshReports")) document.getElementById("btnRefreshReports").click();
+        } else {
+            window.showToast("Ошибка начисления", "err");
+        }
+    });
+};
+
+window.deleteStudent = function(sKey, name) {
+    if (!confirm(`Удалить студента ${name}? Это действие необратимо.`)) return;
+    
+    window.API.deleteStudent(sKey).then(res => {
+        if (res && res.ok) {
+            window.showToast("Студент удален", "ok");
+            if (document.getElementById("btnRefreshReports")) document.getElementById("btnRefreshReports").click();
+        } else {
+            window.showToast("Ошибка удаления", "err");
+        }
+    });
+};
