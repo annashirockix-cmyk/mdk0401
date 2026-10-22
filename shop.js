@@ -14,12 +14,15 @@ const THEMES = [
     { id: "ury-light", title: "Ury Light", price: 0, bg: "#FFFFFF", text: "#252525" },
     { id: "ury-dark", title: "Ury Dark", price: 0, bg: "#2b2b2b", text: "#ebebeb" },
     { id: "ury-sepia", title: "Ury Sepia", price: 0, bg: "#f3f2ec", text: "#252525" },
-    { id: "neon", title: "Киберпанк", price: 500, bg: "#09090b", text: "#ff00cc" },
-    { id: "matrix", title: "Матрица", price: 500, bg: "#000000", text: "#00ff00" },
-    { id: "cyberpunk", title: "Cyberpunk", price: 500, bg: "#0a0015", text: "#00ffff" }
+    { id: "neon", title: "Киберпанк", price: 200, bg: "#09090b", text: "#ff00cc" },
+    { id: "matrix", title: "Матрица", price: 200, bg: "#000000", text: "#00ff00" },
+    { id: "cyberpunk", title: "Cyberpunk", price: 300, bg: "#0a0015", text: "#00ffff" },
+    { id: "rgb", title: "RGB Геймер", price: 500, bg: "#111", text: "#ff0055" },
+    { id: "hacker", title: "Хакер", price: 400, bg: "#000", text: "#00ff00" },
+    { id: "cs", title: "Counter-Strike", price: 400, bg: "#1a1a1a", text: "#f39c12" },
+    { id: "genshin", title: "Genshin Impact", price: 400, bg: "#0f172a", text: "#38bdf8" }
 ];
 
-// ИСПРАВЛЕНО: Шрифты должны строго соответствовать тем, что загружены в index.html
 const FONTS = [
     { id: "default", title: "Стандарт", price: 0, family: "inherit" },
     { id: "atkinson", title: "Atkinson", price: 0, family: "'Atkinson Hyperlegible', sans-serif" },
@@ -35,6 +38,10 @@ const AVATARS = [
     { id: "av1", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix", price: 100, title: "Парень" },
     { id: "av2", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aneka", price: 100, title: "Девушка" },
     { id: "av3", url: "https://api.dicebear.com/7.x/bottts/svg?seed=Robo", price: 200, title: "Робот" },
+    { id: "av4", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=Gamer", price: 200, title: "Пиксель" },
+    { id: "av5", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=Smile", price: 150, title: "Смайл" },
+    { id: "av6", url: "https://api.dicebear.com/7.x/avataaars/svg?seed=CSGO", price: 300, title: "CS" },
+    { id: "av7", url: "https://api.dicebear.com/7.x/micah/svg?seed=Genshin", price: 300, title: "Аниме" },
     { id: "custom", url: "url", price: 500, title: "Свой URL" }
 ];
 
@@ -55,7 +62,6 @@ window.renderShopPage = function() {
         html += `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin-top:15px;">`;
         
         items.forEach(item => {
-            // Проверка владения
             var isOwned = isTeacher || 
                           (window.state.purchasedThemes && window.state.purchasedThemes.includes(item.id)) || 
                           (window.state.avatar === item.url) || 
@@ -80,7 +86,7 @@ window.renderShopPage = function() {
                 preview = `<div class="theme-preview" style="background:${item.bg}; color:${item.text}; display:flex; align-items:center; justify-content:center; font-weight:bold; height:60px; border-radius:6px; margin-bottom:10px;">Aa</div>`;
             }
             if (type === 'avatar' && item.url && item.url !== 'url') {
-                preview = `<img src="${item.url}" style="width:60px; height:60px; border-radius:50%; margin:0 auto 10px; display:block;">`;
+                preview = `<img src="${item.url}" style="width:60px; height:60px; border-radius:50%; margin:0 auto 10px; display:block; background:#fff;">`;
             } else if (type === 'avatar' && item.id === 'default') {
                 preview = `<div style="font-size:40px; margin-bottom:10px;">👨‍🎓</div>`;
             }
@@ -119,16 +125,16 @@ window.buyShopItem = function(type, id, price, value) {
         if (type === 'theme') { 
             if(!window.state.purchasedThemes) window.state.purchasedThemes = []; 
             window.state.purchasedThemes.push(id); 
-            window.applyShopItem(type, id, value); // Автоматически применяем
+            window.applyShopItem(type, id, value);
         }
         if (type === 'avatar') {
             window.state.avatar = value;
-            window.applyShopItem(type, id, value); // Автоматически применяем
+            window.applyShopItem(type, id, value);
         }
         if (type === 'font') { 
             if(!window.state.purchasedFonts) window.state.purchasedFonts = []; 
             window.state.purchasedFonts.push(id); 
-            window.applyShopItem(type, id, value); // Автоматически применяем
+            window.applyShopItem(type, id, value);
         }
         
         if (window.saveStudentData) window.saveStudentData();
@@ -141,7 +147,6 @@ window.applyShopItem = function(type, id, value) {
     if (type === 'theme') {
         localStorage.setItem("mdk.theme_active", id);
         document.documentElement.setAttribute("data-theme", id === "default" ? "dark" : id);
-        // Если открыто модальное окно, перерисуем его, чтобы обновить галочки
         if (document.getElementById("themeModalOverlay")) {
             document.getElementById("themeModalOverlay").remove();
             window.openThemeModal();
@@ -152,8 +157,6 @@ window.applyShopItem = function(type, id, value) {
     } else if (type === 'font') {
         window.state.font = id;
         var fontDef = FONTS.find(f => f.id === id);
-        
-        // Управление кастомным шрифтом через тег style
         var styleEl = document.getElementById("customFontStyle");
         if (id === "default") {
             if (styleEl) styleEl.remove();
@@ -171,7 +174,6 @@ window.applyShopItem = function(type, id, value) {
     if (window.saveStudentData) window.saveStudentData();
     window.showToast("Применено!", "ok");
     
-    // Перерисовываем магазин, если мы на его странице
     if (location.hash === "#/shop") {
         window.renderShopPage();
     }

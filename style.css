@@ -274,3 +274,45 @@ main#app { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
 .theme-card:hover { border-color: var(--accent); transform: translateY(-2px); }
 .theme-card.active { border-color: var(--accent); background: var(--accent-soft); }
 .theme-preview { width: 100%; height: 60px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin-bottom: 8px; border: 1px solid rgba(0,0,0,0.1); }
+/* --- 19. НОВЫЕ ТЕМЫ --- */
+[data-theme="rgb"] {
+  --bg: #050505; --card: #111; --card-soft: #1a1a1a; --border: #333;
+  --text: #fff; --muted: #aaa; --accent: #ff0055; --accent-soft: rgba(255,0,85,0.2);
+  --ok: #00ff55; --err: #ff0000; --gold: #ffcc00;
+}
+[data-theme="rgb"] .btn, [data-theme="rgb"] .status-pill, [data-theme="rgb"] .brand-badge {
+  animation: rgbGlow 3s infinite linear;
+}
+@keyframes rgbGlow {
+  0% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; color: #ff0000; }
+  33% { border-color: #00ff00; box-shadow: 0 0 10px #00ff00; color: #00ff00; }
+  66% { border-color: #0000ff; box-shadow: 0 0 10px #0000ff; color: #0000ff; }
+  100% { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; color: #ff0000; }
+}
+
+[data-theme="hacker"] {
+  --bg: #000; --card: #0a0a0a; --card-soft: #111; --border: #003300;
+  --text: #00ff00; --muted: #008800; --accent: #00ff00; --accent-soft: #002200;
+  --ok: #00ff00; --err: #ff0000; --gold: #00ff00;
+  font-family: 'Share Tech Mono', monospace !important;
+}
+[data-theme="hacker"] body {
+  background-image: linear-gradient(rgba(0, 255, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+[data-theme="cs"] {
+  --bg: #1a1a1a; --card: #222; --card-soft: #2a2a2a; --border: #444;
+  --text: #e0e0e0; --muted: #888; --accent: #f39c12; --accent-soft: rgba(243,156,18,0.2);
+  --ok: #2ecc71; --err: #e74c3c; --gold: #f1c40f;
+}
+[data-theme="cs"] .btn { border-radius: 2px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; }
+
+[data-theme="genshin"] {
+  --bg: #0f172a; --card: #1e293b; --card-soft: #334155; --border: #475569;
+  --text: #f8fafc; --muted: #94a3b8; --accent: #38bdf8; --accent-soft: rgba(56,189,248,0.2);
+  --ok: #34d399; --err: #f87171; --gold: #fbbf24;
+}
+[data-theme="genshin"] body {
+  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+}
