@@ -31,6 +31,19 @@ const EFFECTS = [
     { id: "rainbow", title: "Радуга", price: 800, css: "animation: rainbow-border 3s infinite linear; border: 3px solid; border-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet) 1;" }
 ];
 
+const FONTS = [
+    { id: "default", title: "Стандартный", price: 0, font: "" },
+    { id: "roboto", title: "Roboto", price: 200, font: "'Roboto', sans-serif" },
+    { id: "open-sans", title: "Open Sans", price: 200, font: "'Open Sans', sans-serif" },
+    { id: "montserrat", title: "Montserrat", price: 300, font: "'Montserrat', sans-serif" },
+    { id: "lobster", title: "Lobster", price: 500, font: "'Lobster', cursive" }
+];
+
+const SIGNATURES = [
+    { id: "none", title: "Без подписи", price: 0, text: "" },
+    { id: "custom", title: "Своя подпись", price: 100, text: "custom" }
+];
+
 window.checkAchievements = function() {
     if (!window.state.student) return;
     if (!window.state.unlockedAchievements) window.state.unlockedAchievements = [];
@@ -54,21 +67,29 @@ window.renderShopPage = function() {
         html += `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px;">`;
         
         items.forEach(item => {
-            var isOwned = (window.state.purchasedThemes || []).includes(item.id) || (window.state.avatar === item.url) || (window.state.effect === item.id);
+            var isOwned = (window.state.purchasedThemes || []).includes(item.id) || 
+                         (window.state.avatar === item.url) || 
+                         (window.state.effect === item.id) ||
+                         (window.state.purchasedFonts || []).includes(item.id) ||
+                         (window.state.purchasedSignatures || []).includes(item.id);
             var isActive = false;
             if (type === 'theme') isActive = localStorage.getItem("mdk.theme_active") === item.id;
             if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar);
             if (type === 'effect') isActive = (window.state.effect || 'none') === item.id;
+            if (type === 'font') isActive = (window.state.font || 'default') === item.id;
+            if (type === 'signature') isActive = (window.state.signature || 'none') === item.id;
 
             var btnHtml = "";
             if (isActive) btnHtml = `<button class="btn ghost" disabled style="border-color:var(--ok); color:var(--ok); width:100%;">✅ Активно</button>`;
-            else if (isOwned) btnHtml = `<button class="btn" onclick="window.applyShopItem('${type}', '${item.id}', '${item.url || ''}')" style="width:100%; background:var(--card-soft); color:var(--text);">Применить</button>`;
-            else btnHtml = `<button class="btn" onclick="window.buyShopItem('${type}', '${item.id}', ${item.price}, '${item.url || ''}')" style="width:100%; background:var(--gold); color:#000;">Купить за ${item.price} XP</button>`;
+            else if (isOwned) btnHtml = `<button class="btn" onclick="window.applyShopItem('${type}', '${item.id}', '${item.url || item.font || item.text || ''}')" style="width:100%; background:var(--card-soft); color:var(--text);">Применить</button>`;
+            else btnHtml = `<button class="btn" onclick="window.buyShopItem('${type}', '${item.id}', ${item.price}, '${item.url || item.font || item.text || ''}')" style="width:100%; background:var(--gold); color:#000;">Купить за ${item.price} XP</button>`;
 
             var preview = "";
             if (type === 'theme') preview = `<div style="height:40px; border-radius:8px; background:${item.color}; margin-bottom:10px;"></div>`;
             if (type === 'avatar' && item.url && item.url !== 'url') preview = `<img src="${item.url}" style="width:60px; height:60px; border-radius:50%; margin:0 auto 10px; display:block;">`;
             if (type === 'effect') preview = `<div style="height:40px; width:40px; border-radius:50%; background:var(--card); margin:0 auto 10px; ${item.css}"></div>`;
+            if (type === 'font') preview = `<div style="font-family:${item.font || 'inherit'}; font-size:20px; margin-bottom:10px;">AaБб</div>`;
+            if (type === 'signature') preview = `<div style="font-style:italic; color:var(--muted); margin-bottom:10px;">${item.text === 'custom' ? 'Ваша подпись' : item.text || '—'}</div>`;
 
             html += `<div class="module" style="padding:15px; text-align:center;">
                 ${preview}
@@ -83,19 +104,49 @@ window.renderShopPage = function() {
     app.innerHTML += renderCategory("🎨 Темы оформления", THEMES, "theme");
     app.innerHTML += renderCategory("👤 Аватары", AVATARS, "avatar");
     app.innerHTML += renderCategory("✨ Эффекты аватара", EFFECTS, "effect");
+    app.innerHTML += renderCategory("🔤 Шрифты", FONTS, "font");
+    app.innerHTML += renderCategory("✍️ Подпись под ником", SIGNATURES, "signature");
+
+    // Смена ника
+    app.innerHTML += `<h3 style="margin-top:30px; border-bottom: 2px solid var(--border); padding-bottom:10px;">📝 Смена ника</h3>
+    <div class="module" style="padding:15px; text-align:center;">
+        <p>Текущий ник: <b>${window.state.nickname || window.state.student?.name || 'Не задан'}</b></p>
+        <button class="btn" onclick="window.changeNickname()" style="background:var(--gold); color:#000;">Сменить ник (100 XP)</button>
+    </div>`;
 };
 
-window.buyShopItem = function(type, id, price, url) {
+window.buyShopItem = function(type, id, price, value) {
     if (window.state.xp < price) return window.showToast("Недостаточно XP!", "err");
-    if (url === 'url') {
-        url = prompt("Введите прямую ссылку на картинку (URL, заканчивающийся на .png, .jpg, .gif):");
-        if (!url || (!url.startsWith("http") && !url.startsWith("data:"))) return window.showToast("Неверный URL", "err");
+    
+    if (type === 'signature' && id === 'custom') {
+        value = prompt("Введите вашу подпись:");
+        if (!value) return;
     }
+    
     if (confirm(`Купить за ${price} XP?`)) {
         window.state.xp -= price;
-        if (type === 'theme') { if(!window.state.purchasedThemes) window.state.purchasedThemes = []; window.state.purchasedThemes.push(id); }
-        if (type === 'avatar') { window.state.avatar = url; }
-        if (type === 'effect') { window.state.effect = id; }
+        
+        if (type === 'theme') {
+            if(!window.state.purchasedThemes) window.state.purchasedThemes = [];
+            window.state.purchasedThemes.push(id);
+        }
+        if (type === 'avatar') {
+            if (value === 'url') {
+                value = prompt("Введите прямую ссылку на картинку (URL):");
+                if (!value || (!value.startsWith("http") && !value.startsWith("data:"))) return window.showToast("Неверный URL", "err");
+            }
+            window.state.avatar = value;
+        }
+        if (type === 'effect') window.state.effect = id;
+        if (type === 'font') {
+            if(!window.state.purchasedFonts) window.state.purchasedFonts = [];
+            window.state.purchasedFonts.push(id);
+        }
+        if (type === 'signature') {
+            if(!window.state.purchasedSignatures) window.state.purchasedSignatures = [];
+            window.state.purchasedSignatures.push(id);
+            window.state.signature = value;
+        }
         
         window.saveStudentData();
         window.showToast("Покупка успешна!", "ok");
@@ -104,17 +155,33 @@ window.buyShopItem = function(type, id, price, url) {
     }
 };
 
-window.applyShopItem = function(type, id, url) {
+window.applyShopItem = function(type, id, value) {
     if (type === 'theme') {
         localStorage.setItem("mdk.theme_active", id);
         document.documentElement.setAttribute("data-theme", id === "default" ? "dark" : id);
     } else if (type === 'avatar') {
-        window.state.avatar = url || null;
+        window.state.avatar = value || null;
     } else if (type === 'effect') {
         window.state.effect = id;
+    } else if (type === 'font') {
+        window.state.font = id;
+    } else if (type === 'signature') {
+        window.state.signature = value;
     }
     window.saveStudentData();
     window.showToast("Применено!", "ok");
+    window.renderShopPage();
+    window.renderUserChip();
+};
+
+window.changeNickname = function() {
+    if (window.state.xp < 100) return window.showToast("Нужно 100 XP", "err");
+    var newNick = prompt("Введите новый ник:", window.state.nickname || "");
+    if (!newNick) return;
+    window.state.xp -= 100;
+    window.state.nickname = newNick;
+    window.saveStudentData();
+    window.showToast("Ник изменён!", "ok");
     window.renderShopPage();
     window.renderUserChip();
 };
@@ -123,14 +190,18 @@ window.renderProfilePage = function() {
   var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
   app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
   
-  if (window.state.staff) { app.innerHTML += `<section class="module"><h1>Профиль учителя</h1><p>${window.state.staff.name}</p></section>`; return; }
+  if (window.state.staff) { 
+      app.innerHTML += `<section class="module"><h1>Профиль учителя</h1><p>${window.state.staff.name}</p></section>`; 
+      return; 
+  }
   if (!window.state.student) return;
 
   var lvl = window.getLevel(window.state.xp);
-  var effCss = window.state.effect && window.state.effect !== 'none' ? EFFECTS.find(e => e.id === window.state.effect).css : "";
+  var effCss = window.state.effect && window.state.effect !== 'none' ? EFFECTS.find(e => e.id === window.state.effect)?.css || "" : "";
   var avHtml = window.state.avatar ? `<img src="${window.state.avatar}" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">` : "👨‍🎓";
+  var fontStyle = window.state.font ? FONTS.find(f => f.id === window.state.font)?.font || "" : "";
+  var signature = window.state.signature || "";
 
-  // Блок с оценками
   var resultsHtml = "";
   var results = window.state.results || {};
   var hasResults = false;
@@ -140,14 +211,11 @@ window.renderProfilePage = function() {
           hasResults = true;
           var grade = results[key].grade || "?";
           var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : "var(--err)");
-          
-          // Красивое название для ключа
           var displayName = key;
           if (key.includes("_test")) {
               var topicId = key.replace("_test", "");
-              displayName = "Тест / Практика (Тема " + topicId + ")";
+              displayName = "Тест (Тема " + topicId + ")";
           }
-          
           resultsHtml += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
               <span>${window.escapeHtml(displayName)}</span>
               <b style="color:${color}; font-size:18px;">${grade}</b>
@@ -159,11 +227,12 @@ window.renderProfilePage = function() {
       resultsHtml = "<p style='color:var(--muted);'>Вы пока не прошли ни одного теста.</p>";
   }
 
-  app.innerHTML += `<section class="module" style="text-align:center; padding:40px;">
+  app.innerHTML += `<section class="module" style="text-align:center; padding:40px; font-family:${fontStyle};">
       <div style="width:120px; height:120px; margin:0 auto 20px; border-radius:50%; border:4px solid var(--accent); display:flex; align-items:center; justify-content:center; font-size:60px; ${effCss}">
           ${avHtml}
       </div>
-      <h2 style="margin:0 0 10px 0;">${window.state.student.name}</h2>
+      <h2 style="margin:0 0 10px 0;">${window.state.nickname || window.state.student.name}</h2>
+      ${signature ? `<p style="font-style:italic; color:var(--muted); margin-bottom:10px;">${window.escapeHtml(signature)}</p>` : ''}
       <p style="color:var(--muted); margin-bottom:15px;">Группа: ${window.state.student.group}</p>
       <div style="display:inline-block; background:var(--card-soft); padding:10px 20px; border-radius:20px;">
           <b style="color:var(--gold);">${window.state.xp} XP</b> · Уровень ${lvl}

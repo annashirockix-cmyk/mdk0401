@@ -1,6 +1,6 @@
 "use strict";
 
-var APPS_SCRIPT_URL = "https://script.google.com/macros/s/ВАШ_НОВЫЙ_КОД/exec";
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec";
 
 async function fetchAPI(action, params = {}, method = "GET") {
     if (APPS_SCRIPT_URL.includes("ВАША_НОВАЯ_ССЫЛКА")) {
@@ -10,22 +10,22 @@ async function fetchAPI(action, params = {}, method = "GET") {
 
     const url = new URL(APPS_SCRIPT_URL);
     url.searchParams.append("action", action);
-    url.searchParams.append("t", Date.now()); 
+    url.searchParams.append("t", Date.now());
     
-    for (const key in params) { 
+    for (const key in params) {
         if (params[key] !== undefined && params[key] !== null) {
-            url.searchParams.append(key, params[key]); 
-        } 
+            url.searchParams.append(key, params[key]);
+        }
     }
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000); 
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
     
     try {
         const options = { signal: controller.signal, cache: "no-store" };
-        if (method === "POST") { 
-            options.method = "POST"; 
-            options.body = url.searchParams; 
+        if (method === "POST") {
+            options.method = "POST";
+            options.body = url.searchParams;
         }
         const response = await fetch(url.toString(), options);
         clearTimeout(timeoutId);

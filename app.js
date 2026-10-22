@@ -21,8 +21,10 @@ window.state = {
   activeCourseId: "07.01",
   student: null, staff: null, xp: 0, results: {},
   purchasedThemes: [], unlockedAchievements: [], avatar: null, effect: null,
-  certBg: "1.jpg", // Фон сертификата
-  suppBg: "1.jpg"  // Фон вкладыша
+  nickname: null, signature: null, font: "default",
+  purchasedFonts: [], purchasedSignatures: [],
+  certBg: "1.jpg",
+  suppBg: "1.jpg"
 };
 
 try {
@@ -31,6 +33,9 @@ try {
   var _st = JSON.parse(localStorage.getItem("mdk.staff") || "null"); if (_st && _st.name) window.state.staff = _st;
   window.state.certBg = localStorage.getItem("mdk.certBg") || "1.jpg";
   window.state.suppBg = localStorage.getItem("mdk.suppBg") || "1.jpg";
+  window.state.nickname = localStorage.getItem("mdk.nickname") || null;
+  window.state.signature = localStorage.getItem("mdk.signature") || null;
+  window.state.font = localStorage.getItem("mdk.font") || "default";
 } catch (e) { console.warn("LocalStorage недоступен"); }
 
 if (!window.MDK_DATA || !window.MDK_DATA[window.state.activeCourseId]) window.state.activeCourseId = "07.01";
@@ -49,7 +54,7 @@ window.updateXpDisplay = function() {
 };
 
 window.addXP = function(amount) {
-  if (window.state.staff) return; 
+  if (window.state.staff) return;
   window.state.xp += amount;
   window.saveStudentData();
   window.showToast((amount > 0 ? "+" : "") + amount + " XP", amount > 0 ? "ok" : "err");
@@ -62,19 +67,35 @@ window.saveStudentData = function() {
   try {
     localStorage.setItem("mdk.xp." + ek, window.state.xp);
     localStorage.setItem("mdk.results." + ek, JSON.stringify(window.state.results || {}));
-    localStorage.setItem("mdk.shop." + ek, JSON.stringify({ 
-        purchasedThemes: window.state.purchasedThemes || [], 
+    localStorage.setItem("mdk.shop." + ek, JSON.stringify({
+        purchasedThemes: window.state.purchasedThemes || [],
         unlockedAchievements: window.state.unlockedAchievements || [],
-        avatar: window.state.avatar || null, effect: window.state.effect || null
+        avatar: window.state.avatar || null, effect: window.state.effect || null,
+        nickname: window.state.nickname || null,
+        signature: window.state.signature || null,
+        font: window.state.font || "default",
+        purchasedFonts: window.state.purchasedFonts || [],
+        purchasedSignatures: window.state.purchasedSignatures || []
     }));
+    localStorage.setItem("mdk.nickname", window.state.nickname || "");
+    localStorage.setItem("mdk.signature", window.state.signature || "");
+    localStorage.setItem("mdk.font", window.state.font || "default");
   } catch (e) {}
   
   window.updateXpDisplay();
   if (window.API && window.API.saveStudent) {
     window.API.saveStudent(k, window.state.student.name, window.state.student.group,
-      JSON.stringify({ xp: window.state.xp, results: window.state.results,
-          purchasedThemes: window.state.purchasedThemes || [], unlockedAchievements: window.state.unlockedAchievements || [],
-          avatar: window.state.avatar || null, effect: window.state.effect || null })
+      JSON.stringify({
+          xp: window.state.xp, results: window.state.results,
+          purchasedThemes: window.state.purchasedThemes || [],
+          unlockedAchievements: window.state.unlockedAchievements || [],
+          avatar: window.state.avatar || null, effect: window.state.effect || null,
+          nickname: window.state.nickname || null,
+          signature: window.state.signature || null,
+          font: window.state.font || "default",
+          purchasedFonts: window.state.purchasedFonts || [],
+          purchasedSignatures: window.state.purchasedSignatures || []
+      })
     ).catch(() => {});
   }
 };
@@ -84,20 +105,24 @@ window.loadStudentData = function() {
   var ek = encodeURIComponent(k);
   try {
     window.state.xp = parseInt(localStorage.getItem("mdk.xp." + ek) || "0", 10);
-    var r = localStorage.getItem("mdk.results." + ek); 
+    var r = localStorage.getItem("mdk.results." + ek);
     window.state.results = r ? JSON.parse(r) : {};
-    var s = localStorage.getItem("mdk.shop." + ek); 
-    if(s) { 
-        var sh = JSON.parse(s); 
-        window.state.purchasedThemes = sh.purchasedThemes || []; 
+    var s = localStorage.getItem("mdk.shop." + ek);
+    if(s) {
+        var sh = JSON.parse(s);
+        window.state.purchasedThemes = sh.purchasedThemes || [];
         window.state.unlockedAchievements = sh.unlockedAchievements || [];
-        window.state.avatar = sh.avatar || null; window.state.effect = sh.effect || null; 
+        window.state.avatar = sh.avatar || null; window.state.effect = sh.effect || null;
+        window.state.nickname = sh.nickname || null;
+        window.state.signature = sh.signature || null;
+        window.state.font = sh.font || "default";
+        window.state.purchasedFonts = sh.purchasedFonts || [];
+        window.state.purchasedSignatures = sh.purchasedSignatures || [];
     }
   } catch (e) {}
   window.updateXpDisplay();
   window.renderUserChip();
 };
-
 // ================= АВТОРИЗАЦИЯ =================
 window.doStudentLogin = function() {
   var n = $("loginName").value.trim(); var g = $("loginGroup").value.trim();
@@ -115,7 +140,7 @@ window.doTeacherLogin = function() {
   if ((u === "admin" && p === "admin") || (u === "teacher" && p === "teacher")) {
       window.state.staff = { name: u === "admin" ? "Администратор" : "Анна Анатольевна", role: u === "admin" ? "admin" : "teacher" };
       window.state.student = null;
-      window.state.xp = 999999; 
+      window.state.xp = 999999;
       try { localStorage.setItem("mdk.staff", JSON.stringify(window.state.staff)); localStorage.removeItem("mdk.student"); } catch(e){}
       window.renderUserChip(); window.updateXpDisplay(); window.route();
   } else { errEl.textContent = "Неверный логин или пароль"; errEl.style.display = "block"; }
@@ -130,30 +155,30 @@ window.handleLogout = function() {
   window.closeDrawer(); window.route();
 };
 
-window.switchCourse = function(id) { 
-    window.state.activeCourseId = id; window.COURSE = window.MDK_DATA[id] || null; window.route(); 
+window.switchCourse = function(id) {
+    window.state.activeCourseId = id; window.COURSE = window.MDK_DATA[id] || null; window.route();
 };
 
-window.closeDrawer = function() { 
-    if ($("drawer")) $("drawer").classList.remove("open"); 
-    if ($("drawerOverlay")) $("drawerOverlay").classList.remove("open"); 
+window.closeDrawer = function() {
+    if ($("drawer")) $("drawer").classList.remove("open");
+    if ($("drawerOverlay")) $("drawerOverlay").classList.remove("open");
 };
 
-window.applyTheme = function(theme) { 
-    document.documentElement.setAttribute("data-theme", theme); 
+window.applyTheme = function(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
     try { localStorage.setItem("mdk.theme", theme); } catch(e){}
 };
 
 window.renderUserChip = function() {
   if (!$("userChipName")) return;
-  if (window.state.staff) { 
-      $("userChipName").textContent = window.state.staff.name; 
-      $("userChipGroup").textContent = "Преподаватель"; 
-      $("userChipAvatar").innerHTML = "👨‍🏫"; 
-      return; 
+  if (window.state.staff) {
+      $("userChipName").textContent = window.state.staff.name;
+      $("userChipGroup").textContent = "Преподаватель";
+      $("userChipAvatar").innerHTML = "👨‍🏫";
+      return;
   }
   if (!window.state.student) return;
-  $("userChipName").textContent = window.state.student.name; 
+  $("userChipName").textContent = window.state.nickname || window.state.student.name;
   $("userChipGroup").textContent = "Гр. " + window.state.student.group;
   $("userChipAvatar").innerHTML = window.state.avatar ? `<img src="${window.state.avatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : "👨‍🎓";
 };
@@ -165,17 +190,17 @@ window.route = function() {
   var fab = document.getElementById("asFab");
   var isLoggedIn = !!(window.state.student || window.state.staff);
 
-  if (!isLoggedIn) { 
-      if (overlay) overlay.style.display = "block"; 
+  if (!isLoggedIn) {
+      if (overlay) overlay.style.display = "block";
       if (fab) fab.style.display = "none";
-      if ($("app")) $("app").innerHTML = ""; 
-      return; 
+      if ($("app")) $("app").innerHTML = "";
+      return;
   }
 
   if (overlay) overlay.style.display = "none";
   if (fab) fab.style.display = "flex";
 
-  var hash = location.hash.replace(/^#/, "") || "/"; 
+  var hash = location.hash.replace(/^#/, "") || "/";
   var parts = hash.split("/").filter(Boolean);
   var app = $("app"); if (!app) return;
 
@@ -188,19 +213,19 @@ window.route = function() {
     else if (page === "videos") window.renderSimplePage("Видеоуроки", window.GLOBAL_DATA?.videos, "🎬");
     else if (page === "passports") window.renderSimplePage("Паспорта станков", window.GLOBAL_DATA?.passports, "📄");
     else if (page === "safety") window.renderSimplePage("Охрана труда", window.GLOBAL_DATA?.safety, "🦺");
-    else if (page === "formatting") window.renderSimplePage("Оформление работ", [{title: "Требования к оформлению", content: "Times New Roman 14, интервал 1.5."}], "📝");
+    else if (page === "formatting") window.renderSimplePage("Оформление работ", [{title: window.GLOBAL_DATA?.formatting?.title || "Требования", content: window.GLOBAL_DATA?.formatting?.content || ""}], "📝");
     else if (page === "links" && window.renderLinksPage) window.renderLinksPage();
-    else if (page === "training") { 
-        if (window.state.activeCourseId === "02.01" && window.renderTraining_0201) window.renderTraining_0201(parts[1]); 
-        else if (window.state.activeCourseId === "02.02" && window.renderTraining_0202) window.renderTraining_0202(parts[1]); 
-        else if (window.state.activeCourseId === "04.01" && window.renderTraining_0401) window.renderTraining_0401(parts[1]); 
-        else if (window.state.activeCourseId === "07.01" && window.renderTraining_0701) window.renderTraining_0701(parts[1]); 
+    else if (page === "training") {
+        if (window.state.activeCourseId === "02.01" && window.renderTraining_0201) window.renderTraining_0201(parts[1]);
+        else if (window.state.activeCourseId === "02.02" && window.renderTraining_0202) window.renderTraining_0202(parts[1]);
+        else if (window.state.activeCourseId === "04.01" && window.renderTraining_0401) window.renderTraining_0401(parts[1]);
+        else if (window.state.activeCourseId === "07.01" && window.renderTraining_0701) window.renderTraining_0701(parts[1]);
     }
-    else if (page === "final") { 
-        if (window.state.activeCourseId === "02.01" && window.renderFinal_0201) window.renderFinal_0201(parts[1]); 
-        else if (window.state.activeCourseId === "02.02" && window.renderFinal_0202) window.renderFinal_0202(parts[1]); 
-        else if (window.state.activeCourseId === "04.01" && window.renderFinal_0401) window.renderFinal_0401(parts[1]); 
-        else if (window.state.activeCourseId === "07.01" && window.renderFinal_0701) window.renderFinal_0701(parts[1]); 
+    else if (page === "final") {
+        if (window.state.activeCourseId === "02.01" && window.renderFinal_0201) window.renderFinal_0201(parts[1]);
+        else if (window.state.activeCourseId === "02.02" && window.renderFinal_0202) window.renderFinal_0202(parts[1]);
+        else if (window.state.activeCourseId === "04.01" && window.renderFinal_0401) window.renderFinal_0401(parts[1]);
+        else if (window.state.activeCourseId === "07.01" && window.renderFinal_0701) window.renderFinal_0701(parts[1]);
     }
     else if (page === "arcade" && window.renderArcadePage) window.renderArcadePage();
     else if (page === "shop" && window.renderShopPage) window.renderShopPage();
@@ -210,12 +235,11 @@ window.route = function() {
     else if (page === "schedule" && window.renderSchedulePage) window.renderSchedulePage();
     else if (page === "achievements") window.renderAchievementsPage();
     else renderHome();
-  } catch (err) { 
-      app.innerHTML = '<div class="module" style="color:var(--err);">Ошибка: ' + window.escapeHtml(err.message) + '</div>'; 
+  } catch (err) {
+      app.innerHTML = '<div class="module" style="color:var(--err);">Ошибка: ' + window.escapeHtml(err.message) + '</div>';
   }
   window.scrollTo(0, 0);
 };
-
 // ================= УНИВЕРСАЛЬНЫЙ ГЕНЕРАТОР ТЕСТОВ =================
 window.buildTestBlock = function(prefix, uniqueId, questions) {
     if (!questions || questions.length === 0) return "";
@@ -230,7 +254,7 @@ window.buildTestBlock = function(prefix, uniqueId, questions) {
             <b>${qi + 1}. ${q.q}</b><div style="margin-top:10px;">`;
         q.options.forEach((opt, oi) => {
             html += `<label id="opt_${prefix}_${uniqueId}_${qi}_${oi}" style="display:flex; align-items:center; gap:8px; margin-bottom:6px; cursor:pointer; padding:6px; border-radius:6px; transition: background 0.2s; border: 1px solid transparent;" onmouseover="this.style.background='var(--card-soft)'" onmouseout="if(!this.classList.contains('checked')) this.style.background='transparent'">
-                <input type="radio" name="${prefix}_q_${uniqueId}_${qi}" value="${oi}" style="transform:scale(1.2);"> 
+                <input type="radio" name="${prefix}_q_${uniqueId}_${qi}" value="${oi}" style="transform:scale(1.2);">
                 <span style="font-size:15px;">${opt}</span>
             </label>`;
         });
@@ -260,8 +284,8 @@ window.renderTopic = function(topicId, activeTab) {
             var c = window.MDK_DATA[cid];
             if (c.sections) {
                 c.sections.forEach(s => {
-                    s.topics.forEach(t => { 
-                        if (t.id === topicId) { topic = t; foundCourseId = cid; } 
+                    s.topics.forEach(t => {
+                        if (t.id === topicId) { topic = t; foundCourseId = cid; }
                     });
                 });
             }
@@ -315,7 +339,7 @@ window.renderTopic = function(topicId, activeTab) {
         });
         contentBox.innerHTML = accordionHtml;
         if(window.addXP) window.addXP(5);
-    } 
+    }
     
     // --- 2. ПРАКТИКА ---
     else if (activeTab === 'practicals' && topic.practicals) {
@@ -353,7 +377,7 @@ window.renderTopic = function(topicId, activeTab) {
             html += `</div>`;
             contentBox.innerHTML += html;
         });
-    } 
+    }
     
     // --- 3. САМОСТОЯТЕЛЬНАЯ ---
     else if (activeTab === 'selfWork' && topic.selfWork) {
@@ -379,9 +403,9 @@ window.renderTopic = function(topicId, activeTab) {
             html += `</div>`;
             contentBox.innerHTML += html;
         });
-    } 
+    }
     
-    // --- 4. ТЕСТ (По теме) ---
+    // --- 4. ТЕСТ ---
     else if (activeTab === 'test' && baseQuestions.length > 0) {
         contentBox.innerHTML = `<h3>📝 Контрольный тест по теме</h3>
         <p>Ответьте на все вопросы, чтобы получить оценку.</p>
@@ -402,9 +426,8 @@ window.renderTopic = function(topicId, activeTab) {
                 <a href="${p.file}" download class="btn ghost" style="margin-top:10px; font-size:12px; display:inline-block;">📥 Скачать файл</a>
             </div>`;
         });
-    } 
+    }
 };
-
 // ================= ФУНКЦИИ ПРОВЕРКИ =================
 window.checkPracticalAnswer = function(id, expected) {
     var input = document.getElementById("ans_" + id);
@@ -412,7 +435,7 @@ window.checkPracticalAnswer = function(id, expected) {
     var btn = document.getElementById("btn_" + id);
     if (!input || !fb) return;
     
-    var val = input.value.trim().replace(',', '.'); 
+    var val = input.value.trim().replace(',', '.');
     var exp = String(expected).trim().replace(',', '.');
     
     if (val === exp) {
@@ -480,7 +503,7 @@ window.gradeTest = function(prefix, uniqueId, encodedQuestions) {
         
         if (!window.state.results[uniqueId]) {
             window.state.results[uniqueId] = { grade: grade, total: correct, max: total };
-            if (window.addXP) window.addXP(15); 
+            if (window.addXP) window.addXP(15);
             window.saveStudentData();
         }
     } else {
@@ -489,24 +512,36 @@ window.gradeTest = function(prefix, uniqueId, encodedQuestions) {
     }
 };
 
-// ================= СЕРТИФИКАТ И ВКЛАДЫШ =================
+// ================= СЕРТИФИКАТ (с фильтрацией по МДК) =================
 window.renderCertificatePage = function() {
     var app = $("app"); if (!app) return; app.innerHTML = "";
     app.appendChild(el('<a class="backlink no-print" href="#/" style="color:var(--accent);">← На главную</a>'));
     
     if (!window.state.student) return;
 
-    var p = {}; 
+    // Фильтруем результаты только для активного МДК
+    var courseId = window.state.activeCourseId;
+    var course = window.MDK_DATA[courseId];
+    var validIds = new Set();
+    if (course) {
+        course.sections.forEach(s => s.topics.forEach(t => {
+            validIds.add(t.id);
+            if (t.practicals) t.practicals.forEach((p, i) => validIds.add(`prac_${t.id}_${i}`));
+            if (t.selfWork) t.selfWork.forEach((sw, i) => validIds.add(`self_${t.id}_${i}`));
+            if (t.test) validIds.add(`inline_${t.id}`);
+        }));
+    }
+
+    var p = {};
     try { p = JSON.parse(localStorage.getItem("mdk.results." + encodeURIComponent(window.studentKey()))) || {}; } catch(e) {}
-    var isApproved = p.certificateApproved || false; 
+    var isApproved = p.certificateApproved || false;
     
     var bgs = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
     
-    // --- ПАНЕЛЬ ВЫБОРА ФОНА СЕРТИФИКАТА ---
+    // Панель выбора фона сертификата
     var certBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;">
         <h3 style="margin-bottom:10px;">Выберите фон для сертификата:</h3>
         <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
-    
     bgs.forEach(bg => {
         var isSelected = window.state.certBg === bg;
         certBgSelectorHtml += `<img src="certificat/${bg}" 
@@ -520,11 +555,10 @@ window.renderCertificatePage = function() {
     });
     certBgSelectorHtml += `</div></div>`;
 
-    // --- ПАНЕЛЬ ВЫБОРА ФОНА ВКЛАДЫША ---
+    // Панель выбора фона вкладыша
     var suppBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;">
         <h3 style="margin-bottom:10px;">Выберите фон для вкладыша (оценок):</h3>
         <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
-    
     bgs.forEach(bg => {
         var isSelected = window.state.suppBg === bg;
         suppBgSelectorHtml += `<img src="certificat/${bg}" 
@@ -544,19 +578,20 @@ window.renderCertificatePage = function() {
     var certBgUrl = `url('certificat/${window.state.certBg}')`;
     var suppBgUrl = `url('certificat/${window.state.suppBg}')`;
     
-    // --- Формируем данные для ВКЛАДЫША ---
+    // Формируем данные для вкладыша (только для активного МДК)
     var passedItems = [];
     var totalGradesSum = 0;
     var totalGradesCount = 0;
 
     for (var key in window.state.results) {
+        if (!validIds.has(key)) continue; // фильтр по МДК
         if (key === "__final__") continue;
         
         var cleanId = key.replace("prac_", "").replace("self_", "").replace("_test", "").replace(/_\d+$/, "");
         var topicTitle = cleanId;
         
-        if (window.COURSE && window.COURSE.sections) {
-            window.COURSE.sections.forEach(s => {
+        if (course && course.sections) {
+            course.sections.forEach(s => {
                 s.topics.forEach(t => {
                     if (t.id === cleanId) topicTitle = t.code + " " + t.title;
                 });
@@ -593,7 +628,7 @@ window.renderCertificatePage = function() {
         });
     }
 
-    // --- HTML СЕРТИФИКАТА ---
+    // HTML сертификата
     var certHtml = `
         <div id="printable-cert" style="
             background-image: ${certBgUrl}; background-size: 100% 100%; background-repeat: no-repeat; background-color: #fff;
@@ -607,7 +642,7 @@ window.renderCertificatePage = function() {
                     <p style="font-size:18px; margin-bottom:30px;">подтверждает, что</p>
                     <h2 style="font-size:36px; margin:20px 0; color:#000; border-bottom: 2px solid #ccc; display: inline-block; padding-bottom: 5px;">${window.escapeHtml(window.state.student.name)}</h2>
                     <p style="font-size:18px; margin-top:30px; margin-bottom:30px;">успешно прошел(ла) обучение по программе</p>
-                    <h3 style="font-size:24px; margin:20px 0; color:#000;">${window.escapeHtml(window.COURSE ? window.COURSE.title : "МДК")}</h3>
+                    <h3 style="font-size:24px; margin:20px 0; color:#000;">${window.escapeHtml(course ? course.title : "МДК")}</h3>
                     <p style="font-size:16px; margin-bottom:40px;">Группа: ${window.escapeHtml(window.state.student.group)}</p>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:16px; margin-top:20px;">
@@ -619,7 +654,7 @@ window.renderCertificatePage = function() {
         </div>
     `;
 
-    // --- HTML ВКЛАДЫША ---
+    // HTML вкладыша
     var suppHtml = `
         <div id="printable-supplement" style="
             background-image: ${suppBgUrl}; background-size: 100% 100%; background-repeat: no-repeat; background-color: #fff;
@@ -638,7 +673,7 @@ window.renderCertificatePage = function() {
                     <span><b>Группа:</b> ${window.escapeHtml(window.state.student.group)}</span>
                 </div>
                 <div style="font-size:16px; margin-bottom:20px; display:flex; justify-content:space-between;">
-                    <span><b>Программа:</b> ${window.escapeHtml(window.COURSE ? window.COURSE.title : "МДК")}</span>
+                    <span><b>Программа:</b> ${window.escapeHtml(course ? course.title : "МДК")}</span>
                     <span><b>Средний балл:</b> ${averageGrade}</span>
                 </div>
 
@@ -681,7 +716,7 @@ window.setSuppBg = function(bgName) {
 
 window.requestCertificate = function() {
     var k = window.studentKey(); if (!k) return;
-    var p = {}; 
+    var p = {};
     try { p = JSON.parse(localStorage.getItem("mdk.results." + encodeURIComponent(k))) || {}; } catch(e) {}
     
     if (!p.certificateRequested) {
@@ -694,8 +729,6 @@ window.requestCertificate = function() {
         window.print();
     }
 };
-
-
 // ================= ДОСТИЖЕНИЯ И ПРОСТЫЕ СТРАНИЦЫ =================
 window.renderAchievementsPage = function() {
     var app = $("app"); if (!app) return; app.innerHTML = "";
@@ -740,11 +773,27 @@ window.renderSimplePage = function(title, items, icon) {
         list.innerHTML = "<p>Материалы пока не добавлены.</p>";
     } else {
         items.forEach(item => {
-            list.innerHTML += `<div style="margin-bottom:10px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);">
-                <b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br>
-                <span style="font-size:14px; color:var(--muted);">${item.description || item.content || ''}</span>
-                ${item.file ? `<br><a href="${item.file}" target="_blank" class="btn" style="margin-top:8px; padding:6px 12px; font-size:12px;">📥 Открыть файл</a>` : ''}
-            </div>`;
+            if (item.url) {
+                // Видео или ссылка
+                list.innerHTML += `<div style="margin-bottom:10px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);">
+                    <b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br>
+                    <span style="font-size:14px; color:var(--muted);">${item.description || item.content || ''}</span>
+                    <br><a href="${item.url}" target="_blank" class="btn" style="margin-top:8px; padding:6px 12px; font-size:12px;">▶ Смотреть</a>
+                </div>`;
+            } else if (item.file) {
+                // Файл
+                list.innerHTML += `<div style="margin-bottom:10px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);">
+                    <b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br>
+                    <span style="font-size:14px; color:var(--muted);">${item.description || item.content || ''}</span>
+                    <br><a href="${item.file}" target="_blank" class="btn" style="margin-top:8px; padding:6px 12px; font-size:12px;">📥 Открыть файл</a>
+                </div>`;
+            } else {
+                // Текстовый контент (например, оформление)
+                list.innerHTML += `<div style="margin-bottom:10px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);">
+                    <b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br>
+                    <div style="font-size:14px; color:var(--text-soft); margin-top:8px;">${item.content || item.description || ''}</div>
+                </div>`;
+            }
         });
     }
     app.appendChild(list);
@@ -762,9 +811,9 @@ function renderHome() {
   (c.sections || []).forEach(sec => {
     html += '<div style="font-weight:bold; margin:20px 0 10px; color:var(--accent); text-transform:uppercase; font-size:12px;">' + window.escapeHtml(sec.title) + '</div>';
     (sec.topics || []).forEach(t => {
-      var badges = []; 
-      if (t.lectures) badges.push("📖"); 
-      if (t.practicals) badges.push("🛠"); 
+      var badges = [];
+      if (t.lectures) badges.push("📖");
+      if (t.practicals) badges.push("🛠");
       if (t.test || t.tests) badges.push("📝");
       
       html += `<div class="topic" onclick="location.hash='#/topic/${t.id}/lecture'">
@@ -785,11 +834,17 @@ window.addEventListener("DOMContentLoaded", function() {
   try { savedTheme = localStorage.getItem("mdk.theme") || "dark"; } catch(e){}
   document.documentElement.setAttribute("data-theme", savedTheme);
 
+  // Применяем сохранённый шрифт
+  if (window.state.font && window.state.font !== "default") {
+      var fontDef = FONTS.find(f => f.id === window.state.font);
+      if (fontDef && fontDef.font) document.body.style.fontFamily = fontDef.font;
+  }
+
   if ($("btnLoginStudent")) $("btnLoginStudent").onclick = window.doStudentLogin;
   if ($("btnLoginTeacher")) $("btnLoginTeacher").onclick = window.doTeacherLogin;
   
   if ($("themeToggle")) {
-      $("themeToggle").onclick = () => { 
+      $("themeToggle").onclick = () => {
           if(window.renderShopPage) {
               location.hash = "#/shop";
               setTimeout(() => {
@@ -803,25 +858,25 @@ window.addEventListener("DOMContentLoaded", function() {
   if ($("drawerClose")) $("drawerClose").onclick = window.closeDrawer;
   if ($("drawerOverlay")) $("drawerOverlay").onclick = window.closeDrawer;
   
-  if ($("mdkSelector")) { 
-      $("mdkSelector").value = window.state.activeCourseId; 
-      $("mdkSelector").onchange = (e) => window.switchCourse(e.target.value); 
+  if ($("mdkSelector")) {
+      $("mdkSelector").value = window.state.activeCourseId;
+      $("mdkSelector").onchange = (e) => window.switchCourse(e.target.value);
   }
   
-  document.querySelectorAll("[data-go]").forEach(item => { 
-      item.onclick = (e) => { 
-          e.preventDefault(); 
+  document.querySelectorAll("[data-go]").forEach(item => {
+      item.onclick = (e) => {
+          e.preventDefault();
           var target = item.getAttribute("data-go");
           if(location.hash === target) {
-              window.route(); 
+              window.route();
           } else {
-              location.hash = target; 
+              location.hash = target;
           }
-          window.closeDrawer(); 
-      }; 
+          window.closeDrawer();
+      };
   });
 
-  window.renderUserChip(); 
+  window.renderUserChip();
   if (window.state.student) window.loadStudentData();
   window.route();
 });

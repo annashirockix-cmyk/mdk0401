@@ -76,6 +76,7 @@ window.renderCourseReportsPage = function() {
                       <button class="btn ghost" style="padding:4px 8px; font-size:12px; border-color:var(--err); color:var(--err);" onclick="window.deductXP('${sKey}')">- XP</button>
                       <button class="btn ghost" style="padding:4px 8px; font-size:12px; border-color:#d97706; color:#d97706;" onclick="window.levelDown('${sKey}', ${xp})">📉 Ур.</button>
                       <button class="btn ghost" style="padding:4px 8px; font-size:12px; border-color:var(--err); color:var(--err);" onclick="window.deleteStudent('${sKey}', '${s.name}')">🗑 Удалить</button>
+                      <button class="btn ghost" style="padding:4px 8px; font-size:12px;" onclick="window.downloadStudentReport('${sKey}')">📥 Отчет</button>
                   </div>
               </td>`;
               
@@ -105,7 +106,7 @@ window.renderCourseReportsPage = function() {
   renderTable();
 };
 
-// --- УПРАВЛЕНИЕ СТУДЕНТАМИ (Вызывается из reports.js) ---
+// --- УПРАВЛЕНИЕ СТУДЕНТАМИ ---
 window.grantXP = function(key) {
   var amount = prompt("Сколько XP начислить?", "50"); if (!amount || isNaN(amount)) return;
   window.API.grantXP(key, parseInt(amount)).then(() => { window.showToast("Начислено +" + amount + " XP", "ok"); window.renderCourseReportsPage(); }).catch(() => window.showToast("Ошибка", "err"));
@@ -122,4 +123,54 @@ window.levelDown = function(key, currentXp) {
 window.deleteStudent = function(key, name) {
   if (!confirm(`Удалить студента ${name}? Это действие необратимо.`)) return;
   window.API.deleteStudent(key).then(res => { if(res && res.ok) { window.showToast("Удален", "ok"); window.renderCourseReportsPage(); } else window.showToast("Ошибка удаления", "err"); }).catch(() => window.showToast("Ошибка сети", "err"));
+};
+
+// Экспорт отчета по студенту в CSV
+window.downloadStudentReport = function(sKey) {
+    window.API.getStudents().then(d => {
+        var s = d.students.find(x => (x.name.trim().toLowerCase() + "|" + x.group.trim().toLowerCase()) === sKey);
+        if (!s) return window.showToast("Студент не найден", "err");
+        var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
+        var results = p.results || {};
+        
+        var csv = "\uFEFF"; // BOM для Excel
+        csv += "Тема;Тип работы;Оценка\n";
+        
+        var course = window.COURSE;
+        var courseId = window.state.activeCourseId;
+        
+        // Собираем все работы для текущего МДК
+        var works = [];
+        if (course) {
+            course.sections.forEach(sec => {
+                sec.topics.forEach(t => {
+                    if (t.practicals) t.practicals.forEach((prac, i) => works.push({ id: `prac_${t.id}_${i}`, title: `${t.code} ${prac.code}`, type: 'Практическая' }));
+                    if (t.selfWork) t.selfWork.forEach((sw, i) => works.push({ id: `self_${t.id}_${i}`, title: `${t.code} ${sw.code || ''}`, type: 'Самостоятельная' }));
+                    if (t.test) works.push({ id: `inline_${t.id}`, title: `${t.code} Тест`, type: 'Тест' });
+                });
+            });
+        }
+        
+        works.forEach(w => {
+            var res = results[w.id];
+            var grade = res ? res.grade : "—";
+            csv += `"${w.title}";"${w.type}";"${grade}"\n`;
+        });
+        
+        // Итоговый экзамен
+        var finalKey = `__final__${courseId}`;
+        if (results[finalKey]) {
+            csv += `"Итоговый экзамен";"Экзамен";"${results[finalKey].grade}"\n`;
+        }
+        
+        var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        var link = document.createElement("a");
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Отчет_${s.name}_${courseId}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
 };
