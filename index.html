@@ -9,15 +9,15 @@
 </head>
 <body>
 
-    <!-- Каркас приложения -->
-    <div class="layout">
-        <!-- Боковое меню -->
-        <aside class="sidebar" id="sidebar">
+    <!-- КАРКАС (Сайдбар и Шапка) -->
+    <div class="layout" id="main-layout" style="display:none;">
+        <aside class="sidebar">
             <div class="sidebar-header">МДК Портал</div>
-            <div class="sidebar-course">МДК 07.01 (ЧПУ) ⌄</div>
-            
-            <div id="xpCount" class="xp-display" onclick="window.navigateTo('/shop')">
-                ★ <span id="xp-value">0</span> XP
+            <div class="sidebar-course">
+                <select id="mdkSelector" style="width:100%; border:none; background:transparent; color:var(--accent); font-weight:bold; outline:none; cursor:pointer;"></select>
+            </div>
+            <div class="xp-display" onclick="window.navigateTo('/shop')">
+                ★ <span id="xp-value">0</span> XP <span id="xp-level" style="font-size:0.8rem; color:var(--muted); margin-left:5px;">Ур. 1</span>
             </div>
             
             <nav class="sidebar-nav">
@@ -34,17 +34,15 @@
 
             <div id="userChip" class="user-info" onclick="window.navigateTo('/profile')">
                 <div class="user-avatar">👨‍🏭</div>
-                <div class="user-details">
-                    <div id="user-name" style="font-weight:bold;">Гость</div>
-                    <div id="user-group" style="color:var(--text-muted); font-size:0.8rem;">Группа</div>
+                <div style="overflow:hidden;">
+                    <div id="user-name" style="font-weight:bold; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">Гость</div>
+                    <div id="user-group" style="color:var(--text-muted); font-size:0.8rem;">-</div>
                 </div>
             </div>
         </aside>
 
-        <!-- Основная область -->
         <main class="main-wrapper">
             <header class="top-header" style="display:flex; justify-content:space-between; align-items:center;">
-                <!-- ВАЖНО: Этот элемент (#crumbs) искал journal.js -->
                 <div id="crumbs" class="breadcrumbs">Главная</div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn ghost" onclick="window.navigateTo('/profile')">Профиль</button>
@@ -52,12 +50,12 @@
                 </div>
             </header>
             
-            <!-- Сюда все скрипты (journal.js, games.js и т.д.) будут вставлять контент -->
+            <!-- Сюда модули будут вставлять контент -->
             <div id="app" class="content-area"></div>
         </main>
     </div>
 
-    <!-- ЭКРАН ВХОДА (скрыт по умолчанию, показывается через app.js) -->
+    <!-- ЭКРАН ВХОДА (Показывается, если нет сессии) -->
     <div id="login-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-dark); z-index:9999; overflow-y:auto;">
         <div class="main-wrapper" style="align-items: center; justify-content: flex-start; padding-top: 50px; max-width:800px; margin:0 auto;">
             <div class="top-header" style="border: none; text-align:center;">
@@ -77,7 +75,7 @@
                     <label>Группа</label>
                     <input type="text" id="login-group" placeholder="ТМ 4-3" value="ТМ 4-3">
                 </div>
-                <button class="btn" onclick="window.loginStudent()" style="background:var(--accent); color:#fff;">Войти</button>
+                <button class="btn" onclick="window.loginStudent()" style="background:var(--accent); color:#fff; width:100%;">Войти</button>
             </div>
 
             <hr style="border-color: var(--border); width: 100%; max-width: 500px; margin: 0 auto;">
@@ -93,12 +91,12 @@
                     <label>Пароль</label>
                     <input type="password" id="teacher-pass" value="teacher">
                 </div>
-                <button class="btn" onclick="window.loginTeacher()" style="background:var(--accent); color:#fff;">Войти в журнал</button>
+                <button class="btn" onclick="window.loginTeacher()" style="background:var(--accent); color:#fff; width:100%;">Войти в журнал</button>
             </div>
         </div>
     </div>
 
-    <!-- Подключение скриптов -->
+    <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ (ПОРЯДОК ВАЖЕН) -->
     <script src="api.js"></script>
     
     <!-- Данные -->
@@ -108,8 +106,12 @@
     <script src="data-0202.js"></script>
     <script src="data-global.js"></script>
     <script src="data-extra.js"></script>
+    <script src="tests-extra.js"></script>
     
-    <!-- Модули страниц -->
+    <!-- Ядро (утилиты, XP, Тесты, PWA) -->
+    <script src="core.js"></script>
+    
+    <!-- Модули -->
     <script src="journal.js"></script>
     <script src="games.js"></script>
     <script src="shop.js"></script>
@@ -124,7 +126,7 @@
     <script src="assistant.js"></script>
     <script src="easter-eggs.js"></script>
     
-    <!-- Главный роутер -->
+    <!-- Главный роутер (Всегда последний) -->
     <script src="app.js"></script>
 
 </body>
