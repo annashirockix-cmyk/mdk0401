@@ -316,3 +316,13 @@ main#app { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
 [data-theme="genshin"] body {
   background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
 }
+/* --- 20. VIP ТЕМА --- */
+[data-theme="vip_theme"] {
+  --bg: #0a0514; --card: #1a0b2e; --card-soft: #2a1445; --border: #d4af37;
+  --text: #fdf5e6; --muted: #bda88a; --accent: #ffd700; --accent-soft: rgba(255, 215, 0, 0.2);
+  --ok: #00ffcc; --err: #ff3333; --gold: #ffd700;
+}
+[data-theme="vip_theme"] .brand-badge, [data-theme="vip_theme"] .status-pill {
+  background: linear-gradient(45deg, #ffd700, #ff8c00);
+  color: #000; font-weight: bold;
+}
