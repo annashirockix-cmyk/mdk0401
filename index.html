@@ -7,7 +7,7 @@
 <title>Учебный портал МДК</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
 
-<!-- Шрифты для магазина (Ury) -->
+<!-- Шрифты для магазина -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Newsreader:wght@400;700&family=Quattrocento+Sans:wght@400;700&family=Spectral:wght@400;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
@@ -147,7 +147,10 @@
 <!-- ОСНОВНОЙ КОНТЕНТ -->
 <main id="app"></main>
 
-<!-- СКРИПТЫ (Порядок важен!) -->
+<!-- ========================================== -->
+<!-- СКРИПТЫ (Порядок строго важен!)            -->
+<!-- ========================================== -->
+<!-- 1. Данные -->
 <script src="data-global.js"></script>
 <script src="data-0701.js"></script>
 <script src="data-0201.js"></script>
@@ -155,15 +158,15 @@
 <script src="data-0401.js"></script>
 <script src="data-extra.js"></script>
 
+<!-- 2. Ядро и API -->
 <script src="api.js"></script>
-<script src="tests-extra.js"></script>
 <script src="app.js"></script>
 
-<script src="exam_0201.js"></script>
-<script src="exam_0202.js"></script>
-<script src="exam_0401.js"></script>
-<script src="exam_0701.js"></script>
+<!-- 3. Новые движки (Панель препода и Экзамены) -->
+<script src="admin.js"></script>
+<script src="exam-engine.js"></script>
 
+<!-- 4. Дополнительные модули -->
 <script src="shop.js"></script>
 <script src="reports.js"></script>
 <script src="extra.js"></script>
@@ -173,13 +176,20 @@
 <script src="journal.js"></script>
 <script src="schedule.js"></script>
 
+<!-- 5. Тесты и игры -->
+<script src="tests-extra.js"></script>
+<script src="exam_0201.js"></script>
+<script src="exam_0202.js"></script>
+<script src="exam_0401.js"></script>
+<script src="exam_0701.js"></script>
 <script src="questions-setup.js"></script>
 <script src="questions-mdk.js"></script>
 <script src="questions-anime.js"></script>
 <script src="questions-games.js"></script>
 <script src="questions-logic.js"></script>
-
 <script src="games.js"></script>
+
+<!-- 6. Пасхалки и помощник -->
 <script src="assistant.js"></script>
 <script src="easter-eggs.js"></script>
 
