@@ -1,21 +1,20 @@
 "use strict";
 
 window.GLOBAL_DATA = {
-  // Возвращаем все 9 видео. Используем надежные ссылки YouTube.
-  // Если хотите локальные файлы, замените url на file: "video/1.mp4"
+  // Локальные видео (файлы должны лежать в папке video/ в корне репозитория)
   videos: [
-    { title: "Видеоурок 1: Введение", description: "Основы ЧПУ", url: "https://www.youtube.com/watch?v=8jPQjjsBbIc" },
-    { title: "Видеоурок 2: G-коды", description: "Разбор G00, G01", url: "https://www.youtube.com/watch?v=1h2sQ3eY7wE" },
-    { title: "Видеоурок 3: Наладка", description: "Практические приемы", url: "https://www.youtube.com/watch?v=7q3jZ8Xm2yY" },
-    { title: "Видеоурок 4", description: "Учебный материал", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-    { title: "Видеоурок 5", description: "Учебный материал", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-    { title: "Видеоурок 6", description: "Учебный материал", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-    { title: "Видеоурок 7", description: "Учебный материал", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-    { title: "Видеоурок 8", description: "Учебный материал", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-    { title: "Видеоурок 9", description: "Учебный материал", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+    { title: "Видеоурок 1: Введение", description: "Основы ЧПУ", file: "video/1.mp4" },
+    { title: "Видеоурок 2: G-коды", description: "Разбор команд", file: "video/2.mp4" },
+    { title: "Видеоурок 3: Наладка", description: "Практические приемы", file: "video/3.mp4" },
+    { title: "Видеоурок 4", description: "Учебный материал", file: "video/4.mp4" },
+    { title: "Видеоурок 5", description: "Учебный материал", file: "video/5.mp4" },
+    { title: "Видеоурок 6", description: "Учебный материал", file: "video/6.mp4" },
+    { title: "Видеоурок 7", description: "Учебный материал", file: "video/7.mp4" },
+    { title: "Видеоурок 8", description: "Учебный материал", file: "video/8.mp4" },
+    { title: "Видеоурок 9", description: "Учебный материал", file: "video/9.mp4" }
   ],
   
-  // Пути к PDF (Папка passport должна существовать в репозитории!)
+  // Пути к PDF (Папка passport должна существовать)
   passports: [
     { title: "Паспорт станка 2Д450", description: "Радиально-сверлильный станок", file: "passport/2d450.pdf" },
     { title: "Паспорт станка 2С108П", description: "Вертикально-сверлильный станок", file: "passport/2s108p.pdf" },
@@ -27,7 +26,9 @@ window.GLOBAL_DATA = {
   safety: [
     { title: "ИОТ для токаря", description: "Инструкция по охране труда", file: "ohranatruda/иот токаря.docx" },
     { title: "ИОТ для фрезеровщика", description: "Инструкция по охране труда", file: "ohranatruda/иот фрезер.docx" },
-    { title: "ИОТ (общая)", description: "Общие требования", file: "ohranatruda/Инструкция по охране труда.docx" }
+    { title: "ИОТ при работе на вертикально-протяжном станке", description: "Инструкция", file: "ohranatruda/иот при работе на вертикально-протяжном.docx" },
+    { title: "ИОТ для карабашки", description: "Инструкция", file: "ohranatruda/иот карабашки.docx" },
+    { title: "Инструкция по охране труда (общая)", description: "Общие требования", file: "ohranatruda/Инструкция по охране труда.docx" }
   ],
   
   formatting: {
@@ -37,6 +38,7 @@ window.GLOBAL_DATA = {
         <li><b>Шрифт:</b> Times New Roman, 14 пт.</li>
         <li><b>Интервал:</b> 1.5.</li>
         <li><b>Поля:</b> левое — 3 см, правое — 1.5 см, верхнее/нижнее — 2 см.</li>
+        <li><b>Абзацный отступ:</b> 1.25 см.</li>
       </ul>`
   }
 };
