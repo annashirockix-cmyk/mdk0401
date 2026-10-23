@@ -129,7 +129,6 @@ window.renderTopicPage = function(courseId, topicId) {
         ${(topic.practicals && topic.practicals.length) ? `<button class="btn tab ghost" id="tab-practicals" onclick="window.switchTopicTab('practicals')">🛠️ Практика</button>` : ''}
         ${(topic.selfWork && topic.selfWork.length) ? `<button class="btn tab ghost" id="tab-selfwork" onclick="window.switchTopicTab('selfwork')">📝 Самостоятельная</button>` : ''}
         ${(topic.test && topic.test.length) ? `<button class="btn tab ghost" id="tab-test" onclick="window.switchTopicTab('test')">🎯 Тест</button>` : ''}
-        ${(topic.presentations && topic.presentations.length) ? `<button class="btn tab ghost" id="tab-presentations" onclick="window.switchTopicTab('presentations')">📊 Презентации</button>` : ''}
     </div>
     <div id="topicContent" class="module"></div>`;
     app.innerHTML += tabsHtml;
@@ -172,7 +171,6 @@ window.renderTopicPage = function(courseId, topicId) {
                 var testId = `self_${topic.id}_${idx}`;
                 var isDone = window.state.results && window.state.results[testId];
                 var questions = sw.questions || [];
-                // Если вопросов нет в самой теме, ищем их в EXTRA_TESTS
                 if (questions.length === 0 && window.EXTRA_TESTS && window.EXTRA_TESTS[testId] && window.EXTRA_TESTS[testId].questions) {
                     questions = window.EXTRA_TESTS[testId].questions;
                 }
@@ -204,26 +202,76 @@ window.renderTopicPage = function(courseId, topicId) {
         }
         else if (tabName === 'test') {
             if (!topic.test || !topic.test.length) { contentArea.innerHTML = "<p>Тестов нет.</p>"; return; }
-            var testHtml = "";
-            topic.test.forEach((q, i) => {
-                testHtml += `<div id="q_${topic.id}_${i}" style="margin-bottom:20px; padding:20px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);">
-                    <b style="font-size:16px;">${i+1}. ${q.q}</b><br>`;
-                q.options.forEach((opt, j) => {
-                    testHtml += `<button class="btn ghost" style="display:block; width:100%; text-align:left; margin-top:8px; padding:12px; border-color:var(--border);" onclick="window.answerTest('${topic.id}', ${i}, ${j}, ${q.correct})">${opt}</button>`;
-                });
-                testHtml += `</div>`;
-            });
-            contentArea.innerHTML = testHtml;
-        }
-        else if (tabName === 'presentations') {
-            topic.presentations.forEach(p => {
-                contentArea.innerHTML += `<div style="background:var(--card-soft); padding:15px; border-radius:8px; margin-bottom:10px; border:1px solid var(--border);">
-                    <b style="color:var(--accent);">${p.code}: ${p.title}</b><br>
-                    <span style="font-size:13px; color:var(--muted);">${p.description || ''} (Слайдов: ${p.slides || '?'})</span><br>
-                    <a href="${p.file}" target="_blank" class="btn" style="margin-top:10px; font-size:12px;">📥 Скачать презентацию</a>
+            var testId = `test_${topic.id}`;
+            var isDone = window.state.results && window.state.results[testId];
+            
+            if (isDone) {
+                contentArea.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px;">
+                    <h3 style="color:var(--ok);">✅ Тест уже пройден!</h3>
+                    <p>Оценка: <b>${isDone.grade}</b></p>
+                    <button class="btn" onclick="window.startInlineTest('${topic.id}', true)">Пройти заново</button>
                 </div>`;
-            });
+            } else {
+                contentArea.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px;">
+                    <h3>🎯 Тест по теме</h3>
+                    <p>Вопросов: ${topic.test.length}</p>
+                    <button class="btn" onclick="window.startInlineTest('${topic.id}', false)" style="padding:15px 30px; font-size:16px;">Начать тест (10 минут)</button>
+                </div>`;
+            }
         }
+    };
+
+    window.startInlineTest = function(topicId, forceRestart) {
+        var contentArea = document.getElementById("topicContent");
+        var questions = topic.test;
+        var currentQ = 0;
+        var correct = 0;
+        var timeLeft = 600; // 10 минут
+        var timerId;
+
+        function renderQ() {
+            if (currentQ >= questions.length) {
+                clearInterval(timerId);
+                var grade = Math.round((correct / questions.length) * 100) >= 70 ? 5 : (Math.round((correct / questions.length) * 100) >= 50 ? 4 : 3);
+                window.state.results[`test_${topicId}`] = { grade: grade, total: correct, max: questions.length };
+                window.saveStudentData();
+                contentArea.innerHTML = `<div style="text-align:center; padding:30px; background:var(--card-soft); border-radius:12px;">
+                    <h2 style="color:var(--ok);">Тест завершен!</h2>
+                    <p>Верных ответов: <b>${correct}</b> из <b>${questions.length}</b></p>
+                    <h1 style="font-size:48px; color:var(--accent);">${grade}</h1>
+                    <button class="btn" onclick="window.switchTopicTab('test')">Вернуться</button>
+                </div>`;
+                return;
+            }
+
+            var q = questions[currentQ];
+            var html = `<div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <b>Вопрос ${currentQ+1} из ${questions.length}</b>
+                <b style="color:var(--err);" id="inlineTimer">⏱ ${Math.floor(timeLeft/60)}:${timeLeft%60 < 10 ? '0'+timeLeft%60 : timeLeft%60}</b>
+            </div>
+            <div style="font-weight:bold; margin-bottom:15px; font-size:16px;">${q.q}</div>`;
+            
+            q.options.forEach((opt, i) => {
+                html += `<button class="btn ghost" style="display:block; width:100%; text-align:left; margin-top:5px; padding:10px;" onclick="window.answerInlineTest(${i}, ${q.correct})">${opt}</button>`;
+            });
+            contentArea.innerHTML = html;
+            
+            timerId = setInterval(() => {
+                timeLeft--;
+                var tEl = document.getElementById("inlineTimer");
+                if (tEl) tEl.textContent = `⏱ ${Math.floor(timeLeft/60)}:${timeLeft%60 < 10 ? '0'+timeLeft%60 : timeLeft%60}`;
+                if (timeLeft <= 0) { clearInterval(timerId); renderQ(); }
+            }, 1000);
+        }
+
+        window.answerInlineTest = function(selected, correctIdx) {
+            clearInterval(timerId);
+            if (selected === correctIdx) correct++;
+            currentQ++;
+            renderQ();
+        };
+
+        renderQ();
     };
 
     window.checkSelfWork = function(testId) {
@@ -262,32 +310,11 @@ window.renderTopicPage = function(courseId, topicId) {
         }
     };
 
-    window.answerTest = function(topicId, qIndex, selectedJ, correctJ) {
-        var qDiv = document.getElementById(`q_${topicId}_${qIndex}`);
-        if (qDiv.classList.contains("answered")) return;
-        qDiv.classList.add("answered");
-        
-        var btns = qDiv.querySelectorAll("button");
-        btns.forEach(b => { b.disabled = true; b.style.opacity = "0.6"; });
-        
-        btns[selectedJ].style.opacity = "1";
-        if (selectedJ === correctJ) {
-            btns[selectedJ].style.borderColor = "var(--ok)";
-            btns[selectedJ].style.background = "rgba(88, 201, 138, 0.2)";
-            if(window.addXP) window.addXP(5);
-        } else {
-            btns[selectedJ].style.borderColor = "var(--err)";
-            btns[selectedJ].style.background = "rgba(255, 110, 94, 0.2)";
-            btns[correctJ].style.borderColor = "var(--ok)";
-            btns[correctJ].style.background = "rgba(88, 201, 138, 0.2)";
-        }
-    };
-
     window.switchTopicTab('lectures');
 };
 
 // ============================================================
-// 3. СЕРТИФИКАТ
+// 3. СЕРТИФИКАТ (С ВОССТАНОВЛЕНИЕМ ФОНОВ)
 // ============================================================
 window.renderCertificatePage = function() {
     var app = $("app"); if (!app) return; app.innerHTML = "";
@@ -325,28 +352,18 @@ window.renderCertificatePage = function() {
 
     if (!window.state.student) return;
 
-    // ИСПРАВЛЕНО: Используем ваши имена файлов 1.png - 6.png + добавляем внешние
-    var bgs = [
-        "1.png", "2.png", "3.png", "4.png", "5.png", "6.png",
-        "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=900&q=80",
-        "https://images.unsplash.com/photo-1557683316-973673baf926?w=900&q=80",
-        "https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=900&q=80",
-        "https://images.unsplash.com/photo-1518655048521-f130df041f66?w=900&q=80"
-    ];
-    
+    // ИСПОЛЬЗУЕМ ИМЕНА ФАЙЛОВ, КОТОРЫЕ ВЫ ЗАГРУЗИЛИ (1.png ... 6.png)
+    var bgs = ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png"];
     var certBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;"><h3>Фон:</h3><div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
     bgs.forEach(bg => {
-        // Проверка, является ли фон ссылкой или локальным файлом
-        var srcPath = bg.startsWith("http") ? bg : `certificat/${bg}`;
-        certBgSelectorHtml += `<img src="${srcPath}" onclick="window.setCertBg('${bg}')" style="width:80px; height:60px; object-fit:cover; border-radius:4px; cursor:pointer; border:3px solid ${window.state.certBg === bg ? 'var(--accent)' : 'transparent'};" onerror="this.style.border='1px solid red';">`;
+        certBgSelectorHtml += `<img src="certificat/${bg}" onclick="window.setCertBg('${bg}')" style="width:80px; height:60px; object-fit:cover; border-radius:4px; cursor:pointer; border:3px solid ${window.state.certBg === bg ? 'var(--accent)' : 'transparent'};" onerror="this.src='https://via.placeholder.com/80x60?text=404'; this.title='Файл не найден';">`;
     });
     certBgSelectorHtml += `</div></div>`;
 
     var courseName = window.MDK_DATA && window.MDK_DATA[window.state.activeCourseId] ? window.MDK_DATA[window.state.activeCourseId].title : "МДК";
     var isApproved = window.state.results && window.state.results.certificateApproved;
-    var currentBgPath = window.state.certBg && window.state.certBg.startsWith("http") ? window.state.certBg : `certificat/${window.state.certBg || '1.png'}`;
 
-    var certHtml = `<div id="printable-cert" style="background-image: url('${currentBgPath}'); background-size: 100% 100%; background-color: #fff; color:#000; padding: 20px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center;">
+    var certHtml = `<div id="printable-cert" style="background-image: url('certificat/${window.state.certBg || bgs[0]}'); background-size: 100% 100%; background-color: #fff; color:#000; padding: 20px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center;">
         <div style="background: rgba(255,255,255,0.85); width:100%; height:100%; padding:30px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:8px;">
             <div><h1 style="font-size:32px; color:#c14a2a;">СЕРТИФИКАТ</h1><p>подтверждает, что</p><h2 style="font-size:28px; border-bottom:2px solid #ccc; display:inline-block;">${window.escapeHtml(window.state.student.name)}</h2><p>прошел(ла) обучение</p><h3 style="font-size:20px;">${window.escapeHtml(courseName)}</h3></div>
             <div style="display:flex; justify-content:space-between; font-size:14px;"><div><p>Дата:</p><p style="font-weight:bold;">${new Date().toLocaleDateString('ru-RU')}</p></div><div><p>Подпись:</p><div style="border-bottom:1px solid #000; width:150px; height:30px;"></div></div></div>
@@ -378,7 +395,7 @@ window.setCertBg = function(bg) {
 };
 
 // ============================================================
-// 4. ОСТАЛЬНЫЕ СТРАНИЦЫ
+// 4. ОСТАЛЬНЫЕ СТРАНИЦЫ (ПРОФИЛЬ, ДОСТИЖЕНИЯ, ВИДЕО)
 // ============================================================
 window.renderStudentGradesPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
@@ -495,45 +512,26 @@ window.renderSimplePage = function(title, items, icon) {
         var isDocx = item.file && item.file.toLowerCase().endsWith('.docx');
         var isYouTube = item.url && (item.url.includes('youtube.com') || item.url.includes('youtu.be'));
         var mediaHtml = "";
-        
         if (isYouTube) {
-            var vidId = "";
-            if (item.url.includes('v=')) vidId = item.url.split('v=')[1].split('&')[0];
-            else if (item.url.includes('youtu.be/')) vidId = item.url.split('youtu.be/')[1].split('?')[0];
-            
-            if (vidId) {
-                mediaHtml = `<div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; margin-top:10px;"><iframe src="https://www.youtube.com/embed/${vidId}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>`;
-            } else {
-                mediaHtml = `<p style="color:var(--err); font-size:14px;">Ошибка ссылки YouTube</p>`;
-            }
+            var vidId = item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : item.url.split('/').pop();
+            mediaHtml = `<div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; margin-top:10px;"><iframe src="https://www.youtube.com/embed/${vidId}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>`;
         } else if (isVideo) {
             mediaHtml = `<video controls src="${item.file}" style="width:100%; max-height:400px; border-radius:8px; margin-top:10px; background:#000;"></video>`;
         } else if (isPdf) {
-            // Отображаем PDF через iframe. Если блокируется - даем кнопку скачивания
-            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff; position:relative;">
-                <iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe>
-            </div>`;
+            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>`;
         } else if (isDocx) {
             var docUrl = window.location.origin + window.location.pathname + item.file;
-            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff; position:relative;">
-                <iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(docUrl)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe>
-            </div>`;
+            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(docUrl)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe></div>`;
         }
-
-        list.innerHTML += `<div style="margin-bottom:20px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);">
-            <b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br>
-            <span style="font-size:14px; color:var(--muted);">${item.description || ''}</span>
-            ${mediaHtml}
-            ${(item.file || item.url) ? `<br><a href="${item.file || item.url}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать файл</a>` : ''}
-        </div>`;
+        list.innerHTML += `<div style="margin-bottom:20px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);"><b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br><span style="font-size:14px; color:var(--muted);">${item.description || ''}</span>${mediaHtml}${(item.file || item.url) ? `<br><a href="${item.file || item.url}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать / Открыть</a>` : ''}</div>`;
     });
 };
-
-window.handleLogout = function() { window.state.student = null; window.state.staff = null; window.saveStudentData(); location.reload(); };
 
 // ============================================================
 // 5. РОУТЕР И ИНИЦИАЛИЗАЦИЯ
 // ============================================================
+window.handleLogout = function() { window.state.student = null; window.state.staff = null; window.saveStudentData(); location.reload(); };
+
 window.addEventListener("DOMContentLoaded", function() {
     window.renderUserChip();
     if ($("themeToggle")) $("themeToggle").onclick = window.openThemeModal; 

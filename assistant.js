@@ -21,7 +21,7 @@ window.openAssistant = function(){
       <button class="btn" id="asTourBtn" style="flex:1; font-size:12px; padding:8px; background:var(--gold); color:#000;">🗺️ Экскурсия по сайту</button>
     </div>
     <form id="asForm" style="display:flex;padding:10px;border-top:1px solid var(--border);">
-      <input type="text" id="asInput" placeholder="Спроси про G-код, XP или Игры..." style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);margin-right:8px;">
+      <input type="text" id="asInput" placeholder="Спроси про G-код, XP, Самостоятельные..." style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);margin-right:8px;">
       <button type="submit" class="btn">➤</button>
     </form>
   `;
@@ -29,10 +29,10 @@ window.openAssistant = function(){
   setTimeout(()=>panel.style.transform = "translateY(0)", 20);
 
   var log = panel.querySelector("#asLog"), input = panel.querySelector("#asInput");
-  function addBot(text) { log.appendChild(el(`<div style="background:var(--card-soft);padding:8px 12px;border-radius:8px;align-self:flex-start;">${text}</div>`)); log.scrollTop = log.scrollHeight; }
+  function addBot(text) { log.appendChild(el(`<div style="background:var(--card-soft);padding:8px 12px;border-radius:8px;align-self:flex-start;line-height:1.4;">${text}</div>`)); log.scrollTop = log.scrollHeight; }
   function addUser(text) { log.appendChild(el(`<div style="background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;align-self:flex-end;">${text}</div>`)); log.scrollTop = log.scrollHeight; }
 
-  addBot("Привет! Я помогу найти тему или объясню, как пользоваться порталом. Спроси меня про <b>игры</b>, <b>XP</b>, <b>экзамены</b> или нажми на кнопку экскурсии!");
+  addBot("Привет! Я помогу тебе разобраться с порталом. Спроси меня про <b>самостоятельные</b>, <b>тесты</b>, <b>сертификат</b>, <b>экзамен</b> или нажми на кнопку экскурсии!");
 
   panel.querySelector("#asClose").addEventListener("click", ()=>panel.remove());
   
@@ -46,20 +46,20 @@ window.openAssistant = function(){
     input.value = ""; addUser(val);
     setTimeout(() => {
       var v = val.toLowerCase();
-      var reply = "Я не совсем понял вопрос. Попробуйте спросить про <b>игры</b>, <b>рейтинг</b>, <b>XP</b> или <b>экзамены</b>.";
+      var reply = "Я не совсем понял вопрос. Попробуйте спросить про <b>тесты</b>, <b>оценки</b>, <b>сертификат</b> или <b>экзамен</b>.";
       
-      if (v.includes("игр") || v.includes("аркад") || v.includes("развлеч")) {
-          reply = "🎮 Игровая комната доступна в левом меню. Там есть Сапёр, Судоку, Паук и другие!";
+      if (v.includes("самостоятельн") || v.includes("ср")) {
+          reply = "📝 Самостоятельные работы находятся внутри каждой темы (вкладка «Самостоятельная»). Там нужно либо пройти встроенный тест, либо нажать кнопку «Сдать работу».";
+      } else if (v.includes("тест") || v.includes("вопрос")) {
+          reply = "🎯 Тесты есть внутри каждой темы. Нажми на тему, выбери вкладку «Тест» и нажми «Начать». У тебя будет 10 минут!";
+      } else if (v.includes("сертификат") || v.includes("фон") || v.includes("оценк")) {
+          reply = "📜 Сертификат и вкладыш с оценками можно найти в левом меню. Там же можно выбрать фон (файлы должны лежать в папке `certificat`).";
+      } else if (v.includes("экзамен") || v.includes("итогов")) {
+          reply = "📋 Итоговый экзамен находится в левом меню. Там 30 вопросов и 2 письменных задания. Оценка выставляется автоматически за тест, а письменные проверяет преподаватель.";
       } else if (v.includes("xp") || v.includes("опыт") || v.includes("балл")) {
-          reply = "⭐ XP дают за прохождение тестов, решение задач и победы в играх. Следи за полоской опыта в профиле!";
-      } else if (v.includes("профил")) {
-          reply = "👤 Твой профиль в левом меню. Там можно сменить аватар, поставить эффект и посмотреть достижения.";
-      } else if (v.includes("тест") || v.includes("мдк") || v.includes("вопрос")) {
-          reply = "📚 Тесты и вопросы по МДК находятся на главной странице или в разделе 'Тренировка'.";
-      } else if (v.includes("экзамен")) {
-          reply = "📋 Итоговые экзамены находятся в левом меню. 10 вопросов, 10 минут.";
-      } else if (v.includes("рейтинг") || v.includes("почет")) {
-          reply = "🏆 Доска почета показывает лучших студентов по XP. Проверь, на каком месте ты!";
+          reply = "⭐ XP дают за прохождение тестов, практик и игр. Чем больше XP, тем выше твой уровень!";
+      } else if (v.includes("видео")) {
+          reply = "🎬 Видеоуроки находятся в левом меню. Если видео не грузится, нажми кнопку «Скачать / Открыть», чтобы посмотреть его в новой вкладке.";
       }
       
       addBot(reply);
@@ -89,8 +89,7 @@ function startTour() {
         { el: '#burgerBtn', title: "Навигация", text: "Здесь находится главное меню. Через него можно попасть в Журнал, Игры, Расписание и другие разделы." },
         { el: '#mdkSelector', title: "Выбор предмета", text: "Используйте этот выпадающий список, чтобы переключаться между МДК. Вопросы, лекции и тесты обновятся автоматически." },
         { el: '#app', title: "Учебный план", text: "Здесь отображаются все темы. Нажмите на любую тему, чтобы открыть лекции, тесты и практические задания." },
-        { el: '#xpCount', title: "Опыт и Уровень", text: "За просмотр лекций и прохождение тестов вы получаете XP. Чем больше XP, тем выше ваш уровень!" },
-        { el: '#themeToggle', title: "Смена темы", text: "Нажмите сюда, чтобы переключить сайт в светлую или темную тему." }
+        { el: '#xpCount', title: "Опыт и Уровень", text: "За просмотр лекций и прохождение тестов вы получаете XP. Чем больше XP, тем выше ваш уровень!" }
     ];
     var currentStep = 0;
     var overlay = document.createElement("div");
