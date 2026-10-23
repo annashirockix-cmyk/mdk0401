@@ -56,6 +56,9 @@ window.startGame = function(gameId) {
     app.innerHTML = "";
     app.appendChild(el('<a class="backlink" href="javascript:void(0)" onclick="window.renderArcadePage()" style="color:var(--accent); cursor:pointer;">← В меню игр</a>'));
 
+    // ВЫДАЕМ АЧИВКУ ЗА ЗАПУСК ЛЮБОЙ ИГРЫ
+    if (window.unlockAchievement) window.unlockAchievement('gamer');
+
     var rules = {
         gcode: "Вводите команды в формате G01 X50 Y50. Используйте G02/G03 с параметрами I и J для рисования дуг.",
         minesweeper: "Клик открывает клетку. Кнопка 'Флажок' или правая кнопка мыши ставит флаг. Цифры показывают мины рядом.",
@@ -265,6 +268,16 @@ function startMinesweeper(container) {
             gridEl.appendChild(btn);
         }
         container.appendChild(gridEl);
+        
+        // Проверка на победу
+        if (revealed === SIZE*SIZE - MINES && !gameOver) {
+            gameOver = true;
+            if (window.unlockAchievement) window.unlockAchievement('minesweeper_win');
+            setTimeout(() => {
+                if (confirm("🎉 Вы победили! Начать заново?")) startMinesweeper(container);
+                else window.renderArcadePage();
+            }, 100);
+        }
     }
 
     function showWin() {
@@ -571,14 +584,13 @@ function startMemory(container) {
             
             flipped.push(i);
             moves++;
-            render(); // Отрисовываем переворот
+            render(); 
 
             if (flipped.length === 2) {
                 lock = true;
                 var idx1 = flipped[0], idx2 = flipped[1];
                 
                 if (cards[idx1] === cards[idx2]) {
-                    // Совпадение
                     cards[idx1] = '✅';
                     cards[idx2] = '✅';
                     matched++;
@@ -586,11 +598,10 @@ function startMemory(container) {
                     lock = false;
                     if (matched === 8) {
                         if(window.addXP) window.addXP(150);
-                        window.saveScore('memory', Math.max(0, 100 - moves)); // Чем меньше ходов, тем больше рекорд
+                        window.saveScore('memory', Math.max(0, 100 - moves));
                     }
                     render();
                 } else {
-                    // Не совпали
                     setTimeout(() => {
                         flipped = [];
                         lock = false;
@@ -795,6 +806,10 @@ function startParty(container) {
             var best = parseInt(localStorage.getItem('hs_party') || '0');
             window.saveScore('party', score);
             if (window.addXP) window.addXP(200);
+            
+            // АЧИВКА ЗА ПОБЕДУ В ВЕЧЕРИНКЕ
+            if (window.unlockAchievement) window.unlockAchievement('party_win');
+
             container.innerHTML = `<div style="text-align:center;padding:30px;">
                 <h2 style="color:var(--ok);">🎉 Вы выжили!</h2>
                 <p>Счет: ${score}/${TARGET}</p>
@@ -910,6 +925,9 @@ function startSpider(container) {
             window.showToast("🎉 Победа!", "ok");
             window.saveScore('spider', 100);
             if(window.addXP) window.addXP(100);
+            
+            // АЧИВКА ЗА ПАУКА
+            if (window.unlockAchievement) window.unlockAchievement('spider_win');
         }
     }
     render();
