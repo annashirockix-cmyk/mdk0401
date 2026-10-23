@@ -69,7 +69,7 @@ window.renderUserChip = function() {
 };
 
 // ============================================================
-// 2. ГЛАВНАЯ И ЛЕКЦИИ (ИНТЕРАКТИВНЫЕ ВКЛАДКИ)
+// 2. ГЛАВНАЯ И ЛЕКЦИИ
 // ============================================================
 window.renderHomePage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
@@ -173,11 +173,28 @@ window.renderTopicPage = function(courseId, topicId) {
                 var isDone = window.state.results && window.state.results[testId];
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
                     <b style="color:var(--gold); font-size:16px;">${sw.code}: ${sw.title}</b>
-                    <p style="font-size:14px; margin-top:10px; line-height:1.5;">${sw.task}</p>
-                    ${isDone ? `<div style="color:var(--ok); font-weight:bold; margin-top:10px;">✅ Сдано (Оценка: ${isDone.grade})</div>` : `
-                        <button class="btn" style="margin-top:15px; font-size:13px;" onclick="window.submitSelfWork('${testId}')">Сдать работу</button>
-                    `}
-                </div>`;
+                    <p style="font-size:14px; margin-top:10px; line-height:1.5;">${sw.task}</p>`;
+                
+                // Возвращаем тест для самостоятельной работы
+                if (sw.questions && sw.questions.length > 0) {
+                    contentArea.innerHTML += `<div style="margin-top:15px; border-top:1px dashed var(--border); padding-top:15px;"><b>🎯 Проверочный тест:</b></div>`;
+                    sw.questions.forEach((q, qi) => {
+                        contentArea.innerHTML += `<div style="margin-top:10px; background:var(--card); padding:10px; border-radius:6px;">
+                            <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${q.q}</div>`;
+                        q.options.forEach((opt, oi) => {
+                            contentArea.innerHTML += `<label style="display:block; font-size:13px; margin-top:3px; cursor:pointer;"><input type="radio" name="${testId}_q${qi}" value="${oi}"> ${opt}</label>`;
+                        });
+                        contentArea.innerHTML += `</div>`;
+                    });
+                    contentArea.innerHTML += `<button class="btn" style="margin-top:15px; font-size:13px; width:100%;" onclick="window.checkSelfWork('${testId}')">Отправить результаты</button>`;
+                } else {
+                    contentArea.innerHTML += `<button class="btn" style="margin-top:15px; font-size:13px;" onclick="window.submitSelfWork('${testId}')">Сдать работу</button>`;
+                }
+                
+                if (isDone) {
+                    contentArea.innerHTML += `<div style="color:var(--ok); font-weight:bold; margin-top:15px; text-align:center;">✅ Работа сдана (Оценка: ${isDone.grade})</div>`;
+                }
+                contentArea.innerHTML += `</div>`;
             });
         }
         else if (tabName === 'test') {
@@ -204,6 +221,25 @@ window.renderTopicPage = function(courseId, topicId) {
         }
     };
 
+    window.checkSelfWork = function(testId) {
+        window.showToast("✅ Результаты отправлены, +15 XP", "ok");
+        if (!window.state.results) window.state.results = {};
+        window.state.results[testId] = { grade: 4, max: 5, type: "self_test" };
+        if (window.addXP) window.addXP(15);
+        window.saveStudentData();
+        window.renderTopicPage(courseId, topicId);
+        window.switchTopicTab('selfwork');
+    };
+
+    window.submitSelfWork = function(testId) {
+        window.showToast("Работа отправлена на проверку преподавателю", "ok");
+        if (!window.state.results) window.state.results = {};
+        window.state.results[testId] = { grade: "?", max: 5, type: "self" };
+        window.saveStudentData();
+        window.renderTopicPage(courseId, topicId);
+        window.switchTopicTab('selfwork');
+    };
+
     window.checkPractical = function(testId) {
         var val = document.getElementById(`inp_${testId}`).value.trim();
         var expected = window.EXTRA_TESTS && window.EXTRA_TESTS[testId] ? window.EXTRA_TESTS[testId].expectedAnswer : "";
@@ -219,15 +255,6 @@ window.renderTopicPage = function(courseId, topicId) {
         } else {
             window.showToast("❌ Неверный ответ. Попробуйте еще раз.", "err");
         }
-    };
-
-    window.submitSelfWork = function(testId) {
-        window.showToast("Работа отправлена на проверку преподавателю", "ok");
-        if (!window.state.results) window.state.results = {};
-        window.state.results[testId] = { grade: "?", max: 5, type: "self" };
-        window.saveStudentData();
-        window.renderTopicPage(courseId, topicId);
-        window.switchTopicTab('selfwork');
     };
 
     window.answerTest = function(topicId, qIndex, selectedJ, correctJ) {
@@ -255,14 +282,17 @@ window.renderTopicPage = function(courseId, topicId) {
 };
 
 // ============================================================
-// 3. СЕРТИФИКАТ (ВОССТАНОВЛЕН)
+// 3. СЕРТИФИКАТ (С ВКЛАДЫШЕМ И ПОДПИСЯМИ)
 // ============================================================
 window.renderCertificatePage = function() {
     var app = $("app"); if (!app) return; app.innerHTML = "";
     app.appendChild(el('<a class="backlink no-print" href="#/" style="color:var(--accent);">← На главную</a>'));
-    if (!window.state.student && !window.state.staff) return;
-
+    
     if (window.state.staff) {
+        // БЛАГОДАРСТВЕННОЕ ПИСЬМО ПРЕПОДАВАТЕЛЮ С ПОДПИСЯМИ
+        var sigs = JSON.parse(localStorage.getItem('mdk_teacher_sigs') || '[]');
+        var sigHtml = sigs.length > 0 ? sigs.map(s => `<div style="font-style:italic; margin-top:5px;">✔️ ${s.name} (${s.date})</div>`).join('') : '<div style="color:var(--muted);">Пока нет подписей...</div>';
+
         app.innerHTML = `<div class="no-print" style="text-align:center; margin-bottom:20px;"><button class="btn" onclick="window.print()">🖨 Распечатать</button></div>
             <div id="printable-cert" style="background:#fff; color:#000; padding:40px; max-width:800px; margin:0 auto; text-align:center; border:10px double #c14a2a;">
                 <h1 style="font-size:40px; color:#c14a2a;">БЛАГОДАРСТВЕННОЕ ПИСЬМО</h1>
@@ -270,13 +300,31 @@ window.renderCertificatePage = function() {
                 <h2 style="font-size:36px; border-bottom:2px solid #ccc; display:inline-block;">${window.escapeHtml(window.state.staff.name)}</h2>
                 <p style="font-size:18px; margin-top:40px;">За вклад в развитие портала</p>
                 <div style="margin-top:60px;">Дата: ${new Date().toLocaleDateString('ru-RU')}</div>
+            </div>
+            <div class="module no-print" style="margin-top:20px; background:var(--card-soft); padding:20px; border-radius:8px;">
+                <h3 style="margin-top:0;">✍️ Подписи студентов</h3>
+                <div id="sigList" style="margin-bottom:15px;">${sigHtml}</div>
+                <button class="btn" onclick="window.addTeacherSignature()">Оставить подпись</button>
             </div>`;
+        
+        window.addTeacherSignature = function() {
+            var name = prompt("Введите ваше ФИО (как студента):");
+            if (name) {
+                var newSigs = JSON.parse(localStorage.getItem('mdk_teacher_sigs') || '[]');
+                newSigs.push({ name: name, date: new Date().toLocaleDateString() });
+                localStorage.setItem('mdk_teacher_sigs', JSON.stringify(newSigs));
+                window.renderCertificatePage(); // перерисовываем
+            }
+        };
         return;
     }
+
+    if (!window.state.student) return;
 
     var bgs = ["bg1.jfif", "bg2.jfif", "bg3.jfif", "bg4.jfif", "bg5.jfif", "bg6.jfif", "bg7.jpg", "bg8.jpg", "bg9.jpg", "bg10.jpg", "bg11.jpg", "bg12.jpg"];
     var certBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;"><h3>Фон:</h3><div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
     bgs.forEach(bg => {
+        // Если картинка не грузится, фон просто остается белым
         certBgSelectorHtml += `<img src="certificat/${bg}" onclick="window.setCertBg('${bg}')" style="width:80px; height:60px; object-fit:cover; border-radius:4px; cursor:pointer; border:3px solid ${window.state.certBg === bg ? 'var(--accent)' : 'transparent'};" onerror="this.style.border='1px solid red';">`;
     });
     certBgSelectorHtml += `</div></div>`;
@@ -290,12 +338,56 @@ window.renderCertificatePage = function() {
             <div style="display:flex; justify-content:space-between; font-size:14px;"><div><p>Дата:</p><p style="font-weight:bold;">${new Date().toLocaleDateString('ru-RU')}</p></div><div><p>Подпись:</p><div style="border-bottom:1px solid #000; width:150px; height:30px;"></div></div></div>
         </div>${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:80px; font-weight:bold; color:rgba(255,0,0,0.15);">ОБРАЗЕЦ</div>` : ""}</div>`;
 
-    app.innerHTML += certBgSelectorHtml + certHtml;
+    // ВКЛАДЫШ С ОЦЕНКАМИ
+    var gradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_"));
+    var gradesRows = gradesList.map(k => {
+        var title = k.replace(/prac_|self_|__final__/g, "").toUpperCase();
+        var gradeData = window.state.results[k];
+        var grade = gradeData.grade || gradeData.correct || gradeData;
+        if (typeof grade === 'object') grade = grade.grade || '—';
+        return `<tr><td style="border:1px solid #ccc; padding:8px;">${title}</td><td style="border:1px solid #ccc; padding:8px; text-align:center; font-weight:bold;">${grade}</td></tr>`;
+    }).join("");
+
+    var supplementHtml = `<div class="no-print" style="text-align:center; margin:20px 0;"><button class="btn" onclick="window.print()">🖨 Распечатать всё</button></div>
+        <div id="printable-supplement" style="background:#fff; color:#000; padding:40px; max-width:900px; margin:20px auto; border:1px solid #ccc; border-radius:12px;">
+            <h2 style="text-align:center; color:#c14a2a;">ВКЛАДЫШ ОЦЕНОК</h2>
+            <p><b>Студент:</b> ${window.escapeHtml(window.state.student.name)}</p><p><b>Группа:</b> ${window.escapeHtml(window.state.student.group)}</p>
+            <table style="width:100%; border-collapse:collapse; margin-top:20px;"><thead><tr style="background:#f0f0f0;"><th style="border:1px solid #ccc; padding:8px;">Работа</th><th style="border:1px solid #ccc; padding:8px;">Оценка</th></tr></thead><tbody>${gradesRows || '<tr><td colspan="2" style="text-align:center; padding:10px;">Оценок пока нет</td></tr>'}</tbody></table>
+        </div>`;
+    
+    app.innerHTML += certBgSelectorHtml + certHtml + supplementHtml;
+};
+
+window.setCertBg = function(bg) {
+    window.state.certBg = bg;
+    window.saveStudentData();
+    window.renderCertificatePage();
 };
 
 // ============================================================
-// 4. ОСТАЛЬНОЕ (ПРОФИЛЬ, ДОСТИЖЕНИЯ, ПРОСТЫЕ СТРАНИЦЫ)
+// 4. ЛИЧНЫЙ КАБИНЕТ И ОЦЕНКИ СТУДЕНТА
 // ============================================================
+window.renderStudentGradesPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.appendChild(el('<a class="backlink" href="#/profile" style="color:var(--accent);">← Назад в профиль</a>'));
+    app.innerHTML += `<section class="hero"><h1>📊 Мои оценки</h1></section><div class="module" id="gradesContent"></div>`;
+    
+    var gradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_"));
+    var gradesRows = gradesList.map(k => {
+        var title = k.replace(/prac_|self_|__final__/g, " ").replace(/m\d+/g, "").toUpperCase();
+        var gradeData = window.state.results[k];
+        var grade = gradeData.grade || gradeData.correct || gradeData;
+        if (typeof grade === 'object') grade = grade.grade || '—';
+        var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : "var(--err)");
+        return `<tr><td style="padding:10px; border:1px solid var(--border);">${title}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:${color};">${grade}</td></tr>`;
+    }).join("");
+
+    document.getElementById("gradesContent").innerHTML = `<table style="width:100%; border-collapse:collapse; font-size:14px;">
+        <thead><tr style="background:var(--card-soft);"><th style="padding:10px; border:1px solid var(--border);">Работа</th><th style="padding:10px; border:1px solid var(--border);">Оценка</th></tr></thead>
+        <tbody>${gradesRows || '<tr><td colspan="2" style="text-align:center; padding:20px; color:var(--muted);">У вас пока нет оценок.</td></tr>'}</tbody>
+    </table>`;
+};
+
 window.renderProfilePage = function(route) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
@@ -342,7 +434,10 @@ window.renderProfilePage = function(route) {
                 <input type="text" id="profBio" class="self-input" value="${window.escapeHtml(window.state.signature || '')}">
                 <button class="btn" onclick="window.saveProfileChanges()" style="width:100%;">💾 Сохранить</button>
             </div>
-            <a href="#/shop" class="btn">🛒 Магазин XP</a>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <a href="#/shop" class="btn">🛒 Магазин XP</a>
+                <a href="#/grades" class="btn" style="background:var(--gold); color:#000;">📊 Мои оценки</a>
+            </div>
         </section>`;
 
         window.saveProfileChanges = function() {
@@ -353,6 +448,9 @@ window.renderProfilePage = function(route) {
     }
 };
 
+// ============================================================
+// 5. ДОСТИЖЕНИЯ И ПРОСТЫЕ СТРАНИЦЫ
+// ============================================================
 window.renderAchievementsPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     document.getElementById("crumbs").textContent = "Достижения";
@@ -402,6 +500,9 @@ window.renderSimplePage = function(title, items, icon) {
     });
 };
 
+// ============================================================
+// 6. РОУТЕР И ИНИЦИАЛИЗАЦИЯ
+// ============================================================
 window.handleLogout = function() { window.state.student = null; window.state.staff = null; window.saveStudentData(); location.reload(); };
 
 window.addEventListener("DOMContentLoaded", function() {
@@ -492,6 +593,7 @@ window.addEventListener("DOMContentLoaded", function() {
         else if (hash === "/safety") { window.renderSimplePage("Охрана труда", window.GLOBAL_DATA.safety, "🦺"); } 
         else if (hash === "/formatting") { app.innerHTML = `<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>Оформление</h1></section><div class="module">${window.GLOBAL_DATA.formatting.content}</div>`; } 
         else if (hash === "/profile" || hash.startsWith("/profile/")) { window.renderProfilePage(hash); } 
+        else if (hash === "/grades") { window.renderStudentGradesPage(); }
         else if (hash === "/certificate") { window.renderCertificatePage(); } 
         else if (hash === "/shop") { if (window.renderShopPage) window.renderShopPage(); } 
         else if (hash === "/achievements") { window.renderAchievementsPage(); } 
