@@ -50,6 +50,25 @@ window.showToast = window.showToast || function(msg, type) {
     container.appendChild(t); setTimeout(function() { t.style.opacity = "0"; setTimeout(() => t.remove(), 300); }, 3000);
 };
 
+// Внедряем радужный текст для логотипа
+window.applyRainbowLogo = function() {
+    var logo = document.querySelector(".brand-badge");
+    if (logo) {
+        logo.style.background = "linear-gradient(270deg, red, orange, yellow, green, cyan, blue, violet)";
+        logo.style.backgroundSize = "1400% 1400%";
+        logo.style.webkitBackgroundClip = "text";
+        logo.style.webkitTextFillColor = "transparent";
+        logo.style.animation = "rainbowMove 10s linear infinite";
+        
+        if (!document.getElementById("rainbowStyle")) {
+            var style = document.createElement("style");
+            style.id = "rainbowStyle";
+            style.textContent = `@keyframes rainbowMove { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }`;
+            document.head.appendChild(style);
+        }
+    }
+};
+
 window.renderUserChip = function() {
     var nameEl = document.getElementById("userChipName");
     var groupEl = document.getElementById("userChipGroup");
@@ -255,6 +274,7 @@ window.renderTopicPage = function(courseId, topicId) {
                 var testId = `self_${topic.id}_${idx}`;
                 var isDone = window.state.results && window.state.results[testId];
                 
+                // БЕЗОПАСНЫЙ ПАРСИНГ ВОПРОСОВ
                 var questions = [];
                 if (sw.questions && Array.isArray(sw.questions)) {
                     questions = sw.questions;
@@ -263,17 +283,19 @@ window.renderTopicPage = function(courseId, topicId) {
                 }
 
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
-                    <b style="color:var(--gold); font-size:16px;">${sw.code}: ${sw.title}</b>
+                    <b style="color:var(--gold); font-size:16px;">${sw.code || 'СР'}: ${sw.title}</b>
                     <p style="font-size:14px; margin-top:10px; line-height:1.5;">${sw.task}</p>`;
                 
                 if (questions && questions.length > 0) {
                     contentArea.innerHTML += `<div style="margin-top:15px; border-top:1px dashed var(--border); padding-top:15px;"><b>🎯 Проверочный тест:</b></div>`;
                     questions.forEach((q, qi) => {
                         contentArea.innerHTML += `<div style="margin-top:10px; background:var(--card); padding:10px; border-radius:6px;">
-                            <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${q.q}</div>`;
-                        q.options.forEach((opt, oi) => {
-                            contentArea.innerHTML += `<label style="display:block; font-size:13px; margin-top:3px; cursor:pointer;"><input type="radio" name="${testId}_q${qi}" value="${oi}"> ${opt}</label>`;
-                        });
+                            <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${q.q || 'Вопрос'}</div>`;
+                        if (q.options) {
+                            q.options.forEach((opt, oi) => {
+                                contentArea.innerHTML += `<label style="display:block; font-size:13px; margin-top:3px; cursor:pointer;"><input type="radio" name="${testId}_q${qi}" value="${oi}"> ${opt}</label>`;
+                            });
+                        }
                         contentArea.innerHTML += `</div>`;
                     });
                     contentArea.innerHTML += `<button class="btn" style="margin-top:15px; font-size:13px; width:100%;" onclick="window.checkSelfWork('${testId}')">Отправить результаты</button>`;
@@ -288,7 +310,9 @@ window.renderTopicPage = function(courseId, topicId) {
             });
         }
         else if (tabName === 'test') {
-            if (!topic.test || !topic.test.length) { contentArea.innerHTML = "<p>Тестов нет.</p>"; return; }
+            if (!topic.test || !Array.isArray(topic.test) || topic.test.length === 0) { 
+                contentArea.innerHTML = "<p>Вопросов для этого теста пока нет.</p>"; return; 
+            }
             var testId = `test_${topic.id}`;
             var isDone = window.state.results && window.state.results[testId];
             
@@ -319,14 +343,17 @@ window.renderTopicPage = function(courseId, topicId) {
         function renderQ() {
             if (currentQ >= questions.length) {
                 clearInterval(timerId);
-                var grade = Math.round((correct / questions.length) * 100) >= 70 ? 5 : (Math.round((correct / questions.length) * 100) >= 50 ? 4 : 3);
+                var pct = Math.round((correct / questions.length) * 100);
+                var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
+                
                 window.state.results[`test_${topicId}`] = { grade: grade, total: correct, max: questions.length };
                 window.saveStudentData();
                 window.unlockAchievement('hacker'); 
+                
                 contentArea.innerHTML = `<div style="text-align:center; padding:30px; background:var(--card-soft); border-radius:12px;">
                     <h2 style="color:var(--ok);">Тест завершен!</h2>
                     <p>Верных ответов: <b>${correct}</b> из <b>${questions.length}</b></p>
-                    <h1 style="font-size:48px; color:var(--accent);">${grade}</h1>
+                    <h1 style="font-size:48px; color:var(--accent);">Оценка: ${grade}</h1>
                     <button class="btn" onclick="window.switchTopicTab('test')">Вернуться</button>
                 </div>`;
                 return;
@@ -402,7 +429,7 @@ window.renderTopicPage = function(courseId, topicId) {
 };
 
 // ============================================================
-// СЕРТИФИКАТ, ПРОФИЛЬ, ДОСТИЖЕНИЯ, СТРАНИЦЫ
+// СЕРТИФИКАТ, ПРОФИЛЬ, ДОСТИЖЕНИЯ
 // ============================================================
 window.renderAchievementsPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
@@ -631,7 +658,9 @@ window.renderSimplePage = function(title, items, icon) {
                 <video controls src="${item.file}" style="width:100%; max-height:400px; border-radius:8px; background:#000; display:none;" onerror="this.style.display='none'; this.previousElementSibling.style.display='block';" oncanplay="this.style.display='block'; this.previousElementSibling.style.display='none';"><source src="${item.file}" type="video/mp4"></video>
             </div>`;
         } else if (isPdf) {
-            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>`;
+            // Если метод.pdf не найден, покажет ошибку 404 в iframe. Предупреждаем текстом.
+            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>
+            <p style="color:var(--muted); font-size:12px; margin-top:5px;">* Если документ не отображается, проверьте наличие файла <b>${item.file}</b> в корне репозитория.</p>`;
         } else if (isDocx) {
             var docUrl = window.location.origin + window.location.pathname + item.file;
             mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(docUrl)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe></div>`;
@@ -641,10 +670,15 @@ window.renderSimplePage = function(title, items, icon) {
     });
 };
 
+// ============================================================
+// РОУТЕР И ИНИЦИАЛИЗАЦИЯ
+// ============================================================
 window.handleLogout = function() { window.state.student = null; window.state.staff = null; window.saveStudentData(); location.reload(); };
 
 window.addEventListener("DOMContentLoaded", function() {
     window.renderUserChip();
+    window.applyRainbowLogo(); // Включаем радужный текст
+
     if ($("themeToggle")) $("themeToggle").onclick = window.openThemeModal; 
 
     var mdkSelector = document.getElementById("mdkSelector");
