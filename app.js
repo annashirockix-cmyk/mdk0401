@@ -5,7 +5,7 @@
 // ============================================================
 window.state = window.state || {
     student: null, staff: null, xp: 0, activeCourseId: "07.01", results: {},
-    avatar: null, nickname: null, signature: null, purchasedThemes: [], purchasedFonts: [], font: "default", certBg: "bg1.jfif", examSubmissions: []
+    avatar: null, nickname: null, signature: null, purchasedThemes: [], purchasedFonts: [], font: "default", certBg: "1.png", examSubmissions: []
 };
 
 try {
@@ -171,14 +171,19 @@ window.renderTopicPage = function(courseId, topicId) {
             topic.selfWork.forEach((sw, idx) => {
                 var testId = `self_${topic.id}_${idx}`;
                 var isDone = window.state.results && window.state.results[testId];
+                var questions = sw.questions || [];
+                // Если вопросов нет в самой теме, ищем их в EXTRA_TESTS
+                if (questions.length === 0 && window.EXTRA_TESTS && window.EXTRA_TESTS[testId] && window.EXTRA_TESTS[testId].questions) {
+                    questions = window.EXTRA_TESTS[testId].questions;
+                }
+
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
                     <b style="color:var(--gold); font-size:16px;">${sw.code}: ${sw.title}</b>
                     <p style="font-size:14px; margin-top:10px; line-height:1.5;">${sw.task}</p>`;
                 
-                // Возвращаем тест для самостоятельной работы
-                if (sw.questions && sw.questions.length > 0) {
+                if (questions.length > 0) {
                     contentArea.innerHTML += `<div style="margin-top:15px; border-top:1px dashed var(--border); padding-top:15px;"><b>🎯 Проверочный тест:</b></div>`;
-                    sw.questions.forEach((q, qi) => {
+                    questions.forEach((q, qi) => {
                         contentArea.innerHTML += `<div style="margin-top:10px; background:var(--card); padding:10px; border-radius:6px;">
                             <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${q.q}</div>`;
                         q.options.forEach((opt, oi) => {
@@ -282,14 +287,13 @@ window.renderTopicPage = function(courseId, topicId) {
 };
 
 // ============================================================
-// 3. СЕРТИФИКАТ (С ВКЛАДЫШЕМ И ПОДПИСЯМИ)
+// 3. СЕРТИФИКАТ
 // ============================================================
 window.renderCertificatePage = function() {
     var app = $("app"); if (!app) return; app.innerHTML = "";
     app.appendChild(el('<a class="backlink no-print" href="#/" style="color:var(--accent);">← На главную</a>'));
     
     if (window.state.staff) {
-        // БЛАГОДАРСТВЕННОЕ ПИСЬМО ПРЕПОДАВАТЕЛЮ С ПОДПИСЯМИ
         var sigs = JSON.parse(localStorage.getItem('mdk_teacher_sigs') || '[]');
         var sigHtml = sigs.length > 0 ? sigs.map(s => `<div style="font-style:italic; margin-top:5px;">✔️ ${s.name} (${s.date})</div>`).join('') : '<div style="color:var(--muted);">Пока нет подписей...</div>';
 
@@ -313,7 +317,7 @@ window.renderCertificatePage = function() {
                 var newSigs = JSON.parse(localStorage.getItem('mdk_teacher_sigs') || '[]');
                 newSigs.push({ name: name, date: new Date().toLocaleDateString() });
                 localStorage.setItem('mdk_teacher_sigs', JSON.stringify(newSigs));
-                window.renderCertificatePage(); // перерисовываем
+                window.renderCertificatePage();
             }
         };
         return;
@@ -321,24 +325,33 @@ window.renderCertificatePage = function() {
 
     if (!window.state.student) return;
 
-    var bgs = ["bg1.jfif", "bg2.jfif", "bg3.jfif", "bg4.jfif", "bg5.jfif", "bg6.jfif", "bg7.jpg", "bg8.jpg", "bg9.jpg", "bg10.jpg", "bg11.jpg", "bg12.jpg"];
+    // ИСПРАВЛЕНО: Используем ваши имена файлов 1.png - 6.png + добавляем внешние
+    var bgs = [
+        "1.png", "2.png", "3.png", "4.png", "5.png", "6.png",
+        "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=900&q=80",
+        "https://images.unsplash.com/photo-1557683316-973673baf926?w=900&q=80",
+        "https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=900&q=80",
+        "https://images.unsplash.com/photo-1518655048521-f130df041f66?w=900&q=80"
+    ];
+    
     var certBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;"><h3>Фон:</h3><div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
     bgs.forEach(bg => {
-        // Если картинка не грузится, фон просто остается белым
-        certBgSelectorHtml += `<img src="certificat/${bg}" onclick="window.setCertBg('${bg}')" style="width:80px; height:60px; object-fit:cover; border-radius:4px; cursor:pointer; border:3px solid ${window.state.certBg === bg ? 'var(--accent)' : 'transparent'};" onerror="this.style.border='1px solid red';">`;
+        // Проверка, является ли фон ссылкой или локальным файлом
+        var srcPath = bg.startsWith("http") ? bg : `certificat/${bg}`;
+        certBgSelectorHtml += `<img src="${srcPath}" onclick="window.setCertBg('${bg}')" style="width:80px; height:60px; object-fit:cover; border-radius:4px; cursor:pointer; border:3px solid ${window.state.certBg === bg ? 'var(--accent)' : 'transparent'};" onerror="this.style.border='1px solid red';">`;
     });
     certBgSelectorHtml += `</div></div>`;
 
     var courseName = window.MDK_DATA && window.MDK_DATA[window.state.activeCourseId] ? window.MDK_DATA[window.state.activeCourseId].title : "МДК";
     var isApproved = window.state.results && window.state.results.certificateApproved;
+    var currentBgPath = window.state.certBg && window.state.certBg.startsWith("http") ? window.state.certBg : `certificat/${window.state.certBg || '1.png'}`;
 
-    var certHtml = `<div id="printable-cert" style="background-image: url('certificat/${window.state.certBg || bgs[0]}'); background-size: 100% 100%; background-color: #fff; color:#000; padding: 20px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center;">
+    var certHtml = `<div id="printable-cert" style="background-image: url('${currentBgPath}'); background-size: 100% 100%; background-color: #fff; color:#000; padding: 20px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center;">
         <div style="background: rgba(255,255,255,0.85); width:100%; height:100%; padding:30px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:8px;">
             <div><h1 style="font-size:32px; color:#c14a2a;">СЕРТИФИКАТ</h1><p>подтверждает, что</p><h2 style="font-size:28px; border-bottom:2px solid #ccc; display:inline-block;">${window.escapeHtml(window.state.student.name)}</h2><p>прошел(ла) обучение</p><h3 style="font-size:20px;">${window.escapeHtml(courseName)}</h3></div>
             <div style="display:flex; justify-content:space-between; font-size:14px;"><div><p>Дата:</p><p style="font-weight:bold;">${new Date().toLocaleDateString('ru-RU')}</p></div><div><p>Подпись:</p><div style="border-bottom:1px solid #000; width:150px; height:30px;"></div></div></div>
         </div>${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:80px; font-weight:bold; color:rgba(255,0,0,0.15);">ОБРАЗЕЦ</div>` : ""}</div>`;
 
-    // ВКЛАДЫШ С ОЦЕНКАМИ
     var gradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_"));
     var gradesRows = gradesList.map(k => {
         var title = k.replace(/prac_|self_|__final__/g, "").toUpperCase();
@@ -365,7 +378,7 @@ window.setCertBg = function(bg) {
 };
 
 // ============================================================
-// 4. ЛИЧНЫЙ КАБИНЕТ И ОЦЕНКИ СТУДЕНТА
+// 4. ОСТАЛЬНЫЕ СТРАНИЦЫ
 // ============================================================
 window.renderStudentGradesPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
@@ -448,9 +461,6 @@ window.renderProfilePage = function(route) {
     }
 };
 
-// ============================================================
-// 5. ДОСТИЖЕНИЯ И ПРОСТЫЕ СТРАНИЦЫ
-// ============================================================
 window.renderAchievementsPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     document.getElementById("crumbs").textContent = "Достижения";
@@ -485,26 +495,45 @@ window.renderSimplePage = function(title, items, icon) {
         var isDocx = item.file && item.file.toLowerCase().endsWith('.docx');
         var isYouTube = item.url && (item.url.includes('youtube.com') || item.url.includes('youtu.be'));
         var mediaHtml = "";
+        
         if (isYouTube) {
-            var vidId = item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : item.url.split('/').pop();
-            mediaHtml = `<div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; margin-top:10px;"><iframe src="https://www.youtube.com/embed/${vidId}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>`;
+            var vidId = "";
+            if (item.url.includes('v=')) vidId = item.url.split('v=')[1].split('&')[0];
+            else if (item.url.includes('youtu.be/')) vidId = item.url.split('youtu.be/')[1].split('?')[0];
+            
+            if (vidId) {
+                mediaHtml = `<div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; margin-top:10px;"><iframe src="https://www.youtube.com/embed/${vidId}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>`;
+            } else {
+                mediaHtml = `<p style="color:var(--err); font-size:14px;">Ошибка ссылки YouTube</p>`;
+            }
         } else if (isVideo) {
             mediaHtml = `<video controls src="${item.file}" style="width:100%; max-height:400px; border-radius:8px; margin-top:10px; background:#000;"></video>`;
         } else if (isPdf) {
-            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>`;
+            // Отображаем PDF через iframe. Если блокируется - даем кнопку скачивания
+            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff; position:relative;">
+                <iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe>
+            </div>`;
         } else if (isDocx) {
             var docUrl = window.location.origin + window.location.pathname + item.file;
-            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(docUrl)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe></div>`;
+            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff; position:relative;">
+                <iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(docUrl)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe>
+            </div>`;
         }
-        list.innerHTML += `<div style="margin-bottom:20px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);"><b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br><span style="font-size:14px; color:var(--muted);">${item.description || ''}</span>${mediaHtml}${(item.file || item.url) ? `<br><a href="${item.file || item.url}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать</a>` : ''}</div>`;
+
+        list.innerHTML += `<div style="margin-bottom:20px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);">
+            <b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br>
+            <span style="font-size:14px; color:var(--muted);">${item.description || ''}</span>
+            ${mediaHtml}
+            ${(item.file || item.url) ? `<br><a href="${item.file || item.url}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать файл</a>` : ''}
+        </div>`;
     });
 };
 
-// ============================================================
-// 6. РОУТЕР И ИНИЦИАЛИЗАЦИЯ
-// ============================================================
 window.handleLogout = function() { window.state.student = null; window.state.staff = null; window.saveStudentData(); location.reload(); };
 
+// ============================================================
+// 5. РОУТЕР И ИНИЦИАЛИЗАЦИЯ
+// ============================================================
 window.addEventListener("DOMContentLoaded", function() {
     window.renderUserChip();
     if ($("themeToggle")) $("themeToggle").onclick = window.openThemeModal; 
