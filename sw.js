@@ -1,4 +1,4 @@
-const CACHE = "mdk0701-v206"; 
+const CACHE = "mdk0701-v208"; 
 
 const ASSETS = [
   "./",
@@ -38,7 +38,9 @@ const ASSETS = [
   "./links.js",
   "./info.js",
   "./admin.js",
-  "./easter-eggs.js"
+  "./easter-eggs.js",
+  "./cursor-snake.html",
+  "./carve-pumpkin.html"
 ];
 
 self.addEventListener("install", (e) => {
@@ -96,7 +98,6 @@ self.addEventListener("fetch", (e) => {
         }
         return res;
       }).catch(() => {
-        // Если сеть упала и в кэше нет — просто возвращаем ошибку
         return new Response("Network error", { status: 408, headers: { "Content-Type": "text/plain" } });
       });
     })

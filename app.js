@@ -400,8 +400,10 @@ window.renderTopicPage = function(courseId, topicId) {
                 contentArea.innerHTML += `<details class="lec-accordion" style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;">
                     <summary style="padding:15px; font-weight:bold; cursor:pointer;">📄 ${l.title} (Загружено преподавателем)</summary>
                     <div class="lec-content" style="padding:20px; border-top:1px solid var(--border);">
-                        <iframe src="${l.dataUrl}" width="100%" height="600px" style="border:none; border-radius:8px;"></iframe>
-                        <a href="${l.dataUrl}" download="${l.title}.pdf" class="btn" style="margin-top:10px;">📥 Скачать PDF</a>
+                        <object data="${l.dataUrl}" type="application/pdf" width="100%" height="600px" style="border:none; border-radius:8px;">
+                            <p>Ваш браузер не поддерживает просмотр PDF. <a href="${l.dataUrl}" download="${l.title}.pdf" class="btn" style="margin-top:10px;">📥 Скачать PDF</a></p>
+                        </object>
+                        <a href="${l.dataUrl}" download="${l.title}.pdf" class="btn" style="margin-top:15px;">📥 Скачать PDF</a>
                     </div>
                 </details>`;
             });
@@ -432,12 +434,13 @@ window.renderTopicPage = function(courseId, topicId) {
             }
             topic.presentations.forEach(p => {
                 var fileUrl = window.location.origin + window.location.pathname + p.file;
-                var viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
                     <b style="color:var(--accent); font-size:16px;">${p.code}: ${p.title}</b>
                     <p style="font-size:14px; margin-top:10px; color:var(--text-soft);">${p.description || ''}</p>
-                    <div style="width:100%; height:500px; margin-top:15px; border-radius:8px; border:1px solid var(--border); background:#fff;"><iframe src="${viewerUrl}" width="100%" height="100%" style="border:none;"></iframe></div>
-                    <a href="${fileUrl}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать / Открыть в новой вкладке</a>
+                    <div style="margin-top:15px; text-align:center;">
+                        <p style="color:var(--muted); margin-bottom:15px;">Встроенный просмотр презентаций (PPTX) ограничен политикой безопасности браузера.</p>
+                        <a href="${fileUrl}" target="_blank" class="btn" style="padding:15px 30px; font-size:16px;">📥 Скачать / Открыть презентацию</a>
+                    </div>
                 </div>`;
             });
         }
@@ -1175,11 +1178,9 @@ function router() {
 
     if (page === "final") {
         if (parts.length >= 2) {
-            var courseId = parts[1];
-            var fn = window["renderFinal_" + courseId.replace(".", "")];
-            if (typeof fn === "function") fn(courseId);
-            else if (window.renderFinalExamPage) window.renderFinalExamPage(courseId);
-            else window.renderSimplePage("Экзамен", "Для этого курса экзамен не найден");
+            // Передаем в final.js
+            if (window.renderFinalExamPage) window.renderFinalExamPage(parts[1]);
+            else window.renderSimplePage("Экзамен", "Ошибка: final.js не загружен");
         } else {
             if (window.renderFinalExamPage) window.renderFinalExamPage();
             else window.renderSimplePage("Экзамены", "Выберите предмет в меню");
