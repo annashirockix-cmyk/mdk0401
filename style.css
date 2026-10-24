@@ -4,71 +4,136 @@
 
 /* --- 1. ПЕРЕМЕННЫЕ И ТЕМЫ --- */
 :root {
-  --bg: rgba(14, 14, 16, 0.9); 
+  --bg: #121214; 
   --card: rgba(23, 23, 25, 0.95); 
   --card-soft: rgba(28, 28, 31, 0.9); 
   --border: #2a2a2e;
-  --text: #e8e6e1; --text-soft: #c8c5bd; --muted: #8f8b80;
-  --accent: #ff6b3d; --accent-soft: #2a1c15; --ok: #58c98a; --err: #ff6e5e; --gold: #ffd700;
+  --text: #e8e6e1; 
+  --text-soft: #c8c5bd; 
+  --muted: #8f8b80;
+  --accent: #ff6b3d; 
+  --accent-soft: #2a1c15; 
+  --ok: #58c98a; 
+  --err: #ff6e5e; 
+  --gold: #ffd700;
   --shadow: 0 4px 12px rgba(0,0,0,0.3);
   --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   --card-rgb: 23, 23, 25;
 }
 
 [data-theme="light"] {
-  --bg: rgba(245, 242, 236, 0.9); 
+  --bg: #f5f2ec; 
   --card: rgba(255, 255, 255, 0.95); 
   --card-soft: rgba(240, 236, 228, 0.9); 
   --border: #dcd7cd;
-  --text: #2c2c2c; --text-soft: #4a4a4a; --muted: #7a776e;
-  --accent: #c14a2a; --accent-soft: #f7e4dd; --ok: #2e9e5e; --err: #d93838;
-  --gold: #d4a000; --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --text: #2c2c2c; 
+  --text-soft: #4a4a4a; 
+  --muted: #7a776e;
+  --accent: #c14a2a; 
+  --accent-soft: #f7e4dd; 
+  --ok: #2e9e5e; 
+  --err: #d93838;
+  --gold: #d4a000; 
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
   --card-rgb: 255, 255, 255;
 }
 
 [data-theme="neon"] {
-  --bg: rgba(9, 9, 11, 0.9); --card: rgba(24, 24, 27, 0.95); --card-soft: rgba(39, 39, 42, 0.9); --border: #3f3f46;
-  --text: #f4f4f5; --text-soft: #d4d4d8; --muted: #a1a1aa;
-  --accent: #ff00cc; --accent-soft: #4a003a; --ok: #00ffcc; --err: #ff0055; --gold: #fbbf24;
+  --bg: #09090b; 
+  --card: rgba(24, 24, 27, 0.95); 
+  --card-soft: rgba(39, 39, 42, 0.9); 
+  --border: #3f3f46;
+  --text: #f4f4f5; 
+  --text-soft: #d4d4d8; 
+  --muted: #a1a1aa;
+  --accent: #ff00cc; 
+  --accent-soft: #4a003a; 
+  --ok: #00ffcc; 
+  --err: #ff0055; 
+  --gold: #fbbf24;
   --card-rgb: 24, 24, 27;
 }
 
 [data-theme="matrix"], [data-theme="hacker"] {
-  --bg: rgba(0, 0, 0, 0.9); --card: rgba(10, 10, 10, 0.95); --card-soft: rgba(17, 17, 17, 0.9); --border: #003300;
-  --text: #00ff00; --text-soft: #00cc00; --muted: #008800;
-  --accent: #00ff00; --accent-soft: #002200; --ok: #00ff00; --err: #ff0000; --gold: #00ff00;
-  --font-main: 'Share Tech Mono', monospace;
+  --bg: #000000; 
+  --card: rgba(10, 10, 10, 0.95); 
+  --card-soft: rgba(17, 17, 17, 0.9); 
+  --border: #003300;
+  --text: #00ff00; 
+  --text-soft: #00cc00; 
+  --muted: #008800;
+  --accent: #00ff00; 
+  --accent-soft: #002200; 
+  --ok: #00ff00; 
+  --err: #ff0000; 
+  --gold: #00ff00;
+  --font-main: 'Share Tech Mono', monospace, "Courier New";
   --card-rgb: 10, 10, 10;
 }
 
 [data-theme="cyberpunk"] {
-  --bg: rgba(10, 0, 21, 0.9); --card: rgba(21, 0, 34, 0.95); --card-soft: rgba(32, 0, 51, 0.9); --border: #ff00ff;
-  --text: #00ffff; --text-soft: #ff00ff; --muted: #887799;
-  --accent: #ff00ff; --accent-soft: rgba(255, 0, 255, 0.2); --ok: #00ffff; --err: #ff0055; --gold: #ffcc00;
+  --bg: #0a0015; 
+  --card: rgba(21, 0, 34, 0.95); 
+  --card-soft: rgba(32, 0, 51, 0.9); 
+  --border: #ff00ff;
+  --text: #00ffff; 
+  --text-soft: #ff00ff; 
+  --muted: #887799;
+  --accent: #ff00ff; 
+  --accent-soft: rgba(255, 0, 255, 0.2); 
+  --ok: #00ffff; 
+  --err: #ff0055; 
+  --gold: #ffcc00;
   --font-main: 'Orbitron', sans-serif;
   --card-rgb: 21, 0, 34;
 }
 
 [data-theme="glass"] {
-  --bg: rgba(10, 10, 15, 0.8); --card: rgba(30, 30, 40, 0.6); --card-soft: rgba(40, 40, 50, 0.4); --border: rgba(255, 255, 255, 0.15);
-  --text: #ffffff; --text-soft: #cccccc; --muted: #999999; --accent: #38bdf8; --accent-soft: rgba(56, 189, 248, 0.2);
-  --ok: #34d399; --err: #f87171; --gold: #fbbf24;
+  --bg: #0a0a0f; 
+  --card: rgba(30, 30, 40, 0.6); 
+  --card-soft: rgba(40, 40, 50, 0.4); 
+  --border: rgba(255, 255, 255, 0.15);
+  --text: #ffffff; 
+  --text-soft: #cccccc; 
+  --muted: #999999; 
+  --accent: #38bdf8; 
+  --accent-soft: rgba(56, 189, 248, 0.2);
+  --ok: #34d399; 
+  --err: #f87171; 
+  --gold: #fbbf24;
   --card-rgb: 30, 30, 40;
-  backdrop-filter: blur(20px);
 }
 
 [data-theme="retro"] {
-  --bg: rgba(43, 43, 43, 0.9); --card: rgba(26, 26, 26, 0.95); --card-soft: rgba(51, 51, 51, 0.9); --border: #444;
-  --text: #ffb000; --text-soft: #cc8800; --muted: #885500; --accent: #ffb000; --accent-soft: rgba(255, 176, 0, 0.2);
-  --ok: #00ff00; --err: #ff0000; --gold: #ffb000;
+  --bg: #2b2b2b; 
+  --card: rgba(26, 26, 26, 0.95); 
+  --card-soft: rgba(51, 51, 51, 0.9); 
+  --border: #444;
+  --text: #ffb000; 
+  --text-soft: #cc8800; 
+  --muted: #885500; 
+  --accent: #ffb000; 
+  --accent-soft: rgba(255, 176, 0, 0.2);
+  --ok: #00ff00; 
+  --err: #ff0000; 
+  --gold: #ffb000;
   --font-main: 'Courier New', monospace;
   --card-rgb: 26, 26, 26;
 }
 
 [data-theme="ocean"] {
-  --bg: rgba(10, 25, 47, 0.9); --card: rgba(17, 34, 64, 0.95); --card-soft: rgba(26, 54, 93, 0.9); --border: #233554;
-  --text: #e6f1ff; --text-soft: #8892b0; --muted: #495670; --accent: #64ffda; --accent-soft: rgba(100, 255, 218, 0.1);
-  --ok: #64ffda; --err: #ff6b6b; --gold: #fbbf24;
+  --bg: #0a192f; 
+  --card: rgba(17, 34, 64, 0.95); 
+  --card-soft: rgba(26, 54, 93, 0.9); 
+  --border: #233554;
+  --text: #e6f1ff; 
+  --text-soft: #8892b0; 
+  --muted: #495670; 
+  --accent: #64ffda; 
+  --accent-soft: rgba(100, 255, 218, 0.1);
+  --ok: #64ffda; 
+  --err: #ff6b6b; 
+  --gold: #fbbf24;
   --card-rgb: 17, 34, 64;
 }
 
@@ -78,12 +143,10 @@ html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-main); color: var(--text);
   line-height: 1.6; -webkit-font-smoothing: antialiased;
-  /* ГЛОБАЛЬНЫЙ ФОН-КАРТИНКА */
-  background-image: url('https://images.unsplash.com/photo-1518652778119-25972c58194c?q=80&w=1920&auto=format&fit=crop'); 
-  background-size: cover;
-  background-position: center;
+  /* Убрана внешняя картинка, используется безопасный фоновый цвет темы */
+  background-color: var(--bg);
   background-attachment: fixed;
-  background-color: var(--bg); /* Fallback */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; }
@@ -112,7 +175,7 @@ code { font-family: monospace; background: var(--card-soft); padding: 2px 6px; b
 .drawer-overlay.open { opacity: 1; pointer-events: auto; }
 .drawer { 
   position: fixed; top: 0; left: 0; bottom: 0; width: 300px; 
-  background-color: rgba(var(--card-rgb), 0.95); backdrop-filter: blur(15px); 
+  background-color: rgba(var(--card-rgb), 0.98); backdrop-filter: blur(15px); 
   z-index: 1001; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
   display: flex; flex-direction: column; box-shadow: 4px 0 20px rgba(0,0,0,0.2); border-right: 1px solid var(--border); 
 }
@@ -170,11 +233,11 @@ main#app { padding: 32px 24px 100px; max-width: 1100px; margin: 0 auto; min-heig
 /* --- 11. ЭКРАН ВХОДА --- */
 .login-overlay { 
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 99999;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 99999;
   display: none; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 20px 10px;
 }
 .login-shell { 
-  width: 100%; max-width: 800px; background-color: rgba(var(--card-rgb), 0.95); padding: 30px; 
+  width: 100%; max-width: 800px; background-color: rgba(var(--card-rgb), 0.98); padding: 30px; 
   border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid var(--border);
   margin: 0 auto;
 }
@@ -267,7 +330,7 @@ main#app { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
     .login-shell { margin: 10px auto; }
 }
 
-/* --- 16. СТИЛИ ДЛЯ НОВЫХ ИГР --- */
+/* --- 16. СТИЛИ ДЛЯ ИГР --- */
 .gcode-canvas { background: #111; border: 2px solid var(--border); border-radius: 8px; display: block; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.3); touch-action: none; }
 .diag-part { cursor: pointer; transition: 0.2s; border-radius: 8px; padding: 10px; text-align: center; background: var(--card-soft); border: 2px solid transparent; margin: 5px; }
 .diag-part:hover { border-color: var(--accent); transform: scale(1.02); }
