@@ -33,10 +33,10 @@ window.openAssistant = function(){
   function addBot(text) { log.appendChild(el(`<div style="background:var(--card-soft);padding:8px 12px;border-radius:8px;align-self:flex-start;line-height:1.4;">${text}</div>`)); log.scrollTop = log.scrollHeight; }
   function addUser(text) { log.appendChild(el(`<div style="background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;align-self:flex-end;">${text}</div>`)); log.scrollTop = log.scrollHeight; }
 
-  addBot("Привет! Я умный помощник. Спроси меня про <b>МДК</b>, <b>XP</b>, <b>тесты</b>, <b>сертификат</b> или <b>игры</b>. Если я не знаю ответа — научи меня!");
+  addBot("Привет! Я умный помощник. Спроси меня про <b>МДК</b>, <b>XP</b>, <b>тесты</b>, <b>сертификат</b> или <b>G-код</b>. Если я не знаю ответа — научи меня!");
 
   panel.querySelector("#asClose").addEventListener("click", ()=>panel.remove());
-  panel.querySelector("#asTourBtn").addEventListener("click", function() { panel.remove(); startTour(); });
+  panel.querySelector("#asTourBtn").addEventListener("click", function() { panel.remove(); if(window.startTour) startTour(); });
   
   panel.querySelector("#asClearBrain").addEventListener("click", function() {
       if(confirm("Сбросить память бота? Все, чему вы его научили, будет удалено.")) {
@@ -68,6 +68,8 @@ window.openAssistant = function(){
           reply = "Привет! Я помогу тебе разобраться с порталом. Спроси про учебу или игры.";
       } else if (v.includes("мдк") || v.includes("что такое мдк")) {
           reply = "📚 <b>МДК</b> — это Междисциплинарный курс. У нас их четыре: 07.01 (ЧПУ), 04.01 (Диагностика), 02.01 (Сборка) и 02.02 (Программирование сборки). Переключай их в самом верху страницы!";
+      } else if (v.includes("g90") || v.includes("g91") || v.includes("g0") || v.includes("g1") || v.includes("g2") || v.includes("g3") || v.includes("m3") || v.includes("m5") || v.includes("m30") || v.includes("g-код") || v.includes("gcode") || v.includes("чпу")) {
+          reply = "📐 <b>G-код</b> — это язык программирования станков с ЧПУ. Основные команды: <br>• G00 — быстрый ход<br>• G01 — линейная интерполяция<br>• G02/G03 — дуги<br>• G90 — абсолютные координаты<br>• G91 — относительные координаты<br>• M03 — включить шпиндель<br>• M05 — остановить шпиндель<br>• M30 — конец программы.<br> Попробуй сыграть в мини-игру «G-код Рисование» в Игровой комнате!";
       } else if (v.includes("xp") || v.includes("опыт") || v.includes("балл") || v.includes("уровень")) {
           reply = "⭐ <b>XP (Опыт)</b> дают за прохождение тестов, практик, сдачу самостоятельных и победы в играх. Чем больше XP, тем выше твой уровень в профиле.";
       } else if (v.includes("ачивк") || v.includes("достижен")) {
@@ -92,8 +94,6 @@ window.openAssistant = function(){
           reply = "🎮 В игровой комнате (левое меню) доступны: G-код, Сапёр, Крестики-нолики, Судоку, 21 (Блэкджек), Найди пару, Казино, Рулетка, Паук и Смертельная вечеринка!";
       } else if (v.includes("видео")) {
           reply = "🎬 Видеоуроки находятся в левом меню. Если видео не грузится прямо на сайте, нажми кнопку «Скачать / Открыть в новой вкладке».";
-      } else if (v.includes("g-код") || v.includes("gcode") || v.includes("чпу")) {
-          reply = "📐 <b>G-код</b> — это язык программирования станков с ЧПУ. У нас есть специальная мини-игра «G-код Рисование», где можно вводить команды (G01, G02 и т.д.) и чертить ими!";
       } else if (v.includes("ошибк") || v.includes("не работает") || v.includes("сломалось")) {
           reply = "⚠️ Если что-то не работает, проверь интернет или попробуй обновить страницу (Ctrl+F5). Если ошибка в тесте — сообщи преподавателю.";
       } else if (v.includes("спасибо") || v.includes("благодар")) {
