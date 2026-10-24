@@ -1,22 +1,20 @@
 "use strict";
 
-const THEMES = [
-    { id: "default", title: "Стандарт (Dark)", price: 0, bg: "#0e0e10", text: "#e8e6e1" },
-    { id: "ury-light", title: "Ury Light", price: 0, bg: "#FFFFFF", text: "#252525" },
-    { id: "ury-dark", title: "Ury Dark", price: 0, bg: "#2b2b2b", text: "#ebebeb" },
-    { id: "neon", title: "Киберпанк", price: 200, bg: "#09090b", text: "#ff00cc" },
-    { id: "matrix", title: "Матрица", price: 200, bg: "#000000", text: "#00ff00" },
-    { id: "rgb", title: "RGB Геймер", price: 500, bg: "#111", text: "#ff0055" },
-    { id: "hacker", title: "Хакер", price: 400, bg: "#000", text: "#00ff00" },
-    // ЭКСКЛЮЗИВ
-    { id: "vip_theme", title: "👑 VIP Тестировщик", price: 0, bg: "#1a0b2e", text: "#ffd700" }
+const ACHIEVEMENTS = [
+    { id: "welcome", title: "Первый шаг", desc: "Войти в систему", icon: "🚪" },
+    { id: "reader", title: "Книжный червь", desc: "Изучить лекцию", icon: "📖" },
+    { id: "hacker", title: "Хакер", desc: "Пройти тест", icon: "💻" },
+    { id: "gamer", title: "Геймер", desc: "Сыграть в игру", icon: "🎮" },
+    { id: "level_5", title: "Опытный", desc: "Достичь 5 уровня", icon: "⭐" },
+    { id: "rich", title: "Богач", desc: "Накопить 1000 XP", icon: "💰" }
 ];
 
-const FONTS = [
-    { id: "default", title: "Стандарт", price: 0, family: "inherit" },
-    { id: "atkinson", title: "Atkinson", price: 0, family: "'Atkinson Hyperlegible', sans-serif" },
-    { id: "orbitron", title: "Orbitron", price: 300, family: "'Orbitron', sans-serif" },
-    { id: "sharetech", title: "Share Tech", price: 300, family: "'Share Tech Mono', monospace" }
+const THEMES = [
+    { id: "default", title: "Стандартная", price: 0, bg: "#0e0e10", text: "#e8e6e1" },
+    { id: "light", title: "Светлая", price: 0, bg: "#f5f2ec", text: "#2c2c2c" },
+    { id: "neon", title: "Киберпанк", price: 500, bg: "#09090b", text: "#ff00cc" },
+    { id: "matrix", title: "Матрица", price: 500, bg: "#000000", text: "#00ff00" },
+    { id: "cyberpunk", title: "Cyberpunk", price: 800, bg: "#0a0015", text: "#00ffff" }
 ];
 
 const AVATARS = [
@@ -24,20 +22,38 @@ const AVATARS = [
     { id: "av1", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix", price: 100, title: "Парень" },
     { id: "av2", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aneka", price: 100, title: "Девушка" },
     { id: "av3", url: "https://api.dicebear.com/7.x/bottts/svg?seed=Robo", price: 200, title: "Робот" },
-    // ЭКСКЛЮЗИВ
-    { id: "vip_marazm", url: "https://api.dicebear.com/7.x/bottts/svg?seed=MarazmKing", price: 0, title: "👑 Marazm" },
-    { id: "vip_barbos", url: "https://api.dicebear.com/7.x/bottts/svg?seed=BarbosPro", price: 0, title: "👑 Barbos" }
+    { id: "custom", url: "url", price: 500, title: "Свой URL" }
+];
+
+// НОВЫЕ КАТЕГОРИИ
+const TEXT_EFFECTS = [
+    { id: "none", title: "Без эффекта", price: 0 },
+    { id: "fx-rainbow-text", title: "Радужный текст", price: 300 },
+    { id: "fx-neon-text", title: "Неоновое свечение", price: 400 },
+    { id: "fx-glitch-text", title: "Глитч (Помехи)", price: 500 },
+    { id: "fx-typewriter", title: "Пишущая машинка", price: 200 }
+];
+
+const BG_EFFECTS = [
+    { id: "none", title: "Без эффекта", price: 0 },
+    { id: "fx-aurora-bg", title: "Северное сияние", price: 500 },
+    { id: "fx-matrix-bg", title: "Матрица (Дождь)", price: 600 },
+    { id: "fx-starfield-bg", title: "Звездное небо", price: 600 }
+];
+
+const CARD_EFFECTS = [
+    { id: "none", title: "Без эффекта", price: 0 },
+    { id: "fx-holo-card", title: "Голографическая карта", price: 700 },
+    { id: "fx-3d-card", title: "3D карточка", price: 800 }
 ];
 
 window.renderShopPage = function() {
-    var app = document.getElementById("app"); 
-    if (!app) return; 
-    app.innerHTML = "";
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     document.getElementById("crumbs").textContent = "Магазин XP";
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
     
-    var isVIP = window.isVIP();
-    var balance = isVIP ? "∞ (VIP Тестировщик)" : window.state.xp + " XP";
+    var isTeacher = !!window.state.staff;
+    var balance = isTeacher ? "∞ (Преподаватель)" : window.state.xp + " XP";
     
     app.appendChild(el(`<section class="hero"><h1>🛒 Магазин</h1><p>Баланс: <b style="color:var(--gold); font-size:24px;">${balance}</b></p></section>`));
 
@@ -46,18 +62,21 @@ window.renderShopPage = function() {
         html += `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin-top:15px;">`;
         
         items.forEach(item => {
-            // Скрываем VIP темы и аватары от обычных студентов
-            if (item.id.startsWith("vip_") && !isVIP && !window.state.staff) return;
-
-            var isOwned = isVIP || window.state.staff || 
-                          (window.state.purchasedThemes && window.state.purchasedThemes.includes(item.id)) || 
-                          (window.state.avatar === item.url) || 
-                          (window.state.purchasedFonts && window.state.purchasedFonts.includes(item.id));
+            // Проверка владения (сохраняется в массивах purchasedThemes, purchasedTextEffects и т.д.)
+            var isOwned = isTeacher || 
+                          (type === 'theme' && (window.state.purchasedThemes || []).includes(item.id)) ||
+                          (type === 'avatar' && window.state.avatar === item.url) ||
+                          (type === 'text' && (window.state.purchasedTextEffects || []).includes(item.id)) ||
+                          (type === 'bg' && (window.state.purchasedBgEffects || []).includes(item.id)) ||
+                          (type === 'card' && (window.state.purchasedCardEffects || []).includes(item.id)) ||
+                          item.price === 0;
             
             var isActive = false;
-            if (type === 'theme') isActive = localStorage.getItem("mdk.theme_active") === item.id || (item.id === 'default' && !localStorage.getItem("mdk.theme_active"));
+            if (type === 'theme') isActive = localStorage.getItem("mdk.theme_active") === item.id;
             if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar);
-            if (type === 'font') isActive = (window.state.font || 'default') === item.id;
+            if (type === 'text') isActive = (window.state.activeTextEffect || 'none') === item.id;
+            if (type === 'bg') isActive = (window.state.activeBgEffect || 'none') === item.id;
+            if (type === 'card') isActive = (window.state.activeCardEffect || 'none') === item.id;
 
             var btnHtml = "";
             if (isActive) {
@@ -70,15 +89,21 @@ window.renderShopPage = function() {
 
             var preview = "";
             if (type === 'theme') {
-                preview = `<div class="theme-preview" style="background:${item.bg}; color:${item.text}; display:flex; align-items:center; justify-content:center; font-weight:bold; height:60px; border-radius:6px; margin-bottom:10px;">Aa</div>`;
+                preview = `<div style="background:${item.bg}; color:${item.text}; height:60px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; font-weight:bold;">Aa</div>`;
             }
-            if (type === 'avatar' && item.url) {
-                preview = `<img src="${item.url}" style="width:60px; height:60px; border-radius:50%; margin:0 auto 10px; display:block; background:#fff;">`;
+            if (type === 'avatar' && item.url && item.url !== 'url') {
+                preview = `<img src="${item.url}" style="width:60px; height:60px; border-radius:50%; margin:0 auto 10px; display:block;">`;
             } else if (type === 'avatar' && item.id === 'default') {
                 preview = `<div style="font-size:40px; margin-bottom:10px;">👨‍🎓</div>`;
             }
-            if (type === 'font') {
-                preview = `<div style="font-family:${item.family}; font-size:24px; margin-bottom:10px;">AaБб</div>`;
+            if (type === 'text') {
+                preview = `<div class="${item.id !== 'none' ? item.id : ''}" data-text="Текст" style="font-size:20px; font-weight:bold; margin-bottom:10px; height:40px;">${item.title}</div>`;
+            }
+            if (type === 'bg') {
+                preview = `<div class="${item.id !== 'none' ? item.id : ''}" style="height:60px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);"></div>`;
+            }
+            if (type === 'card') {
+                preview = `<div class="${item.id !== 'none' ? item.id : ''}" style="height:60px; background:var(--card-soft); border-radius:6px; margin-bottom:10px; border:1px solid var(--accent); display:flex; align-items:center; justify-content:center;">Карта</div>`;
             }
 
             html += `<div class="module" style="padding:15px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; margin-bottom:0;">
@@ -90,31 +115,30 @@ window.renderShopPage = function() {
         return html;
     }
 
-    app.innerHTML += renderCategory("🎨 Темы", THEMES, "theme");
+    app.innerHTML += renderCategory("🎨 Темы оформления", THEMES, "theme");
     app.innerHTML += renderCategory("👤 Аватары", AVATARS, "avatar");
-    app.innerHTML += renderCategory("🔤 Шрифты", FONTS, "font");
+    app.innerHTML += renderCategory("✨ Эффекты текста", TEXT_EFFECTS, "text");
+    app.innerHTML += renderCategory("🌌 Эффекты фона", BG_EFFECTS, "bg");
+    app.innerHTML += renderCategory("🃏 Эффекты карточек", CARD_EFFECTS, "card");
 };
 
 window.buyShopItem = function(type, id, price, value) {
-    // Безлимит для VIP и Преподов
-    if (!window.isVIP() && !window.state.staff && window.state.xp < price) {
-        return window.showToast("Недостаточно XP!", "err");
-    }
+    if (!window.state.staff && window.state.xp < price) return window.showToast("Недостаточно XP!", "err");
     
-    if (window.isVIP() || window.state.staff || confirm(`Купить за ${price} XP?`)) {
-        if (!window.isVIP() && !window.state.staff) window.state.xp -= price;
+    if (type === 'avatar' && value === 'url') {
+        value = prompt("Введите прямую ссылку на картинку (URL):");
+        if (!value || (!value.startsWith("http") && !value.startsWith("data:"))) return window.showToast("Неверный URL", "err");
+    }
+
+    if (window.state.staff || confirm(`Купить за ${price} XP?`)) {
+        if (!window.state.staff) window.state.xp -= price;
         
-        if (type === 'theme') { 
-            if(!window.state.purchasedThemes) window.state.purchasedThemes = []; 
-            window.state.purchasedThemes.push(id); window.applyShopItem(type, id, value);
-        }
-        if (type === 'avatar') { window.state.avatar = value; window.applyShopItem(type, id, value); }
-        if (type === 'font') { 
-            if(!window.state.purchasedFonts) window.state.purchasedFonts = []; 
-            window.state.purchasedFonts.push(id); window.applyShopItem(type, id, value);
-        }
+        if (type === 'theme') { if(!window.state.purchasedThemes) window.state.purchasedThemes = []; window.state.purchasedThemes.push(id); }
+        if (type === 'text') { if(!window.state.purchasedTextEffects) window.state.purchasedTextEffects = []; window.state.purchasedTextEffects.push(id); }
+        if (type === 'bg') { if(!window.state.purchasedBgEffects) window.state.purchasedBgEffects = []; window.state.purchasedBgEffects.push(id); }
+        if (type === 'card') { if(!window.state.purchasedCardEffects) window.state.purchasedCardEffects = []; window.state.purchasedCardEffects.push(id); }
         
-        if (window.saveStudentData) window.saveStudentData();
+        window.saveStudentData();
         window.showToast("Покупка успешна!", "ok");
         window.renderShopPage();
     }
@@ -126,18 +150,17 @@ window.applyShopItem = function(type, id, value) {
         document.documentElement.setAttribute("data-theme", id === "default" ? "dark" : id);
     } else if (type === 'avatar') {
         window.state.avatar = value || null;
-        if (window.renderUserChip) window.renderUserChip();
-    } else if (type === 'font') {
-        window.state.font = id;
-        var fontDef = FONTS.find(f => f.id === id);
-        var styleEl = document.getElementById("customFontStyle");
-        if (id === "default") { if (styleEl) styleEl.remove(); document.body.style.fontFamily = ""; } 
-        else {
-            if (!styleEl) { styleEl = document.createElement("style"); styleEl.id = "customFontStyle"; document.head.appendChild(styleEl); }
-            styleEl.textContent = "body, button, input, textarea, select { font-family: " + fontDef.family + " !important; }";
-        }
+    } else if (type === 'text') {
+        window.state.activeTextEffect = id;
+    } else if (type === 'bg') {
+        window.state.activeBgEffect = id;
+    } else if (type === 'card') {
+        window.state.activeCardEffect = id;
     }
-    if (window.saveStudentData) window.saveStudentData();
+    
+    window.saveStudentData();
     window.showToast("Применено!", "ok");
-    if (location.hash === "#/shop") window.renderShopPage();
+    window.renderShopPage();
+    if (window.renderUserChip) window.renderUserChip();
+    if (window.applyGlobalEffects) window.applyGlobalEffects();
 };
