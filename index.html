@@ -19,7 +19,6 @@
         </button>
         <div class="brand-badge" id="mainLogo">МДК Портал</div>
         
-        <!-- Выбор МДК -->
         <select id="mdkSelector" class="self-input" style="width:auto; margin:0; padding:6px 10px; font-size:14px; background:var(--card); border-color:var(--border); color:var(--text);">
             <option value="07.01">МДК 07.01 (ЧПУ)</option>
             <option value="04.01">МДК 04.01 (Диагностика)</option>
@@ -41,13 +40,10 @@
         </div>
     </header>
 
-    <!-- Хлебные крошки -->
     <div id="crumbs" style="padding: 12px 24px; font-size: 14px; color: var(--muted); background: var(--bg); border-bottom: 1px solid var(--border);"></div>
 
-    <!-- Основной контент -->
     <main id="app"></main>
 
-    <!-- Боковое меню -->
     <div class="drawer-overlay" id="drawerOverlay"></div>
     <aside class="drawer" id="drawer">
         <div class="drawer-head">
@@ -61,6 +57,11 @@
             <a href="#/achievements" class="drawer-item" data-go="#/achievements">🏆 Достижения</a>
             <a href="#/shop" class="drawer-item" data-go="#/shop">🛒 Магазин</a>
             <a href="#/links" class="drawer-item" data-go="#/links">📚 Полезные материалы</a>
+            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+            <!-- ДОБАВЛЕНЫ ССЫЛКИ НА ВИДЕО И ОХРАНУ ТРУДА -->
+            <a href="#/videos" class="drawer-item" data-go="#/videos">🎬 Видеоуроки</a>
+            <a href="#/safety" class="drawer-item" data-go="#/safety">🛡️ Охрана труда</a>
+            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
             <a href="#/training" class="drawer-item" data-go="#/training">🎯 Тренировка</a>
             <a href="#/final" class="drawer-item" data-go="#/final">📋 Экзамен</a>
             <a href="#/arcade" class="drawer-item" data-go="#/arcade">🎮 Игровая комната</a>
@@ -76,12 +77,10 @@
         </nav>
     </aside>
 
-    <!-- Экран входа -->
     <div class="login-overlay" id="loginOverlay" style="display:none;">
         <div class="login-shell">
             <h2 style="text-align:center; margin-bottom:20px;">Вход в портал</h2>
             <div class="login-grid">
-                <!-- Форма студента -->
                 <div class="login-card">
                     <h3 style="margin-top:0; color:var(--accent);">👨‍🎓 Студент</h3>
                     <form onsubmit="event.preventDefault(); document.getElementById('btnLoginStudent').click();">
@@ -91,7 +90,6 @@
                         <button type="button" class="btn ghost" onclick="window.clearCache()" style="width:100%; margin-top:10px; border-color:var(--err); color:var(--err); font-size:12px;">🔄 Сбросить кэш и обновить</button>
                     </form>
                 </div>
-                <!-- Форма преподавателя -->
                 <div class="login-card">
                     <h3 style="margin-top:0; color:var(--gold);">👨‍🏫 Преподаватель</h3>
                     <form onsubmit="event.preventDefault(); document.getElementById('btnLoginTeacher').click();">
@@ -106,7 +104,6 @@
 
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- СКРИПТЫ -->
     <script src="api.js"></script>
     <script src="data-0701.js"></script>
     <script src="data-0401.js"></script>
@@ -143,7 +140,6 @@
     <script src="admin.js"></script>
     <script src="easter-eggs.js"></script>
     
-    <!-- Обработчик выбора МДК и регистрация SW -->
     <script>
         document.getElementById('mdkSelector').addEventListener('change', function() {
             if (window.state) {
@@ -157,7 +153,6 @@
             }
         });
 
-        // Установка текущего МДК в селектор при загрузке
         window.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 if (window.state && window.state.activeCourseId) {

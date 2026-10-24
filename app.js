@@ -81,32 +81,28 @@ window.unlockAchievement = function(id) {
 };
 
 // ============================================================
-// 3. СПИСКИ ТРЕНИРОВОК И ЭКЗАМЕНОВ
+// 3. НОВЫЕ СТРАНИЦЫ ВИДЕО И ОХРАНЫ ТРУДА
 // ============================================================
-window.renderTrainingListPage = function() {
+window.renderVideosPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎯 Тренировка</h1><p>Выберите предмет</p></section>';
-    var grid = document.createElement("div"); grid.style = "display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;";
-    Object.values(window.MDK_DATA || {}).forEach(p => {
-        var card = document.createElement("a"); card.href = "#/training/" + p.id; card.className = "module";
-        card.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:1px solid var(--border); border-radius:12px;";
-        card.innerHTML = `<h3 style="margin-top:0; color:var(--accent);">${p.shortName}</h3><p>${p.title}</p>`;
-        grid.appendChild(card);
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎬 Видеоуроки</h1></section><div class="module" id="videosList"></div>';
+    var list = document.getElementById("videosList");
+    var vids = window.GLOBAL_DATA && window.GLOBAL_DATA.videos ? window.GLOBAL_DATA.videos : [];
+    if (!vids.length) { list.innerHTML = "<p>Видео пока нет.</p>"; return; }
+    vids.forEach(v => {
+        list.innerHTML += `<div style="margin-bottom:20px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${v.title}</b><p style="font-size:14px; margin:5px 0;">${v.description||''}</p><video src="${v.file}" controls style="width:100%; border-radius:8px; max-height:500px; background:#000;"></video></div>`;
     });
-    app.appendChild(grid);
 };
 
-window.renderFinalListPage = function() {
+window.renderSafetyPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>📋 Итоговые экзамены</h1><p>Выберите предмет</p></section>';
-    var grid = document.createElement("div"); grid.style = "display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;";
-    Object.values(window.MDK_DATA || {}).forEach(p => {
-        var card = document.createElement("a"); card.href = "#/final/" + p.id; card.className = "module";
-        card.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:1px solid var(--border); border-radius:12px;";
-        card.innerHTML = `<h3 style="margin-top:0; color:var(--gold);">${p.shortName}</h3><p>${p.title}</p>`;
-        grid.appendChild(card);
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🛡️ Охрана труда</h1></section><div class="module" id="safetyList"></div>';
+    var list = document.getElementById("safetyList");
+    var items = window.GLOBAL_DATA && window.GLOBAL_DATA.safety ? window.GLOBAL_DATA.safety : [];
+    if (!items.length) { list.innerHTML = "<p>Инструкций пока нет.</p>"; return; }
+    items.forEach(s => {
+        list.innerHTML += `<div style="margin-bottom:15px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--err); font-size:16px;">${s.title}</b><p style="font-size:14px; margin:5px 0;">${s.description||''}</p>${s.content ? `<p>${s.content}</p>` : `<a href="${s.file}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать</a>`}</div>`;
     });
-    app.appendChild(grid);
 };
 
 // ============================================================
@@ -149,15 +145,10 @@ window.renderTopicPage = function(courseId, topicId) {
     var customCards = (window.CUSTOM_DATA && window.CUSTOM_DATA.flashcards || []).filter(fc => fc.mdkId === courseId && fc.topicId === topic.id);
     var customLecs = (window.CUSTOM_DATA && window.CUSTOM_DATA.customLectures || []).filter(l => l.mdkId === courseId && l.topicId === topic.id);
 
-    var hasVideo = (topic.videos && topic.videos.length) || (window.GLOBAL_DATA && window.GLOBAL_DATA.videos && window.GLOBAL_DATA.videos.length);
-    var hasSafety = (topic.safety && topic.safety.length) || (window.GLOBAL_DATA && window.GLOBAL_DATA.safety && window.GLOBAL_DATA.safety.length);
-
     var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
         <button class="btn tab active" id="tab-lectures" onclick="window.switchTopicTab('lectures')">📖 Лекции</button>
         ${customCards.length > 0 ? `<button class="btn tab ghost" id="tab-flashcards" onclick="window.switchTopicTab('flashcards')">📇 Карточки</button>` : ''}
         ${(topic.presentations && topic.presentations.length) ? `<button class="btn tab ghost" id="tab-presentations" onclick="window.switchTopicTab('presentations')">📊 Презентации</button>` : ''}
-        ${hasVideo ? `<button class="btn tab ghost" id="tab-videos" onclick="window.switchTopicTab('videos')">🎬 Видео</button>` : ''}
-        ${hasSafety ? `<button class="btn tab ghost" id="tab-safety" onclick="window.switchTopicTab('safety')">🛡️ Охрана труда</button>` : ''}
         ${(topic.practicals && topic.practicals.length) ? `<button class="btn tab ghost" id="tab-practicals" onclick="window.switchTopicTab('practicals')">🛠️ Практика</button>` : ''}
         ${(topic.selfWork && topic.selfWork.length) ? `<button class="btn tab ghost" id="tab-selfwork" onclick="window.switchTopicTab('selfwork')">📝 Самостоятельная</button>` : ''}
         ${(topic.test && topic.test.length) ? `<button class="btn tab ghost" id="tab-test" onclick="window.switchTopicTab('test')">🎯 Тест</button>` : ''}
@@ -194,21 +185,6 @@ window.renderTopicPage = function(courseId, topicId) {
             topic.presentations.forEach(p => {
                 var fileUrl = window.location.origin + window.location.pathname + p.file;
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${p.code}: ${p.title}</b><p style="font-size:14px; margin-top:10px; color:var(--text-soft);">${p.description || ''}</p><div style="margin-top:15px; text-align:center;"><p style="color:var(--muted); margin-bottom:15px; font-size:13px;">Встроенный просмотр PPTX недоступен из-за безопасности. Скачайте файл.</p><a href="${fileUrl}" target="_blank" class="btn" style="padding:15px 30px; font-size:16px;">📥 Скачать / Открыть</a></div></div>`;
-            });
-        }
-        else if (tabName === 'videos') {
-            var vids = (topic.videos && topic.videos.length) ? topic.videos : (window.GLOBAL_DATA ? window.GLOBAL_DATA.videos : []);
-            if (!vids || !vids.length) { contentArea.innerHTML = "<p>Видео нет.</p>"; return; }
-            vids.forEach(v => {
-                var videoUrl = v.url || v.file || "";
-                contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${v.title}</b><p style="font-size:14px; margin-top:5px; color:var(--text-soft);">${v.description || ''}</p><div style="margin-top:15px;"><video src="${videoUrl}" controls style="width:100%; border-radius:8px; background:#000; max-height:500px;"></video></div></div>`;
-            });
-        }
-        else if (tabName === 'safety') {
-            var safetyItems = (topic.safety && topic.safety.length) ? topic.safety : (window.GLOBAL_DATA ? window.GLOBAL_DATA.safety : []);
-            if (!safetyItems || !safetyItems.length) { contentArea.innerHTML = "<p>Инструкций нет.</p>"; return; }
-            safetyItems.forEach(s => {
-                contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);"><b style="color:var(--err); font-size:16px;">${s.title}</b><p style="font-size:14px; margin-top:5px; color:var(--text-soft);">${s.description || ''}</p><div style="margin-top:15px;">${s.content ? `<p>${s.content}</p>` : `<a href="${s.file}" target="_blank" class="btn" style="padding:10px 20px;">📥 Скачать инструкцию</a>`}</div></div>`;
             });
         }
         else if (tabName === 'practicals') {
@@ -434,7 +410,29 @@ window.renderCertificatePage = function() {
         </div>
         ${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:120px; font-weight:bold; color:rgba(255,0,0,0.1); pointer-events:none; white-space:nowrap; z-index:10;">ОБРАЗЕЦ</div>` : ""}
     </div>`;
-    app.innerHTML += certBgSelectorHtml + certHtml;
+    
+    // ВОССТАНОВЛЕН ВКЛАДЫШ
+    var gradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved");
+    gradesList.sort((a, b) => a.localeCompare(b));
+    var gradesRows = gradesList.map(k => {
+        var readableName = window.getReadableResultName(k);
+        var gradeData = window.state.results[k];
+        var grade = gradeData.grade || gradeData.correct || gradeData;
+        if (typeof grade === 'object') grade = grade.grade || '—';
+        var color = grade >= 4 ? '#2e7d32' : (grade >= 3 ? '#f57c00' : '#d32f2f');
+        return `<tr><td style="border:1px solid #ddd; padding:10px; font-size:15px;">${window.escapeHtml(readableName)}</td><td style="border:1px solid #ddd; padding:10px; text-align:center; font-weight:bold; color:${color}; font-size:18px;">${grade}</td></tr>`;
+    }).join("");
+    var supplementHtml = `<div class="no-print" style="text-align:center; margin:20px 0;"><button class="btn" onclick="window.print()" style="padding: 12px 24px; font-size: 16px;">🖨 Распечатать сертификат и вкладыш</button></div>
+        <div id="printable-supplement" style="background: ${currentBg.css}; background-size: auto; padding: 30px; border-radius: 12px; max-width:900px; margin:20px auto; border:1px solid #ccc;">
+            <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 8px; color:#000;">
+                <h2 style="text-align:center; color:#c14a2a; text-transform:uppercase; letter-spacing:1px;">Вкладыш оценок</h2>
+                <hr style="border:0; border-top:1px solid #ccc; margin:20px 0;">
+                <div style="display:flex; justify-content:space-between; font-size:16px; margin-bottom:20px;"><div><b>Студент:</b> ${window.escapeHtml(window.state.student.name)}</div><div><b>Группа:</b> ${window.escapeHtml(window.state.student.group)}</div></div>
+                <table style="width:100%; border-collapse:collapse; margin-top:10px;"><thead><tr style="background:#f5f5f5;"><th style="border:1px solid #ddd; padding:12px; text-align:left; width: 70%;">Изученный материал</th><th style="border:1px solid #ddd; padding:12px; text-align:center; width: 30%;">Оценка</th></tr></thead><tbody>${gradesRows || '<tr><td colspan="2" style="text-align:center; padding:20px; color:#888;">Оценок пока нет</td></tr>'}</tbody></table>
+                <div style="margin-top: 40px; text-align: right; font-size:16px;"><p>Итоговый средний балл: <b>${avg}</b></p></div>
+            </div>
+        </div>`;
+    app.innerHTML += certBgSelectorHtml + certHtml + supplementHtml;
     window.applyGlobalEffects();
 };
 window.setCertBg = function(bgId) { window.state.certBg = bgId; window.saveStudentData(); window.renderCertificatePage(); };
@@ -534,6 +532,8 @@ function router() {
     if (page === "grades") { window.renderStudentGradesPage(); return; }
     if (page === "certificate") { window.renderCertificatePage(); return; }
     if (page === "achievements") { window.renderAchievementsPage(); return; }
+    if (page === "videos") { window.renderVideosPage(); return; }
+    if (page === "safety") { window.renderSafetyPage(); return; }
     if (page === "shop") { if (window.renderShopPage) window.renderShopPage(); else window.renderSimplePage("Магазин", "В разработке"); return; }
     if (page === "links") { if (window.renderLinksPage) window.renderLinksPage(); else window.renderSimplePage("Материалы", "В разработке"); return; }
     if (page === "training") {
