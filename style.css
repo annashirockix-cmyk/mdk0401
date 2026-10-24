@@ -326,3 +326,57 @@ main#app { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
   background: linear-gradient(45deg, #ffd700, #ff8c00);
   color: #000; font-weight: bold;
 }
+/* --- 21. ФЛЭШ-КАРТОЧКИ --- */
+.fc-card {
+    perspective: 1000px;
+    cursor: pointer;
+    height: 150px;
+}
+.fc-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+.fc-card.flipped .fc-inner {
+    transform: rotateY(180deg);
+}
+.fc-front, .fc-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    text-align: center;
+}
+.fc-front {
+    background: var(--card);
+    border: 2px solid var(--accent);
+    font-weight: bold;
+    font-size: 16px;
+}
+.fc-back {
+    background: var(--card-soft);
+    border: 2px solid var(--ok);
+    transform: rotateY(180deg);
+    font-size: 14px;
+}
+
+/* --- 22. НОВЫЕ ФОНЫ (ГРАДИЕНТЫ) --- */
+.bg-underwater { background: linear-gradient(135deg, #005c97, #363795); }
+.bg-foggy-forest { background: radial-gradient(circle, #2c3e50, #000000); }
+.bg-stone-alley { background: linear-gradient(180deg, #3e5151, #decba4); }
+.bg-cats-yarn { background: linear-gradient(135deg, #f5af19, #f12711); }
+.bg-pumpkins { background: linear-gradient(135deg, #3a1c71, #d76d77); }
+.bg-spooky-room { background: linear-gradient(135deg, #1d2b64, #f8cdda); }
+.bg-halloween { background: linear-gradient(135deg, #4a00e0, #8e2de2); }
+.bg-red-forest { background: linear-gradient(135deg, #8e0e00, #1f1c18); }
+.bg-lanterns { background: linear-gradient(135deg, #283c86, #45a247); }
+.bg-dark-table { background: linear-gradient(135deg, #2b2b2b, #1a1a1a); }
+.bg-graveyard { background: linear-gradient(135deg, #41295a, #2f0743); }
+.bg-cats-notebook { background: linear-gradient(135deg, #c79081, #dfa579); }

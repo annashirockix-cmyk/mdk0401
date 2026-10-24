@@ -25,7 +25,6 @@ const AVATARS = [
     { id: "custom", url: "url", price: 500, title: "Свой URL" }
 ];
 
-// НОВЫЕ КАТЕГОРИИ
 const TEXT_EFFECTS = [
     { id: "none", title: "Без эффекта", price: 0 },
     { id: "fx-rainbow-text", title: "Радужный текст", price: 300 },
@@ -38,7 +37,20 @@ const BG_EFFECTS = [
     { id: "none", title: "Без эффекта", price: 0 },
     { id: "fx-aurora-bg", title: "Северное сияние", price: 500 },
     { id: "fx-matrix-bg", title: "Матрица (Дождь)", price: 600 },
-    { id: "fx-starfield-bg", title: "Звездное небо", price: 600 }
+    { id: "fx-starfield-bg", title: "Звездное небо", price: 600 },
+    // Новые фоны
+    { id: "bg-underwater", title: "Подводный мир", price: 700 },
+    { id: "bg-foggy-forest", title: "Туманный лес", price: 700 },
+    { id: "bg-stone-alley", title: "Каменная аллея", price: 700 },
+    { id: "bg-cats-yarn", title: "Кошки и клубки", price: 700 },
+    { id: "bg-pumpkins", title: "Тыквы", price: 700 },
+    { id: "bg-spooky-room", title: "Жуткая комната", price: 700 },
+    { id: "bg-halloween", title: "Хэллоуин", price: 700 },
+    { id: "bg-red-forest", title: "Красный лес", price: 700 },
+    { id: "bg-lanterns", title: "Фонари", price: 700 },
+    { id: "bg-dark-table", title: "Темный стол", price: 700 },
+    { id: "bg-graveyard", title: "Кладбище", price: 700 },
+    { id: "bg-cats-notebook", title: "Коты и тетрадь", price: 700 }
 ];
 
 const CARD_EFFECTS = [
@@ -62,7 +74,7 @@ window.renderShopPage = function() {
         html += `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin-top:15px;">`;
         
         items.forEach(item => {
-            // Проверка владения (сохраняется в массивах purchasedThemes, purchasedTextEffects и т.д.)
+            // Проверка владения
             var isOwned = isTeacher || 
                           (type === 'theme' && (window.state.purchasedThemes || []).includes(item.id)) ||
                           (type === 'avatar' && window.state.avatar === item.url) ||
@@ -71,6 +83,7 @@ window.renderShopPage = function() {
                           (type === 'card' && (window.state.purchasedCardEffects || []).includes(item.id)) ||
                           item.price === 0;
             
+            // Проверка активности
             var isActive = false;
             if (type === 'theme') isActive = localStorage.getItem("mdk.theme_active") === item.id;
             if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar);

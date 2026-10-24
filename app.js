@@ -78,7 +78,7 @@ window.applyGlobalEffects = function() {
 
     var bgFx = window.state.activeBgEffect || "none";
     document.querySelectorAll(".hero").forEach(function(el) {
-        el.classList.remove("fx-aurora-bg", "fx-matrix-bg", "fx-starfield-bg");
+        el.classList.remove("fx-aurora-bg", "fx-matrix-bg", "fx-starfield-bg", "bg-underwater", "bg-foggy-forest", "bg-stone-alley", "bg-cats-yarn", "bg-pumpkins", "bg-spooky-room", "bg-halloween", "bg-red-forest", "bg-lanterns", "bg-dark-table", "bg-graveyard", "bg-cats-notebook");
         if (bgFx !== "none") el.classList.add(bgFx);
         else el.classList.add("fx-aurora-bg");
     });
@@ -270,9 +270,12 @@ window.renderTopicPage = function(courseId, topicId) {
     app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
     app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
 
-    // ДОБАВЛЕНА ВКЛАДКА ПРЕЗЕНТАЦИЙ
+    var customCards = (window.CUSTOM_DATA && window.CUSTOM_DATA.flashcards || []).filter(fc => fc.mdkId === courseId && fc.topicId === topic.id);
+    var customLecs = (window.CUSTOM_DATA && window.CUSTOM_DATA.customLectures || []).filter(l => l.mdkId === courseId && l.topicId === topic.id);
+
     var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
         <button class="btn tab active" id="tab-lectures" onclick="window.switchTopicTab('lectures')">📖 Лекции</button>
+        ${customCards.length > 0 ? `<button class="btn tab ghost" id="tab-flashcards" onclick="window.switchTopicTab('flashcards')">📇 Карточки</button>` : ''}
         ${(topic.presentations && topic.presentations.length) ? `<button class="btn tab ghost" id="tab-presentations" onclick="window.switchTopicTab('presentations')">📊 Презентации</button>` : ''}
         ${(topic.practicals && topic.practicals.length) ? `<button class="btn tab ghost" id="tab-practicals" onclick="window.switchTopicTab('practicals')">🛠️ Практика</button>` : ''}
         ${(topic.selfWork && topic.selfWork.length) ? `<button class="btn tab ghost" id="tab-selfwork" onclick="window.switchTopicTab('selfwork')">📝 Самостоятельная</button>` : ''}
@@ -290,15 +293,45 @@ window.renderTopicPage = function(courseId, topicId) {
         contentArea.innerHTML = "";
 
         if (tabName === 'lectures') {
-            if (!topic.lectures || !topic.lectures.length) { contentArea.innerHTML = "<p>Лекций нет.</p>"; return; }
-            topic.lectures.forEach(lec => {
-                contentArea.innerHTML += `<details class="lec-accordion" open style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;">
-                    <summary style="padding:15px; font-weight:bold; cursor:pointer;">${lec.code} ${lec.title}</summary>
-                    <div class="lec-content" style="padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;">${lec.content}</div>
+            if ((!topic.lectures || !topic.lectures.length) && customLecs.length === 0) { contentArea.innerHTML = "<p>Лекций нет.</p>"; return; }
+            if (topic.lectures) {
+                topic.lectures.forEach(lec => {
+                    // ВОЗВРАЩАЕМ ТАБЛИЦЫ, ГРАФИКИ И КАРТИНКИ (не вырезаем)
+                    contentArea.innerHTML += `<details class="lec-accordion" open style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;">
+                        <summary style="padding:15px; font-weight:bold; cursor:pointer;">${lec.code} ${lec.title}</summary>
+                        <div class="lec-content" style="padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;">${lec.content}</div>
+                    </details>`;
+                });
+            }
+            customLecs.forEach(l => {
+                contentArea.innerHTML += `<details class="lec-accordion" style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;">
+                    <summary style="padding:15px; font-weight:bold; cursor:pointer;">📄 ${l.title} (Загружено преподавателем)</summary>
+                    <div class="lec-content" style="padding:20px; border-top:1px solid var(--border);">
+                        <iframe src="${l.dataUrl}" width="100%" height="600px" style="border:none; border-radius:8px;"></iframe>
+                        <a href="${l.dataUrl}" download="${l.title}.pdf" class="btn" style="margin-top:10px;">📥 Скачать PDF</a>
+                    </div>
                 </details>`;
             });
             window.unlockAchievement('reader');
-        } 
+        }
+        else if (tabName === 'flashcards') {
+            contentArea.innerHTML = '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:15px;" id="fcGrid"></div>';
+            var grid = contentArea.querySelector("#fcGrid");
+            customCards.forEach((fc) => {
+                grid.innerHTML += `<div class="fc-card" onclick="this.classList.toggle('flipped')" style="perspective:1000px; cursor:pointer; height:150px;">
+                    <div class="fc-inner" style="position:relative; width:100%; height:100%; transition:transform 0.6s; transform-style:preserve-3d;">
+                        <div class="fc-front" style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--card); border:2px solid var(--accent); border-radius:12px; display:flex; align-items:center; justify-content:center; padding:15px; text-align:center; font-weight:bold; font-size:16px;">${fc.term}</div>
+                        <div class="fc-back" style="position:absolute; width:100%; height:100%; backface-visibility:hidden; background:var(--card-soft); border:2px solid var(--ok); border-radius:12px; display:flex; align-items:center; justify-content:center; padding:15px; text-align:center; transform:rotateY(180deg); font-size:14px;">${fc.definition}</div>
+                    </div>
+                </div>`;
+            });
+            if (!document.getElementById('fcStyles')) {
+                var style = document.createElement('style');
+                style.id = 'fcStyles';
+                style.textContent = `.fc-card.flipped .fc-inner { transform: rotateY(180deg); }`;
+                document.head.appendChild(style);
+            }
+        }
         else if (tabName === 'presentations') {
             if (!topic.presentations || !topic.presentations.length) { contentArea.innerHTML = "<p>Презентаций нет.</p>"; return; }
             topic.presentations.forEach(p => {
@@ -347,6 +380,7 @@ window.renderTopicPage = function(courseId, topicId) {
                     <b style="color:var(--gold); font-size:16px;">${sw.code || 'СР'}: ${sw.title}</b>
                     <p style="font-size:14px; margin-top:10px; line-height:1.5;">${sw.task}</p>`;
                 
+                // ВОЗВРАЩАЕМ ТЕСТ В САМОСТОЯТЕЛЬНУЮ РАБОТУ
                 if (questions && questions.length > 0) {
                     contentArea.innerHTML += `<div style="margin-top:15px; border-top:1px dashed var(--border); padding-top:15px;"><b>🎯 Проверочный тест:</b></div>`;
                     questions.forEach((q, qi) => {
@@ -361,9 +395,11 @@ window.renderTopicPage = function(courseId, topicId) {
                         }
                         contentArea.innerHTML += `</div>`;
                     });
-                    contentArea.innerHTML += `<button class="btn" style="margin-top:15px; font-size:13px; width:100%;" onclick="window.checkSelfWork('${testId}')">Отправить результаты</button>`;
+                    contentArea.innerHTML += `<button class="btn" style="margin-top:15px; font-size:13px; width:100%;" onclick="window.checkSelfWork('${testId}')">Отправить результаты теста</button>`;
                 } else {
-                    contentArea.innerHTML += `<button class="btn" style="margin-top:15px; font-size:13px;" onclick="window.submitSelfWork('${testId}')">Сдать работу (без теста)</button>`;
+                    // Если вопросов нет, то просто текстовое поле
+                    contentArea.innerHTML += `<textarea id="inp_${testId}" class="self-input" rows="4" placeholder="Введите ваш ответ..." style="margin-top:10px;"></textarea>
+                    <button class="btn" style="margin-top:10px; font-size:13px; width:100%;" onclick="window.submitSelfWorkText('${testId}')">Сдать работу</button>`;
                 }
                 
                 if (isDone) {
@@ -465,19 +501,49 @@ window.renderTopicPage = function(courseId, topicId) {
     };
 
     window.checkSelfWork = function(testId) {
-        window.showToast("✅ Результаты отправлены, +15 XP", "ok");
+        var total = 0, correct = 0;
+        var qs = (window.EXTRA_TESTS && window.EXTRA_TESTS[testId]) ? window.EXTRA_TESTS[testId].questions : [];
+        
+        if (qs.length === 0) {
+            window.showToast("✅ Результаты отправлены, +15 XP", "ok");
+            if (!window.state.results) window.state.results = {};
+            window.state.results[testId] = { grade: 5, max: 5, type: "self_test" };
+            if (window.addXP) window.addXP(15);
+            window.saveStudentData();
+            window.renderTopicPage(courseId, topicId);
+            window.switchTopicTab('selfwork');
+            return;
+        }
+        
+        qs.forEach((q, qi) => {
+            var radios = document.getElementsByName(`${testId}_q${qi}`);
+            var selected = -1;
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].checked) selected = parseInt(radios[i].value);
+            }
+            if (selected === q.correct) correct++;
+            total++;
+        });
+        
+        var pct = Math.round((correct / total) * 100);
+        var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
+        
+        window.showToast(`✅ Результаты отправлены! Оценка: ${grade}`, "ok");
         if (!window.state.results) window.state.results = {};
-        window.state.results[testId] = { grade: 5, max: 5, type: "self_test" };
-        if (window.addXP) window.addXP(15);
+        window.state.results[testId] = { grade: grade, max: total, type: "self_test" };
+        if (window.addXP) window.addXP(grade * 5);
         window.saveStudentData();
         window.renderTopicPage(courseId, topicId);
         window.switchTopicTab('selfwork');
     };
 
-    window.submitSelfWork = function(testId) {
+    window.submitSelfWorkText = function(testId) {
+        var val = document.getElementById(`inp_${testId}`).value.trim();
+        if (!val) return window.showToast("Напишите ответ перед сдачей", "err");
+        
         window.showToast("Работа отправлена на проверку преподавателю", "ok");
         if (!window.state.results) window.state.results = {};
-        window.state.results[testId] = { grade: "?", max: 5, type: "self" };
+        window.state.results[testId] = { grade: "?", max: 5, type: "self", answer: val };
         window.saveStudentData();
         window.renderTopicPage(courseId, topicId);
         window.switchTopicTab('selfwork');
@@ -576,7 +642,6 @@ window.renderCertificatePage = function() {
 
     if (!window.state.student) return;
 
-    // СЛОЖНЫЕ ФОНЫ
     var bgs = [
         { id: "bg1", css: "linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)", name: "Классический" },
         { id: "bg2", css: "repeating-linear-gradient(45deg, #ffecd2, #ffecd2 10px, #fcb69f 10px, #fcb69f 20px)", name: "Персиковый узор" },
@@ -642,7 +707,6 @@ window.renderCertificatePage = function() {
         </tr>`;
     }).join("");
 
-    // Вкладыш теперь тоже получает цветной фон
     var supplementHtml = `<div class="no-print" style="text-align:center; margin:20px 0;">
             <button class="btn" onclick="window.print()" style="padding: 12px 24px; font-size: 16px;">🖨 Распечатать сертификат и вкладыш</button>
         </div>
@@ -809,7 +873,7 @@ window.renderSimplePage = function(title, items, icon) {
         } else if (isPdf) {
             mediaHtml = `<div style="margin-top:10px;">
                 <p style="color:var(--err); font-size:13px; margin-bottom:10px;">⚠️ Внимание: Если вы видите "404 File not found", значит файл <b>${item.file}</b> не загружен в корень вашего репозитория.</p>
-                <div style="width:100%; height:600px; border-radius:8px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>
+                <div style="width:100%; height:600px; border-radius:8px; border:1px solid var(--border); background:#fff;"><iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + window.location.pathname + item.file)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe></div>
             </div>`;
         } else if (isDocx) {
             var docUrl = window.location.origin + window.location.pathname + item.file;
