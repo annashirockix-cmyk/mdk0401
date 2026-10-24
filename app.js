@@ -270,8 +270,10 @@ window.renderTopicPage = function(courseId, topicId) {
     app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
     app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
 
+    // ДОБАВЛЕНА ВКЛАДКА ПРЕЗЕНТАЦИЙ
     var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
         <button class="btn tab active" id="tab-lectures" onclick="window.switchTopicTab('lectures')">📖 Лекции</button>
+        ${(topic.presentations && topic.presentations.length) ? `<button class="btn tab ghost" id="tab-presentations" onclick="window.switchTopicTab('presentations')">📊 Презентации</button>` : ''}
         ${(topic.practicals && topic.practicals.length) ? `<button class="btn tab ghost" id="tab-practicals" onclick="window.switchTopicTab('practicals')">🛠️ Практика</button>` : ''}
         ${(topic.selfWork && topic.selfWork.length) ? `<button class="btn tab ghost" id="tab-selfwork" onclick="window.switchTopicTab('selfwork')">📝 Самостоятельная</button>` : ''}
         ${(topic.test && topic.test.length) ? `<button class="btn tab ghost" id="tab-test" onclick="window.switchTopicTab('test')">🎯 Тест</button>` : ''}
@@ -297,6 +299,19 @@ window.renderTopicPage = function(courseId, topicId) {
             });
             window.unlockAchievement('reader');
         } 
+        else if (tabName === 'presentations') {
+            if (!topic.presentations || !topic.presentations.length) { contentArea.innerHTML = "<p>Презентаций нет.</p>"; return; }
+            topic.presentations.forEach(p => {
+                contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
+                    <b style="color:var(--accent); font-size:16px;">${p.code}: ${p.title}</b>
+                    <p style="font-size:14px; margin-top:10px; color:var(--text-soft);">${p.description || ''}</p>
+                    <div style="display:flex; gap:15px; margin-top:15px; align-items:center; flex-wrap:wrap;">
+                        <span style="font-size:13px; color:var(--muted);">📄 ${p.slides} слайдов</span>
+                        <a href="${p.file}" target="_blank" class="btn" style="padding:8px 15px;">📥 Скачать / Открыть</a>
+                    </div>
+                </div>`;
+            });
+        }
         else if (tabName === 'practicals') {
             if (!topic.practicals) { contentArea.innerHTML = "<p>Практик нет.</p>"; return; }
             topic.practicals.forEach((p, idx) => {
@@ -335,7 +350,6 @@ window.renderTopicPage = function(courseId, topicId) {
                 if (questions && questions.length > 0) {
                     contentArea.innerHTML += `<div style="margin-top:15px; border-top:1px dashed var(--border); padding-top:15px;"><b>🎯 Проверочный тест:</b></div>`;
                     questions.forEach((q, qi) => {
-                        // ИСПРАВЛЕНИЕ: q может быть строкой или объектом
                         var qText = typeof q === 'string' ? q : (q.q || 'Вопрос');
                         contentArea.innerHTML += `<div style="margin-top:10px; background:var(--card); padding:10px; border-radius:6px;">
                             <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${qText}</div>`;
@@ -453,7 +467,7 @@ window.renderTopicPage = function(courseId, topicId) {
     window.checkSelfWork = function(testId) {
         window.showToast("✅ Результаты отправлены, +15 XP", "ok");
         if (!window.state.results) window.state.results = {};
-        window.state.results[testId] = { grade: 5, max: 5, type: "self_test" }; // Автоматически ставим 5 за тест
+        window.state.results[testId] = { grade: 5, max: 5, type: "self_test" };
         if (window.addXP) window.addXP(15);
         window.saveStudentData();
         window.renderTopicPage(courseId, topicId);
@@ -562,7 +576,7 @@ window.renderCertificatePage = function() {
 
     if (!window.state.student) return;
 
-    // СЛОЖНЫЕ ФОНЫ (паттерны, сетки, градиенты)
+    // СЛОЖНЫЕ ФОНЫ
     var bgs = [
         { id: "bg1", css: "linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)", name: "Классический" },
         { id: "bg2", css: "repeating-linear-gradient(45deg, #ffecd2, #ffecd2 10px, #fcb69f 10px, #fcb69f 20px)", name: "Персиковый узор" },
