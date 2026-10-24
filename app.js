@@ -1,8 +1,5 @@
 "use strict";
 
-// ============================================================
-// 1. ГЛОБАЛЬНОЕ СОСТОЯНИЕ
-// ============================================================
 window.state = window.state || {
     student: null, staff: null, xp: 0, activeCourseId: "07.01", results: {},
     avatar: null, nickname: null, signature: null, purchasedThemes: [], purchasedFonts: [], font: "default", certBg: "bg1", examSubmissions: [],
@@ -119,19 +116,14 @@ window.getAverageGrade = function() {
     return count > 0 ? (sum / count).toFixed(2) : "—";
 };
 
-// ФУНКЦИЯ ДЛЯ ПОЛУЧЕНИЯ ЧИТАЕМОГО НАЗВАНИЯ РАБОТЫ
 window.getReadableResultName = function(key) {
     if (key === "__final__") return "Итоговый экзамен";
-    
     var isTest = key.startsWith("test_") || key.startsWith("inline_");
     var isPrac = key.startsWith("prac_");
     var isSelf = key.startsWith("self_");
-    
-    // Извлекаем ID темы (например, из "prac_m0201-t11_0" достаем "m0201-t11" и индекс "0")
     var parts = key.split("_");
     var rawId = parts[1] || parts[0]; 
     var index = parts.length > 2 ? parseInt(parts[2]) + 1 : "";
-    
     var course = window.MDK_DATA[window.state.activeCourseId];
     var topicTitle = rawId.toUpperCase();
     
@@ -140,7 +132,6 @@ window.getReadableResultName = function(key) {
             if (t.id === rawId) topicTitle = t.title;
         }));
     }
-    
     if (isTest) return `Тест: ${topicTitle}`;
     if (isPrac) return `Практика ${index ? '№'+index : ''}: ${topicTitle}`;
     if (isSelf) return `Самостоятельная ${index ? '№'+index : ''}: ${topicTitle}`;
@@ -222,7 +213,9 @@ window.changeTheme = function(themeId) {
 // ============================================================
 window.renderHomePage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    document.getElementById("crumbs").textContent = "Главная";
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) crumbs.textContent = "Главная";
+    
     var mdkId = window.state.activeCourseId || "07.01";
     var course = window.MDK_DATA && window.MDK_DATA[mdkId];
     var title = course ? course.title : "Добро пожаловать!";
@@ -271,7 +264,9 @@ window.renderTopicPage = function(courseId, topicId) {
     course.sections.forEach(s => { s.topics.forEach(t => { if (t.id === topicId) topic = t; }); });
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
 
-    document.getElementById("crumbs").textContent = topic.code + " " + topic.title;
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) crumbs.textContent = topic.code + " " + topic.title;
+    
     app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
     app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
 
@@ -340,8 +335,11 @@ window.renderTopicPage = function(courseId, topicId) {
                 if (questions && questions.length > 0) {
                     contentArea.innerHTML += `<div style="margin-top:15px; border-top:1px dashed var(--border); padding-top:15px;"><b>🎯 Проверочный тест:</b></div>`;
                     questions.forEach((q, qi) => {
+                        // ИСПРАВЛЕНИЕ: q может быть строкой или объектом
+                        var qText = typeof q === 'string' ? q : (q.q || 'Вопрос');
                         contentArea.innerHTML += `<div style="margin-top:10px; background:var(--card); padding:10px; border-radius:6px;">
-                            <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${q.q || 'Вопрос'}</div>`;
+                            <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${qText}</div>`;
+                        
                         if (q.options && Array.isArray(q.options)) {
                             q.options.forEach((opt, oi) => {
                                 contentArea.innerHTML += `<label style="display:block; font-size:13px; margin-top:3px; cursor:pointer;"><input type="radio" name="${testId}_q${qi}" value="${oi}"> ${opt}</label>`;
@@ -455,7 +453,7 @@ window.renderTopicPage = function(courseId, topicId) {
     window.checkSelfWork = function(testId) {
         window.showToast("✅ Результаты отправлены, +15 XP", "ok");
         if (!window.state.results) window.state.results = {};
-        window.state.results[testId] = { grade: 4, max: 5, type: "self_test" };
+        window.state.results[testId] = { grade: 5, max: 5, type: "self_test" }; // Автоматически ставим 5 за тест
         if (window.addXP) window.addXP(15);
         window.saveStudentData();
         window.renderTopicPage(courseId, topicId);
@@ -496,7 +494,9 @@ window.renderTopicPage = function(courseId, topicId) {
 // ============================================================
 window.renderAchievementsPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    document.getElementById("crumbs").textContent = "Достижения";
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) crumbs.textContent = "Достижения";
+    
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
     
     var isVIP = window.isVIP();
@@ -525,6 +525,9 @@ window.renderAchievementsPage = function() {
 
 window.renderCertificatePage = function() {
     var app = $("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) crumbs.textContent = "Сертификат";
+    
     app.appendChild(el('<a class="backlink no-print" href="#/" style="color:var(--accent);">← На главную</a>'));
     
     if (window.state.staff) {
@@ -559,34 +562,33 @@ window.renderCertificatePage = function() {
 
     if (!window.state.student) return;
 
-    // ОБНОВЛЕННЫЕ, БОЛЕЕ БЛАГОРОДНЫЕ ФОНЫ
+    // СЛОЖНЫЕ ФОНЫ (паттерны, сетки, градиенты)
     var bgs = [
-        { id: "bg1", css: "linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)", name: "Классический белый" },
-        { id: "bg2", css: "linear-gradient(to right, #ffecd2 0%, #fcb69f 100%)", name: "Теплый персик" },
-        { id: "bg3", css: "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)", name: "Холодный туман" },
+        { id: "bg1", css: "linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)", name: "Классический" },
+        { id: "bg2", css: "repeating-linear-gradient(45deg, #ffecd2, #ffecd2 10px, #fcb69f 10px, #fcb69f 20px)", name: "Персиковый узор" },
+        { id: "bg3", css: "radial-gradient(circle, #cfd9df 20%, transparent 20%), radial-gradient(circle, #cfd9df 20%, transparent 20%)", name: "Холодный горошек", size: "30px 30px", position: "0 0, 15px 15px" },
         { id: "bg4", css: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)", name: "Золотой закат" },
-        { id: "bg5", css: "linear-gradient(to right, #4facfe 0%, #00f2fe 100%)", name: "Голубое сияние" },
-        { id: "bg6", css: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", name: "Фиолетовый космос" }
+        { id: "bg5", css: "repeating-linear-gradient(90deg, #4facfe, #4facfe 20px, #00f2fe 20px, #00f2fe 40px)", name: "Полосы" },
+        { id: "bg6", css: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", name: "Космос" },
+        { id: "bg7", css: "radial-gradient(circle at 10% 20%, #e0c3fc 0%, #8ec5fc 90%)", name: "Нежный" },
+        { id: "bg8", css: "linear-gradient(to right, rgba(255,255,255,0.95), rgba(255,255,255,0.95)), repeating-linear-gradient(45deg, #ccc 0, #ccc 2px, transparent 2px, transparent 10px)", name: "Сетка" }
     ];
 
     var currentBg = bgs.find(b => b.id === window.state.certBg) || bgs[0];
 
     var certBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;"><h3>Выберите стиль сертификата:</h3><div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
     bgs.forEach(bg => {
-        certBgSelectorHtml += `<div onclick="window.setCertBg('${bg.id}')" title="${bg.name}" style="width:60px; height:60px; border-radius:8px; background:${bg.css}; cursor:pointer; border:3px solid ${window.state.certBg === bg.id ? 'var(--accent)' : 'transparent'}; transition:0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></div>`;
+        certBgSelectorHtml += `<div onclick="window.setCertBg('${bg.id}')" title="${bg.name}" style="width:60px; height:60px; border-radius:8px; background:${bg.css}; background-size:${bg.size || 'auto'}; background-position:${bg.position || 'initial'}; cursor:pointer; border:3px solid ${window.state.certBg === bg.id ? 'var(--accent)' : 'transparent'}; transition:0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></div>`;
     });
     certBgSelectorHtml += `</div></div>`;
 
     var courseName = window.MDK_DATA && window.MDK_DATA[window.state.activeCourseId] ? window.MDK_DATA[window.state.activeCourseId].title : "МДК";
     var isApproved = window.state.results && window.state.results.certificateApproved;
-    
-    // ПОДСЧЕТ ИТОГОВОЙ ОЦЕНКИ
     var avg = window.getAverageGrade();
     var finalGrade = avg === "—" ? "—" : (parseFloat(avg) >= 4.5 ? "Отлично" : (parseFloat(avg) >= 3.5 ? "Хорошо" : (parseFloat(avg) >= 2.5 ? "Удовлетворительно" : "Неудовлетворительно")));
 
-    var certHtml = `<div id="printable-cert" style="background: ${currentBg.css}; background-size: 100% 100%; background-color: #fff; color:#000; padding: 20px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; -webkit-print-color-adjust: exact; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    var certHtml = `<div id="printable-cert" style="background: ${currentBg.css}; background-size: ${currentBg.size || 'auto'}; background-position: ${currentBg.position || 'initial'}; background-color: #fff; color:#000; padding: 20px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; -webkit-print-color-adjust: exact; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
         
-        <!-- Декоративная внутренняя рамка -->
         <div style="position: absolute; inset: 15px; border: 3px solid rgba(193, 74, 42, 0.4); border-radius: 8px; pointer-events: none;"></div>
         
         <div style="background: rgba(255,255,255,0.85); width:100%; height:100%; padding:40px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:8px;">
@@ -597,7 +599,6 @@ window.renderCertificatePage = function() {
                 <p style="font-size:18px; color:#555;">успешно прошел(ла) обучение по программе</p>
                 <h3 style="font-size:24px; margin-top:15px; color:#c14a2a;">${window.escapeHtml(courseName)}</h3>
                 
-                <!-- ИТОГОВАЯ ОЦЕНКА -->
                 <div style="margin-top: 20px; font-size: 20px; background: rgba(193, 74, 42, 0.1); display: inline-block; padding: 10px 25px; border-radius: 20px; border: 1px solid rgba(193, 74, 42, 0.3);">
                     <b>Итоговая оценка:</b> ${finalGrade} (Ср. балл: ${avg})
                 </div>
@@ -611,10 +612,7 @@ window.renderCertificatePage = function() {
         ${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:120px; font-weight:bold; color:rgba(255,0,0,0.1); pointer-events:none; white-space:nowrap; z-index:10;">ОБРАЗЕЦ</div>` : ""}
     </div>`;
 
-    // ФОРМИРОВАНИЕ ВКЛАДЫША С ПОНЯТНЫМИ НАЗВАНИЯМИ
     var gradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved");
-    
-    // Сортируем для красоты (сначала тесты, потом практики)
     gradesList.sort((a, b) => a.localeCompare(b));
 
     var gradesRows = gradesList.map(k => {
@@ -622,7 +620,6 @@ window.renderCertificatePage = function() {
         var gradeData = window.state.results[k];
         var grade = gradeData.grade || gradeData.correct || gradeData;
         if (typeof grade === 'object') grade = grade.grade || '—';
-        
         var color = grade >= 4 ? '#2e7d32' : (grade >= 3 ? '#f57c00' : '#d32f2f');
         
         return `<tr>
@@ -631,31 +628,34 @@ window.renderCertificatePage = function() {
         </tr>`;
     }).join("");
 
+    // Вкладыш теперь тоже получает цветной фон
     var supplementHtml = `<div class="no-print" style="text-align:center; margin:20px 0;">
             <button class="btn" onclick="window.print()" style="padding: 12px 24px; font-size: 16px;">🖨 Распечатать сертификат и вкладыш</button>
         </div>
-        <div id="printable-supplement" style="background:#fff; color:#000; padding:40px; max-width:900px; margin:20px auto; border:1px solid #ccc; border-radius:12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <h2 style="text-align:center; color:#c14a2a; text-transform:uppercase; letter-spacing:1px;">Вкладыш оценок</h2>
-            <hr style="border:0; border-top:1px solid #ccc; margin:20px 0;">
-            <div style="display:flex; justify-content:space-between; font-size:16px; margin-bottom:20px;">
-                <div><b>Студент:</b> ${window.escapeHtml(window.state.student.name)}</div>
-                <div><b>Группа:</b> ${window.escapeHtml(window.state.student.group)}</div>
-            </div>
-            
-            <table style="width:100%; border-collapse:collapse; margin-top:10px;">
-                <thead>
-                    <tr style="background:#f5f5f5;">
-                        <th style="border:1px solid #ddd; padding:12px; text-align:left; width: 70%;">Изученный материал</th>
-                        <th style="border:1px solid #ddd; padding:12px; text-align:center; width: 30%;">Оценка</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${gradesRows || '<tr><td colspan="2" style="text-align:center; padding:20px; color:#888;">Оценок пока нет</td></tr>'}
-                </tbody>
-            </table>
-            
-            <div style="margin-top: 40px; text-align: right; font-size:16px;">
-                <p>Итоговый средний балл: <b>${avg}</b></p>
+        <div id="printable-supplement" style="background: ${currentBg.css}; background-size: ${currentBg.size || 'auto'}; background-position: ${currentBg.position || 'initial'}; padding: 30px; border-radius: 12px; max-width:900px; margin:20px auto; border:1px solid #ccc; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 8px; color:#000;">
+                <h2 style="text-align:center; color:#c14a2a; text-transform:uppercase; letter-spacing:1px;">Вкладыш оценок</h2>
+                <hr style="border:0; border-top:1px solid #ccc; margin:20px 0;">
+                <div style="display:flex; justify-content:space-between; font-size:16px; margin-bottom:20px;">
+                    <div><b>Студент:</b> ${window.escapeHtml(window.state.student.name)}</div>
+                    <div><b>Группа:</b> ${window.escapeHtml(window.state.student.group)}</div>
+                </div>
+                
+                <table style="width:100%; border-collapse:collapse; margin-top:10px;">
+                    <thead>
+                        <tr style="background:#f5f5f5;">
+                            <th style="border:1px solid #ddd; padding:12px; text-align:left; width: 70%;">Изученный материал</th>
+                            <th style="border:1px solid #ddd; padding:12px; text-align:center; width: 30%;">Оценка</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${gradesRows || '<tr><td colspan="2" style="text-align:center; padding:20px; color:#888;">Оценок пока нет</td></tr>'}
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 40px; text-align: right; font-size:16px;">
+                    <p>Итоговый средний балл: <b>${avg}</b></p>
+                </div>
             </div>
         </div>`;
     
@@ -671,6 +671,9 @@ window.setCertBg = function(bgId) {
 
 window.renderStudentGradesPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) crumbs.textContent = "Мои оценки";
+    
     app.appendChild(el('<a class="backlink" href="#/profile" style="color:var(--accent);">← Назад в профиль</a>'));
     
     var avg = window.getAverageGrade();
@@ -696,6 +699,9 @@ window.renderStudentGradesPage = function() {
 
 window.renderProfilePage = function(route) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) crumbs.textContent = "Личный кабинет";
+    
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
     var isTeacher = !!window.state.staff;
     var targetKey = route.split("/")[2] ? decodeURIComponent(route.split("/")[2]) : null;
@@ -764,7 +770,9 @@ window.renderProfilePage = function(route) {
 
 window.renderSimplePage = function(title, items, icon) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    document.getElementById("crumbs").textContent = title;
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) crumbs.textContent = title;
+    
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
     app.innerHTML += `<section class="hero"><h1>${icon} ${title}</h1></section><div class="module" id="simpleList"></div>`;
     var list = document.getElementById("simpleList");
@@ -781,12 +789,14 @@ window.renderSimplePage = function(title, items, icon) {
             mediaHtml = `<div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; margin-top:10px;"><iframe src="https://www.youtube.com/embed/${vidId}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>`;
         } else if (isVideo) {
             mediaHtml = `<div style="margin-top:10px; padding:20px; background:var(--card-soft); border-radius:8px; text-align:center; border:1px dashed var(--border);">
-                <p style="color:var(--err); font-weight:bold; margin-bottom:10px;">⚠️ Видео не может быть загружено прямо на сайте (возможно, файл слишком большой или не загружен на GitHub).</p>
+                <p style="color:var(--err); font-weight:bold; margin-bottom:10px;">⚠️ Видео не может быть загружено прямо на сайте.</p>
                 <video controls src="${item.file}" style="width:100%; max-height:400px; border-radius:8px; background:#000; display:none;" onerror="this.style.display='none'; this.previousElementSibling.style.display='block';" oncanplay="this.style.display='block'; this.previousElementSibling.style.display='none';"><source src="${item.file}" type="video/mp4"></video>
             </div>`;
         } else if (isPdf) {
-            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>
-            <p style="color:var(--muted); font-size:12px; margin-top:5px;">* Если документ не отображается, проверьте наличие файла <b>${item.file}</b> в корне репозитория.</p>`;
+            mediaHtml = `<div style="margin-top:10px;">
+                <p style="color:var(--err); font-size:13px; margin-bottom:10px;">⚠️ Внимание: Если вы видите "404 File not found", значит файл <b>${item.file}</b> не загружен в корень вашего репозитория.</p>
+                <div style="width:100%; height:600px; border-radius:8px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>
+            </div>`;
         } else if (isDocx) {
             var docUrl = window.location.origin + window.location.pathname + item.file;
             mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(docUrl)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe></div>`;
