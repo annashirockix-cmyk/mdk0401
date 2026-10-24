@@ -1,7 +1,7 @@
 "use strict";
 
-var FINAL_EXAM_SIZE = 10;
-var FINAL_EXAM_TIME = 10 * 60;
+var FINAL_EXAM_SIZE = 20;
+var FINAL_EXAM_TIME = 20 * 60; // 20 минут
 
 function programById(id) {
   if (window.MDK_DATA && window.MDK_DATA[id]) return window.MDK_DATA[id];
@@ -24,7 +24,7 @@ window.renderFinalExamPage = function (mdkId) {
 
   if (!mdkId) {
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
-    app.appendChild(el('<section class="hero"><h1>Итоговые экзамены</h1><p>Отдельный экзамен по каждому МДК: 10 вопросов, 10 минут.</p></section>'));
+    app.appendChild(el('<section class="hero"><h1>Итоговые экзамены</h1><p>Экзамен по каждому МДК: 20 вопросов и 2 письменных задания. Время: 20 минут.</p></section>'));
     var grid = document.createElement("div");
     grid.style = "display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;";
     
@@ -45,7 +45,7 @@ window.renderFinalExamPage = function (mdkId) {
   if (!course) { location.hash = "#/final"; return; }
 
   app.appendChild(el('<a class="backlink" href="#/final" style="color:var(--accent);">← К списку экзаменов</a>'));
-  app.appendChild(el('<section class="hero"><span class="brand-badge">' + course.shortName + '</span><h1>Итоговый экзамен</h1><p>10 вопросов · 10 минут. ' + course.title + '</p></section>'));
+  app.appendChild(el('<section class="hero"><span class="brand-badge">' + course.shortName + '</span><h1>Итоговый экзамен</h1><p>20 вопросов + 2 письменных задания · 20 минут.</p></section>'));
 
   var mount = el('<div class="module"><button class="btn" id="startBtn" type="button" style="width:100%; padding:15px; font-size:16px;">Начать экзамен</button></div>');
   app.appendChild(mount);
@@ -67,9 +67,10 @@ window.renderFinalExamPage = function (mdkId) {
     mount.innerHTML = "";
 
     var form = el("<form></form>");
-    var timerBox = el('<div class="exam-timer" style="font-size:24px; font-weight:bold; color:var(--accent); text-align:center; margin-bottom:20px;">10:00</div>');
+    var timerBox = el('<div class="exam-timer" style="font-size:24px; font-weight:bold; color:var(--accent); text-align:center; margin-bottom:20px;">20:00</div>');
     mount.appendChild(timerBox);
     
+    // Тестовая часть
     allQ.forEach(function (item, qi) {
       var qb = el('<div class="question" style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px;"><div class="q-text" style="font-weight:bold; margin-bottom:10px;">' + (qi + 1) + ". " + item.q + "</div></div>");
       item.options.forEach(function (opt, oi) {
@@ -77,6 +78,11 @@ window.renderFinalExamPage = function (mdkId) {
       });
       form.appendChild(qb);
     });
+
+    // Письменная часть
+    form.appendChild(el('<h3 style="margin-top:30px; color:var(--accent);">✍️ Письменные задания (на проверку преподавателю)</h3>'));
+    form.appendChild(el('<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);"><b>21. Опишите алгоритм наладки станка с ЧПУ.</b><br><textarea name="written1" class="self-input" rows="4" style="margin-top:10px;" placeholder="Ваш ответ..."></textarea></div>'));
+    form.appendChild(el('<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);"><b>22. Рассчитайте частоту вращения шпинделя, если V=120 м/мин, D=50 мм.</b><br><textarea name="written2" class="self-input" rows="2" style="margin-top:10px;" placeholder="Ваш ответ..."></textarea></div>'));
     
     var gradeBtn = el('<button type="button" class="btn" style="width:100%; margin-top:20px; padding:15px; font-size:16px;">Завершить экзамен</button>');
     form.appendChild(gradeBtn);
@@ -100,13 +106,31 @@ window.renderFinalExamPage = function (mdkId) {
         var ch = form.querySelector('input[name="fq' + qi + '"]:checked');
         if (ch && Number(ch.value) === item.correct) ok++;
       });
+      
+      var w1 = form.querySelector('textarea[name="written1"]').value;
+      var w2 = form.querySelector('textarea[name="written2"]').value;
+
+      // Сохраняем в отправленные на проверку
+      if (!window.state.examSubmissions) window.state.examSubmissions = [];
+      window.state.examSubmissions.push({
+          date: new Date().toLocaleString(),
+          student: window.state.student ? window.state.student.name : "Неизвестный",
+          group: window.state.student ? window.state.student.group : "",
+          testScore: ok,
+          maxTest: allQ.length,
+          written1: w1,
+          written2: w2,
+          status: "На проверке",
+          teacherGrade: null
+      });
+
       var pct = Math.round(ok / allQ.length * 100);
       var g = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
       
       window.state.results["__final__" + course.id] = { grade: g, total: ok };
       if (window.saveStudentData) window.saveStudentData();
       
-      mount.innerHTML = '<div class="exam-result" style="text-align:center; padding:30px;"><h2>' + course.shortName + '</h2><p style="font-size:18px;">Верных: <b>' + ok + '</b> из <b>' + allQ.length + '</b></p><h1 class="exam-grade" style="font-size:64px; margin:20px 0; color:' + (g >= 3 ? "var(--ok)" : "var(--err)") + '">Оценка: ' + g + '</h1><a class="btn" href="#/final">К списку экзаменов</a></div>';
+      mount.innerHTML = '<div class="exam-result" style="text-align:center; padding:30px;"><h2>' + course.shortName + '</h2><p style="font-size:18px;">Верных: <b>' + ok + '</b> из <b>' + allQ.length + '</b></p><p>Письменные задания отправлены преподавателю.</p><h1 class="exam-grade" style="font-size:64px; margin:20px 0; color:' + (g >= 3 ? "var(--ok)" : "var(--err)") + '">Оценка за тест: ' + g + '</h1><a class="btn" href="#/final">К списку экзаменов</a></div>';
     });
   });
 };

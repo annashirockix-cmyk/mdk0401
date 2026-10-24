@@ -19,6 +19,7 @@
         </button>
         <div class="brand-badge" id="mainLogo">МДК Портал</div>
         
+        <!-- Выбор МДК -->
         <select id="mdkSelector" class="self-input" style="width:auto; margin:0; padding:6px 10px; font-size:14px; background:var(--card); border-color:var(--border); color:var(--text);">
             <option value="07.01">МДК 07.01 (ЧПУ)</option>
             <option value="04.01">МДК 04.01 (Диагностика)</option>
@@ -80,18 +81,24 @@
         <div class="login-shell">
             <h2 style="text-align:center; margin-bottom:20px;">Вход в портал</h2>
             <div class="login-grid">
+                <!-- Форма студента -->
                 <div class="login-card">
                     <h3 style="margin-top:0; color:var(--accent);">👨‍🎓 Студент</h3>
-                    <input type="text" id="loginName" placeholder="Ваше ФИО (Иванов Иван)">
-                    <input type="text" id="loginGroup" placeholder="Группа (ТМП 5-2)">
-                    <button class="btn" id="btnLoginStudent" style="width:100%;">Войти</button>
-                    <button class="btn ghost" onclick="window.clearCache()" style="width:100%; margin-top:10px; border-color:var(--err); color:var(--err); font-size:12px;">🔄 Сбросить кэш и обновить</button>
+                    <form onsubmit="event.preventDefault(); document.getElementById('btnLoginStudent').click();">
+                        <input type="text" id="loginName" placeholder="Ваше ФИО (Иванов Иван)">
+                        <input type="text" id="loginGroup" placeholder="Группа (ТМП 5-2)">
+                        <button type="button" class="btn" id="btnLoginStudent" style="width:100%;">Войти</button>
+                        <button type="button" class="btn ghost" onclick="window.clearCache()" style="width:100%; margin-top:10px; border-color:var(--err); color:var(--err); font-size:12px;">🔄 Сбросить кэш и обновить</button>
+                    </form>
                 </div>
+                <!-- Форма преподавателя -->
                 <div class="login-card">
                     <h3 style="margin-top:0; color:var(--gold);">👨‍🏫 Преподаватель</h3>
-                    <input type="text" id="teacherUser" placeholder="Логин (admin)">
-                    <input type="password" id="teacherPass" placeholder="Пароль (admin)">
-                    <button class="btn" id="btnLoginTeacher" style="width:100%; background:var(--gold); color:#000;">Войти в журнал</button>
+                    <form onsubmit="event.preventDefault(); document.getElementById('btnLoginTeacher').click();">
+                        <input type="text" id="teacherUser" placeholder="Логин (admin)">
+                        <input type="password" id="teacherPass" placeholder="Пароль (admin)">
+                        <button type="button" class="btn" id="btnLoginTeacher" style="width:100%; background:var(--gold); color:#000;">Войти в журнал</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -136,7 +143,29 @@
     <script src="admin.js"></script>
     <script src="easter-eggs.js"></script>
     
+    <!-- Обработчик выбора МДК и регистрация SW -->
     <script>
+        document.getElementById('mdkSelector').addEventListener('change', function() {
+            if (window.state) {
+                window.state.activeCourseId = this.value;
+                if (window.saveStudentData) window.saveStudentData();
+                if (location.hash === '#/' || location.hash === '') {
+                    if (window.renderHomePage) window.renderHomePage();
+                } else {
+                    location.hash = '#/';
+                }
+            }
+        });
+
+        // Установка текущего МДК в селектор при загрузке
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                if (window.state && window.state.activeCourseId) {
+                    document.getElementById('mdkSelector').value = window.state.activeCourseId;
+                }
+            }, 100);
+        });
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').catch(err => console.log('SW ошибка:', err));
         }
