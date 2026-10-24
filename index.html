@@ -3,44 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Учебный портал МДК - Сертификат и Магазин</title>
+    <title>Учебный портал МДК - Сертификат, Вкладыш и Магазин</title>
     <style>
-        /* ================= ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ ================= */
-        :root {
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --primary-color: #4a90e2;
-            --watermark-color: rgba(255, 0, 0, 0.15);
-        }
-
+        /* ================= БАЗОВЫЕ СТИЛИ И СБРОС ================= */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
             transition: background 0.3s ease;
             padding-bottom: 50px;
+            min-height: 100vh;
+            /* По умолчанию фиолетовая тема */
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
         }
 
-        /* ================= ФОНЫ (ТЕМЫ) ================= */
-        body.theme-white { --bg-color: #f8f9fa; --card-bg: #ffffff; }
-        body.theme-peach { --bg-color: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); --card-bg: rgba(255, 255, 255, 0.85); }
-        body.theme-grey { --bg-color: linear-gradient(to right, #e0eafc, #cfdef3); --card-bg: rgba(255, 255, 255, 0.85); }
-        body.theme-orange { --bg-color: linear-gradient(135deg, #f6d365 0%, #fda085 100%); --card-bg: rgba(255, 255, 255, 0.9); }
-        body.theme-blue { --bg-color: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); --card-bg: rgba(255, 255, 255, 0.9); }
-        body.theme-purple { --bg-color: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); --card-bg: rgba(255, 255, 255, 0.9); }
+        /* ================= ТЕМЫ (ГРАДИЕНТЫ) ================= */
+        body.theme-white { background: #f8f9fa; }
+        body.theme-peach { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        body.theme-grey { background: linear-gradient(to right, #e0eafc, #cfdef3); }
+        body.theme-orange { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+        body.theme-blue { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
+        body.theme-purple { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
 
-        /* ================= ШАПКА И МЕНЮ ================= */
+        /* Цвет карточек зависит от темы (полупрозрачный белый) */
+        .document-card, .store-section {
+            background: rgba(255, 255, 255, 0.92);
+        }
+        body.theme-white .document-card, body.theme-white .store-section {
+            background: #ffffff;
+        }
+
+        /* ================= ШАПКА И ПЕРЕКЛЮЧАТЕЛЬ ТЕМ ================= */
         header {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -61,8 +63,9 @@
             border-radius: 5px;
             cursor: pointer;
             border: 2px solid transparent;
+            transition: 0.2s;
         }
-        .color-swatch:hover { border-color: white; }
+        .color-swatch:hover { transform: scale(1.1); border-color: white; }
         .swatch-white { background: #fff; }
         .swatch-peach { background: #ffecd2; }
         .swatch-grey { background: #e0eafc; }
@@ -70,7 +73,7 @@
         .swatch-blue { background: #89f7fe; }
         .swatch-purple { background: #a18cd1; }
 
-        /* ================= КОНТЕЙНЕРЫ ДОКУМЕНТОВ ================= */
+        /* ================= КОНТЕЙНЕРЫ ================= */
         .main-container {
             max-width: 900px;
             margin: 20px auto;
@@ -78,17 +81,16 @@
         }
 
         .document-card {
-            background: var(--card-bg);
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             padding: 40px;
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
-            border: 2px solid var(--primary-color);
+            border: 2px solid #4a90e2;
         }
 
-        /* ================= ВОДЯНОЙ ЗНАК ================= */
+        /* Водяной знак */
         .watermark {
             position: absolute;
             top: 50%;
@@ -96,32 +98,32 @@
             transform: translate(-50%, -50%) rotate(-45deg);
             font-size: 100px;
             font-weight: bold;
-            color: var(--watermark-color);
+            color: rgba(255, 0, 0, 0.15);
             white-space: nowrap;
             pointer-events: none;
             z-index: 0;
             letter-spacing: 5px;
         }
+        .content-z { position: relative; z-index: 1; }
 
-        .content-z {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ================= СТИЛИ СЕРТИФИКАТА ================= */
+        /* ================= СЕРТИФИКАТ ================= */
         .cert-title { color: #d35400; text-align: center; font-size: 28px; margin-bottom: 20px; text-transform: uppercase; }
         .cert-subtitle { text-align: center; margin-bottom: 30px; color: #666; }
         .cert-name { font-size: 24px; text-align: center; font-weight: bold; margin-bottom: 20px; }
-        .cert-desc { text-align: center; margin-bottom: 20px; font-size: 16px; line-height: 1.5;}
+        .cert-desc { text-align: center; margin-bottom: 20px; font-size: 16px; }
         .cert-subject { color: #c0392b; font-size: 20px; text-align: center; font-weight: bold; margin: 20px 0; }
         .cert-grade { text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 40px; }
+        .grade-badge { border: 2px solid #d35400; padding: 5px 15px; border-radius: 20px; color: #d35400; }
         .cert-footer { display: flex; justify-content: space-between; margin-top: 40px; font-size: 14px; }
+        .bold-text { font-weight: bold; margin-top: 10px; }
+        .signature-block { text-align: right; }
+        .signature-line { border-bottom: 1px solid #000; width: 150px; margin-top: 25px; margin-left: auto; }
 
-        /* ================= СТИЛИ ВКЛАДЫША ================= */
+        /* ================= ВКЛАДЫШ ================= */
         .vkladysh-title { color: #d35400; text-align: center; font-size: 24px; margin-bottom: 20px; }
         .student-info { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; }
         
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: rgba(255, 255, 255, 0.7); }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: rgba(255, 255, 255, 0.8); }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background-color: #f8f9fa; }
         .grade-col { text-align: center; font-weight: bold; color: green; width: 100px; }
@@ -129,28 +131,23 @@
         /* ================= УЧЕБНЫЙ МАТЕРИАЛ ================= */
         .study-material { margin-top: 40px; }
         .topic-title { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; margin-bottom: 15px; }
+        .sub-title { margin: 20px 0 10px; color: #333; }
         .example-box { background: #e8f8f5; border-left: 5px solid #1abc9c; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
         .glossary-box { background: #ebf5fb; border: 1px dashed #3498db; padding: 20px; border-radius: 8px; margin-top: 20px; }
+        .glossary-box h3 { margin-top: 0; color: #2980b9; margin-bottom: 10px; }
         .glossary-box dt { font-weight: bold; color: #2980b9; margin-top: 10px; }
         .glossary-box dd { margin-left: 20px; margin-bottom: 10px; }
 
         /* ================= МАГАЗИН ================= */
         .store-section {
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
             margin-top: 50px;
-            padding-top: 20px;
-            border-top: 3px dashed #ccc;
+            border: 2px solid #e74c3c;
         }
-        .store-title {
-            text-align: center;
-            font-size: 28px;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        .store-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+        .store-title { text-align: center; font-size: 28px; color: #2c3e50; margin-bottom: 30px; }
+        .store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         .product-card {
             background: #fff;
             border-radius: 10px;
@@ -161,90 +158,45 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            border: 1px solid #eee;
         }
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
         .product-icon { font-size: 40px; margin-bottom: 15px; }
         .product-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #333; }
         .product-price { font-size: 20px; color: #e74c3c; font-weight: bold; margin-bottom: 15px; }
-        
-        .btn-preview {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
+        .btn-preview { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; width: 100%; }
         .btn-preview:hover { background: #2980b9; }
 
-        /* ================= МОДАЛЬНОЕ ОКНО (ПРЕДПРОСМОТР) ================= */
+        /* ================= МОДАЛЬНОЕ ОКНО ================= */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: none; /* Скрыто по умолчанию */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none;
+            justify-content: center; align-items: center; z-index: 1000;
             backdrop-filter: blur(5px);
         }
         .modal-content {
-            background: #fff;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 10px;
-            padding: 30px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
+            background: #fff; width: 90%; max-width: 600px;
+            border-radius: 10px; padding: 30px;
+            position: relative; max-height: 90vh; overflow-y: auto;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: fadeIn 0.3s ease;
         }
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-            background: none; border: none;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .close-btn { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #999; background: none; border: none; }
         .close-btn:hover { color: #333; }
-        
-        /* Стили для содержимого предпросмотра (имитация сертификата) */
-        .preview-window {
-            border: 2px dashed #ccc;
-            padding: 20px;
-            background: #fdfdfd;
-            margin: 20px 0;
-            border-radius: 5px;
-            pointer-events: none; /* Чтобы нельзя было взаимодействовать с содержимым */
-        }
-        
-        .btn-buy {
-            background: #2ecc71;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.2s;
-        }
+        .modal-title { margin-bottom: 5px; color: #333; }
+        .modal-desc { color: #666; font-size: 14px; margin-bottom: 15px; }
+        .preview-window { border: 2px dashed #ccc; padding: 20px; background: #fdfdfd; margin: 20px 0; border-radius: 5px; pointer-events: none; }
+        .btn-buy { background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; }
         .btn-buy:hover { background: #27ae60; }
 
         /* ================= КНОПКА ПЕЧАТИ ================= */
         .print-btn-container { text-align: center; margin-bottom: 30px; }
-        .print-btn {
-            background: #2ecc71; color: white; border: none; padding: 15px 30px;
-            font-size: 18px; border-radius: 30px; cursor: pointer; font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s;
-        }
+        .print-btn { background: #2ecc71; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s; }
         .print-btn:hover { background: #27ae60; transform: translateY(-2px); }
 
-        /* ================= ПРАВИЛА ДЛЯ ПЕЧАТИ (А4) ================= */
+        /* ================= ПРАВИЛА ДЛЯ ПЕЧАТИ ================= */
         @media print {
             @page { size: A4 portrait; margin: 10mm; }
             body {
@@ -252,17 +204,19 @@
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
-            /* Скрываем магазин, шапку и модальные окна при печати */
+            /* Скрываем всё лишнее при печати */
             header, .print-btn-container, .study-material, .store-section, .modal-overlay {
                 display: none !important;
             }
             .main-container { margin: 0; max-width: 100%; padding: 0; }
             .document-card {
                 box-shadow: none; margin: 0 0 10px 0; border-radius: 0;
-                border: 2px solid var(--primary-color); padding: 20px;
-                background: var(--card-bg) !important;
+                border: 2px solid #4a90e2; padding: 20px;
+                background: rgba(255, 255, 255, 0.92) !important;
             }
+            /* Принудительно разрываем страницу после сертификата */
             .certificate-card { page-break-after: always; height: 270mm; display: flex; flex-direction: column; justify-content: center; }
+            /* Вкладыш стараемся не разрывать */
             .vkladysh-card { page-break-inside: avoid; min-height: 270mm; }
             .vkladysh-card table { font-size: 12px; }
             .vkladysh-card th, .vkladysh-card td { padding: 6px 10px; }
@@ -272,23 +226,25 @@
 </head>
 <body class="theme-purple">
 
+    <!-- ШАПКА -->
     <header>
         <div>
             <strong>МДК Порта</strong> | МДК 07.01 (ЧРУ)
         </div>
         <div class="theme-selector">
             <span>Выберите стиль:</span>
-            <div class="color-swatch swatch-white" onclick="setTheme('theme-white')"></div>
-            <div class="color-swatch swatch-peach" onclick="setTheme('theme-peach')"></div>
-            <div class="color-swatch swatch-grey" onclick="setTheme('theme-grey')"></div>
-            <div class="color-swatch swatch-orange" onclick="setTheme('theme-orange')"></div>
-            <div class="color-swatch swatch-blue" onclick="setTheme('theme-blue')"></div>
-            <div class="color-swatch swatch-purple" onclick="setTheme('theme-purple')"></div>
+            <div class="color-swatch swatch-white" onclick="setTheme('theme-white')" title="Светлая"></div>
+            <div class="color-swatch swatch-peach" onclick="setTheme('theme-peach')" title="Персиковая"></div>
+            <div class="color-swatch swatch-grey" onclick="setTheme('theme-grey')" title="Серая"></div>
+            <div class="color-swatch swatch-orange" onclick="setTheme('theme-orange')" title="Оранжевая"></div>
+            <div class="color-swatch swatch-blue" onclick="setTheme('theme-blue')" title="Голубая"></div>
+            <div class="color-swatch swatch-purple" onclick="setTheme('theme-purple')" title="Фиолетовая"></div>
         </div>
     </header>
 
     <div class="main-container">
         
+        <!-- Кнопка печати -->
         <div class="print-btn-container">
             <button class="print-btn" onclick="window.print()">🖨 Распечатать сертификат и вкладыш</button>
         </div>
@@ -302,14 +258,22 @@
                 <div class="cert-name">Широких Анна</div>
                 <p class="cert-desc">успешно прошел(ла) обучение по программе</p>
                 <div class="cert-subject">Технология обработки деталей на станках с ПУ</div>
+                
                 <div class="cert-grade">
-                    <span style="border: 2px solid #d35400; padding: 5px 15px; border-radius: 20px; color: #d35400;">
+                    <span class="grade-badge">
                         Итоговая оценка: Отлично (Ср. балл: 5.00)
                     </span>
                 </div>
+
                 <div class="cert-footer">
-                    <div><p>Дата выдачи:</p><p style="margin-top: 10px; font-weight: bold;">24.10.2026</p></div>
-                    <div style="text-align: right;"><p>Подпись руководителя:</p><div style="border-bottom: 1px solid #000; width: 150px; margin-top: 25px; margin-left: auto;"></div></div>
+                    <div>
+                        <p>Дата выдачи:</p>
+                        <p class="bold-text">24.10.2026</p>
+                    </div>
+                    <div class="signature-block">
+                        <p>Подпись руководителя:</p>
+                        <div class="signature-line"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -319,12 +283,19 @@
             <div class="watermark">ОБРАЗЕЦ</div>
             <div class="content-z">
                 <h2 class="vkladysh-title">ВКЛАДЫШ ОЦЕНОК</h2>
+                
                 <div class="student-info">
                     <span>Студент: Широких Анна</span>
                     <span>Группа: ТМП 5-2</span>
                 </div>
+
                 <table>
-                    <thead><tr><th>Изученный материал</th><th class="grade-col">Оценка</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Изученный материал</th>
+                            <th class="grade-col">Оценка</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr><td>Тест: M0201-T11</td><td class="grade-col">5</td></tr>
                         <tr><td>Тест: M0401-T11</td><td class="grade-col">5</td></tr>
@@ -340,31 +311,47 @@
             </div>
         </div>
 
-        <!-- УЧЕБНЫЙ МАТЕРИАЛ -->
+        <!-- УЧЕБНЫЙ МАТЕРИАЛ (Скрипт на печать не выводит его) -->
         <div class="study-material document-card">
             <div class="content-z">
                 <h2 class="topic-title">Тема: Классификация токарных станков</h2>
                 <p>Ваш существующий текст о классификации станков сохраняется здесь. Ниже добавлены новые элементы для лучшего усвоения материала.</p>
-                <h3 style="margin: 20px 0 10px;">Сравнительная таблица оборудования</h3>
+
+                <h3 class="sub-title">Сравнительная таблица оборудования</h3>
                 <table>
-                    <thead><tr><th>Тип станка</th><th>Назначение</th><th>Пример модели</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Тип станка</th>
+                            <th>Назначение</th>
+                            <th>Пример модели</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr><td>Токарный</td><td>Обработка тел вращения</td><td>16К20</td></tr>
                         <tr><td>Сверлильный</td><td>Создание отверстий</td><td>2Н135</td></tr>
                         <tr><td>Фрезерный</td><td>Обработка плоских поверхностей</td><td>6Р12</td></tr>
                     </tbody>
                 </table>
+
                 <div class="example-box">
                     <strong>💡 Пример из практики:</strong> 
-                    <p style="margin-top: 5px;">При изготовлении вала диаметром 40 мм на токарном станке 16К20 используется проходной резец с пластиной из твердого сплава Т15К6. Скорость резания составляет 120 м/мин.</p>
+                    <p>При изготовлении вала диаметром 40 мм на токарном станке 16К20 используется проходной резец с пластиной из твердого сплава Т15К6. Скорость резания составляет 120 м/мин.</p>
                 </div>
+
                 <div class="glossary-box">
-                    <h3 style="margin-top: 0; color: #2980b9; margin-bottom: 10px;">📚 Глоссарий по теме</h3>
+                    <h3>📚 Глоссарий по теме</h3>
                     <dl>
-                        <dt>Станина</dt><dd>— основная неподвижная часть станка, служащая для монтажа всех узлов.</dd>
-                        <dt>Суппорт</dt><dd>— узел токарного станка, предназначенный для закрепления и перемещения резца.</dd>
-                        <dt>Шпиндель</dt><dd>— вращающийся вал станка, передающий вращение заготовке.</dd>
-                        <dt>Подача (S)</dt><dd>— величина перемещения инструмента за один оборот заготовки.</dd>
+                        <dt>Станина</dt>
+                        <dd>— основная неподвижная часть станка, служащая для монтажа всех узлов.</dd>
+                        
+                        <dt>Суппорт</dt>
+                        <dd>— узел токарного станка, предназначенный для закрепления и перемещения резца.</dd>
+                        
+                        <dt>Шпиндель</dt>
+                        <dd>— вращающийся вал станка, передающий вращение заготовке.</dd>
+
+                        <dt>Подача (S)</dt>
+                        <dd>— величина перемещения инструмента за один оборот заготовки.</dd>
                     </dl>
                 </div>
             </div>
@@ -379,7 +366,7 @@
                 <div class="product-card">
                     <div>
                         <div class="product-icon">🏅</div>
-                        <div class="product-title">Золотая печать на сертификат</div>
+                        <div class="product-title">Золотая печать</div>
                         <div class="product-price">500 ₽</div>
                     </div>
                     <button class="btn-preview" onclick="openPreview('pechat')">👁 Предпросмотр</button>
@@ -389,7 +376,7 @@
                 <div class="product-card">
                     <div>
                         <div class="product-icon">📜</div>
-                        <div class="product-title">Расширенный вкладыш (с QR)</div>
+                        <div class="product-title">Вкладыш с QR</div>
                         <div class="product-price">300 ₽</div>
                     </div>
                     <button class="btn-preview" onclick="openPreview('qr')">👁 Предпросмотр</button>
@@ -399,7 +386,7 @@
                 <div class="product-card">
                     <div>
                         <div class="product-icon">🎨</div>
-                        <div class="product-title">Эксклюзивная тема "Неон"</div>
+                        <div class="product-title">Тема "Неон"</div>
                         <div class="product-price">200 ₽</div>
                     </div>
                     <button class="btn-preview" onclick="openPreview('theme')">👁 Предпросмотр</button>
@@ -414,12 +401,12 @@
     <div class="modal-overlay" id="previewModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closePreview()">✖</button>
-            <h2 id="modalTitle" style="margin-bottom: 5px;">Название товара</h2>
-            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Предпросмотр внешнего вида</p>
+            <h2 class="modal-title" id="modalTitle">Название товара</h2>
+            <p class="modal-desc">Предпросмотр внешнего вида</p>
             
-            <!-- Окно, где показывается результат -->
+            <!-- Окно предпросмотра -->
             <div class="preview-window" id="previewContent">
-                <!-- Сюда будет вставляться HTML для предпросмотра -->
+                <!-- HTML вставляется через JS -->
             </div>
 
             <button class="btn-buy" onclick="buyProduct()">💳 Купить за <span id="modalPrice"></span> ₽</button>
@@ -428,20 +415,16 @@
 
     <!-- СКРИПТЫ -->
     <script>
-        // --- 1. Переключение тем ---
+        // 1. Переключение тем
         function setTheme(themeName) {
-            document.body.className = '';
-            document.body.classList.add(themeName);
+            document.body.className = themeName;
         }
 
-        // --- 2. Логика Магазина и Предпросмотра ---
-        
-        // Данные о товарах (чтобы не дублировать код)
+        // 2. Данные о товарах в магазине
         const products = {
             'pechat': {
                 title: 'Золотая печать на сертификат',
                 price: 500,
-                // HTML-код, который покажется в предпросмотре
                 html: `
                     <div style="text-align: center; padding: 20px;">
                         <div style="display: inline-block; border: 4px solid #FFD700; border-radius: 50%; padding: 15px; background: #fff8e1;">
@@ -483,26 +466,25 @@
             }
         };
 
-        // Открытие модального окна
+        // Открытие предпросмотра
         function openPreview(productId) {
             const product = products[productId];
             if (!product) return;
 
-            // Заполняем данными
             document.getElementById('modalTitle').innerText = product.title;
             document.getElementById('modalPrice').innerText = product.price;
             document.getElementById('previewContent').innerHTML = product.html;
-
+            
             // Показываем окно
             document.getElementById('previewModal').style.display = 'flex';
         }
 
-        // Закрытие модального окна
+        // Закрытие предпросмотра
         function closePreview() {
             document.getElementById('previewModal').style.display = 'none';
         }
 
-        // Закрытие по клику вне окна (на темный фон)
+        // Закрытие по клику на темный фон
         document.getElementById('previewModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closePreview();
