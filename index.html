@@ -3,499 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Учебный портал МДК - Сертификат, Вкладыш и Магазин</title>
-    <style>
-        /* ================= БАЗОВЫЕ СТИЛИ И СБРОС ================= */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            transition: background 0.3s ease;
-            padding-bottom: 50px;
-            min-height: 100vh;
-            /* По умолчанию фиолетовая тема */
-            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-        }
-
-        /* ================= ТЕМЫ (ГРАДИЕНТЫ) ================= */
-        body.theme-white { background: #f8f9fa; }
-        body.theme-peach { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
-        body.theme-grey { background: linear-gradient(to right, #e0eafc, #cfdef3); }
-        body.theme-orange { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
-        body.theme-blue { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
-        body.theme-purple { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
-
-        /* Цвет карточек зависит от темы (полупрозрачный белый) */
-        .document-card, .store-section {
-            background: rgba(255, 255, 255, 0.92);
-        }
-        body.theme-white .document-card, body.theme-white .store-section {
-            background: #ffffff;
-        }
-
-        /* ================= ШАПКА И ПЕРЕКЛЮЧАТЕЛЬ ТЕМ ================= */
-        header {
-            background: rgba(0, 0, 0, 0.85);
-            color: white;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .theme-selector {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .color-swatch {
-            width: 25px;
-            height: 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: 0.2s;
-        }
-        .color-swatch:hover { transform: scale(1.1); border-color: white; }
-        .swatch-white { background: #fff; }
-        .swatch-peach { background: #ffecd2; }
-        .swatch-grey { background: #e0eafc; }
-        .swatch-orange { background: #f6d365; }
-        .swatch-blue { background: #89f7fe; }
-        .swatch-purple { background: #a18cd1; }
-
-        /* ================= КОНТЕЙНЕРЫ ================= */
-        .main-container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-
-        .document-card {
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 40px;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #4a90e2;
-        }
-
-        /* Водяной знак */
-        .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 100px;
-            font-weight: bold;
-            color: rgba(255, 0, 0, 0.15);
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 0;
-            letter-spacing: 5px;
-        }
-        .content-z { position: relative; z-index: 1; }
-
-        /* ================= СЕРТИФИКАТ ================= */
-        .cert-title { color: #d35400; text-align: center; font-size: 28px; margin-bottom: 20px; text-transform: uppercase; }
-        .cert-subtitle { text-align: center; margin-bottom: 30px; color: #666; }
-        .cert-name { font-size: 24px; text-align: center; font-weight: bold; margin-bottom: 20px; }
-        .cert-desc { text-align: center; margin-bottom: 20px; font-size: 16px; }
-        .cert-subject { color: #c0392b; font-size: 20px; text-align: center; font-weight: bold; margin: 20px 0; }
-        .cert-grade { text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 40px; }
-        .grade-badge { border: 2px solid #d35400; padding: 5px 15px; border-radius: 20px; color: #d35400; }
-        .cert-footer { display: flex; justify-content: space-between; margin-top: 40px; font-size: 14px; }
-        .bold-text { font-weight: bold; margin-top: 10px; }
-        .signature-block { text-align: right; }
-        .signature-line { border-bottom: 1px solid #000; width: 150px; margin-top: 25px; margin-left: auto; }
-
-        /* ================= ВКЛАДЫШ ================= */
-        .vkladysh-title { color: #d35400; text-align: center; font-size: 24px; margin-bottom: 20px; }
-        .student-info { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; }
-        
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: rgba(255, 255, 255, 0.8); }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background-color: #f8f9fa; }
-        .grade-col { text-align: center; font-weight: bold; color: green; width: 100px; }
-
-        /* ================= УЧЕБНЫЙ МАТЕРИАЛ ================= */
-        .study-material { margin-top: 40px; }
-        .topic-title { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; margin-bottom: 15px; }
-        .sub-title { margin: 20px 0 10px; color: #333; }
-        .example-box { background: #e8f8f5; border-left: 5px solid #1abc9c; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0; }
-        .glossary-box { background: #ebf5fb; border: 1px dashed #3498db; padding: 20px; border-radius: 8px; margin-top: 20px; }
-        .glossary-box h3 { margin-top: 0; color: #2980b9; margin-bottom: 10px; }
-        .glossary-box dt { font-weight: bold; color: #2980b9; margin-top: 10px; }
-        .glossary-box dd { margin-left: 20px; margin-bottom: 10px; }
-
-        /* ================= МАГАЗИН ================= */
-        .store-section {
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 40px;
-            margin-top: 50px;
-            border: 2px solid #e74c3c;
-        }
-        .store-title { text-align: center; font-size: 28px; color: #2c3e50; margin-bottom: 30px; }
-        .store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-        .product-card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            text-align: center;
-            transition: transform 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid #eee;
-        }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .product-icon { font-size: 40px; margin-bottom: 15px; }
-        .product-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #333; }
-        .product-price { font-size: 20px; color: #e74c3c; font-weight: bold; margin-bottom: 15px; }
-        .btn-preview { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; width: 100%; }
-        .btn-preview:hover { background: #2980b9; }
-
-        /* ================= МОДАЛЬНОЕ ОКНО ================= */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); display: none;
-            justify-content: center; align-items: center; z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: #fff; width: 90%; max-width: 600px;
-            border-radius: 10px; padding: 30px;
-            position: relative; max-height: 90vh; overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .close-btn { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #999; background: none; border: none; }
-        .close-btn:hover { color: #333; }
-        .modal-title { margin-bottom: 5px; color: #333; }
-        .modal-desc { color: #666; font-size: 14px; margin-bottom: 15px; }
-        .preview-window { border: 2px dashed #ccc; padding: 20px; background: #fdfdfd; margin: 20px 0; border-radius: 5px; pointer-events: none; }
-        .btn-buy { background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn-buy:hover { background: #27ae60; }
-
-        /* ================= КНОПКА ПЕЧАТИ ================= */
-        .print-btn-container { text-align: center; margin-bottom: 30px; }
-        .print-btn { background: #2ecc71; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s; }
-        .print-btn:hover { background: #27ae60; transform: translateY(-2px); }
-
-        /* ================= ПРАВИЛА ДЛЯ ПЕЧАТИ ================= */
-        @media print {
-            @page { size: A4 portrait; margin: 10mm; }
-            body {
-                background: white !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            /* Скрываем всё лишнее при печати */
-            header, .print-btn-container, .study-material, .store-section, .modal-overlay {
-                display: none !important;
-            }
-            .main-container { margin: 0; max-width: 100%; padding: 0; }
-            .document-card {
-                box-shadow: none; margin: 0 0 10px 0; border-radius: 0;
-                border: 2px solid #4a90e2; padding: 20px;
-                background: rgba(255, 255, 255, 0.92) !important;
-            }
-            /* Принудительно разрываем страницу после сертификата */
-            .certificate-card { page-break-after: always; height: 270mm; display: flex; flex-direction: column; justify-content: center; }
-            /* Вкладыш стараемся не разрывать */
-            .vkladysh-card { page-break-inside: avoid; min-height: 270mm; }
-            .vkladysh-card table { font-size: 12px; }
-            .vkladysh-card th, .vkladysh-card td { padding: 6px 10px; }
-            .watermark { font-size: 120px; }
-        }
-    </style>
+    <title>МДК 07.01 — Учебный портал</title>
+    
+    <!-- Подключение стилей -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="lecture-methodical.css">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Иконка сайта -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 </head>
-<body class="theme-purple">
+<body data-theme="dark">
 
     <!-- ШАПКА -->
-    <header>
-        <div>
-            <strong>МДК Порта</strong> | МДК 07.01 (ЧРУ)
-        </div>
-        <div class="theme-selector">
-            <span>Выберите стиль:</span>
-            <div class="color-swatch swatch-white" onclick="setTheme('theme-white')" title="Светлая"></div>
-            <div class="color-swatch swatch-peach" onclick="setTheme('theme-peach')" title="Персиковая"></div>
-            <div class="color-swatch swatch-grey" onclick="setTheme('theme-grey')" title="Серая"></div>
-            <div class="color-swatch swatch-orange" onclick="setTheme('theme-orange')" title="Оранжевая"></div>
-            <div class="color-swatch swatch-blue" onclick="setTheme('theme-blue')" title="Голубая"></div>
-            <div class="color-swatch swatch-purple" onclick="setTheme('theme-purple')" title="Фиолетовая"></div>
+    <header class="topbar">
+        <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="brand-badge" id="mainLogo">МДК Портал</div>
+        
+        <select id="mdkSelector" class="self-input" style="width:auto; margin:0; padding:6px 10px; font-size:14px; background:var(--card); border-color:var(--border); color:var(--text);">
+            <option value="07.01">МДК 07.01 (ЧПУ)</option>
+            <option value="04.01">МДК 04.01 (Диагностика)</option>
+            <option value="02.01">МДК 02.01 (Сборка)</option>
+            <option value="02.02">МДК 02.02 (Прогр. сборки)</option>
+        </select>
+
+        <div class="topbar-status" style="display:flex; gap:10px; align-items:center; margin-left:auto;">
+            <div id="xpCount" class="status-pill" style="cursor:default;">🌟 0 XP</div>
+            <button class="btn ghost" id="themeToggle" style="padding:6px 10px; font-size:16px; border:none;">🎨</button>
+            
+            <div class="user-chip" id="userChip" style="display:flex; align-items:center; gap:8px; background:var(--card); padding:4px 12px 4px 4px; border-radius:20px; border:1px solid var(--border); cursor:pointer;" onclick="location.hash='#/profile'">
+                <div id="userChipAvatar" style="width:32px; height:32px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:16px; overflow:hidden;">👨‍🎓</div>
+                <div style="display:flex; flex-direction:column; line-height:1.1;">
+                    <span id="userChipName" style="font-size:13px; font-weight:bold;">Гость</span>
+                    <span id="userChipGroup" style="font-size:11px; color:var(--muted);">—</span>
+                </div>
+            </div>
         </div>
     </header>
 
-    <div class="main-container">
-        
-        <!-- Кнопка печати -->
-        <div class="print-btn-container">
-            <button class="print-btn" onclick="window.print()">🖨 Распечатать сертификат и вкладыш</button>
+    <!-- ОСНОВНОЙ КОНТЕНТ (Сюда app.js вставляет страницы) -->
+    <main id="app"></main>
+
+    <!-- БОКОВОЕ МЕНЮ -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-head">
+            <div class="brand-badge">МДК Портал</div>
+            <button class="drawer-close" id="drawerClose">✕</button>
         </div>
+        <nav class="drawer-nav">
+            <a href="#/" class="drawer-item" data-go="#/">🏠 Главная</a>
+            <a href="#/profile" class="drawer-item" data-go="#/profile">👤 Личный кабинет</a>
+            <a href="#/certificate" class="drawer-item" data-go="#/certificate">📜 Сертификат</a>
+            <a href="#/achievements" class="drawer-item" data-go="#/achievements">🏆 Достижения</a>
+            <a href="#/shop" class="drawer-item" data-go="#/shop">🛒 Магазин</a>
+            <a href="#/links" class="drawer-item" data-go="#/links">📚 Полезные материалы</a>
+            <a href="#/training" class="drawer-item" data-go="#/training">🎯 Тренировка</a>
+            <a href="#/final" class="drawer-item" data-go="#/final">📋 Экзамен</a>
+            <a href="#/arcade" class="drawer-item" data-go="#/arcade">🎮 Игровая комната</a>
+            <a href="#/rating" class="drawer-item" data-go="#/rating">🏅 Доска почета</a>
+            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+            <a href="#/schedule" class="drawer-item" data-go="#/schedule">📅 Расписание</a>
+            <a href="#/journal" class="drawer-item" data-go="#/journal">📒 Журнал (Препод)</a>
+            <a href="#/reports" class="drawer-item" data-go="#/reports">📊 Отчеты (Препод)</a>
+            <a href="#/admin" class="drawer-item" data-go="#/admin">⚙️ Админка (Препод)</a>
+            <div style="padding:20px;">
+                <button class="btn ghost" style="width:100%; border-color:var(--err); color:var(--err);" onclick="window.handleLogout()">🚪 Выйти</button>
+            </div>
+        </nav>
+    </aside>
 
-        <!-- СЕРТИФИКАТ -->
-        <div class="document-card certificate-card">
-            <div class="watermark">ОБРАЗЕЦ</div>
-            <div class="content-z">
-                <h1 class="cert-title">СЕРТИФИКАТ</h1>
-                <p class="cert-subtitle">подтверждает, что</p>
-                <div class="cert-name">Широких Анна</div>
-                <p class="cert-desc">успешно прошел(ла) обучение по программе</p>
-                <div class="cert-subject">Технология обработки деталей на станках с ПУ</div>
-                
-                <div class="cert-grade">
-                    <span class="grade-badge">
-                        Итоговая оценка: Отлично (Ср. балл: 5.00)
-                    </span>
+    <!-- ЭКРАН ВХОДА -->
+    <div class="login-overlay" id="loginOverlay" style="display:none;">
+        <div class="login-shell">
+            <h2 style="text-align:center; margin-bottom:20px;">Вход в портал</h2>
+            <div class="login-grid">
+                <!-- Студент -->
+                <div class="login-card">
+                    <h3 style="margin-top:0; color:var(--accent);">👨‍🎓 Студент</h3>
+                    <input type="text" id="loginName" placeholder="Ваше ФИО (Иванов Иван)">
+                    <input type="text" id="loginGroup" placeholder="Группа (ТМП 5-2)">
+                    <button class="btn" id="btnLoginStudent" style="width:100%;">Войти</button>
                 </div>
-
-                <div class="cert-footer">
-                    <div>
-                        <p>Дата выдачи:</p>
-                        <p class="bold-text">24.10.2026</p>
-                    </div>
-                    <div class="signature-block">
-                        <p>Подпись руководителя:</p>
-                        <div class="signature-line"></div>
-                    </div>
+                <!-- Преподаватель -->
+                <div class="login-card">
+                    <h3 style="margin-top:0; color:var(--gold);">👨‍🏫 Преподаватель</h3>
+                    <input type="text" id="teacherUser" placeholder="Логин (admin)">
+                    <input type="password" id="teacherPass" placeholder="Пароль (admin)">
+                    <button class="btn" id="btnLoginTeacher" style="width:100%; background:var(--gold); color:#000;">Войти в журнал</button>
                 </div>
             </div>
-        </div>
-
-        <!-- ВКЛАДЫШ ОЦЕНОК -->
-        <div class="document-card vkladysh-card">
-            <div class="watermark">ОБРАЗЕЦ</div>
-            <div class="content-z">
-                <h2 class="vkladysh-title">ВКЛАДЫШ ОЦЕНОК</h2>
-                
-                <div class="student-info">
-                    <span>Студент: Широких Анна</span>
-                    <span>Группа: ТМП 5-2</span>
-                </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Изученный материал</th>
-                            <th class="grade-col">Оценка</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Тест: M0201-T11</td><td class="grade-col">5</td></tr>
-                        <tr><td>Тест: M0401-T11</td><td class="grade-col">5</td></tr>
-                        <tr><td>Тест: M0401-T12</td><td class="grade-col">5</td></tr>
-                        <tr><td>Тест: M0401-T13</td><td class="grade-col">5</td></tr>
-                        <tr><td>Тест: M0401-T14</td><td class="grade-col">5</td></tr>
-                        <tr><td>Тест: M0401-T15</td><td class="grade-col">5</td></tr>
-                        <tr><td>Тест: M0401-T16</td><td class="grade-col">5</td></tr>
-                        <tr><td>Тест: Общие основы работы</td><td class="grade-col">5</td></tr>
-                        <tr><td>Тест: Классификация токарных станков</td><td class="grade-col">5</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- УЧЕБНЫЙ МАТЕРИАЛ (Скрипт на печать не выводит его) -->
-        <div class="study-material document-card">
-            <div class="content-z">
-                <h2 class="topic-title">Тема: Классификация токарных станков</h2>
-                <p>Ваш существующий текст о классификации станков сохраняется здесь. Ниже добавлены новые элементы для лучшего усвоения материала.</p>
-
-                <h3 class="sub-title">Сравнительная таблица оборудования</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Тип станка</th>
-                            <th>Назначение</th>
-                            <th>Пример модели</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Токарный</td><td>Обработка тел вращения</td><td>16К20</td></tr>
-                        <tr><td>Сверлильный</td><td>Создание отверстий</td><td>2Н135</td></tr>
-                        <tr><td>Фрезерный</td><td>Обработка плоских поверхностей</td><td>6Р12</td></tr>
-                    </tbody>
-                </table>
-
-                <div class="example-box">
-                    <strong>💡 Пример из практики:</strong> 
-                    <p>При изготовлении вала диаметром 40 мм на токарном станке 16К20 используется проходной резец с пластиной из твердого сплава Т15К6. Скорость резания составляет 120 м/мин.</p>
-                </div>
-
-                <div class="glossary-box">
-                    <h3>📚 Глоссарий по теме</h3>
-                    <dl>
-                        <dt>Станина</dt>
-                        <dd>— основная неподвижная часть станка, служащая для монтажа всех узлов.</dd>
-                        
-                        <dt>Суппорт</dt>
-                        <dd>— узел токарного станка, предназначенный для закрепления и перемещения резца.</dd>
-                        
-                        <dt>Шпиндель</dt>
-                        <dd>— вращающийся вал станка, передающий вращение заготовке.</dd>
-
-                        <dt>Подача (S)</dt>
-                        <dd>— величина перемещения инструмента за один оборот заготовки.</dd>
-                    </dl>
-                </div>
-            </div>
-        </div>
-
-        <!-- МАГАЗИН -->
-        <div class="store-section">
-            <h2 class="store-title">🛒 Магазин бонусов</h2>
-            <div class="store-grid">
-                
-                <!-- Товар 1 -->
-                <div class="product-card">
-                    <div>
-                        <div class="product-icon">🏅</div>
-                        <div class="product-title">Золотая печать</div>
-                        <div class="product-price">500 ₽</div>
-                    </div>
-                    <button class="btn-preview" onclick="openPreview('pechat')">👁 Предпросмотр</button>
-                </div>
-
-                <!-- Товар 2 -->
-                <div class="product-card">
-                    <div>
-                        <div class="product-icon">📜</div>
-                        <div class="product-title">Вкладыш с QR</div>
-                        <div class="product-price">300 ₽</div>
-                    </div>
-                    <button class="btn-preview" onclick="openPreview('qr')">👁 Предпросмотр</button>
-                </div>
-
-                <!-- Товар 3 -->
-                <div class="product-card">
-                    <div>
-                        <div class="product-icon">🎨</div>
-                        <div class="product-title">Тема "Неон"</div>
-                        <div class="product-price">200 ₽</div>
-                    </div>
-                    <button class="btn-preview" onclick="openPreview('theme')">👁 Предпросмотр</button>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО ПРЕДПРОСМОТРА -->
-    <div class="modal-overlay" id="previewModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closePreview()">✖</button>
-            <h2 class="modal-title" id="modalTitle">Название товара</h2>
-            <p class="modal-desc">Предпросмотр внешнего вида</p>
-            
-            <!-- Окно предпросмотра -->
-            <div class="preview-window" id="previewContent">
-                <!-- HTML вставляется через JS -->
-            </div>
-
-            <button class="btn-buy" onclick="buyProduct()">💳 Купить за <span id="modalPrice"></span> ₽</button>
         </div>
     </div>
 
-    <!-- СКРИПТЫ -->
+    <!-- УВЕДОМЛЕНИЯ (Тосты) -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========================================== -->
+    <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ (Строгий порядок!) -->
+    <!-- ========================================== -->
+    
+    <!-- 1. Данные и конфигурации -->
+    <script src="api.js"></script>
+    <script src="data-0701.js"></script>
+    <script src="data-0401.js"></script>
+    <script src="data-0201.js"></script>
+    <script src="data-0202.js"></script>
+    <script src="data-extra.js"></script>
+    <script src="data-global.js"></script>
+    <script src="tests-extra.js"></script>
+    
+    <!-- 2. База вопросов для игр -->
+    <script src="questions-setup.js"></script>
+    <script src="questions-mdk.js"></script>
+    <script src="questions-anime.js"></script>
+    <script src="questions-games.js"></script>
+    <script src="questions-logic.js"></script>
+
+    <!-- 3. Ядро приложения (Запускает роутер) -->
+    <script src="app.js"></script>
+    
+    <!-- 4. Модули и страницы -->
+    <script src="assistant.js"></script>
+    <script src="shop.js"></script>
+    <script src="games.js"></script>
+    <script src="extra.js"></script>
+    <script src="exam-engine.js"></script>
+    <script src="exam_0701.js"></script>
+    <script src="exam_0401.js"></script>
+    <script src="exam_0201.js"></script>
+    <script src="exam_0202.js"></script>
+    <script src="final.js"></script>
+    <script src="journal.js"></script>
+    <script src="reports.js"></script>
+    <script src="schedule.js"></script>
+    <script src="rating.js"></script>
+    <script src="links.js"></script>
+    <script src="info.js"></script>
+    <script src="admin.js"></script>
+    <script src="easter-eggs.js"></script>
+    
+    <!-- Регистрация Service Worker -->
     <script>
-        // 1. Переключение тем
-        function setTheme(themeName) {
-            document.body.className = themeName;
-        }
-
-        // 2. Данные о товарах в магазине
-        const products = {
-            'pechat': {
-                title: 'Золотая печать на сертификат',
-                price: 500,
-                html: `
-                    <div style="text-align: center; padding: 20px;">
-                        <div style="display: inline-block; border: 4px solid #FFD700; border-radius: 50%; padding: 15px; background: #fff8e1;">
-                            <span style="font-size: 40px;">🏅</span>
-                            <div style="font-weight: bold; color: #d35400; margin-top: 5px;">ОФИЦИАЛЬНО</div>
-                        </div>
-                        <p style="margin-top: 15px; font-size: 14px; color: #555;">Золотая голографическая печать будет размещена в левом нижнем углу вашего сертификата.</p>
-                    </div>
-                `
-            },
-            'qr': {
-                title: 'Расширенный вкладыш (с QR)',
-                price: 300,
-                html: `
-                    <div style="padding: 10px;">
-                        <div style="border: 1px solid #ddd; padding: 10px; text-align: center; background: #fff;">
-                            <p style="font-weight: bold; margin-bottom: 10px;">Дополнительная страница</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div style="width: 60px; height: 60px; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px;">QR</div>
-                                <div style="text-align: left; font-size: 12px;">
-                                    <p>Верификация оценок</p>
-                                    <p style="color: #666;">(сканируйте для проверки)</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            'theme': {
-                title: 'Эксклюзивная тема "Неон"',
-                price: 200,
-                html: `
-                    <div style="background: #111; color: #0ff; padding: 20px; text-align: center; border-radius: 5px; box-shadow: 0 0 10px #0ff;">
-                        <h3 style="margin-bottom: 10px; text-shadow: 0 0 5px #0ff;">СЕРТИФИКАТ</h3>
-                        <p style="color: #fff; margin-bottom: 20px;">Иванов Иван</p>
-                        <div style="border: 1px solid #0ff; padding: 5px; display: inline-block;">Оценка: 5</div>
-                    </div>
-                `
-            }
-        };
-
-        // Открытие предпросмотра
-        function openPreview(productId) {
-            const product = products[productId];
-            if (!product) return;
-
-            document.getElementById('modalTitle').innerText = product.title;
-            document.getElementById('modalPrice').innerText = product.price;
-            document.getElementById('previewContent').innerHTML = product.html;
-            
-            // Показываем окно
-            document.getElementById('previewModal').style.display = 'flex';
-        }
-
-        // Закрытие предпросмотра
-        function closePreview() {
-            document.getElementById('previewModal').style.display = 'none';
-        }
-
-        // Закрытие по клику на темный фон
-        document.getElementById('previewModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closePreview();
-            }
-        });
-
-        // Имитация покупки
-        function buyProduct() {
-            const productName = document.getElementById('modalTitle').innerText;
-            alert(`Товар "${productName}" успешно приобретен! (Демо-режим)`);
-            closePreview();
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW ошибка:', err));
         }
     </script>
 </body>
