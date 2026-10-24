@@ -40,7 +40,7 @@
         </div>
     </header>
 
-    <!-- Хлебные крошки (исправляет ошибку textContent) -->
+    <!-- Хлебные крошки -->
     <div id="crumbs" style="padding: 12px 24px; font-size: 14px; color: var(--muted); background: var(--bg); border-bottom: 1px solid var(--border);"></div>
 
     <!-- Основной контент -->
@@ -85,6 +85,7 @@
                     <input type="text" id="loginName" placeholder="Ваше ФИО (Иванов Иван)">
                     <input type="text" id="loginGroup" placeholder="Группа (ТМП 5-2)">
                     <button class="btn" id="btnLoginStudent" style="width:100%;">Войти</button>
+                    <button class="btn ghost" onclick="window.clearCache()" style="width:100%; margin-top:10px; border-color:var(--err); color:var(--err); font-size:12px;">🔄 Сбросить кэш и обновить</button>
                 </div>
                 <div class="login-card">
                     <h3 style="margin-top:0; color:var(--gold);">👨‍🏫 Преподаватель</h3>

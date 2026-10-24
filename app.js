@@ -14,6 +14,23 @@ try {
     if (savedState) { Object.assign(window.state, JSON.parse(savedState)); }
 } catch(e) {}
 
+window.clearCache = function() {
+    if (confirm("Это очистит локальные данные, сбросит кэш браузера и обновит страницу. Продолжить?")) {
+        localStorage.clear();
+        sessionStorage.clear();
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                }
+                location.reload(true);
+            });
+        } else {
+            location.reload(true);
+        }
+    }
+};
+
 window.isVIP = function() {
     if (window.state.staff) return true;
     if (!window.state.student) return false;
@@ -148,7 +165,7 @@ window.unlockAchievement = function(id) {
 };
 
 // ============================================================
-// МОДАЛЬНОЕ ОКНО ТЕМ
+// МОДАЛЬНОЕ ОКНО ТЕМ (ДОБАВЛЕНЫ НОВЫЕ)
 // ============================================================
 window.openThemeModal = function() {
     var modal = document.getElementById("themeModalOverlay");
@@ -160,7 +177,10 @@ window.openThemeModal = function() {
         { id: "neon", title: "Киберпанк", bg: "#09090b", text: "#ff00cc" },
         { id: "matrix", title: "Матрица", bg: "#000000", text: "#00ff00" },
         { id: "hacker", title: "Хакер", bg: "#000", text: "#00ff00" },
-        { id: "cyberpunk", title: "Cyberpunk", bg: "#0a0015", text: "#00ffff" }
+        { id: "cyberpunk", title: "Cyberpunk", bg: "#0a0015", text: "#00ffff" },
+        { id: "glass", title: "Стекло", bg: "rgba(20,20,30,0.7)", text: "#ffffff" },
+        { id: "retro", title: "Ретро", bg: "#2b2b2b", text: "#ffb000" },
+        { id: "ocean", title: "Океан", bg: "#0a192f", text: "#64ffda" }
     ];
 
     if (!document.getElementById("themeModalStyles")) {
@@ -296,7 +316,6 @@ window.renderTopicPage = function(courseId, topicId) {
             if ((!topic.lectures || !topic.lectures.length) && customLecs.length === 0) { contentArea.innerHTML = "<p>Лекций нет.</p>"; return; }
             if (topic.lectures) {
                 topic.lectures.forEach(lec => {
-                    // ВОЗВРАЩАЕМ ТАБЛИЦЫ, ГРАФИКИ И КАРТИНКИ (не вырезаем)
                     contentArea.innerHTML += `<details class="lec-accordion" open style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;">
                         <summary style="padding:15px; font-weight:bold; cursor:pointer;">${lec.code} ${lec.title}</summary>
                         <div class="lec-content" style="padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;">${lec.content}</div>
@@ -335,13 +354,13 @@ window.renderTopicPage = function(courseId, topicId) {
         else if (tabName === 'presentations') {
             if (!topic.presentations || !topic.presentations.length) { contentArea.innerHTML = "<p>Презентаций нет.</p>"; return; }
             topic.presentations.forEach(p => {
+                var fileUrl = window.location.origin + window.location.pathname + p.file;
+                var viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
                     <b style="color:var(--accent); font-size:16px;">${p.code}: ${p.title}</b>
                     <p style="font-size:14px; margin-top:10px; color:var(--text-soft);">${p.description || ''}</p>
-                    <div style="display:flex; gap:15px; margin-top:15px; align-items:center; flex-wrap:wrap;">
-                        <span style="font-size:13px; color:var(--muted);">📄 ${p.slides} слайдов</span>
-                        <a href="${p.file}" target="_blank" class="btn" style="padding:8px 15px;">📥 Скачать / Открыть</a>
-                    </div>
+                    <div style="width:100%; height:500px; margin-top:15px; border-radius:8px; border:1px solid var(--border); background:#fff;"><iframe src="${viewerUrl}" width="100%" height="100%" style="border:none;"></iframe></div>
+                    <a href="${fileUrl}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать / Открыть в новой вкладке</a>
                 </div>`;
             });
         }
@@ -369,41 +388,18 @@ window.renderTopicPage = function(courseId, topicId) {
                 var testId = `self_${topic.id}_${idx}`;
                 var isDone = window.state.results && window.state.results[testId];
                 
-                var questions = [];
-                if (sw.questions && Array.isArray(sw.questions)) {
-                    questions = sw.questions;
-                } else if (window.EXTRA_TESTS && window.EXTRA_TESTS[testId] && window.EXTRA_TESTS[testId].questions) {
-                    questions = window.EXTRA_TESTS[testId].questions;
-                }
-
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);">
                     <b style="color:var(--gold); font-size:16px;">${sw.code || 'СР'}: ${sw.title}</b>
                     <p style="font-size:14px; margin-top:10px; line-height:1.5;">${sw.task}</p>`;
                 
-                // ВОЗВРАЩАЕМ ТЕСТ В САМОСТОЯТЕЛЬНУЮ РАБОТУ
-                if (questions && questions.length > 0) {
-                    contentArea.innerHTML += `<div style="margin-top:15px; border-top:1px dashed var(--border); padding-top:15px;"><b>🎯 Проверочный тест:</b></div>`;
-                    questions.forEach((q, qi) => {
-                        var qText = typeof q === 'string' ? q : (q.q || 'Вопрос');
-                        contentArea.innerHTML += `<div style="margin-top:10px; background:var(--card); padding:10px; border-radius:6px;">
-                            <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${qText}</div>`;
-                        
-                        if (q.options && Array.isArray(q.options)) {
-                            q.options.forEach((opt, oi) => {
-                                contentArea.innerHTML += `<label style="display:block; font-size:13px; margin-top:3px; cursor:pointer;"><input type="radio" name="${testId}_q${qi}" value="${oi}"> ${opt}</label>`;
-                            });
-                        }
-                        contentArea.innerHTML += `</div>`;
-                    });
-                    contentArea.innerHTML += `<button class="btn" style="margin-top:15px; font-size:13px; width:100%;" onclick="window.checkSelfWork('${testId}')">Отправить результаты теста</button>`;
-                } else {
-                    // Если вопросов нет, то просто текстовое поле
-                    contentArea.innerHTML += `<textarea id="inp_${testId}" class="self-input" rows="4" placeholder="Введите ваш ответ..." style="margin-top:10px;"></textarea>
-                    <button class="btn" style="margin-top:10px; font-size:13px; width:100%;" onclick="window.submitSelfWorkText('${testId}')">Сдать работу</button>`;
-                }
-                
                 if (isDone) {
                     contentArea.innerHTML += `<div style="color:var(--ok); font-weight:bold; margin-top:15px; text-align:center;">✅ Работа сдана (Оценка: ${isDone.grade})</div>`;
+                    if (isDone.answer) {
+                        contentArea.innerHTML += `<div style="margin-top:10px; padding:10px; background:var(--bg); border-radius:6px; font-size:13px;"><b>Ваш ответ:</b> ${isDone.answer}</div>`;
+                    }
+                } else {
+                    contentArea.innerHTML += `<textarea id="inp_${testId}" class="self-input" rows="5" placeholder="Введите ваш ответ здесь..." style="margin-top:10px;"></textarea>
+                    <button class="btn" style="margin-top:10px; font-size:13px; width:100%;" onclick="window.submitSelfWorkText('${testId}')">Отправить работу преподавателю</button>`;
                 }
                 contentArea.innerHTML += `</div>`;
             });
@@ -500,43 +496,6 @@ window.renderTopicPage = function(courseId, topicId) {
         renderQ();
     };
 
-    window.checkSelfWork = function(testId) {
-        var total = 0, correct = 0;
-        var qs = (window.EXTRA_TESTS && window.EXTRA_TESTS[testId]) ? window.EXTRA_TESTS[testId].questions : [];
-        
-        if (qs.length === 0) {
-            window.showToast("✅ Результаты отправлены, +15 XP", "ok");
-            if (!window.state.results) window.state.results = {};
-            window.state.results[testId] = { grade: 5, max: 5, type: "self_test" };
-            if (window.addXP) window.addXP(15);
-            window.saveStudentData();
-            window.renderTopicPage(courseId, topicId);
-            window.switchTopicTab('selfwork');
-            return;
-        }
-        
-        qs.forEach((q, qi) => {
-            var radios = document.getElementsByName(`${testId}_q${qi}`);
-            var selected = -1;
-            for (var i = 0; i < radios.length; i++) {
-                if (radios[i].checked) selected = parseInt(radios[i].value);
-            }
-            if (selected === q.correct) correct++;
-            total++;
-        });
-        
-        var pct = Math.round((correct / total) * 100);
-        var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-        
-        window.showToast(`✅ Результаты отправлены! Оценка: ${grade}`, "ok");
-        if (!window.state.results) window.state.results = {};
-        window.state.results[testId] = { grade: grade, max: total, type: "self_test" };
-        if (window.addXP) window.addXP(grade * 5);
-        window.saveStudentData();
-        window.renderTopicPage(courseId, topicId);
-        window.switchTopicTab('selfwork');
-    };
-
     window.submitSelfWorkText = function(testId) {
         var val = document.getElementById(`inp_${testId}`).value.trim();
         if (!val) return window.showToast("Напишите ответ перед сдачей", "err");
@@ -590,6 +549,8 @@ window.renderAchievementsPage = function() {
         { id: "party_win", title: "Выживший", desc: "Победить в Смертельной вечеринке", icon: "🏆", unlocked: unlocked.includes('party_win') },
         { id: "minesweeper_win", title: "Сапёр", desc: "Победить в Сапёре", icon: "💣", unlocked: unlocked.includes('minesweeper_win') },
         { id: "spider_win", title: "Паук", desc: "Собрать пасьянс", icon: "🕷️", unlocked: unlocked.includes('spider_win') },
+        { id: "snake_win", title: "Змейка", desc: "Набрать 20 очков в Змейке", icon: "🐍", unlocked: unlocked.includes('snake_win') },
+        { id: "pumpkin_carve", title: "Тыквовед", desc: "Вырезать лицо на тыкве", icon: "🎃", unlocked: unlocked.includes('pumpkin_carve') },
         { id: "vip", title: "Тестировщик", desc: "Участие в закрытом тесте", icon: "🧪", unlocked: isVIP }
     ];
     
@@ -846,174 +807,4 @@ window.renderProfilePage = function(route) {
     window.applyGlobalEffects();
 };
 
-window.renderSimplePage = function(title, items, icon) {
-    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    var crumbs = document.getElementById("crumbs");
-    if (crumbs) crumbs.textContent = title;
-    
-    app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
-    app.innerHTML += `<section class="hero"><h1>${icon} ${title}</h1></section><div class="module" id="simpleList"></div>`;
-    var list = document.getElementById("simpleList");
-    if (!items || !items.length) { list.innerHTML = "<p>Материалы пока не добавлены.</p>"; return; }
-    items.forEach(item => {
-        var isVideo = item.file && (item.file.toLowerCase().endsWith('.mp4') || item.file.toLowerCase().endsWith('.webm'));
-        var isPdf = item.file && item.file.toLowerCase().endsWith('.pdf');
-        var isDocx = item.file && item.file.toLowerCase().endsWith('.docx');
-        var isYouTube = item.url && (item.url.includes('youtube.com') || item.url.includes('youtu.be'));
-        var mediaHtml = "";
-        
-        if (isYouTube) {
-            var vidId = item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : item.url.split('/').pop();
-            mediaHtml = `<div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; margin-top:10px;"><iframe src="https://www.youtube.com/embed/${vidId}" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allowfullscreen></iframe></div>`;
-        } else if (isVideo) {
-            mediaHtml = `<div style="margin-top:10px; padding:20px; background:var(--card-soft); border-radius:8px; text-align:center; border:1px dashed var(--border);">
-                <p style="color:var(--err); font-weight:bold; margin-bottom:10px;">⚠️ Видео не может быть загружено прямо на сайте.</p>
-                <video controls src="${item.file}" style="width:100%; max-height:400px; border-radius:8px; background:#000; display:none;" onerror="this.style.display='none'; this.previousElementSibling.style.display='block';" oncanplay="this.style.display='block'; this.previousElementSibling.style.display='none';"><source src="${item.file}" type="video/mp4"></video>
-            </div>`;
-        } else if (isPdf) {
-            mediaHtml = `<div style="margin-top:10px;">
-                <p style="color:var(--err); font-size:13px; margin-bottom:10px;">⚠️ Внимание: Если вы видите "404 File not found", значит файл <b>${item.file}</b> не загружен в корень вашего репозитория.</p>
-                <div style="width:100%; height:600px; border-radius:8px; border:1px solid var(--border); background:#fff;"><iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + window.location.pathname + item.file)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe></div>
-            </div>`;
-        } else if (isDocx) {
-            var docUrl = window.location.origin + window.location.pathname + item.file;
-            mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(docUrl)}&embedded=true" width="100%" height="100%" style="border:none;"></iframe></div>`;
-        }
-        
-        list.innerHTML += `<div style="margin-bottom:20px; padding:15px; border:1px solid var(--border); border-radius:8px; background:var(--card-soft);"><b style="color:var(--accent); font-size:16px;">${item.title || 'Без названия'}</b><br><span style="font-size:14px; color:var(--muted);">${item.description || ''}</span>${mediaHtml}${(item.file || item.url) ? `<br><a href="${item.file || item.url}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать / Открыть в новой вкладке</a>` : ''}</div>`;
-    });
-    window.applyGlobalEffects();
-};
-
-// ============================================================
-// РОУТЕР И ИНИЦИАЛИЗАЦИЯ
-// ============================================================
-window.handleLogout = function() { window.state.student = null; window.state.staff = null; window.saveStudentData(); location.reload(); };
-
-window.addEventListener("DOMContentLoaded", function() {
-    window.renderUserChip();
-    window.applyGlobalEffects(); 
-
-    if ($("themeToggle")) $("themeToggle").onclick = window.openThemeModal; 
-
-    var mdkSelector = document.getElementById("mdkSelector");
-    if (mdkSelector) {
-        mdkSelector.value = window.state.activeCourseId || "07.01";
-        mdkSelector.addEventListener("change", function() { window.state.activeCourseId = this.value; window.saveStudentData(); window.dispatchEvent(new HashChangeEvent("hashchange")); });
-    }
-
-    if ($("burgerBtn")) {
-        $("burgerBtn").onclick = function() { document.getElementById("drawer").classList.add("open"); document.getElementById("drawerOverlay").classList.add("open"); };
-        document.getElementById("drawerClose").onclick = function() { document.getElementById("drawer").classList.remove("open"); document.getElementById("drawerOverlay").classList.remove("open"); };
-        document.getElementById("drawerOverlay").onclick = function() { document.getElementById("drawer").classList.remove("open"); this.classList.remove("open"); };
-    }
-
-    document.querySelectorAll(".drawer-item[data-go]").forEach(link => {
-        link.onclick = function(e) { e.preventDefault(); location.hash = this.getAttribute("data-go"); document.getElementById("drawer").classList.remove("open"); document.getElementById("drawerOverlay").classList.remove("open"); };
-    });
-
-    var loginOverlay = document.getElementById("loginOverlay");
-    if (window.state.student || window.state.staff) { if (loginOverlay) loginOverlay.style.display = "none"; }
-
-    var btnLoginStudent = document.getElementById("btnLoginStudent");
-    if (btnLoginStudent) {
-        btnLoginStudent.onclick = function() {
-            var name = document.getElementById("loginName").value.trim();
-            var group = document.getElementById("loginGroup").value.trim();
-            if (!name || !group) return window.showToast("Введите ФИО и группу", "err");
-            var key = name.toLowerCase() + "|" + group.toLowerCase();
-            btnLoginStudent.textContent = "Вход...";
-            window.API.getStudentData(key).then(res => {
-                var payload = {}; if (res && res.ok && res.payload) { try { payload = JSON.parse(res.payload); } catch(e){} }
-                window.state.student = { name: name, group: group };
-                window.state.xp = payload.xp || 0; window.state.results = payload.results || {}; window.state.avatar = payload.avatar || null;
-                window.state.nickname = payload.nickname || null; window.state.signature = payload.signature || null;
-                window.state.purchasedThemes = payload.purchasedThemes || []; 
-                window.state.unlockedAchievements = payload.unlockedAchievements || [];
-                
-                window.state.purchasedTextEffects = payload.purchasedTextEffects || [];
-                window.state.activeTextEffect = payload.activeTextEffect || "none";
-                window.state.purchasedBgEffects = payload.purchasedBgEffects || [];
-                window.state.activeBgEffect = payload.activeBgEffect || "none";
-                window.state.purchasedCardEffects = payload.purchasedCardEffects || [];
-                window.state.activeCardEffect = payload.activeCardEffect || "none";
-                
-                var n = name.toLowerCase();
-                if (n.includes("новиков арсений") || n.includes("кулиш денис")) {
-                    if (!window.state.nickname) window.state.nickname = n.includes("новиков") ? "Marazm" : "Barbos";
-                    if (!window.state.purchasedThemes.includes("vip_theme")) window.state.purchasedThemes.push("vip_theme");
-                }
-                window.saveStudentData(); window.renderUserChip();
-                window.unlockAchievement('welcome');
-                
-                if (loginOverlay) loginOverlay.style.display = "none";
-                window.location.hash = "#/"; window.dispatchEvent(new HashChangeEvent("hashchange"));
-                btnLoginStudent.textContent = "Войти";
-            }).catch(() => {
-                window.state.student = { name: name, group: group }; window.state.xp = 0; window.state.results = {};
-                window.saveStudentData(); window.renderUserChip();
-                if (loginOverlay) loginOverlay.style.display = "none";
-                window.location.hash = "#/"; window.dispatchEvent(new HashChangeEvent("hashchange"));
-                btnLoginStudent.textContent = "Войти";
-            });
-        };
-    }
-
-    var btnLoginTeacher = document.getElementById("btnLoginTeacher");
-    if (btnLoginTeacher) {
-        btnLoginTeacher.onclick = function() {
-            var user = document.getElementById("teacherUser").value.trim();
-            var pass = document.getElementById("teacherPass").value.trim();
-            btnLoginTeacher.textContent = "Проверка...";
-            window.API.login(user, pass).then(res => {
-                if (res && res.ok) {
-                    window.state.staff = { name: res.name, role: res.role }; window.saveStudentData(); window.renderUserChip();
-                    if (loginOverlay) loginOverlay.style.display = "none";
-                    window.location.hash = "#/profile"; window.dispatchEvent(new HashChangeEvent("hashchange"));
-                } else { window.showToast("Неверный логин/пароль", "err"); }
-                btnLoginTeacher.textContent = "Войти в журнал";
-            }).catch(() => { window.showToast("Ошибка сервера", "err"); btnLoginTeacher.textContent = "Войти в журнал"; });
-        };
-    }
-
-    function router() {
-        var hash = location.hash.replace("#", "") || "/";
-        var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-        var mdkSel = document.getElementById("mdkSelector");
-        if (mdkSel) mdkSel.value = window.state.activeCourseId || "07.01";
-        var loginOverlay = document.getElementById("loginOverlay");
-        if (!window.state.student && !window.state.staff) { if (loginOverlay) loginOverlay.style.display = "flex"; } else { if (loginOverlay) loginOverlay.style.display = "none"; }
-
-        if (hash === "/" || hash === "") { window.renderHomePage(); } 
-        else if (hash.startsWith("/topic/")) { var parts = hash.split("/"); window.renderTopicPage(parts[2], parts[3]); }
-        else if (hash === "/videos") { window.renderSimplePage("Видеоуроки", window.GLOBAL_DATA.videos, "🎬"); } 
-        else if (hash === "/passports") { window.renderSimplePage("Паспорта станков", window.GLOBAL_DATA.passports, "📄"); } 
-        else if (hash === "/safety") { window.renderSimplePage("Охрана труда", window.GLOBAL_DATA.safety, "🦺"); } 
-        else if (hash === "/formatting") { app.innerHTML = `<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>Оформление</h1></section><div class="module">${window.GLOBAL_DATA.formatting.content}</div>`; } 
-        else if (hash === "/profile" || hash.startsWith("/profile/")) { window.renderProfilePage(hash); } 
-        else if (hash === "/grades") { window.renderStudentGradesPage(); }
-        else if (hash === "/certificate") { window.renderCertificatePage(); } 
-        else if (hash === "/shop") { if (window.renderShopPage) window.renderShopPage(); } 
-        else if (hash === "/achievements") { window.renderAchievementsPage(); } 
-        else if (hash === "/links") { if (window.renderLinksPage) window.renderLinksPage(); } 
-        else if (hash === "/training") { 
-            var mdkId = window.state.activeCourseId || "07.01"; var suffix = mdkId.replace(".", "");
-            if (typeof window["renderTraining_" + suffix] === "function") { window["renderTraining_" + suffix](mdkId); } else { app.innerHTML = `<div class="module" style="color:var(--err);">Тренировка не найдена.</div>`; }
-        } 
-        else if (hash === "/final") { 
-            if (window.renderNewExam) window.renderNewExam(window.state.activeCourseId); 
-            else { app.innerHTML = `<div class="module" style="color:var(--err);">Экзамен не найден.</div>`; }
-        } 
-        else if (hash === "/arcade") { if (window.renderArcadePage) window.renderArcadePage(); } 
-        else if (hash === "/rating") { if (window.renderRatingPage) window.renderRatingPage(); } 
-        else if (hash === "/journal") { if (window.renderJournalPage) window.renderJournalPage(); } 
-        else if (hash === "/reports") { if (window.renderCourseReportsPage) window.renderCourseReportsPage(); } 
-        else if (hash === "/admin") { if (window.renderAdminPanel) window.renderAdminPanel(); } 
-        else if (hash === "/schedule") { if (window.renderSchedulePage) window.renderSchedulePage(); } 
-        else { app.innerHTML = '<section class="hero"><h1>404</h1><p>Страница не найдена</p></section>'; }
-        
-        window.applyGlobalEffects(); 
-    }
-    window.addEventListener("hashchange", router);
-    router();
-});
+window.renderSimplePage =
