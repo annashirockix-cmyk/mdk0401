@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МДК 07.01 — Учебный портал</title>
     
-    <!-- Подключение стилей -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="animations.css">
     <link rel="stylesheet" href="lecture-methodical.css">
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Иконка сайта -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 </head>
 <body data-theme="dark">
 
-    <!-- ШАПКА -->
     <header class="topbar">
         <button class="burger-btn" id="burgerBtn" aria-label="Меню">
             <span></span><span></span><span></span>
@@ -44,10 +40,13 @@
         </div>
     </header>
 
-    <!-- ОСНОВНОЙ КОНТЕНТ (Сюда app.js вставляет страницы) -->
+    <!-- Хлебные крошки (исправляет ошибку textContent) -->
+    <div id="crumbs" style="padding: 12px 24px; font-size: 14px; color: var(--muted); background: var(--bg); border-bottom: 1px solid var(--border);"></div>
+
+    <!-- Основной контент -->
     <main id="app"></main>
 
-    <!-- БОКОВОЕ МЕНЮ -->
+    <!-- Боковое меню -->
     <div class="drawer-overlay" id="drawerOverlay"></div>
     <aside class="drawer" id="drawer">
         <div class="drawer-head">
@@ -76,19 +75,17 @@
         </nav>
     </aside>
 
-    <!-- ЭКРАН ВХОДА -->
+    <!-- Экран входа -->
     <div class="login-overlay" id="loginOverlay" style="display:none;">
         <div class="login-shell">
             <h2 style="text-align:center; margin-bottom:20px;">Вход в портал</h2>
             <div class="login-grid">
-                <!-- Студент -->
                 <div class="login-card">
                     <h3 style="margin-top:0; color:var(--accent);">👨‍🎓 Студент</h3>
                     <input type="text" id="loginName" placeholder="Ваше ФИО (Иванов Иван)">
                     <input type="text" id="loginGroup" placeholder="Группа (ТМП 5-2)">
                     <button class="btn" id="btnLoginStudent" style="width:100%;">Войти</button>
                 </div>
-                <!-- Преподаватель -->
                 <div class="login-card">
                     <h3 style="margin-top:0; color:var(--gold);">👨‍🏫 Преподаватель</h3>
                     <input type="text" id="teacherUser" placeholder="Логин (admin)">
@@ -99,14 +96,9 @@
         </div>
     </div>
 
-    <!-- УВЕДОМЛЕНИЯ (Тосты) -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- ========================================== -->
-    <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ (Строгий порядок!) -->
-    <!-- ========================================== -->
-    
-    <!-- 1. Данные и конфигурации -->
+    <!-- СКРИПТЫ -->
     <script src="api.js"></script>
     <script src="data-0701.js"></script>
     <script src="data-0401.js"></script>
@@ -116,17 +108,14 @@
     <script src="data-global.js"></script>
     <script src="tests-extra.js"></script>
     
-    <!-- 2. База вопросов для игр -->
     <script src="questions-setup.js"></script>
     <script src="questions-mdk.js"></script>
     <script src="questions-anime.js"></script>
     <script src="questions-games.js"></script>
     <script src="questions-logic.js"></script>
 
-    <!-- 3. Ядро приложения (Запускает роутер) -->
     <script src="app.js"></script>
     
-    <!-- 4. Модули и страницы -->
     <script src="assistant.js"></script>
     <script src="shop.js"></script>
     <script src="games.js"></script>
@@ -146,7 +135,6 @@
     <script src="admin.js"></script>
     <script src="easter-eggs.js"></script>
     
-    <!-- Регистрация Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').catch(err => console.log('SW ошибка:', err));
