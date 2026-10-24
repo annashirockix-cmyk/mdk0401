@@ -9,6 +9,7 @@ function programById(id) {
 }
 
 function questionCount(course) {
+  if (!course || !course.sections) return 0;
   var n = 0;
   (course.sections || []).forEach(function (s) {
     (s.topics || []).forEach(function (t) { if (t.test) n += t.test.length; });
@@ -25,7 +26,6 @@ window.renderFinalExamPage = function (mdkId) {
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
     app.appendChild(el('<section class="hero"><h1>Итоговые экзамены</h1><p>Отдельный экзамен по каждому МДК: 10 вопросов, 10 минут.</p></section>'));
     var grid = document.createElement("div");
-    grid.className = "exam-grid";
     grid.style = "display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;";
     
     Object.values(window.MDK_DATA || {}).forEach(function (p) {

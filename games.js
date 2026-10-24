@@ -64,7 +64,7 @@ window.startGame = function(gameId) {
 
     var rules = {
         snake: "Управляйте змейкой курсором мыши или стрелками. Собирайте еду и не врезайтесь в себя.",
-        pumpkin: "Вырезайте лицо на тыкве, ведя курсором по разметке.",
+        pumpkin: "Вырезайте лицо на тыкве, ведя курсором по разметке. Получите код, когда лицо будет готово.",
         gcode: "Вводите команды в формате G01 X50 Y50. Используйте G02/G03 с параметрами I и J для рисования дуг.",
         minesweeper: "Клик открывает клетку. Кнопка 'Флажок' или правая кнопка мыши ставит флаг. Цифры показывают мины рядом.",
         tictactoe: "Соберите линию из N символов раньше робота.",
@@ -87,10 +87,11 @@ window.startGame = function(gameId) {
     var container = el('<div class="module" id="gameContainer" style="min-height:400px; padding:0; overflow:hidden;"></div>');
     app.appendChild(container);
 
+    // Если игры лежат в отдельной папке, укажите путь, например: 'games/cursor-snake.html'
     if (gameId === 'snake') {
-        container.innerHTML = `<iframe src="cursor-snake.html" style="width:100%; height:80vh; border:none; display:block;"></iframe>`;
+        container.innerHTML = `<iframe src="./cursor-snake.html" style="width:100%; height:80vh; border:none; display:block; border-radius:8px;"></iframe>`;
     } else if (gameId === 'pumpkin') {
-        container.innerHTML = `<iframe src="carve-pumpkin.html" style="width:100%; height:80vh; border:none; display:block;"></iframe>`;
+        container.innerHTML = `<iframe src="./carve-pumpkin.html" style="width:100%; height:80vh; border:none; display:block; border-radius:8px;"></iframe>`;
     } else if (gameId === 'gcode') {
         startGcode(container);
     } else if (gameId === 'minesweeper') {
@@ -117,3 +118,165 @@ window.startGame = function(gameId) {
         startSolarSystem(container);
     }
 };
+
+// ================= 1. ЗВЕЗДНЫЙ ДОЖДЬ =================
+function startStarfield(container) {
+    container.innerHTML = `<canvas id="starfieldCanvas" style="width:100%; height:400px; background:#000; border-radius:8px; display:block;"></canvas>`;
+    var canvas = document.getElementById("starfieldCanvas");
+    var ctx = canvas.getContext("2d");
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    class Star {
+        constructor() { this.reset(); }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2;
+            this.speed = Math.random() * 3 + 1;
+        }
+        update() {
+            this.y += this.speed;
+            if (this.y > canvas.height) this.reset();
+        }
+        draw() {
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+    var stars = Array.from({ length: 200 }, () => new Star());
+    
+    function animate() {
+        if (!document.getElementById("starfieldCanvas")) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => { s.update(); s.draw(); });
+        requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+// ================= 2. СОЛНЕЧНАЯ СИСТЕМА =================
+function startSolarSystem(container) {
+    container.innerHTML = `<canvas id="solarCanvas" style="width:100%; height:400px; background:#000; border-radius:8px; display:block;"></canvas>`;
+    var canvas = document.getElementById("solarCanvas");
+    var ctx = canvas.getContext("2d");
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    var sun = { x: canvas.width / 2, y: canvas.height / 2, radius: 15 };
+    var planets = [
+        { r: 3, dist: 40, speed: 0.04, angle: 0, color: '#a9a9a9' }, // Меркурий
+        { r: 5, dist: 70, speed: 0.03, angle: 0, color: '#ffd700' }, // Венера
+        { r: 6, dist: 100, speed: 0.02, angle: 0, color: '#0000ff' }, // Земля
+        { r: 4, dist: 130, speed: 0.015, angle: 0, color: '#ffa500' } // Марс
+    ];
+
+    function draw() {
+        if (!document.getElementById("solarCanvas")) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Солнце
+        ctx.beginPath();
+        ctx.arc(sun.x, sun.y, sun.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'yellow';
+        ctx.fill();
+
+        // Планеты
+        planets.forEach(p => {
+            p.angle += p.speed;
+            var x = sun.x + p.dist * Math.cos(p.angle);
+            var y = sun.y + p.dist * Math.sin(p.angle);
+            
+            // Орбита
+            ctx.beginPath();
+            ctx.arc(sun.x, sun.y, p.dist, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.stroke();
+
+            // Планета
+            ctx.beginPath();
+            ctx.arc(x, y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+}
+
+// ================= 3. G-КОД РИСОВАНИЕ (Упрощенная) =================
+function startGcode(container) {
+    container.innerHTML = `
+        <div style="padding: 20px;">
+            <h3 style="margin-top:0;">📐 G-код Рисование</h3>
+            <p style="color:var(--muted); font-size:14px; margin-bottom:15px;">Введите команду и нажмите Enter. Примеры: <code>G01 X100 Y100</code>, <code>G02 X50 Y50 I25 J0</code></p>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input type="text" id="gcodeInput" class="self-input" style="margin:0; flex:1;" placeholder="G01 X50 Y50">
+                <button class="btn" onclick="window.runGcode()">Выполнить</button>
+            </div>
+            <canvas id="gcodeCanvas" width="400" height="400" style="background:#111; border:2px solid var(--border); border-radius:8px; display:block; margin: 0 auto;"></canvas>
+        </div>
+    `;
+    var canvas = document.getElementById("gcodeCanvas");
+    var ctx = canvas.getContext("2d");
+    var curX = 200, curY = 200; // Начало в центре
+    var lastX = 200, lastY = 200;
+
+    ctx.beginPath();
+    ctx.moveTo(curX, curY);
+
+    window.runGcode = function() {
+        var cmd = document.getElementById("gcodeInput").value.toUpperCase().trim();
+        if (!cmd) return;
+        document.getElementById("gcodeInput").value = "";
+        var parts = cmd.split(" ");
+        var g = parts[0];
+        var params = {};
+        parts.slice(1).forEach(p => { params[p[0]] = parseFloat(p.slice(1)); });
+
+        ctx.strokeStyle = '#39E6FF';
+        ctx.lineWidth = 2;
+
+        if (g === "G00") {
+            if (params.X !== undefined) curX = params.X;
+            if (params.Y !== undefined) curY = params.Y;
+            ctx.moveTo(curX, curY);
+        } else if (g === "G01") {
+            if (params.X !== undefined) curX = params.X;
+            if (params.Y !== undefined) curY = params.Y;
+            ctx.lineTo(curX, curY);
+            ctx.stroke();
+        } else if (g === "G02" || g === "G03") {
+            var cx = curX + (params.I || 0);
+            var cy = curY + (params.J || 0);
+            var nx = params.X !== undefined ? params.X : curX;
+            var ny = params.Y !== undefined ? params.Y : curY;
+            var r = Math.sqrt((curX-cx)**2 + (curY-cy)**2);
+            
+            ctx.beginPath();
+            // Для простоты рисуем полную окружность или дугу
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.stroke();
+            curX = nx; curY = ny;
+            ctx.beginPath();
+            ctx.moveTo(curX, curY);
+        }
+    };
+
+    document.getElementById("gcodeInput").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") window.runGcode();
+    });
+}
+
+// ================= ОСТАЛЬНЫЕ ИГРЫ (Заглушки для стабильности) =================
+function startMinesweeper(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">💣 Сапёр в разработке (требуется подключение полного скрипта)</div>`; }
+function startTicTacToe(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">❌ Крестики-нолики в разработке</div>`; }
+function startSudoku(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">🔢 Судоку в разработке</div>`; }
+function startBlackjack(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">🃏 Очко в разработке</div>`; }
+function startMemory(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">🧠 Найди пару в разработке</div>`; }
+function startCasino(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">🎰 Казино в разработке</div>`; }
+function startRoulette(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">🎡 Рулетка в разработке</div>`; }
+function startParty(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">☠️ Смертельная вечеринка в разработке</div>`; }
+function startSpider(container) { container.innerHTML = `<div style="padding:40px; text-align:center;">🕷️ Пасьянс Паук в разработке</div>`; }
