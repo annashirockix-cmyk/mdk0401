@@ -50,22 +50,11 @@ window.showToast = window.showToast || function(msg, type) {
     container.appendChild(t); setTimeout(function() { t.style.opacity = "0"; setTimeout(() => t.remove(), 300); }, 3000);
 };
 
-// Внедряем радужный текст для логотипа
+// Функция для радужного логотипа
 window.applyRainbowLogo = function() {
     var logo = document.querySelector(".brand-badge");
     if (logo) {
-        logo.style.background = "linear-gradient(270deg, red, orange, yellow, green, cyan, blue, violet)";
-        logo.style.backgroundSize = "1400% 1400%";
-        logo.style.webkitBackgroundClip = "text";
-        logo.style.webkitTextFillColor = "transparent";
-        logo.style.animation = "rainbowMove 10s linear infinite";
-        
-        if (!document.getElementById("rainbowStyle")) {
-            var style = document.createElement("style");
-            style.id = "rainbowStyle";
-            style.textContent = `@keyframes rainbowMove { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }`;
-            document.head.appendChild(style);
-        }
+        logo.classList.add("rainbow-text");
     }
 };
 
@@ -188,11 +177,12 @@ window.renderHomePage = function() {
         </div>`;
     }
 
-    app.innerHTML = `<section class="hero" style="text-align: left; padding: 40px;">
+    // Внедряем эффект Aurora в Hero Section
+    app.innerHTML = `<section class="hero aurora-bg" style="text-align: left; padding: 40px;">
         ${notifHtml}
         <span class="brand-badge" style="margin-bottom: 10px; display: inline-block;">${course ? course.shortName : "Портал"}</span>
         <h1 style="font-size: 2.2rem; margin-bottom: 10px;">${title}</h1>
-        <p style="font-size: 1.1rem; color: var(--muted);">${module}</p>
+        <p style="font-size: 1.1rem; color: var(--text-soft);">${module}</p>
     </section>`;
 
     if (course && course.sections) {
@@ -204,7 +194,8 @@ window.renderHomePage = function() {
                 <div style="display: flex; flex-direction: column; gap: 10px;">`;
             section.topics.forEach(function(topic) {
                 var isDone = window.state.results && window.state.results[`topic_${topic.id}`] ? "✅ " : "";
-                contentHtml += `<a href="#/topic/${mdkId}/${topic.id}" class="topic" style="background: var(--card-soft); padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; text-decoration: none; color: var(--text);">
+                // Внедряем эффект Hover для карточек
+                contentHtml += `<a href="#/topic/${mdkId}/${topic.id}" class="topic hover-glow" style="background: var(--card-soft); padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; text-decoration: none; color: var(--text); border: 1px solid var(--border);">
                     <span>${isDone}<b>${topic.code}</b> ${topic.title}</span><span>→</span>
                 </a>`;
             });
@@ -224,7 +215,8 @@ window.renderTopicPage = function(courseId, topicId) {
 
     document.getElementById("crumbs").textContent = topic.code + " " + topic.title;
     app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
-    app.appendChild(el(`<section class="hero"><h1>${topic.code} ${topic.title}</h1></section>`));
+    // Внедряем эффект Neon для заголовка
+    app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
 
     var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
         <button class="btn tab active" id="tab-lectures" onclick="window.switchTopicTab('lectures')">📖 Лекции</button>
@@ -254,6 +246,7 @@ window.renderTopicPage = function(courseId, topicId) {
             window.unlockAchievement('reader');
         } 
         else if (tabName === 'practicals') {
+            if (!topic.practicals) { contentArea.innerHTML = "<p>Практик нет.</p>"; return; }
             topic.practicals.forEach((p, idx) => {
                 var testId = `prac_${topic.id}_${idx}`;
                 var isDone = window.state.results && window.state.results[testId];
@@ -270,11 +263,13 @@ window.renderTopicPage = function(courseId, topicId) {
             });
         }
         else if (tabName === 'selfwork') {
+            if (!topic.selfWork || !Array.isArray(topic.selfWork)) { contentArea.innerHTML = "<p>Самостоятельных работ нет.</p>"; return; }
+            
             topic.selfWork.forEach((sw, idx) => {
                 var testId = `self_${topic.id}_${idx}`;
                 var isDone = window.state.results && window.state.results[testId];
                 
-                // БЕЗОПАСНЫЙ ПАРСИНГ ВОПРОСОВ
+                // БЕЗОПАСНЫЙ ПАРСИНГ ВОПРОСОВ (Исправление ошибки undefined)
                 var questions = [];
                 if (sw.questions && Array.isArray(sw.questions)) {
                     questions = sw.questions;
@@ -291,7 +286,7 @@ window.renderTopicPage = function(courseId, topicId) {
                     questions.forEach((q, qi) => {
                         contentArea.innerHTML += `<div style="margin-top:10px; background:var(--card); padding:10px; border-radius:6px;">
                             <div style="font-size:14px; margin-bottom:5px;">${qi+1}. ${q.q || 'Вопрос'}</div>`;
-                        if (q.options) {
+                        if (q.options && Array.isArray(q.options)) {
                             q.options.forEach((opt, oi) => {
                                 contentArea.innerHTML += `<label style="display:block; font-size:13px; margin-top:3px; cursor:pointer;"><input type="radio" name="${testId}_q${qi}" value="${oi}"> ${opt}</label>`;
                             });
@@ -334,7 +329,20 @@ window.renderTopicPage = function(courseId, topicId) {
 
     window.startInlineTest = function(topicId, forceRestart) {
         var contentArea = document.getElementById("topicContent");
-        var questions = topic.test;
+        
+        // Собираем вопросы. Если в теме мало вопросов (меньше 5), добираем из других тем этого же курса.
+        var questions = [...topic.test];
+        if (questions.length < 5) {
+            var allCourseQuestions = [];
+            course.sections.forEach(s => s.topics.forEach(t => {
+                if (t.test && t.id !== topicId) allCourseQuestions = allCourseQuestions.concat(t.test);
+            }));
+            allCourseQuestions = allCourseQuestions.sort(() => Math.random() - 0.5);
+            while(questions.length < 5 && allCourseQuestions.length > 0) {
+                questions.push(allCourseQuestions.pop());
+            }
+        }
+
         var currentQ = 0;
         var correct = 0;
         var timeLeft = 600; 
@@ -658,7 +666,6 @@ window.renderSimplePage = function(title, items, icon) {
                 <video controls src="${item.file}" style="width:100%; max-height:400px; border-radius:8px; background:#000; display:none;" onerror="this.style.display='none'; this.previousElementSibling.style.display='block';" oncanplay="this.style.display='block'; this.previousElementSibling.style.display='none';"><source src="${item.file}" type="video/mp4"></video>
             </div>`;
         } else if (isPdf) {
-            // Если метод.pdf не найден, покажет ошибку 404 в iframe. Предупреждаем текстом.
             mediaHtml = `<div style="width:100%; height:600px; border-radius:8px; margin-top:10px; border:1px solid var(--border); background:#fff;"><iframe src="${item.file}#toolbar=0" width="100%" height="100%" style="border:none;"></iframe></div>
             <p style="color:var(--muted); font-size:12px; margin-top:5px;">* Если документ не отображается, проверьте наличие файла <b>${item.file}</b> в корне репозитория.</p>`;
         } else if (isDocx) {

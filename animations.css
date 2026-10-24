@@ -1,0 +1,54 @@
+/* ============================================================
+   ANIMATIONS.CSS - Визуальные эффекты
+   ============================================================ */
+
+/* 1. AURORA BACKGROUND (Северное сияние) */
+.aurora-bg {
+    background: linear-gradient(120deg, rgba(255,107,61,0.15), rgba(255,0,204,0.1), rgba(0,255,204,0.15), rgba(255,107,61,0.15));
+    background-size: 300% 300%;
+    animation: auroraMove 12s ease infinite;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+@keyframes auroraMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 2. NEON GLOW (Неоновое свечение) */
+.neon-text {
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--accent), 0 0 40px var(--accent);
+    animation: neonPulse 1.5s infinite alternate;
+}
+
+@keyframes neonPulse {
+    from { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--accent), 0 0 40px var(--accent); }
+    to { text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px var(--accent), 0 0 20px var(--accent); }
+}
+
+/* 3. RAINBOW TEXT (Радужный текст для логотипа) */
+.rainbow-text {
+    background: linear-gradient(270deg, red, orange, yellow, green, cyan, blue, violet);
+    background-size: 1400% 1400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbowMove 10s linear infinite;
+}
+
+@keyframes rainbowMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* 4. HOVER EFFECT ДЛЯ КАРТОЧЕК */
+.hover-glow {
+    transition: all 0.3s ease;
+}
+.hover-glow:hover {
+    box-shadow: 0 0 15px var(--accent);
+    transform: translateY(-2px);
+    border-color: var(--accent) !important;
+}

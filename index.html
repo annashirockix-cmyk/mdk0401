@@ -2,7 +2,7 @@
 <html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<!-- Оптимизация под мобильные (включая iPhone с "челкой") -->
+<!-- Оптимизация под мобильные -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Учебный портал МДК</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Newsreader:wght@400;700&family=Quattrocento+Sans:wght@400;700&family=Spectral:wght@400;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="animations.css">
 
 <!-- Применение сохранённой темы и шрифта ДО загрузки body -->
 <script>
@@ -47,8 +48,8 @@
     @media print {
         body * { visibility: hidden; }
         #printable-cert, #printable-cert *, #printable-supplement, #printable-supplement * { visibility: visible; }
-        #printable-cert { position: absolute; left: 0; top: 0; width: 100%; page-break-after: always; margin: 0; padding: 0; box-shadow: none; border-radius: 0; background-size: 100% 100% !important; }
-        #printable-supplement { position: absolute; left: 0; top: 0; width: 100%; page-break-before: always; background-size: 100% 100% !important; }
+        #printable-cert { position: absolute; left: 0; top: 0; width: 100%; page-break-after: always; margin: 0; padding: 0; box-shadow: none; border-radius: 0; background-size: 100% 100% !important; -webkit-print-color-adjust: exact; }
+        #printable-supplement { position: absolute; left: 0; top: 0; width: 100%; page-break-before: always; background-size: 100% 100% !important; -webkit-print-color-adjust: exact; }
         .no-print { display: none !important; }
         .topbar, .drawer, .drawer-overlay, .toast-container, #asFab { display: none !important; }
         main#app { padding: 0 !important; margin: 0 !important; }
@@ -62,21 +63,17 @@
 <div class="login-overlay" id="loginOverlay">
   <div class="login-shell">
     <div class="login-brand" style="text-align: center; margin-bottom: 20px;">
-      <span class="brand-badge">ПОРТАЛ МДК</span>
+      <span class="brand-badge rainbow-text">ПОРТАЛ МДК</span>
       <h1>Оператор станков с ПУ</h1>
       <p>15.02.16 Технология машиностроения · ПМ.07</p>
     </div>
     <div class="login-grid">
-      
-      <!-- Форма студента -->
       <form class="login-card" id="studentLoginForm" onsubmit="return false;">
         <h3>Вход студента</h3>
         <label>ФИО <input id="loginName" type="text" placeholder="Иванов Иван" autocomplete="name" required></label>
         <label>Группа <input id="loginGroup" type="text" placeholder="ТМ-4" autocomplete="off" required></label>
         <button type="button" id="btnLoginStudent" class="btn" style="width: 100%; margin-top: 10px;">Войти</button>
       </form>
-      
-      <!-- Форма преподавателя -->
       <form class="login-card" id="teacherLoginForm" onsubmit="return false;">
         <h3>Вход преподавателя</h3>
         <label>Логин <input id="teacherUser" type="text" placeholder="teacher" autocomplete="username" required></label>
@@ -84,7 +81,6 @@
         <button type="button" id="btnLoginTeacher" class="btn ghost" style="width: 100%; margin-top: 10px;">Войти в журнал</button>
         <p class="login-error" id="teacherLoginError" style="display:none; color:var(--err); margin-top:10px; font-size:13px;"></p>
       </form>
-
     </div>
   </div>
 </div>
@@ -92,7 +88,7 @@
 <!-- ШАПКА -->
 <header class="topbar">
   <button class="burger-btn" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
-  <a class="brand" href="#/"><span class="brand-badge">МДК Портал</span></a>
+  <a class="brand" href="#/"><span class="brand-badge rainbow-text" id="mainLogo">МДК Портал</span></a>
   <div style="margin-left: 15px;">
       <select id="mdkSelector" class="self-input" style="padding: 8px; font-weight: bold; background: var(--card-soft); border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; outline:none; margin:0; width:auto;">
           <option value="07.01">МДК 07.01 (ЧПУ)</option>
