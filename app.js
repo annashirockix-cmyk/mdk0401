@@ -23,7 +23,12 @@ window.clearCache = function() {
 };
 window.isVIP = function() { if (window.state.staff) return true; if (!window.state.student) return false; var name = window.state.student.name.toLowerCase(); return name.includes("новиков арсений") || name.includes("кулиш денис"); };
 window.saveStudentData = function() {
-    try { localStorage.setItem("mdk.state", JSON.stringify(window.state)); if (window.state.student && window.API && window.studentKey()) { window.API.saveStudent(window.studentKey(), window.state.student.name, window.state.student.group, JSON.stringify(window.state)).catch(err => console.warn("Ошибка синхронизации")); } } catch (e) {}
+    try { 
+        localStorage.setItem("mdk.state", JSON.stringify(window.state)); 
+        if (window.state.student && window.API && window.studentKey()) { 
+            window.API.saveStudent(window.studentKey(), window.state.student.name, window.state.student.group, JSON.stringify(window.state)).catch(err => console.warn("Ошибка синхронизации")); 
+        } 
+    } catch (e) {}
 };
 window.studentKey = function() { if (!window.state.student) return ""; return (window.state.student.name || "").trim().toLowerCase() + "|" + (window.state.student.group || "").trim().toLowerCase(); };
 window.getLevel = function(xp) { return Math.floor((xp || 0) / 100) + 1; };
@@ -81,16 +86,29 @@ window.unlockAchievement = function(id) {
 };
 
 // ============================================================
-// 3. НОВЫЕ СТРАНИЦЫ ВИДЕО И ОХРАНЫ ТРУДА
+// 3. СПИСКИ ТРЕНИРОВОК, ЭКЗАМЕНОВ, ВИДЕО И ОХРАНЫ ТРУДА
 // ============================================================
+window.renderTrainingListPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎯 Тренировка</h1><p>Выберите предмет для практики</p></section>';
+    var grid = document.createElement("div"); grid.style = "display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;";
+    Object.values(window.MDK_DATA || {}).forEach(p => {
+        var card = document.createElement("a"); card.href = "#/training/" + p.id; card.className = "module";
+        card.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:1px solid var(--border); border-radius:12px;";
+        card.innerHTML = `<h3 style="margin-top:0; color:var(--accent);">${p.shortName}</h3><p>${p.title}</p>`;
+        grid.appendChild(card);
+    });
+    app.appendChild(grid);
+};
+
 window.renderVideosPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎬 Видеоуроки</h1></section><div class="module" id="videosList"></div>';
     var list = document.getElementById("videosList");
     var vids = window.GLOBAL_DATA && window.GLOBAL_DATA.videos ? window.GLOBAL_DATA.videos : [];
-    if (!vids.length) { list.innerHTML = "<p>Видео пока нет.</p>"; return; }
+    if (!vids.length) { list.innerHTML = "<p>Видео пока нет. Убедитесь, что папка video/ загружена в репозиторий.</p>"; return; }
     vids.forEach(v => {
-        list.innerHTML += `<div style="margin-bottom:20px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${v.title}</b><p style="font-size:14px; margin:5px 0;">${v.description||''}</p><video src="${v.file}" controls style="width:100%; border-radius:8px; max-height:500px; background:#000;"></video></div>`;
+        list.innerHTML += `<div style="margin-bottom:20px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${v.title}</b><p style="font-size:14px; margin:5px 0;">${v.description||''}</p><video src="${v.file}" controls style="width:100%; border-radius:8px; max-height:500px; background:#000;"><source src="${v.file}" type="video/mp4">Ваш браузер не поддерживает видео.</video></div>`;
     });
 };
 
@@ -204,7 +222,7 @@ window.renderTopicPage = function(courseId, topicId) {
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);"><b style="color:var(--gold); font-size:16px;">${sw.code || 'СР'}: ${sw.title}</b><p style="font-size:14px; margin-top:10px; line-height:1.5;">${sw.task || ''}</p>`;
                 if (isDone) contentArea.innerHTML += `<div style="color:var(--ok); font-weight:bold; margin-top:15px; text-align:center;">✅ Работа сдана (Оценка: ${isDone.grade})</div>`;
                 else if (questions && questions.length > 0) contentArea.innerHTML += `<div style="margin-top:15px;"><button class="btn" onclick="window.startSelfWorkTest('${topic.id}', ${idx})" style="width:100%; padding:12px; font-size:16px;">📝 Начать тест (${questions.length} вопросов)</button></div>`;
-                else contentArea.innerHTML += `<div style="color:var(--muted); margin-top:15px; text-align:center;">Вопросы для теста не добавлены или формат неверен</div>`;
+                else contentArea.innerHTML += `<div style="color:var(--muted); margin-top:15px; text-align:center;">Вопросы для теста не добавлены</div>`;
                 contentArea.innerHTML += `</div>`;
             });
         }
@@ -344,6 +362,7 @@ window.renderAchievementsPage = function() {
         { id: "reader", title: "Книжный червь", desc: "Изучить лекцию", icon: "📖", unlocked: unlocked.includes('reader') },
         { id: "hacker", title: "Хакер", desc: "Пройти тест", icon: "💻", unlocked: unlocked.includes('hacker') },
         { id: "gamer", title: "Геймер", desc: "Сыграть в любую игру", icon: "🎮", unlocked: unlocked.includes('gamer') },
+        { id: "gcode_pro", title: "G-кодер", desc: "Пройти уровень в тренажере G-кода", icon: "📐", unlocked: unlocked.includes('gcode_pro') }, // <- НОВАЯ
         { id: "party_win", title: "Выживший", desc: "Победить в Смертельной вечеринке", icon: "🏆", unlocked: unlocked.includes('party_win') },
         { id: "minesweeper_win", title: "Сапёр", desc: "Победить в Сапёре", icon: "💣", unlocked: unlocked.includes('minesweeper_win') },
         { id: "spider_win", title: "Паук", desc: "Собрать пасьянс", icon: "🕷️", unlocked: unlocked.includes('spider_win') },
@@ -411,7 +430,6 @@ window.renderCertificatePage = function() {
         ${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:120px; font-weight:bold; color:rgba(255,0,0,0.1); pointer-events:none; white-space:nowrap; z-index:10;">ОБРАЗЕЦ</div>` : ""}
     </div>`;
     
-    // ВОССТАНОВЛЕН ВКЛАДЫШ
     var gradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved");
     gradesList.sort((a, b) => a.localeCompare(b));
     var gradesRows = gradesList.map(k => {
@@ -527,6 +545,7 @@ function router() {
     var overlay = document.getElementById("loginOverlay"); if (overlay) overlay.style.display = "none";
     if (parts.length === 0 || parts[0] === "") { window.renderHomePage(); return; }
     var page = parts[0];
+    
     if (page === "topic" && parts.length >= 3) { window.renderTopicPage(parts[1], parts[2]); return; }
     if (page === "profile") { window.renderProfilePage(hash); return; }
     if (page === "grades") { window.renderStudentGradesPage(); return; }
@@ -536,15 +555,26 @@ function router() {
     if (page === "safety") { window.renderSafetyPage(); return; }
     if (page === "shop") { if (window.renderShopPage) window.renderShopPage(); else window.renderSimplePage("Магазин", "В разработке"); return; }
     if (page === "links") { if (window.renderLinksPage) window.renderLinksPage(); else window.renderSimplePage("Материалы", "В разработке"); return; }
+    
     if (page === "training") {
-        if (parts.length >= 2) { var fn = window["renderTraining_" + parts[1].replace(".", "")]; if (typeof fn === "function") fn(parts[1]); else window.renderTrainingListPage(); } else window.renderTrainingListPage();
+        if (parts.length >= 2) { 
+            var fn = window["renderTraining_" + parts[1].replace(".", "")]; 
+            if (typeof fn === "function") fn(parts[1]); 
+            else window.renderTrainingListPage(); 
+        } else {
+            window.renderTrainingListPage();
+        }
         return;
     }
     if (page === "final") {
-        if (parts.length >= 2) { var fn = window["renderFinal_" + parts[1].replace(".", "")]; if (typeof fn === "function") fn(parts[1]); else if (window.renderFinalExamPage) window.renderFinalExamPage(parts[1]); else window.renderFinalListPage(); } 
-        else { if (window.renderFinalExamPage) window.renderFinalExamPage(); else window.renderFinalListPage(); }
+        if (window.renderFinalExamPage) {
+            window.renderFinalExamPage(parts.length >= 2 ? parts[1] : null);
+        } else {
+            window.renderSimplePage("Экзамен", "Движок экзамена не загружен");
+        }
         return;
     }
+    
     if (page === "arcade") { if (window.renderArcadePage) window.renderArcadePage(); else window.renderSimplePage("Игры", "В разработке"); return; }
     if (page === "rating") { if (window.renderRatingPage) window.renderRatingPage(); else window.renderSimplePage("Рейтинг", "В разработке"); return; }
     if (page === "schedule") { if (window.renderSchedulePage) window.renderSchedulePage(); else window.renderSimplePage("Расписание", "В разработке"); return; }
@@ -579,4 +609,12 @@ window.addEventListener("DOMContentLoaded", function() {
     var theme = localStorage.getItem("mdk.theme") || "dark";
     document.documentElement.setAttribute("data-theme", theme);
     router(); window.renderUserChip();
+});
+
+// Слушаем сообщения от iframe с тренажером G-кода
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'GCODE_SUCCESS') {
+        window.unlockAchievement('gcode_pro');
+        window.showToast("Отличная работа! Вы написали правильный G-код.", "ok");
+    }
 });

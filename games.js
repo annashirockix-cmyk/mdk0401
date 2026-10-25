@@ -21,6 +21,13 @@ window.renderArcadePage = function() {
     var allGames = [
         { id: "snake", title: "🐍 Cursor Snake", desc: "Управляйте змейкой курсором мыши." },
         { id: "pumpkin", title: "🎃 Carve Pumpkin", desc: "Вырежи лицо на тыкве." },
+        { id: "slime", title: "🟢 Желейный слайм", desc: "Интерактивный слайм." },
+        { id: "dragon", title: "🐉 Пиксельный дракон", desc: "Анимация дракона." },
+        { id: "gravity_pass", title: "🔐 Гравитационный пароль", desc: "Анимация ввода пароля." },
+        { id: "heavy_ball", title: "⚫ Тяжелый шар", desc: "Переключатель темы." },
+        { id: "captcha_cat", title: "🐱 Кот-капча", desc: "Разбуди кота." },
+        { id: "lanterns", title: "🏮 Бумажные фонарики", desc: "Зажги улицу." },
+        { id: "liquid_login", title: "💧 Жидкий металл", desc: "Анимация входа." },
         { id: "gcode", title: "📐 G-код Рисование", desc: "Изучи команды ЧПУ." },
         { id: "minesweeper", title: "💣 Сапёр", desc: "Классический сапёр." },
         { id: "tictactoe", title: "❌ Крестики-нолики", desc: "Победи робота!" },
@@ -41,7 +48,7 @@ window.renderArcadePage = function() {
         var best = localStorage.getItem('hs_' + g.id) || 0;
         var bestTxt = best > 0 ? `<div style="color:var(--gold); font-size:13px; font-weight:bold; margin-top:10px;">⭐ Рекорд: ${best}</div>` : '';
         
-        grid.appendChild(el(`<div class="module" style="cursor:pointer; transition:0.2s; display:flex; flex-direction:column; justify-content:space-between;" onclick="window.startGame('${g.id}')" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        grid.appendChild(el(`<div class="module" style="cursor:pointer; transition:0.2s; display:flex; flex-direction:column; justify-content:space-between; margin-bottom:0;" onclick="window.startGame('${g.id}')" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
             <div>
                 <h3 style="margin-top:0; color:var(--accent);">${g.title}</h3>
                 <p style="color:var(--muted); font-size:14px;">${g.desc}</p>
@@ -64,6 +71,13 @@ window.startGame = function(gameId) {
     var rules = {
         snake: "Управляйте змейкой курсором мыши или стрелками.",
         pumpkin: "Вырезайте лицо на тыкве, ведя курсором по разметке.",
+        slime: "Двигайте мышкой, тяните слайма, кликайте для печенья.",
+        dragon: "Просто наблюдайте за анимацией дракона.",
+        gravity_pass: "Введите пароль и наблюдайте за гравитацией.",
+        heavy_ball: "Бросайте шар, чтобы переключить тему.",
+        captcha_cat: "Разбудите кота, проведя клубком мимо него.",
+        lanterns: "Поднесите огонь к фонарю, чтобы зажечь улицу.",
+        liquid_login: "Введите логин и пароль в анимированную форму.",
         gcode: "Вводите команды в формате G01 X50 Y50.",
         minesweeper: "Клик открывает клетку. Правая кнопка мыши ставит флаг.",
         tictactoe: "Соберите линию из 3 символов раньше робота.",
@@ -83,16 +97,29 @@ window.startGame = function(gameId) {
         <p style="margin-top:10px; font-size:14px; color:var(--muted);">${rules[gameId] || "Правила не указаны."}</p>
     </details>`));
 
-    var container = el('<div class="module" id="gameContainer" style="min-height:400px; padding:0; overflow:hidden; position:relative;"></div>');
+    // Контейнер адаптирован под мобильные устройства и разные игры
+    var container = el('<div class="module" id="gameContainer" style="min-height:400px; padding:0; overflow-x:auto; overflow-y:hidden; position:relative;"></div>');
     app.appendChild(container);
 
-    // Игры через iframe (Змейка и Тыква)
-    if (gameId === 'snake') {
-        container.innerHTML = `<iframe src="./snake.html" style="width:100%; height:80vh; border:none; display:block; border-radius:8px;"></iframe>`;
-    } else if (gameId === 'pumpkin') {
-        container.innerHTML = `<iframe src="./carve_pumpkin.html" style="width:100%; height:80vh; border:none; display:block; border-radius:8px;"></iframe>`;
+    // HTML игры, которые открываются через iframe
+    var iframeGames = {
+        snake: 'snake.html',
+        pumpkin: 'carve_pumpkin.html',
+        slime: 'jelly_slime.html',
+        dragon: 'pixel_dragon.html',
+        gravity_pass: 'gravity_password_v2.html',
+        heavy_ball: 'heavy_ball_switch.html',
+        captcha_cat: 'captcha_wake_cat.html',
+        lanterns: 'paper_lantern.html',
+        liquid_login: 'login_v3b.html'
+    };
+
+    if (iframeGames[gameId]) {
+        var height = (gameId === 'dragon' || gameId === 'heavy_ball') ? '60vh' : '80vh';
+        var bgStyle = gameId === 'dragon' ? 'background:#a3a3a3;' : '';
+        container.innerHTML = `<iframe src="./${iframeGames[gameId]}" style="width:100%; height:${height}; border:none; display:block; border-radius:8px; ${bgStyle}"></iframe>`;
     } 
-    // Остальные игры (полноценные)
+    // Встроенные JS-игры
     else if (gameId === 'gcode') { startGcode(container); }
     else if (gameId === 'minesweeper') { startMinesweeper(container); }
     else if (gameId === 'tictactoe') { startTicTacToe(container); }
@@ -114,7 +141,7 @@ function startGcode(container) {
             <input type="text" id="gcodeInput" class="self-input" style="margin:0; flex:1;" placeholder="G01 X50 Y50">
             <button class="btn" onclick="window.runGcode()">Выполнить</button>
         </div>
-        <canvas id="gcodeCanvas" width="400" height="400" style="background:#111; border:2px solid var(--border); border-radius:8px; display:block; margin: 0 auto;"></canvas>
+        <canvas id="gcodeCanvas" width="400" height="400" class="gcode-canvas"></canvas>
     </div>`;
     var canvas=document.getElementById("gcodeCanvas"), ctx=canvas.getContext("2d"), curX=200, curY=200; 
     ctx.beginPath(); ctx.moveTo(curX, curY);
@@ -160,7 +187,7 @@ function startMinesweeper(container) {
     }
 
     function render() {
-        var html = `<div style="padding:20px; text-align:center;">
+        var html = `<div style="padding:20px; text-align:center; min-width:320px;">
             <div style="margin-bottom:15px; font-size:18px;">💣 Сапёр | Флаги: <span style="color:var(--err);">${flags}</span>/${MINES}</div>
             <div style="display:inline-grid; grid-template-columns:repeat(${COLS}, 30px); gap:2px; background:var(--border); padding:5px; border-radius:8px;">`;
         for (var r = 0; r < ROWS; r++) {
@@ -224,7 +251,7 @@ function startTicTacToe(container) {
     var board = Array(9).fill(null), turn = "X", gameOver = false;
     
     function render() {
-        var html = `<div style="padding:20px; text-align:center;">
+        var html = `<div style="padding:20px; text-align:center; min-width:260px;">
             <div style="margin-bottom:15px; font-size:18px;">${gameOver ? 'Игра окончена' : 'Ход: ' + turn}</div>
             <div style="display:inline-grid; grid-template-columns:repeat(3, 80px); gap:5px; background:var(--border); padding:5px; border-radius:8px;">`;
         for (var i = 0; i < 9; i++) {
@@ -249,7 +276,7 @@ function startTicTacToe(container) {
         var win = checkWin();
         if (win) { gameOver = true; render(); setTimeout(()=>alert(win === "Tie" ? "Ничья!" : "Вы победили!"), 100); return; }
         
-        // AI (простой рандом)
+        // AI
         setTimeout(function() {
             var empty = []; for (var j = 0; j < 9; j++) if (!board[j]) empty.push(j);
             if (empty.length > 0) {
@@ -275,7 +302,7 @@ function startSudoku(container) {
     var current = JSON.parse(JSON.stringify(puzzle));
 
     function render() {
-        var html = `<div style="padding:20px; text-align:center;">
+        var html = `<div style="padding:20px; text-align:center; min-width:340px;">
             <div style="margin-bottom:15px;">🔢 Судоку</div>
             <div style="display:inline-grid; grid-template-columns:repeat(9, 35px); gap:1px; background:var(--border); padding:2px; border-radius:4px;">`;
         for (var r = 0; r < 9; r++) {
@@ -324,7 +351,7 @@ function startBlackjack(container) {
     }
 
     function render() {
-        var html = `<div style="padding:20px; text-align:center;">
+        var html = `<div style="padding:20px; text-align:center; min-width:280px;">
             <h3 style="margin-top:0;">🃏 Очко</h3>
             <div style="margin-bottom:10px;">Дилер: ${dealer.map(c => c.v+c.s).join(' ')} (${gameOver ? calc(dealer) : '?'})</div>
             <div style="margin-bottom:20px;">Вы: ${player.map(c => c.v+c.s).join(' ')} (${calc(player)})</div>
@@ -364,7 +391,7 @@ function startMemory(container) {
     var flipped = [], matched = 0, lock = false;
 
     function render() {
-        var html = `<div style="padding:20px; text-align:center;">
+        var html = `<div style="padding:20px; text-align:center; min-width:320px;">
             <div style="margin-bottom:15px; font-size:18px;">🧠 Найди пару (Совпадений: ${matched}/8)</div>
             <div style="display:inline-grid; grid-template-columns:repeat(4, 70px); gap:10px;">`;
         cards.forEach((c, i) => {
@@ -399,7 +426,7 @@ function startCasino(container) {
     var reels = ['❓','❓','❓'], msg = "Сделайте ставку!";
     
     function render() {
-        var html = `<div style="padding:20px; text-align:center;">
+        var html = `<div style="padding:20px; text-align:center; min-width:280px;">
             <h3>🎰 Казино</h3>
             <div style="display:flex; justify-content:center; gap:15px; font-size:50px; margin:20px 0;">${reels.map(r => `<div style="width:80px; height:80px; background:var(--card-soft); display:flex; align-items:center; justify-content:center; border:2px solid var(--border); border-radius:10px;">${r}</div>`).join('')}</div>
             <div style="font-size:18px; font-weight:bold; margin-bottom:15px; color:var(--gold);">${msg}</div>
@@ -428,7 +455,7 @@ function startCasino(container) {
         } else {
             msg = "Повезет в следующий раз!";
         }
-        setTimeout(render, 100); // Небольшая задержка для визуализации
+        setTimeout(render, 100);
     };
     render();
 }
@@ -439,7 +466,7 @@ function startRoulette(container) {
     var spinResult = null;
 
     function render() {
-        var html = `<div style="padding:20px; text-align:center;">
+        var html = `<div style="padding:20px; text-align:center; min-width:280px;">
             <h3>🎡 Рулетка</h3>
             <div style="font-size:60px; margin:20px 0; font-weight:bold; color:${spinResult === null ? 'var(--muted)' : (spinResult % 2 === 0 ? 'var(--err)' : '#000')}; background:${spinResult === null ? 'var(--card-soft)' : (spinResult === 0 ? 'var(--ok)' : (spinResult % 2 === 0 ? 'var(--err)' : '#333'))}; width:100px; height:100px; display:flex; align-items:center; justify-content:center; margin:0 auto; border-radius:50%; border:4px solid var(--border);">${spinResult !== null ? spinResult : '?'}</div>
             <div style="font-size:16px; font-weight:bold; margin-bottom:15px;">${msg}</div>
@@ -456,7 +483,7 @@ function startRoulette(container) {
         if (!window.state.staff) { window.state.xp -= bet; if(window.saveStudentData) window.saveStudentData(); if(window.renderUserChip) window.renderUserChip(); }
         
         spinResult = Math.floor(Math.random() * 37);
-        var isRed = spinResult !== 0 && spinResult % 2 === 0; // Упрощенно
+        var isRed = spinResult !== 0 && spinResult % 2 === 0;
         var isBlack = spinResult !== 0 && spinResult % 2 !== 0;
         var isGreen = spinResult === 0;
         
@@ -490,7 +517,7 @@ function startParty(container) {
             return;
         }
         var q = questions[idx];
-        var html = `<div style="padding:20px; text-align:center;">
+        var html = `<div style="padding:20px; text-align:center; min-width:280px;">
             <div style="display:flex; justify-content:space-between; font-size:18px; margin-bottom:15px;">
                 <span>❤️ Жизни: ${lives}</span><span>⏱ Время: <span id="partyTimer" style="color:var(--err);">${time}</span></span>
             </div>

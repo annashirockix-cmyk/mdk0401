@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<!--
+  G-Code Trainer Advanced — Написание кода по картинке
+  Поддерживает G0, G1, а также дуги G2/G3 с параметрами I и J.
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Тренажер G-кода PRO</title>
+<style>
+  body { margin: 0; background: #0a0e14; }
+</style>
+<style>
+  .dp {
+    --wall: #0a0e14;
+    --ink: #f8f8f2;
+    --mute: rgba(248, 248, 242, .64);
+    --accent: #8be9fd;
+    --light: #50fa7b;
+    --danger: #ff5555;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: clamp(18px, 4vw, 48px) 16px;
+    background: var(--wall);
+    color: var(--ink);
+    font: 400 16px/1.5 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  }
+  .dp *, .dp *::before, .dp *::after { box-sizing: border-box; }
+  .dp-card { width: min(1100px, 100%); display: grid; gap: 14px; }
+  .dp-title { margin: 0; text-wrap: balance; font: 400 clamp(26px, 5.6vw, 38px)/1.05 Cochin, 'Baskerville Old Face', Baskerville, Georgia, serif; letter-spacing: -.01em; }
+  .dp-hint { margin: 0; color: var(--mute); font-size: 15px; }
+  
+  .dp-workspace {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    height: 65vh;
+    min-height: 400px;
+  }
+
+  @media (max-width: 800px) {
+    .dp-workspace { grid-template-columns: 1fr; height: auto; }
+    .dp-editor-wrap { height: 300px; }
+    .dp-canvas-wrap { aspect-ratio: 1/1; }
+  }
+
+  .dp-editor-wrap {
+    position: relative;
+    background: #13131f;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
+    border: 1px solid #1e1f29;
+  }
+  
+  .dp-editor-header {
+    background: #0d0d15;
+    padding: 8px 16px;
+    font: 500 12px 'ui-monospace', monospace;
+    color: #6272a4;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .dp-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  .dp-textarea {
+    width: 100%;
+    height: calc(100% - 34px);
+    background: #13131f;
+    color: #f8f8f2;
+    border: none;
+    padding: 16px;
+    font: 500 13px/1.5 'ui-monospace', 'JetBrains Mono', 'Consolas', monospace;
+    resize: none;
+    outline: none;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: auto;
+    tab-size: 4;
+  }
+  .dp-textarea:focus { background: #191a24; }
+
+  .dp-canvas-wrap {
+    position: relative;
+    background: #0d0d15;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #1e1f29;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
+  }
+  
+  .dp-canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
+
+  .dp-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 26px; min-height: 46px; }
+  .dp-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 44px; padding: 0 20px; border: 0; border-radius: 4px; background: #1e1f29; color: var(--ink); font: 600 15px 'Avenir Next', 'Segoe UI', system-ui, sans-serif; cursor: pointer; transition: all 140ms var(--ease-out); }
+  .dp-btn:hover { background: #2a2b3d; }
+  .dp-btn:active { transform: scale(0.97); }
+  .dp-btn[hidden] { display: none; }
+  .dp-btn.dp-primary { background: rgba(80, 250, 123, 0.15); color: var(--light); border: 1px solid rgba(80, 250, 123, 0.3); }
+  .dp-btn.dp-primary:hover { background: rgba(80, 250, 123, 0.25); box-shadow: 0 0 15px rgba(80, 250, 123, 0.2); }
+  .dp-btn.dp-quiet { background: transparent; color: var(--mute); }
+  .dp-btn.dp-quiet:hover { color: var(--ink); }
+  
+  .dp-note { margin: 0; color: var(--mute); font-size: 15px; flex: 1; text-align: right; }
+  .dp-note.error { color: var(--danger); }
+  .dp-note.success { color: var(--light); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<section class="dp" aria-label="Тренажер G-кода">
+  <div class="dp-card">
+    <div>
+      <h2 class="dp-title" id="level-title">Уровень 1</h2>
+      <p class="dp-hint" id="level-desc"></p>
+    </div>
+    
+    <div class="dp-workspace">
+      <div class="dp-editor-wrap">
+        <div class="dp-editor-header">
+          <div class="dp-dot" style="background:#ff5f56"></div>
+          <div class="dp-dot" style="background:#ffbd2e"></div>
+          <div class="dp-dot" style="background:#27c93f"></div>
+          <span style="margin-left: 8px;">part.nc</span>
+        </div>
+        <textarea class="dp-textarea" id="editor" spellcheck="false"></textarea>
+      </div>
+      
+      <div class="dp-canvas-wrap">
+        <canvas class="dp-canvas" id="simulator"></canvas>
+      </div>
+    </div>
+
+    <div class="dp-row">
+      <button class="dp-btn dp-primary" type="button" id="run-btn">Запустить программу</button>
+      <button class="dp-btn dp-quiet" type="button" id="reset-btn">Сброс кода</button>
+      <button class="dp-btn dp-quiet" type="button" id="next-btn" hidden>Следующий уровень</button>
+      <p class="dp-note" id="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<script>
+const LEVELS = [
+  {
+    title: "Уровень 1: Квадрат",
+    desc: "Вырежьте квадрат 60x60 мм. Начало в точке (20, 20).",
+    startCode: "G21 ; Метрическая система\nG90 ; Абсолютные координаты\nG54 ; Рабочая система\nM3 S1500 ; Включить шпиндель\n\nG0 X20 Y20 Z5 ; Подвод к началу\nG1 Z-2 F150 ; Врезание\n; Напишите команды движения по квадрату...\n\nG0 Z5 ; Подъем\nM5 ; Выключить шпиндель\nM30 ; Конец",
+    targetPath: [[20,20], [80,20], [80,80], [20,80], [20,20]]
+  },
+  {
+    title: "Уровень 2: Треугольник",
+    desc: "Вырежьте равнобедренный треугольник. Основание от (20, 20) до (80, 20), вершина в (50, 80).",
+    startCode: "G21\nG90\nG54\nM3 S1500\n\nG0 X20 Y20 Z5\nG1 Z-2 F150\n; Напишите команды для треугольника...\n\nG0 Z5\nM5\nM30",
+    targetPath: [[20,20], [80,20], [50,80], [20,20]]
+  },
+  {
+    title: "Уровень 3: Буква L",
+    desc: "Вырежьте букву L. Вертикальная линия от (20, 20) до (20, 80). Горизонтальная линия от (20, 80) до (60, 80).",
+    startCode: "G21\nG90\nG54\nM3 S1500\n\nG0 X20 Y20 Z5\nG1 Z-2 F150\n; Напишите команды для буквы L...\n\nG0 Z5\nM5\nM30",
+    targetPath: [[20,20], [20,80], [60,80]]
+  },
+  {
+    title: "Уровень 4: Буква A",
+    desc: "Вырежьте букву A. Левая ножка от (20, 20) до (50, 80). Правая ножка от (50, 80) до (80, 20). И перекладина от (35, 50) до (65, 50).",
+    startCode: "G21\nG90\nG54\nM3 S1500\n\nG0 X20 Y20 Z5\nG1 Z-2 F150\n; Напишите команды для буквы A...\n\nG0 Z5\nM5\nM30",
+    targetPath: [
+      [[20,20], [50,80]],
+      [[50,80], [80,20]],
+      [[35,50], [65,50]]
+    ]
+  },
+  {
+    title: "Уровень 5: Буква W",
+    desc: "Вырежьте букву W. Четыре линии: (20, 80) -> (35, 20) -> (50, 80) -> (65, 20) -> (80, 80).",
+    startCode: "G21\nG90\nG54\nM3 S1500\n\nG0 X20 Y80 Z5\nG1 Z-2 F150\n; Напишите команды для буквы W...\n\nG0 Z5\nM5\nM30",
+    targetPath: [[20,80], [35,20], [50,80], [65,20], [80,80]]
+  },
+  {
+    title: "Уровень 6: Дуга (Скоба)",
+    desc: "Сложный уровень! Нужно использовать дугу. Прямая от (20,20) до (80,20). Затем дуга против часовой стрелки (G3) до (80,80). И прямая обратно в (20,20).\nПодсказка: для дуги нужен центр. I и J — это смещение от начала дуги. Начало дуги (80,20), центр должен быть в (80,50). Значит I=0, J=30.",
+    startCode: "G21\nG90\nG54\nM3 S1500\n\nG0 X20 Y20 Z5\nG1 Z-2 F150\nG1 X80 Y20 ; Прямая\n; Используйте G3 X80 Y80 I0 J30 для дуги\n\nG1 X20 Y20 ; Возврат\nG0 Z5\nM5\nM30",
+    targetPath: [[20,20], [80,20], [80,80], [20,20]]
+  },
+  {
+    title: "Уровень 7: Шестигранник",
+    desc: "Вырежьте правильный шестигранник с центром в (50,50). Радиус описанной окружности 30 мм. Начните с верхней точки (50, 80).",
+    startCode: "G21\nG90\nG54\nM3 S1500\n\nG0 X50 Y80 Z5\nG1 Z-2 F150\n; Напишите 6 линий для шестигранника...\n\nG0 Z5\nM5\nM30",
+    targetPath: [[50,80], [76,65], [76,35], [50,20], [24,35], [24,65], [50,80]]
+  },
+  {
+    title: "Уровень 8: Звезда",
+    desc: "Вырежьте 5-конечную звезду. Начните с верхней точки (50, 80). Внутренний радиус 12 мм, внешний 30 мм.",
+    startCode: "G21\nG90\nG54\nM3 S1500\n\nG0 X50 Y80 Z5\nG1 Z-2 F150\n; Напишите 10 линий для звезды...\n\nG0 Z5\nM5\nM30",
+    targetPath: [[50,80], [61,61], [82,58], [66,44], [70,24], [50,35], [30,24], [34,44], [18,58], [39,61], [50,80]]
+  }
+];
+
+const TOLERANCE = 5; 
+const ANIM_SPEED = 200; 
+
+const canvas = document.getElementById('simulator');
+const ctx = canvas.getContext('2d');
+const editor = document.getElementById('editor');
+const runBtn = document.getElementById('run-btn');
+const resetBtn = document.getElementById('reset-btn');
+const nextBtn = document.getElementById('next-btn');
+const statusEl = document.getElementById('status');
+const titleEl = document.getElementById('level-title');
+const descEl = document.getElementById('level-desc');
+
+let currentLevelIdx = 0;
+let animating = false;
+let userPath = [];
+let animProgress = 0;
+let animStartTime = 0;
+let drawnPath = [];
+
+// Генерация точек для дуги
+function getArcPoints(x1, y1, x2, y2, i, j, clockwise) {
+  const cx = x1 + i;
+  const cy = y1 + j;
+  const r = Math.hypot(i, j);
+  let a1 = Math.atan2(y1 - cy, x1 - cx);
+  let a2 = Math.atan2(y2 - cy, x2 - cx);
+  
+  if (clockwise) {
+    if (a2 >= a1) a2 -= 2 * Math.PI;
+  } else {
+    if (a2 <= a1) a2 += 2 * Math.PI;
+  }
+  
+  const pts = [];
+  const steps = 36;
+  for (let s = 0; s <= steps; s++) {
+    const a = a1 + (a2 - a1) * (s / steps);
+    pts.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
+  }
+  return pts;
+}
+
+// Улучшенный парсер с поддержкой дуг
+function parseGCode(code) {
+  const lines = code.split('\n');
+  let currentX = 0, currentY = 0, currentZ = 5;
+  let path = [{x: currentX, y: currentY, z: currentZ}];
+  
+  lines.forEach(line => {
+    line = line.split(';')[0].trim().toUpperCase();
+    if (!line) return;
+
+    const matchX = line.match(/X(-?\d*\.?\d+)/);
+    const matchY = line.match(/Y(-?\d*\.?\d+)/);
+    const matchZ = line.match(/Z(-?\d*\.?\d+)/);
+    const matchI = line.match(/I(-?\d*\.?\d+)/);
+    const matchJ = line.match(/J(-?\d*\.?\d+)/);
+
+    let nextX = matchX ? parseFloat(matchX[1]) : currentX;
+    let nextY = matchY ? parseFloat(matchY[1]) : currentY;
+    let nextZ = matchZ ? parseFloat(matchZ[1]) : currentZ;
+
+    if (line.includes('G2') || line.includes('G3')) {
+      const i = matchI ? parseFloat(matchI[1]) : 0;
+      const j = matchJ ? parseFloat(matchJ[1]) : 0;
+      const cw = line.includes('G2');
+      const arcPts = getArcPoints(currentX, currentY, nextX, nextY, i, j, cw);
+      
+      arcPts.forEach(pt => {
+        path.push({ x: pt.x, y: pt.y, z: nextZ, isArc: true });
+      });
+    } else if (line.includes('G0') || line.includes('G1')) {
+      path.push({ x: nextX, y: nextY, z: nextZ });
+    }
+
+    currentX = nextX;
+    currentY = nextY;
+    currentZ = nextZ;
+  });
+
+  // Формируем массив резов (только где Z < 0)
+  const cuts = [];
+  for (let k = 1; k < path.length; k++) {
+    const p1 = path[k-1];
+    const p2 = path[k];
+    if (p1.z < 0 && p2.z < 0) {
+      cuts.push([p1.x, p1.y, p2.x, p2.y]);
+    }
+  }
+
+  return { path, cuts };
+}
+
+function loadLevel(idx) {
+  currentLevelIdx = idx;
+  const level = LEVELS[idx];
+  
+  titleEl.textContent = level.title;
+  descEl.innerHTML = level.desc.replace(/\n/g, '<br>');
+  editor.value = level.startCode;
+  
+  nextBtn.hidden = true;
+  statusEl.textContent = '';
+  statusEl.className = 'dp-note';
+  drawnPath = [];
+  
+  resizeCanvas();
+}
+
+function resizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawScene();
+}
+
+function drawScene() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const w = rect.width;
+  const h = rect.height;
+  
+  ctx.clearRect(0, 0, w, h);
+  
+  // Сетка
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < w; x += 20) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+  }
+  for (let y = 0; y < h; y += 20) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+  }
+
+  const level = LEVELS[currentLevelIdx];
+  
+  // Координатная сетка (0,0 в центре)
+  const cxm = w / 2;
+  const cym = h / 2;
+  const scale = Math.min(w, h) / 120;
+  
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+  ctx.beginPath(); ctx.moveTo(0, cym); ctx.lineTo(w, cym); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cxm, 0); ctx.lineTo(cxm, h); ctx.stroke();
+
+  // Целевая фигура
+  ctx.strokeStyle = 'rgba(139, 233, 253, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 5]);
+  
+  const drawTarget = (path) => {
+    ctx.beginPath();
+    path.forEach(([x, y], i) => {
+      const px = cxm + x * scale;
+      const py = cym - y * scale;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+  };
+
+  if (Array.isArray(level.targetPath[0][0])) {
+    level.targetPath.forEach(drawTarget);
+  } else if (currentLevelIdx === 6) {
+    // Специальная отрисовка для Уровня 6 (Скоба с дугой)
+    ctx.beginPath();
+    // Прямая
+    ctx.moveTo(cxm + 20 * scale, cym - 20 * scale);
+    ctx.lineTo(cxm + 80 * scale, cym - 20 * scale);
+    // Дуга
+    const cx = cxm + 80 * scale;
+    const cy = cym - 50 * scale;
+    const r = 30 * scale;
+    ctx.arc(cx, cy, r, Math.PI/2, -Math.PI/2, true); // true = против часовой
+    // Возврат
+    ctx.lineTo(cxm + 20 * scale, cym - 20 * scale);
+    ctx.stroke();
+  } else {
+    drawTarget(level.targetPath);
+  }
+  ctx.setLineDash([]);
+}
+
+function validate(userCuts, targetPath) {
+  const targets = Array.isArray(targetPath[0][0]) ? targetPath : [targetPath];
+  let maxError = 0;
+  
+  for (const segment of targets) {
+    for (let i = 0; i < segment.length - 1; i++) {
+      const [tx1, ty1] = segment[i];
+      const [tx2, ty2] = segment[i+1];
+      
+      for (let t = 0; t <= 1; t += 0.05) {
+        const px = tx1 + (tx2 - tx1) * t;
+        const py = ty1 + (ty2 - ty1) * t;
+        
+        let minDist = Infinity;
+        for (const [ux1, uy1, ux2, uy2] of userCuts) {
+          const d = distToSegment(px, py, ux1, uy1, ux2, uy2);
+          if (d < minDist) minDist = d;
+        }
+        
+        if (minDist > maxError) maxError = minDist;
+      }
+    }
+  }
+  return maxError;
+}
+
+function distToSegment(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const l2 = dx * dx + dy * dy;
+  if (l2 === 0) return Math.hypot(px - x1, py - y1);
+  let t = ((px - x1) * dx + (py - y1) * dy) / l2;
+  t = Math.max(0, Math.min(1, t));
+  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+}
+
+function animate(time) {
+  if (!animating) return;
+  if (!animStartTime) animStartTime = time;
+  const elapsed = (time - animStartTime) / 1000;
+  
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const w = rect.width;
+  const h = rect.height;
+  const cxm = w / 2;
+  const cym = h / 2;
+  const scale = Math.min(w, h) / 120;
+
+  drawScene(); 
+
+  // Рисуем прорезанный след
+  if (drawnPath.length > 1) {
+    ctx.strokeStyle = '#50fa7b';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = 'rgba(80, 250, 123, 0.8)';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    drawnPath.forEach((p, i) => {
+      const px = cxm + p.x * scale;
+      const py = cym - p.y * scale;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  // Находим текущую позицию
+  let totalDist = 0;
+  const segments = [];
+  for (let i = 1; i < userPath.length; i++) {
+    const p1 = userPath[i-1];
+    const p2 = userPath[i];
+    const d = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+    totalDist += d;
+    segments.push({ p1, p2, d });
+  }
+
+  const currentDist = Math.min(totalDist, elapsed * ANIM_SPEED);
+  let currentPos = userPath[0];
+  drawnPath = []; // Пересчитываем след каждый кадр
+  
+  let accumulated = 0;
+  for (let seg of segments) {
+    if (accumulated + seg.d >= currentDist) {
+      const t = (currentDist - accumulated) / seg.d;
+      currentPos = {
+        x: seg.p1.x + (seg.p2.x - seg.p1.x) * t,
+        y: seg.p1.y + (seg.p2.y - seg.p1.y) * t,
+        z: seg.p1.z + (seg.p2.z - seg.p1.z) * t
+      };
+      // Добавляем незавершенный отрезок
+      if (seg.p1.z < 0 && currentPos.z < 0) {
+        drawnPath.push(seg.p1);
+        drawnPath.push(currentPos);
+      }
+      break;
+    }
+    accumulated += seg.d;
+    if (seg.p1.z < 0 && seg.p2.z < 0) {
+      drawnPath.push(seg.p1);
+      drawnPath.push(seg.p2);
+    }
+    currentPos = seg.p2;
+  }
+
+  // Рисуем фрезу
+  const px = cxm + currentPos.x * scale;
+  const py = cym - currentPos.y * scale;
+  const isCutting = currentPos.z < 0;
+
+  ctx.beginPath();
+  ctx.arc(px, py, 6, 0, Math.PI * 2);
+  ctx.fillStyle = isCutting ? '#50fa7b' : '#ffb86c';
+  ctx.shadowColor = isCutting ? 'rgba(80, 250, 123, 1)' : 'rgba(255, 184, 108, 1)';
+  ctx.shadowBlur = 15;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  if (elapsed * ANIM_SPEED >= totalDist) {
+    animating = false;
+    checkResult();
+  } else {
+    requestAnimationFrame(animate);
+  }
+}
+
+function checkResult() {
+  const level = LEVELS[currentLevelIdx];
+  const { cuts } = parseGCode(editor.value);
+  
+  if (cuts.length === 0) {
+    statusEl.textContent = 'Ошибка: Фреза не опускалась (Z < 0). Нет резания.';
+    statusEl.className = 'dp-note error';
+    return;
+  }
+
+  const error = validate(cuts, level.targetPath);
+  
+  if (error <= TOLERANCE) {
+    statusEl.textContent = `Успех! Максимальное отклонение: ${error.toFixed(2)} мм.`;
+    statusEl.className = 'dp-note success';
+    if (currentLevelIdx < LEVELS.length - 1) nextBtn.hidden = false;
+    
+    // Отправляем сообщение родительскому окну (порталу), что уровень пройден
+    if (window.parent) {
+        window.parent.postMessage({ type: 'GCODE_SUCCESS', level: currentLevelIdx }, '*');
+    }
+  } else {
+    statusEl.textContent = `Ошибка формы. Отклонение ${error.toFixed(2)} мм (допуск ${TOLERANCE} мм).`;
+    statusEl.className = 'dp-note error';
+  }
+}
+
+runBtn.addEventListener('click', () => {
+  if (animating) return;
+  const { path } = parseGCode(editor.value);
+  if (path.length < 2) {
+    statusEl.textContent = 'Ошибка: Нет команд движения.';
+    statusEl.className = 'dp-note error';
+    return;
+  }
+  userPath = path;
+  animating = true;
+  animStartTime = 0;
+  drawnPath = [];
+  statusEl.textContent = 'Выполнение...';
+  statusEl.className = 'dp-note';
+  requestAnimationFrame(animate);
+});
+
+resetBtn.addEventListener('click', () => {
+  if (animating) return;
+  editor.value = LEVELS[currentLevelIdx].startCode;
+  drawnPath = [];
+  drawScene();
+  statusEl.textContent = '';
+  statusEl.className = 'dp-note';
+});
+
+nextBtn.addEventListener('click', () => {
+  if (currentLevelIdx < LEVELS.length - 1) loadLevel(currentLevelIdx + 1);
+});
+
+window.addEventListener('resize', resizeCanvas);
+loadLevel(0);
+</script>
+</body>
+</html>

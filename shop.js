@@ -5,6 +5,7 @@ const ACHIEVEMENTS = [
     { id: "reader", title: "Книжный червь", desc: "Изучить лекцию", icon: "📖" },
     { id: "hacker", title: "Хакер", desc: "Пройти тест", icon: "💻" },
     { id: "gamer", title: "Геймер", desc: "Сыграть в игру", icon: "🎮" },
+    { id: "gcode_pro", title: "G-кодер", desc: "Пройти уровень в тренажере G-кода", icon: "📐" },
     { id: "level_5", title: "Опытный", desc: "Достичь 5 уровня", icon: "⭐" },
     { id: "rich", title: "Богач", desc: "Накопить 1000 XP", icon: "💰" }
 ];
@@ -38,7 +39,6 @@ const BG_EFFECTS = [
     { id: "fx-aurora-bg", title: "Северное сияние", price: 500 },
     { id: "fx-matrix-bg", title: "Матрица (Дождь)", price: 600 },
     { id: "fx-starfield-bg", title: "Звездное небо", price: 600 },
-    // Новые фоны
     { id: "bg-underwater", title: "Подводный мир", price: 700 },
     { id: "bg-foggy-forest", title: "Туманный лес", price: 700 },
     { id: "bg-stone-alley", title: "Каменная аллея", price: 700 },
@@ -74,7 +74,6 @@ window.renderShopPage = function() {
         html += `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin-top:15px;">`;
         
         items.forEach(item => {
-            // Проверка владения
             var isOwned = isTeacher || 
                           (type === 'theme' && (window.state.purchasedThemes || []).includes(item.id)) ||
                           (type === 'avatar' && window.state.avatar === item.url) ||
@@ -83,7 +82,6 @@ window.renderShopPage = function() {
                           (type === 'card' && (window.state.purchasedCardEffects || []).includes(item.id)) ||
                           item.price === 0;
             
-            // Проверка активности
             var isActive = false;
             if (type === 'theme') isActive = localStorage.getItem("mdk.theme_active") === item.id;
             if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar);

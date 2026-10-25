@@ -11,7 +11,6 @@ window.renderCourseReportsPage = function() {
       return; 
   }
 
-  // Вкладки: Студенты и Письменные работы
   var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px;">
     <button class="btn tab active" id="tab-students" onclick="window.switchReportTab('students')">👨‍🎓 Студенты (БД)</button>
     <button class="btn tab ghost" id="tab-written" onclick="window.switchReportTab('written')">✍️ Письменные задания</button>
@@ -70,34 +69,86 @@ window.renderCourseReportsPage = function() {
 
   function renderWrittenTable() {
       var contentWrap = document.getElementById("reportsContent");
-      contentWrap.innerHTML = "";
+      contentWrap.innerHTML = '<div class="skeleton" style="height:200px;"></div>';
       
-      var subs = window.state.examSubmissions || [];
-      if (subs.length === 0) { contentWrap.innerHTML = "<div class='module'>Письменных работ пока нет.</div>"; return; }
-      
-      var table = document.createElement("table"); table.className = "journal-table"; table.style = "width:100%; border-collapse:collapse; font-size:14px;";
-      table.innerHTML = `<thead><tr style="background:var(--card-soft);"><th>Студент</th><th>Задание 1</th><th>Задание 2</th><th>Оценка препода</th></tr></thead>`;
-      var tbody = document.createElement("tbody");
-      
-      subs.forEach((sub, idx) => {
-          var tr = document.createElement("tr"); tr.style = "border-bottom:1px solid var(--border);";
-          tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border);"><b>${window.escapeHtml(sub.student)}</b><br><span style="font-size:12px; color:var(--muted);">Тест: ${sub.testScore}/30</span></td>`;
-          tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); font-size:12px;">${window.escapeHtml(sub.written1 || 'Пусто')}</td>`;
-          tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); font-size:12px;">${window.escapeHtml(sub.written2 || 'Пусто')}</td>`;
-          tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;">
-              <input type="number" min="0" max="10" value="${sub.teacherGrade || ''}" placeholder="0-10" style="width:60px; padding:5px;" onchange="window.gradeWritten(${idx}, this.value)">
-          </td>`;
-          tbody.appendChild(tr);
+      window.API.getStudents().then(d => {
+          contentWrap.innerHTML = "";
+          if (!d || !d.ok || !d.students) { contentWrap.innerHTML = "<div class='module'>Ошибка загрузки данных.</div>"; return; }
+          
+          var allSubs = [];
+          d.students.forEach(s => {
+              var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e){}
+              if (p.examSubmissions && p.examSubmissions.length > 0) {
+                  p.examSubmissions.forEach((sub, idx) => {
+                      allSubs.push({
+                          ...sub,
+                          studentName: s.name,
+                          studentGroup: s.group,
+                          sKey: s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase(),
+                          subIndex: idx
+                      });
+                  });
+              }
+          });
+
+          if (allSubs.length === 0) { contentWrap.innerHTML = "<div class='module'>Письменных работ пока нет.</div>"; return; }
+          
+          var table = document.createElement("table"); table.className = "journal-table"; table.style = "width:100%; border-collapse:collapse; font-size:14px;";
+          table.innerHTML = `<thead><tr style="background:var(--card-soft);">
+              <th>Студент</th>
+              <th>МДК</th>
+              <th>Задание 1</th>
+              <th>Задание 2</th>
+              <th>Тест</th>
+              <th>Оценка препода (0-10)</th>
+              <th>Итог</th>
+          </tr></thead>`;
+          var tbody = document.createElement("tbody");
+          
+          allSubs.forEach((sub) => {
+              var tr = document.createElement("tr"); tr.style = "border-bottom:1px solid var(--border);";
+              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border);"><b>${window.escapeHtml(sub.studentName)}</b><br><span style="font-size:12px; color:var(--muted);">${window.escapeHtml(sub.studentGroup)}</span></td>`;
+              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border);">${sub.courseId || '—'}</td>`;
+              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); font-size:12px; max-width:200px;">${window.escapeHtml(sub.written1 || 'Пусто')}</td>`;
+              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); font-size:12px; max-width:200px;">${window.escapeHtml(sub.written2 || 'Пусто')}</td>`;
+              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;">${sub.testScore}/${sub.maxTest}</td>`;
+              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;">
+                  <input type="number" min="0" max="10" value="${sub.teacherGrade !== null && sub.teacherGrade !== undefined ? sub.teacherGrade : ''}" placeholder="0-10" style="width:60px; padding:5px; border-radius:4px; border:1px solid var(--border); background:var(--bg); color:var(--text);" onchange="window.gradeWritten('${sub.sKey}', ${sub.subIndex}, this.value)">
+              </td>`;
+              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:var(--gold);">${sub.finalGrade || '—'}</td>`;
+              tbody.appendChild(tr);
+          });
+          table.appendChild(tbody);
+          var wrap = document.createElement("div"); wrap.className = "module"; wrap.style = "overflow-x:auto;"; wrap.appendChild(table); contentWrap.appendChild(wrap);
       });
-      table.appendChild(tbody);
-      var wrap = document.createElement("div"); wrap.className = "module"; wrap.style = "overflow-x:auto;"; wrap.appendChild(table); contentWrap.appendChild(wrap);
   }
 
-  window.gradeWritten = function(idx, val) {
-      if (!window.state.examSubmissions) return;
-      window.state.examSubmissions[idx].teacherGrade = val;
-      window.saveStudentData();
-      window.showToast("Оценка сохранена!", "ok");
+  window.gradeWritten = function(sKey, subIdx, val) {
+      var amount = parseInt(val);
+      if (isNaN(amount)) amount = 0;
+      
+      window.API.getStudentData(sKey).then(res => {
+          if (!res || !res.ok) return window.showToast("Ошибка данных студента", "err");
+          var p = {}; try { p = JSON.parse(res.payload || "{}"); } catch(e){}
+          if (!p.examSubmissions || !p.examSubmissions[subIdx]) return;
+          
+          var sub = p.examSubmissions[subIdx];
+          sub.teacherGrade = amount;
+          
+          // Пересчет итоговой оценки
+          var testGrade = sub.testScore >= 27 ? 5 : sub.testScore >= 22 ? 4 : sub.testScore >= 18 ? 3 : 2; 
+          var writtenGrade = amount >= 8 ? 5 : amount >= 6 ? 4 : amount >= 4 ? 3 : 2;
+          var finalGrade = Math.round((testGrade + writtenGrade) / 2);
+          
+          if (!p.results) p.results = {};
+          p.results["__final__" + sub.courseId] = { grade: finalGrade, total: sub.testScore, max: sub.maxTest };
+          sub.finalGrade = finalGrade;
+          
+          window.API.saveStudent(sKey, sKey.split("|")[0], sKey.split("|")[1], JSON.stringify(p)).then(() => {
+              window.showToast("Оценка сохранена! Итог: " + finalGrade, "ok");
+              renderWrittenTable();
+          });
+      });
   };
 
   window.grantXP = function(sKey, isSubtract) {
@@ -107,6 +158,5 @@ window.renderCourseReportsPage = function() {
       window.API.grantXP(sKey, amount).then(res => { if(res.ok) { window.showToast("XP изменен", "ok"); renderStudentsTable(); } });
   };
 
-  // По умолчанию - Студенты
   renderStudentsTable();
 };
