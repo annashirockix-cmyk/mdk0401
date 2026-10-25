@@ -90,8 +90,17 @@ window.unlockAchievement = function(id) {
 // ============================================================
 window.renderTrainingListPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎯 Тренировка</h1><p>Выберите предмет для практики</p></section>';
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎯 Тренировка</h1><p>Выберите предмет или тренажер для практики</p></section>';
     var grid = document.createElement("div"); grid.style = "display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;";
+    
+    // Добавляем карточку тренажера G-кода в начало списка
+    var gcodeCard = document.createElement("a"); 
+    gcodeCard.href = "#/training/gcode"; 
+    gcodeCard.className = "module";
+    gcodeCard.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:2px solid var(--accent); border-radius:12px;";
+    gcodeCard.innerHTML = `<h3 style="margin-top:0; color:var(--accent);">📐 Тренажер G-кода</h3><p>Интерактивный симулятор станка. Напишите программу по картинке и проверьте себя.</p>`;
+    grid.appendChild(gcodeCard);
+
     Object.values(window.MDK_DATA || {}).forEach(p => {
         var card = document.createElement("a"); card.href = "#/training/" + p.id; card.className = "module";
         card.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:1px solid var(--border); border-radius:12px;";
@@ -99,6 +108,21 @@ window.renderTrainingListPage = function() {
         grid.appendChild(card);
     });
     app.appendChild(grid);
+};
+
+// Новая функция для рендера тренажера G-кода на весь экран
+window.renderGcodeTrainer = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.innerHTML = `
+        <a class="backlink" href="#/training" style="color:var(--accent);">← Назад к тренировкам</a>
+        <section class="hero" style="padding: 20px; margin-bottom: 10px;">
+            <h1>📐 Тренажер G-кода PRO</h1>
+            <p>Напишите программу для фрезеровки детали. Справа отображается целевая фигура.</p>
+        </section>
+        <div class="module" style="padding: 0; overflow: hidden; height: 80vh; border-radius: 12px;">
+            <iframe src="./gcode_trainer_advanced.html" style="width: 100%; height: 100%; border: none; background: #0a0e14;"></iframe>
+        </div>
+    `;
 };
 
 window.renderVideosPage = function() {
@@ -362,7 +386,7 @@ window.renderAchievementsPage = function() {
         { id: "reader", title: "Книжный червь", desc: "Изучить лекцию", icon: "📖", unlocked: unlocked.includes('reader') },
         { id: "hacker", title: "Хакер", desc: "Пройти тест", icon: "💻", unlocked: unlocked.includes('hacker') },
         { id: "gamer", title: "Геймер", desc: "Сыграть в любую игру", icon: "🎮", unlocked: unlocked.includes('gamer') },
-        { id: "gcode_pro", title: "G-кодер", desc: "Пройти уровень в тренажере G-кода", icon: "📐", unlocked: unlocked.includes('gcode_pro') }, // <- НОВАЯ
+        { id: "gcode_pro", title: "G-кодер", desc: "Пройти уровень в тренажере G-кода", icon: "📐", unlocked: unlocked.includes('gcode_pro') },
         { id: "party_win", title: "Выживший", desc: "Победить в Смертельной вечеринке", icon: "🏆", unlocked: unlocked.includes('party_win') },
         { id: "minesweeper_win", title: "Сапёр", desc: "Победить в Сапёре", icon: "💣", unlocked: unlocked.includes('minesweeper_win') },
         { id: "spider_win", title: "Паук", desc: "Собрать пасьянс", icon: "🕷️", unlocked: unlocked.includes('spider_win') },
@@ -558,9 +582,13 @@ function router() {
     
     if (page === "training") {
         if (parts.length >= 2) { 
-            var fn = window["renderTraining_" + parts[1].replace(".", "")]; 
-            if (typeof fn === "function") fn(parts[1]); 
-            else window.renderTrainingListPage(); 
+            if (parts[1] === "gcode") {
+                window.renderGcodeTrainer();
+            } else {
+                var fn = window["renderTraining_" + parts[1].replace(".", "")]; 
+                if (typeof fn === "function") fn(parts[1]); 
+                else window.renderTrainingListPage(); 
+            }
         } else {
             window.renderTrainingListPage();
         }

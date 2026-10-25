@@ -1,5 +1,5 @@
 /* ============================================================
-   data-extra.js — Дополнительные данные (Безопасная версия)
+   data-extra.js — Дополнительные данные
    ============================================================ */
 "use strict";
 
@@ -61,45 +61,4 @@
     };
 
     targetSec.topics.unshift(historyTopic);
-})();
-// ==========================================
-// Внедрение интерактивного тренажера G-кода
-// ==========================================
-(function() {
-    if (!window.MDK_DATA || !window.MDK_DATA["07.01"]) return;
-    var course = window.MDK_DATA["07.01"];
-    
-    // Ищем раздел с программированием
-    var targetSection = course.sections.find(s => s.title.includes("Основы программирования") || s.title.includes("ЧПУ"));
-    if (!targetSection) targetSection = course.sections[2]; // fallback
-
-    var alreadyExists = targetSection.topics.some(t => t.id === "t-gcode-trainer");
-    if (alreadyExists) return;
-
-    var trainerTopic = {
-        id: "t-gcode-trainer",
-        code: "Практикум",
-        title: "🕹️ Интерактивный симулятор G-кода",
-        lectures: [
-            {
-                code: "SIM-1",
-                title: "Написание кода по картинке",
-                content: `
-                    <h3>Изучаем G-код на практике</h3>
-                    <p>Ниже представлен интерактивный симулятор станка с ЧПУ. Ваша задача — написать команды для фрезеровки детали. 
-                    Справа отображается целевая фигура (пунктиром) и траектория инструмента.</p>
-                    <p>Напишите программу, нажмите «Запустить» и посмотрите, совпадает ли ваш код с чертежом. За успешное прохождение уровня вы получите достижение!</p>
-                    <div style="margin-top: 20px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                        <iframe src="./gcode_trainer_advanced.html" style="width: 100%; height: 850px; border: none; background: #0a0e14; display: block;"></iframe>
-                    </div>
-                `
-            }
-        ],
-        practicals: [],
-        selfWork: [],
-        test: []
-    };
-
-    // Вставляем в начало раздела
-    targetSection.topics.unshift(trainerTopic);
 })();
