@@ -8,11 +8,14 @@ const Reports = {
   filteredResults: [],
 
   async init() {
-    const session = loadSession();
-    if (!session || session.role !== 'teacher') {
-      alert('Доступ только для преподавателей');
-      showScreen('main-screen');
-      return;
+    // Безопасная проверка сессии (на случай, если loadSession не определена)
+    if (typeof loadSession === 'function') {
+      const session = loadSession();
+      if (!session || session.role !== 'teacher') {
+        alert('Доступ только для преподавателей');
+        if (typeof showScreen === 'function') showScreen('main-screen');
+        return;
+      }
     }
 
     this.bindEvents();
@@ -43,18 +46,31 @@ const Reports = {
     const tbody = document.getElementById('reports-tbody');
     const statusEl = document.getElementById('reports-status');
 
-    if (tbody) tbody.innerHTML = '<tr><td colspan="7">Загрузка...</td></tr>';
+    if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Загрузка...</td></tr>';
     if (statusEl) statusEl.textContent = 'Загрузка данных...';
+    if (statusEl) statusEl.style.color = 'inherit'; // Сброс цвета ошибки, если была
 
     try {
-      const response = await API.safeFetch(API.BASE_URL, {
+      // Защита от зависания: если сервер не ответит за 15 секунд, выбросится ошибка
+      const fetchPromise = API.safeFetch(API.BASE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ action: 'get_results' })
       });
 
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Превышено время ожидания ответа от сервера (15 сек). Проверьте интернет.')), 15000)
+      );
+
+      let response = await Promise.race([fetchPromise, timeoutPromise]);
+
+      // Если API.safeFetch вернул объект Response (а не JSON), парсим его
+      if (response && typeof response.json === 'function') {
+        response = await response.json();
+      }
+
       if (!response || !response.success) {
-        throw new Error(response?.error || 'Не удалось загрузить результаты');
+        throw new Error(response?.error || 'Не удалось загрузить результаты (сервер вернул ошибку)');
       }
 
       this.results = response.results || [];
@@ -65,11 +81,14 @@ const Reports = {
         statusEl.textContent = `Всего записей: ${this.results.length}`;
       }
     } catch (err) {
-      console.error(err);
+      console.error('[Reports] Ошибка загрузки:', err);
       if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="7" class="error-cell">Ошибка: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="error-cell" style="color: red; text-align: center; padding: 10px;">Ошибка: ${err.message}</td></tr>`;
       }
-      if (statusEl) statusEl.textContent = 'Ошибка загрузки';
+      if (statusEl) {
+        statusEl.textContent = 'Ошибка загрузки';
+        statusEl.style.color = 'red';
+      }
     }
   },
 
@@ -121,7 +140,7 @@ const Reports = {
     if (!tbody) return;
 
     if (this.filteredResults.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7">Нет данных</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Нет данных</td></tr>';
       return;
     }
 
