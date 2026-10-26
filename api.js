@@ -1,6 +1,6 @@
 const API = {
-  // Ссылка на ваше развернутое веб-приложение Google Apps Script
-  BASE_URL: 'https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec',
+  // ВСТАВЬТЕ СЮДА ВАШ НОВЫЙ URL ИЗ GOOGLE APPS SCRIPT (который заканчивается на /exec)
+  BASE_URL: 'https://script.google.com/macros/s/ВАШ_НОВЫЙ_ID/exec',
 
   async safeFetch(url, options = {}, timeoutMs = 15000) {
     const controller = new AbortController();
@@ -28,15 +28,14 @@ const API = {
       clearTimeout(timeoutId);
       const isNetworkError = err.name === 'TypeError' || err.message.includes('Failed to fetch');
       if (isNetworkError) {
-        if (typeof window.showToast === 'function') window.showToast('Ой! Пропал интернет.', 'err');
-        throw new Error('Нет соединения с сервером.');
+        if (typeof window.showToast === 'function') window.showToast('Ошибка сети. Проверьте интернет.', 'err');
+        throw new Error('Нет соединения с сервером или доступ к нему заблокирован.');
       }
       if (err.name === 'AbortError') throw new Error('Сервер долго не отвечает.');
       throw err;
     }
   },
 
-  // Общий метод для отправки POST-запросов
   async post(action, payload = {}) {
     return this.safeFetch(this.BASE_URL, {
       method: 'POST',
@@ -64,7 +63,8 @@ const API = {
   },
 
   async changePassword(email, oldPass, newPass) {
-    const result = await this.post('changePassword', { email, oldPass, newPass });
+    // ИСПРАВЛЕНО: отправляем oldPassword и newPassword, как ждет Code.gs
+    const result = await this.post('changePassword', { email, oldPassword: oldPass, newPassword: newPass });
     if (!result || !result.success) throw new Error(result?.error || 'Ошибка смены пароля');
     return result;
   },
@@ -81,8 +81,10 @@ const API = {
     return result;
   },
 
-  async saveStudent(key, name, group, payload) {
-    const result = await this.post('saveStudent', { key, name, group, payload });
+  // ИСПРАВЛЕНО: saveStudent в Code.gs ожидает email, а не key. 
+  // Но если у вас где-то вызывается API.saveStudent(key, ...), возможно, вам нужно адаптировать Code.gs.
+  async saveStudent(email, name, group, payload) {
+    const result = await this.post('saveStudent', { email, name, group, role: payload?.role, password: payload?.password });
     if (!result || !result.success) throw new Error(result?.error || 'Ошибка сохранения данных студента');
     return result;
   },
