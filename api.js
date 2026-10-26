@@ -1,6 +1,6 @@
 const API = {
-  // ВСТАВЬТЕ СЮДА ВАШ НОВЫЙ URL ИЗ GOOGLE APPS SCRIPT (который заканчивается на /exec)
-  BASE_URL: 'https://script.google.com/macros/s/ВАШ_НОВЫЙ_ID/exec',
+  // ВСТАВЛЕН ВАШ РАБОЧИЙ URL
+  BASE_URL: 'https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec',
 
   async safeFetch(url, options = {}, timeoutMs = 15000) {
     const controller = new AbortController();
@@ -63,7 +63,6 @@ const API = {
   },
 
   async changePassword(email, oldPass, newPass) {
-    // ИСПРАВЛЕНО: отправляем oldPassword и newPassword, как ждет Code.gs
     const result = await this.post('changePassword', { email, oldPassword: oldPass, newPassword: newPass });
     if (!result || !result.success) throw new Error(result?.error || 'Ошибка смены пароля');
     return result;
@@ -81,8 +80,6 @@ const API = {
     return result;
   },
 
-  // ИСПРАВЛЕНО: saveStudent в Code.gs ожидает email, а не key. 
-  // Но если у вас где-то вызывается API.saveStudent(key, ...), возможно, вам нужно адаптировать Code.gs.
   async saveStudent(email, name, group, payload) {
     const result = await this.post('saveStudent', { email, name, group, role: payload?.role, password: payload?.password });
     if (!result || !result.success) throw new Error(result?.error || 'Ошибка сохранения данных студента');
