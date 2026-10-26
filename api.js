@@ -1,6 +1,6 @@
 const API = {
   // ВСТАВЬТЕ СЮДА ВАШ НОВЫЙ URL ИЗ GOOGLE APPS SCRIPT (который заканчивается на /exec)
-  BASE_URL: 'https://script.google.com/macros/s/ВАШ_НОВЫЙ_ID/exec',
+  BASE_URL: 'https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec',
 
   async safeFetch(url, options = {}, timeoutMs = 15000) {
     const controller = new AbortController();
