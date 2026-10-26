@@ -1,55 +1,164 @@
-"use strict";
+/**
+ * api.js — слой работы с Google Apps Script
+ */
 
-var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec";
+const API = {
+  // URL Web App (замените на свой)
+  BASE_URL: 'https://script.google.com/macros/s/ВАШ_DEPLOYMENT_ID/exec',
 
-async function fetchAPI(action, params = {}, method = "GET") {
-    if (APPS_SCRIPT_URL.includes("ВАША_НОВАЯ_ССЫЛКА")) {
-        alert("Ошибка: В файле api.js не указана ссылка на Google Apps Script!");
-        return { ok: false, error: "URL not configured" };
-    }
-
-    const url = new URL(APPS_SCRIPT_URL);
-    url.searchParams.append("action", action);
-    url.searchParams.append("t", Date.now());
-    
-    for (const key in params) {
-        if (params[key] !== undefined && params[key] !== null) {
-            url.searchParams.append(key, params[key]);
-        }
-    }
-    
+  /**
+   * Безопасный fetch (обработка CORS, таймаута, ошибок сети)
+   */
+  async safeFetch(url, options = {}, timeoutMs = 15000) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000);
-    
-    try {
-        const options = { signal: controller.signal, cache: "no-store" };
-        if (method === "POST") {
-            options.method = "POST";
-            options.body = url.searchParams;
-        }
-        const response = await fetch(url.toString(), options);
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
-        
-        const data = await response.json();
-        return data;
-    } catch (err) {
-        clearTimeout(timeoutId);
-        console.error(`API Error [${action}]:`, err);
-        throw err;
-    }
-}
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-window.API = {
-    login: (user, pass) => fetchAPI("login", { username: user, password: pass }),
-    getStudents: () => fetchAPI("getstudents"),
-    getStudentData: (key) => fetchAPI("getstudentdata", { key: key }),
-    saveStudent: (key, name, group, payload) => fetchAPI("save", { key, name, group, payload }, "POST"),
-    grantXP: (key, amount) => fetchAPI("grantXP", { key, amount }, "POST"),
-    deleteStudent: (key) => fetchAPI("deleteStudent", { key: key }, "POST"),
-    getChat: (group) => fetchAPI("chatload", { group }),
-    sendChat: (group, key, name, text) => fetchAPI("chatsave", { group, key, name, text }, "POST"),
-    getSchedule: () => fetchAPI("getschedule"),
-    saveSchedule: (data) => fetchAPI("saveschedule", { data: JSON.stringify(data) }, "POST")
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        mode: 'cors',
+        credentials: 'omit',
+        redirect: 'follow'
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const contentType = response.headers.get('content-type') || '';
+      let data;
+
+      if (contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = { raw: text };
+        }
+      }
+
+      if (data && data.error) {
+        throw new Error(data.error);
+      }
+
+      return data;
+    } catch (err) {
+      clearTimeout(timeoutId);
+
+      if (err.name === 'AbortError') {
+        throw new Error('Превышено время ожидания ответа от сервера');
+      }
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        throw new Error('Нет соединения с сервером. Проверьте интернет.');
+      }
+      throw err;
+    }
+  },
+
+  /**
+   * Вход по Email + Пароль
+   * @param {string} email
+   * @param {string} password
+   * @returns {Promise<object>}
+   */
+  async login(email, password) {
+    const normalizedEmail = String(email || '').trim().toLowerCase();
+
+    if (!normalizedEmail || !password) {
+      throw new Error('Укажите email и пароль');
+    }
+
+    const result = await this.safeFetch(this.BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        action: 'login',
+        email: normalizedEmail,
+        password: password
+      })
+    });
+
+    if (!result || !result.success) {
+      throw new Error(result?.error || result?.message || 'Ошибка входа');
+    }
+
+    return {
+      email: result.email,
+      name: result.name || result.email,
+      group: result.group || '',
+      role: result.role || 'student'
+    };
+  },
+
+  /**
+   * Сохранение / обновление студента (по email)
+   * Если email уже есть — обновляет запись, а не создаёт дубликат
+   * @param {object} studentData { email, password?, name?, group?, role? }
+   */
+  async saveStudent(studentData) {
+    const email = String(studentData.email || '').trim().toLowerCase();
+    if (!email) {
+      throw new Error('Email обязателен');
+    }
+
+    const payload = {
+      action: 'save_student',
+      email: email,
+      name: studentData.name || '',
+      group: studentData.group || '',
+      role: studentData.role || 'student'
+    };
+
+    if (studentData.password) {
+      payload.password = studentData.password;
+    }
+
+    const result = await this.safeFetch(this.BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!result || !result.success) {
+      throw new Error(result?.error || 'Не удалось сохранить данные студента');
+    }
+
+    return result;
+  },
+
+  /**
+   * Получение данных студента по email
+   */
+  async getStudent(email) {
+    const normalizedEmail = String(email || '').trim().toLowerCase();
+    if (!normalizedEmail) {
+      throw new Error('Email обязателен');
+    }
+
+    const result = await this.safeFetch(this.BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        action: 'get_student',
+        email: normalizedEmail
+      })
+    });
+
+    if (!result || !result.success) {
+      throw new Error(result?.error || 'Студент не найден');
+    }
+
+    return result;
+  }
 };
