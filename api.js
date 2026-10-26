@@ -1,13 +1,14 @@
 /**
  * api.js — слой работы с Google Apps Script
+ * Обработка сетевых ошибок + toast
  */
 
 const API = {
-  // URL Web App (замените на свой)
+  // Замените на URL вашего Web App
   BASE_URL: 'https://script.google.com/macros/s/ВАШ_DEPLOYMENT_ID/exec',
 
   /**
-   * Безопасный fetch (обработка CORS, таймаута, ошибок сети)
+   * Безопасный fetch: CORS, таймаут, сетевые ошибки
    */
   async safeFetch(url, options = {}, timeoutMs = 15000) {
     const controller = new AbortController();
@@ -50,21 +51,33 @@ const API = {
     } catch (err) {
       clearTimeout(timeoutId);
 
-      if (err.name === 'AbortError') {
-        throw new Error('Превышено время ожидания ответа от сервера');
-      }
-      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+      const isNetworkError =
+        err.name === 'TypeError' ||
+        err.message.includes('Failed to fetch') ||
+        err.message.includes('NetworkError') ||
+        err.message.includes('Network request failed') ||
+        err.message.includes('Load failed');
+
+      if (isNetworkError) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Ой! Пропал интернет. Проверьте соединение и попробуйте снова', 'err');
+        }
         throw new Error('Нет соединения с сервером. Проверьте интернет.');
       }
+
+      if (err.name === 'AbortError') {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Сервер долго не отвечает. Попробуйте ещё раз', 'err');
+        }
+        throw new Error('Превышено время ожидания ответа от сервера');
+      }
+
       throw err;
     }
   },
 
   /**
    * Вход по Email + Пароль
-   * @param {string} email
-   * @param {string} password
-   * @returns {Promise<object>}
    */
   async login(email, password) {
     const normalizedEmail = String(email || '').trim().toLowerCase();
@@ -98,9 +111,7 @@ const API = {
   },
 
   /**
-   * Сохранение / обновление студента (по email)
-   * Если email уже есть — обновляет запись, а не создаёт дубликат
-   * @param {object} studentData { email, password?, name?, group?, role? }
+   * Сохранение / обновление студента
    */
   async saveStudent(studentData) {
     const email = String(studentData.email || '').trim().toLowerCase();
@@ -136,7 +147,7 @@ const API = {
   },
 
   /**
-   * Получение данных студента по email
+   * Получение данных студента
    */
   async getStudent(email) {
     const normalizedEmail = String(email || '').trim().toLowerCase();

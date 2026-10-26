@@ -9,12 +9,13 @@
   <meta name="apple-mobile-web-app-title" content="Учебный портал" />
   <meta name="description" content="Учебный портал для студентов технических специальностей СПО" />
 
+  <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192.png" />
 
   <title>Учебный портал СПО</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div id="app">
@@ -71,6 +72,9 @@
         </div>
         <div class="header-right">
           <span id="user-name" class="user-name"></span>
+          <button id="open-reports-btn" class="btn btn-outline" data-role="teacher" style="display:none;">
+            Отчёты
+          </button>
           <button id="logout-btn" class="btn btn-outline">Выйти</button>
         </div>
       </header>
@@ -79,14 +83,82 @@
         <div id="dashboard">
           <h2>Добро пожаловать!</h2>
           <p id="welcome-text"></p>
-          <!-- Здесь будут курсы, тесты и т.д. -->
+          <div id="courses-list" class="courses-list">
+            <!-- Здесь будут карточки курсов / тестов -->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Экран прохождения теста -->
+    <div id="test-screen" class="screen">
+      <div id="test-container" class="test-container">
+        <!-- Содержимое теста рендерится из app.js -->
+      </div>
+    </div>
+
+    <!-- Экран результата теста -->
+    <div id="test-result-screen" class="screen">
+      <div id="test-result-container" class="test-result-container">
+        <!-- Результат рендерится из app.js -->
+      </div>
+    </div>
+
+    <!-- Экран отчётов (преподаватель) -->
+    <div id="reports-screen" class="screen">
+      <header class="header">
+        <div class="header-left">
+          <h1 class="logo">Отчёты</h1>
+        </div>
+        <div class="header-right">
+          <button id="reports-refresh-btn" class="btn btn-outline">Обновить</button>
+          <button id="reports-export-btn" class="btn btn-primary">Выгрузить в Excel (CSV)</button>
+          <button id="back-to-main-from-reports" class="btn btn-outline">Назад</button>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="reports-filters">
+          <label>
+            Группа:
+            <select id="filter-group">
+              <option value="">Все группы</option>
+            </select>
+          </label>
+          <label>
+            Тест:
+            <select id="filter-test">
+              <option value="">Все тесты</option>
+            </select>
+          </label>
+          <span id="reports-status" class="reports-status"></span>
+        </div>
+
+        <div class="table-wrap">
+          <table id="reports-table" class="reports-table">
+            <thead>
+              <tr>
+                <th>ФИО</th>
+                <th>Группа</th>
+                <th>Тест</th>
+                <th>Оценка</th>
+                <th>Время</th>
+                <th>Попытки</th>
+                <th>Дата</th>
+              </tr>
+            </thead>
+            <tbody id="reports-tbody">
+              <tr><td colspan="7">Загрузка...</td></tr>
+            </tbody>
+          </table>
         </div>
       </main>
     </div>
   </div>
 
-  <!-- Порядок важен: сначала api.js, потом app.js -->
+  <!-- Порядок важен -->
   <script src="/api.js" defer></script>
   <script src="/app.js" defer></script>
+  <script src="/reports.js" defer></script>
 </body>
 </html>

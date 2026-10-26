@@ -1,12 +1,14 @@
 // service-worker.js
 // Базовое кэширование статики для оффлайн-режима Учебного портала
 
-const CACHE_NAME = 'portal-cache-v1';
+const CACHE_NAME = 'portal-cache-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/app.js',
-  '/styles.css',
+  '/api.js',
+  '/reports.js',
+  '/style.css',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png'
@@ -40,16 +42,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Перехват запросов — стратегия Cache First для статики
+// Перехват запросов — Cache First для статики
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
   // Не кэшируем запросы к Google Apps Script и внешним API
-  if (url.hostname.includes('script.google.com') ||
-      url.hostname.includes('googleusercontent.com') ||
-      request.method !== 'GET') {
-    return; // пропускаем — пусть идёт в сеть
+  if (
+    url.hostname.includes('script.google.com') ||
+    url.hostname.includes('googleusercontent.com') ||
+    request.method !== 'GET'
+  ) {
+    return;
   }
 
   event.respondWith(
@@ -60,9 +64,11 @@ self.addEventListener('fetch', (event) => {
 
       return fetch(request)
         .then((networkResponse) => {
-          // Кэшируем только успешные ответы от нашего origin
-          if (networkResponse && networkResponse.status === 200 &&
-              url.origin === self.location.origin) {
+          if (
+            networkResponse &&
+            networkResponse.status === 200 &&
+            url.origin === self.location.origin
+          ) {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(request, responseToCache);
@@ -71,7 +77,6 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // Оффлайн-фолбэк для главной страницы
           if (request.mode === 'navigate') {
             return caches.match('/index.html');
           }

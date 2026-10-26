@@ -1,162 +1,238 @@
-"use strict";
+/**
+ * reports.js — кабинет преподавателя: отчёты и выгрузка CSV
+ * Vanilla JS, ES6+
+ */
 
-window.renderCourseReportsPage = function() {
-  var app = document.getElementById("app"); 
-  if (!app) return; app.innerHTML = ""; 
-  document.getElementById("crumbs").textContent = "Отчеты по курсам";
-  app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
+const Reports = {
+  results: [],
+  filteredResults: [],
 
-  if (!window.state.staff) { 
-      app.innerHTML += '<div class="module" style="color:var(--err); padding:40px; text-align:center;">⛔ Доступ только для преподавателя.</div>'; 
-      return; 
-  }
+  async init() {
+    const session = loadSession();
+    if (!session || session.role !== 'teacher') {
+      alert('Доступ только для преподавателей');
+      showScreen('main-screen');
+      return;
+    }
 
-  var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px;">
-    <button class="btn tab active" id="tab-students" onclick="window.switchReportTab('students')">👨‍🎓 Студенты (БД)</button>
-    <button class="btn tab ghost" id="tab-written" onclick="window.switchReportTab('written')">✍️ Письменные задания</button>
-  </div>
-  <div id="reportsContent"></div>`;
-  app.innerHTML += tabsHtml;
+    this.bindEvents();
+    await this.loadResults();
+  },
 
-  window.switchReportTab = function(tabName) {
-    document.querySelectorAll(".tab").forEach(btn => { btn.classList.remove("active"); btn.classList.add("ghost"); });
-    document.getElementById(`tab-${tabName}`).classList.add("active");
-    document.getElementById(`tab-${tabName}`).classList.remove("ghost");
-    if (tabName === 'students') renderStudentsTable();
-    else renderWrittenTable();
-  };
+  bindEvents() {
+    const refreshBtn = document.getElementById('reports-refresh-btn');
+    const exportBtn = document.getElementById('reports-export-btn');
+    const filterGroup = document.getElementById('filter-group');
+    const filterTest = document.getElementById('filter-test');
 
-  function renderStudentsTable() {
-      var contentWrap = document.getElementById("reportsContent");
-      contentWrap.innerHTML = '<div class="skeleton" style="height:200px;"></div>';
-      
-      window.API.getStudents().then(d => {
-          contentWrap.innerHTML = "";
-          if (!d || !d.ok || !d.students || !d.students.length) { contentWrap.innerHTML = "<div class='module'>Нет студентов.</div>"; return; }
-          
-          var table = document.createElement("table"); 
-          table.className = "journal-table"; 
-          table.style = "width:100%; border-collapse:collapse; text-align:left; font-size:14px;";
-          table.innerHTML = `<thead><tr style="background:var(--card-soft);">
-              <th style="padding:10px; border:1px solid var(--border);">Студент</th>
-              <th style="padding:10px; border:1px solid var(--border); text-align:center;">XP</th>
-              <th style="padding:10px; border:1px solid var(--border); text-align:center;">Сдано (Авто)</th>
-              <th style="padding:10px; border:1px solid var(--border); text-align:center;">Действия</th>
-          </tr></thead>`;
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => this.loadResults());
+    }
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => this.exportToCSV());
+    }
+    if (filterGroup) {
+      filterGroup.addEventListener('change', () => this.applyFilters());
+    }
+    if (filterTest) {
+      filterTest.addEventListener('change', () => this.applyFilters());
+    }
+  },
 
-          var tbody = document.createElement("tbody");
-          d.students.forEach((s) => {
-              var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
-              var xp = p.xp || 0; 
-              var results = p.results || {};
-              var sKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
-              var passedWorks = Object.keys(results).length;
+  async loadResults() {
+    const tbody = document.getElementById('reports-tbody');
+    const statusEl = document.getElementById('reports-status');
 
-              var tr = document.createElement("tr"); tr.style = "border-bottom:1px solid var(--border);";
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border);"><b>${window.escapeHtml(s.name)}</b><br><span style="font-size:12px; color:var(--muted);">гр. ${window.escapeHtml(s.group)}</span></td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;"><span style="color:var(--gold); font-weight:bold;">${xp}</span></td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;"><span style="color:var(--ok); font-weight:bold;">${passedWorks}</span></td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;">
-                  <button class="btn" style="padding:4px 8px; font-size:12px; background:var(--gold); color:#000;" onclick="window.grantXP('${sKey}', false)">+ XP</button>
-                  <button class="btn ghost" style="padding:4px 8px; font-size:12px; border-color:var(--err); color:var(--err);" onclick="window.grantXP('${sKey}', true)">- XP</button>
-              </td>`;
-              tbody.appendChild(tr);
-          });
-          table.appendChild(tbody); 
-          var wrap = document.createElement("div"); wrap.className = "module"; wrap.style = "overflow-x:auto;"; wrap.appendChild(table); contentWrap.appendChild(wrap);
+    if (tbody) tbody.innerHTML = '<tr><td colspan="7">Загрузка...</td></tr>';
+    if (statusEl) statusEl.textContent = 'Загрузка данных...';
+
+    try {
+      const response = await API.safeFetch(API.BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'get_results' })
       });
-  }
 
-  function renderWrittenTable() {
-      var contentWrap = document.getElementById("reportsContent");
-      contentWrap.innerHTML = '<div class="skeleton" style="height:200px;"></div>';
-      
-      window.API.getStudents().then(d => {
-          contentWrap.innerHTML = "";
-          if (!d || !d.ok || !d.students) { contentWrap.innerHTML = "<div class='module'>Ошибка загрузки данных.</div>"; return; }
-          
-          var allSubs = [];
-          d.students.forEach(s => {
-              var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e){}
-              if (p.examSubmissions && p.examSubmissions.length > 0) {
-                  p.examSubmissions.forEach((sub, idx) => {
-                      allSubs.push({
-                          ...sub,
-                          studentName: s.name,
-                          studentGroup: s.group,
-                          sKey: s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase(),
-                          subIndex: idx
-                      });
-                  });
-              }
-          });
+      if (!response || !response.success) {
+        throw new Error(response?.error || 'Не удалось загрузить результаты');
+      }
 
-          if (allSubs.length === 0) { contentWrap.innerHTML = "<div class='module'>Письменных работ пока нет.</div>"; return; }
-          
-          var table = document.createElement("table"); table.className = "journal-table"; table.style = "width:100%; border-collapse:collapse; font-size:14px;";
-          table.innerHTML = `<thead><tr style="background:var(--card-soft);">
-              <th>Студент</th>
-              <th>МДК</th>
-              <th>Задание 1</th>
-              <th>Задание 2</th>
-              <th>Тест</th>
-              <th>Оценка препода (0-10)</th>
-              <th>Итог</th>
-          </tr></thead>`;
-          var tbody = document.createElement("tbody");
-          
-          allSubs.forEach((sub) => {
-              var tr = document.createElement("tr"); tr.style = "border-bottom:1px solid var(--border);";
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border);"><b>${window.escapeHtml(sub.studentName)}</b><br><span style="font-size:12px; color:var(--muted);">${window.escapeHtml(sub.studentGroup)}</span></td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border);">${sub.courseId || '—'}</td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); font-size:12px; max-width:200px;">${window.escapeHtml(sub.written1 || 'Пусто')}</td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); font-size:12px; max-width:200px;">${window.escapeHtml(sub.written2 || 'Пусто')}</td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;">${sub.testScore}/${sub.maxTest}</td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center;">
-                  <input type="number" min="0" max="10" value="${sub.teacherGrade !== null && sub.teacherGrade !== undefined ? sub.teacherGrade : ''}" placeholder="0-10" style="width:60px; padding:5px; border-radius:4px; border:1px solid var(--border); background:var(--bg); color:var(--text);" onchange="window.gradeWritten('${sub.sKey}', ${sub.subIndex}, this.value)">
-              </td>`;
-              tr.innerHTML += `<td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:var(--gold);">${sub.finalGrade || '—'}</td>`;
-              tbody.appendChild(tr);
-          });
-          table.appendChild(tbody);
-          var wrap = document.createElement("div"); wrap.className = "module"; wrap.style = "overflow-x:auto;"; wrap.appendChild(table); contentWrap.appendChild(wrap);
+      this.results = response.results || [];
+      this.populateFilters();
+      this.applyFilters();
+
+      if (statusEl) {
+        statusEl.textContent = `Всего записей: ${this.results.length}`;
+      }
+    } catch (err) {
+      console.error(err);
+      if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="7" class="error-cell">Ошибка: ${err.message}</td></tr>`;
+      }
+      if (statusEl) statusEl.textContent = 'Ошибка загрузки';
+    }
+  },
+
+  populateFilters() {
+    const groupSelect = document.getElementById('filter-group');
+    const testSelect = document.getElementById('filter-test');
+    if (!groupSelect || !testSelect) return;
+
+    const groups = [...new Set(this.results.map((r) => r.group || '').filter(Boolean))].sort();
+    groupSelect.innerHTML = '<option value="">Все группы</option>';
+    groups.forEach((g) => {
+      const opt = document.createElement('option');
+      opt.value = g;
+      opt.textContent = g;
+      groupSelect.appendChild(opt);
+    });
+
+    const testsMap = new Map();
+    this.results.forEach((r) => {
+      if (r.testId) testsMap.set(r.testId, r.testTitle || r.testId);
+    });
+
+    testSelect.innerHTML = '<option value="">Все тесты</option>';
+    [...testsMap.entries()]
+      .sort((a, b) => a[1].localeCompare(b[1]))
+      .forEach(([id, title]) => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = title;
+        testSelect.appendChild(opt);
       });
-  }
+  },
 
-  window.gradeWritten = function(sKey, subIdx, val) {
-      var amount = parseInt(val);
-      if (isNaN(amount)) amount = 0;
-      
-      window.API.getStudentData(sKey).then(res => {
-          if (!res || !res.ok) return window.showToast("Ошибка данных студента", "err");
-          var p = {}; try { p = JSON.parse(res.payload || "{}"); } catch(e){}
-          if (!p.examSubmissions || !p.examSubmissions[subIdx]) return;
-          
-          var sub = p.examSubmissions[subIdx];
-          sub.teacherGrade = amount;
-          
-          // Пересчет итоговой оценки
-          var testGrade = sub.testScore >= 27 ? 5 : sub.testScore >= 22 ? 4 : sub.testScore >= 18 ? 3 : 2; 
-          var writtenGrade = amount >= 8 ? 5 : amount >= 6 ? 4 : amount >= 4 ? 3 : 2;
-          var finalGrade = Math.round((testGrade + writtenGrade) / 2);
-          
-          if (!p.results) p.results = {};
-          p.results["__final__" + sub.courseId] = { grade: finalGrade, total: sub.testScore, max: sub.maxTest };
-          sub.finalGrade = finalGrade;
-          
-          window.API.saveStudent(sKey, sKey.split("|")[0], sKey.split("|")[1], JSON.stringify(p)).then(() => {
-              window.showToast("Оценка сохранена! Итог: " + finalGrade, "ok");
-              renderWrittenTable();
-          });
+  applyFilters() {
+    const groupVal = (document.getElementById('filter-group')?.value || '').trim();
+    const testVal = (document.getElementById('filter-test')?.value || '').trim();
+
+    this.filteredResults = this.results.filter((r) => {
+      if (groupVal && String(r.group || '') !== groupVal) return false;
+      if (testVal && String(r.testId || '') !== testVal) return false;
+      return true;
+    });
+
+    this.renderTable();
+  },
+
+  renderTable() {
+    const tbody = document.getElementById('reports-tbody');
+    if (!tbody) return;
+
+    if (this.filteredResults.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7">Нет данных</td></tr>';
+      return;
+    }
+
+    const rows = this.filteredResults
+      .map((r) => {
+        const timeStr = this.formatTime(r.timeSpent);
+        const dateStr = this.formatDate(r.finishedAt);
+        return `
+          <tr>
+            <td>${this.escapeHtml(r.name || r.email || '—')}</td>
+            <td>${this.escapeHtml(r.group || '—')}</td>
+            <td>${this.escapeHtml(r.testTitle || r.testId || '—')}</td>
+            <td class="grade-cell grade-${r.grade}">${r.grade}</td>
+            <td>${timeStr}</td>
+            <td>${r.attempts || 1}</td>
+            <td>${dateStr}</td>
+          </tr>
+        `;
+      })
+      .join('');
+
+    tbody.innerHTML = rows;
+  },
+
+  formatTime(seconds) {
+    const sec = Math.max(0, Number(seconds) || 0);
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = sec % 60;
+    if (h > 0) {
+      return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+    return `${m}:${String(s).padStart(2, '0')}`;
+  },
+
+  formatDate(iso) {
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
       });
-  };
+    } catch {
+      return String(iso);
+    }
+  },
 
-  window.grantXP = function(sKey, isSubtract) {
-      var amount = parseInt(prompt("Сколько XP?", "50"));
-      if (isNaN(amount)) return;
-      if (isSubtract) amount = -amount;
-      window.API.grantXP(sKey, amount).then(res => { if(res.ok) { window.showToast("XP изменен", "ok"); renderStudentsTable(); } });
-  };
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  },
 
-  renderStudentsTable();
+  /**
+   * Выгрузка CSV: ФИО, Группа, Тест, Оценка, Время, Попытки
+   */
+  exportToCSV() {
+    const data = this.filteredResults.length > 0 ? this.filteredResults : this.results;
+
+    if (!data || data.length === 0) {
+      alert('Нет данных для выгрузки');
+      return;
+    }
+
+    const headers = ['ФИО', 'Группа', 'Тест', 'Оценка', 'Время', 'Попытки'];
+    const rows = data.map((r) => {
+      const timeStr = this.formatTime(r.timeSpent);
+      return [
+        this.csvEscape(r.name || r.email || ''),
+        this.csvEscape(r.group || ''),
+        this.csvEscape(r.testTitle || r.testId || ''),
+        r.grade,
+        timeStr,
+        r.attempts || 1
+      ].join(';');
+    });
+
+    const bom = '\uFEFF';
+    const csvContent = bom + headers.join(';') + '\n' + rows.join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    const now = new Date();
+    const fileName = `отчёт_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.csv`;
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', fileName);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  },
+
+  csvEscape(value) {
+    const str = String(value ?? '');
+    if (str.includes(';') || str.includes('"') || str.includes('\n')) {
+      return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+  }
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('reports-table')) {
+    // Инициализация происходит по кнопке «Отчёты»
+  }
+});
