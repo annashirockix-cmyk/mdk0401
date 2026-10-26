@@ -4,7 +4,7 @@
  */
 
 const API = {
-  // Замените на URL вашего Web App
+  // ⚠️ ЗАМЕНИТЕ НА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (которая заканчивается на /exec)
   BASE_URL: 'https://script.google.com/macros/s/ВАШ_DEPLOYMENT_ID/exec',
 
   /**
@@ -60,7 +60,7 @@ const API = {
 
       if (isNetworkError) {
         if (typeof window.showToast === 'function') {
-          window.showToast('Ой! Пропал интернет. Проверьте соединение и попробуйте снова', 'err');
+          window.showToast('Ой! Пропал интернет или сервер недоступен.', 'err');
         }
         throw new Error('Нет соединения с сервером. Проверьте интернет.');
       }
@@ -108,6 +108,36 @@ const API = {
       group: result.group || '',
       role: result.role || 'student'
     };
+  },
+
+  /**
+   * Регистрация нового пользователя
+   */
+  async register(email, password, name, group) {
+    const normalizedEmail = String(email || '').trim().toLowerCase();
+    if (!normalizedEmail || !password || !name) {
+      throw new Error('Заполните имя, email и пароль');
+    }
+
+    const result = await this.safeFetch(this.BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        action: 'register', // Отправляем action: register
+        email: normalizedEmail,
+        password: password,
+        name: name,
+        group: group || ''
+      })
+    });
+
+    if (!result || !result.success) {
+      throw new Error(result?.error || result?.message || 'Ошибка регистрации');
+    }
+
+    return result;
   },
 
   /**

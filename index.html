@@ -29,36 +29,73 @@
     <div id="auth-screen" class="screen">
       <div class="auth-card">
         <h1>Учебный портал</h1>
-        <p class="subtitle">Вход для студентов и преподавателей</p>
+        
+        <!-- Форма входа -->
+        <div id="login-container">
+            <p class="subtitle">Вход для студентов и преподавателей</p>
+            <form id="login-form" autocomplete="on">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  autocomplete="username"
+                  required
+                  placeholder="student@example.com"
+                  inputmode="email"
+                />
+              </div>
+              <div class="form-group">
+                <label for="password">Пароль</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  autocomplete="current-password"
+                  required
+                  placeholder="••••••••"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary" id="login-btn">
+                Войти
+              </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="#" id="show-register" style="color: #1e40af; text-decoration: none; font-weight: 500;">Нет аккаунта? Зарегистрироваться</a>
+            </div>
+        </div>
 
-        <form id="login-form" autocomplete="on">
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              autocomplete="username"
-              required
-              placeholder="student@example.com"
-              inputmode="email"
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">Пароль</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              autocomplete="current-password"
-              required
-              placeholder="••••••••"
-            />
-          </div>
-          <button type="submit" class="btn btn-primary" id="login-btn">
-            Войти
-          </button>
-        </form>
+        <!-- Форма регистрации (скрыта по умолчанию) -->
+        <div id="register-container" style="display: none;">
+            <p class="subtitle">Создание нового аккаунта</p>
+            <form id="register-form">
+              <div class="form-group">
+                <label for="reg-name">Фамилия и Имя</label>
+                <input type="text" id="reg-name" placeholder="Иванов Иван" required />
+              </div>
+              <div class="form-group">
+                <label for="reg-group">Группа</label>
+                <input type="text" id="reg-group" placeholder="ТМ-4" required />
+              </div>
+              <div class="form-group">
+                <label for="reg-email">Email</label>
+                <input type="email" id="reg-email" placeholder="student@example.com" required />
+              </div>
+              <div class="form-group">
+                <label for="reg-password">Пароль</label>
+                <input type="password" id="reg-password" placeholder="Придумайте пароль" required />
+              </div>
+              <button type="submit" class="btn btn-primary" id="register-btn">
+                Создать аккаунт
+              </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="#" id="show-login" style="color: #1e40af; text-decoration: none; font-weight: 500;">Уже есть аккаунт? Войти</a>
+            </div>
+        </div>
 
         <p id="auth-error" class="error-message" hidden></p>
       </div>

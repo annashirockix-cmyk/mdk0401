@@ -55,9 +55,6 @@ function hideError(elementId) {
   if (el) el.hidden = true;
 }
 
-/**
- * Toast-уведомление
- */
 window.showToast = function (message, type = 'info') {
   const old = document.getElementById('portal-toast');
   if (old) old.remove();
@@ -114,79 +111,6 @@ function clearSession() {
   currentUser = null;
 }
 
-// ====================== ПРОГРЕСС ТЕСТА ======================
-
-function saveTestProgress() {
-  if (!currentUser || !currentTestId) return;
-
-  const key = CONFIG.STORAGE_TEST_PROGRESS;
-  let allProgress = {};
-
-  try {
-    const raw = localStorage.getItem(key);
-    if (raw) allProgress = JSON.parse(raw);
-  } catch {
-    allProgress = {};
-  }
-
-  const userKey = normalizeEmail(currentUser.email);
-  if (!allProgress[userKey]) allProgress[userKey] = {};
-
-  allProgress[userKey][currentTestId] = {
-    answers: { ...testAnswers },
-    savedAt: Date.now()
-  };
-
-  localStorage.setItem(key, JSON.stringify(allProgress));
-}
-
-function loadTestProgress(testId) {
-  if (!currentUser) return null;
-  try {
-    const raw = localStorage.getItem(CONFIG.STORAGE_TEST_PROGRESS);
-    if (!raw) return null;
-    const allProgress = JSON.parse(raw);
-    const userKey = normalizeEmail(currentUser.email);
-    const userProgress = allProgress[userKey];
-    if (!userProgress || !userProgress[testId]) return null;
-    return userProgress[testId];
-  } catch {
-    return null;
-  }
-}
-
-function clearTestProgress(testId) {
-  if (!currentUser) return;
-  try {
-    const raw = localStorage.getItem(CONFIG.STORAGE_TEST_PROGRESS);
-    if (!raw) return;
-    const allProgress = JSON.parse(raw);
-    const userKey = normalizeEmail(currentUser.email);
-    if (allProgress[userKey] && allProgress[userKey][testId]) {
-      delete allProgress[userKey][testId];
-      localStorage.setItem(CONFIG.STORAGE_TEST_PROGRESS, JSON.stringify(allProgress));
-    }
-  } catch {
-    // ignore
-  }
-}
-
-function startAutosave() {
-  stopAutosave();
-  autosaveTimerId = setInterval(() => {
-    if (currentTestId && Object.keys(testAnswers).length > 0) {
-      saveTestProgress();
-    }
-  }, CONFIG.AUTOSAVE_INTERVAL_MS);
-}
-
-function stopAutosave() {
-  if (autosaveTimerId) {
-    clearInterval(autosaveTimerId);
-    autosaveTimerId = null;
-  }
-}
-
 // ====================== АВТОРИЗАЦИЯ ======================
 
 async function doStudentLogin(email, password) {
@@ -224,31 +148,6 @@ async function loadStudentData() {
   }
 
   return session;
-}
-
-async function saveStudentData(studentData) {
-  if (!studentData.email) {
-    throw new Error('Email обязателен');
-  }
-
-  const result = await API.saveStudent({
-    email: normalizeEmail(studentData.email),
-    name: studentData.name || '',
-    group: studentData.group || '',
-    role: studentData.role || 'student',
-    password: studentData.password
-  });
-
-  if (currentUser && normalizeEmail(currentUser.email) === normalizeEmail(studentData.email)) {
-    saveSession({
-      ...currentUser,
-      name: result.name || currentUser.name,
-      group: result.group || currentUser.group,
-      role: result.role || currentUser.role
-    });
-  }
-
-  return result;
 }
 
 function applyUserSession(user) {
@@ -608,7 +507,6 @@ async function saveTestResult(result, test, timeSpentSec) {
       throw new Error(response?.error || 'Не удалось сохранить результат');
     }
 
-    console.log('[Result] Сохранено. Попытка №', response.attempts);
     return response;
   } catch (err) {
     console.error('Ошибка сохранения результата:', err.message);
@@ -634,10 +532,7 @@ function startTest(test) {
   }
 
   const container = document.getElementById('test-container');
-  if (!container) {
-    console.error('Элемент #test-container не найден');
-    return;
-  }
+  if (!container) return;
 
   container.innerHTML = '';
 
@@ -791,50 +686,27 @@ function showTestResult(result, auto = false) {
 // ====================== УВЕДОМЛЕНИЯ ======================
 
 function initLocalNotifications() {
-  if (!('Notification' in window)) {
-    console.log('[Notifications] API не поддерживается');
-    return;
-  }
-
-  if (Notification.permission === 'denied') {
-    console.log('[Notifications] Разрешение запрещено');
-    return;
-  }
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'denied') return;
 
   const showLocalNotification = () => {
     if (Notification.permission !== 'granted') return;
     try {
-      const notification = new Notification('Напоминание', {
+      new Notification('Напоминание', {
         body: 'Не забудьте пройти семестровую контрольную!',
-        // ИСПРАВЛЕНО: относительный путь без слеша в начале
         icon: 'icons/icon-192.png',
         badge: 'icons/icon-192.png',
-        tag: 'portal-reminder',
-        requireInteraction: false
+        tag: 'portal-reminder'
       });
-      notification.onclick = () => {
-        window.focus();
-        notification.close();
-      };
-    } catch (err) {
-      console.warn('[Notifications] Ошибка:', err);
-    }
-  };
-
-  const startNotificationInterval = () => {
-    if (window.__notificationIntervalId) return;
-    const TWO_HOURS = 2 * 60 * 60 * 1000;
-    setTimeout(showLocalNotification, 10000);
-    window.__notificationIntervalId = setInterval(showLocalNotification, TWO_HOURS);
-    console.log('[Notifications] Напоминания запущены (раз в 2 часа)');
+    } catch (err) { console.warn(err); }
   };
 
   if (Notification.permission === 'default') {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') startNotificationInterval();
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') setInterval(showLocalNotification, 2 * 60 * 60 * 1000);
     });
   } else if (Notification.permission === 'granted') {
-    startNotificationInterval();
+    setInterval(showLocalNotification, 2 * 60 * 60 * 1000);
   }
 }
 
@@ -843,16 +715,65 @@ function initLocalNotifications() {
 async function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   try {
-    // ИСПРАВЛЕНО: относительный путь и относительный scope для GitHub Pages
     await navigator.serviceWorker.register('service-worker.js', { scope: './' });
-    console.log('[PWA] Service Worker зарегистрирован');
-  } catch (err) {
-    console.warn('[PWA] Ошибка SW:', err);
-  }
+  } catch (err) { console.warn('[PWA] Ошибка SW:', err); }
 }
 
 async function init() {
   registerServiceWorker();
+
+  // --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ФОРМ И РЕГИСТРАЦИИ ---
+  const loginContainer = document.getElementById('login-container');
+  const registerContainer = document.getElementById('register-container');
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+
+  document.getElementById('show-register')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    loginContainer.style.display = 'none';
+    registerContainer.style.display = 'block';
+    hideError('auth-error');
+  });
+
+  document.getElementById('show-login')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    registerContainer.style.display = 'none';
+    loginContainer.style.display = 'block';
+    hideError('auth-error');
+  });
+
+  if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError('auth-error');
+      
+      const name = document.getElementById('reg-name').value.trim();
+      const group = document.getElementById('reg-group').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value.trim();
+      const btn = document.getElementById('register-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'Создание...';
+
+      try {
+        const response = await API.register(email, password, name, group);
+        if (response.success) {
+          window.showToast("Аккаунт создан! Выполняется вход...", "ok");
+          // После успешной регистрации автоматически входим
+          await doStudentLogin(email, password);
+        } else {
+          showError('auth-error', response.error || "Ошибка регистрации");
+        }
+      } catch (err) {
+        showError('auth-error', err.message || "Ошибка сети. Проверьте интернет.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Создать аккаунт';
+      }
+    });
+  }
+  // --- КОНЕЦ ЛОГИКИ РЕГИСТРАЦИИ ---
 
   const session = await loadStudentData();
   if (session) {
@@ -861,11 +782,10 @@ async function init() {
     showScreen('auth-screen');
   }
 
-  const form = document.getElementById('login-form');
   const loginBtn = document.getElementById('login-btn');
 
-  if (form) {
-    form.addEventListener('submit', async (e) => {
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       hideError('auth-error');
 
