@@ -113,7 +113,6 @@ function applyUserSession(user) {
   if (nameEl) nameEl.textContent = user.name || user.email;
   if (welcomeEl) welcomeEl.textContent = `Вы вошли как ${user.role === 'student' ? 'студент' : 'преподаватель'}: ${user.name || user.email}`;
 
-  // Показываем кнопки для teacher и admin
   document.querySelectorAll('[data-role="teacher"]').forEach((el) => {
     el.style.display = (user.role === 'teacher' || user.role === 'admin') ? '' : 'none';
   });
@@ -129,209 +128,99 @@ function logout() {
   hideError('auth-error');
 }
 
-// ====================== ТЕСТЫ ======================
-function saveTestProgress() {
-  if (!currentUser || !currentTestId) return;
-  const key = CONFIG.STORAGE_TEST_PROGRESS;
-  let allProgress = {};
-  try { const raw = localStorage.getItem(key); if (raw) allProgress = JSON.parse(raw); } catch { allProgress = {}; }
-  const userKey = normalizeEmail(currentUser.email);
-  if (!allProgress[userKey]) allProgress[userKey] = {};
-  allProgress[userKey][currentTestId] = { answers: { ...testAnswers }, savedAt: Date.now() };
-  localStorage.setItem(key, JSON.stringify(allProgress));
-}
+// ====================== НАСТРОЙКИ ПРОФИЛЯ ======================
+window.openSettingsModal = function() {
+  const oldModal = document.getElementById('settings-modal');
+  if (oldModal) oldModal.remove();
 
-function loadTestProgress(testId) {
-  if (!currentUser) return null;
-  try {
-    const raw = localStorage.getItem(CONFIG.STORAGE_TEST_PROGRESS);
-    if (!raw) return null;
-    const allProgress = JSON.parse(raw);
-    const userKey = normalizeEmail(currentUser.email);
-    return (allProgress[userKey] && allProgress[userKey][testId]) ? allProgress[userKey][testId] : null;
-  } catch { return null; }
-}
+  const modal = document.createElement('div');
+  modal.id = 'settings-modal';
+  modal.style = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:99999; display:flex; justify-content:center; align-items:center; padding:20px;";
+  
+  modal.innerHTML = `
+    <div style="background:var(--card); border-radius:12px; width:100%; max-width:500px; padding:25px; box-shadow:0 10px 30px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="margin:0; font-size:20px;">⚙️ Настройки профиля</h2>
+        <button class="btn ghost" onclick="document.getElementById('settings-modal').remove()">✕</button>
+      </div>
 
-function clearTestProgress(testId) {
-  if (!currentUser) return;
+      <!-- Смена Email -->
+      <div style="margin-bottom:25px; padding-bottom:20px; border-bottom:1px solid var(--border);">
+        <h3 style="margin-top:0; font-size:16px; color:var(--accent);">Смена Логина (Email)</h3>
+        <div class="form-group">
+          <label>Новый Email</label>
+          <input type="email" id="new-email-input" class="self-input" placeholder="new@example.com">
+        </div>
+        <div class="form-group">
+          <label>Пароль для подтверждения</label>
+          <input type="password" id="email-confirm-pass" class="self-input">
+        </div>
+        <button class="btn" style="width:100%;" onclick="window.submitEmailChange()">Изменить Email</button>
+      </div>
+
+      <!-- Смена Пароля -->
+      <div>
+        <h3 style="margin-top:0; font-size:16px; color:var(--accent);">Смена Пароля</h3>
+        <div class="form-group">
+          <label>Текущий пароль</label>
+          <input type="password" id="old-pass-input" class="self-input">
+        </div>
+        <div class="form-group">
+          <label>Новый пароль</label>
+          <input type="password" id="new-pass-input" class="self-input">
+        </div>
+        <button class="btn" style="width:100%;" onclick="window.submitPasswordChange()">Изменить Пароль</button>
+      </div>
+      
+      <p id="settings-msg" style="text-align:center; font-weight:bold; margin-top:15px; display:none;"></p>
+    </div>
+  `;
+  document.body.appendChild(modal);
+};
+
+window.submitEmailChange = async function() {
+  const newEmail = document.getElementById('new-email-input').value.trim();
+  const pass = document.getElementById('email-confirm-pass').value;
+  const msg = document.getElementById('settings-msg');
+
+  if (!newEmail || !pass) { msg.textContent = "Заполните все поля"; msg.style.color = "var(--err)"; msg.style.display = "block"; return; }
+  
   try {
-    const raw = localStorage.getItem(CONFIG.STORAGE_TEST_PROGRESS);
-    if (!raw) return;
-    const allProgress = JSON.parse(raw);
-    const userKey = normalizeEmail(currentUser.email);
-    if (allProgress[userKey] && allProgress[userKey][testId]) {
-      delete allProgress[userKey][testId];
-      localStorage.setItem(CONFIG.STORAGE_TEST_PROGRESS, JSON.stringify(allProgress));
+    msg.textContent = "Загрузка..."; msg.style.color = "var(--text)"; msg.style.display = "block";
+    const res = await API.changeEmail(currentUser.email, newEmail, pass);
+    if (res.success) {
+      msg.textContent = "Email успешно изменен! Войдите заново.";
+      msg.style.color = "var(--ok)";
+      setTimeout(() => {
+        document.getElementById('settings-modal').remove();
+        logout();
+      }, 2000);
     }
-  } catch { }
-}
-
-function startAutosave() { stopAutosave(); autosaveTimerId = setInterval(() => { if (currentTestId && Object.keys(testAnswers).length > 0) saveTestProgress(); }, CONFIG.AUTOSAVE_INTERVAL_MS); }
-function stopAutosave() { if (autosaveTimerId) { clearInterval(autosaveTimerId); autosaveTimerId = null; } }
-
-function buildTestBlock(question, index, savedAnswer = null) {
-  const block = document.createElement('div'); block.className = 'test-question';
-  const qId = question.id || `q${index}`;
-  block.innerHTML = `<div class="question-title"><span class="q-num">${index + 1}.</span> ${question.q || question.text || ''}</div>`;
-
-  if (question.type === 'text') {
-    const input = document.createElement('input');
-    input.type = 'text'; input.className = 'text-answer-input'; input.placeholder = 'Введите ответ...'; input.dataset.qid = qId;
-    if (savedAnswer) input.value = savedAnswer;
-    input.addEventListener('input', () => { saveAnswer(qId, input.value); updateProgressBar(); });
-    block.appendChild(input); return block;
+  } catch (err) {
+    msg.textContent = err.message; msg.style.color = "var(--err)";
   }
+};
 
-  const optionsWrap = document.createElement('div'); optionsWrap.className = 'options-list';
-  const isMultiple = question.type === 'multiple';
-  const options = question.options || question.answers || [];
+window.submitPasswordChange = async function() {
+  const oldPass = document.getElementById('old-pass-input').value;
+  const newPass = document.getElementById('new-pass-input').value;
+  const msg = document.getElementById('settings-msg');
 
-  options.forEach((opt, optIdx) => {
-    const label = document.createElement('label'); label.className = 'option-item';
-    const input = document.createElement('input');
-    input.type = isMultiple ? 'checkbox' : 'radio';
-    input.name = isMultiple ? `q_${qId}_${optIdx}` : `q_${qId}`;
-    input.value = typeof opt === 'object' ? (opt.value ?? optIdx) : opt;
-    input.dataset.qid = qId;
-    if (savedAnswer) {
-      if (isMultiple && Array.isArray(savedAnswer) && (savedAnswer.includes(input.value) || savedAnswer.includes(String(optIdx)))) input.checked = true;
-      else if (!isMultiple && (String(savedAnswer) === String(input.value) || String(savedAnswer) === String(optIdx))) input.checked = true;
-    }
-    input.addEventListener('change', () => {
-      if (isMultiple) saveAnswer(qId, Array.from(block.querySelectorAll(`input[data-qid="${qId}"]:checked`)).map(el => el.value));
-      else saveAnswer(qId, input.value);
-      updateProgressBar();
-    });
-    label.appendChild(input);
-    label.appendChild(document.createTextNode(typeof opt === 'object' ? (opt.text || opt.label || opt.value) : opt));
-    optionsWrap.appendChild(label);
-  });
-  block.appendChild(optionsWrap); return block;
-}
+  if (!oldPass || !newPass) { msg.textContent = "Заполните все поля"; msg.style.color = "var(--err)"; msg.style.display = "block"; return; }
 
-function updateProgressBar() {
-  const bar = document.getElementById('test-progress-bar'); const text = document.getElementById('test-progress-text');
-  if (!bar || !currentTest) return;
-  const total = (currentTest.questions || []).length;
-  const answered = Object.keys(testAnswers).filter(k => Array.isArray(testAnswers[k]) ? testAnswers[k].length > 0 : String(testAnswers[k]).trim() !== '').length;
-  bar.style.width = (total > 0 ? Math.round((answered / total) * 100) : 0) + '%';
-  if (text) text.textContent = `${answered} из ${total}`;
-}
-
-function gradeTest(test, answers) {
-  let correctCount = 0; const details = [];
-  (test.questions || []).forEach((q, index) => {
-    const qId = q.id || `q${index}`; const userAnswer = answers[qId]; let isCorrect = false;
-    if (q.type === 'text') isCorrect = normalizeTextAnswer(userAnswer) === normalizeTextAnswer(q.answer || q.correct) && normalizeTextAnswer(userAnswer) !== '';
-    else if (q.type === 'multiple') {
-      const cSet = new Set((q.correct || q.answer || []).map(String)); const uSet = new Set((Array.isArray(userAnswer) ? userAnswer : []).map(String));
-      isCorrect = cSet.size === uSet.size && [...cSet].every(v => uSet.has(v));
-    } else isCorrect = String(userAnswer) === String(q.correct ?? q.answer ?? '');
-    if (isCorrect) correctCount++;
-    details.push({ id: qId, question: q.q || q.text, userAnswer, correctAnswer: q.answer ?? q.correct, isCorrect });
-  });
-  const maxScore = (test.questions || []).length;
-  const percent = maxScore > 0 ? Math.round((correctCount / maxScore) * 100) : 0;
-  let grade = 2; if (percent >= 85) grade = 5; else if (percent >= 70) grade = 4; else if (percent >= 50) grade = 3;
-  return { score: correctCount, maxScore, percent, grade, details };
-}
-
-function enableAntiCheat() {
-  isStrictMode = true; visibilityWarnings = 0; document.body.classList.add('anti-cheat-mode');
-  ['contextmenu', 'copy', 'cut', 'selectstart'].forEach(ev => document.addEventListener(ev, preventDefaultHandler, true));
-  document.addEventListener('visibilitychange', onVisibilityChange);
-}
-function disableAntiCheat() {
-  isStrictMode = false; visibilityWarnings = 0; document.body.classList.remove('anti-cheat-mode');
-  ['contextmenu', 'copy', 'cut', 'selectstart'].forEach(ev => document.removeEventListener(ev, preventDefaultHandler, true));
-  document.removeEventListener('visibilitychange', onVisibilityChange);
-}
-function preventDefaultHandler(e) { if (isStrictMode) { e.preventDefault(); e.stopPropagation(); return false; } }
-function onVisibilityChange() {
-  if (!isStrictMode || !currentTestId) return;
-  if (document.hidden) {
-    visibilityWarnings++;
-    if (visibilityWarnings === 1) sessionStorage.setItem('portal_visibility_warning', '1');
-    else if (visibilityWarnings >= 2) forceFinishTestWithFail('Тест завершён: переключение вкладок.');
-  } else if (sessionStorage.getItem('portal_visibility_warning') === '1') {
-    sessionStorage.removeItem('portal_visibility_warning');
-    alert('Внимание! Переключение вкладок запрещено.\nПри повторном переключении тест будет завершён с оценкой 2.');
-  }
-}
-
-function startTestTimer(seconds) {
-  stopTestTimer(); if (!seconds || seconds <= 0) return;
-  let remaining = seconds; const timerEl = document.getElementById('test-timer');
-  const tick = () => {
-    if (timerEl) timerEl.textContent = `${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')}`;
-    if (remaining <= 0) { stopTestTimer(); finishTest(true); return; }
-    remaining--;
-  };
-  tick(); testTimerId = setInterval(tick, 1000);
-}
-function stopTestTimer() { if (testTimerId) { clearInterval(testTimerId); testTimerId = null; } }
-function saveAnswer(questionId, answer) { if (currentTestId) testAnswers[questionId] = answer; }
-
-async function saveTestResult(result, test, timeSpentSec) {
-  if (!currentUser || !test) return null;
   try {
-    const payload = { action: 'save_result', email: normalizeEmail(currentUser.email), name: currentUser.name || '', group: currentUser.group || '', testId: test.id || currentTestId || 'unknown', testTitle: test.title || test.id || 'Тест', grade: result.grade, score: result.score, maxScore: result.maxScore, percent: result.percent, timeSpent: Math.max(0, Math.round(timeSpentSec || 0)) };
-    const response = await API.safeFetch(API.BASE_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
-    if (!response || !response.success) throw new Error(response?.error || 'Ошибка сохранения');
-    return response;
-  } catch (err) { console.error(err); return null; }
-}
-
-function startTest(test) {
-  if (!test || !test.questions || !test.questions.length) return alert('Тест не содержит вопросов');
-  currentTest = test; currentTestId = test.id || 'default'; testAnswers = {}; visibilityWarnings = 0; testStartTimestamp = Date.now();
-  const saved = loadTestProgress(currentTestId); if (saved && saved.answers) testAnswers = { ...saved.answers };
-
-  const container = document.getElementById('test-container'); if (!container) return; container.innerHTML = '';
-  container.innerHTML = `<div class="test-header"><h2 class="test-title">${test.title || 'Тест'}</h2><div class="test-meta"><div class="progress-wrap"><div class="progress-track"><div id="test-progress-bar" class="progress-bar" style="width:0%"></div></div><span id="test-progress-text" class="progress-text">0 из ${test.questions.length}</span></div><div id="test-timer" class="test-timer"></div></div></div>`;
-
-  const questionsWrap = document.createElement('div'); questionsWrap.className = 'questions-wrap';
-  test.questions.forEach((q, idx) => { questionsWrap.appendChild(buildTestBlock(q, idx, testAnswers[q.id || `q${idx}`])); });
-  container.appendChild(questionsWrap);
-
-  const actions = document.createElement('div'); actions.className = 'test-actions';
-  const submitBtn = document.createElement('button'); submitBtn.className = 'btn btn-primary'; submitBtn.textContent = 'Сдать тест';
-  submitBtn.addEventListener('click', () => finishTest(false)); actions.appendChild(submitBtn); container.appendChild(actions);
-
-  updateProgressBar();
-  if (test.isExam || test.strict) enableAntiCheat(); else disableAntiCheat();
-  if (test.timeLimit && test.timeLimit > 0) startTestTimer(test.timeLimit);
-  startAutosave(); showScreen('test-screen');
-}
-
-async function finishTest(auto = false) {
-  if (!currentTest) return;
-  stopAutosave(); stopTestTimer(); disableAntiCheat();
-  const timeSpent = testStartTimestamp ? Math.round((Date.now() - testStartTimestamp) / 1000) : 0;
-  const result = gradeTest(currentTest, testAnswers);
-  await saveTestResult(result, currentTest, timeSpent);
-  if (currentTestId) clearTestProgress(currentTestId);
-  showTestResult(result, auto);
-  currentTestId = null; currentTest = null; testAnswers = {}; testStartTimestamp = null; visibilityWarnings = 0;
-}
-
-async function forceFinishTestWithFail(reason) {
-  stopAutosave(); stopTestTimer(); disableAntiCheat();
-  const timeSpent = testStartTimestamp ? Math.round((Date.now() - testStartTimestamp) / 1000) : 0;
-  const result = { score: 0, maxScore: (currentTest?.questions || []).length, percent: 0, grade: 2, details: [], forced: true, reason: reason || 'Нарушение правил' };
-  if (currentTest) await saveTestResult(result, currentTest, timeSpent);
-  if (currentTestId) clearTestProgress(currentTestId);
-  showTestResult(result);
-  currentTestId = null; currentTest = null; testAnswers = {}; testStartTimestamp = null; visibilityWarnings = 0;
-}
-
-function showTestResult(result, auto = false) {
-  const container = document.getElementById('test-result-container');
-  if (!container) return alert(`Оценка: ${result.grade}`);
-  container.innerHTML = `<div class="result-card"><h2>Результат теста</h2>${result.forced ? `<p class="result-warning">${result.reason}</p>` : ''}${auto ? '<p class="result-info">Время истекло</p>' : ''}<div class="result-score"><span class="score-value">${result.score}</span><span class="score-max">/ ${result.maxScore}</span></div><p class="result-percent">${result.percent}%</p><p class="result-grade">Оценка: <strong>${result.grade}</strong></p><button class="btn btn-primary" id="back-to-main-btn">Вернуться</button></div>`;
-  showScreen('test-result-screen');
-  document.getElementById('back-to-main-btn')?.addEventListener('click', () => showScreen('main-screen'));
-}
+    msg.textContent = "Загрузка..."; msg.style.color = "var(--text)"; msg.style.display = "block";
+    const res = await API.changePassword(currentUser.email, oldPass, newPass);
+    if (res.success) {
+      msg.textContent = "Пароль успешно изменен!";
+      msg.style.color = "var(--ok)";
+      document.getElementById('old-pass-input').value = '';
+      document.getElementById('new-pass-input').value = '';
+    }
+  } catch (err) {
+    msg.textContent = err.message; msg.style.color = "var(--err)";
+  }
+};
 
 // ====================== ИНИЦИАЛИЗАЦИЯ ======================
 async function registerServiceWorker() {
@@ -343,7 +232,6 @@ async function registerServiceWorker() {
 async function init() {
   registerServiceWorker();
 
-  // Переключение форм
   const loginContainer = document.getElementById('login-container');
   const registerContainer = document.getElementById('register-container');
   const loginForm = document.getElementById('login-form');
@@ -356,7 +244,6 @@ async function init() {
     e.preventDefault(); registerContainer.style.display = 'none'; loginContainer.style.display = 'block'; hideError('auth-error');
   });
 
-  // Обработка регистрации
   if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault(); hideError('auth-error');
@@ -377,11 +264,9 @@ async function init() {
     });
   }
 
-  // Проверка сессии
   const session = await loadStudentData();
   if (session) applyUserSession(session); else showScreen('auth-screen');
 
-  // Обработка входа
   const loginBtn = document.getElementById('login-btn');
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -406,7 +291,6 @@ async function init() {
     if (currentTestId && Object.keys(testAnswers).length > 0) saveTestProgress();
   });
 
-  // Уведомления
   if ('Notification' in window && Notification.permission === 'default') {
     Notification.requestPermission();
   }

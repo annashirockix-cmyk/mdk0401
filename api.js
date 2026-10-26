@@ -3,8 +3,8 @@
  */
 
 const API = {
-  // ⚠️ ОБЯЗАТЕЛЬНО ЗАМЕНИТЕ НА ССЫЛКУ ИЗ ВАШЕГО GOOGLE APPS SCRIPT (на /exec)
-  BASE_URL: 'https://script.google.com/macros/s/ВАШ_DEPLOYMENT_ID/exec',
+  // Вставлена ВАША новая ссылка из Apps Script
+  BASE_URL: 'https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec',
 
   async safeFetch(url, options = {}, timeoutMs = 15000) {
     const controller = new AbortController();
@@ -20,7 +20,6 @@ const API = {
       });
 
       clearTimeout(timeoutId);
-
       if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
 
       const contentType = response.headers.get('content-type') || '';
@@ -74,6 +73,26 @@ const API = {
       body: JSON.stringify({ action: 'get_student', email })
     });
     if (!result || !result.success) throw new Error(result?.error || 'Студент не найден');
+    return result;
+  },
+
+  async changePassword(email, oldPassword, newPassword) {
+    const result = await this.safeFetch(this.BASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'change_password', email, oldPassword, newPassword })
+    });
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка смены пароля');
+    return result;
+  },
+
+  async changeEmail(oldEmail, newEmail, password) {
+    const result = await this.safeFetch(this.BASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'change_email', oldEmail, newEmail, password })
+    });
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка смены Email');
     return result;
   }
 };
