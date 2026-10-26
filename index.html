@@ -9,7 +9,6 @@
   <meta name="apple-mobile-web-app-title" content="Учебный портал" />
   <meta name="description" content="Учебный портал для студентов технических специальностей СПО" />
 
-  <!-- PWA — относительные пути -->
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-192.png" />
@@ -36,38 +35,20 @@
             <form id="login-form" autocomplete="on">
               <div class="form-group">
                 <label for="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  autocomplete="username"
-                  required
-                  placeholder="student@example.com"
-                  inputmode="email"
-                />
+                <input type="email" id="email" name="email" autocomplete="username" required placeholder="student@example.com" inputmode="email" />
               </div>
               <div class="form-group">
                 <label for="password">Пароль</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  autocomplete="current-password"
-                  required
-                  placeholder="••••••••"
-                />
+                <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="••••••••" />
               </div>
-              <button type="submit" class="btn btn-primary" id="login-btn">
-                Войти
-              </button>
+              <button type="submit" class="btn btn-primary" id="login-btn">Войти</button>
             </form>
-            
             <div style="text-align: center; margin-top: 15px;">
                 <a href="#" id="show-register" style="color: #1e40af; text-decoration: none; font-weight: 500;">Нет аккаунта? Зарегистрироваться</a>
             </div>
         </div>
 
-        <!-- Форма регистрации (скрыта по умолчанию) -->
+        <!-- Форма регистрации -->
         <div id="register-container" style="display: none;">
             <p class="subtitle">Создание нового аккаунта</p>
             <form id="register-form">
@@ -87,16 +68,12 @@
                 <label for="reg-password">Пароль</label>
                 <input type="password" id="reg-password" placeholder="Придумайте пароль" required />
               </div>
-              <button type="submit" class="btn btn-primary" id="register-btn">
-                Создать аккаунт
-              </button>
+              <button type="submit" class="btn btn-primary" id="register-btn">Создать аккаунт</button>
             </form>
-            
             <div style="text-align: center; margin-top: 15px;">
                 <a href="#" id="show-login" style="color: #1e40af; text-decoration: none; font-weight: 500;">Уже есть аккаунт? Войти</a>
             </div>
         </div>
-
         <p id="auth-error" class="error-message" hidden></p>
       </div>
     </div>
@@ -104,23 +81,17 @@
     <!-- Основной экран -->
     <div id="main-screen" class="screen">
       <header class="header">
-        <div class="header-left">
-          <h1 class="logo">Учебный портал</h1>
-        </div>
+        <div class="header-left"><h1 class="logo">Учебный портал</h1></div>
         <div class="header-right">
           <span id="user-name" class="user-name"></span>
-          <button id="open-reports-btn" class="btn btn-outline" data-role="teacher" style="display:none;">
-            Отчёты
-          </button>
+          <button id="open-reports-btn" class="btn btn-outline" data-role="teacher" style="display:none;">Отчёты</button>
           <button id="logout-btn" class="btn btn-outline">Выйти</button>
         </div>
       </header>
-
       <main class="content">
         <div id="dashboard">
           <h2>Добро пожаловать!</h2>
           <p id="welcome-text"></p>
-          <div id="courses-list" class="courses-list"></div>
         </div>
       </main>
     </div>
@@ -138,56 +109,17 @@
     <!-- Экран отчётов -->
     <div id="reports-screen" class="screen">
       <header class="header">
-        <div class="header-left">
-          <h1 class="logo">Отчёты</h1>
-        </div>
+        <div class="header-left"><h1 class="logo">Отчёты</h1></div>
         <div class="header-right">
-          <button id="reports-refresh-btn" class="btn btn-outline">Обновить</button>
-          <button id="reports-export-btn" class="btn btn-primary">Выгрузить в Excel (CSV)</button>
           <button id="back-to-main-from-reports" class="btn btn-outline">Назад</button>
         </div>
       </header>
-
       <main class="content">
-        <div class="reports-filters">
-          <label>
-            Группа:
-            <select id="filter-group">
-              <option value="">Все группы</option>
-            </select>
-          </label>
-          <label>
-            Тест:
-            <select id="filter-test">
-              <option value="">Все тесты</option>
-            </select>
-          </label>
-          <span id="reports-status" class="reports-status"></span>
-        </div>
-
-        <div class="table-wrap">
-          <table id="reports-table" class="reports-table">
-            <thead>
-              <tr>
-                <th>ФИО</th>
-                <th>Группа</th>
-                <th>Тест</th>
-                <th>Оценка</th>
-                <th>Время</th>
-                <th>Попытки</th>
-                <th>Дата</th>
-              </tr>
-            </thead>
-            <tbody id="reports-tbody">
-              <tr><td colspan="7">Загрузка...</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div id="reports-content">Загрузка...</div>
       </main>
     </div>
   </div>
 
-  <!-- Относительные пути к скриптам -->
   <script src="api.js" defer></script>
   <script src="app.js" defer></script>
   <script src="reports.js" defer></script>
