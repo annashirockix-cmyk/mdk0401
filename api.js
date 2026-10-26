@@ -1,5 +1,5 @@
 const API = {
-  // Вставьте ссылку, полученную после переразвертывания (шаг 2)
+  // Ссылка на ваше развернутое веб-приложение Google Apps Script
   BASE_URL: 'https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec',
 
   async safeFetch(url, options = {}, timeoutMs = 15000) {
@@ -36,15 +36,74 @@ const API = {
     }
   },
 
-  async login(email, password) {
-    const result = await this.safeFetch(this.BASE_URL, {
+  // Общий метод для отправки POST-запросов
+  async post(action, payload = {}) {
+    return this.safeFetch(this.BASE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'login', email, password })
+      body: JSON.stringify({ action, ...payload })
     });
+  },
+
+  async login(email, password) {
+    const result = await this.post('login', { email, password });
     if (!result || !result.success) throw new Error(result?.error || 'Ошибка входа');
     return result;
   },
 
-  // ... (остальные методы register, getStudent, changePassword, changeEmail остаются без изменений, но с тем же заголовком 'text/plain;charset=utf-8')
+  async register(email, password, name, group) {
+    const result = await this.post('register', { email, password, name, group });
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка регистрации');
+    return result;
+  },
+
+  async getStudent(email) {
+    const result = await this.post('getStudent', { email });
+    if (!result || !result.success) throw new Error(result?.error || 'Студент не найден');
+    return result;
+  },
+
+  async changePassword(email, oldPass, newPass) {
+    const result = await this.post('changePassword', { email, oldPass, newPass });
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка смены пароля');
+    return result;
+  },
+
+  async changeEmail(oldEmail, newEmail, password) {
+    const result = await this.post('changeEmail', { oldEmail, newEmail, password });
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка смены Email');
+    return result;
+  },
+
+  async getStudents() {
+    const result = await this.post('getStudents');
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка загрузки студентов');
+    return result;
+  },
+
+  async saveStudent(key, name, group, payload) {
+    const result = await this.post('saveStudent', { key, name, group, payload });
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка сохранения данных студента');
+    return result;
+  },
+
+  async getSchedule() {
+    const result = await this.post('getSchedule');
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка загрузки расписания');
+    return result;
+  },
+
+  async saveSchedule(schedule) {
+    const result = await this.post('saveSchedule', { schedule: JSON.stringify(schedule) });
+    if (!result || !result.success) throw new Error(result?.error || 'Ошибка сохранения расписания');
+    return result;
+  },
+
+  async getChat(group) {
+    return this.post('getChat', { group });
+  },
+
+  async sendChat(group, key, name, text) {
+    return this.post('sendChat', { group, key, name, text });
+  }
 };

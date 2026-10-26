@@ -128,6 +128,8 @@ function logout() {
   hideError('auth-error');
 }
 
+// ... (Настройки профиля, инициализация и т.д. оставлены без изменений) ...
+
 // ====================== НАСТРОЙКИ ПРОФИЛЯ ======================
 window.openSettingsModal = function() {
   const oldModal = document.getElementById('settings-modal');
@@ -281,19 +283,22 @@ async function init() {
   }
 
   document.getElementById('logout-btn')?.addEventListener('click', logout);
+  
   document.getElementById('open-reports-btn')?.addEventListener('click', () => {
     showScreen('reports-screen');
-    if (typeof Reports !== 'undefined' && Reports.init) Reports.init();
+    // Если отчеты не инициализируются, выводим сообщение
+    if (typeof Reports !== 'undefined' && Reports.init) {
+        Reports.init();
+    } else {
+        document.getElementById('reports-content').innerHTML = '<div class="module" style="color:var(--err);">Ошибка: Модуль отчетов не загружен. Проверьте reports.js</div>';
+    }
   });
+  
   document.getElementById('back-to-main-from-reports')?.addEventListener('click', () => showScreen('main-screen'));
 
   window.addEventListener('beforeunload', () => {
     if (currentTestId && Object.keys(testAnswers).length > 0) saveTestProgress();
   });
-
-  if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
