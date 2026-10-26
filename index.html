@@ -9,13 +9,13 @@
   <meta name="apple-mobile-web-app-title" content="Учебный портал" />
   <meta name="description" content="Учебный портал для студентов технических специальностей СПО" />
 
-  <!-- PWA -->
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192.png" />
+  <!-- PWA — относительные пути -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-192.png" />
 
   <title>Учебный портал СПО</title>
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="app">
@@ -25,7 +25,7 @@
       <p>Загрузка портала...</p>
     </div>
 
-    <!-- Экран авторизации (Email + Пароль) -->
+    <!-- Экран авторизации -->
     <div id="auth-screen" class="screen">
       <div class="auth-card">
         <h1>Учебный портал</h1>
@@ -83,28 +83,22 @@
         <div id="dashboard">
           <h2>Добро пожаловать!</h2>
           <p id="welcome-text"></p>
-          <div id="courses-list" class="courses-list">
-            <!-- Здесь будут карточки курсов / тестов -->
-          </div>
+          <div id="courses-list" class="courses-list"></div>
         </div>
       </main>
     </div>
 
-    <!-- Экран прохождения теста -->
+    <!-- Экран теста -->
     <div id="test-screen" class="screen">
-      <div id="test-container" class="test-container">
-        <!-- Содержимое теста рендерится из app.js -->
-      </div>
+      <div id="test-container" class="test-container"></div>
     </div>
 
-    <!-- Экран результата теста -->
+    <!-- Экран результата -->
     <div id="test-result-screen" class="screen">
-      <div id="test-result-container" class="test-result-container">
-        <!-- Результат рендерится из app.js -->
-      </div>
+      <div id="test-result-container" class="test-result-container"></div>
     </div>
 
-    <!-- Экран отчётов (преподаватель) -->
+    <!-- Экран отчётов -->
     <div id="reports-screen" class="screen">
       <header class="header">
         <div class="header-left">
@@ -156,9 +150,9 @@
     </div>
   </div>
 
-  <!-- Порядок важен -->
-  <script src="/api.js" defer></script>
-  <script src="/app.js" defer></script>
-  <script src="/reports.js" defer></script>
+  <!-- Относительные пути к скриптам -->
+  <script src="api.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="reports.js" defer></script>
 </body>
 </html>

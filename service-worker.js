@@ -3,15 +3,15 @@
 
 const CACHE_NAME = 'portal-cache-v3';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/app.js',
-  '/api.js',
-  '/reports.js',
-  '/style.css',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  './',
+  './index.html',
+  './app.js',
+  './api.js',
+  './reports.js',
+  './style.css',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 // Установка — кэшируем основные файлы

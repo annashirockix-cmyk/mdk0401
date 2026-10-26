@@ -806,8 +806,9 @@ function initLocalNotifications() {
     try {
       const notification = new Notification('Напоминание', {
         body: 'Не забудьте пройти семестровую контрольную!',
-        icon: '/icons/icon-192.png',
-        badge: '/icons/icon-192.png',
+        // ИСПРАВЛЕНО: относительный путь без слеша в начале
+        icon: 'icons/icon-192.png',
+        badge: 'icons/icon-192.png',
         tag: 'portal-reminder',
         requireInteraction: false
       });
@@ -842,7 +843,8 @@ function initLocalNotifications() {
 async function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   try {
-    await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+    // ИСПРАВЛЕНО: относительный путь и относительный scope для GitHub Pages
+    await navigator.serviceWorker.register('service-worker.js', { scope: './' });
     console.log('[PWA] Service Worker зарегистрирован');
   } catch (err) {
     console.warn('[PWA] Ошибка SW:', err);
