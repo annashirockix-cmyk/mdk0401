@@ -4,17 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#1e40af" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Учебный портал" />
   <meta name="description" content="Учебный портал для студентов технических специальностей СПО" />
 
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-192.png" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/icon-192.png" />
 
   <title>Учебный портал СПО</title>
-  <link rel="stylesheet" href="style.css" />
+  <!-- Важно: добавлен ./ для корректной работы на GitHub Pages -->
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <div id="app">
@@ -66,7 +63,7 @@
               </div>
               <div class="form-group">
                 <label for="reg-password">Пароль</label>
-                <input type="password" id="reg-password" placeholder="Придумайте пароль" required />
+                <input type="password" id="reg-password" autocomplete="new-password" placeholder="Придумайте пароль" required />
               </div>
               <button type="submit" class="btn btn-primary" id="register-btn">Создать аккаунт</button>
             </form>
@@ -115,13 +112,19 @@
         </div>
       </header>
       <main class="content">
-        <div id="reports-content">Загрузка...</div>
+        <div id="reports-content">
+            <!-- Заглушка, если reports.js не загрузился -->
+            <div class="module">
+                <h2>Раздел отчетов</h2>
+                <p>Загрузка данных...</p>
+            </div>
+        </div>
       </main>
     </div>
   </div>
 
-  <script src="api.js" defer></script>
-  <script src="app.js" defer></script>
-  <script src="reports.js" defer></script>
+  <script src="./api.js" defer></script>
+  <script src="./app.js" defer></script>
+  <script src="./reports.js" defer></script>
 </body>
 </html>

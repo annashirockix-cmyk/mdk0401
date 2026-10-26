@@ -1,11 +1,8 @@
 /* =====================================================
-   Учебный портал — style.css
-   Крупные кнопки на мобильных, PDF-модалка, toast, тесты
+   Учебный портал — style.css (Исправленный и дополненный)
    ===================================================== */
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -19,6 +16,21 @@ html, body {
   min-height: 100%;
 }
 
+/* Переменные (для совместимости с JS) */
+:root {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --card-soft: #f8fafc;
+  --text: #0f172a;
+  --text-soft: #475569;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --accent: #1e40af;
+  --ok: #15803d;
+  --err: #b91c1c;
+  --gold: #f59e0b;
+}
+
 .screen {
   display: none;
   min-height: 100vh;
@@ -26,6 +38,35 @@ html, body {
 
 .screen.active {
   display: block;
+}
+
+/* ---------- Элементы интерфейса (Module, Hero) ---------- */
+.module {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.hero {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: #fff;
+  padding: 30px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+}
+
+.hero p {
+  margin: 0;
+  opacity: 0.9;
 }
 
 /* ---------- Загрузка ---------- */
@@ -38,24 +79,17 @@ html, body {
   background: #0f172a;
   color: #fff;
 }
-
-#loading-screen.active {
-  display: flex;
-}
+#loading-screen.active { display: flex; }
 
 .loader {
-  width: 40px;
-  height: 40px;
+  width: 40px; height: 40px;
   border: 4px solid rgba(255,255,255,0.2);
   border-top-color: #3b82f6;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
 }
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- Авторизация ---------- */
 #auth-screen {
@@ -66,10 +100,7 @@ html, body {
   padding: 1.5rem;
   background: linear-gradient(145deg, #0f172a 0%, #1e3a8a 100%);
 }
-
-#auth-screen.active {
-  display: flex;
-}
+#auth-screen.active { display: flex; }
 
 .auth-card {
   width: 100%;
@@ -94,10 +125,7 @@ html, body {
   font-size: 0.9rem;
 }
 
-.form-group {
-  margin-bottom: 1rem;
-}
-
+.form-group { margin-bottom: 1rem; }
 .form-group label {
   display: block;
   font-size: 0.875rem;
@@ -106,7 +134,7 @@ html, body {
   color: #334155;
 }
 
-.form-group input {
+.form-group input, .self-input {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #cbd5e1;
@@ -114,9 +142,11 @@ html, body {
   font-size: 1rem;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
+  background: var(--card);
+  color: var(--text);
 }
 
-.form-group input:focus {
+.form-group input:focus, .self-input:focus {
   border-color: #1e40af;
   box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
 }
@@ -132,10 +162,7 @@ html, body {
 }
 
 /* ---------- Кнопки ---------- */
-.btn,
-.btn-primary,
-.btn-outline,
-button[type="submit"] {
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -146,39 +173,22 @@ button[type="submit"] {
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition: background 0.2s, opacity 0.2s;
   text-decoration: none;
   line-height: 1.3;
-}
-
-.btn-primary {
-  background: #1e40af;
+  background: var(--accent);
   color: #fff;
 }
+.btn:hover { opacity: 0.9; }
+.btn:disabled { opacity: 0.65; cursor: not-allowed; }
 
-.btn-primary:hover {
-  background: #1e3a8a;
-}
+.btn-primary { background: #1e40af; color: #fff; }
+.btn-outline { background: transparent; color: #1e40af; border: 2px solid #1e40af; }
+.btn-outline:hover { background: #eff6ff; }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn.ghost:hover { background: var(--card-soft); }
 
-.btn-primary:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.btn-outline {
-  background: transparent;
-  color: #1e40af;
-  border: 2px solid #1e40af;
-}
-
-.btn-outline:hover {
-  background: #eff6ff;
-}
-
-#login-btn {
-  width: 100%;
-  margin-top: 0.5rem;
-}
+#login-btn { width: 100%; margin-top: 0.5rem; }
 
 /* ---------- Шапка ---------- */
 .header {
@@ -192,548 +202,56 @@ button[type="submit"] {
   gap: 0.75rem;
 }
 
-.logo {
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 700;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.user-name {
-  font-size: 0.9rem;
-  opacity: 0.95;
-}
-
-.header .btn-outline {
-  color: #fff;
-  border-color: rgba(255,255,255,0.6);
-}
-
-.header .btn-outline:hover {
-  background: rgba(255,255,255,0.15);
-}
-
-.header .btn-primary {
-  background: #fff;
-  color: #1e40af;
-}
+.logo { margin: 0; font-size: 1.15rem; font-weight: 700; }
+.header-right { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.user-name { font-size: 0.9rem; opacity: 0.95; }
+.header .btn-outline { color: #fff; border-color: rgba(255,255,255,0.6); }
+.header .btn-outline:hover { background: rgba(255,255,255,0.15); }
 
 /* ---------- Контент ---------- */
-.content {
-  padding: 1.25rem;
-  max-width: 960px;
-  margin: 0 auto;
-}
+.content { padding: 1.25rem; max-width: 960px; margin: 0 auto; }
 
-.courses-list {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1.25rem;
-}
-
-/* ---------- Toast ---------- */
+/* ---------- Toast (Уведомления) ---------- */
 .portal-toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
+  position: fixed; bottom: 24px; left: 50%;
   transform: translateX(-50%) translateY(100px);
-  max-width: 90%;
-  padding: 14px 20px;
-  border-radius: 10px;
-  font-size: 15px;
-  line-height: 1.4;
-  color: #fff;
-  background: #334155;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  z-index: 10000;
-  opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  text-align: center;
+  max-width: 90%; padding: 14px 20px; border-radius: 10px;
+  font-size: 15px; color: #fff; background: #334155;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 10000;
+  opacity: 0; transition: transform 0.3s, opacity 0.3s; text-align: center;
 }
-
-.portal-toast--visible {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-.portal-toast--err {
-  background: #b91c1c;
-}
-
-.portal-toast--ok {
-  background: #15803d;
-}
-
-.portal-toast--info {
-  background: #1e40af;
-}
+.portal-toast--visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+.portal-toast--err { background: #b91c1c; }
+.portal-toast--ok { background: #15803d; }
+.portal-toast--info { background: #1e40af; }
 
 /* ---------- PDF-модалка ---------- */
-.pdf-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.pdf-modal { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.pdf-modal-overlay { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.75); }
+.pdf-modal-content { position: relative; display: flex; flex-direction: column; width: 96%; max-width: 960px; height: 92vh; background: #fff; border-radius: 12px; overflow: hidden; }
+.pdf-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #1e40af; color: #fff; }
+.pdf-modal-title { font-weight: 600; }
+.pdf-modal-close { background: transparent; border: none; color: #fff; font-size: 28px; cursor: pointer; }
+.pdf-modal-body { flex: 1; overflow: hidden; }
+.pdf-iframe { width: 100%; height: 100%; border: none; }
+
+/* ---------- Таблицы (Журнал/Отчеты) ---------- */
+.journal-table, .reports-table, .schedule-table {
+  width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--card);
+}
+.journal-table th, .journal-table td,
+.reports-table th, .reports-table td,
+.schedule-table th, .schedule-table td {
+  padding: 0.75rem 1rem; border: 1px solid var(--border); text-align: left;
+}
+.journal-table th, .reports-table th, .schedule-table th {
+  background: var(--card-soft); font-weight: 600; color: var(--text-soft);
 }
 
-.pdf-modal-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.75);
-}
-
-.pdf-modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 96%;
-  max-width: 960px;
-  height: 92vh;
-  max-height: 92vh;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.pdf-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: #1e40af;
-  color: #fff;
-  flex-shrink: 0;
-}
-
-.pdf-modal-title {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.pdf-modal-close {
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 28px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0 6px;
-  min-width: 44px;
-  min-height: 44px;
-}
-
-.pdf-modal-body {
-  flex: 1;
-  overflow: hidden;
-  background: #f1f5f9;
-}
-
-.pdf-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.pdf-modal-footer {
-  flex-shrink: 0;
-  padding: 12px 16px;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  display: flex;
-  justify-content: center;
-}
-
-.pdf-download-btn {
-  text-decoration: none;
-  text-align: center;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* ---------- Анти-чит ---------- */
-body.anti-cheat-mode,
-body.anti-cheat-mode * {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-  -webkit-touch-callout: none !important;
-}
-
-body.anti-cheat-mode input.text-answer-input,
-body.anti-cheat-mode textarea {
-  -webkit-user-select: text !important;
-  -moz-user-select: text !important;
-  -ms-user-select: text !important;
-  user-select: text !important;
-}
-
-/* ---------- Тест ---------- */
-.test-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1.25rem;
-}
-
-.test-header {
-  margin-bottom: 1.5rem;
-}
-
-.test-title {
-  font-size: 1.25rem;
-  margin: 0 0 0.75rem;
-}
-
-.test-meta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.progress-wrap {
-  flex: 1;
-  min-width: 180px;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.progress-track {
-  flex: 1;
-  height: 10px;
-  background: #e2e8f0;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #1e40af, #3b82f6);
-  border-radius: 999px;
-  transition: width 0.3s ease;
-}
-
-.progress-text {
-  font-size: 0.875rem;
-  color: #64748b;
-  white-space: nowrap;
-}
-
-.test-timer {
-  font-family: monospace;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #1e40af;
-  min-width: 60px;
-  text-align: right;
-}
-
-.test-question {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
-}
-
-.question-title {
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  line-height: 1.4;
-}
-
-.q-num {
-  color: #1e40af;
-  margin-right: 0.35rem;
-}
-
-.options-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.option-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.option-item:hover {
-  background: #f1f5f9;
-}
-
-.option-item input {
-  margin-top: 0.2rem;
-  flex-shrink: 0;
-}
-
-.text-answer-input {
-  width: 100%;
-  padding: 0.65rem 0.9rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.text-answer-input:focus {
-  border-color: #1e40af;
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
-}
-
-.test-actions {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* ---------- Результат ---------- */
-.test-result-container {
-  padding: 1.5rem;
-}
-
-.result-card {
-  max-width: 420px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  text-align: center;
-}
-
-.result-score {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1e40af;
-  margin: 1rem 0 0.25rem;
-}
-
-.score-max {
-  font-size: 1.25rem;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.result-percent {
-  font-size: 1.125rem;
-  color: #64748b;
-}
-
-.result-grade {
-  font-size: 1.25rem;
-  margin: 1rem 0 1.5rem;
-}
-
-.result-warning {
-  background: #fef2f2;
-  color: #b91c1c;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-.result-info {
-  color: #b45309;
-  margin-bottom: 0.5rem;
-}
-
-/* ---------- Отчёты ---------- */
-.reports-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 1.25rem;
-}
-
-.reports-filters label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.reports-filters select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  min-height: 40px;
-}
-
-.reports-status {
-  font-size: 0.875rem;
-  color: #64748b;
-}
-
-.table-wrap {
-  overflow-x: auto;
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-}
-
-.reports-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.reports-table th,
-.reports-table td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.reports-table th {
-  background: #f8fafc;
-  font-weight: 600;
-  color: #334155;
-  white-space: nowrap;
-}
-
-.reports-table tr:last-child td {
-  border-bottom: none;
-}
-
-.grade-cell {
-  font-weight: 700;
-}
-
-.grade-5 { color: #15803d; }
-.grade-4 { color: #1d4ed8; }
-.grade-3 { color: #b45309; }
-.grade-2 { color: #b91c1c; }
-
-.error-cell {
-  color: #b91c1c;
-  text-align: center;
-}
-
-/* =====================================================
-   МОБИЛЬНЫЕ: крупные кнопки ≥ 48px (≤ 768px)
-   ===================================================== */
+/* ---------- Мобильная адаптация ---------- */
 @media (max-width: 768px) {
-  .btn,
-  .btn-primary,
-  .btn-outline,
-  button[type="submit"],
-  #login-btn,
-  .test-actions .btn,
-  .test-actions button,
-  #reports-export-btn,
-  #reports-refresh-btn,
-  #open-reports-btn,
-  #back-to-main-from-reports {
-    min-height: 48px !important;
-    padding: 12px 20px !important;
-    font-size: 16px !important;
-    line-height: 1.3 !important;
-    border-radius: 10px !important;
-    touch-action: manipulation;
-  }
-
-  .test-actions .btn-primary,
-  .test-actions button.btn-primary {
-    min-height: 52px !important;
-    padding: 14px 24px !important;
-    font-size: 17px !important;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .pdf-download-btn {
-    min-height: 52px !important;
-    padding: 14px 20px !important;
-    font-size: 16px !important;
-    width: 100%;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  .text-answer-input {
-    min-height: 48px !important;
-    font-size: 16px !important;
-    padding: 12px 14px !important;
-  }
-
-  .pdf-modal-content {
-    width: 100%;
-    height: 100%;
-    max-height: 100%;
-    border-radius: 0;
-  }
-
-  .pdf-modal-footer {
-    padding: 14px 16px;
-    padding-bottom: max(14px, env(safe-area-inset-bottom));
-  }
-
-  .portal-toast {
-    bottom: max(16px, env(safe-area-inset-bottom));
-    padding: 16px 18px;
-    font-size: 16px;
-  }
-
-  .test-meta {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .progress-wrap {
-    min-width: 0;
-  }
-
-  .test-timer {
-    text-align: left;
-  }
-
-  .test-question {
-    padding: 0.85rem 1rem;
-  }
-
-  .header {
-    padding: 0.75rem 1rem;
-  }
-
-  .header-right {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .content {
-    padding: 1rem;
-  }
-
-  .reports-filters {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .reports-filters select {
-    min-height: 48px;
-    font-size: 16px;
-  }
+  .btn, #login-btn { min-height: 48px !important; font-size: 16px !important; }
+  .pdf-modal-content { width: 100%; height: 100%; border-radius: 0; }
+  .header-right { width: 100%; justify-content: flex-end; }
+  .content { padding: 1rem; }
 }
