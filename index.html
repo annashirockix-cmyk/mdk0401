@@ -1,130 +1,192 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#1e40af" />
-  <meta name="description" content="Учебный портал для студентов технических специальностей СПО" />
-
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/png" sizes="32x32" href="./icons/icon-192.png" />
-
-  <title>Учебный портал СПО</title>
-  <!-- Важно: добавлен ./ для корректной работы на GitHub Pages -->
-  <link rel="stylesheet" href="./style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МДК 07.01 — Учебный портал</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="lecture-methodical.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 </head>
-<body>
-  <div id="app">
-    <!-- Экран загрузки -->
-    <div id="loading-screen" class="screen active">
-      <div class="loader"></div>
-      <p>Загрузка портала...</p>
-    </div>
+<body data-theme="dark">
 
-    <!-- Экран авторизации -->
-    <div id="auth-screen" class="screen">
-      <div class="auth-card">
-        <h1>Учебный портал</h1>
+    <header class="topbar">
+        <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="brand-badge" id="mainLogo">МДК Портал</div>
         
-        <!-- Форма входа -->
-        <div id="login-container">
-            <p class="subtitle">Вход для студентов и преподавателей</p>
-            <form id="login-form" autocomplete="on">
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" autocomplete="username" required placeholder="student@example.com" inputmode="email" />
-              </div>
-              <div class="form-group">
-                <label for="password">Пароль</label>
-                <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="••••••••" />
-              </div>
-              <button type="submit" class="btn btn-primary" id="login-btn">Войти</button>
-            </form>
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="#" id="show-register" style="color: #1e40af; text-decoration: none; font-weight: 500;">Нет аккаунта? Зарегистрироваться</a>
+        <select id="mdkSelector" class="self-input" style="width:auto; margin:0; padding:6px 10px; font-size:14px; background:var(--card); border-color:var(--border); color:var(--text);">
+            <option value="07.01">МДК 07.01 (ЧПУ)</option>
+            <option value="04.01">МДК 04.01 (Диагностика)</option>
+            <option value="02.01">МДК 02.01 (Сборка)</option>
+            <option value="02.02">МДК 02.02 (Прогр. сборки)</option>
+        </select>
+
+        <div class="topbar-status" style="display:flex; gap:10px; align-items:center; margin-left:auto;">
+            <div id="xpCount" class="status-pill" style="cursor:default;">🌟 0 XP</div>
+            <button class="btn ghost" id="themeToggle" style="padding:6px 10px; font-size:16px; border:none;">🎨</button>
+            
+            <div class="user-chip" id="userChip" style="display:flex; align-items:center; gap:8px; background:var(--card); padding:4px 12px 4px 4px; border-radius:20px; border:1px solid var(--border); cursor:pointer;" onclick="location.hash='#/profile'">
+                <div id="userChipAvatar" style="width:32px; height:32px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:16px; overflow:hidden;">👨‍🎓</div>
+                <div style="display:flex; flex-direction:column; line-height:1.1;">
+                    <span id="userChipName" style="font-size:13px; font-weight:bold;">Гость</span>
+                    <span id="userChipGroup" style="font-size:11px; color:var(--muted);">—</span>
+                </div>
             </div>
         </div>
+    </header>
 
-        <!-- Форма регистрации -->
-        <div id="register-container" style="display: none;">
-            <p class="subtitle">Создание нового аккаунта</p>
-            <form id="register-form">
-              <div class="form-group">
-                <label for="reg-name">Фамилия и Имя</label>
-                <input type="text" id="reg-name" placeholder="Иванов Иван" required />
-              </div>
-              <div class="form-group">
-                <label for="reg-group">Группа</label>
-                <input type="text" id="reg-group" placeholder="ТМ-4" required />
-              </div>
-              <div class="form-group">
-                <label for="reg-email">Email</label>
-                <input type="email" id="reg-email" placeholder="student@example.com" required />
-              </div>
-              <div class="form-group">
-                <label for="reg-password">Пароль</label>
-                <input type="password" id="reg-password" autocomplete="new-password" placeholder="Придумайте пароль" required />
-              </div>
-              <button type="submit" class="btn btn-primary" id="register-btn">Создать аккаунт</button>
-            </form>
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="#" id="show-login" style="color: #1e40af; text-decoration: none; font-weight: 500;">Уже есть аккаунт? Войти</a>
+    <div id="crumbs" style="padding: 12px 24px; font-size: 14px; color: var(--muted); background: var(--bg); border-bottom: 1px solid var(--border);"></div>
+
+    <main id="app"></main>
+
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-head">
+            <div class="brand-badge">МДК Портал</div>
+            <button class="drawer-close" id="drawerClose">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="#/" class="drawer-item" data-go="#/">🏠 Главная</a>
+            <a href="#/profile" class="drawer-item" data-go="#/profile">👤 Личный кабинет</a>
+            <a href="#/certificate" class="drawer-item" data-go="#/certificate">📜 Сертификат</a>
+            <a href="#/achievements" class="drawer-item" data-go="#/achievements">🏆 Достижения</a>
+            <a href="#/shop" class="drawer-item" data-go="#/shop">🛒 Магазин</a>
+            <a href="#/links" class="drawer-item" data-go="#/links">📚 Полезные материалы</a>
+            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+            <a href="#/videos" class="drawer-item" data-go="#/videos">🎬 Видеоуроки</a>
+            <a href="#/safety" class="drawer-item" data-go="#/safety">🛡️ Охрана труда</a>
+            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+            <a href="#/training" class="drawer-item" data-go="#/training">🎯 Тренировка</a>
+            <a href="#/final" class="drawer-item" data-go="#/final">📋 Экзамен</a>
+            <a href="#/arcade" class="drawer-item" data-go="#/arcade">🎮 Игровая комната</a>
+            <a href="#/rating" class="drawer-item" data-go="#/rating">🏅 Доска почета</a>
+            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
+            <a href="#/schedule" class="drawer-item" data-go="#/schedule">📅 Расписание</a>
+            <a href="#/journal" class="drawer-item" data-go="#/journal">📒 Журнал (Препод)</a>
+            <a href="#/reports" class="drawer-item" data-go="#/reports">📊 Отчеты (Препод)</a>
+            <a href="#/admin" class="drawer-item" data-go="#/admin">⚙️ Админка (Препод)</a>
+            <div style="padding:20px;">
+                <button class="btn ghost" style="width:100%; border-color:var(--err); color:var(--err);" onclick="window.handleLogout()">🚪 Выйти</button>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ИГР -->
+    <div id="loginIframeModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:999999; padding:20px; backdrop-filter: blur(5px);">
+        <button class="btn" onclick="document.getElementById('loginIframeModal').style.display='none'" style="position:absolute; top:20px; right:20px; z-index:10; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">✖ Закрыть</button>
+        <iframe id="loginIframeContent" style="width:100%; height:100%; border:none; border-radius:12px; background: #000;"></iframe>
+    </div>
+
+    <div class="login-overlay" id="loginOverlay" style="display:none;">
+        <div class="login-shell">
+            <h2 style="text-align:center; margin-bottom:20px;">Вход в портал</h2>
+            <div class="login-grid">
+                <div class="login-card">
+                    <h3 style="margin-top:0; color:var(--accent);">👨‍🎓 Студент</h3>
+                    <form onsubmit="event.preventDefault(); document.getElementById('btnLoginStudent').click();">
+                        <input type="text" id="loginName" placeholder="Ваше ФИО (Иванов Иван)">
+                        <input type="text" id="loginGroup" placeholder="Группа (ТМП 5-2)">
+                        <button type="button" class="btn" id="btnLoginStudent" style="width:100%;">Войти</button>
+                        <button type="button" class="btn ghost" onclick="window.clearCache()" style="width:100%; margin-top:10px; border-color:var(--err); color:var(--err); font-size:12px;">🔄 Сбросить кэш и обновить</button>
+                    </form>
+                </div>
+                <div class="login-card">
+                    <h3 style="margin-top:0; color:var(--gold);">👨‍🏫 Преподаватель</h3>
+                    <form onsubmit="event.preventDefault(); document.getElementById('btnLoginTeacher').click();">
+                        <input type="text" id="teacherUser" placeholder="Логин (admin)">
+                        <input type="password" id="teacherPass" placeholder="Пароль (admin)">
+                        <button type="button" class="btn" id="btnLoginTeacher" style="width:100%; background:var(--gold); color:#000;">Войти в журнал</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- БЛОК С ИГРАМИ НА ЭКРАНЕ ВХОДА -->
+            <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; text-align: center;">
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Интерактивные элементы</p>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn ghost" onclick="window.openLoginIframe('captcha_wake_cat.html')" style="font-size: 12px; padding: 8px 15px;">🐱 Кот-капча</button>
+                    <button class="btn ghost" onclick="window.openLoginIframe('heavy_ball_switch.html')" style="font-size: 12px; padding: 8px 15px;">⚫ Тяжелый шар</button>
+                    <button class="btn ghost" onclick="window.openLoginIframe('gravity_password_v2.html')" style="font-size: 12px; padding: 8px 15px;">🔐 Гравитационный пароль</button>
+                    <button class="btn ghost" onclick="window.openLoginIframe('paper_lantern.html')" style="font-size: 12px; padding: 8px 15px;">🏮 Бумажные фонарики</button>
+                    <button class="btn ghost" onclick="window.openLoginIframe('login_v3b.html')" style="font-size: 12px; padding: 8px 15px;">💧 Жидкий металл</button>
+                </div>
             </div>
         </div>
-        <p id="auth-error" class="error-message" hidden></p>
-      </div>
     </div>
 
-    <!-- Основной экран -->
-    <div id="main-screen" class="screen">
-      <header class="header">
-        <div class="header-left"><h1 class="logo">Учебный портал</h1></div>
-        <div class="header-right">
-          <span id="user-name" class="user-name"></span>
-          <button id="open-reports-btn" class="btn btn-outline" data-role="teacher" style="display:none;">Отчёты</button>
-          <button id="logout-btn" class="btn btn-outline">Выйти</button>
-        </div>
-      </header>
-      <main class="content">
-        <div id="dashboard">
-          <h2>Добро пожаловать!</h2>
-          <p id="welcome-text"></p>
-        </div>
-      </main>
-    </div>
+    <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Экран теста -->
-    <div id="test-screen" class="screen">
-      <div id="test-container" class="test-container"></div>
-    </div>
+    <script src="api.js"></script>
+    <script src="data-0701.js"></script>
+    <script src="data-0401.js"></script>
+    <script src="data-0201.js"></script>
+    <script src="data-0202.js"></script>
+    <script src="data-extra.js"></script>
+    <script src="data-global.js"></script>
+    <script src="tests-extra.js"></script>
+    
+    <script src="questions-setup.js"></script>
+    <script src="questions-mdk.js"></script>
+    <script src="questions-anime.js"></script>
+    <script src="questions-games.js"></script>
+    <script src="questions-logic.js"></script>
 
-    <!-- Экран результата -->
-    <div id="test-result-screen" class="screen">
-      <div id="test-result-container" class="test-result-container"></div>
-    </div>
+    <script src="app.js"></script>
+    
+    <script src="assistant.js"></script>
+    <script src="shop.js"></script>
+    <script src="games.js"></script>
+    <script src="extra.js"></script>
+    <script src="exam-engine.js"></script>
+    <script src="exam_0701.js"></script>
+    <script src="exam_0401.js"></script>
+    <script src="exam_0201.js"></script>
+    <script src="exam_0202.js"></script>
+    <script src="final.js"></script>
+    <script src="journal.js"></script>
+    <script src="reports.js"></script>
+    <script src="schedule.js"></script>
+    <script src="rating.js"></script>
+    <script src="links.js"></script>
+    <script src="info.js"></script>
+    <script src="admin.js"></script>
+    <script src="easter-eggs.js"></script>
+    
+    <script>
+        // Функция открытия игр на экране входа
+        window.openLoginIframe = function(url) {
+            document.getElementById('loginIframeContent').src = './' + url;
+            document.getElementById('loginIframeModal').style.display = 'block';
+        };
 
-    <!-- Экран отчётов -->
-    <div id="reports-screen" class="screen">
-      <header class="header">
-        <div class="header-left"><h1 class="logo">Отчёты</h1></div>
-        <div class="header-right">
-          <button id="back-to-main-from-reports" class="btn btn-outline">Назад</button>
-        </div>
-      </header>
-      <main class="content">
-        <div id="reports-content">
-            <!-- Заглушка, если reports.js не загрузился -->
-            <div class="module">
-                <h2>Раздел отчетов</h2>
-                <p>Загрузка данных...</p>
-            </div>
-        </div>
-      </main>
-    </div>
-  </div>
+        document.getElementById('mdkSelector').addEventListener('change', function() {
+            if (window.state) {
+                window.state.activeCourseId = this.value;
+                if (window.saveStudentData) window.saveStudentData();
+                if (location.hash === '#/' || location.hash === '') {
+                    if (window.renderHomePage) window.renderHomePage();
+                } else {
+                    location.hash = '#/';
+                }
+            }
+        });
 
-  <script src="./api.js" defer></script>
-  <script src="./app.js" defer></script>
-  <script src="./reports.js" defer></script>
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                if (window.state && window.state.activeCourseId) {
+                    document.getElementById('mdkSelector').value = window.state.activeCourseId;
+                }
+            }, 100);
+        });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW ошибка:', err));
+        }
+    </script>
 </body>
 </html>
