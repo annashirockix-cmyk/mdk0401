@@ -1,6 +1,5 @@
 /**
  * reports.js — кабинет преподавателя: отчёты и выгрузка CSV
- * Vanilla JS, ES6+
  */
 
 const Reports = {
@@ -8,7 +7,6 @@ const Reports = {
   filteredResults: [],
 
   async init() {
-    // Безопасная проверка сессии (на случай, если loadSession не определена)
     if (typeof loadSession === 'function') {
       const session = loadSession();
       if (!session || session.role !== 'teacher') {
@@ -28,18 +26,10 @@ const Reports = {
     const filterGroup = document.getElementById('filter-group');
     const filterTest = document.getElementById('filter-test');
 
-    if (refreshBtn) {
-      refreshBtn.addEventListener('click', () => this.loadResults());
-    }
-    if (exportBtn) {
-      exportBtn.addEventListener('click', () => this.exportToCSV());
-    }
-    if (filterGroup) {
-      filterGroup.addEventListener('change', () => this.applyFilters());
-    }
-    if (filterTest) {
-      filterTest.addEventListener('change', () => this.applyFilters());
-    }
+    if (refreshBtn) refreshBtn.addEventListener('click', () => this.loadResults());
+    if (exportBtn) exportBtn.addEventListener('click', () => this.exportToCSV());
+    if (filterGroup) filterGroup.addEventListener('change', () => this.applyFilters());
+    if (filterTest) filterTest.addEventListener('change', () => this.applyFilters());
   },
 
   async loadResults() {
@@ -47,33 +37,24 @@ const Reports = {
     const statusEl = document.getElementById('reports-status');
 
     if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Загрузка...</td></tr>';
-    if (statusEl) statusEl.textContent = 'Загрузка данных...';
-    if (statusEl) statusEl.style.color = 'inherit'; // Сброс цвета ошибки, если была
+    if (statusEl) {
+      statusEl.textContent = 'Загрузка данных...';
+      statusEl.style.color = 'inherit';
+    }
 
     try {
-      // Защита от зависания: если сервер не ответит за 15 секунд, выбросится ошибка
-      const fetchPromise = API.safeFetch(API.BASE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'get_results' })
-      });
+      // ИСПОЛЬЗУЕМ ВСТРОЕННЫЙ МЕТОД API
+      const response = await API.post('get_results');
 
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Превышено время ожидания ответа от сервера (15 сек). Проверьте интернет.')), 15000)
-      );
-
-      let response = await Promise.race([fetchPromise, timeoutPromise]);
-
-      // Если API.safeFetch вернул объект Response (а не JSON), парсим его
-      if (response && typeof response.json === 'function') {
-        response = await response.json();
+      // Проверяем оба флага (success или ok)
+      if (!response || (!response.success && !response.ok)) {
+        throw new Error(response?.error || 'Сервер вернул ошибку (возможно, неверный URL или доступ)');
       }
 
-      if (!response || !response.success) {
-        throw new Error(response?.error || 'Не удалось загрузить результаты (сервер вернул ошибку)');
-      }
+      // Достаем результаты (вдруг сервер вернул их в поле data)
+      const results = response.results || response.data || [];
+      this.results = results;
 
-      this.results = response.results || [];
       this.populateFilters();
       this.applyFilters();
 
@@ -83,7 +64,7 @@ const Reports = {
     } catch (err) {
       console.error('[Reports] Ошибка загрузки:', err);
       if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="7" class="error-cell" style="color: red; text-align: center; padding: 10px;">Ошибка: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center; padding: 10px;">Ошибка: ${err.message}</td></tr>`;
       }
       if (statusEl) {
         statusEl.textContent = 'Ошибка загрузки';
@@ -153,7 +134,7 @@ const Reports = {
             <td>${this.escapeHtml(r.name || r.email || '—')}</td>
             <td>${this.escapeHtml(r.group || '—')}</td>
             <td>${this.escapeHtml(r.testTitle || r.testId || '—')}</td>
-            <td class="grade-cell grade-${r.grade}">${r.grade}</td>
+            <td class="grade-cell grade-${r.grade}">${r.grade || '—'}</td>
             <td>${timeStr}</td>
             <td>${r.attempts || 1}</td>
             <td>${dateStr}</td>
@@ -181,11 +162,8 @@ const Reports = {
     try {
       const d = new Date(iso);
       return d.toLocaleString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
       });
     } catch {
       return String(iso);
@@ -193,14 +171,12 @@ const Reports = {
   },
 
   escapeHtml(text) {
+    if (text === null || text === undefined) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   },
 
-  /**
-   * Выгрузка CSV: ФИО, Группа, Тест, Оценка, Время, Попытки
-   */
   exportToCSV() {
     const data = this.filteredResults.length > 0 ? this.filteredResults : this.results;
 
@@ -216,7 +192,7 @@ const Reports = {
         this.csvEscape(r.name || r.email || ''),
         this.csvEscape(r.group || ''),
         this.csvEscape(r.testTitle || r.testId || ''),
-        r.grade,
+        r.grade || '',
         timeStr,
         r.attempts || 1
       ].join(';');
@@ -249,9 +225,3 @@ const Reports = {
     return str;
   }
 };
-
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('reports-table')) {
-    // Инициализация происходит по кнопке «Отчёты»
-  }
-});
