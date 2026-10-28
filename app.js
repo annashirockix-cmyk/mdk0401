@@ -141,9 +141,30 @@ window.renderSafetyPage = function() {
     app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🛡️ Охрана труда</h1></section><div class="module" id="safetyList"></div>';
     var list = document.getElementById("safetyList");
     var items = window.GLOBAL_DATA && window.GLOBAL_DATA.safety ? window.GLOBAL_DATA.safety : [];
+    
     if (!items.length) { list.innerHTML = "<p>Инструкций пока нет.</p>"; return; }
+    
     items.forEach(s => {
-        list.innerHTML += `<div class="safety-card" style="margin-bottom:15px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--err); font-size:16px;">${s.title}</b><p style="font-size:14px; margin:5px 0;">${s.description||''}</p>${s.content ? `<p>${s.content}</p>` : `<a href="${s.file}" target="_blank" class="btn" style="margin-top:10px; display:inline-block;">📥 Скачать</a>`}</div>`;
+        var isPdf = s.file && s.file.toLowerCase().endsWith('.pdf');
+        var viewer = '';
+        
+        if (s.content) {
+            viewer = `<p>${s.content}</p>`;
+        } else if (s.file) {
+            if (isPdf) {
+                viewer = `<object data="${s.file}" type="application/pdf" width="100%" height="600px" style="border:1px solid var(--border); border-radius:8px; margin-top:15px; background:#111;">
+                    <p style="text-align:center; color:var(--muted); padding:20px;">Ваш браузер блокирует встроенный просмотр. <a href="${s.file}" download class="btn" style="margin-top:10px;">📥 Скачать файл</a></p>
+                </object>`;
+            } else {
+                viewer = `<a href="${s.file}" target="_blank" class="btn" style="margin-top:15px; display:inline-block;">📥 Скачать файл</a>`;
+            }
+        }
+        
+        list.innerHTML += `<div class="safety-card" style="margin-bottom:20px; background:var(--card-soft); padding:20px; border-radius:8px; border:1px solid var(--border);">
+            <b style="color:var(--accent); font-size:18px;">${s.title}</b>
+            <p style="font-size:14px; margin:5px 0 15px 0; color:var(--text-soft);">${s.description||''}</p>
+            ${viewer}
+        </div>`;
     });
 };
 
@@ -174,7 +195,6 @@ window.renderHomePage = function() {
     }
     window.applyGlobalEffects();
 };
-
 window.renderTopicPage = function(courseId, topicId) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var course = window.MDK_DATA[courseId]; if (!course) { app.innerHTML = '<div class="module">Курс не найден</div>'; return; }
@@ -320,7 +340,6 @@ window.renderTopicPage = function(courseId, topicId) {
     window.switchTopicTab('lectures');
 };
 
-
 window._getSessionEmail = function() {
     if (window.state.staff && window.state.staff.email) return window.state.staff.email;
     if (window.state.student && window.state.student.email) return window.state.student.email;
@@ -407,7 +426,6 @@ window.bindAccountSettings = function() {
     }
 };
 
-
 window.renderProfilePage = function(route) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     if (!window.state.student && !window.state.staff) { location.hash = "#/"; return; }
@@ -426,7 +444,7 @@ window.renderProfilePage = function(route) {
             <div class="module" id="accountSettings" style="max-width:480px; margin:20px auto; text-align:left;">
                 <h3 style="margin-top:0;">⚙️ Аккаунт</h3>
                 <p style="font-size:13px; color:var(--muted); margin-top:0;">Email: <b id="accEmailLabel"></b></p>
-                <form onsubmit="event.preventDefault();">
+                <div>
                     <div style="margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);">
                         <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Отображаемое имя</label>
                         <input type="text" id="accName" class="self-input" placeholder="ФИО">
@@ -443,7 +461,7 @@ window.renderProfilePage = function(route) {
                         <input type="password" id="accNewPass2" class="self-input" placeholder="Повторите пароль" autocomplete="new-password">
                         <button type="button" class="btn" id="btnSavePass" style="width:100%; margin-top:10px; background:var(--gold); color:#000;">🔑 Сменить пароль</button>
                     </div>
-                </form>
+                </div>
                 <p id="accMsg" style="display:none; margin-top:12px; text-align:center; font-weight:bold;"></p>
             </div>
 `;
@@ -491,7 +509,7 @@ window.renderProfilePage = function(route) {
             <div class="module" id="accountSettings" style="max-width:480px; margin:20px auto; text-align:left;">
                 <h3 style="margin-top:0;">⚙️ Аккаунт</h3>
                 <p style="font-size:13px; color:var(--muted); margin-top:0;">Email: <b id="accEmailLabel"></b></p>
-                <form onsubmit="event.preventDefault();">
+                <div>
                     <div style="margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);">
                         <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Отображаемое имя</label>
                         <input type="text" id="accName" class="self-input" placeholder="ФИО">
@@ -508,7 +526,7 @@ window.renderProfilePage = function(route) {
                         <input type="password" id="accNewPass2" class="self-input" placeholder="Повторите пароль" autocomplete="new-password">
                         <button type="button" class="btn" id="btnSavePass" style="width:100%; margin-top:10px; background:var(--gold); color:#000;">🔑 Сменить пароль</button>
                     </div>
-                </form>
+                </div>
                 <p id="accMsg" style="display:none; margin-top:12px; text-align:center; font-weight:bold;"></p>
             </div>
 `;
@@ -520,7 +538,6 @@ window.renderProfilePage = function(route) {
     }
     window.applyGlobalEffects();
 };
-
 window.renderAchievementsPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Достижения";
@@ -808,27 +825,23 @@ function setupLogin() {
 }
 
 // ============================================================
-// 6. РОУТЕР (ИСПРАВЛЕНА ЛОГИКА БЛОКИРОВКИ)
+// 6. РОУТЕР
 // ============================================================
 function router() {
     var hash = location.hash.slice(1) || "/"; 
     var parts = hash.split("/").filter(p => p);
     var overlay = document.getElementById("loginOverlay");
 
-    // Если не авторизован
     if (!window.state.student && !window.state.staff) {
         if (overlay) overlay.style.display = "flex"; 
-        
         if (hash !== "/" && hash !== "" && hash !== "#/") {
             location.hash = "#/";
             return;
         }
-        
         window.renderHomePage(); 
         return;
     }
 
-    // Если авторизован - скрываем окно входа
     if (overlay) overlay.style.display = "none";
 
     if (parts.length === 0 || parts[0] === "") { window.renderHomePage(); return; }
