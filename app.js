@@ -314,6 +314,94 @@ window.renderTopicPage = function(courseId, topicId) {
     window.switchTopicTab('lectures');
 };
 
+
+window._getSessionEmail = function() {
+    if (window.state.staff && window.state.staff.email) return window.state.staff.email;
+    if (window.state.student && window.state.student.email) return window.state.student.email;
+    return "";
+};
+
+window._showAccMsg = function(text, ok) {
+    var el = document.getElementById("accMsg");
+    if (!el) return;
+    el.style.display = "block";
+    el.textContent = text;
+    el.style.color = ok ? "var(--ok,#10b981)" : "var(--err,#ef4444)";
+};
+
+window.bindAccountSettings = function() {
+    var email = window._getSessionEmail();
+    var emailLabel = document.getElementById("accEmailLabel");
+    if (emailLabel) emailLabel.textContent = email || "(не указан — войдите заново через email)";
+
+    var nameInput = document.getElementById("accName");
+    if (nameInput) {
+        var cur = (window.state.staff && window.state.staff.name) || (window.state.student && window.state.student.name) || "";
+        nameInput.value = cur;
+    }
+
+    var btnName = document.getElementById("btnSaveName");
+    if (btnName) {
+        btnName.onclick = function() {
+            var newName = (document.getElementById("accName").value || "").trim();
+            var pass = (document.getElementById("accNamePass").value || "");
+            if (!newName || newName.length < 2) return window._showAccMsg("Укажите имя (минимум 2 символа)", false);
+            if (!email) return window._showAccMsg("Нет email в сессии. Выйдите и войдите снова по email.", false);
+            if (!pass) return window._showAccMsg("Введите текущий пароль", false);
+
+            btnName.disabled = true; btnName.textContent = "Сохранение...";
+            window.API.changeName(email, pass, newName).then(function(res) {
+                btnName.disabled = false; btnName.textContent = "💾 Сохранить имя";
+                if (res && (res.ok || res.success)) {
+                    if (window.state.staff) window.state.staff.name = newName;
+                    if (window.state.student) window.state.student.name = newName;
+                    if (window.saveStudentData) window.saveStudentData();
+                    if (window.renderUserChip) window.renderUserChip();
+                    document.getElementById("accNamePass").value = "";
+                    window._showAccMsg("Имя обновлено", true);
+                    if (window.showToast) window.showToast("Имя сохранено", "ok");
+                } else {
+                    window._showAccMsg((res && res.error) || "Не удалось сохранить имя", false);
+                }
+            }).catch(function(err) {
+                btnName.disabled = false; btnName.textContent = "💾 Сохранить имя";
+                window._showAccMsg(err.message || "Ошибка сети", false);
+            });
+        };
+    }
+
+    var btnPass = document.getElementById("btnSavePass");
+    if (btnPass) {
+        btnPass.onclick = function() {
+            var oldP = (document.getElementById("accOldPass").value || "");
+            var newP = (document.getElementById("accNewPass").value || "");
+            var newP2 = (document.getElementById("accNewPass2").value || "");
+            if (!email) return window._showAccMsg("Нет email в сессии. Выйдите и войдите снова по email.", false);
+            if (!oldP || !newP) return window._showAccMsg("Заполните текущий и новый пароль", false);
+            if (newP.length < 4) return window._showAccMsg("Новый пароль слишком короткий (мин. 4)", false);
+            if (newP !== newP2) return window._showAccMsg("Пароли не совпадают", false);
+
+            btnPass.disabled = true; btnPass.textContent = "Сохранение...";
+            window.API.changePassword(email, oldP, newP).then(function(res) {
+                btnPass.disabled = false; btnPass.textContent = "🔑 Сменить пароль";
+                if (res && (res.ok || res.success)) {
+                    document.getElementById("accOldPass").value = "";
+                    document.getElementById("accNewPass").value = "";
+                    document.getElementById("accNewPass2").value = "";
+                    window._showAccMsg("Пароль изменён", true);
+                    if (window.showToast) window.showToast("Пароль успешно изменён", "ok");
+                } else {
+                    window._showAccMsg((res && res.error) || "Не удалось сменить пароль", false);
+                }
+            }).catch(function(err) {
+                btnPass.disabled = false; btnPass.textContent = "🔑 Сменить пароль";
+                window._showAccMsg(err.message || "Ошибка сети", false);
+            });
+        };
+    }
+};
+
+
 window.renderProfilePage = function(route) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     if (!window.state.student && !window.state.staff) { location.hash = "#/"; return; }
@@ -328,8 +416,32 @@ window.renderProfilePage = function(route) {
             <a href="#/journal" class="btn" style="padding:20px; background:var(--accent); color:#fff;">📒 Журнал</a>
             <a href="#/reports" class="btn" style="padding:20px; background:var(--gold); color:#000;">📊 Отчеты</a>
             <a href="#/admin" class="btn" style="padding:20px; background:var(--ok); color:#000;">⚙️ Админка</a>
-        </div>`;
-        window.applyGlobalEffects(); return;
+        </div>` + `
+            <div class="module" id="accountSettings" style="max-width:480px; margin:20px auto; text-align:left;">
+                <h3 style="margin-top:0;">⚙️ Аккаунт</h3>
+                <p style="font-size:13px; color:var(--muted); margin-top:0;">Email: <b id="accEmailLabel"></b></p>
+                <div style="margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);">
+                    <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Отображаемое имя</label>
+                    <input type="text" id="accName" class="self-input" placeholder="ФИО">
+                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Текущий пароль (для подтверждения)</label>
+                    <input type="password" id="accNamePass" class="self-input" placeholder="••••••••" autocomplete="current-password">
+                    <button type="button" class="btn" id="btnSaveName" style="width:100%; margin-top:10px;">💾 Сохранить имя</button>
+                </div>
+                <div>
+                    <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Текущий пароль</label>
+                    <input type="password" id="accOldPass" class="self-input" placeholder="Текущий пароль" autocomplete="current-password">
+                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Новый пароль</label>
+                    <input type="password" id="accNewPass" class="self-input" placeholder="Минимум 4 символа" autocomplete="new-password">
+                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Повтор нового пароля</label>
+                    <input type="password" id="accNewPass2" class="self-input" placeholder="Повторите пароль" autocomplete="new-password">
+                    <button type="button" class="btn" id="btnSavePass" style="width:100%; margin-top:10px; background:var(--gold); color:#000;">🔑 Сменить пароль</button>
+                </div>
+                <p id="accMsg" style="display:none; margin-top:12px; text-align:center; font-weight:bold;"></p>
+            </div>
+`;
+        window.applyGlobalEffects();
+        window.bindAccountSettings();
+        return;
     }
 
     if (isTeacher && targetKey) {
@@ -367,11 +479,34 @@ window.renderProfilePage = function(route) {
                 <a href="#/shop" class="btn">🛒 Магазин XP</a>
                 <a href="#/grades" class="btn" style="background:var(--gold); color:#000;">📊 Мои оценки</a>
             </div>
-        </section>`;
+        </section>` + `
+            <div class="module" id="accountSettings" style="max-width:480px; margin:20px auto; text-align:left;">
+                <h3 style="margin-top:0;">⚙️ Аккаунт</h3>
+                <p style="font-size:13px; color:var(--muted); margin-top:0;">Email: <b id="accEmailLabel"></b></p>
+                <div style="margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);">
+                    <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Отображаемое имя</label>
+                    <input type="text" id="accName" class="self-input" placeholder="ФИО">
+                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Текущий пароль (для подтверждения)</label>
+                    <input type="password" id="accNamePass" class="self-input" placeholder="••••••••" autocomplete="current-password">
+                    <button type="button" class="btn" id="btnSaveName" style="width:100%; margin-top:10px;">💾 Сохранить имя</button>
+                </div>
+                <div>
+                    <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Текущий пароль</label>
+                    <input type="password" id="accOldPass" class="self-input" placeholder="Текущий пароль" autocomplete="current-password">
+                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Новый пароль</label>
+                    <input type="password" id="accNewPass" class="self-input" placeholder="Минимум 4 символа" autocomplete="new-password">
+                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Повтор нового пароля</label>
+                    <input type="password" id="accNewPass2" class="self-input" placeholder="Повторите пароль" autocomplete="new-password">
+                    <button type="button" class="btn" id="btnSavePass" style="width:100%; margin-top:10px; background:var(--gold); color:#000;">🔑 Сменить пароль</button>
+                </div>
+                <p id="accMsg" style="display:none; margin-top:12px; text-align:center; font-weight:bold;"></p>
+            </div>
+`;
         window.saveProfileChanges = function() {
             window.state.nickname = document.getElementById("profNick").value.trim(); window.state.signature = document.getElementById("profBio").value.trim();
             window.saveStudentData(); window.renderUserChip(); window.showToast("Сохранено!", "ok"); window.renderProfilePage(route);
         };
+        window.bindAccountSettings();
     }
     window.applyGlobalEffects();
 };
@@ -515,45 +650,122 @@ window.handleLogout = function() {
 
 function setupLogin() {
     var overlay = document.getElementById("loginOverlay"); if (!overlay) return;
-    if (window.state.student || window.state.staff) overlay.style.display = "none"; else overlay.style.display = "flex";
+
+    function showLoginError(msg) {
+        var el = document.getElementById("loginError");
+        if (el) { el.style.display = "block"; el.textContent = msg; }
+        if (window.showToast) window.showToast(msg, "err");
+    }
+    function hideLoginError() {
+        var el = document.getElementById("loginError");
+        if (el) { el.style.display = "none"; el.textContent = ""; }
+    }
+
+    function applyAuthSession(res, email) {
+        var role = (res.role || "student").toLowerCase();
+        var name = res.name || email;
+        var group = res.group || "";
+
+        if (role === "teacher" || role === "admin") {
+            window.state.staff = { name: name, role: role, email: res.email || email };
+            window.state.student = null;
+        } else {
+            window.state.student = { name: name, group: group, email: res.email || email };
+            window.state.staff = null;
+        }
+
+        if (window.saveStudentData) window.saveStudentData();
+        if (window.renderUserChip) window.renderUserChip();
+        overlay.style.display = "none";
+        if (window.unlockAchievement) window.unlockAchievement("welcome");
+        location.hash = "#/";
+        if (window.showToast) window.showToast("Добро пожаловать, " + name + "!", "ok");
+        if (window.router) window.router();
+    }
+
+    function doUnifiedLogin() {
+        hideLoginError();
+        var emailEl = document.getElementById("loginEmail");
+        var passEl = document.getElementById("loginPassword");
+        var btn = document.getElementById("btnLoginUnified");
+        if (!emailEl || !passEl) return;
+
+        var email = emailEl.value.trim();
+        var pass = passEl.value;
+        if (!email || !pass) {
+            showLoginError("Введите email и пароль");
+            return;
+        }
+
+        if (btn) { btn.disabled = true; btn.textContent = "Вход..."; }
+
+        function done() {
+            if (btn) { btn.disabled = false; btn.textContent = "Войти"; }
+        }
+
+        // Локальный запасной вход (если сервер недоступен)
+        function tryLocalFallback() {
+            if (email === "admin@portal.ru" && pass === "admin123") {
+                applyAuthSession({ name: "Главный Администратор", role: "admin", email: email, group: "Администрация" }, email);
+                return true;
+            }
+            if (email === "admin" && pass === "admin") {
+                applyAuthSession({ name: "Администратор", role: "admin", email: "admin@portal.ru", group: "Администрация" }, email);
+                return true;
+            }
+            if (email === "anna.sh@portal.ru" && pass === "teacher123") {
+                applyAuthSession({ name: "Широких Анна Анатольевна", role: "teacher", email: email, group: "Преподаватели" }, email);
+                return true;
+            }
+            return false;
+        }
+
+        if (window.API && window.API.login) {
+            window.API.login(email, pass).then(function (res) {
+                done();
+                if (res && (res.ok || res.success)) {
+                    applyAuthSession(res, email);
+                } else {
+                    if (!tryLocalFallback()) {
+                        showLoginError((res && res.error) || "Неверный email или пароль");
+                    }
+                }
+            }).catch(function (err) {
+                done();
+                console.warn("login error", err);
+                if (!tryLocalFallback()) {
+                    showLoginError("Ошибка сети. Проверьте интернет или нажмите «Сбросить кэш».");
+                }
+            });
+        } else {
+            done();
+            if (!tryLocalFallback()) {
+                showLoginError("Сервер недоступен");
+            }
+        }
+    }
+
+    var btn = document.getElementById("btnLoginUnified");
+    if (btn) btn.onclick = doUnifiedLogin;
+
+    var form = document.getElementById("unifiedLoginForm");
+    if (form) {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            doUnifiedLogin();
+        });
+    }
+
+    // Совместимость: если старые кнопки ещё в DOM
     var btnStudent = document.getElementById("btnLoginStudent");
     if (btnStudent) {
-        btnStudent.onclick = function() {
-            var name = document.getElementById("loginName").value.trim(); var group = document.getElementById("loginGroup").value.trim();
-            if (!name || !group) return window.showToast("Введите ФИО и группу", "err");
-            window.state.student = { name: name, group: group }; window.state.staff = null;
-            window.saveStudentData(); window.renderUserChip(); overlay.style.display = "none";
-            window.unlockAchievement('welcome'); location.hash = "#/"; window.showToast("Добро пожаловать, " + name + "!", "ok");
+        btnStudent.onclick = function () {
+            showLoginError("Используйте единый вход: email и пароль");
         };
     }
     var btnTeacher = document.getElementById("btnLoginTeacher");
     if (btnTeacher) {
-        btnTeacher.onclick = function() {
-            var user = document.getElementById("teacherUser").value.trim(); var pass = document.getElementById("teacherPass").value.trim();
-            if (!user || !pass) return window.showToast("Введите логин и пароль", "err");
-            btnTeacher.disabled = true; btnTeacher.textContent = "Вход...";
-            if (window.API && window.API.login) {
-                window.API.login(user, pass).then(res => {
-                    btnTeacher.disabled = false; btnTeacher.textContent = "Войти в журнал";
-                    if (res && res.ok) {
-                        window.state.staff = { name: res.name || user, role: res.role || "teacher" }; window.state.student = null;
-                        window.saveStudentData(); window.renderUserChip(); overlay.style.display = "none"; location.hash = "#/"; window.showToast("Добро пожаловать, " + window.state.staff.name + "!", "ok");
-                    } else {
-                        if (user === "admin" && pass === "admin") loginTeacherLocal(user); else window.showToast(res.error || "Неверный логин или пароль", "err");
-                    }
-                }).catch(err => {
-                    btnTeacher.disabled = false; btnTeacher.textContent = "Войти в журнал";
-                    if (user === "admin" && pass === "admin") loginTeacherLocal(user); else window.showToast("Ошибка сети", "err");
-                });
-            } else {
-                btnTeacher.disabled = false; btnTeacher.textContent = "Войти в журнал";
-                if (user === "admin" && pass === "admin") loginTeacherLocal(user); else window.showToast("Сервер недоступен", "err");
-            }
-        };
-    }
-    function loginTeacherLocal(user) {
-        window.state.staff = { name: "Администратор", role: "admin" }; window.state.student = null;
-        window.saveStudentData(); window.renderUserChip(); overlay.style.display = "none"; location.hash = "#/"; window.showToast("Добро пожаловать!", "ok");
+        btnTeacher.onclick = doUnifiedLogin;
     }
 }
 
