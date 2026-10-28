@@ -51,7 +51,12 @@ window.API = {
             return res;
         });
     },
-    getStudents: function () { return fetchAPI("getstudents"); },
+    getStudents: function () {
+        return fetchAPI("getStudents").then(function (res) {
+            if (res && res.success) res.ok = true;
+            return res;
+        });
+    },
     getStudentData: function (key) { return fetchAPI("getstudentdata", { key: key }); },
     saveStudent: function (key, name, group, payload) {
         return fetchAPI("save", { key: key, name: name, group: group, payload: payload }, "POST");
