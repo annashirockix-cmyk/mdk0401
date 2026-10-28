@@ -8,7 +8,7 @@ window.renderLinksPage = function(){
   if (crumbs) crumbs.textContent = "Полезные материалы";
 
   app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
-  app.appendChild(el('<section class="hero"><h1>Полезные материалы</h1><p>Подборка статей, видеороликов и книг по ЧПУ.</p></section>'));
+  app.appendChild(el('<section class="hero"><h1>📚 Полезные материалы</h1><p>Подборка статей, видеороликов и книг по ЧПУ.</p></section>'));
 
   var courseId = (window.state && window.state.activeCourseId) ? window.state.activeCourseId : "07.01";
   
@@ -62,60 +62,49 @@ window.renderLinksPage = function(){
   var data = LINKS_DATA[courseId] || { articles: [], videos: [], books: [] };
 
   // Статьи
-  var artBlock = el('<section class="module"><h2>📄 Статьи</h2><div class="links-list" id="articlesList"></div></section>');
+  var artBlock = el('<section class="module"><h2>📄 Статьи</h2><div id="articlesList" style="display:flex; flex-direction:column; gap:10px;"></div></section>');
   var artList = artBlock.querySelector("#articlesList");
   if (data.articles.length === 0) {
     artList.innerHTML = '<p style="color:var(--muted);">Материалы для этого МДК пока не добавлены.</p>';
   } else {
     data.articles.forEach(a => {
-      artList.appendChild(el(`<a class="link-card" href="${a.url}" target="_blank">
-        <div class="link-card-icon">📄</div>
-        <div class="link-card-body">
-          <div class="link-card-title">${a.title}</div>
-          <div class="link-card-source">${a.source}</div>
-          <div class="link-card-desc">${a.desc}</div>
-        </div>
-        <div class="link-card-arrow">↗</div>
+      artList.appendChild(el(`<a href="${a.url}" target="_blank" style="display:block; padding:15px; background:var(--card-soft); border-radius:8px; text-decoration:none; color:var(--text); border:1px solid var(--border); transition: 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-weight:bold; color:var(--accent); font-size:16px; margin-bottom:5px;">${a.title}</div>
+        <div style="font-size:12px; color:var(--gold); margin-bottom:5px;">${a.source}</div>
+        <div style="font-size:14px; color:var(--muted);">${a.desc}</div>
       </a>`));
     });
   }
   app.appendChild(artBlock);
 
   // Видео
-  var vidBlock = el('<section class="module"><h2>🎬 Видеоролики</h2><div class="links-list" id="videosList"></div></section>');
+  var vidBlock = el('<section class="module"><h2>🎬 Видеоролики</h2><div id="videosList" style="display:flex; flex-direction:column; gap:10px;"></div></section>');
   var vidList = vidBlock.querySelector("#videosList");
   if (data.videos.length === 0) {
     vidList.innerHTML = '<p style="color:var(--muted);">Видео для этого МДК пока не добавлены.</p>';
   } else {
     data.videos.forEach(v => {
-      vidList.appendChild(el(`<a class="link-card" href="${v.url}" target="_blank">
-        <div class="link-card-icon">🎬</div>
-        <div class="link-card-body">
-          <div class="link-card-title">${v.title}</div>
-          <div class="link-card-source">${v.source}</div>
-          <div class="link-card-desc">${v.desc}</div>
-        </div>
-        <div class="link-card-arrow">↗</div>
+      vidList.appendChild(el(`<a href="${v.url}" target="_blank" style="display:block; padding:15px; background:var(--card-soft); border-radius:8px; text-decoration:none; color:var(--text); border:1px solid var(--border); transition: 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-weight:bold; color:var(--accent); font-size:16px; margin-bottom:5px;">${v.title}</div>
+        <div style="font-size:12px; color:var(--gold); margin-bottom:5px;">${v.source}</div>
+        <div style="font-size:14px; color:var(--muted);">${v.desc}</div>
       </a>`));
     });
   }
   app.appendChild(vidBlock);
 
   // Книги
-  var bookBlock = el('<section class="module"><h2>📚 Литература</h2><div class="book-list" id="booksList"></div></section>');
+  var bookBlock = el('<section class="module"><h2>📚 Литература</h2><div id="booksList" style="display:flex; flex-direction:column; gap:10px;"></div></section>');
   var bookList = bookBlock.querySelector("#booksList");
   if (data.books.length === 0) {
     bookList.innerHTML = '<p style="color:var(--muted);">Литература для этого МДК пока не добавлена.</p>';
   } else {
     data.books.forEach(b => {
-      bookList.appendChild(el(`<div class="book-card">
-        <div class="book-cover">📕</div>
-        <div class="book-body">
-          <div class="book-title">${b.title}</div>
-          <div class="book-author">${b.author}</div>
-          <div class="book-meta">${b.publisher} · ${b.year}</div>
-          <div class="book-desc">${b.desc}</div>
-        </div>
+      bookList.appendChild(el(`<div style="padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);">
+        <div style="font-weight:bold; font-size:16px; margin-bottom:5px;">${b.title}</div>
+        <div style="font-size:14px; color:var(--text-soft); margin-bottom:5px;">${b.author}</div>
+        <div style="font-size:12px; color:var(--gold); margin-bottom:5px;">${b.publisher} · ${b.year}</div>
+        <div style="font-size:14px; color:var(--muted);">${b.desc}</div>
       </div>`));
     });
   }
