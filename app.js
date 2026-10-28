@@ -6,7 +6,7 @@
 window.state = window.state || {
     student: null, staff: null, xp: 0, activeCourseId: "07.01", results: {},
     avatar: null, nickname: null, signature: null, purchasedThemes: [],
-    purchasedFonts: [], font: "default", certBg: "bg1", examSubmissions: [],
+    purchasedFonts: [], font: "default", certBg: "cert-bg-1", examSubmissions: [],
     unlockedAchievements: [], purchasedTextEffects: [], activeTextEffect: "none",
     purchasedBgEffects: [], activeBgEffect: "none", purchasedCardEffects: [], activeCardEffect: "none"
 };
@@ -93,7 +93,6 @@ window.renderTrainingListPage = function() {
     app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎯 Тренировка</h1><p>Выберите предмет или тренажер для практики</p></section>';
     var grid = document.createElement("div"); grid.style = "display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;";
     
-    // Добавляем карточку тренажера G-кода в начало списка
     var gcodeCard = document.createElement("a"); 
     gcodeCard.href = "#/training/gcode"; 
     gcodeCard.className = "module";
@@ -110,7 +109,6 @@ window.renderTrainingListPage = function() {
     app.appendChild(grid);
 };
 
-// Новая функция для рендера тренажера G-кода на весь экран
 window.renderGcodeTrainer = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     app.innerHTML = `
@@ -319,8 +317,6 @@ window.renderTopicPage = function(courseId, topicId) {
     };
     window.switchTopicTab('lectures');
 };
-
-
 window._getSessionEmail = function() {
     if (window.state.staff && window.state.staff.email) return window.state.staff.email;
     if (window.state.student && window.state.student.email) return window.state.student.email;
@@ -426,22 +422,24 @@ window.renderProfilePage = function(route) {
             <div class="module" id="accountSettings" style="max-width:480px; margin:20px auto; text-align:left;">
                 <h3 style="margin-top:0;">⚙️ Аккаунт</h3>
                 <p style="font-size:13px; color:var(--muted); margin-top:0;">Email: <b id="accEmailLabel"></b></p>
-                <div style="margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);">
-                    <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Отображаемое имя</label>
-                    <input type="text" id="accName" class="self-input" placeholder="ФИО">
-                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Текущий пароль (для подтверждения)</label>
-                    <input type="password" id="accNamePass" class="self-input" placeholder="••••••••" autocomplete="current-password">
-                    <button type="button" class="btn" id="btnSaveName" style="width:100%; margin-top:10px;">💾 Сохранить имя</button>
-                </div>
-                <div>
-                    <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Текущий пароль</label>
-                    <input type="password" id="accOldPass" class="self-input" placeholder="Текущий пароль" autocomplete="current-password">
-                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Новый пароль</label>
-                    <input type="password" id="accNewPass" class="self-input" placeholder="Минимум 4 символа" autocomplete="new-password">
-                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Повтор нового пароля</label>
-                    <input type="password" id="accNewPass2" class="self-input" placeholder="Повторите пароль" autocomplete="new-password">
-                    <button type="button" class="btn" id="btnSavePass" style="width:100%; margin-top:10px; background:var(--gold); color:#000;">🔑 Сменить пароль</button>
-                </div>
+                <form onsubmit="event.preventDefault();">
+                    <div style="margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);">
+                        <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Отображаемое имя</label>
+                        <input type="text" id="accName" class="self-input" placeholder="ФИО">
+                        <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Текущий пароль (для подтверждения)</label>
+                        <input type="password" id="accNamePass" class="self-input" placeholder="••••••••" autocomplete="current-password">
+                        <button type="button" class="btn" id="btnSaveName" style="width:100%; margin-top:10px;">💾 Сохранить имя</button>
+                    </div>
+                    <div>
+                        <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Текущий пароль</label>
+                        <input type="password" id="accOldPass" class="self-input" placeholder="Текущий пароль" autocomplete="current-password">
+                        <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Новый пароль</label>
+                        <input type="password" id="accNewPass" class="self-input" placeholder="Минимум 4 символа" autocomplete="new-password">
+                        <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Повтор нового пароля</label>
+                        <input type="password" id="accNewPass2" class="self-input" placeholder="Повторите пароль" autocomplete="new-password">
+                        <button type="button" class="btn" id="btnSavePass" style="width:100%; margin-top:10px; background:var(--gold); color:#000;">🔑 Сменить пароль</button>
+                    </div>
+                </form>
                 <p id="accMsg" style="display:none; margin-top:12px; text-align:center; font-weight:bold;"></p>
             </div>
 `;
@@ -489,22 +487,24 @@ window.renderProfilePage = function(route) {
             <div class="module" id="accountSettings" style="max-width:480px; margin:20px auto; text-align:left;">
                 <h3 style="margin-top:0;">⚙️ Аккаунт</h3>
                 <p style="font-size:13px; color:var(--muted); margin-top:0;">Email: <b id="accEmailLabel"></b></p>
-                <div style="margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);">
-                    <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Отображаемое имя</label>
-                    <input type="text" id="accName" class="self-input" placeholder="ФИО">
-                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Текущий пароль (для подтверждения)</label>
-                    <input type="password" id="accNamePass" class="self-input" placeholder="••••••••" autocomplete="current-password">
-                    <button type="button" class="btn" id="btnSaveName" style="width:100%; margin-top:10px;">💾 Сохранить имя</button>
-                </div>
-                <div>
-                    <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Текущий пароль</label>
-                    <input type="password" id="accOldPass" class="self-input" placeholder="Текущий пароль" autocomplete="current-password">
-                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Новый пароль</label>
-                    <input type="password" id="accNewPass" class="self-input" placeholder="Минимум 4 символа" autocomplete="new-password">
-                    <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Повтор нового пароля</label>
-                    <input type="password" id="accNewPass2" class="self-input" placeholder="Повторите пароль" autocomplete="new-password">
-                    <button type="button" class="btn" id="btnSavePass" style="width:100%; margin-top:10px; background:var(--gold); color:#000;">🔑 Сменить пароль</button>
-                </div>
+                <form onsubmit="event.preventDefault();">
+                    <div style="margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);">
+                        <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Отображаемое имя</label>
+                        <input type="text" id="accName" class="self-input" placeholder="ФИО">
+                        <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Текущий пароль (для подтверждения)</label>
+                        <input type="password" id="accNamePass" class="self-input" placeholder="••••••••" autocomplete="current-password">
+                        <button type="button" class="btn" id="btnSaveName" style="width:100%; margin-top:10px;">💾 Сохранить имя</button>
+                    </div>
+                    <div>
+                        <label style="font-size:13px; font-weight:bold; display:block; margin-bottom:4px;">Текущий пароль</label>
+                        <input type="password" id="accOldPass" class="self-input" placeholder="Текущий пароль" autocomplete="current-password">
+                        <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Новый пароль</label>
+                        <input type="password" id="accNewPass" class="self-input" placeholder="Минимум 4 символа" autocomplete="new-password">
+                        <label style="font-size:13px; font-weight:bold; display:block; margin:10px 0 4px;">Повтор нового пароля</label>
+                        <input type="password" id="accNewPass2" class="self-input" placeholder="Повторите пароль" autocomplete="new-password">
+                        <button type="button" class="btn" id="btnSavePass" style="width:100%; margin-top:10px; background:var(--gold); color:#000;">🔑 Сменить пароль</button>
+                    </div>
+                </form>
                 <p id="accMsg" style="display:none; margin-top:12px; text-align:center; font-weight:bold;"></p>
             </div>
 `;
@@ -551,48 +551,55 @@ window.renderCertificatePage = function() {
     app.appendChild(el('<a class="backlink no-print" href="#/" style="color:var(--accent);">← На главную</a>'));
     if (window.state.staff) {
         app.innerHTML = `<div class="no-print" style="text-align:center; margin-bottom:20px;"><button class="btn" onclick="window.print()">🖨 Распечатать</button></div>
-            <div id="printable-cert" style="background:#fff; color:#000; padding:40px; max-width:800px; margin:0 auto; text-align:center; border:10px double #c14a2a;">
-                <h1 style="font-size:40px; color:#c14a2a;">БЛАГОДАРСТВЕННОЕ ПИСЬМО</h1>
-                <p style="font-size:20px; margin:40px 0;">Вручается</p>
-                <h2 style="font-size:36px; border-bottom:2px solid #ccc; display:inline-block;">${window.escapeHtml(window.state.staff.name)}</h2>
-                <p style="font-size:18px; margin-top:40px;">За вклад в развитие портала</p>
-                <div style="margin-top:60px;">Дата: ${new Date().toLocaleDateString('ru-RU')}</div>
+            <div id="printable-cert" class="cert-bg-1" style="color:#000; padding:40px; max-width:800px; margin:0 auto; text-align:center; border:10px double #c14a2a;">
+                <div style="background:rgba(255,255,255,0.85); padding:20px; border-radius:8px;">
+                    <h1 style="font-size:40px; color:#c14a2a; font-family:'Monomakh', serif;">БЛАГОДАРСТВЕННОЕ ПИСЬМО</h1>
+                    <p style="font-size:20px; margin:40px 0;">Вручается</p>
+                    <h2 style="font-size:36px; border-bottom:2px solid #ccc; display:inline-block;">${window.escapeHtml(window.state.staff.name)}</h2>
+                    <p style="font-size:18px; margin-top:40px;">За вклад в развитие портала</p>
+                    <div style="margin-top:60px;">Дата: ${new Date().toLocaleDateString('ru-RU')}</div>
+                </div>
             </div>`;
         return;
     }
     if (!window.state.student) return;
+    
     var bgs = [
-        { id: "bg1", css: "linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)", name: "Классический" },
-        { id: "bg2", css: "repeating-linear-gradient(45deg, #ffecd2, #ffecd2 10px, #fcb69f 10px, #fcb69f 20px)", name: "Персиковый узор" },
-        { id: "bg4", css: "linear-gradient(120deg, #f6d365 0%, #fda085 100%)", name: "Золотой закат" },
-        { id: "bg6", css: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", name: "Космос" }
+        { id: "cert-bg-1", name: "Классический синий" },
+        { id: "cert-bg-2", name: "С гербом" },
+        { id: "cert-bg-3", name: "Винтажный" },
+        { id: "cert-bg-4", name: "Гильош" },
+        { id: "cert-bg-5", name: "Крафт" },
+        { id: "cert-bg-6", name: "Имперский" }
     ];
     var currentBg = bgs.find(b => b.id === window.state.certBg) || bgs[0];
     var courseName = window.MDK_DATA && window.MDK_DATA[window.state.activeCourseId] ? window.MDK_DATA[window.state.activeCourseId].title : "МДК";
     var isApproved = window.state.results && window.state.results.certificateApproved;
     var avg = window.getAverageGrade();
     var finalGrade = avg === "—" ? "—" : (parseFloat(avg) >= 4.5 ? "Отлично" : (parseFloat(avg) >= 3.5 ? "Хорошо" : (parseFloat(avg) >= 2.5 ? "Удовлетворительно" : "Неудовлетворительно")));
+    
     var certBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;"><h3>Выберите стиль:</h3><div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
     bgs.forEach(bg => {
-        certBgSelectorHtml += `<div onclick="window.setCertBg('${bg.id}')" title="${bg.name}" style="width:60px; height:60px; border-radius:8px; background:${bg.css}; cursor:pointer; border:3px solid ${window.state.certBg === bg.id ? 'var(--accent)' : 'transparent'};"></div>`;
+        certBgSelectorHtml += `<div onclick="window.setCertBg('${bg.id}')" title="${bg.name}" class="${bg.id}" style="width:60px; height:60px; border-radius:8px; cursor:pointer; border:3px solid ${window.state.certBg === bg.id ? 'var(--accent)' : 'transparent'}; box-shadow: 0 2px 5px rgba(0,0,0,0.5);"></div>`;
     });
     certBgSelectorHtml += `</div></div>`;
-    var certHtml = `<div id="printable-cert" style="background: ${currentBg.css}; background-color: #fff; color:#000; padding: 12px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
-        <div class="cert-inner" style="background: rgba(255,255,255,0.85); width:100%; height:100%; padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:8px;">
+    
+    var certHtml = `<div id="printable-cert" class="${currentBg.id}" style="color:#000; padding: 12px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+        <div class="cert-inner" style="background: rgba(255,255,255,0.75); width:100%; height:100%; padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:8px; backdrop-filter: blur(2px);">
             <div>
-                <h1 style="font-size:32px; color:#c14a2a; text-transform:uppercase; letter-spacing: 1px; margin:0;">СЕРТИФИКАТ</h1>
+                <h1 style="font-size:32px; color:#c14a2a; text-transform:uppercase; letter-spacing: 1px; margin:0; font-family:'Monomakh', serif;">СЕРТИФИКАТ</h1>
                 <p style="font-size:16px; margin-top:10px; color:#555;">подтверждает, что</p>
-                <h2 style="font-size:28px; margin:12px 0; font-weight:bold; border-bottom:2px solid #ccc; display:inline-block; padding-bottom:5px; color:#000;">${window.escapeHtml(window.state.student.name)}</h2>
+                <h2 style="font-size:28px; margin:12px 0; font-weight:bold; border-bottom:2px solid #ccc; display:inline-block; padding-bottom:5px; color:#000; font-family:'Sacramento', cursive;">${window.escapeHtml(window.state.student.name)}</h2>
                 <p style="font-size:16px; color:#555;">успешно прошел(ла) обучение по программе</p>
                 <h3 style="font-size:18px; margin-top:10px; color:#c14a2a;">${window.escapeHtml(courseName)}</h3>
-                <div style="margin-top: 12px; font-size: 16px; background: rgba(193, 74, 42, 0.1); display: inline-block; padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(193, 74, 42, 0.3);"><b>Итоговая оценка:</b> ${finalGrade} (Ср. балл: ${avg})</div>
+                <div style="margin-top: 12px; font-size: 16px; background: rgba(255, 255, 255, 0.6); display: inline-block; padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(193, 74, 42, 0.3);"><b>Итоговая оценка:</b> ${finalGrade} (Ср. балл: ${avg})</div>
             </div>
             <div class="cert-foot" style="display:flex; justify-content:space-between; font-size:14px; margin-top:16px; padding: 0 8px; gap:12px;">
                 <div style="text-align:left;"><p>Дата выдачи:</p><p style="font-weight:bold;">${new Date().toLocaleDateString('ru-RU')}</p></div>
                 <div style="text-align:right;"><p>Подпись руководителя:</p><div style="border-bottom:1px solid #000; width:160px; height:24px;"></div></div>
             </div>
         </div>
-        ${!isApproved ? `<div class="cert-stamp" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:72px; font-weight:bold; color:rgba(255,0,0,0.12); pointer-events:none; white-space:nowrap; z-index:10;">ОБРАЗЕЦ</div>` : ""}
+        ${!isApproved ? `<div class="cert-stamp" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:72px; font-weight:bold; color:rgba(255,0,0,0.15); pointer-events:none; white-space:nowrap; z-index:10;">ОБРАЗЕЦ</div>` : ""}
     </div>`;
     
     var gradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved");
@@ -605,9 +612,10 @@ window.renderCertificatePage = function() {
         var color = grade >= 4 ? '#2e7d32' : (grade >= 3 ? '#f57c00' : '#d32f2f');
         return `<tr><td style="border:1px solid #ddd; padding:10px; font-size:15px;">${window.escapeHtml(readableName)}</td><td style="border:1px solid #ddd; padding:10px; text-align:center; font-weight:bold; color:${color}; font-size:18px;">${grade}</td></tr>`;
     }).join("");
+    
     var supplementHtml = `<div class="no-print" style="text-align:center; margin:20px 0;"><button class="btn" onclick="window.print()" style="padding: 12px 24px; font-size: 16px;">🖨 Распечатать сертификат и вкладыш</button></div>
-        <div id="printable-supplement" style="background: ${currentBg.css}; background-size: auto; padding: 30px; border-radius: 12px; max-width:900px; margin:20px auto; border:1px solid #ccc;">
-            <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 8px; color:#000;">
+        <div id="printable-supplement" class="${currentBg.id}" style="padding: 30px; border-radius: 12px; max-width:900px; margin:20px auto; border:1px solid #ccc;">
+            <div style="background: rgba(255,255,255,0.85); padding: 20px; border-radius: 8px; color:#000;">
                 <h2 style="text-align:center; color:#c14a2a; text-transform:uppercase; letter-spacing:1px;">Вкладыш оценок</h2>
                 <hr style="border:0; border-top:1px solid #ccc; margin:20px 0;">
                 <div style="display:flex; justify-content:space-between; font-size:16px; margin-bottom:20px;"><div><b>Студент:</b> ${window.escapeHtml(window.state.student.name)}</div><div><b>Группа:</b> ${window.escapeHtml(window.state.student.group)}</div></div>
@@ -691,7 +699,6 @@ function setupLogin() {
 
     function doUnifiedLogin() {
         hideLoginError();
-        // Новая единая форма ИЛИ старая форма преподавателя
         var emailEl = document.getElementById("loginEmail") || document.getElementById("teacherUser");
         var passEl = document.getElementById("loginPassword") || document.getElementById("teacherPass");
         var btn = document.getElementById("btnLoginUnified") || document.getElementById("btnLoginTeacher");
@@ -714,7 +721,6 @@ function setupLogin() {
             if (btn) { btn.disabled = false; btn.textContent = btnDefaultText; }
         }
 
-        // Локальный запасной вход (если сервер недоступен)
         function tryLocalFallback() {
             if (email === "admin@portal.ru" && pass === "admin123") {
                 applyAuthSession({ name: "Главный Администратор", role: "admin", email: email, group: "Администрация" }, email);
@@ -767,11 +773,9 @@ function setupLogin() {
         });
     }
 
-    // Совместимость со старой вёрсткой (две колонки)
     var btnStudent = document.getElementById("btnLoginStudent");
     if (btnStudent) {
         btnStudent.onclick = function () {
-            // Если заполнены поля преподавателя — пробуем вход по ним
             var tu = document.getElementById("teacherUser");
             var tp = document.getElementById("teacherPass");
             if (tu && tp && tu.value.trim() && tp.value) {
@@ -787,7 +791,6 @@ function setupLogin() {
     if (btnTeacher) {
         btnTeacher.onclick = doUnifiedLogin;
     }
-    // Enter в полях старой формы
     ["teacherUser", "teacherPass"].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) {
@@ -880,7 +883,6 @@ window.addEventListener("DOMContentLoaded", function() {
     router(); window.renderUserChip();
 });
 
-// Слушаем сообщения от iframe с тренажером G-кода
 window.addEventListener('message', function(event) {
     if (event.data && event.data.type === 'GCODE_SUCCESS') {
         window.unlockAchievement('gcode_pro');
