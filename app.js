@@ -685,10 +685,14 @@ function setupLogin() {
 
     function doUnifiedLogin() {
         hideLoginError();
-        var emailEl = document.getElementById("loginEmail");
-        var passEl = document.getElementById("loginPassword");
-        var btn = document.getElementById("btnLoginUnified");
-        if (!emailEl || !passEl) return;
+        // Новая единая форма ИЛИ старая форма преподавателя
+        var emailEl = document.getElementById("loginEmail") || document.getElementById("teacherUser");
+        var passEl = document.getElementById("loginPassword") || document.getElementById("teacherPass");
+        var btn = document.getElementById("btnLoginUnified") || document.getElementById("btnLoginTeacher");
+        if (!emailEl || !passEl) {
+            showLoginError("Форма входа не найдена. Обновите index.html или сбросьте кэш.");
+            return;
+        }
 
         var email = emailEl.value.trim();
         var pass = passEl.value;
@@ -697,10 +701,11 @@ function setupLogin() {
             return;
         }
 
+        var btnDefaultText = btn && btn.id === "btnLoginTeacher" ? "Войти в журнал" : "Войти";
         if (btn) { btn.disabled = true; btn.textContent = "Вход..."; }
 
         function done() {
-            if (btn) { btn.disabled = false; btn.textContent = "Войти"; }
+            if (btn) { btn.disabled = false; btn.textContent = btnDefaultText; }
         }
 
         // Локальный запасной вход (если сервер недоступен)
@@ -756,17 +761,35 @@ function setupLogin() {
         });
     }
 
-    // Совместимость: если старые кнопки ещё в DOM
+    // Совместимость со старой вёрсткой (две колонки)
     var btnStudent = document.getElementById("btnLoginStudent");
     if (btnStudent) {
         btnStudent.onclick = function () {
-            showLoginError("Используйте единый вход: email и пароль");
+            // Если заполнены поля преподавателя — пробуем вход по ним
+            var tu = document.getElementById("teacherUser");
+            var tp = document.getElementById("teacherPass");
+            if (tu && tp && tu.value.trim() && tp.value) {
+                doUnifiedLogin();
+                return;
+            }
+            if (window.showToast) {
+                window.showToast("Войдите справа: email и пароль (например anna.sh@portal.ru)", "err");
+            }
         };
     }
     var btnTeacher = document.getElementById("btnLoginTeacher");
     if (btnTeacher) {
         btnTeacher.onclick = doUnifiedLogin;
     }
+    // Enter в полях старой формы
+    ["teacherUser", "teacherPass"].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.addEventListener("keydown", function(e) {
+                if (e.key === "Enter") { e.preventDefault(); doUnifiedLogin(); }
+            });
+        }
+    });
 }
 
 // ============================================================
