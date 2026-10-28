@@ -3,18 +3,43 @@
 var FINAL_EXAM_SIZE = 30;
 var FINAL_EXAM_TIME = 45 * 60; // 45 минут
 
+
+// Доп. банки из exam_*.js (тренировки), если в MDK_DATA мало тестов
+window.EXTRA_EXAM_BANKS = window.EXTRA_EXAM_BANKS || {};
+
+function collectCourseQuestions(courseId) {
+  var allQ = [];
+  var course = programById(courseId);
+  if (course && course.sections) {
+    course.sections.forEach(function (s) {
+      (s.topics || []).forEach(function (t) {
+        if (t.test && t.test.length) {
+          t.test.forEach(function (q) { allQ.push(q); });
+        }
+      });
+    });
+  }
+  // Из тренировочных модулей exam_XXXX, если объявлены
+  var bankKey = String(courseId).replace(".", "");
+  var extra = window["EXAM_BANK_" + bankKey] || window.EXTRA_EXAM_BANKS[courseId];
+  if (extra && extra.length) {
+    extra.forEach(function (q) { allQ.push(q); });
+  }
+  // questions-mdk.js может класть в window.MDK_EXTRA_QUESTIONS
+  if (window.MDK_EXTRA_QUESTIONS && window.MDK_EXTRA_QUESTIONS[courseId]) {
+    window.MDK_EXTRA_QUESTIONS[courseId].forEach(function (q) { allQ.push(q); });
+  }
+  return allQ;
+}
+
 function programById(id) {
   if (window.MDK_DATA && window.MDK_DATA[id]) return window.MDK_DATA[id];
   return null;
 }
 
 function questionCount(course) {
-  if (!course || !course.sections) return 0;
-  var n = 0;
-  (course.sections || []).forEach(function (s) {
-    (s.topics || []).forEach(function (t) { if (t.test) n += t.test.length; });
-  });
-  return n;
+  if (!course) return 0;
+  return collectCourseQuestions(course.id).length;
 }
 
 window.renderFinalExamPage = function (mdkId) {
@@ -51,12 +76,7 @@ window.renderFinalExamPage = function (mdkId) {
   app.appendChild(mount);
 
   mount.querySelector("#startBtn").addEventListener("click", function () {
-    var allQ = [];
-    course.sections.forEach(function (s) {
-      s.topics.forEach(function (t) {
-        if (t.test) t.test.forEach(function (q) { allQ.push(q); });
-      });
-    });
+    var allQ = collectCourseQuestions(mdkId);
     
     // Если вопросов мало, дублируем их с перемешиванием
     if (allQ.length < FINAL_EXAM_SIZE) {
