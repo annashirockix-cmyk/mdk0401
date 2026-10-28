@@ -132,7 +132,7 @@ window.renderVideosPage = function() {
     var vids = window.GLOBAL_DATA && window.GLOBAL_DATA.videos ? window.GLOBAL_DATA.videos : [];
     if (!vids.length) { list.innerHTML = "<p>Видео пока нет. Убедитесь, что папка video/ загружена в репозиторий.</p>"; return; }
     vids.forEach(v => {
-        list.innerHTML += `<div style="margin-bottom:20px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${v.title}</b><p style="font-size:14px; margin:5px 0;">${v.description||''}</p><video src="${v.file}" controls style="width:100%; border-radius:8px; max-height:500px; background:#000;"><source src="${v.file}" type="video/mp4">Ваш браузер не поддерживает видео.</video></div>`;
+        list.innerHTML += `<div style="margin-bottom:20px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${v.title}</b><p style="font-size:14px; margin:5px 0;">${v.description||''}</p><video src="${v.file}" controls preload="metadata" playsinline style="width:100%; border-radius:8px; max-height:70vh; background:#000;"></video><p style="margin-top:8px;"><a class="btn ghost" href="${v.file}" target="_blank" rel="noopener">Открыть файл</a></p></div>`;
     });
 };
 
@@ -143,7 +143,7 @@ window.renderSafetyPage = function() {
     var items = window.GLOBAL_DATA && window.GLOBAL_DATA.safety ? window.GLOBAL_DATA.safety : [];
     if (!items.length) { list.innerHTML = "<p>Инструкций пока нет.</p>"; return; }
     items.forEach(s => {
-        list.innerHTML += `<div style="margin-bottom:15px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--err); font-size:16px;">${s.title}</b><p style="font-size:14px; margin:5px 0;">${s.description||''}</p>${s.content ? `<p>${s.content}</p>` : `<a href="${s.file}" target="_blank" class="btn" style="margin-top:10px;">📥 Скачать</a>`}</div>`;
+        list.innerHTML += `<div class="safety-card" style="margin-bottom:15px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--err); font-size:16px;">${s.title}</b><p style="font-size:14px; margin:5px 0;">${s.description||''}</p>${s.content ? `<p>${s.content}</p>` : `<a href="${s.file}" target="_blank" class="btn" style="margin-top:10px; display:inline-block;">📥 Скачать</a>`}</div>`;
     });
 };
 
@@ -229,7 +229,10 @@ window.renderTopicPage = function(courseId, topicId) {
                 if (f && f.indexOf("/") < 0) f = "presentations/" + f;
                 var base = window.location.origin + window.location.pathname.replace(/\/?$/, "/");
                 var fileUrl = base + f;
-                contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${p.code}: ${p.title}</b><p style="font-size:14px; margin-top:10px; color:var(--text-soft);">${p.description || ''}</p><div style="margin-top:15px; text-align:center;"><p style="color:var(--muted); margin-bottom:15px; font-size:13px;">Встроенный просмотр PPTX недоступен из-за безопасности. Скачайте файл.</p><a href="${fileUrl}" target="_blank" class="btn" style="padding:15px 30px; font-size:16px;">📥 Скачать / Открыть</a></div></div>`;
+                var viewer = /\.pdf$/i.test(f)
+                    ? `<object data="${fileUrl}" type="application/pdf" width="100%" height="70vh" style="min-height:420px;border:1px solid var(--border);border-radius:8px;background:#111;"><p>PDF не открылся во встроенном окне.</p></object>`
+                    : `<p style="color:var(--muted); margin-bottom:15px; font-size:13px;">Презентацию PPTX браузер не показывает внутри страницы. Скачайте файл.</p>`;
+                contentArea.innerHTML += `<div style="background:var(--card-soft); padding:16px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${p.code}: ${p.title}</b><p style="font-size:14px; margin-top:10px; color:var(--text-soft);">${p.description || ''}</p><div style="margin-top:15px;">${viewer}<p style="margin-top:12px;"><a href="${fileUrl}" target="_blank" class="btn">Открыть / скачать</a></p></div></div>`;
             });
         }
         else if (tabName === 'practicals') {
@@ -574,22 +577,22 @@ window.renderCertificatePage = function() {
         certBgSelectorHtml += `<div onclick="window.setCertBg('${bg.id}')" title="${bg.name}" style="width:60px; height:60px; border-radius:8px; background:${bg.css}; cursor:pointer; border:3px solid ${window.state.certBg === bg.id ? 'var(--accent)' : 'transparent'};"></div>`;
     });
     certBgSelectorHtml += `</div></div>`;
-    var certHtml = `<div id="printable-cert" style="background: ${currentBg.css}; background-color: #fff; color:#000; padding: 20px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
-        <div style="background: rgba(255,255,255,0.85); width:100%; height:100%; padding:40px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:8px;">
+    var certHtml = `<div id="printable-cert" style="background: ${currentBg.css}; background-color: #fff; color:#000; padding: 12px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+        <div class="cert-inner" style="background: rgba(255,255,255,0.85); width:100%; height:100%; padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:8px;">
             <div>
-                <h1 style="font-size:42px; color:#c14a2a; text-transform:uppercase; letter-spacing: 2px;">СЕРТИФИКАТ</h1>
-                <p style="font-size:18px; margin-top:15px; color:#555;">подтверждает, что</p>
-                <h2 style="font-size:38px; margin:25px 0; font-weight:bold; border-bottom:2px solid #ccc; display:inline-block; padding-bottom:5px; color:#000;">${window.escapeHtml(window.state.student.name)}</h2>
-                <p style="font-size:18px; color:#555;">успешно прошел(ла) обучение по программе</p>
-                <h3 style="font-size:24px; margin-top:15px; color:#c14a2a;">${window.escapeHtml(courseName)}</h3>
-                <div style="margin-top: 20px; font-size: 20px; background: rgba(193, 74, 42, 0.1); display: inline-block; padding: 10px 25px; border-radius: 20px; border: 1px solid rgba(193, 74, 42, 0.3);"><b>Итоговая оценка:</b> ${finalGrade} (Ср. балл: ${avg})</div>
+                <h1 style="font-size:32px; color:#c14a2a; text-transform:uppercase; letter-spacing: 1px; margin:0;">СЕРТИФИКАТ</h1>
+                <p style="font-size:16px; margin-top:10px; color:#555;">подтверждает, что</p>
+                <h2 style="font-size:28px; margin:12px 0; font-weight:bold; border-bottom:2px solid #ccc; display:inline-block; padding-bottom:5px; color:#000;">${window.escapeHtml(window.state.student.name)}</h2>
+                <p style="font-size:16px; color:#555;">успешно прошел(ла) обучение по программе</p>
+                <h3 style="font-size:18px; margin-top:10px; color:#c14a2a;">${window.escapeHtml(courseName)}</h3>
+                <div style="margin-top: 12px; font-size: 16px; background: rgba(193, 74, 42, 0.1); display: inline-block; padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(193, 74, 42, 0.3);"><b>Итоговая оценка:</b> ${finalGrade} (Ср. балл: ${avg})</div>
             </div>
-            <div style="display:flex; justify-content:space-between; font-size:16px; margin-top:30px; padding: 0 20px;">
+            <div class="cert-foot" style="display:flex; justify-content:space-between; font-size:14px; margin-top:16px; padding: 0 8px; gap:12px;">
                 <div style="text-align:left;"><p>Дата выдачи:</p><p style="font-weight:bold;">${new Date().toLocaleDateString('ru-RU')}</p></div>
-                <div style="text-align:right;"><p>Подпись руководителя:</p><div style="border-bottom:1px solid #000; width:200px; height:30px;"></div></div>
+                <div style="text-align:right;"><p>Подпись руководителя:</p><div style="border-bottom:1px solid #000; width:160px; height:24px;"></div></div>
             </div>
         </div>
-        ${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:120px; font-weight:bold; color:rgba(255,0,0,0.1); pointer-events:none; white-space:nowrap; z-index:10;">ОБРАЗЕЦ</div>` : ""}
+        ${!isApproved ? `<div class="cert-stamp" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:72px; font-weight:bold; color:rgba(255,0,0,0.12); pointer-events:none; white-space:nowrap; z-index:10;">ОБРАЗЕЦ</div>` : ""}
     </div>`;
     
     var gradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved");
