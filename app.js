@@ -63,6 +63,8 @@ window.renderUserChip = function() {
         if (avEl) avEl.innerHTML = window.state.avatar ? `<img src="${window.state.avatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : "👨‍🎓";
     } else if (window.state.staff) {
         if (nameEl) nameEl.textContent = window.state.staff.name; if (groupEl) groupEl.textContent = window.state.staff.role; if (avEl) avEl.textContent = "👨‍🏫";
+    } else {
+        if (nameEl) nameEl.textContent = "Гость"; if (groupEl) groupEl.textContent = "—"; if (avEl) avEl.textContent = "👤";
     }
     var xpEl = document.getElementById("xpCount"); if (xpEl) xpEl.textContent = `🌟 ${window.state.xp} XP`;
     window.applyGlobalEffects();
@@ -317,6 +319,8 @@ window.renderTopicPage = function(courseId, topicId) {
     };
     window.switchTopicTab('lectures');
 };
+
+
 window._getSessionEmail = function() {
     if (window.state.staff && window.state.staff.email) return window.state.staff.email;
     if (window.state.student && window.state.student.email) return window.state.student.email;
@@ -659,7 +663,9 @@ window.renderSimplePage = function(title, content) {
 window.handleLogout = function() {
     window.state.student = null; window.state.staff = null;
     localStorage.removeItem("mdk.state"); window.renderUserChip();
-    document.getElementById("loginOverlay").style.display = "flex"; location.hash = "#/";
+    document.getElementById("loginOverlay").style.display = "flex"; 
+    location.hash = "#/";
+    window.renderHomePage();
 };
 
 function setupLogin() {
@@ -802,15 +808,29 @@ function setupLogin() {
 }
 
 // ============================================================
-// 6. РОУТЕР
+// 6. РОУТЕР (ИСПРАВЛЕНА ЛОГИКА БЛОКИРОВКИ)
 // ============================================================
 function router() {
-    var hash = location.hash.slice(1) || "/"; var parts = hash.split("/").filter(p => p);
+    var hash = location.hash.slice(1) || "/"; 
+    var parts = hash.split("/").filter(p => p);
+    var overlay = document.getElementById("loginOverlay");
+
+    // Если не авторизован
     if (!window.state.student && !window.state.staff) {
-        var overlay = document.getElementById("loginOverlay"); if (overlay) overlay.style.display = "flex";
-        window.renderHomePage(); return;
+        if (overlay) overlay.style.display = "flex"; 
+        
+        if (hash !== "/" && hash !== "" && hash !== "#/") {
+            location.hash = "#/";
+            return;
+        }
+        
+        window.renderHomePage(); 
+        return;
     }
-    var overlay = document.getElementById("loginOverlay"); if (overlay) overlay.style.display = "none";
+
+    // Если авторизован - скрываем окно входа
+    if (overlay) overlay.style.display = "none";
+
     if (parts.length === 0 || parts[0] === "") { window.renderHomePage(); return; }
     var page = parts[0];
     
@@ -877,10 +897,12 @@ function setupDrawer() {
 // ============================================================
 window.addEventListener("hashchange", router);
 window.addEventListener("DOMContentLoaded", function() {
-    setupLogin(); setupDrawer();
+    setupLogin(); 
+    setupDrawer();
     var theme = localStorage.getItem("mdk.theme") || "dark";
     document.documentElement.setAttribute("data-theme", theme);
-    router(); window.renderUserChip();
+    router(); 
+    window.renderUserChip();
 });
 
 window.addEventListener('message', function(event) {
