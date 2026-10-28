@@ -1,4 +1,44 @@
 /* =====================================================
+   ПОДКЛЮЧЕНИЕ ШРИФТОВ
+   ===================================================== */
+@font-face {
+  font-family: 'Monomakh';
+  src: url('./fonts/ofont.ru_Monomakh Unicode.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Sacramento';
+  src: url('./fonts/ofont.ru_Sacramento.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Tiny5';
+  src: url('./fonts/ofont.ru_Tiny5.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Another Danger';
+  src: url('./fonts/ofont.ru_Another Danger.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Можешь добавить остальные шрифты по аналогии */
+
+/* Применяем шрифты */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; /* основной */
+}
+h1, h2, h3, .hero h1 {
+  font-family: 'Monomakh', serif; /* Заголовки */
+}
+.cert-title, .cert-name {
+  font-family: 'Sacramento', cursive; /* Красивый шрифт для сертификата */
+  font-size: 48px !important;
+}
+/* =====================================================
    Учебный портал — style.css (Исправленный и дополненный)
    ===================================================== */
 
