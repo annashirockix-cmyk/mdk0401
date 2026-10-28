@@ -1,4 +1,4 @@
-const CACHE = "mdk0701-v211"; 
+const CACHE = "mdk0701-v212";
 
 const ASSETS = [
   "./",
@@ -11,35 +11,13 @@ const ASSETS = [
   "./data-0401.js",
   "./data-0201.js",
   "./data-0202.js",
+  "./data-mastercam.js",
   "./data-extra.js",
   "./data-global.js",
-  "./tests-extra.js",
-  "./questions-setup.js",
-  "./questions-mdk.js",
-  "./questions-anime.js",
-  "./questions-games.js",
-  "./questions-logic.js",
   "./app.js",
   "./api.js",
-  "./assistant.js",
-  "./shop.js",
-  "./games.js",
-  "./extra.js",
-  "./exam-engine.js",
-  "./exam_0701.js",
-  "./exam_0401.js",
-  "./exam_0201.js",
-  "./exam_0202.js",
   "./final.js",
-  "./journal.js",
-  "./reports.js",
-  "./schedule.js",
-  "./rating.js",
-  "./links.js",
-  "./info.js",
-  "./admin.js",
-  "./easter-eggs.js",
-  "./carve-pumpkin.html"
+  "./journal.js"
 ];
 
 self.addEventListener("install", (e) => {
@@ -72,6 +50,10 @@ self.addEventListener("fetch", (e) => {
 
   if (req.method !== "GET") return;
 
+  // Видео, PDF и презентации не кэшируем: Range/206 ломает воспроизведение
+  if (/\.(mp4|webm|pdf|pptx|docx|zip)$/i.test(url.pathname)) return;
+  if (req.headers.get("range")) return;
+
   if (
     url.hostname.includes("script.google.com") ||
     url.hostname.includes("cdn.jsdelivr.net") ||
@@ -91,7 +73,7 @@ self.addEventListener("fetch", (e) => {
   e.respondWith(
     caches.match(req).then((hit) => {
       return hit || fetch(req).then((res) => {
-        if (res.ok && url.origin === location.origin) {
+        if (res.ok && res.status === 200 && url.origin === location.origin) {
           const copy = res.clone();
           caches.open(CACHE).then((c) => c.put(req, copy));
         }
