@@ -1,4 +1,4 @@
-const CACHE = "mdk0701-v208"; 
+const CACHE = "mdk0701-v210"; 
 
 const ASSETS = [
   "./",
@@ -39,7 +39,6 @@ const ASSETS = [
   "./info.js",
   "./admin.js",
   "./easter-eggs.js",
-  "./cursor-snake.html",
   "./carve-pumpkin.html"
 ];
 
