@@ -40,7 +40,7 @@ window.renderJournalPage = function() {
 
       window.API.getStudents().then(d => {
           contentWrap.innerHTML = "";
-          if (!d || !d.ok || !d.students || !d.students.length) { contentWrap.innerHTML = "<div class='module'>Студентов пока нет.</div>"; return; }
+          if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { contentWrap.innerHTML = "<div class='module'>Студентов пока нет.</div>"; return; }
 
           var students = d.students;
           CURRENT_STUDENTS_CACHE = students;
@@ -144,7 +144,7 @@ window.renderJournalPage = function() {
 
           window.API.getStudents().then(d => {
               wrap.innerHTML = "";
-              if (!d || !d.ok || !d.students || !d.students.length) { wrap.innerHTML = "<div class='module'>Нет студентов.</div>"; return; }
+              if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { wrap.innerHTML = "<div class='module'>Нет студентов.</div>"; return; }
 
               var students = d.students;
               if (groupFilter !== "all") {
