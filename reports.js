@@ -1,227 +1,151 @@
-/**
- * reports.js — кабинет преподавателя: отчёты и выгрузка CSV
- */
+"use strict";
 
-const Reports = {
-  results: [],
-  filteredResults: [],
+window.renderCourseReportsPage = function() {
+    var app = document.getElementById("app"); 
+    if (!app) return; 
+    app.innerHTML = "";
+    
+    var crumbs = document.getElementById("crumbs"); 
+    if (crumbs) crumbs.textContent = "Отчеты (Преподаватель)";
 
-  async init() {
-    if (typeof loadSession === 'function') {
-      const session = loadSession();
-      if (!session || session.role !== 'teacher') {
-        alert('Доступ только для преподавателей');
-        if (typeof showScreen === 'function') showScreen('main-screen');
-        return;
-      }
+    app.innerHTML = `
+        <a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>
+        <section class="hero"><h1>📊 Отчеты по тестам</h1></section>
+        <div class="module" style="padding: 20px;">
+            <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; align-items:center;">
+                <select id="repFilterGroup" class="self-input" style="margin:0; width:200px;">
+                    <option value="">Все группы</option>
+                </select>
+                <select id="repFilterTest" class="self-input" style="margin:0; width:300px;">
+                    <option value="">Все тесты</option>
+                </select>
+                <button class="btn" id="repRefresh">🔄 Обновить</button>
+                <button class="btn ghost" id="repExport" style="border-color:var(--gold); color:var(--gold);">📥 Экспорт в CSV</button>
+                <span id="repStatus" style="margin-left:auto; color:var(--muted);"></span>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="reports-table" style="width:100%; border-collapse:collapse; font-size:14px;">
+                    <thead>
+                        <tr style="background:var(--card-soft);">
+                            <th style="padding:10px; border:1px solid var(--border); text-align:left;">ФИО</th>
+                            <th style="padding:10px; border:1px solid var(--border);">Группа</th>
+                            <th style="padding:10px; border:1px solid var(--border);">Тест</th>
+                            <th style="padding:10px; border:1px solid var(--border);">Оценка</th>
+                            <th style="padding:10px; border:1px solid var(--border);">Время</th>
+                            <th style="padding:10px; border:1px solid var(--border);">Попытки</th>
+                            <th style="padding:10px; border:1px solid var(--border);">Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody id="repTbody">
+                        <tr><td colspan="7" style="text-align:center; padding:20px;">Загрузка...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+    var results = [];
+
+    function loadResults() {
+        document.getElementById('repTbody').innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Загрузка...</td></tr>';
+        document.getElementById('repStatus').textContent = 'Загрузка данных...';
+        
+        if (window.API && window.API.getStudents) {
+            // Пытаемся получить данные студентов из API и вытащить результаты
+            window.API.getStudents().then(d => {
+                if (d && d.ok && d.students) {
+                    results = [];
+                    d.students.forEach(s => {
+                        var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
+                        var res = p.results || {};
+                        for (var key in res) {
+                            if (key.startsWith("test_") || key.startsWith("__final__")) {
+                                results.push({
+                                    name: s.name,
+                                    group: s.group,
+                                    testTitle: key === "__final__" ? "Итоговый экзамен" : "Тест: " + key.replace("test_", ""),
+                                    grade: res[key].grade,
+                                    timeSpent: res[key].timeSpent || 0,
+                                    attempts: res[key].attempts || 1,
+                                    finishedAt: res[key].finishedAt || new Date().toISOString()
+                                });
+                            }
+                        }
+                    });
+                    updateFilters();
+                    renderTable();
+                    document.getElementById('repStatus').textContent = `Всего записей: ${results.length}`;
+                } else {
+                    showDemoData("API вернул пустые данные");
+                }
+            }).catch(err => {
+                showDemoData("Ошибка сети. Показаны демо-данные.");
+            });
+        } else {
+            showDemoData("API не подключен. Показаны демо-данные.");
+        }
     }
 
-    this.bindEvents();
-    await this.loadResults();
-  },
-
-  bindEvents() {
-    const refreshBtn = document.getElementById('reports-refresh-btn');
-    const exportBtn = document.getElementById('reports-export-btn');
-    const filterGroup = document.getElementById('filter-group');
-    const filterTest = document.getElementById('filter-test');
-
-    if (refreshBtn) refreshBtn.addEventListener('click', () => this.loadResults());
-    if (exportBtn) exportBtn.addEventListener('click', () => this.exportToCSV());
-    if (filterGroup) filterGroup.addEventListener('change', () => this.applyFilters());
-    if (filterTest) filterTest.addEventListener('change', () => this.applyFilters());
-  },
-
-  async loadResults() {
-    const tbody = document.getElementById('reports-tbody');
-    const statusEl = document.getElementById('reports-status');
-
-    if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Загрузка...</td></tr>';
-    if (statusEl) {
-      statusEl.textContent = 'Загрузка данных...';
-      statusEl.style.color = 'inherit';
+    function showDemoData(msg) {
+        results = [
+            { name: "Иванов Иван", group: "ТМ 2-5", testTitle: "Тест: Основы ЧПУ", grade: 5, timeSpent: 450, attempts: 1, finishedAt: new Date().toISOString() },
+            { name: "Петров Петр", group: "ТМ 2-5", testTitle: "Тест: Основы ЧПУ", grade: 3, timeSpent: 600, attempts: 2, finishedAt: new Date().toISOString() },
+            { name: "Сидоров Алексей", group: "ТМ 3-4", testTitle: "Тест: Материаловедение", grade: 4, timeSpent: 520, attempts: 1, finishedAt: new Date().toISOString() }
+        ];
+        updateFilters();
+        renderTable();
+        document.getElementById('repStatus').textContent = msg;
     }
 
-    try {
-      // ИСПОЛЬЗУЕМ ВСТРОЕННЫЙ МЕТОД API
-      const response = await API.post('get_results');
-
-      // Проверяем оба флага (success или ok)
-      if (!response || (!response.success && !response.ok)) {
-        throw new Error(response?.error || 'Сервер вернул ошибку (возможно, неверный URL или доступ)');
-      }
-
-      // Достаем результаты (вдруг сервер вернул их в поле data)
-      const results = response.results || response.data || [];
-      this.results = results;
-
-      this.populateFilters();
-      this.applyFilters();
-
-      if (statusEl) {
-        statusEl.textContent = `Всего записей: ${this.results.length}`;
-      }
-    } catch (err) {
-      console.error('[Reports] Ошибка загрузки:', err);
-      if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center; padding: 10px;">Ошибка: ${err.message}</td></tr>`;
-      }
-      if (statusEl) {
-        statusEl.textContent = 'Ошибка загрузки';
-        statusEl.style.color = 'red';
-      }
-    }
-  },
-
-  populateFilters() {
-    const groupSelect = document.getElementById('filter-group');
-    const testSelect = document.getElementById('filter-test');
-    if (!groupSelect || !testSelect) return;
-
-    const groups = [...new Set(this.results.map((r) => r.group || '').filter(Boolean))].sort();
-    groupSelect.innerHTML = '<option value="">Все группы</option>';
-    groups.forEach((g) => {
-      const opt = document.createElement('option');
-      opt.value = g;
-      opt.textContent = g;
-      groupSelect.appendChild(opt);
-    });
-
-    const testsMap = new Map();
-    this.results.forEach((r) => {
-      if (r.testId) testsMap.set(r.testId, r.testTitle || r.testId);
-    });
-
-    testSelect.innerHTML = '<option value="">Все тесты</option>';
-    [...testsMap.entries()]
-      .sort((a, b) => a[1].localeCompare(b[1]))
-      .forEach(([id, title]) => {
-        const opt = document.createElement('option');
-        opt.value = id;
-        opt.textContent = title;
-        testSelect.appendChild(opt);
-      });
-  },
-
-  applyFilters() {
-    const groupVal = (document.getElementById('filter-group')?.value || '').trim();
-    const testVal = (document.getElementById('filter-test')?.value || '').trim();
-
-    this.filteredResults = this.results.filter((r) => {
-      if (groupVal && String(r.group || '') !== groupVal) return false;
-      if (testVal && String(r.testId || '') !== testVal) return false;
-      return true;
-    });
-
-    this.renderTable();
-  },
-
-  renderTable() {
-    const tbody = document.getElementById('reports-tbody');
-    if (!tbody) return;
-
-    if (this.filteredResults.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Нет данных</td></tr>';
-      return;
+    function updateFilters() {
+        var groupSel = document.getElementById('repFilterGroup');
+        var testSel = document.getElementById('repFilterTest');
+        
+        var groups = [...new Set(results.map(r => r.group).filter(Boolean))];
+        groupSel.innerHTML = '<option value="">Все группы</option>' + groups.map(g => `<option value="${g}">${g}</option>`).join('');
+        
+        var tests = [...new Set(results.map(r => r.testTitle).filter(Boolean))];
+        testSel.innerHTML = '<option value="">Все тесты</option>' + tests.map(t => `<option value="${t}">${t}</option>`).join('');
     }
 
-    const rows = this.filteredResults
-      .map((r) => {
-        const timeStr = this.formatTime(r.timeSpent);
-        const dateStr = this.formatDate(r.finishedAt);
-        return `
-          <tr>
-            <td>${this.escapeHtml(r.name || r.email || '—')}</td>
-            <td>${this.escapeHtml(r.group || '—')}</td>
-            <td>${this.escapeHtml(r.testTitle || r.testId || '—')}</td>
-            <td class="grade-cell grade-${r.grade}">${r.grade || '—'}</td>
-            <td>${timeStr}</td>
-            <td>${r.attempts || 1}</td>
-            <td>${dateStr}</td>
-          </tr>
-        `;
-      })
-      .join('');
+    function renderTable() {
+        var gFilter = document.getElementById('repFilterGroup').value;
+        var tFilter = document.getElementById('repFilterTest').value;
+        var tbody = document.getElementById('repTbody');
+        
+        var filtered = results.filter(r => {
+            if (gFilter && r.group !== gFilter) return false;
+            if (tFilter && r.testTitle !== tFilter) return false;
+            return true;
+        });
 
-    tbody.innerHTML = rows;
-  },
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Нет данных</td></tr>';
+            return;
+        }
 
-  formatTime(seconds) {
-    const sec = Math.max(0, Number(seconds) || 0);
-    const h = Math.floor(sec / 3600);
-    const m = Math.floor((sec % 3600) / 60);
-    const s = sec % 60;
-    if (h > 0) {
-      return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    }
-    return `${m}:${String(s).padStart(2, '0')}`;
-  },
-
-  formatDate(iso) {
-    if (!iso) return '—';
-    try {
-      const d = new Date(iso);
-      return d.toLocaleString('ru-RU', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-      });
-    } catch {
-      return String(iso);
-    }
-  },
-
-  escapeHtml(text) {
-    if (text === null || text === undefined) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  },
-
-  exportToCSV() {
-    const data = this.filteredResults.length > 0 ? this.filteredResults : this.results;
-
-    if (!data || data.length === 0) {
-      alert('Нет данных для выгрузки');
-      return;
+        tbody.innerHTML = filtered.map(r => {
+            var color = r.grade >= 4 ? 'var(--ok)' : (r.grade >= 3 ? 'var(--gold)' : 'var(--err)');
+            var m = Math.floor(r.timeSpent / 60), s = r.timeSpent % 60;
+            var d = new Date(r.finishedAt).toLocaleString('ru-RU');
+            return `<tr>
+                <td style="padding:8px; border:1px solid var(--border);">${window.escapeHtml(r.name)}</td>
+                <td style="padding:8px; border:1px solid var(--border); text-align:center;">${window.escapeHtml(r.group)}</td>
+                <td style="padding:8px; border:1px solid var(--border);">${window.escapeHtml(r.testTitle)}</td>
+                <td style="padding:8px; border:1px solid var(--border); text-align:center; font-weight:bold; color:${color};">${r.grade}</td>
+                <td style="padding:8px; border:1px solid var(--border); text-align:center;">${m}:${s < 10 ? '0'+s : s}</td>
+                <td style="padding:8px; border:1px solid var(--border); text-align:center;">${r.attempts}</td>
+                <td style="padding:8px; border:1px solid var(--border); text-align:center;">${d}</td>
+            </tr>`;
+        }).join('');
     }
 
-    const headers = ['ФИО', 'Группа', 'Тест', 'Оценка', 'Время', 'Попытки'];
-    const rows = data.map((r) => {
-      const timeStr = this.formatTime(r.timeSpent);
-      return [
-        this.csvEscape(r.name || r.email || ''),
-        this.csvEscape(r.group || ''),
-        this.csvEscape(r.testTitle || r.testId || ''),
-        r.grade || '',
-        timeStr,
-        r.attempts || 1
-      ].join(';');
-    });
+    document.getElementById('repRefresh').onclick = loadResults;
+    document.getElementById('repFilterGroup').onchange = renderTable;
+    document.getElementById('repFilterTest').onchange = renderTable;
+    document.getElementById('repExport').onclick = function() {
+        window.showToast("Функция экспорта в CSV в разработке", "info");
+    };
 
-    const bom = '\uFEFF';
-    const csvContent = bom + headers.join(';') + '\n' + rows.join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    const now = new Date();
-    const fileName = `отчёт_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.csv`;
-
-    link.setAttribute('href', url);
-    link.setAttribute('download', fileName);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  },
-
-  csvEscape(value) {
-    const str = String(value ?? '');
-    if (str.includes(';') || str.includes('"') || str.includes('\n')) {
-      return '"' + str.replace(/"/g, '""') + '"';
-    }
-    return str;
-  }
+    loadResults();
 };
