@@ -1,184 +1,55 @@
-/**
- * api.js — клиент к Google Apps Script
- */
-const API = {
-  BASE_URL:
-    'https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec',
+"use strict";
 
-  async safeFetch(url, options = {}, timeoutMs = 20000) {
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec";
+
+async function fetchAPI(action, params = {}, method = "GET") {
+    if (APPS_SCRIPT_URL.includes("ВАША_НОВАЯ_ССЫЛКА")) {
+        alert("Ошибка: В файле api.js не указана ссылка на Google Apps Script!");
+        return { ok: false, error: "URL not configured" };
+    }
+
+    const url = new URL(APPS_SCRIPT_URL);
+    url.searchParams.append("action", action);
+    url.searchParams.append("t", Date.now());
+    
+    for (const key in params) {
+        if (params[key] !== undefined && params[key] !== null) {
+            url.searchParams.append(key, params[key]);
+        }
+    }
+    
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
+    
     try {
-      const response = await fetch(url, {
-        ...options,
-        signal: controller.signal,
-        mode: 'cors',
-        credentials: 'omit',
-        redirect: 'follow'
-      });
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error('HTTP ' + response.status + ': ' + response.statusText);
-      }
-
-      const text = await response.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        if (text && text.indexOf('<html') !== -1) {
-          throw new Error(
-            'Сервер вернул HTML вместо JSON. Переразверните Apps Script (Deploy → New version, доступ: Все).'
-          );
+        const options = { signal: controller.signal, cache: "no-store" };
+        if (method === "POST") {
+            options.method = "POST";
+            options.body = url.searchParams;
         }
-        data = { raw: text };
-      }
-
-      if (data && data.error) {
-        throw new Error(data.error);
-      }
-      return data;
+        const response = await fetch(url.toString(), options);
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+        
+        const data = await response.json();
+        return data;
     } catch (err) {
-      clearTimeout(timeoutId);
-      if (err.name === 'TypeError' || (err.message && err.message.indexOf('Failed to fetch') !== -1)) {
-        if (typeof window.showToast === 'function') {
-          window.showToast('Ошибка сети. Проверьте интернет.', 'err');
-        }
-        throw new Error('Нет соединения с сервером или доступ к нему заблокирован.');
-      }
-      if (err.name === 'AbortError') {
-        throw new Error('Сервер долго не отвечает.');
-      }
-      throw err;
+        clearTimeout(timeoutId);
+        console.error(`API Error [${action}]:`, err);
+        throw err;
     }
-  },
+}
 
-  async post(action, payload) {
-    payload = payload || {};
-    const body = JSON.stringify(Object.assign({ action: action }, payload));
-
-    try {
-      return await this.safeFetch(this.BASE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: body
-      });
-    } catch (postErr) {
-      try {
-        const params = new URLSearchParams({ action: action });
-        Object.keys(payload).forEach(function (k) {
-          const v = payload[k];
-          if (v !== undefined && v !== null) {
-            params.set(k, typeof v === 'object' ? JSON.stringify(v) : String(v));
-          }
-        });
-        const sep = this.BASE_URL.indexOf('?') >= 0 ? '&' : '?';
-        return await this.safeFetch(this.BASE_URL + sep + params.toString(), {
-          method: 'GET'
-        });
-      } catch (getErr) {
-        throw postErr;
-      }
-    }
-  },
-
-  async login(email, password) {
-    const result = await this.post('login', { email: email, password: password });
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка входа');
-    return result;
-  },
-
-  async register(email, password, name, group) {
-    const result = await this.post('register', {
-      email: email,
-      password: password,
-      name: name,
-      group: group
-    });
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка регистрации');
-    return result;
-  },
-
-  async getStudent(email) {
-    const result = await this.post('getStudent', { email: email });
-    if (!result || !result.success) throw new Error((result && result.error) || 'Студент не найден');
-    return result;
-  },
-
-  async changePassword(email, oldPass, newPass) {
-    const result = await this.post('changePassword', {
-      email: email,
-      oldPassword: oldPass,
-      newPassword: newPass
-    });
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка смены пароля');
-    return result;
-  },
-
-  async changeEmail(oldEmail, newEmail, password) {
-    const result = await this.post('changeEmail', {
-      oldEmail: oldEmail,
-      newEmail: newEmail,
-      password: password
-    });
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка смены Email');
-    return result;
-  },
-
-  async getStudents() {
-    const result = await this.post('getStudents');
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка загрузки студентов');
-    return result;
-  },
-
-  async saveStudent(email, name, group, payload) {
-    payload = payload || {};
-    const result = await this.post('saveStudent', {
-      email: email,
-      name: name,
-      group: group,
-      role: payload.role,
-      password: payload.password
-    });
-    if (!result || !result.success) {
-      throw new Error((result && result.error) || 'Ошибка сохранения данных студента');
-    }
-    return result;
-  },
-
-  async getSchedule() {
-    const result = await this.post('getSchedule');
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка загрузки расписания');
-    return result;
-  },
-
-  async saveSchedule(schedule) {
-    const result = await this.post('saveSchedule', {
-      schedule: typeof schedule === 'string' ? schedule : JSON.stringify(schedule)
-    });
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка сохранения расписания');
-    return result;
-  },
-
-  async getChat(group) {
-    return this.post('getChat', { group: group });
-  },
-
-  async sendChat(group, key, name, text) {
-    return this.post('sendChat', { group: group, key: key, name: name, text: text });
-  },
-
-  async saveResult(payload) {
-    const result = await this.post('saveResult', payload || {});
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка сохранения результата');
-    return result;
-  },
-
-  async getResults(filters) {
-    const result = await this.post('getResults', filters || {});
-    if (!result || !result.success) throw new Error((result && result.error) || 'Ошибка загрузки результатов');
-    return result;
-  }
+window.API = {
+    login: (user, pass) => fetchAPI("login", { username: user, password: pass }),
+    getStudents: () => fetchAPI("getstudents"),
+    getStudentData: (key) => fetchAPI("getstudentdata", { key: key }),
+    saveStudent: (key, name, group, payload) => fetchAPI("save", { key, name, group, payload }, "POST"),
+    grantXP: (key, amount) => fetchAPI("grantXP", { key, amount }, "POST"),
+    deleteStudent: (key) => fetchAPI("deleteStudent", { key: key }, "POST"),
+    getChat: (group) => fetchAPI("chatload", { group }),
+    sendChat: (group, key, name, text) => fetchAPI("chatsave", { group, key, name, text }, "POST"),
+    getSchedule: () => fetchAPI("getschedule"),
+    saveSchedule: (data) => fetchAPI("saveschedule", { data: JSON.stringify(data) }, "POST")
 };
