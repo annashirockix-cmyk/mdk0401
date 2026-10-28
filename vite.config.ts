@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { readdirSync, writeFileSync, existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
@@ -12,7 +12,6 @@ import { grokPwaPlugin } from "./scripts/grok-pwa-plugin.mjs";
 import { appEnvPlugin } from "./scripts/app-env-plugin.mjs";
 import { isMigrationFile } from "./scripts/migration-plan.mjs";
 
-/** The files `src/lib/db.ts` globs — same directory, same non-recursive scope. */
 function hasGlobbedMigrations(root: string): boolean {
   try {
     return readdirSync(join(root, "migrations")).some(isMigrationFile);
@@ -21,11 +20,6 @@ function hasGlobbedMigrations(root: string): boolean {
   }
 }
 
-/**
- * Finish PGLite bootstrap during dev-server setup (before traffic). Vite awaits
- * async `configureServer` hooks. Production: `src/lib/db` kicks `ensureDbReady`
- * on import.
- */
 function pgliteBootstrapPlugin(): Plugin {
   return {
     name: "app-builder:pglite-bootstrap",
@@ -47,10 +41,6 @@ function pgliteBootstrapPlugin(): Plugin {
   };
 }
 
-/**
- * Live-preview OAuth popup — handled HERE so the agent never has to create a
- * `/auth/popup` route.
- */
 function authPopupPlugin(): Plugin {
   return {
     name: "app-builder:auth-popup",
@@ -126,12 +116,31 @@ function authPopupPlugin(): Plugin {
   };
 }
 
-// `0.0.0.0:8080` is the live-preview contract — don't change host/port.
+// Плагин для исправления работы GitHub Pages
+function githubPagesPlugin(): Plugin {
+  return {
+    name: 'github-pages-fix',
+    apply: 'build',
+    closeBundle() {
+      // Nitro static обычно складывает все в .output/public
+      const targetDir = '.output/public';
+      if (existsSync(targetDir)) {
+        // 1. Создаем .nojekyll, чтобы GitHub Pages не игнорировал папки с "_"
+        writeFileSync(join(targetDir, '.nojekyll'), '');
+        
+        // 2. Создаем 404.html для перенаправления при обновлении страницы (SPA fallback)
+        const indexPath = join(targetDir, 'index.html');
+        if (existsSync(indexPath)) {
+          const indexContent = readFileSync(indexPath);
+          writeFileSync(join(targetDir, '404.html'), indexContent);
+        }
+      }
+    }
+  };
+}
+
 export default defineConfig(({ command, isPreview }) => ({
-  
-  // ИЗМЕНЕНИЕ 1: Добавляем базовый путь для GitHub Pages.
-  // Это заставит Vite автоматически добавлять /mdk0401/ ко всем путям к файлам,
-  // что навсегда исправит ошибки 404 для css и картинок.
+  // Базовый путь для GitHub Pages
   base: '/mdk0401/', 
 
   server: {
@@ -155,14 +164,12 @@ export default defineConfig(({ command, isPreview }) => ({
     ...(command === "build" || isPreview
       ? [
           nitro({
-            // ИЗМЕНЕНИЕ 2: Меняем пресет на 'static' (или 'github-pages'), 
-            // так как GitHub Pages не поддерживает серверный рендеринг (SSR) Vercel.
-            // Если Nitro выдаст ошибку, что пресета 'static' нет, используйте 'github-pages'.
-            preset: "static", 
+            preset: "static", // Для GitHub Pages обязателен статический пресет
             serverDir: "./server",
           }),
         ]
       : []),
     viteReact(),
+    githubPagesPlugin(), // Подключаем наш плагин для GitHub Pages
   ],
 }));
