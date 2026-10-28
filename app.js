@@ -225,7 +225,10 @@ window.renderTopicPage = function(courseId, topicId) {
         else if (tabName === 'presentations') {
             if (!topic.presentations || !topic.presentations.length) { contentArea.innerHTML = "<p>Презентаций нет.</p>"; return; }
             topic.presentations.forEach(p => {
-                var fileUrl = window.location.origin + window.location.pathname + p.file;
+                var f = p.file || "";
+                if (f && f.indexOf("/") < 0) f = "presentations/" + f;
+                var base = window.location.origin + window.location.pathname.replace(/\/?$/, "/");
+                var fileUrl = base + f;
                 contentArea.innerHTML += `<div style="background:var(--card-soft); padding:20px; border-radius:8px; margin-bottom:15px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${p.code}: ${p.title}</b><p style="font-size:14px; margin-top:10px; color:var(--text-soft);">${p.description || ''}</p><div style="margin-top:15px; text-align:center;"><p style="color:var(--muted); margin-bottom:15px; font-size:13px;">Встроенный просмотр PPTX недоступен из-за безопасности. Скачайте файл.</p><a href="${fileUrl}" target="_blank" class="btn" style="padding:15px 30px; font-size:16px;">📥 Скачать / Открыть</a></div></div>`;
             });
         }
