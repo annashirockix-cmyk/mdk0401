@@ -25,21 +25,9 @@
   font-weight: normal;
   font-style: normal;
 }
-/* Можешь добавить остальные шрифты по аналогии */
 
-/* Применяем шрифты */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; /* основной */
-}
-h1, h2, h3, .hero h1 {
-  font-family: 'Monomakh', serif; /* Заголовки */
-}
-.cert-title, .cert-name {
-  font-family: 'Sacramento', cursive; /* Красивый шрифт для сертификата */
-  font-size: 48px !important;
-}
 /* =====================================================
-   Учебный портал — style.css (Исправленный и дополненный)
+   Учебный портал — style.css
    ===================================================== */
 
 *, *::before, *::after {
@@ -54,6 +42,10 @@ html, body {
   color: #f8fafc;
   line-height: 1.5;
   min-height: 100%;
+}
+
+h1, h2, h3, .hero h1 {
+  font-family: 'Monomakh', serif; /* Применяем шрифт к заголовкам */
 }
 
 /* Переменные (для совместимости с JS) */
@@ -278,6 +270,28 @@ html, body {
 .journal-table th, .reports-table th, .schedule-table th {
   background: var(--card-soft); font-weight: 600; color: var(--text-soft);
 }
+
+/* ---------- ФОНЫ ДЛЯ МАГАЗИНА ---------- */
+.bg-underwater { background-image: url('./images/underwater.jpg'); background-size: cover; background-position: center; }
+.bg-foggy-forest { background-image: url('./images/foggy-forest.jpg'); background-size: cover; background-position: center; }
+.bg-pumpkins { background-image: url('./images/pumpkins.jpg'); background-size: cover; background-position: center; }
+.bg-spooky-room { background-image: url('./images/spooky-room.jpg'); background-size: cover; background-position: center; }
+.bg-halloween { background-image: url('./images/halloween.jpg'); background-size: cover; background-position: center; }
+.bg-red-forest { background-image: url('./images/red-forest.jpg'); background-size: cover; background-position: center; }
+.bg-lanterns { background-image: url('./images/lanterns.jpg'); background-size: cover; background-position: center; }
+.bg-dark-table { background-image: url('./images/dark-table.jpg'); background-size: cover; background-position: center; }
+.bg-graveyard { background-image: url('./images/graveyard.jpg'); background-size: cover; background-position: center; }
+.bg-cats-notebook { background-image: url('./images/cats-notebook.jpg'); background-size: cover; background-position: center; }
+.bg-cats-yarn { background-image: url('./images/cats-yarn.jpg'); background-size: cover; background-position: center; }
+.bg-stone-alley { background-image: url('./images/stone-alley.jpg'); background-size: cover; background-position: center; }
+
+/* ---------- ФОНЫ ДЛЯ СЕРТИФИКАТОВ ---------- */
+.cert-bg-1 { background-image: url('./images/cert-bg-1.jpg'); background-size: cover; background-position: center; }
+.cert-bg-2 { background-image: url('./images/cert-bg-2.jpg'); background-size: cover; background-position: center; }
+.cert-bg-3 { background-image: url('./images/cert-bg-3.jpg'); background-size: cover; background-position: center; }
+.cert-bg-4 { background-image: url('./images/cert-bg-4.jpg'); background-size: cover; background-position: center; }
+.cert-bg-5 { background-image: url('./images/cert-bg-5.jpg'); background-size: cover; background-position: center; }
+.cert-bg-6 { background-image: url('./images/cert-bg-6.jpg'); background-size: cover; background-position: center; }
 
 /* ---------- Мобильная адаптация ---------- */
 @media (max-width: 768px) {
