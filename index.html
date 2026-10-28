@@ -85,23 +85,23 @@
     <div class="login-overlay" id="loginOverlay" style="display:none;">
         <div class="login-shell">
             <h2 style="text-align:center; margin-bottom:20px;">Вход в портал</h2>
-            <div class="login-grid">
+            <div class="login-grid" style="grid-template-columns: 1fr; max-width: 400px; margin: 0 auto;">
                 <div class="login-card">
-                    <h3 style="margin-top:0; color:var(--accent);">👨‍🎓 Студент</h3>
-                    <form onsubmit="event.preventDefault(); document.getElementById('btnLoginStudent').click();">
-                        <input type="text" id="loginName" placeholder="Ваше ФИО (Иванов Иван)">
-                        <input type="text" id="loginGroup" placeholder="Группа (ТМП 5-2)">
-                        <button type="button" class="btn" id="btnLoginStudent" style="width:100%;">Войти</button>
-                        <button type="button" class="btn ghost" onclick="window.clearCache()" style="width:100%; margin-top:10px; border-color:var(--err); color:var(--err); font-size:12px;">🔄 Сбросить кэш и обновить</button>
+                    <h3 style="margin-top:0; color:var(--accent); text-align:center;">🔐 Вход</h3>
+                    <p style="text-align:center; color:var(--muted); font-size:13px; margin:0 0 16px;">Студенты и преподаватели — один вход по email и паролю</p>
+                    <form id="unifiedLoginForm" onsubmit="event.preventDefault(); document.getElementById('btnLoginUnified').click();">
+                        <label style="display:block; font-size:13px; margin-bottom:4px; color:var(--muted);">Email</label>
+                        <input type="email" id="loginEmail" name="email" autocomplete="username" placeholder="student_1@portal.ru" required style="width:100%; margin-bottom:12px;">
+                        <label style="display:block; font-size:13px; margin-bottom:4px; color:var(--muted);">Пароль</label>
+                        <input type="password" id="loginPassword" name="password" autocomplete="current-password" placeholder="••••••••" required style="width:100%; margin-bottom:16px;">
+                        <button type="button" class="btn" id="btnLoginUnified" style="width:100%;">Войти</button>
+                        <p id="loginError" style="display:none; margin-top:12px; padding:10px; background:rgba(239,68,68,0.15); color:var(--err,#ef4444); border-radius:8px; font-size:13px; text-align:center;"></p>
+                        <button type="button" class="btn ghost" onclick="window.clearCache()" style="width:100%; margin-top:12px; border-color:var(--err); color:var(--err); font-size:12px;">🔄 Сбросить кэш и обновить</button>
                     </form>
-                </div>
-                <div class="login-card">
-                    <h3 style="margin-top:0; color:var(--gold);">👨‍🏫 Преподаватель</h3>
-                    <form onsubmit="event.preventDefault(); document.getElementById('btnLoginTeacher').click();">
-                        <input type="text" id="teacherUser" placeholder="Логин (admin)">
-                        <input type="password" id="teacherPass" placeholder="Пароль (admin)">
-                        <button type="button" class="btn" id="btnLoginTeacher" style="width:100%; background:var(--gold); color:#000;">Войти в журнал</button>
-                    </form>
+                    <p style="margin-top:14px; font-size:12px; color:var(--muted); text-align:center; line-height:1.4;">
+                        Студент: <code>student_N@portal.ru</code> / <code>123456</code><br>
+                        Преподаватель: <code>anna.sh@portal.ru</code> / <code>teacher123</code>
+                    </p>
                 </div>
             </div>
 
