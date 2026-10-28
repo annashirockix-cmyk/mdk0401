@@ -1,5 +1,7 @@
 "use strict";
 
+var CURRENT_STUDENTS_CACHE = [];
+
 window.renderJournalPage = function() {
   var app = document.getElementById("app"); 
   if (!app) return; 
@@ -94,7 +96,7 @@ window.renderJournalPage = function() {
 
           table.appendChild(tbody);
           var wrap = document.createElement("div");
-          wrap.className = "module";
+          wrap.className = "module journal-wrap";
           wrap.style = "overflow-x:auto; padding:10px;";
           wrap.appendChild(table);
           contentWrap.appendChild(wrap);
