@@ -1,0 +1,53 @@
+/* 1. Подключаем Tailwind CSS v4 */
+@import "tailwindcss";
+
+/* 2. Подключаем кастомный шрифт (ИСПРАВЛЯЕТ ОШИБКУ 404) */
+/* Обязательно указываем префикс /mdk0401/ */
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('/mdk0401/fonts/MyFont-Regular.woff2') format('woff2'),
+       url('/mdk0401/fonts/MyFont-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 3. Настраиваем тему Tailwind v4 */
+@theme {
+  /* Привязываем наш шрифт к классу font-sans (он будет применяться по умолчанию) */
+  --font-sans: 'MyCustomFont', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  /* Можно добавить свои фирменные цвета */
+  --color-portal-bg: #12121c;
+  --color-portal-card: #1e1e30;
+  --color-portal-border: #2a2a40;
+  --color-portal-accent: #3b82f6;
+}
+
+/* 4. Базовые стили для всего документа */
+@layer base {
+  body {
+    background-color: var(--color-portal-bg);
+    color: white;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+}
+
+/* 5. Кастомный скроллбар (опционально, как на скриншотах) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #12121c; 
+}
+::-webkit-scrollbar-thumb {
+  background: #3b82f6; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2563eb; 
+}
