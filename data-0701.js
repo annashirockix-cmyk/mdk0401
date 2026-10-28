@@ -1343,7 +1343,7 @@ N100 M30
 <p>В данном разделе представлено полное учебно-методическое пособие по дисциплине «Программирование для автоматизированного оборудования» (МДК 01.02 / МДК 07.01).</p>
 <p>Ознакомьтесь с документом ниже или скачайте его для подробного изучения.</p>
 <div style="width: 100%; height: 800px; margin-top: 20px;">
-  <iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + window.location.pathname.replace(/\/?$/, '/') + 'dczrjt/method.pdf')}&embedded=true" width="100%" height="100%" style="border: 1px solid var(--border); border-radius: 8px;"></iframe>
+  <object data="./dczrjt/method.pdf" type="application/pdf" width="100%" height="640" style="border:1px solid var(--border); border-radius:8px; background:#111;"><p>Браузер не показывает PDF внутри страницы. Откройте файл по ссылке ниже.</p></object>
 </div>
 <p style="margin-top: 20px;">
   <a href="./dczrjt/method.pdf" target="_blank" class="btn" download style="display:inline-block;">📥 Открыть / Скачать PDF</a>
