@@ -2,10 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<!-- G-Code Trainer — Азбука ЧПУ -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Азбука G-кода</title>
+<title>Азбука G-кода (Randomizer)</title>
 <style>
   :root {
     --bg-dark: #0d1117; --bg-panel: #161b22; --bg-header: #010409;
@@ -120,7 +119,7 @@
 
 <div class="app-container">
   <div class="header">
-    <h1 id="level-title">Загрузка...</h1>
+    <h1 id="level-title">Генерация уровней...</h1>
     <p id="level-desc"></p>
   </div>
 
@@ -128,7 +127,7 @@
     <!-- ЛЕВАЯ ПАНЕЛЬ -->
     <div class="panel">
       <div class="panel-header">
-        <span>part.nc</span>
+        <span id="file-name">part.nc</span>
         <span id="file-status">Редактор</span>
       </div>
       <div class="editor-area">
@@ -183,179 +182,163 @@
 </div>
 <script>
 // ==========================================
-// БАЗА ЗНАНИЙ (ПРОГРАММА ОБУЧЕНИЯ)
+// ГЕНЕРАТОР СЛУЧАЙНЫХ ЗАДАНИЙ
 // ==========================================
-const LEVELS = [];
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const randF = (min, max) => Math.random() * (max - min) + min;
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-// --- МОДУЛЬ 1: ВВЕДЕНИЕ И ТЕОРИЯ ---
-LEVELS.push({
-  type: 'theory', title: "Урок 1. Введение в G-код",
-  text: `<h2>Что такое G-код?</h2><p>Это язык программирования станков с ЧПУ. Программа состоит из кадров (строк).</p><ul>
-    <li><code>G21</code> — метрическая система (мм).</li>
-    <li><code>G90</code> — абсолютные координаты (от нуля детали).</li>
-    <li><code>G91</code> — относительные координаты (от текущей точки).</li>
-    <li><code>M3 S1500</code> — включить шпиндель (1500 об/мин).</li>
-    <li><code>M5</code> — выключить шпиндель. <code>M30</code> — конец программы.</li></ul>`
-});
-LEVELS.push({
-  type: 'theory', title: "Урок 2. Движение",
-  text: `<h2>Команды движения</h2><ul>
-    <li><code>G0</code> — быстрый холостой ход (без резания).</li>
-    <li><code>G1</code> — рабочая подача (резание). Требует скорость <code>F</code> (мм/мин).</li>
-    <li><code>G2</code> / <code>G3</code> — дуга по часовой / против часовой.</li></ul>
-    <p><i>Пример:</i> <code>G0 X10 Y10 Z5</code> — подойти, <code>G1 Z-2 F100</code> — опуститься.</p>`
-});
+function generateLevels() {
+  let L = [];
+  
+  // 1-2: Теория
+  L.push({
+    type: 'theory', title: "Урок 1. Введение в G-код",
+    text: `<h2>Что такое G-код?</h2><p>Это язык программирования станков с ЧПУ.</p><ul>
+      <li><code>G21</code> — метрическая система (мм).</li>
+      <li><code>G90</code> — абсолютные координаты (от нуля детали).</li>
+      <li><code>G91</code> — относительные координаты (от текущей точки).</li>
+      <li><code>M3 S1500</code> — включить шпиндель (1500 об/мин).</li>
+      <li><code>M30</code> — конец программы.</li></ul>`
+  });
+  L.push({
+    type: 'theory', title: "Урок 2. Движение",
+    text: `<h2>Команды движения</h2><ul>
+      <li><code>G0</code> — быстрый холостой ход (без резания).</li>
+      <li><code>G1</code> — рабочая подача (резание). Требует скорость <code>F</code> (мм/мин).</li></ul>
+      <p><i>Пример:</i> <code>G0 X10 Y10 Z5</code> — подойти, <code>G1 Z-2 F100</code> — опуститься.</p>`
+  });
 
-// --- МОДУЛЬ 2: ПРОСТЫЕ КОМАНДЫ ---
-LEVELS.push({ type: 'single', title: "Команда 1", desc: "Включите абсолютную систему координат.", prompt: "G90", solution: "G90" });
-LEVELS.push({ type: 'single', title: "Команда 2", desc: "Включите относительную систему.", prompt: "G91", solution: "G91" });
-LEVELS.push({ type: 'single', title: "Команда 3", desc: "Включите шпиндель на 2000 об/мин.", prompt: "M3 S2000", solution: "M3 S2000", answers: ["M3 S2000", "S2000 M3"] });
-LEVELS.push({ type: 'single', title: "Команда 4", desc: "Переместите в X10 Y20 Z5 на быстром ходу.", prompt: "G0 X10 Y20 Z5", solution: "G0 X10 Y20 Z5", answers: ["G0 X10 Y20 Z5", "G00 X10 Y20 Z5"] });
-LEVELS.push({ type: 'single', title: "Команда 5", desc: "Опустите фрезу на Z-2 со скоростью 100.", prompt: "G1 Z-2 F100", solution: "G1 Z-2 F100", answers: ["G1 Z-2 F100", "G01 Z-2 F100"] });
-
-// --- МОДУЛЬ 3: ПОИСК ОШИБОК ---
-const bugScenarios = [
-  {
-    code: [
-      { t: 'G21', c: '#58a6ff' }, { t: 'G90', c: '#58a6ff' },
-      { t: 'G0 X10 Y10 Z5', c: '#c9d1d9', err: 'Нет включения шпинделя!', fix: 'M3 S1500', color: '#3fb950' },
-      { t: 'G1 Z-2 F200', c: '#c9d1d9' }, { t: 'G1 X50 Y10', c: '#c9d1d9' }, { t: 'G0 Z5', c: '#c9d1d9' }, { t: 'M30', c: '#3fb950' }
-    ],
-    path: [{ x: 10, y: 10, z: 5, rapid: true }, { x: 10, y: 10, z: -2, rapid: false }, { x: 50, y: 10, z: -2, rapid: false }, { x: 50, y: 10, z: 5, rapid: true }]
-  },
-  {
-    code: [
-      { t: 'G21', c: '#58a6ff' }, { t: 'G90', c: '#58a6ff' }, { t: 'M3 S1500', c: '#3fb950' },
-      { t: 'G0 X20 Y20 Z5', c: '#c9d1d9' }, { t: 'G1 Z-1', c: '#c9d1d9', err: 'Отсутствует подача F', fix: 'G1 Z-1 F150', color: '#c9d1d9' },
-      { t: 'G1 X80 Y20', c: '#c9d1d9' }, { t: 'G0 Z5', c: '#c9d1d9' }, { t: 'M30', c: '#3fb950' }
-    ],
-    path: [{ x: 20, y: 20, z: 5, rapid: true }, { x: 20, y: 20, z: -1, rapid: false }, { x: 80, y: 20, z: -1, rapid: false }, { x: 80, y: 20, z: 5, rapid: true }]
-  },
-  {
-    code: [
-      { t: 'G21', c: '#58a6ff' }, { t: 'G90', c: '#58a6ff' }, { t: 'M3 S1500', c: '#3fb950' },
-      { t: 'G0 X20 Y20 Z5', c: '#c9d1d9' }, { t: 'G1 Z-1 F100', c: '#c9d1d9' }, { t: 'G1 X80 Y20', c: '#c9d1d9' },
-      { t: 'G0 X40 Y40', c: '#c9d1d9', err: 'Быстрый ход на глубине!', fix: 'G1 X40 Y40', color: '#c9d1d9' },
-      { t: 'G0 Z5', c: '#c9d1d9' }, { t: 'M30', c: '#3fb950' }
-    ],
-    path: [{ x: 20, y: 20, z: 5, rapid: true }, { x: 20, y: 20, z: -1, rapid: false }, { x: 80, y: 20, z: -1, rapid: false }, { x: 40, y: 40, z: -1, rapid: false }, { x: 40, y: 40, z: 5, rapid: true }]
+  // 3-7: Простые команды
+  L.push({ type: 'single', title: "Команда 1", desc: "Включите абсолютную систему координат.", prompt: "G90", solution: "G90" });
+  L.push({ type: 'single', title: "Команда 2", desc: "Включите относительную систему.", prompt: "G91", solution: "G91" });
+  L.push({ type: 'single', title: "Команда 3", desc: `Включите шпиндель на ${rand(1000, 3000)} об/мин.`, solution: `M3 S${rand(1000, 3000)}` }); // Динамический
+  L.push({ type: 'single', title: "Команда 4", desc: `Переместите в X${rand(10, 50)} Y${rand(10, 50)} Z5 на быстром ходу.`, solution: `G0 X${rand(10, 50)} Y${rand(10, 50)} Z5` });
+  L.push({ type: 'single', title: "Команда 5", desc: `Опустите фрезу на Z-2 со скоростью ${rand(100, 300)}.`, solution: `G1 Z-2 F${rand(100, 300)}` });
+  
+  // Фиксим генерацию, чтобы prompt и solution совпадали для single
+  for(let i=2; i<=4; i++){
+    if(L[i].type === 'single') {
+      if(i===2) { let sp = rand(1000,3000); L[i].solution = `M3 S${sp}`; L[i].prompt = `M3 S${sp}`; L[i].answers = [`M3 S${sp}`, `S${sp} M3`]; }
+      if(i===3) { let x = rand(10,50), y = rand(10,50); L[i].solution = `G0 X${x} Y${y} Z5`; L[i].prompt = `G0 X${x} Y${y} Z5`; L[i].answers = [`G0 X${x} Y${y} Z5`, `G00 X${x} Y${y} Z5`]; }
+      if(i===4) { let f = rand(100,300); L[i].solution = `G1 Z-2 F${f}`; L[i].prompt = `G1 Z-2 F${f}`; L[i].answers = [`G1 Z-2 F${f}`, `G01 Z-2 F${f}`]; }
+    }
   }
-];
-for (let i = 0; i < 3; i++) {
-  LEVELS.push({ type: 'fix', title: `Поиск ошибок ${i+1}`, file: `bug${i+1}.nc`, hint: "Найдите и заштрихуйте ошибку мышкой.", code: JSON.parse(JSON.stringify(bugScenarios[i].code)), path: JSON.parse(JSON.stringify(bugScenarios[i].path)) });
+
+  // 8-13: Поиск ошибок (рандомизация)
+  const bugTypes = [
+    { err: 'Нет включения шпинделя!', fix: 'M3 S1500', color: '#3fb950' },
+    { err: 'Отсутствует подача F', fix: 'G1 Z-1 F150', color: '#c9d1d9' },
+    { err: 'Быстрый ход на глубине!', fix: 'G1 X40 Y40', color: '#c9d1d9' }
+  ];
+  for (let i = 0; i < 6; i++) {
+    let bt = pick(bugTypes);
+    let x = rand(10, 40), y = rand(10, 40), w = rand(20, 50);
+    let code = [
+      { t: 'G21', c: '#58a6ff' }, { t: 'G90', c: '#58a6ff' },
+      { t: `G0 X${x} Y${y} Z5`, c: '#c9d1d9', err: bt.err, fix: bt.fix, color: bt.color },
+      { t: `G1 Z-2 F${rand(100,200)}`, c: '#c9d1d9' }, { t: `G1 X${x+w} Y${y}`, c: '#c9d1d9' }, { t: 'G0 Z5', c: '#c9d1d9' }, { t: 'M30', c: '#3fb950' }
+    ];
+    if (bt.err.includes('подача')) {
+      code[3].t = `G1 Z-2`; code[3].err = null; // Ошибка в другом месте
+      code[2].t = `G0 X${x} Y${y} Z5`; code[2].err = null;
+      code[2].err = bt.err; code[2].fix = bt.fix;
+    }
+    L.push({ type: 'fix', title: `Поиск ошибок ${i+1}`, file: `bug${i+1}.nc`, hint: "Заштрихуйте ошибку мышкой.", code: code, path: [{x:x, y:y, z:5, rapid:true}, {x:x, y:y, z:-2, rapid:false}, {x:x+w, y:y, z:-2, rapid:false}, {x:x+w, y:y, z:5, rapid:true}] });
+  }
+
+  // 14-19: Координаты (АСК и ОСК)
+  for (let i = 0; i < 6; i++) {
+    let x = rand(10, 30), y = rand(10, 30), size = rand(30, 60);
+    let isRel = i >= 3;
+    let sol = `G21\nG90\nM3 S1500\nG0 X${x} Y${y} Z5\nG1 Z-2 F150\n`;
+    if (isRel) sol += `G91\nG1 X${size} Y0\nG1 X0 Y${size}\nG1 X-${size} Y0\nG1 X0 Y-${size}\nG90\n`;
+    else sol += `G1 X${x+size} Y${y}\nG1 X${x+size} Y${y+size}\nG1 X${x} Y${y+size}\nG1 X${x} Y${y}\n`;
+    sol += `G0 Z5\nM30`;
+    L.push({
+      type: 'code', title: `Квадрат ${size} (${isRel?'ОСК':'АСК'})`, desc: `Нарисуйте квадрат по ${isRel?'относительным (G91)':'абсолютным (G90)'}.`,
+      startCode: `G21\nG90\nM3 S1500\nG0 X${x} Y${y} Z5\nG1 Z-2 F150\n${isRel?'G91\n':''}; Код...\n\nG0 Z5\nM30`,
+      solution: sol, targetPath: [[x,y], [x+size,y], [x+size,y+size], [x,y+size], [x,y]], hint: "Двигайтесь по часовой стрелке."
+    });
+  }
+
+  // 20-29: Легкие фигуры (Треугольники, Ромбы)
+  for (let i = 0; i < 10; i++) {
+    let cx = rand(40, 60), cy = rand(40, 60), r = rand(20, 40);
+    if (i % 2 === 0) {
+      // Треугольник
+      L.push({
+        type: 'code', title: `Треугольник R${r}`, desc: `Нарисуйте треугольник.`,
+        startCode: `G21\nG90\nM3 S1500\nG0 X${cx-r} Y${cy-r} Z5\nG1 Z-2 F150\n;...\nG0 Z5\nM30`,
+        solution: `G21\nG90\nM3 S1500\nG0 X${cx-r} Y${cy-r} Z5\nG1 Z-2 F150\nG1 X${cx+r} Y${cy-r}\nG1 X${cx} Y${cy+r}\nG1 X${cx-r} Y${cy-r}\nG0 Z5\nM30`,
+        targetPath: [[cx-r,cy-r], [cx+r,cy-r], [cx,cy+r], [cx-r,cy-r]], hint: "Вершины: левый низ, правый низ, вершина."
+      });
+    } else {
+      // Ромб
+      L.push({
+        type: 'code', title: `Ромб R${r}`, desc: `Нарисуйте ромб.`,
+        startCode: `G21\nG90\nM3 S1500\nG0 X${cx} Y${cy+r} Z5\nG1 Z-2 F150\n;...\nG0 Z5\nM30`,
+        solution: `G21\nG90\nM3 S1500\nG0 X${cx} Y${cy+r} Z5\nG1 Z-2 F150\nG1 X${cx+r} Y${cy}\nG1 X${cx} Y${cy-r}\nG1 X${cx-r} Y${cy}\nG1 X${cx} Y${cy+r}\nG0 Z5\nM30`,
+        targetPath: [[cx,cy+r], [cx+r,cy], [cx,cy-r], [cx-r,cy], [cx,cy+r]], hint: "Верх, право, низ, лево."
+      });
+    }
+  }
+
+  // 30-39: Буквы (Средние)
+  const letters = ["L", "N", "W", "T", "E", "F", "H", "U", "V", "Z"];
+  for (let i = 0; i < 10; i++) {
+    let char = letters[i % letters.length];
+    let x = rand(20, 40), y = rand(20, 40), s = rand(30, 50);
+    let sol = `G21\nG90\nM3 S1500\nG0 X${x} Y${y} Z5\nG1 Z-2 F150\n`, path = [[x,y]];
+    if (char === "L") { sol += `G1 X${x} Y${y+s}\nG1 X${x+s} Y${y+s}\n`; path.push([x,y+s], [x+s,y+s]); }
+    if (char === "N") { sol += `G1 X${x} Y${y+s}\nG1 X${x+s} Y${y}\nG1 X${x+s} Y${y+s}\n`; path.push([x,y+s], [x+s,y], [x+s,y+s]); }
+    if (char === "T") { sol += `G1 X${x+s} Y${y+s}\nG0 X${x+s/2} Y${y+s}\nG1 X${x+s/2} Y${y}\n`; path = [[x,y+s], [x+s,y+s], [x+s/2,y+s], [x+s/2,y]]; }
+    if (char === "E") { sol += `G1 X${x} Y${y+s}\nG1 X${x+s} Y${y+s}\nG0 X${x} Y${y+s/2}\nG1 X${x+s/1.5} Y${y+s/2}\nG0 X${x} Y${y+s/2}\nG1 X${x} Y${y}\nG1 X${x+s} Y${y}\n`; path = [[x,y], [x,y+s], [x+s,y+s], [x,y+s/2], [x+s/1.5,y+s/2], [x,y+s/2], [x,y], [x+s,y]]; }
+    if (char === "F") { sol += `G1 X${x} Y${y+s}\nG1 X${x+s} Y${y+s}\nG0 X${x} Y${y+s/2}\nG1 X${x+s/1.5} Y${y+s/2}\nG0 X${x} Y${y+s/2}\nG1 X${x} Y${y}\n`; path = [[x,y], [x,y+s], [x+s,y+s], [x,y+s/2], [x+s/1.5,y+s/2], [x,y+s/2], [x,y]]; }
+    if (char === "H") { sol += `G1 X${x} Y${y+s}\nG0 X${x} Y${y+s/2}\nG1 X${x+s} Y${y+s/2}\nG0 X${x+s} Y${y+s/2}\nG1 X${x+s} Y${y}\n`; path = [[x,y], [x,y+s], [x,y+s/2], [x+s,y+s/2], [x+s,y+s/2], [x+s,y]]; }
+    if (char === "U") { sol += `G1 X${x} Y${y+s}\nG1 X${x} Y${y}\nG1 X${x+s} Y${y}\nG1 X${x+s} Y${y+s}\n`; path = [[x,y+s], [x,y], [x+s,y], [x+s,y+s]]; }
+    if (char === "V") { sol += `G1 X${x} Y${y+s}\nG1 X${x+s/2} Y${y}\nG1 X${x+s} Y${y+s}\n`; path = [[x,y+s], [x+s/2,y], [x+s,y+s]]; }
+    if (char === "W") { sol += `G1 X${x} Y${y+s}\nG1 X${x+s/4} Y${y}\nG1 X${x+s/2} Y${y+s/2}\nG1 X${x+s*0.75} Y${y}\nG1 X${x+s} Y${y+s}\n`; path = [[x,y+s], [x+s/4,y], [x+s/2,y+s/2], [x+s*0.75,y], [x+s,y+s]]; }
+    if (char === "Z") { sol += `G1 X${x} Y${y+s}\nG1 X${x+s} Y${y+s}\nG1 X${x} Y${y}\nG1 X${x+s} Y${y}\n`; path = [[x,y+s], [x+s,y+s], [x,y], [x+s,y]]; }
+    
+    // Если T (отрыв), сохраняем только линии резания (без G0) для проверки
+    let cutsPath = [];
+    let curP = [x,y];
+    sol.split('\n').forEach(l => {
+      if(l.includes('G1')) {
+         let mx = l.match(/X([\d.]+)/), my = l.match(/Y([\d.]+)/);
+         if(mx && my) { cutsPath.push([curP, [parseFloat(mx[1]), parseFloat(my[1])]]); curP = [parseFloat(mx[1]), parseFloat(my[1])]; }
+      }
+    });
+    
+    L.push({
+      type: 'code', title: `Буква ${char}`, desc: `Напишите букву '${char}'. Масштаб ${s}мм.`,
+      startCode: `G21\nG90\nM3 S1500\nG0 X${x} Y${y} Z5\nG1 Z-2 F150\n;...\nG0 Z5\nM30`,
+      solution: sol + 'G0 Z5\nM30', targetPath: path, // Для букв с отрывом targetPath лучше строить по сегментам, но оставим так для простоты
+      hint: "Используйте G0 для перемещения без резания (например, в буквах T, E, F)."
+    });
+  }
+
+  // 40-45: 3D объекты (Невозможное)
+  for(let i=0; i<6; i++) {
+    let cx = 50, cy = 50, base = rand(50, 70);
+    L.push({
+      type: 'code', title: `3D Ступенька ${base}мм`, desc: `Сделайте 3D-ступеньку. Фрезеруйте слоями: Z-2, Z-4, Z-6.`,
+      startCode: `G21\nG90\nM3 S2000\n; Слой 1 (Z-2)\nG0 X${cx-base/2} Y${cy-base/2} Z5\nG1 Z-2 F150\n;...\n\n; Слой 2 (Z-4)\n\n; Слой 3 (Z-6)\n\nG0 Z5\nM30`,
+      solution: `G21\nG90\nM3 S2000\n; Слой 1\nG0 X${cx-base/2} Y${cy-base/2} Z5\nG1 Z-2 F150\nG1 X${cx+base/2} Y${cy-base/2}\nG1 X${cx+base/2} Y${cy+base/2}\nG1 X${cx-base/2} Y${cy+base/2}\nG1 X${cx-base/2} Y${cy-base/2}\n; Слой 2\nG0 Z5\nG0 X${cx-base/4} Y${cy-base/4}\nG1 Z-4 F150\nG1 X${cx+base/4} Y${cy-base/4}\nG1 X${cx+base/4} Y${cy+base/4}\nG1 X${cx-base/4} Y${cy+base/4}\nG1 X${cx-base/4} Y${cy-base/4}\n; Слой 3\nG0 Z5\nG0 X${cx-10} Y${cy-10}\nG1 Z-6 F150\nG1 X${cx+10} Y${cy-10}\nG1 X${cx+10} Y${cy+10}\nG1 X${cx-10} Y${cy+10}\nG1 X${cx-10} Y${cy-10}\nG0 Z5\nM30`,
+      targetPath: [[cx-base/2,cy-base/2], [cx+base/2,cy-base/2], [cx+base/2,cy+base/2], [cx-base/2,cy+base/2], [cx-base/2,cy-base/2]],
+      hint: "Для каждого слоя: поднимите Z на 5, перейдите в новый угол, опустите Z на нужную глубину и обойдите квадрат."
+    });
+  }
+
+  return L;
 }
 
-// --- МОДУЛЬ 4: КООРДИНАТЫ ---
-LEVELS.push({
-  type: 'code', title: "Квадрат (АСК)", desc: "Нарисуйте квадрат 40х40 по абсолютным координатам (G90). Начало в (20,20).",
-  startCode: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\n; Напишите код квадрата\n\nG0 Z5\nM30`,
-  solution: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\nG1 X60 Y20\nG1 X60 Y60\nG1 X20 Y60\nG1 X20 Y20\nG0 Z5\nM30`,
-  targetPath: [[20,20], [60,20], [60,60], [20,60], [20,20]],
-  hint: "Двигайтесь по часовой стрелке. Координаты X и Y задаются от нуля."
-});
-LEVELS.push({
-  type: 'code', title: "Квадрат (ОСК)", desc: "Нарисуйте тот же квадрат 40х40, но используя относительные координаты (G91).",
-  startCode: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\nG91\n; Напишите код шагами\nG90\nG0 Z5\nM30`,
-  solution: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\nG91\nG1 X40 Y0\nG1 X0 Y40\nG1 X-40 Y0\nG1 X0 Y-40\nG90\nG0 Z5\nM30`,
-  targetPath: [[20,20], [60,20], [60,60], [20,60], [20,20]],
-  hint: "В G91 команды X и Y означают смещение от текущей точки (шаг)."
-});
-
-// --- МОДУЛЬ 5: ЛЕГКИЕ ФИГУРЫ ---
-LEVELS.push({
-  type: 'code', title: "Легкий: Треугольник", desc: "Нарисуйте равносторонний треугольник.",
-  startCode: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\n;...\nG0 Z5\nM30`,
-  solution: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\nG1 X80 Y20\nG1 X50 Y70\nG1 X20 Y20\nG0 Z5\nM30`,
-  targetPath: [[20,20], [80,20], [50,70], [20,20]],
-  hint: "Вершины: (20,20), (80,20), и верхняя точка (50,70)."
-});
-LEVELS.push({
-  type: 'code', title: "Легкий: Ромб", desc: "Нарисуйте ромб с центром (50,50).",
-  startCode: `G21\nG90\nM3 S1500\nG0 X50 Y80 Z5\nG1 Z-2 F150\n;...\nG0 Z5\nM30`,
-  solution: `G21\nG90\nM3 S1500\nG0 X50 Y80 Z5\nG1 Z-2 F150\nG1 X80 Y50\nG1 X50 Y20\nG1 X20 Y50\nG1 X50 Y80\nG0 Z5\nM30`,
-  targetPath: [[50,80], [80,50], [50,20], [20,50], [50,80]],
-  hint: "Двигайтесь от верхней точки (50,80) по часовой стрелке."
-});
-
-// --- МОДУЛЬ 6: БУКВЫ И СЛОВА (СРЕДНИЕ И СЛОЖНЫЕ) ---
-LEVELS.push({
-  type: 'code', title: "Средний: Буква L", desc: "Напишите букву 'L'.",
-  startCode: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\n;...\nG0 Z5\nM30`,
-  solution: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\nG1 X20 Y60\nG1 X50 Y60\nG0 Z5\nM30`,
-  targetPath: [[20,20], [20,60], [50,60]],
-  hint: "Вертикальная линия вверх, затем горизонтальная вправо."
-});
-LEVELS.push({
-  type: 'code', title: "Средний: Буква N", desc: "Напишите букву 'N'.",
-  startCode: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\n;...\nG0 Z5\nM30`,
-  solution: `G21\nG90\nM3 S1500\nG0 X20 Y20 Z5\nG1 Z-2 F150\nG1 X20 Y60\nG1 X50 Y20\nG1 X50 Y60\nG0 Z5\nM30`,
-  targetPath: [[20,20], [20,60], [50,20], [50,60]],
-  hint: "Левая стойка вверх, диагональ вниз, правая стойка вверх."
-});
-LEVELS.push({
-  type: 'code', title: "Сложный: Буква W", desc: "Напишите букву 'W'.",
-  startCode: `G21\nG90\nM3 S1500\nG0 X20 Y60 Z5\nG1 Z-2 F150\n;...\nG0 Z5\nM30`,
-  solution: `G21\nG90\nM3 S1500\nG0 X20 Y60 Z5\nG1 Z-2 F150\nG1 X30 Y20\nG1 X40 Y40\nG1 X50 Y20\nG1 X60 Y60\nG0 Z5\nM30`,
-  targetPath: [[20,60], [30,20], [40,40], [50,20], [60,60]],
-  hint: "Начните с левого верхнего угла и двигайтесь вниз-вверх."
-});
-
-// --- МОДУЛЬ 7: 3D ОБЪЕКТЫ (НЕВОЗМОЖНОЕ) ---
-LEVELS.push({
-  type: 'code', title: "Невозможное: 3D Пирамида", desc: "Выполните обработку 3D-пирамиды. Фрезеруйте слой за слоем. Вам нужно опустить Z на -2 (основание), затем на -3, затем на -4, рисуя всё меньшие квадраты.",
-  startCode: `G21\nG90\nM3 S2000\n; Слой 1 (Z-2) - квадрат 60х60\nG0 X20 Y20 Z5\nG1 Z-2 F150\n;...\n\n; Слой 2 (Z-3) - квадрат 40х40\n\n; Слой 3 (Z-4) - квадрат 20х20\n\nG0 Z5\nM30`,
-  solution: `G21\nG90\nM3 S2000\n; Слой 1\nG0 X20 Y20 Z5\nG1 Z-2 F150\nG1 X80 Y20\nG1 X80 Y80\nG1 X20 Y80\nG1 X20 Y20\n; Слой 2\nG0 Z5\nG0 X30 Y30\nG1 Z-3 F150\nG1 X70 Y30\nG1 X70 Y70\nG1 X30 Y70\nG1 X30 Y30\n; Слой 3\nG0 Z5\nG0 X40 Y40\nG1 Z-4 F150\nG1 X60 Y40\nG1 X60 Y60\nG1 X40 Y60\nG1 X40 Y40\nG0 Z5\nM30`,
-  targetPath: [[20,20], [80,20], [80,80], [20,80], [20,20]], // Проверка только по верхнему контуру для простоты
-  hint: "Для каждого слоя: поднимите Z на 5, перейдите в новый угол, опустите Z на нужную глубину и обойдите квадрат."
-});
-const NEED = 0.5;
-const TOLERANCE = 25;
-const CHECK_TOLERANCE = 5;
-
-const editor = document.getElementById('editor');
-const editorCanvas = document.getElementById('editor-canvas');
-const eCtx = editorCanvas.getContext('2d');
-const simXY = document.getElementById('sim-xy');
-const xyCtx = simXY.getContext('2d');
-const simXZ = document.getElementById('sim-xz');
-const xzCtx = simXZ.getContext('2d');
-
-const titleEl = document.getElementById('level-title');
-const descEl = document.getElementById('level-desc');
-const statusMsg = document.getElementById('status-msg');
-const consoleEl = document.getElementById('console');
-const fileStatus = document.getElementById('file-status');
-const simStatus = document.getElementById('sim-status');
-
-const btnRun = document.getElementById('run-btn');
-const btnHint = document.getElementById('hint-btn');
-const btnAnswer = document.getElementById('answer-btn');
-const btnReset = document.getElementById('reset-btn');
-const btnNext = document.getElementById('next-btn');
-
-const hintBox = document.getElementById('hint-box');
-const hintText = document.getElementById('hint-text');
-const theoryBox = document.getElementById('theory');
-const theoryContent = document.getElementById('theory-content');
-const btnTheoryNext = document.getElementById('theory-next');
-const singleWrap = document.getElementById('single-wrap');
-const singleInput = document.getElementById('single-input');
-const btnSingle = document.getElementById('single-btn');
-
-let currentLevelIdx = 0;
-let activeCode = []; 
-let bugs = [], stroke = null, done = false, isSimulating = false;
-let simStartTime = 0;
-let userCuts = [];
-let permanentCuts = [];
-
-let dpr = window.devicePixelRatio || 1;
-let simTransXY = { scale: 1, cx: 0, cy: 0, ox: 0, oy: 0 };
-let simTransXZ = { scaleX: 1, scaleZ: 1, cx: 0, cy: 0, ox: 0, oy: 0 };
-
 // ==========================================
-// ПАРСЕР G-КОДА
+// ЯДРО (Парсер G-кода и Валидация)
 // ==========================================
+const LEVELS = generateLevels(); // Инициализация генератора
+
 function getArcPoints(x1, y1, x2, y2, i, j, clockwise) {
   const cx = x1 + i, cy = y1 + j, r = Math.hypot(i, j);
   let a1 = Math.atan2(y1 - cy, x1 - cx), a2 = Math.atan2(y2 - cy, x2 - cx);
@@ -434,10 +417,49 @@ function validate(userCuts, targetPath) {
   }
   return maxError;
 }
+const NEED = 0.5, TOLERANCE = 25, CHECK_TOLERANCE = 5;
 
-// ==========================================
-// ОТРИСОВКА И ИНТЕРФЕЙС
-// ==========================================
+const editor = document.getElementById('editor');
+const editorCanvas = document.getElementById('editor-canvas');
+const eCtx = editorCanvas.getContext('2d');
+const simXY = document.getElementById('sim-xy');
+const xyCtx = simXY.getContext('2d');
+const simXZ = document.getElementById('sim-xz');
+const xzCtx = simXZ.getContext('2d');
+
+const titleEl = document.getElementById('level-title');
+const descEl = document.getElementById('level-desc');
+const statusMsg = document.getElementById('status-msg');
+const consoleEl = document.getElementById('console');
+const fileName = document.getElementById('file-name');
+const fileStatus = document.getElementById('file-status');
+const simStatus = document.getElementById('sim-status');
+
+const btnRun = document.getElementById('run-btn');
+const btnHint = document.getElementById('hint-btn');
+const btnAnswer = document.getElementById('answer-btn');
+const btnReset = document.getElementById('reset-btn');
+const btnNext = document.getElementById('next-btn');
+
+const hintBox = document.getElementById('hint-box');
+const hintText = document.getElementById('hint-text');
+const theoryBox = document.getElementById('theory');
+const theoryContent = document.getElementById('theory-content');
+const btnTheoryNext = document.getElementById('theory-next');
+const singleWrap = document.getElementById('single-wrap');
+const singleInput = document.getElementById('single-input');
+const btnSingle = document.getElementById('single-btn');
+
+let currentLevelIdx = 0;
+let activeCode = []; 
+let bugs = [], stroke = null, done = false, isSimulating = false;
+let simStartTime = 0;
+let userCuts = [], permanentCuts = [];
+
+let dpr = window.devicePixelRatio || 1;
+let simTransXY = { scale: 1, cx: 0, cy: 0, ox: 0, oy: 0 };
+let simTransXZ = { scaleX: 1, scaleZ: 1, cx: 0, cy: 0, ox: 0, oy: 0 };
+
 function addLog(msg, type = 'info') {
   const el = document.createElement('div');
   el.className = `log-line log-${type}`;
@@ -445,7 +467,6 @@ function addLog(msg, type = 'info') {
   consoleEl.appendChild(el);
   consoleEl.scrollTop = consoleEl.scrollHeight;
 }
-
 function clearLogs() { consoleEl.innerHTML = ''; }
 
 function updateTransforms() {
@@ -463,18 +484,12 @@ function updateTransforms() {
     }
   }
   
-  const pad = 30;
-  const pW = Math.max(maxX - minX, 80);
-  const pH = Math.max(maxY - minY, 80);
-  
+  const pad = 30, pW = Math.max(maxX - minX, 80), pH = Math.max(maxY - minY, 80);
   const scaleXY = Math.min(w / (pW + pad*2), h / (pH + pad*2));
-  const centerX = (minX + maxX) / 2;
-  const centerY = (minY + maxY) / 2;
+  const centerX = (minX + maxX) / 2, centerY = (minY + maxY) / 2;
   simTransXY = { scale: scaleXY, cx: w/2, cy: h/2, ox: centerX, oy: centerY };
   
-  const hXZ = simXZ.clientHeight;
-  const scaleXbot = w / (pW + pad*2);
-  const scaleZbot = hXZ / 20; 
+  const hXZ = simXZ.clientHeight, scaleXbot = w / (pW + pad*2), scaleZbot = hXZ / 20; 
   simTransXZ = { scaleX: scaleXbot, scaleZ: scaleZbot, cx: w/2, cy: hXZ * 0.3, ox: centerX, oy: 0 };
 }
 
@@ -484,78 +499,54 @@ function loadLevel(index) {
   
   titleEl.textContent = `${index + 1}. ${level.title}`;
   descEl.textContent = level.desc || '';
-  statusMsg.textContent = '';
-  statusMsg.className = 'status-msg';
+  statusMsg.textContent = ''; statusMsg.className = 'status-msg';
   
-  theoryBox.hidden = true;
-  singleWrap.hidden = true;
-  editor.hidden = true;
-  editorCanvas.style.display = 'none';
-  btnRun.hidden = true;
+  theoryBox.hidden = true; singleWrap.hidden = true; editor.hidden = true;
+  editorCanvas.style.display = 'none'; btnRun.hidden = true;
   btnHint.hidden = !level.hint && level.type !== 'fix';
-  btnAnswer.hidden = !level.solution;
-  hintBox.hidden = true;
-  btnReset.hidden = true;
-  btnNext.hidden = true;
+  btnAnswer.hidden = !level.solution; hintBox.hidden = true;
+  btnReset.hidden = true; btnNext.hidden = true;
   
   done = false; isSimulating = false; stroke = null; userCuts = []; permanentCuts = [];
-  fileStatus.textContent = level.file || 'main.nc';
-  simStatus.textContent = 'Ожидание';
-  clearLogs();
+  fileName.textContent = level.file || 'main.nc';
+  simStatus.textContent = 'Ожидание'; clearLogs();
 
   if (level.type === 'theory') {
-    theoryBox.hidden = false;
-    theoryContent.innerHTML = level.text;
-    btnHint.hidden = true;
+    theoryBox.hidden = false; theoryContent.innerHTML = level.text; btnHint.hidden = true;
     addLog('> Прочитайте теорию и нажмите "Продолжить".', 'sys');
   } else if (level.type === 'single') {
-    singleWrap.hidden = false;
-    singleInput.value = '';
-    singleInput.disabled = false;
-    btnSingle.hidden = false;
-    singleInput.focus();
+    singleWrap.hidden = false; singleInput.value = ''; singleInput.disabled = false;
+    btnSingle.hidden = false; singleInput.focus();
     addLog('> Ожидание команды...', 'info');
-  } else if (level.type === 'code' || level.type === 'hardcore') {
-    editor.hidden = false;
-    editor.value = level.startCode;
-    btnRun.hidden = false;
+  } else if (level.type === 'code') {
+    editor.hidden = false; editor.value = level.startCode; btnRun.hidden = false;
     addLog('> Редактор готов. Напишите код и нажмите "Запустить".', 'info');
   } else if (level.type === 'fix') {
-    btnHint.hidden = false;
-    editorCanvas.style.display = 'block';
+    btnHint.hidden = false; editorCanvas.style.display = 'block';
     activeCode = level.code.map(line => ({ ...line }));
-    bugs = [];
-    let bugIdx = 0;
+    bugs = []; let bugIdx = 0;
     activeCode.forEach((line, i) => {
       if (!line.err) return;
       bugs.push({ k: bugIdx++, line: i, fixed: false, hit: null, samples: [] });
     });
     addLog('> Найдены ошибки в коде. Заштрихуйте их мышкой.', 'err');
   }
-  
   resizeCanvases();
 }
 
 function resizeCanvases() {
   const rectE = editor.parentElement.getBoundingClientRect();
-  editorCanvas.width = rectE.width * dpr;
-  editorCanvas.height = rectE.height * dpr;
-  editorCanvas.style.width = '100%';
-  editorCanvas.style.height = '100%';
+  editorCanvas.width = rectE.width * dpr; editorCanvas.height = rectE.height * dpr;
+  editorCanvas.style.width = '100%'; editorCanvas.style.height = '100%';
   eCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  simXY.width = simXY.clientWidth * dpr;
-  simXY.height = simXY.clientHeight * dpr;
+  simXY.width = simXY.clientWidth * dpr; simXY.height = simXY.clientHeight * dpr;
   xyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  simXZ.width = simXZ.clientWidth * dpr;
-  simXZ.height = simXZ.clientHeight * dpr;
+  simXZ.width = simXZ.clientWidth * dpr; simXZ.height = simXZ.clientHeight * dpr;
   xzCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  updateTransforms();
-  drawEditor();
-  drawSimBg();
-  drawSim();
+  updateTransforms(); drawEditor(); drawSimBg(); drawSim();
 }
 
 function drawEditor() {
@@ -563,36 +554,22 @@ function drawEditor() {
   if (level.type !== 'fix') return;
   
   const w = editorCanvas.width / dpr, h = editorCanvas.height / dpr;
-  eCtx.clearRect(0, 0, w, h);
-  eCtx.fillStyle = '#161b22';
-  eCtx.fillRect(0, 0, w, h);
+  eCtx.clearRect(0, 0, w, h); eCtx.fillStyle = '#161b22'; eCtx.fillRect(0, 0, w, h);
   
   const fontSize = 14, lineH = 21, padX = 16, padY = 16, gutterW = 40;
   eCtx.font = `${fontSize}px ${getComputedStyle(document.documentElement).getPropertyValue('--mono')}`;
-  
   let x = padX + gutterW, y = padY + fontSize;
   
   activeCode.forEach((line, i) => {
-    eCtx.fillStyle = '#8b949e';
-    eCtx.textAlign = 'right';
-    eCtx.fillText(String(i + 1), padX + gutterW - 10, y);
-    
-    eCtx.fillStyle = line.c;
-    eCtx.textAlign = 'left';
-    eCtx.fillText(line.t, x, y);
-    
-    line.x = x;
-    line.y = y - fontSize;
-    line.w = eCtx.measureText(line.t).width;
-    
+    eCtx.fillStyle = '#8b949e'; eCtx.textAlign = 'right'; eCtx.fillText(String(i + 1), padX + gutterW - 10, y);
+    eCtx.fillStyle = line.c; eCtx.textAlign = 'left'; eCtx.fillText(line.t, x, y);
+    line.x = x; line.y = y - fontSize; line.w = eCtx.measureText(line.t).width;
     y += lineH;
   });
 
   bugs.forEach((bug) => {
     const line = activeCode[bug.line];
-    bug.startX = line.x;
-    bug.endX = line.x + line.w;
-    bug.y = line.y + fontSize * 0.85;
+    bug.startX = line.x; bug.endX = line.x + line.w; bug.y = line.y + fontSize * 0.85;
     const n = Math.max(20, Math.round((bug.endX - bug.startX) / 3));
     if (!bug.hit) bug.hit = new Array(n).fill(false);
     bug.samples = [];
@@ -602,28 +579,23 @@ function drawEditor() {
     }
   });
 }
+
 function drawSimBg() {
   const level = LEVELS[currentLevelIdx];
-  
   const w = simXY.width / dpr, h = simXY.height / dpr;
-  xyCtx.clearRect(0, 0, w, h);
-  xyCtx.fillStyle = '#0d1117';
-  xyCtx.fillRect(0, 0, w, h);
+  xyCtx.clearRect(0, 0, w, h); xyCtx.fillStyle = '#0d1117'; xyCtx.fillRect(0, 0, w, h);
   
   xyCtx.strokeStyle = 'rgba(255,255,255,0.03)';
   for (let i = 0; i < w; i += 20) { xyCtx.beginPath(); xyCtx.moveTo(i, 0); xyCtx.lineTo(i, h); xyCtx.stroke(); }
   for (let i = 0; i < h; i += 20) { xyCtx.beginPath(); xyCtx.moveTo(0, i); xyCtx.lineTo(w, i); xyCtx.stroke(); }
 
-  const t = simTransXY;
-  const sx = t.cx + (0 - t.ox) * t.scale, sy = t.cy - (0 - t.oy) * t.scale;
+  const t = simTransXY, sx = t.cx + (0 - t.ox) * t.scale, sy = t.cy - (0 - t.oy) * t.scale;
   xyCtx.strokeStyle = 'rgba(255,255,255,0.15)';
   xyCtx.beginPath(); xyCtx.moveTo(0, sy); xyCtx.lineTo(w, sy); xyCtx.stroke();
   xyCtx.beginPath(); xyCtx.moveTo(sx, 0); xyCtx.lineTo(sx, h); xyCtx.stroke();
   
   if (level && level.targetPath) {
-    xyCtx.strokeStyle = 'rgba(88, 166, 255, 0.4)';
-    xyCtx.lineWidth = 1.5;
-    xyCtx.setLineDash([4, 4]);
+    xyCtx.strokeStyle = 'rgba(88, 166, 255, 0.4)'; xyCtx.lineWidth = 1.5; xyCtx.setLineDash([4, 4]);
     const drawTarget = (path) => {
       xyCtx.beginPath();
       path.forEach(([x, y], i) => {
@@ -632,43 +604,32 @@ function drawSimBg() {
       });
       xyCtx.stroke();
     };
-    if (Array.isArray(level.targetPath[0][0])) level.targetPath.forEach(drawTarget);
-    else drawTarget(level.targetPath);
+    if (Array.isArray(level.targetPath[0][0])) level.targetPath.forEach(drawTarget); else drawTarget(level.targetPath);
     xyCtx.setLineDash([]);
   }
 
   const wb = simXZ.width / dpr, hb = simXZ.height / dpr;
-  xzCtx.clearRect(0, 0, wb, hb);
-  xzCtx.fillStyle = '#0d1117';
-  xzCtx.fillRect(0, 0, wb, hb);
+  xzCtx.clearRect(0, 0, wb, hb); xzCtx.fillStyle = '#0d1117'; xzCtx.fillRect(0, 0, wb, hb);
   
   xzCtx.strokeStyle = 'rgba(255,255,255,0.03)';
   for (let i = 0; i < wb; i += 20) { xzCtx.beginPath(); xzCtx.moveTo(i, 0); xzCtx.lineTo(i, hb); xzCtx.stroke(); }
   for (let i = 0; i < hb; i += 20) { xzCtx.beginPath(); xzCtx.moveTo(0, i); xzCtx.lineTo(wb, i); xzCtx.stroke(); }
 
   const tb = simTransXZ;
-  xzCtx.fillStyle = 'rgba(255,255,255,0.05)';
-  xzCtx.fillRect(0, tb.cy - 10, wb, 20);
-
-  const sxB = tb.cx + (0 - tb.ox) * tb.scaleX, syB = tb.cy;
+  xzCtx.fillStyle = 'rgba(255,255,255,0.05)'; xzCtx.fillRect(0, tb.cy - 10, wb, 20);
+  const sxB = tb.cx + (0 - tb.ox) * tb.scaleX;
   xzCtx.strokeStyle = 'rgba(255,255,255,0.15)';
-  xzCtx.beginPath(); xzCtx.moveTo(0, syB); xzCtx.lineTo(wb, syB); xzCtx.stroke();
+  xzCtx.beginPath(); xzCtx.moveTo(0, tb.cy); xzCtx.lineTo(wb, tb.cy); xzCtx.stroke();
   xzCtx.beginPath(); xzCtx.moveTo(sxB, 0); xzCtx.lineTo(sxB, hb); xzCtx.stroke();
 }
 
 function drawSim() {
-  const level = LEVELS[currentLevelIdx];
-  if (!level) return;
+  const t = simTransXY, tb = simTransXZ;
   
-  const t = simTransXY;
-  const tb = simTransXZ;
-
   xyCtx.save();
   if (permanentCuts.length > 0) {
-    xyCtx.strokeStyle = 'rgba(63, 185, 80, 0.8)';
-    xyCtx.lineWidth = 2;
-    xyCtx.shadowColor = 'rgba(63, 185, 80, 0.8)';
-    xyCtx.shadowBlur = 8;
+    xyCtx.strokeStyle = 'rgba(63, 185, 80, 0.8)'; xyCtx.lineWidth = 2;
+    xyCtx.shadowColor = 'rgba(63, 185, 80, 0.8)'; xyCtx.shadowBlur = 8;
     permanentCuts.forEach(([p1, p2]) => {
       const px1 = t.cx + (p1.x - t.ox) * t.scale, py1 = t.cy - (p1.y - t.oy) * t.scale;
       const px2 = t.cx + (p2.x - t.ox) * t.scale, py2 = t.cy - (p2.y - t.oy) * t.scale;
@@ -680,18 +641,15 @@ function drawSim() {
     if (cur) {
       const p = cur[1];
       const px = t.cx + (p.x - t.ox) * t.scale, py = t.cy - (p.y - t.oy) * t.scale;
-      xyCtx.beginPath(); xyCtx.arc(px, py, 4, 0, Math.PI * 2);
-      xyCtx.fillStyle = '#3fb950'; xyCtx.fill();
+      xyCtx.beginPath(); xyCtx.arc(px, py, 4, 0, Math.PI * 2); xyCtx.fillStyle = '#3fb950'; xyCtx.fill();
     }
   }
   xyCtx.restore();
 
   xzCtx.save();
   if (permanentCuts.length > 0) {
-    xzCtx.strokeStyle = 'rgba(63, 185, 80, 0.8)';
-    xzCtx.lineWidth = 2;
-    xzCtx.shadowColor = 'rgba(63, 185, 80, 0.8)';
-    xzCtx.shadowBlur = 8;
+    xzCtx.strokeStyle = 'rgba(63, 185, 80, 0.8)'; xzCtx.lineWidth = 2;
+    xzCtx.shadowColor = 'rgba(63, 185, 80, 0.8)'; xzCtx.shadowBlur = 8;
     permanentCuts.forEach(([p1, p2]) => {
       const px1 = tb.cx + (p1.x - tb.ox) * tb.scaleX, py1 = tb.cy - (p1.z - tb.oy) * tb.scaleZ;
       const px2 = tb.cx + (p2.x - tb.ox) * tb.scaleX, py2 = tb.cy - (p2.z - tb.oy) * tb.scaleZ;
@@ -703,16 +661,13 @@ function drawSim() {
     if (cur) {
       const p = cur[1];
       const px = tb.cx + (p.x - tb.ox) * tb.scaleX, py = tb.cy - (p.z - tb.oy) * tb.scaleZ;
-      xzCtx.beginPath(); xzCtx.arc(px, py, 4, 0, Math.PI * 2);
-      xzCtx.fillStyle = '#3fb950'; xzCtx.fill();
+      xzCtx.beginPath(); xzCtx.arc(px, py, 4, 0, Math.PI * 2); xzCtx.fillStyle = '#3fb950'; xzCtx.fill();
     }
   }
   xzCtx.restore();
 }
 
-// ==========================================
-// СОБЫТИЯ И ЛОГИКА
-// ==========================================
+// События
 btnHint.addEventListener('click', () => {
   const level = LEVELS[currentLevelIdx];
   if (hintBox.hidden) {
@@ -720,25 +675,16 @@ btnHint.addEventListener('click', () => {
       const unfixed = bugs.find(b => !b.fixed);
       if (unfixed) hintText.innerHTML = `Строка ${unfixed.line + 1}: ${level.code[unfixed.line].err}`;
       else hintText.innerHTML = "Все ошибки уже исправлены.";
-    } else {
-      hintText.innerHTML = level.hint || "Нет подсказки.";
-    }
+    } else hintText.innerHTML = level.hint || "Нет подсказки.";
     hintBox.hidden = false;
-  } else { hintBox.hidden = true; }
+  } else hintBox.hidden = true;
 });
 
 btnAnswer.addEventListener('click', () => {
   const level = LEVELS[currentLevelIdx];
-  if (level.type === 'single') {
-    singleInput.value = level.solution;
-    checkSingle();
-  } else if (level.type === 'code') {
-    editor.value = level.solution;
-    statusMsg.textContent = 'Ответ вставлен. Нажмите "Запустить".';
-    statusMsg.className = 'status-msg ok';
-  } else if (level.type === 'fix') {
-    bugs.forEach(bug => { if (!bug.fixed) fixBug(bug); });
-  }
+  if (level.type === 'single') { singleInput.value = level.solution; checkSingle(); }
+  else if (level.type === 'code') { editor.value = level.solution; statusMsg.textContent = 'Ответ вставлен.'; statusMsg.className = 'status-msg ok'; }
+  else if (level.type === 'fix') { bugs.forEach(bug => { if (!bug.fixed) fixBug(bug); }); }
 });
 
 btnTheoryNext.addEventListener('click', () => loadLevel(currentLevelIdx + 1));
@@ -751,17 +697,13 @@ function checkSingle() {
   const answers = level.answers || [level.prompt];
   
   if (answers.includes(val)) {
-    statusMsg.textContent = "Верно!";
-    statusMsg.className = 'status-msg ok';
+    statusMsg.textContent = "Верно!"; statusMsg.className = 'status-msg ok';
     addLog(`> Команда "${val}" принята.`, 'ok');
-    singleInput.disabled = true;
-    btnSingle.hidden = true;
+    singleInput.disabled = true; btnSingle.hidden = true;
     if (currentLevelIdx < LEVELS.length - 1) btnNext.hidden = false;
   } else {
-    statusMsg.textContent = "Неверно.";
-    statusMsg.className = 'status-msg err';
-    addLog(`> Ошибка в команде. Попробуйте еще раз.`, 'err');
-    singleInput.value = '';
+    statusMsg.textContent = "Неверно."; statusMsg.className = 'status-msg err';
+    addLog(`> Ошибка в команде.`, 'err'); singleInput.value = '';
   }
 }
 
@@ -769,18 +711,12 @@ btnRun.addEventListener('click', () => {
   if (isSimulating) return;
   const { path, cuts } = parseGCode(editor.value);
   if (path.length < 2 || cuts.length === 0) {
-    statusMsg.textContent = 'Ошибка: Нет движения или резания.';
-    statusMsg.className = 'status-msg err';
-    addLog('> [ОШИБКА] Программа не содержит резов.', 'err');
-    return;
+    statusMsg.textContent = 'Ошибка: Нет резов.'; statusMsg.className = 'status-msg err';
+    addLog('> [ОШИБКА] Программа не содержит резов.', 'err'); return;
   }
   userCuts = cuts; isSimulating = true; done = false; permanentCuts = [];
-  simStartTime = performance.now();
-  statusMsg.textContent = 'Выполнение...';
-  statusMsg.className = 'status-msg';
-  simStatus.textContent = 'В процессе...';
-  addLog('> Запуск программы...', 'sys');
-  drawSimBg();
+  simStartTime = performance.now(); statusMsg.textContent = 'Выполнение...'; statusMsg.className = 'status-msg';
+  simStatus.textContent = 'В процессе...'; addLog('> Запуск...', 'sys'); drawSimBg();
 });
 
 function checkCodeResult() {
@@ -788,23 +724,16 @@ function checkCodeResult() {
   const error = validate(userCuts, level.targetPath);
   
   if (error <= CHECK_TOLERANCE) {
-    statusMsg.textContent = `Успех! Отклонение: ${error.toFixed(2)} мм.`;
-    statusMsg.className = 'status-msg ok';
-    addLog(`> Деталь обработана. Отклонение ${error.toFixed(2)} мм.`, 'ok');
-    simStatus.textContent = 'Готово';
+    statusMsg.textContent = `Успех! Отклонение: ${error.toFixed(2)} мм.`; statusMsg.className = 'status-msg ok';
+    addLog(`> Деталь обработана. Отклонение ${error.toFixed(2)} мм.`, 'ok'); simStatus.textContent = 'Готово';
     
     if (currentLevelIdx === LEVELS.length - 1) {
-      alert("🎉 ПОЗДРАВЛЯЕМ! Вы прошли курс Азбука G-кода!\n\nВаш секретный код:\nCNC_MASTER_PRO\n\nПокажите его преподавателю!");
-      statusMsg.textContent = "Курс пройден! Код получен.";
+      alert("🎉 ПОЗДРАВЛЯЕМ! Вы прошли Азбуку G-кода!\n\nСекретный код: CNC_MASTER_GEN\nПокажите его преподавателю!");
       if (window.parent) window.parent.postMessage({ type: 'GCODE_SUCCESS', level: currentLevelIdx }, '*');
-    } else {
-      if (currentLevelIdx < LEVELS.length - 1) btnNext.hidden = false;
-    }
+    } else if (currentLevelIdx < LEVELS.length - 1) btnNext.hidden = false;
   } else {
-    statusMsg.textContent = `Ошибка формы. Отклонение ${error.toFixed(2)} мм.`;
-    statusMsg.className = 'status-msg err';
-    addLog(`> [ОШИБКА] Отклонение ${error.toFixed(2)} мм.`, 'err');
-    simStatus.textContent = 'Ошибка';
+    statusMsg.textContent = `Ошибка формы. Отклонение ${error.toFixed(2)} мм.`; statusMsg.className = 'status-msg err';
+    addLog(`> [ОШИБКА] Отклонение ${error.toFixed(2)} мм.`, 'err'); simStatus.textContent = 'Ошибка';
   }
 }
 
@@ -815,7 +744,6 @@ editorCanvas.addEventListener('pointerdown', e => {
   const rect = editorCanvas.getBoundingClientRect();
   stroke = { pts: [[e.clientX - rect.left, e.clientY - rect.top]], len: 0 };
 });
-
 editorCanvas.addEventListener('pointermove', e => {
   if (!stroke || done) return;
   const rect = editorCanvas.getBoundingClientRect();
@@ -833,7 +761,6 @@ editorCanvas.addEventListener('pointermove', e => {
     if (gained && bug.hit.filter(Boolean).length / bug.hit.length >= NEED) fixBug(bug);
   });
 });
-
 editorCanvas.addEventListener('pointerup', () => { stroke = null; });
 editorCanvas.addEventListener('pointercancel', () => { stroke = null; });
 
@@ -841,15 +768,12 @@ function fixBug(bug) {
   bug.fixed = true;
   const line = activeCode[bug.line];
   line.t = line.fix; line.c = line.color;
-  addLog(`> Строка ${bug.line + 1} исправлена.`, 'ok');
-  drawEditor();
+  addLog(`> Строка ${bug.line + 1} исправлена.`, 'ok'); drawEditor();
   if (bugs.every(b => b.fixed)) {
     done = true; isSimulating = true; simStartTime = performance.now(); permanentCuts = [];
-    btnReset.hidden = false;
-    if (currentLevelIdx < LEVELS.length - 1) btnNext.hidden = false;
+    btnReset.hidden = false; if (currentLevelIdx < LEVELS.length - 1) btnNext.hidden = false;
     statusMsg.textContent = `Симуляция...`; statusMsg.className = "status-msg ok";
-    simStatus.textContent = 'В процессе...';
-    drawSimBg();
+    simStatus.textContent = 'В процессе...'; drawSimBg();
   }
 }
 
@@ -858,25 +782,17 @@ btnNext.addEventListener('click', () => loadLevel(currentLevelIdx + 1));
 
 function frame(t) {
   if (LEVELS[currentLevelIdx].type === 'fix' && stroke && stroke.pts.length > 1) {
-    eCtx.save();
-    eCtx.strokeStyle = 'rgba(88, 166, 255, 0.8)';
-    eCtx.lineWidth = 3;
-    eCtx.lineCap = 'round';
-    eCtx.shadowColor = 'rgba(88, 166, 255, 0.8)';
-    eCtx.shadowBlur = 8;
-    eCtx.beginPath();
-    stroke.pts.forEach(([x, y], i) => i ? eCtx.lineTo(x, y) : eCtx.moveTo(x, y));
-    eCtx.stroke();
-    eCtx.restore();
+    eCtx.save(); eCtx.strokeStyle = 'rgba(88, 166, 255, 0.8)'; eCtx.lineWidth = 3; eCtx.lineCap = 'round';
+    eCtx.shadowColor = 'rgba(88, 166, 255, 0.8)'; eCtx.shadowBlur = 8;
+    eCtx.beginPath(); stroke.pts.forEach(([x, y], i) => i ? eCtx.lineTo(x, y) : eCtx.moveTo(x, y)); eCtx.stroke(); eCtx.restore();
   }
 
   if (isSimulating) {
     const level = LEVELS[currentLevelIdx];
     let simPath = level.type === 'fix' ? level.path : parseGCode(editor.value).path;
-    let simTime = 6000;
+    let simTime = 5000;
 
     const progress = Math.min(1, (t - simStartTime) / simTime);
-    
     let totalLen = 0; const segs = [];
     for (let i = 1; i < simPath.length; i++) {
       const p1 = simPath[i-1], p2 = simPath[i];
@@ -884,18 +800,12 @@ function frame(t) {
       totalLen += dist; segs.push({ p1, p2, dist });
     }
 
-    const targetLen = totalLen * progress;
-    let currentLen = 0;
-    
+    const targetLen = totalLen * progress; let currentLen = 0;
     permanentCuts = [];
     for (let seg of segs) {
       if (currentLen + seg.dist >= targetLen) {
         const p = (targetLen - currentLen) / (seg.dist || 1);
-        const partialP2 = { 
-           x: seg.p1.x + (seg.p2.x - seg.p1.x) * p, 
-           y: seg.p1.y + (seg.p2.y - seg.p1.y) * p, 
-           z: seg.p1.z + (seg.p2.z - seg.p1.z) * p 
-        };
+        const partialP2 = { x: seg.p1.x + (seg.p2.x - seg.p1.x) * p, y: seg.p1.y + (seg.p2.y - seg.p1.y) * p, z: seg.p1.z + (seg.p2.z - seg.p1.z) * p };
         if (seg.p1.z < 0 && partialP2.z < 0) permanentCuts.push([seg.p1, partialP2]);
         break;
       }
@@ -903,12 +813,11 @@ function frame(t) {
       if (seg.p1.z < 0 && seg.p2.z < 0) permanentCuts.push([seg.p1, seg.p2]);
     }
 
-    drawSimBg();
-    drawSim();
+    drawSimBg(); drawSim();
 
     if (progress >= 1) {
       isSimulating = false;
-      if (level.type === 'code' || level.type === 'hardcore') checkCodeResult();
+      if (level.type === 'code') checkCodeResult();
       else { statusMsg.textContent = `Деталь обработана.`; statusMsg.className = "status-msg ok"; simStatus.textContent = 'Готово'; addLog('> Деталь обработана.', 'ok'); }
     }
   }
@@ -916,9 +825,7 @@ function frame(t) {
 }
 
 window.addEventListener('load', () => {
-  loadLevel(0);
-  window.addEventListener('resize', resizeCanvases);
-  requestAnimationFrame(frame);
+  loadLevel(0); window.addEventListener('resize', resizeCanvases); requestAnimationFrame(frame);
 });
 </script>
 </body>
