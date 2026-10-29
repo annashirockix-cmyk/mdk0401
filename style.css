@@ -49,7 +49,7 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: block; }
 
-/* ---------- ВЕРХНЯЯ ПАНЕЛЬ (TOPBAR) ---------- */
+/* ---------- ВЕРХНЯЯ ПАНЕЛЬ ---------- */
 .topbar {
   display: flex; align-items: center; justify-content: space-between;
   background: var(--card); border-bottom: 1px solid var(--border);
@@ -63,23 +63,15 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .status-pill { background: var(--bg); padding: 4px 10px; border-radius: 20px; font-size: 13px; border: 1px solid var(--border); }
 .user-chip { display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 4px 12px 4px 4px; border-radius: 20px; border: 1px solid var(--border); cursor: pointer; }
 
-/* ---------- ШТОРКА (DRAWER) ---------- */
-.drawer-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 998;
-  opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px);
-}
+/* ---------- ШТОРКА ---------- */
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 998; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
 .drawer-overlay.open { opacity: 1; pointer-events: auto; }
-.drawer {
-  position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
-  background: var(--card); border-right: 1px solid var(--border); z-index: 999;
-  transform: translateX(-100%); transition: transform 0.3s ease;
-  display: flex; flex-direction: column;
-}
+.drawer { position: fixed; top: 0; left: 0; width: 280px; height: 100vh; background: var(--card); border-right: 1px solid var(--border); z-index: 999; transform: translateX(-100%); transition: transform 0.3s ease; display: flex; flex-direction: column; }
 .drawer.open { transform: translateX(0); }
 .drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--border); }
 .drawer-close { background: transparent; border: none; color: var(--text); font-size: 20px; cursor: pointer; }
 .drawer-nav { display: flex; flex-direction: column; padding: 10px 0; overflow-y: auto; flex: 1; }
-.drawer-item { padding: 12px 20px; color: var(--text); text-decoration: none; font-size: 14px; transition: background 0.2s; display: flex; align-items: center; gap: 10px; }
+.drawer-item { padding: 12px 20px; color: var(--text); text-decoration: none; font-size: 14px; transition: background 0.2s; display: flex; align-items: center; gap: 10px; cursor: pointer; }
 .drawer-item:hover { background: var(--bg); }
 
 /* ---------- ОСНОВНОЙ КОНТЕНТ ---------- */
@@ -90,10 +82,9 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .hero h1 { margin: 0 0 10px 0; font-size: 24px; }
 .hero p { margin: 0; opacity: 0.9; }
 
-/* ---------- ОКНО ВХОДА (МОДАЛЬНОЕ) ---------- */
-.login-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; backdrop-filter: blur(5px); }
+/* ---------- ОКНО ВХОДА ---------- */
+.login-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; backdrop-filter: blur(5px); }
 .login-shell { width: 100%; max-width: 460px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-.login-grid { display: grid; gap: 16px; }
 .login-card { background: var(--bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
 .login-card input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-soft); color: var(--text); margin-bottom: 12px; outline: none; }
 .login-card input:focus { border-color: var(--accent); }
@@ -107,62 +98,34 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .self-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; background: var(--bg); color: var(--text); }
 .self-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
 
-/* =====================================================
-   ТАБЛИЦЫ (ЖУРНАЛ / ОТЧЕТЫ / РАСПИСАНИЕ)
-   ===================================================== */
-.journal-table, .reports-table, .schedule-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--card); }
-.journal-table th, .journal-table td, .reports-table th, .reports-table td, .schedule-table th, .schedule-table td { padding: 0.75rem 1rem; border: 1px solid var(--border); text-align: left; }
-.journal-table th, .reports-table th, .schedule-table th { background: var(--card-soft); font-weight: 600; color: var(--text-soft); }
+/* ---------- ТАБЛИЦЫ ---------- */
+.journal-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--card); }
+.journal-table th, .journal-table td { padding: 0.75rem 1rem; border: 1px solid var(--border); text-align: left; }
+.journal-table th { background: var(--card-soft); font-weight: 600; color: var(--text-soft); }
 
 /* =====================================================
-   ФОНЫ ДЛЯ МАГАЗИНА (ГЕНЕРАЦИЯ КОДОМ, БЕЗ КАРТИНОК)
+   ФОНЫ ДЛЯ МАГАЗИНА (ПУТИ НА ПАПКУ fonts)
    ===================================================== */
 .bg-underwater { background: linear-gradient(180deg, #0c4a6e 0%, #082f49 100%); }
-.bg-foggy-forest { background: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), rgba(6, 78, 59, 0.9)), radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.15) 0%, transparent 60%); background-color: #064e3b; }
-.bg-pumpkins { background: radial-gradient(circle at bottom, #ea580c, #431407); }
-.bg-spooky-room { background: repeating-linear-gradient(45deg, #1c1917, #1c1917 10px, #292524 10px, #292524 20px); }
-.bg-halloween { background: linear-gradient(135deg, #2e1065 0%, #9a3412 100%); }
-.bg-red-forest { background: linear-gradient(to bottom, #450a0a, #7f1d1d); }
-.bg-lanterns { background: radial-gradient(circle at 20% 80%, #fef08a 0%, transparent 20%), radial-gradient(circle at 80% 20%, #fef08a 0%, transparent 20%), linear-gradient(to top, #1c1917, #78350f); }
-.bg-dark-table { background: repeating-linear-gradient(to right, #291a14, #291a14 50px, #3f271e 50px, #3f271e 100px); }
-.bg-graveyard { background: linear-gradient(to bottom, #111827 0%, #374151 100%); }
-.bg-cats-notebook { background: repeating-linear-gradient(to bottom, transparent, transparent 28px, #cbd5e1 28px, #cbd5e1 29px), #f8fafc; }
-.bg-cats-yarn { background: radial-gradient(circle at center, #fca5a5, #991b1b); }
+.bg-foggy-forest { background-image: url('./fonts/Background 1.png'); background-size: cover; background-position: center; }
+.bg-pumpkins { background-image: url('./fonts/Background 2.png'); background-size: cover; background-position: center; }
+.bg-spooky-room { background-image: url('./fonts/Background 3.png'); background-size: cover; background-position: center; }
+.bg-halloween { background-image: url('./fonts/Background 7.png'); background-size: cover; background-position: center; }
+.bg-red-forest { background-image: url('./fonts/Background 9.png'); background-size: cover; background-position: center; }
+.bg-lanterns { background-image: url('./fonts/Background 10.png'); background-size: cover; background-position: center; }
+.bg-dark-table { background-image: url('./fonts/Background 15.png'); background-size: cover; background-position: center; }
+.bg-graveyard { background-image: url('./fonts/Background 28.png'); background-size: cover; background-position: center; }
+.bg-cats-notebook { background-image: url('./fonts/Background 31.png'); background-size: cover; background-position: center; }
+.bg-cats-yarn { background-image: url('./fonts/Background 33.png'); background-size: cover; background-position: center; }
 .bg-stone-alley { background: linear-gradient(135deg, #4b5563, #1f2937); }
 
-/* =====================================================
-   ФОНЫ ДЛЯ СЕРТИФИКАТОВ
-   ===================================================== */
-.cert-bg-1 { background: linear-gradient(135deg, #1e3a5f 0%, #3b82f6 50%, #1e3a5f 100%); background-size: cover; background-position: center; }
-.cert-bg-2 { background: linear-gradient(135deg, #3f2b1d 0%, #c9a227 40%, #1a1a2e 100%); background-size: cover; background-position: center; }
-.cert-bg-3 { background: linear-gradient(160deg, #f5e6c8 0%, #d4a574 50%, #8b6914 100%); background-size: cover; background-position: center; }
-.cert-bg-4 { background: radial-gradient(ellipse at center, #fff8e7 0%, #e8d5a3 40%, #c9a227 100%); background-size: cover; background-position: center; }
-.cert-bg-5 { background: linear-gradient(180deg, #e8d5b7 0%, #c4a574 50%, #8b7355 100%); background-size: cover; background-position: center; }
-.cert-bg-6 { background: linear-gradient(135deg, #1a0a2e 0%, #4a1942 40%, #c9a227 100%); background-size: cover; background-position: center; }
-
-/* =====================================================
-   МОБИЛЬНАЯ АДАПТАЦИЯ
-   ===================================================== */
+/* ---------- МОБИЛЬНАЯ АДАПТАЦИЯ ---------- */
 @media (max-width: 768px) {
   .btn, #login-btn { min-height: 48px !important; font-size: 16px !important; }
   .header-right { width: 100%; justify-content: flex-end; }
   .content, #app { padding: 0.75rem !important; }
   header.topbar { flex-wrap: wrap; height: auto !important; gap: 8px; padding: 8px 10px !important; }
   header.topbar .topbar-status { width: 100%; justify-content: flex-end; margin-left: 0 !important; }
-  #mdkSelector { max-width: 100%; flex: 1 1 160px; }
   #userChipName { max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  #printable-cert, #printable-supplement { max-width: 100% !important; }
-  #printable-cert { aspect-ratio: auto !important; padding: 8px !important; }
-  #printable-cert h1 { font-size: 22px !important; letter-spacing: 0 !important; }
-  #printable-cert h2 { font-size: 22px !important; }
-  #printable-cert h3 { font-size: 16px !important; }
-  #printable-cert p, #printable-cert div { font-size: 14px !important; }
-  .cert-inner { padding: 12px !important; height: auto !important; }
-  .cert-foot { flex-direction: column !important; gap: 12px; align-items: flex-start !important; }
-  .cert-stamp { font-size: 42px !important; }
-  .journal-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  video { max-width: 100%; height: auto; }
-  .lec-content img, .module img { max-width: 100%; height: auto; }
-  #printable-supplement [style*="space-between"] { flex-wrap: wrap; gap: 8px; }
-  .safety-card .btn { width: 100%; }
+  .journal-wrap { overflow-x: auto; }
 }
