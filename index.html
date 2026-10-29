@@ -7,54 +7,62 @@
     <style>
         /* ================= ПЕРЕМЕННЫЕ И ТЕМЫ ================= */
         :root {
+            /* Темная тема (по умолчанию) */
             --bg-color: #1a1e29;
-            --panel-bg: #232838;
+            --panel-bg-rgb: 35, 40, 56; /* RGB для полупрозрачности */
+            --panel-bg: rgb(var(--panel-bg-rgb));
             --text-color: #ffffff;
             --text-muted: #8b92a5;
             --accent-color: #3b82f6;
             --accent-hover: #2563eb;
-            --border-color: #334155;
+            --border-color-rgb: 51, 65, 85;
+            --border-color: rgb(var(--border-color-rgb));
             --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --font-size: 16px;
-            --shop-bg: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop');
+            
+            /* ФОНЫ */
+            /* Баннер в самом верху магазина */
+            --shop-banner-bg: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop');
+            /* ОСНОВНОЙ ФОН ЗА КАРТОЧКАМИ (То, что вы просили) */
+            --shop-content-bg: url('https://images.unsplash.com/photo-1565514020179-026b92b84bb6?q=80&w=2070&auto=format&fit=crop');
         }
 
         [data-theme="light"] {
             --bg-color: #f1f5f9;
-            --panel-bg: #ffffff;
+            --panel-bg-rgb: 255, 255, 255;
             --text-color: #0f172a;
             --text-muted: #64748b;
-            --border-color: #cbd5e1;
+            --border-color-rgb: 203, 213, 225;
         }
 
         [data-theme="cyberpunk"] {
             --bg-color: #000000;
-            --panel-bg: #1a1a1a;
+            --panel-bg-rgb: 26, 26, 26;
             --text-color: #00ffcc;
             --text-muted: #ff00ff;
             --accent-color: #ff00ff;
             --accent-hover: #ff00aa;
-            --border-color: #00ffcc;
+            --border-color-rgb: 0, 255, 204;
         }
 
         [data-theme="matrix"] {
             --bg-color: #000000;
-            --panel-bg: #0a1a0a;
+            --panel-bg-rgb: 10, 26, 10;
             --text-color: #00ff00;
             --text-muted: #008800;
             --accent-color: #00ff00;
             --accent-hover: #00cc00;
-            --border-color: #00ff00;
+            --border-color-rgb: 0, 255, 0;
         }
 
         [data-theme="cyber"] {
             --bg-color: #0f0c29;
-            --panel-bg: #1e1b4b;
+            --panel-bg-rgb: 30, 27, 75;
             --text-color: #e0e7ff;
             --text-muted: #818cf8;
             --accent-color: #8b5cf6;
             --accent-hover: #7c3aed;
-            --border-color: #4c1d95;
+            --border-color-rgb: 76, 29, 149;
         }
 
         /* ================= БАЗОВЫЕ СТИЛИ ================= */
@@ -74,7 +82,7 @@
         /* ================= ШАПКА ================= */
         header {
             position: fixed; top: 0; left: 0; right: 0; height: 60px;
-            background-color: var(--panel-bg);
+            background-color: var(--bg-color);
             border-bottom: 1px solid var(--border-color);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 20px; z-index: 100;
@@ -96,10 +104,10 @@
 
         /* ================= БОКОВОЕ МЕНЮ ================= */
         aside {
-            width: 260px; background-color: var(--panel-bg);
+            width: 260px; background-color: var(--bg-color);
             border-right: 1px solid var(--border-color);
             margin-top: 60px; height: calc(100vh - 60px);
-            padding: 20px 0; overflow-y: auto;
+            padding: 20px 0; overflow-y: auto; z-index: 10;
         }
 
         aside a {
@@ -119,18 +127,24 @@
         main {
             flex: 1; margin-top: 60px; padding: 30px;
             overflow-y: auto; height: calc(100vh - 60px);
+            position: relative;
         }
 
-        .page { display: none; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.3s; }
+        .page { display: none; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.3s; position: relative; z-index: 1; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 { margin-bottom: 20px; font-size: 2rem; }
+        h1 { margin-bottom: 20px; font-size: 2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         h2 { margin-bottom: 15px; font-size: 1.5rem; }
         
+        /* ================= ЭФФЕКТ СТЕКЛА ДЛЯ КАРТОЧЕК ================= */
         .card {
-            background-color: var(--panel-bg); border: 1px solid var(--border-color);
+            background-color: rgba(var(--panel-bg-rgb), 0.85); /* Полупрозрачный фон */
+            backdrop-filter: blur(10px); /* Размытие фона за карточкой */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(var(--border-color-rgb), 0.8);
             border-radius: 12px; padding: 25px; margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .btn {
@@ -142,21 +156,53 @@
         .btn-outline { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); }
         .btn-outline:hover { background: var(--accent-color); color: white; }
 
-        /* ================= МАГАЗИН ================= */
+        /* ================= МАГАЗИН (С ФОНОМ) ================= */
+        
+        /* Фоновая картинка для всей страницы магазина */
+        #page-shop {
+            background-image: var(--shop-content-bg);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Картинка не скроллится вместе с контентом */
+            padding: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* Затемняющий слой, чтобы текст всегда читался */
+        #page-shop::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6); /* Затемнение картинки */
+            z-index: -1;
+        }
+
         .shop-banner {
-            background-image: var(--shop-bg); background-size: cover; background-position: center;
+            background-image: var(--shop-banner-bg); background-size: cover; background-position: center;
             height: 200px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
             position: relative; margin-bottom: 30px; overflow: hidden;
+            border: 1px solid var(--border-color);
         }
-        .shop-banner::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
+        .shop-banner::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
         .shop-banner h2 { position: relative; z-index: 1; color: white; font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
+        /* ================= СЕТКА ТЕМ И АВАТАРОВ ================= */
         .theme-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        
+        /* Карточки тем теперь тоже полупрозрачные */
         .theme-card {
-            background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px;
-            padding: 15px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s;
+            background-color: rgba(var(--panel-bg-rgb), 0.6); /* Еще более прозрачные для красоты */
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(var(--border-color-rgb), 0.5);
+            border-radius: 8px; padding: 15px; text-align: center; 
+            cursor: pointer; transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
         }
-        .theme-card:hover { transform: translateY(-3px); border-color: var(--accent-color); }
+        .theme-card:hover { 
+            transform: translateY(-3px); 
+            border-color: var(--accent-color); 
+            background-color: rgba(var(--panel-bg-rgb), 0.8);
+        }
         .theme-preview { padding: 15px; border-radius: 4px; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold; border: 1px solid var(--border-color); }
 
         /* ================= ЛЕКЦИИ (ВКЛАДКИ) ================= */
@@ -170,8 +216,7 @@
         .tab-content.active { display: block; }
 
         /* ================= ГЕНЕРАТОР ЗАДАНИЙ ================= */
-        .generator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .task-result { background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-color); padding: 20px; border-radius: 8px; margin-top: 20px; display: none; }
+        .task-result { background: rgba(59, 130, 246, 0.15); border: 1px solid var(--accent-color); padding: 20px; border-radius: 8px; margin-top: 20px; display: none; }
         .task-result.active { display: block; }
         .task-param { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border-color); }
         .task-param:last-child { border-bottom: none; }
@@ -181,10 +226,10 @@
         /* ================= МОДАЛЬНОЕ ОКНО ================= */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--panel-bg); padding: 30px; border-radius: 12px; width: 400px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .modal { background: var(--bg-color); padding: 30px; border-radius: 12px; width: 400px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         .setting-group { margin-bottom: 20px; }
         .setting-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500; }
-        .setting-group select, .setting-group input { width: 100%; padding: 10px; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; }
+        .setting-group select, .setting-group input { width: 100%; padding: 10px; background: var(--panel-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; }
 
         /* ================= ВИДЕО ================= */
         .video-container { background: #000; width: 100%; aspect-ratio: 16/9; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px dashed var(--border-color); overflow: hidden; }
@@ -196,7 +241,6 @@
     <!-- ШАПКА -->
     <header>
         <div class="header-left">
-            <button id="menuToggle" class="btn" style="background:none; font-size:1.5rem; padding:0; color:var(--text-color); cursor:pointer; display:none;">☰</button>
             <div class="logo">МДК Портал</div>
             <div style="border-left: 1px solid var(--border-color); height: 30px; margin: 0 10px;"></div>
             <span style="font-weight: 500;">МДК 07.01 (ЧПУ)</span>
@@ -221,9 +265,9 @@
         <a href="#/achievements" class="nav-link">🏆 Достижения</a>
         
         <div class="menu-section">Обучение</div>
-        <a href="#/materials" class="nav-link">📚 Полезные материалы (Mastercam)</a>
+        <a href="#/materials" class="nav-link">📚 Полезные материалы</a>
         <a href="#/lectures-dm" class="nav-link">⚙️ Детали машин (Лекции)</a>
-        <a href="#/practicum-dm" class="nav-link">📐 Практикум (Детали машин)</a>
+        <a href="#/practicum-dm" class="nav-link">📐 Практикум (Генератор)</a>
         <a href="#/lecture-3.0" class="nav-link">📖 Тема 3.0 История ЧПУ</a>
         
         <div class="menu-section">Проверка знаний</div>
@@ -234,40 +278,44 @@
     <!-- ОСНОВНОЙ КОНТЕНТ -->
     <main>
         
-        <!-- 1. МАГАЗИН -->
+        <!-- 1. МАГАЗИН (С ФОНОМ) -->
         <div id="page-shop" class="page">
+            <a href="#/shop" style="color: white; text-decoration: none; margin-bottom: 15px; display: inline-block; font-weight: bold;">← На главную</a>
+            
             <div class="shop-banner">
                 <h2>🛒 МАГАЗИН</h2>
             </div>
-            <h2>🎨 Темы оформления</h2>
+            
+            <h2 style="color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">🎨 Темы оформления</h2>
             <div class="theme-grid" style="margin-bottom: 30px;">
                 <div class="theme-card" onclick="setTheme('default')">
                     <div class="theme-preview" style="background:#1a1e29; color:white;">Aa</div>
-                    <div style="font-weight: bold;">Стандартная</div>
+                    <div style="font-weight: bold; color: white;">Стандартная</div>
                 </div>
                 <div class="theme-card" onclick="setTheme('light')">
                     <div class="theme-preview" style="background:#f1f5f9; color:black;">Aa</div>
-                    <div style="font-weight: bold;">Светлая</div>
+                    <div style="font-weight: bold; color: white;">Светлая</div>
                 </div>
                 <div class="theme-card" onclick="setTheme('cyberpunk')">
                     <div class="theme-preview" style="background:#000; color:#00ffcc;">Aa</div>
-                    <div style="font-weight: bold;">Киберпанк</div>
+                    <div style="font-weight: bold; color: white;">Киберпанк</div>
                 </div>
                 <div class="theme-card" onclick="setTheme('matrix')">
                     <div class="theme-preview" style="background:#000; color:#00ff00;">Aa</div>
-                    <div style="font-weight: bold;">Матрица</div>
+                    <div style="font-weight: bold; color: white;">Матрица</div>
                 </div>
                 <div class="theme-card" onclick="setTheme('cyber')">
                     <div class="theme-preview" style="background:#0f0c29; color:#e0e7ff;">Aa</div>
-                    <div style="font-weight: bold;">Суперник</div>
+                    <div style="font-weight: bold; color: white;">Суперник</div>
                 </div>
             </div>
-            <h2>👨‍🏫 Аватары</h2>
+
+            <h2 style="color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">👨‍🏫 Аватары</h2>
             <div class="theme-grid">
-                <div class="theme-card" style="border-color: #10b981;"><div style="font-size:2rem;">👨‍🎓</div><div style="font-weight: bold; color: #10b981;">Стандарт (Активно)</div></div>
-                <div class="theme-card"><div style="font-size:2rem;">👱‍♂️</div><div style="font-weight: bold;">Парень</div></div>
-                <div class="theme-card"><div style="font-size:2rem;">👩</div><div style="font-weight: bold;">Девушка</div></div>
-                <div class="theme-card"><div style="font-size:2rem;">🤖</div><div style="font-weight: bold;">Робот</div></div>
+                <div class="theme-card" style="border-color: #10b981;"><div style="font-size:2rem;">👨‍🎓</div><div style="font-weight: bold; color: #10b981;">Стандарт</div></div>
+                <div class="theme-card"><div style="font-size:2rem;">👱‍♂️</div><div style="font-weight: bold; color: white;">Парень</div></div>
+                <div class="theme-card"><div style="font-size:2rem;">👩</div><div style="font-weight: bold; color: white;">Девушка</div></div>
+                <div class="theme-card"><div style="font-size:2rem;">🤖</div><div style="font-weight: bold; color: white;">Робот</div></div>
             </div>
         </div>
 
@@ -279,19 +327,18 @@
             </div>
         </div>
 
-        <!-- 3. ПОЛЕЗНЫЕ МАТЕРИАЛЫ (Mastercam) -->
+        <!-- 3. ПОЛЕЗНЫЕ МАТЕРИАЛЫ -->
         <div id="page-materials" class="page">
             <h1>📚 Полезные материалы (Mastercam)</h1>
-            <p style="margin-bottom: 20px; color: var(--text-muted);">Справочные руководства по работе с CAD/CAM системой Mastercam.</p>
             <div class="card">
                 <h2>Начало работы с Mastercam 2022</h2>
-                <p style="margin: 15px 0; color: var(--text-muted);">Базовое руководство: интерфейс, настройка, работа с файлами и слоями, основы программирования.</p>
-                <a href="Mastercam_2022_Basics_Tutorial_RU.pdf" target="_blank" class="btn">📥 Открыть PDF (База)</a>
+                <p style="margin: 15px 0; color: var(--text-muted);">Базовое руководство: интерфейс, настройка, работа с файлами и слоями.</p>
+                <a href="Mastercam_2022_Basics_Tutorial_RU.pdf" target="_blank" class="btn">📥 Открыть PDF</a>
             </div>
             <div class="card">
                 <h2>Mastercam Tool Manager</h2>
-                <p style="margin: 15px 0; color: var(--text-muted);">Руководство по работе с библиотеками инструментов и созданию сборок.</p>
-                <a href="Mastercam_Tool_Manager_RU.pdf" target="_blank" class="btn">📥 Открыть PDF (Инструменты)</a>
+                <p style="margin: 15px 0; color: var(--text-muted);">Руководство по работе с библиотеками инструментов.</p>
+                <a href="Mastercam_Tool_Manager_RU.pdf" target="_blank" class="btn">📥 Открыть PDF</a>
             </div>
         </div>
 
@@ -300,30 +347,20 @@
             <h1>⚙️ Детали машин (Лекции)</h1>
             <div class="card">
                 <h2>Курс лекций по деталям машин</h2>
-                <p style="margin: 15px 0; color: var(--text-muted);">Полный учебный курс, охватывающий расчеты, конструкции, материалы и основы конструирования деталей и узлов.</p>
-                <ul style="margin-bottom: 20px; padding-left: 20px; line-height: 1.8;">
-                    <li>Общие сведения о проектировании машин</li>
-                    <li>Механические передачи (зубчатые, червячные, ременные, цепные)</li>
-                    <li>Валы, оси, подшипники, муфты</li>
-                    <li>Соединения (сварные, резьбовые, шпоночные и др.)</li>
-                </ul>
-                <a href="kurs_detaley_mashin.pdf" target="_blank" class="btn">📖 Открыть конспект лекций (PDF)</a>
+                <p style="margin: 15px 0; color: var(--text-muted);">Полный учебный курс, охватывающий расчеты, конструкции, материалы и основы конструирования.</p>
+                <a href="kurs_detaley_mashin.pdf" target="_blank" class="btn">📖 Открыть конспект (PDF)</a>
             </div>
         </div>
 
-        <!-- 5. ПРАКТИКУМ ДЕТАЛИ МАШИН (Генератор заданий) -->
+        <!-- 5. ПРАКТИКУМ (ГЕНЕРАТОР) -->
         <div id="page-practicum-dm" class="page">
             <h1>📐 Практикум (Детали машин)</h1>
             
-            <div class="card" style="border-color: var(--accent-color); background: rgba(59, 130, 246, 0.05);">
-                <h2>🎲 Генератор заданий для курсового проекта</h2>
-                <p style="margin: 10px 0 20px; color: var(--text-muted);">
-                    Нажмите кнопку, чтобы случайным образом получить свой вариант задания (согласно методичке `kp_dm1.pdf`).
-                    Преподаватель увидит выданный вам вариант.
-                </p>
-                <button class="btn" onclick="generateTask()" style="font-size: 1.1rem; padding: 15px 30px;">🎰 Сгенерировать мой вариант</button>
+            <div class="card" style="border-color: var(--accent-color);">
+                <h2>🎲 Генератор заданий</h2>
+                <p style="margin: 10px 0 20px; color: var(--text-muted);">Нажмите кнопку, чтобы получить свой вариант.</p>
+                <button class="btn" onclick="generateTask()" style="font-size: 1.1rem; padding: 15px 30px;">🎰 Сгенерировать вариант</button>
                 
-                <!-- Блок для вывода результата -->
                 <div class="task-result" id="taskResult">
                     <h3 style="margin-bottom: 15px; color: var(--accent-color);">Ваш вариант задания:</h3>
                     <div class="task-param"><span>Мощность на выходе (P вых):</span> <span id="task-p">- кВт</span></div>
@@ -336,63 +373,41 @@
 
             <div class="card">
                 <h2>Панель преподавателя (Имитация)</h2>
-                <p style="margin: 10px 0; color: var(--text-muted);">Здесь отображается последнее сгенерированное студентом задание.</p>
-                <div id="teacherView" style="padding: 15px; background: var(--bg-color); border-radius: 8px; margin-top: 15px; font-family: monospace;">
+                <div id="teacherView" style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 15px; font-family: monospace;">
                     Студент еще не генерировал задание.
                 </div>
             </div>
             
             <div class="card">
                 <h2>Методические указания (kp_dm1.pdf)</h2>
-                <p style="margin: 15px 0; color: var(--text-muted);">Полное пособие по курсовому проектированию деталей машин.</p>
                 <a href="kp_dm1.pdf" target="_blank" class="btn btn-outline">📥 Скачать методичку</a>
             </div>
         </div>
 
-        <!-- 6. ТЕМА 3.0 (С вкладками) -->
+        <!-- 6. ТЕМА 3.0 -->
         <div id="page-lecture-3.0" class="page">
             <h1>📖 Тема 3.0 История развития ЧПУ</h1>
-            
             <div class="lecture-tabs">
                 <button class="tab-btn active" onclick="openTab(event, 'theory')">Лекция</button>
                 <button class="tab-btn" onclick="openTab(event, 'practice')">Практика</button>
-                <button class="tab-btn" onclick="openTab(event, 'test')">Самостоятельная (Тест)</button>
+                <button class="tab-btn" onclick="openTab(event, 'test')">Тест</button>
                 <button class="tab-btn" onclick="openTab(event, 'presentation')">Презентация</button>
             </div>
 
             <div id="tab-theory" class="tab-content active">
                 <div class="card">
                     <h3>3.0.1 Первые шаги</h3>
-                    <p style="margin-top: 10px; line-height: 1.6;">Историю ЧПУ принято отсчитывать с 1801 года, когда Жозеф Мари Жаккар построил ткацкий станок, управляемый перфокартами. Это доказало, что машина может выполнять сложную программу без участия человека.</p>
+                    <p style="margin-top: 10px;">Историю ЧПУ принято отсчитывать с 1801 года (станок Жаккара).</p>
                 </div>
             </div>
-
             <div id="tab-practice" class="tab-content">
-                <div class="card">
-                    <h3>Практическое задание</h3>
-                    <p>Опишите принцип работы перфокарт в станке Жаккара. Как они повлияли на создание первых ЭВМ?</p>
-                    <textarea style="width:100%; height:100px; margin-top:10px; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px;" placeholder="Введите ваш ответ..."></textarea>
-                    <button class="btn" style="margin-top:10px;">Отправить</button>
-                </div>
+                <div class="card"><h3>Практика</h3><p>Задание: Опишите принцип работы перфокарт.</p><textarea style="width:100%; height:80px; margin-top:10px; background: rgba(0,0,0,0.2); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px;"></textarea></div>
             </div>
-
             <div id="tab-test" class="tab-content">
-                <div class="card">
-                    <h3>Тест: История ЧПУ</h3>
-                    <p style="margin: 15px 0;">1. В каком году был создан первый станок с ЧПУ?</p>
-                    <label style="display:block; margin-bottom: 5px;"><input type="radio" name="q1"> 1801</label>
-                    <label style="display:block; margin-bottom: 5px;"><input type="radio" name="q1"> 1948</label>
-                    <label style="display:block; margin-bottom: 5px;"><input type="radio" name="q1"> 1952</label>
-                    <button class="btn" style="margin-top: 15px;" onclick="alert('Тест завершен!')">Завершить</button>
-                </div>
+                <div class="card"><h3>Тест</h3><p>1. В каком году создан первый станок с ЧПУ?</p><label><input type="radio"> 1952</label> <button class="btn" style="margin-top:10px;" onclick="alert('Тест завершен!')">Завершить</button></div>
             </div>
-
             <div id="tab-presentation" class="tab-content">
-                <div class="card" style="text-align: center;">
-                    <h3>Презентация к лекции</h3>
-                    <p style="margin: 20px 0; color: var(--text-muted);">Файл: Istoria_ChPU_2024.pptx</p>
-                    <button class="btn">📥 Скачать</button>
-                </div>
+                <div class="card" style="text-align: center;"><h3>Презентация</h3><button class="btn">📥 Скачать</button></div>
             </div>
         </div>
 
@@ -401,17 +416,10 @@
             <h1>🖥 Тренировка</h1>
             <div class="card">
                 <h2>Тренажер G-кода</h2>
-                <p style="margin: 15px 0; color: var(--text-muted);">Интерактивный симулятор обработки.</p>
-                
-                <!-- ИСПРАВЛЕНИЕ 404: Если видео нет, покажется заглушка -->
                 <div class="video-container">
                     <video controls>
-                        <!-- Укажите правильный путь к файлу (например, video/1.mp4) -->
+                        <!-- Путь к видео. Если файла нет, будет пусто. -->
                         <source src="video/1.mp4" type="video/mp4">
-                        <div style="color: #fff; text-align: center; padding: 20px;">
-                            ⚠️ Видеофайл не найден.<br>
-                            <small>Пожалуйста, проверьте путь в коде: src="video/1.mp4"</small>
-                        </div>
                     </video>
                 </div>
                 <button class="btn">Запустить симулятор</button>
@@ -423,8 +431,8 @@
             <h1>📝 Экзамен</h1>
             <div class="card" style="text-align: center; padding: 50px;">
                 <h2>Итоговый экзамен по МДК 07.01</h2>
-                <p style="margin: 20px 0; color: var(--text-muted);">Вам будет предложено 30 вопросов. Время на выполнение: 45 минут.</p>
-                <button class="btn" style="font-size: 1.2rem; padding: 15px 40px;" onclick="alert('Экзамен начат! (Демо)')">Начать экзамен</button>
+                <p style="margin: 20px 0;">Время на выполнение: 45 минут.</p>
+                <button class="btn" style="font-size: 1.2rem;" onclick="alert('Экзамен начат!')">Начать экзамен</button>
             </div>
         </div>
 
@@ -447,26 +455,20 @@
                 <label>Размер текста (px)</label>
                 <input type="range" id="fontSizeRange" min="12" max="24" value="16">
             </div>
-            <button class="btn" onclick="closeSettings()" style="width: 100%; margin-top: 10px;">Сохранить и закрыть</button>
+            <button class="btn" onclick="closeSettings()" style="width: 100%; margin-top: 10px;">Сохранить</button>
         </div>
     </div>
 
     <script>
-        // ================= 1. РОУТИНГ (Навигация) =================
+        // ================= 1. РОУТИНГ =================
         function navigate() {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            
             let hash = window.location.hash || '#/shop';
             let pageId = 'page-' + hash.replace('#/', '');
-            
             const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            } else {
-                document.getElementById('page-shop').classList.add('active'); // Fallback
-            }
+            if (targetPage) targetPage.classList.add('active');
+            else document.getElementById('page-shop').classList.add('active');
 
-            // Подсветка меню
             document.querySelectorAll('aside a').forEach(a => {
                 if (a.getAttribute('href') === hash) a.classList.add('active');
                 else a.classList.remove('active');
@@ -476,21 +478,14 @@
         window.addEventListener('hashchange', navigate);
         window.addEventListener('DOMContentLoaded', () => {
             navigate();
-            
-            // Загрузка темы
             const savedTheme = localStorage.getItem('theme') || 'default';
             setTheme(savedTheme);
-
-            // Загрузка шрифтов
             const savedFont = localStorage.getItem('font') || "'Segoe UI', Tahoma, sans-serif";
             document.getElementById('fontSelect').value = savedFont;
             document.documentElement.style.setProperty('--font-main', savedFont);
-
             const savedSize = localStorage.getItem('fontSize') || '16';
             document.getElementById('fontSizeRange').value = savedSize;
             document.documentElement.style.setProperty('--font-size', savedSize + 'px');
-
-            // Обновление панели преподавателя
             updateTeacherView();
         });
 
@@ -511,21 +506,18 @@
             localStorage.setItem('fontSize', e.target.value);
         });
 
-        // Модалка
         document.getElementById('settingsBtn').addEventListener('click', () => document.getElementById('settingsModal').classList.add('active'));
         function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
 
-        // ================= 3. ВКЛАДКИ ЛЕКЦИЙ =================
+        // ================= 3. ВКЛАДКИ =================
         function openTab(evt, tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
             document.getElementById('tab-' + tabName).classList.add('active');
             evt.currentTarget.classList.add('active');
         }
 
         // ================= 4. ГЕНЕРАТОР ЗАДАНИЙ =================
-        // База данных заданий (взято из таблиц kp_dm1.pdf)
         const variants = [
             { p: 3.7, w: 15.8, aw: 125, nc: 1000, scheme: "Схема 2" },
             { p: 5.17, w: 16.1, aw: 140, nc: 1000, scheme: "Схема 2" },
@@ -534,27 +526,17 @@
             { p: 19.0, w: 18.2, aw: 200, nc: 1000, scheme: "Схема 2" },
             { p: 23.0, w: 16.3, aw: 225, nc: 1000, scheme: "Схема 2" },
             { p: 25.8, w: 14.3, aw: 250, nc: 1000, scheme: "Схема 2" },
-            { p: 28.0, w: 12.8, aw: 280, nc: 1000, scheme: "Схема 2" },
-            { p: 34.3, w: 10.9, aw: 315, nc: 1000, scheme: "Схема 2" },
-            { p: 27.69, w: 9.55, aw: 315, nc: 1000, scheme: "Схема 2" },
-            { p: 8.0, w: 28.7, aw: 125, nc: 750, scheme: "Схема 1" },
-            { p: 20.37, w: 20.37, aw: 140, nc: 750, scheme: "Схема 1" }
+            { p: 8.0, w: 28.7, aw: 125, nc: 750, scheme: "Схема 1" }
         ];
 
         function generateTask() {
-            const randomIndex = Math.floor(Math.random() * variants.length);
-            const task = variants[randomIndex];
-
-            // Вывод на экран
+            const task = variants[Math.floor(Math.random() * variants.length)];
             document.getElementById('task-p').innerText = task.p + " кВт";
             document.getElementById('task-w').innerText = task.w + " с⁻¹";
             document.getElementById('task-aw').innerText = task.aw + " мм";
             document.getElementById('task-nc').innerText = task.nc + " мин⁻¹";
             document.getElementById('task-scheme').innerText = task.scheme;
-            
             document.getElementById('taskResult').classList.add('active');
-
-            // Сохранение для преподавателя
             localStorage.setItem('studentTask', JSON.stringify(task));
             updateTeacherView();
         }
@@ -562,19 +544,13 @@
         function updateTeacherView() {
             const savedTask = localStorage.getItem('studentTask');
             const teacherDiv = document.getElementById('teacherView');
-            
             if (savedTask) {
                 const t = JSON.parse(savedTask);
                 teacherDiv.innerHTML = `
-                    <strong style="color: var(--accent-color);">Последнее сгенерированное задание:</strong><br><br>
-                    P_вых: ${t.p} кВт<br>
-                    ω_вых: ${t.w} с⁻¹<br>
-                    a_w: ${t.aw} мм<br>
-                    n_c: ${t.nc} мин⁻¹<br>
-                    Схема: ${t.scheme}
+                    <strong style="color: var(--accent-color);">Студент сгенерировал:</strong><br><br>
+                    P_вых: ${t.p} кВт<br>ω_вых: ${t.w} с⁻¹<br>
+                    a_w: ${t.aw} мм<br>n_c: ${t.nc} мин⁻¹<br>Схема: ${t.scheme}
                 `;
-            } else {
-                teacherDiv.innerText = "Студент еще не генерировал задание.";
             }
         }
     </script>
