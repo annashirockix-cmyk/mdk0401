@@ -4,7 +4,7 @@
 // 1. СОСТОЯНИЕ
 // ============================================================
 window.state = window.state || {
-    student: null, staff: null, xp: 0, activeCourseId: "MCAM", results: {},
+    student: null, staff: null, xp: 0, activeCourseId: "07.01", results: {},
     avatar: null, nickname: null, signature: null, purchasedThemes: [],
     purchasedFonts: [], font: "default", certBg: "cert-bg-1", examSubmissions: [],
     unlockedAchievements: [], purchasedTextEffects: [], activeTextEffect: "none",
@@ -21,7 +21,7 @@ if (!localStorage.getItem('portal_grades')) {
 }
 
 // ============================================================
-// 2. УТИЛИТЫ
+// 2. УТИЛИТЫ И ЭФФЕКТЫ
 // ============================================================
 window.clearCache = function() {
     if (confirm("Это очистит локальные данные, сбросит кэш браузера и обновит страницу. Продолжить?")) {
@@ -40,6 +40,7 @@ window.saveStudentData = function() {
 };
 window.studentKey = function() { if (!window.state.student) return ""; return (window.state.student.name || "").trim().toLowerCase() + "|" + (window.state.student.group || "").trim().toLowerCase(); };
 window.getLevel = function(xp) { return Math.floor((xp || 0) / 100) + 1; };
+window.getLevelTitle = function(lvl) { if (lvl < 3) return "Новичок"; if (lvl < 5) return "Ученик"; if (lvl < 8) return "Практикант"; if (lvl < 12) return "Мастер"; return "Эксперт"; };
 window.$ = window.$ || function(id) { return document.getElementById(id); };
 window.el = window.el || function(html) { var div = document.createElement("div"); div.innerHTML = html.trim(); return div.firstChild; };
 window.escapeHtml = window.escapeHtml || function(text) { if (!text) return ""; return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
@@ -50,6 +51,13 @@ window.showToast = window.showToast || function(msg, type) {
 };
 
 window.applyGlobalEffects = function() {
+    var textFx = window.state.activeTextEffect || "none"; var logo = document.getElementById("mainLogo"); var userName = document.getElementById("userChipName");
+    if (logo && userName) {
+        logo.className = "brand-badge"; userName.className = "";
+        if (textFx !== "none") { logo.classList.add(textFx); userName.classList.add(textFx); if (textFx === 'fx-glitch-text') { logo.setAttribute('data-text', logo.textContent); userName.setAttribute('data-text', userName.textContent); } } else logo.classList.add("rainbow-text");
+    }
+    var cardFx = window.state.activeCardEffect || "none";
+    document.querySelectorAll(".topic").forEach(function(el) { el.classList.remove("fx-holo-card", "fx-3d-card"); if (cardFx !== "none") el.classList.add(cardFx); });
     var bgFx = window.state.activeBgEffect || "none";
     document.querySelectorAll(".hero").forEach(function(el) { 
         el.classList.remove("bg-underwater", "bg-foggy-forest", "bg-pumpkins", "bg-spooky-room", "bg-halloween", "bg-red-forest", "bg-lanterns", "bg-dark-table", "bg-graveyard", "bg-cats-notebook", "bg-cats-yarn", "bg-stone-alley"); 
@@ -85,7 +93,7 @@ window.renderVideosPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎬 Видеоуроки</h1></section><div class="module" id="videosList"></div>';
     var list = document.getElementById("videosList");
-    // ВАЖНО: Путь к папке video/
+    // ВАЖНО: Убедитесь, что видеофайлы загружены в папку video/ на GitHub
     var vids = window.GLOBAL_DATA && window.GLOBAL_DATA.videos ? window.GLOBAL_DATA.videos : [];
     if (!vids.length) { list.innerHTML = "<p>Видео пока нет. Убедитесь, что папка video/ загружена в репозиторий.</p>"; return; }
     vids.forEach(v => {
@@ -104,6 +112,230 @@ window.renderTrainingListPage = function() {
     app.appendChild(gcodeCard);
 };
 
+// ============================================================
+// 4. СТРАНИЦЫ: ОЦЕНКИ И ЖУРНАЛ
+// ============================================================
+window.renderStudentGradesPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Мои оценки";
+    app.appendChild(el('<a class="backlink" href="#/profile" style="color:var(--accent);">← Назад в профиль</a>'));
+    
+    var autoGradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved");
+    var autoRows = autoGradesList.map(k => {
+        var title = k; 
+        if(k.startsWith("test_")) title = "Тест по курсу " + k.split("_")[1];
+        var gradeData = window.state.results[k];
+        var grade = typeof gradeData === 'object' ? gradeData.grade : gradeData;
+        var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : "var(--err)");
+        return `<tr><td style="padding:10px; border:1px solid var(--border);">${title}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:${color}; font-size:18px;">${grade}</td></tr>`;
+    }).join("");
+
+    var manualGrades = JSON.parse(localStorage.getItem('portal_grades'));
+    var myManualGrades = manualGrades.filter(g => g.student.toLowerCase() === (window.state.student.email || '').toLowerCase());
+    var manualRows = myManualGrades.map(g => {
+        return `<tr><td style="padding:10px; border:1px solid var(--border);">${g.date}</td><td style="padding:10px; border:1px solid var(--border);">${g.subject}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:var(--ok); font-size:18px;">${g.value}</td></tr>`;
+    }).join("");
+
+    app.innerHTML += `
+        <section class="hero"><h1>📊 Мои оценки</h1></section>
+        <div class="module">
+            <h3>Оценки от преподавателя</h3>
+            <div class="journal-wrap">
+                <table class="journal-table">
+                    <thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead>
+                    <tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок от преподавателя</td></tr>'}</tbody>
+                </table>
+            </div>
+        </div>
+        <div class="module">
+            <h3>Автоматические тесты</h3>
+            <div class="journal-wrap">
+                <table class="journal-table">
+                    <thead><tr><th>Работа</th><th>Оценка</th></tr></thead>
+                    <tbody>${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody>
+                </table>
+            </div>
+        </div>
+    `;
+};
+
+window.renderTeacherJournalPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    if (!window.state.staff) { app.innerHTML = "<h2>Доступ запрещен</h2>"; return; }
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Журнал (Преподаватель)";
+    
+    var grades = JSON.parse(localStorage.getItem('portal_grades'));
+    
+    app.innerHTML = `
+        <a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>
+        <section class="hero"><h1>📓 Журнал группы</h1></section>
+        <div class="module">
+            <h3>Выставить оценку</h3>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <select id="grade-group" class="self-input" style="flex:1;">
+                    <option value="Группа 1">Группа 1</option>
+                    <option value="Группа 2">Группа 2</option>
+                </select>
+                <input type="text" id="grade-student" placeholder="Email студента (student_n@portal.ru)" class="self-input" style="flex:2;">
+                <input type="text" id="grade-subject" placeholder="Предмет" class="self-input" style="flex:1;">
+                <input type="number" id="grade-value" placeholder="Оценка (2-5)" class="self-input" style="width:100px;" min="2" max="5">
+            </div>
+            <button class="btn btn-primary" onclick="window.addGrade()" style="margin-top:10px;">Сохранить оценку</button>
+        </div>
+        <div class="module">
+            <h3>Все оценки</h3>
+            <div class="journal-wrap">
+                <table class="journal-table">
+                    <thead><tr><th>Дата</th><th>Группа</th><th>Студент</th><th>Предмет</th><th>Оценка</th></tr></thead>
+                    <tbody id="grades-table-body">
+                        ${grades.map(g => `<tr><td>${g.date}</td><td>${g.group}</td><td>${g.student}</td><td>${g.subject}</td><td><b style="color:var(--ok); font-size:16px;">${g.value}</b></td></tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+};
+
+window.addGrade = function() {
+    const group = document.getElementById('grade-group').value;
+    const student = document.getElementById('grade-student').value.trim();
+    const subject = document.getElementById('grade-subject').value.trim();
+    const value = document.getElementById('grade-value').value;
+
+    if (!student || !subject || !value) { alert("Заполните все поля!"); return; }
+
+    const grades = JSON.parse(localStorage.getItem('portal_grades'));
+    grades.push({ date: new Date().toLocaleDateString(), group, student, subject, value });
+    localStorage.setItem('portal_grades', JSON.stringify(grades));
+    
+    alert("Оценка выставлена!");
+    window.renderTeacherJournalPage(); 
+};
+
+// ============================================================
+// 5. ВОССТАНОВЛЕННЫЕ СТРАНИЦЫ (СЕРТИФИКАТ, ПРОФИЛЬ, МАГАЗИН)
+// ============================================================
+window.renderCertificatePage = function() {
+    var app = $("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Сертификат";
+    app.appendChild(el('<a class="backlink no-print" href="#/" style="color:var(--accent);">← На главную</a>'));
+    if (window.state.staff) {
+        app.innerHTML = `<div class="no-print" style="text-align:center; margin-bottom:20px;"><button class="btn" onclick="window.print()">🖨 Распечатать</button></div>
+            <div id="printable-cert" class="cert-bg-1" style="color:#000; padding:40px; max-width:800px; margin:0 auto; text-align:center; border:10px double #c14a2a;">
+                <div style="background:rgba(255,255,255,0.85); padding:20px; border-radius:8px;">
+                    <h1 style="font-size:40px; color:#c14a2a; font-family:'Monomakh', serif;">БЛАГОДАРСТВЕННОЕ ПИСЬМО</h1>
+                    <p style="font-size:20px; margin:40px 0;">Вручается</p>
+                    <h2 style="font-size:36px; border-bottom:2px solid #ccc; display:inline-block;">${window.escapeHtml(window.state.staff.name)}</h2>
+                    <p style="font-size:18px; margin-top:40px;">За вклад в развитие портала</p>
+                    <div style="margin-top:60px;">Дата: ${new Date().toLocaleDateString('ru-RU')}</div>
+                </div>
+            </div>`;
+        return;
+    }
+    if (!window.state.student) return;
+    
+    var bgs = [
+        { id: "cert-bg-1", name: "Классический синий" },
+        { id: "cert-bg-2", name: "С гербом" },
+        { id: "cert-bg-3", name: "Винтажный" }
+    ];
+    var currentBg = bgs.find(b => b.id === window.state.certBg) || bgs[0];
+    var courseName = window.MDK_DATA && window.MDK_DATA[window.state.activeCourseId] ? window.MDK_DATA[window.state.activeCourseId].title : "МДК";
+    var isApproved = window.state.results && window.state.results.certificateApproved;
+    
+    var certBgSelectorHtml = `<div class="no-print" style="margin-bottom:20px; text-align:center;"><h3>Выберите стиль:</h3><div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">`;
+    bgs.forEach(bg => {
+        certBgSelectorHtml += `<div onclick="window.setCertBg('${bg.id}')" title="${bg.name}" class="${bg.id}" style="width:60px; height:60px; border-radius:8px; cursor:pointer; border:3px solid ${window.state.certBg === bg.id ? 'var(--accent)' : 'transparent'}; box-shadow: 0 2px 5px rgba(0,0,0,0.5);"></div>`;
+    });
+    certBgSelectorHtml += `</div></div>`;
+    
+    var certHtml = `<div id="printable-cert" class="${currentBg.id}" style="color:#000; padding: 12px; border-radius: 12px; max-width:900px; margin:0 auto; position: relative; aspect-ratio: 1.414 / 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc;">
+        <div class="cert-inner" style="background: rgba(255,255,255,0.85); width:100%; height:100%; padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; border-radius:8px; backdrop-filter: blur(2px);">
+            <div>
+                <h1 style="font-size:32px; color:#c14a2a; text-transform:uppercase; letter-spacing: 1px; margin:0; font-family:'Monomakh', serif;">СЕРТИФИКАТ</h1>
+                <p style="font-size:16px; margin-top:10px; color:#555;">подтверждает, что</p>
+                <h2 style="font-size:28px; margin:12px 0; font-weight:bold; border-bottom:2px solid #ccc; display:inline-block; padding-bottom:5px; color:#000; font-family:'Sacramento', cursive;">${window.escapeHtml(window.state.student.name)}</h2>
+                <p style="font-size:16px; color:#555;">успешно прошел(ла) обучение по программе</p>
+                <h3 style="font-size:18px; margin-top:10px; color:#c14a2a;">${window.escapeHtml(courseName)}</h3>
+            </div>
+            <div class="cert-foot" style="display:flex; justify-content:space-between; font-size:14px; margin-top:16px; padding: 0 8px; gap:12px;">
+                <div style="text-align:left;"><p>Дата выдачи:</p><p style="font-weight:bold;">${new Date().toLocaleDateString('ru-RU')}</p></div>
+                <div style="text-align:right;"><p>Подпись руководителя:</p><div style="border-bottom:1px solid #000; width:160px; height:24px;"></div></div>
+            </div>
+        </div>
+        ${!isApproved ? `<div class="cert-stamp" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:72px; font-weight:bold; color:rgba(255,0,0,0.15); pointer-events:none; white-space:nowrap; z-index:10;">ОБРАЗЕЦ</div>` : ""}
+    </div>`;
+    
+    var supplementHtml = `<div class="no-print" style="text-align:center; margin:20px 0;"><button class="btn" onclick="window.print()" style="padding: 12px 24px; font-size: 16px;">🖨 Распечатать сертификат и вкладыш</button></div>
+        <div id="printable-supplement" class="${currentBg.id}" style="padding: 30px; border-radius: 12px; max-width:900px; margin:20px auto; border:1px solid #ccc;">
+            <div style="background: rgba(255,255,255,0.85); padding: 20px; border-radius: 8px; color:#000;">
+                <h2 style="text-align:center; color:#c14a2a; text-transform:uppercase; letter-spacing:1px;">Вкладыш оценок</h2>
+                <hr style="border:0; border-top:1px solid #ccc; margin:20px 0;">
+                <div style="display:flex; justify-content:space-between; font-size:16px; margin-bottom:20px;"><div><b>Студент:</b> ${window.escapeHtml(window.state.student.name)}</div><div><b>Группа:</b> ${window.escapeHtml(window.state.student.group)}</div></div>
+                <p style="text-align:center; color:#888;">Вкладыш формируется автоматически на основе пройденных тестов.</p>
+            </div>
+        </div>`;
+    app.innerHTML += certBgSelectorHtml + certHtml + supplementHtml;
+};
+window.setCertBg = function(bgId) { window.state.certBg = bgId; window.saveStudentData(); window.renderCertificatePage(); };
+
+window.renderProfilePage = function(route) {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    if (!window.state.student && !window.state.staff) { location.hash = "#/"; return; }
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Личный кабинет";
+    app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
+    var isTeacher = !!window.state.staff;
+
+    if (isTeacher) {
+        app.innerHTML += `<section class="hero" style="text-align:center; padding:40px;"><div style="font-size:60px; margin-bottom:10px;">👨‍🏫</div><h2>${window.escapeHtml(window.state.staff.name)}</h2><p>Личный кабинет преподавателя</p></section>
+        <div class="module" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:15px;">
+            <a href="#/journal" class="btn" style="padding:20px; background:var(--accent); color:#fff;">📒 Журнал</a>
+            <a href="#/reports" class="btn" style="padding:20px; background:var(--gold); color:#000;">📊 Отчеты</a>
+            <a href="#/admin" class="btn" style="padding:20px; background:var(--ok); color:#000;">⚙️ Админка</a>
+        </div>`;
+        return;
+    }
+
+    if (window.state.student) {
+        var lvl = window.getLevel(window.state.xp); var avHtml = window.state.avatar ? `<img src="${window.state.avatar}" style="width:100%; height:100%; object-fit:cover;">` : "👨‍🎓";
+        var isVIP = window.isVIP(); var crown = isVIP ? ' <span title="Тестировщик" style="color:var(--gold); font-size:24px;">👑</span>' : '';
+        app.innerHTML += `<section class="module" style="text-align:center; padding:40px;">
+            <div style="width:120px; height:120px; margin:0 auto 20px; border-radius:50%; border:4px solid var(--accent); overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:60px;">${avHtml}</div>
+            <h2 style="margin-bottom:10px;">${window.escapeHtml(window.state.nickname || window.state.student.name)}${crown}</h2>
+            <p style="color:var(--muted); margin-bottom:15px;">Группа: ${window.escapeHtml(window.state.student.group)}</p>
+            <div style="display:flex; justify-content:center; gap:15px; margin-bottom:20px;">
+                <div style="background:var(--card-soft); padding:10px 20px; border-radius:20px;"><b style="color:var(--gold);">${window.state.xp} XP</b> · Ур. ${lvl}</div>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <a href="#/grades" class="btn" style="background:var(--ok); color:#fff;">📊 Мои оценки</a>
+                <a href="#/shop" class="btn">🛒 Магазин XP</a>
+            </div>
+        </section>`;
+    }
+};
+
+window.renderShopPage = function() {
+    if (window.renderSimplePage) {
+        window.renderSimplePage("🛒 Магазин", "<p>Здесь можно потратить XP на скины и темы.</p>");
+    }
+};
+
+window.renderAchievementsPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Достижения";
+    app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
+    app.innerHTML += `<section class="hero"><h1>🏆 Достижения</h1></section><div class="module">Ваши ачивки тут.</div>`;
+};
+
+window.renderSimplePage = function(title, content) {
+    var app = document.getElementById("app"); if (!app) return;
+    app.innerHTML = `<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>${title}</h1></section><div class="module">${content}</div>`;
+    if (window.applyGlobalEffects) window.applyGlobalEffects();
+};
+
+// ============================================================
+// 6. ЛЕКЦИИ (ТЕМЫ)
+// ============================================================
 window.renderTopicPage = function(courseId, topicId) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var course = window.MDK_DATA[courseId]; if (!course) { app.innerHTML = '<div class="module">Курс не найден</div>'; return; }
@@ -161,7 +393,7 @@ window.renderTopicPage = function(courseId, topicId) {
 
 window.renderHomePage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    var mdkId = window.state.activeCourseId || "MCAM"; var course = window.MDK_DATA && window.MDK_DATA[mdkId];
+    var mdkId = window.state.activeCourseId || "07.01"; var course = window.MDK_DATA && window.MDK_DATA[mdkId];
     var title = course ? course.title : "Добро пожаловать!"; var module = course ? course.module : "Выберите раздел.";
     app.innerHTML = `<section class="hero" style="text-align: left; padding: 40px;"><span class="brand-badge" style="margin-bottom: 10px; display: inline-block;">${course ? course.shortName : "Портал"}</span><h1 style="font-size: 2.2rem; margin-bottom: 10px;">${title}</h1><p style="font-size: 1.1rem; color: var(--text-soft);">${module}</p></section>`;
     if (course && course.sections) {
@@ -180,113 +412,7 @@ window.renderHomePage = function() {
 };
 
 // ============================================================
-// 4. СИСТЕМА ОЦЕНОК (ЖУРНАЛ И ЛИЧНЫЙ КАБИНЕТ)
-// ============================================================
-window.renderStudentGradesPage = function() {
-    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Мои оценки";
-    app.appendChild(el('<a class="backlink" href="#/profile" style="color:var(--accent);">← Назад в профиль</a>'));
-    
-    // Автоматические оценки (из тестов)
-    var autoGradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved");
-    var autoRows = autoGradesList.map(k => {
-        var title = k; 
-        if(k.startsWith("test_")) title = "Тест по курсу " + k.split("_")[1];
-        var gradeData = window.state.results[k];
-        var grade = typeof gradeData === 'object' ? gradeData.grade : gradeData;
-        var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : "var(--err)");
-        return `<tr><td style="padding:10px; border:1px solid var(--border);">${title}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:${color}; font-size:18px;">${grade}</td></tr>`;
-    }).join("");
-
-    // Ручные оценки (от преподавателя)
-    var manualGrades = JSON.parse(localStorage.getItem('portal_grades'));
-    var myManualGrades = manualGrades.filter(g => g.student.toLowerCase() === (window.state.student.email || '').toLowerCase());
-    var manualRows = myManualGrades.map(g => {
-        return `<tr><td style="padding:10px; border:1px solid var(--border);">${g.date}</td><td style="padding:10px; border:1px solid var(--border);">${g.subject}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:var(--ok); font-size:18px;">${g.value}</td></tr>`;
-    }).join("");
-
-    app.innerHTML += `
-        <section class="hero"><h1>📊 Мои оценки</h1></section>
-        
-        <div class="module">
-            <h3>Оценки от преподавателя</h3>
-            <div class="journal-wrap">
-                <table class="journal-table">
-                    <thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead>
-                    <tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок от преподавателя</td></tr>'}</tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="module">
-            <h3>Автоматические тесты</h3>
-            <div class="journal-wrap">
-                <table class="journal-table">
-                    <thead><tr><th>Работа</th><th>Оценка</th></tr></thead>
-                    <tbody>${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody>
-                </table>
-            </div>
-        </div>
-    `;
-};
-
-window.renderTeacherJournalPage = function() {
-    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    if (!window.state.staff) { app.innerHTML = "<h2>Доступ запрещен</h2>"; return; }
-    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Журнал (Преподаватель)";
-    
-    var grades = JSON.parse(localStorage.getItem('portal_grades'));
-    
-    app.innerHTML = `
-        <a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>
-        <section class="hero"><h1>📓 Журнал группы</h1></section>
-        
-        <div class="module">
-            <h3>Выставить оценку</h3>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <select id="grade-group" class="self-input" style="flex:1;">
-                    <option value="Группа 1">Группа 1</option>
-                    <option value="Группа 2">Группа 2</option>
-                </select>
-                <input type="text" id="grade-student" placeholder="Email студента (student_n@portal.ru)" class="self-input" style="flex:2;">
-                <input type="text" id="grade-subject" placeholder="Предмет" class="self-input" style="flex:1;">
-                <input type="number" id="grade-value" placeholder="Оценка (2-5)" class="self-input" style="width:100px;" min="2" max="5">
-            </div>
-            <button class="btn btn-primary" onclick="window.addGrade()" style="margin-top:10px;">Сохранить оценку</button>
-        </div>
-        
-        <div class="module">
-            <h3>Все оценки</h3>
-            <div class="journal-wrap">
-                <table class="journal-table">
-                    <thead><tr><th>Дата</th><th>Группа</th><th>Студент</th><th>Предмет</th><th>Оценка</th></tr></thead>
-                    <tbody id="grades-table-body">
-                        ${grades.map(g => `<tr><td>${g.date}</td><td>${g.group}</td><td>${g.student}</td><td>${g.subject}</td><td><b style="color:var(--ok); font-size:16px;">${g.value}</b></td></tr>`).join('')}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
-};
-
-window.addGrade = function() {
-    const group = document.getElementById('grade-group').value;
-    const student = document.getElementById('grade-student').value.trim();
-    const subject = document.getElementById('grade-subject').value.trim();
-    const value = document.getElementById('grade-value').value;
-
-    if (!student || !subject || !value) { alert("Заполните все поля!"); return; }
-
-    const grades = JSON.parse(localStorage.getItem('portal_grades'));
-    grades.push({ date: new Date().toLocaleDateString(), group, student, subject, value });
-    localStorage.setItem('portal_grades', JSON.stringify(grades));
-    
-    alert("Оценка выставлена!");
-    window.renderTeacherJournalPage(); // Обновляем интерфейс
-};
-
-// ============================================================
-// 5. ЛОГИН / РОУТИНГ / МЕНЮ
+// 7. ЛОГИН / РОУТИНГ / МЕНЮ
 // ============================================================
 window.handleLogout = function() {
     window.state.student = null; window.state.staff = null;
@@ -321,7 +447,7 @@ function setupLogin() {
         if (!email || !pass) { alert("Введите email и пароль"); return; }
         if (btn) { btn.disabled = true; btn.textContent = "Вход..."; }
 
-        // Быстрый локальный вход для теста
+        // Локальный вход для теста
         setTimeout(() => {
             if (btn) { btn.disabled = false; btn.textContent = "Войти"; }
             if (email === "anna.sh@portal.ru" && pass === "teacher123") {
@@ -329,7 +455,6 @@ function setupLogin() {
             } else if (email === "student_n@portal.ru" && pass === "123456") {
                 applyAuthSession({ name: "Студент Новиков", group: "Группа 1", role: "student" }, email);
             } else {
-                // Если API нет, но ввели другие данные - пропускаем как студента
                 applyAuthSession({ name: email.split('@')[0], group: "Группа 1", role: "student" }, email);
             }
         }, 500);
@@ -356,19 +481,12 @@ function router() {
     if (page === "topic" && parts.length >= 3) { window.renderTopicPage(parts[1], parts[2]); return; }
     if (page === "videos") { window.renderVideosPage(); return; }
     if (page === "training") { window.renderTrainingListPage(); return; }
-    
-    // Оценки и Журнал
     if (page === "grades") { window.renderStudentGradesPage(); return; }
     if (page === "journal") { window.renderTeacherJournalPage(); return; }
-    
-    if (page === "profile") { 
-        if(window.state.staff) {
-            window.renderTeacherJournalPage();
-        } else {
-            window.renderStudentGradesPage(); // Временно показываем оценки вместо профиля
-        }
-        return; 
-    }
+    if (page === "certificate") { window.renderCertificatePage(); return; }
+    if (page === "profile") { window.renderProfilePage(hash); return; }
+    if (page === "achievements") { window.renderAchievementsPage(); return; }
+    if (page === "shop") { window.renderShopPage(); return; }
     
     window.renderHomePage();
 }
@@ -386,7 +504,20 @@ function setupDrawer() {
     }
 }
 
+function setupThemeToggle() {
+    var btn = document.getElementById('themeToggle');
+    if (btn) {
+        btn.onclick = function() {
+            var current = document.documentElement.getAttribute('data-theme') || 'dark';
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('mdk.theme', next);
+            window.showToast(next === 'dark' ? 'Тёмная тема' : 'Светлая тема', 'ok');
+        };
+    }
+}
+
 window.addEventListener("hashchange", router);
 window.addEventListener("DOMContentLoaded", function() {
-    setupLogin(); setupDrawer(); router(); window.renderUserChip();
+    setupLogin(); setupDrawer(); setupThemeToggle(); router(); window.renderUserChip();
 });
