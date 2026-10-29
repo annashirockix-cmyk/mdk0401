@@ -3,223 +3,579 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>МДК 07.01 — Учебный портал</title>
-    
-    <!-- Подключение стилей -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="animations.css">
-    <link rel="stylesheet" href="lecture-methodical.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
-</head>
-<body data-theme="dark">
+    <title>МДК 07.01 - Учебный портал</title>
+    <style>
+        /* ================= ПЕРЕМЕННЫЕ И ТЕМЫ ================= */
+        :root {
+            --bg-color: #1a1e29;
+            --panel-bg: #232838;
+            --text-color: #ffffff;
+            --text-muted: #8b92a5;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --border-color: #334155;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-size: 16px;
+            --shop-bg: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop');
+        }
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
-    <header class="topbar">
-        <button class="burger-btn" id="burgerBtn" aria-label="Меню">
-            <span></span><span></span><span></span>
-        </button>
-        <div class="brand-badge" id="mainLogo">МДК Портал</div>
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+        }
+
+        [data-theme="cyberpunk"] {
+            --bg-color: #000000;
+            --panel-bg: #1a1a1a;
+            --text-color: #00ffcc;
+            --text-muted: #ff00ff;
+            --accent-color: #ff00ff;
+            --accent-hover: #ff00aa;
+            --border-color: #00ffcc;
+        }
+
+        [data-theme="matrix"] {
+            --bg-color: #000000;
+            --panel-bg: #0a1a0a;
+            --text-color: #00ff00;
+            --text-muted: #008800;
+            --accent-color: #00ff00;
+            --accent-hover: #00cc00;
+            --border-color: #00ff00;
+        }
+
+        [data-theme="cyber"] {
+            --bg-color: #0f0c29;
+            --panel-bg: #1e1b4b;
+            --text-color: #e0e7ff;
+            --text-muted: #818cf8;
+            --accent-color: #8b5cf6;
+            --accent-hover: #7c3aed;
+            --border-color: #4c1d95;
+        }
+
+        /* ================= БАЗОВЫЕ СТИЛИ ================= */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            font-size: var(--font-size);
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ================= ШАПКА ================= */
+        header {
+            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 100;
+        }
+
+        .header-left, .header-right { display: flex; align-items: center; gap: 15px; }
+        .logo { font-weight: bold; font-size: 1.2rem; color: var(--accent-color); }
+        .xp-badge { background: rgba(255, 255, 255, 0.1); padding: 5px 10px; border-radius: 20px; font-size: 0.9rem; }
+        .user-profile {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255, 255, 255, 0.05); padding: 5px 15px 5px 5px;
+            border-radius: 20px; border: 1px solid var(--border-color);
+        }
+        .user-avatar {
+            width: 30px; height: 30px; border-radius: 50%;
+            background-color: var(--accent-color); display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: white;
+        }
+
+        /* ================= БОКОВОЕ МЕНЮ ================= */
+        aside {
+            width: 260px; background-color: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            margin-top: 60px; height: calc(100vh - 60px);
+            padding: 20px 0; overflow-y: auto;
+        }
+
+        aside a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 20px; color: var(--text-color); text-decoration: none;
+            transition: background 0.2s; font-size: 0.95rem;
+        }
+
+        aside a:hover, aside a.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .menu-section { padding: 15px 20px 5px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ================= КОНТЕНТ ================= */
+        main {
+            flex: 1; margin-top: 60px; padding: 30px;
+            overflow-y: auto; height: calc(100vh - 60px);
+        }
+
+        .page { display: none; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.3s; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { margin-bottom: 20px; font-size: 2rem; }
+        h2 { margin-bottom: 15px; font-size: 1.5rem; }
         
-        <!-- Выбор курса -->
-        <select id="mdkSelector" class="self-input" style="width:auto; margin:0; padding:6px 10px; font-size:14px; background:var(--card); border-color:var(--border); color:var(--text);">
-            <option value="07.01">МДК 07.01 (ЧПУ)</option>
-            <option value="04.01">МДК 04.01 (Диагностика)</option>
-            <option value="02.01">МДК 02.01 (Сборка)</option>
-            <option value="02.02">МДК 02.02 (Прогр. сборки)</option>
-            <option value="MCAM">Mastercam</option>
-        </select>
+        .card {
+            background-color: var(--panel-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 25px; margin-bottom: 20px;
+        }
 
-        <!-- Статус и профиль -->
-        <div class="topbar-status" style="display:flex; gap:10px; align-items:center; margin-left:auto;">
-            <div id="xpCount" class="status-pill" style="cursor:default;">🌟 0 XP</div>
-            <button class="btn ghost" id="themeToggle" style="padding:6px 10px; font-size:16px; border:none;">🎨</button>
-            
-            <div class="user-chip" id="userChip" style="display:flex; align-items:center; gap:8px; background:var(--card); padding:4px 12px 4px 4px; border-radius:20px; border:1px solid var(--border); cursor:pointer;" onclick="location.hash='#/profile'">
-                <div id="userChipAvatar" style="width:32px; height:32px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:16px; overflow:hidden;">👨‍🎓</div>
-                <div style="display:flex; flex-direction:column; line-height:1.1;">
-                    <span id="userChipName" style="font-size:13px; font-weight:bold;">Гость</span>
-                    <span id="userChipGroup" style="font-size:11px; color:var(--muted);">—</span>
+        .btn {
+            background: var(--accent-color); color: white; border: none;
+            padding: 10px 20px; border-radius: 8px; cursor: pointer;
+            font-size: 1rem; transition: background 0.2s; text-decoration: none; display: inline-block;
+        }
+        .btn:hover { background: var(--accent-hover); }
+        .btn-outline { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); }
+        .btn-outline:hover { background: var(--accent-color); color: white; }
+
+        /* ================= МАГАЗИН ================= */
+        .shop-banner {
+            background-image: var(--shop-bg); background-size: cover; background-position: center;
+            height: 200px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            position: relative; margin-bottom: 30px; overflow: hidden;
+        }
+        .shop-banner::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
+        .shop-banner h2 { position: relative; z-index: 1; color: white; font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+        .theme-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .theme-card {
+            background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 15px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s;
+        }
+        .theme-card:hover { transform: translateY(-3px); border-color: var(--accent-color); }
+        .theme-preview { padding: 15px; border-radius: 4px; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold; border: 1px solid var(--border-color); }
+
+        /* ================= ЛЕКЦИИ (ВКЛАДКИ) ================= */
+        .lecture-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
+        .tab-btn {
+            background: none; border: none; color: var(--text-muted);
+            font-size: 1rem; cursor: pointer; padding: 10px 20px; border-radius: 8px; transition: all 0.2s;
+        }
+        .tab-btn.active { background: var(--accent-color); color: white; font-weight: bold; }
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+
+        /* ================= ГЕНЕРАТОР ЗАДАНИЙ ================= */
+        .generator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .task-result { background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-color); padding: 20px; border-radius: 8px; margin-top: 20px; display: none; }
+        .task-result.active { display: block; }
+        .task-param { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border-color); }
+        .task-param:last-child { border-bottom: none; }
+        .task-param span:first-child { color: var(--text-muted); }
+        .task-param span:last-child { font-weight: bold; color: var(--accent-color); }
+
+        /* ================= МОДАЛЬНОЕ ОКНО ================= */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--panel-bg); padding: 30px; border-radius: 12px; width: 400px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .setting-group { margin-bottom: 20px; }
+        .setting-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500; }
+        .setting-group select, .setting-group input { width: 100%; padding: 10px; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; }
+
+        /* ================= ВИДЕО ================= */
+        .video-container { background: #000; width: 100%; aspect-ratio: 16/9; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px dashed var(--border-color); overflow: hidden; }
+        .video-container video { width: 100%; height: 100%; object-fit: contain; }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА -->
+    <header>
+        <div class="header-left">
+            <button id="menuToggle" class="btn" style="background:none; font-size:1.5rem; padding:0; color:var(--text-color); cursor:pointer; display:none;">☰</button>
+            <div class="logo">МДК Портал</div>
+            <div style="border-left: 1px solid var(--border-color); height: 30px; margin: 0 10px;"></div>
+            <span style="font-weight: 500;">МДК 07.01 (ЧПУ)</span>
+        </div>
+        <div class="header-right">
+            <div class="xp-badge">⭐ 0 XP</div>
+            <button id="settingsBtn" class="btn" style="background:none; font-size:1.2rem; padding:0; color:var(--text-color); cursor:pointer;">⚙️</button>
+            <div class="user-profile">
+                <div class="user-avatar">Ш</div>
+                <div>
+                    <div style="font-size: 0.8rem; font-weight: bold;">Широцких Анна</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted);">Преподаватель</div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Хлебные крошки -->
-    <div id="crumbs" style="padding: 12px 24px; font-size: 14px; color: var(--muted); background: var(--bg); border-bottom: 1px solid var(--border);"></div>
-
-    <!-- Основной контент -->
-    <main id="app"></main>
-
-    <!-- ВЫДВИЖНАЯ ШТОРКА (МЕНЮ) -->
-    <div class="drawer-overlay" id="drawerOverlay"></div>
-    <aside class="drawer" id="drawer">
-        <div class="drawer-head">
-            <div class="brand-badge">МДК Портал</div>
-            <button class="drawer-close" id="drawerClose">✕</button>
-        </div>
-        <nav class="drawer-nav">
-            <a href="#/" class="drawer-item" data-go="#/">🏠 Главная</a>
-            <a href="#/profile" class="drawer-item" data-go="#/profile">👤 Личный кабинет</a>
-            
-            <!-- НОВЫЕ ПУНКТЫ ДЛЯ ОЦЕНОК -->
-            <a href="#/grades" class="drawer-item" data-go="#/grades">📊 Мои оценки (Студент)</a>
-            <a href="#/journal" class="drawer-item" data-go="#/journal">📓 Журнал (Препод)</a>
-            
-            <a href="#/certificate" class="drawer-item" data-go="#/certificate">📜 Сертификат</a>
-            <a href="#/achievements" class="drawer-item" data-go="#/achievements">🏆 Достижения</a>
-            <a href="#/shop" class="drawer-item" data-go="#/shop">🛒 Магазин</a>
-            <a href="#/links" class="drawer-item" data-go="#/links">📚 Полезные материалы</a>
-            
-            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
-            
-            <a href="#/videos" class="drawer-item" data-go="#/videos">🎬 Видеоуроки</a>
-            <a href="#/safety" class="drawer-item" data-go="#/safety">🛡️ Охрана труда</a>
-            
-            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
-            
-            <a href="#/training" class="drawer-item" data-go="#/training">🎯 Тренировка</a>
-            <a href="#/final" class="drawer-item" data-go="#/final">📋 Экзамен</a>
-            <a href="#/arcade" class="drawer-item" data-go="#/arcade">🎮 Игровая комната</a>
-            <a href="#/rating" class="drawer-item" data-go="#/rating">🏅 Доска почета</a>
-            
-            <hr style="border:0; border-top:1px solid var(--border); margin:10px 0;">
-            
-            <a href="#/schedule" class="drawer-item" data-go="#/schedule">📅 Расписание</a>
-            <a href="#/reports" class="drawer-item" data-go="#/reports">📊 Отчеты (Препод)</a>
-            <a href="#/admin" class="drawer-item" data-go="#/admin">⚙️ Админка (Препод)</a>
-            
-            <div style="padding:20px; margin-top:auto;">
-                <button class="btn ghost" style="width:100%; border-color:var(--err); color:var(--err);" onclick="window.handleLogout()">🚪 Выйти</button>
-            </div>
-        </nav>
+    <!-- БОКОВОЕ МЕНЮ -->
+    <aside id="sidebar">
+        <div class="menu-section">Личный кабинет</div>
+        <a href="#/shop" class="nav-link active">🛒 Магазин XP</a>
+        <a href="#/achievements" class="nav-link">🏆 Достижения</a>
+        
+        <div class="menu-section">Обучение</div>
+        <a href="#/materials" class="nav-link">📚 Полезные материалы (Mastercam)</a>
+        <a href="#/lectures-dm" class="nav-link">⚙️ Детали машин (Лекции)</a>
+        <a href="#/practicum-dm" class="nav-link">📐 Практикум (Детали машин)</a>
+        <a href="#/lecture-3.0" class="nav-link">📖 Тема 3.0 История ЧПУ</a>
+        
+        <div class="menu-section">Проверка знаний</div>
+        <a href="#/training" class="nav-link">🖥 Тренировка</a>
+        <a href="#/exam" class="nav-link">📝 Экзамен</a>
     </aside>
 
-    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ МИНИ-ИГР -->
-    <div id="loginIframeModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:999999; padding:20px; backdrop-filter: blur(5px);">
-        <button class="btn" onclick="document.getElementById('loginIframeModal').style.display='none'" style="position:absolute; top:20px; right:20px; z-index:10; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">✖ Закрыть</button>
-        <iframe id="loginIframeContent" style="width:100%; height:100%; border:none; border-radius:12px; background: #000;"></iframe>
-    </div>
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main>
+        
+        <!-- 1. МАГАЗИН -->
+        <div id="page-shop" class="page">
+            <div class="shop-banner">
+                <h2>🛒 МАГАЗИН</h2>
+            </div>
+            <h2>🎨 Темы оформления</h2>
+            <div class="theme-grid" style="margin-bottom: 30px;">
+                <div class="theme-card" onclick="setTheme('default')">
+                    <div class="theme-preview" style="background:#1a1e29; color:white;">Aa</div>
+                    <div style="font-weight: bold;">Стандартная</div>
+                </div>
+                <div class="theme-card" onclick="setTheme('light')">
+                    <div class="theme-preview" style="background:#f1f5f9; color:black;">Aa</div>
+                    <div style="font-weight: bold;">Светлая</div>
+                </div>
+                <div class="theme-card" onclick="setTheme('cyberpunk')">
+                    <div class="theme-preview" style="background:#000; color:#00ffcc;">Aa</div>
+                    <div style="font-weight: bold;">Киберпанк</div>
+                </div>
+                <div class="theme-card" onclick="setTheme('matrix')">
+                    <div class="theme-preview" style="background:#000; color:#00ff00;">Aa</div>
+                    <div style="font-weight: bold;">Матрица</div>
+                </div>
+                <div class="theme-card" onclick="setTheme('cyber')">
+                    <div class="theme-preview" style="background:#0f0c29; color:#e0e7ff;">Aa</div>
+                    <div style="font-weight: bold;">Суперник</div>
+                </div>
+            </div>
+            <h2>👨‍🏫 Аватары</h2>
+            <div class="theme-grid">
+                <div class="theme-card" style="border-color: #10b981;"><div style="font-size:2rem;">👨‍🎓</div><div style="font-weight: bold; color: #10b981;">Стандарт (Активно)</div></div>
+                <div class="theme-card"><div style="font-size:2rem;">👱‍♂️</div><div style="font-weight: bold;">Парень</div></div>
+                <div class="theme-card"><div style="font-size:2rem;">👩</div><div style="font-weight: bold;">Девушка</div></div>
+                <div class="theme-card"><div style="font-size:2rem;">🤖</div><div style="font-weight: bold;">Робот</div></div>
+            </div>
+        </div>
 
-    <!-- ОКНО ВХОДА (ЛОГИН) -->
-    <div class="login-overlay" id="loginOverlay" style="display:none;">
-        <div class="login-shell">
-            <h2 style="text-align:center; margin-bottom:20px;">Вход в портал</h2>
-            <div class="login-grid" style="grid-template-columns: 1fr; max-width: 400px; margin: 0 auto;">
-                <div class="login-card">
-                    <h3 style="margin-top:0; color:var(--accent); text-align:center;">🔐 Вход</h3>
-                    <p style="text-align:center; color:var(--muted); font-size:13px; margin:0 0 16px;">Студенты и преподаватели — один вход по email и паролю</p>
-                    
-                    <form id="unifiedLoginForm" onsubmit="event.preventDefault(); document.getElementById('btnLoginUnified').click();">
-                        <label style="display:block; font-size:13px; margin-bottom:4px; color:var(--muted);">Email</label>
-                        <input type="email" id="loginEmail" name="email" autocomplete="username" placeholder="student_1@portal.ru" required style="width:100%; margin-bottom:12px;">
-                        
-                        <label style="display:block; font-size:13px; margin-bottom:4px; color:var(--muted);">Пароль</label>
-                        <input type="password" id="loginPassword" name="password" autocomplete="current-password" placeholder="••••••••" required style="width:100%; margin-bottom:16px;">
-                        
-                        <button type="button" class="btn" id="btnLoginUnified" style="width:100%;">Войти</button>
-                        
-                        <p id="loginError" style="display:none; margin-top:12px; padding:10px; background:rgba(239,68,68,0.15); color:var(--err,#ef4444); border-radius:8px; font-size:13px; text-align:center;"></p>
-                        
-                        <button type="button" class="btn ghost" onclick="window.clearCache()" style="width:100%; margin-top:12px; border-color:var(--err); color:var(--err); font-size:12px;">🔄 Сбросить кэш и обновить</button>
-                    </form>
-                    
-                    <p style="margin-top:14px; font-size:12px; color:var(--muted); text-align:center; line-height:1.4;">
-                        Студент: <code>student_n@portal.ru</code> / <code>123456</code><br>
-                        Преподаватель: <code>anna.sh@portal.ru</code> / <code>teacher123</code>
-                    </p>
+        <!-- 2. ДОСТИЖЕНИЯ -->
+        <div id="page-achievements" class="page">
+            <h1>🏆 Достижения</h1>
+            <div class="card">
+                <p>Ваши ачивки тут. Пока что пусто, выполняйте задания, чтобы получить награды.</p>
+            </div>
+        </div>
+
+        <!-- 3. ПОЛЕЗНЫЕ МАТЕРИАЛЫ (Mastercam) -->
+        <div id="page-materials" class="page">
+            <h1>📚 Полезные материалы (Mastercam)</h1>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Справочные руководства по работе с CAD/CAM системой Mastercam.</p>
+            <div class="card">
+                <h2>Начало работы с Mastercam 2022</h2>
+                <p style="margin: 15px 0; color: var(--text-muted);">Базовое руководство: интерфейс, настройка, работа с файлами и слоями, основы программирования.</p>
+                <a href="Mastercam_2022_Basics_Tutorial_RU.pdf" target="_blank" class="btn">📥 Открыть PDF (База)</a>
+            </div>
+            <div class="card">
+                <h2>Mastercam Tool Manager</h2>
+                <p style="margin: 15px 0; color: var(--text-muted);">Руководство по работе с библиотеками инструментов и созданию сборок.</p>
+                <a href="Mastercam_Tool_Manager_RU.pdf" target="_blank" class="btn">📥 Открыть PDF (Инструменты)</a>
+            </div>
+        </div>
+
+        <!-- 4. ЛЕКЦИИ ДЕТАЛИ МАШИН -->
+        <div id="page-lectures-dm" class="page">
+            <h1>⚙️ Детали машин (Лекции)</h1>
+            <div class="card">
+                <h2>Курс лекций по деталям машин</h2>
+                <p style="margin: 15px 0; color: var(--text-muted);">Полный учебный курс, охватывающий расчеты, конструкции, материалы и основы конструирования деталей и узлов.</p>
+                <ul style="margin-bottom: 20px; padding-left: 20px; line-height: 1.8;">
+                    <li>Общие сведения о проектировании машин</li>
+                    <li>Механические передачи (зубчатые, червячные, ременные, цепные)</li>
+                    <li>Валы, оси, подшипники, муфты</li>
+                    <li>Соединения (сварные, резьбовые, шпоночные и др.)</li>
+                </ul>
+                <a href="kurs_detaley_mashin.pdf" target="_blank" class="btn">📖 Открыть конспект лекций (PDF)</a>
+            </div>
+        </div>
+
+        <!-- 5. ПРАКТИКУМ ДЕТАЛИ МАШИН (Генератор заданий) -->
+        <div id="page-practicum-dm" class="page">
+            <h1>📐 Практикум (Детали машин)</h1>
+            
+            <div class="card" style="border-color: var(--accent-color); background: rgba(59, 130, 246, 0.05);">
+                <h2>🎲 Генератор заданий для курсового проекта</h2>
+                <p style="margin: 10px 0 20px; color: var(--text-muted);">
+                    Нажмите кнопку, чтобы случайным образом получить свой вариант задания (согласно методичке `kp_dm1.pdf`).
+                    Преподаватель увидит выданный вам вариант.
+                </p>
+                <button class="btn" onclick="generateTask()" style="font-size: 1.1rem; padding: 15px 30px;">🎰 Сгенерировать мой вариант</button>
+                
+                <!-- Блок для вывода результата -->
+                <div class="task-result" id="taskResult">
+                    <h3 style="margin-bottom: 15px; color: var(--accent-color);">Ваш вариант задания:</h3>
+                    <div class="task-param"><span>Мощность на выходе (P вых):</span> <span id="task-p">- кВт</span></div>
+                    <div class="task-param"><span>Угловая скорость (ω вых):</span> <span id="task-w">- с⁻¹</span></div>
+                    <div class="task-param"><span>Межосевое расстояние (a w):</span> <span id="task-aw">- мм</span></div>
+                    <div class="task-param"><span>Синхронная частота (n c):</span> <span id="task-nc">- мин⁻¹</span></div>
+                    <div class="task-param"><span>Схема привода:</span> <span id="task-scheme">-</span></div>
                 </div>
             </div>
 
-            <!-- БЛОК С ИГРАМИ НА ЭКРАНЕ ВХОДА -->
-            <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; text-align: center;">
-                <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Интерактивные элементы</p>
-                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                    <button class="btn ghost" onclick="window.openLoginIframe('captcha_wake_cat.html')" style="font-size: 12px; padding: 8px 15px;">🐱 Кот-капча</button>
-                    <button class="btn ghost" onclick="window.openLoginIframe('heavy_ball_switch.html')" style="font-size: 12px; padding: 8px 15px;">⚫ Тяжелый шар</button>
-                    <button class="btn ghost" onclick="window.openLoginIframe('gravity_password_v2.html')" style="font-size: 12px; padding: 8px 15px;">🔐 Гравитационный пароль</button>
-                    <button class="btn ghost" onclick="window.openLoginIframe('paper_lantern.html')" style="font-size: 12px; padding: 8px 15px;">🏮 Бумажные фонарики</button>
-                    <button class="btn ghost" onclick="window.openLoginIframe('login_v3b.html')" style="font-size: 12px; padding: 8px 15px;">💧 Жидкий металл</button>
+            <div class="card">
+                <h2>Панель преподавателя (Имитация)</h2>
+                <p style="margin: 10px 0; color: var(--text-muted);">Здесь отображается последнее сгенерированное студентом задание.</p>
+                <div id="teacherView" style="padding: 15px; background: var(--bg-color); border-radius: 8px; margin-top: 15px; font-family: monospace;">
+                    Студент еще не генерировал задание.
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Методические указания (kp_dm1.pdf)</h2>
+                <p style="margin: 15px 0; color: var(--text-muted);">Полное пособие по курсовому проектированию деталей машин.</p>
+                <a href="kp_dm1.pdf" target="_blank" class="btn btn-outline">📥 Скачать методичку</a>
+            </div>
+        </div>
+
+        <!-- 6. ТЕМА 3.0 (С вкладками) -->
+        <div id="page-lecture-3.0" class="page">
+            <h1>📖 Тема 3.0 История развития ЧПУ</h1>
+            
+            <div class="lecture-tabs">
+                <button class="tab-btn active" onclick="openTab(event, 'theory')">Лекция</button>
+                <button class="tab-btn" onclick="openTab(event, 'practice')">Практика</button>
+                <button class="tab-btn" onclick="openTab(event, 'test')">Самостоятельная (Тест)</button>
+                <button class="tab-btn" onclick="openTab(event, 'presentation')">Презентация</button>
+            </div>
+
+            <div id="tab-theory" class="tab-content active">
+                <div class="card">
+                    <h3>3.0.1 Первые шаги</h3>
+                    <p style="margin-top: 10px; line-height: 1.6;">Историю ЧПУ принято отсчитывать с 1801 года, когда Жозеф Мари Жаккар построил ткацкий станок, управляемый перфокартами. Это доказало, что машина может выполнять сложную программу без участия человека.</p>
+                </div>
+            </div>
+
+            <div id="tab-practice" class="tab-content">
+                <div class="card">
+                    <h3>Практическое задание</h3>
+                    <p>Опишите принцип работы перфокарт в станке Жаккара. Как они повлияли на создание первых ЭВМ?</p>
+                    <textarea style="width:100%; height:100px; margin-top:10px; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px;" placeholder="Введите ваш ответ..."></textarea>
+                    <button class="btn" style="margin-top:10px;">Отправить</button>
+                </div>
+            </div>
+
+            <div id="tab-test" class="tab-content">
+                <div class="card">
+                    <h3>Тест: История ЧПУ</h3>
+                    <p style="margin: 15px 0;">1. В каком году был создан первый станок с ЧПУ?</p>
+                    <label style="display:block; margin-bottom: 5px;"><input type="radio" name="q1"> 1801</label>
+                    <label style="display:block; margin-bottom: 5px;"><input type="radio" name="q1"> 1948</label>
+                    <label style="display:block; margin-bottom: 5px;"><input type="radio" name="q1"> 1952</label>
+                    <button class="btn" style="margin-top: 15px;" onclick="alert('Тест завершен!')">Завершить</button>
+                </div>
+            </div>
+
+            <div id="tab-presentation" class="tab-content">
+                <div class="card" style="text-align: center;">
+                    <h3>Презентация к лекции</h3>
+                    <p style="margin: 20px 0; color: var(--text-muted);">Файл: Istoria_ChPU_2024.pptx</p>
+                    <button class="btn">📥 Скачать</button>
                 </div>
             </div>
         </div>
+
+        <!-- 7. ТРЕНИРОВКА -->
+        <div id="page-training" class="page">
+            <h1>🖥 Тренировка</h1>
+            <div class="card">
+                <h2>Тренажер G-кода</h2>
+                <p style="margin: 15px 0; color: var(--text-muted);">Интерактивный симулятор обработки.</p>
+                
+                <!-- ИСПРАВЛЕНИЕ 404: Если видео нет, покажется заглушка -->
+                <div class="video-container">
+                    <video controls>
+                        <!-- Укажите правильный путь к файлу (например, video/1.mp4) -->
+                        <source src="video/1.mp4" type="video/mp4">
+                        <div style="color: #fff; text-align: center; padding: 20px;">
+                            ⚠️ Видеофайл не найден.<br>
+                            <small>Пожалуйста, проверьте путь в коде: src="video/1.mp4"</small>
+                        </div>
+                    </video>
+                </div>
+                <button class="btn">Запустить симулятор</button>
+            </div>
+        </div>
+
+        <!-- 8. ЭКЗАМЕН -->
+        <div id="page-exam" class="page">
+            <h1>📝 Экзамен</h1>
+            <div class="card" style="text-align: center; padding: 50px;">
+                <h2>Итоговый экзамен по МДК 07.01</h2>
+                <p style="margin: 20px 0; color: var(--text-muted);">Вам будет предложено 30 вопросов. Время на выполнение: 45 минут.</p>
+                <button class="btn" style="font-size: 1.2rem; padding: 15px 40px;" onclick="alert('Экзамен начат! (Демо)')">Начать экзамен</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <h2>⚙️ Настройки интерфейса</h2>
+            <div class="setting-group" style="margin-top: 20px;">
+                <label>Шрифт</label>
+                <select id="fontSelect">
+                    <option value="'Segoe UI', Tahoma, sans-serif">Segoe UI (Стандарт)</option>
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="'Courier New', monospace">Courier New (Моно)</option>
+                    <option value="'Times New Roman', serif">Times New Roman</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>Размер текста (px)</label>
+                <input type="range" id="fontSizeRange" min="12" max="24" value="16">
+            </div>
+            <button class="btn" onclick="closeSettings()" style="width: 100%; margin-top: 10px;">Сохранить и закрыть</button>
+        </div>
     </div>
 
-    <!-- Уведомления -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ -->
-    <!-- Убедитесь, что все эти файлы существуют в вашем репозитории -->
-    <script src="api.js"></script>
-    <script src="data-0701.js"></script>
-    <script src="data-0401.js"></script>
-    <script src="data-0201.js"></script>
-    <script src="data-0202.js"></script>
-    <script src="data-mastercam.js"></script>
-    <script src="data-extra.js"></script>
-    <script src="data-global.js"></script>
-    <script src="tests-extra.js"></script>
-    
-    <script src="questions-setup.js"></script>
-    <script src="questions-mdk.js"></script>
-    <script src="questions-anime.js"></script>
-    <script src="questions-games.js"></script>
-    <script src="questions-logic.js"></script>
-
-    <script src="app.js"></script>
-    
-    <script src="assistant.js"></script>
-    <script src="shop.js"></script>
-    <script src="games.js"></script>
-    <script src="extra.js"></script>
-    <script src="exam-engine.js"></script>
-    <script src="exam_0701.js"></script>
-    <script src="exam_0401.js"></script>
-    <script src="exam_0201.js"></script>
-    <script src="exam_0202.js"></script>
-    <script src="final.js"></script>
-    <script src="journal.js"></script>
-    <script src="reports.js"></script>
-    <script src="schedule.js"></script>
-    <script src="rating.js"></script>
-    <script src="links.js"></script>
-    <script src="info.js"></script>
-    <script src="admin.js"></script>
-    <script src="easter-eggs.js"></script>
-    
-    <!-- ВСТРОЕННЫЕ СКРИПТЫ -->
     <script>
-        // Функция открытия игр на экране входа
-        window.openLoginIframe = function(url) {
-            document.getElementById('loginIframeContent').src = './' + url;
-            document.getElementById('loginIframeModal').style.display = 'block';
-        };
-
-        // Переключение курса
-        document.getElementById('mdkSelector').addEventListener('change', function() {
-            if (window.state) {
-                window.state.activeCourseId = this.value;
-                if (window.saveStudentData) window.saveStudentData();
-                if (location.hash === '#/' || location.hash === '') {
-                    if (window.renderHomePage) window.renderHomePage();
-                } else {
-                    location.hash = '#/';
-                }
+        // ================= 1. РОУТИНГ (Навигация) =================
+        function navigate() {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            
+            let hash = window.location.hash || '#/shop';
+            let pageId = 'page-' + hash.replace('#/', '');
+            
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            } else {
+                document.getElementById('page-shop').classList.add('active'); // Fallback
             }
+
+            // Подсветка меню
+            document.querySelectorAll('aside a').forEach(a => {
+                if (a.getAttribute('href') === hash) a.classList.add('active');
+                else a.classList.remove('active');
+            });
+        }
+
+        window.addEventListener('hashchange', navigate);
+        window.addEventListener('DOMContentLoaded', () => {
+            navigate();
+            
+            // Загрузка темы
+            const savedTheme = localStorage.getItem('theme') || 'default';
+            setTheme(savedTheme);
+
+            // Загрузка шрифтов
+            const savedFont = localStorage.getItem('font') || "'Segoe UI', Tahoma, sans-serif";
+            document.getElementById('fontSelect').value = savedFont;
+            document.documentElement.style.setProperty('--font-main', savedFont);
+
+            const savedSize = localStorage.getItem('fontSize') || '16';
+            document.getElementById('fontSizeRange').value = savedSize;
+            document.documentElement.style.setProperty('--font-size', savedSize + 'px');
+
+            // Обновление панели преподавателя
+            updateTeacherView();
         });
 
-        // Восстановление выбранного курса при загрузке
-        window.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                if (window.state && window.state.activeCourseId) {
-                    document.getElementById('mdkSelector').value = window.state.activeCourseId;
-                }
-            }, 100);
+        // ================= 2. ТЕМЫ И ШРИФТЫ =================
+        function setTheme(themeName) {
+            if (themeName === 'default') document.documentElement.removeAttribute('data-theme');
+            else document.documentElement.setAttribute('data-theme', themeName);
+            localStorage.setItem('theme', themeName);
+        }
+
+        document.getElementById('fontSelect').addEventListener('change', (e) => {
+            document.documentElement.style.setProperty('--font-main', e.target.value);
+            localStorage.setItem('font', e.target.value);
         });
 
-        // Регистрация Service Worker (для PWA)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW ошибка:', err));
+        document.getElementById('fontSizeRange').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--font-size', e.target.value + 'px');
+            localStorage.setItem('fontSize', e.target.value);
+        });
+
+        // Модалка
+        document.getElementById('settingsBtn').addEventListener('click', () => document.getElementById('settingsModal').classList.add('active'));
+        function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
+
+        // ================= 3. ВКЛАДКИ ЛЕКЦИЙ =================
+        function openTab(evt, tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        // ================= 4. ГЕНЕРАТОР ЗАДАНИЙ =================
+        // База данных заданий (взято из таблиц kp_dm1.pdf)
+        const variants = [
+            { p: 3.7, w: 15.8, aw: 125, nc: 1000, scheme: "Схема 2" },
+            { p: 5.17, w: 16.1, aw: 140, nc: 1000, scheme: "Схема 2" },
+            { p: 10.0, w: 18.2, aw: 160, nc: 1000, scheme: "Схема 2" },
+            { p: 17.0, w: 20.3, aw: 180, nc: 1000, scheme: "Схема 2" },
+            { p: 19.0, w: 18.2, aw: 200, nc: 1000, scheme: "Схема 2" },
+            { p: 23.0, w: 16.3, aw: 225, nc: 1000, scheme: "Схема 2" },
+            { p: 25.8, w: 14.3, aw: 250, nc: 1000, scheme: "Схема 2" },
+            { p: 28.0, w: 12.8, aw: 280, nc: 1000, scheme: "Схема 2" },
+            { p: 34.3, w: 10.9, aw: 315, nc: 1000, scheme: "Схема 2" },
+            { p: 27.69, w: 9.55, aw: 315, nc: 1000, scheme: "Схема 2" },
+            { p: 8.0, w: 28.7, aw: 125, nc: 750, scheme: "Схема 1" },
+            { p: 20.37, w: 20.37, aw: 140, nc: 750, scheme: "Схема 1" }
+        ];
+
+        function generateTask() {
+            const randomIndex = Math.floor(Math.random() * variants.length);
+            const task = variants[randomIndex];
+
+            // Вывод на экран
+            document.getElementById('task-p').innerText = task.p + " кВт";
+            document.getElementById('task-w').innerText = task.w + " с⁻¹";
+            document.getElementById('task-aw').innerText = task.aw + " мм";
+            document.getElementById('task-nc').innerText = task.nc + " мин⁻¹";
+            document.getElementById('task-scheme').innerText = task.scheme;
+            
+            document.getElementById('taskResult').classList.add('active');
+
+            // Сохранение для преподавателя
+            localStorage.setItem('studentTask', JSON.stringify(task));
+            updateTeacherView();
+        }
+
+        function updateTeacherView() {
+            const savedTask = localStorage.getItem('studentTask');
+            const teacherDiv = document.getElementById('teacherView');
+            
+            if (savedTask) {
+                const t = JSON.parse(savedTask);
+                teacherDiv.innerHTML = `
+                    <strong style="color: var(--accent-color);">Последнее сгенерированное задание:</strong><br><br>
+                    P_вых: ${t.p} кВт<br>
+                    ω_вых: ${t.w} с⁻¹<br>
+                    a_w: ${t.aw} мм<br>
+                    n_c: ${t.nc} мин⁻¹<br>
+                    Схема: ${t.scheme}
+                `;
+            } else {
+                teacherDiv.innerText = "Студент еще не генерировал задание.";
+            }
         }
     </script>
 </body>
