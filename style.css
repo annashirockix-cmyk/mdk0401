@@ -47,9 +47,6 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
   --err: #ef4444; --gold: #f59e0b;
 }
 
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: block; }
-
 /* ---------- ВЕРХНЯЯ ПАНЕЛЬ ---------- */
 .topbar {
   display: flex; align-items: center; justify-content: space-between;
@@ -96,6 +93,7 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
 .btn.ghost:hover { background: var(--card-soft); }
 .btn-primary { background: #1e40af; color: #fff; }
+.btn-danger { background: var(--err); color: #fff; }
 .self-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; background: var(--bg); color: var(--text); }
 .self-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
 
@@ -105,35 +103,32 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .journal-table th { background: var(--card-soft); font-weight: 600; color: var(--text-soft); }
 
 /* =====================================================
-   ФОНЫ ДЛЯ МАГАЗИНА (ИСПРАВЛЕНЫ ПУТИ)
+   ФОНЫ ДЛЯ МАГАЗИНА (ИСПРАВЛЕНЫ ПУТИ НА fonts/)
    ===================================================== */
 .bg-underwater { background: linear-gradient(180deg, #0c4a6e 0%, #082f49 100%); }
-.bg-foggy-forest { background-image: url('./img/Background 1.png'); background-size: cover; background-position: center; }
-.bg-pumpkins { background-image: url('./img/Background 2.png'); background-size: cover; background-position: center; }
-.bg-spooky-room { background-image: url('./img/Background 3.png'); background-size: cover; background-position: center; }
-.bg-halloween { background-image: url('./img/Background 7.png'); background-size: cover; background-position: center; }
-.bg-red-forest { background-image: url('./img/Background 9.png'); background-size: cover; background-position: center; }
-.bg-lanterns { background-image: url('./img/Background 10.png'); background-size: cover; background-position: center; }
-.bg-dark-table { background-image: url('./img/Background 15.png'); background-size: cover; background-position: center; }
-.bg-graveyard { background-image: url('./img/Background 28.png'); background-size: cover; background-position: center; }
-.bg-cats-notebook { background-image: url('./img/Background 31.png'); background-size: cover; background-position: center; }
-.bg-cats-yarn { background-image: url('./img/Background 33.png'); background-size: cover; background-position: center; }
+.bg-foggy-forest { background-image: url('./fonts/Background 1.png'); background-size: cover; background-position: center; }
+.bg-pumpkins { background-image: url('./fonts/Background 2.png'); background-size: cover; background-position: center; }
+.bg-spooky-room { background-image: url('./fonts/Background 3.png'); background-size: cover; background-position: center; }
+.bg-halloween { background-image: url('./fonts/Background 7.png'); background-size: cover; background-position: center; }
+.bg-red-forest { background-image: url('./fonts/Background 9.png'); background-size: cover; background-position: center; }
+.bg-lanterns { background-image: url('./fonts/Background 10.png'); background-size: cover; background-position: center; }
+.bg-dark-table { background-image: url('./fonts/Background 15.png'); background-size: cover; background-position: center; }
+.bg-graveyard { background-image: url('./fonts/Background 28.png'); background-size: cover; background-position: center; }
+.bg-cats-notebook { background-image: url('./fonts/Background 31.png'); background-size: cover; background-position: center; }
+.bg-cats-yarn { background-image: url('./fonts/Background 33.png'); background-size: cover; background-position: center; }
 .bg-stone-alley { background: linear-gradient(135deg, #4b5563, #1f2937); }
 
 /* Эффекты фона (должны применяться к body) */
 body.fx-aurora-bg { background: linear-gradient(135deg, #0f172a, #1e3a8a, #0f172a); background-size: 400% 400%; animation: aurora 15s ease infinite; }
 @keyframes aurora { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
 body.fx-matrix-bg { background: #000; color: #0f0; }
 body.fx-matrix-bg::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 0, 0.05) 2px, rgba(0, 255, 0, 0.05) 4px); pointer-events: none; z-index: -1; }
-
 body.fx-starfield-bg { background: #000; }
 body.fx-starfield-bg::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px); background-size: 50px 50px; opacity: 0.3; pointer-events: none; z-index: -1; }
 
 /* ---------- МОБИЛЬНАЯ АДАПТАЦИЯ ---------- */
 @media (max-width: 768px) {
   .btn, #login-btn { min-height: 48px !important; font-size: 16px !important; }
-  .header-right { width: 100%; justify-content: flex-end; }
   .content, #app { padding: 0.75rem !important; }
   header.topbar { flex-wrap: wrap; height: auto !important; gap: 8px; padding: 8px 10px !important; }
   header.topbar .topbar-status { width: 100%; justify-content: flex-end; margin-left: 0 !important; }

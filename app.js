@@ -49,7 +49,6 @@ window.getLevel = function(xp) { return Math.floor((xp || 0) / 100) + 1; };
 window.getLevelTitle = function(lvl) { if (lvl < 3) return "Новичок"; if (lvl < 5) return "Ученик"; if (lvl < 8) return "Практикант"; if (lvl < 12) return "Мастер"; return "Эксперт"; };
 
 window.applyGlobalEffects = function() {
-    // Текстовые эффекты
     var textFx = window.state.activeTextEffect || "none"; 
     var logo = document.getElementById("mainLogo"); 
     var userName = document.getElementById("userChipName");
@@ -62,12 +61,10 @@ window.applyGlobalEffects = function() {
             logo.classList.add("rainbow-text");
         }
     }
-    // Эффекты карточек
     var cardFx = window.state.activeCardEffect || "none";
     document.querySelectorAll(".module").forEach(function(el) { el.classList.remove("fx-holo-card", "fx-3d-card"); if (cardFx !== "none") el.classList.add(cardFx); });
     
-    // Фоновые эффекты (применяем класс к body)
-    document.body.className = ""; // Сбрасываем предыдущий
+    document.body.className = ""; 
     var bgFx = window.state.activeBgEffect || "none";
     if (bgFx !== "none") {
         document.body.classList.add(bgFx);
@@ -115,6 +112,14 @@ window.savePracAnswer = function(code) {
     window.showToast("Ответ сохранен!", "ok");
 };
 
+window.saveSelfAnswer = function(code) {
+    var val = document.getElementById(`self_input_${code}`).value;
+    if (!window.state.results) window.state.results = {};
+    window.state.results[`self_${code}`] = val;
+    window.saveStudentData();
+    window.showToast("Ответ сохранен!", "ok");
+};
+
 // ==========================================
 // 3. РЕНДЕР СТРАНИЦ
 // ==========================================
@@ -136,7 +141,6 @@ window.renderTrainingListPage = function() {
     var grid = document.createElement("div");
     grid.style.cssText = "display:flex; flex-direction:column; gap:12px;";
     
-    // Тренажер G-кода
     var gcodeCard = document.createElement("a");
     gcodeCard.href = "#/gcode-trainer";
     gcodeCard.className = "module";
@@ -436,7 +440,6 @@ window.renderTopicPage = function(courseId, topicId) {
                     ${(work.questions && work.questions.length) ? `<p><b>Вопросы:</b></p><ul>${work.questions.map(q => `<li>${q}</li>`).join('')}</ul>` : ''}
                 </div>`;
                 
-                // Проверяем, есть ли тест для этой самостоятельной работы
                 var testData = window.EXTRA_TESTS ? window.EXTRA_TESTS[`self_${work.code.replace(/\s+/g, '')}`] : null;
                 if (testData && testData.questions) {
                     var testId = `self_${work.code}`;
@@ -447,7 +450,6 @@ window.renderTopicPage = function(courseId, topicId) {
                         contentArea.innerHTML += `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px; margin-bottom:15px;"><h3>🎯 Тест самоконтроля</h3><p style="font-size:14px; color:var(--muted);">Вопросов: ${testData.questions.length}</p><button class="btn" onclick="window.startInlineTest('${topic.id}', '${work.code}')" style="padding:10px 20px;">Начать тест</button></div>`;
                     }
                 } else {
-                    // Если теста нет, предлагаем письменный ответ
                     var savedAns = window.state.results[`self_${work.code}`] || "";
                     contentArea.innerHTML += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
                         <label style="font-size:14px; font-weight:bold; color:var(--text-soft);">Ваш ответ:</label>
@@ -465,14 +467,6 @@ window.renderTopicPage = function(courseId, topicId) {
         }
     };
 
-    window.saveSelfAnswer = function(code) {
-        var val = document.getElementById(`self_input_${code}`).value;
-        if (!window.state.results) window.state.results = {};
-        window.state.results[`self_${code}`] = val;
-        window.saveStudentData();
-        window.showToast("Ответ сохранен!", "ok");
-    };
-
     window.startInlineTest = function(topicId, selfWorkCode) {
         var contentArea = document.getElementById("topicContent"); 
         var questions = [];
@@ -484,9 +478,16 @@ window.renderTopicPage = function(courseId, topicId) {
             var course = window.MDK_DATA[window.state.activeCourseId];
             var topic = null; course.sections.forEach(s => { s.topics.forEach(t => { if (t.id === topicId) topic = t; }); });
             if (topic && topic.test) questions = [...topic.test];
+            
+            // ДОБАВЛЯЕМ СЛОЖНЫЕ ВОПРОСЫ
+            if (window.HARD_TESTS && window.HARD_TESTS[topicId]) {
+                questions = questions.concat(window.HARD_TESTS[topicId]);
+            }
         }
         
         if (!questions.length) { contentArea.innerHTML = "<p>Вопросы не найдены.</p>"; return; }
+        
+        questions = questions.sort(() => Math.random() - 0.5);
         
         var currentQ = 0, correct = 0;
         function renderQ() {
@@ -521,7 +522,6 @@ window.renderHomePage = function() {
     var title = course ? course.title : "Добро пожаловать!"; 
     var module = course ? course.module : "Выберите раздел.";
     
-    // Палитра (выбор МДК) уже в шапке, здесь дублируем для удобства
     var paletteHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
     Object.keys(window.MDK_DATA || {}).forEach(id => {
         var c = window.MDK_DATA[id];
