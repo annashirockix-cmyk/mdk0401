@@ -279,17 +279,24 @@ window.renderAchievementsPage = function() {
     app.innerHTML += `<section class="hero"><h1>🏆 Достижения</h1></section><div class="module">Ваши ачивки тут.</div>`;
 };
 
+// ==========================================
+// 3. СТРАНИЦА ТЕМЫ (С ВКЛАДКАМИ ПРАКТИКА И САМОСТОЯТЕЛЬНАЯ)
+// ==========================================
 window.renderTopicPage = function(courseId, topicId) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var course = window.MDK_DATA[courseId]; if (!course) { app.innerHTML = '<div class="module">Курс не найден</div>'; return; }
     var topic = null; course.sections.forEach(s => { s.topics.forEach(t => { if (t.id === topicId) topic = t; }); });
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
+    
     var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = topic.code + " " + topic.title;
     app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
     app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
     
+    // Вкладки: Лекции, Практика, Самостоятельная, Тест
     var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
         <button class="btn tab active" id="tab-lectures" onclick="window.switchTopicTab('lectures')">📖 Лекции</button>
+        ${(topic.practicals && topic.practicals.length) ? `<button class="btn tab ghost" id="tab-practicals" onclick="window.switchTopicTab('practicals')">🛠️ Практика</button>` : ''}
+        ${(topic.selfWork && topic.selfWork.length) ? `<button class="btn tab ghost" id="tab-selfwork" onclick="window.switchTopicTab('selfwork')">📝 Самостоятельная</button>` : ''}
         ${(topic.test && topic.test.length) ? `<button class="btn tab ghost" id="tab-test" onclick="window.switchTopicTab('test')">🎯 Тест</button>` : ''}
     </div><div id="topicContent" class="module"></div>`;
     app.innerHTML += tabsHtml;
@@ -305,6 +312,27 @@ window.renderTopicPage = function(courseId, topicId) {
                 contentArea.innerHTML += `<details class="lec-accordion" open style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;"><summary style="padding:15px; font-weight:bold; cursor:pointer;">${lec.code} ${lec.title}</summary><div class="lec-content" style="padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;">${lec.content}</div></details>`;
             });
             window.unlockAchievement('reader');
+        }
+        else if (tabName === 'practicals') {
+            if (!topic.practicals || !topic.practicals.length) { contentArea.innerHTML = "<p>Практических работ нет.</p>"; return; }
+            topic.practicals.forEach(prac => {
+                contentArea.innerHTML += `<div class="card" style="margin-bottom:15px;">
+                    <h3 style="color:var(--accent); margin-top:0;">${prac.code} ${prac.title}</h3>
+                    <p><b>Цель:</b> ${prac.goal}</p>
+                    <p><b>Задание:</b> ${prac.task}</p>
+                    ${(prac.variants && prac.variants.length) ? `<p><b>Варианты:</b> ${prac.variants.join(', ')}</p>` : ''}
+                </div>`;
+            });
+        }
+        else if (tabName === 'selfwork') {
+            if (!topic.selfWork || !topic.selfWork.length) { contentArea.innerHTML = "<p>Самостоятельных работ нет.</p>"; return; }
+            topic.selfWork.forEach(work => {
+                contentArea.innerHTML += `<div class="card" style="margin-bottom:15px;">
+                    <h3 style="color:var(--accent); margin-top:0;">${work.code} ${work.title}</h3>
+                    <p><b>Задание:</b> ${work.task}</p>
+                    ${(work.questions && work.questions.length) ? `<p><b>Вопросы:</b></p><ul>${work.questions.map(q => `<li>${q}</li>`).join('')}</ul>` : ''}
+                </div>`;
+            });
         }
         else if (tabName === 'test') {
             if (!topic.test || !topic.test.length) { contentArea.innerHTML = "<p>Вопросов нет.</p>"; return; }
@@ -363,7 +391,7 @@ window.renderHomePage = function() {
 };
 
 // ==========================================
-// 3. РОУТИНГ И ВХОД
+// 4. РОУТИНГ И ВХОД
 // ==========================================
 function setupLogin() {
     var overlay = document.getElementById("loginOverlay"); if (!overlay) return;
@@ -465,24 +493,10 @@ function setupDrawer() {
     }
 }
 
-function setupThemeToggle() {
-    var btn = document.getElementById('themeToggle');
-    if (btn) {
-        btn.onclick = function() {
-            var current = document.documentElement.getAttribute('data-theme') || 'dark';
-            var next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('mdk.theme', next);
-            window.showToast(next === 'dark' ? 'Тёмная тема' : 'Светлая тема', 'ok');
-        };
-    }
-}
-
 window.addEventListener("hashchange", window.router);
 window.addEventListener("DOMContentLoaded", function() {
     setupLogin(); 
     setupDrawer(); 
-    setupThemeToggle(); 
     window.renderUserChip();
     window.router();
 });
