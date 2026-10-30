@@ -142,7 +142,7 @@ window.saveSelfAnswer = function(code) {
 };
 
 // ==========================================
-// 3. РЕНДЕР СТРАНИЦ (ВСЕ ФУНКЦИИ)
+// 3. РЕНДЕР СТРАНИЦ
 // ==========================================
 window.renderVideosPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
@@ -408,7 +408,19 @@ window.renderAchievementsPage = function() {
 window.renderTopicPage = function(courseId, topicId) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var course = window.MDK_DATA[courseId]; if (!course) { app.innerHTML = '<div class="module">Курс не найден</div>'; return; }
-    var topic = null; course.sections.forEach(s => { s.topics.forEach(t => { if (t.id === topicId) topic = t; }); });
+    var topic = null; 
+    
+    // Ищем тему в стандартных данных
+    course.sections.forEach(s => { s.topics.forEach(t => { if (t.id === topicId) topic = t; }); });
+    
+    // Если не нашли, ищем в кастомных
+    if (!topic) {
+        var customTopics = JSON.parse(localStorage.getItem('mdk_custom_topics') || '{}');
+        if (customTopics[courseId]) {
+            topic = customTopics[courseId].find(t => t.id === topicId);
+        }
+    }
+
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
     
     var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = topic.code + " " + topic.title;
@@ -538,7 +550,22 @@ window.renderTopicPage = function(courseId, topicId) {
 window.renderHomePage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var mdkId = window.state.activeCourseId || "07.01"; 
-    var course = window.MDK_DATA && window.MDK_DATA[mdkId];
+    
+    // Берем копию курса, чтобы не мутировать оригинал
+    var course = window.MDK_DATA && window.MDK_DATA[mdkId] ? JSON.parse(JSON.stringify(window.MDK_DATA[mdkId])) : null;
+
+    // ДОБАВЛЯЕМ КАСТОМНЫЕ ТЕМЫ ИЗ АДМИНКИ
+    if (course) {
+        var customTopics = JSON.parse(localStorage.getItem('mdk_custom_topics') || '{}');
+        if (customTopics[mdkId] && customTopics[mdkId].length > 0) {
+            if (course.sections.length > 0) {
+                course.sections[0].topics = (course.sections[0].topics || []).concat(customTopics[mdkId]);
+            } else {
+                course.sections.push({ title: "Добавленные темы", topics: customTopics[mdkId] });
+            }
+        }
+    }
+
     var title = course ? course.title : "Добро пожаловать!"; 
     var module = course ? course.module : "Выберите раздел.";
     
