@@ -35,6 +35,7 @@ html, body {
   margin: 0; padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: #0f172a; color: #f8fafc; line-height: 1.5; min-height: 100%;
+  transition: background 0.3s ease;
 }
 
 h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
@@ -104,20 +105,30 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .journal-table th { background: var(--card-soft); font-weight: 600; color: var(--text-soft); }
 
 /* =====================================================
-   ФОНЫ ДЛЯ МАГАЗИНА (ПУТИ НА ПАПКУ fonts)
+   ФОНЫ ДЛЯ МАГАЗИНА (ИСПРАВЛЕНЫ ПУТИ)
    ===================================================== */
 .bg-underwater { background: linear-gradient(180deg, #0c4a6e 0%, #082f49 100%); }
-.bg-foggy-forest { background-image: url('./fonts/Background 1.png'); background-size: cover; background-position: center; }
-.bg-pumpkins { background-image: url('./fonts/Background 2.png'); background-size: cover; background-position: center; }
-.bg-spooky-room { background-image: url('./fonts/Background 3.png'); background-size: cover; background-position: center; }
-.bg-halloween { background-image: url('./fonts/Background 7.png'); background-size: cover; background-position: center; }
-.bg-red-forest { background-image: url('./fonts/Background 9.png'); background-size: cover; background-position: center; }
-.bg-lanterns { background-image: url('./fonts/Background 10.png'); background-size: cover; background-position: center; }
-.bg-dark-table { background-image: url('./fonts/Background 15.png'); background-size: cover; background-position: center; }
-.bg-graveyard { background-image: url('./fonts/Background 28.png'); background-size: cover; background-position: center; }
-.bg-cats-notebook { background-image: url('./fonts/Background 31.png'); background-size: cover; background-position: center; }
-.bg-cats-yarn { background-image: url('./fonts/Background 33.png'); background-size: cover; background-position: center; }
+.bg-foggy-forest { background-image: url('./img/Background 1.png'); background-size: cover; background-position: center; }
+.bg-pumpkins { background-image: url('./img/Background 2.png'); background-size: cover; background-position: center; }
+.bg-spooky-room { background-image: url('./img/Background 3.png'); background-size: cover; background-position: center; }
+.bg-halloween { background-image: url('./img/Background 7.png'); background-size: cover; background-position: center; }
+.bg-red-forest { background-image: url('./img/Background 9.png'); background-size: cover; background-position: center; }
+.bg-lanterns { background-image: url('./img/Background 10.png'); background-size: cover; background-position: center; }
+.bg-dark-table { background-image: url('./img/Background 15.png'); background-size: cover; background-position: center; }
+.bg-graveyard { background-image: url('./img/Background 28.png'); background-size: cover; background-position: center; }
+.bg-cats-notebook { background-image: url('./img/Background 31.png'); background-size: cover; background-position: center; }
+.bg-cats-yarn { background-image: url('./img/Background 33.png'); background-size: cover; background-position: center; }
 .bg-stone-alley { background: linear-gradient(135deg, #4b5563, #1f2937); }
+
+/* Эффекты фона (должны применяться к body) */
+body.fx-aurora-bg { background: linear-gradient(135deg, #0f172a, #1e3a8a, #0f172a); background-size: 400% 400%; animation: aurora 15s ease infinite; }
+@keyframes aurora { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+body.fx-matrix-bg { background: #000; color: #0f0; }
+body.fx-matrix-bg::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 0, 0.05) 2px, rgba(0, 255, 0, 0.05) 4px); pointer-events: none; z-index: -1; }
+
+body.fx-starfield-bg { background: #000; }
+body.fx-starfield-bg::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px); background-size: 50px 50px; opacity: 0.3; pointer-events: none; z-index: -1; }
 
 /* ---------- МОБИЛЬНАЯ АДАПТАЦИЯ ---------- */
 @media (max-width: 768px) {

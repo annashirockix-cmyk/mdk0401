@@ -4,7 +4,8 @@ window.state = window.state || {
     student: null, staff: null, xp: 0, activeCourseId: "07.01", results: {},
     avatar: null, nickname: null, purchasedThemes: [],
     purchasedTextEffects: [], activeTextEffect: "none",
-    purchasedBgEffects: [], activeBgEffect: "none", purchasedCardEffects: [], activeCardEffect: "none"
+    purchasedBgEffects: [], activeBgEffect: "none", purchasedCardEffects: [], activeCardEffect: "none",
+    unlockedAchievements: []
 };
 
 try { 
@@ -48,6 +49,7 @@ window.getLevel = function(xp) { return Math.floor((xp || 0) / 100) + 1; };
 window.getLevelTitle = function(lvl) { if (lvl < 3) return "Новичок"; if (lvl < 5) return "Ученик"; if (lvl < 8) return "Практикант"; if (lvl < 12) return "Мастер"; return "Эксперт"; };
 
 window.applyGlobalEffects = function() {
+    // Текстовые эффекты
     var textFx = window.state.activeTextEffect || "none"; 
     var logo = document.getElementById("mainLogo"); 
     var userName = document.getElementById("userChipName");
@@ -60,8 +62,16 @@ window.applyGlobalEffects = function() {
             logo.classList.add("rainbow-text");
         }
     }
+    // Эффекты карточек
     var cardFx = window.state.activeCardEffect || "none";
     document.querySelectorAll(".module").forEach(function(el) { el.classList.remove("fx-holo-card", "fx-3d-card"); if (cardFx !== "none") el.classList.add(cardFx); });
+    
+    // Фоновые эффекты (применяем класс к body)
+    document.body.className = ""; // Сбрасываем предыдущий
+    var bgFx = window.state.activeBgEffect || "none";
+    if (bgFx !== "none") {
+        document.body.classList.add(bgFx);
+    }
 };
 
 window.renderUserChip = function() {
@@ -121,11 +131,19 @@ window.renderVideosPage = function() {
 
 window.renderTrainingListPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎯 Тренировка</h1><p>Выберите предмет</p></section>';
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎯 Тренировка</h1><p>Выберите предмет или тренажер</p></section>';
     
     var grid = document.createElement("div");
     grid.style.cssText = "display:flex; flex-direction:column; gap:12px;";
     
+    // Тренажер G-кода
+    var gcodeCard = document.createElement("a");
+    gcodeCard.href = "#/gcode-trainer";
+    gcodeCard.className = "module";
+    gcodeCard.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:1px solid var(--accent); border-radius:12px;";
+    gcodeCard.innerHTML = `<h3 style="margin-top:0; color:var(--accent);">📐 Тренажер G-кода</h3><p>Интерактивный симулятор станка с ЧПУ. Изучайте команды в игровой форме.</p>`;
+    grid.appendChild(gcodeCard);
+
     var mdkList = [
         { id: "07.01", title: "МДК 07.01", desc: "Технология обработки на станках с ПУ" },
         { id: "04.01", title: "МДК 04.01", desc: "Диагностика и обслуживание" },
@@ -142,6 +160,16 @@ window.renderTrainingListPage = function() {
         grid.appendChild(card);
     });
     app.appendChild(grid);
+};
+
+window.renderGcodeTrainerPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.innerHTML = '<a class="backlink" href="#/training" style="color:var(--accent);">← Назад к тренировкам</a><section class="hero"><h1>📐 Тренажер G-кода</h1></section>';
+    var iframe = document.createElement("iframe");
+    iframe.src = "./gcode_trainer_advanced.html";
+    iframe.style = "width:100%; height:80vh; border:none; border-radius:12px; background:#0d1117;";
+    iframe.setAttribute("allow", "fullscreen");
+    app.appendChild(iframe);
 };
 
 window.renderSafetyPage = function() {
@@ -329,7 +357,24 @@ window.renderAchievementsPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Достижения";
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
-    app.innerHTML += `<section class="hero"><h1>🏆 Достижения</h1></section><div class="module">Ваши ачивки тут.</div>`;
+    app.innerHTML += `<section class="hero"><h1>🏆 Достижения</h1></section>`;
+    
+    var allAch = window.ACHIEVEMENTS || [];
+    var unlocked = window.state.unlockedAchievements || [];
+    
+    var html = `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px;">`;
+    allAch.forEach(ach => {
+        var isUnlocked = unlocked.includes(ach.id);
+        var opacity = isUnlocked ? "1" : "0.4";
+        var icon = isUnlocked ? ach.icon : "🔒";
+        html += `<div class="module" style="padding:20px; text-align:center; opacity:${opacity};">
+            <div style="font-size:48px; margin-bottom:10px;">${icon}</div>
+            <h4 style="margin:0 0 5px 0; color:var(--accent);">${ach.title}</h4>
+            <p style="font-size:13px; color:var(--muted); margin:0;">${ach.desc}</p>
+        </div>`;
+    });
+    html += `</div>`;
+    app.innerHTML += html;
 };
 
 // ==========================================
@@ -401,6 +446,14 @@ window.renderTopicPage = function(courseId, topicId) {
                     } else {
                         contentArea.innerHTML += `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px; margin-bottom:15px;"><h3>🎯 Тест самоконтроля</h3><p style="font-size:14px; color:var(--muted);">Вопросов: ${testData.questions.length}</p><button class="btn" onclick="window.startInlineTest('${topic.id}', '${work.code}')" style="padding:10px 20px;">Начать тест</button></div>`;
                     }
+                } else {
+                    // Если теста нет, предлагаем письменный ответ
+                    var savedAns = window.state.results[`self_${work.code}`] || "";
+                    contentArea.innerHTML += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
+                        <label style="font-size:14px; font-weight:bold; color:var(--text-soft);">Ваш ответ:</label>
+                        <textarea class="self-input" id="self_input_${work.code}" rows="4" style="margin-top:8px;" placeholder="Введите ответ...">${savedAns}</textarea>
+                        <button class="btn" onclick="window.saveSelfAnswer('${work.code}')" style="margin-top:10px;">💾 Сохранить ответ</button>
+                    </div>`;
                 }
             });
         }
@@ -410,6 +463,14 @@ window.renderTopicPage = function(courseId, topicId) {
             if (isDone) contentArea.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px;"><h3 style="color:var(--ok);">✅ Тест уже пройден!</h3><p>Оценка: <b>${isDone.grade}</b></p><button class="btn" onclick="window.startInlineTest('${topic.id}', null)">Пройти заново</button></div>`;
             else contentArea.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px;"><h3>🎯 Тест по теме</h3><p>Вопросов: ${topic.test.length}</p><button class="btn" onclick="window.startInlineTest('${topic.id}', null)" style="padding:15px 30px; font-size:16px;">Начать тест</button></div>`;
         }
+    };
+
+    window.saveSelfAnswer = function(code) {
+        var val = document.getElementById(`self_input_${code}`).value;
+        if (!window.state.results) window.state.results = {};
+        window.state.results[`self_${code}`] = val;
+        window.saveStudentData();
+        window.showToast("Ответ сохранен!", "ok");
     };
 
     window.startInlineTest = function(topicId, selfWorkCode) {
@@ -460,10 +521,20 @@ window.renderHomePage = function() {
     var title = course ? course.title : "Добро пожаловать!"; 
     var module = course ? course.module : "Выберите раздел.";
     
+    // Палитра (выбор МДК) уже в шапке, здесь дублируем для удобства
+    var paletteHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
+    Object.keys(window.MDK_DATA || {}).forEach(id => {
+        var c = window.MDK_DATA[id];
+        var isActive = id === mdkId;
+        paletteHtml += `<button class="btn ${isActive ? '' : 'ghost'}" onclick="window.state.activeCourseId='${id}'; window.saveStudentData(); window.renderHomePage();" style="padding:10px 20px;">${c.shortName}</button>`;
+    });
+    paletteHtml += `</div>`;
+
     app.innerHTML = `<section class="hero" style="text-align: left; padding: 40px;">
         <span class="brand-badge" style="margin-bottom: 10px; display: inline-block;">${course ? course.shortName : "Портал"}</span>
         <h1 style="font-size: 2.2rem; margin-bottom: 10px;">${title}</h1>
         <p style="font-size: 1.1rem; color: var(--text-soft);">${module}</p>
+        ${paletteHtml}
     </section>`;
     
     if (course && course.sections) {
@@ -554,6 +625,7 @@ window.router = function() {
     if (page === "videos") { window.renderVideosPage(); return; }
     if (page === "safety") { window.renderSafetyPage(); return; }
     if (page === "passports") { window.renderPassportsPage(); return; }
+    if (page === "gcode-trainer") { window.renderGcodeTrainerPage(); return; }
     
     if (page === "training") { 
         if (parts.length > 1) {

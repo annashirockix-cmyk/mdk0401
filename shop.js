@@ -34,6 +34,15 @@ const TEXT_EFFECTS = [
     { id: "fx-typewriter", title: "Пишущая машинка", price: 200 }
 ];
 
+// Добавлены шрифты
+const FONTS = [
+    { id: "font-default", title: "Стандартный", price: 0, font: "'Segoe UI', sans-serif" },
+    { id: "font-mono", title: "Моноширинный", price: 100, font: "'Courier New', monospace" },
+    { id: "font-serif", title: "С засечками", price: 100, font: "'Times New Roman', serif" },
+    { id: "font-monomakh", title: "Мономах", price: 300, font: "'Monomakh', serif" },
+    { id: "font-sacramento", title: "Каллиграфический", price: 400, font: "'Sacramento', cursive" }
+];
+
 const BG_EFFECTS = [
     { id: "none", title: "Без эффекта", price: 0 },
     { id: "fx-aurora-bg", title: "Северное сияние", price: 500 },
@@ -59,6 +68,9 @@ const CARD_EFFECTS = [
     { id: "fx-3d-card", title: "3D карточка", price: 800 }
 ];
 
+// Экспортируем для app.js
+window.ACHIEVEMENTS = ACHIEVEMENTS;
+
 window.renderShopPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     document.getElementById("crumbs").textContent = "Магазин XP";
@@ -78,6 +90,7 @@ window.renderShopPage = function() {
                           (type === 'theme' && (window.state.purchasedThemes || []).includes(item.id)) ||
                           (type === 'avatar' && window.state.avatar === item.url) ||
                           (type === 'text' && (window.state.purchasedTextEffects || []).includes(item.id)) ||
+                          (type === 'font' && (window.state.purchasedFonts || []).includes(item.id)) ||
                           (type === 'bg' && (window.state.purchasedBgEffects || []).includes(item.id)) ||
                           (type === 'card' && (window.state.purchasedCardEffects || []).includes(item.id)) ||
                           item.price === 0;
@@ -86,6 +99,7 @@ window.renderShopPage = function() {
             if (type === 'theme') isActive = localStorage.getItem("mdk.theme_active") === item.id;
             if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar);
             if (type === 'text') isActive = (window.state.activeTextEffect || 'none') === item.id;
+            if (type === 'font') isActive = (window.state.activeFont || 'font-default') === item.id;
             if (type === 'bg') isActive = (window.state.activeBgEffect || 'none') === item.id;
             if (type === 'card') isActive = (window.state.activeCardEffect || 'none') === item.id;
 
@@ -110,6 +124,9 @@ window.renderShopPage = function() {
             if (type === 'text') {
                 preview = `<div class="${item.id !== 'none' ? item.id : ''}" data-text="Текст" style="font-size:20px; font-weight:bold; margin-bottom:10px; height:40px;">${item.title}</div>`;
             }
+            if (type === 'font') {
+                preview = `<div style="font-family:${item.font}; font-size:20px; font-weight:bold; margin-bottom:10px; height:40px;">${item.title}</div>`;
+            }
             if (type === 'bg') {
                 preview = `<div class="${item.id !== 'none' ? item.id : ''}" style="height:60px; border-radius:6px; margin-bottom:10px; border:1px solid var(--border);"></div>`;
             }
@@ -129,6 +146,7 @@ window.renderShopPage = function() {
     app.innerHTML += renderCategory("🎨 Темы оформления", THEMES, "theme");
     app.innerHTML += renderCategory("👤 Аватары", AVATARS, "avatar");
     app.innerHTML += renderCategory("✨ Эффекты текста", TEXT_EFFECTS, "text");
+    app.innerHTML += renderCategory("🔤 Шрифты", FONTS, "font");
     app.innerHTML += renderCategory("🌌 Эффекты фона", BG_EFFECTS, "bg");
     app.innerHTML += renderCategory("🃏 Эффекты карточек", CARD_EFFECTS, "card");
 };
@@ -146,6 +164,7 @@ window.buyShopItem = function(type, id, price, value) {
         
         if (type === 'theme') { if(!window.state.purchasedThemes) window.state.purchasedThemes = []; window.state.purchasedThemes.push(id); }
         if (type === 'text') { if(!window.state.purchasedTextEffects) window.state.purchasedTextEffects = []; window.state.purchasedTextEffects.push(id); }
+        if (type === 'font') { if(!window.state.purchasedFonts) window.state.purchasedFonts = []; window.state.purchasedFonts.push(id); }
         if (type === 'bg') { if(!window.state.purchasedBgEffects) window.state.purchasedBgEffects = []; window.state.purchasedBgEffects.push(id); }
         if (type === 'card') { if(!window.state.purchasedCardEffects) window.state.purchasedCardEffects = []; window.state.purchasedCardEffects.push(id); }
         
@@ -163,6 +182,13 @@ window.applyShopItem = function(type, id, value) {
         window.state.avatar = value || null;
     } else if (type === 'text') {
         window.state.activeTextEffect = id;
+    } else if (type === 'font') {
+        window.state.activeFont = id;
+        // Находим шрифт в списке FONTS
+        var fontObj = FONTS.find(f => f.id === id);
+        if (fontObj) {
+            document.body.style.fontFamily = fontObj.font;
+        }
     } else if (type === 'bg') {
         window.state.activeBgEffect = id;
     } else if (type === 'card') {
