@@ -34,18 +34,48 @@
 html, body {
   margin: 0; padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: #0f172a; color: #f8fafc; line-height: 1.5; min-height: 100%;
-  transition: background 0.3s ease;
+  background: var(--bg); color: var(--text); line-height: 1.5; min-height: 100%;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 
+/* --- БАЗОВАЯ ТЕМА (Тёмная) --- */
 :root {
   --bg: #0f172a; --card: #1e293b; --card-soft: #334155;
   --text: #f8fafc; --text-soft: #cbd5e1; --muted: #94a3b8;
   --border: #475569; --accent: #3b82f6; --ok: #10b981;
   --err: #ef4444; --gold: #f59e0b;
 }
+
+/* --- ТЕМЫ ОФОРМЛЕНИЯ --- */
+[data-theme="light"] {
+  --bg: #f5f2ec; --card: #ffffff; --card-soft: #e2e8f0;
+  --text: #1e293b; --text-soft: #475569; --muted: #64748b;
+  --border: #cbd5e1; --accent: #2563eb; --ok: #059669;
+  --err: #dc2626; --gold: #d97706;
+}
+[data-theme="neon"] {
+  --bg: #09090b; --card: #18181b; --card-soft: #27272a;
+  --text: #ff00cc; --text-soft: #d946ef; --muted: #a21caf;
+  --border: #701a75; --accent: #ff00cc; --ok: #00ffcc;
+  --err: #ff0055; --gold: #ffff00;
+}
+[data-theme="matrix"] {
+  --bg: #000000; --card: #0a0a0a; --card-soft: #111111;
+  --text: #00ff00; --text-soft: #00cc00; --muted: #009900;
+  --border: #003300; --accent: #00ff00; --ok: #00ff00;
+  --err: #ff0000; --gold: #ccff00;
+}
+[data-theme="cyberpunk"] {
+  --bg: #0a0015; --card: #14002a; --card-soft: #1e0040;
+  --text: #00ffff; --text-soft: #ff00ff; --muted: #9d00ff;
+  --border: #3d0066; --accent: #ff00ff; --ok: #00ffcc;
+  --err: #ff0055; --gold: #ffff00;
+}
+
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
 
 /* ---------- ВЕРХНЯЯ ПАНЕЛЬ ---------- */
 .topbar {
@@ -56,10 +86,10 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 }
 .burger-btn { background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 5px; }
 .burger-btn span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; }
-.brand-badge { background: linear-gradient(135deg, var(--accent), #2563eb); color: #fff; font-weight: bold; padding: 6px 12px; border-radius: 8px; font-size: 14px; }
+.brand-badge { background: linear-gradient(135deg, var(--accent), var(--accent)); color: #fff; font-weight: bold; padding: 6px 12px; border-radius: 8px; font-size: 14px; }
 .topbar-status { display: flex; align-items: center; gap: 10px; margin-left: auto; }
-.status-pill { background: var(--bg); padding: 4px 10px; border-radius: 20px; font-size: 13px; border: 1px solid var(--border); }
-.user-chip { display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 4px 12px 4px 4px; border-radius: 20px; border: 1px solid var(--border); cursor: pointer; }
+.status-pill { background: var(--bg); padding: 4px 10px; border-radius: 20px; font-size: 13px; border: 1px solid var(--border); color: var(--text); }
+.user-chip { display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 4px 12px 4px 4px; border-radius: 20px; border: 1px solid var(--border); cursor: pointer; color: var(--text); }
 
 /* ---------- ШТОРКА ---------- */
 .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 998; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
@@ -75,8 +105,8 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 /* ---------- ОСНОВНОЙ КОНТЕНТ ---------- */
 #crumbs { padding: 10px 20px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border); }
 #app { padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
-.module { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-.hero { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: #fff; padding: 30px 20px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
+.module { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.hero { background: linear-gradient(135deg, var(--card-soft) 0%, var(--accent) 100%); color: #fff; padding: 30px 20px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
 .hero h1 { margin: 0 0 10px 0; font-size: 24px; }
 .hero p { margin: 0; opacity: 0.9; }
 
@@ -92,7 +122,7 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .btn:hover { opacity: 0.9; }
 .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
 .btn.ghost:hover { background: var(--card-soft); }
-.btn-primary { background: #1e40af; color: #fff; }
+.btn-primary { background: var(--accent); color: #fff; }
 .btn-danger { background: var(--err); color: #fff; }
 .self-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; background: var(--bg); color: var(--text); }
 .self-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
@@ -103,7 +133,7 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .journal-table th { background: var(--card-soft); font-weight: 600; color: var(--text-soft); }
 
 /* =====================================================
-   ФОНЫ ДЛЯ МАГАЗИНА (ИСПРАВЛЕНЫ ПУТИ НА fonts/)
+   ФОНЫ ДЛЯ МАГАЗИНА
    ===================================================== */
 .bg-underwater { background: linear-gradient(180deg, #0c4a6e 0%, #082f49 100%); }
 .bg-foggy-forest { background-image: url('./fonts/Background 1.png'); background-size: cover; background-position: center; }
