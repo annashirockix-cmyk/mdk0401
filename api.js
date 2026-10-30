@@ -42,57 +42,28 @@ async function fetchAPI(action, params, method) {
 window.API = {
     login: function (user, pass) {
         var email = String(user || "").trim().toLowerCase();
-        return fetchAPI("login", {
-            email: email,
-            username: email,
-            password: pass
-        }).then(function (res) {
-            if (res && res.success) res.ok = true;
-            return res;
-        });
+        return fetchAPI("login", { email: email, username: email, password: pass }).then(function (res) { if (res && res.success) res.ok = true; return res; });
     },
     getStudents: function () {
-        return fetchAPI("getStudents").then(function (res) {
-            if (res && res.success) res.ok = true;
-            return res;
-        });
+        return fetchAPI("getStudents").then(function (res) { if (res && res.success) res.ok = true; return res; });
     },
-    getStudentData: function (key) { return fetchAPI("getstudentdata", { key: key }); },
     saveStudent: function (key, name, group, payload) {
-        return fetchAPI("save", { key: key, name: name, group: group, payload: payload }, "POST");
+        return fetchAPI("saveStudent", { email: key.split('|')[0], name: name, group: group, payload: payload }, "POST");
     },
-    grantXP: function (key, amount) {
-        return fetchAPI("grantXP", { key: key, amount: amount }, "POST");
+    getSchedule: function () { return fetchAPI("getSchedule"); },
+    saveSchedule: function (data) { return fetchAPI("saveSchedule", { schedule: JSON.stringify(data) }, "POST"); },
+    
+    // НОВЫЕ МЕТОДЫ
+    uploadFile: function (fileName, mimeType, fileData) {
+        return fetchAPI("upload_file", { fileName: fileName, mimeType: mimeType, fileData: fileData }, "POST");
     },
-    deleteStudent: function (key) {
-        return fetchAPI("deleteStudent", { key: key }, "POST");
+    getCustomContent: function () {
+        return fetchAPI("get_custom_content");
     },
-    getChat: function (group) { return fetchAPI("chatload", { group: group }); },
-    sendChat: function (group, key, name, text) {
-        return fetchAPI("chatsave", { group: group, key: key, name: name, text: text }, "POST");
+    saveCustomContent: function (data) {
+        return fetchAPI("save_custom_content", data, "POST");
     },
-    getSchedule: function () { return fetchAPI("getschedule"); },
-    saveSchedule: function (data) {
-        return fetchAPI("saveschedule", { data: JSON.stringify(data) }, "POST");
-    },
-    changePassword: function (email, oldPass, newPass) {
-        return fetchAPI("changePassword", {
-            email: String(email || "").trim().toLowerCase(),
-            oldPassword: oldPass,
-            newPassword: newPass
-        }, "POST").then(function (res) {
-            if (res && res.success) res.ok = true;
-            return res;
-        });
-    },
-    changeName: function (email, password, newName) {
-        return fetchAPI("changeName", {
-            email: String(email || "").trim().toLowerCase(),
-            password: password,
-            name: newName
-        }, "POST").then(function (res) {
-            if (res && res.success) res.ok = true;
-            return res;
-        });
+    deleteCustomContent: function (id) {
+        return fetchAPI("delete_custom_content", { id: id }, "POST");
     }
 };
