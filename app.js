@@ -52,7 +52,6 @@ window.saveStudentData = function() {
 window.getLevel = function(xp) { return Math.floor((xp || 0) / 100) + 1; };
 window.getLevelTitle = function(lvl) { if (lvl < 3) return "Новичок"; if (lvl < 5) return "Ученик"; if (lvl < 8) return "Практикант"; if (lvl < 12) return "Мастер"; return "Эксперт"; };
 
-// ФУНКЦИЯ ДЛЯ СКРЫТИЯ/ПОКАЗА МЕНЮ ПРЕПОДАВАТЕЛЯ
 window.updateMenuVisibility = function() {
     var isTeacher = window.state.staff && (window.state.staff.role === "teacher" || window.state.staff.role === "admin");
     
@@ -111,7 +110,7 @@ window.renderUserChip = function() {
     }
     var xpEl = document.getElementById("xpCount"); if (xpEl) xpEl.textContent = `🌟 ${window.state.xp} XP`;
     window.applyGlobalEffects();
-    window.updateMenuVisibility(); // Обновляем меню при смене пользователя
+    window.updateMenuVisibility();
 };
 
 window.unlockAchievement = function(id) {
@@ -143,18 +142,397 @@ window.saveSelfAnswer = function(code) {
 };
 
 // ==========================================
-// 3. РЕНДЕР СТРАНИЦ
+// 3. РЕНДЕР СТРАНИЦ (ВСЕ ФУНКЦИИ)
 // ==========================================
-// (Функции renderVideosPage, renderTrainingListPage, renderGcodeTrainerPage, renderSafetyPage, renderPassportsPage, renderStudentGradesPage, renderTeacherJournalPage, addGrade, renderCertificatePage, renderProfilePage, renderAchievementsPage остаются без изменений, как в предыдущем ответе)
+window.renderVideosPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎬 Видеоуроки</h1></section><div class="module" id="videosList"></div>';
+    var list = document.getElementById("videosList");
+    var vids = window.GLOBAL_DATA && window.GLOBAL_DATA.videos ? window.GLOBAL_DATA.videos : [];
+    if (!vids.length) { list.innerHTML = "<p>Видео пока нет.</p>"; return; }
+    vids.forEach(v => {
+        list.innerHTML += `<div style="margin-bottom:20px; background:var(--card-soft); padding:15px; border-radius:8px; border:1px solid var(--border);"><b style="color:var(--accent); font-size:16px;">${v.title}</b><p style="font-size:14px; margin:5px 0;">${v.description||''}</p><video src="${v.file}" controls preload="metadata" playsinline style="width:100%; border-radius:8px; max-height:70vh; background:#000;"><source src="${v.file}" type="video/mp4">Ваш браузер не поддерживает видео.</video><p style="margin-top:8px;"><a class="btn ghost" href="${v.file}" target="_blank" rel="noopener">Открыть файл в новой вкладке</a></p></div>`;
+    });
+};
 
-// ... [вставьте сюда код renderVideosPage и других функций из предыдущего ответа] ...
-// Для краткости я не дублирую их здесь, они остаются точно такими же.
+window.renderTrainingListPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🎯 Тренировка</h1><p>Выберите предмет или тренажер</p></section>';
+    
+    var grid = document.createElement("div");
+    grid.style.cssText = "display:flex; flex-direction:column; gap:12px;";
+    
+    var gcodeCard = document.createElement("a");
+    gcodeCard.href = "#/gcode-trainer";
+    gcodeCard.className = "module";
+    gcodeCard.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:1px solid var(--accent); border-radius:12px;";
+    gcodeCard.innerHTML = `<h3 style="margin-top:0; color:var(--accent);">📐 Тренажер G-кода</h3><p>Интерактивный симулятор станка с ЧПУ. Изучайте команды в игровой форме.</p>`;
+    grid.appendChild(gcodeCard);
+
+    var mdkList = [
+        { id: "07.01", title: "МДК 07.01", desc: "Технология обработки на станках с ПУ" },
+        { id: "04.01", title: "МДК 04.01", desc: "Диагностика и обслуживание" },
+        { id: "02.01", title: "МДК 02.01", desc: "Сборка типовых сборочных единиц" },
+        { id: "02.02", title: "МДК 02.02", desc: "Управляющие программы для сборки" }
+    ];
+
+    mdkList.forEach(mdk => {
+        var card = document.createElement("a");
+        card.href = "#/training/" + mdk.id;
+        card.className = "module";
+        card.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:1px solid var(--border); border-radius:12px;";
+        card.innerHTML = `<h3 style="margin-top:0; color:var(--accent);">${mdk.title}</h3><p>${mdk.desc}</p>`;
+        grid.appendChild(card);
+    });
+    app.appendChild(grid);
+};
+
+window.renderGcodeTrainerPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.innerHTML = '<a class="backlink" href="#/training" style="color:var(--accent);">← Назад к тренировкам</a><section class="hero"><h1>📐 Тренажер G-кода</h1></section>';
+    var iframe = document.createElement("iframe");
+    iframe.src = "./gcode_trainer_advanced.html";
+    iframe.style = "width:100%; height:80vh; border:none; border-radius:12px; background:#0d1117;";
+    iframe.setAttribute("allow", "fullscreen");
+    app.appendChild(iframe);
+};
+
+window.renderSafetyPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>🦺 Охрана труда</h1></section><div class="module" id="safetyList"></div>';
+    var list = document.getElementById("safetyList");
+    var items = window.GLOBAL_DATA && window.GLOBAL_DATA.safety ? window.GLOBAL_DATA.safety : [];
+    if (!items.length) { list.innerHTML = "<p>Материалы пока не добавлены.</p>"; return; }
+    items.forEach(item => {
+        list.innerHTML += `<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);"><b style="color:var(--accent);">${item.title}</b><p style="font-size:14px; margin:5px 0;">${item.description||''}</p><a class="btn ghost" href="${item.file}" target="_blank" download>📥 Скачать</a></div>`;
+    });
+};
+
+window.renderPassportsPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a><section class="hero"><h1>📄 Паспорта станков</h1></section><div class="module" id="passList"></div>';
+    var list = document.getElementById("passList");
+    var items = window.GLOBAL_DATA && window.GLOBAL_DATA.passports ? window.GLOBAL_DATA.passports : [];
+    if (!items.length) { list.innerHTML = "<p>Материалы пока не добавлены.</p>"; return; }
+    items.forEach(item => {
+        list.innerHTML += `<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);"><b style="color:var(--accent);">${item.title}</b><p style="font-size:14px; margin:5px 0;">${item.description||''}</p><a class="btn ghost" href="${item.file}" target="_blank" download>📥 Скачать</a></div>`;
+    });
+};
+
+window.renderStudentGradesPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Мои оценки";
+    app.appendChild(el('<a class="backlink" href="#/profile" style="color:var(--accent);">← Назад в профиль</a>'));
+    
+    var autoGradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved" && k !== "certificate");
+    var autoRows = autoGradesList.map(k => {
+        var title = k; 
+        if(k.startsWith("test_")) title = "Тест по курсу " + k.split("_")[1];
+        if(k.startsWith("__final__")) title = "Итоговый экзамен";
+        if(k.startsWith("prac_")) title = "Практика: " + k.replace("prac_", "");
+        var gradeData = window.state.results[k];
+        var grade = typeof gradeData === 'object' ? gradeData.grade : (typeof gradeData === 'string' ? "Сдано" : "—");
+        var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : (grade === "Сдано" ? "var(--accent)" : "var(--err)"));
+        return `<tr><td style="padding:10px; border:1px solid var(--border);">${title}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:${color}; font-size:18px;">${grade}</td></tr>`;
+    }).join("");
+
+    var manualGrades = JSON.parse(localStorage.getItem('portal_grades') || '[]');
+    var myManualGrades = manualGrades.filter(g => g.student.toLowerCase() === (window.state.student.email || '').toLowerCase());
+    var manualRows = myManualGrades.map(g => {
+        return `<tr><td style="padding:10px; border:1px solid var(--border);">${g.date}</td><td style="padding:10px; border:1px solid var(--border);">${g.subject}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:var(--ok); font-size:18px;">${g.value}</td></tr>`;
+    }).join("");
+
+    app.innerHTML += `
+        <section class="hero"><h1>📊 Мои оценки</h1></section>
+        <div class="module">
+            <h3>Оценки от преподавателя</h3>
+            <div class="journal-wrap">
+                <table class="journal-table">
+                    <thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead>
+                    <tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}</tbody>
+                </table>
+            </div>
+        </div>
+        <div class="module">
+            <h3>Автоматические тесты и практики</h3>
+            <div class="journal-wrap">
+                <table class="journal-table">
+                    <thead><tr><th>Работа</th><th>Результат</th></tr></thead>
+                    <tbody>${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody>
+                </table>
+            </div>
+        </div>
+    `;
+};
+
+window.renderTeacherJournalPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    if (!window.state.staff) { app.innerHTML = "<h2>Доступ запрещен</h2>"; return; }
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Журнал (Преподаватель)";
+    
+    var grades = JSON.parse(localStorage.getItem('portal_grades') || '[]');
+    
+    app.innerHTML = `
+        <a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>
+        <section class="hero"><h1>📓 Журнал группы</h1></section>
+        <div class="module">
+            <h3>Выставить оценку</h3>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <select id="grade-group" class="self-input" style="flex:1;">
+                    <option value="Группа 1">Группа 1</option>
+                    <option value="Группа 2">Группа 2</option>
+                </select>
+                <input type="text" id="grade-student" placeholder="Email студента" class="self-input" style="flex:2;">
+                <input type="text" id="grade-subject" placeholder="Предмет" class="self-input" style="flex:1;">
+                <input type="number" id="grade-value" placeholder="Оценка" class="self-input" style="width:100px;" min="2" max="5">
+            </div>
+            <button class="btn btn-primary" onclick="window.addGrade()" style="margin-top:10px;">Сохранить оценку</button>
+        </div>
+        <div class="module">
+            <h3>Все оценки</h3>
+            <div class="journal-wrap">
+                <table class="journal-table">
+                    <thead><tr><th>Дата</th><th>Группа</th><th>Студент</th><th>Предмет</th><th>Оценка</th></tr></thead>
+                    <tbody id="grades-table-body">
+                        ${grades.map(g => `<tr><td>${g.date}</td><td>${g.group}</td><td>${g.student}</td><td>${g.subject}</td><td><b style="color:var(--ok); font-size:16px;">${g.value}</b></td></tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+};
+
+window.addGrade = function() {
+    const group = document.getElementById('grade-group').value;
+    const student = document.getElementById('grade-student').value.trim();
+    const subject = document.getElementById('grade-subject').value.trim();
+    const value = document.getElementById('grade-value').value;
+
+    if (!student || !subject || !value) { alert("Заполните все поля!"); return; }
+
+    const grades = JSON.parse(localStorage.getItem('portal_grades') || '[]');
+    grades.push({ date: new Date().toLocaleDateString(), group, student, subject, value });
+    localStorage.setItem('portal_grades', JSON.stringify(grades));
+    
+    alert("Оценка выставлена!");
+    window.renderTeacherJournalPage(); 
+};
+
+window.renderCertificatePage = function() {
+    var app = $("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Сертификат";
+    app.appendChild(el('<a class="backlink no-print" href="#/" style="color:var(--accent);">← На главную</a>'));
+    
+    if (!window.state.student) return;
+    
+    var courseName = window.MDK_DATA && window.MDK_DATA[window.state.activeCourseId] ? window.MDK_DATA[window.state.activeCourseId].title : "МДК";
+    var isApproved = window.state.results && window.state.results.certificateApproved;
+    
+    app.innerHTML += `<div class="no-print" style="text-align:center; margin:20px 0;"><button class="btn" onclick="window.print()">🖨 Распечатать сертификат</button></div>
+    <div id="printable-cert" style="background:#fff; color:#000; padding:40px; max-width:900px; margin:0 auto; border:10px double #c14a2a; text-align:center; position:relative;">
+        <h1 style="font-size:40px; color:#c14a2a; font-family:'Monomakh', serif;">СЕРТИФИКАТ</h1>
+        <p style="font-size:20px; margin:40px 0;">подтверждает, что</p>
+        <h2 style="font-size:36px; border-bottom:2px solid #ccc; display:inline-block; padding-bottom:5px;">${window.escapeHtml(window.state.student.name)}</h2>
+        <p style="font-size:18px; margin-top:40px;">успешно прошел(ла) обучение по программе</p>
+        <h3 style="font-size:24px; color:#c14a2a; margin-top:10px;">${window.escapeHtml(courseName)}</h3>
+        <div style="margin-top:60px; display:flex; justify-content:space-between;">
+            <div style="text-align:left;">Дата: ${new Date().toLocaleDateString('ru-RU')}</div>
+            <div style="text-align:right;">Подпись: _______________</div>
+        </div>
+        ${!isApproved ? `<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-30deg); font-size:80px; font-weight:bold; color:rgba(255,0,0,0.1); pointer-events:none;">ОБРАЗЕЦ</div>` : ""}
+    </div>`;
+};
+
+window.renderProfilePage = function(route) {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    if (!window.state.student && !window.state.staff) { location.hash = "#/"; return; }
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Личный кабинет";
+    app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
+    var isTeacher = !!window.state.staff;
+
+    if (isTeacher) {
+        app.innerHTML += `<section class="hero" style="text-align:center; padding:40px;"><div style="font-size:60px; margin-bottom:10px;">👨‍🏫</div><h2>${window.escapeHtml(window.state.staff.name)}</h2><p>Личный кабинет преподавателя</p></section>
+        <div class="module" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:15px;">
+            <a href="#/journal" class="btn" style="padding:20px; background:var(--accent); color:#fff;">📒 Журнал</a>
+            <a href="#/reports" class="btn" style="padding:20px; background:var(--gold); color:#000;">📊 Отчеты</a>
+            <a href="#/admin" class="btn" style="padding:20px; background:var(--ok); color:#000;">⚙️ Админка</a>
+        </div>`;
+        return;
+    }
+
+    if (window.state.student) {
+        var lvl = window.getLevel(window.state.xp); 
+        var avHtml = window.state.avatar ? `<img src="${window.state.avatar}" style="width:100%; height:100%; object-fit:cover;">` : "👨‍🎓";
+        app.innerHTML += `<section class="module" style="text-align:center; padding:40px;">
+            <div style="width:120px; height:120px; margin:0 auto 20px; border-radius:50%; border:4px solid var(--accent); overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:60px;">${avHtml}</div>
+            <h2 style="margin-bottom:10px;">${window.escapeHtml(window.state.nickname || window.state.student.name)}</h2>
+            <p style="color:var(--muted); margin-bottom:15px;">Группа: ${window.escapeHtml(window.state.student.group)}</p>
+            <div style="display:flex; justify-content:center; gap:15px; margin-bottom:20px;">
+                <div style="background:var(--card-soft); padding:10px 20px; border-radius:20px;"><b style="color:var(--gold);">${window.state.xp} XP</b> · Ур. ${lvl}</div>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <a href="#/grades" class="btn" style="background:var(--ok); color:#fff;">📊 Мои оценки</a>
+                <a href="#/shop" class="btn">🛒 Магазин XP</a>
+            </div>
+        </section>`;
+    }
+};
+
+window.renderAchievementsPage = function() {
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = "Достижения";
+    app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
+    app.innerHTML += `<section class="hero"><h1>🏆 Достижения</h1></section>`;
+    
+    var allAch = window.ACHIEVEMENTS || [];
+    var unlocked = window.state.unlockedAchievements || [];
+    
+    var html = `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px;">`;
+    allAch.forEach(ach => {
+        var isUnlocked = unlocked.includes(ach.id);
+        var opacity = isUnlocked ? "1" : "0.4";
+        var icon = isUnlocked ? ach.icon : "🔒";
+        html += `<div class="module" style="padding:20px; text-align:center; opacity:${opacity};">
+            <div style="font-size:48px; margin-bottom:10px;">${icon}</div>
+            <h4 style="margin:0 0 5px 0; color:var(--accent);">${ach.title}</h4>
+            <p style="font-size:13px; color:var(--muted); margin:0;">${ach.desc}</p>
+        </div>`;
+    });
+    html += `</div>`;
+    app.innerHTML += html;
+};
 
 // ==========================================
 // 4. СТРАНИЦА ТЕМЫ (С ВКЛАДКАМИ)
 // ==========================================
 window.renderTopicPage = function(courseId, topicId) {
-    // ... (код функции renderTopicPage остается без изменений)
+    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
+    var course = window.MDK_DATA[courseId]; if (!course) { app.innerHTML = '<div class="module">Курс не найден</div>'; return; }
+    var topic = null; course.sections.forEach(s => { s.topics.forEach(t => { if (t.id === topicId) topic = t; }); });
+    if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
+    
+    var crumbs = document.getElementById("crumbs"); if (crumbs) crumbs.textContent = topic.code + " " + topic.title;
+    app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
+    app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
+    
+    var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+        <button class="btn tab active" id="tab-lectures" onclick="window.switchTopicTab('lectures')">📖 Лекции</button>
+        ${(topic.practicals && topic.practicals.length) ? `<button class="btn tab ghost" id="tab-practicals" onclick="window.switchTopicTab('practicals')">🛠️ Практика</button>` : ''}
+        ${(topic.selfWork && topic.selfWork.length) ? `<button class="btn tab ghost" id="tab-selfwork" onclick="window.switchTopicTab('selfwork')">📝 Самостоятельная</button>` : ''}
+        ${(topic.test && topic.test.length) ? `<button class="btn tab ghost" id="tab-test" onclick="window.switchTopicTab('test')">🎯 Тест</button>` : ''}
+    </div><div id="topicContent" class="module"></div>`;
+    app.innerHTML += tabsHtml;
+
+    window.switchTopicTab = function(tabName) {
+        document.querySelectorAll(".tab").forEach(btn => { btn.classList.remove("active"); btn.classList.add("ghost"); });
+        var activeBtn = document.getElementById(`tab-${tabName}`); if (activeBtn) { activeBtn.classList.add("active"); activeBtn.classList.remove("ghost"); }
+        var contentArea = document.getElementById("topicContent"); contentArea.innerHTML = "";
+
+        if (tabName === 'lectures') {
+            if (!topic.lectures || !topic.lectures.length) { contentArea.innerHTML = "<p>Лекций нет.</p>"; return; }
+            topic.lectures.forEach(lec => {
+                contentArea.innerHTML += `<details class="lec-accordion" open style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;"><summary style="padding:15px; font-weight:bold; cursor:pointer;">${lec.code} ${lec.title}</summary><div class="lec-content" style="padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;">${lec.content}</div></details>`;
+            });
+            window.unlockAchievement('reader');
+        }
+        else if (tabName === 'practicals') {
+            if (!topic.practicals || !topic.practicals.length) { contentArea.innerHTML = "<p>Практических работ нет.</p>"; return; }
+            topic.practicals.forEach(prac => {
+                var savedAns = window.state.results[`prac_${prac.code}`] || "";
+                contentArea.innerHTML += `<div class="card" style="margin-bottom:15px;">
+                    <h3 style="color:var(--accent); margin-top:0;">${prac.code} ${prac.title}</h3>
+                    <p><b>Цель:</b> ${prac.goal}</p>
+                    <p><b>Задание:</b> ${prac.task}</p>
+                    ${(prac.variants && prac.variants.length) ? `<p><b>Варианты:</b> ${prac.variants.join(', ')}</p>` : ''}
+                    <div style="margin-top:20px; padding-top:15px; border-top:1px dashed var(--border);">
+                        <label style="font-size:14px; font-weight:bold; color:var(--text-soft);">Ваш письменный ответ / Решение:</label>
+                        <textarea class="self-input" id="prac_input_${prac.code}" rows="5" style="margin-top:8px; font-family:monospace;" placeholder="Введите здесь ваше решение...">${savedAns}</textarea>
+                        <button class="btn" onclick="window.savePracAnswer('${prac.code}')" style="margin-top:10px;">💾 Сохранить ответ</button>
+                    </div>
+                </div>`;
+            });
+        }
+        else if (tabName === 'selfwork') {
+            if (!topic.selfWork || !topic.selfWork.length) { contentArea.innerHTML = "<p>Самостоятельных работ нет.</p>"; return; }
+            topic.selfWork.forEach(work => {
+                contentArea.innerHTML += `<div class="card" style="margin-bottom:15px;">
+                    <h3 style="color:var(--accent); margin-top:0;">${work.code} ${work.title}</h3>
+                    <p><b>Задание:</b> ${work.task}</p>
+                    ${(work.questions && work.questions.length) ? `<p><b>Вопросы:</b></p><ul>${work.questions.map(q => `<li>${q}</li>`).join('')}</ul>` : ''}
+                </div>`;
+                
+                var testData = window.EXTRA_TESTS ? window.EXTRA_TESTS[`self_${work.code.replace(/\s+/g, '')}`] : null;
+                if (testData && testData.questions) {
+                    var testId = `self_${work.code}`;
+                    var isDone = window.state.results && window.state.results[testId];
+                    if (isDone) {
+                        contentArea.innerHTML += `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px; margin-bottom:15px; border:1px solid var(--ok);"><h3 style="color:var(--ok);">✅ Тест выполнен!</h3><p>Оценка: <b>${isDone.grade}</b></p><button class="btn ghost" onclick="window.startInlineTest('${topic.id}', '${work.code}')">Пройти заново</button></div>`;
+                    } else {
+                        contentArea.innerHTML += `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px; margin-bottom:15px;"><h3>🎯 Тест самоконтроля</h3><p style="font-size:14px; color:var(--muted);">Вопросов: ${testData.questions.length}</p><button class="btn" onclick="window.startInlineTest('${topic.id}', '${work.code}')" style="padding:10px 20px;">Начать тест</button></div>`;
+                    }
+                } else {
+                    var savedAns = window.state.results[`self_${work.code}`] || "";
+                    contentArea.innerHTML += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
+                        <label style="font-size:14px; font-weight:bold; color:var(--text-soft);">Ваш ответ:</label>
+                        <textarea class="self-input" id="self_input_${work.code}" rows="4" style="margin-top:8px;" placeholder="Введите ответ...">${savedAns}</textarea>
+                        <button class="btn" onclick="window.saveSelfAnswer('${work.code}')" style="margin-top:10px;">💾 Сохранить ответ</button>
+                    </div>`;
+                }
+            });
+        }
+        else if (tabName === 'test') {
+            if (!topic.test || !topic.test.length) { contentArea.innerHTML = "<p>Вопросов нет.</p>"; return; }
+            var testId = `test_${topic.id}`; var isDone = window.state.results && window.state.results[testId];
+            if (isDone) contentArea.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px;"><h3 style="color:var(--ok);">✅ Тест уже пройден!</h3><p>Оценка: <b>${isDone.grade}</b></p><button class="btn" onclick="window.startInlineTest('${topic.id}', null)">Пройти заново</button></div>`;
+            else contentArea.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px;"><h3>🎯 Тест по теме</h3><p>Вопросов: ${topic.test.length}</p><button class="btn" onclick="window.startInlineTest('${topic.id}', null)" style="padding:15px 30px; font-size:16px;">Начать тест</button></div>`;
+        }
+    };
+
+    window.startInlineTest = function(topicId, selfWorkCode) {
+        var contentArea = document.getElementById("topicContent"); 
+        var questions = [];
+        
+        if (selfWorkCode) {
+            var testData = window.EXTRA_TESTS ? window.EXTRA_TESTS[`self_${selfWorkCode.replace(/\s+/g, '')}`] : null;
+            if (testData && testData.questions) questions = [...testData.questions];
+        } else {
+            var course = window.MDK_DATA[window.state.activeCourseId];
+            var topic = null; course.sections.forEach(s => { s.topics.forEach(t => { if (t.id === topicId) topic = t; }); });
+            if (topic && topic.test) questions = [...topic.test];
+            
+            if (window.HARD_TESTS && window.HARD_TESTS[topicId]) {
+                questions = questions.concat(window.HARD_TESTS[topicId]);
+            }
+        }
+        
+        if (!questions.length) { contentArea.innerHTML = "<p>Вопросы не найдены.</p>"; return; }
+        
+        questions = questions.sort(() => Math.random() - 0.5);
+        
+        var currentQ = 0, correct = 0;
+        function renderQ() {
+            if (currentQ >= questions.length) {
+                var pct = Math.round((correct / questions.length) * 100); 
+                var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
+                var resKey = selfWorkCode ? `self_${selfWorkCode}` : `test_${topicId}`;
+                window.state.results[resKey] = { grade: grade }; 
+                window.saveStudentData(); 
+                window.unlockAchievement('hacker');
+                contentArea.innerHTML = `<div style="text-align:center; padding:30px; background:var(--card-soft); border-radius:12px;"><h2 style="color:var(--ok);">Тест завершен!</h2><p>Верных: <b>${correct}</b> из <b>${questions.length}</b></p><h1 style="font-size:48px; color:var(--accent);">Оценка: ${grade}</h1><button class="btn" onclick="window.switchTopicTab('${selfWorkCode ? 'selfwork' : 'test'}')">Вернуться</button></div>`; 
+                return;
+            }
+            var q = questions[currentQ];
+            var html = `<div style="display:flex; justify-content:space-between; margin-bottom:15px;"><b>Вопрос ${currentQ+1} из ${questions.length}</b></div><div style="font-weight:bold; margin-bottom:15px; font-size:16px;">${q.q}</div>`;
+            q.options.forEach((opt, i) => { html += `<button class="btn ghost" style="display:block; width:100%; text-align:left; margin-top:5px; padding:10px;" onclick="window.answerInlineTest(${i}, ${q.correct})">${opt}</button>`; });
+            contentArea.innerHTML = html;
+        }
+        window.answerInlineTest = function(selected, correctIdx) { 
+            if (selected === correctIdx) correct++; 
+            currentQ++; renderQ(); 
+        };
+        renderQ();
+    };
+    window.switchTopicTab('lectures');
 };
 
 window.renderHomePage = function() {
@@ -319,6 +697,6 @@ window.addEventListener("DOMContentLoaded", function() {
     setupLogin(); 
     setupDrawer(); 
     window.renderUserChip();
-    window.updateMenuVisibility(); // Вызываем при загрузке
+    window.updateMenuVisibility();
     window.router();
 });
