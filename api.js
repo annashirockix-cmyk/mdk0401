@@ -10,25 +10,18 @@ async function fetchAPI(action, params, method) {
     urlObj.searchParams.append("action", action);
     urlObj.searchParams.append("t", String(Date.now()));
 
-    // Базовые опции
     var options = { 
         method: method,
         cache: "no-store", 
         redirect: 'follow',
-        // КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Указываем text/plain, чтобы избежать preflight OPTIONS
         headers: { 
             'Content-Type': 'text/plain;charset=utf-8' 
         }
     };
 
     if (method === "POST") {
-        var bodyData = new URLSearchParams();
-        for (var key in params) {
-            if (params[key] !== undefined && params[key] !== null) {
-                bodyData.append(key, params[key]);
-            }
-        }
-        options.body = bodyData;
+        // Отправляем данные как JSON-строку, чтобы GAS мог их прочитать
+        options.body = JSON.stringify(params);
     } else {
         for (var k in params) {
             if (params[k] !== undefined && params[k] !== null) {
