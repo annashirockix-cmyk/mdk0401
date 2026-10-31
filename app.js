@@ -19,12 +19,11 @@ var savedTheme = localStorage.getItem("mdk.theme_active") || "default";
 document.documentElement.setAttribute("data-theme", savedTheme === "default" ? "dark" : savedTheme);
 
 // ==========================================
-// 1. УТИЛИТЫ
+// 1. УТИЛИТЫ И ЭФФЕКТЫ
 // ==========================================
 window.$ = function(id) { return document.getElementById(id); };
 window.el = function(html) { var div = document.createElement("div"); div.innerHTML = html.trim(); return div.firstChild; };
 window.escapeHtml = function(text) { if (!text) return ""; return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
-
 window.showToast = function(msg, type) {
     var container = document.querySelector(".toast-container"); 
     if (!container) { 
@@ -161,7 +160,7 @@ window.saveSelfAnswer = function(code) {
 };
 
 // ==========================================
-// 2. РЕНДЕР СТРАНИЦ
+// 2. РЕНДЕР СТРАНИЦ (ВСЕ ФУНКЦИИ)
 // ==========================================
 window.renderVideosPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
@@ -555,32 +554,35 @@ function setupLogin() {
     }
 
     function doUnifiedLogin() {
+        // --- ДИАГНОСТИКА ---
+        alert("1. Кнопка нажата. Начинаем проверку.");
+        
         var email = document.getElementById("loginEmail").value.trim(); 
         var pass = document.getElementById("loginPassword").value;
         var btn = document.getElementById("btnLoginUnified");
         
-        if (!email || !pass) { alert("Введите email и пароль"); return; }
+        if (!email || !pass) { alert("Остановка: Введите email и пароль"); return; }
         
         btn.disabled = true; 
         btn.textContent = "Вход...";
-        console.log("Попытка входа...", email);
 
         if (typeof window.API === "undefined") {
-            alert("Критическая ошибка: API не загружен.");
+            alert("2. КРИТИЧЕСКАЯ ОШИБКА: window.API не загружен. Проверьте файл api.js.");
             btn.disabled = false; btn.textContent = "Войти"; return;
         }
+        
+        alert("2. Вызываем API.login для " + email);
 
         window.API.login(email, pass).then(function(res) {
-            console.log("Ответ сервера:", res);
+            alert("3. Ответ получен: " + JSON.stringify(res));
             if (res && res.success) {
                 applyAuthSession(res, email);
             } else {
-                alert("Ошибка входа: " + (res && res.error ? res.error : "Неизвестно"));
+                alert("4. Ошибка входа: " + (res && res.error ? res.error : "Неизвестно"));
                 btn.disabled = false; btn.textContent = "Войти";
             }
         }).catch(function(err) {
-            console.error("Ошибка запроса:", err);
-            alert("Ошибка сети/CORS. Проверьте, что вы развернули 'Новую версию' скрипта и очистили кэш (Ctrl+F5).");
+            alert("4. Ошибка запроса (CORS/Сеть): " + err.message);
             btn.disabled = false; btn.textContent = "Войти";
         });
     }

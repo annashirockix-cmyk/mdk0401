@@ -20,7 +20,6 @@ async function fetchAPI(action, params, method) {
     };
 
     if (method === "POST") {
-        // Отправляем данные как JSON-строку, чтобы GAS мог их прочитать
         options.body = JSON.stringify(params);
     } else {
         for (var k in params) {
@@ -37,9 +36,7 @@ async function fetchAPI(action, params, method) {
     try {
         const response = await fetch(urlObj.toString(), options);
         clearTimeout(timeoutId);
-        if (!response.ok) {
-            throw new Error("HTTP Error " + response.status + " " + response.statusText);
-        }
+        if (!response.ok) throw new Error("HTTP Error " + response.status);
         return await response.json();
     } catch (err) {
         clearTimeout(timeoutId);
