@@ -24,11 +24,12 @@
             <form id="unifiedLoginForm" class="login-card">
                 <input type="text" id="loginEmail" placeholder="Email (например: student_n@portal.ru)" required>
                 <input type="password" id="loginPassword" placeholder="Пароль" required>
-                <button type="submit" id="btnLoginUnified" class="btn" style="width: 100%; margin-top: 10px; padding: 12px;">Войти</button>
+                <!-- ВАЖНО: type="button", чтобы страница не перезагружалась -->
+                <button type="button" id="btnLoginUnified" class="btn" style="width: 100%; margin-top: 10px; padding: 12px;">Войти</button>
                 <div style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--muted);">
                     <p>Тестовые аккаунты:</p>
                     <p>Студент: <b>student_n@portal.ru</b> / 123456</p>
-                    <p>Препод: <b>anna.sh@portal.ru</b> / teacher123</p>
+                    <p>Препор: <b>anna.sh@portal.ru</b> / teacher123</p>
                 </div>
             </form>
         </div>
@@ -90,7 +91,6 @@
             
             <hr style="border-color: var(--border); margin: 10px 0; width: 100%;">
             
-            <!-- ЭТИ ПУНКТЫ БУДУТ СКРЫТЫ ДЛЯ СТУДЕНТОВ -->
             <a href="#/journal" class="drawer-item" id="menuJournal">📓 Журнал</a>
             <a href="#/reports" class="drawer-item" id="menuReports">📊 Отчеты</a>
             <a href="#/schedule" class="drawer-item" id="menuSchedule">📅 Расписание</a>
@@ -108,9 +108,9 @@
         <div id="app" style="padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%;"></div>
     </main>
 
-    <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ -->
-    <script src="./api.js"></script>
-    <script src="./data-global.js"></script>
+    <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ (С ВЕРСИЯМИ ДЛЯ СБРОСА КЭША) -->
+    <script src="./api.js?v=2"></script>
+    <script src="./data-global.js?v=2"></script>
     <script src="./data-0701.js"></script>
     <script src="./data-0401.js"></script>
     <script src="./data-0201.js"></script>
@@ -129,7 +129,7 @@
     <script src="./questions-logic.js"></script>
     <script src="./questions-extra.js"></script>
 
-    <script src="./app.js"></script>
+    <script src="./app.js?v=2"></script>
     <script src="./assistant.js"></script>
     <script src="./easter-eggs.js"></script>
     <script src="./exam-engine.js"></script>
