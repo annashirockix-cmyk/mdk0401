@@ -9,12 +9,16 @@ async function fetchAPI(action, params, method) {
     var urlObj = new URL(APPS_SCRIPT_URL);
     urlObj.searchParams.append("action", action);
     urlObj.searchParams.append("t", String(Date.now()));
-    
-    // Базовые опции для fetch
+
+    // Базовые опции
     var options = { 
         method: method,
         cache: "no-store", 
-        redirect: 'follow'
+        redirect: 'follow',
+        // КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Указываем text/plain, чтобы избежать preflight OPTIONS
+        headers: { 
+            'Content-Type': 'text/plain;charset=utf-8' 
+        }
     };
 
     if (method === "POST") {
@@ -25,8 +29,6 @@ async function fetchAPI(action, params, method) {
             }
         }
         options.body = bodyData;
-        // ВАЖНО: Мы НЕ УКАЗЫВАЕМ headers. Браузер сам поставит 
-        // Content-Type: application/x-www-form-urlencoded, что не вызовет OPTIONS.
     } else {
         for (var k in params) {
             if (params[k] !== undefined && params[k] !== null) {
@@ -42,7 +44,9 @@ async function fetchAPI(action, params, method) {
     try {
         const response = await fetch(urlObj.toString(), options);
         clearTimeout(timeoutId);
-        if (!response.ok) throw new Error("HTTP Error " + response.status);
+        if (!response.ok) {
+            throw new Error("HTTP Error " + response.status + " " + response.statusText);
+        }
         return await response.json();
     } catch (err) {
         clearTimeout(timeoutId);
