@@ -27,7 +27,7 @@
 }
 
 /* =====================================================
-   Учебный портал — style.css
+   БАЗОВЫЕ НАСТРОЙКИ И ПЕРЕМЕННЫЕ
    ===================================================== */
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -40,7 +40,7 @@ html, body {
 
 h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 
-/* --- БАЗОВАЯ ТЕМА (Тёмная) --- */
+/* Темная тема (по умолчанию) */
 :root {
   --bg: #0f172a; --card: #1e293b; --card-soft: #334155;
   --text: #f8fafc; --text-soft: #cbd5e1; --muted: #94a3b8;
@@ -48,25 +48,31 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
   --err: #ef4444; --gold: #f59e0b;
 }
 
-/* --- ТЕМЫ ОФОРМЛЕНИЯ --- */
+/* Светлая тема */
 [data-theme="light"] {
   --bg: #f5f2ec; --card: #ffffff; --card-soft: #e2e8f0;
   --text: #1e293b; --text-soft: #475569; --muted: #64748b;
   --border: #cbd5e1; --accent: #2563eb; --ok: #059669;
   --err: #dc2626; --gold: #d97706;
 }
+
+/* Неоновая тема */
 [data-theme="neon"] {
   --bg: #09090b; --card: #18181b; --card-soft: #27272a;
   --text: #ff00cc; --text-soft: #d946ef; --muted: #a21caf;
   --border: #701a75; --accent: #ff00cc; --ok: #00ffcc;
   --err: #ff0055; --gold: #ffff00;
 }
+
+/* Тема Матрица */
 [data-theme="matrix"] {
   --bg: #000000; --card: #0a0a0a; --card-soft: #111111;
   --text: #00ff00; --text-soft: #00cc00; --muted: #009900;
   --border: #003300; --accent: #00ff00; --ok: #00ff00;
   --err: #ff0000; --gold: #ccff00;
 }
+
+/* Тема Киберпанк */
 [data-theme="cyberpunk"] {
   --bg: #0a0015; --card: #14002a; --card-soft: #1e0040;
   --text: #00ffff; --text-soft: #ff00ff; --muted: #9d00ff;
@@ -74,10 +80,9 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
   --err: #ff0055; --gold: #ffff00;
 }
 
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: block; }
-
-/* ---------- ВЕРХНЯЯ ПАНЕЛЬ ---------- */
+/* =====================================================
+   ВЕРХНЯЯ ПАНЕЛЬ
+   ===================================================== */
 .topbar {
   display: flex; align-items: center; justify-content: space-between;
   background: var(--card); border-bottom: 1px solid var(--border);
@@ -91,7 +96,9 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .status-pill { background: var(--bg); padding: 4px 10px; border-radius: 20px; font-size: 13px; border: 1px solid var(--border); color: var(--text); }
 .user-chip { display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 4px 12px 4px 4px; border-radius: 20px; border: 1px solid var(--border); cursor: pointer; color: var(--text); }
 
-/* ---------- ШТОРКА ---------- */
+/* =====================================================
+   ШТОРКА (МЕНЮ)
+   ===================================================== */
 .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 998; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
 .drawer-overlay.open { opacity: 1; pointer-events: auto; }
 .drawer { position: fixed; top: 0; left: 0; width: 280px; height: 100vh; background: var(--card); border-right: 1px solid var(--border); z-index: 999; transform: translateX(-100%); transition: transform 0.3s ease; display: flex; flex-direction: column; }
@@ -102,7 +109,9 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .drawer-item { padding: 12px 20px; color: var(--text); text-decoration: none; font-size: 14px; transition: background 0.2s; display: flex; align-items: center; gap: 10px; cursor: pointer; }
 .drawer-item:hover { background: var(--bg); }
 
-/* ---------- ОСНОВНОЙ КОНТЕНТ ---------- */
+/* =====================================================
+   ОСНОВНОЙ КОНТЕНТ
+   ===================================================== */
 #crumbs { padding: 10px 20px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border); }
 #app { padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
 .module { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -110,14 +119,18 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .hero h1 { margin: 0 0 10px 0; font-size: 24px; }
 .hero p { margin: 0; opacity: 0.9; }
 
-/* ---------- ОКНО ВХОДА ---------- */
+/* =====================================================
+   ОКНО ВХОДА
+   ===================================================== */
 .login-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; backdrop-filter: blur(5px); }
 .login-shell { width: 100%; max-width: 460px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .login-card { background: var(--bg); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
 .login-card input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-soft); color: var(--text); margin-bottom: 12px; outline: none; }
 .login-card input:focus { border-color: var(--accent); }
 
-/* ---------- КНОПКИ И ИНПУТЫ ---------- */
+/* =====================================================
+   КНОПКИ И ИНПУТЫ
+   ===================================================== */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; font-size: 15px; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; transition: background 0.2s, opacity 0.2s; text-decoration: none; line-height: 1.3; background: var(--accent); color: #fff; }
 .btn:hover { opacity: 0.9; }
 .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
@@ -127,28 +140,29 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
 .self-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; background: var(--bg); color: var(--text); }
 .self-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
 
-/* ---------- ТАБЛИЦЫ ---------- */
+/* =====================================================
+   ТАБЛИЦЫ
+   ===================================================== */
 .journal-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--card); }
 .journal-table th, .journal-table td { padding: 0.75rem 1rem; border: 1px solid var(--border); text-align: left; }
 .journal-table th { background: var(--card-soft); font-weight: 600; color: var(--text-soft); }
 
 /* =====================================================
-   ФОНЫ ДЛЯ МАГАЗИНА
+   ФОНЫ И ЭФФЕКТЫ
    ===================================================== */
 .bg-underwater { background: linear-gradient(180deg, #0c4a6e 0%, #082f49 100%); }
-.bg-foggy-forest { background-image: url('./fonts/Background 1.png'); background-size: cover; background-position: center; }
-.bg-pumpkins { background-image: url('./fonts/Background 2.png'); background-size: cover; background-position: center; }
-.bg-spooky-room { background-image: url('./fonts/Background 3.png'); background-size: cover; background-position: center; }
-.bg-halloween { background-image: url('./fonts/Background 7.png'); background-size: cover; background-position: center; }
-.bg-red-forest { background-image: url('./fonts/Background 9.png'); background-size: cover; background-position: center; }
-.bg-lanterns { background-image: url('./fonts/Background 10.png'); background-size: cover; background-position: center; }
-.bg-dark-table { background-image: url('./fonts/Background 15.png'); background-size: cover; background-position: center; }
-.bg-graveyard { background-image: url('./fonts/Background 28.png'); background-size: cover; background-position: center; }
-.bg-cats-notebook { background-image: url('./fonts/Background 31.png'); background-size: cover; background-position: center; }
-.bg-cats-yarn { background-image: url('./fonts/Background 33.png'); background-size: cover; background-position: center; }
+.bg-foggy-forest { background-image: url('./img/Background 1.png'); background-size: cover; background-position: center; }
+.bg-pumpkins { background-image: url('./img/Background 2.png'); background-size: cover; background-position: center; }
+.bg-spooky-room { background-image: url('./img/Background 3.png'); background-size: cover; background-position: center; }
+.bg-halloween { background-image: url('./img/Background 7.png'); background-size: cover; background-position: center; }
+.bg-red-forest { background-image: url('./img/Background 9.png'); background-size: cover; background-position: center; }
+.bg-lanterns { background-image: url('./img/Background 10.png'); background-size: cover; background-position: center; }
+.bg-dark-table { background-image: url('./img/Background 15.png'); background-size: cover; background-position: center; }
+.bg-graveyard { background-image: url('./img/Background 28.png'); background-size: cover; background-position: center; }
+.bg-cats-notebook { background-image: url('./img/Background 31.png'); background-size: cover; background-position: center; }
+.bg-cats-yarn { background-image: url('./img/Background 33.png'); background-size: cover; background-position: center; }
 .bg-stone-alley { background: linear-gradient(135deg, #4b5563, #1f2937); }
 
-/* Эффекты фона (должны применяться к body) */
 body.fx-aurora-bg { background: linear-gradient(135deg, #0f172a, #1e3a8a, #0f172a); background-size: 400% 400%; animation: aurora 15s ease infinite; }
 @keyframes aurora { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 body.fx-matrix-bg { background: #000; color: #0f0; }
@@ -156,7 +170,9 @@ body.fx-matrix-bg::before { content: ""; position: fixed; top: 0; left: 0; width
 body.fx-starfield-bg { background: #000; }
 body.fx-starfield-bg::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px); background-size: 50px 50px; opacity: 0.3; pointer-events: none; z-index: -1; }
 
-/* ---------- МОБИЛЬНАЯ АДАПТАЦИЯ ---------- */
+/* =====================================================
+   АДАПТАЦИЯ
+   ===================================================== */
 @media (max-width: 768px) {
   .btn, #login-btn { min-height: 48px !important; font-size: 16px !important; }
   .content, #app { padding: 0.75rem !important; }

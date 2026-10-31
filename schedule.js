@@ -24,7 +24,17 @@ window.renderSchedulePage = function(){
     { name: "СУББОТА", times: [{ t: "8.00-9.35", label: "1 пара" }, { t: "9.45-11.20", label: "2 пара" }, { t: "11.40-13.15", label: "3 пара" }, { t: "13.25-15.00", label: "4 пара" }] }
   ];
 
-  var defaultData = JSON.parse(localStorage.getItem('mdk_schedule') || '{}');
+  var scheduleData = JSON.parse(localStorage.getItem('mdk_schedule') || '{}');
+
+  window.API.getSchedule().then(res => {
+      if (res && res.success && res.schedule && Object.keys(res.schedule).length > 0) {
+          scheduleData = res.schedule;
+      }
+      buildTable();
+  }).catch(err => {
+      console.error("Ошибка загрузки расписания", err);
+      buildTable(); // Строим таблицу с локальными данными
+  });
 
   function buildTable() {
     var tableHtml = `<div class="module" style="overflow-x:auto; padding:10px;">
@@ -48,7 +58,7 @@ window.renderSchedulePage = function(){
 
         groups.forEach(group => {
           var cellKey = `${day}_${timeObj.t}_${group}`;
-          var cellData = defaultData[cellKey] || { sub1: "", sub2: "" };
+          var cellData = scheduleData[cellKey] || { sub1: "", sub2: "" };
 
           if (isTeacher) {
             tableHtml += `<td style="border:1px solid var(--border); padding:4px; vertical-align:top;">
@@ -69,6 +79,7 @@ window.renderSchedulePage = function(){
     });
     tableHtml += `</tbody></table></div>`;
     
+    // БЛОК С КНОПКАМИ ДЛЯ ПРЕПОДАВАТЕЛЯ
     if (isTeacher) {
       tableHtml += `<div style="margin-top:20px; display:flex; justify-content:center; gap:15px;">
         <button class="btn" id="saveScheduleBtn" style="padding:12px 30px; font-size:16px;">💾 Сохранить</button>
@@ -76,7 +87,7 @@ window.renderSchedulePage = function(){
       </div>`;
     }
 
-    app.appendChild(el(tableHtml));
+    app.innerHTML += tableHtml;
 
     if (isTeacher) {
       var saveBtn = document.getElementById("saveScheduleBtn");
@@ -84,11 +95,11 @@ window.renderSchedulePage = function(){
           saveBtn.onclick = function() {
             document.querySelectorAll(".sched-input").forEach(input => {
               var key = input.getAttribute("data-key"), sub = input.getAttribute("data-sub"), val = input.value.trim();
-              if (!defaultData[key]) defaultData[key] = { sub1: "", sub2: "" };
-              defaultData[key][sub] = val;
+              if (!scheduleData[key]) scheduleData[key] = { sub1: "", sub2: "" };
+              scheduleData[key][sub] = val;
             });
-            localStorage.setItem('mdk_schedule', JSON.stringify(defaultData));
-            if (window.API && window.API.saveSchedule) window.API.saveSchedule(defaultData);
+            localStorage.setItem('mdk_schedule', JSON.stringify(scheduleData));
+            window.API.saveSchedule(scheduleData);
             window.showToast("Расписание сохранено!", "ok");
           };
       }
@@ -97,9 +108,9 @@ window.renderSchedulePage = function(){
       if (clearBtn) {
           clearBtn.onclick = function() {
             if (confirm("Вы уверены, что хотите полностью очистить расписание?")) {
-              defaultData = {};
+              scheduleData = {};
               localStorage.removeItem('mdk_schedule');
-              if (window.API && window.API.saveSchedule) window.API.saveSchedule({});
+              window.API.saveSchedule({});
               window.showToast("Расписание очищено", "info");
               window.renderSchedulePage();
             }
@@ -107,6 +118,4 @@ window.renderSchedulePage = function(){
       }
     }
   }
-  
-  buildTable();
 };
