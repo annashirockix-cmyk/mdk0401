@@ -36,7 +36,9 @@ async function fetchAPI(action, params, method) {
     try {
         const response = await fetch(urlObj.toString(), options);
         clearTimeout(timeoutId);
-        if (!response.ok) throw new Error("HTTP Error " + response.status);
+        if (!response.ok) {
+            throw new Error("HTTP Error " + response.status + " " + response.statusText);
+        }
         return await response.json();
     } catch (err) {
         clearTimeout(timeoutId);
