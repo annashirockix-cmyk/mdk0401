@@ -15,7 +15,7 @@ async function fetchAPI(action, params, method) {
         cache: "no-store", 
         redirect: 'follow',
         headers: { 
-            'Content-Type': 'text/plain;charset=utf-8' 
+            'Content-Type': 'text/plain;charset=utf-8' // Ключевое изменение
         }
     };
 
