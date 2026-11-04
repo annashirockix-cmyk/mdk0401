@@ -30,7 +30,7 @@ async function fetchAPI(action, params, method) {
     }
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(function () { controller.abort(); }, 120000); // 2 минуты на холодный старт
+    const timeoutId = setTimeout(function () { controller.abort(); }, 120000);
     options.signal = controller.signal;
 
     try {
