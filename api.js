@@ -15,7 +15,7 @@ async function fetchAPI(action, params, method) {
         cache: "no-store", 
         redirect: 'follow',
         headers: { 
-            'Content-Type': 'text/plain;charset=utf-8' // Ключевое изменение
+            'Content-Type': 'text/plain;charset=utf-8' // КЛЮЧЕВОЕ ИЗМЕНЕНИЕ
         }
     };
 
@@ -30,7 +30,7 @@ async function fetchAPI(action, params, method) {
     }
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(function () { controller.abort(); }, 120000);
+    const timeoutId = setTimeout(function () { controller.abort(); }, 120000); // 2 минуты на холодный старт
     options.signal = controller.signal;
 
     try {
