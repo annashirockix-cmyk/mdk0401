@@ -30,29 +30,16 @@ async function fetchAPI(action, params, method) {
     }
 
     const controller = new AbortController();
-    // Увеличиваем таймаут до 120 секунд (2 минуты) из-за медленного холодного старта Google
-    const timeoutId = setTimeout(function () { controller.abort(); }, 120000); 
+    const timeoutId = setTimeout(function () { controller.abort(); }, 120000);
     options.signal = controller.signal;
 
     try {
-        console.log(`[API] Отправка запроса: ${action}...`);
         const response = await fetch(urlObj.toString(), options);
         clearTimeout(timeoutId);
-        
         if (!response.ok) {
             throw new Error("HTTP Error " + response.status + " " + response.statusText);
         }
-        
-        // Получаем ответ как текст, чтобы отловить ошибки, если сервер вернул HTML вместо JSON
-        const textResponse = await response.text();
-        
-        try {
-            return JSON.parse(textResponse);
-        } catch (parseError) {
-            console.error("[API] Сервер вернул не JSON. Сырой ответ:", textResponse);
-            throw new Error("Сервер вернул некорректный формат данных (не JSON). Скорее всего, скрипт развернут с ошибкой в правах доступа.");
-        }
-        
+        return await response.json();
     } catch (err) {
         clearTimeout(timeoutId);
         console.error("API Error [" + action + "]:", err);
