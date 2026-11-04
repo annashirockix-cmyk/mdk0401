@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МДК Портал - Учебный портал</title>
-    
     <link rel="icon" href="data:,">
     <link rel="manifest" href="./manifest.json">
-    
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./animations.css">
     <link rel="stylesheet" href="./lecture-methodical.css">
 </head>
 <body>
 
-    <!-- ОКНО ВХОДА -->
     <div id="loginOverlay" class="login-overlay" style="display: flex;">
         <div class="login-shell">
             <div style="text-align: center; margin-bottom: 20px;">
@@ -24,7 +21,6 @@
             <form id="unifiedLoginForm" class="login-card">
                 <input type="text" id="loginEmail" placeholder="Email (например: student_n@portal.ru)" required>
                 <input type="password" id="loginPassword" placeholder="Пароль" required>
-                <!-- ВАЖНО: type="button", чтобы страница не перезагружалась -->
                 <button type="button" id="btnLoginUnified" class="btn" style="width: 100%; margin-top: 10px; padding: 12px;">Войти</button>
                 <div style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--muted);">
                     <p>Тестовые аккаунты:</p>
@@ -35,7 +31,6 @@
         </div>
     </div>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
     <header class="topbar">
         <div class="brand" style="display: flex; align-items: center; gap: 10px;">
             <button class="burger-btn" id="burgerBtn">
@@ -65,7 +60,6 @@
         </div>
     </header>
 
-    <!-- БОКОВОЕ МЕНЮ -->
     <div class="drawer-overlay" id="drawerOverlay"></div>
     <nav class="drawer" id="drawer">
         <div class="drawer-head">
@@ -102,15 +96,13 @@
         </div>
     </nav>
 
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
     <main>
         <div id="crumbs" style="padding: 10px 20px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border);"></div>
         <div id="app" style="padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%;"></div>
     </main>
 
-    <!-- ПОДКЛЮЧЕНИЕ СКРИПТОВ (С ВЕРСИЯМИ ДЛЯ СБРОСА КЭША) -->
-    <script src="./api.js?v=2"></script>
-    <script src="./data-global.js?v=2"></script>
+    <script src="./api.js?v=3"></script>
+    <script src="./data-global.js?v=3"></script>
     <script src="./data-0701.js"></script>
     <script src="./data-0401.js"></script>
     <script src="./data-0201.js"></script>
@@ -129,7 +121,7 @@
     <script src="./questions-logic.js"></script>
     <script src="./questions-extra.js"></script>
 
-    <script src="./app.js?v=2"></script>
+    <script src="./app.js?v=3"></script>
     <script src="./assistant.js"></script>
     <script src="./easter-eggs.js"></script>
     <script src="./exam-engine.js"></script>
