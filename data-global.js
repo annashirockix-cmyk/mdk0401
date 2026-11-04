@@ -1,17 +1,16 @@
 "use strict";
 
 window.GLOBAL_DATA = {
-  // Видеофайлы >50 МБ нельзя стабильно хранить на GitHub Pages.
-  // Загрузите 1.mp4…9.mp4 в папку attachments/ репозитория или укажите YouTube в external.
   videos: [
-    { title: "Видеоурок 1: Введение", description: "Основы ЧПУ. Если плеер пустой — файл не загружен на хостинг.", file: "./attachments/1.mp4", external: "" },
-    { title: "Видеоурок 2: G-коды", description: "Разбор команд", file: "./attachments/2.mp4", external: "" },
-    { title: "Видеоурок 3: Наладка", description: "Практические приемы", file: "./attachments/3.mp4", external: "" },
-    { title: "Видеоурок 4", description: "Учебный материал", file: "./attachments/4.mp4", external: "" },
-    { title: "Видеоурок 5", description: "Учебный материал", file: "./attachments/5.mp4", external: "" },
-    { title: "Видеоурок 6", description: "Учебный материал", file: "./attachments/6.mp4", external: "" },
-    { title: "Видеоурок 8", description: "Учебный материал", file: "./attachments/8.mp4", external: "" },
-    { title: "Видеоурок 9", description: "Учебный материал", file: "./attachments/9.mp4", external: "" }
+    { title: "Видеоурок 1: Введение", description: "Основы ЧПУ", file: "./video/1.mp4" },
+    { title: "Видеоурок 2: G-коды", description: "Разбор команд", file: "./video/2.mp4" },
+    { title: "Видеоурок 3: Наладка", description: "Практические приемы", file: "./video/3.mp4" },
+    { title: "Видеоурок 4", description: "Учебный материал", file: "./video/4.mp4" },
+    { title: "Видеоурок 5", description: "Учебный материал", file: "./video/5.mp4" },
+    { title: "Видеоурок 6", description: "Учебный материал", file: "./video/6.mp4" },
+    { title: "Видеоурок 7", description: "Учебный материал", file: "./video/7.mp4" },
+    { title: "Видеоурок 8", description: "Учебный материал", file: "./video/8.mp4" },
+    { title: "Видеоурок 9", description: "Учебный материал", file: "./video/9.mp4" }
   ],
 
   passports: [
