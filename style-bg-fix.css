@@ -1,0 +1,16 @@
+/* Переопределение путей фонов: файлы лежат в fonts/, не в img/ */
+.bg-foggy-forest { background-image: url("./fonts/Background 1.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-pumpkins { background-image: url("./fonts/Background 2.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-spooky-room { background-image: url("./fonts/Background 3.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-halloween { background-image: url("./fonts/Background 7.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-red-forest { background-image: url("./fonts/Background 9.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-lanterns { background-image: url("./fonts/Background 10.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-dark-table { background-image: url("./fonts/Background 15.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-graveyard { background-image: url("./fonts/Background 28.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-cats-notebook { background-image: url("./fonts/Background 31.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-cats-yarn { background-image: url("./fonts/Background 33.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
+.bg-underwater { background: linear-gradient(180deg, #0c4a6e 0%, #082f49 100%) fixed !important; }
+.bg-stone-alley { background: linear-gradient(135deg, #4b5563, #1f2937) fixed !important; }
+.bg-aurora, body.bg-aurora { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #0ea5e9 100%) fixed !important; }
+.bg-matrix, body.bg-matrix { background: radial-gradient(ellipse at center, #022c22 0%, #000 70%) fixed !important; }
+.bg-space, body.bg-space { background: radial-gradient(ellipse at top, #1e1b4b 0%, #020617 60%) fixed !important; }
