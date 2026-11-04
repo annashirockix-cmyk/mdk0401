@@ -1,97 +1,70 @@
-// sw.js
-const CACHE = "mdk0701-v214"; // Версия обновлена для сброса старого кэша
+// service-worker.js
+const CACHE_NAME = 'portal-cache-v5'; // <--- ВЕРСИЯ ОБНОВЛЕНА ДО v5
 
-const ASSETS = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./animations.css",
-  "./lecture-methodical.css",
-  "./manifest.json",
-  "./data-0701.js",
-  "./data-0401.js",
-  "./data-0201.js",
-  "./data-0202.js",
-  "./data-mastercam.js",
-  "./data-extra.js",
-  "./data-global.js",
-  "./app.js",
-  "./api.js",
-  "./final.js",
-  "./journal.js"
+const STATIC_ASSETS = [
+  './',
+  './index.html',
+  './app.js',
+  './api.js',
+  './style.css',
+  './manifest.json'
 ];
 
-self.addEventListener("install", (e) => {
-  e.waitUntil(
-    caches.open(CACHE)
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
       .then((cache) => {
-        return cache.addAll(ASSETS).catch((err) => {
-          console.warn("[SW] Ошибка кэширования статики:", err);
-        });
+        console.log('[SW] Кэширование ресурсов v5');
+        return cache.addAll(STATIC_ASSETS);
       })
-      .then(() => self.skipWaiting()) // Активируем новый SW сразу
+      .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => {
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        keys.filter((key) => key !== CACHE).map((key) => {
-          console.log("[SW] Удаление старого кэша:", key);
-          return caches.delete(key);
-        })
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => {
+            console.log('[SW] Удаление старого кэша:', name);
+            return caches.delete(name);
+          })
       );
     }).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener("fetch", (e) => {
-  const req = e.request;
-  const url = new URL(req.url);
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
 
-  // 1. Пропускаем всё, что не GET
-  if (req.method !== "GET") return;
-
-  // 2. КРИТИЧЕСКИ ВАЖНО: НЕ кэшируем видео, PDF, PPTX, DOCX и архивы
-  // Иначе браузер пытается отдать обрезанный ответ (Range) и видео ломается
-  if (/\.(mp4|webm|pdf|pptx|docx|zip)$/i.test(url.pathname)) return;
-  
-  // 3. Не перехватываем запросы с заголовком Range (загрузка потокового видео)
-  if (req.headers.get("range")) return;
-
-  // 4. Не кэшируем внешние API (Google Apps Script и т.д.)
-  if (
-    url.hostname.includes("script.google.com") ||
-    url.hostname.includes("cdn.jsdelivr.net") ||
-    url.hostname.includes("fonts.googleapis.com") ||
-    url.hostname.includes("fonts.gstatic.com")
-  ) {
+  // Игнорируем Google API и не-GET запросы
+  if (url.hostname.includes('script.google.com') || request.method !== 'GET') {
     return;
   }
 
-  // 5. Для HTML-страниц используем Network-First (чтобы всегда подтягивать свежий код)
-  if (req.mode === "navigate") {
-    e.respondWith(
-      fetch(req).catch(() => caches.match("./index.html"))
-    );
-    return;
-  }
+  // Сначала пробуем загрузить из сети
+  event.respondWith(
+    fetch(request).then((networkResponse) => {
+      // Если сеть вернула ошибку 503 (GitHub лежит), просто отдаем её
+      if (!networkResponse.ok) return networkResponse;
 
-  // 6. Для скриптов и стилей используем Stale-While-Revalidate
-  e.respondWith(
-    caches.match(req).then((hit) => {
-      const fetchPromise = fetch(req).then((res) => {
-        if (res.ok && res.status === 200 && url.origin === location.origin) {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(req, copy));
-        }
-        return res;
-      }).catch(() => {
-        return new Response("Network error", { status: 408, headers: { "Content-Type": "text/plain" } });
+      if (networkResponse && networkResponse.status === 200 && url.origin === self.location.origin) {
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(request, responseToCache);
+        });
+      }
+      return networkResponse;
+    }).catch(() => {
+      // Если сети нет вообще, берем из кэша
+      return caches.match(request).then((cachedResponse) => {
+        if (cachedResponse) return cachedResponse;
+        if (request.mode === 'navigate') return caches.match('./index.html');
+        return new Response('Нет сети', { status: 503 });
       });
-      
-      return hit || fetchPromise;
     })
   );
 });
