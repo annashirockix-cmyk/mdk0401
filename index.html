@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="./lecture-methodical.css">
 </head>
 <body>
-
     <div id="loginOverlay" class="login-overlay" style="display: flex;">
         <div class="login-shell">
             <div style="text-align: center; margin-bottom: 20px;">
@@ -31,14 +30,9 @@
             </form>
         </div>
     </div>
-
     <header class="topbar">
         <div class="brand" style="display: flex; align-items: center; gap: 10px;">
-            <button class="burger-btn" id="burgerBtn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
             <span class="brand-badge" id="mainLogo">МДК Портал</span>
             <select id="mdkSelector" class="group-select" style="background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px; font-size: 13px; outline: none;" onchange="window.state.activeCourseId = this.value; window.saveStudentData(); window.renderHomePage();">
                 <option value="07.01">МДК 07.01 (ЧПУ)</option>
@@ -60,7 +54,6 @@
             <button class="btn ghost" onclick="window.handleLogout()" style="padding: 5px 10px; font-size: 12px;">Выйти</button>
         </div>
     </header>
-
     <div class="drawer-overlay" id="drawerOverlay"></div>
     <nav class="drawer" id="drawer">
         <div class="drawer-head">
@@ -88,12 +81,10 @@
             <a href="javascript:void(0)" class="drawer-item" onclick="window.clearCache()">🧹 Очистить кэш</a>
         </div>
     </nav>
-
     <main>
         <div id="crumbs" style="padding: 10px 20px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border);"></div>
         <div id="app" style="padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%;"></div>
     </main>
-
     <script src="./api.js?v=4"></script>
     <script src="./data-global.js?v=6"></script>
     <script src="./data-0701.js"></script>
@@ -116,6 +107,7 @@
     <script src="./app-offline-login.js?v=4"></script>
     <script src="./media-fix.js?v=5"></script>
     <script src="./portal-fixes.js?v=6"></script>
+    <script src="./mdk-upgrade.js?v=7"></script>
     <script src="./assistant.js"></script>
     <script src="./easter-eggs.js"></script>
     <script src="./exam-engine.js"></script>
@@ -132,7 +124,6 @@
     <script src="./shop.js"></script>
     <script src="./admin.js"></script>
     <script src="./extra.js"></script>
-
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
