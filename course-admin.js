@@ -15,6 +15,8 @@
 
   function updateCourseChrome(){
     const id=window.state.activeCourseId||"07.01", plugin=isPlugin(id);
+    document.querySelectorAll('.drawer-item[href="#/admin"]').forEach(x=>x.style.display=isAdmin()?"flex":"none");
+    document.querySelectorAll('.drawer-item[href="#/journal"]').forEach(x=>x.style.display=isTeacher()?"flex":"none");
     const xp=document.getElementById("xpCount"); if(xp) xp.style.display=plugin?"none":"";
     document.querySelectorAll('.drawer-item[href="#/shop"],.drawer-item[href="#/achievements"],.drawer-item[href="#/rating"],.drawer-item[href="#/training"]').forEach(x=>x.style.display=plugin?"none":"");
     document.querySelectorAll('.drawer-item[href="#/games"]').forEach(x=>x.style.display="none");
