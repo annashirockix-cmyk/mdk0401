@@ -23,10 +23,20 @@
                 <input type="password" id="loginPassword" placeholder="Пароль" required>
                 <button type="button" id="btnLoginUnified" class="btn" style="width: 100%; margin-top: 10px; padding: 12px;">Войти</button>
                 <div style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--muted);">
-                    <p>Тестовые аккаунты:</p>
-                    <p>Студент: <b>student_n@portal.ru</b> / 123456</p>
-                    <p>Препод: <b>anna.sh@portal.ru</b> / teacher123</p>
+                    <p>Нет аккаунта? Получите ссылку или QR-код приглашения у преподавателя.</p>
+                    <button type="button" class="btn ghost" id="showRegisterBtn" style="width:100%;margin-top:8px;">Регистрация по приглашению</button>
                 </div>
+            </form>
+            <form id="portalRegisterForm" class="login-card" style="display:none;margin-top:12px;">
+                <h3>Регистрация студента</h3>
+                <input id="regName" type="text" placeholder="ФИО" required>
+                <input id="regGroup" type="text" placeholder="Группа" required>
+                <input id="regEmail" type="email" placeholder="Email" required>
+                <input id="regPassword" type="password" minlength="8" placeholder="Пароль (не менее 8 символов)" required>
+                <input id="regInvite" type="text" placeholder="Код приглашения" required>
+                <button type="submit" class="btn" id="btnRegister" style="width:100%;margin-top:10px;">Зарегистрироваться</button>
+                <button type="button" class="btn ghost" id="hideRegisterBtn" style="width:100%;margin-top:6px;">Назад ко входу</button>
+                <p style="font-size:12px;color:var(--muted);">Регистрация выдаёт доступ только к дисциплинам, включённым в приглашение.</p>
             </form>
         </div>
     </div>
