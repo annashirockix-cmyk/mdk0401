@@ -19,11 +19,11 @@ function fetchAPI(action, params, method) {
 window.API = {
  login:function(email,password){return fetchAPI("login",{email:email,password:password},"POST").then(function(r){if(r&&r.success&&r.token){try{sessionStorage.setItem("mdk.session",r.token);}catch(e){}}return r;});},
  logout:function(){try{sessionStorage.removeItem("mdk.session");}catch(e){}},
- register:function(email,password,name,group){return fetchAPI("register",{email:email,password:password,name:name,group:group},"POST");},
+ register:function(email,password,name,group,invite){return fetchAPI("register",{email:email,password:password,name:name,group:group,invite:invite},"POST");},
  getStudents:function(){return fetchAPI("getStudents",{},"GET");},
  saveStudent:function(key,name,group,payload){return fetchAPI("saveStudent",{email:String(key||"").split("|")[0],name:name,group:group,payload:payload},"POST");},
  getResults:function(filters){return fetchAPI("getResults",filters||{},"GET");},
- saveResult:function(data){return fetchAPI("saveResult",data||{},"POST");},
+ saveResult:function(data){data=Object.assign({},data||{});if(!data.courseId&&window.state)data.courseId=window.state.activeCourseId||"";return fetchAPI("saveResult",data,"POST");},
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
  deleteCustomContent:function(id){return fetchAPI("deleteCustomContent",{id:id},"POST");},
@@ -31,6 +31,10 @@ window.API = {
 setUserRole:function(email,role){return fetchAPI("setUserRole",{email:email,role:role},"POST");},
  adminCreateUser:function(data){return fetchAPI("adminCreateUser",data||{},"POST");},
  adminDeleteUser:function(email){return fetchAPI("adminDeleteUser",{email:email},"POST");},
+ setStudentCourses:function(email,courses){return fetchAPI("setStudentCourses",{email:email,courses:courses},"POST");},
+ createInvite:function(data){return fetchAPI("createInvite",data||{},"POST");},
+ getInvites:function(){return fetchAPI("getInvites",{},"GET");},
+ deactivateInvite:function(code){return fetchAPI("deactivateInvite",{code:code},"POST");},
  getSchedule:function(){return fetchAPI("getSchedule",{},"GET");},
  saveSchedule:function(data){return fetchAPI("saveSchedule",{schedule:JSON.stringify(data)},"POST");}
 };
