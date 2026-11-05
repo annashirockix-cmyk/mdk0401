@@ -120,7 +120,8 @@ window.unlockAchievement = function(id) {
 // 2. ЗАГРУЗКА КАСТОМНОГО КОНТЕНТА
 // ==========================================
 window.loadGlobalCustomContent = function(callback) {
-    if (!window.API || !window.API.getCustomContent) {
+    var hasSession = false; try { hasSession = !!sessionStorage.getItem("mdk.session"); } catch (e) {}
+    if (!window.API || !window.API.getCustomContent || (!window.state.student && !window.state.staff) || !hasSession) {
         if (callback) callback();
         return;
     }
@@ -565,8 +566,9 @@ function setupLogin() {
         window.renderUserChip();
         overlay.style.display = "none";
         window.unlockAchievement("welcome");
-        location.hash = "#/"; 
-        window.router();
+        location.hash = "#/";
+        if (window.loadGlobalCustomContent) window.loadGlobalCustomContent(function(){ window.router(); });
+        else window.router();
     }
 
     function doUnifiedLogin() {
