@@ -98,6 +98,7 @@
   window.renderAccountPage = renderAccountPage;
 
   function renderLoginHelp() {
+    const overlay = $("loginOverlay"); if (overlay) overlay.style.display = "none";
     const app = $("app");
     if (!app) return;
     app.innerHTML = '<a href="#/" class="backlink">← На главную</a><section class="hero"><h1>Восстановление доступа</h1><p>Запрос поступит администратору портала.</p></section>' +
