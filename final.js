@@ -190,7 +190,7 @@ window.renderFinalExamPage = function (mdkId) {
   var hero = examNode("section", "hero");
   hero.appendChild(examNode("span", "brand-badge", course.shortName));
   hero.appendChild(examNode("h1", "", "Итоговый экзамен"));
-  var duration = mdkId === "04.01" ? 60 : 45;
+  var duration = 60;
   hero.appendChild(examNode("p", "", "30 заданий разных форматов + 2 письменных задания · " + duration + " минут"));
   app.appendChild(hero);
 
