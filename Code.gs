@@ -3,7 +3,7 @@
  * Совместим с api.js в репозитории mdk0401.
  *
  * Первичная настройка:
- * 1) Script Properties: SPREADSHEET_ID = ID вашей Google-таблицы.
+ * 1) ID Google-таблицы уже указан ниже в CFG.SPREADSHEET_ID.
  * 2) Запустить setupPortal().
  * 3) Зарегистрировать учётную запись на сайте.
  * 4) Запустить promoteUserToAdmin("email@example.com").
@@ -11,6 +11,7 @@
  */
 
 const CFG = {
+  SPREADSHEET_ID: "1UEO0ynuLlbmtixSVTAmbqSnpvbna_PeQlDzu_ztKedk",
   USERS: "Users",
   RESULTS: "Results",
   CONTENT: "CourseContent",
@@ -86,9 +87,9 @@ function json_(value) {
 /* ---------- Spreadsheet and sheets ---------- */
 
 function getSpreadsheet_() {
-  const id = PropertiesService.getScriptProperties().getProperty("SPREADSHEET_ID");
+  const id = CFG.SPREADSHEET_ID || PropertiesService.getScriptProperties().getProperty("SPREADSHEET_ID");
   if (!id) {
-    throw new Error("Не задан SPREADSHEET_ID. Откройте Настройки проекта → Свойства скрипта.");
+    throw new Error("Не задан SPREADSHEET_ID. Укажите ID таблицы в CFG.SPREADSHEET_ID.");
   }
   return SpreadsheetApp.openById(id);
 }
