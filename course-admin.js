@@ -101,23 +101,53 @@
   window.renderAdminPanel=function(){
     const app=document.getElementById("app");if(!app)return;
     if(!isAdmin()){app.innerHTML='<div class="module">Доступ только администратору.</div>';return;}
-    app.innerHTML='<a href="#/" class="backlink">← На главную</a><section class="hero"><h1>Управление доступом</h1><p>Назначение дисциплин преподавателям</p></section><div class="module" id="adminTeachers">Загрузка списка пользователей…</div><div class="module"><h3>Редактор материалов</h3><p>Создание лекций, тестов и тем для назначенных дисциплин.</p><a class="btn" href="#/course-editor">Открыть редактор</a></div>';
-    const box=document.getElementById("adminTeachers");
-    if(!window.API||!window.API.getStudents){box.textContent="API не подключён.";return;}
-    window.API.getStudents().then(res=>{
-      if(!res.success)throw new Error(res.error||"Не удалось получить пользователей.");
-      const teachers=(res.students||[]).filter(u=>String(u.role).toLowerCase()==="teacher");
-      if(!teachers.length){box.innerHTML="<p>Учётные записи преподавателей не найдены.</p>";return;}
-      box.innerHTML='<h3>Доступ преподавателей к предметам</h3><p style="color:var(--muted)">Снимите отметку, чтобы закрыть преподавателю доступ к дисциплине. Изменения применяются после повторного входа.</p>'+teachers.map((u,i)=>{
-        const active=String(u.courses||"").split(",").filter(Boolean);
-        return '<div class="module" style="margin:12px 0;padding:14px"><b>'+esc(u.name||u.email)+'</b><div style="font-size:12px;color:var(--muted)">'+esc(u.email)+'</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:12px 0">'+allIds.map(id=>'<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="teacher-course" data-user="'+esc(u.email)+'" value="'+id+'" '+(active.includes(id)?"checked":"")+'>'+esc(COURSE_LABELS[id])+'</label>').join("")+'</div><button class="btn save-teacher-courses" data-user="'+esc(u.email)+'">Сохранить доступ</button><span class="save-status" style="margin-left:10px"></span></div>';
-      }).join("");
-      box.querySelectorAll(".save-teacher-courses").forEach(btn=>btn.onclick=function(){
-        const email=btn.dataset.user, selected=Array.from(box.querySelectorAll('.teacher-course[data-user="'+CSS.escape(email)+'"]:checked')).map(x=>x.value);
-        const status=btn.parentElement.querySelector(".save-status");btn.disabled=true;status.textContent="Сохранение…";
-        window.API.setTeacherCourses(email,selected).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");status.textContent="Сохранено ✓";}).catch(e=>{status.textContent=e.message;}).finally(()=>btn.disabled=false);
+    app.innerHTML='<a href="#/" class="backlink">← На главную</a><section class="hero"><h1>Администрирование портала</h1><p>Создание, изменение ролей, назначение дисциплин и удаление учётных записей</p></section>'+
+      '<div class="module"><h3>➕ Добавить пользователя</h3><p style="color:var(--muted)">Создайте учётную запись вручную и передайте временный пароль пользователю безопасным способом.</p>'+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">'+
+      '<input id="newUserName" class="self-input" placeholder="ФИО пользователя"><input id="newUserEmail" class="self-input" type="email" placeholder="Email для входа">'+
+      '<input id="newUserGroup" class="self-input" placeholder="Группа (для студента)"><input id="newUserPassword" class="self-input" type="password" minlength="8" placeholder="Временный пароль (от 8 символов)">'+
+      '<select id="newUserRole" class="self-input"><option value="student">Студент</option><option value="teacher">Преподаватель</option><option value="admin">Администратор</option></select></div>'+
+      '<button class="btn" id="createPortalUser" style="margin-top:12px">Создать пользователя</button> <span id="createUserStatus" aria-live="polite"></span></div>'+
+      '<div class="module" id="adminUsers">Загрузка списка пользователей…</div>'+
+      '<div class="module"><h3>Редактор материалов</h3><p>Создание лекций, тестов и тем для дисциплин.</p><a class="btn" href="#/course-editor">Открыть редактор</a></div>';
+    const box=document.getElementById("adminUsers"),status=document.getElementById("createUserStatus");
+    function loadUsers(){
+      box.textContent="Загрузка списка пользователей…";
+      return window.API.getStudents().then(res=>{
+        if(!res.success)throw new Error(res.error||"Не удалось получить пользователей.");
+        const users=res.students||[];
+        if(!users.length){box.innerHTML="<h3>Пользователи портала</h3><p>Пока нет пользователей.</p>";return;}
+        box.innerHTML='<h3>Пользователи портала ('+users.length+')</h3><p style="color:var(--muted)">Изменение роли применяется после повторного входа. Удаление закрывает доступ, но сохраняет историю результатов тестов.</p>'+
+          users.map(u=>{
+            const email=String(u.email||""),ur=String(u.role||"student").toLowerCase(),active=String(u.courses||"").split(",").filter(Boolean);
+            const self=email.toLowerCase()===String(me().email||"").toLowerCase();
+            return '<div class="module" style="margin:12px 0;padding:14px"><div style="display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap"><div><b>'+esc(u.name||email)+'</b><div style="font-size:12px;color:var(--muted)">'+esc(email)+'</div><div style="font-size:12px;color:var(--muted)">Группа: '+esc(u.group||"—")+'</div></div>'+
+              '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><label>Роль <select class="self-input user-role-select" data-user="'+esc(email)+'" style="min-width:145px"><option value="student" '+(ur==="student"?"selected":"")+'>Студент</option><option value="teacher" '+(ur==="teacher"?"selected":"")+'>Преподаватель</option><option value="admin" '+(ur==="admin"?"selected":"")+'>Администратор</option></select></label><button class="btn ghost save-user-role" data-user="'+esc(email)+'">Сохранить роль</button><button class="btn ghost delete-portal-user" data-user="'+esc(email)+'" '+(self?"disabled title='Нельзя удалить собственную учётную запись'":"")+' style="border-color:#b44;color:#e77">Удалить</button></div></div>'+
+              (ur==="teacher"?'<div style="margin-top:14px"><b>Доступные дисциплины</b><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:10px 0">'+allIds.map(id=>'<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="teacher-course" data-user="'+esc(email)+'" value="'+id+'" '+(active.includes(id)?"checked":"")+'>'+esc(COURSE_LABELS[id])+'</label>').join("")+'</div><button class="btn save-teacher-courses" data-user="'+esc(email)+'">Сохранить доступ к дисциплинам</button><span class="save-status" style="margin-left:10px"></span></div>':'')+
+              '</div>';
+          }).join("");
+        box.querySelectorAll(".save-user-role").forEach(btn=>btn.onclick=function(){
+          const email=btn.dataset.user,sel=box.querySelector('.user-role-select[data-user="'+CSS.escape(email)+'"]');btn.disabled=true;
+          window.API.setUserRole(email,sel.value).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");window.showToast("Роль обновлена.","ok");return loadUsers();})
+          .catch(e=>window.showToast(e.message,"err")).finally(()=>btn.disabled=false);
+        });
+        box.querySelectorAll(".save-teacher-courses").forEach(btn=>btn.onclick=function(){
+          const email=btn.dataset.user,selected=Array.from(box.querySelectorAll('.teacher-course[data-user="'+CSS.escape(email)+'"]:checked')).map(x=>x.value),s=btn.parentElement.querySelector(".save-status");
+          btn.disabled=true;s.textContent="Сохранение…";window.API.setTeacherCourses(email,selected).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");s.textContent="Сохранено ✓";}).catch(e=>s.textContent=e.message).finally(()=>btn.disabled=false);
+        });
+        box.querySelectorAll(".delete-portal-user").forEach(btn=>btn.onclick=function(){
+          const email=btn.dataset.user;if(!confirm("Удалить учётную запись "+email+"? История результатов тестов останется. Действие нельзя отменить."))return;
+          btn.disabled=true;window.API.adminDeleteUser(email).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");window.showToast("Пользователь удалён.","ok");return loadUsers();}).catch(e=>{window.showToast(e.message,"err");btn.disabled=false;});
+        });
       });
-    }).catch(e=>{box.textContent="Ошибка: "+e.message;});
+    }
+    if(!window.API||!window.API.adminCreateUser||!window.API.adminDeleteUser){box.textContent="API не подключён: обновите api.js и Code.gs.";return;}
+    document.getElementById("createPortalUser").onclick=function(){
+      const data={name:document.getElementById("newUserName").value.trim(),email:document.getElementById("newUserEmail").value.trim(),group:document.getElementById("newUserGroup").value.trim(),password:document.getElementById("newUserPassword").value,role:document.getElementById("newUserRole").value};
+      const btn=this;if(!data.name||!data.email||data.password.length<8){status.textContent="Заполните ФИО, корректный email и пароль от 8 символов.";return;}
+      btn.disabled=true;status.textContent="Создание…";window.API.adminCreateUser(data).then(r=>{if(!r.success)throw new Error(r.error||"Не удалось создать пользователя.");status.textContent="Создан пользователь: "+r.email;["newUserName","newUserEmail","newUserGroup","newUserPassword"].forEach(id=>document.getElementById(id).value="");return loadUsers();}).catch(e=>status.textContent=e.message).finally(()=>btn.disabled=false);
+    };
+    loadUsers().catch(e=>{box.textContent="Ошибка: "+e.message;});
   };
 
   function getTopics(courseId){
