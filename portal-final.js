@@ -176,7 +176,7 @@
       } else {
         window.state.results["test_" + topicId] = rec;
       }
-      window.state.xp = (window.state.xp || 0) + g * 10;
+      if (!(window.isStandaloneCourse && window.isStandaloneCourse(cid()))) window.state.xp = (window.state.xp || 0) + g * 10;
       if (window.saveStudentData) window.saveStudentData();
       if (window.renderUserChip) window.renderUserChip();
       if (window.state.student && window.API && window.API.saveResult) {
