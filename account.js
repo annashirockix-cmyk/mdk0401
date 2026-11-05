@@ -188,7 +188,7 @@
         location.hash = "#/";
         return;
       }
-      return originalRouter.apply(this, arguments);
+      const result = originalRouter.apply(this, arguments); applyMenu(); return result;
     };
   }
 
