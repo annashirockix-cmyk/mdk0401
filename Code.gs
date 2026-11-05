@@ -793,9 +793,13 @@ const LEGACY_RESULTS_SOURCE_GID = 1051580763;
 function legacyNorm_(v) { return String(v == null ? "" : v).toLowerCase().replace(/ё/g,"е").replace(/[^a-zа-я0-9]+/g,""); }
 function legacyColumn_(headers, aliases) {
   const normalized = headers.map(legacyNorm_);
-  for (let i = 0; i < aliases.length; i++) {
-    const at = normalized.indexOf(legacyNorm_(aliases[i]));
+  const keys = aliases.map(legacyNorm_);
+  for (let i = 0; i < keys.length; i++) {
+    const at = normalized.indexOf(keys[i]);
     if (at >= 0) return at;
+  }
+  for (let i = 0; i < normalized.length; i++) {
+    if (keys.some(key => key.length >= 4 && normalized[i].indexOf(key) >= 0)) return i;
   }
   return -1;
 }
