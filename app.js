@@ -703,6 +703,7 @@ window.router = function() {
     if (page === "schedule" && window.renderSchedulePage) { window.renderSchedulePage(); return; }
     if (page === "rating" && window.renderRatingPage) { window.renderRatingPage(); return; }
     if (page === "admin" && window.renderAdminPanel) { window.renderAdminPanel(); return; }
+    if (page === "access" && window.renderAccessPage) { window.renderAccessPage(); return; }
     window.renderHomePage();
 };
 
