@@ -183,7 +183,14 @@
     const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),testSel=document.getElementById("testTopic");
     let lectureId="",testId="",draft=[],editingQuestion=-1;
     const $=id=>document.getElementById(id);
-    function refreshContent(done){if(window.loadGlobalCustomContent)window.loadGlobalCustomContent(function(){renderSaved();if(done)done();});else{renderSaved();if(done)done();}}
+    function refreshContent(done){
+      const pageToken=$("editorCourse");
+      if(window.loadGlobalCustomContent)window.loadGlobalCustomContent(function(){
+        // Ignore a stale callback after route change or a newer editor instance.
+        if(!pageToken||!document.getElementById("editorCourse"))return;
+        renderSaved();if(done)done();
+      });else{renderSaved();if(done)done();}
+    }
     function topics(){return getTopics(courseSel.value);}
     function records(type,topicId){const key=type==="lecture"?"lectures":"tests";return (window.customContent[key]||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===topicId);}
     function fillTopics(){
@@ -192,6 +199,10 @@
       renderSaved();
     }
     function renderSaved(){
+      // The content request may finish after the teacher has navigated away.
+      // Never update elements belonging to a page that is no longer mounted.
+      const required=["lectureExisting","testExisting","savedMaterials","lectureTopic","testTopic"];
+      if(required.some(id=>!$(id)))return;
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
       const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
       $("lectureExisting").innerHTML='<option value="">— Новая лекция —</option>'+ls.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
