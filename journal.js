@@ -204,7 +204,7 @@ window.renderJournalPage = function() {
                       if (val) p.manualGrades[formattedDate] = val;
                       else delete p.manualGrades[formattedDate];
 
-                      promises.push(window.API.saveStudent(sKey, s.name, s.group, JSON.stringify(p)));
+                      promises.push(window.API.saveStudent(s.email, s.name, s.group, JSON.stringify(p)));
                   });
 
                   Promise.all(promises).then(() => {
