@@ -25,7 +25,7 @@
   }
   function filterCoursePicker(){
     const sel=document.getElementById("mdkSelector"); if(!sel)return;
-    Array.from(sel.options).forEach(o=>{if(o.value) o.hidden=!canCourse(o.value);});
+    Array.from(sel.options).forEach(o=>{if(o.value) o.hidden=o.value!=="ENGLISH_PORTAL"&&!canCourse(o.value);});
     if(isTeacher()&&!canCourse(window.state.activeCourseId)){
       const first=accessible()[0];
       if(first){window.state.activeCourseId=first;sel.value=first;}
