@@ -193,13 +193,14 @@
       renderSaved();
     }
     function renderSaved(){
-      const topicId=topicSel.value||testSel.value,ls=records("lecture",topicId),ts=records("test",topicId);
+      const lectureTopicId=topicSel.value,testTopicId=testSel.value;
+      const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
       $("lectureExisting").innerHTML='<option value="">— Новая лекция —</option>'+ls.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
       $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
       $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button></div>').join(""):'<p>Лекций пока нет.</p>')+
         '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>');
-      $("savedMaterials").querySelectorAll(".pick-lecture").forEach(b=>b.onclick=()=>{topicSel.value=topicId;$("lectureExisting").value=b.dataset.id;loadLecture();});
-      $("savedMaterials").querySelectorAll(".pick-test").forEach(b=>b.onclick=()=>{testSel.value=topicId;$("testExisting").value=b.dataset.id;loadTest();$("previewTestBtn").click();});
+      $("savedMaterials").querySelectorAll(".pick-lecture").forEach(b=>b.onclick=()=>{ $("lectureExisting").value=b.dataset.id;loadLecture();});
+      $("savedMaterials").querySelectorAll(".pick-test").forEach(b=>b.onclick=()=>{ $("testExisting").value=b.dataset.id;loadTest();$("previewTestBtn").click();});
     }
     function resetLecture(){
       lectureId="";$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
