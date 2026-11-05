@@ -5,3 +5,19 @@
 .lecture-methodical li { margin: .25rem 0; }
 .methodical-scheme { margin: 1rem 0; padding: .85rem; border: 1px solid #cbd5e1; border-radius: .75rem; background: rgba(148,163,184,.08); }
 .scheme-flow { font-weight: 600; overflow-wrap: anywhere; }
+
+/* Расширенное оформление лекций по материаловедению */
+.lecture-methodical { color: var(--text); }
+.lecture-methodical h3 { color: var(--accent); padding-bottom: .35rem; border-bottom: 1px solid var(--border); }
+.lecture-methodical p { margin: .65rem 0; }
+.lecture-methodical table { width: 100%; border-collapse: collapse; margin: 1rem 0; display: block; overflow-x: auto; }
+.lecture-methodical th, .lecture-methodical td { border: 1px solid var(--border); padding: .65rem .75rem; text-align: left; vertical-align: top; min-width: 115px; }
+.lecture-methodical th { background: var(--card-soft); color: var(--text); }
+.lecture-methodical .methodical-scheme { background: var(--card-soft); border-color: var(--accent); }
+.lecture-methodical .scheme-flow { line-height: 1.9; white-space: normal; }
+.lecture-methodical ul, .lecture-methodical ol { padding-left: 1.5rem; }
+.lecture-methodical li { margin: .35rem 0; }
+@media (max-width: 640px) {
+  .lecture-methodical { font-size: 14px; }
+  .lecture-methodical th, .lecture-methodical td { padding: .5rem; min-width: 130px; }
+}
