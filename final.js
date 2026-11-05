@@ -201,7 +201,19 @@ window.renderFinalExamPage = function (mdkId) {
   start.addEventListener("click", function () {
     var bank = collectCourseQuestions(mdkId);
     if (!bank.length) { mount.textContent = "Банк экзаменационных вопросов пока пуст."; return; }
-    var picked = examShuffle(bank).slice(0, Math.min(FINAL_EXAM_SIZE, bank.length));
+    var examLimit = Math.min(FINAL_EXAM_SIZE, bank.length);
+    var selected = [];
+    // Для МДК 04.01 гарантируем, что в каждом экзаменационном варианте будут задания разных форматов.
+    if (mdkId === "04.01") {
+      [["multi", 3], ["order", 2], ["match", 2], ["num", 1]].forEach(function (rule) {
+        var candidates = examShuffle(bank.filter(function (question) {
+          return (question.type || "mc") === rule[0] && selected.indexOf(question) === -1;
+        }));
+        selected = selected.concat(candidates.slice(0, rule[1]));
+      });
+    }
+    var remaining = examShuffle(bank.filter(function (question) { return selected.indexOf(question) === -1; }));
+    var picked = examShuffle(selected.concat(remaining.slice(0, Math.max(0, examLimit - selected.length))));
     mount.innerHTML = "";
     var timerBox = examNode("div", "exam-timer", duration + ":00");
     timerBox.style.cssText = "font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;color:var(--accent);";
