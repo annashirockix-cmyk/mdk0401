@@ -355,8 +355,9 @@ function login_(data) {
 function saveStudent_(data) {
   const current = auth_(data);
   const targetEmail = email_(data.email || current.email);
-  if (targetEmail !== current.email && current.role !== "admin") {
-    throw new Error("Нельзя изменять данные другого пользователя.");
+  if (targetEmail !== current.email) {
+    const targetCheck = userByEmail_(targetEmail);
+    if (current.role !== "admin" && !(current.role === "teacher" && targetCheck && targetCheck.role === "student" && targetCheck.courses.split(",").some(function(id){ return hasCourseAccess_(current,id); }))) throw new Error("Нельзя изменять данные этого пользователя.");
   }
 
   const target = userByEmail_(targetEmail);
@@ -391,7 +392,7 @@ function getStudents_(data) {
       group: row[map.Group],
       role: row[map.Role],
       courses: String(row[map.Courses] || "").split(",").filter(function(id){ return user.role === "admin" || hasCourseAccess_(user,id); }),
-      payload: user.role === "admin" ? String(row[map.Payload] || "") : "{}"
+      payload: (function(){ if(user.role==="admin") return String(row[map.Payload]||""); let p={}; try{p=JSON.parse(row[map.Payload]||"{}");}catch(e){} return JSON.stringify({results:p.results||{},manualGrades:p.manualGrades||{}}); })()
     };
   });
   return { success: true, students: students };
