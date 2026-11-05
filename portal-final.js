@@ -191,7 +191,8 @@
             score: ok,
             maxScore: Q.length,
             percent: pct,
-            timeSpent: 0
+            timeSpent: 0,
+            courseId: cid()
           });
         } catch (e) {}
       }
