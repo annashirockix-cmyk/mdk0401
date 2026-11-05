@@ -431,20 +431,20 @@ window.renderTopicPage = function(courseId, topicId) {
         }
         else if (tabName === 'selfwork') {
             if (!topic.selfWork || !topic.selfWork.length) { contentArea.innerHTML = "<p>Самостоятельных работ нет.</p>"; return; }
-            topic.selfWork.forEach(work => {
-                contentArea.innerHTML += `<div class="card" style="margin-bottom:15px;"><h3 style="color:var(--accent); margin-top:0;">${work.code} ${work.title}</h3><p><b>Задание:</b> ${work.task}</p>${(work.questions && work.questions.length) ? `<p><b>Вопросы:</b></p><ul>${work.questions.map(q => `<li>${q}</li>`).join('')}</ul>` : ''}</div>`;
-                
-                var testData = window.EXTRA_TESTS ? window.EXTRA_TESTS[`self_${work.code.replace(/\s+/g, '')}`] : null;
-                if (testData && testData.questions) {
-                    var testId = `self_${work.code}`; var isDone = window.state.results && window.state.results[testId];
-                    if (isDone) {
-                        contentArea.innerHTML += `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px; margin-bottom:15px; border:1px solid var(--ok);"><h3 style="color:var(--ok);">✅ Тест выполнен!</h3><p>Оценка: <b>${isDone.grade}</b></p><button class="btn ghost" onclick="window.startInlineTest('${topic.id}', '${work.code}')">Пройти заново</button></div>`;
-                    } else {
-                        contentArea.innerHTML += `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px; margin-bottom:15px;"><h3>🎯 Тест самоконтроля</h3><p style="font-size:14px; color:var(--muted);">Вопросов: ${testData.questions.length}</p><button class="btn" onclick="window.startInlineTest('${topic.id}', '${work.code}')" style="padding:10px 20px;">Начать тест</button></div>`;
-                    }
+            topic.selfWork.forEach((work, workIndex) => {
+                var workCode = work.code || (topic.id + "_СР" + (workIndex + 1));
+                var testKey = "self_" + topic.id + "_" + workIndex;
+                var testData = window.EXTRA_TESTS && window.EXTRA_TESTS[testKey];
+                if (!testData && window.EXTRA_TESTS && work.code) {
+                    testData = window.EXTRA_TESTS["self_" + String(work.code).replace(/\\s+/g, "")];
+                }
+                var isDone = window.state.results && window.state.results[testKey];
+                contentArea.innerHTML += `<div class="card" style="margin-bottom:15px;"><h3 style="color:var(--accent); margin-top:0;">${window.escapeHtml(workCode)} ${window.escapeHtml(work.title || "")}</h3><p><b>Задание:</b> ${window.escapeHtml(work.task || "Изучить материал и подготовить ответ.")}</p>${(work.questions && work.questions.length) ? `<p><b>Вопросы:</b></p><ul>${work.questions.map(q => `<li>${window.escapeHtml(q)}</li>`).join('')}</ul>` : ''}</div>`);
+                if (testData && Array.isArray(testData.questions) && testData.questions.length) {
+                    contentArea.innerHTML += `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px; margin-bottom:15px; border:1px solid var(--border);"><h3>🎯 Тест самоконтроля</h3><p style="font-size:14px; color:var(--muted);">Вопросов: ${testData.questions.length}</p>${isDone ? `<p>Последняя оценка: <b>${isDone.grade || "—"}</b></p>` : ""}<button class="btn" onclick="window.startInlineTest('${topic.id}', ${workIndex})" style="padding:10px 20px;">${isDone ? "Пройти заново" : "Начать тест"}</button></div>`;
                 } else {
-                    var savedAns = window.state.results[`self_${work.code}`] || "";
-                    contentArea.innerHTML += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);"><label style="font-size:14px; font-weight:bold; color:var(--text-soft);">Ваш ответ:</label><textarea class="self-input" id="self_input_${work.code}" rows="4" style="margin-top:8px;" placeholder="Введите ответ...">${savedAns}</textarea><button class="btn" onclick="window.saveSelfAnswer('${work.code}')" style="margin-top:10px;">💾 Сохранить ответ</button></div>`;
+                    var savedAns = window.state.results["self_" + workCode] || "";
+                    contentArea.innerHTML += `<div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);"><label style="font-size:14px; font-weight:bold; color:var(--text-soft);">Ваш ответ:</label><textarea class="self-input" id="self_input_${workCode}" rows="4" style="margin-top:8px;" placeholder="Введите ответ...">${window.escapeHtml(savedAns)}</textarea><button class="btn" onclick="window.saveSelfAnswer('${workCode}')" style="margin-top:10px;">💾 Сохранить ответ</button></div>`;
                 }
             });
         }
@@ -465,9 +465,9 @@ window.renderTopicPage = function(courseId, topicId) {
         var course = window.MDK_DATA && window.MDK_DATA[courseId];
         var topic = null;
         if (course) (course.sections || []).forEach(s => (s.topics || []).forEach(t => { if (t.id === topicId) topic = t; }));
-        if (selfWorkCode) {
-            var workIndex = topic && (topic.selfWork || []).findIndex(w => w.code === selfWorkCode);
-            if (workIndex < 0 || workIndex == null) workIndex = 0;
+        if (selfWorkCode !== null && selfWorkCode !== undefined) {
+            var workIndex = typeof selfWorkCode === "number" ? selfWorkCode : (topic ? (topic.selfWork || []).findIndex(w => w.code === selfWorkCode) : -1);
+            if (workIndex < 0) workIndex = 0;
             var testData = window.EXTRA_TESTS && window.EXTRA_TESTS[`self_${topicId}_${workIndex}`];
             if (!testData && window.EXTRA_TESTS) {
                 var legacyKey = Object.keys(window.EXTRA_TESTS).find(k => k.indexOf("self_" + topicId + "_") === 0 && window.EXTRA_TESTS[k] && window.EXTRA_TESTS[k].questions);
@@ -488,7 +488,7 @@ window.renderTopicPage = function(courseId, topicId) {
             if (currentQ >= questions.length) {
                 var pct = Math.round((correct / questions.length) * 100); 
                 var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-                var resKey = selfWorkCode ? `self_${selfWorkCode}` : `test_${topicId}`;
+                var resKey = selfWorkCode !== null && selfWorkCode !== undefined ? `self_${topicId}_${typeof selfWorkCode === "number" ? selfWorkCode : 0}` : `test_${topicId}`;
                 window.state.results[resKey] = { grade: grade }; 
                 window.saveStudentData(); 
                 window.unlockAchievement('hacker');
