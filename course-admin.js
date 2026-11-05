@@ -164,35 +164,129 @@
     if(!isTeacher()){app.innerHTML='<div class="module">Редактор доступен только преподавателю.</div>';return;}
     const ids=accessible();if(!ids.length){app.innerHTML='<div class="module">Администратор пока не назначил вам дисциплины.</div>';return;}
     const selected=canCourse(window.state.activeCourseId)?window.state.activeCourseId:ids[0];
-    app.innerHTML='<a href="#/" class="backlink">← На главную</a><section class="hero"><h1>Редактор учебного курса</h1><p>Создавайте темы, лекции и проверочные тесты</p></section><div class="module"><label>Дисциплина</label><select id="editorCourse" class="self-input">'+ids.map(id=>'<option value="'+id+'" '+(id===selected?"selected":"")+'>'+esc(COURSE_LABELS[id])+'</option>').join("")+'</select></div><div class="module"><h3>1. Создать новую тему</h3><input id="newTopicCode" class="self-input" placeholder="Код темы, например Тема 13" style="margin:8px 0"><input id="newTopicTitle" class="self-input" placeholder="Название темы" style="margin:8px 0"><button class="btn" id="createTopicBtn">Создать тему</button><span id="topicStatus" style="margin-left:10px"></span></div><div class="module"><h3>2. Добавить лекцию</h3><select id="lectureTopic" class="self-input"></select><input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="9" placeholder="Текст лекции. Можно использовать простую HTML-разметку: заголовки, списки, таблицы." style="margin:8px 0"></textarea><button class="btn" id="saveLectureBtn">Сохранить лекцию</button><span id="lectureStatus" style="margin-left:10px"></span></div><div class="module"><h3>3. Создать тест</h3><select id="testTopic" class="self-input"></select><input id="testTitle" class="self-input" placeholder="Название теста" style="margin:8px 0"><div id="questionDrafts"></div><div class="module" style="margin:12px 0"><input id="qText" class="self-input" placeholder="Текст вопроса"><input id="qA" class="self-input" placeholder="Вариант А" style="margin-top:6px"><input id="qB" class="self-input" placeholder="Вариант Б" style="margin-top:6px"><input id="qC" class="self-input" placeholder="Вариант В" style="margin-top:6px"><input id="qD" class="self-input" placeholder="Вариант Г" style="margin-top:6px"><label>Правильный ответ</label><select id="qCorrect" class="self-input"><option value="0">А</option><option value="1">Б</option><option value="2">В</option><option value="3">Г</option></select><button class="btn ghost" id="addQuestionBtn" style="margin-top:10px">Добавить вопрос в тест</button></div><button class="btn" id="saveTestBtn">Сохранить тест</button><span id="testStatus" style="margin-left:10px"></span></div>';
-    const courseSel=document.getElementById("editorCourse"), topicSel=document.getElementById("lectureTopic"), testSel=document.getElementById("testTopic");
-    function fillTopics(){const list=getTopics(courseSel.value);const opts=list.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");topicSel.innerHTML=opts;testSel.innerHTML=opts;}
-    fillTopics();courseSel.onchange=fillTopics;
-    document.getElementById("createTopicBtn").onclick=function(){
-      const code=document.getElementById("newTopicCode").value.trim(),title=document.getElementById("newTopicTitle").value.trim(),status=document.getElementById("topicStatus");
+    app.innerHTML='<a href="#/" class="backlink">← На главную</a>'+
+      '<section class="hero"><h1>Редактор учебного курса</h1><p>Создание, просмотр, изменение и удаление учебных материалов. Изменения доступны только в назначенных дисциплинах.</p></section>'+
+      '<div class="module"><label>Дисциплина</label><select id="editorCourse" class="self-input">'+ids.map(id=>'<option value="'+id+'" '+(id===selected?"selected":"")+'>'+esc(COURSE_LABELS[id])+'</option>').join("")+'</select></div>'+
+      '<div class="module"><h3>1. Создать новую тему</h3><input id="newTopicCode" class="self-input" placeholder="Код темы, например Тема 12" style="margin:8px 0"><input id="newTopicTitle" class="self-input" placeholder="Название темы" style="margin:8px 0"><button class="btn" id="createTopicBtn">Создать тему</button> <span id="topicStatus" aria-live="polite"></span></div>'+
+      '<div class="module"><h3>2. Лекции</h3><p style="color:var(--muted)">Выберите существующую лекцию для изменения или создайте новую. Текст поддерживает простую HTML-разметку.</p>'+
+      '<label>Тема</label><select id="lectureTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующая лекция</label><select id="lectureExisting" class="self-input"><option value="">— Новая лекция —</option></select>'+
+      '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea>'+
+      '<button class="btn" id="saveLectureBtn">Создать лекцию</button> <button class="btn ghost" id="resetLectureBtn" type="button">Очистить форму</button> <button class="btn ghost" id="deleteLectureBtn" type="button" disabled>Удалить выбранную</button> <span id="lectureStatus" aria-live="polite"></span></div>'+
+      '<div class="module"><h3>3. Дополнительные тесты</h3><p style="color:var(--muted)">Можно создавать тесты, загружать ранее сохранённые тесты для изменения, просматривать формулировки всех заданий и правильные ответы.</p>'+
+      '<label>Тема</label><select id="testTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующий тест</label><select id="testExisting" class="self-input"><option value="">— Новый тест —</option></select>'+
+      '<input id="testTitle" class="self-input" placeholder="Название теста" style="margin:8px 0"><div id="questionDrafts"></div>'+
+      '<div class="module" style="padding:12px;margin:12px 0"><h4>Добавить / изменить вопрос</h4><textarea id="qText" class="self-input" rows="2" placeholder="Текст вопроса"></textarea>'+
+      '<input id="qA" class="self-input" placeholder="Вариант А" style="margin-top:6px"><input id="qB" class="self-input" placeholder="Вариант Б" style="margin-top:6px"><input id="qC" class="self-input" placeholder="Вариант В" style="margin-top:6px"><input id="qD" class="self-input" placeholder="Вариант Г" style="margin-top:6px">'+
+      '<label>Правильный ответ</label><select id="qCorrect" class="self-input"><option value="0">А</option><option value="1">Б</option><option value="2">В</option><option value="3">Г</option></select>'+
+      '<button class="btn ghost" id="addQuestionBtn" style="margin-top:10px">Добавить вопрос в тест</button> <button class="btn ghost" id="cancelQuestionEditBtn" type="button">Отмена изменения вопроса</button></div>'+
+      '<button class="btn" id="saveTestBtn">Создать тест</button> <button class="btn ghost" id="resetTestBtn" type="button">Новый тест</button> <button class="btn ghost" id="deleteTestBtn" type="button" disabled>Удалить выбранный тест</button> <button class="btn ghost" id="previewTestBtn" type="button">Просмотреть задания и ответы</button> <span id="testStatus" aria-live="polite"></span><div id="testPreview" style="margin-top:12px"></div></div>'+
+      '<div class="module"><h3>4. Сохранённые материалы темы</h3><p style="color:var(--muted)">Список обновляется после сохранения. Выберите тему выше, чтобы увидеть её лекции и тесты.</p><div id="savedMaterials">Загрузка материалов…</div></div>';
+    const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),testSel=document.getElementById("testTopic");
+    let lectureId="",testId="",draft=[],editingQuestion=-1;
+    const $=id=>document.getElementById(id);
+    function refreshContent(done){if(window.loadGlobalCustomContent)window.loadGlobalCustomContent(function(){renderSaved();if(done)done();});else{renderSaved();if(done)done();}}
+    function topics(){return getTopics(courseSel.value);}
+    function records(type,topicId){const key=type==="lecture"?"lectures":"tests";return (window.customContent[key]||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===topicId);}
+    function fillTopics(){
+      const opts=topics().map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
+      topicSel.innerHTML=opts;testSel.innerHTML=opts;
+      renderSaved();
+    }
+    function renderSaved(){
+      const topicId=topicSel.value||testSel.value,ls=records("lecture",topicId),ts=records("test",topicId);
+      $("lectureExisting").innerHTML='<option value="">— Новая лекция —</option>'+ls.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
+      $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
+      $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button></div>').join(""):'<p>Лекций пока нет.</p>')+
+        '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>');
+      $("savedMaterials").querySelectorAll(".pick-lecture").forEach(b=>b.onclick=()=>{topicSel.value=topicId;$("lectureExisting").value=b.dataset.id;loadLecture();});
+      $("savedMaterials").querySelectorAll(".pick-test").forEach(b=>b.onclick=()=>{testSel.value=topicId;$("testExisting").value=b.dataset.id;loadTest();$("previewTestBtn").click();});
+    }
+    function resetLecture(){
+      lectureId="";$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
+      $("saveLectureBtn").textContent="Создать лекцию";$("deleteLectureBtn").disabled=true;$("lectureStatus").textContent="";
+    }
+    function loadLecture(){
+      const id=$("lectureExisting").value;if(!id){resetLecture();return;}
+      const item=records("lecture",topicSel.value).find(x=>String(x.id)===id);if(!item)return;
+      lectureId=item.id;$("lectureTitle").value=item.title||"";$("lectureBody").value=item.content||"";
+      $("saveLectureBtn").textContent="Сохранить изменения лекции";$("deleteLectureBtn").disabled=false;$("lectureStatus").textContent="Загружена лекция для изменения.";
+    }
+    function clearQuestionForm(){$("qText").value="";["qA","qB","qC","qD"].forEach(id=>$(id).value="");$("qCorrect").value="0";editingQuestion=-1;$("addQuestionBtn").textContent="Добавить вопрос в тест";}
+    function drawDraft(){
+      $("questionDrafts").innerHTML='<h4>Задания теста ('+draft.length+')</h4>'+(draft.length?draft.map((q,i)=>'<div class="module" style="padding:10px;margin:8px 0"><b>'+(i+1)+'. '+esc(q.q)+'</b><ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b>— правильный ответ</b>':'')+'</li>').join("")+'</ol><button class="btn ghost edit-q" data-i="'+i+'">Изменить</button> <button class="btn ghost remove-q" data-i="'+i+'">Удалить</button></div>').join(""):'<p>Добавьте первый вопрос.</p>');
+      $("questionDrafts").querySelectorAll(".edit-q").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,q=draft[i];$("qText").value=q.q;["qA","qB","qC","qD"].forEach((id,j)=>$(id).value=q.options[j]||"");$("qCorrect").value=String(q.correct);editingQuestion=i;$("addQuestionBtn").textContent="Сохранить вопрос";});
+      $("questionDrafts").querySelectorAll(".remove-q").forEach(b=>b.onclick=()=>{draft.splice(+b.dataset.i,1);if(editingQuestion===+b.dataset.i)clearQuestionForm();drawDraft();});
+    }
+    function resetTest(){
+      testId="";draft=[];editingQuestion=-1;$("testExisting").value="";$("testTitle").value="";$("testPreview").innerHTML="";
+      $("saveTestBtn").textContent="Создать тест";$("deleteTestBtn").disabled=true;$("testStatus").textContent="";clearQuestionForm();drawDraft();
+    }
+    function loadTest(){
+      const id=$("testExisting").value;if(!id){resetTest();return;}
+      const item=records("test",testSel.value).find(x=>String(x.id)===id);if(!item)return;
+      testId=item.id;draft=(item.questions||[]).map(q=>({q:q.q,options:(q.options||[]).slice(),correct:Number(q.correct)||0}));
+      $("testTitle").value=item.title||"";$("saveTestBtn").textContent="Сохранить изменения теста";$("deleteTestBtn").disabled=false;
+      $("testStatus").textContent="Загружен тест. Можно изменять вопросы и варианты ответов.";drawDraft();
+    }
+    function previewTest(){
+      const title=$("testTitle").value.trim()||"Предварительный просмотр теста";
+      $("testPreview").innerHTML='<h3>'+esc(title)+' — просмотр заданий</h3>'+(draft.length?draft.map((q,i)=>'<div class="module" style="padding:12px;margin:8px 0"><b>Задание '+(i+1)+'. '+esc(q.q)+'</b><ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b style="color:var(--accent)">✓ Правильный ответ</b>':'')+'</li>').join("")+'</ol></div>').join(""):'<p>В тесте пока нет заданий.</p>');
+    }
+    fillTopics();
+    courseSel.onchange=()=>{resetLecture();resetTest();fillTopics();};
+    topicSel.onchange=()=>{resetLecture();renderSaved();};
+    testSel.onchange=()=>{resetTest();renderSaved();};
+    $("lectureExisting").onchange=loadLecture;
+    $("testExisting").onchange=loadTest;
+    $("resetLectureBtn").onclick=resetLecture;
+    $("resetTestBtn").onclick=resetTest;
+    $("cancelQuestionEditBtn").onclick=clearQuestionForm;
+    $("createTopicBtn").onclick=function(){
+      const code=$("newTopicCode").value.trim(),title=$("newTopicTitle").value.trim(),status=$("topicStatus");
       if(!code||!title){status.textContent="Заполните код и название.";return;}
-      const id="custom-"+Date.now(),full=code+" "+title;status.textContent="Сохранение…";
-      window.API.saveCustomContent({id:id,mdkId:courseSel.value,type:"topic",title:full,content:"",code:code}).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");return window.loadGlobalCustomContent();}).then(()=>{fillTopics();topicSel.value=id;testSel.value=id;status.textContent="Тема создана ✓";document.getElementById("newTopicCode").value="";document.getElementById("newTopicTitle").value="";}).catch(e=>status.textContent=e.message);
+      const id="custom-"+Date.now();status.textContent="Сохранение…";
+      window.API.saveCustomContent({id:id,mdkId:courseSel.value,type:"topic",title:code+" "+title,content:"",code:code}).then(r=>{
+        if(!r.success)throw new Error(r.error||"Ошибка");return window.loadGlobalCustomContent?new Promise(resolve=>window.loadGlobalCustomContent(resolve)):null;
+      }).then(()=>{fillTopics();topicSel.value=id;testSel.value=id;renderSaved();status.textContent="Тема создана ✓";$("newTopicCode").value="";$("newTopicTitle").value="";}).catch(e=>status.textContent=e.message);
     };
-    document.getElementById("saveLectureBtn").onclick=function(){
-      const topicId=topicSel.value,title=document.getElementById("lectureTitle").value.trim(),content=document.getElementById("lectureBody").value.trim(),status=document.getElementById("lectureStatus");
+    $("saveLectureBtn").onclick=function(){
+      const topicId=topicSel.value,title=$("lectureTitle").value.trim(),content=$("lectureBody").value.trim(),status=$("lectureStatus");
       if(!topicId||!title||!content){status.textContent="Выберите тему и заполните название и текст.";return;}
-      status.textContent="Сохранение…";
-      window.API.saveCustomContent({id:"lec-"+Date.now(),mdkId:courseSel.value,topicId:topicId,type:"lecture",title:title,code:"Доп. лекция",content:content}).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");status.textContent="Лекция сохранена ✓";document.getElementById("lectureTitle").value="";document.getElementById("lectureBody").value="";}).catch(e=>status.textContent=e.message);
+      const id=lectureId||("lec-"+Date.now());status.textContent="Сохранение…";
+      window.API.saveCustomContent({id:id,mdkId:courseSel.value,topicId:topicId,type:"lecture",title:title,code:"Доп. лекция",content:content}).then(r=>{
+        if(!r.success)throw new Error(r.error||"Ошибка сохранения");
+        lectureId=id;return new Promise(resolve=>refreshContent(resolve));
+      }).then(()=>{$("lectureExisting").value=id;$("saveLectureBtn").textContent="Сохранить изменения лекции";$("deleteLectureBtn").disabled=false;status.textContent="Лекция сохранена ✓";}).catch(e=>status.textContent=e.message);
     };
-    let draft=[];
-    function drawDraft(){document.getElementById("questionDrafts").innerHTML=draft.map((q,i)=>'<div class="module" style="padding:10px;margin:8px 0"><b>'+(i+1)+'. '+esc(q.q)+'</b><div style="font-size:12px;color:var(--muted)">Правильный ответ: '+esc(q.options[q.correct])+'</div><button class="btn ghost remove-q" data-i="'+i+'">Удалить</button></div>').join("");document.querySelectorAll(".remove-q").forEach(b=>b.onclick=()=>{draft.splice(+b.dataset.i,1);drawDraft();});}
-    document.getElementById("addQuestionBtn").onclick=function(){
-      const q=document.getElementById("qText").value.trim(),options=["qA","qB","qC","qD"].map(id=>document.getElementById(id).value.trim()),correct=+document.getElementById("qCorrect").value;
-      if(!q||options.some(x=>!x)){window.showToast("Заполните вопрос и все четыре варианта.","err");return;}
-      draft.push({q:q,options:options,correct:correct});["qText","qA","qB","qC","qD"].forEach(id=>document.getElementById(id).value="");drawDraft();
+    $("deleteLectureBtn").onclick=function(){
+      if(!lectureId||!confirm("Удалить выбранную лекцию?"))return;
+      const id=lectureId;$("lectureStatus").textContent="Удаление…";
+      window.API.deleteCustomContent(id).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка удаления");resetLecture();return new Promise(resolve=>refreshContent(resolve));}).then(()=>$("lectureStatus").textContent="Лекция удалена.").catch(e=>$("lectureStatus").textContent=e.message);
     };
-    document.getElementById("saveTestBtn").onclick=function(){
-      const topicId=testSel.value,title=document.getElementById("testTitle").value.trim(),status=document.getElementById("testStatus");
+    $("addQuestionBtn").onclick=function(){
+      const q=$("qText").value.trim(),options=["qA","qB","qC","qD"].map(id=>$(id).value.trim()),correct=Number($("qCorrect").value);
+      if(!q||options.some(x=>!x)){window.showToast("Заполните вопрос и все четыре варианта ответа.","err");return;}
+      const item={q:q,options:options,correct:correct};
+      if(editingQuestion>=0)draft[editingQuestion]=item;else draft.push(item);
+      clearQuestionForm();drawDraft();
+    };
+    $("previewTestBtn").onclick=previewTest;
+    $("saveTestBtn").onclick=function(){
+      const topicId=testSel.value,title=$("testTitle").value.trim(),status=$("testStatus");
       if(!topicId||!title||!draft.length){status.textContent="Укажите тему, название и добавьте хотя бы один вопрос.";return;}
-      status.textContent="Сохранение…";
-      window.API.saveCustomContent({id:"test-"+Date.now(),mdkId:courseSel.value,topicId:topicId,type:"test",title:title,questions:draft.slice()}).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");status.textContent="Тест сохранён ✓ ("+draft.length+" вопросов)";draft=[];drawDraft();document.getElementById("testTitle").value="";}).catch(e=>status.textContent=e.message);
+      const id=testId||("test-"+Date.now());status.textContent="Сохранение…";
+      window.API.saveCustomContent({id:id,mdkId:courseSel.value,topicId:topicId,type:"test",title:title,questions:draft.map(q=>({q:q.q,options:q.options.slice(),correct:q.correct}))}).then(r=>{
+        if(!r.success)throw new Error(r.error||"Ошибка сохранения");
+        testId=id;return new Promise(resolve=>refreshContent(resolve));
+      }).then(()=>{$("testExisting").value=id;$("saveTestBtn").textContent="Сохранить изменения теста";$("deleteTestBtn").disabled=false;status.textContent="Тест сохранён ✓ ("+draft.length+" заданий)";previewTest();}).catch(e=>status.textContent=e.message);
     };
+    $("deleteTestBtn").onclick=function(){
+      if(!testId||!confirm("Удалить выбранный тест? Результаты студентов в журнале сохранятся."))return;
+      const id=testId;$("testStatus").textContent="Удаление…";
+      window.API.deleteCustomContent(id).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка удаления");resetTest();return new Promise(resolve=>refreshContent(resolve));}).then(()=>$("testStatus").textContent="Тест удалён.").catch(e=>$("testStatus").textContent=e.message);
+    };
+    drawDraft();
+    refreshContent();
   };
 
   function customRecords(courseId,topicId,type){return (window.customContent[type==="lecture"?"lectures":"tests"]||[]).filter(x=>x.mdkId===courseId&&x.topicId===topicId);}
