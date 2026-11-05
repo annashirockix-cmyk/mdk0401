@@ -861,7 +861,7 @@ function importLegacyResultsFromSpreadsheet() {
     group: legacyColumn_(h, ["группа","group"]),
     testId: legacyColumn_(h, ["testid","id теста","код работы","id работы"]),
     title: legacyColumn_(h, ["название теста","название работы","тест","работа","наименование","testtitle"]),
-    grade: legacyColumn_(h, ["оценка","оценка за тест","оценка за работу","итог","итоговая оценка","grade"]),
+    grade: legacyColumn_(h, ["оценка","оценка за тест","оценка за работу","итоговая оценка","результат","grade"]),
     score: legacyColumn_(h, ["баллы","набрано баллов","верных ответов","правильных ответов","количество баллов","score"]),
     max: legacyColumn_(h, ["максимум","всего вопросов","maxscore","максимальный балл"]),
     percent: legacyColumn_(h, ["процент","результат процентов","результат в процентах","успеваемость","percent"]),
@@ -899,8 +899,11 @@ function importLegacyResultsFromSpreadsheet() {
     const gradeRaw = col.grade >= 0 ? String(src[col.grade] || "").replace(",", ".") : "";
     const score = col.score >= 0 ? legacyNumber_(src[col.score]) : 0;
     const maxScore = col.max >= 0 ? legacyNumber_(src[col.max]) : 0;
-    const percent = col.percent >= 0 ? legacyNumber_(src[col.percent]) : (maxScore > 0 ? Math.round(score / maxScore * 100) : 0);
     let grade = legacyNumber_(gradeRaw);
+    let percent = col.percent >= 0 ? legacyNumber_(src[col.percent]) : (maxScore > 0 ? Math.round(score / maxScore * 100) : 0);
+    // A single "Результат" column may contain either a grade (4/5) or a percent (82%).
+    if (!percent && grade > 5 && grade <= 100) { percent = grade; grade = 0; }
+    if (!percent && /%/.test(gradeRaw)) percent = legacyNumber_(gradeRaw);
     if (!grade || grade < 2 || grade > 5) grade = percent >= 90 ? 5 : percent >= 75 ? 4 : percent >= 60 ? 3 : 2;
     let finishedAt = "";
     if (col.date >= 0 && src[col.date]) {
