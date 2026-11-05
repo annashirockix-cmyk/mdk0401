@@ -752,7 +752,7 @@ function resolvePasswordReset_(data) {
     const user = userByEmail_(vals[i][m.Email]);
     if (!user) throw new Error("Пользователь с таким email больше не существует.");
     const salt = Utilities.getUuid() + Utilities.getUuid(), now = new Date().toISOString();
-    writeUserFields_(user, { PasswordSalt: salt, PasswordHash: passwordHash_(password, salt), PasswordChangedAt: now, UpdatedAt: now });
+    writeUserFields_(user, { PasswordSalt: salt, PasswordHash: passwordHash_(password, salt), UpdatedAt: now });
     sh.getRange(i + 1, m.Status + 1).setValue("resolved");
     sh.getRange(i + 1, m.ResolvedAt + 1).setValue(now);
     sh.getRange(i + 1, m.ResolvedBy + 1).setValue(actor.email);
