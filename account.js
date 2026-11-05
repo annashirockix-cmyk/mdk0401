@@ -131,6 +131,7 @@
     const labels = { student: "Студенты", teacher: "Преподаватели", admin: "Администраторы" };
     const settings = window.portalSettings.gamesByRole || DEFAULT_GAMES;
     box.innerHTML = Object.keys(labels).map(role => '<label style="display:flex;gap:10px;align-items:center"><input type="checkbox" data-role="' + role + '" ' + (settings[role] ? "checked" : "") + '> Показывать игры: ' + labels[role] + '</label>').join("");
+    window.refreshPortalSettings().then(() => { box.querySelectorAll("input[data-role]").forEach(input => input.checked = !!(window.portalSettings.gamesByRole || DEFAULT_GAMES)[input.dataset.role]); });
     $("saveGameRoleChecks").onclick = function () {
       const gamesByRole = {};
       box.querySelectorAll("input[data-role]").forEach(input => gamesByRole[input.dataset.role] = input.checked);
