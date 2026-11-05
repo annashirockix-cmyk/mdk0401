@@ -385,7 +385,15 @@ function saveStudent_(data) {
   if (data.name !== undefined) fields.Name = String(data.name);
   if (data.group !== undefined) fields.Group = String(data.group);
   if (data.payload !== undefined) {
-    fields.Payload = typeof data.payload === "string" ? data.payload : JSON.stringify(data.payload || {});
+    const incoming = typeof data.payload === "string" ? (function(){try{return JSON.parse(data.payload||"{}");}catch(e){return {};}})() : (data.payload || {});
+    if (current.role === "teacher") {
+      let existing = {};
+      try { existing = JSON.parse(target.payload || "{}"); } catch (e) { existing = {}; }
+      existing.manualGrades = incoming.manualGrades || existing.manualGrades || {};
+      fields.Payload = JSON.stringify(existing);
+    } else {
+      fields.Payload = typeof data.payload === "string" ? data.payload : JSON.stringify(data.payload || {});
+    }
   }
   writeUserFields_(target, fields);
   return { success: true };
