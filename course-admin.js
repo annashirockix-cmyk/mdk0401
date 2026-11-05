@@ -88,7 +88,7 @@
       window.showToast("Доступ к этой дисциплине закрыт администратором.","err");
       location.hash="#/";return;
     }
-    if(isPlugin(window.state.activeCourseId)&&["games","shop","achievements","rating","training"].indexOf(p[0])>=0){
+    if(isPlugin(window.state.activeCourseId)&&["shop","achievements","rating","training"].indexOf(p[0])>=0){
       location.hash="#/";updateCourseChrome();return;
     }
     if(isTeacher()&&!isAdmin()&&p[0]==="journal"){(window.renderJournalPage||renderTeacherJournal)();return;}
