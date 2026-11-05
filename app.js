@@ -57,10 +57,12 @@ window.getLevelTitle = function(lvl) { if (lvl < 3) return "Новичок"; if 
 window.updateMenuVisibility = function() {
     var isTeacher = window.state.staff && (window.state.staff.role === "teacher" || window.state.staff.role === "admin");
     var displayStyle = isTeacher ? "flex" : "none";
-    ['menuJournal', 'menuReports', 'menuSchedule', 'menuAdmin'].forEach(id => {
+    ['menuJournal', 'menuReports', 'menuSchedule'].forEach(id => {
         var el = document.getElementById(id);
         if (el) el.style.display = displayStyle;
     });
+    var adminLink = document.querySelector('.drawer-item[href="#/admin"]');
+    if (adminLink) adminLink.style.display = window.state.staff && window.state.staff.role === "admin" ? "flex" : "none";
 };
 
 window.applyGlobalEffects = function() {
