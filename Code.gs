@@ -17,6 +17,8 @@ const CFG = {
   CONTENT: "CourseContent",
   SCHEDULE: "Schedule",
   INVITES: "Invites",
+  PASSWORD_REQUESTS: "PasswordRequests",
+  SETTINGS: "PortalSettings",
   SESSION_PREFIX: "portal_session:",
   SESSION_TTL: 21600, // 6 часов
   LEGACY_SALT: "portal_spo_2026",
@@ -28,7 +30,9 @@ const HEADERS = {
   Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId"],
   CourseContent: ["Id", "CourseId", "TopicId", "Type", "Title", "Payload", "UpdatedBy", "UpdatedAt"],
   Schedule: ["Schedule"],
-  Invites: ["Code", "Courses", "CreatedBy", "CreatedAt", "ExpiresAt", "MaxUses", "Uses", "Active"]
+  Invites: ["Code", "Courses", "CreatedBy", "CreatedAt", "ExpiresAt", "MaxUses", "Uses", "Active"],
+  PasswordRequests: ["Id", "Email", "RequestedAt", "Status", "Note", "ResolvedAt", "ResolvedBy"],
+  PortalSettings: ["Key", "Value", "UpdatedAt", "UpdatedBy"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -59,6 +63,12 @@ function handleRequest_(e) {
 
     switch (action) {
       case "login": result = login_(data); break;
+      case "changecredentials": result = changeCredentials_(data); break;
+      case "requestpasswordreset": result = requestPasswordReset_(data); break;
+      case "getpasswordrequests": result = getPasswordRequests_(data); break;
+      case "resolvepasswordreset": result = resolvePasswordReset_(data); break;
+      case "getportalsettings": result = getPortalSettings_(data); break;
+      case "setgamesaccess": result = setGamesAccess_(data); break;
       case "register": result = register_(data); break;
       case "savestudent": result = saveStudent_(data); break;
       case "getstudents": result = getStudents_(data); break;
@@ -131,16 +141,18 @@ function results_() { return ensureSheet_(CFG.RESULTS); }
 function content_() { return ensureSheet_(CFG.CONTENT); }
 function schedule_() { return ensureSheet_(CFG.SCHEDULE); }
 function invites_() { return ensureSheet_(CFG.INVITES); }
+function passwordRequests_() { return ensureSheet_(CFG.PASSWORD_REQUESTS); }
+function settings_() { return ensureSheet_(CFG.SETTINGS); }
 
 /**
  * Запустите вручную один раз после добавления SPREADSHEET_ID.
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
-  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites.";
+  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings.";
 }
 
 /* ---------- Common helpers and authentication ---------- */
@@ -396,7 +408,7 @@ function getStudents_(data) {
       group: row[map.Group],
       role: row[map.Role],
       courses: String(row[map.Courses] || "").split(",").filter(function(id){ return user.role === "admin" || hasCourseAccess_(user,id); }),
-      payload: (function(){ if(user.role==="admin") return String(row[map.Payload]||""); let p={}; try{p=JSON.parse(row[map.Payload]||"{}");}catch(e){} return "{}"; })()
+      payload: (function(){ let p={}; try{p=JSON.parse(row[map.Payload]||"{}");}catch(e){} if(user.role==="admin") return String(row[map.Payload]||""); return JSON.stringify({manualGrades:p.manualGrades||{}}); })()
     };
   });
   return { success: true, students: students };
@@ -648,6 +660,122 @@ function setStudentCourses_(data){const actor=auth_(data),target=userByEmail_(da
 function createInvite_(data){const actor=auth_(data);if(actor.role!=='admin'&&actor.role!=='teacher')throw new Error('Создавать приглашения могут только преподаватели и администраторы.');const requested=Array.isArray(data.courses)?data.courses.map(String):[];const allowed=actor.role==='admin'?CFG.COURSES:actor.courses.split(',').filter(Boolean);const courses=requested.filter((id,i)=>allowed.indexOf(id)>=0&&requested.indexOf(id)===i);if(!courses.length||courses.length!==requested.length)throw new Error('Выберите дисциплины только из доступных вам.');const days=Math.min(90,Math.max(1,Number(data.days)||30)),maxUses=Math.min(500,Math.max(1,Number(data.maxUses)||50)),code=Utilities.getUuid().replace(/-/g,'')+Utilities.getUuid().replace(/-/g,'');const now=new Date(),expires=new Date(now.getTime()+days*86400000);invites_().appendRow([code,courses.join(','),actor.email,now.toISOString(),expires.toISOString(),maxUses,0,true]);return {success:true,code:code,courses:courses,expiresAt:expires.toISOString(),maxUses:maxUses};}
 function getInvites_(data){const actor=auth_(data);if(actor.role!=='admin'&&actor.role!=='teacher')throw new Error('Недостаточно прав.');const sh=invites_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);const invites=vals.slice(1).filter(r=>actor.role==='admin'||email_(r[m.CreatedBy])===actor.email).map(r=>({code:String(r[m.Code]),courses:String(r[m.Courses]),createdAt:r[m.CreatedAt],expiresAt:r[m.ExpiresAt],maxUses:Number(r[m.MaxUses]),uses:Number(r[m.Uses]),active:String(r[m.Active]).toLowerCase()!=='false'}));return {success:true,invites:invites};}
 function deactivateInvite_(data){const actor=auth_(data);if(actor.role!=='admin'&&actor.role!=='teacher')throw new Error('Недостаточно прав.');const sh=invites_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);for(let i=1;i<vals.length;i++)if(String(vals[i][m.Code])===String(data.code||'')){if(actor.role!=='admin'&&email_(vals[i][m.CreatedBy])!==actor.email)throw new Error('Это приглашение создано другим преподавателем.');sh.getRange(i+1,m.Active+1).setValue(false);return {success:true};}throw new Error('Приглашение не найдено.');}
+
+/* ---------- Account security: monthly credential changes and admin recovery ---------- */
+function verifyPassword_(user, password) {
+  return user.passwordSalt
+    ? user.passwordHash === passwordHash_(password, user.passwordSalt)
+    : user.passwordHash === legacyPasswordHash_(password);
+}
+function changeCredentials_(data) {
+  const user = auth_(data), oldPassword = String(data.oldPassword || "");
+  if (!verifyPassword_(user, oldPassword)) throw new Error("Текущий пароль указан неверно.");
+  const newEmail = data.newEmail !== undefined ? email_(data.newEmail) : user.email;
+  const newPassword = String(data.newPassword || "");
+  const now = new Date(), lock = LockService.getScriptLock();
+  if (newEmail && newEmail !== user.email && newEmail.indexOf("@") < 1) throw new Error("Укажите корректный новый логин (email).");
+  if (newPassword && newPassword.length < 8) throw new Error("Новый пароль должен содержать не менее 8 символов.");
+  if (newEmail === user.email && !newPassword) throw new Error("Укажите новый логин или новый пароль.");
+  lock.waitLock(10000);
+  try {
+    const fresh = userByEmail_(user.email);
+    if (newEmail !== user.email) {
+      if (userByEmail_(newEmail)) throw new Error("Этот логин уже занят.");
+      const lastLogin = fresh.loginChangedAt ? new Date(fresh.loginChangedAt).getTime() : 0;
+      if (lastLogin && now.getTime() - lastLogin < 30 * 86400000) {
+        const left = Math.ceil((30 * 86400000 - (now.getTime() - lastLogin)) / 86400000);
+        throw new Error("Логин можно менять один раз в 30 дней. Осталось дней: " + left + ".");
+      }
+    }
+    if (newPassword) {
+      const lastPassword = fresh.passwordChangedAt ? new Date(fresh.passwordChangedAt).getTime() : 0;
+      if (lastPassword && now.getTime() - lastPassword < 30 * 86400000) {
+        const left = Math.ceil((30 * 86400000 - (now.getTime() - lastPassword)) / 86400000);
+        throw new Error("Пароль можно менять один раз в 30 дней. Осталось дней: " + left + ".");
+      }
+    }
+    const fields = {};
+    if (newEmail !== user.email) fields.Email = newEmail;
+    if (newEmail !== user.email) fields.LoginChangedAt = now.toISOString();
+    if (newPassword) {
+      const salt = Utilities.getUuid() + Utilities.getUuid();
+      fields.PasswordSalt = salt;
+      fields.PasswordHash = passwordHash_(newPassword, salt);
+      fields.PasswordChangedAt = now.toISOString();
+    }
+    fields.UpdatedAt = now.toISOString();
+    writeUserFields_(fresh, fields);
+    if (newEmail !== user.email) {
+      const sh = results_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh);
+      for (let i = 1; i < vals.length; i++) if (email_(vals[i][m.Email]) === user.email) sh.getRange(i + 1, m.Email + 1).setValue(newEmail);
+      if (data.token) CacheService.getScriptCache().put(CFG.SESSION_PREFIX + String(data.token), newEmail, CFG.SESSION_TTL);
+    }
+    return { success: true, email: newEmail, loginChangedAt: fields.LoginChangedAt || fresh.loginChangedAt || "", passwordChangedAt: fields.PasswordChangedAt || fresh.passwordChangedAt || "" };
+  } finally { lock.releaseLock(); }
+}
+function requestPasswordReset_(data) {
+  const email = email_(data.email), note = String(data.note || "").slice(0, 500);
+  if (!email || email.indexOf("@") < 1) throw new Error("Укажите email, указанный при регистрации.");
+  const user = userByEmail_(email);
+  // Не раскрываем наличие аккаунта: ответ одинаковый для существующего и неизвестного адреса.
+  if (user) {
+    const sh = passwordRequests_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh);
+    const recent = vals.slice(1).some(r => email_(r[m.Email]) === email && new Date(r[m.RequestedAt]).getTime() > Date.now() - 86400000 && String(r[m.Status]).toLowerCase() === "pending");
+    if (!recent) sh.appendRow([Utilities.getUuid(), email, new Date().toISOString(), "pending", note, "", ""]);
+  }
+  return { success: true, message: "Если учётная запись существует, запрос отправлен администратору." };
+}
+function getPasswordRequests_(data) {
+  admin_(data);
+  const sh = passwordRequests_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh);
+  const requests = vals.slice(1).filter(r => String(r[m.Status]).toLowerCase() === "pending").map(r => ({
+    id: String(r[m.Id]), email: String(r[m.Email]), requestedAt: r[m.RequestedAt], note: String(r[m.Note] || "")
+  }));
+  return { success: true, requests: requests };
+}
+function resolvePasswordReset_(data) {
+  const actor = admin_(data), id = String(data.id || ""), password = String(data.temporaryPassword || "");
+  if (password.length < 8) throw new Error("Временный пароль должен содержать не менее 8 символов.");
+  const sh = passwordRequests_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh);
+  for (let i = 1; i < vals.length; i++) {
+    if (String(vals[i][m.Id]) !== id || String(vals[i][m.Status]).toLowerCase() !== "pending") continue;
+    const user = userByEmail_(vals[i][m.Email]);
+    if (!user) throw new Error("Пользователь с таким email больше не существует.");
+    const salt = Utilities.getUuid() + Utilities.getUuid(), now = new Date().toISOString();
+    writeUserFields_(user, { PasswordSalt: salt, PasswordHash: passwordHash_(password, salt), PasswordChangedAt: now, UpdatedAt: now });
+    sh.getRange(i + 1, m.Status + 1).setValue("resolved");
+    sh.getRange(i + 1, m.ResolvedAt + 1).setValue(now);
+    sh.getRange(i + 1, m.ResolvedBy + 1).setValue(actor.email);
+    return { success: true, email: user.email };
+  }
+  throw new Error("Запрос уже обработан или не найден.");
+}
+
+/* ---------- Role-based games visibility ---------- */
+function getPortalSettings_(data) {
+  auth_(data);
+  const sh = settings_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh);
+  let gamesByRole = { student: true, teacher: false, admin: true };
+  for (let i = 1; i < vals.length; i++) if (String(vals[i][m.Key]) === "gamesByRole") {
+    try { gamesByRole = Object.assign(gamesByRole, JSON.parse(vals[i][m.Value] || "{}")); } catch (e) {}
+  }
+  return { success: true, gamesByRole: gamesByRole };
+}
+function setGamesAccess_(data) {
+  const actor = admin_(data), incoming = data.gamesByRole || {};
+  const value = {
+    student: incoming.student === true,
+    teacher: incoming.teacher === true,
+    admin: incoming.admin === true
+  };
+  const sh = settings_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh), now = new Date().toISOString();
+  let row = 0;
+  for (let i = 1; i < vals.length; i++) if (String(vals[i][m.Key]) === "gamesByRole") { row = i + 1; break; }
+  const dataRow = ["gamesByRole", JSON.stringify(value), now, actor.email];
+  if (row) sh.getRange(row, 1, 1, dataRow.length).setValues([dataRow]); else sh.appendRow(dataRow);
+  return { success: true, gamesByRole: value };
+}
+
 /* ---------- Schedule ---------- */
 
 function getSchedule_(data) {
