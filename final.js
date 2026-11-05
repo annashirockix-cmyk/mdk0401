@@ -1,7 +1,7 @@
 "use strict";
 
 var FINAL_EXAM_SIZE = 30;
-var FINAL_EXAM_TIME = 45 * 60;
+var FINAL_EXAM_TIME = 60 * 60;
 
 window.EXTRA_EXAM_BANKS = window.EXTRA_EXAM_BANKS || {};
 
@@ -20,8 +20,10 @@ function collectCourseQuestions(courseId) {
     });
   }
   var bankKey = String(courseId).replace(".", "");
-  var extra = window["EXAM_BANK_" + bankKey] || window.EXTRA_EXAM_BANKS[courseId];
-  if (Array.isArray(extra)) extra.forEach(function (question) { all.push(question); });
+  var primaryBank = window["EXAM_BANK_" + bankKey];
+  var extensionBank = window.EXTRA_EXAM_BANKS[courseId];
+  if (Array.isArray(primaryBank)) primaryBank.forEach(function (question) { all.push(question); });
+  if (Array.isArray(extensionBank)) extensionBank.forEach(function (question) { all.push(question); });
   if (window.MDK_EXTRA_QUESTIONS && Array.isArray(window.MDK_EXTRA_QUESTIONS[courseId])) {
     window.MDK_EXTRA_QUESTIONS[courseId].forEach(function (question) { all.push(question); });
   }
@@ -76,6 +78,9 @@ function renderExamQuestion(question, number) {
   }
 
   if (type === "multi") {
+    var multiHint = examNode("div", "multi-hint", "Выберите все правильные варианты ответа.");
+    multiHint.style.cssText = "font-size:13px;color:var(--accent);margin:-4px 0 10px;";
+    card.appendChild(multiHint);
     (question.options || []).forEach(function (option, index) {
       var input = examNode("input"); input.type = "checkbox"; input.value = String(index); input.name = "q" + number;
       card.appendChild(examLabel(option, input));
@@ -190,7 +195,7 @@ window.renderFinalExamPage = function (mdkId) {
   var hero = examNode("section", "hero");
   hero.appendChild(examNode("span", "brand-badge", course.shortName));
   hero.appendChild(examNode("h1", "", "Итоговый экзамен"));
-  var duration = 60;
+  var duration = Math.round(FINAL_EXAM_TIME / 60);
   hero.appendChild(examNode("p", "", "30 заданий разных форматов + 2 письменных задания · " + duration + " минут"));
   app.appendChild(hero);
 
@@ -205,7 +210,7 @@ window.renderFinalExamPage = function (mdkId) {
     var selected = [];
     // Для всех курсов гарантируем смешанный вариант, если в банке есть задания нужного типа.
     {
-      [["multi", 3], ["order", 2], ["match", 2], ["num", 1]].forEach(function (rule) {
+      [["multi", 5], ["order", 2], ["match", 2], ["num", 1]].forEach(function (rule) {
         var candidates = examShuffle(bank.filter(function (question) {
           return (question.type || "mc") === rule[0] && selected.indexOf(question) === -1;
         }));
