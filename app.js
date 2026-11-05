@@ -63,6 +63,7 @@ window.updateMenuVisibility = function() {
     });
     var adminLink = document.querySelector('.drawer-item[href="#/admin"]');
     if (adminLink) adminLink.style.display = window.state.staff && window.state.staff.role === "admin" ? "flex" : "none";
+    var accessLink=document.querySelector('.drawer-item[href="#/access"]'); if(accessLink) accessLink.style.display=isTeacher?"flex":"none";
 };
 
 window.applyGlobalEffects = function() {
@@ -680,7 +681,8 @@ window.router = function() {
     if (page === "safety") { window.renderSafetyPage(); return; }
     if (page === "passports") { window.renderPassportsPage(); return; }
     if (page === "gcode-trainer") { window.renderGcodeTrainerPage(); return; }
-    if (page === "training") { 
+    if (page === "training") {
+        if (parts.length > 1 && window.canAccessCourse && !window.canAccessCourse(parts[1])) { window.renderHomePage(); return; }
         if (parts.length > 1) {
             var mdkId = parts[1];
             if (mdkId === "07.01" && window.renderTraining_0701) window.renderTraining_0701(mdkId);
