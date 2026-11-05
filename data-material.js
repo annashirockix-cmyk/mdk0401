@@ -192,7 +192,7 @@ window.MDK_DATA["MAT"] = {
 <path d="M284 180 H720"/>
 </g>
 <g stroke="#b45309" stroke-width="2.5" fill="none">
-<path d="M78 102 L94 72"/>
+<path d="M78 102 L94 72"/><path d="M94 72H130"/>
 <path d="M78 250 L151 304"/>
 </g>
 <g stroke="#dc2626" stroke-width="2" fill="none">
@@ -201,13 +201,13 @@ window.MDK_DATA["MAT"] = {
 <g fill="#0f172a" font-size="12" font-weight="600">
 <text x="102" y="88">δ + Ж</text>
 <text x="310" y="82">Жидкость (Ж)</text>
-<text x="540" y="142">Ж + Fe₃C</text>
+<text x="535" y="171">Ж + Fe₃C</text><text x="180" y="112">γ + Ж</text>
 <text x="108" y="235">α + γ</text>
 <text x="185" y="270">γ-аустенит</text>
 <text x="300" y="218">γ + Fe₃C</text>
-<text x="96" y="326">α + Fe₃C</text>
+<text x="96" y="326">Феррит + перлит</text>
 <text x="520" y="326">Перлит + цементит</text>
-<text x="205" y="294">Перлитная область</text>
+
 </g>
 <g fill="#dc2626" stroke="#fff" stroke-width="1.5">
 <circle cx="94" cy="72" r="5"/><circle cx="151" cy="304" r="5"/><circle cx="492" cy="180" r="5"/><circle cx="284" cy="180" r="4"/>
