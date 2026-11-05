@@ -1,433 +1,49 @@
 /**
- * Code.gs — серверная логика Учебного портала
- * Google Apps Script + Google Sheets
- * Email-авторизация, результаты (оценка/время/попытки), бэкап
+ * Сервер учебного портала. Google Apps Script + Google Sheets.
+ * Задайте SPREADSHEET_ID в свойствах скрипта, затем разверните новую версию веб-приложения.
  */
-
-// ====================== КОНФИГУРАЦИЯ ======================
-const SPREADSHEET_ID = 'ВАШ_ID_ТАБЛИЦЫ'; // замените на ID вашей таблицы
-const USERS_SHEET = 'Users';
-const RESULTS_SHEET = 'Results';
-const SALT = 'portal_spo_2026';
-
-/**
- * Точка входа для POST-запросов
- */
-function doPost(e) {
-  return handleRequest(e);
-}
-
-/**
- * Точка входа для GET-запросов
- */
-function doGet(e) {
-  return handleRequest(e);
-}
-
-/**
- * Главный обработчик запросов
- */
-function handleRequest(e) {
-  try {
-    let data = {};
-
-    if (e.postData && e.postData.contents) {
-      try {
-        data = JSON.parse(e.postData.contents);
-      } catch (err) {
-        return jsonResponse({ success: false, error: 'Неверный формат JSON' });
-      }
-    } else if (e.parameter) {
-      data = e.parameter;
-    }
-
-    const action = (data.action || '').toString().trim().toLowerCase();
-
-    switch (action) {
-      case 'login':
-        return jsonResponse(handleLogin(data));
-      case 'save_student':
-        return jsonResponse(handleSaveStudent(data));
-      case 'get_student':
-        return jsonResponse(handleGetStudent(data));
-      case 'save_result':
-        return jsonResponse(handleSaveResult(data));
-      case 'get_results':
-        return jsonResponse(handleGetResults(data));
-      default:
-        return jsonResponse({ success: false, error: 'Неизвестное действие: ' + action });
-    }
-  } catch (err) {
-    return jsonResponse({
-      success: false,
-      error: 'Внутренняя ошибка сервера: ' + err.message
-    });
-  }
-}
-
-/**
- * Простейший хэш пароля (SHA-256 + соль)
- */
-function simpleHash(password) {
-  const raw = SALT + String(password || '');
-  const digest = Utilities.computeDigest(
-    Utilities.DigestAlgorithm.SHA_256,
-    raw,
-    Utilities.Charset.UTF_8
-  );
-  return digest.map(function (b) {
-    const v = (b < 0 ? b + 256 : b).toString(16);
-    return v.length === 1 ? '0' + v : v;
-  }).join('');
-}
-
-/**
- * Нормализация email
- */
-function normalizeEmail(email) {
-  return String(email || '').trim().toLowerCase();
-}
-
-/**
- * Получение листа Users (создаёт, если нет)
- */
-function getUsersSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName(USERS_SHEET);
-
-  if (!sheet) {
-    sheet = ss.insertSheet(USERS_SHEET);
-    sheet.appendRow(['Email', 'PasswordHash', 'Name', 'Group', 'Role', 'UpdatedAt']);
-  }
-
-  return sheet;
-}
-
-/**
- * Получение листа Results (создаёт, если нет)
- * A-Email | B-Name | C-Group | D-TestId | E-TestTitle |
- * F-Grade | G-Score | H-MaxScore | I-Percent |
- * J-TimeSpent | K-Attempts | L-FinishedAt
- */
-function getResultsSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName(RESULTS_SHEET);
-
-  if (!sheet) {
-    sheet = ss.insertSheet(RESULTS_SHEET);
-    sheet.appendRow([
-      'Email',
-      'Name',
-      'Group',
-      'TestId',
-      'TestTitle',
-      'Grade',
-      'Score',
-      'MaxScore',
-      'Percent',
-      'TimeSpent',
-      'Attempts',
-      'FinishedAt'
-    ]);
-  }
-
-  return sheet;
-}
-
-/**
- * Поиск пользователя по email
- */
-function findUserByEmail(email) {
-  const sheet = getUsersSheet();
-  const values = sheet.getDataRange().getValues();
-  const normalized = normalizeEmail(email);
-
-  for (let i = 1; i < values.length; i++) {
-    const rowEmail = normalizeEmail(values[i][0]);
-    if (rowEmail === normalized) {
-      return {
-        row: i + 1,
-        data: {
-          email: values[i][0],
-          passwordHash: values[i][1],
-          name: values[i][2],
-          group: values[i][3],
-          role: values[i][4] || 'student',
-          updatedAt: values[i][5]
-        }
-      };
-    }
-  }
-  return null;
-}
-
-/**
- * Подсчёт предыдущих попыток студента по тесту
- */
-function countAttempts(email, testId) {
-  const sheet = getResultsSheet();
-  const values = sheet.getDataRange().getValues();
-  const normalizedEmail = normalizeEmail(email);
-  const tid = String(testId || '');
-
-  let count = 0;
-  for (let i = 1; i < values.length; i++) {
-    if (normalizeEmail(values[i][0]) === normalizedEmail && String(values[i][3]) === tid) {
-      count++;
-    }
-  }
-  return count;
-}
-
-/**
- * Вход
- */
-function handleLogin(data) {
-  const email = normalizeEmail(data.email);
-  const password = String(data.password || '');
-
-  if (!email || !password) {
-    return { success: false, error: 'Укажите email и пароль' };
-  }
-
-  const user = findUserByEmail(email);
-  if (!user) {
-    return { success: false, error: 'Пользователь с таким email не найден' };
-  }
-
-  const incomingHash = simpleHash(password);
-  if (incomingHash !== user.data.passwordHash) {
-    return { success: false, error: 'Неверный пароль' };
-  }
-
-  return {
-    success: true,
-    email: user.data.email,
-    name: user.data.name || email,
-    group: user.data.group || '',
-    role: user.data.role || 'student'
-  };
-}
-
-/**
- * Сохранение / обновление студента (без дубликатов по email)
- */
-function handleSaveStudent(data) {
-  const email = normalizeEmail(data.email);
-  if (!email) {
-    return { success: false, error: 'Email обязателен' };
-  }
-
-  const sheet = getUsersSheet();
-  const existing = findUserByEmail(email);
-  const now = new Date().toISOString();
-
-  const name = (data.name || '').toString().trim() || (existing ? existing.data.name : email);
-  const group = (data.group || '').toString().trim() || (existing ? existing.data.group : '');
-  const role = (data.role || '').toString().trim() || (existing ? existing.data.role : 'student');
-
-  let passwordHash = existing ? existing.data.passwordHash : '';
-  if (data.password) {
-    passwordHash = simpleHash(data.password);
-  }
-
-  if (!passwordHash) {
-    return { success: false, error: 'Пароль обязателен для нового пользователя' };
-  }
-
-  if (existing) {
-    sheet.getRange(existing.row, 1, 1, 6).setValues([[
-      email,
-      passwordHash,
-      name,
-      group,
-      role,
-      now
-    ]]);
-  } else {
-    sheet.appendRow([email, passwordHash, name, group, role, now]);
-  }
-
-  return {
-    success: true,
-    email: email,
-    name: name,
-    group: group,
-    role: role,
-    updated: !!existing
-  };
-}
-
-/**
- * Получение данных студента
- */
-function handleGetStudent(data) {
-  const email = normalizeEmail(data.email);
-  if (!email) {
-    return { success: false, error: 'Email обязателен' };
-  }
-
-  const user = findUserByEmail(email);
-  if (!user) {
-    return { success: false, error: 'Пользователь не найден' };
-  }
-
-  return {
-    success: true,
-    email: user.data.email,
-    name: user.data.name,
-    group: user.data.group,
-    role: user.data.role
-  };
-}
-
-/**
- * Сохранение результата теста
- * attempts считается на сервере (предыдущие + 1)
- */
-function handleSaveResult(data) {
-  const email = normalizeEmail(data.email);
-  if (!email) {
-    return { success: false, error: 'Email обязателен' };
-  }
-
-  const testId = String(data.testId || 'unknown');
-  const testTitle = String(data.testTitle || testId);
-  const grade = Number(data.grade) || 2;
-  const score = Number(data.score) || 0;
-  const maxScore = Number(data.maxScore) || 0;
-  const percent = Number(data.percent) || 0;
-  const timeSpent = Math.max(0, Number(data.timeSpent) || 0);
-
-  let name = String(data.name || '').trim();
-  let group = String(data.group || '').trim();
-
-  if (!name || !group) {
-    const user = findUserByEmail(email);
-    if (user) {
-      if (!name) name = user.data.name || email;
-      if (!group) group = user.data.group || '';
-    }
-  }
-  if (!name) name = email;
-
-  const prevAttempts = countAttempts(email, testId);
-  const attempts = prevAttempts + 1;
-  const finishedAt = new Date().toISOString();
-
-  const sheet = getResultsSheet();
-  sheet.appendRow([
-    email,
-    name,
-    group,
-    testId,
-    testTitle,
-    grade,
-    score,
-    maxScore,
-    percent,
-    timeSpent,
-    attempts,
-    finishedAt
-  ]);
-
-  return {
-    success: true,
-    email: email,
-    testId: testId,
-    grade: grade,
-    timeSpent: timeSpent,
-    attempts: attempts,
-    finishedAt: finishedAt
-  };
-}
-
-/**
- * Получение результатов (для кабинета преподавателя)
- */
-function handleGetResults(data) {
-  const sheet = getResultsSheet();
-  const values = sheet.getDataRange().getValues();
-
-  if (values.length <= 1) {
-    return { success: true, results: [] };
-  }
-
-  const filterTestId = data.testId ? String(data.testId) : null;
-  const filterGroup = data.group ? String(data.group).trim().toLowerCase() : null;
-
-  const results = [];
-
-  for (let i = 1; i < values.length; i++) {
-    const row = values[i];
-    const item = {
-      email: row[0],
-      name: row[1],
-      group: row[2],
-      testId: row[3],
-      testTitle: row[4],
-      grade: row[5],
-      score: row[6],
-      maxScore: row[7],
-      percent: row[8],
-      timeSpent: row[9],
-      attempts: row[10],
-      finishedAt: row[11]
-    };
-
-    if (filterTestId && String(item.testId) !== filterTestId) continue;
-    if (filterGroup && String(item.group || '').toLowerCase() !== filterGroup) continue;
-
-    results.push(item);
-  }
-
-  results.sort(function (a, b) {
-    return String(b.finishedAt).localeCompare(String(a.finishedAt));
-  });
-
-  return { success: true, results: results };
-}
-
-/**
- * Резервное копирование таблицы
- *
- * Как настроить триггер (раз в неделю):
- * 1. Откройте проект Apps Script
- * 2. Слева «Триггеры» (иконка будильника)
- * 3. «+ Добавить триггер»
- * 4. Функция: createBackup
- * 5. Источник: «По времени» → «Недельный таймер»
- * 6. День: Воскресенье, время 02:00–03:00
- * 7. Сохраните
- */
-function createBackup() {
-  try {
-    const file = DriveApp.getFileById(SPREADSHEET_ID);
-    const now = new Date();
-
-    const dateStr =
-      now.getFullYear() + '-' +
-      String(now.getMonth() + 1).padStart(2, '0') + '-' +
-      String(now.getDate()).padStart(2, '0') + ' ' +
-      String(now.getHours()).padStart(2, '0') + '-' +
-      String(now.getMinutes()).padStart(2, '0');
-
-    const backupName = 'Учебный портал — бэкап ' + dateStr;
-    const copy = file.makeCopy(backupName);
-
-    console.log('Бэкап создан: ' + copy.getName() + ' (ID: ' + copy.getId() + ')');
-    return copy.getId();
-  } catch (err) {
-    console.error('Ошибка создания бэкапа: ' + err.message);
-    throw err;
-  }
-}
-
-/**
- * JSON-ответ
- */
-function jsonResponse(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+const USERS_SHEET="Users", RESULTS_SHEET="Results", CONTENT_SHEET="CourseContent", SCHEDULE_SHEET="Schedule";
+const SALT="portal_spo_2026", SESSION_TTL=21600;
+function getSpreadsheet_(){const id=PropertiesService.getScriptProperties().getProperty("SPREADSHEET_ID");if(!id)throw new Error("Не задано свойство скрипта SPREADSHEET_ID (Настройки проекта → Свойства скрипта).");return SpreadsheetApp.openById(id);}
+function doGet(e){return handleRequest_(e);} function doPost(e){return handleRequest_(e);}
+function handleRequest_(e){try{
+ let d={};if(e&&e.postData&&e.postData.contents)d=JSON.parse(e.postData.contents||"{}");
+ if(e&&e.parameter)Object.keys(e.parameter).forEach(k=>{if(d[k]===undefined)d[k]=e.parameter[k];});
+ const a=String(d.action||"").toLowerCase().replace(/[_-]/g,"");let r;
+ switch(a){
+ case "login":r=login_(d);break;case "register":r=register_(d);break;
+ case "savestudent":r=saveStudent_(d);break;case "getstudents":r=getStudents_(d);break;
+ case "saveresult":r=saveResult_(d);break;case "getresults":r=getResults_(d);break;
+ case "getcustomcontent":r=getCustomContent_(d);break;case "savecustomcontent":r=saveCustomContent_(d);break;
+ case "deletecustomcontent":r=deleteCustomContent_(d);break;case "setteachercourses":r=setTeacherCourses_(d);break;
+ case "setuserrole":r=setUserRole_(d);break;case "getschedule":r=getSchedule_(d);break;case "saveschedule":r=saveSchedule_(d);break;
+ default:r={success:false,error:"Неизвестное действие: "+a};
+ }return json_(r);
+ }catch(err){return json_({success:false,error:String(err&&err.message||err)});}}
+function json_(o){return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);}
+function hash_(p){return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,SALT+String(p||""),Utilities.Charset.UTF_8).map(b=>("0"+((b+256)%256).toString(16)).slice(-2)).join("");}
+function email_(s){return String(s||"").trim().toLowerCase();}
+function sheet_(name,headers){const ss=getSpreadsheet_();let sh=ss.getSheetByName(name);if(!sh){sh=ss.insertSheet(name);sh.appendRow(headers);}else if(sh.getLastRow()===0)sh.appendRow(headers);else{const ex=sh.getRange(1,1,1,Math.max(sh.getLastColumn(),1)).getValues()[0].map(String);headers.forEach(h=>{if(ex.indexOf(h)<0){sh.getRange(1,sh.getLastColumn()+1).setValue(h);ex.push(h);}});}return sh;}
+function users_(){return sheet_(USERS_SHEET,["Email","PasswordHash","Name","Group","Role","UpdatedAt","Courses","Payload"]);}
+function results_(){return sheet_(RESULTS_SHEET,["Email","Name","Group","TestId","TestTitle","Grade","Score","MaxScore","Percent","TimeSpent","Attempts","FinishedAt","CourseId"]);}
+function content_(){return sheet_(CONTENT_SHEET,["Id","CourseId","TopicId","Type","Title","Payload","UpdatedBy","UpdatedAt"]);}
+function userByEmail_(em){const sh=users_(),v=sh.getDataRange().getValues(),h=v[0].map(String),key=email_(em);for(let i=1;i<v.length;i++)if(email_(v[i][h.indexOf("Email")])===key){const g=k=>v[i][h.indexOf(k)];return{row:i+1,email:key,passwordHash:g("PasswordHash"),name:g("Name"),group:g("Group"),role:String(g("Role")||"student").toLowerCase(),courses:String(g("Courses")||""),payload:String(g("Payload")||"")};}return null;}
+function auth_(d){const token=String(d.token||"");if(!token)throw new Error("Требуется авторизация. Войдите в портал заново.");const em=CacheService.getScriptCache().get("sess:"+token);if(!em)throw new Error("Сессия истекла. Войдите в портал заново.");const u=userByEmail_(em);if(!u)throw new Error("Пользователь не найден.");return u;}
+function admin_(d){const u=auth_(d);if(u.role!=="admin")throw new Error("Операция доступна только администратору.");return u;}
+function courseAccess_(u,id){return u.role==="admin"||(u.role==="teacher"&&u.courses.split(",").map(x=>x.trim()).includes(String(id)));}
+function editor_(d,id){const u=auth_(d);if(u.role!=="admin"&&!(u.role==="teacher"&&courseAccess_(u,id)))throw new Error("Нет доступа к этой дисциплине или недостаточно прав.");return u;}
+function login_(d){const u=userByEmail_(d.email);if(!u||u.passwordHash!==hash_(d.password))return{success:false,error:"Неверный email или пароль."};const token=Utilities.getUuid()+Utilities.getUuid().replace(/-/g,"");CacheService.getScriptCache().put("sess:"+token,u.email,SESSION_TTL);return{success:true,email:u.email,name:u.name,group:u.group,role:u.role,courses:u.courses?u.courses.split(",").filter(Boolean):[],token:token};}
+function register_(d){const em=email_(d.email);if(!em||!d.password)return{success:false,error:"Укажите email и пароль."};if(userByEmail_(em))return{success:false,error:"Пользователь уже зарегистрирован."};const sh=users_(),h=sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0].map(String),o={Email:em,PasswordHash:hash_(d.password),Name:String(d.name||em),Group:String(d.group||""),Role:"student",UpdatedAt:new Date().toISOString(),Courses:"",Payload:""};sh.appendRow(h.map(k=>o[k]||""));return{success:true};}
+function saveStudent_(d){const u=auth_(d),em=email_(d.email||u.email);if(em!==u.email&&u.role!=="admin")throw new Error("Нельзя изменять данные другого пользователя.");const sh=users_(),x=userByEmail_(em);if(!x)throw new Error("Пользователь не найден.");const h=sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0].map(String),r=sh.getRange(x.row,1,1,h.length).getValues()[0];const put=(k,v)=>{if(h.indexOf(k)>=0)r[h.indexOf(k)]=v;};put("Name",d.name||x.name);put("Group",d.group||x.group);put("Payload",typeof d.payload==="string"?d.payload:JSON.stringify(d.payload||{}));put("UpdatedAt",new Date().toISOString());sh.getRange(x.row,1,1,h.length).setValues([r]);return{success:true};}
+function getStudents_(d){const u=auth_(d);if(u.role!=="admin"&&u.role!=="teacher")throw new Error("Недостаточно прав.");const v=users_().getDataRange().getValues(),h=v[0].map(String),at=k=>h.indexOf(k);return{success:true,students:v.slice(1).filter(r=>r[at("Email")]).map(r=>({email:r[at("Email")],name:r[at("Name")],group:r[at("Group")],role:r[at("Role")],courses:r[at("Courses")]||"",payload:r[at("Payload")]||""}))};}
+function saveResult_(d){const u=auth_(d),em=email_(d.email||u.email);if(em!==u.email&&u.role!=="admin")throw new Error("Нельзя отправлять результат за другого пользователя.");const sh=results_(),v=sh.getDataRange().getValues(),id=String(d.testId||"test"),attempts=v.slice(1).filter(r=>email_(r[0])===em&&String(r[3])===id).length+1;sh.appendRow([em,String(d.name||u.name),String(d.group||u.group),id,String(d.testTitle||id),Number(d.grade)||2,Number(d.score)||0,Number(d.maxScore)||0,Number(d.percent)||0,Math.max(0,Number(d.timeSpent)||0),attempts,new Date().toISOString(),String(d.courseId||"")]);return{success:true,attempts:attempts};}
+function getResults_(d){const u=auth_(d);if(u.role!=="admin"&&u.role!=="teacher")throw new Error("Недостаточно прав.");const v=results_().getDataRange().getValues();let a=v.slice(1).map(r=>({email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],courseId:r[12]||""}));if(u.role==="teacher")a=a.filter(x=>courseAccess_(u,x.courseId));if(d.courseId)a=a.filter(x=>x.courseId===String(d.courseId));a.sort((x,y)=>String(y.finishedAt).localeCompare(String(x.finishedAt)));return{success:true,results:a};}
+function getCustomContent_(d){const u=auth_(d),v=content_().getDataRange().getValues(),a=[];v.slice(1).forEach(r=>{if(!r[0])return;const c=String(r[1]||"");if(u.role==="teacher"&&!courseAccess_(u,c))return;let p={};try{p=JSON.parse(r[5]||"{}");}catch(e){}a.push(Object.assign({id:String(r[0]),mdkId:c,courseId:c,topicId:String(r[2]||""),type:String(r[3]||""),title:String(r[4]||"")},p));});return{success:true,data:a};}
+function saveCustomContent_(d){const c=String(d.mdkId||d.courseId||""),u=editor_(d,c),id=String(d.id||Utilities.getUuid()),type=String(d.type||"");if(!["topic","lecture","test","file"].includes(type))throw new Error("Неизвестный тип материала.");const sh=content_(),v=sh.getDataRange().getValues();let row=0;for(let i=1;i<v.length;i++)if(String(v[i][0])===id){row=i+1;break;}const p=Object.assign({},d);["token","action","id","mdkId","courseId","topicId","type","title"].forEach(k=>delete p[k]);const a=[id,c,String(d.topicId||""),type,String(d.title||""),JSON.stringify(p),u.email,new Date().toISOString()];if(row)sh.getRange(row,1,1,a.length).setValues([a]);else sh.appendRow(a);return{success:true,id:id};}
+function deleteCustomContent_(d){const u=auth_(d),sh=content_(),v=sh.getDataRange().getValues();for(let i=1;i<v.length;i++)if(String(v[i][0])===String(d.id||"")){editor_(d,String(v[i][1]||""));sh.deleteRow(i+1);return{success:true};}return{success:false,error:"Материал не найден."};}
+function setTeacherCourses_(d){admin_(d);const u=userByEmail_(d.email);if(!u)throw new Error("Пользователь не найден.");if(u.role!=="teacher")throw new Error("Назначать дисциплины можно только преподавателю.");const ids=["07.01","04.01","02.01","02.02","MCAM","MAT","OT"],a=(Array.isArray(d.courses)?d.courses:[]).map(String).filter(x=>ids.includes(x));const sh=users_(),h=sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0].map(String),r=sh.getRange(u.row,1,1,h.length).getValues()[0];r[h.indexOf("Courses")]=a.join(",");r[h.indexOf("UpdatedAt")]=new Date().toISOString();sh.getRange(u.row,1,1,h.length).setValues([r]);return{success:true,courses:a};}
+function setUserRole_(d){admin_(d);const u=userByEmail_(d.email);if(!u)throw new Error("Пользователь не найден.");const role=String(d.role||"").toLowerCase();if(!["student","teacher","admin"].includes(role))throw new Error("Недопустимая роль.");const sh=users_(),h=sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0].map(String),r=sh.getRange(u.row,1,1,h.length).getValues()[0];r[h.indexOf("Role")]=role;r[h.indexOf("UpdatedAt")]=new Date().toISOString();sh.getRange(u.row,1,1,h.length).setValues([r]);return{success:true};}
+function getSchedule_(d){auth_(d);const sh=sheet_(SCHEDULE_SHEET,["Schedule"]);return{success:true,schedule:sh.getLastRow()>1?sh.getRange(2,1,sh.getLastRow()-1,1).getValues().map(r=>{try{return JSON.parse(r[0]);}catch(e){return null;}}).filter(Boolean):[]};}
+function saveSchedule_(d){admin_(d);const sh=sheet_(SCHEDULE_SHEET,["Schedule"]);sh.clearContents();sh.appendRow(["Schedule"]);JSON.parse(d.schedule||"[]").forEach(x=>sh.appendRow([JSON.stringify(x)]));return{success:true};}
+/** Однократно запустите вручную в редакторе Apps Script для назначения администратора. */
+function promoteUserToAdmin(email){const u=userByEmail_(email);if(!u)throw new Error("Сначала создайте пользователя-преподавателя: "+email);const sh=users_(),h=sh.getRange(1,1,1,sh.getLastColumn()).getValues()[0].map(String),r=sh.getRange(u.row,1,1,h.length).getValues()[0];r[h.indexOf("Role")]="admin";r[h.indexOf("Courses")]="*";r[h.indexOf("UpdatedAt")]=new Date().toISOString();sh.getRange(u.row,1,1,h.length).setValues([r]);}
