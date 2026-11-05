@@ -37,7 +37,7 @@
   }
 
   window.refreshPortalSettings = function () {
-    if (!window.API || !window.API.getPortalSettings || !currentUser()) return Promise.resolve(null);
+    if (!window.API || !window.API.getPortalSettings) return Promise.resolve(null);
     return window.API.getPortalSettings().then(r => {
       if (r && r.success) {
         window.portalSettings = { gamesByRole: Object.assign({}, DEFAULT_GAMES, r.gamesByRole || {}) };
