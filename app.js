@@ -610,6 +610,7 @@ function setupLogin() {
 }
 
 window.handleLogout = function() {
+    if (window.API && window.API.logout) window.API.logout();
     window.state.student = null; window.state.staff = null;
     localStorage.removeItem("mdk.state"); window.renderUserChip();
     document.getElementById("loginOverlay").style.display = "flex"; 
