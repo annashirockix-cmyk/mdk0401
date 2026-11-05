@@ -17,7 +17,7 @@
    const box=document.getElementById("accessStudents");box.textContent="Загрузка списка…";
    window.API.getStudents().then(r=>{
     if(!r||!r.success)throw new Error(r&&r.error||"Не удалось загрузить студентов.");
-    const students=r.students||[];if(!students.length){box.innerHTML="<p>Пока нет зарегистрированных студентов.</p>";return;}
+    const students=(r.students||[]).filter(st=>String(st.role).toLowerCase()==='student');if(!students.length){box.innerHTML="<p>Пока нет зарегистрированных студентов.</p>";return;}
     box.innerHTML=students.map((st,i)=>'<div class="module" style="padding:12px;margin:10px 0"><div><b>'+esc(st.name)+'</b> · '+esc(st.group)+' <span style="color:var(--muted)">('+esc(st.email)+')</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin:10px 0">'+allowed.map(c=>'<label><input type="checkbox" class="studentCourse" data-row="'+i+'" value="'+c[0]+'" '+((st.courses||[]).includes(c[0])?'checked':'')+'> '+c[1]+'</label>').join("")+'</div><button class="btn saveStudentAccess" data-row="'+i+'">Сохранить доступ</button> <span class="accessStatus" data-row="'+i+'"></span></div>').join("");
     box.querySelectorAll(".saveStudentAccess").forEach(btn=>btn.onclick=()=>{
      const i=+btn.dataset.row,st=students[i],courses=Array.from(box.querySelectorAll('.studentCourse[data-row="'+i+'"]:checked')).map(x=>x.value),status=box.querySelector('.accessStatus[data-row="'+i+'"]');
