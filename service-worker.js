@@ -22,7 +22,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v8');
+        console.log('[SW] Кэширование статических ресурсов версии v10');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
