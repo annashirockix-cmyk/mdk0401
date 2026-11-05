@@ -786,6 +786,133 @@ function setGamesAccess_(data) {
   return { success: true, gamesByRole: value };
 }
 
+
+/* ---------- One-time import from the previous student-results spreadsheet ---------- */
+const LEGACY_RESULTS_SOURCE_ID = "1lpNmnxr8TCaG-3-FpqUMU1wMAHQmk82jNlnSRDGASDQ";
+const LEGACY_RESULTS_SOURCE_GID = 1051580763;
+function legacyNorm_(v) { return String(v == null ? "" : v).toLowerCase().replace(/ё/g,"е").replace(/[^a-zа-я0-9]+/g,""); }
+function legacyColumn_(headers, aliases) {
+  const normalized = headers.map(legacyNorm_);
+  for (let i = 0; i < aliases.length; i++) {
+    const at = normalized.indexOf(legacyNorm_(aliases[i]));
+    if (at >= 0) return at;
+  }
+  return -1;
+}
+function legacyCourseId_(value, testId) {
+  const s = legacyNorm_(value) + " " + legacyNorm_(testId);
+  if (s.indexOf("материаловед") >= 0 || s.indexOf("mat") >= 0) return "MAT";
+  if (s.indexOf("охрана") >= 0 || s.indexOf("безопасноститруда") >= 0) return "OT";
+  if (s.indexOf("0701") >= 0 || s.indexOf("чпу") >= 0) return "07.01";
+  if (s.indexOf("0401") >= 0 || s.indexOf("диагност") >= 0) return "04.01";
+  if (s.indexOf("0201") >= 0 || s.indexOf("сборк") >= 0) return "02.01";
+  if (s.indexOf("0202") >= 0 || s.indexOf("программирован") >= 0) return "02.02";
+  if (s.indexOf("mastercam") >= 0 || s.indexOf("mcam") >= 0) return "MCAM";
+  return "";
+}
+function legacySourceSheet_() {
+  const ss = SpreadsheetApp.openById(LEGACY_RESULTS_SOURCE_ID);
+  const sh = ss.getSheets().filter(s => Number(s.getSheetId()) === LEGACY_RESULTS_SOURCE_GID)[0];
+  if (!sh) throw new Error("Не найден лист старой таблицы с gid=" + LEGACY_RESULTS_SOURCE_GID + ". Проверьте ссылку и доступ Apps Script к таблице.");
+  return sh;
+}
+function previewLegacyResultsImport() {
+  const sh = legacySourceSheet_(), values = sh.getDataRange().getValues();
+  const headerRow = values.slice(0, 10).findIndex(row => {
+    const h = row.map(legacyNorm_);
+    return h.some(x => ["email","почта","логин","фио","студент","группа"].indexOf(x) >= 0) &&
+      h.some(x => ["оценка","grade","результат","баллы","процент","тест","работа"].indexOf(x) >= 0);
+  });
+  if (headerRow < 0) throw new Error("Не удалось автоматически определить строку заголовков. Первые строки: " + JSON.stringify(values.slice(0, 5)));
+  const report = { sheet: sh.getName(), gid: sh.getSheetId(), headerRow: headerRow + 1, headers: values[headerRow].map(String), sampleRows: values.slice(headerRow + 1, headerRow + 6) };
+  Logger.log(JSON.stringify(report, null, 2));
+  return report;
+}
+function importLegacyResultsFromSpreadsheet() {
+  const sh = legacySourceSheet_(), values = sh.getDataRange().getValues();
+  const headerRow = values.slice(0, 10).findIndex(row => {
+    const h = row.map(legacyNorm_);
+    return h.some(x => ["email","почта","логин","фио","студент","группа"].indexOf(x) >= 0) &&
+      h.some(x => ["оценка","grade","результат","баллы","процент","тест","работа"].indexOf(x) >= 0);
+  });
+  if (headerRow < 0) throw new Error("Не найдены заголовки результатов. Сначала выполните previewLegacyResultsImport().");
+  const h = values[headerRow];
+  const col = {
+    email: legacyColumn_(h, ["email","почта","логин","email студента","почта студента"]),
+    name: legacyColumn_(h, ["фио","фио студента","студент","имя","name","учащийся"]),
+    group: legacyColumn_(h, ["группа","group"]),
+    testId: legacyColumn_(h, ["testid","id теста","код работы","id работы"]),
+    title: legacyColumn_(h, ["название теста","название работы","тест","работа","наименование","testtitle"]),
+    grade: legacyColumn_(h, ["оценка","grade","итоговая оценка"]),
+    score: legacyColumn_(h, ["баллы","верных ответов","правильных ответов","score"]),
+    max: legacyColumn_(h, ["максимум","всего вопросов","maxscore","максимальный балл"]),
+    percent: legacyColumn_(h, ["процент","результатпроцентов","percent"]),
+    time: legacyColumn_(h, ["время","времявыполнения","timespent"]),
+    attempts: legacyColumn_(h, ["попытки","количествопопыток","attempts"]),
+    date: legacyColumn_(h, ["дата","датазавершения","завершено","finishedat","времяпрохождения"]),
+    course: legacyColumn_(h, ["дисциплина","мдк","курс","courseid","предмет"])
+  };
+  if (col.email < 0 && col.name < 0) throw new Error("В таблице нет столбца с email или ФИО студента.");
+  if (col.grade < 0 && col.score < 0 && col.percent < 0) throw new Error("В таблице не найден столбец с оценкой, баллами или процентом.");
+  const users = users_().getDataRange().getValues(), um = headerMap_(users_());
+  const studentRows = users.slice(1).filter(r => String(r[um.Role] || "").toLowerCase() === "student");
+  const existing = results_().getDataRange().getValues();
+  const seen = {};
+  existing.slice(1).forEach(r => { seen[email_(r[0]) + "|" + String(r[3]) + "|" + String(r[11])] = true; });
+  const rows = [], skipped = [];
+  for (let i = headerRow + 1; i < values.length; i++) {
+    const src = values[i];
+    if (!src.some(v => String(v == null ? "" : v).trim())) continue;
+    let email = col.email >= 0 ? email_(src[col.email]) : "";
+    const name = col.name >= 0 ? String(src[col.name] || "").trim() : "";
+    const group = col.group >= 0 ? String(src[col.group] || "").trim() : "";
+    let matched = null;
+    if (email) matched = studentRows.find(r => email_(r[um.Email]) === email) || null;
+    if (!matched && name) {
+      const candidates = studentRows.filter(r => legacyNorm_(r[um.Name]) === legacyNorm_(name) && (!group || legacyNorm_(r[um.Group]) === legacyNorm_(group)));
+      if (candidates.length === 1) matched = candidates[0];
+    }
+    if (matched) email = email_(matched[um.Email]);
+    if (!email) { skipped.push("Строка " + (i + 1) + ": студент не сопоставлен по email/ФИО."); continue; }
+    const title = col.title >= 0 ? String(src[col.title] || "").trim() : "";
+    const originalId = col.testId >= 0 ? String(src[col.testId] || "").trim() : "";
+    const testTitle = title || originalId || "Импортированный результат";
+    const testId = originalId || ("legacy_" + legacyNorm_(testTitle) + "_" + (i + 1));
+    const gradeRaw = col.grade >= 0 ? String(src[col.grade] || "").replace(",", ".") : "";
+    const score = col.score >= 0 ? Number(String(src[col.score] || "").replace(",", ".")) || 0 : 0;
+    const maxScore = col.max >= 0 ? Number(String(src[col.max] || "").replace(",", ".")) || 0 : 0;
+    const percent = col.percent >= 0 ? Number(String(src[col.percent] || "").replace(",", ".")) || 0 : (maxScore > 0 ? Math.round(score / maxScore * 100) : 0);
+    let grade = Number(gradeRaw);
+    if (!grade || grade < 2 || grade > 5) grade = percent >= 90 ? 5 : percent >= 75 ? 4 : percent >= 60 ? 3 : 2;
+    let finishedAt = "";
+    if (col.date >= 0 && src[col.date]) {
+      const d = src[col.date] instanceof Date ? src[col.date] : new Date(src[col.date]);
+      finishedAt = isNaN(d.getTime()) ? String(src[col.date]) : d.toISOString();
+    }
+    const courseValue = col.course >= 0 ? src[col.course] : "";
+    let courseId = legacyCourseId_(courseValue, originalId + " " + testTitle);
+    if (!courseId && matched) {
+      const enrolled = String(matched[um.Courses] || "").split(",").filter(Boolean);
+      if (enrolled.length === 1) courseId = enrolled[0];
+    }
+    if (!courseId) courseId = "LEGACY";
+    const key = email + "|" + testId + "|" + finishedAt;
+    if (seen[key]) continue;
+    seen[key] = true;
+    rows.push([
+      email, name || (matched ? matched[um.Name] : email), group || (matched ? matched[um.Group] : ""),
+      testId, testTitle, grade, score, maxScore, percent,
+      col.time >= 0 ? (Number(src[col.time]) || 0) : 0,
+      col.attempts >= 0 ? (Number(src[col.attempts]) || 1) : 1,
+      finishedAt, courseId
+    ]);
+  }
+  if (rows.length) results_().getRange(results_().getLastRow() + 1, 1, rows.length, HEADERS.Results.length).setValues(rows);
+  const summary = { imported: rows.length, skipped: skipped.length, unknownCourse: rows.filter(r => r[12] === "LEGACY").length, skippedDetails: skipped.slice(0, 30) };
+  Logger.log(JSON.stringify(summary, null, 2));
+  return summary;
+}
+
 /* ---------- Schedule ---------- */
 
 function getSchedule_(data) {
