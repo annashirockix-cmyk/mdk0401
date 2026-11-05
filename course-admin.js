@@ -41,6 +41,8 @@
     const app=document.getElementById("app"),hero=app&&app.querySelector(".hero");
     if(!app||!hero)return;
     const buttons=Array.from(hero.querySelectorAll("button"));
+    const hiddenButtons=buttons.filter(b=>allIds.some(id=>!canCourse(id)&&b.textContent.trim()===(window.MDK_DATA[id]&&window.MDK_DATA[id].shortName)));
+    hiddenButtons.forEach(b=>b.remove());
     const pluginButtons=buttons.filter(b=>PLUGINS.some(id=>b.textContent.trim()===(window.MDK_DATA[id]&&window.MDK_DATA[id].shortName)));
     pluginButtons.forEach(b=>b.remove());
     const availablePlugins=PLUGINS.filter(id=>canCourse(id));
