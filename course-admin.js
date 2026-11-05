@@ -187,7 +187,7 @@
       const pageToken=$("editorCourse");
       if(window.loadGlobalCustomContent)window.loadGlobalCustomContent(function(){
         // Ignore a stale callback after route change or a newer editor instance.
-        if(!pageToken||!document.getElementById("editorCourse"))return;
+        if(!pageToken||document.getElementById("editorCourse")!==pageToken)return;
         renderSaved();if(done)done();
       });else{renderSaved();if(done)done();}
     }
@@ -202,7 +202,7 @@
       // The content request may finish after the teacher has navigated away.
       // Never update elements belonging to a page that is no longer mounted.
       const required=["lectureExisting","testExisting","savedMaterials","lectureTopic","testTopic"];
-      if(required.some(id=>!$(id)))return;
+      if(document.getElementById("editorCourse")!==courseSel||required.some(id=>!$(id)))return;
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
       const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
       $("lectureExisting").innerHTML='<option value="">— Новая лекция —</option>'+ls.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
