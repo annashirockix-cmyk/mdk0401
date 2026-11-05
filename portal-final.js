@@ -121,20 +121,32 @@
     return q;
   }
 
-  function col(id) {
+  function col(id, workIndex) {
     var L = [];
-    if (B[id]) L = L.concat(B[id]);
-    var k = "self_" + id + "_0";
-    if (window.EXTRA_TESTS && window.EXTRA_TESTS[k] && window.EXTRA_TESTS[k].questions) {
-      L = L.concat(window.EXTRA_TESTS[k].questions);
+    var seen = {};
+    function add(list) {
+      (list || []).forEach(function (q) {
+        var key = String(q && (q.q || q.question || q.text) || JSON.stringify(q));
+        if (!seen[key]) { seen[key] = true; L.push(q); }
+      });
     }
+    if (B[id]) add(B[id]);
     try {
       var courseId = cid();
-      var c = window.MDK_DATA && window.MDK_DATA[courseId];
-      if (c) {
-        (c.sections || []).forEach(function (s) {
-          (s.topics || []).forEach(function (t) {
-            if (t.id === id && t.test) L = L.concat(t.test);
+      var course = window.MDK_DATA && window.MDK_DATA[courseId];
+      if (course) {
+        (course.sections || []).forEach(function (section) {
+          (section.topics || []).forEach(function (topic) {
+            if (topic.id !== id) return;
+            // Main topic test bank.
+            add(topic.test || topic.tests || []);
+            // Each independent-work bank uses its topic ID and work index.
+            (topic.selfWork || []).forEach(function (work, index) {
+              if (workIndex != null && Number(workIndex) !== index) return;
+              var key = "self_" + id + "_" + index;
+              var extra = window.EXTRA_TESTS && window.EXTRA_TESTS[key];
+              if (extra && extra.questions) add(extra.questions);
+            });
           });
         });
       }
@@ -156,7 +168,7 @@
     if (!area) return;
     if (typeof selfIdx !== "number") selfIdx = 0;
     topicId = topicId || tid();
-    var Q = col(topicId);
+    var Q = col(topicId, selfIdx);
     if (!Q.length) {
       area.innerHTML = '<div class="module" style="padding:20px">Нет вопросов для <b>' + topicId + "</b>. Нажмите Ctrl+Shift+R.</div>";
       return;
