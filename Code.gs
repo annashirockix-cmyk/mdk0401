@@ -850,8 +850,8 @@ function importLegacyResultsFromSpreadsheet() {
   const sh = legacySourceSheet_(), values = sh.getDataRange().getValues();
   const headerRow = values.slice(0, 10).findIndex(row => {
     const h = row.map(legacyNorm_);
-    return h.some(x => ["email","почта","логин","фио","студент","группа"].some(k => x.indexOf(k) >= 0)) &&
-      h.some(x => ["оценка","grade","результат","балл","процент","тест","работа"].some(k => x.indexOf(k) >= 0));
+    return h.some(x => ["email","почта","логин","фио","студент","группа","пользователь","обучающийся","учащийся","имя"].some(k => x.indexOf(k) >= 0)) &&
+      h.some(x => ["оценка","grade","результат","балл","процент","тест","работа","задание","правильн"].some(k => x.indexOf(k) >= 0));
   });
   if (headerRow < 0) throw new Error("Не найдены заголовки результатов. Сначала выполните previewLegacyResultsImport().");
   const h = values[headerRow];
