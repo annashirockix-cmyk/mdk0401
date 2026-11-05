@@ -203,8 +203,8 @@ window.renderFinalExamPage = function (mdkId) {
     if (!bank.length) { mount.textContent = "Банк экзаменационных вопросов пока пуст."; return; }
     var examLimit = Math.min(FINAL_EXAM_SIZE, bank.length);
     var selected = [];
-    // Для МДК 04.01 гарантируем, что в каждом экзаменационном варианте будут задания разных форматов.
-    if (mdkId === "04.01") {
+    // Для всех курсов гарантируем смешанный вариант, если в банке есть задания нужного типа.
+    {
       [["multi", 3], ["order", 2], ["match", 2], ["num", 1]].forEach(function (rule) {
         var candidates = examShuffle(bank.filter(function (question) {
           return (question.type || "mc") === rule[0] && selected.indexOf(question) === -1;
