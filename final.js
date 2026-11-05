@@ -1,45 +1,161 @@
 "use strict";
 
 var FINAL_EXAM_SIZE = 30;
-var FINAL_EXAM_TIME = 45 * 60; // 45 минут
+var FINAL_EXAM_TIME = 45 * 60;
 
-
-// Доп. банки из exam_*.js (тренировки), если в MDK_DATA мало тестов
 window.EXTRA_EXAM_BANKS = window.EXTRA_EXAM_BANKS || {};
 
+function programById(id) {
+  return window.MDK_DATA && window.MDK_DATA[id] ? window.MDK_DATA[id] : null;
+}
+
 function collectCourseQuestions(courseId) {
-  var allQ = [];
+  var all = [];
   var course = programById(courseId);
-  if (course && course.sections) {
-    course.sections.forEach(function (s) {
-      (s.topics || []).forEach(function (t) {
-        if (t.test && t.test.length) {
-          t.test.forEach(function (q) { allQ.push(q); });
-        }
+  if (course && Array.isArray(course.sections)) {
+    course.sections.forEach(function (section) {
+      (section.topics || []).forEach(function (topic) {
+        (topic.test || []).forEach(function (question) { all.push(question); });
       });
     });
   }
-  // Из тренировочных модулей exam_XXXX, если объявлены
   var bankKey = String(courseId).replace(".", "");
   var extra = window["EXAM_BANK_" + bankKey] || window.EXTRA_EXAM_BANKS[courseId];
-  if (extra && extra.length) {
-    extra.forEach(function (q) { allQ.push(q); });
+  if (Array.isArray(extra)) extra.forEach(function (question) { all.push(question); });
+  if (window.MDK_EXTRA_QUESTIONS && Array.isArray(window.MDK_EXTRA_QUESTIONS[courseId])) {
+    window.MDK_EXTRA_QUESTIONS[courseId].forEach(function (question) { all.push(question); });
   }
-  // questions-mdk.js может класть в window.MDK_EXTRA_QUESTIONS
-  if (window.MDK_EXTRA_QUESTIONS && window.MDK_EXTRA_QUESTIONS[courseId]) {
-    window.MDK_EXTRA_QUESTIONS[courseId].forEach(function (q) { allQ.push(q); });
-  }
-  return allQ;
-}
-
-function programById(id) {
-  if (window.MDK_DATA && window.MDK_DATA[id]) return window.MDK_DATA[id];
-  return null;
+  var seen = {};
+  return all.filter(function (q) {
+    if (!q || !q.q) return false;
+    var signature = String(q.type || "mc") + "|" + q.q;
+    if (seen[signature]) return false;
+    seen[signature] = true;
+    return true;
+  });
 }
 
 function questionCount(course) {
-  if (!course) return 0;
-  return collectCourseQuestions(course.id).length;
+  return course ? collectCourseQuestions(course.id).length : 0;
+}
+
+function examShuffle(items) {
+  var copy = items.slice();
+  for (var i = copy.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = copy[i]; copy[i] = copy[j]; copy[j] = temp;
+  }
+  return copy;
+}
+
+function examNode(tag, className, text) {
+  var node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined && text !== null) node.textContent = text;
+  return node;
+}
+
+function examLabel(text, input) {
+  var label = examNode("label", "option");
+  label.style.cssText = "display:flex;align-items:flex-start;gap:9px;padding:9px;margin:5px 0;cursor:pointer;border-radius:7px;background:var(--card-soft);";
+  label.appendChild(input);
+  label.appendChild(examNode("span", "", text));
+  return label;
+}
+
+function renderExamQuestion(question, number) {
+  var card = examNode("section", "question");
+  card.style.cssText = "margin-bottom:16px;padding:16px;background:var(--card-soft);border:1px solid var(--border);border-radius:10px;";
+  var type = question.type || "mc";
+  var title = (number + 1) + ". " + question.q;
+  card.appendChild(examNode("div", "q-text", title)).style.cssText = "font-weight:700;line-height:1.5;margin-bottom:12px;";
+  if (question.context) {
+    var context = examNode("div", "exam-context", question.context);
+    context.style.cssText = "padding:10px 12px;margin:8px 0 12px;background:var(--card);border-left:3px solid var(--accent);border-radius:6px;line-height:1.5;";
+    card.appendChild(context);
+  }
+
+  if (type === "multi") {
+    (question.options || []).forEach(function (option, index) {
+      var input = examNode("input"); input.type = "checkbox"; input.value = String(index); input.name = "q" + number;
+      card.appendChild(examLabel(option, input));
+    });
+  } else if (type === "num") {
+    var numeric = examNode("input", "self-input"); numeric.type = "number"; numeric.step = "any"; numeric.name = "q" + number;
+    numeric.placeholder = question.unit ? "Ответ, " + question.unit : "Введите числовой ответ";
+    numeric.style.maxWidth = "260px";
+    card.appendChild(numeric);
+    if (question.unit) card.appendChild(examNode("span", "", " " + question.unit));
+  } else if (type === "order") {
+    var items = examShuffle(question.items || []);
+    items.forEach(function (item, index) {
+      var row = examNode("div");
+      row.style.cssText = "display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap;";
+      row.appendChild(examNode("span", "", item));
+      var select = examNode("select", "self-input");
+      select.name = "q" + number + "_order_" + index;
+      select.style.maxWidth = "100px";
+      select.appendChild(examNode("option", "", "№"));
+      for (var pos = 1; pos <= items.length; pos++) select.appendChild(new Option(String(pos), String(pos)));
+      select.dataset.item = item;
+      row.appendChild(select);
+      card.appendChild(row);
+    });
+  } else if (type === "match") {
+    var rightOptions = examShuffle((question.pairs || []).map(function (pair) { return pair.right; }));
+    (question.pairs || []).forEach(function (pair, index) {
+      var row = examNode("div");
+      row.style.cssText = "display:grid;grid-template-columns:minmax(130px,1fr) minmax(150px,1.2fr);gap:10px;align-items:center;margin:8px 0;";
+      row.appendChild(examNode("span", "", pair.left));
+      var select = examNode("select", "self-input");
+      select.name = "q" + number + "_match_" + index;
+      select.appendChild(examNode("option", "", "Выберите соответствие"));
+      rightOptions.forEach(function (option) { select.appendChild(new Option(option, option)); });
+      row.appendChild(select); card.appendChild(row);
+    });
+  } else {
+    (question.options || []).forEach(function (option, index) {
+      var input = examNode("input"); input.type = "radio"; input.name = "q" + number; input.value = String(index);
+      card.appendChild(examLabel(option, input));
+    });
+  }
+  return card;
+}
+
+function scoreExamQuestion(question, form, number) {
+  var type = question.type || "mc";
+  if (type === "num") {
+    var field = form.querySelector('[name="q' + number + '"]');
+    if (!field || field.value.trim() === "") return 0;
+    var value = Number(field.value);
+    return Number.isFinite(value) && Math.abs(value - Number(question.answer)) <= (question.tol || 0.01) ? 1 : 0;
+  }
+  if (type === "multi") {
+    var selected = Array.prototype.map.call(form.querySelectorAll('input[name="q' + number + '"]:checked'), function (el) { return Number(el.value); }).sort();
+    var expected = (question.correct || []).slice().sort(function (a, b) { return a - b; });
+    return selected.length === expected.length && selected.every(function (v, i) { return v === expected[i]; }) ? 1 : 0;
+  }
+  if (type === "order") {
+    var correctOrder = question.correctOrder || question.items || [];
+    var fields = form.querySelectorAll('[name^="q' + number + '_order_"]');
+    var right = 0;
+    Array.prototype.forEach.call(fields, function (field) {
+      var expectedPosition = correctOrder.indexOf(field.dataset.item) + 1;
+      if (expectedPosition > 0 && Number(field.value) === expectedPosition) right++;
+    });
+    return fields.length ? right / fields.length : 0;
+  }
+  if (type === "match") {
+    var pairs = question.pairs || [];
+    var rightMatches = 0;
+    pairs.forEach(function (pair, index) {
+      var field = form.querySelector('[name="q' + number + '_match_' + index + '"]');
+      if (field && field.value === pair.right) rightMatches++;
+    });
+    return pairs.length ? rightMatches / pairs.length : 0;
+  }
+  var checked = form.querySelector('input[name="q' + number + '"]:checked');
+  return checked && Number(checked.value) === question.correct ? 1 : 0;
 }
 
 window.renderFinalExamPage = function (mdkId) {
@@ -48,18 +164,20 @@ window.renderFinalExamPage = function (mdkId) {
   app.innerHTML = "";
 
   if (!mdkId) {
-    app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
-    app.appendChild(el('<section class="hero"><h1>Итоговые экзамены</h1><p>Экзамен по каждому МДК: 30 вопросов и 2 письменных задания. Время: 45 минут.</p></section>'));
-    var grid = document.createElement("div");
-    grid.style = "display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px;";
-    
-    Object.values(window.MDK_DATA || {}).forEach(function (p) {
-      var n = questionCount(p);
-      var card = document.createElement("a");
-      card.className = "module exam-card";
-      card.style = "display:block; padding:20px; text-decoration:none; color:var(--text); background:var(--card-soft); border:1px solid var(--border); border-radius:12px;";
-      card.href = "#/final/" + p.id;
-      card.innerHTML = '<span class="brand-badge">' + p.shortName + '</span><h3 style="margin:15px 0 5px 0;">' + p.title + '</h3><p style="color:var(--muted); font-size:14px;">В банке ' + n + ' вопросов</p>';
+    app.appendChild(examNode("a", "backlink", "← На главную")).href = "#/";
+    app.appendChild(examNode("section", "hero", "Итоговые экзамены"));
+    var intro = examNode("p", "", "Экзамены по дисциплинам: тестовые задания разных типов, практические ситуации и письменная часть.");
+    app.querySelector(".hero").appendChild(intro);
+    var grid = examNode("div");
+    grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;";
+    Object.values(window.MDK_DATA || {}).forEach(function (course) {
+      var count = questionCount(course);
+      var card = examNode("a", "module");
+      card.href = "#/final/" + course.id;
+      card.style.cssText = "display:block;padding:20px;text-decoration:none;color:var(--text);background:var(--card-soft);border:1px solid var(--border);border-radius:12px;";
+      card.appendChild(examNode("b", "brand-badge", course.shortName));
+      card.appendChild(examNode("h3", "", course.title));
+      card.appendChild(examNode("p", "", "В банке " + count + " вопросов и заданий"));
       grid.appendChild(card);
     });
     app.appendChild(grid);
@@ -68,95 +186,101 @@ window.renderFinalExamPage = function (mdkId) {
 
   var course = programById(mdkId);
   if (!course) { location.hash = "#/final"; return; }
+  var back = examNode("a", "backlink", "← К списку экзаменов"); back.href = "#/final"; app.appendChild(back);
+  var hero = examNode("section", "hero");
+  hero.appendChild(examNode("span", "brand-badge", course.shortName));
+  hero.appendChild(examNode("h1", "", "Итоговый экзамен"));
+  var duration = mdkId === "04.01" ? 60 : 45;
+  hero.appendChild(examNode("p", "", "30 заданий разных форматов + 2 письменных задания · " + duration + " минут"));
+  app.appendChild(hero);
 
-  app.appendChild(el('<a class="backlink" href="#/final" style="color:var(--accent);">← К списку экзаменов</a>'));
-  app.appendChild(el('<section class="hero"><span class="brand-badge">' + course.shortName + '</span><h1>Итоговый экзамен</h1><p>30 вопросов + 2 письменных задания · 45 минут.</p></section>'));
+  var mount = examNode("div", "module");
+  var start = examNode("button", "btn", "Начать экзамен"); start.type = "button"; start.style.cssText = "width:100%;padding:16px;font-size:17px;";
+  mount.appendChild(start); app.appendChild(mount);
 
-  var mount = el('<div class="module"><button class="btn" id="startBtn" type="button" style="width:100%; padding:15px; font-size:16px;">Начать экзамен</button></div>');
-  app.appendChild(mount);
-
-  mount.querySelector("#startBtn").addEventListener("click", function () {
-    var allQ = collectCourseQuestions(mdkId);
-    
-    // Если вопросов мало, дублируем их с перемешиванием
-    if (allQ.length < FINAL_EXAM_SIZE) {
-        var originalLength = allQ.length;
-        while (allQ.length < FINAL_EXAM_SIZE) {
-            allQ = allQ.concat(allQ.slice(0, Math.min(originalLength, FINAL_EXAM_SIZE - allQ.length)));
-        }
-    }
-    allQ = allQ.sort(function () { return Math.random() - 0.5; }).slice(0, FINAL_EXAM_SIZE);
-    
+  start.addEventListener("click", function () {
+    var bank = collectCourseQuestions(mdkId);
+    if (!bank.length) { mount.textContent = "Банк экзаменационных вопросов пока пуст."; return; }
+    var picked = examShuffle(bank).slice(0, Math.min(FINAL_EXAM_SIZE, bank.length));
     mount.innerHTML = "";
-
-    var form = el("<form></form>");
-    var timerBox = el('<div class="exam-timer" style="font-size:24px; font-weight:bold; color:var(--accent); text-align:center; margin-bottom:20px;">45:00</div>');
+    var timerBox = examNode("div", "exam-timer", duration + ":00");
+    timerBox.style.cssText = "font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;color:var(--accent);";
     mount.appendChild(timerBox);
-    
-    // Тестовая часть
-    allQ.forEach(function (item, qi) {
-      var qb = el('<div class="question" style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px;"><div class="q-text" style="font-weight:bold; margin-bottom:10px;">' + (qi + 1) + ". " + item.q + "</div></div>");
-      item.options.forEach(function (opt, oi) {
-        qb.appendChild(el('<label class="option" style="display:flex; align-items:center; gap:10px; padding:8px; cursor:pointer; border-radius:6px; margin-bottom:4px;"><input type="radio" name="fq' + qi + '" value="' + oi + '" style="transform:scale(1.2); accent-color:var(--accent);"><span>' + opt + "</span></label>"));
-      });
-      form.appendChild(qb);
+    var form = examNode("form");
+    form.addEventListener("submit", function (event) { event.preventDefault(); });
+    picked.forEach(function (question, index) { form.appendChild(renderExamQuestion(question, index)); });
+
+    var writtenTitle = examNode("h3", "", "✍️ Письменная и ситуационная часть");
+    writtenTitle.style.color = "var(--accent)"; form.appendChild(writtenTitle);
+    var writtenPrompts = mdkId === "04.01" ? [
+      "Составьте последовательность диагностирования станка при росте вибрации шпиндельного узла. Укажите исходные данные, приборы, контрольные точки, критерии остановки и форму фиксации результатов.",
+      "По результатам диагностики выявлены повышенная температура опоры, рост вибрации и металлические частицы в масле. Предложите дерево возможных причин, укажите, какие проверки помогут их разделить, и обоснуйте решение: продолжить работу, выполнить регулировку или вывести узел в ремонт."
+    ] : [
+      "Опишите алгоритм подготовки оборудования к выполнению технологической операции с указанием контрольных точек.",
+      "Разберите ситуацию отклонения параметров оборудования от нормы: установите возможные причины, способ проверки и корректирующие действия."
+    ];
+    writtenPrompts.forEach(function (prompt, index) {
+      var wrap = examNode("div");
+      wrap.style.cssText = "margin:12px 0;padding:15px;background:var(--card-soft);border:1px solid var(--border);border-radius:8px;";
+      wrap.appendChild(examNode("b", "", (picked.length + index + 1) + ". " + prompt));
+      var area = examNode("textarea", "self-input"); area.name = "written" + (index + 1); area.rows = 5;
+      area.placeholder = "Разверните решение, укажите ход рассуждений и вывод...";
+      area.style.marginTop = "10px"; wrap.appendChild(area); form.appendChild(wrap);
     });
 
-    // Письменная часть
-    form.appendChild(el('<h3 style="margin-top:30px; color:var(--accent);">✍️ Письменные задания (на проверку преподавателю)</h3>'));
-    form.appendChild(el('<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);"><b>31. Опишите алгоритм наладки станка с ЧПУ.</b><br><textarea name="written1" class="self-input" rows="4" style="margin-top:10px;" placeholder="Ваш ответ..."></textarea></div>'));
-    form.appendChild(el('<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);"><b>32. Рассчитайте частоту вращения шпинделя, если V=120 м/мин, D=50 мм.</b><br><textarea name="written2" class="self-input" rows="2" style="margin-top:10px;" placeholder="Ваш ответ..."></textarea></div>'));
-    
-    var gradeBtn = el('<button type="button" class="btn" style="width:100%; margin-top:20px; padding:15px; font-size:16px;">Завершить экзамен</button>');
-    form.appendChild(gradeBtn);
-    mount.appendChild(form);
+    var submit = examNode("button", "btn", "Завершить экзамен"); submit.type = "button";
+    submit.style.cssText = "width:100%;margin-top:18px;padding:15px;font-size:16px;";
+    form.appendChild(submit); mount.appendChild(form);
 
-    var timeLeft = FINAL_EXAM_TIME;
-    var tId = setInterval(function () {
-      if (!document.body.contains(timerBox)) { clearInterval(tId); return; }
+    var timeLeft = duration * 60;
+    var timer = setInterval(function () {
+      if (!document.body.contains(timerBox)) { clearInterval(timer); return; }
       timeLeft--;
-      var mm = String(Math.floor(timeLeft / 60)).padStart(2, "0");
-      var ss = String(timeLeft % 60).padStart(2, "0");
-      timerBox.textContent = mm + ":" + ss;
+      timerBox.textContent = String(Math.floor(timeLeft / 60)).padStart(2, "0") + ":" + String(timeLeft % 60).padStart(2, "0");
       if (timeLeft <= 60) timerBox.style.color = "var(--err)";
-      if (timeLeft <= 0) gradeBtn.click();
+      if (timeLeft <= 0) submit.click();
     }, 1000);
 
-    gradeBtn.addEventListener("click", function () {
-      clearInterval(tId);
-      var ok = 0;
-      allQ.forEach(function (item, qi) {
-        var ch = form.querySelector('input[name="fq' + qi + '"]:checked');
-        if (ch && Number(ch.value) === item.correct) ok++;
-      });
-      
-      var w1 = form.querySelector('textarea[name="written1"]').value;
-      var w2 = form.querySelector('textarea[name="written2"]').value;
-
-      // Сохраняем в отправленные на проверку
+    var submitted = false;
+    submit.addEventListener("click", function () {
+      if (submitted) return;
+      submitted = true; clearInterval(timer); submit.disabled = true;
+      var points = 0;
+      picked.forEach(function (question, index) { points += scoreExamQuestion(question, form, index); });
+      var pct = Math.round(points / picked.length * 100);
+      var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
+      var written1 = form.querySelector('[name="written1"]').value;
+      var written2 = form.querySelector('[name="written2"]').value;
+      if (!window.state.results) window.state.results = {};
       if (!window.state.examSubmissions) window.state.examSubmissions = [];
+      window.state.results["__final__" + course.id] = { grade: grade, total: Math.round(points * 100) / 100, max: picked.length, percent: pct };
       window.state.examSubmissions.push({
-          date: new Date().toLocaleString(),
-          courseId: course.id,
-          student: window.state.student ? window.state.student.name : "Неизвестный",
-          group: window.state.student ? window.state.student.group : "",
-          testScore: ok,
-          maxTest: allQ.length,
-          written1: w1,
-          written2: w2,
-          status: "На проверке",
-          teacherGrade: null,
-          finalGrade: null
+        date: new Date().toLocaleString("ru-RU"), courseId: course.id,
+        student: window.state.student ? window.state.student.name : "Неизвестный",
+        group: window.state.student ? window.state.student.group : "",
+        testScore: Math.round(points * 100) / 100, maxTest: picked.length,
+        written1: written1, written2: written2, status: "На проверке",
+        teacherGrade: null, finalGrade: null
       });
-
-      var pct = Math.round(ok / allQ.length * 100);
-      var g = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-      
-      // Предварительная оценка за тест
-      window.state.results["__final__" + course.id] = { grade: g, total: ok };
       if (window.saveStudentData) window.saveStudentData();
-      
-      mount.innerHTML = '<div class="exam-result" style="text-align:center; padding:30px;"><h2>' + course.shortName + '</h2><p style="font-size:18px;">Верных: <b>' + ok + '</b> из <b>' + allQ.length + '</b></p><p>Письменные задания отправлены преподавателю.</p><h1 class="exam-grade" style="font-size:64px; margin:20px 0; color:' + (g >= 3 ? "var(--ok)" : "var(--err)") + '">Оценка за тест: ' + g + '</h1><a class="btn" href="#/final">К списку экзаменов</a></div>';
+      if (window.state.student && window.API && window.API.saveResult) {
+        Promise.resolve(window.API.saveResult({
+          email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
+          testId: "__final__" + course.id, testTitle: "Итоговый экзамен " + course.shortName,
+          grade: grade, score: points, maxScore: picked.length, percent: pct, timeSpent: duration * 60 - timeLeft
+        })).catch(function (error) { console.warn("Не удалось отправить результат экзамена", error); });
+      }
+      mount.innerHTML = "";
+      var result = examNode("div", "exam-result");
+      result.style.cssText = "text-align:center;padding:30px;";
+      result.appendChild(examNode("h2", "", course.shortName + " · экзамен завершён"));
+      result.appendChild(examNode("p", "", "Баллы за тестовую часть: " + Math.round(points * 100) / 100 + " из " + picked.length + " (" + pct + "%)"));
+      var gradeNode = examNode("h1", "exam-grade", "Предварительная оценка: " + grade);
+      gradeNode.style.cssText = "font-size:42px;margin:20px 0;color:" + (grade >= 3 ? "var(--ok)" : "var(--err)");
+      result.appendChild(gradeNode);
+      result.appendChild(examNode("p", "", "Письменные задания переданы на проверку преподавателю. Итоговая оценка может быть скорректирована после их проверки."));
+      var home = examNode("a", "btn", "К списку экзаменов"); home.href = "#/final"; result.appendChild(home);
+      mount.appendChild(result);
     });
   });
 };
