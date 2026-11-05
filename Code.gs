@@ -820,6 +820,29 @@ function legacyCourseId_(value, testId) {
   if (s.indexOf("mastercam") >= 0 || s.indexOf("mcam") >= 0) return "MCAM";
   return "";
 }
+/**
+ * Диагностика старой таблицы: показывает вкладки, gid и размеры,
+ * не выводя персональные данные обучающихся.
+ * Запустите вручную listLegacyResultsSheets().
+ */
+function listLegacyResultsSheets() {
+  const ss = SpreadsheetApp.openById(LEGACY_RESULTS_SOURCE_ID);
+  const report = ss.getSheets().map(function(sh) {
+    return {
+      name: sh.getName(),
+      gid: sh.getSheetId(),
+      lastRow: sh.getLastRow(),
+      lastColumn: sh.getLastColumn()
+    };
+  });
+  Logger.log(JSON.stringify({
+    spreadsheet: ss.getName(),
+    spreadsheetId: LEGACY_RESULTS_SOURCE_ID,
+    sheets: report
+  }, null, 2));
+  return report;
+}
+
 function legacySourceSheet_() {
   const ss = SpreadsheetApp.openById(LEGACY_RESULTS_SOURCE_ID);
   const sh = ss.getSheets().filter(s => Number(s.getSheetId()) === LEGACY_RESULTS_SOURCE_GID)[0];
