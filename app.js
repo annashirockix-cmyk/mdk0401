@@ -522,8 +522,8 @@ window.canAccessCourse = function(courseId) {
 };
 window.syncCourseSelector = function() {
     var sel=document.getElementById("mdkSelector"); if(!sel)return;
-    Array.prototype.forEach.call(sel.options,function(opt){opt.hidden=!(window.canAccessCourse&&window.canAccessCourse(opt.value));});
-    if(window.state.student||window.state.staff){var allowed=Array.prototype.filter.call(sel.options,opt=>window.canAccessCourse(opt.value));if(allowed.length){if(!window.canAccessCourse(window.state.activeCourseId))window.state.activeCourseId=allowed[0].value;sel.value=window.state.activeCourseId;}else sel.value="";}
+    Array.prototype.forEach.call(sel.options,function(opt){opt.hidden=opt.value!=="ENGLISH_PORTAL"&&!(window.canAccessCourse&&window.canAccessCourse(opt.value));});
+    if(window.state.student||window.state.staff){var allowed=Array.prototype.filter.call(sel.options,opt=>opt.value!=="ENGLISH_PORTAL"&&window.canAccessCourse(opt.value));if(allowed.length){if(!window.canAccessCourse(window.state.activeCourseId))window.state.activeCourseId=allowed[0].value;sel.value=window.state.activeCourseId;}else sel.value="";}
 };
 
 // ==========================================
