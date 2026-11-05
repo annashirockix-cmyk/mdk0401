@@ -45,22 +45,26 @@
     return q;
   }
 
-  function collect(topicId) {
+  function collect(topicId, workIndex) {
     var list = [];
-    var key = "self_" + topicId + "_0";
-    if (window.EXTRA_TESTS && window.EXTRA_TESTS[key] && window.EXTRA_TESTS[key].questions) {
-      list = list.concat(window.EXTRA_TESTS[key].questions);
+    if (workIndex !== null && workIndex !== undefined) {
+      var key = "self_" + topicId + "_" + workIndex;
+      var data = window.EXTRA_TESTS && window.EXTRA_TESTS[key];
+      if (data && Array.isArray(data.questions)) list = list.concat(data.questions);
     }
     if (window.MDK_DATA) {
       var cid = (window.state && window.state.activeCourseId) || "07.01";
       var course = window.MDK_DATA[cid];
       if (course) {
-        course.sections.forEach(function (s) {
-          s.topics.forEach(function (t) {
-            if (t.id === topicId && t.test) list = list.concat(t.test);
+        (course.sections || []).forEach(function (section) {
+          (section.topics || []).forEach(function (topic) {
+            if (topic.id === topicId && topic.test) list = list.concat(topic.test);
           });
         });
       }
+    }
+    if (workIndex === null || workIndex === undefined) {
+      if (window.HARD_TESTS && window.HARD_TESTS[topicId]) list = list.concat(window.HARD_TESTS[topicId]);
     }
     return list.map(norm).filter(Boolean);
   }
@@ -75,157 +79,146 @@
     if (!area) return;
     var topicId = topicIdFromHash();
     if (!topicId) return;
-
-    var m = location.hash.match(/topic\/([^/]+)/);
+    var m = location.hash.match(/topic\\/([^/]+)/);
     var courseId = (m && m[1]) || (window.state && window.state.activeCourseId) || "07.01";
     var course = window.MDK_DATA && window.MDK_DATA[courseId];
     var topic = null;
-    if (course) {
-      course.sections.forEach(function (s) {
-        s.topics.forEach(function (t) {
-          if (t.id === topicId) topic = t;
-        });
-      });
-    }
+    if (course) (course.sections || []).forEach(function (section) {
+      (section.topics || []).forEach(function (item) { if (item.id === topicId) topic = item; });
+    });
     if (!topic || !topic.selfWork || !topic.selfWork.length) return;
 
     var html = "";
-    topic.selfWork.forEach(function (work) {
-      var testId = "self_" + work.code;
-      var done = window.state.results && window.state.results[testId];
-      var n = collect(topicId).length;
-
+    topic.selfWork.forEach(function (work, index) {
+      var displayCode = work.code || ("СР " + (index + 1));
+      var resultKey = "self_" + topicId + "_" + index;
+      var done = window.state.results && window.state.results[resultKey];
+      var questions = collect(topicId, index);
       html += '<div class="module" style="margin-bottom:16px;padding:18px">';
-      html += '<h3 style="color:var(--accent);margin-top:0">' + work.code + " " + work.title + "</h3>";
-      html += "<p><b>Задание:</b> " + work.task + "</p>";
+      html += '<h3 style="color:var(--accent);margin-top:0">' + displayCode + " " + (work.title || "") + "</h3>";
+      html += "<p><b>Задание:</b> " + (work.task || "Изучить материал и подготовить ответ.") + "</p>";
       if (work.questions && work.questions.length) {
         html += "<ul>";
-        work.questions.forEach(function (q) { html += "<li>" + q + "</li>"; });
+        work.questions.forEach(function (question) { html += "<li>" + question + "</li>"; });
         html += "</ul>";
       }
-      if (n > 0) {
+      if (questions.length) {
         if (done) {
           html += '<div style="padding:14px;background:var(--card-soft);border-radius:8px;border:1px solid var(--ok);margin-top:12px">';
-          html += '<b style="color:var(--ok)">Тест сдан</b> — оценка: <b>' + (done.grade || "—") + "</b><br>";
-          html += '<button type="button" class="btn ghost btn-retry-self" data-topic="' + topicId + '" data-code="' + work.code + '" style="margin-top:10px">Пройти снова</button>';
-          html += "</div>";
+          html += '<b style="color:var(--ok)">Тест выполнен</b> — оценка: <b>' + (done.grade || "—") + "</b><br>";
+          html += '<button type="button" class="btn ghost btn-retry-self" data-index="' + index + '" style="margin-top:10px">Пройти снова</button></div>';
         } else {
           html += '<div style="text-align:center;padding:18px;background:var(--card-soft);border-radius:8px;margin-top:12px">';
-          html += "<p>Проверка <b>тестом</b> · вопросов: <b>" + n + "</b></p>";
-          html += '<p style="font-size:13px;color:var(--muted)">Оценка сохранится и уйдёт в журнал</p>';
-          html += '<button type="button" class="btn btn-start-self" data-topic="' + topicId + '" data-code="' + work.code + '" style="padding:12px 28px;font-size:16px">Начать тест</button>';
-          html += "</div>";
+          html += "<p>Проверка тестом · вопросов: <b>" + questions.length + "</b></p>";
+          html += '<button type="button" class="btn btn-start-self" data-index="' + index + '" style="padding:12px 28px;font-size:16px">Начать тест</button></div>';
         }
       } else {
-        html += '<p style="color:var(--muted);margin-top:12px">Банк вопросов для этой темы пока пуст.</p>';
+        html += '<p style="color:var(--muted);margin-top:12px">Банк вопросов для этой самостоятельной работы пока не добавлен.</p>';
       }
       html += "</div>";
     });
     area.innerHTML = html;
-
-    area.querySelectorAll(".btn-start-self, .btn-retry-self").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        window.startInlineTest(btn.getAttribute("data-topic"), btn.getAttribute("data-code"));
+    area.querySelectorAll(".btn-start-self, .btn-retry-self").forEach(function (button) {
+      button.addEventListener("click", function () {
+        window.startInlineTest(topicId, Number(button.getAttribute("data-index")));
       });
     });
   }
 
-  window.startInlineTest = function (topicId, selfWorkCode) {
+  window.startInlineTest = function (topicId, selfWorkRef) {
     var area = document.getElementById("topicContent");
     if (!area) return;
-    var questions = collect(topicId);
+    var courseId = (location.hash.match(/topic\\/([^/]+)/) || [])[1] || (window.state && window.state.activeCourseId) || "07.01";
+    var course = window.MDK_DATA && window.MDK_DATA[courseId];
+    var topic = null;
+    if (course) (course.sections || []).forEach(function (section) {
+      (section.topics || []).forEach(function (item) { if (item.id === topicId) topic = item; });
+    });
+    var isSelf = selfWorkRef !== null && selfWorkRef !== undefined;
+    var workIndex = null;
+    if (isSelf) {
+      workIndex = typeof selfWorkRef === "number" ? selfWorkRef :
+        (topic ? (topic.selfWork || []).findIndex(function (work) { return work.code === selfWorkRef; }) : -1);
+      if (workIndex < 0) workIndex = 0;
+    }
+    var questions = collect(topicId, workIndex);
     if (!questions.length) {
-      area.innerHTML = '<p style="color:var(--err)">Вопросы не найдены. Обновите страницу (Ctrl+F5).</p>';
+      area.innerHTML = '<p style="color:var(--err)">Вопросы для этой работы не найдены.</p>';
       return;
     }
-    questions = shuffle(questions);
-    if (questions.length > 12) questions = questions.slice(0, 12);
-
-    var cur = 0;
-    var correct = 0;
+    questions = shuffle(questions).slice(0, 15);
+    var cur = 0, score = 0;
 
     function finish() {
-      var pct = Math.round((correct / questions.length) * 100);
+      var pct = Math.round(score / questions.length * 100);
       var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-      var key = selfWorkCode ? "self_" + selfWorkCode : "test_" + topicId;
+      var key = isSelf ? ("self_" + topicId + "_" + workIndex) : ("test_" + topicId);
       if (!window.state.results) window.state.results = {};
-      window.state.results[key] = { grade: grade, percent: pct, score: correct, max: questions.length };
+      window.state.results[key] = { grade: grade, percent: pct, score: score, max: questions.length };
       if (window.saveStudentData) window.saveStudentData();
-      if (window.unlockAchievement) {
-        window.unlockAchievement("first_test");
-        window.unlockAchievement("hacker");
-      }
+      if (window.unlockAchievement) window.unlockAchievement("first_test");
       if (window.state.student && window.API && window.API.saveResult) {
-        try {
-          window.API.saveResult({
-            email: window.state.student.email,
-            name: window.state.student.name,
-            group: window.state.student.group,
-            testId: key,
-            testTitle: selfWorkCode ? ("СР " + selfWorkCode) : ("Тест " + topicId),
-            grade: grade,
-            score: correct,
-            maxScore: questions.length,
-            percent: pct,
-            timeSpent: 0
-          });
-        } catch (e) {
-          console.warn("saveResult", e);
-        }
+        Promise.resolve(window.API.saveResult({
+          email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
+          testId: key, testTitle: isSelf ? ("Самостоятельная работа " + (workIndex + 1)) : ("Тест " + topicId),
+          grade: grade, score: score, maxScore: questions.length, percent: pct, timeSpent: 0
+        })).catch(function (error) { console.warn("Не удалось отправить результат теста", error); });
       }
-
-      var backTab = selfWorkCode ? "selfwork" : "test";
-      area.innerHTML =
-        '<div style="text-align:center;padding:30px;background:var(--card-soft);border-radius:12px">' +
-        '<h2 style="color:var(--ok)">Тест завершён!</h2>' +
-        "<p>Верных: <b>" + correct + "</b> из <b>" + questions.length + "</b> (" + pct + "%)</p>" +
-        '<h1 style="font-size:48px;color:var(--accent)">Оценка: ' + grade + "</h1>" +
-        '<p style="color:var(--muted);font-size:13px">Результат сохранён' +
-        (window.state.student ? " и отправлен в журнал" : "") +
-        "</p>" +
-        '<button type="button" class="btn" id="btnBackAfterTest">Вернуться</button></div>';
-      var b = document.getElementById("btnBackAfterTest");
-      if (b) {
-        b.onclick = function () {
-          if (window.switchTopicTab) window.switchTopicTab(backTab);
-        };
-      }
+      area.innerHTML = '<div style="text-align:center;padding:30px;background:var(--card-soft);border-radius:12px"><h2 style="color:var(--ok)">Проверка завершена</h2><p>Верных ответов: <b>' + score + '</b> из <b>' + questions.length + '</b> (' + pct + '%)</p><h1 style="font-size:48px;color:var(--accent)">Оценка: ' + grade + '</h1><button type="button" class="btn" id="btnBackAfterTest">Вернуться</button></div>';
+      var back = document.getElementById("btnBackAfterTest");
+      if (back) back.onclick = function () { if (window.switchTopicTab) window.switchTopicTab(isSelf ? "selfwork" : "test"); };
     }
 
     function show() {
       if (cur >= questions.length) return finish();
       var q = questions[cur];
-      var html =
-        '<div style="display:flex;justify-content:space-between;margin-bottom:12px">' +
-        "<b>Вопрос " + (cur + 1) + " из " + questions.length + "</b></div>" +
-        '<div style="font-weight:bold;margin-bottom:16px;font-size:16px;line-height:1.4">' + q.q + "</div>";
-
+      var html = '<div style="display:flex;justify-content:space-between;margin-bottom:12px"><b>Вопрос ' + (cur + 1) + ' из ' + questions.length + '</b></div><div style="font-weight:bold;margin-bottom:16px;line-height:1.45">' + q.q + '</div>';
       if (q.type === "num") {
-        html +
-          '<input id="numAns" class="self-input" type="number" step="any" placeholder="Введите число" style="max-width:220px">' +
-          '<div style="margin-top:12px"><button type="button" class="btn" id="btnNumOk">Ответить</button></div>';
+        html += '<input id="inlineNum" class="self-input" type="number" step="any" placeholder="Введите число" style="max-width:240px"><button type="button" class="btn" id="inlineSubmit" style="display:block;margin-top:12px">Ответить</button>';
         area.innerHTML = html;
-        document.getElementById("btnNumOk").onclick = function () {
-          var v = parseFloat(document.getElementById("numAns").value);
-          if (!isNaN(v) && Math.abs(v - q.answer) <= (q.tol || 0.01)) correct++;
-          cur++;
-          show();
+        document.getElementById("inlineSubmit").onclick = function () {
+          var value = Number(document.getElementById("inlineNum").value);
+          if (Number.isFinite(value) && Math.abs(value - Number(q.answer)) <= (q.tol || 0.01)) score++;
+          cur++; show();
         };
         return;
       }
-
-      (q.options || []).forEach(function (opt, i) {
-        html +=
-          '<button type="button" class="btn ghost opt-btn" data-i="' + i +
-          '" style="display:block;width:100%;text-align:left;margin-top:6px;padding:12px">' +
-          opt + "</button>";
+      if (q.type === "multi") {
+        (q.options || []).forEach(function (option, index) {
+          html += '<label style="display:block;padding:8px"><input type="checkbox" value="' + index + '"> ' + option + '</label>';
+        });
+        html += '<button type="button" class="btn" id="inlineSubmit" style="margin-top:12px">Проверить ответ</button>';
+        area.innerHTML = html;
+        document.getElementById("inlineSubmit").onclick = function () {
+          var selected = Array.prototype.map.call(area.querySelectorAll('input[type="checkbox"]:checked'), function (el) { return Number(el.value); }).sort();
+          var correct = (q.correct || []).slice().sort();
+          if (selected.length === correct.length && selected.every(function (v, i) { return v === correct[i]; })) score++;
+          cur++; show();
+        };
+        return;
+      }
+      if (q.type === "order") {
+        var items = shuffle(q.items || []);
+        items.forEach(function (item, index) {
+          html += '<label style="display:flex;gap:8px;align-items:center;margin:8px 0"><span>' + item + '</span><select class="self-input order-pos" data-i="' + index + '" style="max-width:90px">' + Array.from({length:items.length}, function (_, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + '</option>'; }).join("") + '</select></label>';
+        });
+        html += '<button type="button" class="btn" id="inlineSubmit">Проверить порядок</button>';
+        area.innerHTML = html;
+        document.getElementById("inlineSubmit").onclick = function () {
+          var positions = Array.prototype.map.call(area.querySelectorAll(".order-pos"), function (el) { return Number(el.value); });
+          if (positions.every(function (v, i) { return v === i + 1; })) score++;
+          cur++; show();
+        };
+        return;
+      }
+      (q.options || []).forEach(function (option, index) {
+        html += '<button type="button" class="btn ghost opt-btn" data-i="' + index + '" style="display:block;width:100%;text-align:left;margin-top:6px;padding:12px">' + option + '</button>';
       });
       area.innerHTML = html;
-      area.querySelectorAll(".opt-btn").forEach(function (btn) {
-        btn.onclick = function () {
-          if (parseInt(btn.getAttribute("data-i"), 10) === q.correct) correct++;
-          cur++;
-          show();
+      area.querySelectorAll(".opt-btn").forEach(function (button) {
+        button.onclick = function () {
+          if (Number(button.getAttribute("data-i")) === q.correct) score++;
+          cur++; show();
         };
       });
     }
@@ -233,17 +226,13 @@
   };
 
   function patchTopic() {
-    if (!window.renderTopicPage) return;
-    var orig = window.renderTopicPage;
-    window.renderTopicPage = function () {
-      orig.apply(this, arguments);
-      if (typeof window.switchTopicTab === "function") {
-        var st = window.switchTopicTab;
-        window.switchTopicTab = function (tab) {
-          st.apply(this, arguments);
-          if (tab === "selfwork") setTimeout(renderSelf, 50);
-        };
-      }
+    if (window.__portalV2SwitchPatched || typeof window.switchTopicTab !== "function") return;
+    window.__portalV2SwitchPatched = true;
+    var originalSwitchTopicTab = window.switchTopicTab;
+    window.switchTopicTab = function (tab) {
+      var result = originalSwitchTopicTab.apply(this, arguments);
+      if (tab === "selfwork") renderSelf();
+      return result;
     };
   }
 
