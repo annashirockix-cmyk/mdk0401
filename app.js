@@ -503,13 +503,34 @@ window.renderTopicPage = function(courseId, topicId) {
     window.switchTopicTab('lectures');
 };
 
+window.canAccessCourse = function(courseId) {
+    if (!window.state.student && !window.state.staff) return false;
+    if (window.state.staff && window.state.staff.role === "admin") return true;
+    var courses = window.state.student ? (window.state.student.courses || []) : (window.state.staff.courses || []);
+    return courses.indexOf(String(courseId)) !== -1;
+};
+window.syncCourseSelector = function() {
+    var sel=document.getElementById("mdkSelector"); if(!sel)return;
+    Array.prototype.forEach.call(sel.options,function(opt){opt.hidden=!(window.canAccessCourse&&window.canAccessCourse(opt.value));});
+    if(window.state.student||window.state.staff){var allowed=Array.prototype.filter.call(sel.options,opt=>window.canAccessCourse(opt.value));if(allowed.length){if(!window.canAccessCourse(window.state.activeCourseId))window.state.activeCourseId=allowed[0].value;sel.value=window.state.activeCourseId;}else sel.value="";}
+};
+
 // ==========================================
 // 6. ГЛАВНАЯ СТРАНИЦА
 // ==========================================
 window.renderHomePage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    var mdkId = window.state.activeCourseId || "07.01"; 
-    var course = window.MDK_DATA && window.MDK_DATA[mdkId] ? JSON.parse(JSON.stringify(window.MDK_DATA[mdkId])) : null;
+    var mdkId = window.state.activeCourseId || "07.01";
+    if (window.canAccessCourse && !window.canAccessCourse(mdkId)) {
+        var permitted = Object.keys(window.MDK_DATA || {}).filter(id => window.canAccessCourse(id));
+        mdkId = permitted[0] || "";
+        if (mdkId) { window.state.activeCourseId = mdkId; window.saveStudentData(); }
+    }
+    var course = mdkId && window.MDK_DATA && window.MDK_DATA[mdkId] ? JSON.parse(JSON.stringify(window.MDK_DATA[mdkId])) : null;
+    if (!course && window.state.student) {
+        app.innerHTML = '<section class="hero"><h1>Доступ к дисциплинам пока не выдан</h1><p>Попросите преподавателя прислать ссылку-приглашение или назначить вам дисциплину.</p></section>';
+        return;
+    }
 
     if (course) {
         var customTopics = window.customContent.topics ? window.customContent.topics.filter(t => t.mdkId === mdkId) : [];
@@ -525,7 +546,7 @@ window.renderHomePage = function() {
     var title = course ? course.title : "Добро пожаловать!"; 
     var module = course ? course.module : "Выберите раздел.";
     var paletteHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
-    Object.keys(window.MDK_DATA || {}).forEach(id => {
+    Object.keys(window.MDK_DATA || {}).filter(id => window.canAccessCourse ? window.canAccessCourse(id) : true).forEach(id => {
         var c = window.MDK_DATA[id]; var isActive = id === mdkId;
         paletteHtml += `<button class="btn ${isActive ? '' : 'ghost'}" onclick="window.state.activeCourseId='${id}'; window.saveStudentData(); window.renderHomePage();" style="padding:10px 20px;">${c.shortName}</button>`;
     });
@@ -561,11 +582,12 @@ function setupLogin() {
             window.state.staff = { name: res.name || email, role: role, email: email, courses: res.courses || [] };
             window.state.student = null;
         } else {
-            window.state.student = { name: res.name || email, group: res.group || "", email: email, role: role };
+            window.state.student = { name: res.name || email, group: res.group || "", email: email, role: role, courses: res.courses || [] };
             window.state.staff = null;
         }
         window.saveStudentData(); 
         window.renderUserChip();
+        if (window.syncCourseSelector) window.syncCourseSelector();
         overlay.style.display = "none";
         window.unlockAchievement("welcome");
         location.hash = "#/";
@@ -611,6 +633,22 @@ function setupLogin() {
     if (btn) btn.onclick = function(e) { e.preventDefault(); doUnifiedLogin(); };
     var form = document.getElementById("unifiedLoginForm"); 
     if (form) form.onsubmit = function(e) { e.preventDefault(); doUnifiedLogin(); };
+    var showReg=document.getElementById("showRegisterBtn"),regForm=document.getElementById("portalRegisterForm");
+    var inviteFromUrl="";try{inviteFromUrl=new URLSearchParams(location.search).get("invite")||"";}catch(e){}
+    if(document.getElementById("regInvite")&&inviteFromUrl)document.getElementById("regInvite").value=inviteFromUrl;
+    if(showReg)showReg.onclick=function(){if(regForm)regForm.style.display="block";form.style.display="none";};
+    var hideReg=document.getElementById("hideRegisterBtn");if(hideReg)hideReg.onclick=function(){regForm.style.display="none";form.style.display="block";};
+    if(regForm)regForm.onsubmit=function(e){
+      e.preventDefault();var btn=document.getElementById("btnRegister");
+      var name=document.getElementById("regName").value.trim(),group=document.getElementById("regGroup").value.trim(),email=document.getElementById("regEmail").value.trim(),pass=document.getElementById("regPassword").value,invite=document.getElementById("regInvite").value.trim();
+      if(!invite){alert("Введите код приглашения.");return;}if(pass.length<8){alert("Пароль должен содержать не менее 8 символов.");return;}
+      btn.disabled=true;btn.textContent="Регистрация…";
+      window.API.register(email,pass,name,group,invite).then(function(res){
+        if(!res||!res.success)throw new Error(res&&res.error||"Не удалось зарегистрироваться.");
+        return window.API.login(email,pass);
+      }).then(function(res){if(!res||!res.success)throw new Error(res&&res.error||"Регистрация выполнена. Теперь войдите.");applyAuthSession(res,email);})
+      .catch(function(err){alert(err.message);btn.disabled=false;btn.textContent="Зарегистрироваться";});
+    };
 }
 
 window.handleLogout = function() {
@@ -637,7 +675,7 @@ window.router = function() {
     if (parts.length === 0 || parts[0] === "") { window.renderHomePage(); return; }
     var page = parts[0];
     
-    if (page === "topic" && parts.length >= 3) { window.renderTopicPage(parts[1], parts[2]); return; }
+    if (page === "topic" && parts.length >= 3) { if(window.canAccessCourse&&!window.canAccessCourse(parts[1])){window.renderHomePage();return;} window.renderTopicPage(parts[1], parts[2]); return; }
     if (page === "videos") { window.renderVideosPage(); return; }
     if (page === "safety") { window.renderSafetyPage(); return; }
     if (page === "passports") { window.renderPassportsPage(); return; }
