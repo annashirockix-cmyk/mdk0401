@@ -40,11 +40,14 @@ window.renderJournalPage = function() {
           });
       });
 
-      window.API.getStudents().then(d => {
+      Promise.all([window.API.getStudents(), window.API.getResults({courseId:courseId})]).then(pair => { var d=pair[0], rd=pair[1];
           contentWrap.innerHTML = "";
           if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { contentWrap.innerHTML = "<div class='module'>Студентов пока нет.</div>"; return; }
 
-          var students = d.students;
+          if (!rd || !rd.success) throw new Error(rd && rd.error || 'Не удалось загрузить результаты.');
+          var students = d.students.filter(st => window.state.staff.role === 'admin' || (st.courses || []).includes(courseId));
+          var resultIndex = {};
+          (rd.results || []).forEach(rec => { if (!resultIndex[rec.email]) resultIndex[rec.email] = {}; resultIndex[rec.email][rec.testId] = rec; });
           CURRENT_STUDENTS_CACHE = students;
 
           var table = document.createElement("table");
@@ -74,8 +77,7 @@ window.renderJournalPage = function() {
           students.forEach((s) => {
               var sKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
               var tr = document.createElement("tr");
-              var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
-              var results = p.results || {};
+              var results = resultIndex[s.email] || {};
 
               var tdName = document.createElement("td");
               tdName.style = "border:1px solid var(--border); padding:8px; text-align:left; font-weight:bold; position:sticky; left:0; background:var(--card); z-index:1;";
