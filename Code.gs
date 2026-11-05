@@ -16,6 +16,7 @@ const CFG = {
   RESULTS: "Results",
   CONTENT: "CourseContent",
   SCHEDULE: "Schedule",
+  INVITES: "Invites",
   SESSION_PREFIX: "portal_session:",
   SESSION_TTL: 21600, // 6 часов
   LEGACY_SALT: "portal_spo_2026",
@@ -26,7 +27,8 @@ const HEADERS = {
   Users: ["Email", "PasswordHash", "Name", "Group", "Role", "UpdatedAt", "Courses", "Payload", "PasswordSalt"],
   Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId"],
   CourseContent: ["Id", "CourseId", "TopicId", "Type", "Title", "Payload", "UpdatedBy", "UpdatedAt"],
-  Schedule: ["Schedule"]
+  Schedule: ["Schedule"],
+  Invites: ["Code", "Courses", "CreatedBy", "CreatedAt", "ExpiresAt", "MaxUses", "Uses", "Active"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -69,6 +71,10 @@ function handleRequest_(e) {
       case "setuserrole": result = setUserRole_(data); break;
       case "admincreateuser": result = adminCreateUser_(data); break;
       case "admindeleteuser": result = adminDeleteUser_(data); break;
+      case "setstudentcourses": result = setStudentCourses_(data); break;
+      case "createinvite": result = createInvite_(data); break;
+      case "getinvites": result = getInvites_(data); break;
+      case "deactivateinvite": result = deactivateInvite_(data); break;
       case "getschedule": result = getSchedule_(data); break;
       case "saveschedule": result = saveSchedule_(data); break;
       default:
@@ -124,16 +130,17 @@ function users_() { return ensureSheet_(CFG.USERS); }
 function results_() { return ensureSheet_(CFG.RESULTS); }
 function content_() { return ensureSheet_(CFG.CONTENT); }
 function schedule_() { return ensureSheet_(CFG.SCHEDULE); }
+function invites_() { return ensureSheet_(CFG.INVITES); }
 
 /**
  * Запустите вручную один раз после добавления SPREADSHEET_ID.
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
-  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule.";
+  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites.";
 }
 
 /* ---------- Common helpers and authentication ---------- */
@@ -237,7 +244,7 @@ function admin_(data) {
 
 function hasCourseAccess_(user, courseId) {
   if (user.role === "admin") return true;
-  if (user.role !== "teacher") return false;
+  if (user.role !== "teacher" && user.role !== "student") return false;
   return user.courses.split(",").map(function (id) { return id.trim(); })
     .indexOf(String(courseId)) !== -1;
 }
@@ -255,14 +262,17 @@ function editor_(data, courseId) {
 function register_(data) {
   const email = email_(data.email);
   const password = String(data.password || "");
+  const inviteCode = String(data.invite || data.inviteCode || "").trim();
   if (!email || email.indexOf("@") < 1) return { success: false, error: "Укажите корректный email." };
   if (password.length < 8) return { success: false, error: "Пароль должен содержать не менее 8 символов." };
 
+  if (!inviteCode) return { success: false, error: "Регистрация доступна по приглашению преподавателя или администратора." };
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
     if (userByEmail_(email)) return { success: false, error: "Пользователь с таким email уже зарегистрирован." };
-
+    const invite = findInvite_(inviteCode);
+    if (!invite || !invite.active || invite.uses >= invite.maxUses || new Date(invite.expiresAt).getTime() < Date.now()) return { success:false, error:"Приглашение недействительно, истекло или уже использовано." };
     const salt = Utilities.getUuid() + Utilities.getUuid();
     const sheet = users_();
     const map = headerMap_(sheet);
@@ -274,7 +284,7 @@ function register_(data) {
       Group: String(data.group || ""),
       Role: "student",
       UpdatedAt: new Date().toISOString(),
-      Courses: "",
+      Courses: invite.courses.join(","),
       Payload: "",
       PasswordSalt: salt
     };
@@ -282,10 +292,15 @@ function register_(data) {
       if (map[key] !== undefined) row[map[key]] = values[key];
     });
     sheet.appendRow(row);
-    return { success: true };
-  } finally {
-    lock.releaseLock();
-  }
+    invites_().getRange(invite.row, 7).setValue(invite.uses + 1);
+    return { success: true, courses: invite.courses };
+  } finally { lock.releaseLock(); }
+}
+
+function findInvite_(code) {
+  const sh=invites_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh);
+  for(let i=1;i<vals.length;i++) if(String(vals[i][m.Code]||"")===String(code)) return {row:i+1,courses:String(vals[i][m.Courses]||"").split(",").filter(Boolean),expiresAt:vals[i][m.ExpiresAt],maxUses:Number(vals[i][m.MaxUses])||1,uses:Number(vals[i][m.Uses])||0,active:String(vals[i][m.Active]).toLowerCase()!=="false"};
+  return null;
 }
 
 function login_(data) {
@@ -375,7 +390,7 @@ function getStudents_(data) {
       name: row[map.Name],
       group: row[map.Group],
       role: row[map.Role],
-      courses: user.role === "admin" ? String(row[map.Courses] || "") : "",
+      courses: String(row[map.Courses] || "").split(",").filter(function(id){ return user.role === "admin" || hasCourseAccess_(user,id); }),
       payload: user.role === "admin" ? String(row[map.Payload] || "") : "{}"
     };
   });
@@ -389,6 +404,8 @@ function saveResult_(data) {
     throw new Error("Нельзя отправлять результат за другого пользователя.");
   }
 
+  const courseId = String(data.courseId || "");
+  if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
   const sheet = results_();
   const values = sheet.getDataRange().getValues();
   const testId = String(data.testId || "test");
@@ -415,29 +432,13 @@ function saveResult_(data) {
 }
 
 function getResults_(data) {
-  const user = auth_(data);
-  if (user.role !== "admin" && user.role !== "teacher") throw new Error("Недостаточно прав.");
-
-  const values = results_().getDataRange().getValues();
-  let list = values.slice(1).filter(function (row) { return row[0]; }).map(function (row) {
-    return {
-      email: row[0], name: row[1], group: row[2], testId: row[3], testTitle: row[4],
-      grade: row[5], score: row[6], maxScore: row[7], percent: row[8],
-      timeSpent: row[9], attempts: row[10], finishedAt: row[11], courseId: row[12] || ""
-    };
-  });
-
-  if (user.role === "teacher") list = list.filter(function (item) {
-    return hasCourseAccess_(user, item.courseId);
-  });
-  if (data.courseId) list = list.filter(function (item) {
-    return item.courseId === String(data.courseId);
-  });
-
-  list.sort(function (a, b) {
-    return String(b.finishedAt).localeCompare(String(a.finishedAt));
-  });
-  return { success: true, results: list };
+  const user=auth_(data); if(user.role!=='admin'&&user.role!=='teacher') throw new Error('Недостаточно прав.');
+  let list=results_().getDataRange().getValues().slice(1).filter(r=>r[0]).map(r=>({email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],courseId:r[12]||''}));
+  const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+  vals.slice(1).forEach(row=>{if(String(row[m.Role]||'').toLowerCase()!=='student')return;let p={};try{p=JSON.parse(row[m.Payload]||'{}')}catch(e){};const rs=p.results||{};Object.keys(rs).forEach(key=>{const rec=rs[key];if(!rec||typeof rec!=='object'||rec.grade==null)return;const email=email_(row[m.Email]);if(list.some(x=>email_(x.email)===email&&String(x.testId)===key))return;let cid=String(rec.courseId||'');if(!cid){const matches=CFG.COURSES.filter(id=>key.indexOf(id)>=0);if(matches.length===1)cid=matches[0];}list.push({email:email,name:row[m.Name],group:row[m.Group],testId:key,testTitle:rec.testTitle||key,grade:rec.grade,score:rec.score||0,maxScore:rec.max||rec.maxScore||0,percent:rec.percent||0,timeSpent:rec.timeSpent||0,attempts:rec.attempts||1,finishedAt:rec.finishedAt||'',courseId:cid});});});
+  if(user.role==='teacher')list=list.filter(x=>hasCourseAccess_(user,x.courseId));
+  if(data.courseId)list=list.filter(x=>x.courseId===String(data.courseId));
+  list.sort((a,b)=>String(b.finishedAt).localeCompare(String(a.finishedAt)));return {success:true,results:list};
 }
 
 /* ---------- Teacher-created topics, lectures and tests ---------- */
@@ -450,7 +451,7 @@ function getCustomContent_(data) {
   values.slice(1).forEach(function (row) {
     if (!row[0]) return;
     const courseId = String(row[1] || "");
-    if (user.role === "teacher" && !hasCourseAccess_(user, courseId)) return;
+    if (user.role !== "admin" && !hasCourseAccess_(user, courseId)) return;
 
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
@@ -637,6 +638,11 @@ function adminDeleteUser_(data) {
   return {success:true,email:targetEmail,historyPreserved:true};
 }
 
+/* ---------- Student course access and teacher invitations ---------- */
+function setStudentCourses_(data){const actor=auth_(data),target=userByEmail_(data.email);if(!target||target.role!=='student')throw new Error('Учащийся не найден.');if(actor.role!=='admin'&&actor.role!=='teacher')throw new Error('Недостаточно прав.');const requested=Array.isArray(data.courses)?data.courses.map(String):[];const allowed=actor.role==='admin'?CFG.COURSES:actor.courses.split(',').filter(Boolean);requested.forEach(id=>{if(allowed.indexOf(id)<0)throw new Error('Нельзя назначить дисциплину вне ваших полномочий: '+id);});let finalCourses=requested;if(actor.role==='teacher'){const other=target.courses.split(',').filter(Boolean).filter(id=>allowed.indexOf(id)<0);finalCourses=other.concat(requested.filter(id=>other.indexOf(id)<0));}writeUserFields_(target,{Courses:finalCourses.join(','),UpdatedAt:new Date().toISOString()});return {success:true,courses:finalCourses};}
+function createInvite_(data){const actor=auth_(data);if(actor.role!=='admin'&&actor.role!=='teacher')throw new Error('Создавать приглашения могут только преподаватели и администраторы.');const requested=Array.isArray(data.courses)?data.courses.map(String):[];const allowed=actor.role==='admin'?CFG.COURSES:actor.courses.split(',').filter(Boolean);const courses=requested.filter((id,i)=>allowed.indexOf(id)>=0&&requested.indexOf(id)===i);if(!courses.length||courses.length!==requested.length)throw new Error('Выберите дисциплины только из доступных вам.');const days=Math.min(90,Math.max(1,Number(data.days)||30)),maxUses=Math.min(500,Math.max(1,Number(data.maxUses)||50)),code=Utilities.getUuid().replace(/-/g,'')+Utilities.getUuid().replace(/-/g,'');const now=new Date(),expires=new Date(now.getTime()+days*86400000);invites_().appendRow([code,courses.join(','),actor.email,now.toISOString(),expires.toISOString(),maxUses,0,true]);return {success:true,code:code,courses:courses,expiresAt:expires.toISOString(),maxUses:maxUses};}
+function getInvites_(data){const actor=auth_(data);if(actor.role!=='admin'&&actor.role!=='teacher')throw new Error('Недостаточно прав.');const sh=invites_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);const invites=vals.slice(1).filter(r=>actor.role==='admin'||email_(r[m.CreatedBy])===actor.email).map(r=>({code:String(r[m.Code]),courses:String(r[m.Courses]),createdAt:r[m.CreatedAt],expiresAt:r[m.ExpiresAt],maxUses:Number(r[m.MaxUses]),uses:Number(r[m.Uses]),active:String(r[m.Active]).toLowerCase()!=='false'}));return {success:true,invites:invites};}
+function deactivateInvite_(data){const actor=auth_(data);if(actor.role!=='admin'&&actor.role!=='teacher')throw new Error('Недостаточно прав.');const sh=invites_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);for(let i=1;i<vals.length;i++)if(String(vals[i][m.Code])===String(data.code||'')){if(actor.role!=='admin'&&email_(vals[i][m.CreatedBy])!==actor.email)throw new Error('Это приглашение создано другим преподавателем.');sh.getRange(i+1,m.Active+1).setValue(false);return {success:true};}throw new Error('Приглашение не найдено.');}
 /* ---------- Schedule ---------- */
 
 function getSchedule_(data) {
