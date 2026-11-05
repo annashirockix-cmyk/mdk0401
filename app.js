@@ -719,7 +719,7 @@ function setupDrawer() {
     }
 }
 
-window.addEventListener("hashchange", window.router);
+window.addEventListener("hashchange", function () { window.router(); });
 window.addEventListener("DOMContentLoaded", function() {
     setupLogin(); 
     setupDrawer(); 
