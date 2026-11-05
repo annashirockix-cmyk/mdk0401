@@ -45,7 +45,7 @@ window.renderJournalPage = function() {
           if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { contentWrap.innerHTML = "<div class='module'>Студентов пока нет.</div>"; return; }
 
           if (!rd || !rd.success) throw new Error(rd && rd.error || 'Не удалось загрузить результаты.');
-          var students = d.students.filter(st => window.state.staff.role === 'admin' || (st.courses || []).includes(courseId));
+          var students = d.students.filter(st => String(st.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (st.courses || []).includes(courseId)));
           var resultIndex = {};
           (rd.results || []).forEach(rec => { if (!resultIndex[rec.email]) resultIndex[rec.email] = {}; resultIndex[rec.email][rec.testId] = rec; });
           CURRENT_STUDENTS_CACHE = students;
@@ -150,7 +150,7 @@ window.renderJournalPage = function() {
               wrap.innerHTML = "";
               if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { wrap.innerHTML = "<div class='module'>Нет студентов.</div>"; return; }
 
-              var students = d.students.filter(s => window.state.staff.role === 'admin' || (s.courses || []).includes(window.state.activeCourseId));
+              var students = d.students.filter(s => String(s.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (s.courses || []).includes(window.state.activeCourseId)));
               if (groupFilter !== "all") {
                   students = students.filter(s => s.group === groupFilter);
               }
