@@ -104,6 +104,19 @@ window.MDK_DATA["MAT"] = {
 <tr><td>ГЦК</td><td>Атомы в вершинах и центрах граней куба</td><td>Алюминий, медь, никель, γ-железо</td></tr>
 <tr><td>ГПУ</td><td>Плотная гексагональная упаковка</td><td>Магний, цинк, титан при обычных условиях</td></tr>
 </tbody></table>
+<div class="methodical-scheme" style="margin:16px 0;padding:14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px">
+<b style="display:block;margin-bottom:8px">Модели элементарных ячеек металлических кристаллов</b>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px">
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;padding:10px;text-align:center">
+<svg viewBox="0 0 180 145" role="img" aria-label="Объёмно-центрированная кубическая решётка ОЦК" style="width:100%;height:auto;max-height:145px"><g stroke="#64748b" stroke-width="2" fill="none"><path d="M42 42L112 42L145 22L75 22Z M42 42V112L112 112V42 M112 42L145 22V92L112 112 M42 112L75 92L145 92 M75 22V92"/></g><g fill="#2563eb" stroke="#1e3a8a" stroke-width="1.2"><circle cx="42" cy="42" r="6"/><circle cx="112" cy="42" r="6"/><circle cx="145" cy="22" r="6"/><circle cx="75" cy="22" r="6"/><circle cx="42" cy="112" r="6"/><circle cx="112" cy="112" r="6"/><circle cx="145" cy="92" r="6"/><circle cx="75" cy="92" r="6"/></g><circle cx="93.5" cy="67" r="7" fill="#f59e0b" stroke="#92400e" stroke-width="1.3"/></svg>
+<b>ОЦК</b><div style="font-size:12px;color:#475569">8 атомов в вершинах + 1 в центре куба<br>Координационное число — 8</div></div>
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;padding:10px;text-align:center">
+<svg viewBox="0 0 180 145" role="img" aria-label="Гранецентрированная кубическая решётка ГЦК" style="width:100%;height:auto;max-height:145px"><g stroke="#64748b" stroke-width="2" fill="none"><path d="M42 42L112 42L145 22L75 22Z M42 42V112L112 112V42 M112 42L145 22V92L112 112 M42 112L75 92L145 92 M75 22V92"/></g><g fill="#2563eb" stroke="#1e3a8a" stroke-width="1.1"><circle cx="42" cy="42" r="5.5"/><circle cx="112" cy="42" r="5.5"/><circle cx="145" cy="22" r="5.5"/><circle cx="75" cy="22" r="5.5"/><circle cx="42" cy="112" r="5.5"/><circle cx="112" cy="112" r="5.5"/><circle cx="145" cy="92" r="5.5"/><circle cx="75" cy="92" r="5.5"/></g><g fill="#f59e0b" stroke="#92400e" stroke-width="1.1"><circle cx="77" cy="42" r="6"/><circle cx="128" cy="32" r="6"/><circle cx="58" cy="32" r="6"/><circle cx="77" cy="112" r="6"/><circle cx="128" cy="102" r="6"/><circle cx="58" cy="102" r="6"/></g></svg>
+<b>ГЦК</b><div style="font-size:12px;color:#475569">8 атомов в вершинах + 6 в центрах граней<br>Координационное число — 12</div></div>
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;padding:10px;text-align:center">
+<svg viewBox="0 0 180 145" role="img" aria-label="Гексагональная плотноупакованная решётка ГПУ" style="width:100%;height:auto;max-height:145px"><g stroke="#64748b" stroke-width="2" fill="none"><path d="M45 42L78 23L111 42L111 91L78 110L45 91Z M45 42L45 91 M78 23V72L111 91 M111 42L144 23L144 72L111 91 M78 72L111 42 M78 72L144 72 M78 23L144 23"/></g><g fill="#2563eb" stroke="#1e3a8a" stroke-width="1.1"><circle cx="45" cy="42" r="5.5"/><circle cx="78" cy="23" r="5.5"/><circle cx="111" cy="42" r="5.5"/><circle cx="45" cy="91" r="5.5"/><circle cx="78" cy="110" r="5.5"/><circle cx="111" cy="91" r="5.5"/><circle cx="144" cy="23" r="5.5"/><circle cx="144" cy="72" r="5.5"/></g><g fill="#f59e0b" stroke="#92400e" stroke-width="1.1"><circle cx="78" cy="72" r="6"/><circle cx="111" cy="66" r="6"/><circle cx="62" cy="66" r="6"/></g></svg>
+<b>ГПУ</b><div style="font-size:12px;color:#475569">Гексагональная упаковка слоёв A–B–A<br>Координационное число — 12</div></div></div>
+<div style="font-size:12px;color:#64748b;margin-top:8px">Схематические модели элементарных ячеек; атомы показаны условными шарами, размеры и перспективные проекции не в масштабе.</div></div>
 <h3>2. Дефекты кристаллического строения</h3>
 <p>Реальные кристаллы не являются идеальными. Точечные дефекты включают вакансии и межузельные атомы; линейные дефекты представлены дислокациями; плоские — границами зёрен и дефектами упаковки. Дефекты влияют на диффузию, пластическую деформацию, прочность и другие свойства.</p>
 <div class="methodical-scheme"><b>Уровни дефектов</b><div class="scheme-flow">Точечные → вакансии, межузельные атомы<br>Линейные → дислокации<br>Поверхностные → границы зёрен, границы фаз</div></div>
@@ -168,63 +181,20 @@ window.MDK_DATA["MAT"] = {
 <p>Железоуглеродистые сплавы составляют основу конструкционных и инструментальных материалов. Их свойства зависят прежде всего от содержания углерода, легирующих элементов и структуры, сформированной при охлаждении и термической обработке. Диаграмма железо—цементит рассматривает превращения в системе с содержанием углерода до 6,67 %.</p>
 <h3>Диаграмма состояния железо—цементит (Fe—Fe₃C)</h3>
 <p>Диаграмма показывает равновесные превращения железоуглеродистых сплавов при изменении температуры и содержания углерода. Схема ниже учебная и не в масштабе; точные координаты линий и составов следует сверять с учебником и нормативным материалом.</p>
-<div style="overflow-x:auto;background:#fff;border-radius:12px;padding:12px;margin:14px 0">
-<svg viewBox="0 0 760 420" role="img" aria-label="Диаграмма состояния железо цементит Fe Fe3C с эвтектоидом, эвтектикой и фазовыми областями" style="width:100%;min-width:650px;height:auto">
-<rect x="78" y="42" width="642" height="300" fill="#fff" stroke="#334155" stroke-width="1.5"/>
-<g stroke="#d7dee8" stroke-dasharray="4 5" stroke-width="1">
-<path d="M78 58H720M78 132H720M78 206H720M78 280H720M78 342H720"/>
-<path d="M151 42V342M284 42V342M492 42V342"/>
-</g>
-<g fill="#334155" font-size="12">
-<text x="18" y="47">T, °C</text><text x="32" y="62">1600</text><text x="32" y="136">1350</text><text x="32" y="210">1100</text><text x="32" y="284">850</text><text x="32" y="346">650</text>
-<text x="75" y="363">0</text><text x="145" y="363">0,76</text><text x="274" y="363">2,14</text><text x="483" y="363">4,3</text><text x="695" y="363">6,67</text>
-<text x="330" y="400" font-size="13">Содержание углерода, % (мас.)</text>
-</g>
-<g stroke="#1d4ed8" stroke-width="3" fill="none" stroke-linejoin="round">
-<!-- Liquidus: Fe melting point to eutectic, then to cementite -->
-<path d="M78 60 C175 78 350 140 492 180 L720 156"/>
-<!-- Solidus/peritectic boundary -->
-<path d="M94 72 C190 92 350 145 492 180"/>
-<!-- Austenite boundaries A3 and Acm -->
-<path d="M78 250 L151 304 L284 180"/>
-<!-- Horizontal invariant lines -->
-<path d="M78 304 H720"/>
-<path d="M284 180 H720"/>
-</g>
-<g stroke="#b45309" stroke-width="2.5" fill="none">
-<path d="M78 102 L94 72"/><path d="M94 72H130"/>
-<path d="M78 250 L151 304"/>
-</g>
-<g stroke="#dc2626" stroke-width="2" fill="none">
-<path d="M151 304V342"/><path d="M492 180V342"/><path d="M284 180V342"/>
-</g>
-<g fill="#0f172a" font-size="12" font-weight="600">
-<text x="102" y="88">δ + Ж</text>
-<text x="310" y="82">Жидкость (Ж)</text>
-<text x="535" y="171">Ж + Fe₃C</text><text x="180" y="112">γ + Ж</text>
-<text x="108" y="235">α + γ</text>
-<text x="185" y="270">γ-аустенит</text>
-<text x="300" y="218">γ + Fe₃C</text>
-<text x="96" y="326">Феррит + перлит</text>
-<text x="520" y="326">Перлит + цементит</text>
-
-</g>
-<g fill="#dc2626" stroke="#fff" stroke-width="1.5">
-<circle cx="94" cy="72" r="5"/><circle cx="151" cy="304" r="5"/><circle cx="492" cy="180" r="5"/><circle cx="284" cy="180" r="4"/>
-</g>
-<g fill="#991b1b" font-size="11" font-weight="600">
-<text x="103" y="66">0,16 % C; 1493 °C — перитектика</text>
-<text x="160" y="296">0,76 % C; 727 °C — эвтектоид</text>
-<text x="500" y="174">4,3 % C; 1147 °C — эвтектика</text>
-<text x="291" y="193">2,14 % C</text>
-</g>
-<g fill="#1e40af" font-size="11">
-<text x="83" y="52">1538 °C — плавление Fe</text>
-<text x="610" y="34">Fe₃C — 6,67 % C</text>
-</g>
+<div style="overflow-x:auto;background:#fff;border:1px solid #dbe3ee;border-radius:12px;padding:12px;margin:14px 0">
+<svg viewBox="0 0 820 520" role="img" aria-label="Учебная диаграмма состояния железо цементит Fe Fe3C с характерными точками и областями" style="width:100%;min-width:680px;height:auto">
+<rect x="82" y="34" width="690" height="405" fill="#fff" stroke="#334155" stroke-width="1.5"/>
+<g stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"><path d="M82 34H772M82 115H772M82 196H772M82 277H772M82 358H772M82 439H772"/><path d="M82 34V439M160 34V439M303 34V439M525 34V439M772 34V439"/></g>
+<g fill="#334155" font-size="12"><text x="22" y="38">1600</text><text x="22" y="119">1400</text><text x="22" y="200">1200</text><text x="22" y="281">1000</text><text x="22" y="362">800</text><text x="22" y="443">600</text><text x="18" y="20">T, °C</text><text x="79" y="460">0</text><text x="148" y="460">0,16</text><text x="292" y="460">0,76</text><text x="514" y="460">2,14</text><text x="516" y="478">стали</text><text x="760" y="460">6,67</text><text x="760" y="478">Fe₃C</text><text x="230" y="505" font-size="13">Содержание углерода, % (мас.)</text></g>
+<g fill="none" stroke="#1d4ed8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M82 59 L99 78 L525 220 L772 187"/><path d="M82 59 L99 78 L145 116"/><path d="M99 78 L99 143 L145 116"/><path d="M145 116 L525 220"/><path d="M82 314 Q160 344 303 388"/><path d="M303 388 L525 220"/><path d="M82 388 H772"/></g>
+<g fill="none" stroke="#b45309" stroke-width="2.5"><path d="M82 314 Q160 344 303 388"/><path d="M303 388 L525 220"/></g>
+<g stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5 4"><path d="M99 78V439M303 388V439M525 220V439M525 220H772M303 388H772"/></g>
+<g fill="#0f172a" font-size="12" font-weight="600"><text x="115" y="55">Жидкость (Ж)</text><text x="330" y="95">Ж + γ</text><text x="620" y="174">Ж + Fe₃C</text><text x="104" y="105">δ + Ж</text><text x="115" y="145">δ + γ</text><text x="185" y="265">γ-аустенит</text><text x="385" y="290">γ + Fe₃C</text><text x="105" y="370">α + γ</text><text x="105" y="420">α + перлит</text><text x="555" y="420">перлит + Fe₃C</text><text x="650" y="235">ледебуритная область</text></g>
+<g fill="#b91c1c" stroke="#fff" stroke-width="1.5"><circle cx="99" cy="78" r="5"/><circle cx="303" cy="388" r="5"/><circle cx="525" cy="220" r="5"/></g>
+<g fill="#991b1b" font-size="11" font-weight="600"><text x="108" y="72">P: 0,16 % C; 1493 °C</text><text x="311" y="380">S: 0,76 % C; 727 °C</text><text x="533" y="214">E: 4,3 % C; 1147 °C</text></g>
+<g fill="#1e40af" font-size="11"><text x="86" y="51">1538 °C — плавление Fe</text><text x="630" y="28">Fe₃C: 6,67 % C</text></g>
 </svg>
-<div style="font-size:12px;color:#475569">Ключевые точки: эвтектоид — около 0,76 % C и 727 °C; эвтектика — 4,3 % C и 1147 °C; граница стали и чугуна в принятой учебной классификации — около 2,14 % C.</div>
-</div>
+<div style="font-size:12px;color:#475569;margin-top:8px"><b>Важно:</b> это учебная упрощённая схема, не точная масштабная диаграмма. Характерные точки: перитектика P — около 0,16 % C и 1493 °C; эвтектоид S — около 0,76 % C и 727 °C; эвтектика E — 4,3 % C и 1147 °C. Для расчётов и определения фазовых границ используйте атлас/учебник с полной диаграммой Fe—Fe₃C.</div></div>
 <h3>2. Основные структурные составляющие</h3>
 <table><thead><tr><th>Составляющая</th><th>Характеристика</th><th>Влияние на свойства</th></tr></thead><tbody>
 <tr><td>Феррит</td><td>Твёрдый раствор углерода в α-железе</td><td>Относительно мягкий и пластичный</td></tr>
