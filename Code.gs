@@ -362,7 +362,10 @@ function getStudents_(data) {
   const values = sheet.getDataRange().getValues();
   const map = headerMap_(sheet);
   const students = values.slice(1).filter(function (row) {
-    return row[map.Email] && String(row[map.Role]).toLowerCase() === "student";
+    if (!row[map.Email]) return false;
+    // Администратору нужны все записи, включая преподавателей, для управления доступом.
+    // Преподаватель получает только список обучающихся.
+    return user.role === "admin" || String(row[map.Role]).toLowerCase() === "student";
   }).map(function (row) {
     return {
       email: row[map.Email],
