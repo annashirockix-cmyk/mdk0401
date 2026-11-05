@@ -789,8 +789,14 @@ function setGamesAccess_(data) {
 
 /* ---------- One-time import from the previous student-results spreadsheet ---------- */
 const LEGACY_RESULTS_SOURCE_ID = "1lpNmnxr8TCaG-3-FpqUMU1wMAHQmk82jNlnSRDGASDQ";
-const LEGACY_RESULTS_SOURCE_GID = 1051580763;
+const LEGACY_RESULTS_SOURCE_GID = 0;
 function legacyNorm_(v) { return String(v == null ? "" : v).toLowerCase().replace(/ё/g,"е").replace(/[^a-zа-я0-9]+/g,""); }
+function legacyNumber_(v) {
+  if (typeof v === "number") return v;
+  const s = String(v == null ? "" : v).replace(/\\s/g,"").replace(",",".").replace("%","");
+  const m = s.match(/-?\\d+(?:\\.\\d+)?/);
+  return m ? Number(m[0]) : 0;
+}
 function legacyColumn_(headers, aliases) {
   const normalized = headers.map(legacyNorm_);
   const keys = aliases.map(legacyNorm_);
@@ -843,14 +849,14 @@ function importLegacyResultsFromSpreadsheet() {
   const h = values[headerRow];
   const col = {
     email: legacyColumn_(h, ["email","почта","логин","email студента","почта студента"]),
-    name: legacyColumn_(h, ["фио","фио студента","студент","имя","name","учащийся"]),
+    name: legacyColumn_(h, ["фио","фио студента","фио обучающегося","фамилия имя отчество","студент","учащийся","обучающийся","имя пользователя","name"]),
     group: legacyColumn_(h, ["группа","group"]),
     testId: legacyColumn_(h, ["testid","id теста","код работы","id работы"]),
     title: legacyColumn_(h, ["название теста","название работы","тест","работа","наименование","testtitle"]),
-    grade: legacyColumn_(h, ["оценка","grade","итоговая оценка"]),
-    score: legacyColumn_(h, ["баллы","верных ответов","правильных ответов","score"]),
+    grade: legacyColumn_(h, ["оценка","оценка за тест","оценка за работу","итог","итоговая оценка","grade"]),
+    score: legacyColumn_(h, ["баллы","набрано баллов","верных ответов","правильных ответов","количество баллов","score"]),
     max: legacyColumn_(h, ["максимум","всего вопросов","maxscore","максимальный балл"]),
-    percent: legacyColumn_(h, ["процент","результатпроцентов","percent"]),
+    percent: legacyColumn_(h, ["процент","результат процентов","результат в процентах","успеваемость","percent"]),
     time: legacyColumn_(h, ["время","времявыполнения","timespent"]),
     attempts: legacyColumn_(h, ["попытки","количествопопыток","attempts"]),
     date: legacyColumn_(h, ["дата","датазавершения","завершено","finishedat","времяпрохождения"]),
@@ -883,10 +889,10 @@ function importLegacyResultsFromSpreadsheet() {
     const testTitle = title || originalId || "Импортированный результат";
     const testId = originalId || ("legacy_" + legacyNorm_(testTitle) + "_" + (i + 1));
     const gradeRaw = col.grade >= 0 ? String(src[col.grade] || "").replace(",", ".") : "";
-    const score = col.score >= 0 ? Number(String(src[col.score] || "").replace(",", ".")) || 0 : 0;
-    const maxScore = col.max >= 0 ? Number(String(src[col.max] || "").replace(",", ".")) || 0 : 0;
-    const percent = col.percent >= 0 ? Number(String(src[col.percent] || "").replace(",", ".")) || 0 : (maxScore > 0 ? Math.round(score / maxScore * 100) : 0);
-    let grade = Number(gradeRaw);
+    const score = col.score >= 0 ? legacyNumber_(src[col.score]) : 0;
+    const maxScore = col.max >= 0 ? legacyNumber_(src[col.max]) : 0;
+    const percent = col.percent >= 0 ? legacyNumber_(src[col.percent]) : (maxScore > 0 ? Math.round(score / maxScore * 100) : 0);
+    let grade = legacyNumber_(gradeRaw);
     if (!grade || grade < 2 || grade > 5) grade = percent >= 90 ? 5 : percent >= 75 ? 4 : percent >= 60 ? 3 : 2;
     let finishedAt = "";
     if (col.date >= 0 && src[col.date]) {
@@ -906,8 +912,8 @@ function importLegacyResultsFromSpreadsheet() {
     rows.push([
       email, name || (matched ? matched[um.Name] : email), group || (matched ? matched[um.Group] : ""),
       testId, testTitle, grade, score, maxScore, percent,
-      col.time >= 0 ? (Number(src[col.time]) || 0) : 0,
-      col.attempts >= 0 ? (Number(src[col.attempts]) || 1) : 1,
+      col.time >= 0 ? legacyNumber_(src[col.time]) : 0,
+      col.attempts >= 0 ? (legacyNumber_(src[col.attempts]) || 1) : 1,
       finishedAt, courseId
     ]);
   }
