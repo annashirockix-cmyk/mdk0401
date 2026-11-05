@@ -34,7 +34,7 @@ window.renderJournalPage = function() {
       var works = [];
       course.sections.forEach(s => {
           s.topics.forEach(t => {
-              if (t.practicals) t.practicals.forEach((p, i) => works.push({ id: `prac_${t.id}_${i}`, title: `${t.code} ${p.code}`, type: 'prac' }));
+              if (t.practicals) t.practicals.forEach((p, i) => works.push({ id: `prac_${p.code}`, title: `${t.code} ${p.code}`, type: 'prac' }));
               if (t.selfWork) t.selfWork.forEach((sw, i) => works.push({ id: `self_${t.id}_${i}`, title: `${t.code} ${sw.code || ''}`, type: 'self' }));
               if (t.test) works.push({ id: `test_${t.id}`, title: `${t.code} Тест`, type: 'test' });
           });
@@ -150,7 +150,7 @@ window.renderJournalPage = function() {
               wrap.innerHTML = "";
               if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { wrap.innerHTML = "<div class='module'>Нет студентов.</div>"; return; }
 
-              var students = d.students;
+              var students = d.students.filter(s => window.state.staff.role === 'admin' || (s.courses || []).includes(window.state.activeCourseId));
               if (groupFilter !== "all") {
                   students = students.filter(s => s.group === groupFilter);
               }
