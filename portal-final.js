@@ -261,9 +261,9 @@
       area.innerHTML = "<p>Нет самостоятельных работ по этой теме.</p>";
       return;
     }
-    var n = col(topicId).length;
     var html = "";
     topic.selfWork.forEach(function (work, idx) {
+      var n = col(topicId, idx).length;
       var jKey = "self_" + topicId + "_" + idx;
       var leg = "self_" + work.code;
       var done = (window.state.results && (window.state.results[jKey] || window.state.results[leg])) || null;
@@ -302,7 +302,7 @@
             '" data-i="' + idx + '" style="padding:12px 24px">Начать тест</button></div>';
         }
       } else {
-        html += '<p style="color:var(--muted);margin-top:12px">Банк вопросов для этой темы пока пуст.</p>';
+        html += '<p style="color:var(--muted);margin-top:12px">Тестовый банк для этой самостоятельной работы не добавлен. Ответьте на контрольные вопросы выше письменно.</p>';
       }
       html += "</div>";
     });
