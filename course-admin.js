@@ -61,6 +61,22 @@
     updateCourseChrome();
   };
 
+  
+  function renderTeacherJournal(){
+    const app=document.getElementById("app");if(!app)return;
+    if(!isTeacher()){app.innerHTML='<div class="module">Раздел доступен преподавателям.</div>';return;}
+    app.innerHTML='<a href="#/" class="backlink">← На главную</a><section class="hero"><h1>Журнал преподавателя</h1><p>Только результаты дисциплин, назначенных администратором</p></section><div class="module" id="courseResults">Загрузка результатов…</div>';
+    const box=document.getElementById("courseResults");
+    window.API.getResults({}).then(r=>{
+      if(!r.success)throw new Error(r.error||"Ошибка загрузки");
+      const rows=r.results||[];
+      if(!rows.length){box.innerHTML="<p>По назначенным дисциплинам пока нет результатов.</p>";return;}
+      box.innerHTML='<div style="overflow-x:auto"><table class="journal-table"><thead><tr><th>Студент</th><th>Дисциплина</th><th>Работа</th><th>Оценка</th><th>Результат</th><th>Дата</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(x.name)+'</td><td>'+esc(COURSE_LABELS[x.courseId]||x.courseId||"—")+'</td><td>'+esc(x.testTitle)+'</td><td><b>'+esc(x.grade)+'</b></td><td>'+esc(x.score)+' / '+esc(x.maxScore)+' ('+esc(x.percent)+'%)</td><td>'+esc(x.finishedAt)+'</td></tr>').join("")+'</tbody></table></div>';
+    }).catch(e=>{box.textContent="Ошибка: "+e.message;});
+  }
+  window.renderTeacherJournalPage=renderTeacherJournal;
+  window.renderCourseReportsPage=renderTeacherJournal;
+
   const originalRouter=window.router;
   if(originalRouter)window.router=function(){
     const p=(location.hash||"").replace(/^#/,"").split("/").filter(Boolean);
@@ -72,6 +88,7 @@
     if(isPlugin(window.state.activeCourseId)&&["games","shop","achievements","rating","training"].indexOf(p[0])>=0){
       location.hash="#/";updateCourseChrome();return;
     }
+    if(isTeacher()&&!isAdmin()&&(p[0]==="journal"||p[0]==="reports")){renderTeacherJournal();return;}
     if(p[0]==="course-editor"){window.renderCourseEditorPage();return;}
     if(p[0]==="admin"&&!isAdmin()){
       const app=document.getElementById("app");if(app)app.innerHTML='<div class="module">Панель администратора доступна только администратору.</div>';return;
