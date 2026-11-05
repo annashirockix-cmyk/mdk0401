@@ -21,7 +21,7 @@ window.API = {
  logout:function(){try{sessionStorage.removeItem("mdk.session");}catch(e){}},
  register:function(email,password,name,group,invite){return fetchAPI("register",{email:email,password:password,name:name,group:group,invite:invite},"POST");},
  getStudents:function(){return fetchAPI("getStudents",{},"GET");},
- saveStudent:function(key,name,group,payload){return fetchAPI("saveStudent",{email:String(key||"").split("|")[0],name:name,group:group,payload:payload},"POST");},
+ saveStudent:function(key,name,group,payload){var email=(window.state&&window.state.student&&window.state.student.email)||String(key||"").split("|")[0];return fetchAPI("saveStudent",{email:email,name:name,group:group,payload:payload},"POST");},
  getResults:function(filters){return fetchAPI("getResults",filters||{},"GET");},
  saveResult:function(data){data=Object.assign({},data||{});if(!data.courseId&&window.state)data.courseId=window.state.activeCourseId||"";return fetchAPI("saveResult",data,"POST");},
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
