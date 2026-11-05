@@ -266,13 +266,17 @@ function register_(data) {
   if (!email || email.indexOf("@") < 1) return { success: false, error: "Укажите корректный email." };
   if (password.length < 8) return { success: false, error: "Пароль должен содержать не менее 8 символов." };
 
-  if (!inviteCode) return { success: false, error: "Регистрация доступна по приглашению преподавателя или администратора." };
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
     if (userByEmail_(email)) return { success: false, error: "Пользователь с таким email уже зарегистрирован." };
-    const invite = findInvite_(inviteCode);
-    if (!invite || !invite.active || invite.uses >= invite.maxUses || new Date(invite.expiresAt).getTime() < Date.now()) return { success:false, error:"Приглашение недействительно, истекло или уже использовано." };
+    const invite = inviteCode ? findInvite_(inviteCode) : null;
+    if (inviteCode && (!invite || !invite.active || invite.uses >= invite.maxUses || new Date(invite.expiresAt).getTime() < Date.now())) return { success:false, error:"Приглашение недействительно, истекло или уже использовано." };
+    if (!inviteCode) {
+      const all=users_().getDataRange().getValues(), um=headerMap_(users_());
+      const adminExists=all.slice(1).some(function(row){return String(row[um.Role]||"").toLowerCase()==="admin";});
+      if(adminExists)return {success:false,error:"Для регистрации необходима ссылка или код приглашения преподавателя."};
+    }
     const salt = Utilities.getUuid() + Utilities.getUuid();
     const sheet = users_();
     const map = headerMap_(sheet);
@@ -284,7 +288,7 @@ function register_(data) {
       Group: String(data.group || ""),
       Role: "student",
       UpdatedAt: new Date().toISOString(),
-      Courses: invite.courses.join(","),
+      Courses: invite ? invite.courses.join(",") : "",
       Payload: "",
       PasswordSalt: salt
     };
@@ -292,8 +296,8 @@ function register_(data) {
       if (map[key] !== undefined) row[map[key]] = values[key];
     });
     sheet.appendRow(row);
-    invites_().getRange(invite.row, 7).setValue(invite.uses + 1);
-    return { success: true, courses: invite.courses };
+    if(invite) invites_().getRange(invite.row, 7).setValue(invite.uses + 1);
+    return { success: true, courses: invite ? invite.courses : [] };
   } finally { lock.releaseLock(); }
 }
 
