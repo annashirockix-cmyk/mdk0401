@@ -28,7 +28,9 @@ window.API = {
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
  deleteCustomContent:function(id){return fetchAPI("deleteCustomContent",{id:id},"POST");},
  setTeacherCourses:function(email,courses){return fetchAPI("setTeacherCourses",{email:email,courses:courses},"POST");},
- setUserRole:function(email,role){return fetchAPI("setUserRole",{email:email,role:role},"POST");},
+setUserRole:function(email,role){return fetchAPI("setUserRole",{email:email,role:role},"POST");},
+ adminCreateUser:function(data){return fetchAPI("adminCreateUser",data||{},"POST");},
+ adminDeleteUser:function(email){return fetchAPI("adminDeleteUser",{email:email},"POST");},
  getSchedule:function(){return fetchAPI("getSchedule",{},"GET");},
  saveSchedule:function(data){return fetchAPI("saveSchedule",{schedule:JSON.stringify(data)},"POST");}
 };
