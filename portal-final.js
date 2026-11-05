@@ -129,7 +129,7 @@
       L = L.concat(window.EXTRA_TESTS[k].questions);
     }
     try {
-      var courseId = (window.state && window.state.activeCourseId) || "07.01";
+      var courseId = cid();
       var c = window.MDK_DATA && window.MDK_DATA[courseId];
       if (c) {
         (c.sections || []).forEach(function (s) {
