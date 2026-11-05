@@ -67,6 +67,8 @@ function handleRequest_(e) {
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
       case "setteachercourses": result = setTeacherCourses_(data); break;
       case "setuserrole": result = setUserRole_(data); break;
+      case "admincreateuser": result = adminCreateUser_(data); break;
+      case "admindeleteuser": result = adminDeleteUser_(data); break;
       case "getschedule": result = getSchedule_(data); break;
       case "saveschedule": result = saveSchedule_(data); break;
       default:
@@ -593,6 +595,46 @@ function promoteUserToAdmin(email) {
   } finally {
     lock.releaseLock();
   }
+}
+
+
+/* ---------- Administrator: create and delete portal accounts ---------- */
+function adminCreateUser_(data) {
+  admin_(data);
+  const email = email_(data.email), password = String(data.password || "");
+  const name = String(data.name || "").trim(), group = String(data.group || "").trim();
+  const role = String(data.role || "student").toLowerCase();
+  if (!email || email.indexOf("@") < 1) throw new Error("Укажите корректный email.");
+  if (password.length < 8) throw new Error("Временный пароль должен содержать не менее 8 символов.");
+  if (!name) throw new Error("Укажите имя пользователя.");
+  if (["student", "teacher", "admin"].indexOf(role) === -1) throw new Error("Недопустимая роль.");
+  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    if (userByEmail_(email)) throw new Error("Пользователь с таким email уже существует.");
+    const salt = Utilities.getUuid() + Utilities.getUuid(), sheet = users_(), map = headerMap_(sheet);
+    const row = new Array(sheet.getLastColumn()).fill("");
+    const values = {Email:email,PasswordHash:passwordHash_(password,salt),Name:name,Group:group,Role:role,
+      UpdatedAt:new Date().toISOString(),Courses:role==="admin"?"*":"",Payload:"",PasswordSalt:salt};
+    Object.keys(values).forEach(function(key){if(map[key]!==undefined)row[map[key]]=values[key];});
+    sheet.appendRow(row);
+    return {success:true,email:email,role:role};
+  } finally { lock.releaseLock(); }
+}
+
+function adminDeleteUser_(data) {
+  const actor = admin_(data), targetEmail = email_(data.email);
+  if (!targetEmail) throw new Error("Не указан email пользователя.");
+  if (targetEmail === actor.email) throw new Error("Нельзя удалить собственную учётную запись администратора.");
+  const target = userByEmail_(targetEmail);
+  if (!target) throw new Error("Пользователь не найден.");
+  if (target.role === "admin") {
+    const sheet=users_(), values=sheet.getDataRange().getValues(), map=headerMap_(sheet);
+    const count=values.slice(1).filter(function(row){return email_(row[map.Email])&&String(row[map.Role]).toLowerCase()==="admin";}).length;
+    if(count<=1)throw new Error("Нельзя удалить последнего администратора.");
+  }
+  // История тестов не удаляется: удаляется только учётная запись из Users.
+  users_().deleteRow(target.row);
+  return {success:true,email:targetEmail,historyPreserved:true};
 }
 
 /* ---------- Schedule ---------- */
