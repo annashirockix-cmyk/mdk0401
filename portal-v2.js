@@ -84,7 +84,7 @@
     if (!area) return;
     var topicId = topicIdFromHash();
     if (!topicId) return;
-    var m = location.hash.match(/topic\\/([^/]+)/);
+    var m = location.hash.match(/topic\/([^/]+)/);
     var courseId = (m && m[1]) || (window.state && window.state.activeCourseId) || "07.01";
     var course = window.MDK_DATA && window.MDK_DATA[courseId];
     var topic = null;
@@ -133,7 +133,7 @@
   window.startInlineTest = function (topicId, selfWorkRef) {
     var area = document.getElementById("topicContent");
     if (!area) return;
-    var courseId = (location.hash.match(/topic\\/([^/]+)/) || [])[1] || (window.state && window.state.activeCourseId) || "07.01";
+    var courseId = (location.hash.match(/topic\/([^/]+)/) || [])[1] || (window.state && window.state.activeCourseId) || "07.01";
     var course = window.MDK_DATA && window.MDK_DATA[courseId];
     var topic = null;
     if (course) (course.sections || []).forEach(function (section) {
