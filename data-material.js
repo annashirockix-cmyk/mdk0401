@@ -171,14 +171,14 @@ window.MDK_DATA["MAT"] = {
 <div style="overflow-x:auto;background:#fff;border-radius:12px;padding:12px;margin:14px 0">
 <svg viewBox="0 0 760 390" role="img" aria-label="Схематическая диаграмма железо цементит" style="width:100%;min-width:620px;height:auto">
 <rect x="65" y="22" width="650" height="315" fill="#fff" stroke="#334155"/>
-<g stroke="#d1d5db" stroke-dasharray="4 4"><path d="M65 90H715M65 160H715M65 230H715M65 300H715"/><path d="M139 22V337M273 22V337M484 22V337"/></g>
-<g fill="#334155" font-size="12"><text x="14" y="28">T, °C</text><text x="22" y="94">1500</text><text x="22" y="164">1200</text><text x="22" y="234">900</text><text x="22" y="304">600</text><text x="62" y="357">0</text><text x="130" y="357">0,76</text><text x="264" y="357">2,14</text><text x="475" y="357">4,3</text><text x="695" y="357">6,67</text><text x="330" y="382">Содержание углерода, %</text></g>
-<g stroke="#1d4ed8" stroke-width="3" fill="none"><path d="M65 52 L484 194 L715 172"/><path d="M65 215 L139 300"/><path d="M139 300 L273 194"/><path d="M65 300 H715"/></g>
-<g stroke="#b45309" stroke-width="2.5" fill="none"><path d="M65 90 H82 L139 90"/><path d="M139 300 L273 194"/></g>
-<path d="M65 300H715" stroke="#dc2626" stroke-width="2.5"/>
+<g stroke="#d1d5db" stroke-dasharray="4 4"><path d="M65 53H715M65 148H715M65 243H715M65 337H715"/><path d="M139 22V337M273 22V337M484 22V337"/></g>
+<g fill="#334155" font-size="12"><text x="14" y="28">T, °C</text><text x="22" y="57">1500</text><text x="22" y="152">1200</text><text x="22" y="247">900</text><text x="22" y="341">600</text><text x="62" y="357">0</text><text x="130" y="357">0,76</text><text x="264" y="357">2,14</text><text x="475" y="357">4,3</text><text x="695" y="357">6,67</text><text x="330" y="382">Содержание углерода, %</text></g>
+<g stroke="#1d4ed8" stroke-width="3" fill="none"><path d="M65 42 L484 165 L715 140"/><path d="M65 239 L139 297"/><path d="M139 297 L273 165"/><path d="M65 297 H715"/><path d="M273 165 H715"/></g>
+<g stroke="#b45309" stroke-width="2.5" fill="none"><path d="M65 87 L81 56"/><path d="M139 297 L273 165"/></g>
+<path d="M65 297H715" stroke="#dc2626" stroke-width="2.5"/>
 <g fill="#111827" font-size="12" font-weight="600"><text x="95" y="76">δ + жидкость</text><text x="305" y="70">Жидкость</text><text x="340" y="150">Жидкость + цементит</text><text x="85" y="255">Феррит + аустенит</text><text x="190" y="265">Аустенит</text><text x="300" y="282">Аустенит + цементит</text><text x="150" y="322">Перлит</text><text x="530" y="322">Перлит + цементит</text></g>
 <g fill="#dc2626" stroke="#fff" stroke-width="1.5"><circle cx="139" cy="300" r="5"/><circle cx="484" cy="194" r="5"/><circle cx="273" cy="194" r="5"/></g>
-<g fill="#991b1b" font-size="11"><text x="145" y="290">0,76 % C; 727 °C — эвтектоид</text><text x="492" y="188">4,3 % C; 1147 °C — эвтектика</text><text x="280" y="208">2,14 % C — граница сталей и чугунов</text></g>
+<g fill="#991b1b" font-size="11"><text x="145" y="288">0,76 % C; 727 °C — эвтектоид</text><text x="492" y="158">4,3 % C; 1147 °C — эвтектика</text><text x="280" y="180">2,14 % C — граница сталей и чугунов</text></g>
 <g fill="#1e40af" font-size="11"><text x="78" y="42">1538 °C — плавление чистого Fe</text><text x="520" y="30">Fe₃C — 6,67 % C</text></g>
 </svg>
 <div style="font-size:12px;color:#475569">Ключевые точки: эвтектоид — около 0,76 % C и 727 °C; эвтектика — 4,3 % C и 1147 °C; граница стали и чугуна в принятой учебной классификации — около 2,14 % C.</div>
