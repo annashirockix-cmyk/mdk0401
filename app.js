@@ -108,6 +108,7 @@ window.renderUserChip = function() {
 
 window.unlockAchievement = function(id) {
     if (!window.state.unlockedAchievements) window.state.unlockedAchievements = [];
+    if (window.isStandaloneCourse && window.isStandaloneCourse(window.state.activeCourseId)) return;
     if (!window.state.unlockedAchievements.includes(id)) { 
         window.state.unlockedAchievements.push(id); 
         window.saveStudentData(); 
