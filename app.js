@@ -124,7 +124,7 @@ window.loadGlobalCustomContent = function(callback) {
         if (callback) callback();
         return;
     }
-    window.API.getCustomContent().then(res => {
+    return window.API.getCustomContent().then(res => {
         if (res && res.success) {
             window.customContent.topics = res.data.filter(d => d.type === 'topic');
             window.customContent.files = res.data.filter(d => d.type === 'file');
