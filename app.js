@@ -8,7 +8,7 @@ window.state = window.state || {
     unlockedAchievements: []
 };
 
-window.customContent = { topics: [], files: [] };
+window.customContent = { topics: [], files: [], lectures: [], tests: [] };
 
 try { 
     var savedState = localStorage.getItem("mdk.state"); 
@@ -127,6 +127,8 @@ window.loadGlobalCustomContent = function(callback) {
         if (res && res.success) {
             window.customContent.topics = res.data.filter(d => d.type === 'topic');
             window.customContent.files = res.data.filter(d => d.type === 'file');
+            window.customContent.lectures = res.data.filter(d => d.type === 'lecture');
+            window.customContent.tests = res.data.filter(d => d.type === 'test');
         }
         if (callback) callback();
     }).catch(err => {
@@ -552,10 +554,10 @@ function setupLogin() {
     function applyAuthSession(res, email) {
         var role = (res.role || "student").toLowerCase();
         if (role === "teacher" || role === "admin") {
-            window.state.staff = { name: res.name || email, role: role, email: email };
+            window.state.staff = { name: res.name || email, role: role, email: email, courses: res.courses || [] };
             window.state.student = null;
         } else {
-            window.state.student = { name: res.name || email, group: res.group || "", email: email };
+            window.state.student = { name: res.name || email, group: res.group || "", email: email, role: role };
             window.state.staff = null;
         }
         window.saveStudentData(); 
