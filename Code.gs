@@ -26,7 +26,7 @@ const CFG = {
 };
 
 const HEADERS = {
-  Users: ["Email", "PasswordHash", "Name", "Group", "Role", "UpdatedAt", "Courses", "Payload", "PasswordSalt"],
+  Users: ["Email", "PasswordHash", "Name", "Group", "Role", "UpdatedAt", "Courses", "Payload", "PasswordSalt", "LoginChangedAt", "PasswordChangedAt"],
   Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId"],
   CourseContent: ["Id", "CourseId", "TopicId", "Type", "Title", "Payload", "UpdatedBy", "UpdatedAt"],
   Schedule: ["Schedule"],
@@ -209,6 +209,8 @@ function userByEmail_(email) {
         email: target,
         passwordHash: String(values[row][index.PasswordHash] || ""),
         passwordSalt: String(values[row][index.PasswordSalt] || ""),
+        loginChangedAt: index.LoginChangedAt !== undefined ? String(values[row][index.LoginChangedAt] || "") : "",
+        passwordChangedAt: index.PasswordChangedAt !== undefined ? String(values[row][index.PasswordChangedAt] || "") : "",
         name: String(values[row][index.Name] || ""),
         group: String(values[row][index.Group] || ""),
         role: String(values[row][index.Role] || "student").toLowerCase(),
