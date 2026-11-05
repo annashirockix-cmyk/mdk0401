@@ -402,7 +402,7 @@ window.renderTopicPage = function(courseId, topicId) {
     window.switchTopicTab = function(tabName) {
         document.querySelectorAll(".tab").forEach(btn => { btn.classList.remove("active"); btn.classList.add("ghost"); });
         var activeBtn = document.getElementById(`tab-${tabName}`); if (activeBtn) { activeBtn.classList.add("active"); activeBtn.classList.remove("ghost"); }
-        var contentArea = document.getElementById("topicContent"); contentArea.innerHTML = "";
+        var contentArea = document.getElementById("topicContent"); if (!contentArea) return; contentArea.innerHTML = "";
 
         if (tabName === 'lectures') {
             if (topic.lectures && topic.lectures.length) {
