@@ -4,6 +4,7 @@ const CACHE_NAME = 'portal-cache-v15'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Т
 const STATIC_ASSETS = [
   './',
   './index.html',
+  './course-assessment-advanced.js',
   './app.js',
   './api.js',
   './account.js',
@@ -22,7 +23,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v14');
+        console.log('[SW] Кэширование статических ресурсов версии v15');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
