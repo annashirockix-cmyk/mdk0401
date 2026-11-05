@@ -460,14 +460,24 @@ window.renderTopicPage = function(courseId, topicId) {
         var contentArea = document.getElementById("topicContent"); 
         var questions = [];
         
+        var routeParts = (location.hash || "").replace(/^#/, "").split("/").filter(Boolean);
+        var courseId = routeParts[0] === "topic" ? routeParts[1] : (window.state && window.state.activeCourseId);
+        var course = window.MDK_DATA && window.MDK_DATA[courseId];
+        var topic = null;
+        if (course) (course.sections || []).forEach(s => (s.topics || []).forEach(t => { if (t.id === topicId) topic = t; }));
         if (selfWorkCode) {
-            var testData = window.EXTRA_TESTS ? window.EXTRA_TESTS[`self_${selfWorkCode.replace(/\s+/g, '')}`] : null;
+            var workIndex = topic && (topic.selfWork || []).findIndex(w => w.code === selfWorkCode);
+            if (workIndex < 0 || workIndex == null) workIndex = 0;
+            var testData = window.EXTRA_TESTS && window.EXTRA_TESTS[`self_${topicId}_${workIndex}`];
+            if (!testData && window.EXTRA_TESTS) {
+                var legacyKey = Object.keys(window.EXTRA_TESTS).find(k => k.indexOf("self_" + topicId + "_") === 0 && window.EXTRA_TESTS[k] && window.EXTRA_TESTS[k].questions);
+                if (legacyKey) testData = window.EXTRA_TESTS[legacyKey];
+            }
             if (testData && testData.questions) questions = [...testData.questions];
+            if (!questions.length && topic && topic.test) questions = [...topic.test];
         } else {
-            var course = window.MDK_DATA[window.state.activeCourseId];
-            var topic = null; course.sections.forEach(s => { s.topics.forEach(t => { if (t.id === topicId) topic = t; }); });
             if (topic && topic.test) questions = [...topic.test];
-            if (window.HARD_TESTS && window.HARD_TESTS[topicId]) { questions = questions.concat(window.HARD_TESTS[topicId]); }
+            if (window.HARD_TESTS && window.HARD_TESTS[topicId]) questions = questions.concat(window.HARD_TESTS[topicId]);
         }
         
         if (!questions.length) { contentArea.innerHTML = "<p>Вопросы не найдены.</p>"; return; }
