@@ -169,17 +169,59 @@ window.MDK_DATA["MAT"] = {
 <h3>Диаграмма состояния железо—цементит (Fe—Fe₃C)</h3>
 <p>Диаграмма показывает равновесные превращения железоуглеродистых сплавов при изменении температуры и содержания углерода. Схема ниже учебная и не в масштабе; точные координаты линий и составов следует сверять с учебником и нормативным материалом.</p>
 <div style="overflow-x:auto;background:#fff;border-radius:12px;padding:12px;margin:14px 0">
-<svg viewBox="0 0 760 390" role="img" aria-label="Схематическая диаграмма железо цементит" style="width:100%;min-width:620px;height:auto">
-<rect x="65" y="22" width="650" height="315" fill="#fff" stroke="#334155"/>
-<g stroke="#d1d5db" stroke-dasharray="4 4"><path d="M65 53H715M65 148H715M65 243H715M65 337H715"/><path d="M139 22V337M273 22V337M484 22V337"/></g>
-<g fill="#334155" font-size="12"><text x="14" y="28">T, °C</text><text x="22" y="57">1500</text><text x="22" y="152">1200</text><text x="22" y="247">900</text><text x="22" y="341">600</text><text x="62" y="357">0</text><text x="130" y="357">0,76</text><text x="264" y="357">2,14</text><text x="475" y="357">4,3</text><text x="695" y="357">6,67</text><text x="330" y="382">Содержание углерода, %</text></g>
-<g stroke="#1d4ed8" stroke-width="3" fill="none"><path d="M65 42 L484 165 L715 140"/><path d="M65 239 L139 297"/><path d="M139 297 L273 165"/><path d="M65 297 H715"/><path d="M273 165 H715"/></g>
-<g stroke="#b45309" stroke-width="2.5" fill="none"><path d="M65 87 L81 56"/><path d="M139 297 L273 165"/></g>
-<path d="M65 297H715" stroke="#dc2626" stroke-width="2.5"/>
-<g fill="#111827" font-size="12" font-weight="600"><text x="95" y="76">δ + жидкость</text><text x="305" y="70">Жидкость</text><text x="340" y="150">Жидкость + цементит</text><text x="85" y="255">Феррит + аустенит</text><text x="190" y="265">Аустенит</text><text x="300" y="282">Аустенит + цементит</text><text x="150" y="322">Перлит</text><text x="530" y="322">Перлит + цементит</text></g>
-<g fill="#dc2626" stroke="#fff" stroke-width="1.5"><circle cx="139" cy="300" r="5"/><circle cx="484" cy="194" r="5"/><circle cx="273" cy="194" r="5"/></g>
-<g fill="#991b1b" font-size="11"><text x="145" y="288">0,76 % C; 727 °C — эвтектоид</text><text x="492" y="158">4,3 % C; 1147 °C — эвтектика</text><text x="280" y="180">2,14 % C — граница сталей и чугунов</text></g>
-<g fill="#1e40af" font-size="11"><text x="78" y="42">1538 °C — плавление чистого Fe</text><text x="520" y="30">Fe₃C — 6,67 % C</text></g>
+<svg viewBox="0 0 760 420" role="img" aria-label="Диаграмма состояния железо цементит Fe Fe3C с эвтектоидом, эвтектикой и фазовыми областями" style="width:100%;min-width:650px;height:auto">
+<rect x="78" y="42" width="642" height="300" fill="#fff" stroke="#334155" stroke-width="1.5"/>
+<g stroke="#d7dee8" stroke-dasharray="4 5" stroke-width="1">
+<path d="M78 58H720M78 132H720M78 206H720M78 280H720M78 342H720"/>
+<path d="M151 42V342M284 42V342M492 42V342"/>
+</g>
+<g fill="#334155" font-size="12">
+<text x="18" y="47">T, °C</text><text x="32" y="62">1600</text><text x="32" y="136">1350</text><text x="32" y="210">1100</text><text x="32" y="284">850</text><text x="32" y="346">650</text>
+<text x="75" y="363">0</text><text x="145" y="363">0,76</text><text x="274" y="363">2,14</text><text x="483" y="363">4,3</text><text x="695" y="363">6,67</text>
+<text x="330" y="400" font-size="13">Содержание углерода, % (мас.)</text>
+</g>
+<g stroke="#1d4ed8" stroke-width="3" fill="none" stroke-linejoin="round">
+<!-- Liquidus: Fe melting point to eutectic, then to cementite -->
+<path d="M78 60 C175 78 350 140 492 180 L720 156"/>
+<!-- Solidus/peritectic boundary -->
+<path d="M94 72 C190 92 350 145 492 180"/>
+<!-- Austenite boundaries A3 and Acm -->
+<path d="M78 250 L151 304 L284 180"/>
+<!-- Horizontal invariant lines -->
+<path d="M78 304 H720"/>
+<path d="M284 180 H720"/>
+</g>
+<g stroke="#b45309" stroke-width="2.5" fill="none">
+<path d="M78 102 L94 72"/>
+<path d="M78 250 L151 304"/>
+</g>
+<g stroke="#dc2626" stroke-width="2" fill="none">
+<path d="M151 304V342"/><path d="M492 180V342"/><path d="M284 180V342"/>
+</g>
+<g fill="#0f172a" font-size="12" font-weight="600">
+<text x="102" y="88">δ + Ж</text>
+<text x="310" y="82">Жидкость (Ж)</text>
+<text x="540" y="142">Ж + Fe₃C</text>
+<text x="108" y="235">α + γ</text>
+<text x="185" y="270">γ-аустенит</text>
+<text x="300" y="218">γ + Fe₃C</text>
+<text x="96" y="326">α + Fe₃C</text>
+<text x="520" y="326">Перлит + цементит</text>
+<text x="205" y="294">Перлитная область</text>
+</g>
+<g fill="#dc2626" stroke="#fff" stroke-width="1.5">
+<circle cx="94" cy="72" r="5"/><circle cx="151" cy="304" r="5"/><circle cx="492" cy="180" r="5"/><circle cx="284" cy="180" r="4"/>
+</g>
+<g fill="#991b1b" font-size="11" font-weight="600">
+<text x="103" y="66">0,16 % C; 1493 °C — перитектика</text>
+<text x="160" y="296">0,76 % C; 727 °C — эвтектоид</text>
+<text x="500" y="174">4,3 % C; 1147 °C — эвтектика</text>
+<text x="291" y="193">2,14 % C</text>
+</g>
+<g fill="#1e40af" font-size="11">
+<text x="83" y="52">1538 °C — плавление Fe</text>
+<text x="610" y="34">Fe₃C — 6,67 % C</text>
+</g>
 </svg>
 <div style="font-size:12px;color:#475569">Ключевые точки: эвтектоид — около 0,76 % C и 727 °C; эвтектика — 4,3 % C и 1147 °C; граница стали и чугуна в принятой учебной классификации — около 2,14 % C.</div>
 </div>
