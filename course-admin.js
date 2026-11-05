@@ -19,7 +19,7 @@
     document.querySelectorAll('.drawer-item[href="#/journal"]').forEach(x=>x.style.display=isTeacher()?"flex":"none");
     const xp=document.getElementById("xpCount"); if(xp) xp.style.display=plugin?"none":"";
     document.querySelectorAll('.drawer-item[href="#/shop"],.drawer-item[href="#/achievements"],.drawer-item[href="#/rating"],.drawer-item[href="#/training"]').forEach(x=>x.style.display=plugin?"none":"");
-    document.querySelectorAll('.drawer-item[href="#/games"]').forEach(x=>x.style.display="none");
+    document.querySelectorAll('.drawer-item[href="#/games"]').forEach(x=>x.style.display=(window.canRoleAccessGames&&window.canRoleAccessGames())?"flex":"none");
     document.querySelectorAll(".plugin-course-label").forEach(x=>x.remove());
     document.body.classList.toggle("standalone-course",plugin);
   }
@@ -78,8 +78,7 @@
       box.innerHTML='<div style="overflow-x:auto"><table class="journal-table"><thead><tr><th>Студент</th><th>Дисциплина</th><th>Работа</th><th>Оценка</th><th>Результат</th><th>Дата</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>'+esc(x.name)+'</td><td>'+esc(COURSE_LABELS[x.courseId]||x.courseId||"—")+'</td><td>'+esc(x.testTitle)+'</td><td><b>'+esc(x.grade)+'</b></td><td>'+esc(x.score)+' / '+esc(x.maxScore)+' ('+esc(x.percent)+'%)</td><td>'+esc(x.finishedAt)+'</td></tr>').join("")+'</tbody></table></div>';
     }).catch(e=>{box.textContent="Ошибка: "+e.message;});
   }
-  window.renderTeacherJournalPage=renderTeacherJournal;
-  window.renderCourseReportsPage=renderTeacherJournal;
+  window.renderTeacherJournalPage=window.renderJournalPage || renderTeacherJournal;
 
   const originalRouter=window.router;
   if(originalRouter)window.router=function(){
@@ -92,7 +91,7 @@
     if(isPlugin(window.state.activeCourseId)&&["games","shop","achievements","rating","training"].indexOf(p[0])>=0){
       location.hash="#/";updateCourseChrome();return;
     }
-    if(isTeacher()&&!isAdmin()&&(p[0]==="journal"||p[0]==="reports")){renderTeacherJournal();return;}
+    if(isTeacher()&&!isAdmin()&&p[0]==="journal"){(window.renderJournalPage||renderTeacherJournal)();return;}
     if(p[0]==="course-editor"){window.renderCourseEditorPage();return;}
     if(p[0]==="admin"&&!isAdmin()){
       const app=document.getElementById("app");if(app)app.innerHTML='<div class="module">Панель администратора доступна только администратору.</div>';return;
