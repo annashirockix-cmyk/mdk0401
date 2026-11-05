@@ -830,11 +830,19 @@ function previewLegacyResultsImport() {
   const sh = legacySourceSheet_(), values = sh.getDataRange().getValues();
   const headerRow = values.slice(0, 10).findIndex(row => {
     const h = row.map(legacyNorm_);
-    return h.some(x => ["email","почта","логин","фио","студент","группа"].some(k => x.indexOf(k) >= 0)) &&
-      h.some(x => ["оценка","grade","результат","балл","процент","тест","работа"].some(k => x.indexOf(k) >= 0));
+    return h.some(x => ["email","почта","логин","фио","студент","группа","пользователь","обучающийся","учащийся","имя"].some(k => x.indexOf(k) >= 0)) &&
+      h.some(x => ["оценка","grade","результат","балл","процент","тест","работа","задание","правильн"].some(k => x.indexOf(k) >= 0));
   });
-  if (headerRow < 0) throw new Error("Не удалось автоматически определить строку заголовков. Первые строки: " + JSON.stringify(values.slice(0, 5)));
-  const report = { sheet: sh.getName(), gid: sh.getSheetId(), headerRow: headerRow + 1, headers: values[headerRow].map(String), sampleRows: values.slice(headerRow + 1, headerRow + 6) };
+  const report = {
+    spreadsheetId: LEGACY_RESULTS_SOURCE_ID,
+    sheet: sh.getName(),
+    gid: sh.getSheetId(),
+    headerRow: headerRow >= 0 ? headerRow + 1 : null,
+    headers: headerRow >= 0 ? values[headerRow].map(String) : [],
+    sampleRows: headerRow >= 0 ? values.slice(headerRow + 1, headerRow + 8) : values.slice(0, 12),
+    detected: headerRow >= 0,
+    hint: headerRow >= 0 ? "Проверьте заголовки и примеры, затем можно запускать импорт." : "Заголовки автоматически не распознаны. Пришлите сюда эти первые строки — сопоставлю столбцы."
+  };
   Logger.log(JSON.stringify(report, null, 2));
   return report;
 }
@@ -848,8 +856,8 @@ function importLegacyResultsFromSpreadsheet() {
   if (headerRow < 0) throw new Error("Не найдены заголовки результатов. Сначала выполните previewLegacyResultsImport().");
   const h = values[headerRow];
   const col = {
-    email: legacyColumn_(h, ["email","почта","логин","email студента","почта студента"]),
-    name: legacyColumn_(h, ["фио","фио студента","фио обучающегося","фамилия имя отчество","студент","учащийся","обучающийся","имя пользователя","name"]),
+    email: legacyColumn_(h, ["email","e-mail","электронная почта","адрес почты","почта","логин","email студента","почта студента"]),
+    name: legacyColumn_(h, ["фио","фио студента","фио обучающегося","фамилия имя отчество","студент","учащийся","обучающийся","пользователь","имя пользователя","name"]),
     group: legacyColumn_(h, ["группа","group"]),
     testId: legacyColumn_(h, ["testid","id теста","код работы","id работы"]),
     title: legacyColumn_(h, ["название теста","название работы","тест","работа","наименование","testtitle"]),
