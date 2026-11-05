@@ -180,6 +180,7 @@
       const page = ((location.hash || "").replace(/^#/, "").split("/").filter(Boolean)[0] || "");
       if (page === "account") { renderAccountPage(); applyMenu(); return; }
       if (page === "login-help") { renderLoginHelp(); return; }
+      if (page === "links" && window.renderLinksPage) { window.renderLinksPage(); return; }
       if (page === "games" && !window.canRoleAccessGames()) {
         window.showToast("Вкладка игр отключена администратором для вашей роли.", "err");
         location.hash = "#/";
@@ -192,6 +193,15 @@
   document.addEventListener("DOMContentLoaded", function () {
     applyMenu();
     if (currentUser()) window.refreshPortalSettings();
+    const loginForm = $("unifiedLoginForm");
+    if (loginForm && !$("forgotPasswordLink")) {
+      const link = document.createElement("button");
+      link.type = "button"; link.id = "forgotPasswordLink"; link.className = "btn ghost";
+      link.style = "width:100%;margin-top:8px";
+      link.textContent = "Забыли пароль? Запросить восстановление";
+      link.onclick = function () { location.hash = "#/login-help"; };
+      loginForm.insertAdjacentElement("afterend", link);
+    }
   });
   setTimeout(function () { applyMenu(); if (currentUser()) window.refreshPortalSettings(); }, 800);
 })();
