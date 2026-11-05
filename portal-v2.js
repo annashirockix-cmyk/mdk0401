@@ -24,10 +24,15 @@
     var q = {
       type: raw.type || "mc",
       q: raw.q || "",
+      context: raw.context || "",
       options: raw.options ? raw.options.slice() : null,
-      correct: raw.correct,
+      correct: Array.isArray(raw.correct) ? raw.correct.slice() : raw.correct,
       answer: raw.answer,
-      tol: raw.tol != null ? raw.tol : 0.01
+      tol: raw.tol != null ? raw.tol : 0.01,
+      unit: raw.unit || "",
+      items: raw.items ? raw.items.slice() : null,
+      correctOrder: raw.correctOrder ? raw.correctOrder.slice() : null,
+      pairs: raw.pairs ? raw.pairs.map(function (pair) { return { left: pair.left, right: pair.right }; }) : null
     };
     if (q.type === "tf") {
       q.options = ["Верно", "Неверно"];
@@ -200,13 +205,18 @@
       if (q.type === "order") {
         var items = shuffle(q.items || []);
         items.forEach(function (item, index) {
-          html += '<label style="display:flex;gap:8px;align-items:center;margin:8px 0"><span>' + item + '</span><select class="self-input order-pos" data-i="' + index + '" style="max-width:90px">' + Array.from({length:items.length}, function (_, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + '</option>'; }).join("") + '</select></label>';
+          html += '<label style="display:flex;gap:8px;align-items:center;margin:8px 0"><span>' + item + '</span><select class="self-input order-pos" data-item="' + item.replace(/"/g, '&quot;') + '" style="max-width:90px"><option value="">№</option>' + Array.from({length:items.length}, function (_, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + '</option>'; }).join("") + '</select></label>';
         });
         html += '<button type="button" class="btn" id="inlineSubmit">Проверить порядок</button>';
         area.innerHTML = html;
         document.getElementById("inlineSubmit").onclick = function () {
-          var positions = Array.prototype.map.call(area.querySelectorAll(".order-pos"), function (el) { return Number(el.value); });
-          if (positions.every(function (v, i) { return v === i + 1; })) score++;
+          var correctOrder = q.correctOrder || q.items || [];
+          var fields = area.querySelectorAll(".order-pos");
+          var right = 0;
+          Array.prototype.forEach.call(fields, function (field) {
+            if (Number(field.value) === correctOrder.indexOf(field.getAttribute("data-item")) + 1) right++;
+          });
+          if (fields.length && right === fields.length) score++;
           cur++; show();
         };
         return;
@@ -388,7 +398,8 @@
   };
 
   function patchRouter() {
-    if (!window.router) return;
+    if (window.__portalV2RouterPatched || !window.router) return;
+    window.__portalV2RouterPatched = true;
     var orig = window.router;
     window.router = function () {
       var parts = ((location.hash || "").slice(1) || "/")
