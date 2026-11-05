@@ -284,3 +284,5 @@ window.MDK_DATA["MAT"] = {
   safety: [],
   formatting: {}
 };
+
+window.MDK_DATA.MAT.pluginCourse = true; window.MDK_DATA.MAT.noGamification = true;
