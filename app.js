@@ -761,6 +761,7 @@ window.router = function() {
     if (page === "grades") { window.renderStudentGradesPage(); return; }
     if (page === "journal") { window.renderTeacherJournalPage(); return; }
     if (page === "teacher-dashboard" && window.renderTeacherDashboard) { window.renderTeacherDashboard(); return; }
+    if (page === "student-progress" && window.renderStudentProgressPage) { window.renderStudentProgressPage(parts[1] || ""); return; }
     if (page === "certificate") { window.renderCertificatePage(); return; }
     if (page === "profile") { window.renderProfilePage(hash); return; }
     if (page === "achievements") { window.renderAchievementsPage(); return; }
