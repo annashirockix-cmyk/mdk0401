@@ -2,6 +2,7 @@
 (function(){
   function node(tag,text,cls){var n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;}
   function moneylessNumber(v){return Number(v||0).toFixed(2).replace(/\.00$/,"");}
+  function courseTitle(id){var c=window.MDK_DATA&&window.MDK_DATA[id];return c?(c.shortName||c.title||id):id;}
   var base=window.renderRatingPage;
   if(typeof base!=="function")return;
   window.renderRatingPage=function(){
@@ -26,10 +27,10 @@
       var subjects=res.subjects||[],ratings=res.ratings||{};
       if(!subjects.length){panel.appendChild(node("p","Пока нет оценённых работ. Выполненные задания появятся в рейтинге после сохранения результата."));return;}
       var summary=node("div");summary.style.cssText="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:9px;margin:12px 0";
-      subjects.forEach(function(s,i){var card=node("div");card.style.cssText="padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card-soft)";card.appendChild(node("b",(i+1)+". "+s.courseId));card.appendChild(node("div","Средний балл: "+moneylessNumber(s.averageGrade)));card.appendChild(node("small","Участников: "+s.participants));summary.appendChild(card);});
+      subjects.forEach(function(s,i){var card=node("div");card.style.cssText="padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card-soft)";card.appendChild(node("b",(i+1)+". "+courseTitle(s.courseId)));card.appendChild(node("div","Средний балл: "+moneylessNumber(s.averageGrade)));card.appendChild(node("small","Участников: "+s.participants));summary.appendChild(card);});
       panel.appendChild(node("h4","🏅 Общий рейтинг дисциплин"));panel.appendChild(summary);
       var select=node("select");select.style.cssText="width:100%;max-width:360px;padding:10px;border-radius:8px;background:var(--bg);color:var(--text);border:1px solid var(--border);margin:8px 0 12px";
-      subjects.forEach(function(s){var opt=node("option",s.courseId+" — средний балл "+moneylessNumber(s.averageGrade));opt.value=s.courseId;select.appendChild(opt);});
+      subjects.forEach(function(s){var opt=node("option",courseTitle(s.courseId)+" — средний балл "+moneylessNumber(s.averageGrade));opt.value=s.courseId;select.appendChild(opt);});
       panel.appendChild(node("h4","👥 Рейтинг обучающихся по дисциплине"));panel.appendChild(select);
       var tableWrap=node("div");panel.appendChild(tableWrap);
       function renderCourse(){
