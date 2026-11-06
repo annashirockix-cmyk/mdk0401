@@ -205,3 +205,22 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 .fx-gold-text { color:#fbbf24 !important; text-shadow:0 0 5px rgba(251,191,36,.9),0 0 18px rgba(245,158,11,.6); }
 .fx-ice-text { color:#bae6fd !important; text-shadow:0 0 6px rgba(125,211,252,.95),0 0 20px rgba(56,189,248,.7); }
 .fx-fire-text { color:#fb923c !important; text-shadow:0 0 5px rgba(251,146,60,.95),0 0 18px rgba(239,68,68,.7); }
+
+/* Сетевая детективная игра */
+.netgame{width:100%;max-width:760px;padding:22px;box-sizing:border-box}
+.netgame h2{margin:0 0 10px;color:var(--accent)}
+.net-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.net-phase{margin:18px 0;padding:12px 16px;border-radius:12px;background:var(--card-soft);font-weight:800;letter-spacing:.08em;text-align:center}
+.net-actions,.net-join{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.net-join input{flex:1;min-width:140px;text-align:center;letter-spacing:.2em;text-transform:uppercase}
+.net-muted{color:var(--muted);font-size:13px}
+.net-notice{margin-top:14px;color:var(--gold);min-height:20px;overflow-wrap:anywhere}
+.net-roster{padding-left:24px;line-height:1.9}
+.net-dead{color:var(--err);font-size:12px}
+.net-role{padding:8px 12px;border-radius:999px;background:var(--accent);color:#07111b;font-weight:800}
+.net-log{margin:14px 0;padding:10px 14px;border:1px solid var(--border);border-radius:10px;max-height:150px;overflow:auto;color:var(--text-soft);font-size:13px}
+.net-log p{margin:4px 0}
+.net-controls{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}
+.net-target{margin:4px}
+.net-private{padding:12px;border-radius:10px;background:var(--card-soft);border-left:3px solid var(--accent);margin:12px 0}
+@media(max-width:520px){.netgame{padding:14px}.net-head{align-items:flex-start}.net-join{flex-direction:column}.net-join input,.net-join button{width:100%}}
