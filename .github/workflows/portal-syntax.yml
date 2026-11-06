@@ -20,7 +20,7 @@ jobs:
       - name: Check changed JavaScript modules
         run: |
           set -e
-          for file in app.js portal-genz.js rating-subjects.js workbooks.js certificate-supplement.js avatar-studio.js; do
+          for file in api.js app.js portal-genz.js rating-subjects.js workbooks.js certificate-supplement.js avatar-studio.js; do
             echo "Checking $file"
             node --check "$file"
           done
