@@ -64,7 +64,7 @@
     if(!guard())return;var app=appStart("🃏 Карточки и кроссворд");if(!app)return;
     var course=window.MDK_DATA.EN,tracks=["basic","technical"],current=tracks.indexOf(track)>=0?track:"basic";
     var cards=(course.flashcards[current]||[]).slice();
-    (window.customContent.flashcards||[]).filter(function(x){return x.mdkId==="EN"&&(!x.track||x.track===current);}).forEach(function(set){(set.cards||[]).forEach(function(c){cards.push(c);});});
+    (window.customContent.flashcards||[]).filter(function(x){return x.mdkId==="EN"&&(!x.track||x.track==="all"||x.track===current);}).forEach(function(set){(set.cards||[]).forEach(function(c){cards.push(c);});});
     var words=(course.flashcards.crossword&&course.flashcards.crossword[current]||[]).slice();
     app.insertAdjacentHTML("beforeend",'<section class="module"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn '+(current==="basic"?"":"ghost")+'" data-track="basic">Базовый английский</button><button class="btn '+(current==="technical"?"":"ghost")+'" data-track="technical">Технический английский</button></div><p class="museum-muted">Карточки: '+cards.length+' · слова для кроссворда: '+words.length+'</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="startCards">🃏 Учить слова</button><button class="btn ghost" id="startCrossword">🔤 Решить кроссворд</button></div></section><div id="englishCardsWork"></div>');
     app.querySelectorAll("[data-track]").forEach(function(b){b.onclick=function(){window.renderEnglishCardsPage(b.dataset.track);};});
@@ -95,6 +95,14 @@
       box.innerHTML=html;
       $("checkEnglishCrossword").onclick=function(){var total=0,correct=0;box.querySelectorAll("input[data-r]").forEach(function(input){total++;var r=Number(input.dataset.r),c=Number(input.dataset.c),target=grid[r][c],val=(input.value||"").toUpperCase();if(val===target){correct++;input.style.background="#c8f2d6";}else input.style.background="#ffd6d6";});var pct=Math.round(correct/total*100);$("englishCrosswordResult").textContent="Совпадений: "+correct+" из "+total+" ("+pct+"%).";};
     }
+  };
+  var originalEnglishHome=window.renderHomePage;
+  if(originalEnglishHome)window.renderHomePage=function(){
+    originalEnglishHome.apply(this,arguments);
+    if(!window.state||window.state.activeCourseId!=="EN")return;
+    var app=$("app"),hero=app&&app.querySelector(".hero");if(!app||!hero)return;
+    var quick=document.createElement("section");quick.className="module";quick.innerHTML='<h2>🇬🇧 Быстрый доступ к английскому</h2><p class="museum-muted">Выберите нужный формат занятия.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="#/english-tests">🎯 Тесты и контрольные</a><a class="btn ghost" href="#/english-media">🎬 Видео и презентации</a><a class="btn ghost" href="#/english-cards">🃏 Карточки и кроссворд</a></div>';
+    hero.insertAdjacentElement("afterend",quick);
   };
   window.renderEnglishMediaPage=function(lessonId){
     if(!guard())return;var app=appStart("🎬 Видео и презентации");if(!app)return;
