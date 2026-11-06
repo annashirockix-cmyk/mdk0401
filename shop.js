@@ -7,7 +7,12 @@ const ACHIEVEMENTS = [
     { id: "gamer", title: "Геймер", desc: "Сыграть в игру", icon: "🎮" },
     { id: "gcode_pro", title: "G-кодер", desc: "Пройти уровень в тренажере G-кода", icon: "📐" },
     { id: "level_5", title: "Опытный", desc: "Достичь 5 уровня", icon: "⭐" },
-    { id: "rich", title: "Богач", desc: "Накопить 1000 XP", icon: "💰" }
+    { id: "rich", title: "Богач", desc: "Накопить 1000 XP", icon: "💰" },
+    { id: "first_practical", title: "Руки мастера", desc: "Сохранить первое практическое решение", icon: "🛠️" },
+    { id: "mastercam_1", title: "Первый пуск", desc: "Открыть практику первого урока Mastercam", icon: "🧭" },
+    { id: "mastercam_5", title: "Пять ступеней мастера", desc: "Завершить практические задания пяти уроков Mastercam", icon: "🏅" },
+    { id: "collector", title: "Коллекционер", desc: "Открыть все базовые достижения", icon: "🏆" },
+    { id: "xp_2500", title: "Запас опыта", desc: "Накопить 2500 XP", icon: "💎" }
 ];
 
 const THEMES = [
@@ -15,7 +20,10 @@ const THEMES = [
     { id: "light", title: "Светлая", price: 0, bg: "#f5f2ec", text: "#2c2c2c" },
     { id: "neon", title: "Киберпанк", price: 500, bg: "#09090b", text: "#ff00cc" },
     { id: "matrix", title: "Матрица", price: 500, bg: "#000000", text: "#00ff00" },
-    { id: "cyberpunk", title: "Cyberpunk", price: 800, bg: "#0a0015", text: "#00ffff" }
+    { id: "cyberpunk", title: "Cyberpunk", price: 800, bg: "#0a0015", text: "#00ffff" },
+    { id: "graphite", title: "Графит и мята", price: 650, bg: "#111827", text: "#a7f3d0" },
+    { id: "lavender", title: "Лавандовая ночь", price: 650, bg: "#211a38", text: "#e9d5ff" },
+    { id: "ocean", title: "Океанская глубина", price: 650, bg: "#062b3a", text: "#a5f3fc" }
 ];
 
 const AVATARS = [
@@ -23,6 +31,9 @@ const AVATARS = [
     { id: "av1", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix", price: 100, title: "Парень" },
     { id: "av2", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aneka", price: 100, title: "Девушка" },
     { id: "av3", url: "https://api.dicebear.com/7.x/bottts/svg?seed=Robo", price: 200, title: "Робот" },
+    { id: "av4", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Vasilisa", price: 180, title: "Василиса" },
+    { id: "av5", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Orion", price: 180, title: "Орион" },
+    { id: "av6", url: "https://api.dicebear.com/7.x/bottts/svg?seed=GearMaster", price: 250, title: "Механоид" },
     { id: "custom", url: "url", price: 500, title: "Свой URL" }
 ];
 
@@ -59,13 +70,28 @@ const BG_EFFECTS = [
     { id: "bg-lanterns", title: "Фонари", price: 700 },
     { id: "bg-dark-table", title: "Темный стол", price: 700 },
     { id: "bg-graveyard", title: "Кладбище", price: 700 },
-    { id: "bg-cats-notebook", title: "Коты и тетрадь", price: 700 }
+    { id: "bg-cats-notebook", title: "Коты и тетрадь", price: 700 },
+    { id: "bg-galaxy", title: "Космическая пыль", price: 750 },
+    { id: "bg-tech-grid", title: "Чертёжная сетка", price: 750 },
+    { id: "bg-workshop", title: "Мастерская ЧПУ", price: 750 },
+    { id: "bg-aurora-wave", title: "Полярное сияние", price: 800 },
+    { id: "bg-sunset", title: "Закат на Марсе", price: 700 }
+];
+
+const FONT_SIZES = [
+    { id: "small", title: "Компактный", scale: "0.92", price: 0 },
+    { id: "normal", title: "Обычный", scale: "1", price: 0 },
+    { id: "large", title: "Крупный", scale: "1.12", price: 100 },
+    { id: "xlarge", title: "Очень крупный", scale: "1.25", price: 150 }
 ];
 
 const CARD_EFFECTS = [
     { id: "none", title: "Без эффекта", price: 0 },
     { id: "fx-holo-card", title: "Голографическая карта", price: 700 },
-    { id: "fx-3d-card", title: "3D карточка", price: 800 }
+    { id: "fx-3d-card", title: "3D карточка", price: 800 },
+    { id: "fx-glass-card", title: "Матовый Glass", price: 850 },
+    { id: "fx-pulse-card", title: "Пульсирующая рамка", price: 850 },
+    { id: "fx-blueprint-card", title: "Инженерный чертёж", price: 900 }
 ];
 
 // Экспортируем для app.js
@@ -91,6 +117,7 @@ window.renderShopPage = function() {
                           (type === 'avatar' && window.state.avatar === item.url) ||
                           (type === 'text' && (window.state.purchasedTextEffects || []).includes(item.id)) ||
                           (type === 'font' && (window.state.purchasedFonts || []).includes(item.id)) ||
+                          (type === 'fontSize' && (window.state.purchasedFontSizes || []).includes(item.id)) ||
                           (type === 'bg' && (window.state.purchasedBgEffects || []).includes(item.id)) ||
                           (type === 'card' && (window.state.purchasedCardEffects || []).includes(item.id)) ||
                           item.price === 0;
@@ -100,6 +127,7 @@ window.renderShopPage = function() {
             if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar);
             if (type === 'text') isActive = (window.state.activeTextEffect || 'none') === item.id;
             if (type === 'font') isActive = (window.state.activeFont || 'font-default') === item.id;
+            if (type === 'fontSize') isActive = (window.state.activeFontSize || 'normal') === item.id;
             if (type === 'bg') isActive = (window.state.activeBgEffect || 'none') === item.id;
             if (type === 'card') isActive = (window.state.activeCardEffect || 'none') === item.id;
 
@@ -147,6 +175,7 @@ window.renderShopPage = function() {
     app.innerHTML += renderCategory("👤 Аватары", AVATARS, "avatar");
     app.innerHTML += renderCategory("✨ Эффекты текста", TEXT_EFFECTS, "text");
     app.innerHTML += renderCategory("🔤 Шрифты", FONTS, "font");
+    app.innerHTML += renderCategory("🔎 Масштаб шрифта", FONT_SIZES, "fontSize");
     app.innerHTML += renderCategory("🌌 Эффекты фона", BG_EFFECTS, "bg");
     app.innerHTML += renderCategory("🃏 Эффекты карточек", CARD_EFFECTS, "card");
 };
@@ -165,6 +194,7 @@ window.buyShopItem = function(type, id, price, value) {
         if (type === 'theme') { if(!window.state.purchasedThemes) window.state.purchasedThemes = []; window.state.purchasedThemes.push(id); }
         if (type === 'text') { if(!window.state.purchasedTextEffects) window.state.purchasedTextEffects = []; window.state.purchasedTextEffects.push(id); }
         if (type === 'font') { if(!window.state.purchasedFonts) window.state.purchasedFonts = []; window.state.purchasedFonts.push(id); }
+        if (type === 'fontSize') { if(!window.state.purchasedFontSizes) window.state.purchasedFontSizes = []; window.state.purchasedFontSizes.push(id); }
         if (type === 'bg') { if(!window.state.purchasedBgEffects) window.state.purchasedBgEffects = []; window.state.purchasedBgEffects.push(id); }
         if (type === 'card') { if(!window.state.purchasedCardEffects) window.state.purchasedCardEffects = []; window.state.purchasedCardEffects.push(id); }
         
