@@ -30,6 +30,7 @@ window.API = {
  saveStudent:function(key,name,group,payload){var email=String(key||"").indexOf("@")>=0?String(key).trim():(window.state&&window.state.student&&window.state.student.email)||String(key||"").split("|")[0];return fetchAPI("saveStudent",{email:email,name:name,group:group,payload:payload},"POST");},
  getResults:function(filters){return fetchAPI("getResults",filters||{},"GET");},
  getPublicSubjectRatings:function(){return fetchAPI("getPublicSubjectRatings",{}, "GET");},
+ getMyCourseResults:function(courseId){return fetchAPI("getMyCourseResults",{courseId:courseId||""},"GET");},
  saveResult:function(data){data=Object.assign({},data||{});if(!data.courseId&&window.state)data.courseId=window.state.activeCourseId||"";return fetchAPI("saveResult",data,"POST");},
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
