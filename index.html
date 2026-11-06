@@ -6,7 +6,7 @@
     <title>МДК Портал - Учебный портал</title>
     <link rel="icon" href="data:,">
     <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" href="./style.css?v=8">
+    <link rel="stylesheet" href="./style.css?v=9">
     <link rel="stylesheet" href="./style-bg-fix.css?v=5">
     <link rel="stylesheet" href="./animations.css">
     <link rel="stylesheet" href="./lecture-methodical.css">
@@ -53,7 +53,7 @@
                 <optgroup label="Подключаемые порталы"><option value="ENGLISH_PORTAL">Английский язык ↗</option><option value="MAT">Материаловедение</option><option value="OT">Охрана труда</option></optgroup>
             </select>
         </div>
-        <div class="topbar-status">
+        <div class="topbar-status"><div class="notification-wrap" id="notificationWrap"><button class="btn ghost notification-bell" id="notificationBell" type="button" aria-label="Уведомления" aria-expanded="false">🔔<span id="notificationBadge" class="notification-badge" hidden>0</span></button><section class="notification-popover" id="notificationPopover" hidden aria-label="Центр уведомлений"><div class="notification-popover-head"><b>Уведомления</b><div><button type="button" class="btn ghost" id="notificationRefresh">↻</button><button type="button" class="btn ghost" id="notificationClose" aria-label="Закрыть">✕</button></div></div><div id="notificationItems" aria-live="polite" class="notification-items">Загрузка…</div><div class="notification-popover-foot"><a href="#/teacher-tasks">Перейти к заданиям</a></div></section></div>
             <span class="status-pill" id="xpCount">🌟 0 XP</span>
             <div class="user-chip" onclick="location.hash = '#/profile'" style="cursor: pointer;">
                 <div id="userChipAvatar" style="width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; overflow: hidden;">👨‍🎓</div>
@@ -126,7 +126,7 @@
     <script src="./questions-games.js"></script>
     <script src="./questions-logic.js"></script>
     <script src="./questions-extra.js"></script>
-    <script src="./app.js?v=16"></script>
+    <script src="./app.js?v=17"></script>
     <script src="./app-offline-login.js?v=4"></script>
     <script src="./media-fix.js?v=5"></script>
     <script src="./portal-fixes.js?v=6"></script>
@@ -150,7 +150,7 @@
     <script src="./rating.js?v=2"></script>
     <script src="./rating-subjects.js?v=3"></script>
     <script src="./reports.js?v=8"></script>
-    <script src="./teacher-tasks.js?v=8"></script>
+    <script src="./teacher-tasks.js?v=9"></script>
     <script src="./schedule.js?v=2"></script>
     <script src="./shop.js"></script>
     <script src="./admin.js"></script>
