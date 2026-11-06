@@ -1,55 +1,65 @@
-/* GAMES-VISUAL — анимации игровой комнаты / online coop */
-@keyframes gv-fade-up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* GAMES-VISUAL — анимации, визуал и мобильная вёрстка для всей игровой комнаты */
+@keyframes gv-fade-up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes gv-scale-in{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-@keyframes gv-pulse-glow{0%,100%{box-shadow:0 0 0 0 rgba(56,189,248,.35)}50%{box-shadow:0 0 0 10px rgba(56,189,248,0)}}
+@keyframes gv-pulse-glow{0%,100%{box-shadow:0 0 0 0 rgba(56,189,248,.35)}50%{box-shadow:0 0 0 12px rgba(56,189,248,0)}}
 @keyframes gv-shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-@keyframes gv-spin-slow{to{transform:rotate(360deg)}}
+@keyframes gv-spin{to{transform:rotate(360deg)}}
 @keyframes gv-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@keyframes gv-card-deal{from{opacity:0;transform:translateY(-40px) rotate(-8deg) scale(.8)}to{opacity:1;transform:none}}
+@keyframes gv-card-deal{from{opacity:0;transform:translateY(-36px) rotate(-8deg) scale(.85)}to{opacity:1;transform:none}}
 @keyframes gv-stamp{0%{opacity:0;transform:scale(2.2) rotate(-12deg)}60%{opacity:1;transform:scale(.95) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(-3deg)}}
-@keyframes gv-phase-flash{0%{filter:brightness(1.4)}100%{filter:brightness(1)}}
-@keyframes gv-online-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
-.gv-enter{animation:gv-fade-up .45s ease both}
-.gv-enter-delay-1{animation-delay:.06s}.gv-enter-delay-2{animation-delay:.12s}.gv-enter-delay-3{animation-delay:.18s}
-.netgame{position:relative;background:linear-gradient(160deg,rgba(15,23,42,.55),rgba(30,41,59,.35));border:1px solid var(--border);border-radius:18px;overflow:hidden;animation:gv-scale-in .4s ease both}
-.netgame::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);background-size:200% 100%;animation:gv-shimmer 3.5s linear infinite;pointer-events:none}
-.net-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
-.net-phase{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:800;letter-spacing:.04em;font-size:13px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:var(--accent);animation:gv-phase-flash .6s ease;margin:8px 0 14px}
-.net-phase.night{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.4);color:#a5b4fc}
-.net-phase.day{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.4);color:#fbbf24}
-.net-phase.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4);color:#f87171;animation:gv-pulse-glow 1.6s ease infinite}
-.net-roster{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:8px}
-.net-roster li{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--card-soft,rgba(255,255,255,.04));border:1px solid var(--border);animation:gv-fade-up .35s ease both;transition:border-color .2s,transform .2s}
-.net-roster li:hover{border-color:var(--accent);transform:translateX(3px)}
-.net-avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:16px;background:linear-gradient(135deg,var(--accent),#6366f1);color:#0b1220;font-weight:800;flex-shrink:0;position:relative}
-.net-avatar .online-dot{position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#22c55e;border:2px solid var(--card,#0f172a);animation:gv-online-dot 1.4s ease infinite}
-.net-role{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid var(--border)}
-.net-log{margin:12px 0;padding:12px;border-radius:12px;background:rgba(0,0,0,.2);border:1px dashed var(--border);max-height:140px;overflow:auto;font-size:13px;color:var(--muted)}
-.net-log p{margin:0 0 6px;animation:gv-fade-up .3s ease both}
-.net-controls,.net-actions,.net-join{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
-.net-join input{flex:1;min-width:140px;text-transform:uppercase;letter-spacing:.2em;font-weight:800;text-align:center;font-size:18px;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
-.net-code-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:12px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.35);font-family:ui-monospace,monospace;font-weight:800;letter-spacing:.18em;font-size:18px;animation:gv-pulse-glow 2.2s ease infinite}
-.net-invite-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
-.net-notice{min-height:1.2em;margin-top:10px;color:var(--muted);font-size:13px}
-.net-private{margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.35);animation:gv-scale-in .35s ease}
-.net-muted{color:var(--muted);font-size:13px}
-.gv-game-card{position:relative;overflow:hidden;cursor:pointer;transition:transform .22s ease,box-shadow .22s ease,border-color .22s;animation:gv-fade-up .45s ease both}
-.gv-game-card:hover{transform:translateY(-4px);border-color:var(--accent)!important;box-shadow:0 12px 28px rgba(0,0,0,.25)}
+@keyframes gv-phase-flash{0%{filter:brightness(1.35)}100%{filter:brightness(1)}}
+@keyframes gv-online-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.85)}}
+@keyframes gv-flip{from{transform:rotateY(90deg);opacity:0}to{transform:rotateY(0);opacity:1}}
+@keyframes gv-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes gv-win-pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@keyframes gv-reel{0%{transform:translateY(-20px);opacity:.4}100%{transform:translateY(0);opacity:1}}
+.gv-enter{animation:gv-fade-up .45s ease both}.gv-shake{animation:gv-shake .4s ease}.gv-win{animation:gv-win-pop .5s cubic-bezier(.2,1.4,.4,1) both}
+#app .hero h1{background:linear-gradient(90deg,var(--accent),#a78bfa,var(--accent));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gv-shimmer 6s linear infinite}
+.gv-arcade-grid,#app > div[style*="grid-template-columns"]{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))!important;gap:14px!important}
+.gv-game-card,#app .module[onclick*="startGame"],#app .module[data-net-party],#app .module[data-party-extra]{position:relative;overflow:hidden;cursor:pointer;border-radius:16px!important;transition:transform .22s ease,box-shadow .22s ease,border-color .22s;animation:gv-fade-up .45s ease both;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#app .module[onclick*="startGame"]:nth-child(1){animation-delay:.03s}#app .module[onclick*="startGame"]:nth-child(2){animation-delay:.06s}#app .module[onclick*="startGame"]:nth-child(3){animation-delay:.09s}#app .module[onclick*="startGame"]:nth-child(4){animation-delay:.12s}#app .module[onclick*="startGame"]:nth-child(5){animation-delay:.15s}#app .module[onclick*="startGame"]:nth-child(6){animation-delay:.18s}#app .module[onclick*="startGame"]:nth-child(n+7){animation-delay:.22s}
+.gv-game-card:hover,#app .module[onclick*="startGame"]:hover,#app .module[data-net-party]:hover{transform:translateY(-4px);border-color:var(--accent)!important;box-shadow:0 14px 32px rgba(0,0,0,.28)}
+.gv-game-card:active,#app .module[onclick*="startGame"]:active{transform:scale(.98)}
+.gv-game-card::after,#app .module[onclick*="startGame"]::after{content:"";position:absolute;right:-30%;bottom:-40%;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.16),transparent 70%);pointer-events:none}
 .gv-badge-online{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:999px;background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.35);vertical-align:middle;margin-left:6px}
-.durak-hand{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.durak-card,.btn.durak-card{min-width:52px;height:74px;border-radius:10px;font-weight:800;font-size:15px;animation:gv-card-deal .4s ease both;transition:transform .15s}
-.durak-card:hover,.btn.durak-card:hover{transform:translateY(-8px)}
-.durak-table{min-height:56px;padding:14px;border-radius:14px;background:radial-gradient(ellipse at center,rgba(34,197,94,.08),transparent 70%),var(--card-soft,rgba(255,255,255,.04));border:1px dashed var(--border);margin:10px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.durak-pair{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;background:var(--card);border:1px solid var(--border);font-weight:700;animation:gv-scale-in .3s ease}
-.bredo-answer-card{padding:14px;border-radius:12px;background:var(--card-soft);border:1px solid var(--border);margin:8px 0;animation:gv-fade-up .35s ease both;cursor:pointer;transition:border-color .2s,transform .2s}
-.bredo-answer-card:hover{border-color:var(--accent);transform:scale(1.01)}
-.bredo-rank{display:flex;justify-content:space-between;padding:10px 12px;border-radius:10px;background:var(--card-soft);margin:6px 0;animation:gv-fade-up .35s ease both}
-.bredo-rank:nth-child(1){border:1px solid rgba(251,191,36,.5);background:rgba(251,191,36,.08)}
-.case-scene{position:relative;animation:gv-fade-up .45s ease both}
-.case-choices .case-choice{transition:transform .18s,border-color .18s;animation:gv-fade-up .4s ease both}
-.case-choices .case-choice:hover{transform:translateX(6px);border-color:var(--accent)}
+#gameContainer,.gv-game-shell{width:100%;max-width:720px;margin:0 auto;padding:16px!important;border-radius:18px!important;animation:gv-scale-in .4s ease both;box-sizing:border-box;min-height:min(60vh,480px);overflow:auto!important;-webkit-overflow-scrolling:touch}
+#gameContainer iframe{width:100%!important;height:min(75vh,640px)!important;border-radius:12px;border:none}
+.netgame{position:relative;width:100%;max-width:760px;margin:0 auto;padding:18px;box-sizing:border-box;background:linear-gradient(160deg,rgba(15,23,42,.55),rgba(30,41,59,.35));border:1px solid var(--border);border-radius:18px;overflow:hidden;animation:gv-scale-in .4s ease both}
+.netgame::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);background-size:200% 100%;animation:gv-shimmer 3.5s linear infinite;pointer-events:none}
+.net-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.net-phase{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:800;letter-spacing:.04em;font-size:13px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:var(--accent);animation:gv-phase-flash .6s ease;margin:8px 0 14px}
+.net-roster{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:8px}
+.net-roster li{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--card-soft,rgba(255,255,255,.04));border:1px solid var(--border);animation:gv-fade-up .35s ease both}
+.net-avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--accent),#6366f1);color:#0b1220;position:relative;flex-shrink:0}
+.net-avatar .online-dot{position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#22c55e;border:2px solid var(--card,#0f172a);animation:gv-online-dot 1.4s ease infinite}
+.net-join{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.net-join input{flex:1;min-width:140px;min-height:48px;text-transform:uppercase;letter-spacing:.18em;font-weight:800;text-align:center;font-size:18px;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
+.net-code-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:12px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.35);font-family:ui-monospace,monospace;font-weight:800;letter-spacing:.16em;font-size:18px;animation:gv-pulse-glow 2.2s ease infinite}
+.net-invite-row,.net-controls,.net-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
+.net-muted{color:var(--muted);font-size:13px}.net-notice{min-height:1.2em;margin-top:10px;color:var(--muted);font-size:13px}
+.net-log{margin:12px 0;padding:12px;border-radius:12px;background:rgba(0,0,0,.2);border:1px dashed var(--border);max-height:140px;overflow:auto;font-size:13px;color:var(--muted)}
+.party-shell{width:100%;max-width:1050px;margin:0 auto;padding:16px;color:var(--text)}
+.party-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.party-kicker{font-size:10px;letter-spacing:2px;color:var(--accent);font-weight:800}
+.party-panel,.case-board,.case-verdict{background:var(--card-soft,var(--card));border:1px solid var(--border);border-radius:14px;padding:16px;margin:14px 0;animation:gv-fade-up .4s ease both}
+.case-location,.case-suspect{transition:transform .18s,border-color .18s;-webkit-tap-highlight-color:transparent}
+.case-location:active,.case-suspect:active{transform:scale(.98)}
 .case-ending-stamp{display:inline-block;margin-top:12px;padding:10px 18px;border:3px solid #f87171;color:#f87171;font-weight:900;letter-spacing:.12em;text-transform:uppercase;border-radius:8px;transform:rotate(-6deg);animation:gv-stamp .55s cubic-bezier(.2,1.4,.4,1) both}
-.case-flag-chip{display:inline-block;margin:3px 4px 3px 0;padding:3px 8px;border-radius:999px;font-size:11px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);color:var(--accent);animation:gv-scale-in .3s ease both}
-.gv-loading{display:flex;align-items:center;gap:10px;color:var(--muted);padding:20px}
-.gv-spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:gv-spin-slow .8s linear infinite}
-@media(max-width:520px){.netgame{padding:14px}.durak-card,.btn.durak-card{min-width:46px;height:66px;font-size:13px}.net-code-badge{font-size:15px;letter-spacing:.12em}}
+.case-flag-chip{display:inline-block;margin:3px 4px 3px 0;padding:3px 8px;border-radius:999px;font-size:11px;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);color:var(--accent)}
+.durak-hand,.gv-hand{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;justify-content:center}
+.durak-card,.btn.durak-card,.gv-card{min-width:52px;min-height:74px;border-radius:10px;font-weight:800;font-size:15px;animation:gv-card-deal .4s ease both;transition:transform .15s;touch-action:manipulation}
+.durak-card:hover,.btn.durak-card:hover,.gv-card:hover{transform:translateY(-8px)}
+.durak-table{min-height:56px;padding:14px;border-radius:14px;background:radial-gradient(ellipse at center,rgba(34,197,94,.08),transparent 70%),var(--card-soft,rgba(255,255,255,.04));border:1px dashed var(--border);margin:10px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+#gameContainer [style*="grid-template-columns"] > div{transition:transform .2s;animation:gv-flip .35s ease both;border-radius:10px!important}
+#gameContainer [style*="grid-template-columns"] > div:active{transform:scale(.96)}
+#gameContainer button[onclick*="ms"]{min-width:36px!important;min-height:36px!important;touch-action:manipulation}
+#gameContainer .btn.ghost{transition:transform .15s,border-color .15s;min-height:44px;touch-action:manipulation}
+#gameContainer .btn.ghost:active{transform:scale(.98)}
+#gameContainer h2{animation:gv-win-pop .45s ease both}
+#gameContainer [style*="font-size:50px"],#gameContainer [style*="font-size:60px"]{animation:gv-reel .35s ease both}
+@media (hover:none) and (pointer:coarse){.gv-game-card:hover,#app .module[onclick*="startGame"]:hover{transform:none;box-shadow:none}.gv-game-card:active,#app .module[onclick*="startGame"]:active{transform:scale(.97);border-color:var(--accent)!important}.durak-card:hover,.btn.durak-card:hover{transform:none}.btn,button.btn,#gameContainer button{min-height:44px;padding:10px 14px}.net-join input{font-size:20px;min-height:52px}}
+@media (max-width:720px){#app{padding-left:12px!important;padding-right:12px!important;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))!important}.gv-arcade-grid,#app > div[style*="grid-template-columns"]{grid-template-columns:1fr 1fr!important;gap:10px!important}#gameContainer,.gv-game-shell,.netgame,.party-shell{padding:12px!important;border-radius:14px!important}#gameContainer iframe{height:min(70vh,520px)!important}.party-top,.net-head{flex-direction:column}.net-join{flex-direction:column}.net-join input,.net-join button{width:100%}.net-controls .btn,.net-actions .btn{flex:1 1 calc(50% - 8px)}.case-location-grid,.case-suspects{grid-template-columns:1fr!important}.case-board{grid-template-columns:1fr!important}.durak-card,.btn.durak-card{min-width:46px;min-height:66px;font-size:13px}#gcodeCanvas,#starfieldCanvas,canvas{max-width:100%!important;height:auto!important}#gcodeCanvas{width:100%!important}}
+@media (max-width:420px){.gv-arcade-grid,#app > div[style*="grid-template-columns"]{grid-template-columns:1fr!important}.net-code-badge{font-size:15px;letter-spacing:.1em}.gv-badge-online{display:block;margin:6px 0 0;width:fit-content}}
+@media (max-height:480px) and (orientation:landscape){#gameContainer iframe{height:85vh!important}#gameContainer,.gv-game-shell{min-height:auto}.netgame{max-height:90vh;overflow:auto}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@supports (padding:env(safe-area-inset-bottom)){#app{padding-bottom:calc(20px + env(safe-area-inset-bottom))}.netgame,#gameContainer{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}}
