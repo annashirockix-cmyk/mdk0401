@@ -18,7 +18,7 @@
   };
   window.renderOwnGameEditor=function(id){
     const app=shell("Конструктор «Своей игры»");if(!app)return;
-    if(!teacher()){app.insertAdjacentHTML("beforeend",'<section class="module">Создавать игры могут только преподаватели.</section>');return;}
+    if(!teacher()||(window.canAccessCourse&&!window.canAccessCourse(course()))){app.insertAdjacentHTML("beforeend",'<section class="module">Создавать игры могут только преподаватели, которым назначена выбранная дисциплина.</section>');return;}
     const old=games().find(g=>g.id===id);
     const seed=old?{title:old.title,categories:old.categories}: {title:"Своя игра",categories:[{title:"Материаловедение",questions:[{points:100,q:"Как называется способность материала сопротивляться внедрению другого тела?",a:"Твёрдость"},{points:200,q:"Как называется способность материала восстанавливать форму после снятия нагрузки?",a:"Упругость"}]}]};
     app.insertAdjacentHTML("beforeend",'<section class="module"><label>Название игры</label><input class="self-input" id="ownGameTitle" value="'+esc(seed.title)+'" placeholder="Название игры"><p>Категории и вопросы задаются в таблице JSON. У каждой записи обязательны поле <code>q</code> (вопрос) и <code>a</code> (ответ), поле <code>points</code> — стоимость.</p><label>Игровое поле (JSON)</label><textarea class="self-input" id="ownGameJson" rows="18" spellcheck="false"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="ownGameSave">Сохранить игру</button><button class="btn ghost" id="ownGamePreview">Предпросмотр</button><a class="btn ghost" href="#/own-game">К списку игр</a></div><p id="ownGameStatus" aria-live="polite"></p><div id="ownGamePreviewBox"></div></section>');
