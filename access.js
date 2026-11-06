@@ -1,6 +1,6 @@
 "use strict";
 (function(){
- const ALL=[["07.01","МДК 07.01 — ЧПУ"],["04.01","МДК 04.01 — Диагностика"],["02.01","МДК 02.01 — Сборка"],["02.02","МДК 02.02 — Программирование"],["MCAM","Mastercam"],["MAT","Материаловедение"],["OT","Охрана труда"]];
+ const ALL=[["07.01","МДК 07.01 — ЧПУ"],["04.01","МДК 04.01 — Диагностика"],["02.01","МДК 02.01 — Сборка"],["02.02","МДК 02.02 — Программирование"],["MCAM","Mastercam"],["MAT","Материаловедение"],["OT","Охрана труда"],["PFI","ПФИ"]];
  const esc=s=>window.escapeHtml?window.escapeHtml(String(s==null?"":s)):String(s||"");
  window.renderAccessPage=function(){
   const app=document.getElementById("app");if(!app)return;
@@ -42,7 +42,7 @@
    window.API.createInvite({courses:courses,days:Number(document.getElementById("inviteDays").value),maxUses:Number(document.getElementById("inviteUses").value)}).then(r=>{
     if(!r.success)throw new Error(r.error||"Не удалось создать приглашение.");
     const url=location.origin+location.pathname+"?invite="+encodeURIComponent(r.code);
-    document.getElementById("inviteOutput").innerHTML='<div class="module" style="display:flex;gap:18px;flex-wrap:wrap;align-items:center"><div><b>Ссылка для регистрации</b><p><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(url)+'</a></p><button class="btn ghost" id="copyInvite">Скопировать ссылку</button><p style="color:var(--muted)">Дисциплины: '+esc(courses.join(", "))+'<br>Регистраций: '+r.maxUses+'<br>Истекает: '+new Date(r.expiresAt).toLocaleDateString("ru-RU")+'</p></div><img alt="QR-код приглашения" width="210" height="210" src="https://api.qrserver.com/v1/create-qr-code/?size=210x210&data='+encodeURIComponent(url)+'"></div>';
+    document.getElementById("inviteOutput").innerHTML='<div class="module" style="display:flex;gap:18px;flex-wrap:wrap;align-items:center"><div><b>Ссылка для регистрации</b><p><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(url)+'</a></p><button class="btn ghost" id="copyInvite">Скопировать ссылку</button><p style="color:var(--muted)">Дисциплины: '+esc(courses.join(", "))+'<br>Регистраций: '+r.maxUses+'<br>Истекает: '+new Date(r.expiresAt).toLocaleDateString("ru-RU")+'</p></div><p style="font-size:13px;color:var(--muted)">Ссылка содержит персональный код приглашения. Код не передаётся сторонним QR-сервисам. При необходимости создайте QR-код локальным инструментом.</p></div>';
     document.getElementById("copyInvite").onclick=()=>{if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>window.showToast("Ссылка скопирована","ok"));else prompt("Скопируйте ссылку",url);};
     loadInvites();
    }).catch(e=>alert(e.message)).finally(()=>{btn.disabled=false;btn.textContent="Создать ссылку и QR-код";});
