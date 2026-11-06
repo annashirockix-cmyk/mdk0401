@@ -30,8 +30,13 @@
    const box=document.getElementById("inviteList");
    window.API.getInvites().then(r=>{
     if(!r.success)throw new Error(r.error||"Ошибка");
-    if(!r.invites.length){box.innerHTML="<p>Приглашений пока нет.</p>";return;}
-    box.innerHTML=r.invites.map(inv=>'<div style="padding:10px;border-bottom:1px solid var(--border)"><b>'+esc(inv.courses)+'</b> · использовано '+inv.uses+'/'+inv.maxUses+' · до '+new Date(inv.expiresAt).toLocaleDateString("ru-RU")+' · '+(inv.active?'активно':'отключено')+' '+(inv.active?'<button class="btn ghost deactivateInvite" data-code="'+esc(inv.code)+'">Отключить</button>':'')+'</div>').join("");
+    const invites=Array.isArray(r.invites)?r.invites:[];
+    if(!invites.length){box.innerHTML="<p>Приглашений пока нет.</p>";return;}
+    box.innerHTML=invites.map(inv=>{
+     const expires= new Date(inv.expiresAt).getTime(), expired=!Number.isFinite(expires)||expires<=Date.now(), exhausted=Number(inv.uses)>=Number(inv.maxUses), usable=!!inv.active&&!expired&&!exhausted;
+     const state=usable?"активно":(!inv.active?"отключено":(expired?"срок истёк":"лимит регистраций исчерпан"));
+     return '<div style="padding:10px;border-bottom:1px solid var(--border)"><b>'+esc(inv.courses)+'</b> · использовано '+esc(inv.uses)+'/'+esc(inv.maxUses)+' · до '+(Number.isFinite(expires)?new Date(expires).toLocaleDateString("ru-RU"):"—")+' · '+state+' '+(usable?'<button class="btn ghost deactivateInvite" data-code="'+esc(inv.code)+'">Отключить</button>':'')+'</div>';
+    }).join("");
     box.querySelectorAll(".deactivateInvite").forEach(b=>b.onclick=()=>{if(!confirm("Отключить это приглашение?"))return;window.API.deactivateInvite(b.dataset.code).then(()=>loadInvites()).catch(e=>alert(e.message));});
    }).catch(e=>box.textContent=e.message);
   }
