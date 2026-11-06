@@ -48,6 +48,8 @@ window.renderJournalPage = function() {
           var students = d.students.filter(st => String(st.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (st.courses || []).includes(courseId)));
           var resultIndex = {};
           (rd.results || []).forEach(rec => { if (!resultIndex[rec.email]) resultIndex[rec.email] = {}; resultIndex[rec.email][rec.testId] = rec; });
+          var knownWorkIds = new Set(works.map(w => w.id));
+          (rd.results || []).forEach(rec => { if (rec.courseId === courseId && rec.testId && !knownWorkIds.has(rec.testId)) { works.push({id:rec.testId,title:rec.testTitle||rec.testId,type:"custom"}); knownWorkIds.add(rec.testId); } });
           CURRENT_STUDENTS_CACHE = students;
 
           var table = document.createElement("table");
@@ -87,9 +89,10 @@ window.renderJournalPage = function() {
               works.forEach(w => {
                   var td = document.createElement("td");
                   td.style = "border:1px solid var(--border); padding:4px; text-align:center;";
-                  var grade = results[w.id] ? results[w.id].grade : "—";
+                  var record = results[w.id], grade = record && Number(record.grade) > 0 ? record.grade : "—";
                   var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : (grade === "—" ? "var(--muted)" : "var(--err)"));
                   td.innerHTML = `<b style="color:${color}; font-size:16px;">${grade}</b>`;
+                  if (record && record.payload) { var details=document.createElement("details");details.style="font-size:11px;margin-top:4px;text-align:left";var summary=document.createElement("summary");summary.textContent="Ответ";var answer=document.createElement("div");answer.textContent=record.payload;answer.style="white-space:pre-wrap;max-width:220px;overflow-wrap:anywhere;padding:5px";details.appendChild(summary);details.appendChild(answer);td.appendChild(details); }
                   tr.appendChild(td);
               });
 
