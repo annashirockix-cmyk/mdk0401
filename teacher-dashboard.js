@@ -66,7 +66,7 @@ const visibleCourses=courseFilter==="all"?matrixCourseIds:matrixCourseIds.filter
 const quote=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
 const lines=[["Студент","Группа"].concat(visibleCourses.map(id=>courses[id]||id),["Средний балл"])];
 visibleStudents.forEach(s=>{const email=String(s.email||"").toLowerCase(),values=[],all=[];visibleCourses.forEach(id=>{const marks=results.filter(x=>String(x.email||"").toLowerCase()===email&&String(x.courseId||"")===String(id)&&x.grade!==""&&x.grade!==null&&x.grade!==undefined&&Number.isFinite(Number(x.grade)));const mean=marks.length?marks.reduce((n,x)=>n+Number(x.grade),0)/marks.length:null;if(mean!==null)all.push.apply(all,marks.map(x=>Number(x.grade)));values.push(mean===null?"":mean.toFixed(2));});const total=all.length?all.reduce((n,x)=>n+x,0)/all.length:"";lines.push([s.name||s.email,s.group||"Без группы"].concat(values,[total===""?"":total.toFixed(2)]));});
-const csv="\\uFEFF"+lines.map(row=>row.map(quote).join(";")).join("\\r\\n"),url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");a.href=url;a.download="progress-group-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+const csv="\uFEFF"+lines.map(row=>row.map(quote).join(";")).join("\r\n"),url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");a.href=url;a.download="progress-group-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 };
 renderMatrix();
 }).catch(e=>document.getElementById("tdStatus").textContent="Ошибка загрузки: "+e.message);
