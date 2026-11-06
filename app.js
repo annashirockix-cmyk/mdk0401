@@ -68,6 +68,7 @@ window.updateMenuVisibility = function() {
     var adminLink = document.querySelector('.drawer-item[href="#/admin"]');
     if (adminLink) adminLink.style.display = window.state.staff && window.state.staff.role === "admin" ? "flex" : "none";
     var accessLink=document.querySelector('.drawer-item[href="#/access"]'); if(accessLink) accessLink.style.display=isTeacher?"flex":"none";
+    var taskLink=document.querySelector('.drawer-item[href="#/teacher-tasks"]'); if(taskLink) taskLink.style.display=isTeacher?"flex":"none";
 };
 
 window.applyGlobalEffects = function() {
