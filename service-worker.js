@@ -1,9 +1,8 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v40'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
+const CACHE_NAME = 'portal-cache-v41'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
 
 const STATIC_ASSETS = [
   './',
-  './index.html',
   './index.html',
   './manifest.json',
   './style.css',
@@ -78,7 +77,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v17');
+        console.log('[SW] Кэширование статических ресурсов версии v41');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
