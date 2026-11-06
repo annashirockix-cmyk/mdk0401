@@ -274,7 +274,10 @@ window.renderStudentGradesPage = function() {
         <section class="hero"><h1>📊 Мои оценки</h1></section>
         <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}</tbody></table></div></div>
         <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody>${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody></table></div></div>
+        <div class="module"><h3>Задания преподавателя</h3><div id="serverAssignmentGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
     `;
+    var remoteHost=document.getElementById("serverAssignmentGrades");
+    if(remoteHost&&window.API&&window.API.getMyCourseResults){window.API.getMyCourseResults("").then(function(r){if(!r||!r.success)throw new Error(r&&r.error||"Не удалось загрузить оценки");var rows=(r.results||[]).filter(function(x){return String(x.testId||"").indexOf("assignment_")===0;});remoteHost.innerHTML=rows.length?'<div class="journal-wrap"><table class="journal-table"><thead><tr><th>Задание</th><th>Дата отправки</th><th>Оценка</th><th>Комментарий</th></tr></thead><tbody>'+rows.map(function(x){return "<tr><td>"+window.escapeHtml(x.testTitle)+"</td><td>"+window.escapeHtml(x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—")+"</td><td style='text-align:center;font-weight:bold'>"+(x.grade!==""&&x.grade!=null?window.escapeHtml(x.grade):"На проверке")+"</td><td style='white-space:pre-wrap'>"+window.escapeHtml(x.feedback||"—")+"</td></tr>";}).join("")+"</tbody></table></div>":"Пока нет отправленных заданий.";}).catch(function(e){remoteHost.textContent="Не удалось загрузить оценки за задания: "+e.message;});}
 };
 
 window.renderTeacherJournalPage = function() {
