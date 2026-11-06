@@ -42,5 +42,12 @@ setUserRole:function(email,role){return fetchAPI("setUserRole",{email:email,role
  getInvites:function(){return fetchAPI("getInvites",{},"GET");},
  deactivateInvite:function(code){return fetchAPI("deactivateInvite",{code:code},"POST");},
  getSchedule:function(){return fetchAPI("getSchedule",{},"GET");},
- saveSchedule:function(data){return fetchAPI("saveSchedule",{schedule:JSON.stringify(data)},"POST");}
+ saveSchedule:function(data){return fetchAPI("saveSchedule",{schedule:JSON.stringify(data)},"POST");},
+ createGameRoom:function(data){return fetchAPI("createGameRoom",data||{},"POST");},
+ joinGameRoom:function(data){return fetchAPI("joinGameRoom",data||{},"POST");},
+ getGameRoom:function(code){return fetchAPI("getGameRoom",{code:code},"GET");},
+ updateGameRoom:function(code,state){return fetchAPI("updateGameRoom",{code:code,state:state},"POST");},
+ sendGameAction:function(data){return fetchAPI("sendGameAction",data||{},"POST");},
+ getGameActions:function(code,after){return fetchAPI("getGameActions",{code:code,after:after||0},"GET");},
+ leaveGameRoom:function(code){return fetchAPI("leaveGameRoom",{code:code},"POST");}
 };
