@@ -42,7 +42,10 @@ const TEXT_EFFECTS = [
     { id: "fx-rainbow-text", title: "Радужный текст", price: 300 },
     { id: "fx-neon-text", title: "Неоновое свечение", price: 400 },
     { id: "fx-glitch-text", title: "Глитч (Помехи)", price: 500 },
-    { id: "fx-typewriter", title: "Пишущая машинка", price: 200 }
+    { id: "fx-typewriter", title: "Пишущая машинка", price: 200 },
+    { id: "fx-gold-text", title: "Золотое сияние", price: 450 },
+    { id: "fx-ice-text", title: "Ледяные буквы", price: 450 },
+    { id: "fx-fire-text", title: "Пламенный текст", price: 500 }
 ];
 
 // Добавлены шрифты
