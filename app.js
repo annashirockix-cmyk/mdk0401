@@ -119,6 +119,30 @@ window.renderUserChip = function() {
     var xpEl = document.getElementById("xpCount"); if (xpEl) xpEl.textContent = `🌟 ${window.state.xp} XP`;
     window.applyGlobalEffects();
     window.updateMenuVisibility();
+    if (window.refreshNotificationCenter) window.refreshNotificationCenter();
+};
+
+
+/* Global notification center */
+window.notificationCache=[];
+window.renderNotificationItems=function(){
+ var list=document.getElementById("notificationItems");if(!list)return;var items=window.notificationCache||[];
+ if(!items.length){list.innerHTML='<p class="notification-empty">Пока уведомлений нет.</p>';return;}
+ list.innerHTML=items.map(function(n){var date=n.createdAt?new Date(n.createdAt).toLocaleString("ru-RU"):"";return '<article class="notification-item '+(n.readAt?'is-read':'is-unread')+'"><div class="notification-item-title">'+window.escapeHtml(n.title)+'</div><time>'+window.escapeHtml(date)+'</time><p>'+window.escapeHtml(n.message)+'</p><div class="notification-item-actions">'+(!n.readAt?'<button type="button" class="btn ghost" data-notification-read="'+window.escapeHtml(n.id)+'">Прочитано</button>':'')+'<button type="button" class="btn" data-notification-open="'+window.escapeHtml(n.id)+'" data-assignment="'+window.escapeHtml(n.relatedId||'')+'">Открыть</button></div></article>';}).join("");
+ list.querySelectorAll("[data-notification-read]").forEach(function(b){b.onclick=function(){b.disabled=true;window.API.markNotificationRead(b.dataset.notificationRead).then(window.refreshNotificationCenter).catch(function(e){b.disabled=false;window.showToast(e.message,"error");});};});
+ list.querySelectorAll("[data-notification-open]").forEach(function(b){b.onclick=function(){var id=b.dataset.notificationOpen,assignment=b.dataset.assignment;window.API.markNotificationRead(id).catch(function(){});var target="#/teacher-tasks"+(assignment?"/"+encodeURIComponent(assignment):"");document.getElementById("notificationPopover").hidden=true;document.getElementById("notificationBell").setAttribute("aria-expanded","false");if(location.hash===target){window.renderTeacherTasksPage(assignment);}else location.hash=target;window.refreshNotificationCenter();};});
+};
+window.refreshNotificationCenter=function(){
+ if(!window.API||!window.API.getNotifications||(!window.state.student&&!window.state.staff))return Promise.resolve();
+ return window.API.getNotifications().then(function(r){if(!r||!r.success)throw Error(r&&r.error||"Не удалось загрузить уведомления");window.notificationCache=Array.isArray(r.notifications)?r.notifications:[];var badge=document.getElementById("notificationBadge");if(badge){var count=Number(r.unread||0);badge.textContent=count>99?"99+":String(count);badge.hidden=count<1;}var pop=document.getElementById("notificationPopover");if(pop&&!pop.hidden)window.renderNotificationItems();}).catch(function(e){var list=document.getElementById("notificationItems"),pop=document.getElementById("notificationPopover");if(list&&pop&&!pop.hidden)list.textContent="Ошибка: "+e.message;});
+};
+window.setupNotificationCenter=function(){
+ var bell=document.getElementById("notificationBell"),pop=document.getElementById("notificationPopover");if(!bell||!pop||bell.dataset.ready)return;bell.dataset.ready="1";
+ var close=function(){pop.hidden=true;bell.setAttribute("aria-expanded","false");};
+ bell.onclick=function(){var open=pop.hidden;pop.hidden=!open;bell.setAttribute("aria-expanded",String(open));if(open){window.renderNotificationItems();window.refreshNotificationCenter();}};
+ document.getElementById("notificationClose").onclick=close;document.getElementById("notificationRefresh").onclick=function(){window.refreshNotificationCenter();};
+ document.addEventListener("click",function(e){if(!e.target.closest("#notificationWrap"))close();});
+ window.refreshNotificationCenter();if(!window._notificationPoll)window._notificationPoll=setInterval(function(){if(document.visibilityState!=="hidden")window.refreshNotificationCenter();},60000);
 };
 
 window.unlockAchievement = function(id) {
@@ -754,7 +778,7 @@ window.router = function() {
     if (page === "games" && window.renderArcadePage) { window.renderArcadePage(); return; }
     if (page === "final" && window.renderFinalExamPage) { window.renderFinalExamPage(parts[1]); return; }
     if (page === "reports" && window.renderCourseReportsPage) { window.renderCourseReportsPage(); return; }
-    if (page === "teacher-tasks" && window.renderTeacherTasksPage) { window.renderTeacherTasksPage(); return; }
+    if (page === "teacher-tasks" && window.renderTeacherTasksPage) { window.renderTeacherTasksPage(parts[1] ? decodeURIComponent(parts[1]) : ""); return; }
     if (page === "schedule" && window.renderSchedulePage) { window.renderSchedulePage(); return; }
     if (page === "rating" && window.renderRatingPage) { window.renderRatingPage(); return; }
     if (page === "admin" && window.renderAdminPanel) { window.renderAdminPanel(); return; }
@@ -776,6 +800,7 @@ window.addEventListener("hashchange", function () { window.router(); });
 window.addEventListener("DOMContentLoaded", function() {
     setupLogin(); 
     setupDrawer(); 
+    window.setupNotificationCenter();
     window.renderUserChip();
     window.updateMenuVisibility();
     window.loadGlobalCustomContent(() => { window.router(); });
