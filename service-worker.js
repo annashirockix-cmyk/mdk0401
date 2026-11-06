@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v75'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
+const CACHE_NAME = 'portal-cache-v76'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
 
 const STATIC_ASSETS = [
   './',
@@ -54,6 +54,11 @@ const STATIC_ASSETS = [
   './network-detective.js',
   './party-games.js',
   './party-games-fix.js',
+  './network-party-games.js',
+  './coop-detective.js',
+  './games-ui-enhance.js',
+  './games-visual.css',
+  './room-visual.css',
   './workbooks.js',
   './portal-genz.js',
   './certificate-supplement.js',
