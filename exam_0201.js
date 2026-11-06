@@ -21,6 +21,8 @@ window.renderTraining_0201 = function(mdkId) {
   if (window.MDK_DATA && window.MDK_DATA['02.01']) {
       window.MDK_DATA['02.01'].sections.forEach(s => s.topics.forEach(t => {
           if (t.test) baseQuestions = baseQuestions.concat(t.test);
+            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
+          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
       }));
   }
 
@@ -149,6 +151,8 @@ window.renderFinal_0201 = function(mdkId) {
   if (window.MDK_DATA && window.MDK_DATA['02.01']) {
       window.MDK_DATA['02.01'].sections.forEach(s => s.topics.forEach(t => {
           if (t.test) baseQuestions = baseQuestions.concat(t.test);
+            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
+          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
       }));
   }
   // Используем те же вопросы, что и для тренировки
