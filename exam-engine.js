@@ -15,6 +15,9 @@ window.startExam = function(courseId) {
     if (data && data.sections) {
         data.sections.forEach(s => s.topics.forEach(t => {
             if (t.test) baseQuestions = baseQuestions.concat(t.test);
+            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
+            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
+          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
         }));
     }
     
