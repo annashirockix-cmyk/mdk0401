@@ -13,6 +13,22 @@ const allowed=staff?(actor.role==="admin"?Object.keys(C):(actor.courses||[]).fil
 if(!allowed.length){app.innerHTML='<section class="module">Нет доступных дисциплин.</section>';return;}
 app.innerHTML='<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🧩 '+(staff?'Задания и проверка работ':'Мои задания')+'</h1><p>'+(staff?'Назначайте работы, принимайте ответы и выставляйте оценки.':'Просматривайте задания, отправляйте ответы и получайте обратную связь.')+'</p></section><div id="taHost"><section class="module">Загрузка…</section></div>';
 const host=document.getElementById("taHost");let assignments=[],students=[];
+
+const appRoot=document.getElementById("app");
+appRoot.insertAdjacentHTML("beforeend","<section class=\"module\" id=\"taNotifications\" style=\"padding:14px 18px;margin-bottom:14px\"><h2>🔔 Уведомления <button class=\"btn ghost\" type=\"button\" id=\"taNotificationsRefresh\">Обновить</button></h2><div id=\"taNotificationsList\" aria-live=\"polite\">Загрузка уведомлений…</div></section>");
+function loadNotifications(){
+ const box=document.getElementById("taNotificationsList");if(!box)return;box.textContent="Загрузка…";
+ window.API.getNotifications().then(r=>{
+  if(!r||!r.success)throw Error(r&&r.error||"Не удалось загрузить уведомления");
+  const items=r.notifications||[];
+  if(!items.length){box.textContent="Новых уведомлений пока нет.";return;}
+  box.innerHTML=items.map(n=>"<article style=\"padding:10px;margin:8px 0;border-radius:8px;background:var(--bg);border-left:3px solid "+(n.readAt?"var(--border)":"var(--accent)")+"\"><b>"+E(n.title)+"</b><div style=\"font-size:11px;color:var(--muted)\">"+E(D(n.createdAt))+"</div><p style=\"margin:6px 0;white-space:pre-wrap\">"+E(n.message)+"</p>"+(!n.readAt?"<button class=\"btn ghost\" type=\"button\" data-read=\""+E(n.id)+"\">Прочитано</button>":"<span style=\"font-size:11px;color:var(--muted)\">Прочитано</span>")+"</article>").join("");
+  box.querySelectorAll("[data-read]").forEach(b=>b.onclick=()=>{b.disabled=true;window.API.markNotificationRead(b.dataset.read).then(loadNotifications).catch(e=>{b.disabled=false;b.textContent=e.message;});});
+ }).catch(e=>box.textContent="Ошибка: "+e.message);
+}
+document.getElementById("taNotificationsRefresh").onclick=loadNotifications;
+loadNotifications();
+
 const options=()=>allowed.map(x=>'<option value="'+E(x)+'">'+E(C[x])+'</option>').join("");
 function renderLegacy(){const host=document.getElementById("taLegacy");if(!host)return;let old=[];try{const raw=JSON.parse(localStorage.getItem("mdk.teacherTasks.v1")||"[]");if(Array.isArray(raw))old=raw;}catch(e){}host.innerHTML=old.length?old.map(x=>'<article style="padding:10px 0;border-bottom:1px solid var(--border)"><b>'+E(x.topic||x.title||"Черновик без названия")+'</b><div style="font-size:12px;color:var(--muted)">'+E(C[x.courseId]||x.courseId)+' · Адресат: '+E(x.target||"не указан")+' · '+E(x.level||"")+'</div><details><summary>Показать содержание</summary><p style="white-space:pre-wrap">'+E(x.body||"")+'</p><p style="white-space:pre-wrap"><b>Критерии:</b> '+E(x.criteria||"")+'</p></details></article>').join(""):'<p style="color:var(--muted)">Старых локальных черновиков не найдено.</p>';}
 function teacherUI(){
