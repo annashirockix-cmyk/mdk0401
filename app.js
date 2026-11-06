@@ -73,6 +73,7 @@ window.updateMenuVisibility = function() {
     var missionsLink=document.querySelector('.drawer-item[href="#/missions"]'); if(missionsLink) missionsLink.style.display=window.state.student?"flex":"none";
     var seasonalLink=document.querySelector('.drawer-item[href="#/seasonal"]'); if(seasonalLink) seasonalLink.style.display=window.state.student?"flex":"none";
     var teamsLink=document.querySelector('.drawer-item[href="#/teams"]'); if(teamsLink) teamsLink.style.display=(window.state.student||isTeacher)?"flex":"none";
+    var museumLink=document.querySelector('.drawer-item[href="#/museum"]'); if(museumLink) museumLink.style.display=(window.state.student||isTeacher)?"flex":"none";
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
 };
 
@@ -786,6 +787,7 @@ window.router = function() {
     if (page === "schedule" && window.renderSchedulePage) { window.renderSchedulePage(); return; }
     if (page === "rating" && window.renderRatingPage) { window.renderRatingPage(); return; }
     if (page === "teams" && window.renderTeamLeaguePage) { window.renderTeamLeaguePage(); return; }
+    if (page === "museum" && window.renderLearningMuseumPage) { window.renderLearningMuseumPage(); return; }
     if (page === "admin" && window.renderAdminPanel) { window.renderAdminPanel(); return; }
     if (page === "access" && window.renderAccessPage) { window.renderAccessPage(); return; }
     window.renderHomePage();
