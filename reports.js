@@ -1,6 +1,7 @@
 "use strict";
 window.renderCourseReportsPage=function(){
  const app=document.getElementById("app");if(!app)return;app.innerHTML="";
+ const actor=window.state.staff;if(!actor||!["teacher","admin"].includes(actor.role)){app.innerHTML='<div class="module">Отчёты доступны только преподавателям и администраторам.</div>';return;}
  const crumbs=document.getElementById("crumbs");if(crumbs)crumbs.textContent="Отчеты преподавателя";
  app.innerHTML='<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>📊 Результаты студентов</h1><p>Загрузка реальных попыток из Google Sheets и старых результатов из профилей.</p></section><div class="module" style="padding:20px"><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"><select id="repFilterGroup" class="self-input" style="width:200px"><option value="">Все группы</option></select><select id="repFilterTest" class="self-input" style="width:280px"><option value="">Все тесты</option></select><select id="repFilterCourse" class="self-input" style="width:220px"><option value="">Все дисциплины</option></select><button class="btn" id="repRefresh">Обновить</button><button class="btn ghost" id="repExport">Экспорт CSV</button><span id="repStatus" style="color:var(--muted)"></span></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th>Студент</th><th>Группа</th><th>Дисциплина</th><th>Работа</th><th>Оценка</th><th>Баллы</th><th>Попытки</th><th>Дата</th></tr></thead><tbody id="repTbody"><tr><td colspan="8">Загрузка…</td></tr></tbody></table></div></div>';
  let results=[];
@@ -27,7 +28,7 @@ window.renderCourseReportsPage=function(){
   const g=document.getElementById("repFilterGroup").value,t=document.getElementById("repFilterTest").value,c=document.getElementById("repFilterCourse").value;
   const rows=results.filter(x=>(!g||x.group===g)&&(!t||x.testTitle===t)&&(!c||x.courseId===c));
   const cell=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
-  const csv=[["Email","ФИО","Группа","Дисциплина","Работа","Оценка","Баллы","Максимум","Процент","Попытки","Дата"].map(cell).join(";")].concat(rows.map(x=>[x.email,x.name,x.group,labels[x.courseId]||x.courseId,x.testTitle,x.grade,x.score,x.maxScore,x.percent,x.attempts,x.finishedAt].map(cell).join(";")));
+  const csv=[["ФИО","Группа","Дисциплина","Работа","Оценка","Баллы","Максимум","Процент","Попытки","Дата"].map(cell).join(";")].concat(rows.map(x=>[x.name,x.group,labels[x.courseId]||x.courseId,x.testTitle,x.grade,x.score,x.maxScore,x.percent,x.attempts,x.finishedAt].map(cell).join(";")));
   const blob=new Blob(["\uFEFF"+csv.join("\r\n")],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="rezultaty-studentov.csv";a.click();URL.revokeObjectURL(url);
  };
  load();
