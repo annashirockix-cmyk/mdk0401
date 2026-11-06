@@ -801,14 +801,16 @@ function gradeAssignment_(data) {
 /* ---------- Teacher PDF upload to Drive ---------- */
 function uploadBookPdf_(data) {
   const courseId = String(data.courseId || "MAT");
+  if (courseId !== "MAT") throw new Error("Загрузка учебников разрешена только в библиотеку Материаловедения.");
   const user = editor_(data, courseId);
   const name = String(data.name || "Учебный материал.pdf").replace(/[\\\\/:*?"<>|]/g, "_").slice(0, 180);
   const mime = String(data.mimeType || "");
   const base64 = String(data.base64 || "");
   if (mime !== "application/pdf" || !base64) throw new Error("Разрешены только PDF-файлы.");
-  if (base64.length > 11000000) throw new Error("Файл слишком большой. Максимальный размер — 8 МБ.");
+  if (base64.length > 11200000) throw new Error("Файл слишком большой. Максимальный размер — 8 МБ.");
   const bytes = Utilities.base64Decode(base64);
   if (bytes.length > 8 * 1024 * 1024) throw new Error("Файл превышает ограничение 8 МБ.");
+  if (bytes.length < 4 || bytes[0] !== 37 || bytes[1] !== 80 || bytes[2] !== 68 || bytes[3] !== 70) throw new Error("Файл не похож на корректный PDF.");
   const props = PropertiesService.getScriptProperties();
   let folderId = props.getProperty("MATERIALS_PDF_FOLDER_ID");
   let folder;
