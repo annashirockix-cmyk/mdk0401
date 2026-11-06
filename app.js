@@ -431,7 +431,7 @@ window.renderTopicPage = function(courseId, topicId) {
                     return '<a class="btn ghost" href="' + window.escapeHtml(resource.url) + '" target="_blank" rel="noopener noreferrer" style="margin:6px 8px 6px 0;">' + window.escapeHtml(resource.icon || '📁') + ' ' + window.escapeHtml(resource.title) + ' ↗</a>';
                 }).join('');
                 contentArea.innerHTML += `<div class="card" style="margin-bottom:15px;"><h3 style="color:var(--accent); margin-top:0;">${prac.code} ${prac.title}</h3><p><b>Цель:</b> ${prac.goal}</p><p><b>Задание:</b> ${prac.task}</p>${resourcesHtml ? '<div class="prac-resources"><b>Материалы к уроку:</b><div>' + resourcesHtml + '</div></div>' : ''}${prac.notice ? '<p class="prac-notice">' + window.escapeHtml(prac.notice) + '</p>' : ''}${(prac.variants && prac.variants.length) ? `<p><b>Варианты:</b> ${prac.variants.join(', ')}</p>` : ''}<div style="margin-top:20px; padding-top:15px; border-top:1px dashed var(--border);"><label style="font-size:14px; font-weight:bold; color:var(--text-soft);">Ваш письменный ответ / Решение:</label><textarea class="self-input" id="prac_input_${prac.code}" rows="5" style="margin-top:8px; font-family:monospace;" placeholder="Введите здесь ваше решение...">${savedAns}</textarea><button class="btn" onclick="window.savePracAnswer('${prac.code}')" style="margin-top:10px;">💾 Сохранить ответ</button></div></div>`;
-            }));
+            });
         }
         else if (tabName === 'selfwork') {
             if (!topic.selfWork || !topic.selfWork.length) { contentArea.innerHTML = "<p>Самостоятельных работ нет.</p>"; return; }
