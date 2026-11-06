@@ -29,6 +29,7 @@
   window.getRewardCollection=function(){return inventory().slice();};
   window.renderRewardCollection=function(){
     var app=document.getElementById("app");if(!app)return;
+    var existing=document.getElementById("rewardCollection");if(existing)existing.remove();
     var owned=inventory(),frames=owned.filter(function(r){return r.kind==="frame";}),titles=owned.filter(function(r){return r.kind==="title";});
     var wrap=document.createElement("section");wrap.className="module";wrap.id="rewardCollection";wrap.style.cssText="padding:20px;margin:18px 0";
     var h=document.createElement("h2");h.textContent="🎁 Коллекция наград";wrap.appendChild(h);
@@ -68,6 +69,6 @@
   var oldChip=window.renderUserChip;
   if(oldChip)window.renderUserChip=function(){oldChip.apply(this,arguments);var avatar=document.getElementById("userChipAvatar");applyFrame(avatar);};
   var oldUnlock=window.unlockAchievement;
-  if(oldUnlock)window.unlockAchievement=function(id){oldUnlock.apply(this,arguments);if(window.state&&window.state.student){var newly=inventory();if(newly.length&&window.showToast)window.showToast("🎁 Награды открываются в разделе «Достижения»","info");}};
+  if(oldUnlock)window.unlockAchievement=function(id){var before=inventory().map(function(r){return r.id;});oldUnlock.apply(this,arguments);if(window.state&&window.state.student){var after=inventory(),fresh=after.filter(function(r){return before.indexOf(r.id)<0;});if(fresh.length&&window.showToast)window.showToast("🎁 Открыта награда: "+fresh.map(function(r){return r.name;}).join(", "),"ok");}};
   document.addEventListener("DOMContentLoaded",function(){if(window.renderUserChip)window.renderUserChip();});
 })();
