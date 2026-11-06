@@ -24,7 +24,7 @@ const CFG = {
   SESSION_PREFIX: "portal_session:",
   SESSION_TTL: 21600, // 6 часов
   LEGACY_SALT: "portal_spo_2026",
-  COURSES: ["07.01", "04.01", "02.01", "02.02", "MCAM", "MAT", "OT"]
+  COURSES: ["07.01", "04.01", "02.01", "02.02", "MCAM", "MAT", "OT", "PFI"]
 };
 
 const HEADERS = {
