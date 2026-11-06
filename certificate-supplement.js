@@ -20,6 +20,7 @@
     var printButton=app.querySelector(".no-print button");
     if(printButton){printButton.disabled=true;printButton.textContent="Загружаем приложение к сертификату…";}
     function enablePrint(){if(printButton){printButton.disabled=false;printButton.textContent="🖨 Распечатать сертификат и приложение";}}
+    function renderError(message){summary.textContent="Данные приложения не загружены";tableWrap.innerHTML="";var warning=el("p",message);warning.style.cssText="padding:14px;background:#fff4e5;border-left:4px solid #d97706;color:#7c3f08;border-radius:6px";tableWrap.appendChild(warning);if(printButton){printButton.disabled=false;printButton.textContent="🖨 Распечатать сертификат без приложения";}}
     function render(data){
       var rows=(data&&data.results)||[],stats=(data&&data.summary)||{};
       summary.textContent="Завершено работ: "+(stats.completed!=null?stats.completed:rows.length)+" · Оценено: "+(stats.graded||0)+" · Средний балл: "+(stats.averageGrade||0)+" · Средний результат: "+(stats.averagePercent||0)+"%";
@@ -30,7 +31,7 @@
       var body=el("tbody");rows.forEach(function(r,i){var tr=el("tr");[String(i+1),r.testTitle||r.testId||"Работа",r.grade>0?String(r.grade):"—",r.percent!=null?String(r.percent)+"%":"—",r.finishedAt?String(r.finishedAt).slice(0,10):"—"].forEach(function(v){var td=el("td",v);td.style.cssText="padding:8px;border-bottom:1px solid #d6e0e9";tr.appendChild(td);});body.appendChild(tr);});table.appendChild(body);tableWrap.appendChild(table);enablePrint();
     }
     if(window.API&&typeof API.getMyCourseResults==="function"){
-      API.getMyCourseResults(courseId).then(function(res){if(res&&res.success)render(res);else render({results:[]});}).catch(function(){render({results:[]});});
+      API.getMyCourseResults(courseId).then(function(res){if(res&&res.success)render(res);else renderError("Сервер не подтвердил получение результатов. Приложение не сформировано.");}).catch(function(){renderError("Не удалось загрузить результаты с сервера. Проверьте подключение и повторите попытку; сертификат можно распечатать отдельно.");});
     }else{
       var fallback=Object.keys(window.state.results||{}).map(function(k){var v=window.state.results[k];return typeof v==="object"&&v.grade!=null?{testId:k,testTitle:v.testTitle||k,grade:Number(v.grade)||0,percent:Number(v.percent)||0,finishedAt:v.finishedAt||""}:null;}).filter(Boolean);
       render({results:fallback,summary:{completed:fallback.length,graded:fallback.filter(function(x){return x.grade>0;}).length,averageGrade:0,averagePercent:0}});
