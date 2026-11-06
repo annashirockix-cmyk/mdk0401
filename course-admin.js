@@ -59,7 +59,7 @@
       hero.insertAdjacentElement("afterend",panel);
     }
     if(isTeacher()){
-      const b=document.createElement("a");b.href="#/course-editor";b.className="btn";b.style.margin="0 0 16px";b.textContent="✍️ Редактор лекций и тестов";
+      const b=document.createElement("a");b.href="#/course-editor";b.className="btn";b.style.margin="0 0 16px";b.textContent="✍️ Редактор курса и объявлений";
       const first=app.querySelector(".module");if(first)first.insertAdjacentElement("beforebegin",b);else app.appendChild(b);
     }
     updateCourseChrome();
