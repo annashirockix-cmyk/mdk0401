@@ -431,7 +431,7 @@ function getStudents_(data) {
       group: row[map.Group],
       role: row[map.Role],
       courses: String(row[map.Courses] || "").split(",").filter(function(id){ return user.role === "admin" || hasCourseAccess_(user,id); }),
-      payload: (function(){ let p={}; try{p=JSON.parse(row[map.Payload]||"{}");}catch(e){} if(user.role==="admin") return String(row[map.Payload]||""); return JSON.stringify({manualGrades:p.manualGrades||{}}); })()
+      payload: (function(){ let p={}; try{p=JSON.parse(row[map.Payload]||"{}");}catch(e){} if(user.role==="admin") return String(row[map.Payload]||""); return JSON.stringify({manualGrades:p.manualGrades||{},xp:Number(p.xp)||0,avatar:p.avatar||null,avatarEmoji:p.avatarEmoji||null,avatarEffect:p.avatarEffect||null}); })()
     };
   });
   return { success: true, students: students };
