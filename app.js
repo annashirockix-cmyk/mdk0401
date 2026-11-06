@@ -764,6 +764,7 @@ window.router = function() {
     if (page === "teacher-dashboard" && window.renderTeacherDashboard) { window.renderTeacherDashboard(); return; }
     if (page === "student-progress" && window.renderStudentProgressPage) { window.renderStudentProgressPage(parts[1] || ""); return; }
     if (page === "learning-path" && window.renderLearningPathPage) { window.renderLearningPathPage(); return; }
+    if (page === "subject-tutor" && window.renderSubjectTutor) { window.renderSubjectTutor(); return; }
     if (page === "gcode-lab" && window.renderGCodeLabPortal) { window.renderGCodeLabPortal(); return; }
     if (page === "materials-lab" && window.renderMaterialsLab) { window.renderMaterialsLab(); return; }
     if (page === "machining-lab" && window.renderMachiningLab) { window.renderMachiningLab(); return; }
