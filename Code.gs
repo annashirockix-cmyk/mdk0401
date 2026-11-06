@@ -825,9 +825,10 @@ function joinGameRoom_(data) {
   lock.waitLock(10000);
   try { const room=gameRoomRow_(code); if(!room||room.status!=="open"||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
     const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true};
-    if(state.phase!=="lobby") throw new Error("Игра уже началась.");
     state.players=state.players||[]; const existing=state.players.find(p=>email_(p.email)===user.email);
-    if(!existing&&state.players.length>=12) throw new Error("Комната заполнена (максимум 12 игроков).");
+    if(existing) return {success:true,code:code,state:state,isHost:false};
+    if(state.phase!=="lobby") throw new Error("Игра уже началась. Новые участники больше не принимаются.");
+    if(state.players.length>=12) throw new Error("Комната заполнена (максимум 12 игроков).");
     if(!existing) state.players.push({email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
     room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); return {success:true,code:code,state:state};
   } finally { lock.releaseLock(); }
