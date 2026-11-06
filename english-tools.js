@@ -10,8 +10,8 @@
   };
   function $(id){return id.charAt(0)==="["?document.querySelector(id):document.getElementById(id);}
   function esc(v){return window.escapeHtml?window.escapeHtml(String(v==null?"":v)):String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
-  function appStart(title){var app=$("app");if(!app)return null;app.innerHTML='<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>'+title+'</h1><p>Английский язык · Basic English и Technical English</p></section>';var crumb=$("crumbs");if(crumb)crumb.textContent=title;return app;}
-  function permitted(){return !!(window.state&&(window.state.student||window.state.staff))&&(!window.canAccessCourse||window.canAccessCourse("EN"));}
+  function activeCourse(){var id=window.state&&window.state.activeCourseId||"EN";return id==="ENB"?"ENB":id==="ENT"?"ENT":"EN";}function activeTrack(){return activeCourse()==="ENB"?"basic":activeCourse()==="ENT"?"technical":"basic";}function appStart(title){var app=$("app");if(!app)return null;var subtitle=activeCourse()==="ENB"?"Базовый английский · Basic English":activeCourse()==="ENT"?"Технический английский · Technical English":"Английский язык";app.innerHTML='<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>'+title+'</h1><p>'+subtitle+'</p></section>';var crumb=$("crumbs");if(crumb)crumb.textContent=title;return app;}
+  function permitted(){var id=activeCourse();return !!(window.state&&(window.state.student||window.state.staff))&&(!window.canAccessCourse||window.canAccessCourse(id));}
   function guard(){var app=$("app");if(permitted())return true;if(app)app.innerHTML='<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';return false;}
   function cardButton(text,hash){return '<a class="btn ghost" href="'+hash+'" style="display:inline-flex;margin:4px 6px 4px 0">'+text+'</a>';}
   function runEnglishAssessment(title,questions,minutes,resultKey){
@@ -39,13 +39,13 @@
   window.renderEnglishTestsPage=function(mode){
     if(!guard())return;var app=appStart("🎯 Тесты по английскому языку");if(!app)return;
     var allowed=["basic","technical","semester-basic","semester-technical","final-basic","final-technical"];
-    mode=allowed.indexOf(mode)>=0?mode:"basic";
+    mode=allowed.indexOf(mode)>=0?mode:activeTrack();if(activeCourse()==="ENB"&&mode.indexOf("technical")>=0)mode="basic";if(activeCourse()==="ENT"&&mode.indexOf("technical")<0)mode="technical";
     var track=mode.indexOf("technical")>=0?"technical":"basic";
     var labels=[["basic","Basic English"],["technical","Technical English"],["semester-basic","Семестровые · базовый"],["semester-technical","Семестровые · технический"],["final-basic","Итоговые · базовый"],["final-technical","Итоговые · технический"]];
-    var html='<section class="module"><div style="display:flex;gap:8px;flex-wrap:wrap">'+labels.map(function(x){return '<button class="btn '+(mode===x[0]?"":"ghost")+'" data-mode="'+x[0]+'">'+x[1]+'</button>';}).join("")+'</div></section>';
+    var visibleLabels=activeCourse()==="ENB"?labels.filter(function(x){return x[0].indexOf("technical")<0;}):activeCourse()==="ENT"?labels.filter(function(x){return x[0].indexOf("technical")>=0;}):labels;var html='<section class="module"><div style="display:flex;gap:8px;flex-wrap:wrap">'+visibleLabels.map(function(x){return '<button class="btn '+(mode===x[0]?"":"ghost")+'" data-mode="'+x[0]+'">'+x[1]+'</button>';}).join("")+'</div></section>';
     if(mode==="basic"||mode==="technical"){
       html+='<div class="module"><p class="museum-muted">Тематические тесты исходного курса. Откройте тему и выберите вкладку «Тест».</p></div>';
-      (window.MDK_DATA.EN.sections||[]).filter(function(section){return section.sourceTrack===track;}).forEach(function(section){html+='<section class="module"><h2>'+esc(section.code)+' · '+esc(section.title)+'</h2>';(section.topics||[]).forEach(function(topic){var count=(topic.test||[]).length;if(!count)return;html+='<div style="padding:10px 0;border-top:1px solid var(--border)"><b>'+esc(topic.code)+' · '+esc(topic.title)+'</b><span class="museum-muted"> · '+count+' вопросов</span><div>'+cardButton("Открыть тест","#/topic/EN/"+encodeURIComponent(topic.id)+"/test")+'</div></div>';});html+='</section>';});
+      (window.MDK_DATA.EN.sections||[]).filter(function(section){return section.sourceTrack===track;}).forEach(function(section){html+='<section class="module"><h2>'+esc(section.code)+' · '+esc(section.title)+'</h2>';(section.topics||[]).forEach(function(topic){var count=(topic.test||[]).length;if(!count)return;html+='<div style="padding:10px 0;border-top:1px solid var(--border)"><b>'+esc(topic.code)+' · '+esc(topic.title)+'</b><span class="museum-muted"> · '+count+' вопросов</span><div>'+cardButton("Открыть тест","#/topic/"+activeCourse()+"/"+encodeURIComponent(topic.id)+"/test")+'</div></div>';});html+='</section>';});
     }else if(mode.indexOf("semester-")===0){
       var sem=(window.SEMESTER_TESTS&&window.SEMESTER_TESTS[track])||[];
       html+='<section class="module"><h2>Семестровые контрольные</h2><p class="museum-muted">'+sem.length+' контрольных работ · 5 курсов · 45 минут на работу</p>';
@@ -62,12 +62,12 @@
   };
   window.renderEnglishCardsPage=function(track,mode){
     if(!guard())return;var app=appStart("🃏 Карточки и кроссворд");if(!app)return;
-    var course=window.MDK_DATA.EN,tracks=["basic","technical"],current=tracks.indexOf(track)>=0?track:"basic";
+    var course=window.MDK_DATA.EN,tracks=["basic","technical"],current=activeTrack();if(activeCourse()==="EN"&&tracks.indexOf(track)>=0)current=track;
     var cards=(course.flashcards[current]||[]).slice();
-    (window.customContent.flashcards||[]).filter(function(x){return x.mdkId==="EN"&&(!x.track||x.track==="all"||x.track===current);}).forEach(function(set){(set.cards||[]).forEach(function(c){cards.push(c);});});
+    (window.customContent.flashcards||[]).filter(function(x){return (x.mdkId==="EN"||x.mdkId===activeCourse())&&(!x.track||x.track==="all"||x.track===current);}).forEach(function(set){(set.cards||[]).forEach(function(c){cards.push(c);});});
     var words=(course.flashcards.crossword&&course.flashcards.crossword[current]||[]).slice();
     app.insertAdjacentHTML("beforeend",'<section class="module"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn '+(current==="basic"?"":"ghost")+'" data-track="basic">Базовый английский</button><button class="btn '+(current==="technical"?"":"ghost")+'" data-track="technical">Технический английский</button></div><p class="museum-muted">Карточки: '+cards.length+' · слова для кроссворда: '+words.length+'</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="startCards">🃏 Учить слова</button><button class="btn ghost" id="startCrossword">🔤 Решить кроссворд</button></div></section><div id="englishCardsWork"></div>');
-    app.querySelectorAll("[data-track]").forEach(function(b){b.onclick=function(){window.renderEnglishCardsPage(b.dataset.track);};});
+    app.querySelectorAll("[data-track]").forEach(function(b){if(activeCourse()!=="EN")b.remove();else b.onclick=function(){window.renderEnglishCardsPage(b.dataset.track);};});
     $("startCards").onclick=function(){renderDeck(cards);};
     $("startCrossword").onclick=function(){renderCrossword(words);};
     if(mode==="crossword")renderCrossword(words);
