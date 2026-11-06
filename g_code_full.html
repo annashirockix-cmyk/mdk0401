@@ -92,7 +92,7 @@ function levelInfo(n){
 }
 function makeCode(info,n){
  let p=info.plane||planes[0],axes=p.axes,required=info.required||[],lines=["%","O"+String(n).padStart(3,"0"),"G21"];
- required.filter(function(c){return /^G\\d+$/.test(c)&&c!=="G21";}).forEach(function(c){lines.push(c);});
+ required.filter(function(c){return /^G\d+$/.test(c)&&c!=="G21";}).forEach(function(c){lines.push(c);});
  if(!required.some(function(c){return c==="G90"||c==="G91";}))lines.push("G90");
  if(!required.includes("G41")&&!required.includes("G42"))lines.push("G40");
  lines.push("G00 "+axes[0]+"0 "+axes[1]+"0","M03 S1200","F120");
