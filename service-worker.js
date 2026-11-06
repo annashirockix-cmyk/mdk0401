@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v79'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
+const CACHE_NAME = 'portal-cache-v80'; // Обновление интеграции учебных симуляторов.
 
 const STATIC_ASSETS = [
   './',
@@ -71,6 +71,7 @@ const STATIC_ASSETS = [
   './teacher-dashboard.js',
   './student-progress.js',
   './learning-path.js',
+  './simulators.js',
   './schedule.js',
   './shop.js',
   './admin.js',
@@ -86,7 +87,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v77');
+        console.log('[SW] Кэширование статических ресурсов версии v80');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
