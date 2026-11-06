@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v17'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
+const CACHE_NAME = 'portal-cache-v18'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
 
 const STATIC_ASSETS = [
   './',
@@ -17,6 +17,7 @@ const STATIC_ASSETS = [
   './data-0201.js',
   './data-0202.js',
   './data-mastercam.js',
+  './mastercam-practicals.js',
   './data-material.js',
   './data-safety.js',
   './data-extra.js',
