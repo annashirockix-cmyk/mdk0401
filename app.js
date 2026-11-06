@@ -611,11 +611,24 @@ function setupLogin() {
             window.state.student = { name: res.name || email, group: res.group || "", email: email, role: role, courses: res.courses || [] };
             window.state.staff = null;
         }
-        // Восстанавливаем аватар текущего аккаунта и не оставляем картинку предыдущего пользователя.
+        // Восстанавливаем прогресс именно текущего аккаунта, не смешивая данные разных пользователей на одном устройстве.
         var profile = res.profile || {};
-        window.state.avatar = profile.avatar || null;
-        window.state.avatarEmoji = profile.avatarEmoji || "👩‍🔧";
-        window.state.avatarEffect = profile.avatarEffect || "plain";
+        var isStudent = role === "student";
+        window.state.xp = isStudent ? (Number(profile.xp) || 0) : 0;
+        window.state.results = isStudent && profile.results && typeof profile.results === "object" ? profile.results : {};
+        window.state.unlockedAchievements = isStudent && Array.isArray(profile.unlockedAchievements) ? profile.unlockedAchievements : [];
+        window.state.activeCourseId = isStudent && (res.courses || []).indexOf(profile.activeCourseId) >= 0 ? profile.activeCourseId : ((res.courses || [])[0] || "07.01");
+        window.state.avatar = isStudent ? (profile.avatar || null) : null;
+        window.state.avatarEmoji = isStudent ? (profile.avatarEmoji || "👩‍🔧") : "👨‍🏫";
+        window.state.avatarEffect = isStudent ? (profile.avatarEffect || "plain") : "plain";
+        window.state.nickname = isStudent ? (profile.nickname || null) : null;
+        window.state.purchasedThemes = isStudent && Array.isArray(profile.purchasedThemes) ? profile.purchasedThemes : [];
+        window.state.purchasedTextEffects = isStudent && Array.isArray(profile.purchasedTextEffects) ? profile.purchasedTextEffects : [];
+        window.state.activeTextEffect = isStudent ? (profile.activeTextEffect || "none") : "none";
+        window.state.purchasedBgEffects = isStudent && Array.isArray(profile.purchasedBgEffects) ? profile.purchasedBgEffects : [];
+        window.state.activeBgEffect = isStudent ? (profile.activeBgEffect || "none") : "none";
+        window.state.purchasedCardEffects = isStudent && Array.isArray(profile.purchasedCardEffects) ? profile.purchasedCardEffects : [];
+        window.state.activeCardEffect = isStudent ? (profile.activeCardEffect || "none") : "none";
         window.saveStudentData(); 
         window.renderUserChip();
         if (window.syncCourseSelector) window.syncCourseSelector();
