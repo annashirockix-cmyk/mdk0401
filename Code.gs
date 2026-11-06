@@ -79,6 +79,7 @@ function handleRequest_(e) {
       case "saveresult": result = saveResult_(data); break;
       case "getresults": result = getResults_(data); break;
       case "getpublicsubjectratings": result = getPublicSubjectRatings_(data); break;
+      case "getmycourseresults": result = getMyCourseResults_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
@@ -550,6 +551,49 @@ function getPublicSubjectRatings_(data) {
     return { courseId: courseId, participants: participants, averageGrade: Math.round(avg * 100) / 100 };
   }).sort(function (a, b) { return b.averageGrade - a.averageGrade || b.participants - a.participants; });
   return { success: true, ratings: ratings, subjects: subjectSummary };
+}
+
+function getMyCourseResults_(data) {
+  const user = auth_(data), email = email_(user.email), requestedCourse = String(data.courseId || "");
+  const list = results_().getDataRange().getValues().slice(1).filter(function (r) {
+    return r[0] && email_(r[0]) === email && (!requestedCourse || String(r[12] || "") === requestedCourse);
+  }).map(function (r) {
+    return { testId: String(r[3] || ""), testTitle: String(r[4] || r[3] || ""),
+      grade: Number(r[5]) || 0, score: Number(r[6]) || 0, maxScore: Number(r[7]) || 0,
+      percent: Number(r[8]) || 0, timeSpent: Number(r[9]) || 0,
+      finishedAt: String(r[11] || ""), courseId: String(r[12] || "") };
+  });
+  const sheet = users_(), values = sheet.getDataRange().getValues(), map = headerMap_(sheet);
+  const row = values.slice(1).find(function (r) { return email_(r[map.Email]) === email; });
+  if (row) {
+    let payload = {};
+    try { payload = JSON.parse(row[map.Payload] || "{}"); } catch (e) {}
+    const legacy = payload.results || {};
+    Object.keys(legacy).forEach(function (testId) {
+      const rec = legacy[testId];
+      if (!rec || typeof rec !== "object" || rec.grade == null) return;
+      let courseId = String(rec.courseId || "");
+      if (!courseId) {
+        const matches = CFG.COURSES.filter(function (id) { return testId.indexOf(id) >= 0; });
+        if (matches.length === 1) courseId = matches[0];
+        else {
+          const enrolled = String(row[map.Courses] || "").split(",").filter(Boolean);
+          if (enrolled.length === 1) courseId = enrolled[0];
+        }
+      }
+      if (requestedCourse && courseId !== requestedCourse) return;
+      if (list.some(function (x) { return x.testId === String(testId); })) return;
+      list.push({ testId: String(testId), testTitle: String(rec.testTitle || testId),
+        grade: Number(rec.grade) || 0, score: Number(rec.score) || 0,
+        maxScore: Number(rec.max || rec.maxScore) || 0, percent: Number(rec.percent) || 0,
+        timeSpent: Number(rec.timeSpent) || 0, finishedAt: String(rec.finishedAt || ""), courseId: courseId });
+    });
+  }
+  list.sort(function (a, b) { return String(a.finishedAt).localeCompare(String(b.finishedAt)); });
+  const graded = list.filter(function (x) { return x.grade > 0; });
+  const averageGrade = graded.length ? Math.round(graded.reduce(function (n, x) { return n + x.grade; }, 0) / graded.length * 100) / 100 : 0;
+  const averagePercent = graded.length ? Math.round(graded.reduce(function (n, x) { return n + x.percent; }, 0) / graded.length) : 0;
+  return { success: true, results: list, summary: { completed: list.length, graded: graded.length, averageGrade: averageGrade, averagePercent: averagePercent } };
 }
 
 /* ---------- Teacher-created topics, lectures and tests ---------- */
