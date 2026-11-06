@@ -307,3 +307,7 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 
 /* Grade trend chart */
 .sp-chart-wrap{width:100%;overflow-x:auto}.sp-chart{display:block;width:100%;min-width:300px;height:auto;max-height:240px}.student-progress .sp-chart text{font-family:inherit}.student-progress .sp-chart circle{cursor:help}
+
+
+/* Individual remedial task form */
+.sp-create-task details>summary{cursor:pointer;color:var(--accent);font-weight:800;padding:5px 0}.sp-create-task form{display:grid;gap:9px;margin-top:14px}.sp-create-task label{display:block;font-weight:700}.sp-create-task .sp-form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.sp-create-task input,.sp-create-task select,.sp-create-task textarea{box-sizing:border-box;max-width:100%}.sp-create-task button{justify-self:start}
