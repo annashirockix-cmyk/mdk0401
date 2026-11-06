@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v93'; // Обновление интеграции учебных симуляторов.
+const CACHE_NAME = 'portal-cache-v94'; // Обновление интеграции учебных симуляторов.
 
 const STATIC_ASSETS = [
   './',
