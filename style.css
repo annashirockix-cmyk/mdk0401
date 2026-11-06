@@ -196,3 +196,12 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 .prac-resources { margin: 18px 0; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-soft); }
 .prac-notice { padding: 10px 12px; border-left: 3px solid var(--gold); background: rgba(245,158,11,.08); border-radius: 6px; color: var(--text-soft); }
 .module, .card { transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+
+
+/* Новые темы магазина */
+[data-theme="graphite"] { --bg:#111827; --card:#1f2937; --card-soft:#374151; --text:#f3f4f6; --text-soft:#d1d5db; --muted:#9ca3af; --border:#4b5563; --accent:#6ee7b7; --ok:#34d399; --err:#fb7185; --gold:#fbbf24; }
+[data-theme="lavender"] { --bg:#211a38; --card:#30264d; --card-soft:#44365f; --text:#f5f0ff; --text-soft:#ddd0f7; --muted:#b6a5d4; --border:#665783; --accent:#c4b5fd; --ok:#86efac; --err:#fb7185; --gold:#fcd34d; }
+[data-theme="ocean"] { --bg:#062b3a; --card:#0b3d50; --card-soft:#15566b; --text:#ecfeff; --text-soft:#cffafe; --muted:#a5cbd4; --border:#277187; --accent:#67e8f9; --ok:#5eead4; --err:#fda4af; --gold:#fcd34d; }
+.fx-gold-text { color:#fbbf24 !important; text-shadow:0 0 5px rgba(251,191,36,.9),0 0 18px rgba(245,158,11,.6); }
+.fx-ice-text { color:#bae6fd !important; text-shadow:0 0 6px rgba(125,211,252,.95),0 0 20px rgba(56,189,248,.7); }
+.fx-fire-text { color:#fb923c !important; text-shadow:0 0 5px rgba(251,146,60,.95),0 0 18px rgba(239,68,68,.7); }
