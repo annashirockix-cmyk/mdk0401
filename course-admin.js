@@ -1,7 +1,7 @@
 "use strict";
 (function(){
-  const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ"};
-  const PLUGINS=["MAT","OT","PFI"];
+  const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ","EN":"Английский язык"};
+  const PLUGINS=["MAT","OT","PFI","EN"];
   const allIds=Object.keys(COURSE_LABELS);
   const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   function safeLectureHtml(html){
@@ -41,7 +41,7 @@
   }
   function filterCoursePicker(){
     const sel=document.getElementById("mdkSelector"); if(!sel)return;
-    Array.from(sel.options).forEach(o=>{if(o.value) o.hidden=o.value!=="ENGLISH_PORTAL"&&!canCourse(o.value);});
+    Array.from(sel.options).forEach(o=>{if(o.value) o.hidden=!!o.value&&!canCourse(o.value);});
     if(isTeacher()&&!canCourse(window.state.activeCourseId)){
       const first=accessible()[0];
       if(first){window.state.activeCourseId=first;sel.value=first;}
