@@ -27,7 +27,7 @@ window.renderCourseReportsPage=function(){
  document.getElementById("repExport").onclick=function(){
   const g=document.getElementById("repFilterGroup").value,t=document.getElementById("repFilterTest").value,c=document.getElementById("repFilterCourse").value;
   const rows=results.filter(x=>(!g||x.group===g)&&(!t||x.testTitle===t)&&(!c||x.courseId===c));
-  const cell=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const cell=v=>{let s=String(v==null?"":v);if(/^[=+\-@\t\r]/.test(s))s="\'"+s;return '"' + s.replace(/"/g,'""') + '"' ;};
   const csv=[["ФИО","Группа","Дисциплина","Работа","Оценка","Баллы","Максимум","Процент","Ответ / работа","Попытки","Дата"].map(cell).join(";")].concat(rows.map(x=>[x.name,x.group,labels[x.courseId]||x.courseId,x.testTitle,x.grade,x.score,x.maxScore,x.percent,x.payload,x.attempts,x.finishedAt].map(cell).join(";")));
   const blob=new Blob(["\uFEFF"+csv.join("\r\n")],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="rezultaty-studentov.csv";a.click();URL.revokeObjectURL(url);
  };
