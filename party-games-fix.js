@@ -59,8 +59,8 @@
           if(!target){message="Все карты уже отбиты. Передайте ход атакующему.";render();return;}
           if(!beat(target.attack,c)){message="Карта не подходит: нужна старшая той же масти или козырь.";render();return;}
           hand.splice(selected,1);target.defense=c;selected=null;
-          if(table.some(function(x){return !x.defense;})){passTo=defender;nextPhase="defend";}else{passTo=attacker;nextPhase="attack";}
-          phase="pass";message=table.some(function(x){return !x.defense;})?"Нужно отбить следующую карту.":"Все карты отбиты. Атакующий может подкинуть или завершить раунд.";render();
+          if(table.some(function(x){return !x.defense;})){phase="defend";message="Нужно отбить следующую карту.";render();return;}else{passTo=attacker;nextPhase="attack";}
+          phase="pass";message="Все карты отбиты. Атакующий может подкинуть или завершить раунд.";render();
         };
         container.querySelector("#durakTake").onclick=function(){roundEnd(true);};
       }
