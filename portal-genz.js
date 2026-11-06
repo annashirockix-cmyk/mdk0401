@@ -1,7 +1,7 @@
 "use strict";
 (function(){
   var themes=[["dark","🌌 Тёмная"],["light","☀️ Светлая"],["neon","💗 Неон"],["matrix","💚 Матрица"],["cyberpunk","⚡ Киберпанк"],["graphite","🪨 Графит"],["lavender","💜 Лаванда"],["ocean","🌊 Океан"]];
-  function applyTheme(id){if(!themes.some(function(t){return t[0]===id;}))id="dark";document.documentElement.setAttribute("data-theme",id);try{localStorage.setItem("mdk.theme_active",id);}catch(e){}var s=window.state||{};s.activeTheme=id;if(window.saveStudentData)window.saveStudentData();}
+  function applyTheme(id){if(!themes.some(function(t){return t[0]===id;}))id="dark";document.documentElement.setAttribute("data-theme",id);try{localStorage.setItem("mdk.theme_active",id);}catch(e){}var s=window.state||{};s.activeTheme=id;}
   function mountTheme(){
     var xp=document.getElementById("xpCount");if(!xp||document.getElementById("themePalette"))return;
     var wrap=document.createElement("div");wrap.id="themePalette";wrap.style.cssText="position:relative;display:inline-flex;align-items:center;z-index:20";
