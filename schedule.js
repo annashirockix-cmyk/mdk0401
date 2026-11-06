@@ -9,9 +9,9 @@ window.renderSchedulePage = function(){
   
   app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
   
-  var isTeacher = window.state.staff && (window.state.staff.role === "teacher" || window.state.staff.role === "admin");
+  var isAdmin = !!(window.state.staff && window.state.staff.role === "admin");
   
-  app.appendChild(el(`<section class="hero"><h1>Расписание занятий (1 семестр)</h1><p>${isTeacher ? 'Режим редактирования. Нажмите "Сохранить" после изменений.' : 'Расписание на семестр'}</p></section>`));
+  app.appendChild(el(`<section class="hero"><h1>Расписание занятий (1 семестр)</h1><p>${isAdmin ? 'Режим редактирования. Нажмите "Сохранить" после изменений.' : 'Расписание на семестр'}</p></section>`));
 
   var groups = ["ТМ 2-5", "ТМ 2-6", "ТМ 3-4", "ТМ 4-3"];
 
@@ -24,11 +24,30 @@ window.renderSchedulePage = function(){
     { name: "СУББОТА", times: [{ t: "8.00-9.35", label: "1 пара" }, { t: "9.45-11.20", label: "2 пара" }, { t: "11.40-13.15", label: "3 пара" }, { t: "13.25-15.00", label: "4 пара" }] }
   ];
 
-  var scheduleData = JSON.parse(localStorage.getItem('mdk_schedule') || '{}');
+  var scheduleData = {};
+  try { scheduleData = normalizeSchedule(JSON.parse(localStorage.getItem("mdk_schedule") || "{}")); } catch (e) { scheduleData = {}; }
+  function normalizeSchedule(raw) {
+    var out = {};
+    if (Array.isArray(raw)) {
+      raw.forEach(function(item) {
+        if (!item || typeof item !== "object") return;
+        if (item.key || item.cellKey) { var key = String(item.key || item.cellKey); out[key] = { sub1: String(item.sub1 || ""), sub2: String(item.sub2 || "") }; return; }
+        Object.keys(item).forEach(function(key) { var value = item[key]; if (value && typeof value === "object") out[key] = { sub1: String(value.sub1 || ""), sub2: String(value.sub2 || "") }; });
+      });
+    } else if (raw && typeof raw === "object") {
+      Object.keys(raw).forEach(function(key) { var value = raw[key]; if (value && typeof value === "object") out[key] = { sub1: String(value.sub1 || ""), sub2: String(value.sub2 || "") }; });
+    }
+    return out;
+  }
+  function serializeSchedule(raw) { return Object.keys(raw).map(function(key) { return { key: key, sub1: String(raw[key].sub1 || ""), sub2: String(raw[key].sub2 || "") }; }); }
 
   window.API.getSchedule().then(res => {
-      if (res && res.success && res.schedule && Object.keys(res.schedule).length > 0) {
-          scheduleData = res.schedule;
+      if (res && res.success && res.schedule) {
+          var remoteSchedule = normalizeSchedule(res.schedule);
+          if (Object.keys(remoteSchedule).length > 0 || Array.isArray(res.schedule)) {
+            scheduleData = remoteSchedule;
+            localStorage.setItem("mdk_schedule", JSON.stringify(scheduleData));
+          }
       }
       buildTable();
   }).catch(err => {
@@ -60,15 +79,15 @@ window.renderSchedulePage = function(){
           var cellKey = `${day}_${timeObj.t}_${group}`;
           var cellData = scheduleData[cellKey] || { sub1: "", sub2: "" };
 
-          if (isTeacher) {
+          if (isAdmin) {
             tableHtml += `<td style="border:1px solid var(--border); padding:4px; vertical-align:top;">
-              <textarea class="sched-input" data-key="${cellKey}" data-sub="sub1" style="width:100%; border:none; background:transparent; color:var(--text); resize:vertical; font-size:11px; min-height:40px;" placeholder="...">${cellData.sub1 || ''}</textarea>
+              <textarea class="sched-input" data-key="${cellKey}" data-sub="sub1" style="width:100%; border:none; background:transparent; color:var(--text); resize:vertical; font-size:11px; min-height:40px;" placeholder="...">${escapeHtml(cellData.sub1 || '')}</textarea>
               <div style="border-top:1px dashed var(--border); margin:2px 0;"></div>
-              <textarea class="sched-input" data-key="${cellKey}" data-sub="sub2" style="width:100%; border:none; background:transparent; color:var(--text); resize:vertical; font-size:11px; min-height:40px;" placeholder="...">${cellData.sub2 || ''}</textarea>
+              <textarea class="sched-input" data-key="${cellKey}" data-sub="sub2" style="width:100%; border:none; background:transparent; color:var(--text); resize:vertical; font-size:11px; min-height:40px;" placeholder="...">${escapeHtml(cellData.sub2 || '')}</textarea>
             </td>`;
           } else {
-            var sub1Html = cellData.sub1 ? `<div style="font-weight:bold; color:var(--text); margin-bottom:4px; white-space:pre-wrap;">${cellData.sub1}</div>` : '';
-            var sub2Html = cellData.sub2 ? `<div style="border-top:1px dashed var(--border); padding-top:4px; color:var(--text-soft); white-space:pre-wrap;">${cellData.sub2}</div>` : '';
+            var sub1Html = cellData.sub1 ? `<div style="font-weight:bold; color:var(--text); margin-bottom:4px; white-space:pre-wrap;">${escapeHtml(cellData.sub1)}</div>` : '';
+            var sub2Html = cellData.sub2 ? `<div style="border-top:1px dashed var(--border); padding-top:4px; color:var(--text-soft); white-space:pre-wrap;">${escapeHtml(cellData.sub2)}</div>` : '';
             var emptyHtml = (!cellData.sub1 && !cellData.sub2) ? '<span style="color:var(--border);">—</span>' : '';
             tableHtml += `<td style="border:1px solid var(--border); padding:6px; vertical-align:top; text-align:left; line-height:1.3;">${sub1Html}${sub2Html}${emptyHtml}</td>`;
           }
@@ -80,7 +99,7 @@ window.renderSchedulePage = function(){
     tableHtml += `</tbody></table></div>`;
     
     // БЛОК С КНОПКАМИ ДЛЯ ПРЕПОДАВАТЕЛЯ
-    if (isTeacher) {
+    if (isAdmin) {
       tableHtml += `<div style="margin-top:20px; display:flex; justify-content:center; gap:15px;">
         <button class="btn" id="saveScheduleBtn" style="padding:12px 30px; font-size:16px;">💾 Сохранить</button>
         <button class="btn btn-danger" id="clearScheduleBtn" style="padding:12px 30px; font-size:16px;">🗑 Очистить</button>
@@ -89,7 +108,7 @@ window.renderSchedulePage = function(){
 
     app.innerHTML += tableHtml;
 
-    if (isTeacher) {
+    if (isAdmin) {
       var saveBtn = document.getElementById("saveScheduleBtn");
       if (saveBtn) {
           saveBtn.onclick = function() {
@@ -98,9 +117,16 @@ window.renderSchedulePage = function(){
               if (!scheduleData[key]) scheduleData[key] = { sub1: "", sub2: "" };
               scheduleData[key][sub] = val;
             });
-            localStorage.setItem('mdk_schedule', JSON.stringify(scheduleData));
-            window.API.saveSchedule(scheduleData);
-            window.showToast("Расписание сохранено!", "ok");
+            localStorage.setItem("mdk_schedule", JSON.stringify(scheduleData));
+            saveBtn.disabled = true;
+            saveBtn.textContent = "Сохранение...";
+            window.API.saveSchedule(serializeSchedule(scheduleData)).then(function(res) {
+              if (!res || !res.success) throw new Error(res && res.error || "Сервер не подтвердил сохранение.");
+              window.showToast("Расписание сохранено на сервере.", "ok");
+            }).catch(function(err) {
+              console.error("Ошибка сохранения расписания", err);
+              window.showToast("Сохранено только на этом устройстве. Сервер недоступен или отказал в доступе.", "error");
+            }).finally(function() { saveBtn.disabled = false; saveBtn.textContent = "💾 Сохранить"; });
           };
       }
       
@@ -110,8 +136,13 @@ window.renderSchedulePage = function(){
             if (confirm("Вы уверены, что хотите полностью очистить расписание?")) {
               scheduleData = {};
               localStorage.removeItem('mdk_schedule');
-              window.API.saveSchedule({});
-              window.showToast("Расписание очищено", "info");
+              window.API.saveSchedule([]).then(function(res) {
+                if (!res || !res.success) throw new Error(res && res.error || "Сервер не подтвердил очистку.");
+                window.showToast("Расписание очищено на сервере.", "info");
+              }).catch(function(err) {
+                console.error("Ошибка очистки расписания", err);
+                window.showToast("Локальная копия очищена, но серверное расписание не изменено.", "error");
+              });
               window.renderSchedulePage();
             }
           };
