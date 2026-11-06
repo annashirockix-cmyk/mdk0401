@@ -8,7 +8,7 @@ window.state = window.state || {
     unlockedAchievements: []
 };
 
-window.customContent = { topics: [], files: [], lectures: [], tests: [], announcements: [] };
+window.customContent = { topics: [], files: [], lectures: [], tests: [], flashcards: [], announcements: [] };
 
 try { 
     var savedState = localStorage.getItem("mdk.state"); 
@@ -74,6 +74,8 @@ window.updateMenuVisibility = function() {
     var seasonalLink=document.querySelector('.drawer-item[href="#/seasonal"]'); if(seasonalLink) seasonalLink.style.display=window.state.student?"flex":"none";
     var teamsLink=document.querySelector('.drawer-item[href="#/teams"]'); if(teamsLink) teamsLink.style.display=(window.state.student||isTeacher)?"flex":"none";
     var museumLink=document.querySelector('.drawer-item[href="#/museum"]'); if(museumLink) museumLink.style.display=(window.state.student||isTeacher)?"flex":"none";
+    var editorLink=document.getElementById('menuCourseEditor'); if(editorLink)editorLink.style.display=isTeacher?'flex':'none';
+    var englishLinks=document.querySelectorAll('.english-drawer-item'); Array.prototype.forEach.call(englishLinks,function(link){link.style.display=window.state.activeCourseId==='EN'?'flex':'none';});
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
 };
 
@@ -165,6 +167,7 @@ window.loadGlobalCustomContent = function(callback) {
             window.customContent.files = res.data.filter(d => d.type === 'file');
             window.customContent.lectures = res.data.filter(d => d.type === 'lecture');
             window.customContent.tests = res.data.filter(d => d.type === 'test');
+            window.customContent.flashcards = res.data.filter(d => d.type === 'flashcards');
             window.customContent.announcements = res.data.filter(d => d.type === 'announcement');
         }
         if (callback) callback();
@@ -411,7 +414,7 @@ window.renderAchievementsPage = function() {
 // ==========================================
 // 5. СТРАНИЦА ТЕМЫ
 // ==========================================
-window.renderTopicPage = function(courseId, topicId) {
+window.renderTopicPage = function(courseId, topicId, activeTab) {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var course = window.MDK_DATA[courseId]; if (!course) { app.innerHTML = '<div class="module">Курс не найден</div>'; return; }
     var topic = null; 
@@ -553,7 +556,7 @@ window.renderTopicPage = function(courseId, topicId) {
         window.answerInlineTest = function(selected, correctIdx) { if (selected === correctIdx) correct++; currentQ++; renderQ(); };
         renderQ();
     };
-    window.switchTopicTab('lectures');
+    window.switchTopicTab(activeTab || 'lectures');
 };
 
 window.canAccessCourse = function(courseId) {
@@ -564,8 +567,8 @@ window.canAccessCourse = function(courseId) {
 };
 window.syncCourseSelector = function() {
     var sel=document.getElementById("mdkSelector"); if(!sel)return;
-    Array.prototype.forEach.call(sel.options,function(opt){opt.hidden=opt.value!=="ENGLISH_PORTAL"&&!(window.canAccessCourse&&window.canAccessCourse(opt.value));});
-    if(window.state.student||window.state.staff){var allowed=Array.prototype.filter.call(sel.options,opt=>opt.value!=="ENGLISH_PORTAL"&&window.canAccessCourse(opt.value));if(allowed.length){if(!window.canAccessCourse(window.state.activeCourseId))window.state.activeCourseId=allowed[0].value;sel.value=window.state.activeCourseId;}else sel.value="";}
+    Array.prototype.forEach.call(sel.options,function(opt){opt.hidden=!!opt.value&&!(window.canAccessCourse&&window.canAccessCourse(opt.value));});
+    if(window.state.student||window.state.staff){var allowed=Array.prototype.filter.call(sel.options,opt=>!!opt.value&&window.canAccessCourse(opt.value));if(allowed.length){if(!window.canAccessCourse(window.state.activeCourseId))window.state.activeCourseId=allowed[0].value;sel.value=window.state.activeCourseId;}else sel.value="";}
 };
 
 // ==========================================
@@ -747,7 +750,10 @@ window.router = function() {
     if (parts.length === 0 || parts[0] === "") { window.renderHomePage(); return; }
     var page = parts[0];
     
-    if (page === "topic" && parts.length >= 3) { if(window.canAccessCourse&&!window.canAccessCourse(parts[1])){window.renderHomePage();return;} window.renderTopicPage(parts[1], parts[2]); return; }
+    if (page === "topic" && parts.length >= 3) { if(window.canAccessCourse&&!window.canAccessCourse(parts[1])){window.renderHomePage();return;} window.renderTopicPage(parts[1], parts[2], parts[3] || "lectures"); return; }
+    if (page === "english-media" && window.renderEnglishMediaPage) { if(window.canAccessCourse&&!window.canAccessCourse("EN")){window.renderHomePage();return;} window.renderEnglishMediaPage(parts[1] || ""); return; }
+    if (page === "english-cards" && window.renderEnglishCardsPage) { if(window.canAccessCourse&&!window.canAccessCourse("EN")){window.renderHomePage();return;} window.renderEnglishCardsPage(parts[1] || "basic"); return; }
+    if (page === "english-tests" && window.renderEnglishTestsPage) { if(window.canAccessCourse&&!window.canAccessCourse("EN")){window.renderHomePage();return;} window.renderEnglishTestsPage(parts[1] || "basic"); return; }
     if (page === "videos") { window.renderVideosPage(); return; }
     if (page === "safety") { window.renderSafetyPage(); return; }
     if (page === "passports") { window.renderPassportsPage(); return; }
