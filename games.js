@@ -69,10 +69,6 @@ window.startGame = function(gameId) {
     if (iframeGames[gameId]) {
         container.innerHTML = `<iframe src="./${iframeGames[gameId]}" style="width:100%; height:80vh; border:none; display:block; border-radius:8px;"></iframe>`;
     } 
-    else if (gameId.startsWith("quiz_")) {
-        var qType = gameId.replace("quiz_", "");
-        startQuiz(container, qType);
-    }
     else if (gameId === 'gcode') { startGcode(container); }
     else if (gameId === 'minesweeper') { startMinesweeper(container); }
     else if (gameId === 'tictactoe') { startTicTacToe(container); }
@@ -83,65 +79,6 @@ window.startGame = function(gameId) {
     else if (gameId === 'party') { startParty(container); }
     else if (gameId === 'detective') { if (window.startDetectiveNetwork) window.startDetectiveNetwork(container); else container.innerHTML = '<p>Сетевая игра загружается. Обновите страницу.</p>'; }
 };
-
-// ================= ВИКТОРИНЫ =================
-function startQuiz(container, type) {
-    var questionsPool = (window._Q && window._Q[type]) ? window._Q[type] : [];
-    if (questionsPool.length === 0) {
-        container.innerHTML = '<div style="padding:20px;">Вопросы для этой викторины не найдены.</div>';
-        return;
-    }
-    
-    var questions = questionsPool.sort(() => Math.random() - 0.5).slice(0, 10);
-    var idx = 0, score = 0;
-
-    function renderQ() {
-        if (idx >= questions.length) {
-            var xpEarned = score * 10;
-            container.innerHTML = `<div style="padding:40px; text-align:center; width:100%;">
-                <h2 style="color:var(--ok);">Викторина завершена!</h2>
-                <p style="font-size:20px;">Ваш результат: <b>${score}</b> из ${questions.length}</p>
-                <p style="color:var(--gold); font-weight:bold; margin-top:10px;">Получено: +${xpEarned} XP</p>
-                <button class="btn" onclick="window.renderArcadePage()" style="margin-top:20px;">В меню игр</button>
-            </div>`;
-            
-            if (window.state) {
-                window.state.xp += xpEarned;
-                if (window.saveStudentData) window.saveStudentData();
-                if (window.renderUserChip) window.renderUserChip();
-            }
-            window.saveScore('quiz_' + type, score);
-            return;
-        }
-
-        var q = questions[idx];
-        var opts = q[1].split('|').map((text, i) => ({ text: text, isCorrect: (i === q[2]) }));
-        opts = opts.sort(() => Math.random() - 0.5);
-
-        var html = `<div style="padding:30px; width:100%; max-width:600px;">
-            <div style="font-size:14px; color:var(--muted); margin-bottom:10px;">Вопрос ${idx+1} из ${questions.length}</div>
-            <h3 style="margin-top:0; margin-bottom:20px; font-size:20px;">${q[0]}</h3>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                ${opts.map(o => `<button class="btn ghost" style="text-align:left; padding:15px; font-size:16px;" onclick="window.quizAnswer(this, ${o.isCorrect})">${o.text}</button>`).join('')}
-            </div>
-        </div>`;
-        container.innerHTML = html;
-
-        window.quizAnswer = function(btn, isCorrect) {
-            container.querySelectorAll('button').forEach(b => b.disabled = true);
-            if (isCorrect) {
-                score++;
-                btn.style.borderColor = 'var(--ok)';
-                btn.style.background = 'rgba(16, 185, 129, 0.2)';
-            } else {
-                btn.style.borderColor = 'var(--err)';
-                btn.style.background = 'rgba(239, 68, 68, 0.2)';
-            }
-            setTimeout(() => { idx++; renderQ(); }, 1000);
-        };
-    }
-    renderQ();
-}
 
 // ================= СМЕРТЕЛЬНАЯ ВЕЧЕРИНКА =================
 function startParty(container) {
@@ -397,7 +334,7 @@ function startCasino(container) {
 function startRoulette(container) {
     var msg = "Выберите цвет или число", spinResult = null;
     function render() {
-        var html = `<div style="padding:20px; text-align:center; min-width:280px;"><h3>🎡 Рулетка</h3><div style="font-size:60px; margin:20px 0; font-weight:bold; color:${spinResult === null ? 'var(--muted)' : (spinResult % 2 === 0 ? 'var(--err)' : '#000')}; background:${spinResult === null ? 'var(--card-soft)' : (spinResult === 0 ? 'var(--ok)' : (spinResult % 2 === 0 ? 'var(--err)' : '#333'))}; width:100px; height:100px; display:flex; align-items:center; justify-content:center; margin:0 auto; border-radius:50%; border:4px solid var(--border);">${spinResult !== null ? spinResult : '?'}</div><div style="font-size:16px; font-weight:bold; margin-bottom:15px;">${msg}</div><button class="btn" style="background:var(--err); color:#fff;" onclick="window.roulPlay('red', 2)">Красное (x2)</button> <button class="btn" style="background:#333; color:#fff;" onclick="window.roulPlay('black', 2)">Черное (x2)</button> <button class="btn" style="background:var(--ok); color:#000;" onclick="window.roulPlay('green', 35)">Зеро (x35)</button></div>`;
+        var html = `<div style="padding:20px; text-align:center; min-width:280px;"><h3>🎡 Рулетка</h3><div style="font-size:60px; margin:20px 0; font-weight:bold; color:${spinResult === null ? 'var(--muted)' : ([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(spinResult) ? '#fff' : '#fff')}; background:${spinResult === null ? 'var(--card-soft)' : (spinResult === 0 ? 'var(--ok)' : ([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(spinResult) ? 'var(--err)' : '#222'))}; width:100px; height:100px; display:flex; align-items:center; justify-content:center; margin:0 auto; border-radius:50%; border:4px solid var(--border);">${spinResult !== null ? spinResult : '?'}</div><div style="font-size:16px; font-weight:bold; margin-bottom:15px;">${msg}</div><button class="btn" style="background:var(--err); color:#fff;" onclick="window.roulPlay('red', 2)">Красное (x2)</button> <button class="btn" style="background:#333; color:#fff;" onclick="window.roulPlay('black', 2)">Черное (x2)</button> <button class="btn" style="background:var(--ok); color:#000;" onclick="window.roulPlay('green', 35)">Зеро (x35)</button></div>`;
         container.innerHTML = html;
     }
     window.roulPlay = function(color, mult) {
@@ -405,7 +342,8 @@ function startRoulette(container) {
         if (window.state.xp < bet && !window.state.staff) return alert("Недостаточно XP!");
         if (!window.state.staff) { window.state.xp -= bet; if(window.saveStudentData) window.saveStudentData(); if(window.renderUserChip) window.renderUserChip(); }
         spinResult = Math.floor(Math.random() * 37);
-        var isRed = spinResult !== 0 && spinResult % 2 === 0, isBlack = spinResult !== 0 && spinResult % 2 !== 0, isGreen = spinResult === 0;
+        var redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+        var isRed = redNumbers.indexOf(spinResult) >= 0, isBlack = spinResult !== 0 && !isRed, isGreen = spinResult === 0;
         if ((color === 'red' && isRed) || (color === 'black' && isBlack) || (color === 'green' && isGreen)) { msg = `Выигрыш! +${bet * mult} XP`; if (window.state) { window.state.xp += bet * mult; window.saveStudentData(); window.renderUserChip(); } } 
         else { msg = "Вы проиграли!"; }
         render();
