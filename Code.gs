@@ -829,8 +829,8 @@ function saveCustomContent_(data) {
   const user = editor_(data, courseId);
   const id = String(data.id || Utilities.getUuid());
   const type = String(data.type || "");
-  if (["topic", "lecture", "test", "flashcards", "file", "announcement"].indexOf(type) === -1) {
-    throw new Error("Допустимые типы материалов: topic, lecture, test, flashcards, file, announcement.");
+  if (["topic", "lecture", "test", "flashcards", "file", "announcement", "game"].indexOf(type) === -1) {
+    throw new Error("Допустимые типы материалов: topic, lecture, test, flashcards, file, announcement, game.");
   }
 
   const sheet = content_();
