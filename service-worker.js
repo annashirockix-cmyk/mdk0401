@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v20'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
+const CACHE_NAME = 'portal-cache-v21'; // <--- ВЕРСИЯ ИЗМЕНЕНА! Теперь браузер сбросит старый кэш.
 
 const STATIC_ASSETS = [
   './',
@@ -11,7 +11,6 @@ const STATIC_ASSETS = [
   './animations.css',
   './lecture-methodical.css',
   './api.js',
-  './Code.gs',
   './data-global.js',
   './data-0701.js',
   './data-0401.js',
