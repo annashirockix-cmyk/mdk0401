@@ -8,7 +8,7 @@
     newton:VIDEO_BASE+"Isaac_Newton_The_Force_of_Genius_-ex%20(1).pdf",
     newtonKeys:VIDEO_BASE+"Isaac_Newton_The_Force_of_Genius_-ex_keys.docx"
   };
-  function $(id){return document.getElementById(id);}
+  function $(id){return id.charAt(0)==="["?document.querySelector(id):document.getElementById(id);}
   function esc(v){return window.escapeHtml?window.escapeHtml(String(v==null?"":v)):String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
   function appStart(title){var app=$("app");if(!app)return null;app.innerHTML='<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>'+title+'</h1><p>Английский язык · Basic English и Technical English</p></section>';var crumb=$("crumbs");if(crumb)crumb.textContent=title;return app;}
   function permitted(){return !!(window.state&&(window.state.student||window.state.staff))&&(!window.canAccessCourse||window.canAccessCourse("EN"));}
