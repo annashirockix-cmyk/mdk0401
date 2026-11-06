@@ -824,8 +824,8 @@ function joinGameRoom_(data) {
   if(!/^[A-Z2-9]{6}$/.test(code)) throw new Error("Код комнаты должен содержать 6 символов.");
   lock.waitLock(10000);
   try { const room=gameRoomRow_(code); if(!room||room.status!=="open"||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
-    const state=parseGameState_(room.state); if(state.phase!=="lobby") throw new Error("Игра уже началась.");
-    if(user.email===room.hostEmail) throw new Error("Ведущий управляет игрой и не участвует как игрок.");
+    const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true};
+    if(state.phase!=="lobby") throw new Error("Игра уже началась.");
     state.players=state.players||[]; const existing=state.players.find(p=>email_(p.email)===user.email);
     if(!existing&&state.players.length>=12) throw new Error("Комната заполнена (максимум 12 игроков).");
     if(!existing) state.players.push({email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
