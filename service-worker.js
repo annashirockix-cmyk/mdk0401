@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v82'; // Обновление интеграции учебных симуляторов.
+const CACHE_NAME = 'portal-cache-v83'; // Обновление интеграции учебных симуляторов.
 
 const STATIC_ASSETS = [
   './',
@@ -43,6 +43,7 @@ const STATIC_ASSETS = [
   './stage2-portal.js',
   './assistant.js',
   './assistant-genz.js',
+  './subject-tutor.js',
   './easter-eggs.js',
   './exam-engine.js',
   './exam_0701.js',
@@ -89,7 +90,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v82');
+        console.log('[SW] Кэширование статических ресурсов версии v83');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
