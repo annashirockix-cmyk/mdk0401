@@ -78,6 +78,7 @@ function handleRequest_(e) {
       case "getstudents": result = getStudents_(data); break;
       case "saveresult": result = saveResult_(data); break;
       case "getresults": result = getResults_(data); break;
+      case "getpublicsubjectratings": result = getPublicSubjectRatings_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
@@ -477,6 +478,62 @@ function getResults_(data) {
   if(user.role==='teacher')list=list.filter(x=>hasCourseAccess_(user,x.courseId));
   if(data.courseId)list=list.filter(x=>x.courseId===String(data.courseId));
   list.sort((a,b)=>String(b.finishedAt).localeCompare(String(a.finishedAt)));return {success:true,results:list};
+}
+
+function getPublicSubjectRatings_(data) {
+  // Публичная таблица содержит только ФИО, группу и агрегированные учебные показатели.
+  // Email и исходные payload обучающихся не возвращаются.
+  const user = auth_(data);
+  const rows = results_().getDataRange().getValues().slice(1);
+  const latest = {};
+  rows.forEach(function (r) {
+    if (!r[0]) return;
+    const email = email_(r[0]);
+    const courseId = String(r[12] || "");
+    if (!courseId || (user.role === "student" && !hasCourseAccess_(user, courseId))) return;
+    const testId = String(r[3] || "");
+    const stamp = String(r[11] || "");
+    const key = email + "|" + courseId + "|" + testId;
+    if (!latest[key] || stamp >= String(latest[key][11] || "")) latest[key] = r;
+  });
+  const grouped = {};
+  Object.keys(latest).forEach(function (key) {
+    const r = latest[key], courseId = String(r[12] || "");
+    if (!grouped[courseId]) grouped[courseId] = {};
+    const studentKey = email_(r[0]);
+    if (!grouped[courseId][studentKey]) grouped[courseId][studentKey] = {
+      name: String(r[1] || "Обучающийся"),
+      group: String(r[2] || ""),
+      gradeSum: 0,
+      percentSum: 0,
+      completed: 0
+    };
+    const st = grouped[courseId][studentKey];
+    const grade = Number(r[5]) || 0;
+    if (grade > 0) { st.gradeSum += grade; st.percentSum += Number(r[8]) || 0; st.completed += 1; }
+  });
+  const ratings = {};
+  Object.keys(grouped).forEach(function (courseId) {
+    ratings[courseId] = Object.keys(grouped[courseId]).map(function (key) {
+      const st = grouped[courseId][key];
+      return {
+        name: st.name,
+        group: st.group,
+        averageGrade: st.completed ? Math.round(st.gradeSum / st.completed * 100) / 100 : 0,
+        averagePercent: st.completed ? Math.round(st.percentSum / st.completed) : 0,
+        completed: st.completed
+      };
+    }).sort(function (a, b) {
+      return b.averageGrade - a.averageGrade || b.averagePercent - a.averagePercent || b.completed - a.completed;
+    });
+  });
+  const subjectSummary = Object.keys(ratings).map(function (courseId) {
+    const list = ratings[courseId];
+    const participants = list.length;
+    const avg = participants ? list.reduce(function (sum, x) { return sum + x.averageGrade; }, 0) / participants : 0;
+    return { courseId: courseId, participants: participants, averageGrade: Math.round(avg * 100) / 100 };
+  }).sort(function (a, b) { return b.averageGrade - a.averageGrade || b.participants - a.participants; });
+  return { success: true, ratings: ratings, subjects: subjectSummary };
 }
 
 /* ---------- Teacher-created topics, lectures and tests ---------- */
