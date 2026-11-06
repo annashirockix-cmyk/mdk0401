@@ -415,7 +415,7 @@ function startRoulette(container) {
 
 // ================= G-КОД И ЗВЕЗДЫ =================
 function startGcode(container) {
-    container.innerHTML = `<div style="padding: 20px; width:100%; max-width:600px;"><h3 style="margin-top:0; text-align:center;">📐 G-код Рисование</h3><div style="display:flex; gap:10px; margin-bottom:15px;"><input type="text" id="gcodeInput" class="self-input" style="margin:0; flex:1;" placeholder="Например: G01 X50 Y50"><button class="btn" onclick="window.runGcode()">Выполнить</button></div><canvas id="gcodeCanvas" width="500" height="400" style="background:#fff; border-radius:8px; display:block; margin:0 auto; border:1px solid var(--border);"></canvas></div>`;
+    container.innerHTML = `<div style="padding: 20px; width:100%; max-width:600px;"><h3 style="margin-top:0; text-align:center;">📐 G-код Рисование</h3><div style="display:flex; gap:10px; margin-bottom:15px;"><input type="text" id="gcodeInput" class="self-input" style="margin:0; flex:1;" placeholder="Например: G01 X50 Y50"><button class="btn" onclick="window.runGcode()">Выполнить</button></div><p id="gcodeStatus" style="color:var(--muted);font-size:13px;">Поддерживаются G00/G0 и G01/G1, координаты X и Y.</p><canvas id="gcodeCanvas" width="500" height="400" style="background:#fff; border-radius:8px; display:block; margin:0 auto; border:1px solid var(--border);"></canvas></div>`;
     var canvas=document.getElementById("gcodeCanvas"), ctx=canvas.getContext("2d"), curX=250, curY=200; 
     ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
     for(let i=0; i<=500; i+=25) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke(); }
@@ -426,10 +426,15 @@ function startGcode(container) {
         var cmd=document.getElementById("gcodeInput").value.toUpperCase().trim(); 
         if(!cmd) return; 
         document.getElementById("gcodeInput").value=""; 
-        var parts=cmd.split(" "), g=parts[0], params={}; 
-        parts.slice(1).forEach(p=>{params[p[0]]=parseFloat(p.slice(1));}); 
-        if(g==="G00"){ if(params.X!==undefined)curX=250+params.X; if(params.Y!==undefined)curY=200-params.Y; ctx.beginPath(); ctx.moveTo(curX,curY); }
-        else if(g==="G01"){ if(params.X!==undefined)curX=250+params.X; if(params.Y!==undefined)curY=200-params.Y; ctx.lineTo(curX,curY); ctx.stroke(); }
+        var match=cmd.match(/^(G0?0|G0?1)\b/i), g=match?match[1].toUpperCase():"", params={}, re=/([XY])\s*(-?\d+(?:\.\d+)?)/gi, m;
+        while((m=re.exec(cmd))!==null) params[m[1].toUpperCase()]=Number(m[2]);
+        var status=document.getElementById("gcodeStatus");
+        if(!g||(!Object.prototype.hasOwnProperty.call(params,"X")&&!Object.prototype.hasOwnProperty.call(params,"Y"))){if(status)status.textContent="Команда не распознана. Пример: G01 X50 Y-25";return;}
+        var nx=Object.prototype.hasOwnProperty.call(params,"X")?250+params.X:curX, ny=Object.prototype.hasOwnProperty.call(params,"Y")?200-params.Y:curY;
+        if(nx<0||nx>500||ny<0||ny>400){if(status)status.textContent="Координата за пределами поля 500×400.";return;}
+        ctx.beginPath();ctx.moveTo(curX,curY);curX=nx;curY=ny;
+        if(g==="G00"||g==="G0"){ctx.moveTo(curX,curY);if(status)status.textContent="G00: быстрый переход без рисования.";}
+        else{ctx.lineTo(curX,curY);ctx.stroke();if(status)status.textContent="G01: выполнено линейное перемещение.";}
     }; 
     document.getElementById("gcodeInput").addEventListener("keydown", function(e) { if(e.key==="Enter") window.runGcode(); });
 }
