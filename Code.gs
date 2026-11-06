@@ -374,9 +374,21 @@ function login_(data) {
   let savedPayload = {};
   try { savedPayload = JSON.parse(user.payload || "{}"); } catch (e) {}
   const profile = {
+    xp: Number(savedPayload.xp) || 0,
+    activeCourseId: String(savedPayload.activeCourseId || ""),
+    results: savedPayload.results && typeof savedPayload.results === "object" ? savedPayload.results : {},
+    unlockedAchievements: Array.isArray(savedPayload.unlockedAchievements) ? savedPayload.unlockedAchievements : [],
     avatar: savedPayload.avatar || null,
     avatarEmoji: savedPayload.avatarEmoji || null,
-    avatarEffect: savedPayload.avatarEffect || null
+    avatarEffect: savedPayload.avatarEffect || null,
+    nickname: savedPayload.nickname || null,
+    purchasedThemes: Array.isArray(savedPayload.purchasedThemes) ? savedPayload.purchasedThemes : [],
+    purchasedTextEffects: Array.isArray(savedPayload.purchasedTextEffects) ? savedPayload.purchasedTextEffects : [],
+    activeTextEffect: savedPayload.activeTextEffect || "none",
+    purchasedBgEffects: Array.isArray(savedPayload.purchasedBgEffects) ? savedPayload.purchasedBgEffects : [],
+    activeBgEffect: savedPayload.activeBgEffect || "none",
+    purchasedCardEffects: Array.isArray(savedPayload.purchasedCardEffects) ? savedPayload.purchasedCardEffects : [],
+    activeCardEffect: savedPayload.activeCardEffect || "none"
   };
   return {
     success: true,
