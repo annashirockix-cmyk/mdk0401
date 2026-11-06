@@ -518,7 +518,7 @@ function getPublicSubjectRatings_(data) {
   const latest = {};
   rows.forEach(function (r) {
     const email = email_(r[0]), courseId = String(r[12] || "");
-    if (!courseId || (user.role === "student" && !hasCourseAccess_(user, courseId))) return;
+    if (!courseId || ((user.role === "student" || user.role === "teacher") && !hasCourseAccess_(user, courseId))) return;
     const testId = String(r[3] || ""), stamp = String(r[11] || "");
     const key = email + "|" + courseId + "|" + testId;
     if (!latest[key] || stamp >= String(latest[key][11] || "")) latest[key] = r;
