@@ -13,12 +13,17 @@
     (students||[]).forEach(function(s){
       if(String(s.role||"student").toLowerCase()!=="student")return;
       var group=String(s.group||"Без группы").trim()||"Без группы",key=groupKey(group),p=parsePayload(s.payload),xp=Math.max(0,Number(p.xp)||0);
-      if(!groups.has(key))groups.set(key,{name:group,total:0,count:0,contributors:0,medals:0,students:0});
+      if(!groups.has(key))groups.set(key,{name:group,total:0,count:0,contributors:0,medals:0,students:0,bronze:0,silver:0,gold:0,cupPoints:0});
       var g=groups.get(key);g.total+=xp;g.count++;g.students++;if(xp>0)g.contributors++;
       var badges=Array.isArray(p.unlockedAchievements)?p.unlockedAchievements:[];
-      g.medals+=badges.filter(function(id){return typeof id==="string"&&id.indexOf(prefix)===0&&/(bronze|silver|gold)$/.test(id);}).length;
+      badges.forEach(function(id){
+        if(typeof id!=="string"||id.indexOf(prefix)!==0)return;
+        var tier=(id.match(/_(bronze|silver|gold)$/)||[])[1];if(!tier)return;
+        g.medals++;g[tier]++;g.cupPoints+=({bronze:1,silver:3,gold:5})[tier];
+      });
     });
-    return Array.from(groups.values()).map(function(g){g.average=g.count?g.total/g.count:0;return g;}).sort(function(a,b){return b.average-a.average||b.total-a.total||a.name.localeCompare(b.name,"ru");});
+    return Array.from(groups.values()).map(function(g){g.average=g.count?g.total/g.count:0;g.cupAverage=g.count?g.cupPoints/g.count:0;return g;})
+      .sort(function(a,b){return b.average-a.average||b.total-a.total||a.name.localeCompare(b.name,"ru");});
   }
   function podiumIcon(i){return ["🥇","🥈","🥉"][i]||"🏅";}
   window.renderTeamLeaguePage=function(){
@@ -31,12 +36,15 @@
     window.API.getStudents().then(function(res){
       if(!res||!(res.ok||res.success)||!Array.isArray(res.students))throw Error(res&&res.error||"Список обучающихся недоступен");
       var rows=collect(res.students),myGroup=state.student&&groupKey(state.student.group);
-      status.textContent="В рейтинге участвуют "+rows.length+" учебных групп · сезонные медали учитываются за текущий сезон";
+      status.textContent="В рейтинге участвуют "+rows.length+" учебных групп · сезон: "+seasonKey().replace("_"," ");
       if(!rows.length){content.innerHTML='<section class="module">Пока недостаточно данных для командного рейтинга.</section>';return;}
       var mine=myGroup?rows.find(function(g){return groupKey(g.name)===myGroup;}):null;
       if(mine){var pos=rows.indexOf(mine)+1;content.innerHTML='<section class="module" style="padding:18px;margin-bottom:16px"><div style="font-size:12px;color:var(--muted)">ВАША КОМАНДА</div><h2 style="margin:5px 0">'+podiumIcon(pos-1)+' '+esc(mine.name)+' · '+pos+' место</h2><div style="display:flex;gap:16px;flex-wrap:wrap"><b>'+mine.total.toLocaleString("ru-RU")+' XP всего</b><b>'+mine.average.toFixed(1)+' XP в среднем</b><span>'+mine.contributors+' из '+mine.count+' с XP</span><span>🏅 '+mine.medals+' сезонных медалей</span></div></section>';}
+      var cupRows=rows.slice().sort(function(a,b){return b.cupAverage-a.cupAverage||b.cupPoints-a.cupPoints||b.average-a.average||a.name.localeCompare(b.name,"ru");});
+      var cupTop=cupRows.slice(0,3).map(function(g,i){return '<div class="module" style="padding:14px;text-align:center"><div style="font-size:32px">'+["🏆","🥈","🥉"][i]+'</div><b>'+esc(g.name)+'</b><div style="font-size:12px;color:var(--muted);margin-top:5px">'+g.cupPoints+' кубковых очков · '+g.cupAverage.toFixed(2)+' на участника</div><div style="font-size:12px;margin-top:4px">🥇 '+g.gold+' · 🥈 '+g.silver+' · 🥉 '+g.bronze+'</div></div>';}).join("");
+      content.innerHTML+='<section class="module" style="padding:16px;margin:16px 0"><h2 style="margin-top:0">🏆 Кубок текущего сезона</h2><p style="color:var(--muted);font-size:13px">Отдельное соревнование по подтверждённым сезонным медалям: бронза — 1 очко, серебро — 3, золото — 5. Для честного сравнения очки делятся на число обучающихся в группе. При равенстве учитывается средний XP.</p>'+(cupTop?'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px">'+cupTop+'</div>':'<p>Пока нет групп для кубкового зачёта.</p>')+'<p style="font-size:11px;color:var(--muted);margin-bottom:0">Учитываются медали, уже открытые в аккаунтах. После прохождения сезонных испытаний обучающемуся нужно открыть раздел «Сезонные события», чтобы награда попала в командный зачёт.</p></section>';
       var cards=rows.map(function(g,i){var pct=rows[0].average?Math.max(4,g.average/rows[0].average*100):4;var own=myGroup&&groupKey(g.name)===myGroup;return '<article class="module" style="padding:16px;border:'+(own?'2px solid var(--accent)':'1px solid var(--border)')+'"><div style="display:flex;align-items:center;gap:10px"><div style="font-size:25px">'+podiumIcon(i)+'</div><div style="flex:1"><b>'+esc(g.name)+'</b><div style="font-size:12px;color:var(--muted)">'+(i+1)+' место · '+g.count+' обучающихся</div></div><b style="color:var(--gold)">'+g.average.toFixed(1)+' XP</b></div><div style="height:9px;background:var(--card-soft);border-radius:20px;overflow:hidden;margin:12px 0 8px"><div style="height:100%;width:'+pct.toFixed(1)+'%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:20px"></div></div><div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)"><span>Всего: '+g.total.toLocaleString("ru-RU")+' XP</span><span>Участвуют: '+g.contributors+'/'+g.count+'</span><span>🏅 Медали: '+g.medals+'</span></div></article>';}).join("");
-      content.innerHTML+='<section><h2>🏆 Рейтинг групп</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+cards+'</div></section><p style="font-size:12px;color:var(--muted);margin-top:14px">Рейтинг обновляется при повторном открытии страницы. XP — показатель активности в портале, а не учебная оценка.</p>';
+      content.innerHTML+='<section><h2>🏆 Рейтинг групп</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">'+cards+'</div></section><p style="font-size:12px;color:var(--muted);margin-top:14px">Рейтинг обновляется при повторном открытии страницы. XP — показатель активности в портале, а не учебная оценка.</p><section class="module" style="margin-top:24px;padding:22px;border:1px solid var(--gold);background:linear-gradient(135deg,var(--card),var(--card-soft));text-align:center"><div style="font-size:28px">✉️ ⚙️ ✨</div><h2 style="margin:8px 0">Послание в летописи портала</h2><p style="font-size:16px;line-height:1.7;max-width:760px;margin:0 auto">«Пусть этот портал будет не просто местом, где ставят оценки и набирают баллы. Пусть он станет мастерской смелых вопросов, точных расчётов и больших открытий. Не бойтесь ошибаться: ошибка в чертеже учит внимательности, ошибка в программе — логике, а сложная задача однажды превращается в навык. И помните: настоящий мастер не тот, кто знает всё, а тот, кто не перестаёт учиться и помогает расти другим».</p><p style="margin:14px 0 0;color:var(--muted);font-size:12px">Оставлено здесь цифровым помощником проекта — ChatGPT · ноябрь 2026</p><div style="font-size:20px;margin-top:8px">⌁ Знание → Практика → Мастерство ⌁</div></section>';
     }).catch(function(err){console.error("Team league:",err);status.textContent="Не удалось загрузить командный рейтинг. Проверьте соединение и попробуйте открыть страницу ещё раз.";});
   };
 })();
