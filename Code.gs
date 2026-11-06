@@ -80,6 +80,7 @@ function handleRequest_(e) {
       case "getresults": result = getResults_(data); break;
       case "getpublicsubjectratings": result = getPublicSubjectRatings_(data); break;
       case "getmycourseresults": result = getMyCourseResults_(data); break;
+      case "savegcodeprogress": result = saveGCodeProgress_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
@@ -374,6 +375,7 @@ function login_(data) {
   let savedPayload = {};
   try { savedPayload = JSON.parse(user.payload || "{}"); } catch (e) {}
   const profile = {
+    gcodeProgress: savedPayload.gcodeProgress && typeof savedPayload.gcodeProgress === "object" ? savedPayload.gcodeProgress : null,
     xp: Number(savedPayload.xp) || 0,
     activeCourseId: String(savedPayload.activeCourseId || ""),
     results: savedPayload.results && typeof savedPayload.results === "object" ? savedPayload.results : {},
@@ -574,6 +576,20 @@ function getPublicSubjectRatings_(data) {
   return { success: true, ratings: ratings, subjects: subjectSummary };
 }
 
+function saveGCodeProgress_(data) {
+  const user = auth_(data);
+  if (user.role !== "student") throw new Error("Прогресс G-Code Lab доступен только обучающемуся.");
+  const incoming = data.progress && typeof data.progress === "object" ? data.progress : {};
+  const done = Array.isArray(incoming.done) ? Array.from(new Set(incoming.done.map(Number).filter(function(n){return Number.isInteger(n)&&n>=1&&n<=300;}))).slice(0,300) : [];
+  const known = ["Первый запуск","Азбука G/M","Командир траектории","Геометр","Архитектор контуров","Буквенный мастер","Мастер алфавита","Словесный программист","Автор инструкций","Легенда ЧПУ"];
+  const achievements = Array.isArray(incoming.achievements) ? incoming.achievements.filter(function(x){return known.indexOf(String(x))>=0;}) : [];
+  const progress = { level: Math.max(1,Math.min(300,Math.floor(Number(incoming.level)||1))), xp: Math.max(0,Math.min(3000,Math.floor(Number(incoming.xp)||0))), done: done, achievements: achievements, streak: Math.max(0,Math.min(300,Math.floor(Number(incoming.streak)||0))), updatedAt: Number(incoming.updatedAt)||Date.now() };
+  let payload = {};
+  try { payload = JSON.parse(user.payload || "{}"); } catch (e) {}
+  payload.gcodeProgress = progress;
+  writeUserFields_(user, { Payload: JSON.stringify(payload), UpdatedAt: new Date().toISOString() });
+  return { success: true, progress: progress };
+}
 function getMyCourseResults_(data) {
   const user = auth_(data), email = email_(user.email), requestedCourse = String(data.courseId || "");
   const list = results_().getDataRange().getValues().slice(1).filter(function (r) {
