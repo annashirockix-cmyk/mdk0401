@@ -181,3 +181,18 @@ body.fx-starfield-bg::before { content: ""; position: fixed; top: 0; left: 0; wi
   #userChipName { max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .journal-wrap { overflow-x: auto; }
 }
+
+/* Дополнительные настройки оформления портала */
+:root { --portal-font-scale: 1; }
+body { font-size: calc(16px * var(--portal-font-scale, 1)); }
+.bg-galaxy { background: radial-gradient(ellipse at 20% 20%, #34205c 0, transparent 38%), radial-gradient(ellipse at 80% 70%, #123d62 0, transparent 42%), #080b1d !important; background-attachment: fixed !important; }
+.bg-tech-grid { background-color: #101b2b !important; background-image: linear-gradient(rgba(56,189,248,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,.12) 1px, transparent 1px) !important; background-size: 28px 28px !important; }
+.bg-workshop { background: radial-gradient(circle at 50% 0, #34465b 0, transparent 45%), linear-gradient(135deg,#101820,#1d2935) !important; background-attachment: fixed !important; }
+.bg-aurora-wave { background: radial-gradient(ellipse at 10% 20%,rgba(34,211,238,.25),transparent 42%), radial-gradient(ellipse at 80% 80%,rgba(168,85,247,.24),transparent 45%),#071522 !important; background-attachment: fixed !important; }
+.bg-sunset { background: linear-gradient(145deg,#281044 0%,#713b55 48%,#d97745 100%) !important; background-attachment: fixed !important; }
+.fx-glass-card { background: rgba(255,255,255,.075) !important; backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.22) !important; box-shadow: 0 12px 35px rgba(0,0,0,.18); }
+.fx-pulse-card { border: 1px solid var(--accent) !important; box-shadow: 0 0 22px rgba(59,130,246,.28); }
+.fx-blueprint-card { background-image: linear-gradient(rgba(56,189,248,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.06) 1px,transparent 1px) !important; background-size: 18px 18px !important; border: 1px dashed #38bdf8 !important; }
+.prac-resources { margin: 18px 0; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-soft); }
+.prac-notice { padding: 10px 12px; border-left: 3px solid var(--gold); background: rgba(245,158,11,.08); border-radius: 6px; color: var(--text-soft); }
+.module, .card { transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
