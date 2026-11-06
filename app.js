@@ -8,7 +8,7 @@ window.state = window.state || {
     unlockedAchievements: []
 };
 
-window.customContent = { topics: [], files: [], lectures: [], tests: [] };
+window.customContent = { topics: [], files: [], lectures: [], tests: [], announcements: [] };
 
 try { 
     var savedState = localStorage.getItem("mdk.state"); 
@@ -141,6 +141,7 @@ window.loadGlobalCustomContent = function(callback) {
             window.customContent.files = res.data.filter(d => d.type === 'file');
             window.customContent.lectures = res.data.filter(d => d.type === 'lecture');
             window.customContent.tests = res.data.filter(d => d.type === 'test');
+            window.customContent.announcements = res.data.filter(d => d.type === 'announcement');
         }
         if (callback) callback();
     }).catch(err => {
