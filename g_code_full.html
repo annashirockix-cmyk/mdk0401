@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>G-Code Lab — 300 уровней</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--card:#121e31;--soft:#1b2a42;--line:#2d405d;--txt:#e8f0ff;--muted:#9fb0c9;--accent:#56d6c5;--gold:#ffd166;--ok:#75e0a3;--err:#ff8295}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#1b3150 0,transparent 38%),var(--bg);color:var(--txt);font:15px/1.5 system-ui,Segoe UI,sans-serif}
+header{padding:22px clamp(14px,4vw,44px);border-bottom:1px solid var(--line);background:#09111de8;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+h1{margin:0;font-size:clamp(22px,3vw,34px)}header p{margin:5px 0 0;color:var(--muted)}
+main{max-width:1280px;margin:auto;padding:20px;display:grid;gap:16px;grid-template-columns:minmax(280px,.8fr) minmax(420px,1.2fr)}
+.card{background:linear-gradient(145deg,var(--card),#101a2b);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 12px 35px #0003}
+.topline{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.pill{padding:6px 10px;border-radius:999px;background:var(--soft);border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.progress{height:9px;background:#263750;border-radius:99px;overflow:hidden;margin:12px 0}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#8e9eff);width:0}
+h2{margin:8px 0 10px;font-size:23px}h3{margin:16px 0 8px;font-size:16px;color:var(--accent)}
+p{margin:8px 0}.muted{color:var(--muted)}.task{font-size:17px;line-height:1.5}
+button,select{font:inherit}button{border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--txt);padding:10px 13px;cursor:pointer;font-weight:650}button:hover{border-color:var(--accent);transform:translateY(-1px)}button.primary{background:var(--accent);color:#06131b;border-color:transparent}button.gold{background:var(--gold);color:#231b08;border-color:transparent}button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.stat{background:var(--soft);border:1px solid var(--line);padding:10px;border-radius:10px}.stat b{display:block;font-size:20px}.stat small{color:var(--muted)}
+textarea{width:100%;min-height:270px;resize:vertical;background:#07101d;color:#c8f7e8;border:1px solid var(--line);border-radius:12px;padding:14px;font:13px/1.6 ui-monospace,Consolas,monospace;tab-size:2}
+canvas{width:100%;height:auto;display:block;background:#07101d;border:1px solid var(--line);border-radius:12px}
+.result{padding:12px;border-radius:10px;background:var(--soft);margin-top:10px;min-height:48px}.good{color:var(--ok)}.bad{color:var(--err)}
+.levels{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;max-height:170px;overflow:auto;margin-top:12px}.levels button{padding:6px 2px;font-size:11px}.levels button.done{border-color:var(--ok);color:var(--ok)}.levels button.current{background:var(--accent);color:#06131b}
+.achievement{display:inline-block;margin:4px;padding:6px 9px;border-radius:8px;background:#40351d;border:1px solid #846d2f;color:#ffe5a0;font-size:12px}
+@media(max-width:850px){main{grid-template-columns:1fr}.levels{grid-template-columns:repeat(8,1fr)}header{position:static}}
+</style></head>
+<body>
+<header><div class="topline"><div><h1>⚙️ G-Code Lab <span style="color:var(--accent)">300</span></h1><p>От первых команд до контуров, текста и разных плоскостей ЧПУ</p></div><div class="pill" id="headerProgress">0 / 300 уровней</div></div></header>
+<main>
+<section class="card">
+ <div class="topline"><span class="pill" id="levelKind">УРОВЕНЬ</span><span class="pill" id="planeTag">G17 · XY</span></div>
+ <h2 id="levelTitle">Загрузка лаборатории…</h2><div class="progress"><i id="bar"></i></div>
+ <div class="stats"><div class="stat"><b id="xp">0</b><small>XP</small></div><div class="stat"><b id="done">0</b><small>Пройдено</small></div><div class="stat"><b id="streak">0</b><small>Серия</small></div></div>
+ <h3>🎯 Задание</h3><p class="task" id="taskText"></p><h3>📘 Подсказка мастера</h3><p class="muted" id="hint"></p>
+ <div id="theoryBox" style="display:none"><h3>Мини-лекция</h3><p id="theoryText"></p><button class="gold" id="readTheory">Теорию изучил(а) — завершить уровень</button></div>
+ <div class="actions"><button id="prev">← Назад</button><button id="next">Следующий →</button><button id="showExample">Показать пример</button></div>
+ <h3>🏅 Достижения</h3><div id="achievements" class="muted">Пока нет. Каждый рубеж приближает к мастерству.</div>
+ <h3>Карта 300 уровней</h3><div id="levels" class="levels"></div>
+</section>
+<section class="card">
+ <div class="topline"><h2 style="margin:0">🧑‍💻 Редактор управляющей программы</h2><span class="pill">G00 · G01 · M03 · M05 · M30</span></div>
+ <p class="muted">Измени программу, проверь траекторию и только потом отправляй её на проверку. Это учебный симулятор, а не средство подготовки УП для реального станка.</p>
+ <textarea id="code" spellcheck="false" aria-label="Редактор G-кода"></textarea>
+ <div class="actions"><button class="primary" id="check">▶ Проверить программу</button><button id="draw">Отрисовать</button><button id="reset">Вернуть пример</button><button id="export">Экспорт прогресса</button></div>
+ <div class="result" id="result" aria-live="polite">Ожидаю программу. Сначала проверь код — потом режь металл только на учебном симуляторе 🙂</div>
+ <h3>🗺️ Визуализация траектории</h3><canvas id="view" width="760" height="500"></canvas>
+ <p class="muted" id="viewLabel">Красный пунктир — быстрый ход G00, бирюзовая линия — рабочая подача G01.</p>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+const STORE="gcode_lab_300_v1";
+const planes=[{g:"G17",axes:["X","Y"],label:"XY"},{g:"G18",axes:["X","Z"],label:"XZ"},{g:"G19",axes:["Y","Z"],label:"YZ"}];
+const glyph={
+A:["01110","10001","10001","11111","10001","10001","10001"],B:["11110","10001","10001","11110","10001","10001","11110"],C:["01111","10000","10000","10000","10000","10000","01111"],D:["11110","10001","10001","10001","10001","10001","11110"],E:["11111","10000","10000","11110","10000","10000","11111"],F:["11111","10000","10000","11110","10000","10000","10000"],G:["01111","10000","10000","10111","10001","10001","01111"],H:["10001","10001","10001","11111","10001","10001","10001"],I:["11111","00100","00100","00100","00100","00100","11111"],J:["00111","00010","00010","00010","10010","10010","01100"],K:["10001","10010","10100","11000","10100","10010","10001"],L:["10000","10000","10000","10000","10000","10000","11111"],M:["10001","11011","10101","10101","10001","10001","10001"],N:["10001","11001","10101","10011","10001","10001","10001"],O:["01110","10001","10001","10001","10001","10001","01110"],P:["11110","10001","10001","11110","10000","10000","10000"],Q:["01110","10001","10001","10001","10101","10010","01101"],R:["11110","10001","10001","11110","10100","10010","10001"],S:["01111","10000","10000","01110","00001","00001","11110"],T:["11111","00100","00100","00100","00100","00100","00100"],U:["10001","10001","10001","10001","10001","10001","01110"],V:["10001","10001","10001","10001","10001","01010","00100"],W:["10001","10001","10001","10101","10101","10101","01010"],X:["10001","10001","01010","00100","01010","10001","10001"],Y:["10001","10001","01010","00100","00100","00100","00100"],Z:["11111","00001","00010","00100","01000","10000","11111"],
+0:["01110","10001","10011","10101","11001","10001","01110"],1:["00100","01100","00100","00100","00100","00100","01110"],2:["01110","10001","00001","00010","00100","01000","11111"],3:["11110","00001","00001","01110","00001","00001","11110"],4:["00010","00110","01010","10010","11111","00010","00010"],5:["11111","10000","10000","11110","00001","00001","11110"],6:["01110","10000","10000","11110","10001","10001","01110"],7:["11111","00001","00010","00100","01000","01000","01000"],8:["01110","10001","10001","01110","10001","10001","01110"],9:["01110","10001","10001","01111","00001","00001","01110"]};
+const words=["CNC","GCODE","MASTER","MILL","LATHE","TOOL","STEEL","PART","AXIS","FEED","SPINDLE","SAFETY","METAL","CHIP","ZERO","WORK","SMART","ROBOT","LASER","MOTION"];
+const phrases=["CHECK THE ZERO","SAFE TOOL PATH","CNC IS SMART","VERIFY BEFORE CUT","KNOW YOUR G CODE","PLAN THEN MACHINE","MEASURE TWICE CUT ONCE","KEEP THE WORK AREA SAFE","CONTROL THE TOOL MOTION","CHECK OFFSETS BEFORE START"];
+const theory=[
+["G00 и G01","G00 выполняет быстрое позиционирование. G01 перемещает инструмент по прямой с заданной рабочей подачей F.","В программе должны быть безопасное позиционирование и рабочее перемещение."],
+["G02 и G03","G02 — круговая интерполяция по часовой стрелке, G03 — против часовой. Конкретный формат дуги зависит от стойки ЧПУ.","Помни: дуга требует корректного центра или радиуса и проверки постпроцессора."],
+["G17 / G18 / G19","G17 выбирает плоскость XY, G18 — XZ, G19 — YZ.","Плоскость определяет, в какой паре осей выполняется дуговая интерполяция."],
+["G20 и G21","G20 задаёт дюймовую систему единиц, G21 — метрическую.","Перед запуском проверь единицы в программе и на стойке."],
+["G40 / G41 / G42","G40 отменяет коррекцию радиуса, G41 и G42 задают коррекцию слева или справа от контура.","Коррекция зависит от направления движения и настройки стойки."],
+["G43","G43 включает коррекцию длины инструмента, обычно с указанием номера корректора H.","Не запускай обработку без проверки таблицы длин инструмента."],
+["G54–G59","G54–G59 выбирают рабочие системы координат заготовки.","Ноль детали должен быть измерен и подтверждён."],
+["G90 и G91","G90 — абсолютное задание координат, G91 — приращениями относительно текущей позиции.","Внимательно следи за активным режимом координат."],
+["F и S","F задаёт подачу, S — частоту вращения шпинделя. Единицы зависят от режима и стойки.","Режимы резания выбирают по материалу, инструменту и условиям обработки."],
+["M-коды","M03/M04 запускают шпиндель, M05 останавливает; M06 — смена инструмента; M08/M09 — СОЖ; M30 — конец программы.","M-коды зависят от конкретной системы ЧПУ. Проверяй руководство станка."]
+];
+let state={level:1,xp:0,done:[],achievements:[],streak:0};
+try{const saved=JSON.parse(localStorage.getItem(STORE)||"{}");state=Object.assign(state,saved);}catch(e){}
+const $=id=>document.getElementById(id), code=$("code"), canvas=$("view"),ctx=canvas.getContext("2d");
+const round=n=>Math.round(n*100)/100, fmt=n=>String(round(n));
+function save(){localStorage.setItem(STORE,JSON.stringify(state));}
+function milestone(){const marks={1:"Первый запуск",10:"Азбука G/M",30:"Командир траектории",60:"Геометр",90:"Архитектор контуров",120:"Буквенный мастер",180:"Мастер алфавита",240:"Словесный программист",270:"Автор инструкций",300:"Легенда ЧПУ"};Object.keys(marks).forEach(k=>{if(state.done.length>=Number(k)&&!state.achievements.includes(marks[k]))state.achievements.push(marks[k]);});}
+function polygon(n,r,rot){let p=[];for(let i=0;i<n;i++){let a=rot+i*2*Math.PI/n;p.push([round(Math.cos(a)*r+35),round(Math.sin(a)*r+35)]);}p.push(p[0]);return p;}
+function star(n,r){let p=[];for(let i=0;i<n*2;i++){let a=-Math.PI/2+i*Math.PI/n,rr=i%2?r*.43:r;p.push([round(Math.cos(a)*rr+35),round(Math.sin(a)*rr+35)]);}p.push(p[0]);return p;}
+function glyphLines(text){let lines=[],x=0;for(const ch of text){if(ch===" "){x+=4;continue;}const g=glyph[ch];if(!g){x+=7;continue;}for(let row=0;row<7;row++){let col=0;while(col<5){if(g[row][col]==="1"){let start=col;while(col+1<5&&g[row][col+1]==="1")col++;lines.push([[x+start,7-row],[x+col,7-row]]);}col++;}}x+=7;}return lines;}
+function shapeFor(n){
+ if(n>=91&&n<=180){const ch="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"[(n-91)%36];return {lines:glyphLines(ch),label:"Буква / цифра «"+ch+"»"};}
+ if(n>=181&&n<=240){const w=words[(n-181)%words.length];return {lines:glyphLines(w),label:"Слово «"+w+"»"};}
+ if(n>=241&&n<=270){const w=phrases[(n-241)%phrases.length];return {lines:glyphLines(w),label:"Фраза «"+w+"»"};}
+ if(n>=271){const p=planes[(n-271)%3],base=(n-271)%6;let lines=base===0?[polygon(6,26,0)]:base===1?[star(5,29)]:base===2?[polygon(8,27,Math.PI/8)]:base===3?[polygon(4,28,Math.PI/4)]:base===4?[polygon(5,29,0)]:[polygon(3,31,-Math.PI/2)];return {lines:lines.flatMap(x=>x.slice(1).map((v,i)=>[x[i],v])),label:"Контур в плоскости "+p.label,plane:p};}
+ if(n>=31&&n<=90){let k=n-31, sides=3+(k%10);let lines=k%7===0?[star(5,30)]:[polygon(sides,28,(k%5)*.12)];return {lines:lines.flatMap(x=>x.slice(1).map((v,i)=>[x[i],v])),label:"Геометрическая фигура · "+(k%7===0?"звезда":sides+"-угольник")};}
+ return {lines:[],label:"Командная тренировка"};
+}
+function planeFor(n){if(n>=271)return planes[(n-271)%3];if(n>=31&&n%6===0)return planes[(n/6|0)%3];return planes[0];}
+function levelInfo(n){
+ if(n<=10){let t=theory[n-1];return {kind:"ТЕОРИЯ",title:"Уровень "+n+" · "+t[0],task:"Изучи команду и её назначение. В реальной работе команда должна быть согласована с системой ЧПУ и технологией.",hint:t[2],theory:t[1],plane:planes[n%3],lines:[],required:["G21","G90","M03","M05","M30"]};}
+ if(n<=30){let cmds=[["G00","Быстрое позиционирование"],["G01","Линейная интерполяция"],["G02","Дуга по часовой стрелке"],["G03","Дуга против часовой стрелки"],["G17","Плоскость XY"],["G18","Плоскость XZ"],["G19","Плоскость YZ"],["G20","Дюймовая система"],["G21","Метрическая система"],["G40","Отмена коррекции радиуса"],["G41","Коррекция радиуса слева"],["G42","Коррекция радиуса справа"],["G43","Коррекция длины инструмента"],["G54","Рабочая система координат 1"],["G55","Рабочая система координат 2"],["G56","Рабочая система координат 3"],["G90","Абсолютные координаты"],["G91","Относительные координаты"],["M03","Вращение шпинделя"],["M05","Остановка шпинделя"]];let c=cmds[n-11];return {kind:"КОМАНДА",title:"Уровень "+n+" · "+c[0],task:"Покажи, что знаешь команду "+c[0]+" — "+c[1]+". Добавь её в программу и проверь обязательную структуру безопасного учебного фрагмента.",hint:"Не путай подготовительные G-команды и вспомогательные M-команды.",lines:[],required:[c[0],"M03","M05","M30"],plane:planes[0]};}
+ const s=shapeFor(n),p=s.plane||planeFor(n);return {kind:n<=90?"ФИГУРА":n<=180?"СИМВОЛ":n<=240?"СЛОВО":n<=270?"ФРАЗА":"МНОГОПЛОСКОСТНАЯ ОБРАБОТКА",title:"Уровень "+n+" · "+s.label,task:"Построй контур "+s.label+". Используй "+p.g+" и систему координат "+(n>=271?"G"+(54+(n-271)%6):"G54")+". Сравни фактическую траекторию с образцом.",hint:"G00 — быстрый переход к началу сегмента; G01 — рабочее движение. Внимательно проверь выбранную плоскость и активную систему координат.",lines:s.lines,plane:p,required:["G21",p.g,"G54","G90","M03","M05","M30"]};
+}
+function makeCode(info,n){
+ let p=info.plane||planes[0],axes=p.axes,lines=["%","O"+String(n).padStart(3,"0"),"G21",p.g,(n>=271?"G"+(54+(n-271)%6):"G54"),(n>=271&&n%2===0?"G91":"G90"),"G40","G00 "+axes[0]+"0 "+axes[1]+"0","M03 S1200","F120"];
+ if(info.lines&&info.lines.length){info.lines.forEach(function(seg){let a=seg[0],b=seg[1];if(n>=271&&n%2===0){lines.push("G00 "+axes[0]+fmt(a[0])+" "+axes[1]+fmt(a[1]));lines.push("G01 "+axes[0]+fmt(b[0]-a[0])+" "+axes[1]+fmt(b[1]-a[1]));}else{lines.push("G00 "+axes[0]+fmt(a[0])+" "+axes[1]+fmt(a[1]));lines.push("G01 "+axes[0]+fmt(b[0])+" "+axes[1]+fmt(b[1]));}});}
+ else {lines.push("G00 "+axes[0]+"10 "+axes[1]+"10","G01 "+axes[0]+"20 "+axes[1]+"10");}
+ lines.push("M05","M30","%");return lines.join("\n");
+}
+function parse(txt,info){
+ let pos={a:0,b:0},mode="G90",motion="G00",rapid=[],feed=[],modes=[],codes=[];
+ const axes=(info.plane||planes[0]).axes;
+ txt.toUpperCase().split(/\r?\n/).forEach(line=>{
+  line=line.split("(")[0].split(";")[0].trim();if(!line)return;
+  const gs=line.match(/G\d+/g)||[],ms=line.match(/M\d+/g)||[];gs.concat(ms).forEach(x=>codes.push(x));
+  gs.forEach(g=>{if(g==="G90"||g==="G91")mode=g;if(g==="G00"||g==="G0")motion="G00";if(g==="G01"||g==="G1")motion="G01";});
+  let ma=line.match(new RegExp(axes[0]+"(-?[0-9.]+)")),mb=line.match(new RegExp(axes[1]+"(-?[0-9.]+)"));
+  if(!ma&&!mb)return;let a=ma?Number(ma[1]):null,b=mb?Number(mb[1]):null,old={a:pos.a,b:pos.b};
+  if(mode==="G91"){if(a!==null)pos.a=round(pos.a+a);if(b!==null)pos.b=round(pos.b+b);}else{if(a!==null)pos.a=a;if(b!==null)pos.b=b;}
+  let seg=[ [old.a,old.b],[pos.a,pos.b] ];if(old.a!==pos.a||old.b!==pos.b)(motion==="G00"?rapid:feed).push(seg);
+ });
+ return {rapid:rapid,feed:feed,codes:codes};
+}
+function draw(paths,target){
+ ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#07101d";ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.strokeStyle="#1c3049";ctx.lineWidth=1;for(let x=0;x<canvas.width;x+=25){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}for(let y=0;y<canvas.height;y+=25){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}
+ ctx.strokeStyle="#3c5572";ctx.beginPath();ctx.moveTo(30,canvas.height/2);ctx.lineTo(canvas.width-20,canvas.height/2);ctx.moveTo(canvas.width/2,20);ctx.lineTo(canvas.width/2,canvas.height-20);ctx.stroke();
+ let all=(target||[]).flat().concat((paths.rapid||[]).flat(),(paths.feed||[]).flat());if(!all.length)return;
+ let xs=all.map(p=>p[0]),ys=all.map(p=>p[1]),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),scale=Math.min((canvas.width-100)/Math.max(1,maxX-minX),(canvas.height-100)/Math.max(1,maxY-minY)),ox=canvas.width/2-(minX+maxX)/2*scale,oy=canvas.height/2+(minY+maxY)/2*scale;
+ function path(list,color,dash,width){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);list.forEach(seg=>{ctx.beginPath();ctx.moveTo(ox+seg[0][0]*scale,oy-seg[0][1]*scale);ctx.lineTo(ox+seg[1][0]*scale,oy-seg[1][1]*scale);ctx.stroke();});ctx.setLineDash([]);}
+ path(target||[],"#42617e",[],2);path(paths.rapid||[],"#ff657a",[6,5],1.7);path(paths.feed||[], "#56d6c5",[],2.7);
+}
+function render(){
+ const n=Math.max(1,Math.min(300,Number(state.level)||1));state.level=n;let info=levelInfo(n);
+ $("levelKind").textContent=info.kind;$("levelTitle").textContent=info.title;$("taskText").textContent=info.task;$("hint").textContent=info.hint;
+ $("planeTag").textContent=(info.plane||planes[0]).g+" · "+(info.plane||planes[0]).label;
+ $("theoryBox").style.display=info.theory?"block":"none";$("theoryText").textContent=info.theory||"";
+ $("readTheory").style.display=info.theory?"inline-block":"none";
+ $("xp").textContent=state.xp;$("done").textContent=state.done.length;$("streak").textContent=state.streak;
+ $("bar").style.width=(state.done.length/300*100)+"%";$("headerProgress").textContent=state.done.length+" / 300 уровней";
+ $("prev").disabled=n===1;$("next").disabled=n===300||!state.done.includes(n);
+ $("achievements").innerHTML=state.achievements.length?state.achievements.map(x=>'<span class="achievement">🏅 '+x+'</span>').join(""):"Пока нет. Каждый рубеж приближает к мастерству.";
+ const levels=$("levels");levels.innerHTML="";for(let i=1;i<=300;i++){let b=document.createElement("button");b.textContent=i;b.className=(state.done.includes(i)?"done ":"")+(i===n?"current":"");b.title="Уровень "+i;b.onclick=()=>{state.level=i;render();};levels.appendChild(b);}
+ code.value=makeCode(info,n);draw({rapid:[],feed:[]},info.lines||[]);
+ $("result").textContent=info.theory?"Изучи мини-лекцию и отметь завершение.": "Пример загружен. Отредактируй его или сразу проверь.";
+}
+function complete(msg){
+ const n=state.level;if(!state.done.includes(n)){state.done.push(n);state.xp+=10;state.streak+=1;milestone();save();}
+ $("result").innerHTML='<span class="good">✓ '+msg+' Уровень '+n+' пройден · +10 XP.</span>';
+ $("xp").textContent=state.xp;$("done").textContent=state.done.length;$("streak").textContent=state.streak;$("bar").style.width=(state.done.length/300*100)+"%";$("headerProgress").textContent=state.done.length+" / 300 уровней";
+ $("achievements").innerHTML=state.achievements.map(x=>'<span class="achievement">🏅 '+x+'</span>').join("")||"";
+ $("next").disabled=n===300;
+}
+function check(){
+ const info=levelInfo(state.level),txt=code.value,parsed=parse(txt,info),missing=(info.required||[]).filter(c=>!parsed.codes.includes(c));
+ draw(parsed,info.lines||[]);
+ if(info.theory){$("result").innerHTML='<span class="bad">Для теоретического уровня нажми «Теорию изучил(а)» после чтения материала.</span>';return;}
+ if(missing.length){state.streak=0;save();$("result").innerHTML='<span class="bad">Не хватает обязательных команд: '+missing.join(", ")+'.</span>';return;}
+ if(info.lines&&info.lines.length){
+  const expected=info.lines,actual=parsed.feed;
+  if(actual.length!==expected.length){state.streak=0;save();$("result").innerHTML='<span class="bad">Количество рабочих сегментов не совпадает: ожидается '+expected.length+', найдено '+actual.length+'. Проверь G00/G01 и координаты.</span>';return;}
+  for(let i=0;i<expected.length;i++){let e=expected[i],a=actual[i];if(Math.abs(e[0][0]-a[0][0])>.15||Math.abs(e[0][1]-a[0][1])>.15||Math.abs(e[1][0]-a[1][0])>.15||Math.abs(e[1][1]-a[1][1])>.15){state.streak=0;save();$("result").innerHTML='<span class="bad">Сегмент '+(i+1)+' отличается от образца. Сравни начальную и конечную координаты.</span>';return;}}
+ }
+ complete("Траектория и обязательные G/M-команды проверены.");
+}
+$("check").onclick=check;$("draw").onclick=()=>draw(parse(code.value,levelInfo(state.level)),levelInfo(state.level).lines||[]);
+$("reset").onclick=render;$("showExample").onclick=render;
+$("readTheory").onclick=()=>{complete("Теория изучена.");$("next").disabled=state.level===300;};
+$("prev").onclick=()=>{state.level=Math.max(1,state.level-1);save();render();};
+$("next").onclick=()=>{if(state.done.includes(state.level)){state.level=Math.min(300,state.level+1);save();render();}};
+$("export").onclick=()=>{let blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="gcode-lab-progress.json";a.click();URL.revokeObjectURL(a.href);};
+render();
+})();
+</script></body></html>
