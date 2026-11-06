@@ -100,7 +100,7 @@
   if(originalRouter)window.router=function(){
     const p=(location.hash||"").replace(/^#/,"").split("/").filter(Boolean);
     const id=p[0]==="topic"?p[1]:(window.state.activeCourseId||"07.01");
-    if(isTeacher()&&!["account","login-help","links","games"].includes(p[0])&&!canCourse(id)){
+    if(isTeacher()&&!["account","login-help","links","games","course-editor","flashcard-editor"].includes(p[0])&&!canCourse(id)){
       window.showToast("Доступ к этой дисциплине закрыт администратором.","err");
       location.hash="#/";return;
     }
