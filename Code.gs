@@ -370,6 +370,14 @@ function login_(data) {
   }
 
   cache.remove(attemptKey);
+  // Возвращаем только безопасные поля оформления из собственного payload пользователя.
+  let savedPayload = {};
+  try { savedPayload = JSON.parse(user.payload || "{}"); } catch (e) {}
+  const profile = {
+    avatar: savedPayload.avatar || null,
+    avatarEmoji: savedPayload.avatarEmoji || null,
+    avatarEffect: savedPayload.avatarEffect || null
+  };
   return {
     success: true,
     email: user.email,
@@ -377,6 +385,7 @@ function login_(data) {
     group: user.group,
     role: user.role,
     courses: user.courses ? user.courses.split(",").filter(Boolean) : [],
+    profile: profile,
     token: createSession_(user)
   };
 }
