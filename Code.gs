@@ -484,52 +484,68 @@ function getPublicSubjectRatings_(data) {
   // Публичная таблица содержит только ФИО, группу и агрегированные учебные показатели.
   // Email и исходные payload обучающихся не возвращаются.
   const user = auth_(data);
-  const rows = results_().getDataRange().getValues().slice(1);
+  const rows = results_().getDataRange().getValues().slice(1).filter(function (r) { return !!r[0]; });
+  // Совместимость со старой схемой: часть результатов может храниться в students.payload.
+  const userSheet = users_(), userValues = userSheet.getDataRange().getValues(), userMap = headerMap_(userSheet);
+  userValues.slice(1).forEach(function (row) {
+    if (String(row[userMap.Role] || "").toLowerCase() !== "student" || !row[userMap.Email]) return;
+    let payload = {};
+    try { payload = JSON.parse(row[userMap.Payload] || "{}"); } catch (e) {}
+    const legacy = payload.results || {};
+    Object.keys(legacy).forEach(function (testId) {
+      const rec = legacy[testId];
+      if (!rec || typeof rec !== "object" || rec.grade == null) return;
+      let courseId = String(rec.courseId || "");
+      if (!courseId) {
+        const matches = CFG.COURSES.filter(function (id) { return testId.indexOf(id) >= 0; });
+        if (matches.length === 1) courseId = matches[0];
+        else {
+          const enrolled = String(row[userMap.Courses] || "").split(",").filter(Boolean);
+          if (enrolled.length === 1) courseId = enrolled[0];
+        }
+      }
+      if (!courseId) return;
+      const email = email_(row[userMap.Email]);
+      if (rows.some(function (r) { return email_(r[0]) === email && String(r[3]) === String(testId); })) return;
+      rows.push([
+        email, row[userMap.Name], row[userMap.Group], testId, rec.testTitle || testId,
+        rec.grade, rec.score || 0, rec.max || rec.maxScore || 0, rec.percent || 0,
+        rec.timeSpent || 0, rec.attempts || 1, rec.finishedAt || "", courseId
+      ]);
+    });
+  });
   const latest = {};
   rows.forEach(function (r) {
-    if (!r[0]) return;
-    const email = email_(r[0]);
-    const courseId = String(r[12] || "");
+    const email = email_(r[0]), courseId = String(r[12] || "");
     if (!courseId || (user.role === "student" && !hasCourseAccess_(user, courseId))) return;
-    const testId = String(r[3] || "");
-    const stamp = String(r[11] || "");
+    const testId = String(r[3] || ""), stamp = String(r[11] || "");
     const key = email + "|" + courseId + "|" + testId;
     if (!latest[key] || stamp >= String(latest[key][11] || "")) latest[key] = r;
   });
   const grouped = {};
   Object.keys(latest).forEach(function (key) {
-    const r = latest[key], courseId = String(r[12] || "");
+    const r = latest[key], courseId = String(r[12] || ""), studentKey = email_(r[0]);
     if (!grouped[courseId]) grouped[courseId] = {};
-    const studentKey = email_(r[0]);
     if (!grouped[courseId][studentKey]) grouped[courseId][studentKey] = {
-      name: String(r[1] || "Обучающийся"),
-      group: String(r[2] || ""),
-      gradeSum: 0,
-      percentSum: 0,
-      completed: 0
+      name: String(r[1] || "Обучающийся"), group: String(r[2] || ""), gradeSum: 0, percentSum: 0, completed: 0
     };
-    const st = grouped[courseId][studentKey];
-    const grade = Number(r[5]) || 0;
+    const st = grouped[courseId][studentKey], grade = Number(r[5]) || 0;
     if (grade > 0) { st.gradeSum += grade; st.percentSum += Number(r[8]) || 0; st.completed += 1; }
   });
   const ratings = {};
   Object.keys(grouped).forEach(function (courseId) {
     ratings[courseId] = Object.keys(grouped[courseId]).map(function (key) {
       const st = grouped[courseId][key];
-      return {
-        name: st.name,
-        group: st.group,
+      return { name: st.name, group: st.group,
         averageGrade: st.completed ? Math.round(st.gradeSum / st.completed * 100) / 100 : 0,
         averagePercent: st.completed ? Math.round(st.percentSum / st.completed) : 0,
-        completed: st.completed
-      };
+        completed: st.completed };
     }).sort(function (a, b) {
       return b.averageGrade - a.averageGrade || b.averagePercent - a.averagePercent || b.completed - a.completed;
     });
   });
   const subjectSummary = Object.keys(ratings).map(function (courseId) {
-    const list = ratings[courseId];
-    const participants = list.length;
+    const list = ratings[courseId], participants = list.length;
     const avg = participants ? list.reduce(function (sum, x) { return sum + x.averageGrade; }, 0) / participants : 0;
     return { courseId: courseId, participants: participants, averageGrade: Math.round(avg * 100) / 100 };
   }).sort(function (a, b) { return b.averageGrade - a.averageGrade || b.participants - a.participants; });
