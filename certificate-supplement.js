@@ -17,14 +17,17 @@
     var tableWrap=el("div");box.appendChild(tableWrap);
     var note=el("p","В приложение включаются только результаты, сохранённые в учебном портале. Незавершённые и неоценённые работы не влияют на средний балл.");note.style.cssText="font-size:11px;color:#526176;margin-top:16px";box.appendChild(note);
     app.appendChild(box);
+    var printButton=app.querySelector(".no-print button");
+    if(printButton){printButton.disabled=true;printButton.textContent="Загружаем приложение к сертификату…";}
+    function enablePrint(){if(printButton){printButton.disabled=false;printButton.textContent="🖨 Распечатать сертификат и приложение";}}
     function render(data){
       var rows=(data&&data.results)||[],stats=(data&&data.summary)||{};
       summary.textContent="Завершено работ: "+(stats.completed!=null?stats.completed:rows.length)+" · Оценено: "+(stats.graded||0)+" · Средний балл: "+(stats.averageGrade||0)+" · Средний результат: "+(stats.averagePercent||0)+"%";
       tableWrap.innerHTML="";
-      if(!rows.length){tableWrap.appendChild(el("p","По этой дисциплине пока нет сохранённых оценённых работ."));return;}
+      if(!rows.length){tableWrap.appendChild(el("p","По этой дисциплине пока нет сохранённых оценённых работ."));enablePrint();return;}
       var table=el("table");table.style.cssText="width:100%;border-collapse:collapse;font-size:13px";
       var head=el("thead"),hr=el("tr");["№","Учебная работа","Оценка","Результат","Дата"].forEach(function(x){var th=el("th",x);th.style.cssText="text-align:left;padding:9px;border-bottom:2px solid #315b7d";hr.appendChild(th);});head.appendChild(hr);table.appendChild(head);
-      var body=el("tbody");rows.forEach(function(r,i){var tr=el("tr");[String(i+1),r.testTitle||r.testId||"Работа",r.grade>0?String(r.grade):"—",r.percent!=null?String(r.percent)+"%":"—",r.finishedAt?String(r.finishedAt).slice(0,10):"—"].forEach(function(v){var td=el("td",v);td.style.cssText="padding:8px;border-bottom:1px solid #d6e0e9";tr.appendChild(td);});body.appendChild(tr);});table.appendChild(body);tableWrap.appendChild(table);
+      var body=el("tbody");rows.forEach(function(r,i){var tr=el("tr");[String(i+1),r.testTitle||r.testId||"Работа",r.grade>0?String(r.grade):"—",r.percent!=null?String(r.percent)+"%":"—",r.finishedAt?String(r.finishedAt).slice(0,10):"—"].forEach(function(v){var td=el("td",v);td.style.cssText="padding:8px;border-bottom:1px solid #d6e0e9";tr.appendChild(td);});body.appendChild(tr);});table.appendChild(body);tableWrap.appendChild(table);enablePrint();
     }
     if(window.API&&typeof API.getMyCourseResults==="function"){
       API.getMyCourseResults(courseId).then(function(res){if(res&&res.success)render(res);else render({results:[]});}).catch(function(){render({results:[]});});
