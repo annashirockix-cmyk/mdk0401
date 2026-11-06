@@ -45,10 +45,13 @@ canvas{width:100%;height:auto;display:block;background:#07101d;border:1px solid 
  <p class="muted" id="viewLabel">Красный пунктир — быстрый ход G00, бирюзовая линия — рабочая подача G01.</p>
 </section>
 </main>
+<script src="./api.js"></script>
 <script>
 (function(){
 "use strict";
-const STORE="gcode_lab_300_v1";
+let portalProfile={};try{portalProfile=JSON.parse(localStorage.getItem("mdk.state")||"{}");}catch(e){}
+const accountEmail=portalProfile.student&&portalProfile.student.email?String(portalProfile.student.email).trim().toLowerCase():"";
+const STORE="gcode_lab_300_v1"+(accountEmail?":"+accountEmail:"");
 const planes=[{g:"G17",axes:["X","Y"],label:"XY"},{g:"G18",axes:["X","Z"],label:"XZ"},{g:"G19",axes:["Y","Z"],label:"YZ"}];
 const glyph={
 A:["01110","10001","10001","11111","10001","10001","10001"],B:["11110","10001","10001","11110","10001","10001","11110"],C:["01111","10000","10000","10000","10000","10000","01111"],D:["11110","10001","10001","10001","10001","10001","11110"],E:["11111","10000","10000","11110","10000","10000","11111"],F:["11111","10000","10000","11110","10000","10000","10000"],G:["01111","10000","10000","10111","10001","10001","01111"],H:["10001","10001","10001","11111","10001","10001","10001"],I:["11111","00100","00100","00100","00100","00100","11111"],J:["00111","00010","00010","00010","10010","10010","01100"],K:["10001","10010","10100","11000","10100","10010","10001"],L:["10000","10000","10000","10000","10000","10000","11111"],M:["10001","11011","10101","10101","10001","10001","10001"],N:["10001","11001","10101","10011","10001","10001","10001"],O:["01110","10001","10001","10001","10001","10001","01110"],P:["11110","10001","10001","11110","10000","10000","10000"],Q:["01110","10001","10001","10001","10101","10010","01101"],R:["11110","10001","10001","11110","10100","10010","10001"],S:["01111","10000","10000","01110","00001","00001","11110"],T:["11111","00100","00100","00100","00100","00100","00100"],U:["10001","10001","10001","10001","10001","10001","01110"],V:["10001","10001","10001","10001","10001","01010","00100"],W:["10001","10001","10001","10101","10101","10101","01010"],X:["10001","10001","01010","00100","01010","10001","10001"],Y:["10001","10001","01010","00100","00100","00100","00100"],Z:["11111","00001","00010","00100","01000","10000","11111"],
@@ -68,7 +71,7 @@ const theory=[
 ["M-коды","M03/M04 запускают шпиндель, M05 останавливает; M06 — смена инструмента; M08/M09 — СОЖ; M30 — конец программы.","M-коды зависят от конкретной системы ЧПУ. Проверяй руководство станка."]
 ];
 let state={level:1,xp:0,done:[],achievements:[],streak:0};
-try{const saved=JSON.parse(localStorage.getItem(STORE)||"{}");state=Object.assign(state,saved);}catch(e){}
+try{const localProgress=JSON.parse(localStorage.getItem(STORE)||"{}"),remoteProgress=portalProfile.gcodeProgress||{};const saved=Number(remoteProgress.updatedAt)>Number(localProgress.updatedAt)?remoteProgress:localProgress;state=Object.assign(state,saved);}catch(e){}
 state.done=Array.isArray(state.done)?state.done.filter(n=>Number.isInteger(n)&&n>=1&&n<=300):[];
 state.achievements=Array.isArray(state.achievements)?state.achievements.filter(x=>typeof x==="string").slice(0,30):[];
 state.xp=Number.isFinite(Number(state.xp))?Math.max(0,Number(state.xp)):0;
@@ -76,7 +79,7 @@ state.streak=Number.isFinite(Number(state.streak))?Math.max(0,Number(state.strea
 state.level=Math.max(1,Math.min(300,Number(state.level)||1));
 const $=id=>document.getElementById(id), code=$("code"), canvas=$("view"),ctx=canvas.getContext("2d");
 const round=n=>Math.round(n*100)/100, fmt=n=>String(round(n));
-function save(){localStorage.setItem(STORE,JSON.stringify(state));}
+function save(sync){state.updatedAt=Date.now();localStorage.setItem(STORE,JSON.stringify(state));if(sync&&accountEmail&&window.API&&typeof API.saveGCodeProgress==="function"){API.saveGCodeProgress(state).then(function(res){if(!res||!res.success)console.warn("G-Code progress sync unavailable");}).catch(function(err){console.warn("G-Code progress sync failed",err);});}}
 function renderAchievements(){const box=$("achievements");box.textContent="";if(!state.achievements.length){box.textContent="Пока нет. Каждый рубеж приближает к мастерству.";return;}state.achievements.forEach(function(label){const badge=document.createElement("span");badge.className="achievement";badge.textContent="🏅 "+label;box.appendChild(badge);});}
 function milestone(){const marks={1:"Первый запуск",10:"Азбука G/M",30:"Командир траектории",60:"Геометр",90:"Архитектор контуров",120:"Буквенный мастер",180:"Мастер алфавита",240:"Словесный программист",270:"Автор инструкций",300:"Легенда ЧПУ"};Object.keys(marks).forEach(k=>{if(state.done.length>=Number(k)&&!state.achievements.includes(marks[k]))state.achievements.push(marks[k]);});}
 function polygon(n,r,rot){let p=[];for(let i=0;i<n;i++){let a=rot+i*2*Math.PI/n;p.push([round(Math.cos(a)*r+35),round(Math.sin(a)*r+35)]);}p.push(p[0]);return p;}
@@ -144,7 +147,7 @@ function render(){
  $("result").textContent=info.theory?"Изучи мини-лекцию и отметь завершение.": "Пример загружен. Отредактируй его или сразу проверь.";
 }
 function complete(msg){
- const n=state.level;if(!state.done.includes(n)){state.done.push(n);state.xp+=10;state.streak+=1;milestone();save();}
+ const n=state.level;if(!state.done.includes(n)){state.done.push(n);state.xp+=10;state.streak+=1;milestone();save(true);}
  $("result").innerHTML='<span class="good">✓ '+msg+' Уровень '+n+' пройден · +10 XP.</span>';
  $("xp").textContent=state.xp;$("done").textContent=state.done.length;$("streak").textContent=state.streak;$("bar").style.width=(state.done.length/300*100)+"%";$("headerProgress").textContent=state.done.length+" / 300 уровней";
  renderAchievements();
