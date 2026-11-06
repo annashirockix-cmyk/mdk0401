@@ -819,6 +819,7 @@ function createGameRoom_(data) {
     return {success:true,code:code,state:state,isHost:true};
   } finally { lock.releaseLock(); }
 }
+function publicGameState_(state) { const safe=JSON.parse(JSON.stringify(state)); (safe.players||[]).forEach(p=>{delete p.role;delete p.roleLabel;delete p.email;}); delete safe.privateMessages; delete safe.pendingNight; delete safe.votes; return safe; }
 function joinGameRoom_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), lock=LockService.getScriptLock();
   if(!/^[A-Z2-9]{6}$/.test(code)) throw new Error("Код комнаты должен содержать 6 символов.");
@@ -826,11 +827,11 @@ function joinGameRoom_(data) {
   try { const room=gameRoomRow_(code); if(!room||room.status!=="open"||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
     const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true};
     state.players=state.players||[]; const existing=state.players.find(p=>email_(p.email)===user.email);
-    if(existing){if(!existing.id)existing.id=Utilities.getUuid();room.sheet.getRange(room.row,3).setValue(JSON.stringify(state));return {success:true,code:code,state:state,isHost:false,selfId:existing.id};}
+    if(existing){if(!existing.id)existing.id=Utilities.getUuid();room.sheet.getRange(room.row,3).setValue(JSON.stringify(state));return {success:true,code:code,state:publicGameState_(state),isHost:false,selfId:existing.id,privateRole:existing.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};}
     if(state.phase!=="lobby") throw new Error("Игра уже началась. Новые участники больше не принимаются.");
     if(state.players.length>=12) throw new Error("Комната заполнена (максимум 12 игроков).");
     if(!existing) state.players.push({id:Utilities.getUuid(),email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
-    room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); return {success:true,code:code,state:state,selfId:(state.players||[]).find(p=>email_(p.email)===user.email).id};
+    room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); const joined=(state.players||[]).find(p=>email_(p.email)===user.email); return {success:true,code:code,state:publicGameState_(state),selfId:joined.id,privateRole:joined.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
   } finally { lock.releaseLock(); }
 }
 function getGameRoom_(data) {
@@ -839,8 +840,7 @@ function getGameRoom_(data) {
   const state=parseGameState_(room.state), isHost=user.email===room.hostEmail, player=(state.players||[]).find(p=>email_(p.email)===user.email);
   if(!isHost&&!player) throw new Error("Вы не состоите в этой комнате.");
   if(isHost) return {success:true,code:room.code,isHost:true,state:state};
-  const safe=JSON.parse(JSON.stringify(state)); (safe.players||[]).forEach(p=>{delete p.role;delete p.roleLabel;delete p.email;}); delete safe.privateMessages; delete safe.pendingNight; delete safe.votes;
-  return {success:true,code:room.code,isHost:false,state:safe,selfId:player.id||"",privateRole:player.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
+  return {success:true,code:room.code,isHost:false,state:publicGameState_(state),selfId:player.id||"",privateRole:player.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
 }
 function updateGameRoom_(data) {
   const user=auth_(data), room=gameRoomRow_(String(data.code||"").trim().toUpperCase()); if(!room) throw new Error("Комната не найдена.");
