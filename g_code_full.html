@@ -96,7 +96,7 @@ function makeCode(info,n){
  if(!required.some(function(c){return c==="G90"||c==="G91";}))lines.push("G90");
  if(!required.includes("G41")&&!required.includes("G42"))lines.push("G40");
  lines.push("G00 "+axes[0]+"0 "+axes[1]+"0","M03 S1200","F120");
- if(info.lines&&info.lines.length){let cur=[0,0];info.lines.forEach(function(seg){let a=seg[0],b=seg[1];if(n>=271&&n%2===0){lines.push("G00 "+axes[0]+fmt(a[0]-cur[0])+" "+axes[1]+fmt(a[1]-cur[1]));lines.push("G01 "+axes[0]+fmt(b[0]-a[0])+" "+axes[1]+fmt(b[1]-a[1]));}else{lines.push("G00 "+axes[0]+fmt(a[0])+" "+axes[1]+fmt(a[1]));lines.push("G01 "+axes[0]+fmt(b[0])+" "+axes[1]+fmt(b[1]));}cur=b;});}
+ if(info.lines&&info.lines.length){let cur=[0,0];info.lines.forEach(function(seg){let a=seg[0],b=seg[1];if(required.includes("G91")){lines.push("G00 "+axes[0]+fmt(a[0]-cur[0])+" "+axes[1]+fmt(a[1]-cur[1]));lines.push("G01 "+axes[0]+fmt(b[0]-a[0])+" "+axes[1]+fmt(b[1]-a[1]));}else{lines.push("G00 "+axes[0]+fmt(a[0])+" "+axes[1]+fmt(a[1]));lines.push("G01 "+axes[0]+fmt(b[0])+" "+axes[1]+fmt(b[1]));}cur=b;});}
  else {lines.push("G00 "+axes[0]+"10 "+axes[1]+"10","G01 "+axes[0]+"20 "+axes[1]+"10");}
  lines.push("M05","M30","%");return lines.join("\n");
 }
