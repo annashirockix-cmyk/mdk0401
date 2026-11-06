@@ -152,6 +152,9 @@ window.renderShopPage = function() {
             if (type === 'text') {
                 preview = `<div class="${item.id !== 'none' ? item.id : ''}" data-text="Текст" style="font-size:20px; font-weight:bold; margin-bottom:10px; height:40px;">${item.title}</div>`;
             }
+            if (type === 'fontSize') {
+                preview = '<div style="font-size:calc(16px * ' + item.scale + ');font-weight:bold;margin-bottom:10px;height:40px;">Аа 123</div>';
+            }
             if (type === 'font') {
                 preview = `<div style="font-family:${item.font}; font-size:20px; font-weight:bold; margin-bottom:10px; height:40px;">${item.title}</div>`;
             }
