@@ -19,6 +19,8 @@ const CFG = {
   INVITES: "Invites",
   PASSWORD_REQUESTS: "PasswordRequests",
   SETTINGS: "PortalSettings",
+  GAME_ROOMS: "GameRooms",
+  GAME_ACTIONS: "GameActions",
   SESSION_PREFIX: "portal_session:",
   SESSION_TTL: 21600, // 6 часов
   LEGACY_SALT: "portal_spo_2026",
@@ -32,7 +34,9 @@ const HEADERS = {
   Schedule: ["Schedule"],
   Invites: ["Code", "Courses", "CreatedBy", "CreatedAt", "ExpiresAt", "MaxUses", "Uses", "Active"],
   PasswordRequests: ["Id", "Email", "RequestedAt", "Status", "Note", "ResolvedAt", "ResolvedBy"],
-  PortalSettings: ["Key", "Value", "UpdatedAt", "UpdatedBy"]
+  PortalSettings: ["Key", "Value", "UpdatedAt", "UpdatedBy"],
+  GameRooms: ["Code", "HostEmail", "State", "CreatedAt", "ExpiresAt", "Status"],
+  GameActions: ["Id", "RoomCode", "Email", "Type", "Payload", "CreatedAt"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -87,6 +91,13 @@ function handleRequest_(e) {
       case "deactivateinvite": result = deactivateInvite_(data); break;
       case "getschedule": result = getSchedule_(data); break;
       case "saveschedule": result = saveSchedule_(data); break;
+      case "creategameroom": result = createGameRoom_(data); break;
+      case "joingameroom": result = joinGameRoom_(data); break;
+      case "getgameroom": result = getGameRoom_(data); break;
+      case "updategameroom": result = updateGameRoom_(data); break;
+      case "sendgameaction": result = sendGameAction_(data); break;
+      case "getgameactions": result = getGameActions_(data); break;
+      case "leavegameroom": result = leaveGameRoom_(data); break;
       default:
         result = { success: false, error: "Неизвестное действие: " + action };
     }
@@ -149,7 +160,7 @@ function settings_() { return ensureSheet_(CFG.SETTINGS); }
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
   return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings.";
@@ -787,6 +798,75 @@ function setGamesAccess_(data) {
 }
 
 
+/* ---------- Multiplayer Detective / Mafia rooms ---------- */
+function gameRooms_() { return ensureSheet_(CFG.GAME_ROOMS); }
+function gameActions_() { return ensureSheet_(CFG.GAME_ACTIONS); }
+function gameRoomRow_(code) {
+  const sh=gameRooms_(), values=sh.getDataRange().getValues(), target=String(code||"").trim().toUpperCase();
+  for(let i=1;i<values.length;i++) if(String(values[i][0]||"").toUpperCase()===target) return {sheet:sh,row:i+1,code:target,hostEmail:email_(values[i][1]),state:values[i][2],expiresAt:values[i][4],status:values[i][5]};
+  return null;
+}
+function parseGameState_(raw) { try { return typeof raw==="string" ? JSON.parse(raw||"{}") : (raw||{}); } catch(e) { throw new Error("Повреждено состояние игровой комнаты."); } }
+function createGameRoom_(data) {
+  const user=auth_(data), lock=LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    const sh=gameRooms_(); let code="";
+    for(let n=0;n<20;n++){ code=Array.from({length:6},()=> "ABCDEFGHJKLMNPQRSTUVWXYZ23456789".charAt(Math.floor(Math.random()*32))).join(""); if(!gameRoomRow_(code)) break; code=""; }
+    if(!code) throw new Error("Не удалось создать код комнаты.");
+    const now=new Date(), expires=new Date(now.getTime()+4*60*60*1000);
+    const state={phase:"lobby",round:0,players:[],pendingNight:{},votes:{},privateMessages:{},log:[],winner:"",updatedAt:now.toISOString()};
+    sh.appendRow([code,user.email,JSON.stringify(state),now.toISOString(),expires.toISOString(),"open"]);
+    return {success:true,code:code,state:state,isHost:true};
+  } finally { lock.releaseLock(); }
+}
+function joinGameRoom_(data) {
+  const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), lock=LockService.getScriptLock();
+  if(!/^[A-Z2-9]{6}$/.test(code)) throw new Error("Код комнаты должен содержать 6 символов.");
+  lock.waitLock(10000);
+  try { const room=gameRoomRow_(code); if(!room||room.status!=="open"||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
+    const state=parseGameState_(room.state); if(state.phase!=="lobby") throw new Error("Игра уже началась.");
+    if(user.email===room.hostEmail) throw new Error("Ведущий управляет игрой и не участвует как игрок.");
+    state.players=state.players||[]; const existing=state.players.find(p=>email_(p.email)===user.email);
+    if(!existing&&state.players.length>=12) throw new Error("Комната заполнена (максимум 12 игроков).");
+    if(!existing) state.players.push({email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
+    room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); return {success:true,code:code,state:state};
+  } finally { lock.releaseLock(); }
+}
+function getGameRoom_(data) {
+  const user=auth_(data), room=gameRoomRow_(String(data.code||"").trim().toUpperCase());
+  if(!room||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
+  const state=parseGameState_(room.state), isHost=user.email===room.hostEmail, player=(state.players||[]).find(p=>email_(p.email)===user.email);
+  if(!isHost&&!player) throw new Error("Вы не состоите в этой комнате.");
+  if(isHost) return {success:true,code:room.code,isHost:true,state:state};
+  const safe=JSON.parse(JSON.stringify(state)); (safe.players||[]).forEach(p=>{delete p.role;delete p.roleLabel;}); delete safe.privateMessages;
+  return {success:true,code:room.code,isHost:false,state:safe,privateRole:player.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
+}
+function updateGameRoom_(data) {
+  const user=auth_(data), room=gameRoomRow_(String(data.code||"").trim().toUpperCase()); if(!room) throw new Error("Комната не найдена.");
+  if(user.email!==room.hostEmail) throw new Error("Только ведущий может менять состояние игры.");
+  const state=parseGameState_(data.state); if(JSON.stringify(state).length>45000) throw new Error("Состояние комнаты слишком большое.");
+  state.updatedAt=new Date().toISOString(); room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); room.sheet.getRange(room.row,6).setValue(state.phase==="ended"?"closed":"open");
+  return {success:true,updatedAt:state.updatedAt};
+}
+function sendGameAction_(data) {
+  const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), room=gameRoomRow_(code); if(!room||room.status!=="open") throw new Error("Комната закрыта или не найдена.");
+  const state=parseGameState_(room.state), player=(state.players||[]).find(p=>email_(p.email)===user.email); if(!player||!player.alive) throw new Error("Вы не можете отправлять действия.");
+  const type=String(data.type||""); if(["night_kill","night_check","night_save","vote"].indexOf(type)<0) throw new Error("Неизвестное игровое действие.");
+  const payload=data.payload||{}, target=String(payload.target||""); if(target&&!(state.players||[]).some(p=>email_(p.email)===email_(target)&&p.alive)) throw new Error("Выбранная цель недоступна.");
+  const sh=gameActions_(), id=sh.getLastRow(); sh.appendRow([id,code,user.email,type,JSON.stringify(payload),new Date().toISOString()]); return {success:true,id:id};
+}
+function getGameActions_(data) {
+  const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), room=gameRoomRow_(code); if(!room) throw new Error("Комната не найдена.");
+  const state=parseGameState_(room.state), isHost=user.email===room.hostEmail; if(!isHost&&!(state.players||[]).some(p=>email_(p.email)===user.email)) throw new Error("Вы не состоите в комнате.");
+  const after=Math.max(0,Number(data.after)||0), values=gameActions_().getDataRange().getValues(), out=[];
+  for(let i=1;i<values.length;i++){const row=values[i],id=Number(row[0])||i;if(String(row[1]).toUpperCase()===code&&id>after){let payload={};try{payload=JSON.parse(row[4]||"{}");}catch(e){}out.push({id:id,email:email_(row[2]),type:String(row[3]),payload:payload,createdAt:row[5]});}}
+  return {success:true,actions:out.slice(-100)};
+}
+function leaveGameRoom_(data) {
+  const user=auth_(data), room=gameRoomRow_(String(data.code||"").trim().toUpperCase()); if(!room) return {success:true};
+  const lock=LockService.getScriptLock(); lock.waitLock(10000);
+  try {const state=parseGameState_(room.state);if(user.email===room.hostEmail){state.phase="ended";state.winner="Комната закрыта ведущим";room.sheet.getRange(room.row,6).setValue("closed");}else{state.players=(state.players||[]).filter(p=>email_(p.email)!==user.email);}room.sheet.getRange(room.row,3).setValue(JSON.stringify(state));return {success:true};}finally{lock.releaseLock();}
+}
 /* ---------- One-time import from the previous student-results spreadsheet ---------- */
 const LEGACY_RESULTS_SOURCE_ID = "1lpNmnxr8TCaG-3-FpqUMU1wMAHQmk82jNlnSRDGASDQ";
 const LEGACY_RESULTS_SOURCE_GID = 0;
