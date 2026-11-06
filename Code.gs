@@ -110,6 +110,7 @@ function handleRequest_(e) {
       case "gradeassignment": result = gradeAssignment_(data); break;
       case "getnotifications": result = getNotifications_(data); break;
       case "marknotificationread": result = markNotificationRead_(data); break;
+      case "markallnotificationsread": result = markAllNotificationsRead_(data); break;
       case "leavegameroom": result = leaveGameRoom_(data); break;
       default:
         result = { success: false, error: "Неизвестное действие: " + action };
@@ -532,6 +533,14 @@ function markNotificationRead_(data) {
     return {success:true};
   }
   throw new Error("Уведомление не найдено.");
+}
+function markAllNotificationsRead_(data) {
+  const user=auth_(data),lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const sh=notifications_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),now=new Date().toISOString();let count=0;
+    for(let i=1;i<vals.length;i++)if(email_(vals[i][m.RecipientEmail])===user.email&&!vals[i][m.ReadAt]){sh.getRange(i+1,m.ReadAt+1).setValue(now);count++;}
+    return {success:true,updated:count};
+  } finally {lock.releaseLock();}
 }
 
 function assignmentResultRecords_(emailFilter) {
