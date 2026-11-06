@@ -4,6 +4,22 @@
   const PLUGINS=["MAT","OT","PFI"];
   const allIds=Object.keys(COURSE_LABELS);
   const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function safeLectureHtml(html){
+    const box=document.createElement("div");
+    box.innerHTML=String(html||"");
+    const allowed=["P","BR","HR","H1","H2","H3","H4","H5","H6","DIV","SPAN","B","STRONG","I","EM","U","S","UL","OL","LI","TABLE","THEAD","TBODY","TFOOT","TR","TH","TD","CAPTION","BLOCKQUOTE","PRE","CODE","SUB","SUP","A"];
+    Array.from(box.querySelectorAll("*")).reverse().forEach(el=>{
+      if(allowed.indexOf(el.tagName)<0){const parent=el.parentNode;while(el.firstChild)parent.insertBefore(el.firstChild,el);parent.removeChild(el);return;}
+      Array.from(el.attributes).forEach(attr=>{
+        const name=attr.name.toLowerCase(),value=attr.value;
+        if(name==="class"||name==="title"||name==="colspan"||name==="rowspan"||name==="scope")return;
+        if(el.tagName==="A"&&name==="href"&&/^(https?:|mailto:|\.\/|\.\.\/|\/|#)/i.test(value)&&!/^\s*javascript:/i.test(value))return;
+        el.removeAttribute(attr.name);
+      });
+      if(el.tagName==="A"&&el.hasAttribute("href")){el.setAttribute("rel","noopener noreferrer");if(/^https?:/i.test(el.getAttribute("href")))el.setAttribute("target","_blank");}
+    });
+    return box.innerHTML;
+  }
   const me=()=>window.state.staff||window.state.student||{};
   const role=()=>String(me().role||(window.state.staff&&window.state.staff.role)||"student").toLowerCase();
   const isAdmin=()=>role()==="admin";
@@ -309,9 +325,16 @@
         const pct=Math.round(score/questions.length*100),grade=pct>=90?5:pct>=75?4:pct>=60?3:2,key="test_"+topicId+"_custom_"+test.id;
         window.state.results=window.state.results||{};window.state.results[key]={grade:grade,percent:pct,score:score,max:questions.length,finishedAt:new Date().toISOString()};
         if(window.saveStudentData)window.saveStudentData();
-        if(window.API&&window.API.saveResult&&window.state.student)window.API.saveResult({email:window.state.student.email,name:window.state.student.name,group:window.state.student.group,testId:key,testTitle:test.title,grade:grade,score:score,maxScore:questions.length,percent:pct,courseId:courseId});
-        area.innerHTML='<div class="module" style="text-align:center"><h2>Тест завершён</h2><p>Правильных ответов: '+score+' из '+questions.length+'</p><h2>Оценка: '+grade+'</h2><button class="btn" id="retryCustomTest">Пройти снова</button></div>';
-        document.getElementById("retryCustomTest").onclick=()=>runTest(test,courseId,topicId);return;
+
+        area.innerHTML='<div class="module" style="text-align:center"><h2>Тест завершён</h2><p>Правильных ответов: '+score+' из '+questions.length+'</p><h2>Оценка: '+grade+'</h2><p id="customResultSync" aria-live="polite">Результат сохранён на этом устройстве. Отправка в журнал…</p><button class="btn" id="retryCustomTest">Пройти снова</button></div>';
+        document.getElementById("retryCustomTest").onclick=()=>runTest(test,courseId,topicId);
+        const sync=document.getElementById("customResultSync");
+        if(window.API&&window.API.saveResult&&window.state.student){
+          window.API.saveResult({email:window.state.student.email,name:window.state.student.name,group:window.state.student.group,testId:key,testTitle:test.title,grade:grade,score:score,maxScore:questions.length,percent:pct,courseId:courseId})
+            .then(function(res){if(!res||!res.success)throw new Error(res&&res.error||"Сервер не подтвердил запись.");if(sync)sync.textContent="Результат также передан в журнал преподавателя." ;})
+            .catch(function(err){console.warn("Не удалось передать результат теста в журнал",err);if(sync)sync.textContent="Результат сохранён локально, но не передан в журнал. Проверьте подключение и повторите попытку позже.";});
+        } else if(sync) sync.textContent="Результат сохранён локально. Для передачи в журнал войдите в аккаунт обучающегося.";
+        return;
       }
       const q=questions[i];area.innerHTML='<p><b>Вопрос '+(i+1)+' из '+questions.length+'</b></p><h3>'+esc(q.q)+'</h3>'+(q.options||[]).map((o,j)=>'<button class="btn ghost custom-answer" data-i="'+j+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+esc(o)+'</button>').join("");
       area.querySelectorAll(".custom-answer").forEach(b=>b.onclick=function(){if(+b.dataset.i===+q.correct)score++;i++;show();});
@@ -333,7 +356,7 @@
     window.switchTopicTab=function(tab){
       if(tab==="custom-test"){document.querySelectorAll(".tab").forEach(b=>{b.classList.remove("active");b.classList.add("ghost");});const b=document.getElementById("tab-custom-test");if(b){b.classList.add("active");b.classList.remove("ghost");}const area=document.getElementById("topicContent");area.innerHTML=tests.map((t,i)=>'<div class="module"><h3>'+esc(t.title)+'</h3><p>Вопросов: '+(t.questions||[]).length+'</p><button class="btn start-custom-test" data-i="'+i+'">Начать тест</button></div>').join("");area.querySelectorAll(".start-custom-test").forEach(b=>b.onclick=()=>runTest(tests[+b.dataset.i],courseId,topicId));return;}
       originalSwitch.apply(this,arguments);
-      if(tab==="lectures"&&lectures.length){const area=document.getElementById("topicContent");lectures.forEach(l=>{const d=document.createElement("details");d.className="lec-accordion";d.open=true;const s=document.createElement("summary");s.textContent=(l.code||"Дополнительная лекция")+" · "+l.title;s.style="padding:14px;font-weight:bold;cursor:pointer";const body=document.createElement("div");body.className="lec-content";body.style="padding:18px;border-top:1px solid var(--border);line-height:1.6";body.innerHTML=l.content||"";d.appendChild(s);d.appendChild(body);area.appendChild(d);});}
+      if(tab==="lectures"&&lectures.length){const area=document.getElementById("topicContent");lectures.forEach(l=>{const d=document.createElement("details");d.className="lec-accordion";d.open=true;const s=document.createElement("summary");s.textContent=(l.code||"Дополнительная лекция")+" · "+l.title;s.style="padding:14px;font-weight:bold;cursor:pointer";const body=document.createElement("div");body.className="lec-content";body.style="padding:18px;border-top:1px solid var(--border);line-height:1.6";body.innerHTML=safeLectureHtml(l.content);d.appendChild(s);d.appendChild(body);area.appendChild(d);});}
     };
     window.switchTopicTab("lectures");
   };
