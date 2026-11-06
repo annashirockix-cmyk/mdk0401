@@ -39,7 +39,8 @@ const HEADERS = {
   GameActions: ["Id", "RoomCode", "Email", "Type", "Payload", "CreatedAt"],
   Assignments: ["Id", "CourseId", "Title", "Topic", "Level", "WorkType", "DueAt", "TargetType", "TargetValue", "Instructions", "Criteria", "CreatedBy", "CreatedAt", "Status"],
   AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
-  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"]
+  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"],
+  Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -107,6 +108,8 @@ function handleRequest_(e) {
       case "getassignments": result = getAssignments_(data); break;
       case "submitassignment": result = submitAssignment_(data); break;
       case "gradeassignment": result = gradeAssignment_(data); break;
+      case "getnotifications": result = getNotifications_(data); break;
+      case "marknotificationread": result = markNotificationRead_(data); break;
       case "leavegameroom": result = leaveGameRoom_(data); break;
       default:
         result = { success: false, error: "Неизвестное действие: " + action };
@@ -167,16 +170,17 @@ function settings_() { return ensureSheet_(CFG.SETTINGS); }
 function assignments_() { return ensureSheet_("Assignments"); }
 function assignmentSubmissions_() { return ensureSheet_("AssignmentSubmissions"); }
 function assignmentSubmissionHistory_() { return ensureSheet_("AssignmentSubmissionHistory"); }
+function notifications_() { return ensureSheet_("Notifications"); }
 
 /**
  * Запустите вручную один раз после добавления SPREADSHEET_ID.
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
-  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory.";
+  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications.";
 }
 
 /* ---------- Common helpers and authentication ---------- */
@@ -505,6 +509,31 @@ function saveResult_(data) {
   return { success: true, attempts: attempts };
 }
 
+
+/* ---------- In-app notifications ---------- */
+function createNotification_(recipientEmail, type, title, message, courseId, relatedId) {
+  const recipient=email_(recipientEmail); if(!recipient)return;
+  notifications_().appendRow([Utilities.getUuid(),recipient,String(type||"info").slice(0,40),String(title||"Уведомление").slice(0,180),String(message||"").slice(0,500),String(courseId||""),String(relatedId||""),new Date().toISOString(),""]);
+}
+function getNotifications_(data) {
+  const user=auth_(data),sh=notifications_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+  const items=vals.slice(1).map(function(r,i){
+    if(email_(r[m.RecipientEmail])!==user.email)return null;
+    return {id:String(r[m.Id]||""),type:String(r[m.Type]||"info"),title:String(r[m.Title]||""),message:String(r[m.Message]||""),courseId:String(r[m.CourseId]||""),relatedId:String(r[m.RelatedId]||""),createdAt:String(r[m.CreatedAt]||""),readAt:String(r[m.ReadAt]||""),row:i+2};
+  }).filter(Boolean).sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));}).slice(0,60);
+  return {success:true,notifications:items,unread:items.filter(function(x){return !x.readAt;}).length};
+}
+function markNotificationRead_(data) {
+  const user=auth_(data),id=String(data.id||"");if(!id)throw new Error("Не указано уведомление.");
+  const sh=notifications_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+  for(let i=1;i<vals.length;i++)if(String(vals[i][m.Id]||"")===id){
+    if(email_(vals[i][m.RecipientEmail])!==user.email)throw new Error("Нет доступа к этому уведомлению.");
+    if(!vals[i][m.ReadAt])sh.getRange(i+1,m.ReadAt+1).setValue(new Date().toISOString());
+    return {success:true};
+  }
+  throw new Error("Уведомление не найдено.");
+}
+
 function assignmentResultRecords_(emailFilter) {
   const as=assignments_(), av=as.getDataRange().getValues(), ah=headerMap_(as);
   const ss=assignmentSubmissions_(), sv=ss.getDataRange().getValues(), sh=headerMap_(ss), byId={};
@@ -739,6 +768,7 @@ function submitAssignment_(data) {
     hist.appendRow([Utilities.getUuid(),id,submissionId,student.email,student.name,student.group,answer,now,attempt]);
     const row=[submissionId,id,student.email,student.name,student.group,answer,now,"submitted","","","",""];
     if(i>=0)sub.getRange(i+2,1,1,row.length).setValues([row]);else sub.appendRow(row);
+    createNotification_(String(a[h.CreatedBy]||""),"submission",attempt>1?"Повторная отправка задания":"Новый ответ на задание",student.name+" ("+student.group+") отправил(а) работу: "+String(a[h.Title]||""),cid,id);
     return {success:true,submittedAt:now,attempt:attempt,submissionId:submissionId};
   }finally{lock.releaseLock();}
 }
@@ -751,7 +781,9 @@ function gradeAssignment_(data) {
   const row=vals[i+1], aid=String(row[m.AssignmentId]||""), as=assignments_(), av=as.getDataRange().getValues(), ah=headerMap_(as), a=av.slice(1).find(function(r){return String(r[ah.Id])===aid;});
   if(!a) throw new Error("Назначение не найдено.");
   const teacher=editor_(data,String(a[ah.CourseId]||""));
-  sh.getRange(i+2,m.Status+1).setValue("reviewed"); sh.getRange(i+2,m.Grade+1).setValue(grade); sh.getRange(i+2,m.Feedback+1).setValue(String(data.feedback||"").slice(0,4000)); sh.getRange(i+2,m.ReviewedBy+1).setValue(teacher.email); sh.getRange(i+2,m.ReviewedAt+1).setValue(new Date().toISOString());
+  const feedback=String(data.feedback||"").slice(0,4000);
+  sh.getRange(i+2,m.Status+1).setValue("reviewed"); sh.getRange(i+2,m.Grade+1).setValue(grade); sh.getRange(i+2,m.Feedback+1).setValue(feedback); sh.getRange(i+2,m.ReviewedBy+1).setValue(teacher.email); sh.getRange(i+2,m.ReviewedAt+1).setValue(new Date().toISOString());
+  createNotification_(String(row[m.StudentEmail]||""),"grade","Работа проверена","По заданию «"+String(a[ah.Title]||"")+"» выставлена оценка: "+grade+"/5."+(feedback?" Есть комментарий преподавателя.":""),String(a[ah.CourseId]||""),aid);
   return {success:true};
 }
 /* ---------- Teacher-created topics, lectures and tests ---------- */
