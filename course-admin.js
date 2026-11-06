@@ -109,6 +109,7 @@
     }
     if(isTeacher()&&!isAdmin()&&p[0]==="journal"){(window.renderJournalPage||renderTeacherJournal)();return;}
     if(p[0]==="course-editor"){window.renderCourseEditorPage();return;}
+    if(p[0]==="flashcard-editor"&&window.renderFlashcardEditorPage){window.renderFlashcardEditorPage();return;}
     if(p[0]==="admin"&&!isAdmin()){
       const app=document.getElementById("app");if(app)app.innerHTML='<div class="module">Панель администратора доступна только администратору.</div>';return;
     }
