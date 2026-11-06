@@ -70,6 +70,7 @@ window.updateMenuVisibility = function() {
     var accessLink=document.querySelector('.drawer-item[href="#/access"]'); if(accessLink) accessLink.style.display=isTeacher?"flex":"none";
     var taskLink=document.querySelector('.drawer-item[href="#/teacher-tasks"]'); var dashLink=document.getElementById("menuTeacherDashboard"); if(dashLink)dashLink.style.display=isTeacher?"flex":"none"; if(taskLink) taskLink.style.display=(isTeacher || !!window.state.student)?"flex":"none";
     var learningPathLink=document.querySelector('.drawer-item[href="#/learning-path"]'); if(learningPathLink) learningPathLink.style.display=window.state.student?"flex":"none";
+    var missionsLink=document.querySelector('.drawer-item[href="#/missions"]'); if(missionsLink) missionsLink.style.display=window.state.student?"flex":"none";
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
 };
 
@@ -765,6 +766,7 @@ window.router = function() {
     if (page === "teacher-dashboard" && window.renderTeacherDashboard) { window.renderTeacherDashboard(); return; }
     if (page === "student-progress" && window.renderStudentProgressPage) { window.renderStudentProgressPage(parts[1] || ""); return; }
     if (page === "learning-path" && window.renderLearningPathPage) { window.renderLearningPathPage(); return; }
+    if (page === "missions" && window.renderLearningMissionsPage) { window.renderLearningMissionsPage(); return; }
     if (page === "portfolio" && window.renderPortfolioPage) { window.renderPortfolioPage(); return; }
     if (page === "subject-tutor" && window.renderSubjectTutor) { window.renderSubjectTutor(); return; }
     if (page === "gcode-lab" && window.renderGCodeLabPortal) { window.renderGCodeLabPortal(); return; }
