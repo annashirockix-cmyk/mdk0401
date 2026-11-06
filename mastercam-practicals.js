@@ -18,8 +18,16 @@
     5: { code: "5.2", section: "5", title: "Проверка и Вывод УП", focus: "Проверка траекторий, выявление ошибок и получение управляющей программы", task: "Откройте папку урока 5. Изучите приложенные материалы. Выполните Backplot и Verify, проверьте заготовку, оснастку и возможные столкновения. Выполните постпроцессирование, проверьте полученный G-код и сохраните УП. В отчёте перечислите найденные ошибки (если есть) и способы их устранения." }
   };
 
+  // Практические занятия вынесены в самостоятельный раздел курса,
+  // чтобы не смешивать их с теоретическими лекциями разделов 1–5.
+  var practicalSection = course.sections.find(function (s) { return s.id === "mc-practicals"; });
+  if (!practicalSection) {
+    practicalSection = { id: "mc-practicals", code: "Практические занятия", title: "Практические уроки 1–5", topics: [] };
+    course.sections.push(practicalSection);
+  }
+
   Object.keys(lessonMeta).forEach(function (key) {
-    var meta = lessonMeta[key], section = course.sections.find(function (s) { return String(s.code || "").indexOf("Раздел " + meta.section) === 0; });
+    var meta = lessonMeta[key], section = practicalSection;
     if (!section) return;
     var id = "mc-practical-" + key;
     if ((section.topics || []).some(function (t) { return t.id === id; })) return;
