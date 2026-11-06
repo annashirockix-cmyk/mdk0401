@@ -8,7 +8,7 @@ window.state = window.state || {
     unlockedAchievements: []
 };
 
-window.customContent = { topics: [], files: [], lectures: [], tests: [], flashcards: [], announcements: [] };
+window.customContent = { topics: [], files: [], lectures: [], tests: [], flashcards: [], games: [], announcements: [] };
 
 try { 
     var savedState = localStorage.getItem("mdk.state"); 
@@ -169,6 +169,7 @@ window.loadGlobalCustomContent = function(callback) {
             window.customContent.lectures = res.data.filter(d => d.type === 'lecture');
             window.customContent.tests = res.data.filter(d => d.type === 'test');
             window.customContent.flashcards = res.data.filter(d => d.type === 'flashcards');
+            window.customContent.games = res.data.filter(d => d.type === 'game');
             window.customContent.announcements = res.data.filter(d => d.type === 'announcement');
         }
         if (callback) callback();
@@ -551,10 +552,10 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             }
             var q = questions[currentQ];
             var html = `<div style="display:flex; justify-content:space-between; margin-bottom:15px;"><b>Вопрос ${currentQ+1} из ${questions.length}</b></div><div style="font-weight:bold; margin-bottom:15px; font-size:16px;">${q.q}</div>`;
-            q.options.forEach((opt, i) => { html += `<button class="btn ghost" style="display:block; width:100%; text-align:left; margin-top:5px; padding:10px;" onclick="window.answerInlineTest(${i}, ${q.correct})">${opt}</button>`; });
+            q.options.forEach((opt, i) => { html += `<button class="btn ghost" style="display:block; width:100%; text-align:left; margin-top:5px; padding:10px;" onclick="window.answerInlineTest(${i})">${opt}</button>`; });
             contentArea.innerHTML = html;
         }
-        window.answerInlineTest = function(selected, correctIdx) { if (selected === correctIdx) correct++; currentQ++; renderQ(); };
+        window.answerInlineTest = function(selected) { if (Number(selected) === Number(questions[currentQ].correct)) correct++; currentQ++; renderQ(); };
         renderQ();
     };
     window.switchTopicTab(activeTab || 'lectures');
