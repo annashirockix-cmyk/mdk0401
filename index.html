@@ -45,7 +45,7 @@
         <div class="brand" style="display: flex; align-items: center; gap: 10px;">
             <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
             <span class="brand-badge" id="mainLogo">МДК Портал</span>
-            <select id="mdkSelector" class="group-select" style="background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px; font-size: 13px; outline: none;" onchange="if(!this.value)return;window.state.activeCourseId=this.value;window.saveStudentData&&window.saveStudentData();window.syncCourseSelector&&window.syncCourseSelector();window.renderHomePage&&window.renderHomePage();">
+            <select id="mdkSelector" class="group-select" style="background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px; font-size: 13px; outline: none;" onchange="if(!this.value)return;window.state.activeCourseId=this.value;window.saveStudentData&&window.saveStudentData();window.syncCourseSelector&&window.syncCourseSelector();window.updateMenuVisibility&&window.updateMenuVisibility();window.renderHomePage&&window.renderHomePage();">
                 <option value="07.01">МДК 07.01 (ЧПУ)</option>
                 <option value="04.01">МДК 04.01 (Диагностика)</option>
                 <option value="02.01">МДК 02.01 (Сборка)</option>
