@@ -17,7 +17,7 @@ if(!a||!a.success)throw Error(a&&a.error||"Не удалось получить 
 var student=(u.students||[]).find(function(s){return String(s.email||"").trim().toLowerCase()===email.trim().toLowerCase()&&String(s.role||"student").toLowerCase()==="student";});
 if(!student){document.getElementById("spStatus").textContent="Студент не найден или у вас нет доступа к его данным.";return;}
 var courseSet=new Set(student.courses||[]);
-var assignableCourses=(staff.role==="admin"?(student.courses||[]):(student.courses||[]).filter(function(id){return (staff.courses||[]).includes(id);}));
+var assignableCourses=(String(staff.role||"").toLowerCase()==="admin"?(student.courses||[]):(student.courses||[]).filter(function(id){return (staff.courses||[]).includes(id);}));
 var suggestedCourse=assignableCourses[0]||"";
 var results=(r.results||[]).filter(function(x){return String(x.email||"").toLowerCase()===email.toLowerCase()&&(!x.courseId||courseSet.has(x.courseId));});
 var tasks=(a.assignments||[]).filter(function(t){return courseSet.has(t.courseId)&&((t.targetType==="individual"&&String(t.targetValue||"").toLowerCase()===email.toLowerCase())||(t.targetType==="group"&&String(t.targetValue||"").trim().toLowerCase()===String(student.group||"").trim().toLowerCase()));});
