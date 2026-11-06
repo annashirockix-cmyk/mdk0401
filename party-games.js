@@ -117,7 +117,7 @@
     if(id==="detective"){var app=document.getElementById("app");app.innerHTML='<a class="backlink" href="javascript:void(0)" id="backGames">← В меню игр</a><div class="module" id="customGame" style="padding:16px"></div>';app.querySelector("#backGames").onclick=function(){window.renderArcadePage();};startCase(app.querySelector("#customGame"));return;}
     if(id==="bredo"){var app2=document.getElementById("app");app2.innerHTML='<a class="backlink" href="javascript:void(0)" id="backGames">← В меню игр</a><div class="module" id="customGame" style="padding:16px"></div>';app2.querySelector("#backGames").onclick=function(){window.renderArcadePage();};startBredo(app2.querySelector("#customGame"));return;}
     if(id==="durak"){var app3=document.getElementById("app");app3.innerHTML='<a class="backlink" href="javascript:void(0)" id="backGames">← В меню игр</a><div class="module" id="customGame" style="padding:16px"></div>';app3.querySelector("#backGames").onclick=function(){window.renderArcadePage();};startDurak(app3.querySelector("#customGame"));return;}
-    if(id==="mafia"){oldStart("detective");return;}
+    if(id==="mafia"){var mafiaApp=document.getElementById("app");mafiaApp.innerHTML='<a class="backlink" href="javascript:void(0)" id="backGames">← В меню игр</a><div class="module" id="mafiaGame" style="padding:16px"></div>';mafiaApp.querySelector("#backGames").onclick=function(){window.renderArcadePage();};if(window.startMafiaNetwork)window.startMafiaNetwork(mafiaApp.querySelector("#mafiaGame"));else mafiaApp.querySelector("#mafiaGame").textContent="Сетевая мафия пока недоступна.";return;}
     oldStart(id);
   };
   window.renderArcadePage=function(){
