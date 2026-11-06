@@ -15,7 +15,7 @@
     var app=document.getElementById("app");if(!app||app.querySelector("#nextgenStartPanel"))return;
     var panel=document.createElement("section");panel.id="nextgenStartPanel";panel.className="module";
     panel.style.cssText="border-left:4px solid var(--accent);margin:18px 0;padding:18px";
-    panel.innerHTML="<div style='display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center'><div><div style='font-size:11px;letter-spacing:1.5px;color:var(--accent);font-weight:800'>NEXT-GEN LEARNING HUB</div><h3 style='margin:6px 0'>Учись, пробуй, прокачивайся 🚀</h3><p style='margin:0;color:var(--muted)'>Короткий маршрут: лекция → практика → самопроверка → достижение.</p></div><div style='display:flex;gap:8px;flex-wrap:wrap'><a class='btn' href='#/training'>Начать тренировку</a><a class='btn ghost' href='#/rating'>Рейтинг</a></div></div>";
+    panel.innerHTML="<div style='display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center'><div><div style='font-size:11px;letter-spacing:1.5px;color:var(--accent);font-weight:800'>NEXT-GEN LEARNING HUB</div><h3 style='margin:6px 0'>Учись, пробуй, прокачивайся 🚀</h3><p style='margin:0;color:var(--muted)'>Короткий маршрут: лекция → практика → самопроверка → достижение.</p></div><div style='display:flex;gap:8px;flex-wrap:wrap'><a class='btn' href='./g_code_full.html' target='_blank' rel='noopener noreferrer'>G-Code Lab · 300 уровней</a><a class='btn ghost' href='#/training'>Тренировка</a><a class='btn ghost' href='#/rating'>Рейтинг</a></div></div>";
     var hero=app.querySelector(".hero");if(hero)hero.insertAdjacentElement("afterend",panel);else app.prepend(panel);
   }
   function start(){mountTheme();mountHome();}
