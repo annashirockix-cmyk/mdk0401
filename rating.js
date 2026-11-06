@@ -9,7 +9,7 @@ window.renderRatingPage = function() {
   app.appendChild(el('<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🏆 Доска почета</h1></section>'));
   
   API.getStudents().then(d => {
-      if (!d || !d.ok || !d.students || !d.students.length) {
+      if (!d || !(d.ok || d.success) || !d.students || !d.students.length) {
           return app.appendChild(el('<div class="module" style="text-align:center;">Пока нет данных для рейтинга.</div>'));
       }
 
@@ -28,7 +28,7 @@ window.renderRatingPage = function() {
       // Функция для рендера аватара с маской
       var renderAv = (s, size, borderColor) => {
           var effClass = s.effect ? ` av-fx-${s.effect}` : "";
-          var avHtml = s.avatar ? `<img src="${s.avatar}" style="width:100%; height:100%; object-fit:cover;">` : "👨‍🎓";
+          var avHtml = s.avatar ? `<img src="${s.avatar}" style="width:100%; height:100%; object-fit:cover;">` : escapeHtml(s.avatarEmoji || "👨‍🎓");
           return `<div class="av-container${effClass}" style="width:${size}px; height:${size}px; margin:0 auto; border:3px solid ${borderColor}; border-radius:50%; overflow:hidden; font-size:${size/2}px;">${avHtml}</div>`;
       };
 
