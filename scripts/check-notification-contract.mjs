@@ -31,7 +31,7 @@ assert.match(backend, /email_\(vals\[i\]\[m\.RecipientEmail\]\)\s*===\s*user\.em
 console.log(`Notification contract OK: ${requiredIds.length} unique UI IDs and frontend/backend actions verified.`);
 
 // Teacher analytics dashboard regression checks.
-const reports = read("reports.js");
+const reports = readFileSync(new URL("../reports.js", import.meta.url), "utf8");
 assert(reports.includes("window.API.getAssignments()"), "reports load assignment data");
 assert(reports.includes("Активность по заданиям"), "reports show assignment activity panel");
 assert(reports.includes("Индивидуальные задания учитываются"), "individual assignments are not misattributed to groups");
