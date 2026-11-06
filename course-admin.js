@@ -1,7 +1,7 @@
 "use strict";
 (function(){
-  const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда"};
-  const PLUGINS=["MAT","OT"];
+  const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ — Материаловедение"};
+  const PLUGINS=["MAT","OT","PFI"];
   const allIds=Object.keys(COURSE_LABELS);
   const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const me=()=>window.state.staff||window.state.student||{};
@@ -53,7 +53,7 @@
       panel.innerHTML='<h3>Подключаемые учебные курсы</h3><p style="color:var(--muted)">Самостоятельные дисциплины без игровых механик.</p><div style="display:flex;gap:10px;flex-wrap:wrap"></div>';
       const wrap=panel.querySelector("div");
       availablePlugins.forEach(id=>{
-        const b=document.createElement("button");b.className="btn ghost";b.textContent=(id==="MAT"?"📐 ":"🦺 ")+COURSE_LABELS[id];
+        const b=document.createElement("button");b.className="btn ghost";b.textContent=(id==="MAT"||id==="PFI"?"📐 ":"🦺 ")+COURSE_LABELS[id];
         b.onclick=function(){window.state.activeCourseId=id;window.saveStudentData();window.renderHomePage();};wrap.appendChild(b);
       });
       hero.insertAdjacentElement("afterend",panel);
