@@ -788,6 +788,7 @@ window.router = function() {
     if (page === "rating" && window.renderRatingPage) { window.renderRatingPage(); return; }
     if (page === "teams" && window.renderTeamLeaguePage) { window.renderTeamLeaguePage(); return; }
     if (page === "museum" && window.renderLearningMuseumPage) { window.renderLearningMuseumPage(); return; }
+    if (page === "museum-curator" && window.renderMuseumCuratorPage) { window.renderMuseumCuratorPage(); return; }
     if (page === "admin" && window.renderAdminPanel) { window.renderAdminPanel(); return; }
     if (page === "access" && window.renderAccessPage) { window.renderAccessPage(); return; }
     window.renderHomePage();
