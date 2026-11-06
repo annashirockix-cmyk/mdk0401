@@ -579,7 +579,7 @@ window.renderHomePage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var mdkId = window.state.activeCourseId || "07.01";
     if (window.canAccessCourse && !window.canAccessCourse(mdkId)) {
-        var permitted = Object.keys(window.MDK_DATA || {}).filter(id => window.canAccessCourse(id));
+        var permitted = Object.keys(window.MDK_DATA || {}).filter(id => id !== "basic" && id !== "technical" && window.canAccessCourse(id));
         mdkId = permitted[0] || "";
         if (mdkId) { window.state.activeCourseId = mdkId; window.saveStudentData(); }
     }
@@ -603,7 +603,7 @@ window.renderHomePage = function() {
     var title = course ? course.title : "Добро пожаловать!"; 
     var module = course ? course.module : "Выберите раздел.";
     var paletteHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
-    Object.keys(window.MDK_DATA || {}).filter(id => window.canAccessCourse ? window.canAccessCourse(id) : true).forEach(id => {
+    Object.keys(window.MDK_DATA || {}).filter(id => id !== "basic" && id !== "technical" && (window.canAccessCourse ? window.canAccessCourse(id) : true)).forEach(id => {
         var c = window.MDK_DATA[id]; var isActive = id === mdkId;
         paletteHtml += `<button class="btn ${isActive ? '' : 'ghost'}" onclick="window.state.activeCourseId='${id}'; window.saveStudentData(); window.renderHomePage();" style="padding:10px 20px;">${c.shortName}</button>`;
     });
