@@ -55,6 +55,11 @@
             </select>
         </div>
         <div class="topbar-status">
+            <div class="notification-wrap" id="notificationWrap"><button class="btn ghost notification-bell" id="notificationBell" type="button" aria-label="Уведомления" aria-expanded="false">🔔<span id="notificationBadge" class="notification-badge" hidden>0</span></button><section class="notification-popover" id="notificationPopover" hidden aria-label="Центр уведомлений">
+<div class="notification-popover-head"><b>Уведомления</b><div><button type="button" class="btn ghost" id="notificationMarkAll">Прочитать всё</button><button type="button" class="btn ghost" id="notificationRefresh" aria-label="Обновить">↻</button><button type="button" class="btn ghost" id="notificationClose" aria-label="Закрыть">✕</button></div></div>
+<div class="notification-filters"><select id="notificationStatusFilter" aria-label="Статус уведомлений"><option value="all">Все</option><option value="unread">Непрочитанные</option></select><select id="notificationCourseFilter" aria-label="Фильтр по дисциплине"><option value="all">Все дисциплины</option></select><button type="button" class="btn ghost" id="notificationPrefsBtn" aria-expanded="false">⚙ Настроить</button></div>
+<div class="notification-prefs" id="notificationPrefs" hidden><b>Показывать уведомления по дисциплинам</b><div id="notificationPrefsList"></div><small>Настройки сохраняются на этом устройстве.</small></div>
+<div id="notificationItems" aria-live="polite" class="notification-items">Загрузка…</div><div class="notification-popover-foot"><a href="#/teacher-tasks">Перейти к заданиям</a></div></section></div>
             <span class="status-pill" id="xpCount">🌟 0 XP</span>
             <div class="user-chip" onclick="location.hash='#/profile'" style="cursor:pointer">
                 <div id="userChipAvatar" style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;overflow:hidden">👨‍🎓</div>
