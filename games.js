@@ -9,6 +9,7 @@ window.saveScore = function(game, score) {
 };
 
 window.renderArcadePage = function() {
+    if (window.stopCurrentGame) { window.stopCurrentGame(); window.stopCurrentGame = null; }
     var app = document.getElementById("app"); 
     if (!app) return; 
     app.innerHTML = "";
@@ -18,11 +19,8 @@ window.renderArcadePage = function() {
     app.appendChild(el('<section class="hero"><h1>🎮 Игровая комната</h1><p>Зарабатывай XP и развлекайся!</p></section>'));
 
     var allGames = [
-        { id: "quiz_mdk", title: "⚙️ Викторина: ЧПУ", desc: "Вопросы по МДК 07.01." },
-        { id: "quiz_anime", title: "🍥 Викторина: Аниме", desc: "Проверь свои знания аниме!" },
-        { id: "quiz_games", title: "🕹️ Викторина: Игры", desc: "Для настоящих геймеров." },
-        { id: "quiz_logic", title: "🧠 Викторина: Логика", desc: "Математика и загадки." },
         { id: "party", title: "☠️ Смертельная вечеринка", desc: "Викторина на выживание." },
+        { id: "detective", title: "🕵️ Детективная мафия онлайн", desc: "Комнаты, тайные роли, ночные действия и дневное голосование." },
         { id: "minesweeper", title: "💣 Сапёр", desc: "Классическая логическая игра." },
         { id: "memory", title: "🧠 Найди пару", desc: "Тренируй зрительную память." },
         { id: "tictactoe", title: "❌ Крестики-нолики", desc: "Сыграй против робота." },
@@ -55,6 +53,7 @@ window.renderArcadePage = function() {
 };
 
 window.startGame = function(gameId) {
+    if (window.stopCurrentGame) { window.stopCurrentGame(); window.stopCurrentGame = null; }
     var app = document.getElementById("app"); 
     if (!app) return;
     app.innerHTML = "";
@@ -82,6 +81,7 @@ window.startGame = function(gameId) {
     else if (gameId === 'casino') { startCasino(container); }
     else if (gameId === 'roulette') { startRoulette(container); }
     else if (gameId === 'party') { startParty(container); }
+    else if (gameId === 'detective') { if (window.startDetectiveNetwork) window.startDetectiveNetwork(container); else container.innerHTML = '<p>Сетевая игра загружается. Обновите страницу.</p>'; }
 };
 
 // ================= ВИКТОРИНЫ =================
@@ -153,10 +153,14 @@ function startParty(container) {
         { q: "Что означает M30?", a: ["Конец программы", "Пуск шпинделя", "Смена инструмента", "СОЖ"], c: 0 }
     ];
     var idx = 0, lives = 3, score = 0, time = 15, tId = null;
+    window.stopCurrentGame = function(){ clearInterval(tId); };
 
     function render() {
         if (idx >= questions.length) {
-            container.innerHTML = `<div style="padding:40px; text-align:center;"><h2>Вы выжили!</h2><p>Счет: ${score}</p><button class="btn" onclick="window.renderArcadePage()">В меню</button></div>`;
+            clearInterval(tId);
+            var bonus = score * 2;
+            if (window.state) { window.state.xp += bonus; if(window.saveStudentData)window.saveStudentData(); if(window.renderUserChip)window.renderUserChip(); }
+            container.innerHTML = `<div style="padding:40px; text-align:center;"><h2>Вы выжили!</h2><p>Счет: ${score}</p><p style="color:var(--gold)">Награда: +${bonus} XP</p><button class="btn" onclick="window.renderArcadePage()">В меню</button></div>`;
             return;
         }
         if (lives <= 0) {
