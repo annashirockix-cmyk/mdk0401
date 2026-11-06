@@ -68,7 +68,7 @@ window.updateMenuVisibility = function() {
     var adminLink = document.querySelector('.drawer-item[href="#/admin"]');
     if (adminLink) adminLink.style.display = window.state.staff && window.state.staff.role === "admin" ? "flex" : "none";
     var accessLink=document.querySelector('.drawer-item[href="#/access"]'); if(accessLink) accessLink.style.display=isTeacher?"flex":"none";
-    var taskLink=document.querySelector('.drawer-item[href="#/teacher-tasks"]'); if(taskLink) taskLink.style.display=(isTeacher || !!window.state.student)?"flex":"none";
+    var taskLink=document.querySelector('.drawer-item[href="#/teacher-tasks"]'); var dashLink=document.getElementById("menuTeacherDashboard"); if(dashLink)dashLink.style.display=isTeacher?"flex":"none"; if(taskLink) taskLink.style.display=(isTeacher || !!window.state.student)?"flex":"none";
 };
 
 window.applyGlobalEffects = function() {
@@ -760,6 +760,7 @@ window.router = function() {
     }
     if (page === "grades") { window.renderStudentGradesPage(); return; }
     if (page === "journal") { window.renderTeacherJournalPage(); return; }
+    if (page === "teacher-dashboard" && window.renderTeacherDashboard) { window.renderTeacherDashboard(); return; }
     if (page === "certificate") { window.renderCertificatePage(); return; }
     if (page === "profile") { window.renderProfilePage(hash); return; }
     if (page === "achievements") { window.renderAchievementsPage(); return; }
