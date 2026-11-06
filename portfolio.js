@@ -7,7 +7,10 @@
   function rowsFor(email,results,assignments){
     var rs=results.filter(function(x){return String(x.email||"").toLowerCase()===String(email).toLowerCase();});
     var subs=[];
-    assignments.forEach(function(t){(t.submissions||[]).forEach(function(s){if(String(s.studentEmail||"").toLowerCase()===String(email).toLowerCase())subs.push(Object.assign({taskTitle:t.title,courseId:t.courseId,topic:t.topic},s));});});
+    assignments.forEach(function(t){
+      if(t.submission){subs.push(Object.assign({taskTitle:t.title,courseId:t.courseId,topic:t.topic},t.submission));return;}
+      (t.submissions||[]).forEach(function(s){if(String(s.studentEmail||"").toLowerCase()===String(email).toLowerCase())subs.push(Object.assign({taskTitle:t.title,courseId:t.courseId,topic:t.topic},s));});
+    });
     return {results:rs,submissions:subs};
   }
   function printButton(){return '<button type="button" class="btn no-print" onclick="window.print()">🖨 Печать / сохранить в PDF</button>';}
