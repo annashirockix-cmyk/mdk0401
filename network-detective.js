@@ -59,4 +59,6 @@
     if(!window.sessionStorage||!sessionStorage.getItem("mdk.session")){lobby();notice("Сначала войдите в учебный портал.");return;}
     lobby();
   };
+  // Сохраняем отдельную ссылку на мафию до того, как coop-детектив задаст общий alias.
+  window.startMafiaNetwork = window.startDetectiveNetwork;
 })();
