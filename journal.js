@@ -89,7 +89,7 @@ window.renderJournalPage = function() {
               works.forEach(w => {
                   var td = document.createElement("td");
                   td.style = "border:1px solid var(--border); padding:4px; text-align:center;";
-                  var record = results[w.id], grade = record && Number(record.grade) > 0 ? record.grade : "—";
+                  var record = results[w.id], grade = record && record.grade !== "" && record.grade !== null && record.grade !== undefined ? Number(record.grade) : "—";
                   var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : (grade === "—" ? "var(--muted)" : "var(--err)"));
                   td.innerHTML = `<b style="color:${color}; font-size:16px;">${grade}</b>`;
                   if (record && (record.payload || record.feedback || record.assignmentStatus)) { var details=document.createElement("details");details.style="font-size:11px;margin-top:4px;text-align:left";var summary=document.createElement("summary");summary.textContent=record.assignmentStatus==="reviewed"?"Ответ и проверка":(record.assignmentStatus?"Ответ · на проверке":"Ответ");details.appendChild(summary);if(record.payload){var answer=document.createElement("div");answer.textContent=record.payload;answer.style="white-space:pre-wrap;max-width:220px;overflow-wrap:anywhere;padding:5px";details.appendChild(answer);}if(record.feedback){var feedback=document.createElement("div");feedback.textContent="Комментарий: "+record.feedback;feedback.style="white-space:pre-wrap;padding:5px;color:var(--accent)";details.appendChild(feedback);}td.appendChild(details); }
