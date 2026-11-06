@@ -1,0 +1,70 @@
+"use strict";
+(function(){
+  var COURSE_NAMES={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ"};
+  var E=function(v){return window.escapeHtml(String(v==null?"":v));};
+  var dateText=function(v){if(!v)return "Дата не указана";var d=new Date(v);return isNaN(d.getTime())?"Дата не указана":d.toLocaleDateString("ru-RU");};
+  function getGoalStore(email){var key="mdk.learningGoals."+String(email||"").trim().toLowerCase();try{return {key:key,items:JSON.parse(localStorage.getItem(key)||"[]")};}catch(e){return {key:key,items:[]};}}
+  window.renderLearningPathPage=function(){
+    var app=document.getElementById("app"),crumb=document.getElementById("crumbs"),student=window.state&&window.state.student;
+    if(!app)return;
+    if(crumb)crumb.textContent="Моя траектория обучения";
+    if(!student||!student.email){app.innerHTML='<section class="module"><h2>🔐 Войдите как обучающийся</h2><p>Персональная траектория доступна после входа в учебный аккаунт.</p><a class="btn" href="#/account">Войти в аккаунт</a></section>';return;}
+    app.innerHTML='<div class="lp-page"><div class="lp-head"><div><a href="#/">← На главную</a><h1>🧭 Моя траектория обучения</h1><p>Ваши результаты, задания и следующие шаги — в одном месте.</p></div><button class="btn ghost" id="lpRefresh" type="button">↻ Обновить</button></div><p id="lpStatus" class="lp-muted" aria-live="polite">Загружаем личные данные…</p><div id="lpContent"></div></div>';
+    var status=document.getElementById("lpStatus"),content=document.getElementById("lpContent");
+    function load(){
+      status.textContent="Обновляем личные данные…";
+      Promise.all([window.API.getMyCourseResults(""),window.API.getAssignments()]).then(function(data){
+        var r=data[0],a=data[1];
+        if(!r||!r.success)throw Error(r&&r.error||"Не удалось загрузить ваши результаты");
+        if(!a||!a.success)throw Error(a&&a.error||"Не удалось загрузить ваши задания");
+        var results=Array.isArray(r.results)?r.results:[],assignments=Array.isArray(a.assignments)?a.assignments:[];
+        var courses=Array.isArray(student.courses)?student.courses.slice():[];
+        assignments.forEach(function(t){if(t.courseId&&courses.indexOf(t.courseId)<0)courses.push(t.courseId);});
+        results.forEach(function(x){if(x.courseId&&courses.indexOf(x.courseId)<0)courses.push(x.courseId);});
+        courses.sort();
+        var graded=results.filter(function(x){return x.assignmentStatus!=="submitted"&&x.grade!==""&&x.grade!==null&&x.grade!==undefined&&Number(x.grade)>0;});
+        var average=graded.length?graded.reduce(function(n,x){return n+Number(x.grade);},0)/graded.length:null;
+        var pending=assignments.filter(function(t){return t.submission&&t.submission.status!=="reviewed";});
+        var open=assignments.filter(function(t){return !t.submission;});
+        var goals=getGoalStore(student.email);
+        function courseData(id){
+          var rs=results.filter(function(x){return String(x.courseId||"")===String(id);});
+          var marks=rs.filter(function(x){return x.assignmentStatus!=="submitted"&&Number(x.grade)>0;});
+          var mean=marks.length?marks.reduce(function(n,x){return n+Number(x.grade);},0)/marks.length:null;
+          var low=marks.filter(function(x){return Number(x.grade)<3;});
+          var recent=marks.slice().sort(function(x,y){return String(y.finishedAt||"").localeCompare(String(x.finishedAt||""));})[0];
+          return {results:rs,marks:marks,mean:mean,low:low,recent:recent};
+        }
+        var courseCards=courses.map(function(id){
+          var d=courseData(id),pct=d.marks.length?Math.round(d.marks.reduce(function(n,x){return n+Math.max(0,Math.min(100,Number(x.percent)||0));},0)/d.marks.length):0;
+          var label=d.mean===null?"Пока нет оценённых работ":d.mean<3?"Нужно повторить отдельные темы":d.mean<4?"Полезно закрепить материал":"Хороший результат — продолжайте";
+          var advice=d.low.length?"Начните с повторения: "+d.low.slice(0,3).map(function(x){return x.testTitle||x.testId;}).join(", ")+".":d.marks.length?"Повторите последнюю тему и выполните следующее практическое задание.":"Пройдите первое доступное задание или учебный тест по дисциплине.";
+          return '<article class="lp-course"><div class="lp-course-top"><div><h3>'+E(COURSE_NAMES[id]||id)+'</h3><p>'+E(label)+'</p></div><strong class="lp-grade">'+(d.mean===null?"—":d.mean.toFixed(2))+'</strong></div><div class="lp-progress"><span style="width:'+pct+'%"></span></div><div class="lp-meta"><span>Оценённых работ: '+d.marks.length+'</span><span>Средний процент: '+(d.marks.length?pct+"%":"—")+'</span></div><p class="lp-advice">💡 '+E(advice)+'</p>'+(d.recent?'<small class="lp-muted">Последний результат: '+E(d.recent.testTitle||d.recent.testId)+' · '+E(dateText(d.recent.finishedAt))+'</small>':'')+'</article>';
+        }).join("")||'<p class="lp-muted">Дисциплины пока не указаны в профиле.</p>';
+        var taskCards=assignments.map(function(t){
+          var sub=t.submission,when=t.dueAt?dateText(t.dueAt):"Срок не указан",state=sub?(sub.status==="reviewed"?"Проверено":"Отправлено · ожидает проверки"):"Не выполнено";
+          var grade=sub&&sub.grade!=null&&sub.grade!==""?'<b class="lp-task-grade">Оценка: '+E(sub.grade)+'</b>':"";
+          var feedback=sub&&sub.feedback?'<p class="lp-feedback">Комментарий преподавателя: '+E(sub.feedback)+'</p>':"";
+          var answer=sub?'<div class="lp-submitted"><p><b>Ваш ответ отправлен</b> · '+E(dateText(sub.submittedAt))+'</p><p class="lp-muted">Попыток: '+E(sub.attempts||1)+'</p>'+grade+feedback+'</div>':'<form class="lp-submit-form" data-assignment="'+E(t.id)+'"><label for="lp-answer-'+E(t.id)+'">Ваш ответ</label><textarea id="lp-answer-'+E(t.id)+'" name="answer" maxlength="12000" required placeholder="Введите решение, ход выполнения или ссылку на результат…"></textarea><button class="btn" type="submit">Отправить на проверку</button><span class="lp-muted lp-form-status" aria-live="polite"></span></form>';
+          return '<article class="lp-task"><div class="lp-task-top"><div><h3>'+E(t.title)+'</h3><small>'+E(COURSE_NAMES[t.courseId]||t.courseId)+' · '+E(t.topic||"Без указания темы")+'</small></div><span class="lp-state '+(sub&&sub.status==="reviewed"?"is-done":sub?"is-wait":"is-open")+'">'+E(state)+'</span></div><p>'+E(t.instructions)+'</p>'+(t.criteria?'<details><summary>Критерии оценивания</summary><p>'+E(t.criteria)+'</p></details>':'')+'<small class="lp-muted">Срок: '+E(when)+'</small>'+answer+'</article>';
+        }).join("")||'<p>Активных заданий пока нет. Следите за уведомлениями преподавателя.</p>';
+        var trend=graded.slice().filter(function(x){return x.finishedAt&&!isNaN(new Date(x.finishedAt).getTime());}).sort(function(x,y){return new Date(x.finishedAt)-new Date(y.finishedAt);});
+        var trendText="Для анализа динамики нужны датированные оценки.";
+        if(trend.length>=2){var first=trend[0],last=trend[trend.length-1],delta=Number(last.grade)-Number(first.grade);trendText="От первой датированной оценки ("+E(first.grade)+") до последней ("+E(last.grade)+"): "+(delta>0?"рост на ":delta<0?"снижение на ":"без изменения ")+Math.abs(delta).toFixed(1)+". Это ориентир по двум точкам, а не итоговая оценка освоения курса.";}
+        var goalHtml=goals.items.map(function(g,i){return '<label class="lp-goal"><input type="checkbox" data-goal="'+i+'" '+(g.done?"checked":"")+'> <span>'+E(g.text)+'</span></label>';}).join("");
+        var weak=graded.filter(function(x){return Number(x.grade)<3;});
+        var recommendation=weak.length?"Повторите "+weak.length+" работу(ы) с оценкой ниже 3: "+weak.slice(0,4).map(function(x){return x.testTitle||x.testId;}).join("; ")+".":pending.length?"У вас "+pending.length+" работа(ы) ожидают проверки. После обратной связи вернитесь к отмеченным преподавателем вопросам.":"Продолжайте регулярно проходить тесты и практические задания — по новым результатам рекомендации станут точнее.";
+        status.textContent="Данные обновлены: "+new Date().toLocaleString("ru-RU")+". Показаны только ваши результаты и задания.";
+        content.innerHTML='<div class="lp-summary"><article><b>'+(average===null?"—":average.toFixed(2))+'</b><span>Средняя оценка</span></article><article><b>'+graded.length+'</b><span>Оценённых работ</span></article><article><b>'+open.length+'</b><span>Новых заданий</span></article><article><b>'+pending.length+'</b><span>Ожидают проверки</span></article></div><section class="module"><h2>📚 Прогресс по дисциплинам</h2><p class="lp-muted">Средний балл считается только по оценённым работам. Полоса показывает средний процент выполнения тестов, а не процент освоения всей программы.</p><div class="lp-course-grid">'+courseCards+'</div></section><section class="module"><h2>🧠 Что повторить в первую очередь</h2><p>'+E(recommendation)+'</p><p class="lp-muted">'+E(trendText)+'</p></section><section class="module"><h2>📝 Мои задания</h2><p class="lp-muted">Отправленные ответы и комментарии преподавателя сохраняются в учебном журнале.</p><div class="lp-task-list">'+taskCards+'</div></section><section class="module"><h2>🎯 Мои учебные цели</h2><p class="lp-muted">Личный список целей сохраняется в этом браузере на данном устройстве.</p><form id="lpGoalForm" class="lp-goal-form"><input name="goal" maxlength="160" required placeholder="Например: повторить циклы G-кода"><button class="btn" type="submit">Добавить цель</button></form><div id="lpGoals">'+(goalHtml||'<p class="lp-muted">Добавьте первую учебную цель.</p>')+'</div><p class="lp-muted" id="lpGoalStatus" aria-live="polite"></p></section>';
+        content.querySelectorAll(".lp-submit-form").forEach(function(form){form.addEventListener("submit",function(ev){ev.preventDefault();var btn=form.querySelector("button"),msg=form.querySelector(".lp-form-status"),answer=form.elements.answer.value.trim();if(!answer)return;btn.disabled=true;msg.textContent="Отправка…";window.API.submitAssignment(form.getAttribute("data-assignment"),answer).then(function(res){if(!res||!res.success)throw Error(res&&res.error||"Не удалось отправить ответ");msg.textContent="Ответ отправлен.";load();}).catch(function(err){msg.textContent=err.message;btn.disabled=false;});});});
+        var goalForm=document.getElementById("lpGoalForm");
+        goalForm.addEventListener("submit",function(ev){ev.preventDefault();var text=goalForm.elements.goal.value.trim();if(!text)return;goals.items.push({text:text,done:false,createdAt:new Date().toISOString()});localStorage.setItem(goals.key,JSON.stringify(goals.items));load();});
+        content.querySelectorAll("[data-goal]").forEach(function(input){input.addEventListener("change",function(){var i=Number(input.getAttribute("data-goal"));if(!goals.items[i])return;goals.items[i].done=input.checked;localStorage.setItem(goals.key,JSON.stringify(goals.items));var s=document.getElementById("lpGoalStatus");if(s)s.textContent="Цель обновлена.";});});
+      }).catch(function(err){status.textContent="Не удалось загрузить траекторию: "+err.message;content.innerHTML='<section class="module"><p>Проверьте подключение и повторите загрузку. Ваши личные данные не заменяются демонстрационными.</p><button class="btn" id="lpRetry" type="button">Повторить</button></section>';var retry=document.getElementById("lpRetry");if(retry)retry.onclick=load;});
+    }
+    document.getElementById("lpRefresh").onclick=load;load();
+  };
+  if(!document.getElementById("learningPathStyles")){
+    var style=document.createElement("style");style.id="learningPathStyles";style.textContent='.lp-page{max-width:1100px;margin:0 auto}.lp-head,.lp-course-top,.lp-task-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}.lp-head h1{margin:12px 0 4px}.lp-muted{color:var(--muted);font-size:.9em}.lp-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin:18px 0}.lp-summary article{background:var(--card-soft);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:5px}.lp-summary b{font-size:1.7rem;color:var(--accent)}.lp-summary span,.lp-meta{color:var(--muted);font-size:.88em}.lp-course-grid,.lp-task-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}.lp-course,.lp-task{background:var(--card-soft);border:1px solid var(--border);border-radius:14px;padding:16px;min-width:0}.lp-course h3,.lp-task h3{margin:0 0 5px}.lp-course p,.lp-task p{line-height:1.5}.lp-grade{font-size:1.55rem;color:var(--accent)}.lp-progress{height:9px;border-radius:20px;background:var(--border);overflow:hidden;margin:12px 0 7px}.lp-progress span{display:block;height:100%;background:var(--accent);border-radius:20px}.lp-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.lp-advice{font-size:.92em}.lp-state{font-size:.78em;padding:5px 9px;border-radius:20px;background:var(--border)}.lp-state.is-done{color:var(--ok)}.lp-state.is-wait{color:var(--accent)}.lp-task>p{white-space:pre-wrap}.lp-submit-form{display:grid;gap:8px;margin-top:12px}.lp-submit-form textarea{width:100%;min-height:100px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font:inherit}.lp-submitted{margin-top:12px;padding:10px;border-radius:10px;background:var(--card)}.lp-feedback{white-space:pre-wrap}.lp-goal-form{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.lp-goal-form input{flex:1;min-width:190px;padding:10px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text)}.lp-goal{display:flex;align-items:flex-start;gap:9px;padding:10px;border-bottom:1px solid var(--border)}.lp-goal input{margin-top:4px}.lp-task details{margin:8px 0}.lp-task small{color:var(--muted)}@media(max-width:600px){.lp-head .btn{width:100%}.lp-course-top{align-items:center}}';document.head.appendChild(style);
+  }
+})();
