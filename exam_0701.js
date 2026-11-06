@@ -16,6 +16,8 @@ window.renderTraining_0701 = function(mdkId) {
   if (window.MDK_DATA && window.MDK_DATA['07.01']) {
       window.MDK_DATA['07.01'].sections.forEach(s => s.topics.forEach(t => {
           if (t.test) baseQuestions = baseQuestions.concat(t.test);
+            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
+          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
       }));
   }
   var extraQuestions = []; // Уже 105 вопросов, можно не добавлять
@@ -73,6 +75,8 @@ window.renderFinal_0701 = function(mdkId) {
   if (window.MDK_DATA && window.MDK_DATA['07.01']) {
       window.MDK_DATA['07.01'].sections.forEach(s => s.topics.forEach(t => {
           if (t.test) baseQuestions = baseQuestions.concat(t.test);
+            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
+          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
       }));
   }
   var allQ = baseQuestions;
