@@ -750,6 +750,7 @@ window.router = function() {
     if (page === "games" && window.renderArcadePage) { window.renderArcadePage(); return; }
     if (page === "final" && window.renderFinalExamPage) { window.renderFinalExamPage(parts[1]); return; }
     if (page === "reports" && window.renderCourseReportsPage) { window.renderCourseReportsPage(); return; }
+    if (page === "teacher-tasks" && window.renderTeacherTasksPage) { window.renderTeacherTasksPage(); return; }
     if (page === "schedule" && window.renderSchedulePage) { window.renderSchedulePage(); return; }
     if (page === "rating" && window.renderRatingPage) { window.renderRatingPage(); return; }
     if (page === "admin" && window.renderAdminPanel) { window.renderAdminPanel(); return; }
