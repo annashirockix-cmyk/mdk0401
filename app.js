@@ -611,6 +611,11 @@ function setupLogin() {
             window.state.student = { name: res.name || email, group: res.group || "", email: email, role: role, courses: res.courses || [] };
             window.state.staff = null;
         }
+        // Восстанавливаем аватар текущего аккаунта и не оставляем картинку предыдущего пользователя.
+        var profile = res.profile || {};
+        window.state.avatar = profile.avatar || null;
+        window.state.avatarEmoji = profile.avatarEmoji || "👩‍🔧";
+        window.state.avatarEffect = profile.avatarEffect || "plain";
         window.saveStudentData(); 
         window.renderUserChip();
         if (window.syncCourseSelector) window.syncCourseSelector();
