@@ -310,14 +310,35 @@ function startTicTacToe(container) {
         }
         return board.includes(null) ? null : "Tie";
     }
+    function bestBotMove() {
+        var bestScore=-Infinity, bestMove=-1;
+        function minimax(depth, player) {
+            var result=checkWin();
+            if(result==="O") return 10-depth;
+            if(result==="X") return depth-10;
+            if(result==="Tie") return 0;
+            var scores=[];
+            for(var k=0;k<9;k++) if(!board[k]) {
+                board[k]=player;
+                scores.push(minimax(depth+1,player==="O"?"X":"O"));
+                board[k]=null;
+            }
+            return player==="O"?Math.max.apply(null,scores):Math.min.apply(null,scores);
+        }
+        for(var k=0;k<9;k++) if(!board[k]) {
+            board[k]="O"; var score=minimax(0,"X"); board[k]=null;
+            if(score>bestScore){bestScore=score;bestMove=k;}
+        }
+        return bestMove;
+    }
     window.tttClick = function(i) {
         if (gameOver || board[i] || turn !== "X") return;
         board[i] = "X"; turn = "O"; render();
         var win = checkWin();
         if (win) { gameOver = true; render(); setTimeout(()=>alert(win === "Tie" ? "Ничья!" : "Вы победили!"), 100); if (win === "X" && window.state) { window.state.xp += 20; window.saveStudentData(); window.renderUserChip(); } return; }
         setTimeout(function() {
-            var empty = []; for (var j = 0; j < 9; j++) if (!board[j]) empty.push(j);
-            if (empty.length > 0) { board[empty[Math.floor(Math.random() * empty.length)]] = "O"; turn = "X"; render(); var win2 = checkWin(); if (win2) { gameOver = true; render(); setTimeout(()=>alert(win2 === "Tie" ? "Ничья!" : "Робот победил!"), 100); } }
+            var move = bestBotMove();
+            if (move >= 0) { board[move] = "O"; turn = "X"; render(); var win2 = checkWin(); if (win2) { gameOver = true; render(); setTimeout(()=>alert(win2 === "Tie" ? "Ничья!" : "Робот победил!"), 100); } }
         }, 300);
     };
     window.tttRestart = function() { board = Array(9).fill(null); turn = "X"; gameOver = false; render(); };
