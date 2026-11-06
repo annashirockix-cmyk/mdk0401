@@ -19,8 +19,9 @@
       var done=!!(result&&Number(result.grade)>=3);
       return {id:"quiz:"+x.courseId+":"+x.topic.id,courseId:x.courseId,title:"Контроль знаний: "+(x.topic.title||x.topic.code),topic:x.topic,done:done,result:result,kind:"quiz",reward:15};
     });
-    var taskMissions=assignments.filter(function(t){return t.submission&&t.submission.status==="reviewed"&&Number(t.submission.grade)>=3;}).map(function(t){
-      return {id:"task:"+t.id,courseId:t.courseId,title:"Практика: "+(t.title||"Задание"),done:true,kind:"task",reward:20,submission:t.submission,task:t};
+    var taskMissions=assignments.map(function(t){
+      var sub=t.submission||null,done=!!(sub&&sub.status==="reviewed"&&Number(sub.grade)>=3);
+      return {id:"task:"+t.id,courseId:t.courseId,title:"Практика: "+(t.title||"Задание"),done:done,kind:"task",reward:20,submission:sub,task:t};
     });
     var missions=quizMissions.concat(taskMissions);
     var claimed=Array.isArray(window.state.missionRewardsClaimed)?window.state.missionRewardsClaimed:[];
@@ -47,6 +48,18 @@
         list.appendChild(section);
       });
     }else if(!quizMissions.length){var empty=document.createElement("p");empty.textContent="Для доступных дисциплин пока не найдены темы с контрольными тестами.";list.appendChild(empty);}
+    var pendingTasks=taskMissions.filter(function(m){return !m.done;});
+    if(pendingTasks.length){
+      var practicalSection=document.createElement("section");practicalSection.style.marginTop="22px";
+      var ph=document.createElement("h2");ph.textContent="🛠 Практические миссии";practicalSection.appendChild(ph);
+      pendingTasks.forEach(function(m){
+        var card=document.createElement("article");card.className="module";card.style.cssText="margin:10px 0;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap";
+        var info=document.createElement("div"),name=document.createElement("b"),desc=document.createElement("p");name.textContent=m.title;desc.textContent=(m.submission?(m.submission.status==="reviewed"?"Работа проверена, но для награды нужна оценка не ниже 3.":"Работа отправлена и ожидает проверки."):"Выполните задание и отправьте преподавателю на проверку.")+" Награда после успешной проверки: +20 XP.";desc.style.cssText="font-size:13px;color:var(--muted);margin:6px 0 0";info.appendChild(name);info.appendChild(desc);
+        var link=document.createElement("a");link.className="btn ghost";link.href="#/learning-path";link.textContent="Открыть задания";
+        card.appendChild(info);card.appendChild(link);practicalSection.appendChild(card);
+      });
+      list.appendChild(practicalSection);
+    }
     var completed=missions.filter(function(m){return m.done;});
     var doneSection=document.createElement("section");doneSection.style.marginTop="22px";var dh=document.createElement("h2");dh.textContent="🏅 Завершённые миссии";doneSection.appendChild(dh);
     if(!completed.length){var none=document.createElement("p");none.style.color="var(--muted)";none.textContent="Здесь появятся успешно пройденные тесты и проверенные практические работы.";doneSection.appendChild(none);}
