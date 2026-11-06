@@ -24,7 +24,7 @@ const CFG = {
   SESSION_PREFIX: "portal_session:",
   SESSION_TTL: 21600, // 6 часов
   LEGACY_SALT: "portal_spo_2026",
-  COURSES: ["07.01", "04.01", "02.01", "02.02", "MCAM", "MAT", "OT", "PFI"]
+  COURSES: ["07.01", "04.01", "02.01", "02.02", "MCAM", "MAT", "OT", "PFI", "EN", "ENB", "ENT"]
 };
 
 const HEADERS = {
@@ -288,8 +288,9 @@ function admin_(data) {
 function hasCourseAccess_(user, courseId) {
   if (user.role === "admin") return true;
   if (user.role !== "teacher" && user.role !== "student") return false;
-  return user.courses.split(",").map(function (id) { return id.trim(); })
-    .indexOf(String(courseId)) !== -1;
+  const assigned = user.courses.split(",").map(function (id) { return id.trim(); });
+  if ((courseId === "ENB" || courseId === "ENT") && assigned.indexOf("EN") !== -1) return true;
+  return assigned.indexOf(String(courseId)) !== -1;
 }
 
 function editor_(data, courseId) {
