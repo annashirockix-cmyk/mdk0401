@@ -507,7 +507,7 @@ function getPublicSubjectRatings_(data) {
       }
       if (!courseId) return;
       const email = email_(row[userMap.Email]);
-      if (rows.some(function (r) { return email_(r[0]) === email && String(r[3]) === String(testId); })) return;
+      if (rows.some(function (r) { return email_(r[0]) === email && String(r[3]) === String(testId) && String(r[12] || "") === courseId; })) return;
       rows.push([
         email, row[userMap.Name], row[userMap.Group], testId, rec.testTitle || testId,
         rec.grade, rec.score || 0, rec.max || rec.maxScore || 0, rec.percent || 0,
