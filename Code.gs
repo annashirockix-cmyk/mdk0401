@@ -853,7 +853,7 @@ function sendGameAction_(data) {
   const state=parseGameState_(room.state), player=(state.players||[]).find(p=>email_(p.email)===user.email); if(!player||!player.alive) throw new Error("Вы не можете отправлять действия.");
   const type=String(data.type||""); if(["night_kill","night_check","night_save","vote"].indexOf(type)<0) throw new Error("Неизвестное игровое действие.");
   const payload=data.payload||{}, target=String(payload.target||""); if(target&&!(state.players||[]).some(p=>email_(p.email)===email_(target)&&p.alive)) throw new Error("Выбранная цель недоступна.");
-  const sh=gameActions_(), id=sh.getLastRow(); sh.appendRow([id,code,user.email,type,JSON.stringify(payload),new Date().toISOString()]); return {success:true,id:id};
+  const lock=LockService.getScriptLock(); lock.waitLock(10000); try { const sh=gameActions_(), id=sh.getLastRow(); sh.appendRow([id,code,user.email,type,JSON.stringify(payload),new Date().toISOString()]); return {success:true,id:id}; } finally { lock.releaseLock(); }
 }
 function getGameActions_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), room=gameRoomRow_(code); if(!room) throw new Error("Комната не найдена.");
