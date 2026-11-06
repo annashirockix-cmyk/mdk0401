@@ -60,17 +60,17 @@ const BG_EFFECTS = [
     { id: "fx-matrix-bg", title: "Матрица (Дождь)", price: 600 },
     { id: "fx-starfield-bg", title: "Звездное небо", price: 600 },
     { id: "bg-underwater", title: "Подводный мир", price: 700 },
-    { id: "bg-foggy-forest", title: "Туманный лес", price: 700 },
-    { id: "bg-stone-alley", title: "Каменная аллея", price: 700 },
-    { id: "bg-cats-yarn", title: "Кошки и клубки", price: 700 },
-    { id: "bg-pumpkins", title: "Тыквы", price: 700 },
+    { id: "bg-foggy-forest", title: "Лесная дымка", price: 700 },
+    { id: "bg-stone-alley", title: "Старый переулок", price: 700 },
+    { id: "bg-cats-yarn", title: "Кошачий уют", price: 700 },
+    { id: "bg-pumpkins", title: "Осенний урожай", price: 700 },
     { id: "bg-spooky-room", title: "Жуткая комната", price: 700 },
     { id: "bg-halloween", title: "Хэллоуин", price: 700 },
     { id: "bg-red-forest", title: "Красный лес", price: 700 },
-    { id: "bg-lanterns", title: "Фонари", price: 700 },
-    { id: "bg-dark-table", title: "Темный стол", price: 700 },
-    { id: "bg-graveyard", title: "Кладбище", price: 700 },
-    { id: "bg-cats-notebook", title: "Коты и тетрадь", price: 700 },
+    { id: "bg-lanterns", title: "Тёплые фонари", price: 700 },
+    { id: "bg-dark-table", title: "Тёмная мастерская", price: 700 },
+    { id: "bg-graveyard", title: "Ночной некрополь", price: 700 },
+    { id: "bg-cats-notebook", title: "Коты и заметки", price: 700 },
     { id: "bg-galaxy", title: "Космическая пыль", price: 750 },
     { id: "bg-tech-grid", title: "Чертёжная сетка", price: 750 },
     { id: "bg-workshop", title: "Мастерская ЧПУ", price: 750 },
@@ -192,6 +192,7 @@ window.buyShopItem = function(type, id, price, value) {
         if (!window.state.staff) window.state.xp -= price;
         
         if (type === 'theme') { if(!window.state.purchasedThemes) window.state.purchasedThemes = []; window.state.purchasedThemes.push(id); }
+        if (type === 'avatar') { window.state.avatar = value || null; }
         if (type === 'text') { if(!window.state.purchasedTextEffects) window.state.purchasedTextEffects = []; window.state.purchasedTextEffects.push(id); }
         if (type === 'font') { if(!window.state.purchasedFonts) window.state.purchasedFonts = []; window.state.purchasedFonts.push(id); }
         if (type === 'fontSize') { if(!window.state.purchasedFontSizes) window.state.purchasedFontSizes = []; window.state.purchasedFontSizes.push(id); }
@@ -219,6 +220,10 @@ window.applyShopItem = function(type, id, value) {
         if (fontObj) {
             document.body.style.fontFamily = fontObj.font;
         }
+    } else if (type === 'fontSize') {
+        window.state.activeFontSize = id;
+        var sizeObj = FONT_SIZES.find(f => f.id === id);
+        if (sizeObj) document.documentElement.style.setProperty('--portal-font-scale', sizeObj.scale);
     } else if (type === 'bg') {
         window.state.activeBgEffect = id;
     } else if (type === 'card') {
