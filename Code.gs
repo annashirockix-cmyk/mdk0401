@@ -700,6 +700,7 @@ function submitAssignment_(data) {
   } finally {lock.releaseLock();}
 }
 function gradeAssignment_(data) {
+  const actor=auth_(data); if (actor.role !== "teacher" && actor.role !== "admin") throw new Error("Проверять ответы могут только преподаватели.");
   const grade=Number(data.grade); if(!isFinite(grade)||grade<0||grade>5) throw new Error("Оценка должна быть от 0 до 5.");
   const id=String(data.submissionId||""), sh=assignmentSubmissions_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), i=vals.slice(1).findIndex(function(r){return String(r[m.Id])===id;});
   if(i<0) throw new Error("Ответ не найден.");
