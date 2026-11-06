@@ -5,8 +5,15 @@
   var base=window.renderRatingPage;
   if(typeof base!=="function")return;
   window.renderRatingPage=function(){
-    base.apply(this,arguments);
     var app=document.getElementById("app");if(!app)return;
+    if(window.state&&window.state.student&&!window.state.staff){
+      app.innerHTML="";
+      var crumbs=document.getElementById("crumbs");if(crumbs)crumbs.textContent="Доска почёта";
+      var hero=node("section",null,"hero");hero.appendChild(node("h1","🏆 Доска почёта"));app.appendChild(hero);
+      var lead=node("p","Предметные рейтинги показывают учебные результаты по дисциплинам. В таблицах не отображаются адреса электронной почты.");lead.style.color="var(--muted)";app.appendChild(lead);
+    } else {
+      base.apply(this,arguments);
+    }
     var panel=node("section",null,"module");panel.id="subjectRatingPanel";panel.style.cssText="margin-top:18px;padding:18px;border-left:4px solid var(--accent)";
     var heading=node("h3","📚 Предметные рейтинги");panel.appendChild(heading);
     var intro=node("p","Отдельный рейтинг по каждой дисциплине рассчитывается по сохранённым оценкам: средний балл, процент выполнения и число завершённых работ.","");intro.style.color="var(--muted)";panel.appendChild(intro);
