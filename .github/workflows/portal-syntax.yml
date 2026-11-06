@@ -1,0 +1,53 @@
+name: Portal syntax checks
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check changed JavaScript modules
+        run: |
+          set -e
+          for file in app.js portal-genz.js rating-subjects.js workbooks.js certificate-supplement.js avatar-studio.js; do
+            echo "Checking $file"
+            node --check "$file"
+          done
+          echo "Checking Google Apps Script backend"
+          node --check < Code.gs
+      - name: Check inline scripts in HTML
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import subprocess, tempfile
+          class Scripts(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.active=False; self.parts=[]; self.current=[]
+              def handle_starttag(self, tag, attrs):
+                  if tag == 'script' and not dict(attrs).get('src'): self.active=True; self.current=[]
+              def handle_data(self, data):
+                  if self.active: self.current.append(data)
+              def handle_endtag(self, tag):
+                  if tag == 'script' and self.active:
+                      self.parts.append(''.join(self.current)); self.active=False
+          for html in ['index.html', 'g_code_full.html']:
+              parser=Scripts(); parser.feed(Path(html).read_text(encoding='utf-8'))
+              for i, source in enumerate(parser.parts, 1):
+                  if not source.strip(): continue
+                  with tempfile.NamedTemporaryFile('w', suffix='.js', encoding='utf-8') as tmp:
+                      tmp.write(source); tmp.flush()
+                      print(f'Checking {html} inline script #{i}')
+                      subprocess.run(['node', '--check', tmp.name], check=True)
+          PY
