@@ -826,11 +826,11 @@ function joinGameRoom_(data) {
   try { const room=gameRoomRow_(code); if(!room||room.status!=="open"||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
     const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true};
     state.players=state.players||[]; const existing=state.players.find(p=>email_(p.email)===user.email);
-    if(existing) return {success:true,code:code,state:state,isHost:false};
+    if(existing){if(!existing.id)existing.id=Utilities.getUuid();room.sheet.getRange(room.row,3).setValue(JSON.stringify(state));return {success:true,code:code,state:state,isHost:false,selfId:existing.id};}
     if(state.phase!=="lobby") throw new Error("Игра уже началась. Новые участники больше не принимаются.");
     if(state.players.length>=12) throw new Error("Комната заполнена (максимум 12 игроков).");
-    if(!existing) state.players.push({email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
-    room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); return {success:true,code:code,state:state};
+    if(!existing) state.players.push({id:Utilities.getUuid(),email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
+    room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); return {success:true,code:code,state:state,selfId:(state.players||[]).find(p=>email_(p.email)===user.email).id};
   } finally { lock.releaseLock(); }
 }
 function getGameRoom_(data) {
@@ -839,8 +839,8 @@ function getGameRoom_(data) {
   const state=parseGameState_(room.state), isHost=user.email===room.hostEmail, player=(state.players||[]).find(p=>email_(p.email)===user.email);
   if(!isHost&&!player) throw new Error("Вы не состоите в этой комнате.");
   if(isHost) return {success:true,code:room.code,isHost:true,state:state};
-  const safe=JSON.parse(JSON.stringify(state)); (safe.players||[]).forEach(p=>{delete p.role;delete p.roleLabel;}); delete safe.privateMessages;
-  return {success:true,code:room.code,isHost:false,state:safe,privateRole:player.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
+  const safe=JSON.parse(JSON.stringify(state)); (safe.players||[]).forEach(p=>{delete p.role;delete p.roleLabel;delete p.email;}); delete safe.privateMessages; delete safe.pendingNight; delete safe.votes;
+  return {success:true,code:room.code,isHost:false,state:safe,selfId:player.id||"",privateRole:player.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
 }
 function updateGameRoom_(data) {
   const user=auth_(data), room=gameRoomRow_(String(data.code||"").trim().toUpperCase()); if(!room) throw new Error("Комната не найдена.");
@@ -853,12 +853,12 @@ function sendGameAction_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), room=gameRoomRow_(code); if(!room||room.status!=="open") throw new Error("Комната закрыта или не найдена.");
   const state=parseGameState_(room.state), player=(state.players||[]).find(p=>email_(p.email)===user.email); if(!player||!player.alive) throw new Error("Вы не можете отправлять действия.");
   const type=String(data.type||""); if(["night_kill","night_check","night_save","vote"].indexOf(type)<0) throw new Error("Неизвестное игровое действие.");
-  const payload=data.payload||{}, target=String(payload.target||""); if(target&&!(state.players||[]).some(p=>email_(p.email)===email_(target)&&p.alive)) throw new Error("Выбранная цель недоступна.");
+  const payload=data.payload||{}, target=String(payload.target||""); if(target&&!(state.players||[]).some(p=>(String(p.id||"")===target||email_(p.email)===email_(target))&&p.alive!==false)) throw new Error("Выбранная цель недоступна.");
   const lock=LockService.getScriptLock(); lock.waitLock(10000); try { const sh=gameActions_(), id=sh.getLastRow(); sh.appendRow([id,code,user.email,type,JSON.stringify(payload),new Date().toISOString()]); return {success:true,id:id}; } finally { lock.releaseLock(); }
 }
 function getGameActions_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), room=gameRoomRow_(code); if(!room) throw new Error("Комната не найдена.");
-  const state=parseGameState_(room.state), isHost=user.email===room.hostEmail; if(!isHost&&!(state.players||[]).some(p=>email_(p.email)===user.email)) throw new Error("Вы не состоите в комнате.");
+  const state=parseGameState_(room.state), isHost=user.email===room.hostEmail; if(!isHost) throw new Error("Историю действий видит только ведущий.");
   const after=Math.max(0,Number(data.after)||0), values=gameActions_().getDataRange().getValues(), out=[];
   for(let i=1;i<values.length;i++){const row=values[i],id=Number(row[0])||i;if(String(row[1]).toUpperCase()===code&&id>after){let payload={};try{payload=JSON.parse(row[4]||"{}");}catch(e){}out.push({id:id,email:email_(row[2]),type:String(row[3]),payload:payload,createdAt:row[5]});}}
   return {success:true,actions:out.slice(-100)};
