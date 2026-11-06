@@ -34,6 +34,7 @@ window.API = {
  saveGCodeProgress:function(progress){return fetchAPI("saveGCodeProgress",{progress:progress||{}}, "POST");},
  saveResult:function(data){data=Object.assign({},data||{});if(!data.courseId&&window.state)data.courseId=window.state.activeCourseId||"";return fetchAPI("saveResult",data,"POST");},
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
+ uploadBookPdf:function(data){return fetchAPI("uploadBookPdf",data||{},"POST");},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
  deleteCustomContent:function(id){return fetchAPI("deleteCustomContent",{id:id},"POST");},
  setTeacherCourses:function(email,courses){return fetchAPI("setTeacherCourses",{email:email,courses:courses},"POST");},
