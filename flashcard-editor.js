@@ -3,7 +3,7 @@
   function esc(v){return window.escapeHtml?window.escapeHtml(String(v==null?"":v)):String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
   function staff(){var s=window.state&&window.state.staff;return !!s&&["teacher","admin"].indexOf(String(s.role||"").toLowerCase())>=0;}
   function admin(){return !!(window.state&&window.state.staff&&String(window.state.staff.role).toLowerCase()==="admin");}
-  function courses(){return admin()?Object.keys(window.MDK_DATA||{}):((window.state.staff&&window.state.staff.courses)||[]).filter(function(id){return !!(window.MDK_DATA&&window.MDK_DATA[id]);});}
+  function courses(){return admin()?Object.keys(window.MDK_DATA||{}).filter(function(id){return id!=="basic"&&id!=="technical";}):((window.state.staff&&window.state.staff.courses)||[]).filter(function(id){return !!(window.MDK_DATA&&window.MDK_DATA[id]);});}
   function topics(courseId){var out=[],c=window.MDK_DATA&&window.MDK_DATA[courseId];(c&&c.sections||[]).forEach(function(section){(section.topics||[]).forEach(function(t){out.push({id:t.id,title:(t.code||"")+" "+(t.title||"")});});});(window.customContent.topics||[]).filter(function(t){return t.mdkId===courseId;}).forEach(function(t){out.push({id:t.id,title:t.title});});return out;}
   function byId(id){return document.getElementById(id);}
   function render(){var app=byId("app"),crumb=byId("crumbs");if(!app)return;if(crumb)crumb.textContent="Конструктор карточек";if(!staff()){app.innerHTML='<section class="module">⛔ Создание карточек доступно только преподавателю и администратору.</section>';return;}
@@ -31,7 +31,7 @@
   var originalTopic=window.renderTopicPage;
   if(originalTopic)window.renderTopicPage=function(courseId,topicId,activeTab){
     originalTopic.apply(this,arguments);
-    var sets=(window.customContent.flashcards||[]).filter(function(x){return x.mdkId===courseId&&x.topicId===topicId;});if(!sets.length)return;
+    var track="";var courseData=window.MDK_DATA&&window.MDK_DATA[courseId];(courseData&&courseData.sections||[]).forEach(function(section){(section.topics||[]).forEach(function(t){if(t.id===topicId)track=t.sourceTrack||"";});});var sets=(window.customContent.flashcards||[]).filter(function(x){return x.mdkId===courseId&&x.topicId===topicId&&(!track||!x.track||x.track==="all"||x.track===track);});if(!sets.length)return;
     var bar=byId("tab-lectures")&&byId("tab-lectures").parentElement;if(!bar)return;
     if(!byId("tab-custom-flashcards")){var b=document.createElement("button");b.id="tab-custom-flashcards";b.className="btn tab ghost";b.textContent="🃏 Карточки";bar.appendChild(b);b.onclick=function(){window.switchTopicTab("custom-flashcards");};}
     var oldSwitch=window.switchTopicTab;
