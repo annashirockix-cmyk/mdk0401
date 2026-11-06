@@ -4,8 +4,8 @@
   function esc(v){return window.escapeHtml(String(v==null?"":v));}
   function date(v){if(!v)return "—";var d=new Date(v);return isNaN(d.getTime())?esc(v):d.toLocaleString("ru-RU");}
   function avg(rows){var a=rows.filter(function(x){return x.grade!==""&&x.grade!=null&&Number.isFinite(Number(x.grade))&&Number(x.grade)>0;});return a.length?(a.reduce(function(s,x){return s+Number(x.grade);},0)/a.length).toFixed(2):"—";}
-  function rowsFor(email,results,assignments){
-    var rs=results.filter(function(x){return String(x.email||"").toLowerCase()===String(email).toLowerCase();});
+  function rowsFor(email,results,assignments,ownData){
+    var rs=ownData?results.slice():results.filter(function(x){return String(x.email||"").toLowerCase()===String(email).toLowerCase();});
     var subs=[];
     assignments.forEach(function(t){
       if(t.submission){subs.push(Object.assign({taskTitle:t.title,courseId:t.courseId,topic:t.topic},t.submission));return;}
@@ -23,7 +23,7 @@
     return '<div class="pf-scroll"><table class="pf-table"><thead><tr><th>Дисциплина</th><th>Задание</th><th>Статус</th><th>Оценка</th><th>Отправлено</th><th>Комментарий</th></tr></thead><tbody>'+rows.map(function(x){return '<tr><td>'+esc(NAMES[x.courseId]||x.courseId||"—")+'</td><td>'+esc(x.taskTitle||"Задание")+'</td><td>'+esc(x.status==="reviewed"?"Проверено":"На проверке")+'</td><td>'+esc(x.grade==null||x.grade===""?"—":x.grade)+'</td><td>'+date(x.submittedAt)+'</td><td>'+esc(x.feedback||"—")+'</td></tr>';}).join("")+'</tbody></table></div>';
   }
   function renderStudent(app,student,results,assignments,teacherView){
-    var data=rowsFor(student.email,results,assignments),graded=data.results.filter(function(x){return x.grade!==""&&x.grade!=null&&Number(x.grade)>0;});
+    var data=rowsFor(student.email,results,assignments,!teacherView),graded=data.results.filter(function(x){return x.grade!==""&&x.grade!=null&&Number(x.grade)>0;});
     var reviewed=data.submissions.filter(function(x){return x.status==="reviewed"&&x.grade!==""&&x.grade!=null;});
     var achievements=teacherView?[]:(window.state.unlockedAchievements||[]).map(function(id){return (window.ACHIEVEMENTS||[]).find(function(a){return a.id===id;});}).filter(Boolean);
     var cert=teacherView?null:!!(window.state.results&&window.state.results.certificateApproved);
