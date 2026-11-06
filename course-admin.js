@@ -1,7 +1,7 @@
 "use strict";
 (function(){
-  const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ","EN":"Английский язык (общий)","ENB":"Английский — базовый","ENT":"Английский — технический"};
-  const PLUGINS=["MAT","OT","PFI","EN","ENB","ENT"];
+  const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ","ENB":"Английский — базовый","ENT":"Английский — технический"};
+  const PLUGINS=["MAT","OT","PFI","ENB","ENT"];
   const allIds=Object.keys(COURSE_LABELS);
   const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   function safeLectureHtml(html){
@@ -25,7 +25,7 @@
   const isAdmin=()=>role()==="admin";
   const isTeacher=()=>role()==="teacher"||isAdmin();
   const canCourse=id=>!isTeacher()||isAdmin()||(me().courses||[]).indexOf(id)>=0||((id==="ENB"||id==="ENT")&&(me().courses||[]).indexOf("EN")>=0);
-  const accessible=()=>isAdmin()?allIds:(isTeacher()?(me().courses||[]):allIds);
+  const accessible=()=>isAdmin()?allIds:(isTeacher()?Array.from(new Set((me().courses||[]).reduce((out,id)=>{if(id==="EN"){out.push("ENB","ENT");}else out.push(id);return out;},[]))):allIds);
   const isPlugin=id=>PLUGINS.indexOf(id)>=0;
   window.isStandaloneCourse=isPlugin;
 
