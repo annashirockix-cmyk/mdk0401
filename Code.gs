@@ -86,6 +86,7 @@ function handleRequest_(e) {
       case "getmycourseresults": result = getMyCourseResults_(data); break;
       case "savegcodeprogress": result = saveGCodeProgress_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
+      case "uploadbookpdf": result = uploadBookPdf_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
       case "setteachercourses": result = setTeacherCourses_(data); break;
@@ -796,6 +797,40 @@ function gradeAssignment_(data) {
   createNotification_(String(row[m.StudentEmail]||""),"grade","Работа проверена","По заданию «"+String(a[ah.Title]||"")+"» выставлена оценка: "+grade+"/5."+(feedback?" Есть комментарий преподавателя.":""),String(a[ah.CourseId]||""),aid);
   return {success:true};
 }
+
+/* ---------- Teacher PDF upload to Drive ---------- */
+function uploadBookPdf_(data) {
+  const courseId = String(data.courseId || "MAT");
+  const user = editor_(data, courseId);
+  const name = String(data.name || "Учебный материал.pdf").replace(/[\\\\/:*?"<>|]/g, "_").slice(0, 180);
+  const mime = String(data.mimeType || "");
+  const base64 = String(data.base64 || "");
+  if (mime !== "application/pdf" || !base64) throw new Error("Разрешены только PDF-файлы.");
+  if (base64.length > 11000000) throw new Error("Файл слишком большой. Максимальный размер — 8 МБ.");
+  const bytes = Utilities.base64Decode(base64);
+  if (bytes.length > 8 * 1024 * 1024) throw new Error("Файл превышает ограничение 8 МБ.");
+  const props = PropertiesService.getScriptProperties();
+  let folderId = props.getProperty("MATERIALS_PDF_FOLDER_ID");
+  let folder;
+  if (folderId) {
+    try { folder = DriveApp.getFolderById(folderId); } catch (e) { folder = null; }
+  }
+  if (!folder) {
+    folder = DriveApp.createFolder("МДК Портал — библиотека PDF");
+    props.setProperty("MATERIALS_PDF_FOLDER_ID", folder.getId());
+  }
+  const file = folder.createFile(Utilities.newBlob(bytes, mime, name));
+  const publicLink = data.shareByLink === true || String(data.shareByLink) === "true";
+  if (publicLink) file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return {
+    success: true,
+    fileId: file.getId(),
+    name: file.getName(),
+    url: "https://drive.google.com/file/d/" + file.getId() + "/view",
+    publicLink: publicLink
+  };
+}
+
 /* ---------- Teacher-created topics, lectures and tests ---------- */
 
 function getCustomContent_(data) {
