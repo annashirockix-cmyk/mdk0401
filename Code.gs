@@ -36,7 +36,9 @@ const HEADERS = {
   PasswordRequests: ["Id", "Email", "RequestedAt", "Status", "Note", "ResolvedAt", "ResolvedBy"],
   PortalSettings: ["Key", "Value", "UpdatedAt", "UpdatedBy"],
   GameRooms: ["Code", "HostEmail", "State", "CreatedAt", "ExpiresAt", "Status"],
-  GameActions: ["Id", "RoomCode", "Email", "Type", "Payload", "CreatedAt"]
+  GameActions: ["Id", "RoomCode", "Email", "Type", "Payload", "CreatedAt"],
+  Assignments: ["Id", "CourseId", "Title", "Topic", "Level", "WorkType", "DueAt", "TargetType", "TargetValue", "Instructions", "Criteria", "CreatedBy", "CreatedAt", "Status"],
+  AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -100,6 +102,10 @@ function handleRequest_(e) {
       case "updategameroom": result = updateGameRoom_(data); break;
       case "sendgameaction": result = sendGameAction_(data); break;
       case "getgameactions": result = getGameActions_(data); break;
+      case "createassignment": result = createAssignment_(data); break;
+      case "getassignments": result = getAssignments_(data); break;
+      case "submitassignment": result = submitAssignment_(data); break;
+      case "gradeassignment": result = gradeAssignment_(data); break;
       case "leavegameroom": result = leaveGameRoom_(data); break;
       default:
         result = { success: false, error: "Неизвестное действие: " + action };
@@ -157,13 +163,15 @@ function schedule_() { return ensureSheet_(CFG.SCHEDULE); }
 function invites_() { return ensureSheet_(CFG.INVITES); }
 function passwordRequests_() { return ensureSheet_(CFG.PASSWORD_REQUESTS); }
 function settings_() { return ensureSheet_(CFG.SETTINGS); }
+function assignments_() { return ensureSheet_("Assignments"); }
+function assignmentSubmissions_() { return ensureSheet_("AssignmentSubmissions"); }
 
 /**
  * Запустите вручную один раз после добавления SPREADSHEET_ID.
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
   return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings.";
@@ -634,6 +642,73 @@ function getMyCourseResults_(data) {
   return { success: true, results: list, summary: { completed: list.length, graded: graded.length, averageGrade: averageGrade, averagePercent: averagePercent } };
 }
 
+/* ---------- Assignments and student submissions ---------- */
+function createAssignment_(data) {
+  const courseId = String(data.courseId || "");
+  if (!courseId || CFG.COURSES.indexOf(courseId) < 0) throw new Error("Укажите корректную дисциплину.");
+  const teacher = editor_(data, courseId);
+  const title = String(data.title || "").trim().slice(0,180);
+  const instructions = String(data.instructions || "").trim().slice(0,10000);
+  const targetType = String(data.targetType || ""), targetValue = String(data.targetValue || "").trim();
+  if (!title || !instructions) throw new Error("Заполните название и условие задания.");
+  if (["group","individual"].indexOf(targetType) < 0 || !targetValue) throw new Error("Выберите адресата.");
+  const us = users_(), rows = us.getDataRange().getValues(), um = headerMap_(us);
+  const matches = rows.slice(1).filter(function(r){
+    if (String(r[um.Role] || "").toLowerCase() !== "student") return false;
+    if (String(r[um.Courses] || "").split(",").map(function(x){return x.trim();}).indexOf(courseId) < 0) return false;
+    return targetType === "individual" ? email_(r[um.Email]) === email_(targetValue) : String(r[um.Group] || "").trim().toLowerCase() === targetValue.toLowerCase();
+  });
+  if (targetType === "individual" && !matches.length) throw new Error("Обучающийся не найден или у него нет доступа к дисциплине.");
+  const id = Utilities.getUuid(), now = new Date().toISOString();
+  assignments_().appendRow([id,courseId,title,String(data.topic||"").slice(0,180),String(data.level||"Средний"),String(data.workType||"Практическое задание"),String(data.dueAt||""),targetType,targetType==="individual"?email_(targetValue):targetValue,instructions,String(data.criteria||"").slice(0,4000),teacher.email,now,"active"]);
+  return {success:true,id:id,recipients:matches.length};
+}
+function getAssignments_(data) {
+  const user = auth_(data);
+  if (["student","teacher","admin"].indexOf(user.role) < 0) throw new Error("Недостаточно прав.");
+  const sh = assignments_(), rows = sh.getDataRange().getValues(), h = headerMap_(sh);
+  const ss = assignmentSubmissions_(), subs = ss.getDataRange().getValues(), m = headerMap_(ss), list = [];
+  rows.slice(1).forEach(function(r){
+    if (!r[h.Id]) return;
+    const cid = String(r[h.CourseId] || ""); if (!hasCourseAccess_(user,cid)) return;
+    if (user.role === "student") {
+      const typ=String(r[h.TargetType]||""), val=String(r[h.TargetValue]||"");
+      if (typ==="individual" && email_(val)!==user.email) return;
+      if (typ==="group" && val.toLowerCase()!==String(user.group||"").trim().toLowerCase()) return;
+      if (String(r[h.Status]||"active")!=="active") return;
+    }
+    const item={id:String(r[h.Id]),courseId:cid,title:String(r[h.Title]||""),topic:String(r[h.Topic]||""),level:String(r[h.Level]||""),workType:String(r[h.WorkType]||""),dueAt:String(r[h.DueAt]||""),targetType:String(r[h.TargetType]||""),targetValue:String(r[h.TargetValue]||""),instructions:String(r[h.Instructions]||""),criteria:String(r[h.Criteria]||""),createdAt:String(r[h.CreatedAt]||""),status:String(r[h.Status]||"active")};
+    const own=subs.slice(1).filter(function(s){return String(s[m.AssignmentId])===item.id;});
+    if (user.role==="student") { const s=own.filter(function(x){return email_(x[m.StudentEmail])===user.email;}).sort(function(a,b){return String(b[m.SubmittedAt]).localeCompare(String(a[m.SubmittedAt]));})[0]; item.submission=s?{answer:String(s[m.Answer]||""),submittedAt:String(s[m.SubmittedAt]||""),status:String(s[m.Status]||"submitted"),grade:s[m.Grade]===""?null:s[m.Grade],feedback:String(s[m.Feedback]||"")}:null; }
+    else item.submissions=own.map(function(s){return {id:String(s[m.Id]),studentName:String(s[m.StudentName]),group:String(s[m.Group]),answer:String(s[m.Answer]||""),submittedAt:String(s[m.SubmittedAt]||""),status:String(s[m.Status]||"submitted"),grade:s[m.Grade]===""?null:s[m.Grade],feedback:String(s[m.Feedback]||"")};});
+    list.push(item);
+  });
+  list.sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));});
+  return {success:true,assignments:list};
+}
+function submitAssignment_(data) {
+  const student=auth_(data); if(student.role!=="student") throw new Error("Отправлять ответы может только обучающийся.");
+  const id=String(data.assignmentId||""), answer=String(data.answer||"").trim().slice(0,12000); if(!id||!answer) throw new Error("Введите ответ.");
+  const sh=assignments_(), rows=sh.getDataRange().getValues(), h=headerMap_(sh), a=rows.slice(1).find(function(r){return String(r[h.Id])===id;});
+  if(!a) throw new Error("Задание не найдено.");
+  const cid=String(a[h.CourseId]||""), typ=String(a[h.TargetType]||""), val=String(a[h.TargetValue]||"");
+  if(!hasCourseAccess_(student,cid)||(typ==="individual"&&email_(val)!==student.email)||(typ==="group"&&val.toLowerCase()!==String(student.group||"").trim().toLowerCase())||String(a[h.Status]||"active")!=="active") throw new Error("Это задание вам недоступно.");
+  const lock=LockService.getScriptLock(); lock.waitLock(10000);
+  try { const sub=assignmentSubmissions_(), v=sub.getDataRange().getValues(), m=headerMap_(sub), i=v.slice(1).findIndex(function(r){return String(r[m.AssignmentId])===id&&email_(r[m.StudentEmail])===student.email;}), now=new Date().toISOString();
+    const row=[i>=0?String(v[i+1][m.Id]):Utilities.getUuid(),id,student.email,student.name,student.group,answer,now,"submitted","","","",""];
+    if(i>=0) sub.getRange(i+2,1,1,row.length).setValues([row]); else sub.appendRow(row); return {success:true,submittedAt:now};
+  } finally {lock.releaseLock();}
+}
+function gradeAssignment_(data) {
+  const grade=Number(data.grade); if(!isFinite(grade)||grade<0||grade>5) throw new Error("Оценка должна быть от 0 до 5.");
+  const id=String(data.submissionId||""), sh=assignmentSubmissions_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), i=vals.slice(1).findIndex(function(r){return String(r[m.Id])===id;});
+  if(i<0) throw new Error("Ответ не найден.");
+  const row=vals[i+1], aid=String(row[m.AssignmentId]||""), as=assignments_(), av=as.getDataRange().getValues(), ah=headerMap_(as), a=av.slice(1).find(function(r){return String(r[ah.Id])===aid;});
+  if(!a) throw new Error("Назначение не найдено.");
+  const teacher=editor_(data,String(a[ah.CourseId]||""));
+  sh.getRange(i+2,m.Status+1).setValue("reviewed"); sh.getRange(i+2,m.Grade+1).setValue(grade); sh.getRange(i+2,m.Feedback+1).setValue(String(data.feedback||"").slice(0,4000)); sh.getRange(i+2,m.ReviewedBy+1).setValue(teacher.email); sh.getRange(i+2,m.ReviewedAt+1).setValue(new Date().toISOString());
+  return {success:true};
+}
 /* ---------- Teacher-created topics, lectures and tests ---------- */
 
 function getCustomContent_(data) {
