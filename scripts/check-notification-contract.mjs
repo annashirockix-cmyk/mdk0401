@@ -29,3 +29,10 @@ assert.match(backend, /function\s+markAllNotificationsRead_\s*\(data\)/);
 assert.match(backend, /email_\(vals\[i\]\[m\.RecipientEmail\]\)\s*===\s*user\.email\s*&&\s*!vals\[i\]\[m\.ReadAt\]/);
 
 console.log(`Notification contract OK: ${requiredIds.length} unique UI IDs and frontend/backend actions verified.`);
+
+// Teacher analytics dashboard regression checks.
+const reports = read("reports.js");
+assert(reports.includes("window.API.getAssignments()"), "reports load assignment data");
+assert(reports.includes("Активность по заданиям"), "reports show assignment activity panel");
+assert(reports.includes("Индивидуальные задания учитываются"), "individual assignments are not misattributed to groups");
+assert(reports.includes("не персональная отметка о задолженности"), "no-response counts are not labeled as individual debt");
