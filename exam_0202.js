@@ -16,6 +16,8 @@ window.renderTraining_0202 = function(mdkId) {
   if (window.MDK_DATA && window.MDK_DATA['02.02']) {
       window.MDK_DATA['02.02'].sections.forEach(s => s.topics.forEach(t => {
           if (t.test) baseQuestions = baseQuestions.concat(t.test);
+            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
+          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
       }));
   }
 
@@ -126,6 +128,8 @@ window.renderFinal_0202 = function(mdkId) {
   if (window.MDK_DATA && window.MDK_DATA['02.02']) {
       window.MDK_DATA['02.02'].sections.forEach(s => s.topics.forEach(t => {
           if (t.test) baseQuestions = baseQuestions.concat(t.test);
+            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
+          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
       }));
   }
   var extraQuestions = [ /* Тот же массив, что и выше */ ]; 
