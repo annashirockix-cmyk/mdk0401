@@ -50,6 +50,8 @@ setUserRole:function(email,role){return fetchAPI("setUserRole",{email:email,role
  getAssignments:function(){return fetchAPI("getAssignments",{},"GET");},
  submitAssignment:function(assignmentId,answer){return fetchAPI("submitAssignment",{assignmentId:assignmentId,answer:answer},"POST");},
  gradeAssignment:function(submissionId,grade,feedback){return fetchAPI("gradeAssignment",{submissionId:submissionId,grade:grade,feedback:feedback||""},"POST");},
+ getNotifications:function(){return fetchAPI("getNotifications",{},"GET");},
+ markNotificationRead:function(id){return fetchAPI("markNotificationRead",{id:id},"POST");},
  createGameRoom:function(data){return fetchAPI("createGameRoom",data||{},"POST");},
  joinGameRoom:function(data){return fetchAPI("joinGameRoom",data||{},"POST");},
  getGameRoom:function(code){return fetchAPI("getGameRoom",{code:code},"GET");},
