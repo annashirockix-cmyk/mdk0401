@@ -508,12 +508,14 @@ function saveResult_(data) {
 function assignmentResultRecords_(emailFilter) {
   const as=assignments_(), av=as.getDataRange().getValues(), ah=headerMap_(as);
   const ss=assignmentSubmissions_(), sv=ss.getDataRange().getValues(), sh=headerMap_(ss), byId={};
+  const hs=assignmentSubmissionHistory_(), hv=hs.getDataRange().getValues(), hm=headerMap_(hs), attemptCounts={};
+  hv.slice(1).forEach(function(r){const sid=String(r[hm.SubmissionId]||"");if(sid)attemptCounts[sid]=(attemptCounts[sid]||0)+1;});
   av.slice(1).forEach(function(r){if(r[ah.Id])byId[String(r[ah.Id])]=r;});
   const wanted=emailFilter?email_(emailFilter):"";
   return sv.slice(1).filter(function(r){return r[sh.Id]&&(!wanted||email_(r[sh.StudentEmail])===wanted);}).map(function(r){
     const a=byId[String(r[sh.AssignmentId])];if(!a)return null;
     const grade=r[sh.Grade]===""||r[sh.Grade]===null?"":Number(r[sh.Grade]);
-    return {email:email_(r[sh.StudentEmail]),name:String(r[sh.StudentName]||""),group:String(r[sh.Group]||""),testId:"assignment_"+String(a[ah.Id]),testTitle:"Задание: "+String(a[ah.Title]||""),grade:grade,score:grade===""?0:grade,maxScore:5,percent:grade===""?0:grade*20,timeSpent:0,attempts:1,finishedAt:String(r[sh.SubmittedAt]||""),courseId:String(a[ah.CourseId]||""),payload:String(r[sh.Answer]||""),assignmentStatus:String(r[sh.Status]||"submitted"),feedback:String(r[sh.Feedback]||""),assignmentId:String(a[ah.Id])};
+    return {email:email_(r[sh.StudentEmail]),name:String(r[sh.StudentName]||""),group:String(r[sh.Group]||""),testId:"assignment_"+String(a[ah.Id]),testTitle:"Задание: "+String(a[ah.Title]||""),grade:grade,score:grade===""?0:grade,maxScore:5,percent:grade===""?0:grade*20,timeSpent:0,attempts:Math.max(1,attemptCounts[String(r[sh.Id])]||1),finishedAt:String(r[sh.SubmittedAt]||""),courseId:String(a[ah.CourseId]||""),payload:String(r[sh.Answer]||""),assignmentStatus:String(r[sh.Status]||"submitted"),feedback:String(r[sh.Feedback]||""),assignmentId:String(a[ah.Id])};
   }).filter(Boolean);
 }
 
