@@ -80,7 +80,14 @@ window.applyGlobalEffects = function() {
         }
     }
     var cardFx = window.state.activeCardEffect || "none";
-    document.querySelectorAll(".module").forEach(function(el) { el.classList.remove("fx-holo-card", "fx-3d-card"); if (cardFx !== "none") el.classList.add(cardFx); });
+    document.querySelectorAll(".module, .card").forEach(function(el) {
+        el.classList.remove("fx-holo-card", "fx-3d-card", "fx-glass-card", "fx-pulse-card", "fx-blueprint-card");
+        if (cardFx !== "none") el.classList.add(cardFx);
+    });
+    var fontSize = { small: "0.92", normal: "1", large: "1.12", xlarge: "1.25" }[window.state.activeFontSize || "normal"] || "1";
+    document.documentElement.style.setProperty("--portal-font-scale", fontSize);
+    var fontChoice = { "font-default": "'Segoe UI', sans-serif", "font-mono": "'Courier New', monospace", "font-serif": "'Times New Roman', serif", "font-monomakh": "'Monomakh', serif", "font-sacramento": "'Sacramento', cursive" }[window.state.activeFont || "font-default"];
+    if (fontChoice) document.body.style.fontFamily = fontChoice;
     
     document.body.className = ""; 
     var bgFx = window.state.activeBgEffect || "none";
@@ -151,6 +158,8 @@ window.savePracAnswer = function(code) {
     window.state.results[`prac_${code}`] = val;
     window.saveStudentData();
     if (val.trim()) window.unlockAchievement('first_practical');
+    var mcDone = ['ПР-MC-01','ПР-MC-02','ПР-MC-03','ПР-MC-04','ПР-MC-05'].filter(function(k){return !!(window.state.results['prac_'+k] || '').trim();});
+    if (mcDone.length === 5) window.unlockAchievement('mastercam_5');
     
     if (window.state.student && window.API) {
         window.API.saveResult({
@@ -424,6 +433,7 @@ window.renderTopicPage = function(courseId, topicId) {
             window.unlockAchievement('reader');
         }
         else if (tabName === 'practicals') {
+            if (topic.practicals && topic.practicals.some(function(p){return p.code === 'ПР-MC-01';})) window.unlockAchievement('mastercam_1');
             if (!topic.practicals || !topic.practicals.length) { contentArea.innerHTML = "<p>Практических работ нет.</p>"; return; }
             topic.practicals.forEach(prac => {
                 var savedAns = window.state.results[`prac_${prac.code}`] || '';
