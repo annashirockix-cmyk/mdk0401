@@ -25,7 +25,7 @@
   }
   function inviteUrl(code) {
     var base = (location.origin || "") + (location.pathname || "/").replace(/index\.html$/, "");
-    return base + "#/games?join=" + encodeURIComponent(code) + "&g=detective";
+    return base + "#/games?join=" + encodeURIComponent(code) + "&g=detective-coop";
   }
 
   /* ---------- Сюжет ---------- */
