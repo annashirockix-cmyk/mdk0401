@@ -121,7 +121,8 @@
     addStyles();
     var cert=document.getElementById("printable-cert");
     var panel=makeChoicePanel();
-    var printWrap=app.querySelector(".no-print");
+    var printButton=app.querySelector(".no-print button");
+    var printWrap=printButton&&printButton.parentNode;
     if(printWrap&&printWrap.parentNode)printWrap.parentNode.insertBefore(panel,printWrap.nextSibling);
     else app.insertBefore(panel,app.firstChild);
     var prefs=readPrefs();applyDesign(prefs.design||"classic",prefs.bg||"white");
@@ -136,7 +137,6 @@
     var tableWrap=node("div");box.appendChild(tableWrap);
     var note=node("p","В приложение включены только результаты, подтверждённые учебным порталом: тесты с оценкой не ниже 3 и проверенные практические работы с положительной оценкой. Незавершённые и ожидающие проверки задания не учитываются.");note.className="cs-note";box.appendChild(note);
     app.appendChild(box);
-    var printButton=printWrap&&printWrap.querySelector("button");
     if(printButton){printButton.disabled=true;printButton.textContent="Загружаем приложение…";}
     function enablePrint(){if(printButton){printButton.disabled=false;printButton.textContent="🖨 Распечатать сертификат и приложение";}}
     function error(message){status.textContent="Не удалось загрузить приложение";tableWrap.textContent=message;enablePrint();}
