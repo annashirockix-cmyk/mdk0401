@@ -12,7 +12,7 @@
       }else if(task.submission){submissions.push(Object.assign({studentName:student.name,studentEmail:student.email,group:student.group},task.submission));}
       submissions.forEach(function(s){
         if(String(s.status||"").toLowerCase()!=="reviewed"||!Number.isFinite(Number(s.grade))||Number(s.grade)<3)return;
-        if(isTeacher&&staff.role!=="admin"&&staff.courses&&staff.courses.length&&!staff.courses.includes(course))return;
+        if(isTeacher&&String(staff.role||"").toLowerCase()!=="admin"&&!(staff.courses||[]).includes(course))return;
         var answer=String(s.answer||s.text||s.response||"").trim();
         out.push({title:String(task.title||"Практическая работа"),course:COURSES[course]||course||"Дисциплина не указана",courseId:course,topic:String(task.topic||""),student:String(s.studentName||s.name||""),group:String(s.group||""),grade:Number(s.grade),date:s.reviewedAt||s.submittedAt||s.updatedAt||"",feedback:String(s.feedback||""),answer:answer});
       });
