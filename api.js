@@ -31,6 +31,7 @@ window.API = {
  getResults:function(filters){return fetchAPI("getResults",filters||{},"GET");},
  getPublicSubjectRatings:function(){return fetchAPI("getPublicSubjectRatings",{}, "GET");},
  getMyCourseResults:function(courseId){return fetchAPI("getMyCourseResults",{courseId:courseId||""},"GET");},
+ saveGCodeProgress:function(progress){return fetchAPI("saveGCodeProgress",{progress:progress||{}}, "POST");},
  saveResult:function(data){data=Object.assign({},data||{});if(!data.courseId&&window.state)data.courseId=window.state.activeCourseId||"";return fetchAPI("saveResult",data,"POST");},
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
