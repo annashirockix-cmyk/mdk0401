@@ -60,9 +60,9 @@
           if(selected===null)return;var c=hand[selected];
           if(table.length&&!table.some(function(x){return x.attack.r===c.r||(x.defense&&x.defense.r===c.r);})){message="Подкинуть можно только карту достоинства, уже присутствующего на столе.";render();return;}
           if(table.length>=6||table.length>=maxAttack){message="Достигнуто ограничение по количеству карт на столе.";render();return;}
-          hand.splice(selected,1);table.push({attack:c,defense:null});selected=null;
-          if(table.length===1)queueThrowers();
-          throwIndex++;passTo=defender;nextPhase="defend";phase="pass";message="Передайте устройство защищающемуся игроку.";render();
+          var firstAttack=table.length===0;hand.splice(selected,1);table.push({attack:c,defense:null});selected=null;
+          if(firstAttack)queueThrowers();else throwIndex++;
+          passTo=defender;nextPhase="defend";phase="pass";message="Передайте устройство защищающемуся игроку.";render();
         };
         container.querySelector("#durakPass").onclick=function(){throwIndex++;selected=null;passToNextThrower();};
       }else{
