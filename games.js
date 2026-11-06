@@ -197,10 +197,10 @@ function startParty(container) {
 // ================= САПЁР =================
 function startMinesweeper(container) {
     var ROWS = 10, COLS = 10, MINES = 15;
-    var board = [], gameOver = false, flags = 0, revealed = 0;
+    var board = [], gameOver = false, flags = 0, revealed = 0, flagMode = false, firstMove = true;
     
     function init() {
-        board = []; gameOver = false; flags = 0; revealed = 0;
+        board = []; gameOver = false; flags = 0; revealed = 0; flagMode = false; firstMove = true;
         for (var r = 0; r < ROWS; r++) {
             board[r] = [];
             for (var c = 0; c < COLS; c++) {
@@ -230,7 +230,7 @@ function startMinesweeper(container) {
     function render() {
         var html = `<div style="padding:20px; text-align:center;">
             <h3>💣 Сапёр</h3>
-            <div style="margin-bottom:15px; font-size:18px;">Флаги: <span style="color:var(--err);">${flags}</span>/${MINES}</div>
+            <div style="margin-bottom:15px; font-size:18px;">Флаги: <span style="color:var(--err);">${flags}</span>/${MINES} <button class="btn ghost" onclick="window.msToggleFlag()">${flagMode ? "🚩 Режим флага включён" : "🚩 Поставить флаг"}</button></div>
             <div style="display:inline-grid; grid-template-columns:repeat(${COLS}, 32px); gap:2px; background:var(--border); padding:5px; border-radius:8px;">`;
         for (var r = 0; r < ROWS; r++) {
             for (var c = 0; c < COLS; c++) {
@@ -264,6 +264,8 @@ function startMinesweeper(container) {
 
     window.msClick = function(r, c) {
         if (gameOver || board[r][c].flagged) return;
+        if (flagMode) { window.msFlag({preventDefault:function(){}},r,c); return; }
+        if (firstMove) { firstMove=false; if(board[r][c].mine){ board[r][c].mine=false; outer: for(var rr=0;rr<ROWS;rr++){for(var cc=0;cc<COLS;cc++){if(!board[rr][cc].mine && (rr!==r||cc!==c)){board[rr][cc].mine=true;break outer;}}} for(var ar=0;ar<ROWS;ar++)for(var ac=0;ac<COLS;ac++){board[ar][ac].count=0;if(board[ar][ac].mine)continue;for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){var nr=ar+dr,nc=ac+dc;if(nr>=0&&nr<ROWS&&nc>=0&&nc<COLS&&board[nr][nc].mine)board[ar][ac].count++;}}} }
         reveal(r, c);
         if (gameOver) { 
             for (var i=0;i<ROWS;i++) for(var j=0;j<COLS;j++) board[i][j].revealed = true;
@@ -280,12 +282,14 @@ function startMinesweeper(container) {
     window.msFlag = function(e, r, c) {
         e.preventDefault();
         if (gameOver || board[r][c].revealed) return;
+        if (!board[r][c].flagged && flags >= MINES) return;
         board[r][c].flagged = !board[r][c].flagged;
         flags += board[r][c].flagged ? 1 : -1;
         render();
     };
 
     window.msRestart = function() { init(); render(); };
+    window.msToggleFlag = function() { flagMode = !flagMode; render(); };
     init(); render();
 }
 
