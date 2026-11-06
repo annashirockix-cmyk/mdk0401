@@ -1,7 +1,7 @@
 "use strict";
 
 window.state = window.state || {
-    student: null, staff: null, xp: 0, activeCourseId: "07.01", results: {},
+    student: null, staff: null, xp: 0, activeCourseId: "07.01", results: {}, gcodeProgress: null,
     avatar: null, nickname: null, purchasedThemes: [],
     purchasedTextEffects: [], activeTextEffect: "none",
     purchasedBgEffects: [], activeBgEffect: "none", purchasedCardEffects: [], activeCardEffect: "none",
@@ -617,6 +617,7 @@ function setupLogin() {
         window.state.xp = isStudent ? (Number(profile.xp) || 0) : 0;
         window.state.results = isStudent && profile.results && typeof profile.results === "object" ? profile.results : {};
         window.state.unlockedAchievements = isStudent && Array.isArray(profile.unlockedAchievements) ? profile.unlockedAchievements : [];
+        window.state.gcodeProgress = isStudent && profile.gcodeProgress && typeof profile.gcodeProgress === "object" ? profile.gcodeProgress : null;
         window.state.activeCourseId = isStudent && (res.courses || []).indexOf(profile.activeCourseId) >= 0 ? profile.activeCourseId : ((res.courses || [])[0] || "07.01");
         window.state.avatar = isStudent ? (profile.avatar || null) : null;
         window.state.avatarEmoji = isStudent ? (profile.avatarEmoji || "👩‍🔧") : "👨‍🏫";
