@@ -103,7 +103,7 @@ window.renderJournalPage = function() {
           wrap.appendChild(table);
           contentWrap.appendChild(wrap);
       }).catch(err => {
-          contentWrap.innerHTML = `<div class="module" style="color:var(--err);">Ошибка: ${err.message}</div>`;
+          contentWrap.innerHTML = `<div class="module" style="color:var(--err);">Ошибка: ${window.escapeHtml(err.message)}</div>`;
       });
   }
 
@@ -166,18 +166,19 @@ window.renderJournalPage = function() {
                           <th style="padding:12px; border:1px solid var(--border);">Статус</th>
                       </tr></thead><tbody>`;
 
-              students.forEach(s => {
-                  var sKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
+              students.forEach((s, studentIndex) => {
                   var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
                   var manualGrades = p.manualGrades || {};
-                  var currentVal = manualGrades[formattedDate] || "";
+                  var currentVal = String(manualGrades[formattedDate] || "");
+                  var inputId = "manualGrade_" + studentIndex;
+                  var statusId = "manualGradeStatus_" + studentIndex;
 
                   tableHtml += `<tr>
-                      <td style="padding:12px; border:1px solid var(--border);"><b>${window.escapeHtml(s.name)}</b> <span style="font-size:12px; color:var(--muted);">(${s.group})</span></td>
+                      <td style="padding:12px; border:1px solid var(--border);"><b>${window.escapeHtml(s.name)}</b> <span style="font-size:12px; color:var(--muted);">(${window.escapeHtml(s.group)})</span></td>
                       <td style="padding:12px; border:1px solid var(--border); text-align:center;">
-                          <input type="text" id="grade_${sKey}_${formattedDate}" class="self-input" style="margin:0; text-align:center; font-size:18px; font-weight:bold; height:40px;" maxlength="3" placeholder="-" value="${currentVal}">
+                          <input type="text" id="${inputId}" class="self-input" style="margin:0; text-align:center; font-size:18px; font-weight:bold; height:40px;" maxlength="3" placeholder="-" value="${window.escapeHtml(currentVal)}">
                       </td>
-                      <td style="padding:12px; border:1px solid var(--border); text-align:center;" id="status_${sKey}_${formattedDate}">
+                      <td style="padding:12px; border:1px solid var(--border); text-align:center;" id="${statusId}">
                           ${currentVal ? '<span style="color:var(--ok);">Сохранено</span>' : '<span style="color:var(--muted);">Не выставлено</span>'}
                       </td>
                   </tr>`;
@@ -194,9 +195,8 @@ window.renderJournalPage = function() {
                   btn.textContent = "Сохранение..."; btn.disabled = true;
                   var promises = [];
 
-                  students.forEach(s => {
-                      var sKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
-                      var input = document.getElementById(`grade_${sKey}_${formattedDate}`);
+                  students.forEach((s, studentIndex) => {
+                      var input = document.getElementById("manualGrade_" + studentIndex);
                       if (!input) return;
                       var val = input.value.trim();
                       
@@ -213,10 +213,9 @@ window.renderJournalPage = function() {
                       window.showToast("Оценки за " + formattedDate + " сохранены!", "ok");
                       btn.textContent = "💾 Сохранить все оценки"; btn.disabled = false;
                       // Обновляем статусы
-                      students.forEach(s => {
-                          var sKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
-                          var input = document.getElementById(`grade_${sKey}_${formattedDate}`);
-                          var st = document.getElementById(`status_${sKey}_${formattedDate}`);
+                      students.forEach((s, studentIndex) => {
+                          var input = document.getElementById("manualGrade_" + studentIndex);
+                          var st = document.getElementById("manualGradeStatus_" + studentIndex);
                           if (st) {
                               if (input.value.trim()) st.innerHTML = '<span style="color:var(--ok);">Сохранено</span>';
                               else st.innerHTML = '<span style="color:var(--muted);">Не выставлено</span>';
