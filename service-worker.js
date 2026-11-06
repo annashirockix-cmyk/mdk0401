@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v86'; // Обновление интеграции учебных симуляторов.
+const CACHE_NAME = 'portal-cache-v87'; // Обновление интеграции учебных симуляторов.
 
 const STATIC_ASSETS = [
   './',
@@ -91,7 +91,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v86');
+        console.log('[SW] Кэширование статических ресурсов версии v87');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
