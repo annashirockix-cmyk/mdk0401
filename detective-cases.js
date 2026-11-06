@@ -1,0 +1,1 @@
+/home/workdir/artifacts/detective-cases.js

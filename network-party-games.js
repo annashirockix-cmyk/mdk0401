@@ -1,0 +1,1 @@
+/home/workdir/artifacts/network-party-games.js
