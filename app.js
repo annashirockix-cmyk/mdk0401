@@ -42,7 +42,11 @@ window.showToast = function(msg, type) {
 };
 
 window.saveStudentData = function() {
-    try { 
+    try {
+        // Не затираем более свежий прогресс G-Code Lab, сохранённый отдельной страницей портала.
+        var cachedState = JSON.parse(localStorage.getItem("mdk.state") || "{}");
+        var sameAccount = cachedState.student && window.state.student && String(cachedState.student.email || "").toLowerCase() === String(window.state.student.email || "").toLowerCase();
+        if (sameAccount && cachedState.gcodeProgress && Number(cachedState.gcodeProgress.updatedAt) > Number((window.state.gcodeProgress || {}).updatedAt || 0)) window.state.gcodeProgress = cachedState.gcodeProgress;
         localStorage.setItem("mdk.state", JSON.stringify(window.state)); 
         if (window.state.student && window.API) { 
             var key = (window.state.student.name || "").trim().toLowerCase() + "|" + (window.state.student.group || "").trim().toLowerCase();
