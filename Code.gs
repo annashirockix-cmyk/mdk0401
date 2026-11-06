@@ -503,11 +503,24 @@ function saveResult_(data) {
   return { success: true, attempts: attempts };
 }
 
+function assignmentResultRecords_(emailFilter) {
+  const as=assignments_(), av=as.getDataRange().getValues(), ah=headerMap_(as);
+  const ss=assignmentSubmissions_(), sv=ss.getDataRange().getValues(), sh=headerMap_(ss), byId={};
+  av.slice(1).forEach(function(r){if(r[ah.Id])byId[String(r[ah.Id])]=r;});
+  const wanted=emailFilter?email_(emailFilter):"";
+  return sv.slice(1).filter(function(r){return r[sh.Id]&&(!wanted||email_(r[sh.StudentEmail])===wanted);}).map(function(r){
+    const a=byId[String(r[sh.AssignmentId])];if(!a)return null;
+    const grade=r[sh.Grade]===""||r[sh.Grade]===null?"":Number(r[sh.Grade]);
+    return {email:email_(r[sh.StudentEmail]),name:String(r[sh.StudentName]||""),group:String(r[sh.Group]||""),testId:"assignment_"+String(a[ah.Id]),testTitle:"Задание: "+String(a[ah.Title]||""),grade:grade,score:grade===""?0:grade,maxScore:5,percent:grade===""?0:grade*20,timeSpent:0,attempts:1,finishedAt:String(r[sh.SubmittedAt]||""),courseId:String(a[ah.CourseId]||""),payload:String(r[sh.Answer]||""),assignmentStatus:String(r[sh.Status]||"submitted"),feedback:String(r[sh.Feedback]||""),assignmentId:String(a[ah.Id])};
+  }).filter(Boolean);
+}
+
 function getResults_(data) {
   const user=auth_(data); if(user.role!=='admin'&&user.role!=='teacher') throw new Error('Недостаточно прав.');
   let list=results_().getDataRange().getValues().slice(1).filter(r=>r[0]).map(r=>({email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],courseId:r[12]||'',payload:String(r[13]||'')}));
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
   vals.slice(1).forEach(row=>{if(String(row[m.Role]||'').toLowerCase()!=='student')return;let p={};try{p=JSON.parse(row[m.Payload]||'{}')}catch(e){};const rs=p.results||{};Object.keys(rs).forEach(key=>{const rec=rs[key];if(!rec||typeof rec!=='object'||rec.grade==null)return;const email=email_(row[m.Email]);if(list.some(x=>email_(x.email)===email&&String(x.testId)===key))return;let cid=String(rec.courseId||'');if(!cid){const matches=CFG.COURSES.filter(id=>key.indexOf(id)>=0);if(matches.length===1)cid=matches[0];else{const enrolled=String(row[m.Courses]||'').split(',').filter(Boolean);if(enrolled.length===1)cid=enrolled[0];}}list.push({email:email,name:row[m.Name],group:row[m.Group],testId:key,testTitle:rec.testTitle||key,grade:rec.grade,score:rec.score||0,maxScore:rec.max||rec.maxScore||0,percent:rec.percent||0,timeSpent:rec.timeSpent||0,attempts:rec.attempts||1,finishedAt:rec.finishedAt||'',courseId:cid});});});
+  assignmentResultRecords_().forEach(function(x){if(!list.some(function(r){return email_(r.email)===x.email&&String(r.testId)===x.testId;}))list.push(x);});
   if(user.role==='teacher')list=list.filter(x=>hasCourseAccess_(user,x.courseId));
   if(data.courseId)list=list.filter(x=>x.courseId===String(data.courseId));
   list.sort((a,b)=>String(b.finishedAt).localeCompare(String(a.finishedAt)));return {success:true,results:list};
@@ -635,8 +648,9 @@ function getMyCourseResults_(data) {
         timeSpent: Number(rec.timeSpent) || 0, finishedAt: String(rec.finishedAt || ""), courseId: courseId });
     });
   }
+  assignmentResultRecords_(email).forEach(function(x){if(!requestedCourse||x.courseId===requestedCourse){if(!list.some(function(r){return r.testId===x.testId;}))list.push({testId:x.testId,testTitle:x.testTitle,grade:x.grade,score:x.score,maxScore:x.maxScore,percent:x.percent,timeSpent:0,finishedAt:x.finishedAt,courseId:x.courseId,payload:x.payload,assignmentStatus:x.assignmentStatus,feedback:x.feedback,assignmentId:x.assignmentId});}});
   list.sort(function (a, b) { return String(a.finishedAt).localeCompare(String(b.finishedAt)); });
-  const graded = list.filter(function (x) { return x.grade > 0; });
+  const graded = list.filter(function (x) { return x.grade !== "" && x.grade !== null && Number(x.grade) > 0; });
   const averageGrade = graded.length ? Math.round(graded.reduce(function (n, x) { return n + x.grade; }, 0) / graded.length * 100) / 100 : 0;
   const averagePercent = graded.length ? Math.round(graded.reduce(function (n, x) { return n + x.percent; }, 0) / graded.length) : 0;
   return { success: true, results: list, summary: { completed: list.length, graded: graded.length, averageGrade: averageGrade, averagePercent: averagePercent } };
