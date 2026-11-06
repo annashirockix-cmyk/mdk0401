@@ -114,7 +114,7 @@ window.renderShopPage = function() {
         items.forEach(item => {
             var isOwned = isTeacher || 
                           (type === 'theme' && (window.state.purchasedThemes || []).includes(item.id)) ||
-                          (type === 'avatar' && window.state.avatar === item.url) ||
+                          (type === 'avatar' && ((window.state.purchasedAvatars || []).includes(item.url) || window.state.avatar === item.url)) ||
                           (type === 'text' && (window.state.purchasedTextEffects || []).includes(item.id)) ||
                           (type === 'font' && (window.state.purchasedFonts || []).includes(item.id)) ||
                           (type === 'fontSize' && (window.state.purchasedFontSizes || []).includes(item.id)) ||
@@ -192,7 +192,7 @@ window.buyShopItem = function(type, id, price, value) {
         if (!window.state.staff) window.state.xp -= price;
         
         if (type === 'theme') { if(!window.state.purchasedThemes) window.state.purchasedThemes = []; window.state.purchasedThemes.push(id); }
-        if (type === 'avatar') { window.state.avatar = value || null; }
+        if (type === 'avatar') { window.state.avatar = value || null; if(!window.state.purchasedAvatars) window.state.purchasedAvatars = []; if(value && !window.state.purchasedAvatars.includes(value)) window.state.purchasedAvatars.push(value); }
         if (type === 'text') { if(!window.state.purchasedTextEffects) window.state.purchasedTextEffects = []; window.state.purchasedTextEffects.push(id); }
         if (type === 'font') { if(!window.state.purchasedFonts) window.state.purchasedFonts = []; window.state.purchasedFonts.push(id); }
         if (type === 'fontSize') { if(!window.state.purchasedFontSizes) window.state.purchasedFontSizes = []; window.state.purchasedFontSizes.push(id); }
