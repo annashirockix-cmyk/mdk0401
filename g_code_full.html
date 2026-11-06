@@ -69,9 +69,15 @@ const theory=[
 ];
 let state={level:1,xp:0,done:[],achievements:[],streak:0};
 try{const saved=JSON.parse(localStorage.getItem(STORE)||"{}");state=Object.assign(state,saved);}catch(e){}
+state.done=Array.isArray(state.done)?state.done.filter(n=>Number.isInteger(n)&&n>=1&&n<=300):[];
+state.achievements=Array.isArray(state.achievements)?state.achievements.filter(x=>typeof x==="string").slice(0,30):[];
+state.xp=Number.isFinite(Number(state.xp))?Math.max(0,Number(state.xp)):0;
+state.streak=Number.isFinite(Number(state.streak))?Math.max(0,Number(state.streak)):0;
+state.level=Math.max(1,Math.min(300,Number(state.level)||1));
 const $=id=>document.getElementById(id), code=$("code"), canvas=$("view"),ctx=canvas.getContext("2d");
 const round=n=>Math.round(n*100)/100, fmt=n=>String(round(n));
 function save(){localStorage.setItem(STORE,JSON.stringify(state));}
+function renderAchievements(){const box=$("achievements");box.textContent="";if(!state.achievements.length){box.textContent="Пока нет. Каждый рубеж приближает к мастерству.";return;}state.achievements.forEach(function(label){const badge=document.createElement("span");badge.className="achievement";badge.textContent="🏅 "+label;box.appendChild(badge);});}
 function milestone(){const marks={1:"Первый запуск",10:"Азбука G/M",30:"Командир траектории",60:"Геометр",90:"Архитектор контуров",120:"Буквенный мастер",180:"Мастер алфавита",240:"Словесный программист",270:"Автор инструкций",300:"Легенда ЧПУ"};Object.keys(marks).forEach(k=>{if(state.done.length>=Number(k)&&!state.achievements.includes(marks[k]))state.achievements.push(marks[k]);});}
 function polygon(n,r,rot){let p=[];for(let i=0;i<n;i++){let a=rot+i*2*Math.PI/n;p.push([round(Math.cos(a)*r+35),round(Math.sin(a)*r+35)]);}p.push(p[0]);return p;}
 function star(n,r){let p=[];for(let i=0;i<n*2;i++){let a=-Math.PI/2+i*Math.PI/n,rr=i%2?r*.43:r;p.push([round(Math.cos(a)*rr+35),round(Math.sin(a)*rr+35)]);}p.push(p[0]);return p;}
@@ -91,10 +97,10 @@ function levelInfo(n){
  const s=shapeFor(n),p=s.plane||planeFor(n);return {kind:n<=90?"ФИГУРА":n<=180?"СИМВОЛ":n<=240?"СЛОВО":n<=270?"ФРАЗА":"МНОГОПЛОСКОСТНАЯ ОБРАБОТКА",title:"Уровень "+n+" · "+s.label,task:"Построй контур "+s.label+". Используй "+p.g+" и систему координат "+(n>=271?"G"+(54+(n-271)%6):"G54")+". Сравни фактическую траекторию с образцом.",hint:"G00 — быстрый переход к началу сегмента; G01 — рабочее движение. Внимательно проверь выбранную плоскость и активную систему координат.",lines:s.lines,plane:p,required:["G21",p.g,"G"+(54+(n>=271?(n-271)%6:0)),(n%2===0?"G91":"G90"),"M03","M05","M30"]};
 }
 function makeCode(info,n){
- let p=info.plane||planes[0],axes=p.axes,required=info.required||[],lines=["%","O"+String(n).padStart(3,"0"),"G21"];
- required.filter(function(c){return /^G\d+$/.test(c)&&c!=="G21";}).forEach(function(c){lines.push(c);});
+ let p=info.plane||planes[0],axes=p.axes,required=info.required||[],unit=required.includes("G20")?"G20":"G21",lines=["%","O"+String(n).padStart(3,"0"),unit];
+ required.filter(function(c){return /^G\d+$/.test(c)&&c!=="G20"&&c!=="G21";}).forEach(function(c){lines.push(c);});
  if(!required.some(function(c){return c==="G90"||c==="G91";}))lines.push("G90");
- if(!required.includes("G41")&&!required.includes("G42"))lines.push("G40");
+ if(!required.includes("G40")&&!required.includes("G41")&&!required.includes("G42"))lines.push("G40");
  lines.push("G00 "+axes[0]+"0 "+axes[1]+"0","M03 S1200","F120");
  if(info.lines&&info.lines.length){let cur=[0,0];info.lines.forEach(function(seg){let a=seg[0],b=seg[1];if(required.includes("G91")){lines.push("G00 "+axes[0]+fmt(a[0]-cur[0])+" "+axes[1]+fmt(a[1]-cur[1]));lines.push("G01 "+axes[0]+fmt(b[0]-a[0])+" "+axes[1]+fmt(b[1]-a[1]));}else{lines.push("G00 "+axes[0]+fmt(a[0])+" "+axes[1]+fmt(a[1]));lines.push("G01 "+axes[0]+fmt(b[0])+" "+axes[1]+fmt(b[1]));}cur=b;});}
  else {lines.push("G00 "+axes[0]+"10 "+axes[1]+"10","G01 "+axes[0]+"20 "+axes[1]+"10");}
@@ -132,7 +138,7 @@ function render(){
  $("xp").textContent=state.xp;$("done").textContent=state.done.length;$("streak").textContent=state.streak;
  $("bar").style.width=(state.done.length/300*100)+"%";$("headerProgress").textContent=state.done.length+" / 300 уровней";
  $("prev").disabled=n===1;$("next").disabled=n===300||!state.done.includes(n);
- $("achievements").innerHTML=state.achievements.length?state.achievements.map(x=>'<span class="achievement">🏅 '+x+'</span>').join(""):"Пока нет. Каждый рубеж приближает к мастерству.";
+ renderAchievements();
  const levels=$("levels");levels.innerHTML="";for(let i=1;i<=300;i++){let b=document.createElement("button");b.textContent=i;b.className=(state.done.includes(i)?"done ":"")+(i===n?"current":"");b.title="Уровень "+i;b.onclick=()=>{state.level=i;render();};levels.appendChild(b);}
  code.value=makeCode(info,n);draw({rapid:[],feed:[]},info.lines||[]);
  $("result").textContent=info.theory?"Изучи мини-лекцию и отметь завершение.": "Пример загружен. Отредактируй его или сразу проверь.";
@@ -141,7 +147,7 @@ function complete(msg){
  const n=state.level;if(!state.done.includes(n)){state.done.push(n);state.xp+=10;state.streak+=1;milestone();save();}
  $("result").innerHTML='<span class="good">✓ '+msg+' Уровень '+n+' пройден · +10 XP.</span>';
  $("xp").textContent=state.xp;$("done").textContent=state.done.length;$("streak").textContent=state.streak;$("bar").style.width=(state.done.length/300*100)+"%";$("headerProgress").textContent=state.done.length+" / 300 уровней";
- $("achievements").innerHTML=state.achievements.map(x=>'<span class="achievement">🏅 '+x+'</span>').join("")||"";
+ renderAchievements();
  $("next").disabled=n===300;
 }
 function check(){
