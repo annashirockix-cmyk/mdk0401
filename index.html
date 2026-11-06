@@ -45,13 +45,13 @@
         <div class="brand" style="display: flex; align-items: center; gap: 10px;">
             <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
             <span class="brand-badge" id="mainLogo">МДК Портал</span>
-            <select id="mdkSelector" class="group-select" style="background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px; font-size: 13px; outline: none;" onchange="if(this.value==='ENGLISH_PORTAL'){window.open('https://annashirockix-cmyk.github.io/-/','_blank','noopener,noreferrer');this.value=window.state.activeCourseId||'07.01';return;} window.state.activeCourseId=this.value;window.saveStudentData&&window.saveStudentData();window.renderHomePage&&window.renderHomePage();">
+            <select id="mdkSelector" class="group-select" style="background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px; font-size: 13px; outline: none;" onchange="if(!this.value)return;window.state.activeCourseId=this.value;window.saveStudentData&&window.saveStudentData();window.syncCourseSelector&&window.syncCourseSelector();window.renderHomePage&&window.renderHomePage();">
                 <option value="07.01">МДК 07.01 (ЧПУ)</option>
                 <option value="04.01">МДК 04.01 (Диагностика)</option>
                 <option value="02.01">МДК 02.01 (Сборка)</option>
                 <option value="02.02">МДК 02.02 (Программирование)</option>
                 <option value="MCAM">Mastercam</option>
-                <optgroup label="Подключаемые порталы"><option value="ENGLISH_PORTAL">Английский язык ↗</option><option value="MAT">Материаловедение</option><option value="OT">Охрана труда</option></optgroup>
+                <optgroup label="Учебные дисциплины"><option value="EN">Английский язык</option><option value="MAT">Материаловедение</option><option value="OT">Охрана труда</option></optgroup>
             </select>
         </div>
         <div class="topbar-status">
@@ -86,6 +86,9 @@
             <a href="#/subject-tutor" class="drawer-item">🎓 Предметный помощник</a>
             <a href="#/gcode-lab" class="drawer-item">⚙️ G-Code Lab — 300 уровней</a>
             <a href="#/materials-lab" class="drawer-item">🔬 Лаборатория материаловедения</a>
+            <a href="#/english-tests" class="drawer-item english-drawer-item" style="display:none">🇬🇧 Английский — тесты</a>
+            <a href="#/english-media" class="drawer-item english-drawer-item" style="display:none">🎬 Английский — видео и презентации</a>
+            <a href="#/english-cards" class="drawer-item english-drawer-item" style="display:none">🃏 Английский — карточки и кроссворд</a>
             <a href="#/machining-lab" class="drawer-item">🛠️ Расчёт режимов резания</a>
             <a href="#/shop" class="drawer-item">🛒 Магазин</a>
             <a href="#/achievements" class="drawer-item">🏆 Достижения</a>
@@ -105,6 +108,7 @@
             <a href="#/teacher-dashboard" class="drawer-item">📊 Панель преподавателя</a>
             <a href="#/journal" class="drawer-item">📋 Журнал (преподаватель)</a>
             <a href="#/teacher-tasks" class="drawer-item">🧩 Конструктор заданий</a>
+            <a href="#/course-editor" class="drawer-item" id="menuCourseEditor" style="display:none">✍️ Создание лекций, тестов и карточек</a>
             <a href="#/access" class="drawer-item">🔐 Доступ и приглашения</a>
             <a href="#/admin" class="drawer-item">⚙️ Админка</a>
             <hr style="border-color:var(--border);margin:10px 0;width:100%">
@@ -124,6 +128,10 @@
     <script src="./data-mastercam.js"></script>
     <script src="./mastercam-practicals.js?v=3"></script>
     <script src="./data-material.js?v=8"></script>
+    <script src="./data-english-basic.js?v=1"></script>
+    <script src="./data-english-technical.js?v=1"></script>
+    <script src="./english-data-global.js?v=1"></script>
+    <script src="./english-course.js?v=1"></script>
     <script src="./data-pfi.js?v=3"></script>
     <script src="./data-safety.js"></script>
     <script src="./data-extra.js"></script>
@@ -139,7 +147,7 @@
     <script src="./questions-games.js"></script>
     <script src="./questions-logic.js"></script>
     <script src="./questions-extra.js"></script>
-    <script src="./app.js?v=19"></script>
+    <script src="./app.js?v=20"></script>
     <script src="./app-offline-login.js?v=4"></script>
     <script src="./media-fix.js?v=5"></script>
     <script src="./portal-fixes.js?v=6"></script>
@@ -182,7 +190,8 @@
     <script src="./admin.js"></script>
     <script src="./extra.js"></script>
     <script src="./portal-final.js?v=14"></script>
-    <script src="./course-admin.js?v=10"></script>
+    <script src="./course-admin.js?v=11"></script>
+    <script src="./english-tools.js?v=1"></script>
     <script src="./course-announcements.js?v=3"></script>
     <script src="./access.js?v=6"></script>
     <script src="./account.js?v=3"></script>
