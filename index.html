@@ -1,1 +1,186 @@
-/tmp/index_patched.html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+    <title>МДК Портал - Учебный портал</title>
+    <link rel="icon" href="data:,">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="./style.css?v=12">
+    <link rel="stylesheet" href="./style-bg-fix.css?v=5">
+    <link rel="stylesheet" href="./animations.css">
+    <link rel="stylesheet" href="./games-visual.css?v=3">
+    <link rel="stylesheet" href="./lecture-methodical.css">
+</head>
+<body>
+    <div id="loginOverlay" class="login-overlay" style="display: flex;">
+        <div class="login-shell">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="color: var(--accent); margin-bottom: 5px;">МДК Портал</h2>
+                <p style="color: var(--muted); font-size: 14px;">Авторизация в системе</p>
+            </div>
+            <form id="unifiedLoginForm" class="login-card">
+                <input type="text" id="loginEmail" placeholder="Email (например: student_n@portal.ru)" required>
+                <input type="password" id="loginPassword" placeholder="Пароль" required>
+                <button type="button" id="btnLoginUnified" class="btn" style="width: 100%; margin-top: 10px; padding: 12px;">Войти</button>
+                <div style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--muted);">
+                    <p>Нет аккаунта? Получите ссылку или QR-код приглашения у преподавателя.</p>
+                    <button type="button" class="btn ghost" id="showRegisterBtn" style="width:100%;margin-top:8px;">Регистрация по приглашению</button>
+                </div>
+            </form>
+            <form id="portalRegisterForm" class="login-card" style="display:none;margin-top:12px;">
+                <h3>Регистрация студента</h3>
+                <input id="regName" type="text" placeholder="ФИО" required>
+                <input id="regGroup" type="text" placeholder="Группа" required>
+                <input id="regEmail" type="email" placeholder="Email" required>
+                <input id="regPassword" type="password" minlength="8" placeholder="Пароль (не менее 8 символов)" required>
+                <input id="regInvite" type="text" placeholder="Код приглашения" required>
+                <button type="submit" class="btn" id="btnRegister" style="width:100%;margin-top:10px;">Зарегистрироваться</button>
+                <button type="button" class="btn ghost" id="hideRegisterBtn" style="width:100%;margin-top:6px;">Назад ко входу</button>
+                <p style="font-size:12px;color:var(--muted);">Регистрация выдаёт доступ только к дисциплинам, включённым в приглашение.</p>
+            </form>
+        </div>
+    </div>
+    <header class="topbar">
+        <div class="brand" style="display: flex; align-items: center; gap: 10px;">
+            <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
+            <span class="brand-badge" id="mainLogo">МДК Портал</span>
+            <select id="mdkSelector" class="group-select" style="background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px; font-size: 13px; outline: none;" onchange="if(this.value==='ENGLISH_PORTAL'){window.open('https://annashirockix-cmyk.github.io/-/','_blank','noopener,noreferrer');this.value=window.state.activeCourseId||'07.01';return;} window.state.activeCourseId=this.value;window.saveStudentData();window.renderHomePage();">
+                <option value="07.01">МДК 07.01 (ЧПУ)</option>
+                <option value="04.01">МДК 04.01 (Диагностика)</option>
+                <option value="02.01">МДК 02.01 (Сборка)</option>
+                <option value="02.02">МДК 02.02 (Программирование)</option>
+                <option value="MCAM">Mastercam</option>
+                <optgroup label="Подключаемые порталы"><option value="ENGLISH_PORTAL">Английский язык ↗</option><option value="MAT">Материаловедение</option><option value="OT">Охрана труда</option></optgroup>
+            </select>
+        </div>
+        <div class="topbar-status"><div class="notification-wrap" id="notificationWrap"><button class="btn ghost notification-bell" id="notificationBell" type="button" aria-label="Уведомления" aria-expanded="false">🔔<span id="notificationBadge" class="notification-badge" hidden>0</span></button><section class="notification-popover" id="notificationPopover" hidden aria-label="Центр уведомлений">
+<div class="notification-popover-head"><b>Уведомления</b><div><button type="button" class="btn ghost" id="notificationMarkAll">Прочитать всё</button><button type="button" class="btn ghost" id="notificationRefresh" aria-label="Обновить">↻</button><button type="button" class="btn ghost" id="notificationClose" aria-label="Закрыть">✕</button></div></div>
+<div class="notification-filters"><select id="notificationStatusFilter" aria-label="Статус уведомлений"><option value="all">Все</option><option value="unread">Непрочитанные</option></select><select id="notificationCourseFilter" aria-label="Фильтр по дисциплине"><option value="all">Все дисциплины</option></select><button type="button" class="btn ghost" id="notificationPrefsBtn" aria-expanded="false">⚙ Настроить</button></div>
+<div class="notification-prefs" id="notificationPrefs" hidden><b>Показывать уведомления по дисциплинам</b><div id="notificationPrefsList"></div><small>Настройки сохраняются на этом устройстве.</small></div>
+<div id="notificationItems" aria-live="polite" class="notification-items">Загрузка…</div><div class="notification-popover-foot"><a href="#/teacher-tasks">Перейти к заданиям</a></div></section></div>
+            <span class="status-pill" id="xpCount">🌟 0 XP</span>
+            <div class="user-chip" onclick="location.hash = '#/profile'" style="cursor: pointer;">
+                <div id="userChipAvatar" style="width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; overflow: hidden;">👨‍🎓</div>
+                <div style="display: flex; flex-direction: column; line-height: 1.2;">
+                    <span id="userChipName" style="font-size: 12px; font-weight: bold;">Гость</span>
+                    <span id="userChipGroup" style="font-size: 10px; color: var(--muted);">—</span>
+                </div>
+            </div>
+            <button class="btn ghost" onclick="window.handleLogout()" style="padding: 5px 10px; font-size: 12px;">Выйти</button>
+        </div>
+    </header>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <nav class="drawer" id="drawer">
+        <div class="drawer-head">
+            <span style="font-weight: bold; color: var(--accent);">Навигация</span>
+            <button class="drawer-close" id="drawerClose">✕</button>
+        </div>
+        <div class="drawer-nav">
+            <a href="#/" class="drawer-item">🏠 Главная</a>
+            <a href="#/profile" class="drawer-item">👤 Личный кабинет</a>
+            <a href="#/account" class="drawer-item">🔑 Логин и пароль</a>
+            <a href="#/grades" class="drawer-item">📊 Мои оценки</a>
+            <a href="#/shop" class="drawer-item">🛒 Магазин</a>
+            <a href="#/achievements" class="drawer-item">🏆 Достижения</a>
+            <a href="#/rating" class="drawer-item">📈 Доска почета</a>
+            <a href="#/games" class="drawer-item">🎮 Игры</a>
+            <hr style="border-color: var(--border); margin: 10px 0; width: 100%;">
+            <a href="#/videos" class="drawer-item">🎬 Видеоуроки</a>
+            <a href="#/safety" class="drawer-item">🦺 Охрана труда</a>
+            <a href="#/passports" class="drawer-item">📘 Паспорта станков</a>
+            <a href="#/links" class="drawer-item">🔗 Полезные ссылки</a>
+            <a href="https://annashirockix-cmyk.github.io/-/" class="drawer-item" target="_blank" rel="noopener noreferrer">🌐 Английский язык ↗</a>
+            <a href="#/training" class="drawer-item">🎯 Тренировка</a>
+            <a href="#/final/07.01" class="drawer-item">📝 Экзамен</a>
+            <a href="#/certificate" class="drawer-item">📜 Сертификат</a>
+            <hr style="border-color: var(--border); margin: 10px 0; width: 100%;">
+            <a href="#/teacher-dashboard" class="drawer-item" id="menuTeacherDashboard">📊 Панель преподавателя</a>
+            <a href="#/journal" class="drawer-item">📋 Журнал (преподаватель)</a>
+            <a href="#/teacher-tasks" class="drawer-item">🧩 Конструктор заданий</a>
+            <a href="#/access" class="drawer-item">🔐 Доступ и приглашения</a>
+            <a href="#/admin" class="drawer-item">⚙️ Админка</a>
+            <hr style="border-color: var(--border); margin: 10px 0; width: 100%;">
+            <a href="javascript:void(0)" class="drawer-item" onclick="window.clearCache()">🧹 Очистить кэш</a>
+        </div>
+    </nav>
+    <main>
+        <div id="crumbs" style="padding: 10px 20px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border);"></div>
+        <div id="app" style="padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%;"></div>
+    </main>
+    <script src="./api.js?v=13"></script>
+    <script src="./data-global.js?v=6"></script>
+    <script src="./data-0701.js"></script>
+    <script src="./data-0401.js"></script>
+    <script src="./data-0201.js"></script>
+    <script src="./data-0202.js"></script>
+    <script src="./data-mastercam.js"></script>
+    <script src="./mastercam-practicals.js?v=3"></script>
+    <script src="./data-material.js?v=8"></script>
+    <script src="./data-pfi.js?v=3"></script>
+    <script src="./data-safety.js"></script>
+    <script src="./data-extra.js"></script>
+    <script src="./info.js"></script>
+    <script src="./links.js"></script>
+    <script src="./tests-extra.js"></script>
+    <script src="./course-assessment-advanced.js?v=2"></script>
+    <script src="./hard-questions.js"></script>
+    <script src="./challenge-questions.js?v=2"></script>
+    <script src="./questions-setup.js"></script>
+    <script src="./questions-mdk.js"></script>
+    <script src="./questions-anime.js"></script>
+    <script src="./questions-games.js"></script>
+    <script src="./questions-logic.js"></script>
+    <script src="./questions-extra.js"></script>
+    <script src="./app.js?v=19"></script>
+    <script src="./app-offline-login.js?v=4"></script>
+    <script src="./media-fix.js?v=5"></script>
+    <script src="./portal-fixes.js?v=6"></script>
+    <script src="./mdk-upgrade.js?v=7"></script>
+    <script src="./portal-v2.js?v=10"></script>
+    <script src="./stage2-portal.js?v=10"></script>
+    <script src="./assistant.js"></script>
+    <script src="./assistant-genz.js?v=2"></script>
+    <script src="./easter-eggs.js"></script>
+    <script src="./exam-engine.js"></script>
+    <script src="./exam_0701.js"></script>
+    <script src="./exam_0401.js?v=2"></script>
+    <script src="./exam_0201.js"></script>
+    <script src="./exam_0202.js"></script>
+    <script src="./final.js?v=5"></script>
+    <script src="./games.js?v=5"></script>
+    <script src="./network-detective.js?v=8"></script>
+    <script src="./party-games.js?v=2"></script>
+    <script src="./party-games-fix.js?v=2"></script>
+    <script src="./games-ui-enhance.js?v=3"></script>
+    <script src="./journal.js?v=9"></script>
+    <script src="./rating.js?v=2"></script>
+    <script src="./rating-subjects.js?v=3"></script>
+    <script src="./reports.js?v=9"></script>
+    <script src="./teacher-tasks.js?v=9"></script>
+    <script src="./teacher-dashboard.js?v=2"></script>
+    <script src="./student-progress.js?v=4"></script>
+    <script src="./schedule.js?v=2"></script>
+    <script src="./shop.js"></script>
+    <script src="./admin.js"></script>
+    <script src="./extra.js"></script>
+    <script src="./portal-final.js?v=14"></script>
+    <script src="./course-admin.js?v=10"></script>
+    <script src="./course-announcements.js?v=3"></script>
+    <script src="./access.js?v=6"></script>
+    <script src="./account.js?v=3"></script>
+    <script src="./workbooks.js?v=7"></script>
+    <script src="./portal-genz.js?v=6"></script>
+    <script src="./certificate-supplement.js?v=4"></script>
+    <script src="./avatar-studio.js?v=3"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('SW зарегистрирован', reg.scope))
+                    .catch(err => console.warn('Ошибка регистрации SW', err));
+            });
+        }
+    </script>
+</body>
+</html>
