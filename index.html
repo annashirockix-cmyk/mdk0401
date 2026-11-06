@@ -6,7 +6,7 @@
     <title>МДК Портал - Учебный портал</title>
     <link rel="icon" href="data:,">
     <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" href="./style.css?v=9">
+    <link rel="stylesheet" href="./style.css?v=10">
     <link rel="stylesheet" href="./style-bg-fix.css?v=5">
     <link rel="stylesheet" href="./animations.css">
     <link rel="stylesheet" href="./lecture-methodical.css">
@@ -53,7 +53,11 @@
                 <optgroup label="Подключаемые порталы"><option value="ENGLISH_PORTAL">Английский язык ↗</option><option value="MAT">Материаловедение</option><option value="OT">Охрана труда</option></optgroup>
             </select>
         </div>
-        <div class="topbar-status"><div class="notification-wrap" id="notificationWrap"><button class="btn ghost notification-bell" id="notificationBell" type="button" aria-label="Уведомления" aria-expanded="false">🔔<span id="notificationBadge" class="notification-badge" hidden>0</span></button><section class="notification-popover" id="notificationPopover" hidden aria-label="Центр уведомлений"><div class="notification-popover-head"><b>Уведомления</b><div><button type="button" class="btn ghost" id="notificationRefresh">↻</button><button type="button" class="btn ghost" id="notificationClose" aria-label="Закрыть">✕</button></div></div><div id="notificationItems" aria-live="polite" class="notification-items">Загрузка…</div><div class="notification-popover-foot"><a href="#/teacher-tasks">Перейти к заданиям</a></div></section></div>
+        <div class="topbar-status"><div class="notification-wrap" id="notificationWrap"><button class="btn ghost notification-bell" id="notificationBell" type="button" aria-label="Уведомления" aria-expanded="false">🔔<span id="notificationBadge" class="notification-badge" hidden>0</span></button><section class="notification-popover" id="notificationPopover" hidden aria-label="Центр уведомлений">
+<div class="notification-popover-head"><b>Уведомления</b><div><button type="button" class="btn ghost" id="notificationMarkAll">Прочитать всё</button><button type="button" class="btn ghost" id="notificationRefresh" aria-label="Обновить">↻</button><button type="button" class="btn ghost" id="notificationClose" aria-label="Закрыть">✕</button></div></div>
+<div class="notification-filters"><select id="notificationStatusFilter" aria-label="Статус уведомлений"><option value="all">Все</option><option value="unread">Непрочитанные</option></select><select id="notificationCourseFilter" aria-label="Фильтр по дисциплине"><option value="all">Все дисциплины</option></select><button type="button" class="btn ghost" id="notificationPrefsBtn" aria-expanded="false">⚙ Настроить</button></div>
+<div class="notification-prefs" id="notificationPrefs" hidden><b>Показывать уведомления по дисциплинам</b><div id="notificationPrefsList"></div><small>Настройки сохраняются на этом устройстве.</small></div>
+<div id="notificationItems" aria-live="polite" class="notification-items">Загрузка…</div><div class="notification-popover-foot"><a href="#/teacher-tasks">Перейти к заданиям</a></div></section><div class="notification-popover-head"><b>Уведомления</b><div><button type="button" class="btn ghost" id="notificationRefresh">↻</button><button type="button" class="btn ghost" id="notificationClose" aria-label="Закрыть">✕</button></div></div><div id="notificationItems" aria-live="polite" class="notification-items">Загрузка…</div><div class="notification-popover-foot"><a href="#/teacher-tasks">Перейти к заданиям</a></div></section></div>
             <span class="status-pill" id="xpCount">🌟 0 XP</span>
             <div class="user-chip" onclick="location.hash = '#/profile'" style="cursor: pointer;">
                 <div id="userChipAvatar" style="width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; overflow: hidden;">👨‍🎓</div>
@@ -102,7 +106,7 @@
         <div id="crumbs" style="padding: 10px 20px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border);"></div>
         <div id="app" style="padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%;"></div>
     </main>
-    <script src="./api.js?v=12"></script>
+    <script src="./api.js?v=13"></script>
     <script src="./data-global.js?v=6"></script>
     <script src="./data-0701.js"></script>
     <script src="./data-0401.js"></script>
@@ -126,7 +130,7 @@
     <script src="./questions-games.js"></script>
     <script src="./questions-logic.js"></script>
     <script src="./questions-extra.js"></script>
-    <script src="./app.js?v=17"></script>
+    <script src="./app.js?v=18"></script>
     <script src="./app-offline-login.js?v=4"></script>
     <script src="./media-fix.js?v=5"></script>
     <script src="./portal-fixes.js?v=6"></script>
