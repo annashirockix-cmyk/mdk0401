@@ -895,7 +895,7 @@
         if (kv[0]) params[kv[0]] = decodeURIComponent(kv[1] || "");
       });
       if (params.join && params.g) {
-        var map = { bredo: "bredo-net", durak: "durak-net", mafia: "mafia", detective: "mafia" };
+        var map = { bredo: "bredo-net", durak: "durak-net", mafia: "mafia", detective: "detective-coop" };
         var gid = map[params.g] || params.g;
         sessionStorage.setItem("mdk.pendingJoin", JSON.stringify({ code: params.join, game: gid }));
       }
