@@ -59,4 +59,6 @@
   if(!document.getElementById("assistantGenzFab")){
     var fab=document.createElement("button");fab.id="assistantGenzFab";fab.type="button";fab.textContent="🤖";fab.title="Открыть помощника";fab.style.cssText="position:fixed;right:20px;bottom:20px;width:54px;height:54px;border:0;border-radius:50%;background:var(--accent);color:#fff;font-size:25px;box-shadow:0 5px 20px #0006;cursor:pointer;z-index:99998";fab.onclick=function(){window.openAssistant();};document.body.appendChild(fab);
   }
+  // Удаляем старую кнопку из assistant.js: остаётся один новый навигатор.
+  document.addEventListener("DOMContentLoaded",function(){var legacy=document.getElementById("asFab");if(legacy)legacy.remove();});
 })();
