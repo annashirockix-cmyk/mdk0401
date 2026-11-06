@@ -1,7 +1,7 @@
 "use strict";
 (function(){
-  const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ","EN":"Английский язык"};
-  const PLUGINS=["MAT","OT","PFI","EN"];
+  const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ","EN":"Английский язык (общий)","ENB":"Английский — базовый","ENT":"Английский — технический"};
+  const PLUGINS=["MAT","OT","PFI","EN","ENB","ENT"];
   const allIds=Object.keys(COURSE_LABELS);
   const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   function safeLectureHtml(html){
@@ -24,7 +24,7 @@
   const role=()=>String(me().role||(window.state.staff&&window.state.staff.role)||"student").toLowerCase();
   const isAdmin=()=>role()==="admin";
   const isTeacher=()=>role()==="teacher"||isAdmin();
-  const canCourse=id=>!isTeacher()||isAdmin()||(me().courses||[]).indexOf(id)>=0;
+  const canCourse=id=>!isTeacher()||isAdmin()||(me().courses||[]).indexOf(id)>=0||((id==="ENB"||id==="ENT")&&(me().courses||[]).indexOf("EN")>=0);
   const accessible=()=>isAdmin()?allIds:(isTeacher()?(me().courses||[]):allIds);
   const isPlugin=id=>PLUGINS.indexOf(id)>=0;
   window.isStandaloneCourse=isPlugin;
@@ -69,7 +69,7 @@
       panel.innerHTML='<h3>Подключаемые учебные курсы</h3><p style="color:var(--muted)">Самостоятельные дисциплины без игровых механик.</p><div style="display:flex;gap:10px;flex-wrap:wrap"></div>';
       const wrap=panel.querySelector("div");
       availablePlugins.forEach(id=>{
-        const b=document.createElement("button");b.className="btn ghost";b.textContent=(id==="MAT"||id==="PFI"?"📐 ":id==="EN"?"🇬🇧 ":"🦺 ")+COURSE_LABELS[id];
+        const b=document.createElement("button");b.className="btn ghost";b.textContent=(id==="MAT"||id==="PFI"?"📐 ":id.indexOf("EN")===0?"🇬🇧 ":"🦺 ")+COURSE_LABELS[id];
         b.onclick=function(){window.state.activeCourseId=id;window.saveStudentData();window.renderHomePage();};wrap.appendChild(b);
       });
       hero.insertAdjacentElement("afterend",panel);
