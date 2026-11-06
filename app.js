@@ -764,6 +764,7 @@ window.router = function() {
     if (page === "teacher-dashboard" && window.renderTeacherDashboard) { window.renderTeacherDashboard(); return; }
     if (page === "student-progress" && window.renderStudentProgressPage) { window.renderStudentProgressPage(parts[1] || ""); return; }
     if (page === "learning-path" && window.renderLearningPathPage) { window.renderLearningPathPage(); return; }
+    if (page === "gcode-lab" && window.renderGCodeLabPortal) { window.renderGCodeLabPortal(); return; }
     if (page === "certificate") { window.renderCertificatePage(); return; }
     if (page === "profile") { window.renderProfilePage(hash); return; }
     if (page === "achievements") { window.renderAchievementsPage(); return; }
