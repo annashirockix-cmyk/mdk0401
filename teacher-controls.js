@@ -20,6 +20,7 @@ window.renderTeacherControlsPage=function(){
  '<label style="display:block;margin-top:10px">Тест</label><select id="attemptTest" class="self-input"><option value="">Загрузка тестов…</option></select>'+
  '<label style="display:block;margin-top:10px">Идентификатор теста (можно выбрать выше или указать вручную)</label><input id="attemptTestId" class="self-input" placeholder="например: test_topic01" style="max-width:100%"><label style="display:block;margin-top:10px">Количество дополнительных попыток</label><input id="attemptCount" class="self-input" type="number" min="0" max="20" value="1" style="max-width:180px">'+
  '<button class="btn" id="grantAttemptsBtn" style="margin-top:12px">Выдать попытки</button> <span id="attemptStatus" aria-live="polite"></span></div>'+
+ '<div class="module"><h3>📨 Запросы дополнительных попыток</h3><p style="color:var(--muted)">Заявки студентов, у которых закончились доступные попытки.</p><button class="btn ghost" id="refreshAttemptRequests" type="button">Обновить запросы</button><div id="attemptRequestList" style="margin-top:10px">Загрузка запросов…</div></div>'+
  '<div class="module"><h3>🧩 Банк вопросов</h3><p style="color:var(--muted)">Просмотр вопросов, вариантов и ключей ответов по выбранной дисциплине. Доступен только преподавателям.</p><a class="btn" href="#/question-bank">Открыть банк вопросов</a><span id="bankMigrationArea"></span></div>'+
  '<div class="module"><h3>🛡️ Контроль самостоятельности</h3><p style="color:var(--muted)">Фиксируются скрытие вкладки, потеря фокуса окна и попытки копирования/вставки. Скриншоты и запуск ИИ в другой вкладке браузер достоверно не раскрывает.</p><button class="btn ghost" id="refreshProctorEvents">Обновить журнал событий</button><div id="proctorEventList">Нажмите «Обновить журнал событий».</div><hr style="border-color:var(--border);margin:14px 0"><h4>История попыток и выданных разрешений</h4><button class="btn ghost" id="refreshAttemptAudit">Обновить историю</button><div id="attemptAuditList">Нажмите «Обновить историю».</div></div>'+
  '<div class="module"><h3>🎓 Запись на репетиторство</h3><p style="color:var(--muted)">Добавьте ссылку на сервис записи/оплаты дополнительных занятий. Она будет показана студентам этой дисциплины.</p><label>Ссылка сервиса</label><input id="tutorUrl" class="self-input" type="url" placeholder="https://…"><label style="display:block;margin-top:8px">Заголовок</label><input id="tutorTitle" class="self-input" maxlength="120" value="Запись на дополнительные занятия"><label style="display:block;margin-top:8px">Пояснение для студентов</label><textarea id="tutorDescription" class="self-input" maxlength="500" rows="3" style="width:100%"></textarea><label style="display:flex;align-items:center;gap:9px;margin-top:12px"><input type="checkbox" id="tutorVisible" checked> Показывать вкладку студентам</label><p style="font-size:12px;color:var(--muted)">Если снять флажок, вкладка исчезнет из меню студентов этой дисциплины. Ссылка и настройки сохранятся.</p><button class="btn" id="saveTutorLink" style="margin-top:10px">Сохранить ссылку</button> <span id="tutorStatus" aria-live="polite"></span></div>';
@@ -111,6 +112,16 @@ window.renderTeacherControlsPage=function(){
    });
  });
  const studentSel=document.getElementById("attemptStudent"),testSel=document.getElementById("attemptTest"),testIdInput=document.getElementById("attemptTestId"),attemptStatus=document.getElementById("attemptStatus");
+ function loadAttemptRequests(){
+   const box=document.getElementById("attemptRequestList");if(!box)return;box.textContent="Загружаем запросы…";
+   window.API.getNotifications().then(function(r){
+     const requests=(r.notifications||[]).filter(function(n){return n.type==="attempt_request";});
+     if(!requests.length){box.innerHTML='<div style="padding:10px;border-radius:9px;background:var(--card-soft);color:var(--muted)">Активных запросов пока нет.</div>';return;}
+     box.innerHTML=requests.map(function(n){var details={};try{details=JSON.parse(n.relatedId||"{}");}catch(e){}return '<article style="border:1px solid var(--border);border-radius:10px;padding:12px;margin:8px 0"><b>'+esc(n.title)+'</b><p style="margin:6px 0;white-space:pre-wrap">'+esc(n.message)+'</p><small style="color:var(--muted)">'+esc(n.createdAt||"")+'</small><div><button type="button" class="btn ghost" data-attempt-request="1" data-email="'+esc(details.email||"")+'" data-test="'+esc(details.testId||n.relatedId||"")+'" style="margin-top:8px">Заполнить форму выдачи</button></div></article>';}).join("");
+     box.querySelectorAll("[data-attempt-request]").forEach(function(btn){btn.onclick=function(){studentSel.value=btn.dataset.email||"";testIdInput.value=btn.dataset.test||"";if(Array.prototype.some.call(testSel.options,function(o){return o.value===testIdInput.value;}))testSel.value=testIdInput.value;document.getElementById("attemptCount").value="1";refreshAttemptStatus();document.getElementById("grantAttemptsBtn").scrollIntoView({behavior:"smooth",block:"center"});};});
+   }).catch(function(e){box.textContent="Не удалось загрузить запросы: "+e.message;});
+ }
+ document.getElementById("refreshAttemptRequests").onclick=loadAttemptRequests;
  function refreshAttemptStatus(){
    const email=studentSel.value,testId=String(testIdInput.value||testSel.value||"").trim();
    if(!email||!testId){attemptStatus.textContent="Выберите студента и тест, чтобы увидеть использованные попытки.";return;}
@@ -136,6 +147,7 @@ window.renderTeacherControlsPage=function(){
    built.push({id:"__final__"+cid,title:"Итоговый экзамен · "+cid});
    const all=tests.concat(built);
    testSel.innerHTML='<option value="">— Выберите тест —</option>'+all.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
+   loadAttemptRequests();
  }).catch(e=>{studentSel.innerHTML='<option value="">Ошибка загрузки студентов</option>';testSel.innerHTML='<option value="">Ошибка загрузки тестов</option>';document.getElementById("attemptStatus").textContent=e.message;});
  document.getElementById("grantAttemptsBtn").onclick=function(){
    const email=studentSel.value,testId=String(testIdInput.value||testSel.value).trim(),n=Math.max(0,Math.min(20,Number(document.getElementById("attemptCount").value)||0)),status=document.getElementById("attemptStatus");
