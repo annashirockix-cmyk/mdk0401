@@ -380,7 +380,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v254/);
+  assert.match(sw, /portal-cache-v255/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -394,7 +394,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const sw = read("service-worker.js");
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
-  assert.match(html, /lecture-visual-atlas\.js\?v=3/);
+  assert.match(html, /lecture-visual-atlas\.js\?v=4/);
   assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=6/);
   assert.match(html, /sprut-tp-document-examples\.js\?v=1/);
   assert.match(html, /lecture-visual-atlas\.css\?v=4/);
@@ -412,6 +412,8 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   }
   vm.runInNewContext(visual, sandbox, { timeout: 2000 });
   assert.ok(sandbox.window.LECTURE_VISUAL_ATLAS_COUNT >= 30, "expected topic-matched visuals in the course collection");
+  const atlasImageSources = Object.values(sandbox.window.MDK_DATA).flatMap(course => course.sections || []).flatMap(section => section.topics || []).flatMap(topic => topic.lectures || []).flatMap(lecture => [...String(lecture.content || "").matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]));
+  assert.equal(new Set(atlasImageSources).size, atlasImageSources.length, "the same photo must not be repeated across lecture visual supplements");
   for (const id of ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT"]) {
     const course = sandbox.window.MDK_DATA[id];
     assert.ok(course && course.sections.length, "course missing: " + id);
