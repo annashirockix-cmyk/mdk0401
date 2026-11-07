@@ -1,6 +1,6 @@
 "use strict";
 (function(){
-  var emojis=["👩‍🔧","🧑‍💻","👩‍🚀","🦊","🐼","🐱","🐉","🤖","🦾","⚙️","🚀","🧠","🎮","🦉","🐺","🦋"];
+  var emojis=["👩‍🔧","🧑‍💻","👩‍🚀","👨‍🔬","👩‍🏭","🧑‍🚀","🦊","🐼","🐱","🐉","🤖","🦾","⚙️","🚀","🧠","🎮","🦉","🐺","🦋","🐯","🐸","🐙","🦄","🐝","🦅","🐧","🐻","🦖","🐢","🦈","🦜","🐳","🌙","⭐","💎","🔥","🌸","🌿","🛠️","🏆"];
   function node(tag,text){var n=document.createElement(tag);if(text!=null)n.textContent=text;return n;}
   function renderAvatar(el){
     if(!el)return;
