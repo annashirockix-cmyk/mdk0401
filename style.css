@@ -306,3 +306,29 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 
 /* Групповая карта прогресса */
 .td-matrix-module{margin-top:18px}.td-matrix-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.td-matrix-head h2{margin:0 0 6px}.td-matrix-head p{margin:0;color:var(--muted);font-size:13px;max-width:720px}.td-matrix-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}.td-matrix-filters label{display:grid;gap:6px;font-size:13px;font-weight:700}.td-matrix-filters select,.td-matrix-filters input{width:100%;min-height:40px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}.td-matrix-legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin:12px 0;color:var(--muted);font-size:12px}.td-matrix-legend span{display:inline-flex;align-items:center;gap:6px}.td-matrix-legend i{width:12px;height:12px;display:inline-block;border-radius:3px;border:1px solid var(--border)}.td-cell-high{background:rgba(34,197,94,.18)!important}.td-cell-mid{background:rgba(234,179,8,.18)!important}.td-cell-low{background:rgba(239,68,68,.18)!important}.td-cell-none{background:var(--bg)!important;color:var(--muted)}.td-matrix-table{min-width:680px}.td-matrix-table th{white-space:nowrap}.td-matrix-table td{vertical-align:middle}.td-matrix-grade{text-align:center!important;font-weight:800;min-width:76px}.td-matrix-grade small{display:block;font-size:10px;font-weight:500;color:var(--muted)}.td-matrix-note{margin:10px 0 0;color:var(--muted);font-size:12px}@media(max-width:620px){.td-matrix-head{flex-direction:column}.td-matrix-head .btn{width:100%}.td-matrix-filters{grid-template-columns:1fr}}
+
+
+/* Рабочие тетради: примеры, схемы, иллюстрации и библиотека файлов */
+.wb-extra{margin:20px 0;padding:18px;border:1px solid #d6e0e9;border-radius:14px;background:#f8fbff;color:#172033;break-inside:auto}
+.wb-extra h4{margin:18px 0 8px;color:#244e73}
+.wb-genz{padding:15px 17px;border-radius:12px;background:#e9f4ff;border-left:5px solid #3685bd;margin-bottom:16px;color:#20364c}
+.wb-genz p{margin:7px 0}.wb-genz small{color:#526176}
+.wb-code{overflow:auto;padding:14px;border-radius:10px;background:#132238;color:#d7f6e8;font:13px/1.65 ui-monospace,monospace}
+.wb-warning{padding:10px 12px;border-left:4px solid #d69b25;background:#fff5d8;color:#604817;border-radius:6px}
+.wb-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.wb-flow span{padding:9px 12px;border-radius:9px;background:#e8eef7;color:#233b59;font-size:13px;font-weight:700}
+.wb-flow i{font-style:normal;color:#5680a5}
+.wb-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.wb-gallery figure,.wb-meme{margin:0;padding:9px;background:#fff;border:1px solid #dbe3ec;border-radius:10px}
+.wb-gallery img{width:100%;height:150px;object-fit:contain;background:#f2f5f8;border-radius:7px}
+.wb-gallery figcaption,.wb-meme figcaption{font-size:12px;color:#53657a;padding:7px 3px 2px}
+.wb-meme{display:flex;gap:12px;align-items:center;margin:16px 0;background:#fff8ed;color:#172033}
+.wb-meme img{width:130px;max-height:110px;object-fit:cover;border-radius:8px}
+.wb-more{margin-top:14px;padding:12px;background:#edf3f8;border-radius:9px;color:#20364c}
+.wb-more summary{font-weight:700;cursor:pointer;color:#244e73}.wb-more li{margin:5px 0}
+.wb-resources{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.wb-resource{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--border);border-radius:10px;background:var(--card-soft)}
+.wb-resource a{color:var(--accent);font-weight:800;overflow-wrap:anywhere}
+.wb-font-picker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.wb-font-picker select{padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
+@media(max-width:600px){.wb-meme{align-items:flex-start;flex-direction:column}.wb-meme img{width:100%;max-height:180px}.wb-extra{padding:12px}}
