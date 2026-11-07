@@ -68,7 +68,7 @@ window.renderTeacherControlsPage=function(){
       total+=Number(result.questionsImported)||0;
       status.textContent="Импортировано вопросов: "+total+" из "+totalExpected;
      }
-     status.textContent="Готово: "+banks.length+" банков, "+total+" вопросов сохранены в закрытом листе QuestionBank. Тесты пока продолжают работать по старой схеме.";
+     status.textContent="Готово: "+banks.length+" банков, "+total+" вопросов сохранены в закрытом листе QuestionBank. Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
     }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
     finally{btn.disabled=false;}
    };
