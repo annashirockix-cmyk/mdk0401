@@ -12,9 +12,19 @@
     {id:"xp_2000",title:"Легенда портала",desc:"Набрать 2000 XP.",icon:"👑"},
     {id:"reviewed_work",title:"Обратная связь",desc:"Получить первую оценку за письменную работу.",icon:"📬"}
   ];
-  if(Array.isArray(window.ACHIEVEMENTS)){
-    EXTRA_ACHIEVEMENTS.forEach(function(a){if(!window.ACHIEVEMENTS.some(function(x){return x.id===a.id;}))window.ACHIEVEMENTS.push(a);});
-  }
+  var BASE_ACHIEVEMENTS=[
+    {id:"first_practical",title:"Первая практика",desc:"Сохранить первую практическую работу.",icon:"🛠️"},
+    {id:"hacker",title:"Первый тест пройден",desc:"Успешно завершить первый тест.",icon:"💻"},
+    {id:"mastercam_5",title:"Пять этапов Mastercam",desc:"Завершить пять практических этапов Mastercam.",icon:"📐"},
+    {id:"xp_2500",title:"Большой запас опыта",desc:"Набрать 2500 XP.",icon:"👑"},
+    {id:"reader",title:"Хранитель знаний",desc:"Изучить учебную лекцию.",icon:"📖"},
+    {id:"gcode_pro",title:"Оператор ЧПУ",desc:"Освоить тренажёр G-кода.",icon:"⚙️"},
+    {id:"season_gold",title:"Золотой сезон",desc:"Получить золотую сезонную медаль.",icon:"🥇"}
+  ];
+  if(!Array.isArray(window.ACHIEVEMENTS))window.ACHIEVEMENTS=[];
+  BASE_ACHIEVEMENTS.concat(EXTRA_ACHIEVEMENTS).forEach(function(a){
+    if(!window.ACHIEVEMENTS.some(function(x){return x.id===a.id;}))window.ACHIEVEMENTS.push(a);
+  });
   function student(){return !!(window.state&&window.state.student);}
   function save(){if(window.saveStudentData&&student())window.saveStudentData();}
   function award(id){if(student()&&window.unlockAchievement&&(!Array.isArray(window.state.unlockedAchievements)||window.state.unlockedAchievements.indexOf(id)<0))window.unlockAchievement(id);}
@@ -28,9 +38,9 @@
     if(Number(result.grade)===5)award("perfect_test");
     save();
   }
-  function recordWritten(result){
+  function recordWritten(result,key){
     if(!student()||!result||!result.success)return;
-    var st=stats();st.written=Math.max(0,Number(st.written)||0)+1;
+    var st=stats();st.writtenKeys=Array.isArray(st.writtenKeys)?st.writtenKeys:[];key=String(key||("written_"+Date.now()));if(st.writtenKeys.indexOf(key)>=0)return;st.writtenKeys.push(key);st.written=st.writtenKeys.length;
     if(st.written>=1)award("first_written");
     if(st.written>=5)award("five_written");
     save();
@@ -45,9 +55,9 @@
   wrapApi("saveResult",function(r,args){
     var data=args&&args[0]||{};
     if(r&&r.success&&/^test_|^english_|^__final__/.test(String(data.testId||"")))recordTest({success:true,grade:r.grade});
-    if(r&&r.success&&/^(prac_|self_)/.test(String(data.testId||""))&&String(data.payload||"").trim())recordWritten(r);
+    if(r&&r.success&&/^(prac_|self_)/.test(String(data.testId||""))&&String(data.payload||"").trim())recordWritten(r,String(data.courseId||"")+":"+String(data.testId||""));
   });
-  wrapApi("submitAssignment",function(r){recordWritten(r);});
+  wrapApi("submitAssignment",function(r,args){recordWritten(r,"assignment:"+String(args&&args[0]||""));});
   wrapApi("gradeWrittenResult",function(r){if(r&&r.success)award("reviewed_work");});
   function checkXp(){
     if(!student())return;
