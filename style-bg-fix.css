@@ -1,4 +1,4 @@
-/* Переопределение путей фонов: файлы лежат в fonts/, не в img/ */
+/* Фоновые изображения подключаются из структурированной папки assets/images/. */
 .bg-foggy-forest { background-image: url("./assets/images/backgrounds/Background 1.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
 .bg-pumpkins { background-image: url("./assets/images/backgrounds/Background 2.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
 .bg-spooky-room { background-image: url("./assets/images/backgrounds/Background 3.png") !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
