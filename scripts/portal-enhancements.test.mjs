@@ -233,10 +233,12 @@ test("MDK 07.01 numeric practical answer keys match their stated data", () => {
   const expected = { "ПЗ 1.1": "955", "ПЗ 1.2": "1.46", "ПЗ 2.1": "2.5", "ПЗ 2.2": "14.5", "ПЗ 2.3": "0.1", "ПЗ 3.1": "0.4", "ПЗ 3.2": "5", "ПЗ 3.3": "40", "ПЗ 3.5": "280", "ПЗ 4.4": "480" };
   for (const [code, answer] of Object.entries(expected)) assert.equal(byCode.get(code)?.expectedAnswer, answer, code);
   assert.equal(byCode.get("ПЗ 1.3")?.expectedAnswer, undefined, "PZ 1.3 is a structural practical, not an unsupported gear-ratio calculation");
-  assert.equal(byCode.get("ПЗ 5.4")?.expectedAnswer, undefined, "PZ 5.4 assesses post-processing, not unrelated model-volume arithmetic");
-  assert.match(byCode.get("ПЗ 5.4").task, /изготовленной на используемом 3D-принтере/);
-  assert.match(byCode.get("ПЗ 5.4").task, /Не включайте способы обработки, не предусмотренные применяемой технологией/);
-  assert.match(byCode.get("ПЗ 5.4").task, /Критерии: последовательность и полнота маршрута/);
+  assert.equal(byCode.get("ПЗ 5.4")?.expectedAnswer, undefined, "PZ 5.4 is a slicer setup practical, not unrelated arithmetic");
+  assert.match(byCode.get("ПЗ 5.4").title, /параметров печати/);
+  assert.match(byCode.get("ПЗ 5.4").task, /подготовьте задание для слайсера/);
+  assert.match(byCode.get("ПЗ 5.4").task, /высота слоя, ширина линии, число периметров, заполнение/);
+  assert.match(byCode.get("ПЗ 5.4").task, /предварительном просмотре проверьте/);
+  assert.match(byCode.get("ПЗ 5.4").task, /Критерии: проверка модели и области построения/);
   assert.match(byCode.get("ПЗ 3.4-А").task, /Для своего варианта/);
   assert.match(byCode.get("ПЗ 3.4-А").variants[1], /начало координат \(10;5\)/);
   assert.match(byCode.get("ПЗ 3.4-Б").task, /Для своего варианта/);
