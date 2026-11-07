@@ -42,7 +42,8 @@ const HEADERS = {
   AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
-  AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"]
+  AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"],
+  QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -98,6 +99,8 @@ function handleRequest_(e) {
       case "gettutoringlink": result = getTutoringLink_(data); break;
       case "savetutoringlink": result = saveTutoringLink_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
+      case "importquestionbanks": result = importQuestionBanks_(data); break;
+      case "getquestionbank": result = getQuestionBank_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
@@ -220,7 +223,7 @@ function notifyProctorSanction_(student,courseId,testId,attemptNo,violationNo,pe
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
   return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications.";
@@ -1061,6 +1064,70 @@ function getCustomContent_(data) {
   return { success: true, data: list };
 }
 
+
+
+/* ---------- Private built-in question bank ---------- */
+function questionBank_() { return ensureSheet_("QuestionBank"); }
+
+/**
+ * Импорт встроенного банка выполняет только администратор.
+ * Один объект banks: {courseId, bankId, title, questions:[...]}.
+ * Повторный импорт того же courseId + bankId заменяет только этот банк.
+ */
+function importQuestionBanks_(data) {
+  const actor = admin_(data);
+  const banks = Array.isArray(data.banks) ? data.banks : [];
+  if (!banks.length || banks.length > 100) throw new Error("Передайте от 1 до 100 банков за один импорт.");
+  const allowed = CFG.COURSES;
+  const sh = questionBank_();
+  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  try {
+    const rows = sh.getDataRange().getValues();
+    const map = headerMap_(sh);
+    let imported = 0, questionsImported = 0;
+    banks.forEach(function(bank) {
+      const courseId = String(bank.courseId || "");
+      const bankId = String(bank.bankId || "").slice(0, 180);
+      const questions = Array.isArray(bank.questions) ? bank.questions : [];
+      if (allowed.indexOf(courseId) < 0 || !bankId) throw new Error("Некорректная дисциплина или идентификатор банка.");
+      if (!questions.length || questions.length > 1000) throw new Error("Банк " + bankId + ": допустимо от 1 до 1000 вопросов.");
+      const keep = [];
+      for (let i = 1; i < rows.length; i++) {
+        if (!(String(rows[i][map.CourseId]) === courseId && String(rows[i][map.BankId]) === bankId)) keep.push(rows[i]);
+      }
+      // Удаляем прежние строки этого банка, не затрагивая другие дисциплины и банки.
+      const current = sh.getDataRange().getValues();
+      const deleteRows = [];
+      for (let i = 1; i < current.length; i++) {
+        if (String(current[i][map.CourseId]) === courseId && String(current[i][map.BankId]) === bankId) deleteRows.push(i + 1);
+      }
+      for (let i = deleteRows.length - 1; i >= 0; i--) sh.deleteRow(deleteRows[i]);
+      const stamp = new Date().toISOString();
+      const out = questions.map(function(q, index) {
+        if (!q || typeof q !== "object") throw new Error("Некорректный вопрос в банке " + bankId + ".");
+        const qid = String(q.id || (bankId + ":" + index)).slice(0, 220);
+        return [courseId, bankId, qid, JSON.stringify(q).slice(0, 45000), stamp, actor.email];
+      });
+      sh.getRange(sh.getLastRow() + 1, 1, out.length, 6).setValues(out);
+      imported++; questionsImported += out.length;
+    });
+    return {success:true,banksImported:imported,questionsImported:questionsImported};
+  } finally { lock.releaseLock(); }
+}
+
+/** Полный ключ доступен только преподавателю своей дисциплины или администратору. */
+function getQuestionBank_(data) {
+  const courseId = String(data.courseId || ""), teacher = editor_(data, courseId);
+  const bankId = String(data.bankId || ""), sh = questionBank_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh);
+  const rows = vals.slice(1).filter(function(row) {
+    return String(row[m.CourseId]) === courseId && (!bankId || String(row[m.BankId]) === bankId);
+  }).map(function(row) {
+    let question = {};
+    try { question = JSON.parse(String(row[m.QuestionJSON] || "{}")); } catch (e) {}
+    return {bankId:String(row[m.BankId]||""),questionId:String(row[m.QuestionId]||""),question:question,updatedAt:String(row[m.UpdatedAt]||""),updatedBy:String(row[m.UpdatedBy]||"")};
+  });
+  return {success:true,courseId:courseId,questions:rows};
+}
 
 function submitCustomTest_(data) {
   const user = auth_(data);
