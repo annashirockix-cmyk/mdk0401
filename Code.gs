@@ -85,6 +85,7 @@ function handleRequest_(e) {
       case "savestudent": result = saveStudent_(data); break;
       case "getstudents": result = getStudents_(data); break;
       case "saveresult": result = saveResult_(data); break;
+      case "saveteacherresult": result = saveTeacherResult_(data); break;
       case "getresults": result = getResults_(data); break;
       case "getpublicsubjectratings": result = getPublicSubjectRatings_(data); break;
       case "getmycourseresults": result = getMyCourseResults_(data); break;
@@ -671,6 +672,38 @@ function saveResult_(data) {
   } finally {lock.releaseLock();}
 }
 
+
+
+
+/**
+ * Преподавательская запись оценки за лабораторную работу.
+ * Разрешена только для MET и только студенту, которому назначен этот курс.
+ */
+function saveTeacherResult_(data) {
+  const teacher=auth_(data);
+  if(teacher.role!=="teacher"&&teacher.role!=="admin") throw new Error("Выставлять оценки может только преподаватель.");
+  const courseId=String(data.courseId||"").trim();
+  if(courseId!=="MET") throw new Error("Этот метод предназначен для журнала метрологии.");
+  editor_(data,courseId);
+  const studentEmail=email_(data.email),student=userByEmail_(studentEmail);
+  if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по дисциплине «Метрология».");
+  const grade=Number(data.grade),date=String(data.date||"").trim(),testId=String(data.testId||"").trim();
+  const title=String(data.testTitle||"Лабораторная работа").trim().slice(0,180);
+  const feedback=String(data.feedback||"").trim().slice(0,3000);
+  if(!isFinite(grade)||grade<2||grade>5) throw new Error("Оценка должна быть от 2 до 5.");
+  if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) throw new Error("Укажите корректную дату работы.");
+  const dateParts=date.split("-").map(Number),checkDate=new Date(Date.UTC(dateParts[0],dateParts[1]-1,dateParts[2]));
+  if(checkDate.getUTCFullYear()!==dateParts[0]||checkDate.getUTCMonth()!==dateParts[1]-1||checkDate.getUTCDate()!==dateParts[2]) throw new Error("Указана некорректная дата работы.");
+  if(!/^metrology_[A-Za-z0-9_-]{1,120}$/.test(testId)) throw new Error("Некорректный идентификатор лабораторной работы.");
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const now=new Date().toISOString(),submission="Лабораторная работа: "+title+"; дата: "+date+(feedback?"\\nКомментарий преподавателя: "+feedback:"");
+    appendMappedRecord_(results_(),{Email:student.email,Name:student.name,Group:student.group,TestId:testId,TestTitle:title+" ("+date+")",Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,Attempts:1,FinishedAt:now,CourseId:courseId,Submission:submission});
+    appendAttemptAudit_({EventType:"teacher_grade_entered",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20});
+  } finally {lock.releaseLock();}
+  createNotification_(student.email,"grade","Оценка за лабораторную работу","Преподаватель выставил оценку "+grade+"/5 за работу «"+title+"»."+(feedback?" Добавлен комментарий.":""),courseId,testId);
+  return {success:true,grade:grade};
+}
 
 
 function gradeWrittenResult_(data) {
