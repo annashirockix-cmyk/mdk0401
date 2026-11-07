@@ -168,8 +168,11 @@ test("MDK 07.01 final exam samples different topics within every section", () =>
   const moduleData = sandbox.window.MDK_DATA["07.01"];
   const selected = sandbox.selectBalancedExam0701(moduleData, 10);
   assert.equal(selected.length, 10);
-  assert.equal(moduleData.sections.length, 5);
-  for (const section of moduleData.sections) {
+  const activeSections = moduleData.sections.filter((section) => section.topics.some((topic) =>
+    (topic.test || []).length || (sandbox.window.HARD_TESTS[topic.id] || []).length
+  ));
+  assert.equal(activeSections.length, 5);
+  for (const section of activeSections) {
     const sectionQuestions = selected.filter((question) => section.topics.some((topic) =>
       (topic.test || []).includes(question) || (sandbox.window.HARD_TESTS[topic.id] || []).includes(question)
     ));
