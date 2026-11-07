@@ -41,7 +41,8 @@ const HEADERS = {
   AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
   AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
-  ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "EventType", "Page", "ClientTime", "ServerTime", "Details"]
+  ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "EventType", "Page", "ClientTime", "ServerTime", "Details"],
+  AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -93,6 +94,7 @@ function handleRequest_(e) {
       case "gettestattemptstatus": result = getTestAttemptStatus_(data); break;
       case "logproctorevent": result = logProctorEvent_(data); break;
       case "getproctorevents": result = getProctorEvents_(data); break;
+      case "getattemptaudit": result = getAttemptAudit_(data); break;
       case "gettutoringlink": result = getTutoringLink_(data); break;
       case "savetutoringlink": result = saveTutoringLink_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
@@ -184,13 +186,15 @@ function assignmentSubmissions_() { return ensureSheet_("AssignmentSubmissions")
 function assignmentSubmissionHistory_() { return ensureSheet_("AssignmentSubmissionHistory"); }
 function notifications_() { return ensureSheet_("Notifications"); }
 function proctorEvents_() { return ensureSheet_("ProctorEvents"); }
+function attemptAudit_() { return ensureSheet_("AttemptAudit"); }
+function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString()]); }
 
 /**
  * Запустите вручную один раз после добавления SPREADSHEET_ID.
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
   return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications.";
@@ -530,10 +534,11 @@ function saveResult_(data) {
       }
     }
     const attempts=prior+1;
-    sheet.appendRow([email,String(data.name||user.name),String(data.group||user.group),testId,String(data.testTitle||testId),
-      data.grade===undefined||data.grade===null||data.grade===""?0:Math.max(0,Math.min(5,Number(data.grade)||0)),
-      Number(data.score)||0,Number(data.maxScore)||0,Number(data.percent)||0,Math.max(0,Number(data.timeSpent)||0),
+    const grade=data.grade===undefined||data.grade===null||data.grade===""?0:Math.max(0,Math.min(5,Number(data.grade)||0));
+    const score=Number(data.score)||0,maxScore=Number(data.maxScore)||0,percent=Number(data.percent)||0,title=String(data.testTitle||testId);
+    sheet.appendRow([email,String(data.name||user.name),String(data.group||user.group),testId,title,grade,score,maxScore,percent,Math.max(0,Number(data.timeSpent)||0),
       attempts,new Date().toISOString(),courseId,String(data.payload||"").slice(0,10000)]);
+    appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:title,AttemptNo:attempts,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent});
     return {success:true,attempts:attempts};
   } finally {lock.releaseLock();}
 }
@@ -561,6 +566,15 @@ function logProctorEvent_(data) {
   } finally {lock.releaseLock();}
   return {success:true};
 }
+
+function getAttemptAudit_(data) {
+  const courseId=String(data.courseId||""),teacher=editor_(data,courseId),wanted=email_(data.email||""),testId=String(data.testId||"");
+  const sh=attemptAudit_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+  const rows=vals.slice(1).filter(function(r){return String(r[m.CourseId]||"")===courseId&&(!wanted||email_(r[m.StudentEmail])===wanted)&&(!testId||String(r[m.TestId]||"")===testId);}).map(function(r){return {eventType:String(r[m.EventType]||""),actorEmail:String(r[m.ActorEmail]||""),email:String(r[m.StudentEmail]||""),name:String(r[m.StudentName]||""),group:String(r[m.Group]||""),courseId:String(r[m.CourseId]||""),testId:String(r[m.TestId]||""),testTitle:String(r[m.TestTitle]||""),extraAttempts:r[m.ExtraAttempts],attemptNo:r[m.AttemptNo],grade:r[m.Grade],score:r[m.Score],maxScore:r[m.MaxScore],percent:r[m.Percent],createdAt:String(r[m.CreatedAt]||"")};});
+  rows.sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));});
+  return {success:true,events:rows.slice(0,200)};
+}
+
 function getProctorEvents_(data) {
   const courseId=String(data.courseId||""),teacher=editor_(data,courseId),wanted=email_(data.email||"");
   const testId=String(data.testId||""),sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
@@ -955,7 +969,9 @@ function grantTestAttempts_(data) {
   const student=userByEmail_(studentEmail);
   if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
   const extra=Math.max(0,Math.min(20,Math.floor(Number(data.extraAttempts)||0)));
-  writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try { writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra}); }
+  finally {lock.releaseLock();}
   return {success:true,extraAttempts:extra};
 }
 
@@ -1043,6 +1059,7 @@ function submitCustomTest_(data) {
     if(prior>=limit) throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю за дополнительной попыткой.");
     attemptNo=prior+1;
     resultSheet.appendRow([user.email,user.name,user.group,attemptKey,record.title,grade,score,questions.length,percent,Math.max(0,Number(data.timeSpent)||0),attemptNo,new Date().toISOString(),record.courseId,JSON.stringify({answers:answers.map(function(v){return Number(v);})})]);
+    appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:record.courseId,TestId:attemptKey,TestTitle:record.title,AttemptNo:attemptNo,Grade:grade,Score:score,MaxScore:questions.length,Percent:percent});
   } finally { lock.releaseLock(); }
   return { success: true, score: score, maxScore: questions.length, percent: percent, grade: grade, attempts: attemptNo };
 }
