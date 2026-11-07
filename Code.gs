@@ -1445,7 +1445,8 @@ function getFinalExam_(data) {
   if(user.role!=="student"||!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к экзамену.");
   const rows=results_().getDataRange().getValues(),prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
   const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
-  if(raw!==""&&prior>=1+Math.max(0,Number(raw)||0))throw new Error("Попытки экзамена закончились.");
+  const attemptLimit=raw===""?1:1+Math.max(0,Number(raw)||0);
+  if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
   const bank=allFinalExamEntries_(courseId);if(!bank.length){
     const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),available=[];
     vals.slice(1).forEach(function(row){
@@ -1518,7 +1519,8 @@ function submitFinalExam_(data) {
     const max=exam.questions.length,pct=Math.round(points/max*100),testId="__final__"+courseId,sh=results_(),rows=sh.getDataRange().getValues();
     const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
     const limitRaw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
-    if(limitRaw!==""&&prior>=1+Math.max(0,Number(limitRaw)||0))throw new Error("Попытки экзамена закончились.");
+    const attemptLimit=limitRaw===""?1:1+Math.max(0,Number(limitRaw)||0);
+    if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
     const written1=String(data.written1||"").slice(0,12000),written2=String(data.written2||"").slice(0,12000);
     appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Math.min(3600,Number(data.timeSpent)||0)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:("Письменное задание 1:\n"+written1+"\n\nПисьменное задание 2:\n"+written2).slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
