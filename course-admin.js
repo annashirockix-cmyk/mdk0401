@@ -1,7 +1,7 @@
 "use strict";
 (function(){
   const COURSE_LABELS={"07.01":"МДК 07.01 (ЧПУ)","04.01":"МДК 04.01 (Диагностика)","02.01":"МДК 02.01 (Сборка)","02.02":"МДК 02.02 (Программирование)","MCAM":"Mastercam","MAT":"Материаловедение","MET":"Метрология","OT":"Охрана труда","PFI":"ПФИ","ENB":"Английский — базовый","ENT":"Английский — технический"};
-  const PLUGINS=["MAT","OT","PFI","ENB","ENT"];
+  const PLUGINS=["MAT","MET","OT","PFI","ENB","ENT"];
   const allIds=Object.keys(COURSE_LABELS);
   const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   function safeLectureHtml(html){
