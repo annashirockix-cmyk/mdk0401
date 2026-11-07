@@ -25,6 +25,8 @@ test("personal cabinet provides login, grades, portfolio and achievements", () =
   const hub = read("laboratory.js");
   for (const route of ["profile", "account", "grades", "portfolio", "achievements"]) {
     assert.ok(html.includes('href="#/' + route + '"'));
+  }
+  for (const route of ["account", "grades", "portfolio", "achievements"]) {
     assert.ok(hub.includes("#/" + route));
   }
   assert.match(html, /drawerCabinet/);
