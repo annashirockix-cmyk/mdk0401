@@ -2,110 +2,120 @@
 
 window.renderNewExam = function(courseId) {
     var app = document.getElementById("app");
-    app.innerHTML = `<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>
-    <section class="hero"><h1>📋 Итоговый экзамен</h1><p>30 вопросов · 2 письменных задания · 45 минут</p></section>
-    <div class="module" id="examBox">
-        <button class="btn" onclick="window.startExam('${courseId}')" style="width:100%; padding:20px; font-size:18px;">Начать экзамен</button>
-    </div>`;
+    var data = window.MDK_DATA && window.MDK_DATA[courseId];
+    var title = data && data.title ? data.title : courseId;
+    app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>' +
+      '<section class="hero"><h1>📋 Итоговый экзамен</h1><p>' + window.escapeHtml(title) + '</p><p>До 30 вопросов из банка дисциплины · 2 письменных задания · 45 минут</p></section>' +
+      '<div class="module" id="examBox"><button class="btn" id="startCourseExam" style="width:100%;padding:20px;font-size:18px;">Начать экзамен</button></div>';
+    var start = document.getElementById("startCourseExam");
+    if (start) start.onclick = function () { window.startExam(courseId); };
 };
 
 window.startExam = function(courseId) {
+    var data = window.MDK_DATA && window.MDK_DATA[courseId];
     var baseQuestions = [];
-    var data = window.MDK_DATA[courseId];
-    if (data && data.sections) {
-        data.sections.forEach(s => s.topics.forEach(t => {
-            if (t.test) baseQuestions = baseQuestions.concat(t.test);
-            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
-            if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
-          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
-        }));
-    }
-    
-    // Добиваем до 30 вопросов, если их мало (используем заглушки для теста)
-    while(baseQuestions.length < 30) {
-        baseQuestions.push({ q: "Дополнительный вопрос по МДК (проверка знаний №" + (baseQuestions.length + 1) + ")", options: ["Вариант А", "Вариант Б", "Вариант В", "Вариант Г"], correct: 0 });
-    }
-    
-    var examQuestions = baseQuestions.sort(() => 0.5 - Math.random()).slice(0, 30);
-    var timeLeft = 45 * 60; // 45 минут
-    
-    var formHtml = `<div id="exTimer" style="font-size:24px; font-weight:bold; color:var(--err); text-align:center; margin-bottom:20px;">45:00</div><form id="examForm">`;
-    
-    // Тестовая часть
-    examQuestions.forEach((q, i) => {
-        formHtml += `<div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);">
-            <b>${i+1}. ${q.q}</b><br>`;
-        q.options.forEach((opt, j) => {
-            formHtml += `<label style="display:block; margin-top:5px; cursor:pointer;"><input type="radio" name="q${i}" value="${j}" style="margin-right:8px;"> ${opt}</label>`;
+    var seen = Object.create(null);
+    if (data && Array.isArray(data.sections)) {
+        data.sections.forEach(function(section) {
+            (section.topics || []).forEach(function(topic) {
+                var candidates = (topic.test || []).slice();
+                if (window.HARD_TESTS && Array.isArray(window.HARD_TESTS[topic.id])) candidates = candidates.concat(window.HARD_TESTS[topic.id]);
+                candidates.forEach(function(q) {
+                    if (!q || typeof q.q !== "string" || !Array.isArray(q.options) ||
+                        !Number.isInteger(q.correct) || q.correct < 0 || q.correct >= q.options.length || q.options.length < 2) return;
+                    var key = q.q.trim().toLocaleLowerCase("ru");
+                    if (!key || seen[key]) return;
+                    seen[key] = true;
+                    baseQuestions.push({ q: q.q, options: q.options.slice(), correct: q.correct });
+                });
+            });
         });
-        formHtml += `</div>`;
+    }
+    if (!baseQuestions.length) {
+        document.getElementById("examBox").innerHTML = '<p>В этой дисциплине пока нет подготовленного банка экзаменационных вопросов. Заглушки не подставляются.</p>';
+        return;
+    }
+    function shuffle(list) {
+        var copy = list.slice();
+        for (var i = copy.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+        }
+        return copy;
+    }
+    var examQuestions = shuffle(baseQuestions).slice(0, 30);
+    var writtenPrompts = courseId === "SPRUT_TP" ? [
+        "Составьте алгоритм разработки технологического процесса по исходному чертежу: укажите необходимые исходные данные, выбор заготовки и баз, последовательность операций и контроль.",
+        "Сравните маршрутный, операционный и маршрутно-операционный варианты документации. Объясните, какие сведения должны быть проверены перед выпуском комплекта ТД."
+    ] : courseId === "MCAM" ? [
+        "Опишите подготовку проекта обработки в Mastercam: модель, WCS/Cplane/Tplane, заготовка, инструмент и проверка траектории.",
+        "Объясните назначение постпроцессора и перечислите проверки NC-программы до передачи на станок."
+    ] : [
+        "Опишите алгоритм выполнения ключевой производственной задачи по изученной дисциплине, указав исходные данные, этапы и контрольные точки.",
+        "Приведите пример возможной ошибки, объясните её последствия и предложите способ проверки результата."
+    ];
+    var formHtml = '<div id="exTimer" style="font-size:24px;font-weight:bold;color:var(--err);text-align:center;margin-bottom:20px;">45:00</div>' +
+      '<p>Вопросов в варианте: <b>' + examQuestions.length + '</b>. Каждый вопрос оценивается в один балл.</p><form id="examForm">';
+    examQuestions.forEach(function(q, i) {
+        formHtml += '<div style="margin-bottom:15px;padding:15px;background:var(--card-soft);border-radius:8px;border:1px solid var(--border);"><b>' +
+          (i + 1) + '. ' + window.escapeHtml(q.q) + '</b>';
+        q.options.forEach(function(opt, j) {
+            formHtml += '<label style="display:block;margin-top:7px;cursor:pointer;"><input type="radio" name="q' + i + '" value="' + j + '" style="margin-right:8px;"> ' +
+              window.escapeHtml(opt) + '</label>';
+        });
+        formHtml += '</div>';
     });
-    
-    // Письменная часть
-    formHtml += `<h3 style="margin-top:30px; color:var(--accent);">✍️ Письменные задания (на проверку преподавателю)</h3>
-    <div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);">
-        <b>31. Опишите алгоритм наладки станка с ЧПУ.</b><br>
-        <textarea name="written1" class="self-input" rows="4" style="margin-top:10px;" placeholder="Ваш ответ..."></textarea>
-    </div>
-    <div style="margin-bottom:15px; padding:15px; background:var(--card-soft); border-radius:8px; border:1px solid var(--border);">
-        <b>32. Рассчитайте частоту вращения шпинделя, если V=120 м/мин, D=50 мм (ответ с решением).</b><br>
-        <textarea name="written2" class="self-input" rows="2" style="margin-top:10px;" placeholder="Ваш ответ..."></textarea>
-    </div>
-    <button type="button" class="btn" onclick="window.finishExam()" style="width:100%; padding:15px; background:var(--ok); color:#000;">Завершить экзамен</button>
-    </form>`;
-    
+    formHtml += '<h3 style="margin-top:30px;color:var(--accent);">✍️ Письменные задания (на проверку преподавателю)</h3>';
+    writtenPrompts.forEach(function(prompt, i) {
+        formHtml += '<div style="margin-bottom:15px;padding:15px;background:var(--card-soft);border-radius:8px;border:1px solid var(--border);"><b>' +
+          (examQuestions.length + i + 1) + '. ' + window.escapeHtml(prompt) + '</b><textarea name="written' + (i + 1) +
+          '" class="self-input" rows="4" style="margin-top:10px;" placeholder="Ваш ответ..."></textarea></div>';
+    });
+    formHtml += '<button type="button" class="btn" id="finishCourseExam" style="width:100%;padding:15px;background:var(--ok);color:#000;">Завершить экзамен</button></form>';
     document.getElementById("examBox").innerHTML = formHtml;
     window._currentExamQuestions = examQuestions;
-    
+    window._currentExamCourseId = courseId;
+    var timeLeft = 45 * 60;
     var timerEl = document.getElementById("exTimer");
-    window._examTimer = setInterval(() => {
+    if (window._examTimer) clearInterval(window._examTimer);
+    document.getElementById("finishCourseExam").onclick = window.finishExam;
+    window._examTimer = setInterval(function() {
         timeLeft--;
-        var m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-        timerEl.textContent = `${m}:${s < 10 ? '0'+s : s}`;
-        if (timeLeft <= 0) { clearInterval(window._examTimer); window.finishExam(); }
+        if (timerEl) timerEl.textContent = Math.floor(timeLeft / 60) + ":" + String(timeLeft % 60).padStart(2, "0");
+        if (timeLeft <= 0) window.finishExam();
     }, 1000);
 };
 
 window.finishExam = function() {
-    clearInterval(window._examTimer);
+    if (window._examTimer) clearInterval(window._examTimer);
     var form = document.getElementById("examForm");
+    if (!form || !Array.isArray(window._currentExamQuestions)) return;
     var correct = 0;
-    
-    window._currentExamQuestions.forEach((q, i) => {
-        var ch = form.querySelector(`input[name="q${i}"]:checked`);
-        if (ch && parseInt(ch.value) === q.correct) correct++;
+    window._currentExamQuestions.forEach(function(q, i) {
+        var answer = form.querySelector('input[name="q' + i + '"]:checked');
+        if (answer && Number(answer.value) === q.correct) correct++;
     });
-    
-    var pct = Math.round((correct / 30) * 100);
+    var total = window._currentExamQuestions.length;
+    var pct = Math.round((correct / total) * 100);
     var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-    
-    var w1 = form.querySelector('textarea[name="written1"]').value;
-    var w2 = form.querySelector('textarea[name="written2"]').value;
-    
-    // СОХРАНЯЕМ ОЦЕНКУ В РЕЗУЛЬТАТЫ
+    var written1 = (form.querySelector('textarea[name="written1"]') || {}).value || "";
+    var written2 = (form.querySelector('textarea[name="written2"]') || {}).value || "";
     if (!window.state.results) window.state.results = {};
-    window.state.results["__final__"] = { grade: grade, total: correct, max: 30 };
-    
+    window.state.results["__final__"] = { grade: grade, total: correct, max: total, courseId: window._currentExamCourseId };
     if (!window.state.examSubmissions) window.state.examSubmissions = [];
     window.state.examSubmissions.push({
         date: new Date().toLocaleString(),
+        courseId: window._currentExamCourseId,
         student: window.state.student ? window.state.student.name : "Неизвестный",
         group: window.state.student ? window.state.student.group : "",
-        testScore: correct,
-        maxTest: 30,
-        written1: w1,
-        written2: w2,
-        status: "На проверке",
-        teacherGrade: null
+        testScore: correct, maxTest: total, written1: written1, written2: written2,
+        status: "На проверке", teacherGrade: null
     });
-    window.saveStudentData();
-    
-    document.getElementById("examBox").innerHTML = `
-        <div style="text-align:center; padding:40px;">
-            <h1 style="color:var(--ok);">🎉 Экзамен сдан!</h1>
-            <p style="font-size:20px;">Тестовых ответов: <b>${correct} из 30</b></p>
-            <h1 style="font-size:60px; margin:20px 0; color:var(--accent);">Оценка: ${grade}</h1>
-            <p>Письменные задания отправлены преподавателю на проверку.</p>
-            <a href="#/" class="btn" style="margin-top:20px;">На главную</a>
-        </div>`;
+    if (window.saveStudentData) window.saveStudentData();
+    var passed = grade >= 3;
+    document.getElementById("examBox").innerHTML =
+      '<div style="text-align:center;padding:40px;"><h1 style="color:' + (passed ? "var(--ok)" : "var(--err)") + ';">' +
+      (passed ? "Экзамен сдан!" : "Экзамен не сдан") + '</h1><p style="font-size:20px;">Тестовых ответов: <b>' +
+      correct + ' из ' + total + '</b></p><h1 style="font-size:60px;margin:20px 0;color:var(--accent);">Оценка: ' +
+      grade + '</h1><p>Письменные задания отправлены преподавателю на проверку.</p><a href="#/" class="btn" style="margin-top:20px;">На главную</a></div>';
 };
