@@ -115,7 +115,7 @@ window.renderTeacherControlsPage=function(){
  function loadAttemptRequests(){
    const box=document.getElementById("attemptRequestList");if(!box)return;box.textContent="Загружаем запросы…";
    window.API.getNotifications().then(function(r){
-     const requests=(r.notifications||[]).filter(function(n){return n.type==="attempt_request";});
+     const requests=(r.notifications||[]).filter(function(n){return n.type==="attempt_request"&&!n.readAt;});
      if(!requests.length){box.innerHTML='<div style="padding:10px;border-radius:9px;background:var(--card-soft);color:var(--muted)">Активных запросов пока нет.</div>';return;}
      box.innerHTML=requests.map(function(n){var details={};try{details=JSON.parse(n.relatedId||"{}");}catch(e){}return '<article style="border:1px solid var(--border);border-radius:10px;padding:12px;margin:8px 0"><b>'+esc(n.title)+'</b><p style="margin:6px 0;white-space:pre-wrap">'+esc(n.message)+'</p><small style="color:var(--muted)">'+esc(n.createdAt||"")+'</small><div><button type="button" class="btn ghost" data-attempt-request="1" data-email="'+esc(details.email||"")+'" data-test="'+esc(details.testId||n.relatedId||"")+'" style="margin-top:8px">Заполнить форму выдачи</button></div></article>';}).join("");
      box.querySelectorAll("[data-attempt-request]").forEach(function(btn){btn.onclick=function(){studentSel.value=btn.dataset.email||"";testIdInput.value=btn.dataset.test||"";if(Array.prototype.some.call(testSel.options,function(o){return o.value===testIdInput.value;}))testSel.value=testIdInput.value;document.getElementById("attemptCount").value="1";refreshAttemptStatus();document.getElementById("grantAttemptsBtn").scrollIntoView({behavior:"smooth",block:"center"});};});
@@ -153,7 +153,7 @@ window.renderTeacherControlsPage=function(){
    const email=studentSel.value,testId=String(testIdInput.value||testSel.value).trim(),n=Math.max(0,Math.min(20,Number(document.getElementById("attemptCount").value)||0)),status=document.getElementById("attemptStatus");
    if(!email||!testId){status.textContent="Выберите студента и тест.";return;}
    this.disabled=true;status.textContent="Сохранение…";
-   window.API.grantTestAttempts(cid,testId,email,n).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");status.textContent="Сохранено: дополнительных попыток — "+r.extraAttempts+".";return window.API.getTestAttemptStatus(cid,testId,email);}).then(r=>{if(r&&r.success)status.textContent="Готово. Использовано: "+r.used+" из "+r.limit+". Осталось: "+r.remaining+". Дополнительно выдано: "+r.extraAttempts+".";}).catch(e=>status.textContent=e.message).finally(()=>{this.disabled=false;});
+   window.API.grantTestAttempts(cid,testId,email,n).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");status.textContent="Сохранено: дополнительных попыток — "+r.extraAttempts+".";return window.API.getTestAttemptStatus(cid,testId,email);}).then(r=>{if(r&&r.success)status.textContent="Готово. Использовано: "+r.used+" из "+r.limit+". Осталось: "+r.remaining+". Дополнительно выдано: "+r.extraAttempts+".";loadAttemptRequests();}).catch(e=>status.textContent=e.message).finally(()=>{this.disabled=false;});
  };
 };
 
