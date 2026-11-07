@@ -139,12 +139,13 @@
       var list=document.getElementById("notificationItems");if(!list)return;
       list.querySelectorAll("[data-notification-open]").forEach(function(btn){
         var item=(window.notificationCache||[]).find(function(n){return String(n.id)===String(btn.dataset.notificationOpen);});
-        if(!item||item.type!=="written_submission")return;
+        if(!item||["written_submission","attempt_request"].indexOf(item.type)<0)return;
         btn.onclick=function(){
           window.API.markNotificationRead(btn.dataset.notificationOpen).catch(function(){});
           var pop=document.getElementById("notificationPopover");if(pop)pop.hidden=true;
           var bell=document.getElementById("notificationBell");if(bell)bell.setAttribute("aria-expanded","false");
-          location.hash="#/written-review";window.refreshNotificationCenter();
+          location.hash=item.type==="written_submission"?"#/written-review":"#/teaching-controls";
+          window.refreshNotificationCenter();
         };
       });
     };
