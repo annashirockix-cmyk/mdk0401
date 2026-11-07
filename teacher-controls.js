@@ -110,8 +110,20 @@ window.renderTeacherControlsPage=function(){
      window.API.setTopicAccess(cid,ch.dataset.topic,ch.checked).then(r=>{if(!r.success)throw new Error(r.error||"Не удалось сохранить");status.textContent=ch.checked?"Доступна студентам":"Закрыта для студентов";}).catch(e=>{ch.checked=!ch.checked;status.textContent=e.message;}).finally(()=>ch.disabled=false);
    });
  });
- const studentSel=document.getElementById("attemptStudent"),testSel=document.getElementById("attemptTest"),testIdInput=document.getElementById("attemptTestId");
- testSel.onchange=function(){testIdInput.value=this.value;};
+ const studentSel=document.getElementById("attemptStudent"),testSel=document.getElementById("attemptTest"),testIdInput=document.getElementById("attemptTestId"),attemptStatus=document.getElementById("attemptStatus");
+ function refreshAttemptStatus(){
+   const email=studentSel.value,testId=String(testIdInput.value||testSel.value||"").trim();
+   if(!email||!testId){attemptStatus.textContent="Выберите студента и тест, чтобы увидеть использованные попытки.";return;}
+   attemptStatus.textContent="Проверяем попытки…";
+   window.API.getTestAttemptStatus(cid,testId,email).then(function(r){
+     if(!r||!r.success)throw Error(r&&r.error||"Не удалось проверить попытки");
+     attemptStatus.textContent="Использовано: "+r.used+" из "+r.limit+". Осталось: "+r.remaining+". Дополнительно выдано: "+r.extraAttempts+".";
+   }).catch(function(e){attemptStatus.textContent="Не удалось получить статус: "+e.message;});
+ }
+ testSel.onchange=function(){testIdInput.value=this.value;refreshAttemptStatus();};
+ studentSel.onchange=refreshAttemptStatus;
+ testIdInput.addEventListener("change",refreshAttemptStatus);
+ testIdInput.addEventListener("input",function(){if(this.value.trim())refreshAttemptStatus();});
  Promise.all([window.API.getStudents(),window.loadGlobalCustomContent?new Promise(resolve=>window.loadGlobalCustomContent(resolve)):Promise.resolve()]).then(([res])=>{
    const students=(res.students||[]).filter(s=>String(s.role).toLowerCase()==="student"&&(s.courses||[]).includes(cid));
    studentSel.innerHTML='<option value="">— Выберите студента —</option>'+students.map(s=>'<option value="'+esc(s.email)+'">'+esc(s.name||s.email)+' · '+esc(s.group||"без группы")+'</option>').join("");
@@ -129,7 +141,7 @@ window.renderTeacherControlsPage=function(){
    const email=studentSel.value,testId=String(testIdInput.value||testSel.value).trim(),n=Math.max(0,Math.min(20,Number(document.getElementById("attemptCount").value)||0)),status=document.getElementById("attemptStatus");
    if(!email||!testId){status.textContent="Выберите студента и тест.";return;}
    this.disabled=true;status.textContent="Сохранение…";
-   window.API.grantTestAttempts(cid,testId,email,n).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");status.textContent="Сохранено: дополнительных попыток — "+r.extraAttempts+".";}).catch(e=>status.textContent=e.message).finally(()=>{this.disabled=false;});
+   window.API.grantTestAttempts(cid,testId,email,n).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");status.textContent="Сохранено: дополнительных попыток — "+r.extraAttempts+".";return window.API.getTestAttemptStatus(cid,testId,email);}).then(r=>{if(r&&r.success)status.textContent="Готово. Использовано: "+r.used+" из "+r.limit+". Осталось: "+r.remaining+". Дополнительно выдано: "+r.extraAttempts+".";}).catch(e=>status.textContent=e.message).finally(()=>{this.disabled=false;});
  };
 };
 
