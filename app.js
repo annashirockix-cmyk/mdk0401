@@ -597,7 +597,13 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                 if (!serverBank || !serverBank.success || !serverBank.questions || !serverBank.questions.length) {
                     var serverReason = serverBank && serverBank.error ? String(serverBank.error) :
                         (serverBank && serverBank.notImported ? "В хранилище не найдены запрошенные банки." : "Сервер не вернул вопросы.");
-                    contentArea.innerHTML = '<div class="module"><h3>Не удалось загрузить защищённый тест</h3><p>Проверьте наличие банка вопросов для дисциплины МДК 07.01.</p><p><b>Ответ сервера:</b> ' + safeText(serverReason) + '</p><p style="font-size:12px;color:var(--muted)">Дисциплина: ' + safeText(courseId) + '<br>Тест: ' + safeText(serverTestId) + '<br>Банки: ' + safeText(serverBankIds.join(", ")) + '</p><p>Если сервер сообщает, что действие неизвестно или банк не найден, администратору нужно проверить публикацию Google Apps Script и содержимое закрытого листа QuestionBank.</p></div>';
+                    var bankDiagnostics = "";
+                    if (serverBank && serverBank.notImported) {
+                        bankDiagnostics = '<p style="font-size:12px;color:var(--muted)"><b>Запрошено:</b> ' + safeText((serverBank.requestedBankIds || serverBankIds).join(", ")) +
+                            '<br><b>Проверено:</b> ' + safeText((serverBank.resolvedBankIds || []).join(", ")) +
+                            '<br><b>Есть в QuestionBank для этой дисциплины:</b> ' + safeText((serverBank.availableBankIds || []).join(", ") || "нет записей") + '</p>';
+                    }
+                    contentArea.innerHTML = '<div class="module"><h3>Не удалось загрузить защищённый тест</h3><p>Проверьте наличие банка вопросов для дисциплины МДК 07.01.</p><p><b>Ответ сервера:</b> ' + safeText(serverReason) + '</p><p style="font-size:12px;color:var(--muted)">Дисциплина: ' + safeText(courseId) + '<br>Тест: ' + safeText(serverTestId) + '<br>Банки: ' + safeText(serverBankIds.join(", ")) + '</p>' + bankDiagnostics + '<p>Перед повторным импортом сравните список банков выше с идентификаторами в закрытом листе QuestionBank.</p></div>';
                     return;
                 }
                 var secureQuestions = serverBank.questions, secureAnswers = [], secureIndex = 0, selectedMulti = {};
