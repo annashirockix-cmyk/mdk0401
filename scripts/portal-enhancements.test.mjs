@@ -380,10 +380,39 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v245/);
+  assert.match(sw, /portal-cache-v246/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
   assert.match(exam, /correct \/ total/);
   assert.match(exam, /courseId === "SPRUT_TP"/);
+});
+
+
+test("every technical lecture receives a topic-specific visual atlas with attributed web photos, diagrams and graphs", () => {
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  const visual = read("lecture-visual-atlas.js");
+  const css = read("lecture-visual-atlas.css");
+  assert.match(html, /lecture-visual-atlas\.js\?v=1/);
+  assert.match(html, /lecture-visual-atlas\.css\?v=1/);
+  assert.ok(sw.includes("./lecture-visual-atlas.js"));
+  assert.ok(sw.includes("./lecture-visual-atlas.css"));
+  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "LECTURE_VISUAL_ATLAS_COUNT"]) {
+    assert.ok(visual.includes(term), "visual atlas missing " + term);
+  }
+  assert.match(css, /\.lecture-visual-atlas/);
+  const sandbox = { window: { MDK_DATA: {} } };
+  for (const file of ["data-0701.js", "data-0401.js", "data-0201.js", "data-0202.js", "data-mastercam.js", "data-sprut-tp.js", "data-material.js", "data-metrology.js", "data-safety.js"]) {
+    vm.runInNewContext(read(file), sandbox, { timeout: 2000 });
+  }
+  vm.runInNewContext(visual, sandbox, { timeout: 2000 });
+  assert.ok(sandbox.window.LECTURE_VISUAL_ATLAS_COUNT >= 50, "expected visuals in at least 50 lectures");
+  for (const id of ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT"]) {
+    const course = sandbox.window.MDK_DATA[id];
+    assert.ok(course && course.sections.length, "course missing: " + id);
+    const lectures = course.sections.flatMap(section => section.topics || []).flatMap(topic => topic.lectures || []);
+    assert.ok(lectures.length > 0, "no lectures in " + id);
+    assert.ok(lectures.some(lecture => lecture.content && lecture.content.includes("lecture-visual-atlas")), "visual atlas missing in " + id);
+  }
 });
