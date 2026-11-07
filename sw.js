@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'portal-cache-v9'; // <--- ВЕРСИЯ ОБНОВЛЕНА ДО v5
+const CACHE_NAME = 'portal-cache-v10'; // <--- ВЕРСИЯ ОБНОВЛЕНА ДО v5
 
 const STATIC_ASSETS = [
   './',
@@ -14,7 +14,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование ресурсов v9');
+        console.log('[SW] Кэширование ресурсов v10');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
