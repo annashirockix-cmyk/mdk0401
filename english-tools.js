@@ -16,6 +16,23 @@
   function cardButton(text,hash){return '<a class="btn ghost" href="'+hash+'" style="display:inline-flex;margin:4px 6px 4px 0">'+text+'</a>';}
   function runEnglishAssessment(title,questions,minutes,resultKey){
     var app=$("app");if(!app)return;
+    if(window.state&&window.state.student&&window.API&&window.API.getTestAttemptStatus&&window._englishAssessmentGate!==resultKey){
+      app.innerHTML='<section class="module">Проверяем, не была ли работа уже выполнена…</section>';
+      window.API.getTestAttemptStatus(activeCourse(),resultKey).then(function(status){
+        if(!status||!status.allowed){
+          app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="module" style="text-align:center"><h2>Работа уже завершена</h2><p>Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.</p></section>';
+          return;
+        }
+        window._englishAssessmentGate=resultKey;
+        runEnglishAssessment(title,questions,minutes,resultKey);
+        window._englishAssessmentGate="";
+      }).catch(function(error){
+        app.innerHTML='<section class="module">Не удалось проверить доступ к работе. Обновите страницу или обратитесь к преподавателю.</section>';
+        console.warn("English attempt status failed",error);
+      });
+      return;
+    }
+    if(window._englishAssessmentGate===resultKey)window._englishAssessmentGate="";
     var existing=window.state&&window.state.results&&window.state.results[resultKey];
     if(existing){app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="module" style="text-align:center"><h2>Работа уже завершена</h2><p>Оценка: <b>'+esc(existing.grade||"—")+'</b></p><p>Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.</p></section>';return;}
     if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
