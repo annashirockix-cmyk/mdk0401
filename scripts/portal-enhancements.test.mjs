@@ -160,6 +160,18 @@ test("MDK 07.01 training and final exam include the additional bank only once", 
 });
 
 
+test("MDK 07.01 final exam samples questions across all available sections", () => {
+  const sandbox = { window: { MDK_DATA: {}, HARD_TESTS: {} } };
+  vm.runInNewContext(read("exam_0701.js"), sandbox, { timeout: 1000 });
+  const sections = Array.from({ length: 5 }, (_, index) => ({
+    topics: [{ id: "topic-" + index, test: [0, 1, 2].map((n) => ({ q: "Раздел " + index + " вопрос " + n, options: ["A", "B", "C"], correct: 0 })) }]
+  }));
+  const selected = sandbox.selectBalancedExam0701({ sections }, 10);
+  assert.equal(selected.length, 10);
+  const covered = new Set(selected.map((question) => Number(question.q.match(/Раздел (\\d+)/)[1])));
+  assert.equal(covered.size, 5, "the exam must include questions from each available section");
+});
+
 test("MDK 07.01 topic 4.3 quiz tests program-development theory, not turning-cycle memorization", () => {
   const source = read("data-0701.js");
   const sandbox = { window: { MDK_DATA: {} } };
