@@ -180,7 +180,10 @@ window.renderFinalExamPage = function (mdkId) {
     if (window.state && window.state.student && window.API && window.API.getFinalExam && window.API.submitFinalExam) {
       start.disabled=true;mount.innerHTML="<p>Загружаем экзаменационный вариант с сервера…</p>";
       window.API.getFinalExam(course.id).then(function(serverExam){
-        if(!serverExam||!serverExam.success||!serverExam.questions||!serverExam.questions.length)throw new Error("Защищённый банк экзамена ещё не импортирован. Обратитесь к администратору.");
+        if(!serverExam||!serverExam.success||!serverExam.questions||!serverExam.questions.length){
+          var available=serverExam&&serverExam.availableBankIds;
+          throw new Error("Защищённый банк экзамена не найден для дисциплины "+course.id+". Банки в QuestionBank: "+(Array.isArray(available)&&available.length?available.join(", "):"нет записей")+". Проверьте импорт и публикацию Google Apps Script.");
+        }
         var picked=serverExam.questions.map(function(entry){return entry.question;});
         mount.innerHTML="";
         var timerBox=examNode("div","exam-timer",duration+":00");timerBox.style.cssText="font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;color:var(--accent);";mount.appendChild(timerBox);
