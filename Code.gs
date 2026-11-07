@@ -870,13 +870,14 @@ function getResults_(data) {
     const rs=p.results||{};
     Object.keys(rs).forEach(function(key){
       const rec=rs[key];if(!rec||typeof rec!=="object"||rec.grade==null)return;
-      const email=email_(row[m.Email]);if(list.some(function(x){return email_(x.email)===email&&String(x.testId)===key&&sameCourseId_(x.courseId,cid);}))return;
+      const email=email_(row[m.Email]);
       let cid=normalizeCourseId_(rec.courseId||"");
       if(!cid){
         const matches=CFG.COURSES.filter(function(id){return key.indexOf(id)>=0;});
         if(matches.length===1)cid=matches[0];
         else{const enrolled=String(row[m.Courses]||"").split(",").filter(Boolean);if(enrolled.length===1)cid=enrolled[0];}
       }
+      if(list.some(function(x){return email_(x.email)===email&&String(x.testId)===key&&sameCourseId_(x.courseId,cid);}))return;
       if(isProtectedAssessment_(key,cid,protectedBanks))return;
       list.push({email:email,name:row[m.Name],group:row[m.Group],testId:key,testTitle:rec.testTitle||key,grade:rec.grade,score:rec.score||0,maxScore:rec.max||rec.maxScore||0,percent:rec.percent||0,timeSpent:rec.timeSpent||0,attempts:rec.attempts||1,finishedAt:rec.finishedAt||"",courseId:cid});
     });
