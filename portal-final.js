@@ -290,7 +290,7 @@
         });
         if (validation) { error.textContent = validation; return; }
         submit.disabled = true; error.textContent = "Отправляем ответы на сервер…";
-        window.API.submitBuiltInTest({ courseId: courseId, testId: testId, bankIds: bankIds, answers: answers, testTitle: testTitle, timeSpent: Math.max(0, Math.round((Date.now()-startedAt)/1000)) }).then(function (result) {
+        window.API.submitBuiltInTest({ courseId: courseId, testId: testId, bankIds: bankIds, attemptId: response.attemptId, answers: answers, testTitle: testTitle, timeSpent: Math.max(0, Math.round((Date.now()-startedAt)/1000)) }).then(function (result) {
           if (!result || !result.success) throw new Error(result && result.error || "Сервер не подтвердил результат.");
           var rec = { grade: result.grade, percent: result.percent, score: result.score, max: result.maxScore, attempts: result.attempts, courseId: courseId, testTitle: testTitle, finishedAt: new Date().toISOString() };
           if (!window.state.results) window.state.results = {};
