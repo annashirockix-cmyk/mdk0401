@@ -494,6 +494,8 @@ function login_(data) {
 /* ---------- Student profile and test results ---------- */
 
 function protectedQuestionBankMap_() {
+  const cache=CacheService.getScriptCache(),cacheKey="protectedQuestionBankMap:v1",cached=cache.get(cacheKey);
+  if(cached){try{return JSON.parse(cached);}catch(e){}}
   const sh=questionBank_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),map={};
   values.slice(1).forEach(function(row){
     const courseId=String(row[m.CourseId]||""),bankId=String(row[m.BankId]||"");
@@ -501,6 +503,7 @@ function protectedQuestionBankMap_() {
     if(!map[courseId])map[courseId]={};
     map[courseId][bankId]=true;
   });
+  try{cache.put(cacheKey,JSON.stringify(map),600);}catch(e){}
   return map;
 }
 function isProtectedAssessment_(testId,courseId,bankMap) {
@@ -517,7 +520,6 @@ function isProtectedAssessment_(testId,courseId,bankMap) {
     return false;
   }
   if(courseId)return protectedFor(String(courseId));
-  if(id.indexOf("__final__")===0)return protectedFor(id.slice("__final__".length));
   return Object.keys(map).some(protectedFor);
 }
 function saveStudent_(data) {
@@ -1185,6 +1187,7 @@ function importQuestionBanks_(data) {
       for(let i=deleteRows.length-1;i>=0;i--)sh.deleteRow(deleteRows[i]);
       sh.getRange(sh.getLastRow()+1,1,bank.rows.length,6).setValues(bank.rows);
     });
+    CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");
     return {success:true,banksImported:prepared.length,questionsImported:total};
   } finally {lock.releaseLock();}
 }
