@@ -574,7 +574,15 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     window.API.saveResult({
                         email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
                         testId: resKey, testTitle: topic.title, grade: grade, score: correct, maxScore: questions.length, percent: pct, timeSpent: 0, courseId: courseId
-                    });
+                    }).then(function(saved){
+                        if(saved&&Number(saved.penaltyPoints)>0){
+                            window.state.results[resKey]={grade:saved.grade,percent:saved.percent,penaltyPoints:saved.penaltyPoints};
+                            window.saveStudentData();
+                            var gradeHeading=contentArea.querySelector("h1");if(gradeHeading)gradeHeading.textContent="Оценка с учётом штрафа: "+saved.grade;
+                            var penaltyNote=document.createElement("p");penaltyNote.textContent="Штраф за повторное нарушение правил: -"+saved.penaltyPoints+" процентных пунктов. Отчёт преподавателю отправлен.";
+                            var resultCard=contentArea.querySelector("div");if(resultCard)resultCard.appendChild(penaltyNote);
+                        }
+                    }).catch(function(error){window.showToast("Не удалось сохранить результат: "+(error.message||"ошибка"),"err");});
                 }
 
                 contentArea.innerHTML = `<div style="text-align:center; padding:30px; background:var(--card-soft); border-radius:12px;"><h2 style="color:var(--ok);">Тест завершен!</h2><p>Верных: <b>${correct}</b> из <b>${questions.length}</b></p><h1 style="font-size:48px; color:var(--accent);">Оценка: ${grade}</h1><button class="btn" onclick="window.switchTopicTab('${selfWorkCode ? 'selfwork' : 'test'}')">Вернуться</button></div>`; 
