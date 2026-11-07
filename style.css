@@ -401,7 +401,7 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 .wb-more{margin-top:14px;padding:12px;background:#edf3f8;border-radius:9px;color:#20364c}
 .wb-more summary{font-weight:700;cursor:pointer;color:#244e73}.wb-more li{margin:5px 0}
 .wb-resources{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
-.wb-resource{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--border);border-radius:10px;background:var(--card-soft)}
+.wb-resource{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--border);border-radius:10px;background:var(--card-soft)}.wb-resource:before{content:"";display:block;width:34px;height:34px;background:url("./assets/images/icon-doc.png") center/contain no-repeat}
 .wb-resource a{color:var(--accent);font-weight:800;overflow-wrap:anywhere}
 .wb-font-picker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
 .wb-font-picker select{padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
