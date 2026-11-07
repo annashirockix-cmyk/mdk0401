@@ -160,16 +160,25 @@ test("MDK 07.01 training and final exam include the additional bank only once", 
 });
 
 
-test("MDK 07.01 final exam samples questions across all available sections", () => {
+test("MDK 07.01 final exam samples different topics within every section", () => {
   const sandbox = { window: { MDK_DATA: {}, HARD_TESTS: {} } };
+  vm.runInNewContext(read("data-0701.js"), sandbox, { timeout: 1000 });
+  vm.runInNewContext(read("hard-questions.js"), sandbox, { timeout: 1000 });
   vm.runInNewContext(read("exam_0701.js"), sandbox, { timeout: 1000 });
-  const sections = Array.from({ length: 5 }, (_, index) => ({
-    topics: [{ id: "topic-" + index, test: [0, 1, 2].map((n) => ({ q: "Раздел " + index + " вопрос " + n, options: ["A", "B", "C"], correct: 0 })) }]
-  }));
-  const selected = sandbox.selectBalancedExam0701({ sections }, 10);
+  const moduleData = sandbox.window.MDK_DATA["07.01"];
+  const selected = sandbox.selectBalancedExam0701(moduleData, 10);
   assert.equal(selected.length, 10);
-  const covered = new Set(selected.map((question) => Number(question.q.match(/Раздел (\d+)/)[1])));
-  assert.equal(covered.size, 5, "the exam must include questions from each available section");
+  assert.equal(moduleData.sections.length, 5);
+  for (const section of moduleData.sections) {
+    const sectionQuestions = selected.filter((question) => section.topics.some((topic) =>
+      (topic.test || []).includes(question) || (sandbox.window.HARD_TESTS[topic.id] || []).includes(question)
+    ));
+    assert.equal(sectionQuestions.length, 2, "each section must contribute two questions");
+    const topicIds = section.topics.filter((topic) => sectionQuestions.some((question) =>
+      (topic.test || []).includes(question) || (sandbox.window.HARD_TESTS[topic.id] || []).includes(question)
+    )).map((topic) => topic.id);
+    assert.equal(new Set(topicIds).size, 2, "questions in a section must come from different topics");
+  }
 });
 
 test("MDK 07.01 topic 4.3 quiz tests program-development theory, not turning-cycle memorization", () => {
