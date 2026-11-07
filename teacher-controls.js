@@ -31,16 +31,23 @@ window.renderTeacherControlsPage=function(){
      window.API.setTopicAccess(cid,ch.dataset.topic,ch.checked).then(r=>{if(!r.success)throw new Error(r.error||"Не удалось сохранить");status.textContent=ch.checked?"Доступна студентам":"Закрыта для студентов";}).catch(e=>{ch.checked=!ch.checked;status.textContent=e.message;}).finally(()=>ch.disabled=false);
    });
  });
- const studentSel=document.getElementById("attemptStudent"),testSel=document.getElementById("attemptTest");
+ const studentSel=document.getElementById("attemptStudent"),testSel=document.getElementById("attemptTest"),testIdInput=document.getElementById("attemptTestId");
+ testSel.onchange=function(){testIdInput.value=this.value;};
  Promise.all([window.API.getStudents(),window.loadGlobalCustomContent?new Promise(resolve=>window.loadGlobalCustomContent(resolve)):Promise.resolve()]).then(([res])=>{
    const students=(res.students||[]).filter(s=>String(s.role).toLowerCase()==="student"&&(s.courses||[]).includes(cid));
    studentSel.innerHTML='<option value="">— Выберите студента —</option>'+students.map(s=>'<option value="'+esc(s.email)+'">'+esc(s.name||s.email)+' · '+esc(s.group||"без группы")+'</option>').join("");
-   const tests=(window.customContent&&window.customContent.tests||[]).filter(t=>t.mdkId===cid);
-   testSel.innerHTML='<option value="">— Выберите тест —</option>'+tests.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title||t.id)+'</option>').join("");
-   if(!tests.length)testSel.innerHTML='<option value="">Нет дополнительных тестов</option>';
+   const tests=(window.customContent&&window.customContent.tests||[]).filter(t=>t.mdkId===cid).map(t=>({id:t.id,title:"Дополнительный тест · "+(t.title||t.id)}));
+   const course=window.MDK_DATA&&window.MDK_DATA[cid],built=[];
+   (course&&course.sections||[]).forEach(sec=>(sec.topics||[]).forEach(topic=>{
+     if(topic.test&&topic.test.length)built.push({id:"test_"+topic.id,title:"Тест · "+(topic.code||"")+" "+(topic.title||topic.id)});
+     (topic.selfWork||[]).forEach((w,i)=>{const k="self_"+topic.id+"_"+i;if(window.EXTRA_TESTS&&window.EXTRA_TESTS[k]&&window.EXTRA_TESTS[k].questions)built.push({id:k,title:"Самостоятельный тест · "+(w.title||k)});});
+   }));
+   built.push({id:"__final__"+cid,title:"Итоговый экзамен · "+cid});
+   const all=tests.concat(built);
+   testSel.innerHTML='<option value="">— Выберите тест —</option>'+all.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
  }).catch(e=>{studentSel.innerHTML='<option value="">Ошибка загрузки студентов</option>';testSel.innerHTML='<option value="">Ошибка загрузки тестов</option>';document.getElementById("attemptStatus").textContent=e.message;});
  document.getElementById("grantAttemptsBtn").onclick=function(){
-   const email=studentSel.value,testId=testSel.value,n=Math.max(0,Math.min(20,Number(document.getElementById("attemptCount").value)||0)),status=document.getElementById("attemptStatus");
+   const email=studentSel.value,testId=String(testIdInput.value||testSel.value).trim(),n=Math.max(0,Math.min(20,Number(document.getElementById("attemptCount").value)||0)),status=document.getElementById("attemptStatus");
    if(!email||!testId){status.textContent="Выберите студента и тест.";return;}
    this.disabled=true;status.textContent="Сохранение…";
    window.API.grantTestAttempts(cid,testId,email,n).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка");status.textContent="Сохранено: дополнительных попыток — "+r.extraAttempts+".";}).catch(e=>status.textContent=e.message).finally(()=>{this.disabled=false;});
