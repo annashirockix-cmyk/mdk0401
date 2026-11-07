@@ -44,7 +44,7 @@ const HEADERS = {
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"],
   QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"],
-  ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt"]
+  ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt", "EventType", "Details"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -668,10 +668,14 @@ function logActivity_(data) {
   const courseId=String(data.courseId||"");
   if(courseId&&!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
   const route=String(data.route||"/").replace(/[\r\n]/g," ").slice(0,240);
-  const pageTitle=String(data.pageTitle||"").replace(/[\r\n]/g," ").slice(0,120);
+  const pageTitle=String(data.pageTitle||"").replace(/[<>\r\n]/g," ").slice(0,120);
+  const allowedTypes=["page_view","click","tab_switch","session_start","session_end"];
+  const requestedType=String(data.eventType||"page_view");
+  const eventType=allowedTypes.indexOf(requestedType)>=0?requestedType:"page_view";
+  const details=String(data.details||"").replace(/[<>\r\n\u0000-\u001f]/g," ").replace(/\s+/g," ").trim().slice(0,180);
   if(!route||route.indexOf("javascript:")===0)throw new Error("Некорректный маршрут.");
   const now=new Date().toISOString();
-  appendMappedRecord_(activityLog_(),{Id:Utilities.getUuid(),Email:user.email,Name:user.name,Group:user.group,Role:user.role,CourseId:courseId,Route:route,PageTitle:pageTitle,CreatedAt:now,ClientAt:String(data.clientAt||"").slice(0,40)});
+  appendMappedRecord_(activityLog_(),{Id:Utilities.getUuid(),Email:user.email,Name:user.name,Group:user.group,Role:user.role,CourseId:courseId,Route:route,PageTitle:pageTitle,CreatedAt:now,ClientAt:String(data.clientAt||"").slice(0,40),EventType:eventType,Details:details});
   return {success:true,createdAt:now};
 }
 function getActivityLog_(data) {
@@ -683,9 +687,9 @@ function getActivityLog_(data) {
   const rows=vals.slice(1).filter(function(row){
     const cid=String(row[m.CourseId]||"");
     return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||String(row[m.Group]||"")===group)&&(user.role==="admin"||!!cid&&hasCourseAccess_(user,cid));
-  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:String(row[m.Group]||""),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||"")};});
+  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:String(row[m.Group]||""),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||""),eventType:m.EventType===undefined?"page_view":String(row[m.EventType]||"page_view"),details:m.Details===undefined?"":String(row[m.Details]||"")};});
   rows.sort(function(x,y){return String(y.createdAt).localeCompare(String(x.createdAt));});
-  return {success:true,events:rows.slice(0,500),total:rows.length};
+  return {success:true,events:rows.slice(0,1000),total:rows.length};
 }
 
 function getAttemptAudit_(data) {
