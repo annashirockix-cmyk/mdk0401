@@ -319,26 +319,30 @@
 
   function customRecords(courseId,topicId,type){return (window.customContent[type==="lecture"?"lectures":"tests"]||[]).filter(x=>x.mdkId===courseId&&x.topicId===topicId);}
   function runTest(test,courseId,topicId){
-    const area=document.getElementById("topicContent"),questions=test.questions||[];if(!questions.length){area.textContent="В тесте пока нет вопросов.";return;}
-    let i=0,score=0;
+    const area=document.getElementById("topicContent"),questions=test.questions||[];
+    if(!questions.length){area.textContent="В тесте пока нет вопросов.";return;}
+    if(!window.state.student||!window.API||!window.API.submitCustomTest){area.textContent="Для прохождения теста войдите в аккаунт обучающегося и подключитесь к серверу.";return;}
+    let i=0,answers=[],startedAt=Date.now(),sending=false;
     function show(){
       if(i>=questions.length){
-        const pct=Math.round(score/questions.length*100),grade=pct>=90?5:pct>=75?4:pct>=60?3:2,key="test_"+topicId+"_custom_"+test.id;
-        window.state.results=window.state.results||{};window.state.results[key]={grade:grade,percent:pct,score:score,max:questions.length,finishedAt:new Date().toISOString()};
-        if(window.saveStudentData)window.saveStudentData();
-
-        area.innerHTML='<div class="module" style="text-align:center"><h2>Тест завершён</h2><p>Правильных ответов: '+score+' из '+questions.length+'</p><h2>Оценка: '+grade+'</h2><p id="customResultSync" aria-live="polite">Результат сохранён на этом устройстве. Отправка в журнал…</p><button class="btn" id="retryCustomTest">Пройти снова</button></div>';
-        document.getElementById("retryCustomTest").onclick=()=>runTest(test,courseId,topicId);
+        if(sending)return;sending=true;
+        area.innerHTML='<div class="module" style="text-align:center"><h2>Проверяем ответы…</h2><p id="customResultSync" aria-live="polite">Результат проверяется на сервере.</p></div>';
         const sync=document.getElementById("customResultSync");
-        if(window.API&&window.API.saveResult&&window.state.student){
-          window.API.saveResult({email:window.state.student.email,name:window.state.student.name,group:window.state.student.group,testId:key,testTitle:test.title,grade:grade,score:score,maxScore:questions.length,percent:pct,courseId:courseId})
-            .then(function(res){if(!res||!res.success)throw new Error(res&&res.error||"Сервер не подтвердил запись.");if(sync)sync.textContent="Результат также передан в журнал преподавателя." ;})
-            .catch(function(err){console.warn("Не удалось передать результат теста в журнал",err);if(sync)sync.textContent="Результат сохранён локально, но не передан в журнал. Проверьте подключение и повторите попытку позже.";});
-        } else if(sync) sync.textContent="Результат сохранён локально. Для передачи в журнал войдите в аккаунт обучающегося.";
+        window.API.submitCustomTest(test.id,answers,Math.round((Date.now()-startedAt)/1000)).then(function(res){
+          if(!res||!res.success)throw new Error(res&&res.error||"Сервер не подтвердил результат.");
+          const pct=Number(res.percent)||0,grade=Number(res.grade)||2,score=Number(res.score)||0,max=Number(res.maxScore)||questions.length;
+          const key="test_"+topicId+"_custom_"+test.id;
+          window.state.results=window.state.results||{};
+          window.state.results[key]={grade:grade,percent:pct,score:score,max:max,attempts:res.attempts||1,finishedAt:new Date().toISOString(),courseId:courseId,testTitle:test.title};
+          if(window.saveStudentData)window.saveStudentData();
+          area.innerHTML='<div class="module" style="text-align:center"><h2>Тест завершён</h2><p>Правильных ответов: '+score+' из '+max+'</p><h2>Оценка: '+grade+'</h2><p>Попытка №'+(res.attempts||1)+'</p><button class="btn" id="retryCustomTest">Попробовать ещё раз</button></div>';
+          document.getElementById("retryCustomTest").onclick=function(){runTest(test,courseId,topicId);};
+        }).catch(function(err){area.innerHTML='<div class="module"><h3>Не удалось завершить тест</h3><p>'+esc(err.message||"Ошибка отправки")+'</p><p>Если попытки закончились, обратитесь к преподавателю.</p><button class="btn ghost" id="backCustomTest">Вернуться к тестам</button></div>';const b=document.getElementById("backCustomTest");if(b)b.onclick=()=>window.switchTopicTab("custom-test");});
         return;
       }
-      const q=questions[i];area.innerHTML='<p><b>Вопрос '+(i+1)+' из '+questions.length+'</b></p><h3>'+esc(q.q)+'</h3>'+(q.options||[]).map((o,j)=>'<button class="btn ghost custom-answer" data-i="'+j+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+esc(o)+'</button>').join("");
-      area.querySelectorAll(".custom-answer").forEach(b=>b.onclick=function(){if(+b.dataset.i===+q.correct)score++;i++;show();});
+      const q=questions[i];
+      area.innerHTML='<p><b>Вопрос '+(i+1)+' из '+questions.length+'</b></p><h3>'+esc(q.q)+'</h3>'+(q.options||[]).map((o,j)=>'<button class="btn ghost custom-answer" data-i="'+j+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+esc(o)+'</button>').join("");
+      area.querySelectorAll(".custom-answer").forEach(b=>b.onclick=function(){if(sending)return;answers[i]=Number(b.dataset.i);i++;show();});
     }
     show();
   }
