@@ -104,8 +104,10 @@ function handleRequest_(e) {
       case "submitcustomtest": result = submitCustomTest_(data); break;
       case "importquestionbanks": result = importQuestionBanks_(data); break;
       case "getquestionbank": result = getQuestionBank_(data); break;
-      case "getbuilttest": result = getBuiltInTest_(data); break;
-      case "submitbuilttest": result = submitBuiltInTest_(data); break;
+      case "getbuilttest":
+      case "getbuiltintest": result = getBuiltInTest_(data); break;
+      case "submitbuilttest":
+      case "submitbuiltintest": result = submitBuiltInTest_(data); break;
       case "getfinalexam": result = getFinalExam_(data); break;
       case "submitfinalexam": result = submitFinalExam_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
