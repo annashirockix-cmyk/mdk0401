@@ -186,7 +186,7 @@
     ["image-space","Космос — фото"],["image-matrix","Код Матрицы"],["image-brutal","Brutal"],["image-hyper","Hyper"],
     ["foggy-forest","Туманный лес"],["pumpkins","Тыквы"],["spooky-room","Мрачная комната"],["halloween","Хэллоуин"],
     ["red-forest","Красный лес"],["lanterns","Фонари"],["dark-table","Тёмный стол"],["graveyard","Кладбище"],
-    ["cats-notebook","Коты и тетрадь"],["cats-yarn","Коты и пряжа"]
+    ["cats-notebook","Коты и тетрадь"],["cats-yarn","Коты и пряжа"],["ui-cyber","Cyber UI"],["ui-frame","Frame UI"],["ui-hydra","Hydra UI"],["ui-pixel","Pixel UI"],["ui-quest","Quest UI"],["ui-reds","Reds UI"],["ui-retro","Retro UI"],["ui-status","Status UI"],["ui-zen","Zen UI"]
   ];
   function setTheme(id){
     document.documentElement.setAttribute("data-theme",id);
