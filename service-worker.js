@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v113'; // Удалён модуль PDF-библиотеки; обновлены статические ресурсы.
+const CACHE_NAME = 'portal-cache-v114'; // Удалён модуль PDF-библиотеки; обновлены статические ресурсы.
 
 const STATIC_ASSETS = [
   './',
