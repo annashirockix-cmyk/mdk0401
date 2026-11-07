@@ -114,7 +114,9 @@
     var box=document.getElementById("writtenReviewList");
     window.API.getResults({}).then(function(r){
       if(!r||!r.success)throw Error(r&&r.error||"Не удалось загрузить журнал");
-      var rows=(r.results||[]).filter(function(x){return /^(prac_|self_)/.test(String(x.testId||""));});
+      var rawRows=(r.results||[]).filter(function(x){return /^(prac_|self_)/.test(String(x.testId||""));}),latest={};
+      rawRows.forEach(function(x){var key=String(x.email||"")+"|"+String(x.courseId||"")+"|"+String(x.testId||"");if(!latest[key]||String(x.finishedAt||"")>=String(latest[key].finishedAt||""))latest[key]=x;});
+      var rows=Object.keys(latest).map(function(k){return latest[k];});
       rows.sort(function(a,b){return String(b.finishedAt||"").localeCompare(String(a.finishedAt||""));});
       if(!rows.length){box.innerHTML='<div class="portal-ux-empty">Письменных работ пока нет.</div>';return;}
       var pending=rows.filter(function(x){return x.grade===""||x.grade===null||Number(x.grade)===0;});
@@ -185,12 +187,19 @@
   function mountPalette(){
     var palette=document.getElementById("themePalette"),menu=palette&&palette.querySelector("div");
     if(!menu||menu.dataset.portalUxReady)return;
-    menu.dataset.portalUxReady="1";
+    menu.dataset.portalUxReady="1";menu.style.maxHeight="min(72vh,560px)";menu.style.overflowY="auto";
+    var baseThemeIds=["dark","light","neon","matrix","cyberpunk","graphite","lavender","ocean"];
+    Array.prototype.forEach.call(menu.querySelectorAll("button"),function(btn,index){btn.addEventListener("click",function(){var id=baseThemeIds[index];if(id&&window.state){window.state.activeTheme=id;save();}});});
     var divider=document.createElement("div");divider.style.cssText="height:1px;background:var(--border);margin:7px 2px";menu.appendChild(divider);
     var th=document.createElement("div");th.textContent="Дополнительные темы";th.style.cssText="font-size:11px;color:var(--muted);padding:6px 8px;font-weight:700";menu.appendChild(th);
     themes.forEach(function(t){var b=document.createElement("button");b.type="button";b.textContent=t[1];b.style.cssText="display:block;width:100%;text-align:left;padding:8px;border:0;border-radius:7px;background:transparent;color:var(--text);cursor:pointer";b.onclick=function(){setTheme(t[0]);menu.style.display="none";};menu.appendChild(b);});
     var bgTitle=document.createElement("div");bgTitle.textContent="Фон кабинета";bgTitle.style.cssText="font-size:11px;color:var(--muted);padding:8px 8px 4px;font-weight:700";menu.appendChild(bgTitle);
     backgrounds.forEach(function(t){var b=document.createElement("button");b.type="button";b.textContent=t[0]==="none"?"◻️ "+t[1]:"🖼️ "+t[1];b.style.cssText="display:block;width:100%;text-align:left;padding:8px;border:0;border-radius:7px;background:transparent;color:var(--text);cursor:pointer";b.onclick=function(){setBackground(t[0]);menu.style.display="none";};menu.appendChild(b);});
+  }
+  function restoreTheme(){
+    var id=(window.state&&window.state.activeTheme)||"";
+    if(!id){try{id=localStorage.getItem("mdk.theme_active")||"dark";}catch(e){id="dark";}}
+    document.documentElement.setAttribute("data-theme",id);
   }
   function restoreBackground(){
     var id=(window.state&&window.state.activeBackground)||"";
@@ -200,11 +209,11 @@
   }
   var oldChip=window.renderUserChip;
   if(oldChip&&!oldChip._portalUxWrapped){
-    var chip=function(){oldChip.apply(this,arguments);mountPalette();restoreBackground();checkXp();};
+    var chip=function(){oldChip.apply(this,arguments);mountPalette();restoreTheme();restoreBackground();checkXp();};
     chip._portalUxWrapped=true;window.renderUserChip=chip;
   }
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){mountPalette();restoreBackground();});
-  else{mountPalette();restoreBackground();}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){mountPalette();restoreTheme();restoreBackground();});
+  else{mountPalette();restoreTheme();restoreBackground();}
   if(window.MutationObserver&&document.body){var observer=new MutationObserver(function(){mountPalette();});observer.observe(document.body,{childList:true,subtree:true});}
   console.log("[portal-ux] grades sync, written review, achievements and personalization ready");
 })();
