@@ -1295,6 +1295,7 @@ function finalQuestionType_(question) {
   if(type==="num"||type==="numeric"||type==="number")return "num";
   if(type==="order"||type==="ordering")return "order";
   if(type==="match"||type==="matching")return "match";
+  if(type==="tf"||type==="true_false")return "tf";
   return "mc";
 }
 function safeFinalExamQuestion_(entry,index) {
