@@ -545,7 +545,7 @@ function logProctorEvent_(data) {
   const user=auth_(data);
   if(user.role!=="student") throw new Error("Фиксировать события попытки может только студентская сессия.");
   const courseId=String(data.courseId||""),testId=String(data.testId||"");
-  const allowed=["visibility_hidden","window_blur","fullscreen_exit","copy_attempt","paste_attempt","contextmenu_attempt"];
+  const allowed=["visibility_hidden","window_blur","fullscreen_exit","copy_attempt","paste_attempt","contextmenu_attempt","screenshot_shortcut","devtools_shortcut","external_link"];
   const eventType=String(data.eventType||"");
   if(!courseId||!testId||allowed.indexOf(eventType)===-1||!hasCourseAccess_(user,courseId)) throw new Error("Некорректное событие контроля.");
   const cache=CacheService.getScriptCache(),key="proctor:"+user.email+":"+testId+":"+eventType;
