@@ -298,7 +298,8 @@ if(originalInline)window.startInlineTest=function(topicId,selfWorkCode){
  const state=window.state||{},student=!!state.student;
  if(!student||!window.API||!window.API.getTestAttemptStatus)return originalInline.apply(this,arguments);
  const cid=String(state.activeCourseId||"07.01");
- const testId=selfWorkCode!==null&&selfWorkCode!==undefined?("self_"+topicId+"_"+(typeof selfWorkCode==="number"?selfWorkCode:0)):("test_"+topicId);
+ const selfIndex=typeof arguments[2]==="number"?arguments[2]:0;
+ const testId=selfWorkCode?("self_"+topicId+"_"+selfIndex):("test_"+topicId);
  const area=document.getElementById("topicContent");if(area){area.dataset.testId=testId;area.dataset.proctorAssessment="0";}
  if(area)area.innerHTML='<p>Проверяем доступные попытки…</p>';
  window.API.getTestAttemptStatus(cid,testId).then(function(r){
