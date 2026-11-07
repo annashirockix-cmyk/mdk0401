@@ -380,7 +380,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v246/);
+  assert.match(sw, /portal-cache-v247/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -389,7 +389,7 @@ test("course selector and exam engine use the new course bank without duplicate 
 });
 
 
-test("every technical lecture receives a topic-specific visual atlas with attributed web photos, diagrams and graphs", () => {
+test("lecture atlas uses topic-matched photos and diagrams instead of generic repeated graphics", () => {
   const html = read("index.html");
   const sw = read("service-worker.js");
   const visual = read("lecture-visual-atlas.js");
@@ -398,7 +398,7 @@ test("every technical lecture receives a topic-specific visual atlas with attrib
   assert.match(html, /lecture-visual-atlas\.css\?v=1/);
   assert.ok(sw.includes("./lecture-visual-atlas.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.css"));
-  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "LECTURE_VISUAL_ATLAS_COUNT"]) {
+  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
     assert.ok(visual.includes(term), "visual atlas missing " + term);
   }
   assert.match(css, /\.lecture-visual-atlas/);
@@ -407,12 +407,32 @@ test("every technical lecture receives a topic-specific visual atlas with attrib
     vm.runInNewContext(read(file), sandbox, { timeout: 2000 });
   }
   vm.runInNewContext(visual, sandbox, { timeout: 2000 });
-  assert.ok(sandbox.window.LECTURE_VISUAL_ATLAS_COUNT >= 50, "expected visuals in at least 50 lectures");
+  assert.ok(sandbox.window.LECTURE_VISUAL_ATLAS_COUNT >= 30, "expected topic-matched visuals in the course collection");
   for (const id of ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT"]) {
     const course = sandbox.window.MDK_DATA[id];
     assert.ok(course && course.sections.length, "course missing: " + id);
     const lectures = course.sections.flatMap(section => section.topics || []).flatMap(topic => topic.lectures || []);
     assert.ok(lectures.length > 0, "no lectures in " + id);
     assert.ok(lectures.some(lecture => lecture.content && lecture.content.includes("lecture-visual-atlas")), "visual atlas missing in " + id);
+  }
+});
+
+test("SPRUT-TP theory and practical assignments are expanded with topic-specific material", () => {
+  const source=read("data-sprut-tp.js");
+  const upgrade=read("sprut-tp-lecture-upgrade.js");
+  const sandbox={window:{MDK_DATA:{}}};
+  vm.runInNewContext(source,sandbox,{timeout:2000});
+  vm.runInNewContext(upgrade,sandbox,{timeout:2000});
+  const topics=sandbox.window.MDK_DATA.SPRUT_TP.sections.flatMap(section=>section.topics||[]);
+  assert.equal(sandbox.window.SPRUT_TP_EXPANSION.theory,14);
+  assert.equal(sandbox.window.SPRUT_TP_EXPANSION.practical,14);
+  for(const topic of topics){
+    const theory=topic.lectures.find(lecture=>lecture.__sprutTheoryExpanded);
+    const practical=topic.lectures.find(lecture=>lecture.__sprutPracticeExpanded);
+    assert.ok(theory, "expanded theory missing for "+topic.id);
+    assert.ok(theory.content.length>4000, "theory remains too short for "+topic.id);
+    assert.ok(practical, "expanded practical missing for "+topic.id);
+    assert.match(practical.content,/Критерии оценивания/);
+    assert.match(practical.content,/Вопросы для защиты/);
   }
 });
