@@ -11,7 +11,7 @@
     if(!window.renderMetrologyTrainer)return;
     window.renderMetrologyTrainer();
     var app=document.getElementById("app");if(!app)return;
-    var data=read(),mode="depth",task=make(mode),done=false;
+    var data=read(),mode="depth",task=make(mode),practiceTask=makePractice(),done=false;
     var host=document.createElement("section");
     host.className="card";host.style.cssText="padding:16px;margin-top:16px";
     app.appendChild(host);
@@ -31,6 +31,8 @@
         '<p><b>Дано:</b> '+(mode==="depth"?"основная шкала — "+task.main+" мм; совпавшее деление нониуса — "+task.vernier+"; цена деления — 0,1 мм.":"минимум — "+f(task.min)+" мм; максимум — "+f(task.max)+" мм.")+'</p><label>Ответ, мм <input id="plusAnswer" inputmode="decimal" placeholder="Например, 12,4" style="padding:10px;max-width:220px"></label> <button class="btn btn-primary" id="plusCheck">Проверить</button> <button class="btn" id="plusNext" disabled>Новое задание</button><div id="plusFeedback" aria-live="polite"></div>';
       }else if(mode==="tolerance"){
         body='<p>Введи номинал, верхнее и нижнее отклонения (со знаком), а также фактический размер.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px">'+[['Номинал','tolNom','20'],['Верхнее отклонение','tolES','0.1'],['Нижнее отклонение','tolEI','-0.1'],['Фактический размер','tolFact','20.04']].map(x=>'<label>'+x[0]+'<input id="'+x[1]+'" type="number" step="0.001" value="'+x[2]+'" style="display:block;width:100%;padding:10px"></label>').join("")+'</div><button class="btn btn-primary" id="plusTol" style="margin-top:12px">Рассчитать</button><div id="plusTolResult" aria-live="polite"></div><p style="font-size:13px;color:var(--muted)">Учебная оценка по предельным размерам. В реальном контроле учитываются неопределённость и установленное правило принятия решения.</p>';
+      }else if(mode==="practice"){
+        body=practiceMarkup();
       }else if(mode==="assessment"){
         var qs=assessmentQuestions();
         body='<p>Ответь на 5 вопросов по основам метрологии. За каждый правильный ответ начисляется 1 балл. После проверки система рассчитает предварительную оценку.</p><div id="mtaQuestions">'+qs.map(function(q,i){return '<fieldset style="border:1px solid var(--border);border-radius:10px;padding:12px;margin:10px 0"><legend><b>'+ (i+1)+'. '+esc(q.q)+'</b></legend>'+q.a.map(function(v,j){return '<label style="display:block;padding:5px"><input type="radio" name="mtaQ'+i+'" value="'+j+'"> '+esc(v)+'</label>';}).join("")+'</fieldset>';}).join("")+'</div><button class="btn btn-primary" id="mtaSubmit">Проверить ответы</button><div id="mtaResult" aria-live="polite"></div><p style="font-size:13px;color:var(--muted)">Автооценка является предварительной. Преподаватель может проверить результат и подтвердить итоговую оценку.</p>';
@@ -40,8 +42,8 @@
         var r=data.report||{};
         body='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">'+[['ФИО','rpName',r.name],['Группа','rpGroup',r.group],['Дата','rpDate',r.date||new Date().toISOString().slice(0,10)],['Деталь','rpPart',r.part]].map(x=>'<label>'+x[0]+'<input id="'+x[1]+'" value="'+esc(x[2])+'" style="display:block;width:100%;padding:10px"></label>').join("")+'</div><h3>Измеренные параметры</h3><div style="overflow:auto"><table style="width:100%;border-collapse:collapse"><tr><th>Параметр</th><th>Требование</th><th>Средство</th><th>Результат</th></tr>'+[0,1,2,3].map(i=>'<tr>'+['p','req','tool','val'].map(k=>'<td style="padding:3px"><input data-ri="'+i+'" data-rk="'+k+'" value="'+esc((r.rows||[])[i]?.[k])+'" style="min-width:90px;width:100%;padding:8px"></td>').join("")+'</tr>').join("")+'</table></div><label>Заключение<textarea id="rpConclusion" rows="3" style="display:block;width:100%;padding:10px">'+esc(r.conclusion)+'</textarea></label><button class="btn btn-primary" id="plusSave">Сохранить протокол</button> <button class="btn" id="plusCsv">Скачать CSV</button> <button class="btn" id="plusPrint">Печать / PDF</button><div id="plusMsg" aria-live="polite"></div><p style="font-size:13px;color:var(--muted)">Записывай только фактически полученные измерения. Учебные данные не выдавай за результаты контроля.</p>';
       }
-      host.innerHTML='<h2 style="margin:0 0 6px">Дополнительная лаборатория</h2><p style="margin:0;color:var(--muted)">Глубиномер · индикатор биения · допуски · оформление протокола</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0">'+tabButton("assessment","Самопроверка")+tabButton("depth","Глубиномер")+tabButton("indicator","Биение")+tabButton("tolerance","Допуски")+tabButton("report","Протокол")+tabButton("journal","Журнал преподавателя")+'</div><div class="card" style="padding:14px">'+body+'</div>';
-      host.querySelectorAll("[data-plus-tab]").forEach(b=>b.onclick=function(){mode=b.dataset.plusTab;task=make(mode);done=false;render();});
+      host.innerHTML='<h2 style="margin:0 0 6px">Дополнительная лаборатория</h2><p style="margin:0;color:var(--muted)">Глубиномер · индикатор биения · допуски · оформление протокола</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0">'+tabButton("assessment","Самопроверка")+tabButton("practice","Практикум: допуски")+tabButton("depth","Глубиномер")+tabButton("indicator","Биение")+tabButton("tolerance","Допуски")+tabButton("report","Протокол")+tabButton("journal","Журнал преподавателя")+'</div><div class="card" style="padding:14px">'+body+'</div>';
+      host.querySelectorAll("[data-plus-tab]").forEach(b=>b.onclick=function(){mode=b.dataset.plusTab;task=make(mode);practiceTask=makePractice();done=false;render();});
       if(mode==="depth"||mode==="indicator"){
         host.querySelector("#plusCheck").onclick=check;
         host.querySelector("#plusNext").onclick=function(){task=make(mode);done=false;render();};
@@ -50,6 +52,7 @@
       if(mode==="report"){host.querySelector("#plusSave").onclick=saveReport;host.querySelector("#plusCsv").onclick=csv;host.querySelector("#plusPrint").onclick=function(){window.print();};}
       if(mode==="journal")loadTeacherJournal();
       if(mode==="assessment")host.querySelector("#mtaSubmit").onclick=submitAssessment;
+      if(mode==="practice"){host.querySelector("#mtpCheck").onclick=checkPractice;host.querySelector("#mtpNew").onclick=function(){practiceTask=makePractice();render();};}
     }
     function check(){
       if(done)return;var raw=host.querySelector("#plusAnswer").value,v=n(raw),ok=raw!==""&&Number.isFinite(v)&&Math.abs(v-task.answer)<.005;done=true;
@@ -71,6 +74,32 @@
       var text="\uFEFF"+rows.map(row=>row.map(v=>'"'+String(v||"").replace(/"/g,'""')+'"').join(";")).join("\r\n"),blob=new Blob([text],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="protokol-metrologiya.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
     }
 
+
+
+    function makePractice(){
+      var nominal=(12+rnd(39))+(rnd(10)/10),ei=-(1+rnd(8))*.01,es=(1+rnd(8))*.01;
+      var min=Number((nominal+ei).toFixed(2)),max=Number((nominal+es).toFixed(2)),tol=Number((es-ei).toFixed(2));
+      var accepted=rnd(2)===0,actual=accepted?Number((min+(max-min)*(.2+rnd(60)/100)).toFixed(2)):Number((rnd(2)===0?min-(1+rnd(5))*.01:max+(1+rnd(5))*.01).toFixed(2));
+      return {nominal:Number(nominal.toFixed(2)),ei:ei,es:es,min:min,max:max,tol:tol,actual:actual,accepted:accepted};
+    }
+    function practiceMarkup(){
+      var p=practiceTask;
+      return '<p>Индивидуальный вариант: рассчитай предельные размеры и допуск, затем оцени фактический размер детали. За каждый верный этап — 1 балл.</p><div style="border:1px solid var(--border);border-radius:10px;padding:14px"><p><b>Исходные данные</b></p><p>Номинальный размер: <b>'+f(p.nominal)+' мм</b></p><p>Верхнее отклонение ES: <b>+'+f(p.es)+' мм</b></p><p>Нижнее отклонение EI: <b>'+f(p.ei)+' мм</b></p><p>Фактический размер: <b>'+f(p.actual)+' мм</b></p></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px">'+[['Верхний предельный размер, мм','mtpMax'],['Нижний предельный размер, мм','mtpMin'],['Допуск, мм','mtpTol']].map(function(x){return '<label>'+x[0]+'<input id="'+x[1]+'" inputmode="decimal" placeholder="Ответ" style="display:block;width:100%;padding:10px"></label>';}).join("")+'</div><fieldset style="margin:12px 0;padding:10px;border:1px solid var(--border);border-radius:8px"><legend>Оценка фактического размера</legend><label style="display:block;padding:5px"><input type="radio" name="mtpDecision" value="yes"> Размер соответствует допуску</label><label style="display:block;padding:5px"><input type="radio" name="mtpDecision" value="no"> Размер не соответствует допуску</label></fieldset><button class="btn btn-primary" id="mtpCheck">Проверить решение</button> <button class="btn" id="mtpNew">Получить новый вариант</button><div id="mtpFeedback" aria-live="polite"></div>';
+    }
+    function checkPractice(){
+      var p=practiceTask,vals=[n(host.querySelector("#mtpMax").value),n(host.querySelector("#mtpMin").value),n(host.querySelector("#mtpTol").value)],expected=[p.max,p.min,p.tol],labels=["Верхний предельный размер","Нижний предельный размер","Допуск"],score=0,lines=[];
+      vals.forEach(function(v,i){var ok=Number.isFinite(v)&&Math.abs(v-expected[i])<=.005;if(ok)score++;lines.push(labels[i]+": "+(ok?"верно":"ошибка; правильное значение "+f(expected[i])+" мм"));});
+      var choice=host.querySelector('input[name="mtpDecision"]:checked'),decision=choice?choice.value:"",decisionOK=decision===(p.accepted?"yes":"no");
+      if(decisionOK)score++;
+      lines.push("Оценка фактического размера: "+(decisionOK?"верно":"неверно; "+(p.accepted?"размер находится в пределах допуска":"размер выходит за пределы допуска")));
+      var grade=score===4?5:score===3?4:score===2?3:2,percent=Math.round(score/4*100),box=host.querySelector("#mtpFeedback");
+      box.innerHTML='<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:12px"><h3>Результат: '+score+' из 4 · предварительная оценка '+grade+'</h3><p>Предельные размеры: '+f(p.min)+'–'+f(p.max)+' мм. Допуск T = ES − EI = '+f(p.es)+' − ('+f(p.ei)+') = '+f(p.tol)+' мм.</p><ul>'+lines.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul><p id="mtpSaveStatus">Отправка результата…</p></div>';
+      host.querySelector("#mtpCheck").disabled=true;
+      var st=window.state&&window.state.student;
+      if(!st||!st.email||!window.API||!window.API.saveResult){host.querySelector("#mtpSaveStatus").textContent="Результат рассчитан локально. Для записи в журнал войдите в аккаунт студента.";return;}
+      var date=new Date().toISOString().slice(0,10),payload={variant:p,answers:vals,decision:decision,criteria:lines};
+      window.API.saveResult({email:st.email,name:st.name||st.fullName||st.email,group:st.group||"",courseId:"MET",testId:"metrology_tolerance_practice_"+Date.now(),testTitle:"Практикум: предельные размеры и допуск",grade:grade,score:score,maxScore:4,percent:percent,feedback:"Автоматическая предварительная оценка. "+lines.join("; "),payload:JSON.stringify(payload),date:date}).then(function(r){if(!r||r.success===false)throw new Error(r&&r.error||"Сервер не подтвердил запись.");host.querySelector("#mtpSaveStatus").textContent="Результат отправлен в журнал преподавателя. Оценка предварительная.";}).catch(function(e){host.querySelector("#mtpSaveStatus").textContent="Не удалось сохранить результат: "+(e.message||e);});
+    }
 
     function assessmentQuestions(){
       return [
