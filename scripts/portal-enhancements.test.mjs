@@ -82,6 +82,8 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
     assert.ok(data.includes('code: "' + code + '"') || data.includes('"code":"' + code + '"'), "missing local practical code " + code);
   }
   assert.match(data, /title: "Составление карты функций устройства ЧПУ"/);
+  assert.match(data, /title: "Сравнение систем программного управления"/);
+  assert.ok(!data.includes("Сравнение стоек Fanuc \/ Siemens \/ Heidenhain"), "self-study must match the lecture content");
   assert.ok(!data.includes("1.5 * Радиус"), "remove unsupported safety-distance multiplier");
   assert.match(data, /безопасное расстояние определяют по документации оборудования/);
   assert.match(data, /dсв = D − P/);
