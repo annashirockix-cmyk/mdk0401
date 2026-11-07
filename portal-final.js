@@ -178,6 +178,7 @@
       return;
     }
     var courseId = cid();
+    if(/^EN/.test(String(courseId))){area.setAttribute("translate","no");area.classList.add("notranslate");}
     var testId = selfWorkCode ? ("self_" + topicId + "_" + selfIdx) : ("test_" + topicId);
     var bankIds = selfWorkCode ? [("self_" + topicId + "_" + selfIdx), ("topic_" + topicId)] : [("topic_" + topicId), ("hard_" + topicId)];
     var testTitle = selfWorkCode ? ("Самостоятельная работа " + selfWorkCode) : ("Тест " + topicId);
