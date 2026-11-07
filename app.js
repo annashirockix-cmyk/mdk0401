@@ -839,6 +839,31 @@ window.handleLogout = function() {
     location.hash = "#/"; window.renderHomePage();
 };
 
+window.installStudentActivityCapture = window.installStudentActivityCapture || function() {
+    if (window._studentActivityCaptureInstalled || !document || !document.addEventListener) return;
+    window._studentActivityCaptureInstalled = true;
+    document.addEventListener("click", function(event) {
+        if (!window.state || !window.state.student || !window.API || !window.API.logActivity) return;
+        var target = event.target && event.target.closest ? event.target.closest('a[href^="#/"],[role="tab"],.tab-btn,.nav-tab,[data-tab],[data-activity-label]') : null;
+        if (!target || target.closest("form,[data-no-activity]")) return;
+        var isTab = target.getAttribute("role") === "tab" || target.classList.contains("tab-btn") || target.classList.contains("nav-tab") || target.hasAttribute("data-tab");
+        var label = target.getAttribute("data-activity-label") || target.getAttribute("aria-label") || target.getAttribute("title") || target.textContent || target.getAttribute("href") || "Элемент интерфейса";
+        label = String(label).replace(/\s+/g, " ").trim().slice(0, 120);
+        if (!label) return;
+        var route = location.hash.slice(1) || "/";
+        var parts = route.split("/").filter(Boolean);
+        var course = parts[0] === "topic" && parts[1] ? String(parts[1]) : String(window.state.activeCourseId || "");
+        window.API.logActivity({
+            eventType: isTab ? "tab_switch" : "click",
+            details: label,
+            route: route,
+            pageTitle: (document.querySelector("#app h1") || document.querySelector("#app h2"))?.textContent || document.title || "",
+            courseId: course,
+            clientAt: new Date().toISOString()
+        }).catch(function(error) { console.warn("Не удалось записать действие в журнал активности", error); });
+    }, true);
+};
+
 window.router = function() {
     var hash = location.hash.slice(1) || "/"; 
     var parts = hash.split("/").filter(p => p);
@@ -849,6 +874,7 @@ window.router = function() {
         return;
     }
     if (overlay) overlay.style.display = "none";
+    if (window.state.student) window.installStudentActivityCapture();
     if (window.state.student && window.API && window.API.logActivity) {
         var activityRoute = location.hash.slice(1) || "/";
         var activityParts = activityRoute.split("/").filter(Boolean);
@@ -856,7 +882,7 @@ window.router = function() {
         var activityKey = activityRoute + "|" + activityCourse;
         if (window._lastActivityRouteKey !== activityKey) {
             window._lastActivityRouteKey = activityKey;
-            window.API.logActivity({route: activityRoute, courseId: activityCourse, clientAt: new Date().toISOString()})
+            window.API.logActivity({eventType: "page_view", route: activityRoute, pageTitle: (document.querySelector("#app h1") || document.querySelector("#app h2"))?.textContent || document.title || "", courseId: activityCourse, clientAt: new Date().toISOString()})
                 .catch(function (error) { console.warn("Не удалось записать переход в журнал активности", error); });
         }
     }
