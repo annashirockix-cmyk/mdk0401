@@ -346,3 +346,44 @@ test("MDK 07.01 topic 4.3 quiz tests program-development theory, not turning-cyc
   assert.match(joined, /Серийный запуск/);
   assert.doesNotMatch(joined, /G96|G71|T0101|M03/);
 });
+
+
+test("SPRUT-TP has a topic-specific assessment bank with stable unique topic ids", () => {
+  const sandbox = { window: { MDK_DATA: {}, HARD_TESTS: {} } };
+  vm.runInNewContext(read("data-sprut-tp.js"), sandbox, { timeout: 1000 });
+  vm.runInNewContext(read("sprut-tp-question-bank.js"), sandbox, { timeout: 1000 });
+  const course = sandbox.window.MDK_DATA.SPRUT_TP;
+  const topics = course.sections.flatMap(section => section.topics || []);
+  assert.equal(topics.length, 14);
+  assert.equal(new Set(topics.map(topic => topic.id)).size, topics.length, "topic ids must not collide");
+  assert.equal(sandbox.window.SPRUT_TP_QUESTION_TOPICS, 14);
+  assert.ok(sandbox.window.SPRUT_TP_QUESTION_COUNT >= 50);
+  const questions = topics.flatMap(topic => topic.test || []);
+  const answerPositions = new Set();
+  const questionTexts = new Set();
+  for (const question of questions) {
+    assert.ok(question.q && question.q.trim().length > 10);
+    assert.equal(question.options.length, 4);
+    assert.ok(question.correct >= 0 && question.correct < question.options.length);
+    assert.equal(new Set(question.options.map(x => x.toLocaleLowerCase("ru"))).size, 4);
+    assert.ok(!questionTexts.has(question.q), "question text must be unique: " + question.q);
+    questionTexts.add(question.q);
+    answerPositions.add(question.correct);
+  }
+  assert.ok(answerPositions.size >= 3, "correct answer positions should vary");
+});
+
+test("course selector and exam engine use the new course bank without duplicate or placeholder questions", () => {
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  const exam = read("exam-engine.js");
+  assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
+  assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
+  assert.ok(sw.includes("./sprut-tp-question-bank.js"));
+  assert.match(sw, /portal-cache-v245/);
+  assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
+  assert.match(exam, /seen\[key\]/);
+  assert.match(exam, /slice\(0, 30\)/);
+  assert.match(exam, /correct \/ total/);
+  assert.match(exam, /courseId === "SPRUT_TP"/);
+});
