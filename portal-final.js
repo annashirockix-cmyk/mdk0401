@@ -605,5 +605,5 @@
   setTimeout(boot, 400);
   setTimeout(boot, 1500);
   setTimeout(function () { patchTopic(); patchRouter(); fixExam(); }, 3000);
-  console.log("[portal-final] ready v12");
+  console.log("[portal-final] ready v15");
 })();
