@@ -1188,8 +1188,14 @@ function builtInQuestions_(courseId, bankIds) {
   return out;
 }
 function safeBuiltInQuestion_(entry) {
-  const q=Object.assign({},entry.question||{});
-  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers"].forEach(function(k){delete q[k];});
+  const q=Object.assign({},entry.question||{}),type=String(q.type||"mc").toLowerCase();
+  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
+  if(type==="order"||type==="ordering")q.items=shuffledServer_(q.items||[]);
+  if(type==="match"||type==="matching"){
+    const pairs=q.pairs||[],right=shuffledServer_(pairs.map(function(pair){return pair.right;}));
+    q.options=right;q.pairs=pairs.map(function(pair){return {left:pair.left};});
+  }
+  if(type==="tf"&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
   return {bankId:entry.bankId,questionId:entry.questionId,questionIndex:entry.questionIndex,question:q};
 }
 function getBuiltInTest_(data) {
@@ -1202,19 +1208,35 @@ function getBuiltInTest_(data) {
 }
 function sameAnswer_(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
 function scoreBuiltInQuestion_(q,answer) {
-  const type=String(q.type||"mc").toLowerCase(),expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
-  if(expected===undefined||expected===null)return false;
-  if(type==="multi"||Array.isArray(expected)) {
-    if(!Array.isArray(answer))return false;
+  const type=String(q.type||"mc").toLowerCase();
+  let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+  if(type==="tf"){
+    if(expected===undefined||expected===null)return false;
+    const target=typeof expected==="boolean"?(expected?0:1):Number(expected);
+    return Number(answer)===target;
+  }
+  if(type==="multi"||type==="multiple"||type==="multiple_choice"||Array.isArray(expected)){
+    if(!Array.isArray(answer)||!Array.isArray(expected))return false;
+    if(expected.length&&typeof expected[0]==="string"&&q.options)expected=expected.map(function(value){const index=q.options.indexOf(value);return index<0?value:index;});
     return sameAnswer_(answer.map(String).sort(),expected.map(String).sort());
   }
-  if(type==="num"||type==="numeric"||type==="number") {
+  if(type==="num"||type==="numeric"||type==="number"){
+    if(expected===undefined||expected===null)return false;
     const actual=Number(String(answer).replace(",", ".")),target=Number(String(expected).replace(",", "."));
     if(!isFinite(actual)||!isFinite(target))return false;
-    const tolerance=Math.max(0,Number(q.tolerance)||0.01);
+    const tolerance=Math.max(0,Number(q.tolerance!==undefined?q.tolerance:q.tol)||0.01);
     return Math.abs(actual-target)<=tolerance;
   }
-  if(type==="order"||type==="match")return Array.isArray(answer)&&Array.isArray(expected)&&sameAnswer_(answer,expected);
+  if(type==="order"||type==="ordering"){
+    expected=q.correctOrder||q.correct||q.answer||q.items||[];
+    return Array.isArray(answer)&&Array.isArray(expected)&&expected.length===answer.length&&sameAnswer_(answer.map(String),expected.map(String));
+  }
+  if(type==="match"||type==="matching"){
+    if(Array.isArray(q.pairs)&&q.pairs.length&&Array.isArray(answer))return answer.length===q.pairs.length&&q.pairs.every(function(pair,index){return String(answer[index])===String(pair.right);});
+    return Array.isArray(answer)&&Array.isArray(expected)&&sameAnswer_(answer.map(String),expected.map(String));
+  }
+  if(expected===undefined||expected===null)return false;
+  if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)return Number(answer)===q.options.indexOf(expected);
   return String(answer)===String(expected);
 }
 function submitBuiltInTest_(data) {
