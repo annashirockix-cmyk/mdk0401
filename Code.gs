@@ -1074,6 +1074,12 @@ function createAssignment_(data) {
     Instructions:instructions, Criteria:String(data.criteria || "").slice(0,4000),
     CreatedBy:teacher.email, CreatedAt:now, Status:"active"
   });
+  matches.forEach(function(row){
+    const mail=email_(row[um.Email]);
+    createNotification_(mail,"assignment","Новое задание по метрологии",
+      "Вам назначена работа: «"+title+"»."+(dueAt?" Срок выполнения: "+dueAt+".":"")+
+      " Откройте раздел «Назначенные мне работы».",courseId,id);
+  });
   return {success:true,id:id,recipients:matches.length};
 }
 function getAssignments_(data) {
@@ -1169,9 +1175,65 @@ function gradeAssignment_(data) {
     const teacher = editor_(data, courseId);
     const feedback = String(data.feedback || "").slice(0,4000);
     updateMappedRecord_(sh, i + 2, {Status:"reviewed",Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:new Date().toISOString()});
-    createNotification_(String(row[m.StudentEmail] || ""),"grade","Работа проверена","По заданию «" + String(a[ah.Title] || "") + "» выставлена оценка: " + grade + "/5." + (feedback ? " Есть комментарий преподавателя." : ""),courseId,aid);
-    return {success:true};
+    const retryNeeded=grade<=2;
+    createNotification_(String(row[m.StudentEmail] || ""),retryNeeded?"assignment_retry":"grade",
+      retryNeeded?"Работу нужно доработать":"Работа проверена",
+      "По заданию «" + String(a[ah.Title] || "") + "» выставлена оценка: " + grade + "/5." +
+      (feedback ? " Комментарий преподавателя: "+feedback : "") +
+      (retryNeeded?" Исправь ошибки и отправь ответ повторно в разделе «Назначенные мне работы».":""),
+      courseId,aid);
+    return {success:true,retrySuggested:retryNeeded};
   } finally { lock.releaseLock(); }
+}
+
+/* ---------- Assignment due reminders ---------- */
+// Устанавливается один раз вручную из редактора Google Apps Script.
+// Запускает ежедневную проверку в часовом поясе проекта, ориентировочно в 09:00.
+function installAssignmentReminderTrigger() {
+  const existing=ScriptApp.getProjectTriggers().filter(function(t){return t.getHandlerFunction()==="sendAssignmentDueReminders_";});
+  existing.forEach(function(t){ScriptApp.deleteTrigger(t);});
+  ScriptApp.newTrigger("sendAssignmentDueReminders_").timeBased().everyDays(1).atHour(9).create();
+  return "Ежедневное напоминание о сроках заданий включено (около 09:00, часовой пояс проекта).";
+}
+
+function sendAssignmentDueReminders_() {
+  const now=new Date(),tomorrow=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+  const dueKey=Utilities.formatDate(tomorrow,Session.getScriptTimeZone(),"yyyy-MM-dd");
+  const as=assignments_(),av=as.getDataRange().getValues(),ah=headerMap_(as);
+  const us=users_(),uv=us.getDataRange().getValues(),um=headerMap_(us);
+  const ss=assignmentSubmissions_(),sv=ss.getDataRange().getValues(),sm=headerMap_(ss);
+  const ns=notifications_(),nv=ns.getDataRange().getValues(),nm=headerMap_(ns);
+  const already={};
+  nv.slice(1).forEach(function(r){
+    if(String(r[nm.Type]||"")!=="assignment_due")return;
+    already[String(r[nm.RelatedId]||"")]=true;
+  });
+  let sent=0;
+  av.slice(1).forEach(function(a){
+    const id=String(a[ah.Id]||""),course=String(a[ah.CourseId]||""),due=String(a[ah.DueAt]||"");
+    if(!id||due!==dueKey||String(a[ah.Status]||"active")!=="active")return;
+    const type=String(a[ah.TargetType]||""),target=String(a[ah.TargetValue]||"").trim().toLowerCase();
+    if(type!=="group"&&type!=="individual")return;
+    const submitted={};
+    sv.slice(1).forEach(function(sub){
+      if(String(sub[sm.AssignmentId]||"")===id)submitted[email_(sub[sm.StudentEmail])]=true;
+    });
+    uv.slice(1).forEach(function(userRow){
+      if(String(userRow[um.Role]||"").toLowerCase()!=="student")return;
+      const mail=email_(userRow[um.Email]),group=String(userRow[um.Group]||"").trim().toLowerCase();
+      const recipient={role:"student",courses:String(userRow[um.Courses]||"")};
+      if(!mail||!hasCourseAccess_(recipient,course)||submitted[mail])return;
+      if(type==="individual"&&mail!==email_(target))return;
+      if(type==="group"&&group!==target)return;
+      const dedupe=id+"|"+mail+"|"+dueKey;
+      if(already[dedupe])return;
+      createNotification_(mail,"assignment_due","Завтра срок сдачи работы",
+        "Напоминаем: завтра истекает срок выполнения задания «"+String(a[ah.Title]||"")+"». Если работа ещё не отправлена, откройте «Назначенные мне работы» и отправьте ответ.",
+        course,dedupe);
+      already[dedupe]=true;sent++;
+    });
+  });
+  return {success:true,remindersSent:sent,dueDate:dueKey};
 }
 
 /* ---------- Teacher controls: topic access and test attempts ---------- */
