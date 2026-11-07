@@ -1,6 +1,6 @@
 "use strict";
 (function(){
-const C={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ"};
+const C={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ","EN":"Английский язык","ENB":"Английский язык — базовый","ENT":"Английский язык — технический"};
 const E=v=>String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const D=v=>v?new Date(v).toLocaleString("ru-RU"):"—";
 const historyHtml=h=>{h=Array.isArray(h)?h:[];return h.length?'<details style="margin:8px 0"><summary>История отправок: '+h.length+'</summary>'+h.map(x=>'<article style="padding:8px;margin:6px 0;background:var(--bg);border-radius:7px"><b>Попытка №'+E(x.attempt)+'</b> · '+E(D(x.submittedAt))+'<p style="white-space:pre-wrap;margin:6px 0 0">'+E(x.answer)+'</p></article>').join("")+'</details>':"";};
