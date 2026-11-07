@@ -1,7 +1,7 @@
 (function(){
 "use strict";
 var active=false,lastEvent=0,currentTest="",noticeOpen=false,noticeQueue=[];
-function isAssessment(){var app=document.getElementById("app"),area=document.getElementById("topicContent");var root=area||app;if(!root)return false;return !!root.querySelector('input[type="radio"],input[type="checkbox"],input[type="number"][name^="q"],.question,.exam-question');}
+function isAssessment(){var app=document.getElementById("app"),area=document.getElementById("topicContent");var root=area||app;if(!root)return false;return root.dataset.proctorAssessment==="1"||!!root.querySelector('input[type="radio"],input[type="checkbox"],input[type="number"][name^="q"],.question,.exam-question');}
 function getTestId(){var hash=String(location.hash||"");var m=hash.match(/final\/([^/?#]+)/);if(m)return "__final__"+m[1];var root=document.getElementById("topicContent");if(root&&root.dataset&&root.dataset.testId)return root.dataset.testId;var s=window.state||{};return "test_"+String(s.activeTopicId||hash.split("/").pop()||"unknown");}
 
 function showProctorNotice(kind,data){
