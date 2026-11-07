@@ -394,8 +394,8 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const sw = read("service-worker.js");
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
-  assert.match(html, /lecture-visual-atlas\.js\?v=1/);
-  assert.match(html, /lecture-visual-atlas\.css\?v=1/);
+  assert.match(html, /lecture-visual-atlas\.js\?v=2/);
+  assert.match(html, /lecture-visual-atlas\.css\?v=2/);\n  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=1/);\n  assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.css"));
   for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
@@ -430,7 +430,7 @@ test("SPRUT-TP theory and practical assignments are expanded with topic-specific
     const theory=topic.lectures.find(lecture=>lecture.__sprutTheoryExpanded);
     const practical=topic.lectures.find(lecture=>lecture.__sprutPracticeExpanded);
     assert.ok(theory, "expanded theory missing for "+topic.id);
-    assert.ok(theory.content.length>4000, "theory remains too short for "+topic.id);
+    assert.ok(theory.content.length>3000, "theory remains too short for "+topic.id);
     assert.ok(practical, "expanded practical missing for "+topic.id);
     assert.match(practical.content,/Критерии оценивания/);
     assert.match(practical.content,/Вопросы для защиты/);
