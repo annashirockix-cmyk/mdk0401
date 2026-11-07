@@ -123,7 +123,7 @@ window.renderTeacherControlsPage=function(){
  testSel.onchange=function(){testIdInput.value=this.value;refreshAttemptStatus();};
  studentSel.onchange=refreshAttemptStatus;
  testIdInput.addEventListener("change",refreshAttemptStatus);
- testIdInput.addEventListener("input",function(){if(this.value.trim())refreshAttemptStatus();});
+
  Promise.all([window.API.getStudents(),window.loadGlobalCustomContent?new Promise(resolve=>window.loadGlobalCustomContent(resolve)):Promise.resolve()]).then(([res])=>{
    const students=(res.students||[]).filter(s=>String(s.role).toLowerCase()==="student"&&(s.courses||[]).includes(cid));
    studentSel.innerHTML='<option value="">— Выберите студента —</option>'+students.map(s=>'<option value="'+esc(s.email)+'">'+esc(s.name||s.email)+' · '+esc(s.group||"без группы")+'</option>').join("");
