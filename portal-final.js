@@ -194,6 +194,7 @@
     function typeOf(q) {
       var t = String(q.type || "mc").toLowerCase();
       if (t === "multiple" || t === "multiple_choice") return "multi";
+      if (t === "true_false") return "tf";
       if (t === "numeric" || t === "number") return "num";
       if (t === "ordering") return "order";
       if (t === "matching") return "match";
