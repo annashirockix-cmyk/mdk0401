@@ -107,7 +107,7 @@ function renderExamQuestion(question, number) {
       card.appendChild(row);
     });
   } else if (type === "match") {
-    var rightOptions = examShuffle((question.pairs || []).map(function (pair) { return pair.right; }));
+    var rightOptions = examShuffle(question.options || (question.pairs || []).map(function (pair) { return pair.right; }));
     (question.pairs || []).forEach(function (pair, index) {
       var row = examNode("div");
       row.style.cssText = "display:grid;grid-template-columns:minmax(130px,1fr) minmax(150px,1.2fr);gap:10px;align-items:center;margin:8px 0;";
@@ -210,6 +210,58 @@ window.renderFinalExamPage = function (mdkId) {
         if(!status||status.allowed===false){mount.innerHTML="<h3>Попытки экзамена закончились</h3><p>Обратитесь к преподавателю за дополнительной попыткой.</p>";return;}
         start.dataset.attemptChecked="1";start.disabled=false;start.click();
       }).catch(function(error){mount.textContent="Не удалось проверить доступ к экзамену: "+(error.message||"ошибка сервера");});
+      return;
+    }
+
+    if (window.state && window.state.student && window.API && window.API.getFinalExam && window.API.submitFinalExam) {
+      start.disabled=true;mount.innerHTML="<p>Загружаем экзаменационный вариант с сервера…</p>";
+      window.API.getFinalExam(course.id).then(function(serverExam){
+        if(!serverExam||!serverExam.success||!serverExam.questions||!serverExam.questions.length)throw new Error("Защищённый банк экзамена ещё не импортирован. Обратитесь к администратору.");
+        var picked=serverExam.questions.map(function(entry){return entry.question;});
+        mount.innerHTML="";
+        var timerBox=examNode("div","exam-timer",duration+":00");timerBox.style.cssText="font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;color:var(--accent);";mount.appendChild(timerBox);
+        var form=examNode("form");form.addEventListener("submit",function(e){e.preventDefault();});
+        picked.forEach(function(question,index){form.appendChild(renderExamQuestion(question,index));});
+        var writtenTitle=examNode("h3","","✍️ Письменная и ситуационная часть");writtenTitle.style.color="var(--accent)";form.appendChild(writtenTitle);
+        var writtenPrompts=mdkId==="04.01"?[
+          "Составьте последовательность диагностирования станка при росте вибрации шпиндельного узла. Укажите исходные данные, приборы, контрольные точки, критерии остановки и форму фиксации результатов.",
+          "По результатам диагностики выявлены повышенная температура опоры, рост вибрации и металлические частицы в масле. Предложите дерево возможных причин, укажите, какие проверки помогут их разделить, и обоснуйте решение: продолжить работу, выполнить регулировку или вывести узел в ремонт."
+        ]:[
+          "Опишите алгоритм подготовки оборудования к выполнению технологической операции с указанием контрольных точек.",
+          "Разберите ситуацию отклонения параметров оборудования от нормы: установите возможные причины, способ проверки и корректирующие действия."
+        ];
+        writtenPrompts.forEach(function(prompt,index){var wrap=examNode("div");wrap.style.cssText="margin:12px 0;padding:15px;background:var(--card-soft);border:1px solid var(--border);border-radius:8px;";wrap.appendChild(examNode("b","",(picked.length+index+1)+". "+prompt));var area=examNode("textarea","self-input");area.name="written"+(index+1);area.rows=5;area.placeholder="Разверните решение, укажите ход рассуждений и вывод...";area.style.marginTop="10px";wrap.appendChild(area);form.appendChild(wrap);});
+        var submit=examNode("button","btn","Завершить экзамен");submit.type="button";submit.style.cssText="width:100%;margin-top:18px;padding:15px;font-size:16px;";form.appendChild(submit);mount.appendChild(form);
+        if(window.proctorMonitor&&typeof window.proctorMonitor.start==="function")window.proctorMonitor.start("__final__"+course.id);
+        var timeLeft=duration*60,submitted=false;
+        var timer=setInterval(function(){if(!document.body.contains(timerBox)){clearInterval(timer);return;}timeLeft--;timerBox.textContent=String(Math.floor(timeLeft/60)).padStart(2,"0")+":"+String(timeLeft%60).padStart(2,"0");if(timeLeft<=60)timerBox.style.color="var(--err)";if(timeLeft<=0)submit.click();},1000);
+        function collectSecureAnswers(){
+          return picked.map(function(q,index){
+            var type=q.type||"mc";
+            if(type==="num"){var n=form.querySelector('[name="q'+index+'"]');return n?n.value:"";}
+            if(type==="multi")return Array.prototype.map.call(form.querySelectorAll('input[name="q'+index+'"]:checked'),function(el){return Number(el.value);}).sort(function(a,b){return a-b;});
+            if(type==="order"){
+              var fields=Array.prototype.slice.call(form.querySelectorAll('[name^="q'+index+'_order_"]'));
+              return fields.map(function(field){return {item:field.dataset.item,pos:Number(field.value)};}).filter(function(x){return x.pos>0;}).sort(function(a,b){return a.pos-b.pos;}).map(function(x){return x.item;});
+            }
+            if(type==="match")return (q.pairs||[]).map(function(pair,i){var field=form.querySelector('[name="q'+index+'_match_'+i+'"]');return field?field.value:"";});
+            var checked=form.querySelector('input[name="q'+index+'"]:checked');return checked?Number(checked.value):-1;
+          });
+        }
+        submit.addEventListener("click",function(){
+          if(submitted)return;submitted=true;clearInterval(timer);submit.disabled=true;
+          mount.innerHTML="<p>Передаём ответы на серверную проверку…</p>";
+          window.API.submitFinalExam({examId:serverExam.examId,courseId:course.id,answers:collectSecureAnswers(),written1:(form.querySelector('[name="written1"]')||{}).value||"",written2:(form.querySelector('[name="written2"]')||{}).value||"",timeSpent:duration*60-timeLeft}).then(function(result){
+            if(!result||!result.success)throw new Error(result&&result.error||"Сервер не смог проверить экзамен.");
+            if(!window.state.results)window.state.results={};
+            window.state.results["__final__"+course.id]={grade:result.grade,total:result.score,max:result.maxScore,percent:result.percent,penaltyPoints:result.penaltyPoints||0};
+            if(!window.state.examSubmissions)window.state.examSubmissions=[];
+            window.state.examSubmissions.push({date:new Date().toLocaleString("ru-RU"),courseId:course.id,student:window.state.student.name,group:window.state.student.group,testScore:result.score,maxTest:result.maxScore,written1:(form.querySelector('[name="written1"]')||{}).value||"",written2:(form.querySelector('[name="written2"]')||{}).value||"",status:"На проверке",teacherGrade:null,finalGrade:null});
+            if(window.saveStudentData)window.saveStudentData();
+            mount.innerHTML="";var resultBox=examNode("div","exam-result");resultBox.style.cssText="text-align:center;padding:30px;";resultBox.appendChild(examNode("h2","",course.shortName+" · экзамен завершён"));resultBox.appendChild(examNode("p","","Баллы за тестовую часть: "+result.score+" из "+result.maxScore+" ("+result.percent+"%)"));var gradeNode=examNode("h1","exam-grade","Оценка: "+result.grade);gradeNode.style.cssText="font-size:42px;margin:20px 0;color:"+(result.grade>=3?"var(--ok)":"var(--err)");resultBox.appendChild(gradeNode);resultBox.appendChild(examNode("p","","Письменные задания переданы преподавателю на проверку."));if(result.penaltyPoints)resultBox.appendChild(examNode("p","","Штраф за повторные нарушения: -"+result.penaltyPoints+" п.п. Отчёт отправлен преподавателю."));var home=examNode("a","btn","К списку экзаменов");home.href="#/final";resultBox.appendChild(home);mount.appendChild(resultBox);
+          }).catch(function(error){mount.textContent="Не удалось отправить экзамен: "+(error.message||error)+". Обратитесь к преподавателю.";});
+        });
+      }).catch(function(error){mount.textContent=error.message||"Не удалось загрузить экзамен.";});
       return;
     }
     var bank = collectCourseQuestions(mdkId);
