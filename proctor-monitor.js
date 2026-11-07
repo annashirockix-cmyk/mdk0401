@@ -1,18 +1,18 @@
 (function(){
 "use strict";
-var active=false,lastEvent=0,currentTest="",noticeOpen=false;
+var active=false,lastEvent=0,currentTest="",noticeOpen=false,noticeQueue=[];
 function isAssessment(){var app=document.getElementById("app"),area=document.getElementById("topicContent");var root=area||app;if(!root)return false;return !!root.querySelector('input[type="radio"],input[type="checkbox"],input[type="number"][name^="q"],.question,.exam-question');}
 function getTestId(){var hash=String(location.hash||"");var m=hash.match(/final\/([^/?#]+)/);if(m)return "__final__"+m[1];var root=document.getElementById("topicContent");if(root&&root.dataset&&root.dataset.testId)return root.dataset.testId;var s=window.state||{};return "test_"+String(s.activeTopicId||hash.split("/").pop()||"unknown");}
 
 function showProctorNotice(kind,data){
- if(noticeOpen)return;noticeOpen=true;
+ if(noticeOpen){noticeQueue.push([kind,data]);return;}noticeOpen=true;
  var overlay=document.createElement("div");overlay.className="proctor-dialog";
  overlay.style.cssText="position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.76);display:flex;align-items:center;justify-content:center;padding:18px";
  var card=document.createElement("section");card.style.cssText="max-width:520px;width:100%;padding:24px;background:var(--card,#171b25);color:var(--text,#fff);border:2px solid "+(kind==="warning"?"#d99b26":"#d9534f")+";border-radius:14px;box-shadow:0 20px 70px rgba(0,0,0,.45)";
  var h=document.createElement("h2");h.textContent=kind==="warning"?"⚠️ Первое предупреждение":"⛔ Применена штрафная санкция";
- var p=document.createElement("p");p.style.cssText="line-height:1.55";p.textContent=kind==="warning"?"Система зафиксировала действие, которое может нарушать правила самостоятельного выполнения теста. Не переключайте вкладки и не используйте постороннюю помощь. Повторное нарушение приведёт к снижению результата на 10 процентных пунктов.":"Повторное нарушение зафиксировано. К результату теста применён штраф "+Number(data.penaltyPoints||10)+" процентных пунктов. Отчёт отправлен преподавателю. Продолжение теста означает, что вы ознакомлены с санкцией.";
+ var p=document.createElement("p");p.style.cssText="line-height:1.55";p.textContent=kind==="warning"?"Система зафиксировала действие, которое может нарушать правила самостоятельного выполнения теста. Не переключайте вкладки и не используйте постороннюю помощь. Повторное нарушение приведёт к снижению результата на 10 процентных пунктов.":"Повторное нарушение зафиксировано. К результату теста применён штраф "+Number(data.penaltyPoints||10)+" процентных пунктов. "+(data.reportSent?"Отчёт отправлен преподавателю.":"Отчёт пока не удалось отправить преподавателю.")+" Продолжение теста означает, что вы ознакомлены с санкцией.";
  var b=document.createElement("button");b.type="button";b.className="btn";b.textContent=kind==="warning"?"Понятно, продолжить тест":"Продолжить тест";b.style.cssText="width:100%;margin-top:12px";
- b.addEventListener("click",function(){overlay.remove();noticeOpen=false;});
+ b.addEventListener("click",function(){overlay.remove();noticeOpen=false;if(noticeQueue.length){var next=noticeQueue.shift();showProctorNotice(next[0],next[1]);}});
  card.appendChild(h);card.appendChild(p);card.appendChild(b);overlay.appendChild(card);document.body.appendChild(overlay);b.focus();
 }
 
