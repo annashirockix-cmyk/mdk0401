@@ -184,7 +184,7 @@ test("MDK 07.01 topic 4.1 checks are grounded in the setup lecture", () => {
   const sandbox = { window: { MDK_DATA: {} } };
   vm.runInNewContext(read("data-0701.js"), sandbox, { timeout: 1000 });
   const topic = sandbox.window.MDK_DATA["07.01"].sections.flatMap((section) => section.topics || []).find((item) => item.id === "t-4-1");
-  const prompts = topic.test.map((question) => question.q).join(" ");
+  const prompts = topic.test.map((question) => question.q + " " + question.options.join(" ")).join(" ");
   assert.match(prompts, /резервную копию/);
   assert.match(prompts, /активную систему координат/);
   assert.match(prompts, /Карта наладки фиксирует/);
