@@ -1133,6 +1133,13 @@ function getQuestionBank_(data) {
 
 
 /* ---------- Server-delivered built-in tests ---------- */
+function resolvedBuiltInBankIds_(courseId, bankIds) {
+  if(bankIds.length && String(bankIds[0]).indexOf("self_")===0) {
+    const first=builtInQuestions_(courseId,[bankIds[0]]);
+    return first.length?[bankIds[0]]:bankIds.slice(1,2);
+  }
+  return bankIds;
+}
 function builtInQuestions_(courseId, bankIds) {
   const sh=questionBank_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), out=[], seen={};
   vals.slice(1).forEach(function(row) {
@@ -1154,7 +1161,7 @@ function getBuiltInTest_(data) {
   const user=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
   const bankIds=Array.isArray(data.bankIds)?data.bankIds.map(String).slice(0,10):[];
   if(user.role!=="student"||!courseId||!testId||!bankIds.length||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к тесту.");
-  const entries=builtInQuestions_(courseId,bankIds);
+  const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds),entries=builtInQuestions_(courseId,resolvedIds);
   if(!entries.length)return {success:false,notImported:true,questions:[]};
   return {success:true,courseId:courseId,testId:testId,questions:entries.map(safeBuiltInQuestion_)};
 }
@@ -1180,7 +1187,7 @@ function submitBuiltInTest_(data) {
   const bankIds=Array.isArray(data.bankIds)?data.bankIds.map(String).slice(0,10):[];
   const answers=Array.isArray(data.answers)?data.answers:[];
   if(user.role!=="student"||!courseId||!testId||!bankIds.length||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к тесту.");
-  const entries=builtInQuestions_(courseId,bankIds);
+  const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds),entries=builtInQuestions_(courseId,resolvedIds);
   if(!entries.length)throw new Error("Серверный банк не найден. Обратитесь к преподавателю.");
   if(answers.length!==entries.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
   const rawScore=entries.reduce(function(total,entry,index){return total+(scoreBuiltInQuestion_(entry.question,answers[index])?1:0);},0);
