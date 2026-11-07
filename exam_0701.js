@@ -1,5 +1,14 @@
 "use strict";
 
+function shuffle0701(items) {
+  var copy = items.slice();
+  for (var i = copy.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = copy[i]; copy[i] = copy[j]; copy[j] = temp;
+  }
+  return copy;
+}
+
 window.renderTraining_0701 = function(mdkId) {
   var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
   app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>';
@@ -17,12 +26,11 @@ window.renderTraining_0701 = function(mdkId) {
       window.MDK_DATA['07.01'].sections.forEach(s => s.topics.forEach(t => {
           if (t.test) baseQuestions = baseQuestions.concat(t.test);
             if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
-          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
       }));
   }
   var extraQuestions = []; // Уже 105 вопросов, можно не добавлять
   var allQuestions = baseQuestions.concat(extraQuestions);
-  var questions = allQuestions.sort(function(){ return Math.random() - 0.5; });
+  var questions = shuffle0701(allQuestions);
   var idx = 0, correct = 0, answered = 0;
 
   app.innerHTML += '<section class="hero"><h1>🎯 МДК 07.01</h1><p>Вопросов для тренировки: ' + questions.length + '</p></section>';
@@ -67,7 +75,7 @@ window.renderFinal_0701 = function(mdkId) {
     app.innerHTML += '<section class="hero"><h1>📋 Экзамен: МДК 07.01</h1><p>10 вопросов · 10 минут</p></section>';
     var grid = document.createElement("div"); grid.style.cssText = "display:flex; flex-direction:column; gap:12px;";
     var card = document.createElement("a"); card.href = "#/final/07.01"; card.style.cssText = "display:block; padding:20px; background:var(--card); border:1px solid var(--border); border-radius:12px; color:var(--text); text-decoration:none;";
-    card.innerHTML = '<h3>МДК 07.01</h3><span style="color:var(--muted);">Банк: 105 вопросов</span>';
+    card.innerHTML = '<h3>МДК 07.01</h3><span style="color:var(--muted);">Банк вопросов по всем темам и дополнительным заданиям</span>';
     grid.appendChild(card); app.appendChild(grid); return;
   }
 
@@ -76,7 +84,6 @@ window.renderFinal_0701 = function(mdkId) {
       window.MDK_DATA['07.01'].sections.forEach(s => s.topics.forEach(t => {
           if (t.test) baseQuestions = baseQuestions.concat(t.test);
             if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
-          if (window.HARD_TESTS && window.HARD_TESTS[t.id]) baseQuestions = baseQuestions.concat(window.HARD_TESTS[t.id]);
       }));
   }
   var allQ = baseQuestions;
@@ -86,7 +93,7 @@ window.renderFinal_0701 = function(mdkId) {
   var startBtn = document.createElement("button"); startBtn.className = "btn"; startBtn.textContent = "Начать экзамен"; startBtn.style.width = "100%"; box.appendChild(startBtn);
   
   startBtn.onclick = function() {
-    var picked = allQ.sort(function(){ return Math.random() - 0.5; }).slice(0, Math.min(10, allQ.length));
+    var picked = shuffle0701(allQ).slice(0, Math.min(10, allQ.length));
     var timeLeft = 600;
     box.innerHTML = '<div id="exTimer" style="font-size:24px; font-weight:bold; text-align:center; color:var(--accent); margin-bottom:20px;">10:00</div>';
     var form = document.createElement("form");
