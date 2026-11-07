@@ -39,7 +39,7 @@
   }
   document.addEventListener("click", function (event) {
     var link = event.target && event.target.closest ? event.target.closest("a[href]") : null;
-    if (!link || link.hasAttribute("download") || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (!link || link.id === "pdfViewerExternal" || link.hasAttribute("download") || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     var url;
     try { url = new URL(link.href, window.location.href); } catch (e) { return; }
     if (url.origin !== window.location.origin || !/\.pdf$/i.test(url.pathname)) return;
