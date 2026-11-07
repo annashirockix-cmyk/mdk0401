@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v198'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
+const CACHE_NAME = 'portal-cache-v199'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
 
 const STATIC_ASSETS = [
   './',
@@ -59,6 +59,7 @@ const STATIC_ASSETS = [
   './questions-logic.js',
   './questions-extra.js',
   './app.js',
+  './student-recommendations.js',
   './app-offline-login.js',
   './media-fix.js',
   './portal-fixes.js',
