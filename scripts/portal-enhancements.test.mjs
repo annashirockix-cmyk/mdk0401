@@ -92,6 +92,14 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(data, /Подготовка модели и параметров печати на аддитивном оборудовании/);
   assert.match(data, /поддержки предусмотрены там, где они необходимы/);
   assert.match(data, /Проанализируйте один возможный дефект/);
+  for (const rubric of [
+    /полнота последовательности 4 б\./,
+    /корректность сравнения систем 4 б\./,
+    /логика и полнота маршрута 4 б\./,
+    /координаты отверстий 3 б\./,
+    /последовательность переходов 4 б\./,
+    /обоснование компенсации радиуса 2 б\./
+  ]) assert.match(data, rubric, "foundational practical must have a 10-point rubric");
   assert.match(data, /расчётная длина хода без подхода и перебега/);
   assert.ok(!data.includes('href="./method.pdf"'), "obsolete root PDF path must be removed");
   assert.ok(data.includes('href="./materials/reference/method.pdf"'), "verified PDF path must be used");
