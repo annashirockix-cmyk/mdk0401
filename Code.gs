@@ -1218,7 +1218,10 @@ function scoreBuiltInQuestion_(q,answer) {
   let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
   if(type==="tf"){
     if(expected===undefined||expected===null)return false;
-    const target=typeof expected==="boolean"?(expected?0:1):Number(expected);
+    let target;
+    if(typeof expected==="boolean")target=expected?0:1;
+    else if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)target=q.options.indexOf(expected);
+    else target=Number(expected);
     return Number(answer)===target;
   }
   if(type==="multi"||type==="multiple"||type==="multiple_choice"||Array.isArray(expected)){
@@ -1298,6 +1301,7 @@ function safeFinalExamQuestion_(entry,index) {
   const q=Object.assign({},entry.question||{}),type=finalQuestionType_(q);
   ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
   if(type==="order")q.items=shuffledServer_(q.items||[]);
+  if(type==="tf"&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
   if(type==="match"){const pairs=q.pairs||[],right=shuffledServer_(pairs.map(function(p){return p.right;}));q.options=right;q.pairs=pairs.map(function(p){return {left:p.left};});}
   return {questionId:entry.questionId,questionIndex:index,question:q};
 }
@@ -1315,6 +1319,15 @@ function getFinalExam_(data) {
 }
 function scoreFinalAnswer_(q,answer) {
   const type=finalQuestionType_(q||{});
+  if(type==="tf"){
+    const expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
+    if(expected===undefined||expected===null)return 0;
+    let target;
+    if(typeof expected==="boolean")target=expected?0:1;
+    else if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)target=q.options.indexOf(expected);
+    else target=Number(expected);
+    return Number(answer)===target?1:0;
+  }
   if(type==="num"){
     const expected=q.answer!==undefined?q.answer:(q.correct!==undefined?q.correct:q.correctAnswer);
     const a=Number(String(answer).replace(",", ".")),b=Number(String(expected).replace(",", "."));
