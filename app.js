@@ -999,6 +999,7 @@ window.router = function() {
     if (page === "english-media" && window.renderEnglishMediaPage) { if(window.canAccessCourse&&!window.canAccessCourse(window.state.activeCourseId||"EN")){window.renderHomePage();return;} window.renderEnglishMediaPage(parts[1] || ""); return; }
     if (page === "english-cards" && window.renderEnglishCardsPage) { if(window.canAccessCourse&&!window.canAccessCourse("EN")){window.renderHomePage();return;} window.renderEnglishCardsPage(parts[1] || ""); return; }
     if (page === "english-tests" && window.renderEnglishTestsPage) { if(window.canAccessCourse&&!window.canAccessCourse("EN")){window.renderHomePage();return;} window.renderEnglishTestsPage(parts[1] || ""); return; }
+    if (page === "resources" && window.renderPortalResourcesPage) { window.renderPortalResourcesPage(); return; }
     if (page === "videos") { window.renderVideosPage(); return; }
     if (page === "safety") { window.renderSafetyPage(); return; }
     if (page === "passports") { window.renderPassportsPage(); return; }
