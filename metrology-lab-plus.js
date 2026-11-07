@@ -31,11 +31,13 @@
         '<p><b>Дано:</b> '+(mode==="depth"?"основная шкала — "+task.main+" мм; совпавшее деление нониуса — "+task.vernier+"; цена деления — 0,1 мм.":"минимум — "+f(task.min)+" мм; максимум — "+f(task.max)+" мм.")+'</p><label>Ответ, мм <input id="plusAnswer" inputmode="decimal" placeholder="Например, 12,4" style="padding:10px;max-width:220px"></label> <button class="btn btn-primary" id="plusCheck">Проверить</button> <button class="btn" id="plusNext" disabled>Новое задание</button><div id="plusFeedback" aria-live="polite"></div>';
       }else if(mode==="tolerance"){
         body='<p>Введи номинал, верхнее и нижнее отклонения (со знаком), а также фактический размер.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px">'+[['Номинал','tolNom','20'],['Верхнее отклонение','tolES','0.1'],['Нижнее отклонение','tolEI','-0.1'],['Фактический размер','tolFact','20.04']].map(x=>'<label>'+x[0]+'<input id="'+x[1]+'" type="number" step="0.001" value="'+x[2]+'" style="display:block;width:100%;padding:10px"></label>').join("")+'</div><button class="btn btn-primary" id="plusTol" style="margin-top:12px">Рассчитать</button><div id="plusTolResult" aria-live="polite"></div><p style="font-size:13px;color:var(--muted)">Учебная оценка по предельным размерам. В реальном контроле учитываются неопределённость и установленное правило принятия решения.</p>';
+      }else if(mode==="journal"){
+        body='<p style="color:var(--muted)">Выставление оценки за лабораторную работу с сохранением результата в общей базе портала. Доступно преподавателю и администратору.</p><div id="mtjAccess" aria-live="polite">Проверка доступа и загрузка списка студентов…</div><div id="mtjForm" style="display:none"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px"><label>Группа<select id="mtjGroup" style="display:block;width:100%;padding:10px"></select></label><label>Студент<select id="mtjStudent" style="display:block;width:100%;padding:10px"></select></label><label>Лабораторная работа<select id="mtjWork" style="display:block;width:100%;padding:10px"><option value="caliper">Измерение штангенциркулем</option><option value="micrometer">Измерение микрометром</option><option value="depth">Измерение глубиномером</option><option value="indicator">Контроль биения индикатором</option><option value="tolerance">Расчёт и контроль допуска</option><option value="protocol">Оформление протокола измерений</option></select></label><label>Дата выполнения<input id="mtjDate" type="date" value="'+new Date().toISOString().slice(0,10)+'" style="display:block;width:100%;padding:10px"></label><label>Оценка<select id="mtjGrade" style="display:block;width:100%;padding:10px"><option value="5">5 — отлично</option><option value="4">4 — хорошо</option><option value="3">3 — удовлетворительно</option><option value="2">2 — неудовлетворительно</option></select></label></div><label style="display:block;margin-top:10px">Комментарий преподавателя<textarea id="mtjFeedback" rows="3" placeholder="Что выполнено правильно, что исправить…" style="display:block;width:100%;padding:10px"></textarea></label><button class="btn btn-primary" id="mtjSave" style="margin-top:12px">Сохранить оценку в журнал</button><div id="mtjStatus" aria-live="polite" style="margin-top:10px"></div></div><h3 style="margin-top:22px">Последние оценки по метрологии</h3><div id="mtjResults">Результаты загрузятся после проверки доступа.</div>';
       }else{
         var r=data.report||{};
         body='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">'+[['ФИО','rpName',r.name],['Группа','rpGroup',r.group],['Дата','rpDate',r.date||new Date().toISOString().slice(0,10)],['Деталь','rpPart',r.part]].map(x=>'<label>'+x[0]+'<input id="'+x[1]+'" value="'+esc(x[2])+'" style="display:block;width:100%;padding:10px"></label>').join("")+'</div><h3>Измеренные параметры</h3><div style="overflow:auto"><table style="width:100%;border-collapse:collapse"><tr><th>Параметр</th><th>Требование</th><th>Средство</th><th>Результат</th></tr>'+[0,1,2,3].map(i=>'<tr>'+['p','req','tool','val'].map(k=>'<td style="padding:3px"><input data-ri="'+i+'" data-rk="'+k+'" value="'+esc((r.rows||[])[i]?.[k])+'" style="min-width:90px;width:100%;padding:8px"></td>').join("")+'</tr>').join("")+'</table></div><label>Заключение<textarea id="rpConclusion" rows="3" style="display:block;width:100%;padding:10px">'+esc(r.conclusion)+'</textarea></label><button class="btn btn-primary" id="plusSave">Сохранить протокол</button> <button class="btn" id="plusCsv">Скачать CSV</button> <button class="btn" id="plusPrint">Печать / PDF</button><div id="plusMsg" aria-live="polite"></div><p style="font-size:13px;color:var(--muted)">Записывай только фактически полученные измерения. Учебные данные не выдавай за результаты контроля.</p>';
       }
-      host.innerHTML='<h2 style="margin:0 0 6px">Дополнительная лаборатория</h2><p style="margin:0;color:var(--muted)">Глубиномер · индикатор биения · допуски · оформление протокола</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0">'+tabButton("depth","Глубиномер")+tabButton("indicator","Биение")+tabButton("tolerance","Допуски")+tabButton("report","Протокол")+'</div><div class="card" style="padding:14px">'+body+'</div>';
+      host.innerHTML='<h2 style="margin:0 0 6px">Дополнительная лаборатория</h2><p style="margin:0;color:var(--muted)">Глубиномер · индикатор биения · допуски · оформление протокола</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0">'+tabButton("depth","Глубиномер")+tabButton("indicator","Биение")+tabButton("tolerance","Допуски")+tabButton("report","Протокол")+tabButton("journal","Журнал преподавателя")+'</div><div class="card" style="padding:14px">'+body+'</div>';
       host.querySelectorAll("[data-plus-tab]").forEach(b=>b.onclick=function(){mode=b.dataset.plusTab;task=make(mode);done=false;render();});
       if(mode==="depth"||mode==="indicator"){
         host.querySelector("#plusCheck").onclick=check;
@@ -43,6 +45,7 @@
       }
       if(mode==="tolerance")host.querySelector("#plusTol").onclick=calc;
       if(mode==="report"){host.querySelector("#plusSave").onclick=saveReport;host.querySelector("#plusCsv").onclick=csv;host.querySelector("#plusPrint").onclick=function(){window.print();};}
+      if(mode==="journal")loadTeacherJournal();
     }
     function check(){
       if(done)return;var raw=host.querySelector("#plusAnswer").value,v=n(raw),ok=raw!==""&&Number.isFinite(v)&&Math.abs(v-task.answer)<.005;done=true;
@@ -63,6 +66,49 @@
       var r=collect(),rows=[["Протокол лабораторной работы"],["ФИО",r.name],["Группа",r.group],["Дата",r.date],["Деталь",r.part],[],["Параметр","Требование","Средство","Результат"]].concat(r.rows.map(x=>[x.p,x.req,x.tool,x.val]),[[],["Заключение",r.conclusion]]);
       var text="\uFEFF"+rows.map(row=>row.map(v=>'"'+String(v||"").replace(/"/g,'""')+'"').join(";")).join("\r\n"),blob=new Blob([text],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="protokol-metrologiya.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
     }
+
+    function loadTeacherJournal(){
+      var actor=window.state&&window.state.staff,access=host.querySelector("#mtjAccess"),form=host.querySelector("#mtjForm"),resultsBox=host.querySelector("#mtjResults");
+      if(!actor||!["teacher","admin"].includes(actor.role)){access.textContent="Доступ закрыт: журнал доступен только преподавателю или администратору.";return;}
+      if(!window.API||!window.API.getStudents||!window.API.getResults||!window.API.saveResult){access.textContent="API журнала недоступен. Проверь подключение к порталу.";return;}
+      Promise.all([window.API.getStudents(),window.API.getResults({courseId:"MET"})]).then(function(pair){
+        var sr=pair[0],rr=pair[1];
+        if(!sr||!(sr.ok||sr.success)||!Array.isArray(sr.students))throw new Error(sr&&sr.error||"Не удалось получить список студентов.");
+        if(!rr||!rr.success)throw new Error(rr&&rr.error||"Не удалось получить результаты метрологии.");
+        var students=sr.students.filter(function(s){return String(s.role||"student").toLowerCase()==="student"&&(actor.role==="admin"||(s.courses||[]).includes("MET"));});
+        if(!students.length){access.textContent="Студенты курса «Метрология» пока не назначены. Проверьте назначение курса в настройках доступа.";return;}
+        form.style.display="block";access.textContent="Загружено студентов: "+students.length+". Оценки сохраняются в общей базе портала.";
+        var groups=Array.from(new Set(students.map(function(s){return s.group||"Без группы";}))).sort();
+        var groupSel=host.querySelector("#mtjGroup"),studentSel=host.querySelector("#mtjStudent");
+        groupSel.innerHTML=groups.map(function(g){return '<option value="'+esc(g)+'">'+esc(g)+'</option>';}).join("");
+        function fillStudents(){
+          var group=groupSel.value,list=students.filter(function(s){return (s.group||"Без группы")===group;});
+          studentSel.innerHTML=list.map(function(s){return '<option value="'+esc(s.email)+'">'+esc(s.name)+' — '+esc(s.email)+'</option>';}).join("");
+        }
+        groupSel.onchange=fillStudents;fillStudents();
+        var rows=(rr.results||[]).filter(function(x){return x.courseId==="MET"&&String(x.testId||"").indexOf("metrology_")===0;});
+        function renderRows(){
+          var selected=groupSel.value,filtered=rows.filter(function(x){var st=students.find(function(z){return z.email===x.email;});return !st||!selected||st.group===selected;});
+          if(!filtered.length){resultsBox.innerHTML='<p style="color:var(--muted)">Оценок пока нет.</p>';return;}
+          resultsBox.innerHTML='<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="text-align:left;padding:7px">Дата</th><th style="text-align:left;padding:7px">Студент</th><th style="text-align:left;padding:7px">Работа</th><th style="padding:7px">Оценка</th><th style="text-align:left;padding:7px">Комментарий</th></tr></thead><tbody>'+filtered.slice().sort(function(a,b){return String(b.date||b.timestamp||"").localeCompare(String(a.date||a.timestamp||""));}).map(function(x){return '<tr style="border-top:1px solid var(--border)"><td style="padding:7px">'+esc(x.date||"—")+'</td><td style="padding:7px">'+esc(x.name||x.email)+'</td><td style="padding:7px">'+esc(x.testTitle||x.testId)+'</td><td style="padding:7px;text-align:center"><b>'+esc(x.grade)+'</b></td><td style="padding:7px">'+esc(x.feedback||x.payload||"")+'</td></tr>';}).join("")+'</tbody></table></div>';
+        }
+        renderRows();groupSel.addEventListener("change",renderRows);
+        host.querySelector("#mtjSave").onclick=function(){
+          var student=students.find(function(s){return s.email===studentSel.value;}),date=host.querySelector("#mtjDate").value,work=host.querySelector("#mtjWork"),grade=Number(host.querySelector("#mtjGrade").value),feedback=host.querySelector("#mtjFeedback").value.trim();
+          if(!student||!date){host.querySelector("#mtjStatus").textContent="Выберите студента и дату.";return;}
+          var title=work.options[work.selectedIndex].text,testId="metrology_"+work.value+"_"+date.replace(/-/g,"");
+          var btn=this;btn.disabled=true;btn.textContent="Сохранение…";
+          window.API.saveResult({email:student.email,name:student.name,group:student.group,testId:testId,testTitle:title+" ("+date+")",grade:grade,score:grade,maxScore:5,percent:grade*20,courseId:"MET",payload:"Лабораторная работа: "+title+"; дата: "+date,feedback:feedback,date:date}).then(function(saved){
+            if(!saved||saved.success===false)throw new Error(saved&&saved.error||"Сервер не подтвердил сохранение.");
+            var rec={email:student.email,name:student.name,group:student.group,testId:testId,testTitle:title+" ("+date+")",grade:grade,feedback:feedback,date:date,courseId:"MET"};
+            rows=rows.filter(function(x){return !(x.email===student.email&&x.testId===testId);});rows.push(rec);renderRows();
+            host.querySelector("#mtjStatus").textContent="Оценка "+grade+" сохранена в общей базе портала.";
+            host.querySelector("#mtjFeedback").value="";
+          }).catch(function(err){host.querySelector("#mtjStatus").textContent="Не удалось сохранить: "+(err.message||err);}).finally(function(){btn.disabled=false;btn.textContent="Сохранить оценку в журнал";});
+        };
+      }).catch(function(err){access.textContent="Ошибка загрузки журнала: "+(err.message||err);});
+    }
+
     render();
   };
 })();
