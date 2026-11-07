@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v189'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
+const CACHE_NAME = 'portal-cache-v190'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
 
 const STATIC_ASSETS = [
   './',
@@ -40,6 +40,7 @@ const STATIC_ASSETS = [
   './metrology-trainer.js',
   './metrology-virtual-lab.js',
   './metrology-lab-plus.js',
+  './metrology-complex-work.js',
   './materials/metrology/lab-measurement-protocol.html',
   './data-extra.js',
   './info.js',
@@ -255,7 +256,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v175');
+        console.log('[SW] Кэширование статических ресурсов версии v190');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
