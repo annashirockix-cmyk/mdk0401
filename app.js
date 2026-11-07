@@ -77,7 +77,6 @@ window.updateMenuVisibility = function() {
     var editorLink=document.getElementById('menuCourseEditor'); if(editorLink)editorLink.style.display=isTeacher?'flex':'none';
     var flashcardEditorLink=document.getElementById('menuFlashcardEditor'); if(flashcardEditorLink)flashcardEditorLink.style.display=isTeacher?'flex':'none';
     var englishLinks=document.querySelectorAll('.english-drawer-item'); Array.prototype.forEach.call(englishLinks,function(link){link.style.display=['EN','ENB','ENT'].indexOf(window.state.activeCourseId)>=0?'flex':'none';});
-    var bookLibraryLink=document.getElementById("menuBookLibrary"); if(bookLibraryLink)bookLibraryLink.style.display=window.state.activeCourseId==="MAT"?"flex":"none";
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
 };
 
