@@ -39,7 +39,7 @@ window.renderTeacherControlsPage=function(){
    document.getElementById("migrateQuestionBanks").onclick=async function(){
     const btn=this,status=document.getElementById("bankMigrationStatus");btn.disabled=true;status.textContent="Подготовка банков…";
     try{
-     const allowedCourses=new Set(["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"]);
+     const allowedCourses=new Set(["07.01","04.01","02.01","02.02","MCAM","MAT","MET","OT","PFI","EN","ENB","ENT"]);
      const topicCourse={},ambiguousTopics={},banks=[],seen={};
      let skippedUnsupported=0,skippedDuplicates=0;
      function add(cid,id,questions){
