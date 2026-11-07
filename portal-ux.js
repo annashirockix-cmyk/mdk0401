@@ -182,7 +182,11 @@
   ];
   var backgrounds=[
     ["none","Без фона"],["blueprint","Чертёжная сетка"],["aurora","Северное сияние"],
-    ["galaxy","Космос"],["workshop","Мастерская"],["paper","Инженерная бумага"]
+    ["galaxy","Космос"],["workshop","Мастерская"],["paper","Инженерная бумага"],
+    ["image-space","Космос — фото"],["image-matrix","Код Матрицы"],["image-brutal","Brutal"],["image-hyper","Hyper"],
+    ["foggy-forest","Туманный лес"],["pumpkins","Тыквы"],["spooky-room","Мрачная комната"],["halloween","Хэллоуин"],
+    ["red-forest","Красный лес"],["lanterns","Фонари"],["dark-table","Тёмный стол"],["graveyard","Кладбище"],
+    ["cats-notebook","Коты и тетрадь"],["cats-yarn","Коты и пряжа"]
   ];
   function setTheme(id){
     document.documentElement.setAttribute("data-theme",id);
