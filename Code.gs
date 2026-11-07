@@ -101,6 +101,8 @@ function handleRequest_(e) {
       case "submitcustomtest": result = submitCustomTest_(data); break;
       case "importquestionbanks": result = importQuestionBanks_(data); break;
       case "getquestionbank": result = getQuestionBank_(data); break;
+      case "getbuilttest": result = getBuiltInTest_(data); break;
+      case "submitbuilttest": result = submitBuiltInTest_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
@@ -1127,6 +1129,76 @@ function getQuestionBank_(data) {
     return {bankId:String(row[m.BankId]||""),questionId:String(row[m.QuestionId]||""),question:question,updatedAt:String(row[m.UpdatedAt]||""),updatedBy:String(row[m.UpdatedBy]||"")};
   });
   return {success:true,courseId:courseId,questions:rows};
+}
+
+
+/* ---------- Server-delivered built-in tests ---------- */
+function builtInQuestions_(courseId, bankIds) {
+  const sh=questionBank_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), out=[], seen={};
+  vals.slice(1).forEach(function(row) {
+    const cid=String(row[m.CourseId]||""), bid=String(row[m.BankId]||"");
+    if(cid!==courseId||bankIds.indexOf(bid)===-1)return;
+    let q={};try{q=JSON.parse(String(row[m.QuestionJSON]||"{}"));}catch(e){return;}
+    const signature=String(q.type||"mc")+"|"+String(q.q||q.question||"");
+    if(seen[signature])return;seen[signature]=true;
+    out.push({bankId:bid,questionId:String(row[m.QuestionId]||""),questionIndex:out.length,question:q});
+  });
+  return out;
+}
+function safeBuiltInQuestion_(entry) {
+  const q=Object.assign({},entry.question||{});
+  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers"].forEach(function(k){delete q[k];});
+  return {bankId:entry.bankId,questionId:entry.questionId,questionIndex:entry.questionIndex,question:q};
+}
+function getBuiltInTest_(data) {
+  const user=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
+  const bankIds=Array.isArray(data.bankIds)?data.bankIds.map(String).slice(0,10):[];
+  if(user.role!=="student"||!courseId||!testId||!bankIds.length||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к тесту.");
+  const entries=builtInQuestions_(courseId,bankIds);
+  if(!entries.length)return {success:false,notImported:true,questions:[]};
+  return {success:true,courseId:courseId,testId:testId,questions:entries.map(safeBuiltInQuestion_)};
+}
+function sameAnswer_(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
+function scoreBuiltInQuestion_(q,answer) {
+  const type=String(q.type||"mc").toLowerCase(),expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
+  if(expected===undefined||expected===null)return false;
+  if(type==="multi"||Array.isArray(expected)) {
+    if(!Array.isArray(answer))return false;
+    return sameAnswer_(answer.map(String).sort(),expected.map(String).sort());
+  }
+  if(type==="num"||type==="numeric"||type==="number") {
+    const actual=Number(String(answer).replace(",", ".")),target=Number(String(expected).replace(",", "."));
+    if(!isFinite(actual)||!isFinite(target))return false;
+    const tolerance=Math.max(0,Number(q.tolerance)||0.01);
+    return Math.abs(actual-target)<=tolerance;
+  }
+  if(type==="order"||type==="match")return Array.isArray(answer)&&Array.isArray(expected)&&sameAnswer_(answer,expected);
+  return String(answer)===String(expected);
+}
+function submitBuiltInTest_(data) {
+  const user=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
+  const bankIds=Array.isArray(data.bankIds)?data.bankIds.map(String).slice(0,10):[];
+  const answers=Array.isArray(data.answers)?data.answers:[];
+  if(user.role!=="student"||!courseId||!testId||!bankIds.length||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к тесту.");
+  const entries=builtInQuestions_(courseId,bankIds);
+  if(!entries.length)throw new Error("Серверный банк не найден. Обратитесь к преподавателю.");
+  if(answers.length!==entries.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
+  const rawScore=entries.reduce(function(total,entry,index){return total+(scoreBuiltInQuestion_(entry.question,answers[index])?1:0);},0);
+  const rawPercent=Math.round(rawScore/entries.length*100),lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const sh=results_(),rows=sh.getDataRange().getValues();
+    const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
+    const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
+    if(raw!==""){
+      const limit=1+Math.max(0,Number(raw)||0);
+      if(prior>=limit)throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю.");
+    }
+    const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo);
+    const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=gradeFromPercent_(percent),score=Math.round(entries.length*percent)/100;
+    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:String(data.testTitle||testId),Grade:grade,Score:score,MaxScore:entries.length,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:JSON.stringify({answers:answers}).slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+    appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:String(data.testTitle||testId),AttemptNo:attemptNo,Grade:grade,Score:score,MaxScore:entries.length,Percent:percent});
+    return {success:true,score:score,rawScore:rawScore,maxScore:entries.length,percent:percent,rawPercent:rawPercent,grade:grade,attempts:attemptNo,penaltyPoints:policy.penaltyPoints,violationCount:policy.violationCount};
+  } finally {lock.releaseLock();}
 }
 
 function submitCustomTest_(data) {
