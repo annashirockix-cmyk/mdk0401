@@ -572,7 +572,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                 if (window.state.student && window.API) {
                     window.API.saveResult({
                         email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
-                        testId: resKey, testTitle: topic.title, grade: grade, score: correct, maxScore: questions.length, percent: pct, timeSpent: 0
+                        testId: resKey, testTitle: topic.title, grade: grade, score: correct, maxScore: questions.length, percent: pct, timeSpent: 0, courseId: courseId
                     });
                 }
 
