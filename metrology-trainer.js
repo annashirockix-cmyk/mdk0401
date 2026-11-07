@@ -29,11 +29,12 @@
   function micrometerSvg(q){
     var s='<svg viewBox="0 0 650 180" role="img" aria-label="Шкала стебля и барабана микрометра" style="width:100%;max-width:650px;background:#f8fafc;border-radius:10px">';
     s+='<text x="20" y="23" font-size="13" fill="#334155">Стебель · основная шкала 0,5 мм</text><rect x="20" y="45" width="430" height="70" rx="8" fill="#dbe4ec" stroke="#64748b"/>';
-    for(var i=0;i<32;i++){var x=35+i*12;var major=i%2===0;s+='<line x1="'+x+'" y1="'+(major?54:68)+'" x2="'+x+'" y2="91" stroke="#334155" stroke-width="1.2"/>';if(i%4===0)s+='<text x="'+(x-4)+'" y="107" font-size="10" fill="#334155">'+(i/2)+'</text>';}
+    for(var i=0;i<=50;i++){var x=35+i*8.1;var major=i%10===0;s+='<line x1="'+x+'" y1="'+(major?54:68)+'" x2="'+x+'" y2="91" stroke="#334155" stroke-width="1.1"/>';if(i%10===0)s+='<text x="'+(x-4)+'" y="107" font-size="10" fill="#334155">'+(i/2)+'</text>';}
+    var edge=35+q.sleeve*16.2;s+='<line x1="'+edge+'" y1="40" x2="'+edge+'" y2="119" stroke="#dc2626" stroke-width="3"/><text x="'+Math.min(edge+5,405)+'" y="37" font-size="10" fill="#dc2626">край стебля</text>';
     s+='<line x1="20" y1="77" x2="450" y2="77" stroke="#0f766e" stroke-width="2"/><text x="20" y="139" font-size="12" fill="#334155">Барабан · 50 делений, цена деления 0,01 мм</text>';
     s+='<rect x="20" y="146" width="610" height="24" rx="5" fill="#cbd5e1" stroke="#64748b"/>';
     for(var j=0;j<50;j++){var tx=28+j*12;var selected=j===q.drum;s+='<line x1="'+tx+'" y1="'+(selected?142:151)+'" x2="'+tx+'" y2="166" stroke="'+(selected?'#dc2626':'#334155')+'" stroke-width="'+(selected?3:1)+'"/>';if(j%10===0)s+='<text x="'+(tx-3)+'" y="139" font-size="10" fill="#334155">'+j+'</text>';}
-    s+='<text x="475" y="62" font-size="12" fill="#475569">Совмести отсчёт</text><text x="475" y="84" font-size="19" font-weight="bold" fill="#0f766e">по индексу</text></svg>';
+    s+='<text x="475" y="62" font-size="12" fill="#475569">Считай шкалы</text><text x="475" y="84" font-size="19" font-weight="bold" fill="#0f766e">по индексу</text></svg>';
     return s;
   }
   window.renderMetrologyTrainer=function(){
