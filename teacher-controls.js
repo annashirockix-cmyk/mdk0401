@@ -57,6 +57,19 @@ const oldRouter=window.router;
 if(oldRouter)window.router=function(){const route=(location.hash||"").replace(/^#\/?/,"").split("/")[0];if(route==="teaching-controls"){window.renderTeacherControlsPage();return;}return oldRouter.apply(this,arguments);};
 const oldEditor=window.renderCourseEditorPage;
 if(oldEditor)window.renderCourseEditorPage=function(){oldEditor.apply(this,arguments);if(!staff())return;const app=document.getElementById("app");if(app&&!document.getElementById("teachingControlsLink")){const link=document.createElement("a");link.id="teachingControlsLink";link.href="#/teaching-controls";link.className="btn";link.textContent="🔐 Управление доступом и попытками";const hero=app.querySelector(".hero");if(hero)hero.insertAdjacentElement("afterend",link);else app.prepend(link);link.style.margin="0 0 14px";}};
+const originalInline=window.startInlineTest;
+if(originalInline)window.startInlineTest=function(topicId,selfWorkCode){
+ const state=window.state||{},student=!!state.student;
+ if(!student||!window.API||!window.API.getTestAttemptStatus)return originalInline.apply(this,arguments);
+ const cid=String(state.activeCourseId||"07.01");
+ const testId=selfWorkCode!==null&&selfWorkCode!==undefined?("self_"+topicId+"_"+(typeof selfWorkCode==="number"?selfWorkCode:0)):("test_"+topicId);
+ const area=document.getElementById("topicContent");
+ if(area)area.innerHTML='<p>Проверяем доступные попытки…</p>';
+ window.API.getTestAttemptStatus(cid,testId).then(function(r){
+   if(!r||r.allowed===false){if(area)area.innerHTML='<div class="module"><h3>Попытки закончились</h3><p>Использовано: '+esc(r&&r.used||0)+' из '+esc(r&&r.limit||1)+'. Обратитесь к преподавателю за дополнительной попыткой.</p></div>';return;}
+   originalInline.apply(window,[topicId,selfWorkCode]);
+ }).catch(function(e){if(area)area.innerHTML='<div class="module">Не удалось проверить доступ к тесту: '+esc(e.message||"ошибка сервера")+'. Повторите попытку позже.</div>';});
+};
 const oldTopic=window.renderTopicPage;
 if(oldTopic)window.renderTopicPage=function(course,topic){const s=window.state||{},role=String((s.user&&s.user.role)||(s.student&&s.student.role)||"").toLowerCase();if(role!=="student"&&!s.student){return oldTopic.apply(this,arguments);}const app=document.getElementById("app");if(app)app.innerHTML='<div class="module">Проверка доступа к теме…</div>';const stamp=String(course)+":"+String(topic);window.API.getTopicAccess(course,topic).then(r=>{if(!app||!document.getElementById("app"))return;if(r&&r.open===false){app.innerHTML='<a class="backlink" href="#/">← Назад к плану</a><div class="module" style="text-align:center;padding:36px"><h2>🔒 Тема пока закрыта</h2><p>Преподаватель ещё не открыл доступ к этой теме. Попробуйте позже.</p></div>';return;}if((location.hash||"").indexOf(String(topic))>=0)oldTopic.apply(window,[course,topic]);}).catch(()=>{if(app)app.innerHTML='<div class="module">Не удалось проверить доступ к теме. Проверьте подключение и повторите попытку.</div>';});};
 console.log("[teacher-controls] topic access and test attempt controls loaded");
