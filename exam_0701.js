@@ -10,25 +10,38 @@ function shuffle0701(items) {
 }
 
 function selectBalancedExam0701(moduleData, limit) {
-  var pools = (moduleData && moduleData.sections ? moduleData.sections : []).map(function(section) {
-    var questions = [];
-    (section.topics || []).forEach(function(topic) {
+  var sectionPools = (moduleData && moduleData.sections ? moduleData.sections : []).map(function(section) {
+    var topicPools = (section.topics || []).map(function(topic) {
+      var questions = [];
       if (Array.isArray(topic.test)) questions = questions.concat(topic.test);
       if (window.HARD_TESTS && Array.isArray(window.HARD_TESTS[topic.id])) questions = questions.concat(window.HARD_TESTS[topic.id]);
-    });
-    var seen = Object.create(null);
-    questions = questions.filter(function(question) {
-      var key = String(question.q || "").trim().toLocaleLowerCase("ru");
-      if (!key || seen[key]) return false;
-      seen[key] = true;
-      return true;
-    });
-    return shuffle0701(questions);
-  }).filter(function(pool) { return pool.length > 0; });
+      var seen = Object.create(null);
+      questions = questions.filter(function(question) {
+        var key = String(question.q || "").trim().toLocaleLowerCase("ru");
+        if (!key || seen[key]) return false;
+        seen[key] = true;
+        return true;
+      });
+      return shuffle0701(questions);
+    }).filter(function(pool) { return pool.length > 0; });
+    return { topics: topicPools, cursor: 0 };
+  }).filter(function(section) { return section.topics.length > 0; });
+
   var selected = [];
-  while (selected.length < limit && pools.some(function(pool) { return pool.length > 0; })) {
-    pools.forEach(function(pool) {
-      if (selected.length < limit && pool.length) selected.push(pool.pop());
+  while (selected.length < limit && sectionPools.some(function(section) {
+    return section.topics.some(function(pool) { return pool.length > 0; });
+  })) {
+    sectionPools.forEach(function(section) {
+      if (selected.length >= limit) return;
+      var topicCount = section.topics.length;
+      for (var attempt = 0; attempt < topicCount; attempt++) {
+        var topicPool = section.topics[section.cursor];
+        section.cursor = (section.cursor + 1) % topicCount;
+        if (topicPool.length) {
+          selected.push(topicPool.pop());
+          break;
+        }
+      }
     });
   }
   return selected;
