@@ -296,6 +296,7 @@ window.renderFinalExamPage = function (mdkId) {
         })).then(function(saved){
           if(saved&&Number(saved.penaltyPoints)>0){
             gradeNode.textContent="Итоговая оценка с учётом штрафа: "+saved.grade;
+            if(window.state&&window.state.results){window.state.results["__final__"+course.id]={grade:saved.grade,percent:saved.percent,penaltyPoints:saved.penaltyPoints};if(window.saveStudentData)window.saveStudentData();}
             result.appendChild(examNode("p","","Штраф за повторное нарушение: -"+saved.penaltyPoints+" процентных пунктов. Отчёт отправлен преподавателю."));
           }
         }).catch(function (error) { console.warn("Не удалось отправить результат экзамена", error); });
