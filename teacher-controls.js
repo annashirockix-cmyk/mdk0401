@@ -248,7 +248,7 @@ window.renderQuestionBankPage=function(){
     const n=Array.isArray(bank.questions)?bank.questions.length:0;
     if(!n)continue;
     if(n>1000)throw new Error("Банк "+bank.bankId+" содержит "+n+" вопросов. Допустимо не более 1000 в одном банке.");
-    if(batch.length>=4||batchQuestions+n>2000)await sendBatch();
+    if(batch.length>=1||batchQuestions+n>2000)await sendBatch();
     batch.push(bank);batchQuestions+=n;
    }
    await sendBatch();
