@@ -982,7 +982,8 @@ function submitCustomTest_(data) {
   try {
     const resultSheet=results_(), resultRows=resultSheet.getDataRange().getValues();
     const prior=resultRows.slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey;}).length;
-    const scopedExtra=settingValue_("testAttempts:"+user.email+":"+record.courseId+":"+id);\n    const extra=Number(scopedExtra!==""?scopedExtra:settingValue_("testAttempts:"+user.email+":"+id))||0;
+    const scopedExtra=settingValue_("testAttempts:"+user.email+":"+record.courseId+":"+id);
+    const extra=Number(scopedExtra!==""?scopedExtra:settingValue_("testAttempts:"+user.email+":"+id))||0;
     const limit=1+Math.max(0,extra);
     if(prior>=limit) throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю за дополнительной попыткой.");
     attemptNo=prior+1;
