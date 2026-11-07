@@ -37,3 +37,13 @@ body[data-portal-bg="cats-notebook"]{background:url("./assets/images/backgrounds
 body[data-portal-bg="cats-yarn"]{background:url("./assets/images/backgrounds/Background 33.png") center/cover fixed!important}
 @keyframes portalAurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 body[data-portal-bg]:not([data-portal-bg="none"]) #app{background:rgba(10,18,32,.22);border-radius:18px}
+
+body[data-portal-bg="ui-cyber"]{background:url("./assets/images/ui-cyber.jpg") center/cover fixed!important}
+body[data-portal-bg="ui-frame"]{background:url("./assets/images/ui-frame.jpg") center/cover fixed!important}
+body[data-portal-bg="ui-hydra"]{background:url("./assets/images/ui-hydra.jpg") center/cover fixed!important}
+body[data-portal-bg="ui-pixel"]{background:url("./assets/images/ui-pixel.jpg") center/cover fixed!important}
+body[data-portal-bg="ui-quest"]{background:url("./assets/images/ui-quest.jpg") center/cover fixed!important}
+body[data-portal-bg="ui-reds"]{background:url("./assets/images/ui-reds.jpg") center/cover fixed!important}
+body[data-portal-bg="ui-retro"]{background:url("./assets/images/ui-retro.jpg") center/cover fixed!important}
+body[data-portal-bg="ui-status"]{background:url("./assets/images/ui-status.jpg") center/cover fixed!important}
+body[data-portal-bg="ui-zen"]{background:url("./assets/images/ui-zen.jpg") center/cover fixed!important}
