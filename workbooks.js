@@ -10,16 +10,28 @@
     if(editorial&&editorial.explanation) explanation=editorial.explanation;
     var example=programming?'<h4>Учебный пример: фрагмент УП</h4><pre class="wb-code"><code>%\nO0001\nG21 G90\nG54\nM03 S800\nG00 X0 Z5\nG01 Z-20 F120\nG00 Z5\nM05\nM30\n%</code></pre><p><b>Разбор:</b> G21 — миллиметры; G90 — абсолютные координаты; G54 — рабочая система координат; M03 S800 — вращение шпинделя по часовой стрелке с заданной частотой; G00 — быстрое перемещение; G01 — рабочее перемещение с подачей; M05 — останов шпинделя; M30 — конец программы.</p><p class="wb-warning">⚠️ Это учебный фрагмент для разбора команд, а не готовая программа для запуска. Перед работой проверяют стойку, систему координат, инструмент, заготовку, коррекции и безопасные перемещения.</p>':'<h4>Пример из практики</h4><p>Допустим, нужно выполнить производственную задачу. Запиши исходные данные, выбери инструмент или метод, составь последовательность действий, а затем проверь результат по критериям качества. Если результат не совпал с требованием — найди этап, где возникло отклонение, а не исправляй его наугад.</p><div class="wb-flow"><span>Исходные данные</span><i>→</i><span>Выбор метода</span><i>→</i><span>Выполнение</span><i>→</i><span>Контроль</span></div>';
     var images=[];function add(file,caption){images.push({file:file,caption:caption});}
-    if(/координат|ноль|базирован/.test(title)){add("fig-2-coords.png","Координатные оси");add("fig-11-zero-points.png","Выбор нулевой точки");add("fig-18-zxy.png","Оси X, Y и Z");}
-    else if(/токар/.test(title)){add("fig-6-lathe.png","Токарная обработка");add("fig-7-lathe-c.png","Токарный станок");add("fig-12-w-tokar.png","Рабочая зона токаря");}
-    else if(/фрезер/.test(title)){add("fig-5-milling.png","Фрезерование");add("fig-13-w-frez.png","Рабочая зона фрезеровщика");add("fig-15-e-frez.png","Элементы фрезерной обработки");}
-    else if(/sprut|стойк|интерфейс|управлен/.test(title)){add("fig-22-sprut-interface.png","Интерфейс SprutCAM");add("fig-23-sprut-project.png","Проект обработки");add("fig-24-sprut-tools.png","Инструменты проекта");}
-    else if(/программ|g-код|команд|уп /.test(title)){add("fig-19-letter-a.png","Пример структуры программы");add("fig-20-letter-mama.png","Пример траектории");add("fig-10-uchpu.png","Устройство ЧПУ");}
-    else if(cnc){add("fig-16-machine.png","Станок с ЧПУ");add("fig-1-blocks.png","Структурная схема");add("fig-4-right-hand.png","Правило правой руки");}
-    else if(/чертеж|детал|сборк/.test(title)){add("fig-21-flanets.png","Пример детали — фланец");add("fig-3-3d.png","Трёхмерная модель");}
+    // Иллюстрации добавляются только при тематическом совпадении. Не назначаем
+    // универсальный набор картинок всем темам одного курса.
+    if(editorial&&Array.isArray(editorial.images)){
+      editorial.images.forEach(function(x){if(x&&x.file&&x.caption)add(x.file,x.caption);});
+    } else if(/координат|нулев(ая|ой) точк|базирован/.test(title)){
+      add("fig-2-coords.png","Координатные оси X, Y и Z");add("fig-11-zero-points.png","Выбор нулевой точки детали");add("fig-18-zxy.png","Направления осей координат");
+    } else if(/токар|точени/.test(title)){
+      add("fig-6-lathe.png","Токарный станок и принцип точения");add("fig-12-w-tokar.png","Рабочая зона токаря");add("fig-14-e-tokar.png","Элементы токарной обработки");
+    } else if(/фрезер|фрезован/.test(title)){
+      add("fig-5-milling.png","Фрезерование");add("fig-13-w-frez.png","Рабочая зона фрезеровщика");add("fig-15-e-frez.png","Элементы фрезерной обработки");
+    } else if(/sprut|стойк|интерфейс/.test(title)){
+      add("fig-22-sprut-interface.png","Интерфейс SprutCAM");add("fig-23-sprut-project.png","Проект обработки в CAM-системе");add("fig-24-sprut-tools.png","Инструменты проекта SprutCAM");
+    } else if(/программ|g-код|команд|управляющ.*программ/.test(title)){
+      add("fig-19-letter-a.png","Пример записи управляющей программы");add("fig-20-letter-mama.png","Пример траектории инструмента");add("fig-10-uchpu.png","Устройство системы ЧПУ");
+    } else if(/чертеж|детал|сборк|геометри.*модел/.test(title)){
+      add("fig-21-flanets.png","Чертёжная геометрия детали — фланец");add("fig-3-3d.png","Трёхмерная модель детали");
+    } else if(cnc&&/станок|оборудован|устройств.*чпу/.test(title)){
+      add("fig-16-machine.png","Станок с ЧПУ");add("fig-1-blocks.png","Структурная схема системы");add("fig-4-right-hand.png","Правило правой руки для координат");
+    }
     var gallery=images.length?'<div class="wb-gallery">'+images.map(function(x){return '<figure><img loading="lazy" src="assets/images/'+esc(x.file)+'" alt="'+esc(x.caption)+'"><figcaption>'+esc(x.caption)+'</figcaption></figure>';}).join("")+'</div>':"";
-    var meme=/перемен|данн|тип/.test(title)?{file:"meme-variables.jpg",caption:"Когда переменная названа понятно, а не x1_final_final2. Читаемый код экономит время всей команды."}:programming?{file:"meme-js.jpg",caption:"Когда написал G00 вместо G01: быстро — не всегда правильно. Сначала проверь смысл команды."}:/алгоритм|компьют|программ/.test(title)?{file:"meme-python.jpg",caption:"Когда алгоритм сначала проверили на примере, а уже потом доверили ему задачу."}:cnc?{file:"meme-js.jpg",caption:"Станок выполняет команду буквально. Сначала проверяем программу, потом запускаем."}:{file:"meme-cat.jpg",caption:"Когда всё посчитал, проверил и только потом нажал «Готово». Вот это профессиональный подход."};
-    var memeHtml='<figure class="wb-meme"><img loading="lazy" src="assets/images/'+meme.file+'" alt="Учебный мем"><figcaption>😎 '+meme.caption+'</figcaption></figure>';
+    var meme=/перемен|данн|тип/.test(title)?{file:"meme-variables.jpg",caption:"Понятные имена переменных помогают читать и проверять программу."}:programming?{file:"meme-js.jpg",caption:"G00 и G01 решают разные задачи: быстрое и рабочее перемещение нельзя путать."}:/алгоритм|компьют/.test(title)?{file:"meme-python.jpg",caption:"Алгоритм сначала проверяют на учебном примере, а затем применяют к задаче."}:null;
+    var memeHtml=meme?'<figure class="wb-meme"><img loading="lazy" src="assets/images/'+meme.file+'" alt="Иллюстрация к теме программирования"><figcaption>😎 '+meme.caption+'</figcaption></figure>':"";
     var steps=['Разобраться в терминах','Найти исходные данные','Выполнить действия по порядку','Проверить результат'];
     return '<section class="wb-extra"><div class="wb-genz"><b>🧠 Зумерский перевод без душноты</b><p>'+esc(explanation)+'</p><small>Запомни: понял принцип → можешь применить → можешь объяснить, почему сделал именно так.</small></div>'+example+(editorial?'<div class="wb-editorial-case"><h4>🎯 '+esc(editorial.caseTitle||"Профессиональный кейс")+'</h4><p>'+esc(editorial.caseText||"")+'</p><h4>⚠️ Типичные ошибки</h4><ul>'+((editorial.mistakes||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join(""))+'</ul><h4>🧭 Алгоритм по теме</h4><div class="wb-flow">'+((editorial.route||[]).map(function(x,i){return '<span><b>'+(i+1)+'.</b> '+esc(x)+'</span>';}).join('<i>→</i>'))+'</div></div>':"")+'<h4>Маршрут освоения темы</h4><div class="wb-flow">'+steps.map(function(s,i){return '<span><b>'+(i+1)+'.</b> '+s+'</span>';}).join('<i>→</i>')+'</div>'+gallery+memeHtml+'<details class="wb-more"><summary>✨ Что ещё полезно помнить</summary><ul><li>Не пропускай проверку исходных данных.</li><li>Записывай единицы измерения и обозначения.</li><li>Отделяй факт из учебного материала от собственного предположения.</li><li>Если сомневаешься — вернись к схеме, чертежу или инструкции.</li></ul></details></section>';
   }
