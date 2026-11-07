@@ -1089,41 +1089,37 @@ function importQuestionBanks_(data) {
   const actor = admin_(data);
   const banks = Array.isArray(data.banks) ? data.banks : [];
   if (!banks.length || banks.length > 100) throw new Error("Передайте от 1 до 100 банков за один импорт.");
-  const allowed = CFG.COURSES;
-  const sh = questionBank_();
-  const lock = LockService.getScriptLock(); lock.waitLock(10000);
-  try {
-    const rows = sh.getDataRange().getValues();
-    const map = headerMap_(sh);
-    let imported = 0, questionsImported = 0;
-    banks.forEach(function(bank) {
-      const courseId = String(bank.courseId || "");
-      const bankId = String(bank.bankId || "").slice(0, 180);
-      const questions = Array.isArray(bank.questions) ? bank.questions : [];
-      if (allowed.indexOf(courseId) < 0 || !bankId) throw new Error("Некорректная дисциплина или идентификатор банка.");
-      if (!questions.length || questions.length > 1000) throw new Error("Банк " + bankId + ": допустимо от 1 до 1000 вопросов.");
-      const keep = [];
-      for (let i = 1; i < rows.length; i++) {
-        if (!(String(rows[i][map.CourseId]) === courseId && String(rows[i][map.BankId]) === bankId)) keep.push(rows[i]);
-      }
-      // Удаляем прежние строки этого банка, не затрагивая другие дисциплины и банки.
-      const current = sh.getDataRange().getValues();
-      const deleteRows = [];
-      for (let i = 1; i < current.length; i++) {
-        if (String(current[i][map.CourseId]) === courseId && String(current[i][map.BankId]) === bankId) deleteRows.push(i + 1);
-      }
-      for (let i = deleteRows.length - 1; i >= 0; i--) sh.deleteRow(deleteRows[i]);
-      const stamp = new Date().toISOString();
-      const out = questions.map(function(q, index) {
-        if (!q || typeof q !== "object") throw new Error("Некорректный вопрос в банке " + bankId + ".");
-        const qid = String(q.id || (bankId + ":" + index)).slice(0, 220);
-        return [courseId, bankId, qid, JSON.stringify(q).slice(0, 45000), stamp, actor.email];
-      });
-      sh.getRange(sh.getLastRow() + 1, 1, out.length, 6).setValues(out);
-      imported++; questionsImported += out.length;
+  const allowed = CFG.COURSES, prepared = [], seen = {};
+  let total = 0;
+  banks.forEach(function(bank) {
+    const courseId = String(bank.courseId || ""), bankId = String(bank.bankId || "").slice(0,180);
+    const questions = Array.isArray(bank.questions) ? bank.questions : [];
+    const key=courseId+"|"+bankId;
+    if (allowed.indexOf(courseId)<0 || !bankId || seen[key]) throw new Error("Некорректная дисциплина или повторяющийся идентификатор банка.");
+    seen[key]=true;
+    if (!questions.length || questions.length>1000) throw new Error("Банк "+bankId+": допустимо от 1 до 1000 вопросов.");
+    const out=questions.map(function(q,index){
+      if(!q||typeof q!=="object")throw new Error("Некорректный вопрос в банке "+bankId+".");
+      const json=JSON.stringify(q);
+      if(json.length>45000)throw new Error("Вопрос "+(index+1)+" банка "+bankId+" превышает лимит 45 КБ.");
+      return [courseId,bankId,String(q.id||(bankId+":"+index)).slice(0,220),json,new Date().toISOString(),actor.email];
     });
-    return {success:true,banksImported:imported,questionsImported:questionsImported};
-  } finally { lock.releaseLock(); }
+    total+=out.length;prepared.push({courseId:courseId,bankId:bankId,rows:out});
+  });
+  if(total>2500)throw new Error("Разбейте импорт на части: не более 2500 вопросов за запрос.");
+  const sh=questionBank_(),lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const map=headerMap_(sh);
+    prepared.forEach(function(bank){
+      const current=sh.getDataRange().getValues(),deleteRows=[];
+      for(let i=1;i<current.length;i++){
+        if(String(current[i][map.CourseId])===bank.courseId&&String(current[i][map.BankId])===bank.bankId)deleteRows.push(i+1);
+      }
+      for(let i=deleteRows.length-1;i>=0;i--)sh.deleteRow(deleteRows[i]);
+      sh.getRange(sh.getLastRow()+1,1,bank.rows.length,6).setValues(bank.rows);
+    });
+    return {success:true,banksImported:prepared.length,questionsImported:total};
+  } finally {lock.releaseLock();}
 }
 
 /** Полный ключ доступен только преподавателю своей дисциплины или администратору. */
@@ -1226,7 +1222,7 @@ function allFinalExamEntries_(courseId) {
   vals.slice(1).forEach(function(row){
     if(String(row[m.CourseId]||"")!==courseId)return;
     const bid=String(row[m.BankId]||"");
-    if(!/^exam_(primary|extra)$/.test(bid)&&bid!=="mdk_extra"&&!/^topic_|^hard_/.test(bid))return;
+    if(!/^exam_(primary|extra)$/.test(bid)&&bid!=="mdk_extra"&&!/^topic_|^hard_|^self_/.test(bid))return;
     let q={};try{q=JSON.parse(String(row[m.QuestionJSON]||"{}"));}catch(e){return;}
     if(!q||!q.q)return;const sig=String(q.type||"mc")+"|"+String(q.q);if(seen[sig])return;seen[sig]=true;
     out.push({bankId:bid,questionId:String(row[m.QuestionId]||""),question:q});
