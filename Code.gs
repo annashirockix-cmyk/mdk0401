@@ -29,7 +29,7 @@ const CFG = {
 
 const HEADERS = {
   Users: ["Email", "PasswordHash", "Name", "Group", "Role", "UpdatedAt", "Courses", "Payload", "PasswordSalt", "LoginChangedAt", "PasswordChangedAt"],
-  Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId", "Submission"],
+  Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId", "Submission", "PenaltyPoints", "ViolationCount"],
   CourseContent: ["Id", "CourseId", "TopicId", "Type", "Title", "Payload", "UpdatedBy", "UpdatedAt"],
   Schedule: ["Schedule"],
   Invites: ["Code", "Courses", "CreatedBy", "CreatedAt", "ExpiresAt", "MaxUses", "Uses", "Active"],
@@ -41,7 +41,7 @@ const HEADERS = {
   AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
   AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
-  ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "EventType", "Page", "ClientTime", "ServerTime", "Details"],
+  ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"]
 };
 
@@ -188,6 +188,31 @@ function notifications_() { return ensureSheet_("Notifications"); }
 function proctorEvents_() { return ensureSheet_("ProctorEvents"); }
 function attemptAudit_() { return ensureSheet_("AttemptAudit"); }
 function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString()]); }
+
+function proctorPenalty_(studentEmail,courseId,testId) {
+  const sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+  let penalty=0,count=0;
+  vals.slice(1).forEach(function(row){
+    if(email_(row[m.StudentEmail])===email_(studentEmail)&&String(row[m.CourseId]||"")===String(courseId)&&String(row[m.TestId]||"")===String(testId)){
+      count=Math.max(count,Number(row[m.ViolationNo])||0);
+      penalty=Math.max(penalty,Number(row[m.PenaltyPoints])||0);
+    }
+  });
+  return {penaltyPoints:Math.min(30,penalty),violationCount:count};
+}
+function gradeFromPercent_(percent) { return percent>=90?5:percent>=75?4:percent>=60?3:2; }
+function notifyProctorSanction_(student,courseId,testId,violationNo,penaltyPoints,eventType) {
+  const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),message="Студент: "+student.name+" ("+student.email+"), группа "+student.group+". Тест: "+testId+". Зафиксировано нарушений: "+violationNo+". Штраф: -"+penaltyPoints+" процентных пунктов. Последнее событие: "+eventType+".";
+  vals.slice(1).forEach(function(row){
+    const role=String(row[m.Role]||"").toLowerCase(),mail=email_(row[m.Email]);
+    if(!mail)return;
+    const assigned={email:mail,role:role,courses:String(row[m.Courses]||"")};
+    if(role==="admin"||(role==="teacher"&&hasCourseAccess_(assigned,courseId))){
+      appendMappedRecord_(notifications_(),{Id:Utilities.getUuid(),RecipientEmail:mail,Type:"warning",Title:"Нарушение правил тестирования",Message:message,CourseId:courseId,RelatedId:testId,CreatedAt:new Date().toISOString()});
+    }
+  });
+}
+
 
 /**
  * Запустите вручную один раз после добавления SPREADSHEET_ID.
@@ -534,12 +559,13 @@ function saveResult_(data) {
       }
     }
     const attempts=prior+1;
-    const grade=data.grade===undefined||data.grade===null||data.grade===""?0:Math.max(0,Math.min(5,Number(data.grade)||0));
-    const score=Number(data.score)||0,maxScore=Number(data.maxScore)||0,percent=Number(data.percent)||0,title=String(data.testTitle||testId);
-    sheet.appendRow([email,String(data.name||user.name),String(data.group||user.group),testId,title,grade,score,maxScore,percent,Math.max(0,Number(data.timeSpent)||0),
-      attempts,new Date().toISOString(),courseId,String(data.payload||"").slice(0,10000)]);
+    const rawGrade=data.grade===undefined||data.grade===null||data.grade===""?0:Math.max(0,Math.min(5,Number(data.grade)||0));
+    const rawScore=Number(data.score)||0,maxScore=Number(data.maxScore)||0,rawPercent=Math.max(0,Math.min(100,Number(data.percent)||0)),title=String(data.testTitle||testId);
+    const policy=assessment?proctorPenalty_(email,courseId,testId):{penaltyPoints:0,violationCount:0};
+    const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=assessment?gradeFromPercent_(percent):rawGrade,score=maxScore?Math.round(maxScore*percent)/100:Math.max(0,rawScore);
+    appendMappedRecord_(sheet,{Email:email,Name:String(data.name||user.name),Group:String(data.group||user.group),TestId:testId,TestTitle:title,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attempts,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:String(data.payload||"").slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:title,AttemptNo:attempts,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent});
-    return {success:true,attempts:attempts};
+    return {success:true,attempts:attempts,grade:grade,percent:percent,penaltyPoints:policy.penaltyPoints,violationCount:policy.violationCount};
   } finally {lock.releaseLock();}
 }
 
@@ -553,18 +579,27 @@ function logProctorEvent_(data) {
   const allowed=["visibility_hidden","window_blur","fullscreen_exit","copy_attempt","paste_attempt","contextmenu_attempt","screenshot_shortcut","devtools_shortcut","external_link"];
   const eventType=String(data.eventType||"");
   if(!courseId||!testId||allowed.indexOf(eventType)===-1||!hasCourseAccess_(user,courseId)) throw new Error("Некорректное событие контроля.");
-  const cache=CacheService.getScriptCache(),key="proctor:"+user.email+":"+testId+":"+eventType;
+  const cache=CacheService.getScriptCache(),key="proctor:"+user.email+":"+courseId+":"+testId+":"+eventType;
   const now=Date.now(),last=Number(cache.get(key)||0);
-  if(now-last<2500)return {success:true,throttled:true};
-  cache.put(key,String(now),30);
-  const page=String(data.page||"").slice(0,180);
-  const details=String(data.details||"").slice(0,240);
-  const clientTime=String(data.clientTime||"").slice(0,40);
+  if(now-last<2500)return {success:true,throttled:true,action:"throttled"};
+  const page=String(data.page||"").slice(0,180),details=String(data.details||"").slice(0,240),clientTime=String(data.clientTime||"").slice(0,40);
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
-    proctorEvents_().appendRow([Utilities.getUuid(),user.email,user.name,user.group,courseId,testId,eventType,page,clientTime,new Date().toISOString(),details]);
+    const sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+    let previous=0;
+    vals.slice(1).forEach(function(row){
+      if(email_(row[m.StudentEmail])===user.email&&String(row[m.CourseId]||"")===courseId&&String(row[m.TestId]||"")===testId)previous=Math.max(previous,Number(row[m.ViolationNo])||0);
+    });
+    const violationNo=previous+1,action=violationNo===1?"warning":"sanction";
+    const penaltyPoints=Math.min(30,Math.max(0,violationNo-1)*10);
+    appendMappedRecord_(sh,{Id:Utilities.getUuid(),StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,EventType:eventType,Page:page,ClientTime:clientTime,ServerTime:new Date().toISOString(),Details:details,ViolationNo:violationNo,Action:action,PenaltyPoints:penaltyPoints});
+    cache.put(key,String(now),30);
+    if(action==="sanction"&&penaltyPoints>0){
+      appendAttemptAudit_({EventType:"proctor_sanction",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:testId,AttemptNo:violationNo,Percent:penaltyPoints});
+      notifyProctorSanction_(user,courseId,testId,violationNo,penaltyPoints,eventType);
+    }
+    return {success:true,violationNo:violationNo,action:action,penaltyPoints:penaltyPoints,reportSent:action==="sanction"};
   } finally {lock.releaseLock();}
-  return {success:true};
 }
 
 function getAttemptAudit_(data) {
@@ -588,18 +623,18 @@ function getTutoringLink_(data) {
   const user=auth_(data),courseId=String(data.courseId||"");
   if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
   const raw=settingValue_("tutoring:"+courseId);
-  let value={url:"",title:"Запись на дополнительные занятия",description:""};
+  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:true};
   if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
   return {success:true,link:value};
 }
 function saveTutoringLink_(data) {
   const courseId=String(data.courseId||""),teacher=editor_(data,courseId);
   const url=String(data.url||"").trim(),title=String(data.title||"Запись на дополнительные занятия").trim().slice(0,120);
-  const description=String(data.description||"").trim().slice(0,500);
+  const description=String(data.description||"").trim().slice(0,500),visible=data.visible!==false;
   if(url&&!/^https?:\/\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
   if(url.length>1000)throw new Error("Слишком длинная ссылка.");
-  writeSetting_("tutoring:"+courseId,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description}),teacher.email);
-  return {success:true,link:{url:url,title:title,description:description}};
+  writeSetting_("tutoring:"+courseId,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible}),teacher.email);
+  return {success:true,link:{url:url,title:title,description:description,visible:visible}};
 }
 
 /* ---------- In-app notifications ---------- */
@@ -1058,10 +1093,12 @@ function submitCustomTest_(data) {
     const limit=1+Math.max(0,extra);
     if(prior>=limit) throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю за дополнительной попыткой.");
     attemptNo=prior+1;
-    resultSheet.appendRow([user.email,user.name,user.group,attemptKey,record.title,grade,score,questions.length,percent,Math.max(0,Number(data.timeSpent)||0),attemptNo,new Date().toISOString(),record.courseId,JSON.stringify({answers:answers.map(function(v){return Number(v);})})]);
-    appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:record.courseId,TestId:attemptKey,TestTitle:record.title,AttemptNo:attemptNo,Grade:grade,Score:score,MaxScore:questions.length,Percent:percent});
+    const policy=proctorPenalty_(user.email,record.courseId,attemptKey),finalPercent=Math.max(0,percent-policy.penaltyPoints),finalGrade=gradeFromPercent_(finalPercent),finalScore=Math.round(questions.length*finalPercent)/100;
+    appendMappedRecord_(resultSheet,{Email:user.email,Name:user.name,Group:user.group,TestId:attemptKey,TestTitle:record.title,Grade:finalGrade,Score:finalScore,MaxScore:questions.length,Percent:finalPercent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:record.courseId,Submission:JSON.stringify({answers:answers.map(function(v){return Number(v);})}),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+    appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:record.courseId,TestId:attemptKey,TestTitle:record.title,AttemptNo:attemptNo,Grade:finalGrade,Score:finalScore,MaxScore:questions.length,Percent:finalPercent});
   } finally { lock.releaseLock(); }
-  return { success: true, score: score, maxScore: questions.length, percent: percent, grade: grade, attempts: attemptNo };
+  const finalPolicy=proctorPenalty_(user.email,record.courseId,attemptKey),finalPercent=Math.max(0,percent-finalPolicy.penaltyPoints),finalGrade=gradeFromPercent_(finalPercent),finalScore=Math.round(questions.length*finalPercent)/100;
+  return { success: true, score: finalScore, rawScore:score, maxScore: questions.length, percent: finalPercent, rawPercent:percent, grade: finalGrade, attempts: attemptNo, penaltyPoints:finalPolicy.penaltyPoints, violationCount:finalPolicy.violationCount };
 }
 
 function getGameAnswer_(data) {
