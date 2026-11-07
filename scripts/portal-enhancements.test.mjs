@@ -180,6 +180,17 @@ test("MDK 07.01 training and final exam include the additional bank only once", 
 });
 
 
+test("MDK 07.01 topic tests avoid several known cross-topic repeats", () => {
+  const data = read("data-0701.js");
+  const hard = read("hard-questions.js");
+  for (const repeated of ["Для длинных валов применяют", "Ключ в патроне", "Что такое WCS (Working Coordinate System)?", "Какой командой задается относительная система координат?", "Что такое эквидистанта в программировании ЧПУ?"]) {
+    assert.ok(!data.includes(repeated) && !hard.includes(repeated), "replace repeated quiz prompt: " + repeated);
+  }
+  assert.match(data, /При обработке вала с двух установов базу выбирают так/);
+  assert.match(hard, /При внешнем скруглении R детали = 8 мм/);
+  assert.match(hard, /значение G98\/G99 нужно сверять/);
+});
+
 test("MDK 07.01 final exam samples different topics within every section", () => {
   const sandbox = { window: { MDK_DATA: {}, HARD_TESTS: {} } };
   vm.runInNewContext(read("data-0701.js"), sandbox, { timeout: 1000 });
