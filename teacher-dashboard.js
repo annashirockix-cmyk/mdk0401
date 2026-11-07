@@ -26,14 +26,14 @@ const marks=results.filter(x=>x.grade!==""&&x.grade!==null&&x.grade!==undefined&
 const avg=marks.length?(marks.reduce((n,x)=>n+Number(x.grade),0)/marks.length).toFixed(2):"—";
 const activityEvents=Array.isArray(activity.events)?activity.events:[];
 const nowMs=Date.now(),weekMs=7*24*60*60*1000,monthMs=30*24*60*60*1000;
-const activeEmails=new Set(activityEvents.filter(x=>{const t=Date.parse(x.createdAt||x.clientAt||"");return Number.isFinite(t)&&nowMs-t<=weekMs;}).map(x=>String(x.email||"").toLowerCase()).filter(Boolean));
+const activeEmails=new Set(activityEvents.filter(x=>{const t=Date.parse(x.createdAt||x.clientAt||"");return Number.isFinite(t)&&t<=nowMs&&nowMs-t<=weekMs;}).map(x=>String(x.email||"").toLowerCase()).filter(Boolean));
 const activeLast7=activeEmails.size;
 const repeatAssignmentAttempts=subs.reduce((n,x)=>n+Math.max(0,(Number(x.attempts)||1)-1),0);
 const repeatTestAttempts=marks.reduce((n,x)=>n+Math.max(0,(Number(x.attempts)||1)-1),0);
 const lowMarks=marks.filter(x=>Number(x.grade)<3);
 const gradeDate=x=>Date.parse(x.finishedAt||x.createdAt||"");
-const recentMarks=marks.filter(x=>{const t=gradeDate(x);return Number.isFinite(t)&&nowMs-t<=monthMs;});
-const previousMarks=marks.filter(x=>{const t=gradeDate(x);return Number.isFinite(t)&&nowMs-t>monthMs&&nowMs-t<=2*monthMs;});
+const recentMarks=marks.filter(x=>{const t=gradeDate(x);return Number.isFinite(t)&&t<=nowMs&&nowMs-t<=monthMs;});
+const previousMarks=marks.filter(x=>{const t=gradeDate(x);return Number.isFinite(t)&&t<=nowMs&&nowMs-t>monthMs&&nowMs-t<=2*monthMs;});
 const meanOf=list=>list.length?list.reduce((n,x)=>n+Number(x.grade),0)/list.length:null;
 const recentMean=meanOf(recentMarks),previousMean=meanOf(previousMarks);
 const gradeDelta=recentMean!==null&&previousMean!==null?recentMean-previousMean:null;
