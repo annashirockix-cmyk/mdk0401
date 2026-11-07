@@ -193,14 +193,30 @@ test("MDK 07.01 topic 4.2 quiz follows its lecture rather than unsupported contr
 });
 
 test("MDK 07.01 topic tests avoid several known cross-topic repeats", () => {
-  const data = read("data-0701.js");
-  const hard = read("hard-questions.js");
+  const dataSandbox = { window: { MDK_DATA: {} } };
+  vm.runInNewContext(read("data-0701.js"), dataSandbox, { timeout: 1000 });
+  const corePrompts = dataSandbox.window.MDK_DATA["07.01"].sections
+    .flatMap((section) => section.topics || [])
+    .flatMap((topic) => (topic.test || []).map((question) => question.q));
+  const hardSandbox = { window: {} };
+  vm.runInNewContext(read("hard-questions.js"), hardSandbox, { timeout: 1000 });
+  const hardPrompts = Object.values(hardSandbox.window.HARD_TESTS)
+    .flatMap((questions) => questions.map((question) => question.q));
+  const prompts = corePrompts.concat(hardPrompts).join(" ");
   for (const repeated of ["Для длинных валов применяют", "Ключ в патроне", "Что такое WCS (Working Coordinate System)?", "Какой командой задается относительная система координат?", "Что такое эквидистанта в программировании ЧПУ?"]) {
-    assert.ok(!data.includes(repeated) && !hard.includes(repeated), "replace repeated quiz prompt: " + repeated);
+    assert.ok(!prompts.includes(repeated), "replace repeated quiz prompt: " + repeated);
   }
-  assert.match(data, /При обработке вала с двух установов базу выбирают так/);
-  assert.match(hard, /При внешнем скруглении R детали = 8 мм/);
-  assert.match(hard, /значение G98\/G99 нужно сверять/);
+  assert.ok(corePrompts.some((prompt) => prompt.includes("При обработке вала с двух установов базу выбирают так")));
+  assert.ok(hardPrompts.some((prompt) => prompt.includes("При внешнем скруглении R детали = 8 мм")));
+  assert.ok(hardPrompts.some((prompt) => prompt.includes("значение G98/G99 нужно сверять")));
+});
+
+test("MDK 07.01 G43 question is assigned to milling, not setup functions", () => {
+  const sandbox = { window: {} };
+  vm.runInNewContext(read("hard-questions.js"), sandbox, { timeout: 1000 });
+  const bank = sandbox.window.HARD_TESTS;
+  assert.ok(!bank["t-4-1"].some((question) => question.q.includes("G43")));
+  assert.ok(bank["t-5-3"].some((question) => question.q.includes("G43")));
 });
 
 test("MDK 07.01 final exam samples different topics within every section", () => {
