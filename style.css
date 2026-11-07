@@ -1,31 +1,22 @@
-/* =====================================================
-   ПОДКЛЮЧЕНИЕ ШРИФТОВ
-   ===================================================== */
-@font-face {
-  font-family: 'Monomakh';
-  src: url('./fonts/ofont.ru_Monomakh Unicode.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Sacramento';
-  src: url('./fonts/ofont.ru_Sacramento.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Tiny5';
-  src: url('./fonts/ofont.ru_Tiny5.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Another Danger';
-  src: url('./fonts/ofont.ru_Another Danger.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
+/* Подключены все 16 декоративных шрифтов из assets/fonts. */
+@font-face{font-family:'Monomakh';src:url('./assets/fonts/ofont.ru_Monomakh Unicode.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Sacramento';src:url('./assets/fonts/ofont.ru_Sacramento.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Tiny5';src:url('./assets/fonts/ofont.ru_Tiny5.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Another Danger';src:url('./assets/fonts/ofont.ru_Another Danger.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Belepotan';src:url('./assets/fonts/ofont.ru_Belepotan.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Buira';src:url('./assets/fonts/ofont.ru_Buira.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Jun';src:url('./assets/fonts/ofont.ru_Jun.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Kumiko';src:url('./assets/fonts/ofont.ru_Kumiko.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Minsk';src:url('./assets/fonts/ofont.ru_Minsk (1).ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Neoneon';src:url('./assets/fonts/ofont.ru_Neoneon.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Peter Ivanowitsch';src:url('./assets/fonts/ofont.ru_Peter Ivanowitsch.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'ST-Cherty';src:url('./assets/fonts/ofont.ru_ST-Cherty.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Satyr SP';src:url('./assets/fonts/ofont.ru_Satyr SP.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Scumbria';src:url('./assets/fonts/ofont.ru_Scumbria.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Smooz';src:url('./assets/fonts/ofont.ru_Smooz.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'TagType';src:url('./assets/fonts/ofont.ru_TagType.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+:root{--portal-display-font:'Monomakh',Georgia,serif;}
+html[data-font='monomakh']{--portal-display-font:'Monomakh',Georgia,serif}html[data-font='minsk']{--portal-display-font:'Minsk',Georgia,serif}html[data-font='kumiko']{--portal-display-font:'Kumiko',Georgia,serif}html[data-font='sacramento']{--portal-display-font:'Sacramento',cursive}html[data-font='belepotan']{--portal-display-font:'Belepotan',Georgia,serif}html[data-font='tiny5']{--portal-display-font:'Tiny5',monospace}
 /* =====================================================
    БАЗОВЫЕ НАСТРОЙКИ И ПЕРЕМЕННЫЕ
    ===================================================== */
@@ -38,7 +29,7 @@ html, body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
+h1, h2, h3, .hero h1 { font-family: var(--portal-display-font, 'Monomakh'), serif; margin-top: 0; }
 
 /* Темная тема (по умолчанию) */
 :root {
@@ -151,16 +142,16 @@ h1, h2, h3, .hero h1 { font-family: 'Monomakh', serif; margin-top: 0; }
    ФОНЫ И ЭФФЕКТЫ
    ===================================================== */
 .bg-underwater { background: linear-gradient(180deg, #0c4a6e 0%, #082f49 100%); }
-.bg-foggy-forest { background-image: url('./img/Background 1.png'); background-size: cover; background-position: center; }
-.bg-pumpkins { background-image: url('./img/Background 2.png'); background-size: cover; background-position: center; }
-.bg-spooky-room { background-image: url('./img/Background 3.png'); background-size: cover; background-position: center; }
-.bg-halloween { background-image: url('./img/Background 7.png'); background-size: cover; background-position: center; }
-.bg-red-forest { background-image: url('./img/Background 9.png'); background-size: cover; background-position: center; }
-.bg-lanterns { background-image: url('./img/Background 10.png'); background-size: cover; background-position: center; }
-.bg-dark-table { background-image: url('./img/Background 15.png'); background-size: cover; background-position: center; }
-.bg-graveyard { background-image: url('./img/Background 28.png'); background-size: cover; background-position: center; }
-.bg-cats-notebook { background-image: url('./img/Background 31.png'); background-size: cover; background-position: center; }
-.bg-cats-yarn { background-image: url('./img/Background 33.png'); background-size: cover; background-position: center; }
+.bg-foggy-forest { background-image: url('./assets/images/backgrounds/Background 1.png'); background-size: cover; background-position: center; }
+.bg-pumpkins { background-image: url('./assets/images/backgrounds/Background 2.png'); background-size: cover; background-position: center; }
+.bg-spooky-room { background-image: url('./assets/images/backgrounds/Background 3.png'); background-size: cover; background-position: center; }
+.bg-halloween { background-image: url('./assets/images/backgrounds/Background 7.png'); background-size: cover; background-position: center; }
+.bg-red-forest { background-image: url('./assets/images/backgrounds/Background 9.png'); background-size: cover; background-position: center; }
+.bg-lanterns { background-image: url('./assets/images/backgrounds/Background 10.png'); background-size: cover; background-position: center; }
+.bg-dark-table { background-image: url('./assets/images/backgrounds/Background 15.png'); background-size: cover; background-position: center; }
+.bg-graveyard { background-image: url('./assets/images/backgrounds/Background 28.png'); background-size: cover; background-position: center; }
+.bg-cats-notebook { background-image: url('./assets/images/backgrounds/Background 31.png'); background-size: cover; background-position: center; }
+.bg-cats-yarn { background-image: url('./assets/images/backgrounds/Background 33.png'); background-size: cover; background-position: center; }
 .bg-stone-alley { background: linear-gradient(135deg, #4b5563, #1f2937); }
 
 body.fx-aurora-bg { background: linear-gradient(135deg, #0f172a, #1e3a8a, #0f172a); background-size: 400% 400%; animation: aurora 15s ease infinite; }
