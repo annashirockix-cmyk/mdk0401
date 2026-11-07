@@ -655,6 +655,10 @@ function saveResult_(data) {
     const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=assessment?gradeFromPercent_(percent):rawGrade,score=maxScore?Math.round(maxScore*percent)/100:Math.max(0,rawScore);
     appendMappedRecord_(sheet,{Email:email,Name:String(data.name||user.name),Group:String(data.group||user.group),TestId:testId,TestTitle:title,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attempts,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:String(data.payload||"").slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:title,AttemptNo:attempts,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent});
+    if(user.role==="student" && /^(prac_|self_)/.test(testId) && String(data.payload||"").trim()) {
+      notifyCourseStaff_(courseId,"submission","Новая письменная работа на проверку",
+        user.name+" ("+user.group+") отправил(а) письменную работу: "+title+". Откройте журнал результатов по дисциплине для проверки.",testId);
+    }
     return {success:true,attempts:attempts,grade:grade,percent:percent,penaltyPoints:policy.penaltyPoints,violationCount:policy.violationCount};
   } finally {lock.releaseLock();}
 }
@@ -677,7 +681,7 @@ function logProctorEvent_(data) {
   try {
     const sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
     const resultRows=results_().getDataRange().getValues();
-    const attemptNo=resultRows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length+1;
+    const attemptNo=resultRows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length+1;
     let previous=0;
     vals.slice(1).forEach(function(row){
       // Счётчик нарушений ведётся по всему тесту и не сбрасывается при новой попытке.
@@ -768,6 +772,22 @@ function saveTutoringLink_(data) {
 function createNotification_(recipientEmail, type, title, message, courseId, relatedId) {
   const recipient=email_(recipientEmail); if(!recipient)return;
   notifications_().appendRow([Utilities.getUuid(),recipient,String(type||"info").slice(0,40),String(title||"Уведомление").slice(0,180),String(message||"").slice(0,500),String(courseId||""),String(relatedId||""),new Date().toISOString(),""]);
+}
+
+// Рассылает уведомление всем преподавателям, имеющим доступ к дисциплине,
+// и администратору. Это надёжнее, чем уведомлять только автора задания.
+function notifyCourseStaff_(courseId, type, title, message, relatedId) {
+  const sh=users_(), values=sh.getDataRange().getValues(), m=headerMap_(sh), sent={};
+  values.slice(1).forEach(function(row) {
+    const role=String(row[m.Role]||"").toLowerCase(), mail=email_(row[m.Email]);
+    if(!mail || sent[mail]) return;
+    const recipient={email:mail,role:role,courses:String(row[m.Courses]||"")};
+    if(role==="admin" || (role==="teacher" && hasCourseAccess_(recipient,courseId))) {
+      createNotification_(mail,type,title,message,courseId,relatedId);
+      sent[mail]=true;
+    }
+  });
+  return Object.keys(sent).length;
 }
 function getNotifications_(data) {
   const user=auth_(data),sh=notifications_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
@@ -1074,7 +1094,8 @@ function submitAssignment_(data) {
     appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt});
     const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
     if (i >= 0) updateMappedRecord_(sub, i + 2, record); else appendMappedRecord_(sub, record);
-    createNotification_(String(a[h.CreatedBy] || ""),"submission",attempt > 1 ? "Повторная отправка задания" : "Новый ответ на задание",student.name + " (" + student.group + ") отправил(а) работу: " + String(a[h.Title] || ""),cid,id);
+    notifyCourseStaff_(cid,"submission",attempt > 1 ? "Повторная отправка задания" : "Новый ответ на задание",
+      student.name + " (" + student.group + ") отправил(а) работу: " + String(a[h.Title] || "") + ". Откройте раздел «Задания и проверка работ».",id);
     return {success:true,submittedAt:now,attempt:attempt,submissionId:submissionId};
   } finally { lock.releaseLock(); }
 }
@@ -1133,12 +1154,32 @@ function setTopicAccess_(data) {
   return {success:true,open:data.open===true};
 }
 function getTestAttemptStatus_(data) {
-  const user=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
-  if(!courseId||!testId||!hasCourseAccess_(user,courseId)) throw new Error("Нет доступа к тесту.");
-  const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
+  const actor=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
+  if(!courseId||!testId) throw new Error("Укажите дисциплину и тест.");
+  let targetEmail=actor.email;
+  if(actor.role==="teacher"||actor.role==="admin") {
+    editor_(data,courseId);
+    targetEmail=email_(data.email);
+    if(!targetEmail) throw new Error("Выберите студента для проверки попыток.");
+    const target=userByEmail_(targetEmail);
+    if(!target||target.role!=="student"||!hasCourseAccess_(target,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
+  } else if(actor.role!=="student"||!hasCourseAccess_(actor,courseId)) {
+    throw new Error("Нет доступа к тесту.");
+  }
+  const isCustom=testId.indexOf("custom_")===0;
+  const baseId=isCustom?testId.slice(7):testId;
+  const keys=isCustom?[baseId,testId]:[testId];
+  let raw="";
+  for(let i=0;i<keys.length;i++) {
+    raw=settingValue_("testAttempts:"+targetEmail+":"+courseId+":"+keys[i]);
+    if(raw!=="") break;
+  }
   const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
-  const used=results_().getDataRange().getValues().slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===testId&&sameCourseId_(r[12]||courseId,courseId);}).length;
-  return {success:true,used:used,limit:limit,remaining:Math.max(0,limit-used),unlimited:false,allowed:used<limit};
+  const acceptedIds=isCustom?[testId,baseId]:[testId];
+  const used=results_().getDataRange().getValues().slice(1).filter(function(r){
+    return email_(r[0])===targetEmail&&acceptedIds.indexOf(String(r[3]||""))>=0&&sameCourseId_(r[12]||courseId,courseId);
+  }).length;
+  return {success:true,email:targetEmail,testId:testId,used:used,limit:limit,remaining:Math.max(0,limit-used),extraAttempts:Math.max(0,limit-1),unlimited:false,allowed:used<limit};
 }
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
@@ -1148,8 +1189,12 @@ function grantTestAttempts_(data) {
   if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
   const extra=Math.max(0,Math.min(20,Math.floor(Number(data.extraAttempts)||0)));
   const lock=LockService.getScriptLock();lock.waitLock(10000);
-  try { writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra}); }
-  finally {lock.releaseLock();}
+  try {
+    writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);
+    appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra});
+  } finally {lock.releaseLock();}
+  createNotification_(student.email,"attempts","Выданы дополнительные попытки",
+    "Преподаватель разрешил дополнительные попытки: "+extra+". Дисциплина: "+courseId+". Тест: "+testId+".",courseId,testId);
   return {success:true,extraAttempts:extra};
 }
 
@@ -1443,7 +1488,7 @@ function safeFinalExamQuestion_(entry,index) {
 function getFinalExam_(data) {
   const user=auth_(data),courseId=String(data.courseId||""),testId="__final__"+courseId;
   if(user.role!=="student"||!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к экзамену.");
-  const rows=results_().getDataRange().getValues(),prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
+  const rows=results_().getDataRange().getValues(),prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
   const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
   const attemptLimit=raw===""?1:1+Math.max(0,Number(raw)||0);
   if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
