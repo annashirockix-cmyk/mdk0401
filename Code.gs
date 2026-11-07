@@ -1136,9 +1136,9 @@ function getTestAttemptStatus_(data) {
   const user=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
   if(!courseId||!testId||!hasCourseAccess_(user,courseId)) throw new Error("Нет доступа к тесту.");
   const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
-  const hasPolicy=raw!=="",limit=hasPolicy?1+Math.max(0,Number(raw)||0):null;
-  const used=results_().getDataRange().getValues().slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===testId;}).length;
-  return {success:true,used:used,limit:limit,remaining:limit===null?null:Math.max(0,limit-used),unlimited:limit===null,allowed:limit===null||used<limit};
+  const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
+  const used=results_().getDataRange().getValues().slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===testId&&sameCourseId_(r[12]||courseId,courseId);}).length;
+  return {success:true,used:used,limit:limit,remaining:Math.max(0,limit-used),unlimited:false,allowed:used<limit};
 }
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
