@@ -176,8 +176,9 @@ window.renderQuestionBankPage=function(){
    const btn=this,status=document.getElementById("bankStatus");btn.disabled=true;
    const current=document.getElementById("bankImportBtn");if(current)current.disabled=true;
    try{
-    const all=[],seen={},courseIds=new Set(Object.keys(window.MDK_DATA||{}));
-    ["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"].forEach(x=>courseIds.add(x));
+    const all=[],seen={},courseIds=new Set(["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"]);
+    // Не перебираем исходные модули MDK_DATA.basic/technical:
+    // для импорта они представлены дисциплинами ENB/ENT (и объединённой EN).
     function add(cid,id,arr){
      if(!cid||!Array.isArray(arr)||!arr.length)return;
      const questions=arr.filter(q=>q&&typeof q==="object");if(!questions.length)return;
