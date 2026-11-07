@@ -173,7 +173,8 @@ test("group assignment workflow works before student onboarding and preserves st
   assert.match(afterGrade.feedback, /Отличная работа/);
   assert.equal(afterGrade.answer, "Исправленная версия");
   assert.equal(notifications.length, 3);
-  assert.equal(users.rows[3][7], r.originalPayload);
+  const unchangedStudentRow = users.rows.find(row => row[0] === "student@example.test");
+  assert.equal(unchangedStudentRow[7], r.originalPayload);
 });
 
 test("group assignments may be prepared without any connected students", () => {
