@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v192'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
+const CACHE_NAME = 'portal-cache-v193'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
 
 const STATIC_ASSETS = [
   './',
@@ -42,6 +42,7 @@ const STATIC_ASSETS = [
   './metrology-lab-plus.js',
   './metrology-complex-work.js',
   './metrology-analytics.js',
+  './metrology-adaptive.js',
   './materials/metrology/lab-measurement-protocol.html',
   './data-extra.js',
   './info.js',
