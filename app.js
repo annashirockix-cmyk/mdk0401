@@ -771,6 +771,16 @@ function setupLogin() {
         overlay.style.display = "none";
         window.unlockAchievement("welcome");
         location.hash = "#/";
+        if (isStudent && window.API && window.API.logActivity) {
+            window.API.logActivity({
+                eventType: "session_start",
+                details: "Успешный вход в портал",
+                route: "/",
+                pageTitle: "Начало сессии",
+                courseId: String(window.state.activeCourseId || ""),
+                clientAt: new Date().toISOString()
+            }).catch(function(error) { console.warn("Не удалось записать начало сессии", error); });
+        }
         if (window.loadGlobalCustomContent) window.loadGlobalCustomContent(function(){ window.router(); });
         else window.router();
     }
@@ -832,10 +842,24 @@ function setupLogin() {
 }
 
 window.handleLogout = function() {
+    // Событие отправляется до удаления токена: fetchAPI успевает приложить действующую сессию.
+    if (window.state && window.state.student && window.API && window.API.logActivity) {
+        try {
+            window.API.logActivity({
+                eventType: "session_end",
+                details: "Выход из портала",
+                route: location.hash.slice(1) || "/",
+                pageTitle: "Завершение сессии",
+                courseId: String(window.state.activeCourseId || ""),
+                clientAt: new Date().toISOString()
+            }).catch(function(error) { console.warn("Не удалось записать завершение сессии", error); });
+        } catch (error) { console.warn("Не удалось отправить событие завершения сессии", error); }
+    }
     if (window.API && window.API.logout) window.API.logout();
     window.state.student = null; window.state.staff = null;
     localStorage.removeItem("mdk.state"); window.renderUserChip();
-    document.getElementById("loginOverlay").style.display = "flex"; 
+    var overlay = document.getElementById("loginOverlay");
+    if (overlay) overlay.style.display = "flex";
     location.hash = "#/"; window.renderHomePage();
 };
 
