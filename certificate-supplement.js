@@ -18,7 +18,8 @@
     image3:{label:"Фон сертификата №3",image:"./assets/certificates/backgrounds/3.png"},
     image4:{label:"Фон сертификата №4",image:"./assets/certificates/backgrounds/4.png"},
     image5:{label:"Фон сертификата №5",image:"./assets/certificates/backgrounds/5.png"},
-    image6:{label:"Фон сертификата №6",image:"./assets/certificates/backgrounds/6.png"}
+    image6:{label:"Фон сертификата №6",image:"./assets/certificates/backgrounds/6.png"},
+    image7:{label:"Фон удостоверения / ID-карты",image:"./assets/images/id-card-bg.jpg"}
   };
   function preferenceKey(){var email=window.state&&window.state.student&&window.state.student.email||"guest";return "mdk.certificate.design.v1."+String(email).toLowerCase();}
   function readPrefs(){try{return JSON.parse(localStorage.getItem(preferenceKey())||"{}");}catch(e){return {};}}
