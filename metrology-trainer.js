@@ -54,7 +54,7 @@
       '<div class="card" style="padding:14px;margin-bottom:12px"><h2 style="margin:0 0 8px;font-size:20px">Задание: определи показание</h2><p style="margin:0 0 12px;color:var(--muted)">'+(kind==="caliper"?"Цена деления нониуса — 0,1 мм. Найди целое значение основной шкалы и совпавшую риску нониуса.":"Цена деления барабана — 0,01 мм. Сложи показание стебля и барабана.")+'</p>'+
       (kind==="caliper"?caliperSvg(q):micrometerSvg(q))+
       '<label for="mtAnswer" style="display:block;font-weight:700;margin:14px 0 6px">Твоё показание, мм</label><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="mtAnswer" inputmode="decimal" placeholder="Например, 24,7" style="max-width:220px;padding:11px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text)"><button id="mtCheck" class="btn btn-primary" type="button">Проверить</button><button id="mtNext" class="btn" type="button" disabled>Следующее задание →</button></div>'+
-      '<div id="mtFeedback" aria-live="polite" style="margin-top:12px"></div></div>'+
+      '<div id="mtFeedback" aria-live="polite" style="margin-top:12px"></div><div id="mtSaveStatus" aria-live="polite" style="margin-top:8px;color:var(--muted);font-size:13px"></div></div>'+
       '<details class="card" style="padding:12px"><summary style="cursor:pointer;font-weight:700">Памятка: как выполнять отсчёт</summary><ol><li>Проверь чистоту измерительных поверхностей и нулевое показание.</li><li>Установи прибор без перекоса и чрезмерного усилия.</li><li>Сначала считай основную шкалу, затем добавь долю по нониусу или барабану.</li><li>Запиши результат с единицей измерения.</li></ol><p style="color:var(--muted)">Это учебная визуализация, а не поверенный прибор. Результат тренажёра не заменяет измерение реальной детали.</p></details></section>';
       document.getElementById("mtCal").onclick=function(){kind="caliper";q=makeQuestion(kind);answered=false;render();};
       document.getElementById("mtMic").onclick=function(){kind="micrometer";q=makeQuestion(kind);answered=false;render();};
@@ -70,6 +70,12 @@
       var fb=document.getElementById("mtFeedback");
       fb.innerHTML='<div style="padding:12px;border-radius:9px;border:1px solid '+(ok?'#16a34a':'#d97706')+';background:var(--card-soft)"><strong>'+(ok?'✓ Верно!':'Нужно проверить расчёт.')+'</strong><p style="margin:6px 0">'+esc(q.explain)+'</p><small>Правильный ответ: <b>'+q.answer+' мм</b>. '+(ok?'Отличная работа.':'Повтори порядок отсчёта и попробуй следующее задание.')+'</small></div>';
       document.getElementById("mtCheck").disabled=true;document.getElementById("mtNext").disabled=false;
+      var student=window.state&&window.state.student;
+      var saveStatus=document.getElementById("mtSaveStatus");
+      if(student&&student.email&&window.API&&window.API.saveResult){
+        var stamp=Date.now(),testId="metrology_trainer_"+kind+"_"+stamp;
+        window.API.saveResult({email:student.email,name:student.name||student.fullName||student.email,group:student.group||"",courseId:"MET",testId:testId,testTitle:"Тренажёр метролога: "+(kind==="caliper"?"штангенциркуль":"микрометр"),grade:ok?5:2,score:ok?1:0,maxScore:1,percent:ok?100:0,feedback:ok?"Верный отсчёт измерительного прибора.":"Неверный отсчёт измерительного прибора.",payload:JSON.stringify({kind:kind,question:q,answer:raw,expected:q.answer,correct:ok}),date:new Date().toISOString().slice(0,10)}).then(function(r){if(!r||r.success===false)throw new Error(r&&r.error||"Сервер не подтвердил запись");saveStatus.textContent="Результат отправлен в журнал преподавателя.";}).catch(function(e){saveStatus.textContent="Не удалось сохранить результат: "+(e.message||e);});
+      }else if(saveStatus){saveStatus.textContent="Результат сохранён только на этом устройстве. Войди в аккаунт студента, чтобы отправить его преподавателю.";}
       var stat=app.querySelectorAll(".card[style*='padding:10px']");if(stat.length>=3){stat[0].querySelector("div").textContent=state.done;stat[1].querySelector("div").textContent=state.correct;stat[2].querySelector("div").textContent=(state.done?Math.round(state.correct/state.done*100):0)+"%";}
     }
     render();
