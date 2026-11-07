@@ -86,5 +86,9 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.ok(fs.existsSync(path.join(root, "materials/reference/method.pdf")));
   assert.match(workbook, /Учебный пример: цикл сверления/);
   assert.match(workbook, /Учебный пример: фрагмент УП для фрезерования/);
+  assert.match(workbook, /контур.*детал|элемент.*контура/);
+  assert.match(workbook, /траектор.*инструмент|элемент.*траектор/);
+  assert.match(workbook, /String\(courseId\)==="07\.01"\?""/);
+  assert.doesNotMatch(workbook, /Допустим, нужно выполнить производственную задачу/);
   assert.ok(workbook.includes('String(courseId)==="07.01"?null:'), "generic memes must be disabled for this workbook");
 });
