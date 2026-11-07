@@ -93,6 +93,7 @@ function handleRequest_(e) {
       case "gettopicaccess": result = getTopicAccess_(data); break;
       case "settopicaccess": result = setTopicAccess_(data); break;
       case "granttestattempts": result = grantTestAttempts_(data); break;
+      case "requesttestattempts": result = requestTestAttempts_(data); break;
       case "gettestattemptstatus": result = getTestAttemptStatus_(data); break;
       case "logproctorevent": result = logProctorEvent_(data); break;
       case "getproctorevents": result = getProctorEvents_(data); break;
@@ -1222,6 +1223,23 @@ function getTestAttemptStatus_(data) {
   }).length;
   return {success:true,email:targetEmail,testId:testId,used:used,limit:limit,remaining:Math.max(0,limit-used),extraAttempts:Math.max(0,limit-1),unlimited:false,allowed:used<limit};
 }
+function requestTestAttempts_(data) {
+  const student=auth_(data);
+  if(student.role!=="student") throw new Error("Запросить дополнительную попытку может только обучающийся.");
+  const courseId=String(data.courseId||""),testId=String(data.testId||"").trim();
+  if(!courseId||!testId||!hasCourseAccess_(student,courseId)) throw new Error("Нет доступа к выбранному тесту.");
+  const status=getTestAttemptStatus_(data);
+  if(status.allowed) throw new Error("У вас ещё есть доступные попытки ("+status.used+" из "+status.limit+").");
+  const cache=CacheService.getScriptCache(),requestKey="attempt_request:"+student.email+":"+courseId+":"+testId.slice(0,120);
+  if(cache.get(requestKey)) return {success:true,alreadyRequested:true,notified:0};
+  const relatedId=JSON.stringify({email:student.email,testId:testId});
+  const notified=notifyCourseStaff_(courseId,"attempt_request","Запрос дополнительной попытки",
+    "Студент: "+student.name+" · "+student.group+" · "+student.email+". Тест: "+testId+". Использовано: "+status.used+" из "+status.limit+". Просит разрешить ещё одну попытку.",relatedId);
+  if(!notified) throw new Error("Не найден преподаватель с доступом к этой дисциплине. Обратитесь к администратору.");
+  cache.put(requestKey,"1",600);
+  return {success:true,alreadyRequested:false,notified:notified,used:status.used,limit:status.limit};
+}
+
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
   const teacher=editor_(data,courseId);
@@ -1233,6 +1251,7 @@ function grantTestAttempts_(data) {
   try {
     writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);
     appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra});
+    CacheService.getScriptCache().remove("attempt_request:"+studentEmail+":"+courseId+":"+testId.slice(0,120));
   } finally {lock.releaseLock();}
   createNotification_(student.email,"attempts","Выданы дополнительные попытки",
     "Преподаватель разрешил дополнительные попытки: "+extra+". Дисциплина: "+courseId+". Тест: "+testId+".",courseId,testId);
