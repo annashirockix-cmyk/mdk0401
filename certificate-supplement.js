@@ -12,7 +12,13 @@
     white:{label:"Чистый белый",css:"#ffffff"},
     parchment:{label:"Светлый пергамент",css:"linear-gradient(135deg,#fffdf7 0%,#f5edda 100%)"},
     blueprint:{label:"Инженерный чертёж",css:"linear-gradient(135deg,#f4f8fc 0%,#e5eef7 100%)"},
-    pearl:{label:"Жемчужный",css:"linear-gradient(135deg,#fff 0%,#edf0f5 100%)"}
+    pearl:{label:"Жемчужный",css:"linear-gradient(135deg,#fff 0%,#edf0f5 100%)"},
+    image1:{label:"Фон сертификата №1",image:"./assets/certificates/backgrounds/1.png"},
+    image2:{label:"Фон сертификата №2",image:"./assets/certificates/backgrounds/2.png"},
+    image3:{label:"Фон сертификата №3",image:"./assets/certificates/backgrounds/3.png"},
+    image4:{label:"Фон сертификата №4",image:"./assets/certificates/backgrounds/4.png"},
+    image5:{label:"Фон сертификата №5",image:"./assets/certificates/backgrounds/5.png"},
+    image6:{label:"Фон сертификата №6",image:"./assets/certificates/backgrounds/6.png"}
   };
   function preferenceKey(){var email=window.state&&window.state.student&&window.state.student.email||"guest";return "mdk.certificate.design.v1."+String(email).toLowerCase();}
   function readPrefs(){try{return JSON.parse(localStorage.getItem(preferenceKey())||"{}");}catch(e){return {};}}
@@ -46,6 +52,7 @@
       #printable-cert[data-bg="blueprint"],.certificate-supplement[data-bg="blueprint"]{background:linear-gradient(135deg,#f4f8fc 0%,#e5eef7 100%)!important}
       #printable-cert[data-bg="pearl"],.certificate-supplement[data-bg="pearl"]{background:linear-gradient(135deg,#fff 0%,#edf0f5 100%)!important}
       #printable-cert[data-bg="white"],.certificate-supplement[data-bg="white"]{background:#fff!important}
+      #printable-cert[data-bg^="image"],.certificate-supplement[data-bg^="image"]{background-image:linear-gradient(rgba(255,255,255,.82),rgba(255,255,255,.82)),var(--cert-bg-image)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;}
       @media(max-width:600px){.certificate-supplement{padding:16px}.certificate-supplement table{font-size:11px}}
       @media print{
         @page{size:A4 portrait;margin:14mm}
@@ -61,7 +68,7 @@
   function applyDesign(design,bg){
     design=designs[design]?design:"classic";bg=backgrounds[bg]?bg:"white";
     var d=designs[design],cert=document.getElementById("printable-cert"),supp=document.querySelector(".certificate-supplement");
-    [cert,supp].forEach(function(x){if(!x)return;x.dataset.design=design;x.dataset.bg=bg;x.style.setProperty("--cert-accent",d.accent);x.style.setProperty("--cert-deep",d.deep);x.style.setProperty("--cert-soft",d.soft);});
+    [cert,supp].forEach(function(x){if(!x)return;x.dataset.design=design;x.dataset.bg=bg;x.style.setProperty("--cert-accent",d.accent);x.style.setProperty("--cert-deep",d.deep);x.style.setProperty("--cert-soft",d.soft);x.style.setProperty("--cert-bg-image",backgrounds[bg].image?"url(\""+backgrounds[bg].image+"\")":"none");});
     var key=preferenceKey();try{localStorage.setItem(key,JSON.stringify({design:design,bg:bg}));}catch(e){}
   }
   function makeChoicePanel(){
