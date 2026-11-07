@@ -595,7 +595,9 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             contentArea.innerHTML = "<p>Загружаем вопросы из защищённого банка…</p>";
             window.API.getBuiltInTest(courseId, serverTestId, serverBankIds).then(function(serverBank) {
                 if (!serverBank || !serverBank.success || !serverBank.questions || !serverBank.questions.length) {
-                    contentArea.innerHTML = "<p>Защищённый банк для этого теста ещё не импортирован. Обратитесь к преподавателю или администратору.</p>";
+                    var serverReason = serverBank && serverBank.error ? String(serverBank.error) :
+                        (serverBank && serverBank.notImported ? "В хранилище не найдены запрошенные банки." : "Сервер не вернул вопросы.");
+                    contentArea.innerHTML = '<div class="module"><h3>Не удалось загрузить защищённый тест</h3><p>Проверьте наличие банка вопросов для дисциплины МДК 07.01.</p><p><b>Ответ сервера:</b> ' + safeText(serverReason) + '</p><p style="font-size:12px;color:var(--muted)">Дисциплина: ' + safeText(courseId) + '<br>Тест: ' + safeText(serverTestId) + '<br>Банки: ' + safeText(serverBankIds.join(", ")) + '</p><p>Если сервер сообщает, что действие неизвестно или банк не найден, администратору нужно проверить публикацию Google Apps Script и содержимое закрытого листа QuestionBank.</p></div>';
                     return;
                 }
                 var secureQuestions = serverBank.questions, secureAnswers = [], secureIndex = 0, selectedMulti = {};
