@@ -52,7 +52,7 @@
                 <option value="02.01">МДК 02.01 (Сборка)</option>
                 <option value="02.02">МДК 02.02 (Программирование)</option>
                 <option value="MCAM">Mastercam</option>
-                <optgroup label="Учебные дисциплины"><option value="ENB">Английский — базовый</option><option value="ENT">Английский — технический</option><option value="MAT">Материаловедение</option><option value="OT">Охрана труда</option><option value="PFI">ПФИ</option></optgroup>
+                <optgroup label="Учебные дисциплины"><option value="ENB">Английский — базовый</option><option value="ENT">Английский — технический</option><option value="MAT">Материаловедение</option><option value="MET">Метрология</option><option value="OT">Охрана труда</option><option value="PFI">ПФИ</option></optgroup>
             </select>
         </div>
         <div class="topbar-status">
@@ -127,6 +127,7 @@
     <script src="./api.js?v=32"></script>
     <script src="./data-global.js?v=6"></script>
     <script src="./data-0701.js"></script>
+    <script src="./gcode-reference.js?v=1"></script>
     <script src="./data-0401.js"></script>
     <script src="./data-0201.js"></script>
     <script src="./data-0202.js"></script>
@@ -140,6 +141,8 @@
     <script src="./english-assessment-data.js?v=1"></script>
     <script src="./data-pfi.js?v=3"></script>
     <script src="./data-safety.js"></script>
+    <script src="./safety-accident-lessons.js?v=1"></script>
+    <script src="./data-metrology.js?v=1"></script>
     <script src="./data-extra.js"></script>
     <script src="./info.js"></script>
     <script src="./links.js"></script>
@@ -220,7 +223,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=168', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=169', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
