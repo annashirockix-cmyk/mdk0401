@@ -882,7 +882,7 @@ window.router = function() {
         var activityKey = activityRoute + "|" + activityCourse;
         if (window._lastActivityRouteKey !== activityKey) {
             window._lastActivityRouteKey = activityKey;
-            window.API.logActivity({eventType: "page_view", route: activityRoute, pageTitle: (document.querySelector("#app h1") || document.querySelector("#app h2"))?.textContent || document.title || "", courseId: activityCourse, clientAt: new Date().toISOString()})
+            window.API.logActivity({eventType: "page_view", route: activityRoute, pageTitle: activityRoute, courseId: activityCourse, clientAt: new Date().toISOString()})
                 .catch(function (error) { console.warn("Не удалось записать переход в журнал активности", error); });
         }
     }
