@@ -1240,6 +1240,16 @@ function requestTestAttempts_(data) {
   return {success:true,alreadyRequested:false,notified:notified,used:status.used,limit:status.limit};
 }
 
+function resolveAttemptRequestNotifications_(studentEmail,courseId,testId) {
+  const sh=notifications_(),rows=sh.getDataRange().getValues(),m=headerMap_(sh),stamp=new Date().toISOString();
+  rows.slice(1).forEach(function(row,i){
+    if(String(row[m.Type]||"")!=="attempt_request"||String(row[m.ReadAt]||""))return;
+    if(!sameCourseId_(row[m.CourseId],courseId))return;
+    let ref={};try{ref=JSON.parse(String(row[m.RelatedId]||"{}"));}catch(e){}
+    if(email_(ref.email)===email_(studentEmail)&&String(ref.testId||"")===String(testId))updateMappedRecord_(sh,i+2,{ReadAt:stamp});
+  });
+}
+
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
   const teacher=editor_(data,courseId);
@@ -1251,6 +1261,7 @@ function grantTestAttempts_(data) {
   try {
     writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);
     appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra});
+    resolveAttemptRequestNotifications_(studentEmail,courseId,testId);
     CacheService.getScriptCache().remove("attempt_request:"+studentEmail+":"+courseId+":"+testId.slice(0,120));
   } finally {lock.releaseLock();}
   createNotification_(student.email,"attempts","Выданы дополнительные попытки",
