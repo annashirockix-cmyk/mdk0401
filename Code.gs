@@ -86,6 +86,9 @@ function handleRequest_(e) {
       case "getmycourseresults": result = getMyCourseResults_(data); break;
       case "savegcodeprogress": result = saveGCodeProgress_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
+      case "gettopicaccess": result = getTopicAccess_(data); break;
+      case "settopicaccess": result = setTopicAccess_(data); break;
+      case "granttestattempts": result = grantTestAttempts_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
@@ -799,6 +802,49 @@ function gradeAssignment_(data) {
   return {success:true};
 }
 
+
+/* ---------- Teacher controls: topic access and test attempts ---------- */
+function settingValue_(key) {
+  const sh=settings_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh);
+  for(let i=1;i<vals.length;i++) if(String(vals[i][m.Key]||"")===key) return String(vals[i][m.Value]||"");
+  return "";
+}
+function writeSetting_(key,value,actorEmail) {
+  const sh=settings_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), now=new Date().toISOString();
+  let row=0;
+  for(let i=1;i<vals.length;i++) if(String(vals[i][m.Key]||"")===key){row=i+1;break;}
+  const record=[key,String(value),now,String(actorEmail||"")];
+  if(row) sh.getRange(row,1,1,record.length).setValues([record]); else sh.appendRow(record);
+}
+function getTopicAccess_(data) {
+  const user=auth_(data), courseId=String(data.courseId||""), topicId=String(data.topicId||"");
+  if(!courseId||!topicId||!hasCourseAccess_(user,courseId)) throw new Error("Нет доступа к теме.");
+  const raw=settingValue_("topicAccess:"+courseId+":"+topicId);
+  let policy={open:true}; try{if(raw)policy=JSON.parse(raw)||policy;}catch(e){}
+  return {success:true,open:policy.open!==false};
+}
+function setTopicAccess_(data) {
+  const courseId=String(data.courseId||""), topicId=String(data.topicId||"");
+  if(!courseId||!topicId) throw new Error("Не указана дисциплина или тема.");
+  const teacher=editor_(data,courseId);
+  writeSetting_("topicAccess:"+courseId+":"+topicId,JSON.stringify({open:data.open===true}),teacher.email);
+  return {success:true,open:data.open===true};
+}
+function grantTestAttempts_(data) {
+  const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
+  const teacher=editor_(data,courseId);
+  if(!testId||!studentEmail) throw new Error("Выберите тест и студента.");
+  const student=userByEmail_(studentEmail);
+  if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
+  const rows=content_().getDataRange().getValues();
+  let found=false;
+  rows.slice(1).forEach(function(r){if(String(r[0])===testId&&String(r[1])===courseId&&String(r[3])==="test")found=true;});
+  if(!found) throw new Error("Тест не найден в выбранной дисциплине.");
+  const extra=Math.max(0,Math.min(20,Math.floor(Number(data.extraAttempts)||0)));
+  writeSetting_("testAttempts:"+studentEmail+":"+testId,String(extra),teacher.email);
+  return {success:true,extraAttempts:extra};
+}
+
 /* ---------- Teacher-created topics, lectures and tests ---------- */
 
 function getCustomContent_(data) {
@@ -857,6 +903,11 @@ function submitCustomTest_(data) {
   });
   if (!record) throw new Error("Тест не найден.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
+  const attemptKey="custom_"+id;
+  const prior=results_().getDataRange().getValues().slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey;}).length;
+  const extra=Number(settingValue_("testAttempts:"+user.email+":"+id))||0;
+  const limit=1+Math.max(0,extra);
+  if(prior>=limit) throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю за дополнительной попыткой.");
   const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   const answers = Array.isArray(data.answers) ? data.answers : [];
   if (!questions.length || answers.length !== questions.length) throw new Error("Ответьте на все вопросы теста.");
