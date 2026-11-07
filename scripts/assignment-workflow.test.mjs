@@ -53,6 +53,7 @@ function runtime() {
   const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","LegacyNote"]);
   users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01,EN","","","",""]);
   users.appendRow(["other.teacher@example.test","","Другой преподаватель","","teacher","","MAT","","","",""]);
+  users.appendRow(["english.teacher@example.test","","Преподаватель английского","","teacher","","ENB","","","",""]);
   const payload = JSON.stringify({ xp: 135, manualGrades: { "07.01": 4 }, avatar: "gear", custom: { keep: true } });
   users.appendRow(["student@example.test","","Иван Иванов","ТО-21","student","","07.01",payload,"","",""]);
   users.appendRow(["other.student@example.test","","Пётр Петров","ТО-22","student","","07.01","{}","","",""]);
@@ -71,6 +72,7 @@ function runtime() {
   const tokenUsers = {
     teacherToken: "teacher@example.test",
     otherTeacherToken: "other.teacher@example.test",
+    englishTeacherToken: "english.teacher@example.test",
     studentToken: "student@example.test",
     otherStudentToken: "other.student@example.test",
     legacyEnglishToken: "legacy.english@example.test"
@@ -217,6 +219,9 @@ test("legacy EN course access is respected for ENB individual assignments", () =
   assert.equal(created.recipients, 1);
   const visible = r.sandbox.getAssignments_({ token: "legacyEnglishToken" });
   assert.equal(visible.assignments.length, 1);
+  const englishTeacherStudents = r.sandbox.getStudents_({ token: "englishTeacherToken" });
+  const legacyStudent = englishTeacherStudents.students.find(student => student.email === "legacy.english@example.test");
+  assert.ok(legacyStudent.courses.includes("EN"));
 });
 
 test("assignment UI, API wiring and offline cache stay connected", () => {
