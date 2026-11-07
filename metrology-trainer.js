@@ -16,25 +16,24 @@
       explain:"Стебель: "+sleeve.toFixed(1)+" мм. Барабан: "+drum+" делений × 0,01 мм = "+(drum*0.01).toFixed(2)+" мм. Показание = "+(sleeve+drum*0.01).toFixed(2)+" мм."};
   }
   function caliperSvg(q){
-    var x0=90,scale=16,zero=x0+q.tick*scale/10;
-    var s='<svg viewBox="0 0 650 170" role="img" aria-label="Схема основной шкалы и нониуса штангенциркуля" style="width:100%;max-width:650px;background:#f8fafc;border-radius:10px">';
-    s+='<rect x="24" y="48" width="602" height="42" rx="4" fill="#dbe4ec" stroke="#64748b"/><text x="28" y="35" font-size="13" fill="#334155">Основная шкала · 1 мм</text>';
-    for(var i=0;i<=34;i++){var x=35+i*16;var major=i%5===0;s+='<line x1="'+x+'" y1="48" x2="'+x+'" y2="'+(major?70:61)+'" stroke="#334155" stroke-width="1.3"/>';if(major)s+='<text x="'+(x-4)+'" y="83" font-size="10" fill="#334155">'+(i/1)+'</text>';}
-    s+='<rect x="24" y="105" width="602" height="38" rx="4" fill="#cbd5e1" stroke="#64748b"/><text x="28" y="100" font-size="13" fill="#334155">Нониус · 0,1 мм</text>';
-    s+='<line x1="'+zero+'" y1="105" x2="'+zero+'" y2="143" stroke="#0f766e" stroke-width="3"/>';
-    for(var j=0;j<=10;j++){var vx=zero+j*scale*0.9;s+='<line x1="'+vx+'" y1="105" x2="'+vx+'" y2="'+(j%5===0?130:119)+'" stroke="#334155" stroke-width="1.3"/>';if(j%5===0)s+='<text x="'+(vx-3)+'" y="138" font-size="10" fill="#334155">'+j+'</text>';}
-    s+='<text x="475" y="160" font-size="11" fill="#475569">Учебная схема, не в масштабе</text></svg>';
+    var x0=110,step=26,zero=x0+8*step+q.tick*2.6;
+    var s='<svg viewBox="0 0 650 178" role="img" aria-label="Шкала штангенциркуля с основной шкалой и нониусом" style="width:100%;max-width:650px;background:#f8fafc;border-radius:10px">';
+    s+='<text x="18" y="22" font-size="13" fill="#334155">Основная шкала · деление 1 мм</text><line x1="20" y1="75" x2="630" y2="75" stroke="#64748b" stroke-width="2"/>';
+    for(var i=0;i<21;i++){var x=x0+i*step;s+='<line x1="'+x+'" y1="43" x2="'+x+'" y2="'+(i%5===0?75:61)+'" stroke="#334155" stroke-width="1.4"/>';if(i%2===0)s+='<text x="'+(x-4)+'" y="91" font-size="10" fill="#334155">'+i+'</text>';}
+    s+='<text x="18" y="119" font-size="13" fill="#334155">Нониус · деление 0,1 мм</text><line x1="20" y1="151" x2="630" y2="151" stroke="#64748b" stroke-width="2"/>';
+    s+='<line x1="'+zero+'" y1="121" x2="'+zero+'" y2="158" stroke="#0f766e" stroke-width="3"/><text x="'+(zero-4)+'" y="174" font-size="10" fill="#0f766e">0</text>';
+    for(var j=1;j<=10;j++){var vx=zero+j*step*0.9;var match=j===q.tick;s+='<line x1="'+vx+'" y1="129" x2="'+vx+'" y2="'+(match?160:143)+'" stroke="'+(match?'#dc2626':'#334155')+'" stroke-width="'+(match?3:1.3)+'"/>';s+='<text x="'+(vx-3)+'" y="174" font-size="10" fill="'+(match?'#dc2626':'#334155')+'">'+j+'</text>';}
+    s+='<text x="430" y="22" font-size="11" fill="#475569">Найди совпавшую риску</text></svg>';
     return s;
   }
   function micrometerSvg(q){
-    var s='<svg viewBox="0 0 650 165" role="img" aria-label="Схема стебля и барабана микрометра" style="width:100%;max-width:650px;background:#f8fafc;border-radius:10px">';
-    s+='<rect x="30" y="48" width="430" height="55" rx="8" fill="#dbe4ec" stroke="#64748b"/><text x="34" y="34" font-size="13" fill="#334155">Стебель · шкала 0,5 мм</text>';
-    for(var i=0;i<40;i++){var x=42+i*10;var major=i%2===0;s+='<line x1="'+x+'" y1="'+(major?48:62)+'" x2="'+x+'" y2="81" stroke="#334155"/>';if(i%10===0)s+='<text x="'+(x-4)+'" y="95" font-size="10" fill="#334155">'+(i/2)+'</text>';}
-    s+='<line x1="30" y1="75" x2="460" y2="75" stroke="#0f766e" stroke-width="2"/>';
-    s+='<rect x="460" y="38" width="155" height="76" rx="18" fill="#cbd5e1" stroke="#475569"/><text x="475" y="28" font-size="13" fill="#334155">Барабан · 0,01 мм</text>';
-    for(var j=0;j<50;j++){var y=44+j*1.25;if(j%5===0)s+='<line x1="460" y1="'+y+'" x2="477" y2="'+y+'" stroke="#334155" stroke-width="1.2"/>';}
-    s+='<path d="M460 75 L482 75" stroke="#dc2626" stroke-width="3"/><text x="493" y="80" font-size="15" fill="#0f172a" font-weight="bold">'+q.drum+'</text>';
-    s+='<text x="475" y="132" font-size="11" fill="#475569">Совмещённое деление барабана</text></svg>';
+    var s='<svg viewBox="0 0 650 180" role="img" aria-label="Шкала стебля и барабана микрометра" style="width:100%;max-width:650px;background:#f8fafc;border-radius:10px">';
+    s+='<text x="20" y="23" font-size="13" fill="#334155">Стебель · основная шкала 0,5 мм</text><rect x="20" y="45" width="430" height="70" rx="8" fill="#dbe4ec" stroke="#64748b"/>';
+    for(var i=0;i<32;i++){var x=35+i*12;var major=i%2===0;s+='<line x1="'+x+'" y1="'+(major?54:68)+'" x2="'+x+'" y2="91" stroke="#334155" stroke-width="1.2"/>';if(i%4===0)s+='<text x="'+(x-4)+'" y="107" font-size="10" fill="#334155">'+(i/2)+'</text>';}
+    s+='<line x1="20" y1="77" x2="450" y2="77" stroke="#0f766e" stroke-width="2"/><text x="20" y="139" font-size="12" fill="#334155">Барабан · 50 делений, цена деления 0,01 мм</text>';
+    s+='<rect x="20" y="146" width="610" height="24" rx="5" fill="#cbd5e1" stroke="#64748b"/>';
+    for(var j=0;j<50;j++){var tx=28+j*12;var selected=j===q.drum;s+='<line x1="'+tx+'" y1="'+(selected?142:151)+'" x2="'+tx+'" y2="166" stroke="'+(selected?'#dc2626':'#334155')+'" stroke-width="'+(selected?3:1)+'"/>';if(j%10===0)s+='<text x="'+(tx-3)+'" y="139" font-size="10" fill="#334155">'+j+'</text>';}
+    s+='<text x="475" y="62" font-size="12" fill="#475569">Совмести отсчёт</text><text x="475" y="84" font-size="19" font-weight="bold" fill="#0f766e">по индексу</text></svg>';
     return s;
   }
   window.renderMetrologyTrainer=function(){
