@@ -1242,6 +1242,7 @@ function requestTestAttempts_(data) {
   const notified=notifyCourseStaff_(courseId,"attempt_request","Запрос дополнительной попытки",
     "Студент: "+student.name+" · "+student.group+" · "+student.email+". Тест: "+testId+". Использовано: "+status.used+" из "+status.limit+". Просит разрешить ещё одну попытку.",relatedId);
   if(!notified) throw new Error("Не найден преподаватель с доступом к этой дисциплине. Обратитесь к администратору.");
+  appendAttemptAudit_({EventType:"attempts_requested",ActorEmail:student.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:testId,ExtraAttempts:1});
   cache.put(requestKey,"1",600);
   return {success:true,alreadyRequested:false,notified:notified,used:status.used,limit:status.limit};
 }
