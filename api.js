@@ -15,7 +15,23 @@ function fetchAPI(action, params, method, timeoutMs) {
       var result;try{result=JSON.parse(raw);}catch(e){throw new Error("Сервер вернул некорректный JSON.");}
       if(result&&result.error&&/сессия|авторизац|войдите/i.test(result.error)){try{sessionStorage.removeItem("mdk.session");}catch(e){}}
       return result;})
-    .catch(function(err){clearTimeout(timer);if(timedOut){var timeoutError=new Error("Сервер не ответил за "+Math.round(timeoutMs/1000)+" сек. Операция могла завершиться на сервере; проверьте банк перед повторным запуском.");timeoutError.name="TimeoutError";console.error("API ["+action+"]",timeoutError);throw timeoutError;}console.error("API ["+action+"]",err);throw err;});
+    .catch(function(err){
+       clearTimeout(timer);
+       if(timedOut){
+         var timeoutError=new Error("Тайм-аут: Google Apps Script не ответил за "+Math.round(timeoutMs/1000)+" сек.");
+         timeoutError.name="TimeoutError";timeoutError.action=action;
+         console.error("API ["+action+"] timeout",timeoutError);throw timeoutError;
+       }
+       var name=(err&&err.name)||"Error",message=(err&&err.message)||String(err||"неизвестная ошибка");
+       var diagnostic;
+       if(name==="AbortError") diagnostic="Запрос был отменён браузером или расширением (AbortError).";
+       else if(name==="TypeError"||/fetch|network|cors/i.test(message)) diagnostic="Браузер не смог получить ответ от Google Apps Script. Возможны CORS, блокировка сети/расширения или проблема перенаправления Google.";
+       else diagnostic=message;
+       var wrapped=new Error(diagnostic+" [действие: "+action+"; тип: "+name+"; исходное сообщение: "+message+"]");
+       wrapped.name=name;wrapped.cause=err;wrapped.action=action;
+       console.error("API ["+action+"] request failed", {name:name,message:message,stack:err&&err.stack,url:APPS_SCRIPT_URL});
+       throw wrapped;
+     });
 }
 window.API = {
  login:function(email,password){return fetchAPI("login",{email:email,password:password},"POST").then(function(r){if(r&&r.success&&r.token){try{sessionStorage.setItem("mdk.session",r.token);}catch(e){}}return r;});},
