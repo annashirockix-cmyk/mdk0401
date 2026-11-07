@@ -1392,7 +1392,7 @@ function getFinalExam_(data) {
   const bank=allFinalExamEntries_(courseId);if(!bank.length){
     const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),available=[];
     vals.slice(1).forEach(function(row){
-      if(String(row[m.CourseId]||"").trim()===courseId.trim()){
+      if(sameCourseId_(row[m.CourseId], courseId)){
         const id=String(row[m.BankId]||"").trim();if(id&&available.indexOf(id)<0)available.push(id);
       }
     });
