@@ -95,11 +95,11 @@ if(originalInline)window.startInlineTest=function(topicId,selfWorkCode){
  if(!student||!window.API||!window.API.getTestAttemptStatus)return originalInline.apply(this,arguments);
  const cid=String(state.activeCourseId||"07.01");
  const testId=selfWorkCode!==null&&selfWorkCode!==undefined?("self_"+topicId+"_"+(typeof selfWorkCode==="number"?selfWorkCode:0)):("test_"+topicId);
- const area=document.getElementById("topicContent");if(area){area.dataset.testId=testId;area.dataset.proctorAssessment="1";}
+ const area=document.getElementById("topicContent");if(area){area.dataset.testId=testId;area.dataset.proctorAssessment="0";}
  if(area)area.innerHTML='<p>Проверяем доступные попытки…</p>';
  window.API.getTestAttemptStatus(cid,testId).then(function(r){
-   if(!r||r.allowed===false){if(area)area.innerHTML='<div class="module"><h3>Попытки закончились</h3><p>Использовано: '+esc(r&&r.used||0)+' из '+esc(r&&r.limit||1)+'. Обратитесь к преподавателю за дополнительной попыткой.</p></div>';return;}
-   originalInline.apply(window,[topicId,selfWorkCode]);
+   if(!r||r.allowed===false){if(area){area.dataset.proctorAssessment="0";area.innerHTML='<div class="module"><h3>Попытки закончились</h3><p>Использовано: '+esc(r&&r.used||0)+' из '+esc(r&&r.limit||1)+'. Обратитесь к преподавателю за дополнительной попыткой.</p></div>';}return;}
+   if(area)area.dataset.proctorAssessment="1";originalInline.apply(window,[topicId,selfWorkCode]);
  }).catch(function(e){if(area)area.innerHTML='<div class="module">Не удалось проверить доступ к тесту: '+esc(e.message||"ошибка сервера")+'. Повторите попытку позже.</div>';});
 };
 const oldTopic=window.renderTopicPage;
