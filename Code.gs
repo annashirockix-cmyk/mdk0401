@@ -582,7 +582,7 @@ function saveTutoringLink_(data) {
   const courseId=String(data.courseId||""),teacher=editor_(data,courseId);
   const url=String(data.url||"").trim(),title=String(data.title||"Запись на дополнительные занятия").trim().slice(0,120);
   const description=String(data.description||"").trim().slice(0,500);
-  if(url&&!/^https?:\\/\\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
+  if(url&&!/^https?:\/\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
   if(url.length>1000)throw new Error("Слишком длинная ссылка.");
   writeSetting_("tutoring:"+courseId,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description}),teacher.email);
   return {success:true,link:{url:url,title:title,description:description}};
