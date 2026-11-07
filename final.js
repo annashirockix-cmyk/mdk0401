@@ -69,7 +69,7 @@ function renderExamQuestion(question, number) {
   var card = examNode("section", "question");
   card.style.cssText = "margin-bottom:16px;padding:16px;background:var(--card-soft);border:1px solid var(--border);border-radius:10px;";
   var type = question.type || "mc";
-  var title = (number + 1) + ". " + question.q;
+  var title = (number + 1) + ". " + (question.q || question.question || "Вопрос без формулировки");
   card.appendChild(examNode("div", "q-text", title)).style.cssText = "font-weight:700;line-height:1.5;margin-bottom:12px;";
   if (question.context) {
     var context = examNode("div", "exam-context", question.context);
