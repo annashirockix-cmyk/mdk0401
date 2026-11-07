@@ -553,6 +553,12 @@ function saveResult_(data) {
   const testId = String(data.testId || "test");
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
   const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId));
+  if(user.role==="student"&&(testId.indexOf("test_")===0||/^self_.+_\\d+$/.test(testId))){
+    const topicId=testId.indexOf("test_")===0?testId.slice(5):testId.replace(/^self_(.+)_\\d+$/,"$1");
+    const ids=testId.indexOf("test_")===0?["topic_"+topicId,"hard_"+topicId]:[testId,"topic_"+topicId];
+    const resolved=resolvedBuiltInBankIds_(courseId,ids);
+    if(builtInQuestions_(courseId,resolved).length)throw new Error("Встроенные тесты должны отправляться через защищённую серверную проверку.");
+  }
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const sheet=results_(),values=sheet.getDataRange().getValues();
