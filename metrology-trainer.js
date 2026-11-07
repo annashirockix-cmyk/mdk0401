@@ -7,7 +7,7 @@
   function rnd(n){return Math.floor(Math.random()*n);}
   function makeQuestion(kind){
     if(kind==="caliper"){
-      var whole=12+rnd(30), tick=1+rnd(9), price=0.1;
+      var whole=8, tick=1+rnd(9), price=0.1;
       return {kind:kind,whole:whole,tick:tick,price:price,answer:(whole+tick*price).toFixed(2),unit:"мм",
         explain:"Основная шкала: "+whole+" мм. Совпавшая риска нониуса: "+tick+". Цена деления: 0,1 мм. Показание = "+whole+" + "+tick+" × 0,1 = "+(whole+tick*price).toFixed(2)+" мм."};
     }
