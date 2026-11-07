@@ -87,7 +87,7 @@ window.renderTeacherControlsPage=function(){
       const count=Array.isArray(bank.questions)?bank.questions.length:0;
       if(!count)continue;
       if(count>1000)throw Error("Банк "+bank.bankId+" содержит "+count+" вопросов. Сервер принимает не более 1000 вопросов в одном банке.");
-      if(batch.length>=4||batchQuestions+count>2000)await sendImportBatch();
+      if(batch.length>=1||batchQuestions+count>2000)await sendImportBatch();
       batch.push(bank);batchQuestions+=count;
      }
      await sendImportBatch();
@@ -220,7 +220,7 @@ window.renderQuestionBankPage=function(){
     for(const bank of all){
      const n=bank.questions.length;
      if(n>1000)throw new Error("Банк "+bank.courseId+"/"+bank.bankId+" содержит "+n+" вопросов (лимит 1000).");
-     if(batch.length>=4||batchSize+n>2000)await send();
+     if(batch.length>=1||batchSize+n>2000)await send();
      batch.push(bank);batchSize+=n;
     }
     await send();
