@@ -505,12 +505,9 @@ function protectedQuestionBankMap_() {
 }
 function isProtectedAssessment_(testId,courseId,bankMap) {
   const id=String(testId||""),map=bankMap||{};
+  if(id.indexOf("__final__")===0||id.indexOf("custom_")===0)return true;
   function protectedFor(cid) {
     const banks=map[cid]||{};
-    if(id.indexOf("__final__")===0){
-      const examCourse=cid||id.slice("__final__".length),examBanks=map[examCourse]||{};
-      return Object.keys(examBanks).some(function(bank){return /^exam_(primary|extra)$/.test(bank)||bank==="mdk_extra"||/^topic_|^hard_|^self_/.test(bank);});
-    }
     if(id.indexOf("test_")===0){
       const topic=id.slice(5);
       return !!(banks["topic_"+topic]||banks["hard_"+topic]);
@@ -598,7 +595,7 @@ function saveResult_(data) {
   const testId = String(data.testId || "test");
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
   const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId));
-  if(user.role==="student"&&/^__final__/.test(testId)&&allFinalExamEntries_(courseId).length)throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
+  if(user.role==="student"&&/^__final__/.test(testId))throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
   if(user.role==="student"&&(testId.indexOf("test_")===0||/^self_.+_\d+$/.test(testId))){
     const topicId=testId.indexOf("test_")===0?testId.slice(5):testId.replace(/^self_(.+)_\d+$/,"$1");
     const ids=testId.indexOf("test_")===0?["topic_"+topicId,"hard_"+topicId]:[testId,"topic_"+topicId];
