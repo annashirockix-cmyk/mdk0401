@@ -631,7 +631,7 @@ function saveResult_(data) {
   if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
   const testId = String(data.testId || "test");
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
-  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId));
+  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId)||/^english_/.test(testId));
   if(user.role==="student"&&/^__final__/.test(testId))throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
   if(user.role==="student"&&(testId.indexOf("test_")===0||/^self_.+_\d+$/.test(testId))){
     const topicId=testId.indexOf("test_")===0?testId.slice(5):testId.replace(/^self_(.+)_\d+$/,"$1");
@@ -642,13 +642,11 @@ function saveResult_(data) {
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const sheet=results_(),values=sheet.getDataRange().getValues();
-    const prior=values.slice(1).filter(function(row){return email_(row[0])===email&&String(row[3])===testId;}).length;
+    const prior=values.slice(1).filter(function(row){return email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     if(assessment){
       const raw=settingValue_("testAttempts:"+email+":"+courseId+":"+testId);
-      if(raw!==""){
-        const limit=1+Math.max(0,Number(raw)||0);
-        if(prior>=limit)throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю.");
-      }
+      const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
+      if(prior>=limit)throw new Error("Работа уже завершена ("+prior+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
     }
     const attempts=prior+1;
     const rawGrade=data.grade===undefined||data.grade===null||data.grade===""?0:Math.max(0,Math.min(5,Number(data.grade)||0));
@@ -682,7 +680,8 @@ function logProctorEvent_(data) {
     const attemptNo=resultRows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length+1;
     let previous=0;
     vals.slice(1).forEach(function(row){
-      if(email_(row[m.StudentEmail])===user.email&&String(row[m.CourseId]||"")===courseId&&String(row[m.TestId]||"")===testId&&Number(row[m.AttemptNo]||1)===attemptNo)previous=Math.max(previous,Number(row[m.ViolationNo])||0);
+      // Счётчик нарушений ведётся по всему тесту и не сбрасывается при новой попытке.
+      if(email_(row[m.StudentEmail])===user.email&&String(row[m.CourseId]||"")===courseId&&String(row[m.TestId]||"")===testId)previous=Math.max(previous,Number(row[m.ViolationNo])||0);
     });
     const violationNo=previous+1,action=violationNo===1?"warning":"sanction";
     const penaltyPoints=Math.min(30,Math.max(0,violationNo-1)*10);
@@ -1310,11 +1309,9 @@ function getBuiltInTest_(data) {
   const bankIds=Array.isArray(data.bankIds)?data.bankIds.map(String).slice(0,10):[];
   if(user.role!=="student"||!courseId||!testId||!bankIds.length||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к тесту.");
   const policy=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
-  if(policy!==""){
-    const limit=1+Math.max(0,Number(policy)||0);
-    const used=results_().getDataRange().getValues().slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
-    if(used>=limit)throw new Error("Попытки закончились ("+used+" из "+limit+"). Обратитесь к преподавателю.");
-  }
+  const limit=policy===""?1:1+Math.max(0,Number(policy)||0);
+  const used=results_().getDataRange().getValues().slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
+  if(used>=limit)throw new Error("Работа уже завершена ("+used+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
   const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds),entries=builtInQuestions_(courseId,resolvedIds);
   if(!entries.length){
     const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),available=[];
@@ -1396,10 +1393,8 @@ function submitBuiltInTest_(data) {
     const sh=results_(),rows=sh.getDataRange().getValues();
     const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
-    if(raw!==""){
-      const limit=1+Math.max(0,Number(raw)||0);
-      if(prior>=limit)throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю.");
-    }
+    const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
+    if(prior>=limit)throw new Error("Работа уже завершена ("+prior+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo);
     const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=gradeFromPercent_(percent),score=Math.round(entries.length*percent)/100;
     appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:String(data.testTitle||testId),Grade:grade,Score:score,MaxScore:entries.length,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:JSON.stringify({answers:answers}).slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
