@@ -11,6 +11,8 @@ document.addEventListener("fullscreenchange",function(){if(active&&!document.ful
 document.addEventListener("copy",function(e){sync();if(active)send("copy_attempt","Событие копирования в области страницы.");},true);
 document.addEventListener("paste",function(e){sync();if(active)send("paste_attempt","Событие вставки в области страницы.");},true);
 document.addEventListener("contextmenu",function(e){sync();if(active)send("contextmenu_attempt","Вызов контекстного меню.");},true);
+document.addEventListener("keydown",function(e){sync();if(!active)return;if(e.key==="PrintScreen")send("screenshot_shortcut","Браузер получил клавишу PrintScreen; фактическое создание снимка не подтверждается.");if((e.ctrlKey||e.metaKey)&&e.shiftKey&&String(e.key).toLowerCase()==="i")send("devtools_shortcut","Комбинация открытия инструментов разработчика.");},true);
+document.addEventListener("click",function(e){sync();if(!active)return;var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(a){try{var u=new URL(a.href,location.href);if(u.origin!==location.origin)send("external_link","Переход по внешней ссылке: "+u.hostname);}catch(ignore){}}},true);
 var observer=new MutationObserver(sync);observer.observe(document.documentElement,{childList:true,subtree:true});
 window.addEventListener("hashchange",function(){setTimeout(sync,0);});
 document.addEventListener("DOMContentLoaded",sync);setInterval(sync,1500);
