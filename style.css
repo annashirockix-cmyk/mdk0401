@@ -431,3 +431,5 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 .lecture-bar-track{height:13px;background:var(--border);border-radius:99px;overflow:hidden}
 .lecture-bar-track i{display:block;height:100%;background:var(--accent);border-radius:99px}
 @media(max-width:600px){.lecture-bar-row{grid-template-columns:58px minmax(40px,1fr) 88px;font-size:.78rem}}
+
+.bar-w-100{width:100%}.bar-w-50{width:50%}.bar-w-35{width:35%}.bar-w-25{width:25%}
