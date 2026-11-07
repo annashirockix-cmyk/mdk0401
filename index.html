@@ -87,6 +87,7 @@
             <a href="#/subject-tutor" class="drawer-item">🎓 Предметный помощник</a>
             <a href="#/gcode-lab" class="drawer-item">⚙️ G-Code Lab — 300 уровней</a>
             <a href="#/materials-lab" class="drawer-item">🔬 Лаборатория материаловедения</a>
+            <a href="#/metrology-trainer" class="drawer-item">📏 Тренажёр метролога</a>
             <a href="#/english-tests" class="drawer-item english-drawer-item" style="display:none">🇬🇧 Английский — тесты</a>
             <a href="#/english-media" class="drawer-item english-drawer-item" style="display:none">🎬 Английский — видео и презентации</a>
             <a href="#/english-cards" class="drawer-item english-drawer-item" style="display:none">🃏 Английский — карточки и кроссворд</a>
@@ -146,6 +147,7 @@
     <script src="./data-metrology.js?v=1"></script>
     <script src="./metrology-advanced.js?v=1"></script>
     <script src="./metrology-practicals.js?v=1"></script>
+    <script src="./metrology-trainer.js?v=1"></script>
     <script src="./data-extra.js"></script>
     <script src="./info.js"></script>
     <script src="./links.js"></script>
@@ -226,7 +228,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=176', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=181', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
