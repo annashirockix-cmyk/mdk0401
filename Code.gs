@@ -87,6 +87,7 @@ function handleRequest_(e) {
       case "savegcodeprogress": result = saveGCodeProgress_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
+      case "getgameanswer": result = getGameAnswer_(data); break;
       case "uploadbookpdf": result = uploadBookPdf_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
@@ -857,6 +858,17 @@ function getCustomContent_(data) {
         return safe;
       });
     }
+    if (user.role === "student" && String(row[3] || "") === "game" && Array.isArray(payload.categories)) {
+      payload.categories = payload.categories.map(function (category) {
+        const safeCategory = Object.assign({}, category || {});
+        safeCategory.questions = (Array.isArray(category.questions) ? category.questions : []).map(function (question) {
+          const safeQuestion = Object.assign({}, question || {});
+          ["a", "answer", "correct", "solution", "explanation", "key"].forEach(function (key) { delete safeQuestion[key]; });
+          return safeQuestion;
+        });
+        return safeCategory;
+      });
+    }
     list.push(Object.assign({
       id: String(row[0]), mdkId: courseId, courseId: courseId,
       topicId: String(row[2] || ""), type: String(row[3] || ""), title: String(row[4] || "")
@@ -900,6 +912,21 @@ function submitCustomTest_(data) {
   return { success: true, score: score, maxScore: questions.length, percent: percent, grade: grade, attempts: result.attempts };
 }
 
+function getGameAnswer_(data) {
+  const user = auth_(data);
+  const id = String(data.gameId || data.id || "");
+  const ci = Number(data.categoryIndex), qi = Number(data.questionIndex);
+  if (!id || !Number.isInteger(ci) || !Number.isInteger(qi) || ci < 0 || qi < 0) throw new Error("Некорректный запрос ответа.");
+  const values = content_().getDataRange().getValues();
+  let record = null;
+  values.slice(1).forEach(function(row) { if (String(row[0]) === id && String(row[3]) === "game") record = {courseId:String(row[1]||""), payload:JSON.parse(row[5]||"{}")}; });
+  if (!record) throw new Error("Игра не найдена.");
+  if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
+  const cats = Array.isArray(record.payload.categories) ? record.payload.categories : [];
+  const cat = cats[ci], q = cat && Array.isArray(cat.questions) ? cat.questions[qi] : null;
+  if (!q) throw new Error("Вопрос не найден.");
+  return {success:true, answer:String(q.a || q.answer || "")};
+}
 function saveCustomContent_(data) {
   const courseId = String(data.mdkId || data.courseId || "");
   if (!courseId) throw new Error("Не указана дисциплина.");
