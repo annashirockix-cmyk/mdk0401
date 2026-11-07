@@ -1258,18 +1258,28 @@ function scoreFinalAnswer_(q,answer) {
 function submitFinalExam_(data) {
   const user=auth_(data),examId=String(data.examId||""),courseId=String(data.courseId||"");
   if(user.role!=="student"||!examId||!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к отправке экзамена.");
-  const cache=CacheService.getScriptCache(),raw=cache.get("finalExam:"+examId);if(!raw)throw new Error("Время экзамена истекло или экзамен уже отправлен. Начните попытку заново.");
-  const exam=JSON.parse(raw);if(exam.email!==user.email||exam.courseId!==courseId)throw new Error("Экзамен не принадлежит этой учётной записи.");
-  const answers=Array.isArray(data.answers)?data.answers:[];if(answers.length!==exam.questions.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
-  let points=0;exam.questions.forEach(function(q,i){points+=scoreFinalAnswer_(q,answers[i]);});
-  const max=exam.questions.length,pct=Math.round(points/max*100),testId="__final__"+courseId,sh=results_(),rows=sh.getDataRange().getValues();
-  const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
-  const limitRaw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);if(limitRaw!==""&&prior>=1+Math.max(0,Number(limitRaw)||0))throw new Error("Попытки экзамена закончились.");
-  const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
-  const written1=String(data.written1||"").slice(0,12000),written2=String(data.written2||"").slice(0,12000);
-  appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:("Письменное задание 1:\n"+written1+"\n\nПисьменное задание 2:\n"+written2).slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
-  appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,AttemptNo:attemptNo,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted});
-  cache.remove("finalExam:"+examId);return {success:true,score:Math.round(points*100)/100,maxScore:max,rawPercent:pct,percent:adjusted,grade:grade,penaltyPoints:policy.penaltyPoints,attempts:attemptNo};
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const cache=CacheService.getScriptCache(),cacheKey="finalExam:"+examId,raw=cache.get(cacheKey);
+    if(!raw)throw new Error("Время экзамена истекло или экзамен уже отправлен. Начните попытку заново.");
+    const exam=JSON.parse(raw);
+    if(exam.email!==user.email||exam.courseId!==courseId)throw new Error("Экзамен не принадлежит этой учётной записи.");
+    if(!Array.isArray(exam.questions)||!exam.questions.length)throw new Error("Экзаменационный вариант повреждён. Начните попытку заново.");
+    const answers=Array.isArray(data.answers)?data.answers:[];
+    if(answers.length!==exam.questions.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
+    let points=0;
+    exam.questions.forEach(function(q,i){points+=scoreFinalAnswer_(q,answers[i]);});
+    const max=exam.questions.length,pct=Math.round(points/max*100),testId="__final__"+courseId,sh=results_(),rows=sh.getDataRange().getValues();
+    const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
+    const limitRaw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
+    if(limitRaw!==""&&prior>=1+Math.max(0,Number(limitRaw)||0))throw new Error("Попытки экзамена закончились.");
+    const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
+    const written1=String(data.written1||"").slice(0,12000),written2=String(data.written2||"").slice(0,12000);
+    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Math.min(3600,Number(data.timeSpent)||0)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:("Письменное задание 1:\n"+written1+"\n\nПисьменное задание 2:\n"+written2).slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+    appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,AttemptNo:attemptNo,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted});
+    cache.remove(cacheKey);
+    return {success:true,score:Math.round(points*100)/100,maxScore:max,rawPercent:pct,percent:adjusted,grade:grade,penaltyPoints:policy.penaltyPoints,attempts:attemptNo};
+  } finally { lock.releaseLock(); }
 }
 
 function submitCustomTest_(data) {
