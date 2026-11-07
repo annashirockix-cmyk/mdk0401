@@ -187,7 +187,14 @@
     function fail(message) {
       area.innerHTML = "";
       var box = document.createElement("div"); box.className = "module"; box.style.padding = "20px";
-      box.textContent = message || "Не удалось загрузить тест."; area.appendChild(box);
+      var text = document.createElement("p"); text.textContent = message || "Не удалось загрузить тест."; box.appendChild(text);
+      if(String(message||"").indexOf("Попытки закончились")>=0 && window.API && window.API.requestTestAttempts){
+        var button=document.createElement("button");button.type="button";button.className="btn";button.textContent="📨 Запросить дополнительную попытку";button.style.marginTop="10px";
+        var status=node("span","");status.style.cssText="display:block;margin-top:8px;font-size:13px;color:var(--muted)";
+        button.onclick=function(){button.disabled=true;status.textContent="Отправляем запрос…";window.API.requestTestAttempts(courseId,testId).then(function(r){if(!r||!r.success)throw new Error(r&&r.error||"Не удалось отправить запрос");status.textContent=r.alreadyRequested?"Запрос уже отправлен. Дождитесь ответа преподавателя.":"Запрос отправлен преподавателю. Вы получите уведомление после решения.";}).catch(function(e){status.textContent=e.message||String(e);button.disabled=false;});};
+        box.appendChild(button);box.appendChild(status);
+      }
+      area.appendChild(box);
     }
     function node(tag, text) {
       var el = document.createElement(tag); if (text !== undefined && text !== null) el.textContent = String(text); return el;
