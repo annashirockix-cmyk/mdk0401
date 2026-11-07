@@ -7,7 +7,7 @@
     var box=document.createElement("div");box.innerHTML=String(lecture.content||"");
     var raw=(box.textContent||"").replace(/\s+/g," ").trim();
     var latin=(raw.match(/[A-Za-z]/g)||[]).length,cyr=(raw.match(/[А-Яа-яЁё]/g)||[]).length;
-    if(raw.length<180||latin<100||latin/(latin+cyr||1)<0.55)return "";
+    if(raw.length<80||latin<45||latin/(latin+cyr||1)<0.55)return "";
     return '<section class="wb-translation"><h4>✍️ Письменный перевод текста №'+(index+1)+'</h4><p><b>Задание:</b> письменно переведите весь текст на русский язык. Сохраните смысл, последовательность мыслей и профессиональные термины. Не переводите названия стандартов, марки оборудования и обозначения без необходимости.</p><p class="wb-translation-tip">После перевода выпишите 5–8 новых слов: английский термин — перевод — собственный пример употребления.</p><div class="wb-vocab-grid"><span>English term</span><span>Перевод / пояснение</span><span>Example</span></div><div class="write-lines wb-translation-lines"></div></section>';
   }
   function lectureStudySummary(lectures){
