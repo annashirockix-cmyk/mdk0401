@@ -18,7 +18,7 @@
    var rows=(rr.results||[]).filter(function(r){return r.courseId==="MET"&&String(r.testId||"").indexOf("metrology_")===0&&ids[String(r.email||"").toLowerCase()];});
    // Официальные оценки преподавателя имеют ID metrology_<инструмент>_YYYYMMDD.
    // Тренажёры и адаптивные упражнения остаются диагностическими результатами.
-   var officialRows=rows.filter(function(r){return /^metrology_(caliper|micrometer|depth|indicator|tolerance|protocol)_\\d{8}$/.test(String(r.testId||""));});
+   var officialRows=rows.filter(function(r){return /^metrology_(caliper|micrometer|depth|indicator|tolerance|protocol)_\d{8}$/.test(String(r.testId||""));});
    function avg(a){return a.length?Math.round(a.reduce(function(x,y){return x+y;},0)/a.length*10)/10:0;}
    function gradeCount(a,g){return a.filter(function(x){return Number(x.grade)===g;}).length;}
    var groups={};students.forEach(function(s){var g=s.group||"Без группы";(groups[g]||(groups[g]=[])).push(s);});
