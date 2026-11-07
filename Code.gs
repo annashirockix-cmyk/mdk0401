@@ -40,7 +40,8 @@ const HEADERS = {
   Assignments: ["Id", "CourseId", "Title", "Topic", "Level", "WorkType", "DueAt", "TargetType", "TargetValue", "Instructions", "Criteria", "CreatedBy", "CreatedAt", "Status"],
   AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
   AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"],
-  Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"]
+  Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
+  ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "EventType", "Page", "ClientTime", "ServerTime", "Details"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -90,6 +91,10 @@ function handleRequest_(e) {
       case "settopicaccess": result = setTopicAccess_(data); break;
       case "granttestattempts": result = grantTestAttempts_(data); break;
       case "gettestattemptstatus": result = getTestAttemptStatus_(data); break;
+      case "logproctorevent": result = logProctorEvent_(data); break;
+      case "getproctorevents": result = getProctorEvents_(data); break;
+      case "gettutoringlink": result = getTutoringLink_(data); break;
+      case "savetutoringlink": result = saveTutoringLink_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
@@ -178,13 +183,14 @@ function assignments_() { return ensureSheet_("Assignments"); }
 function assignmentSubmissions_() { return ensureSheet_("AssignmentSubmissions"); }
 function assignmentSubmissionHistory_() { return ensureSheet_("AssignmentSubmissionHistory"); }
 function notifications_() { return ensureSheet_("Notifications"); }
+function proctorEvents_() { return ensureSheet_("ProctorEvents"); }
 
 /**
  * Запустите вручную один раз после добавления SPREADSHEET_ID.
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
   return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications.";
@@ -532,6 +538,55 @@ function saveResult_(data) {
   } finally {lock.releaseLock();}
 }
 
+
+
+/* ---------- Exam integrity events and tutoring links ---------- */
+function logProctorEvent_(data) {
+  const user=auth_(data);
+  if(user.role!=="student") throw new Error("Фиксировать события попытки может только студентская сессия.");
+  const courseId=String(data.courseId||""),testId=String(data.testId||"");
+  const allowed=["visibility_hidden","window_blur","fullscreen_exit","copy_attempt","paste_attempt","contextmenu_attempt"];
+  const eventType=String(data.eventType||"");
+  if(!courseId||!testId||allowed.indexOf(eventType)===-1||!hasCourseAccess_(user,courseId)) throw new Error("Некорректное событие контроля.");
+  const cache=CacheService.getScriptCache(),key="proctor:"+user.email+":"+testId+":"+eventType;
+  const now=Date.now(),last=Number(cache.get(key)||0);
+  if(now-last<2500)return {success:true,throttled:true};
+  cache.put(key,String(now),30);
+  const page=String(data.page||"").slice(0,180);
+  const details=String(data.details||"").slice(0,240);
+  const clientTime=String(data.clientTime||"").slice(0,40);
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    proctorEvents_().appendRow([Utilities.getUuid(),user.email,user.name,user.group,courseId,testId,eventType,page,clientTime,new Date().toISOString(),details]);
+  } finally {lock.releaseLock();}
+  return {success:true};
+}
+function getProctorEvents_(data) {
+  const courseId=String(data.courseId||""),teacher=editor_(data,courseId),wanted=email_(data.email||"");
+  const testId=String(data.testId||""),sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+  const rows=vals.slice(1).filter(function(r){
+    return String(r[m.CourseId]||"")===courseId&&(!wanted||email_(r[m.StudentEmail])===wanted)&&(!testId||String(r[m.TestId])===testId);
+  }).map(function(r){return {email:String(r[m.StudentEmail]||""),name:String(r[m.StudentName]||""),group:String(r[m.Group]||""),courseId:String(r[m.CourseId]||""),testId:String(r[m.TestId]||""),eventType:String(r[m.EventType]||""),page:String(r[m.Page]||""),clientTime:String(r[m.ClientTime]||""),serverTime:String(r[m.ServerTime]||""),details:String(r[m.Details]||"")};});
+  rows.sort(function(a,b){return String(b.serverTime).localeCompare(String(a.serverTime));});
+  return {success:true,events:rows.slice(0,200)};
+}
+function getTutoringLink_(data) {
+  const user=auth_(data),courseId=String(data.courseId||"");
+  if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
+  const raw=settingValue_("tutoring:"+courseId);
+  let value={url:"",title:"Запись на дополнительные занятия",description:""};
+  if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
+  return {success:true,link:value};
+}
+function saveTutoringLink_(data) {
+  const courseId=String(data.courseId||""),teacher=editor_(data,courseId);
+  const url=String(data.url||"").trim(),title=String(data.title||"Запись на дополнительные занятия").trim().slice(0,120);
+  const description=String(data.description||"").trim().slice(0,500);
+  if(url&&!/^https?:\\/\\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
+  if(url.length>1000)throw new Error("Слишком длинная ссылка.");
+  writeSetting_("tutoring:"+courseId,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description}),teacher.email);
+  return {success:true,link:{url:url,title:title,description:description}};
+}
 
 /* ---------- In-app notifications ---------- */
 function createNotification_(recipientEmail, type, title, message, courseId, relatedId) {
