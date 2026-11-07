@@ -1002,6 +1002,19 @@ function getMyCourseResults_(data) {
       if(list.some(function(x){return x.testId===String(testId)&&sameCourseId_(x.courseId,courseId);}))return;
       list.push({testId:String(testId),testTitle:String(rec.testTitle||testId),grade:Number(rec.grade)||0,score:Number(rec.score)||0,maxScore:Number(rec.max||rec.maxScore)||0,percent:Number(rec.percent)||0,timeSpent:Number(rec.timeSpent)||0,finishedAt:String(rec.finishedAt||""),courseId:courseId});
     });
+    // Оценки из журнала преподавателя хранятся в payload.manualGrades по дате.
+    // У старого формата нет поля дисциплины, поэтому показываем их в общем журнале,
+    // не приписывая произвольный курс.
+    if(!requestedCourse){
+      const manual=payload.manualGrades||{};
+      Object.keys(manual).forEach(function(date){
+        const value=manual[date];if(value===undefined||value===null||String(value).trim()==="")return;
+        const id="manual_"+String(date);
+        if(list.some(function(x){return x.testId===id;}))return;
+        const numeric=Number(value);
+        list.push({testId:id,testTitle:"Оценка преподавателя",grade:String(value),score:isFinite(numeric)?numeric:0,maxScore:5,percent:isFinite(numeric)?numeric*20:0,timeSpent:0,finishedAt:String(date),courseId:"",manual:true});
+      });
+    }
   }
   assignmentResultRecords_(email).forEach(function(x){
     if((!requestedCourse||sameCourseId_(x.courseId,requestedCourse))&&!list.some(function(r){return r.testId===x.testId;})){
@@ -1010,8 +1023,8 @@ function getMyCourseResults_(data) {
   });
   list.sort(function(a,b){return String(a.finishedAt).localeCompare(String(b.finishedAt));});
   const graded=list.filter(function(x){return x.grade!==""&&x.grade!==null&&Number(x.grade)>0;});
-  const averageGrade=graded.length?Math.round(graded.reduce(function(n,x){return n+x.grade;},0)/graded.length*100)/100:0;
-  const averagePercent=graded.length?Math.round(graded.reduce(function(n,x){return n+x.percent;},0)/graded.length):0;
+  const averageGrade=graded.length?Math.round(graded.reduce(function(n,x){return n+Number(x.grade||0);},0)/graded.length*100)/100:0;
+  const averagePercent=graded.length?Math.round(graded.reduce(function(n,x){return n+Number(x.percent||0);},0)/graded.length):0;
   return {success:true,results:list,summary:{completed:list.length,graded:graded.length,averageGrade:averageGrade,averagePercent:averagePercent}};
 }
 
