@@ -234,7 +234,7 @@ function setupPortal() {
   [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "ActivityLog"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
-  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications.";
+  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications, ProctorEvents, AttemptAudit, QuestionBank, ActivityLog.";
 }
 
 /* ---------- Common helpers and authentication ---------- */
@@ -644,7 +644,7 @@ function getActivityLog_(data) {
   const sh=activityLog_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
   const rows=vals.slice(1).filter(function(row){
     const cid=String(row[m.CourseId]||"");
-    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||String(row[m.Group]||"")===group)&&(user.role==="admin"||hasCourseAccess_(user,cid));
+    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||String(row[m.Group]||"")===group)&&(user.role==="admin"||!!cid&&hasCourseAccess_(user,cid));
   }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:String(row[m.Group]||""),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||"")};});
   rows.sort(function(x,y){return String(y.createdAt).localeCompare(String(x.createdAt));});
   return {success:true,events:rows.slice(0,500),total:rows.length};
