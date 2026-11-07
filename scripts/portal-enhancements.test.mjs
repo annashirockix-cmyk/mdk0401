@@ -380,7 +380,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v247/);
+  assert.match(sw, /portal-cache-v248/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -394,8 +394,8 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const sw = read("service-worker.js");
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
-  assert.match(html, /lecture-visual-atlas\.js\?v=2/);
-  assert.match(html, /lecture-visual-atlas\.css\?v=2/);
+  assert.match(html, /lecture-visual-atlas\.js\?v=3/);
+  assert.match(html, /lecture-visual-atlas\.css\?v=3/);
   assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=1/);\n  assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.css"));
