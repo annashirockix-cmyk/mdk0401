@@ -729,7 +729,7 @@ window.canAccessCourse = function(courseId) {
     if (!window.state.student && !window.state.staff) return false;
     if (window.state.staff && window.state.staff.role === "admin") return true;
     var courses = window.state.student ? (window.state.student.courses || []) : (window.state.staff.courses || []);
-    return courses.indexOf(String(courseId)) !== -1 || (courseId === "MET" && courses.length > 0) || ((courseId === "ENB" || courseId === "ENT") && courses.indexOf("EN") !== -1);
+    return courses.indexOf(String(courseId)) !== -1 || ((courseId === "ENB" || courseId === "ENT") && courses.indexOf("EN") !== -1);
 };
 window.syncCourseSelector = function() {
     var sel=document.getElementById("mdkSelector"); if(!sel)return;
