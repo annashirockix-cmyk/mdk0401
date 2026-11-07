@@ -66,3 +66,25 @@ test("local PDF resources have a same-site viewer and valid source files", () =>
   assert.match(viewer, /new URL\(link\.href/);
   assert.match(viewer, /iframe/);
 });
+
+test("MDK 07.01 practicals match their topics and the method PDF link resolves", () => {
+  const data = read("data-0701.js");
+  const workbook = read("workbooks.js");
+  for (const legacy of [
+    "Разработка алгоритма сборки разъёмных соединений",
+    "Проведение анализа сборочной единицы на технологичность",
+    "Импорт комплекта документов в PDF и Excel",
+    "Разработка моделей и УП для деталей, требующих пост-обработки"
+  ]) assert.ok(!data.includes(legacy), "legacy or mismatched practical remains: " + legacy);
+  assert.doesNotMatch(data, /МДК 02\\.0[12]/, "cross-module practical labels must be removed");
+  for (const code of ["ПЗ 1.1","ПЗ 1.2","ПЗ 1.3","ПЗ 1.4","ПЗ 2.1","ПЗ 2.2","ПЗ 2.3","ПЗ 3.1","ПЗ 3.2","ПЗ 3.3","ПЗ 3.5","ПЗ 4.1","ПЗ 4.2","ПЗ 4.4","ПЗ 5.4"]) {
+    assert.ok(data.includes('code: "' + code + '"') || data.includes('"code":"' + code + '"'), "missing local practical code " + code);
+  }
+  assert.match(data, /title: "Составление карты функций устройства ЧПУ"/);
+  assert.doesNotMatch(data, /href="\\.\\/method\\.pdf"/);
+  assert.match(data, /href="\\.\\/materials\\/reference\\/method\\.pdf"/);
+  assert.ok(fs.existsSync(path.join(root, "materials/reference/method.pdf")));
+  assert.match(workbook, /Учебный пример: цикл сверления/);
+  assert.match(workbook, /Учебный пример: фрагмент УП для фрезерования/);
+  assert.match(workbook, /String\\(courseId\\)==="07\\.01"\\?null/);
+});
