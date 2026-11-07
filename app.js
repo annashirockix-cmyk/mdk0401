@@ -612,7 +612,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                 function drawSecureQuestion() {
                     if (secureIndex >= secureQuestions.length) {
                         contentArea.innerHTML = "<p>Проверяем ответы на сервере…</p>";
-                        window.API.submitBuiltInTest({courseId:courseId,testId:serverTestId,bankIds:serverBankIds,answers:secureAnswers,timeSpent:0,testTitle:topic ? topic.title : serverTestId}).then(function(result) {
+                        window.API.submitBuiltInTest({courseId:courseId,testId:serverTestId,bankIds:serverBankIds,attemptId:serverBank.attemptId,answers:secureAnswers,timeSpent:0,testTitle:topic ? topic.title : serverTestId}).then(function(result) {
                             if (!result || !result.success) throw new Error(result && result.error || "Сервер не смог проверить ответы.");
                             contentArea.dataset.proctorAssessment = "0";
                             var penaltyText = Number(result.penaltyPoints) > 0 ? "<p>Штраф за повторные нарушения: -" + result.penaltyPoints + " п.п.</p>" : "";
