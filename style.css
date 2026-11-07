@@ -418,3 +418,16 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 .wb-reference th{background:var(--card);color:var(--text)}
 .wb-meme-text{padding:.8rem 1rem;border-left:4px solid var(--accent);border-radius:8px;background:var(--card-soft);margin:1rem 0}
 .wb-meme-text p{margin:.35rem 0 0}
+
+/* Инфографика лекций МДК 07.01 */
+.lecture-visual-supplement{margin-top:1.4rem;padding-top:1rem;border-top:2px solid var(--accent)}
+.lecture-table-wrap{width:100%;overflow-x:auto;margin:.85rem 0}
+.lecture-visual-supplement table{width:100%;border-collapse:collapse;margin:.7rem 0}
+.lecture-visual-supplement th,.lecture-visual-supplement td{border:1px solid var(--border);padding:.55rem .65rem;text-align:left;vertical-align:top}
+.lecture-visual-supplement th{background:var(--card-soft)}
+.lecture-note{padding:.75rem 1rem;border-left:4px solid var(--accent);background:var(--card-soft);border-radius:8px}
+.lecture-bars{display:grid;gap:.45rem;margin:.8rem 0}
+.lecture-bar-row{display:grid;grid-template-columns:75px minmax(70px,1fr) 110px;gap:.6rem;align-items:center;font-size:.9rem}
+.lecture-bar-track{height:13px;background:var(--border);border-radius:99px;overflow:hidden}
+.lecture-bar-track i{display:block;height:100%;background:var(--accent);border-radius:99px}
+@media(max-width:600px){.lecture-bar-row{grid-template-columns:58px minmax(40px,1fr) 88px;font-size:.78rem}}
