@@ -151,7 +151,7 @@
           else if(item.type==="attempts"){
             var tid=String(item.relatedId||""),cid=String(item.courseId||"");
             if(tid.indexOf("test_")===0)target="#/topic/"+encodeURIComponent(cid)+"/"+encodeURIComponent(tid.slice(5));
-            else if(tid.indexOf("self_")===0){var match=tid.match(/^self_(.+)_\\d+$/);if(match)target="#/topic/"+encodeURIComponent(cid)+"/"+encodeURIComponent(match[1]);}
+            else if(tid.indexOf("self_")===0){var match=tid.match(/^self_(.+)_\d+$/);if(match)target="#/topic/"+encodeURIComponent(cid)+"/"+encodeURIComponent(match[1]);}
             else if(tid.indexOf("__final__")===0)target="#/final/"+encodeURIComponent(cid);
             else {var custom=(window.customContent&&window.customContent.tests||[]).find(function(t){return String(t.id)===tid;});if(custom&&custom.mdkId&&custom.topicId)target="#/topic/"+encodeURIComponent(custom.mdkId)+"/"+encodeURIComponent(custom.topicId);}
           }
