@@ -89,6 +89,7 @@ function handleRequest_(e) {
       case "gettopicaccess": result = getTopicAccess_(data); break;
       case "settopicaccess": result = setTopicAccess_(data); break;
       case "granttestattempts": result = grantTestAttempts_(data); break;
+      case "gettestattemptstatus": result = getTestAttemptStatus_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
@@ -490,31 +491,27 @@ function saveResult_(data) {
 
   const courseId = String(data.courseId || "");
   if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
-  const sheet = results_();
-  const values = sheet.getDataRange().getValues();
   const testId = String(data.testId || "test");
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
-  const attempts = values.slice(1).filter(function (row) {
-    return email_(row[0]) === email && String(row[3]) === testId;
-  }).length + 1;
-
-  sheet.appendRow([
-    email,
-    String(data.name || user.name),
-    String(data.group || user.group),
-    testId,
-    String(data.testTitle || testId),
-    data.grade === undefined || data.grade === null || data.grade === "" ? 0 : Math.max(0, Math.min(5, Number(data.grade) || 0)),
-    Number(data.score) || 0,
-    Number(data.maxScore) || 0,
-    Number(data.percent) || 0,
-    Math.max(0, Number(data.timeSpent) || 0),
-    attempts,
-    new Date().toISOString(),
-    String(data.courseId || ""),
-    String(data.payload || "").slice(0, 10000)
-  ]);
-  return { success: true, attempts: attempts };
+  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\\d+$/.test(testId));
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const sheet=results_(),values=sheet.getDataRange().getValues();
+    const prior=values.slice(1).filter(function(row){return email_(row[0])===email&&String(row[3])===testId;}).length;
+    if(assessment){
+      const raw=settingValue_("testAttempts:"+email+":"+courseId+":"+testId);
+      if(raw!==""){
+        const limit=1+Math.max(0,Number(raw)||0);
+        if(prior>=limit)throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю.");
+      }
+    }
+    const attempts=prior+1;
+    sheet.appendRow([email,String(data.name||user.name),String(data.group||user.group),testId,String(data.testTitle||testId),
+      data.grade===undefined||data.grade===null||data.grade===""?0:Math.max(0,Math.min(5,Number(data.grade)||0)),
+      Number(data.score)||0,Number(data.maxScore)||0,Number(data.percent)||0,Math.max(0,Number(data.timeSpent)||0),
+      attempts,new Date().toISOString(),courseId,String(data.payload||"").slice(0,10000)]);
+    return {success:true,attempts:attempts};
+  } finally {lock.releaseLock();}
 }
 
 
@@ -831,18 +828,22 @@ function setTopicAccess_(data) {
   writeSetting_("topicAccess:"+courseId+":"+topicId,JSON.stringify({open:data.open===true}),teacher.email);
   return {success:true,open:data.open===true};
 }
+function getTestAttemptStatus_(data) {
+  const user=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
+  if(!courseId||!testId||!hasCourseAccess_(user,courseId)) throw new Error("Нет доступа к тесту.");
+  const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
+  const hasPolicy=raw!=="",limit=hasPolicy?1+Math.max(0,Number(raw)||0):null;
+  const used=results_().getDataRange().getValues().slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===testId;}).length;
+  return {success:true,used:used,limit:limit,remaining:limit===null?null:Math.max(0,limit-used),unlimited:limit===null,allowed:limit===null||used<limit};
+}
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
   const teacher=editor_(data,courseId);
   if(!testId||!studentEmail) throw new Error("Выберите тест и студента.");
   const student=userByEmail_(studentEmail);
   if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
-  const rows=content_().getDataRange().getValues();
-  let found=false;
-  rows.slice(1).forEach(function(r){if(String(r[0])===testId&&String(r[1])===courseId&&String(r[3])==="test")found=true;});
-  if(!found) throw new Error("Тест не найден в выбранной дисциплине.");
   const extra=Math.max(0,Math.min(20,Math.floor(Number(data.extraAttempts)||0)));
-  writeSetting_("testAttempts:"+studentEmail+":"+testId,String(extra),teacher.email);
+  writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);
   return {success:true,extraAttempts:extra};
 }
 
