@@ -124,7 +124,7 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(workbook, /траектор.*инструмент|элемент.*траектор/);
   assert.match(workbook, /String\(courseId\)==="07\.01"\?""/);
   assert.match(workbook, /String\(courseId\)==="07\.01"\?"":/);
-  assert.match(workbook, /var meme=String\\(courseId\\)==="07\\.01"\\?\\{file:"",caption:/, "MDK 07.01 uses topic-specific workshop humour rather than unrelated generic memes");
+  assert.ok(workbook.includes('var meme=String(courseId)==="07.01"?{file:"",caption:'), "MDK 07.01 uses topic-specific workshop humour rather than unrelated generic memes");
   assert.ok(workbook.includes("Справочный блок: документы технологического процесса"), "workbook must include production document references");
 });
 
