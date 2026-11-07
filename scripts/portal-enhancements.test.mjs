@@ -68,6 +68,17 @@ test("local PDF resources have a same-site viewer and valid source files", () =>
   assert.match(viewer, /iframe/);
 });
 
+test("workbooks include translation, written practice, notes and attributed external photos", () => {
+  const source = read("workbooks.js");
+  assert.match(source, /Письменный перевод текста/);
+  assert.match(source, /function writtenPractice/);
+  assert.match(source, /Мои заметки/);
+  assert.match(source, /Источник и лицензия/);
+  assert.match(source, /data-wb="ENT"/);
+  assert.match(source, /data-wb="ENB"/);
+  assert.match(source, /Special:FilePath/);
+});
+
 test("MDK 07.01 practicals match their topics and the method PDF link resolves", () => {
   const data = read("data-0701.js");
   const workbook = read("workbooks.js");
