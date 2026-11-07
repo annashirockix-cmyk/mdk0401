@@ -109,7 +109,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v137');
+        console.log('[SW] Кэширование статических ресурсов версии v140');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
