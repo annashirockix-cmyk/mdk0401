@@ -76,7 +76,7 @@ visibleStudents.forEach(s=>{const email=String(s.email||"").toLowerCase(),values
 const csv="\uFEFF"+lines.map(row=>row.map(quote).join(";")).join("\r\n"),url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");a.href=url;a.download="progress-group-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 };
 renderMatrix();
-}).catch(e=>document.getElementById("tdStatus").textContent="Ошибка загрузки: "+e.message);
+}).catch(e=>{const status=document.getElementById("tdStatus");if(status&&status.isConnected)status.textContent="Ошибка загрузки: "+(e&&e.message?e.message:String(e));else console.warn("[TeacherDashboard] Ошибка после закрытия панели:",e);});
 }
 document.getElementById("tdRefresh").onclick=load;load();
 };
