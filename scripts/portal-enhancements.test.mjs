@@ -97,7 +97,7 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(workbook, /контур.*детал|элемент.*контура/);
   assert.match(workbook, /траектор.*инструмент|элемент.*траектор/);
   assert.match(workbook, /String\(courseId\)==="07\.01"\?""/);
-  assert.doesNotMatch(workbook, /Допустим, нужно выполнить производственную задачу/);
+  assert.match(workbook, /String\(courseId\)==="07\.01"\?"":/);
   assert.ok(workbook.includes('String(courseId)==="07.01"?null:'), "generic memes must be disabled for this workbook");
 });
 
@@ -157,4 +157,19 @@ test("MDK 07.01 training and final exam include the additional bank only once", 
   assert.equal((exam.match(/baseQuestions = baseQuestions\.concat\(window\.HARD_TESTS\[t\.id\]\)/g) || []).length, 2);
   assert.match(exam, /function shuffle0701/);
   assert.doesNotMatch(exam, /\.sort\(function\(\)\{ return Math\.random\(\) - 0\.5; \}\)/);
+});
+
+
+test("MDK 07.01 topic 4.3 quiz tests program-development theory, not turning-cycle memorization", () => {
+  const source = read("data-0701.js");
+  const sandbox = { window: { MDK_DATA: {} } };
+  vm.runInNewContext(source, sandbox, { timeout: 1000 });
+  const topic = sandbox.window.MDK_DATA["07.01"].sections.flatMap((section) => section.topics || []).find((item) => item.id === "t-4-3");
+  assert.ok(topic && topic.test && topic.test.length >= 5);
+  const joined = topic.test.map((question) => question.q).join(" ");
+  assert.match(joined, /До составления УП/);
+  assert.match(joined, /планировании траектории/);
+  assert.match(joined, /режима резания/);
+  assert.match(joined, /Серийный запуск/);
+  assert.doesNotMatch(joined, /G96|G71|T0101|M03/);
 });
