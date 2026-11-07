@@ -139,12 +139,23 @@
       var list=document.getElementById("notificationItems");if(!list)return;
       list.querySelectorAll("[data-notification-open]").forEach(function(btn){
         var item=(window.notificationCache||[]).find(function(n){return String(n.id)===String(btn.dataset.notificationOpen);});
-        if(!item||["written_submission","attempt_request","attempt_request_resolved"].indexOf(item.type)<0)return;
+        if(!item||["written_submission","attempt_request","attempt_request_resolved","attempts","grade"].indexOf(item.type)<0)return;
         btn.onclick=function(){
           if(item.type!=="attempt_request")window.API.markNotificationRead(btn.dataset.notificationOpen).catch(function(){});
           var pop=document.getElementById("notificationPopover");if(pop)pop.hidden=true;
           var bell=document.getElementById("notificationBell");if(bell)bell.setAttribute("aria-expanded","false");
-          location.hash=item.type==="written_submission"?"#/written-review":"#/teaching-controls";
+          var target="#/";
+          if(item.type==="written_submission")target="#/written-review";
+          else if(item.type==="attempt_request"||item.type==="attempt_request_resolved")target="#/teaching-controls";
+          else if(item.type==="grade")target="#/grades";
+          else if(item.type==="attempts"){
+            var tid=String(item.relatedId||""),cid=String(item.courseId||"");
+            if(tid.indexOf("test_")===0)target="#/topic/"+encodeURIComponent(cid)+"/"+encodeURIComponent(tid.slice(5));
+            else if(tid.indexOf("self_")===0){var match=tid.match(/^self_(.+)_\\d+$/);if(match)target="#/topic/"+encodeURIComponent(cid)+"/"+encodeURIComponent(match[1]);}
+            else if(tid.indexOf("__final__")===0)target="#/final/"+encodeURIComponent(cid);
+            else {var custom=(window.customContent&&window.customContent.tests||[]).find(function(t){return String(t.id)===tid;});if(custom&&custom.mdkId&&custom.topicId)target="#/topic/"+encodeURIComponent(custom.mdkId)+"/"+encodeURIComponent(custom.topicId);}
+          }
+          if(location.hash===target){if(window.router)window.router();}else location.hash=target;
           window.refreshNotificationCenter();
         };
       });
