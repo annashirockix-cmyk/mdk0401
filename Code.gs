@@ -103,6 +103,8 @@ function handleRequest_(e) {
       case "getquestionbank": result = getQuestionBank_(data); break;
       case "getbuilttest": result = getBuiltInTest_(data); break;
       case "submitbuilttest": result = submitBuiltInTest_(data); break;
+      case "getfinalexam": result = getFinalExam_(data); break;
+      case "submitfinalexam": result = submitFinalExam_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
@@ -1212,6 +1214,65 @@ function submitBuiltInTest_(data) {
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:String(data.testTitle||testId),AttemptNo:attemptNo,Grade:grade,Score:score,MaxScore:entries.length,Percent:percent});
     return {success:true,score:score,rawScore:rawScore,maxScore:entries.length,percent:percent,rawPercent:rawPercent,grade:grade,attempts:attemptNo,penaltyPoints:policy.penaltyPoints,violationCount:policy.violationCount};
   } finally {lock.releaseLock();}
+}
+
+
+function shuffledServer_(items) {
+  const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;
+}
+function allFinalExamEntries_(courseId) {
+  const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),out=[],seen={};
+  vals.slice(1).forEach(function(row){
+    if(String(row[m.CourseId]||"")!==courseId)return;
+    const bid=String(row[m.BankId]||"");
+    if(!/^exam_(primary|extra)$/.test(bid)&&bid!=="mdk_extra"&&!/^topic_|^hard_/.test(bid))return;
+    let q={};try{q=JSON.parse(String(row[m.QuestionJSON]||"{}"));}catch(e){return;}
+    if(!q||!q.q)return;const sig=String(q.type||"mc")+"|"+String(q.q);if(seen[sig])return;seen[sig]=true;
+    out.push({bankId:bid,questionId:String(row[m.QuestionId]||""),question:q});
+  });return out;
+}
+function safeFinalExamQuestion_(entry,index) {
+  const q=Object.assign({},entry.question||{}),type=String(q.type||"mc");
+  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
+  if(type==="order")q.items=shuffledServer_(q.items||[]);
+  if(type==="match"){const pairs=q.pairs||[],right=shuffledServer_(pairs.map(function(p){return p.right;}));q.options=right;q.pairs=pairs.map(function(p){return {left:p.left};});}
+  return {questionId:entry.questionId,questionIndex:index,question:q};
+}
+function getFinalExam_(data) {
+  const user=auth_(data),courseId=String(data.courseId||""),testId="__final__"+courseId;
+  if(user.role!=="student"||!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к экзамену.");
+  const rows=results_().getDataRange().getValues(),prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
+  const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
+  if(raw!==""&&prior>=1+Math.max(0,Number(raw)||0))throw new Error("Попытки экзамена закончились.");
+  const bank=allFinalExamEntries_(courseId);if(!bank.length)return {success:false,notImported:true,questions:[]};
+  let selected=[];[["multi",5],["order",2],["match",2],["num",1]].forEach(function(rule){selected=selected.concat(shuffledServer_(bank.filter(function(e){return String(e.question.type||"mc")===rule[0]&&selected.indexOf(e)===-1;})).slice(0,rule[1]));});
+  const rest=shuffledServer_(bank.filter(function(e){return selected.indexOf(e)===-1;}));selected=shuffledServer_(selected.concat(rest.slice(0,Math.max(0,Math.min(30,bank.length)-selected.length))));
+  const examId=Utilities.getUuid();CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,questions:selected.map(function(e){return e.question;})}),7200);
+  return {success:true,examId:examId,questions:selected.map(safeFinalExamQuestion_)};
+}
+function scoreFinalAnswer_(q,answer) {
+  const type=String(q.type||"mc");
+  if(type==="num"){const a=Number(String(answer).replace(",", ".")),b=Number(String(q.answer).replace(",", "."));return isFinite(a)&&isFinite(b)&&Math.abs(a-b)<=Math.max(0,Number(q.tol)||0.01)?1:0;}
+  if(type==="multi"){const a=Array.isArray(answer)?answer.map(Number).sort(function(x,y){return x-y;}):[],b=(q.correct||[]).map(Number).sort(function(x,y){return x-y;});return a.length===b.length&&a.every(function(v,i){return v===b[i];})?1:0;}
+  if(type==="order"){const expected=q.correctOrder||q.items||[];if(!Array.isArray(answer)||!expected.length)return 0;const right=answer.filter(function(v,i){return String(v)===String(expected[i]);}).length;return right/expected.length;}
+  if(type==="match"){const pairs=q.pairs||[];if(!Array.isArray(answer))return 0;const right=pairs.filter(function(pair,i){return String(answer[i])===String(pair.right);}).length;return pairs.length?right/pairs.length:0;}
+  return Number(answer)===Number(q.correct)?1:0;
+}
+function submitFinalExam_(data) {
+  const user=auth_(data),examId=String(data.examId||""),courseId=String(data.courseId||"");
+  if(user.role!=="student"||!examId||!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к отправке экзамена.");
+  const cache=CacheService.getScriptCache(),raw=cache.get("finalExam:"+examId);if(!raw)throw new Error("Время экзамена истекло или экзамен уже отправлен. Начните попытку заново.");
+  const exam=JSON.parse(raw);if(exam.email!==user.email||exam.courseId!==courseId)throw new Error("Экзамен не принадлежит этой учётной записи.");
+  const answers=Array.isArray(data.answers)?data.answers:[];if(answers.length!==exam.questions.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
+  let points=0;exam.questions.forEach(function(q,i){points+=scoreFinalAnswer_(q,answers[i]);});
+  const max=exam.questions.length,pct=Math.round(points/max*100),testId="__final__"+courseId,sh=results_(),rows=sh.getDataRange().getValues();
+  const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
+  const limitRaw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);if(limitRaw!==""&&prior>=1+Math.max(0,Number(limitRaw)||0))throw new Error("Попытки экзамена закончились.");
+  const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
+  const written1=String(data.written1||"").slice(0,12000),written2=String(data.written2||"").slice(0,12000);
+  appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:JSON.stringify({answers:answers,written1:written1,written2:written2}).slice(0,30000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+  appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,AttemptNo:attemptNo,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted});
+  cache.remove("finalExam:"+examId);return {success:true,score:Math.round(points*100)/100,maxScore:max,rawPercent:pct,percent:adjusted,grade:grade,penaltyPoints:policy.penaltyPoints,attempts:attemptNo};
 }
 
 function submitCustomTest_(data) {
