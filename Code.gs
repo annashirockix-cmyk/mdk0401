@@ -1202,6 +1202,12 @@ function getBuiltInTest_(data) {
   const user=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
   const bankIds=Array.isArray(data.bankIds)?data.bankIds.map(String).slice(0,10):[];
   if(user.role!=="student"||!courseId||!testId||!bankIds.length||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к тесту.");
+  const policy=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
+  if(policy!==""){
+    const limit=1+Math.max(0,Number(policy)||0);
+    const used=results_().getDataRange().getValues().slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
+    if(used>=limit)throw new Error("Попытки закончились ("+used+" из "+limit+"). Обратитесь к преподавателю.");
+  }
   const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds),entries=builtInQuestions_(courseId,resolvedIds);
   if(!entries.length)return {success:false,notImported:true,questions:[]};
   return {success:true,courseId:courseId,testId:testId,questions:entries.map(safeBuiltInQuestion_)};
