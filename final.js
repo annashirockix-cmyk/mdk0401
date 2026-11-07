@@ -204,6 +204,14 @@ window.renderFinalExamPage = function (mdkId) {
   mount.appendChild(start); app.appendChild(mount);
 
   start.addEventListener("click", function () {
+    if (!start.dataset.attemptChecked && window.state && window.state.student && window.API && window.API.getTestAttemptStatus) {
+      start.disabled=true;
+      window.API.getTestAttemptStatus(course.id,"__final__"+course.id).then(function(status){
+        if(!status||status.allowed===false){mount.innerHTML="<h3>Попытки экзамена закончились</h3><p>Обратитесь к преподавателю за дополнительной попыткой.</p>";return;}
+        start.dataset.attemptChecked="1";start.disabled=false;start.click();
+      }).catch(function(error){mount.textContent="Не удалось проверить доступ к экзамену: "+(error.message||"ошибка сервера");});
+      return;
+    }
     var bank = collectCourseQuestions(mdkId);
     if (!bank.length) { mount.textContent = "Банк экзаменационных вопросов пока пуст."; return; }
     var examLimit = Math.min(FINAL_EXAM_SIZE, bank.length);
@@ -284,7 +292,7 @@ window.renderFinalExamPage = function (mdkId) {
         Promise.resolve(window.API.saveResult({
           email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
           testId: "__final__" + course.id, testTitle: "Итоговый экзамен " + course.shortName,
-          grade: grade, score: points, maxScore: picked.length, percent: pct, timeSpent: duration * 60 - timeLeft
+          grade: grade, score: points, maxScore: picked.length, percent: pct, timeSpent: duration * 60 - timeLeft, courseId: course.id
         })).catch(function (error) { console.warn("Не удалось отправить результат экзамена", error); });
       }
       mount.innerHTML = "";
