@@ -43,7 +43,8 @@ const HEADERS = {
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"],
-  QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"]
+  QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"],
+  ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -96,6 +97,8 @@ function handleRequest_(e) {
       case "logproctorevent": result = logProctorEvent_(data); break;
       case "getproctorevents": result = getProctorEvents_(data); break;
       case "getattemptaudit": result = getAttemptAudit_(data); break;
+      case "logactivity": result = logActivity_(data); break;
+      case "getactivitylog": result = getActivityLog_(data); break;
       case "gettutoringlink": result = getTutoringLink_(data); break;
       case "savetutoringlink": result = saveTutoringLink_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
@@ -194,6 +197,7 @@ function assignmentSubmissionHistory_() { return ensureSheet_("AssignmentSubmiss
 function notifications_() { return ensureSheet_("Notifications"); }
 function proctorEvents_() { return ensureSheet_("ProctorEvents"); }
 function attemptAudit_() { return ensureSheet_("AttemptAudit"); }
+function activityLog_() { return ensureSheet_("ActivityLog"); }
 function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString()]); }
 
 function proctorPenalty_(studentEmail,courseId,testId,attemptNo) {
@@ -227,7 +231,7 @@ function notifyProctorSanction_(student,courseId,testId,attemptNo,violationNo,pe
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "ActivityLog"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
   return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications.";
@@ -618,6 +622,32 @@ function logProctorEvent_(data) {
     }
     return {success:true,violationNo:violationNo,attemptNo:attemptNo,action:action,penaltyPoints:penaltyPoints,reportSent:reportSent};
   } finally {lock.releaseLock();}
+}
+
+function logActivity_(data) {
+  const user=auth_(data);
+  if(user.role!=="student")return {success:true,ignored:true};
+  const courseId=String(data.courseId||"");
+  if(courseId&&!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
+  const route=String(data.route||"/").replace(/[\r\n]/g," ").slice(0,240);
+  const pageTitle=String(data.pageTitle||"").replace(/[\r\n]/g," ").slice(0,120);
+  if(!route||route.indexOf("javascript:")===0)throw new Error("Некорректный маршрут.");
+  const now=new Date().toISOString();
+  appendMappedRecord_(activityLog_(),{Id:Utilities.getUuid(),Email:user.email,Name:user.name,Group:user.group,Role:user.role,CourseId:courseId,Route:route,PageTitle:pageTitle,CreatedAt:now,ClientAt:String(data.clientAt||"").slice(0,40)});
+  return {success:true,createdAt:now};
+}
+function getActivityLog_(data) {
+  const user=auth_(data);
+  if(user.role!=="admin"&&user.role!=="teacher")throw new Error("Журнал активности доступен только преподавателям и администраторам.");
+  const courseId=String(data.courseId||""),wanted=email_(data.email||""),group=String(data.group||"");
+  if(user.role==="teacher"&&courseId&&!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к этой дисциплине.");
+  const sh=activityLog_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+  const rows=vals.slice(1).filter(function(row){
+    const cid=String(row[m.CourseId]||"");
+    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||String(row[m.Group]||"")===group)&&(user.role==="admin"||hasCourseAccess_(user,cid));
+  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:String(row[m.Group]||""),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||"")};});
+  rows.sort(function(x,y){return String(y.createdAt).localeCompare(String(x.createdAt));});
+  return {success:true,events:rows.slice(0,500),total:rows.length};
 }
 
 function getAttemptAudit_(data) {
