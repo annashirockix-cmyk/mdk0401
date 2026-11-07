@@ -50,6 +50,7 @@ window.API = {
  getMyCourseResults:function(courseId){return fetchAPI("getMyCourseResults",{courseId:courseId||""},"GET");},
  saveGCodeProgress:function(progress){return fetchAPI("saveGCodeProgress",{progress:progress||{}}, "POST");},
  saveResult:function(data){data=Object.assign({},data||{});if(!data.courseId&&window.state)data.courseId=window.state.activeCourseId||"";return fetchAPI("saveResult",data,"POST");},
+ saveTeacherResult:function(data){return fetchAPI("saveTeacherResult",data||{},"POST");},
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
  getTopicAccess:function(courseId,topicId){return fetchAPI("getTopicAccess",{courseId:courseId,topicId:topicId},"GET");},
  setTopicAccess:function(courseId,topicId,open){return fetchAPI("setTopicAccess",{courseId:courseId,topicId:topicId,open:open},"POST");},
