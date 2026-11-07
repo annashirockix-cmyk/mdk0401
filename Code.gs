@@ -41,7 +41,7 @@ const HEADERS = {
   AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
   AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
-  ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
+  ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"]
 };
 
@@ -189,11 +189,11 @@ function proctorEvents_() { return ensureSheet_("ProctorEvents"); }
 function attemptAudit_() { return ensureSheet_("AttemptAudit"); }
 function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString()]); }
 
-function proctorPenalty_(studentEmail,courseId,testId) {
+function proctorPenalty_(studentEmail,courseId,testId,attemptNo) {
   const sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
   let penalty=0,count=0;
   vals.slice(1).forEach(function(row){
-    if(email_(row[m.StudentEmail])===email_(studentEmail)&&String(row[m.CourseId]||"")===String(courseId)&&String(row[m.TestId]||"")===String(testId)){
+    if(email_(row[m.StudentEmail])===email_(studentEmail)&&String(row[m.CourseId]||"")===String(courseId)&&String(row[m.TestId]||"")===String(testId)&&(!attemptNo||Number(row[m.AttemptNo]||1)===Number(attemptNo))){
       count=Math.max(count,Number(row[m.ViolationNo])||0);
       penalty=Math.max(penalty,Number(row[m.PenaltyPoints])||0);
     }
@@ -561,7 +561,7 @@ function saveResult_(data) {
     const attempts=prior+1;
     const rawGrade=data.grade===undefined||data.grade===null||data.grade===""?0:Math.max(0,Math.min(5,Number(data.grade)||0));
     const rawScore=Number(data.score)||0,maxScore=Number(data.maxScore)||0,rawPercent=Math.max(0,Math.min(100,Number(data.percent)||0)),title=String(data.testTitle||testId);
-    const policy=assessment?proctorPenalty_(email,courseId,testId):{penaltyPoints:0,violationCount:0};
+    const policy=assessment?proctorPenalty_(email,courseId,testId,attempts):{penaltyPoints:0,violationCount:0};
     const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=assessment?gradeFromPercent_(percent):rawGrade,score=maxScore?Math.round(maxScore*percent)/100:Math.max(0,rawScore);
     appendMappedRecord_(sheet,{Email:email,Name:String(data.name||user.name),Group:String(data.group||user.group),TestId:testId,TestTitle:title,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attempts,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:String(data.payload||"").slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:title,AttemptNo:attempts,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent});
@@ -586,16 +586,18 @@ function logProctorEvent_(data) {
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+    const resultRows=results_().getDataRange().getValues();
+    const attemptNo=resultRows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length+1;
     let previous=0;
     vals.slice(1).forEach(function(row){
-      if(email_(row[m.StudentEmail])===user.email&&String(row[m.CourseId]||"")===courseId&&String(row[m.TestId]||"")===testId)previous=Math.max(previous,Number(row[m.ViolationNo])||0);
+      if(email_(row[m.StudentEmail])===user.email&&String(row[m.CourseId]||"")===courseId&&String(row[m.TestId]||"")===testId&&Number(row[m.AttemptNo]||1)===attemptNo)previous=Math.max(previous,Number(row[m.ViolationNo])||0);
     });
     const violationNo=previous+1,action=violationNo===1?"warning":"sanction";
     const penaltyPoints=Math.min(30,Math.max(0,violationNo-1)*10);
-    appendMappedRecord_(sh,{Id:Utilities.getUuid(),StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,EventType:eventType,Page:page,ClientTime:clientTime,ServerTime:new Date().toISOString(),Details:details,ViolationNo:violationNo,Action:action,PenaltyPoints:penaltyPoints});
+    appendMappedRecord_(sh,{Id:Utilities.getUuid(),StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,AttemptNo:attemptNo,EventType:eventType,Page:page,ClientTime:clientTime,ServerTime:new Date().toISOString(),Details:details,ViolationNo:violationNo,Action:action,PenaltyPoints:penaltyPoints});
     cache.put(key,String(now),30);
     if(action==="sanction"&&penaltyPoints>0){
-      appendAttemptAudit_({EventType:"proctor_sanction",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:testId,AttemptNo:violationNo,Percent:penaltyPoints});
+      appendAttemptAudit_({EventType:"proctor_sanction",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:testId,AttemptNo:attemptNo,Percent:penaltyPoints});
       notifyProctorSanction_(user,courseId,testId,violationNo,penaltyPoints,eventType);
     }
     return {success:true,violationNo:violationNo,action:action,penaltyPoints:penaltyPoints,reportSent:action==="sanction"};
@@ -615,7 +617,7 @@ function getProctorEvents_(data) {
   const testId=String(data.testId||""),sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
   const rows=vals.slice(1).filter(function(r){
     return String(r[m.CourseId]||"")===courseId&&(!wanted||email_(r[m.StudentEmail])===wanted)&&(!testId||String(r[m.TestId])===testId);
-  }).map(function(r){return {email:String(r[m.StudentEmail]||""),name:String(r[m.StudentName]||""),group:String(r[m.Group]||""),courseId:String(r[m.CourseId]||""),testId:String(r[m.TestId]||""),eventType:String(r[m.EventType]||""),page:String(r[m.Page]||""),clientTime:String(r[m.ClientTime]||""),serverTime:String(r[m.ServerTime]||""),details:String(r[m.Details]||"")};});
+  }).map(function(r){return {email:String(r[m.StudentEmail]||""),name:String(r[m.StudentName]||""),group:String(r[m.Group]||""),courseId:String(r[m.CourseId]||""),testId:String(r[m.TestId]||""),eventType:String(r[m.EventType]||""),attemptNo:Number(r[m.AttemptNo]||1),violationNo:Number(r[m.ViolationNo]||0),action:String(r[m.Action]||""),penaltyPoints:Number(r[m.PenaltyPoints]||0),page:String(r[m.Page]||""),clientTime:String(r[m.ClientTime]||""),serverTime:String(r[m.ServerTime]||""),details:String(r[m.Details]||"")};});
   rows.sort(function(a,b){return String(b.serverTime).localeCompare(String(a.serverTime));});
   return {success:true,events:rows.slice(0,200)};
 }
@@ -1093,11 +1095,11 @@ function submitCustomTest_(data) {
     const limit=1+Math.max(0,extra);
     if(prior>=limit) throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю за дополнительной попыткой.");
     attemptNo=prior+1;
-    const policy=proctorPenalty_(user.email,record.courseId,attemptKey),finalPercent=Math.max(0,percent-policy.penaltyPoints),finalGrade=gradeFromPercent_(finalPercent),finalScore=Math.round(questions.length*finalPercent)/100;
+    const policy=proctorPenalty_(user.email,record.courseId,attemptKey,attemptNo),finalPercent=Math.max(0,percent-policy.penaltyPoints),finalGrade=gradeFromPercent_(finalPercent),finalScore=Math.round(questions.length*finalPercent)/100;
     appendMappedRecord_(resultSheet,{Email:user.email,Name:user.name,Group:user.group,TestId:attemptKey,TestTitle:record.title,Grade:finalGrade,Score:finalScore,MaxScore:questions.length,Percent:finalPercent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:record.courseId,Submission:JSON.stringify({answers:answers.map(function(v){return Number(v);})}),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:record.courseId,TestId:attemptKey,TestTitle:record.title,AttemptNo:attemptNo,Grade:finalGrade,Score:finalScore,MaxScore:questions.length,Percent:finalPercent});
   } finally { lock.releaseLock(); }
-  const finalPolicy=proctorPenalty_(user.email,record.courseId,attemptKey),finalPercent=Math.max(0,percent-finalPolicy.penaltyPoints),finalGrade=gradeFromPercent_(finalPercent),finalScore=Math.round(questions.length*finalPercent)/100;
+  const finalPolicy=proctorPenalty_(user.email,record.courseId,attemptKey,attemptNo),finalPercent=Math.max(0,percent-finalPolicy.penaltyPoints),finalGrade=gradeFromPercent_(finalPercent),finalScore=Math.round(questions.length*finalPercent)/100;
   return { success: true, score: finalScore, rawScore:score, maxScore: questions.length, percent: finalPercent, rawPercent:percent, grade: finalGrade, attempts: attemptNo, penaltyPoints:finalPolicy.penaltyPoints, violationCount:finalPolicy.violationCount };
 }
 
