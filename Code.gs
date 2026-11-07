@@ -1195,7 +1195,7 @@ function safeBuiltInQuestion_(entry) {
     const pairs=q.pairs||[],right=shuffledServer_(pairs.map(function(pair){return pair.right;}));
     q.options=right;q.pairs=pairs.map(function(pair){return {left:pair.left};});
   }
-  if(type==="tf"&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
+  if((type==="tf"||type==="true_false")&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
   return {bankId:entry.bankId,questionId:entry.questionId,questionIndex:entry.questionIndex,question:q};
 }
 function getBuiltInTest_(data) {
@@ -1216,7 +1216,7 @@ function sameAnswer_(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
 function scoreBuiltInQuestion_(q,answer) {
   const type=String(q.type||"mc").toLowerCase();
   let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
-  if(type==="tf"){
+  if(type==="tf"||type==="true_false"){
     if(expected===undefined||expected===null)return false;
     let target;
     if(typeof expected==="boolean")target=expected?0:1;
