@@ -69,7 +69,7 @@
       panel.innerHTML='<h3>Подключаемые учебные курсы</h3><p style="color:var(--muted)">Самостоятельные дисциплины без игровых механик.</p><div style="display:flex;gap:10px;flex-wrap:wrap"></div>';
       const wrap=panel.querySelector("div");
       availablePlugins.forEach(id=>{
-        const b=document.createElement("button");b.className="btn ghost";b.textContent=(id==="MAT"||id==="PFI"?"📐 ":id.indexOf("EN")===0?"🇬🇧 ":"🦺 ")+COURSE_LABELS[id];
+        const b=document.createElement("button");b.className="btn ghost";b.textContent=id==="MET"?"📏 ":((id==="MAT"||id==="PFI")?"📐 ":id.indexOf("EN")===0?"🇬🇧 ":"🦺 ")+COURSE_LABELS[id];
         b.onclick=function(){window.state.activeCourseId=id;window.saveStudentData();window.renderHomePage();};wrap.appendChild(b);
       });
       hero.insertAdjacentElement("afterend",panel);
