@@ -172,6 +172,19 @@ window.loadGlobalCustomContent = function(callback) {
             window.customContent.flashcards = res.data.filter(d => d.type === 'flashcards');
             window.customContent.games = res.data.filter(d => d.type === 'game');
             window.customContent.announcements = res.data.filter(d => d.type === 'announcement');
+        } else if (res && res.error) {
+            // API возвращает ошибки авторизации JSON-ответом, а не исключением.
+            var tokenAfterResponse = false;
+            try { tokenAfterResponse = !!sessionStorage.getItem("mdk.session"); } catch (e) {}
+            if (!tokenAfterResponse && window.state && (window.state.student || window.state.staff)) {
+                window.state.student = null;
+                window.state.staff = null;
+                try { localStorage.setItem("mdk.state", JSON.stringify(window.state)); } catch (e) {}
+                var login = document.getElementById("loginOverlay");
+                if (login) login.style.display = "flex";
+                if (window.renderUserChip) window.renderUserChip();
+                if (window.updateMenuVisibility) window.updateMenuVisibility();
+            }
         }
         if (callback) callback();
     }).catch(err => {
