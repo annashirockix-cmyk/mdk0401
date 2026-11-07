@@ -380,7 +380,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v253/);
+  assert.match(sw, /portal-cache-v254/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -397,6 +397,9 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   assert.match(html, /lecture-visual-atlas\.js\?v=3/);
   assert.match(html, /lecture-visual-atlas\.css\?v=3/);
   assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=6/);
+  assert.match(html, /sprut-tp-document-examples\.js\?v=1/);
+  assert.match(html, /lecture-visual-atlas\.css\?v=4/);
+  assert.ok(sw.includes("./sprut-tp-document-examples.js"));
   assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.css"));
@@ -436,5 +439,24 @@ test("SPRUT-TP theory and practical assignments are expanded with topic-specific
     assert.ok(practical, "expanded practical missing for "+topic.id);
     assert.match(practical.task,/Критерии оценивания/);
     assert.match(practical.task,/Вопросы для защиты/);
+  }
+});
+
+test("SPRUT-TP includes filled examples for every listed document and practical cases for all topics", () => {
+  const sandbox={window:{MDK_DATA:{}}};
+  vm.runInNewContext(read("data-sprut-tp.js"),sandbox,{timeout:2000});
+  vm.runInNewContext(read("sprut-tp-document-examples.js"),sandbox,{timeout:2000});
+  const course=sandbox.window.MDK_DATA.SPRUT_TP;
+  const topics=course.sections.flatMap(section=>section.topics||[]);
+  assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.documents,10);
+  assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.practiceCases,14);
+  const docs=topics.find(topic=>topic.title==="ЕСТД и комплект технологических документов");
+  const pack=docs.lectures.find(lecture=>lecture.code==="1.3.2");
+  for(const label of ["Карта эскизов","Технологическая инструкция","Маршрутная карта","Карта технологического процесса","Операционная карта","Комплектовочная карта","Ведомость оснастки и оборудования","Ведомость сборки изделия","Карта типового (группового) ТП","Карта типовой (групповой) операции"]) {
+    assert.ok(pack.content.includes(label), "missing filled document example: "+label);
+  }
+  for(const topic of topics) {
+    assert.ok(topic.practicals[0].task.includes("Производственная ситуация"), "practical case missing: "+topic.title);
+    assert.ok(topic.practicals[0].variants.length>=3, "practical variants missing: "+topic.title);
   }
 });
