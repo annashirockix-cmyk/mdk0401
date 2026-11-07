@@ -1018,7 +1018,7 @@ window.router = function() {
     if (page === "gcode-lab" && window.renderGCodeLabPortal) { window.renderGCodeLabPortal(); return; }
     if (page === "materials-lab" && window.renderMaterialsLab) { window.renderMaterialsLab(); return; }
     if (page === "machining-lab" && window.renderMachiningLab) { window.renderMachiningLab(); return; }
-    if (page === "metrology-trainer" && window.renderMetrologyTrainer) { window.renderMetrologyTrainer(); return; }
+    if (page === "metrology-trainer" && window.renderMetrologyLabPlus) { window.renderMetrologyLabPlus(); return; }
     if (page === "certificate") { window.renderCertificatePage(); return; }
     if (page === "profile") { window.renderProfilePage(hash); return; }
     if (page === "achievements") { window.renderAchievementsPage(); return; }
