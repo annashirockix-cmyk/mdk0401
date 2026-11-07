@@ -189,6 +189,18 @@ test("group assignments may be prepared without any connected students", () => {
   assert.equal(created.success, true);
   assert.equal(created.recipients, 0);
   assert.equal(api.getAssignments_({ token: "teacherToken" }).assignments.length, 1);
+  assert.throws(
+    () => api.createAssignment_({ token: "teacherToken", courseId: "07.01", targetType: "individual", targetValue: "missing@example.test", title: "Индивидуальное", instructions: "Текст" }),
+    /не найден/
+  );
+  assert.throws(
+    () => api.createAssignment_({ token: "teacherToken", courseId: "07.01", targetType: "group", targetValue: "НОВАЯ-ГРУППА", dueAt: "2026-02-31", title: "Некорректный срок", instructions: "Текст" }),
+    /некорректная дата/
+  );
+  users.appendRow(["student@example.test","","Новый студент","НОВАЯ-ГРУППА","student","","07.01","{}","","",""]);
+  const newlyConnectedStudent = api.getAssignments_({ token: "studentToken" });
+  assert.equal(newlyConnectedStudent.assignments.length, 1);
+  assert.equal(newlyConnectedStudent.assignments[0].submission, null);
 });
 
 test("legacy EN course access is respected for ENB individual assignments", () => {
@@ -214,6 +226,8 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /Групповое задание можно назначить и до подключения всех обучающихся/);
   assert.match(ui, /Опубликовано для группы/);
   assert.match(ui, /Ожидают отправки/);
+  assert.match(ui, /ENB":"Английский язык — базовый/);
+  assert.match(ui, /ENT":"Английский язык — технический/);
   assert.match(ui, /window\.API\.createAssignment/);
   assert.match(ui, /window\.API\.submitAssignment/);
   assert.match(ui, /window\.API\.gradeAssignment/);
