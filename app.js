@@ -514,6 +514,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         var test = (window.customContent.tests || []).find(function (t) { return String(t.id) === String(testId); });
         var area = document.getElementById("topicContent");
         if (!test || !area) { if (area) area.textContent = "Тест не найден."; return; }
+        area.dataset.testId="custom_"+testId;area.dataset.proctorAssessment="1";
         var questions = test.questions || [], answers = [], index = 0, started = Date.now();
         if (!questions.length) { area.textContent = "В тесте пока нет вопросов."; return; }
         function draw() {
@@ -521,6 +522,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                 area.innerHTML = "<p>Проверяем ответы на сервере…</p>";
                 window.API.submitCustomTest(testId, answers, Math.round((Date.now()-started)/1000)).then(function (result) {
                     if (!result || !result.success) throw new Error(result && result.error || "Не удалось проверить тест.");
+                    area.dataset.proctorAssessment="0";
                     area.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться к тестам</button></div>';
                 }).catch(function (error) { area.textContent = error.message || "Ошибка проверки теста."; });
                 return;
@@ -563,6 +565,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         var currentQ = 0, correct = 0;
         function renderQ() {
             if (currentQ >= questions.length) {
+                contentArea.dataset.proctorAssessment="0";
                 var pct = Math.round((correct / questions.length) * 100); 
                 var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
                 var resKey = selfWorkCode !== null && selfWorkCode !== undefined ? `self_${topicId}_${typeof selfWorkCode === "number" ? selfWorkCode : 0}` : `test_${topicId}`;
