@@ -245,6 +245,17 @@ function email_(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+// Сопоставляет текстовый код курса с числовым значением из Google Sheets,
+// не меняя остальные текстовые идентификаторы.
+function sameCourseId_(a, b) {
+  const left = String(a === null || a === undefined ? "" : a).trim();
+  const right = String(b === null || b === undefined ? "" : b).trim();
+  if (left === right) return true;
+  if (typeof a === "number" && right !== "" && isFinite(Number(right))) return a === Number(right);
+  if (typeof b === "number" && left !== "" && isFinite(Number(left))) return Number(left) === b;
+  return false;
+}
+
 function bytesToHex_(bytes) {
   return bytes.map(function (byte) {
     return ("0" + ((byte + 256) % 256).toString(16)).slice(-2);
@@ -1208,7 +1219,7 @@ function getQuestionBank_(data) {
   const courseId = String(data.courseId || ""), teacher = editor_(data, courseId);
   const bankId = String(data.bankId || ""), sh = questionBank_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh);
   const rows = vals.slice(1).filter(function(row) {
-    return String(row[m.CourseId]) === courseId && (!bankId || String(row[m.BankId]) === bankId);
+    return sameCourseId_(row[m.CourseId], courseId) && (!bankId || String(row[m.BankId]) === bankId);
   }).map(function(row) {
     let question = {};
     try { question = JSON.parse(String(row[m.QuestionJSON] || "{}")); } catch (e) {}
@@ -1232,7 +1243,7 @@ function builtInQuestions_(courseId, bankIds) {
   const wantedCourse=String(courseId||"").trim();
   vals.slice(1).forEach(function(row) {
     const cid=String(row[m.CourseId]||"").trim(), bid=String(row[m.BankId]||"").trim();
-    if(cid!==wantedCourse||wanted.indexOf(bid)===-1)return;
+    if(!sameCourseId_(row[m.CourseId], courseId)||wanted.indexOf(bid)===-1)return;
     let q={};try{q=JSON.parse(String(row[m.QuestionJSON]||"{}"));}catch(e){return;}
     const signature=String(q.type||"mc")+"|"+String(q.q||q.question||"");
     if(seen[signature])return;seen[signature]=true;
@@ -1265,7 +1276,7 @@ function getBuiltInTest_(data) {
   if(!entries.length){
     const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),available=[];
     vals.slice(1).forEach(function(row){
-      if(String(row[m.CourseId]||"").trim()===courseId.trim()){
+      if(sameCourseId_(row[m.CourseId], courseId)){
         const id=String(row[m.BankId]||"").trim();if(id&&available.indexOf(id)<0)available.push(id);
       }
     });
@@ -1342,7 +1353,7 @@ function shuffledServer_(items) {
 function allFinalExamEntries_(courseId) {
   const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),out=[],seen={};
   vals.slice(1).forEach(function(row){
-    if(String(row[m.CourseId]||"").trim()!==String(courseId||"").trim())return;
+    if(!sameCourseId_(row[m.CourseId], courseId))return;
     const bid=String(row[m.BankId]||"").trim();
     if(!/^exam_(primary|extra)$/.test(bid)&&bid!=="mdk_extra"&&!/^topic_|^hard_|^self_/.test(bid))return;
     let q={};try{q=JSON.parse(String(row[m.QuestionJSON]||"{}"));}catch(e){return;}
