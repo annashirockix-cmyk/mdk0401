@@ -247,9 +247,21 @@ function email_(value) {
 
 // Сопоставляет текстовый код курса с числовым значением из Google Sheets,
 // не меняя остальные текстовые идентификаторы.
+var COURSE_ID_TIME_ZONE_CACHE_ = "";
+
 function sameCourseId_(a, b) {
-  const left = String(a === null || a === undefined ? "" : a).trim();
   const right = String(b === null || b === undefined ? "" : b).trim();
+
+  // Google Sheets may silently convert a course code such as 07.01
+  // into a Date object (7 January). Compare it in the spreadsheet timezone.
+  if (a instanceof Date && !isNaN(a.getTime()) && /^\d{1,2}\.\d{1,2}$/.test(right)) {
+    if (!COURSE_ID_TIME_ZONE_CACHE_) {
+      COURSE_ID_TIME_ZONE_CACHE_ = getSpreadsheet_().getSpreadsheetTimeZone();
+    }
+    if (Utilities.formatDate(a, COURSE_ID_TIME_ZONE_CACHE_, "dd.MM") === right) return true;
+  }
+
+  const left = String(a === null || a === undefined ? "" : a).trim();
   if (left === right) return true;
   if (typeof a === "number" && right !== "" && isFinite(Number(right))) return a === Number(right);
   if (typeof b === "number" && left !== "" && isFinite(Number(left))) return Number(left) === b;
