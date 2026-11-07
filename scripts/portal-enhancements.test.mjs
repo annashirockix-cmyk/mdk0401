@@ -154,7 +154,7 @@ test("MDK 07.01 additional quiz bank has valid varied answer keys", () => {
 
 test("MDK 07.01 training and final exam include the additional bank only once", () => {
   const exam = read("exam_0701.js");
-  assert.equal((exam.match(/baseQuestions = baseQuestions\\.concat\\(window\\.HARD_TESTS\\[t\\.id\\]\\)/g) || []).length, 2);
+  assert.equal((exam.match(/baseQuestions = baseQuestions\.concat\(window\.HARD_TESTS\[t\.id\]\)/g) || []).length, 2);
   assert.match(exam, /function shuffle0701/);
   assert.doesNotMatch(exam, /\.sort\(function\(\)\{ return Math\.random\(\) - 0\.5; \}\)/);
 });
