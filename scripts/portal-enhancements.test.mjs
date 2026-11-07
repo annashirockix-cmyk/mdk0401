@@ -239,6 +239,14 @@ test("MDK 07.01 numeric practical answer keys match their stated data", () => {
   assert.match(byCode.get("ПЗ 5.4").task, /Критерии: последовательность и полнота маршрута/);
   assert.match(byCode.get("ПЗ 3.4-А").task, /Для своего варианта/);
   assert.match(byCode.get("ПЗ 3.4-А").variants[1], /начало координат \(10;5\)/);
+  assert.match(byCode.get("ПЗ 3.4-Б").task, /Для своего варианта/);
+  assert.match(byCode.get("ПЗ 3.5").task, /единый контрольный расчёт, не зависящий от варианта/);
+  assert.match(byCode.get("ПЗ 3.5").variants[0], /58×38 мм/);
+  assert.match(byCode.get("ПЗ 5.1-А").task, /Для своего варианта/);
+  assert.match(byCode.get("ПЗ 5.1-А").variants[1], /центр \(40;30\).*радиусом 20 мм/);
+  assert.match(byCode.get("ПЗ 5.2-А").task, /Для своего варианта/);
+  assert.match(byCode.get("ПЗ 5.3-А").task, /Для своего варианта/);
+  assert.match(byCode.get("ПЗ 5.3-Б").task, /Для своего варианта/);
   assert.match(byCode.get("ПЗ 3.6-Б").task, /G03 X40 Y10 I0 J10/);
   assert.match(byCode.get("ПЗ 3.6-Б").task, /G03 — дуга против часовой стрелки/);
 });
