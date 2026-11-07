@@ -37,6 +37,7 @@ const STATIC_ASSETS = [
   './data-metrology.js',
   './metrology-advanced.js',
   './metrology-practicals.js',
+  './metrology-trainer.js',
   './materials/metrology/lab-measurement-protocol.html',
   './data-extra.js',
   './info.js',
