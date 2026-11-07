@@ -216,5 +216,28 @@
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){mountPalette();restoreTheme();restoreBackground();});
   else{mountPalette();restoreTheme();restoreBackground();}
   if(window.MutationObserver&&document.body){var observer=new MutationObserver(function(){mountPalette();});observer.observe(document.body,{childList:true,subtree:true});}
+  var oldCustomStart=window.startCustomInlineTest;
+  if(oldCustomStart&&!oldCustomStart._portalUxWrapped){
+    var customStart=async function(testId){
+      var state=window.state||{},test=(window.customContent&&window.customContent.tests||[]).find(function(x){return String(x.id)===String(testId);});
+      if(!state.student||!window.API||!window.API.getTestAttemptStatus||!test)return oldCustomStart.apply(this,arguments);
+      var courseId=String(test.mdkId||state.activeCourseId||"07.01"),area=document.getElementById("topicContent");
+      if(area){area.dataset.testId="custom_"+testId;area.dataset.proctorAssessment="0";area.innerHTML='<p>Проверяем доступные попытки…</p>';}
+      try{
+        var status=await window.API.getTestAttemptStatus(courseId,String(testId));
+        if(status&&status.allowed===false){
+          if(area){
+            area.innerHTML='<div class="module"><h3>Попытки закончились</h3><p>Использовано: '+window.escapeHtml(status.used||0)+' из '+window.escapeHtml(status.limit||1)+'. Запросите дополнительную попытку у преподавателя.</p><button type="button" class="btn" id="requestCustomAttempt">📨 Запросить дополнительную попытку</button><span id="requestCustomAttemptStatus" style="display:block;margin-top:8px"></span></div>';
+            var button=area.querySelector("#requestCustomAttempt"),note=area.querySelector("#requestCustomAttemptStatus");
+            button.onclick=function(){button.disabled=true;note.textContent="Отправляем запрос…";window.API.requestTestAttempts(courseId,String(testId)).then(function(r){if(!r||!r.success)throw Error(r&&r.error||"Не удалось отправить запрос");note.textContent=r.alreadyRequested?"Запрос уже отправлен. Дождитесь ответа преподавателя.":"Запрос отправлен преподавателю.";}).catch(function(e){note.textContent=e.message;button.disabled=false;});};
+          }
+          return;
+        }
+        if(area)area.dataset.proctorAssessment="1";
+        return oldCustomStart.apply(this,arguments);
+      }catch(error){if(area)area.innerHTML='<div class="portal-ux-error">Не удалось проверить попытки: '+window.escapeHtml(error.message||String(error))+'</div>';}
+    };
+    customStart._portalUxWrapped=true;window.startCustomInlineTest=customStart;
+  }
   console.log("[portal-ux] grades sync, written review, achievements and personalization ready");
 })();
