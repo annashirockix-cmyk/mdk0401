@@ -88,7 +88,6 @@ function handleRequest_(e) {
       case "getcustomcontent": result = getCustomContent_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
-      case "uploadbookpdf": result = uploadBookPdf_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
       case "setteachercourses": result = setTeacherCourses_(data); break;
@@ -798,41 +797,6 @@ function gradeAssignment_(data) {
   sh.getRange(i+2,m.Status+1).setValue("reviewed"); sh.getRange(i+2,m.Grade+1).setValue(grade); sh.getRange(i+2,m.Feedback+1).setValue(feedback); sh.getRange(i+2,m.ReviewedBy+1).setValue(teacher.email); sh.getRange(i+2,m.ReviewedAt+1).setValue(new Date().toISOString());
   createNotification_(String(row[m.StudentEmail]||""),"grade","Работа проверена","По заданию «"+String(a[ah.Title]||"")+"» выставлена оценка: "+grade+"/5."+(feedback?" Есть комментарий преподавателя.":""),String(a[ah.CourseId]||""),aid);
   return {success:true};
-}
-
-/* ---------- Teacher PDF upload to Drive ---------- */
-function uploadBookPdf_(data) {
-  const courseId = String(data.courseId || "MAT");
-  if (courseId !== "MAT") throw new Error("Загрузка учебников разрешена только в библиотеку Материаловедения.");
-  const user = editor_(data, courseId);
-  const name = String(data.name || "Учебный материал.pdf").replace(/[\\\\/:*?"<>|]/g, "_").slice(0, 180);
-  const mime = String(data.mimeType || "");
-  const base64 = String(data.base64 || "");
-  if (mime !== "application/pdf" || !base64) throw new Error("Разрешены только PDF-файлы.");
-  if (base64.length > 11200000) throw new Error("Файл слишком большой. Максимальный размер — 8 МБ.");
-  const bytes = Utilities.base64Decode(base64);
-  if (bytes.length > 8 * 1024 * 1024) throw new Error("Файл превышает ограничение 8 МБ.");
-  if (bytes.length < 4 || bytes[0] !== 37 || bytes[1] !== 80 || bytes[2] !== 68 || bytes[3] !== 70) throw new Error("Файл не похож на корректный PDF.");
-  const props = PropertiesService.getScriptProperties();
-  let folderId = props.getProperty("MATERIALS_PDF_FOLDER_ID");
-  let folder;
-  if (folderId) {
-    try { folder = DriveApp.getFolderById(folderId); } catch (e) { folder = null; }
-  }
-  if (!folder) {
-    folder = DriveApp.createFolder("МДК Портал — библиотека PDF");
-    props.setProperty("MATERIALS_PDF_FOLDER_ID", folder.getId());
-  }
-  const file = folder.createFile(Utilities.newBlob(bytes, mime, name));
-  const publicLink = data.shareByLink === true || String(data.shareByLink) === "true";
-  if (publicLink) file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  return {
-    success: true,
-    fileId: file.getId(),
-    name: file.getName(),
-    url: "https://drive.google.com/file/d/" + file.getId() + "/view",
-    publicLink: publicLink
-  };
 }
 
 /* ---------- Teacher-created topics, lectures and tests ---------- */
