@@ -86,10 +86,10 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(data, /безопасное расстояние определяют по документации оборудования/);
   assert.match(data, /dсв = D − P/);
   assert.match(data, /тангенс половинного угла конуса/);
-  assert.match(data, /траектории центра фрезы для обхода прямоугольного контура снаружи/);
-  assert.match(data, /Разработка технологии пост-обработки деталей/);
-  assert.match(data, /удаление поддержек; удаление каймы и заусенцев/);
-  assert.match(data, /контроль габаритов, поверхности и возможных дефектов/);
+  assert.match(data, /внешний прямоугольный контур 80×40 мм/);
+  assert.match(data, /Подготовка модели и параметров печати на аддитивном оборудовании/);
+  assert.match(data, /поддержки предусмотрены там, где они необходимы/);
+  assert.match(data, /Проанализируйте один возможный дефект/);
   assert.match(data, /расчётная длина хода без подхода и перебега/);
   assert.ok(!data.includes('href="./method.pdf"'), "obsolete root PDF path must be removed");
   assert.ok(data.includes('href="./materials/reference/method.pdf"'), "verified PDF path must be used");
