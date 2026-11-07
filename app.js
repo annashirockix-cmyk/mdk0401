@@ -844,12 +844,14 @@ window.installStudentActivityCapture = window.installStudentActivityCapture || f
     window._studentActivityCaptureInstalled = true;
     document.addEventListener("click", function(event) {
         if (!window.state || !window.state.student || !window.API || !window.API.logActivity) return;
-        var target = event.target && event.target.closest ? event.target.closest('a[href^="#/"],[role="tab"],.tab-btn,.nav-tab,[data-tab],[data-activity-label]') : null;
-        if (!target || target.closest("form,[data-no-activity]")) return;
+        var target = event.target && event.target.closest ? event.target.closest('a[href^="#/"],[role="tab"],.tab-btn,.nav-tab,[data-tab],[data-activity-label],button,[role="button"]') : null;
+        if (!target || target.closest("[data-no-activity],input,textarea,select,.answer-option,.question-option,[data-answer]")) return;
         var isTab = target.getAttribute("role") === "tab" || target.classList.contains("tab-btn") || target.classList.contains("nav-tab") || target.hasAttribute("data-tab");
         var label = target.getAttribute("data-activity-label") || target.getAttribute("aria-label") || target.getAttribute("title") || target.textContent || target.getAttribute("href") || "Элемент интерфейса";
         label = String(label).replace(/\s+/g, " ").trim().slice(0, 120);
         if (!label) return;
+        var isNavigation = target.matches('a[href^="#/"],[role="tab"],.tab-btn,.nav-tab,[data-tab],[data-activity-label]');
+        if (!isNavigation && !/(начать|открыть|перейти|смотреть|запустить|продолжить|отправить|сдать|проверить|завершить|сохранить|показать|скачать|загрузить|войти|выйти|обновить|создать|добавить|удалить|редактировать|следующий|назад|пройти|выполнить)/i.test(label)) return;
         var route = location.hash.slice(1) || "/";
         var parts = route.split("/").filter(Boolean);
         var course = parts[0] === "topic" && parts[1] ? String(parts[1]) : String(window.state.activeCourseId || "");
