@@ -124,3 +124,37 @@ test("MDK 07.01 quiz questions have valid, non-duplicated options and varied ans
   }
   assert.ok(positions.size >= 3, "correct answers should not always occupy the same position");
 });
+
+
+test("MDK 07.01 additional quiz bank has valid varied answer keys", () => {
+  const sandbox = { window: {} };
+  vm.runInNewContext(read("hard-questions.js"), sandbox, { timeout: 1000 });
+  const bank = sandbox.window.HARD_TESTS;
+  const topicIds = new Set(["t-1-1","t-1-2","t-1-3","t-1-4","t-2-1","t-2-2","t-2-3","t-3-1","t-3-2","t-3-3","t-3-4","t-3-5","t-3-6","t-4-1","t-4-2","t-4-3","t-4-4","t-5-1","t-5-2","t-5-3","t-5-4"]);
+  const positions = new Set();
+  let count = 0;
+  for (const [topicId, questions] of Object.entries(bank)) {
+    if (!topicId.startsWith("t-")) continue;
+    assert.ok(topicIds.has(topicId), "unknown MDK 07.01 topic: " + topicId);
+    assert.ok(Array.isArray(questions));
+    for (const question of questions) {
+      count++;
+      assert.ok(question.q && question.q.trim(), "empty hard question");
+      assert.ok(Array.isArray(question.options) && question.options.length >= 3, question.q);
+      assert.ok(Number.isInteger(question.correct) && question.correct >= 0 && question.correct < question.options.length, question.q);
+      const normalized = question.options.map((option) => option.trim().toLocaleLowerCase("ru"));
+      assert.equal(new Set(normalized).size, normalized.length, "duplicate options: " + question.q);
+      positions.add(question.correct);
+    }
+  }
+  assert.ok(count >= 50, "additional bank should contain at least 50 MDK 07.01 questions");
+  assert.ok(positions.size >= 3, "additional correct answers should use varied positions");
+  assert.doesNotMatch(read("hard-questions.js"), /Не менее 1 метра от вращающихся частей|16К20|6Р82/);
+});
+
+test("MDK 07.01 training and final exam include the additional bank only once", () => {
+  const exam = read("exam_0701.js");
+  assert.equal((exam.match(/baseQuestions = baseQuestions\\.concat\\(window\\.HARD_TESTS\\[t\\.id\\]\\)/g) || []).length, 2);
+  assert.match(exam, /function shuffle0701/);
+  assert.doesNotMatch(exam, /\.sort\(function\(\)\{ return Math\.random\(\) - 0\.5; \}\)/);
+});
