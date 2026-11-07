@@ -117,6 +117,7 @@
     html+=photoHtml(photo);
     if(special)html+=special;
     if(steps)html+=flowSvg(steps,"Схема по теме «"+(topic.title||"")+"»");
+    if(graph)html+=graph;
     if(photo||special||steps||graph)html+='<div class="lv-task"><b>Задание по иллюстрации</b><ol><li>Назовите элементы, непосредственно связанные с изучаемой темой.</li><li>Объясните последовательность или взаимосвязь, показанную на схеме.</li><li>Укажите, какие исходные данные нужны для проверки решения на реальном производстве.</li></ol></div>';
     return html+'</section>';
   }
