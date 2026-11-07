@@ -28,8 +28,9 @@ window.renderTeacherControlsPage=function(){
  document.getElementById("saveTutorLink").onclick=function(){const btn=this,st=document.getElementById("tutorStatus");btn.disabled=true;st.textContent="Сохранение…";window.API.saveTutoringLink(cid,{url:document.getElementById("tutorUrl").value,title:document.getElementById("tutorTitle").value,description:document.getElementById("tutorDescription").value,visible:document.getElementById("tutorVisible").checked}).then(r=>{if(!r.success)throw Error(r.error||"Не удалось сохранить");st.textContent="Настройки сохранены.";window.updateMenuVisibility&&window.updateMenuVisibility();}).catch(e=>st.textContent=e.message).finally(()=>btn.disabled=false);};
 
 
- const currentUser=(window.state&&(window.state.user||window.state.student))||{};
- const isAdmin=!!((window.state&&window.state.admin)||String(currentUser.role||"").toLowerCase()==="admin");
+ const currentState=window.state||{};
+ const currentUser=currentState.staff||currentState.user||currentState.student||{};
+ const isAdmin=!!(currentState.admin===true||String(currentUser.role||"").toLowerCase()==="admin");
  if(isAdmin){
   const area=document.getElementById("bankMigrationArea");
   if(area){
@@ -61,13 +62,25 @@ window.renderTeacherControlsPage=function(){
       add(cid,"mdk_extra",window.MDK_EXTRA_QUESTIONS&&window.MDK_EXTRA_QUESTIONS[cid]);
      });
      if(!banks.length)throw Error("Не найдены встроенные банки. Проверьте загрузку файлов данных.");
-     const totalExpected=banks.reduce((n,b)=>n+b.questions.length,0);let total=0;
-     for(let i=0;i<banks.length;i+=4){
-      const result=await window.API.importQuestionBanks(banks.slice(i,i+4));
-      if(!result||!result.success)throw Error(result&&result.error||"Ошибка импорта блока "+(i+1));
-      total+=Number(result.questionsImported)||0;
-      status.textContent="Импортировано вопросов: "+total+" из "+totalExpected;
+     const totalExpected=banks.reduce((n,b)=>n+b.questions.length,0);let total=0,bankCount=0,batch=[],batchQuestions=0,partNo=0;
+     async function sendImportBatch(){
+      if(!batch.length)return;
+      partNo++;
+      const result=await window.API.importQuestionBanks(batch);
+      if(!result||!result.success)throw Error(result&&result.error||"Ошибка импорта части "+partNo);
+      total+=Number(result.questionsImported)||0;bankCount+=Number(result.banksImported)||batch.length;
+      status.textContent="Импортировано банков: "+bankCount+" из "+banks.length; 
+      status.textContent+=" · вопросов: "+total+" из "+totalExpected;
+      batch=[];batchQuestions=0;
      }
+     for(const bank of banks){
+      const count=Array.isArray(bank.questions)?bank.questions.length:0;
+      if(!count)continue;
+      if(count>1000)throw Error("Банк "+bank.bankId+" содержит "+count+" вопросов. Сервер принимает не более 1000 вопросов в одном банке.");
+      if(batch.length>=4||batchQuestions+count>2000)await sendImportBatch();
+      batch.push(bank);batchQuestions+=count;
+     }
+     await sendImportBatch();
      status.textContent="Готово: "+banks.length+" банков, "+total+" вопросов сохранены в закрытом листе QuestionBank. Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
     }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
     finally{btn.disabled=false;}
@@ -148,8 +161,23 @@ window.renderQuestionBankPage=function(){
   this.disabled=true;const status=document.getElementById("bankStatus");
   try{
    const banks=collect();if(!banks.length)throw new Error("В файлах этого предмета не найдено вопросов для импорта.");
-   let count=0,questions=0;
-   for(let i=0;i<banks.length;i+=5){const part=banks.slice(i,i+5),r=await window.API.importQuestionBanks(part);if(!r||!r.success)throw new Error(r&&r.error||"Ошибка импорта части "+(Math.floor(i/5)+1));count+=r.banksImported||part.length;questions+=r.questionsImported||0;status.textContent="Импортировано банков: "+count+" из "+banks.length+"; вопросов: "+questions;}
+   let count=0,questions=0,batch=[],batchQuestions=0,partNo=0;
+   async function sendBatch(){
+    if(!batch.length)return;
+    partNo++;const r=await window.API.importQuestionBanks(batch);
+    if(!r||!r.success)throw new Error(r&&r.error||"Ошибка импорта части "+partNo);
+    count+=Number(r.banksImported)||batch.length;questions+=Number(r.questionsImported)||0;
+    status.textContent="Импортировано банков: "+count+" из "+banks.length+"; вопросов: "+questions;
+    batch=[];batchQuestions=0;
+   }
+   for(const bank of banks){
+    const n=Array.isArray(bank.questions)?bank.questions.length:0;
+    if(!n)continue;
+    if(n>1000)throw new Error("Банк "+bank.bankId+" содержит "+n+" вопросов. Допустимо не более 1000 в одном банке.");
+    if(batch.length>=4||batchQuestions+n>2000)await sendBatch();
+    batch.push(bank);batchQuestions+=n;
+   }
+   await sendBatch();
    status.textContent="Импорт завершён: "+count+" банков, "+questions+" вопросов. Загружаем закрытую копию…";load();
   }catch(e){status.textContent="Импорт остановлен: "+e.message+" Пожалуйста, повторите после проверки сообщения.";}
   finally{this.disabled=false;}
