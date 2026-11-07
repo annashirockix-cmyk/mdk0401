@@ -38,23 +38,33 @@ window.renderTeacherControlsPage=function(){
    document.getElementById("migrateQuestionBanks").onclick=async function(){
     const btn=this,status=document.getElementById("bankMigrationStatus");btn.disabled=true;status.textContent="Подготовка банков…";
     try{
-     const topicCourse={},banks=[],seen={};
-     Object.keys(window.MDK_DATA||{}).forEach(cid=>{
-      const course=window.MDK_DATA[cid];
-      (course.sections||[]).forEach(sec=>(sec.topics||[]).forEach(topic=>{
-       topicCourse[String(topic.id)]=cid;
-       if(Array.isArray(topic.test)&&topic.test.length)banks.push({courseId:cid,bankId:"topic_"+topic.id,questions:topic.test});
-      }));
-     });
+     const allowedCourses=new Set(["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"]);
+     const topicCourse={},ambiguousTopics={},banks=[],seen={};
+     let skippedUnsupported=0,skippedDuplicates=0;
      function add(cid,id,questions){
-      if(!cid||!Array.isArray(questions)||!questions.length)return;
-      const key=cid+"|"+id;if(seen[key])return;seen[key]=1;
+      cid=String(cid||"");id=String(id||"").slice(0,180);
+      if(!Array.isArray(questions)||!questions.length)return;
+      if(!allowedCourses.has(cid)){skippedUnsupported++;return;}
+      if(!id)return;
+      const key=cid+"|"+id;
+      if(seen[key]){skippedDuplicates++;return;}
+      seen[key]=1;
       banks.push({courseId:cid,bankId:id,questions:questions});
      }
-     Object.keys(window.HARD_TESTS||{}).forEach(id=>add(topicCourse[id],"hard_"+id,window.HARD_TESTS[id]));
+     Object.keys(window.MDK_DATA||{}).forEach(cid=>{
+      if(!allowedCourses.has(String(cid))){skippedUnsupported++;return;}
+      const course=window.MDK_DATA[cid];
+      (course.sections||[]).forEach(sec=>(sec.topics||[]).forEach(topic=>{
+       const tid=String(topic.id);
+       if(topicCourse[tid]&&topicCourse[tid]!==cid)ambiguousTopics[tid]=true;
+       else if(!ambiguousTopics[tid])topicCourse[tid]=cid;
+       if(Array.isArray(topic.test)&&topic.test.length)add(cid,"topic_"+tid,topic.test);
+      }));
+     });
+     Object.keys(window.HARD_TESTS||{}).forEach(id=>{if(!ambiguousTopics[id])add(topicCourse[id],"hard_"+id,window.HARD_TESTS[id]);});
      Object.keys(window.EXTRA_TESTS||{}).forEach(id=>{
       const m=id.match(/^self_(.+)_\d+$/),topic=m&&m[1],entry=window.EXTRA_TESTS[id];
-      if(topic&&topicCourse[topic]&&entry&&Array.isArray(entry.questions))add(topicCourse[topic],id,entry.questions);
+      if(topic&&!ambiguousTopics[topic]&&topicCourse[topic]&&entry&&Array.isArray(entry.questions))add(topicCourse[topic],id,entry.questions);
      });
      ["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"].forEach(cid=>{
       add(cid,"exam_primary",window["EXAM_BANK_"+cid.replace(".","")]);
@@ -81,7 +91,7 @@ window.renderTeacherControlsPage=function(){
       batch.push(bank);batchQuestions+=count;
      }
      await sendImportBatch();
-     status.textContent="Готово: "+banks.length+" банков, "+total+" вопросов сохранены в закрытом листе QuestionBank. Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
+     status.textContent="Готово: "+banks.length+" банков, "+total+" вопросов сохранены в закрытом листе QuestionBank. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов: "+skippedDuplicates+". Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
     }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
     finally{btn.disabled=false;}
    };
