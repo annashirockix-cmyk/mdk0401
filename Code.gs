@@ -227,6 +227,24 @@ function headerMap_(sheet) {
   return map;
 }
 
+function appendMappedRecord_(sheet, record) {
+  const map = headerMap_(sheet), width = sheet.getLastColumn();
+  const row = new Array(width).fill("");
+  Object.keys(record || {}).forEach(function (key) {
+    if (map[key] !== undefined) row[map[key]] = record[key];
+  });
+  sheet.appendRow(row);
+}
+
+function updateMappedRecord_(sheet, rowNumber, record) {
+  const map = headerMap_(sheet), width = sheet.getLastColumn();
+  const row = sheet.getRange(rowNumber, 1, 1, width).getValues()[0];
+  Object.keys(record || {}).forEach(function (key) {
+    if (map[key] !== undefined) row[map[key]] = record[key];
+  });
+  sheet.getRange(rowNumber, 1, 1, width).setValues([row]);
+}
+
 function userByEmail_(email) {
   const sheet = users_();
   const values = sheet.getDataRange().getValues();
@@ -704,23 +722,43 @@ function getMyCourseResults_(data) {
 
 /* ---------- Assignments and student submissions ---------- */
 function createAssignment_(data) {
-  const courseId = String(data.courseId || "");
+  const courseId = String(data.courseId || "").trim();
   if (!courseId || CFG.COURSES.indexOf(courseId) < 0) throw new Error("Укажите корректную дисциплину.");
   const teacher = editor_(data, courseId);
   const title = String(data.title || "").trim().slice(0,180);
   const instructions = String(data.instructions || "").trim().slice(0,10000);
-  const targetType = String(data.targetType || ""), targetValue = String(data.targetValue || "").trim();
+  const targetType = String(data.targetType || "");
+  const rawTarget = String(data.targetValue || "").trim().slice(0,120);
+  const targetValue = targetType === "individual" ? email_(rawTarget) : rawTarget;
+  const dueAt = String(data.dueAt || "").trim();
   if (!title || !instructions) throw new Error("Заполните название и условие задания.");
   if (["group","individual"].indexOf(targetType) < 0 || !targetValue) throw new Error("Выберите адресата.");
+  if (dueAt) {
+    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(dueAt)) throw new Error("Срок должен быть указан в формате даты.");
+    const parts = dueAt.split("-").map(Number);
+    const parsed = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+    if (parsed.getUTCFullYear() !== parts[0] || parsed.getUTCMonth() !== parts[1] - 1 || parsed.getUTCDate() !== parts[2]) throw new Error("Указана некорректная дата срока.");
+  }
+  if (targetType === "individual" && targetValue.indexOf("@") < 1) throw new Error("Укажите корректный email обучающегося.");
   const us = users_(), rows = us.getDataRange().getValues(), um = headerMap_(us);
-  const matches = rows.slice(1).filter(function(r){
+  const matches = rows.slice(1).filter(function(r) {
     if (String(r[um.Role] || "").toLowerCase() !== "student") return false;
-    if (String(r[um.Courses] || "").split(",").map(function(x){return x.trim();}).indexOf(courseId) < 0) return false;
-    return targetType === "individual" ? email_(r[um.Email]) === email_(targetValue) : String(r[um.Group] || "").trim().toLowerCase() === targetValue.toLowerCase();
+    if (!hasCourseAccess_({role:"student",courses:String(r[um.Courses] || "")}, courseId)) return false;
+    if (targetType === "individual") return email_(r[um.Email]) === targetValue;
+    return String(r[um.Group] || "").trim().toLowerCase() === targetValue.toLowerCase();
   });
+  // Групповое назначение разрешено публиковать до регистрации обучающихся.
   if (targetType === "individual" && !matches.length) throw new Error("Обучающийся не найден или у него нет доступа к дисциплине.");
   const id = Utilities.getUuid(), now = new Date().toISOString();
-  assignments_().appendRow([id,courseId,title,String(data.topic||"").slice(0,180),String(data.level||"Средний"),String(data.workType||"Практическое задание"),String(data.dueAt||""),targetType,targetType==="individual"?email_(targetValue):targetValue,instructions,String(data.criteria||"").slice(0,4000),teacher.email,now,"active"]);
+  appendMappedRecord_(assignments_(), {
+    Id:id, CourseId:courseId, Title:title,
+    Topic:String(data.topic || "").trim().slice(0,180),
+    Level:String(data.level || "Средний").slice(0,60),
+    WorkType:String(data.workType || "Практическое задание").slice(0,80),
+    DueAt:dueAt, TargetType:targetType, TargetValue:targetValue,
+    Instructions:instructions, Criteria:String(data.criteria || "").slice(0,4000),
+    CreatedBy:teacher.email, CreatedAt:now, Status:"active"
+  });
   return {success:true,id:id,recipients:matches.length};
 }
 function getAssignments_(data) {
@@ -742,7 +780,7 @@ function getAssignments_(data) {
     if(user.role==="student"){
       const typ=String(r[h.TargetType]||""),val=String(r[h.TargetValue]||"");
       if(typ==="individual"&&email_(val)!==user.email)return;
-      if(typ==="group"&&val.toLowerCase()!==String(user.group||"").trim().toLowerCase())return;
+      if(typ==="group"&&String(val||"").trim().toLowerCase()!==String(user.group||"").trim().toLowerCase())return;
       if(String(r[h.Status]||"active")!=="active")return;
     }
     const item={id:String(r[h.Id]),courseId:cid,title:String(r[h.Title]||""),topic:String(r[h.Topic]||""),level:String(r[h.Level]||""),workType:String(r[h.WorkType]||""),dueAt:String(r[h.DueAt]||""),targetType:String(r[h.TargetType]||""),targetValue:String(r[h.TargetValue]||""),instructions:String(r[h.Instructions]||""),criteria:String(r[h.Criteria]||""),createdAt:String(r[h.CreatedAt]||""),status:String(r[h.Status]||"active")};
@@ -759,47 +797,65 @@ function getAssignments_(data) {
   return {success:true,assignments:list};
 }
 function submitAssignment_(data) {
-  const student=auth_(data); if(student.role!=="student") throw new Error("Отправлять ответы может только обучающийся.");
-  const id=String(data.assignmentId||""),answer=String(data.answer||"").trim().slice(0,12000); if(!id||!answer)throw new Error("Введите ответ.");
-  const sh=assignments_(),rows=sh.getDataRange().getValues(),h=headerMap_(sh),a=rows.slice(1).find(function(r){return String(r[h.Id])===id;});
-  if(!a)throw new Error("Задание не найдено.");
-  const cid=String(a[h.CourseId]||""),typ=String(a[h.TargetType]||""),val=String(a[h.TargetValue]||"");
-  if(!hasCourseAccess_(student,cid)||(typ==="individual"&&email_(val)!==student.email)||(typ==="group"&&val.toLowerCase()!==String(student.group||"").trim().toLowerCase())||String(a[h.Status]||"active")!=="active")throw new Error("Это задание вам недоступно.");
-  const lock=LockService.getScriptLock();lock.waitLock(10000);
-  try{
-    const sub=assignmentSubmissions_(),v=sub.getDataRange().getValues(),m=headerMap_(sub);
-    const i=v.slice(1).findIndex(function(r){return String(r[m.AssignmentId])===id&&email_(r[m.StudentEmail])===student.email;});
-    const now=new Date().toISOString(),submissionId=i>=0?String(v[i+1][m.Id]):Utilities.getUuid();
-    const hist=assignmentSubmissionHistory_(),hv=hist.getDataRange().getValues(),hm=headerMap_(hist);
-    const saved=hv.slice(1).filter(function(r){return String(r[hm.SubmissionId]||"")===submissionId;});
-    let attempt=saved.length+1;
-    if(i>=0&&!saved.length){
-      const previous=v[i+1],previousAt=String(previous[m.SubmittedAt]||now);
-      hist.appendRow([Utilities.getUuid(),id,submissionId,student.email,String(previous[m.StudentName]||student.name),String(previous[m.Group]||student.group),String(previous[m.Answer]||""),previousAt,1]);
-      attempt=2;
+  const student = auth_(data);
+  if (student.role !== "student") throw new Error("Отправлять ответы может только обучающийся.");
+  const id = String(data.assignmentId || "");
+  const answer = String(data.answer || "").trim().slice(0,12000);
+  if (!id || !answer) throw new Error("Введите ответ.");
+  const sh = assignments_(), rows = sh.getDataRange().getValues(), h = headerMap_(sh);
+  const a = rows.slice(1).find(function(r){ return String(r[h.Id]) === id; });
+  if (!a) throw new Error("Задание не найдено.");
+  const cid = String(a[h.CourseId] || ""), typ = String(a[h.TargetType] || ""), val = String(a[h.TargetValue] || "");
+  const eligible = (typ === "individual" && email_(val) === student.email) || (typ === "group" && String(val || "").trim().toLowerCase() === String(student.group || "").trim().toLowerCase());
+  if (!hasCourseAccess_(student,cid) || !eligible || String(a[h.Status] || "active") !== "active") throw new Error("Это задание вам недоступно.");
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sub = assignmentSubmissions_(), v = sub.getDataRange().getValues(), m = headerMap_(sub);
+    const i = v.slice(1).findIndex(function(r){ return String(r[m.AssignmentId]) === id && email_(r[m.StudentEmail]) === student.email; });
+    const now = new Date().toISOString();
+    const submissionId = i >= 0 ? String(v[i+1][m.Id]) : Utilities.getUuid();
+    const hist = assignmentSubmissionHistory_(), hv = hist.getDataRange().getValues(), hm = headerMap_(hist);
+    const saved = hv.slice(1).filter(function(r){ return String(r[hm.SubmissionId] || "") === submissionId; });
+    let attempt = saved.length + 1;
+    if (i >= 0 && !saved.length) {
+      const previous = v[i+1], previousAt = String(previous[m.SubmittedAt] || now);
+      appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1});
+      attempt = 2;
     }
-    hist.appendRow([Utilities.getUuid(),id,submissionId,student.email,student.name,student.group,answer,now,attempt]);
-    const row=[submissionId,id,student.email,student.name,student.group,answer,now,"submitted","","","",""];
-    if(i>=0)sub.getRange(i+2,1,1,row.length).setValues([row]);else sub.appendRow(row);
-    createNotification_(String(a[h.CreatedBy]||""),"submission",attempt>1?"Повторная отправка задания":"Новый ответ на задание",student.name+" ("+student.group+") отправил(а) работу: "+String(a[h.Title]||""),cid,id);
+    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt});
+    const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
+    if (i >= 0) updateMappedRecord_(sub, i + 2, record); else appendMappedRecord_(sub, record);
+    createNotification_(String(a[h.CreatedBy] || ""),"submission",attempt > 1 ? "Повторная отправка задания" : "Новый ответ на задание",student.name + " (" + student.group + ") отправил(а) работу: " + String(a[h.Title] || ""),cid,id);
     return {success:true,submittedAt:now,attempt:attempt,submissionId:submissionId};
-  }finally{lock.releaseLock();}
+  } finally { lock.releaseLock(); }
 }
 function gradeAssignment_(data) {
-  const actor=auth_(data); if (actor.role !== "teacher" && actor.role !== "admin") throw new Error("Проверять ответы могут только преподаватели.");
-  if(data.grade===undefined||data.grade===null||String(data.grade).trim()==="") throw new Error("Выберите оценку.");
-  const grade=Number(data.grade); if(!isFinite(grade)||grade<0||grade>5) throw new Error("Оценка должна быть от 0 до 5.");
-  const id=String(data.submissionId||""), sh=assignmentSubmissions_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), i=vals.slice(1).findIndex(function(r){return String(r[m.Id])===id;});
-  if(i<0) throw new Error("Ответ не найден.");
-  const row=vals[i+1], aid=String(row[m.AssignmentId]||""), as=assignments_(), av=as.getDataRange().getValues(), ah=headerMap_(as), a=av.slice(1).find(function(r){return String(r[ah.Id])===aid;});
-  if(!a) throw new Error("Назначение не найдено.");
-  const teacher=editor_(data,String(a[ah.CourseId]||""));
-  const feedback=String(data.feedback||"").slice(0,4000);
-  sh.getRange(i+2,m.Status+1).setValue("reviewed"); sh.getRange(i+2,m.Grade+1).setValue(grade); sh.getRange(i+2,m.Feedback+1).setValue(feedback); sh.getRange(i+2,m.ReviewedBy+1).setValue(teacher.email); sh.getRange(i+2,m.ReviewedAt+1).setValue(new Date().toISOString());
-  createNotification_(String(row[m.StudentEmail]||""),"grade","Работа проверена","По заданию «"+String(a[ah.Title]||"")+"» выставлена оценка: "+grade+"/5."+(feedback?" Есть комментарий преподавателя.":""),String(a[ah.CourseId]||""),aid);
-  return {success:true};
+  const actor = auth_(data);
+  if (actor.role !== "teacher" && actor.role !== "admin") throw new Error("Проверять ответы могут только преподаватели.");
+  if (data.grade === undefined || data.grade === null || String(data.grade).trim() === "") throw new Error("Выберите оценку.");
+  const grade = Number(data.grade);
+  if (!isFinite(grade) || grade < 0 || grade > 5) throw new Error("Оценка должна быть от 0 до 5.");
+  const id = String(data.submissionId || "");
+  if (!id) throw new Error("Не указан ответ для проверки.");
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sh = assignmentSubmissions_(), vals = sh.getDataRange().getValues(), m = headerMap_(sh);
+    const i = vals.slice(1).findIndex(function(r){ return String(r[m.Id]) === id; });
+    if (i < 0) throw new Error("Ответ не найден.");
+    const row = vals[i+1], aid = String(row[m.AssignmentId] || "");
+    const as = assignments_(), av = as.getDataRange().getValues(), ah = headerMap_(as);
+    const a = av.slice(1).find(function(r){ return String(r[ah.Id]) === aid; });
+    if (!a) throw new Error("Назначение не найдено.");
+    const courseId = String(a[ah.CourseId] || "");
+    const teacher = editor_(data, courseId);
+    const feedback = String(data.feedback || "").slice(0,4000);
+    updateMappedRecord_(sh, i + 2, {Status:"reviewed",Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:new Date().toISOString()});
+    createNotification_(String(row[m.StudentEmail] || ""),"grade","Работа проверена","По заданию «" + String(a[ah.Title] || "") + "» выставлена оценка: " + grade + "/5." + (feedback ? " Есть комментарий преподавателя." : ""),courseId,aid);
+    return {success:true};
+  } finally { lock.releaseLock(); }
 }
-
 
 /* ---------- Teacher controls: topic access and test attempts ---------- */
 function settingValue_(key) {
