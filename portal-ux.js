@@ -32,7 +32,7 @@
   function recordTest(result){
     if(!student()||!result||!result.success)return;
     var st=stats();st.tests=Math.max(0,Number(st.tests)||0)+1;
-    if(st.tests>=1)award("first_test");
+    if(st.tests>=1){award("first_test");award("hacker");}
     if(st.tests>=5)award("five_tests");
     if(st.tests>=10)award("ten_tests");
     if(Number(result.grade)===5)award("perfect_test");
@@ -65,6 +65,7 @@
     if(xp>=500)award("xp_500");
     if(xp>=1000)award("xp_1000");
     if(xp>=2000)award("xp_2000");
+    if(xp>=2500)award("xp_2500");
   }
   var oldUnlock=window.unlockAchievement;
   if(oldUnlock&&!oldUnlock._portalUxWrapped){
