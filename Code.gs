@@ -202,15 +202,16 @@ function proctorPenalty_(studentEmail,courseId,testId,attemptNo) {
 }
 function gradeFromPercent_(percent) { return percent>=90?5:percent>=75?4:percent>=60?3:2; }
 function notifyProctorSanction_(student,courseId,testId,attemptNo,violationNo,penaltyPoints,eventType) {
-  const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),message="Студент: "+student.name+" ("+student.email+"), группа "+student.group+". Тест: "+testId+", попытка №"+attemptNo+". Зафиксировано нарушений: "+violationNo+". Штраф: -"+penaltyPoints+" процентных пунктов. Последнее событие: "+eventType+". Время отчёта: "+new Date().toISOString()+".";
+  let sent=0;const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),message="Студент: "+student.name+" ("+student.email+"), группа "+student.group+". Тест: "+testId+", попытка №"+attemptNo+". Зафиксировано нарушений: "+violationNo+". Штраф: -"+penaltyPoints+" процентных пунктов. Последнее событие: "+eventType+". Время отчёта: "+new Date().toISOString()+".";
   vals.slice(1).forEach(function(row){
     const role=String(row[m.Role]||"").toLowerCase(),mail=email_(row[m.Email]);
     if(!mail)return;
     const assigned={email:mail,role:role,courses:String(row[m.Courses]||"")};
     if(role==="admin"||(role==="teacher"&&hasCourseAccess_(assigned,courseId))){
-      appendMappedRecord_(notifications_(),{Id:Utilities.getUuid(),RecipientEmail:mail,Type:"warning",Title:"Нарушение правил тестирования",Message:message,CourseId:courseId,RelatedId:testId,CreatedAt:new Date().toISOString()});
+      appendMappedRecord_(notifications_(),{Id:Utilities.getUuid(),RecipientEmail:mail,Type:"warning",Title:"Нарушение правил тестирования",Message:message,CourseId:courseId,RelatedId:testId,CreatedAt:new Date().toISOString()});sent++;
     }
   });
+  return sent;
 }
 
 
@@ -599,7 +600,7 @@ function logProctorEvent_(data) {
     let reportSent=false;
     if(action==="sanction"&&penaltyPoints>0){
       appendAttemptAudit_({EventType:"proctor_sanction",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:testId,AttemptNo:attemptNo,Percent:penaltyPoints});
-      try{notifyProctorSanction_(user,courseId,testId,attemptNo,violationNo,penaltyPoints,eventType);reportSent=true;}catch(reportError){console.error("Не удалось отправить отчёт преподавателю",reportError);}
+      try{reportSent=notifyProctorSanction_(user,courseId,testId,attemptNo,violationNo,penaltyPoints,eventType)>0;}catch(reportError){console.error("Не удалось отправить отчёт преподавателю",reportError);}
     }
     return {success:true,violationNo:violationNo,attemptNo:attemptNo,action:action,penaltyPoints:penaltyPoints,reportSent:reportSent};
   } finally {lock.releaseLock();}
