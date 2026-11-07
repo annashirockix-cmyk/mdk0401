@@ -582,6 +582,12 @@ function saveStudent_(data) {
       fields.Payload = JSON.stringify(existing);
     } else if (current.role === "student") {
       const payload = incoming && typeof incoming === "object" ? incoming : {};
+      // Оценки из журнала — серверные данные преподавателя. Синхронизация
+      // локального состояния студента не должна их затирать или подменять.
+      let existingPayload={};
+      try { existingPayload=JSON.parse(target.payload||"{}"); } catch(e) {}
+      if(existingPayload.manualGrades && typeof existingPayload.manualGrades==="object") payload.manualGrades=existingPayload.manualGrades;
+      else delete payload.manualGrades;
       if (payload.results && typeof payload.results === "object" && !Array.isArray(payload.results)) {
         const bankMap=protectedQuestionBankMap_();
         Object.keys(payload.results).forEach(function(testId){
