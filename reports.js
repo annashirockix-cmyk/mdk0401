@@ -4,7 +4,7 @@ window.renderCourseReportsPage=function(){
  const actor=window.state.staff;if(!actor||!["teacher","admin"].includes(actor.role)){app.innerHTML='<div class="module">Отчёты доступны только преподавателям и администраторам.</div>';return;}
  const crumbs=document.getElementById("crumbs");if(crumbs)crumbs.textContent="Отчеты преподавателя";
  app.innerHTML='<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>📊 Результаты студентов</h1><p>Загрузка реальных попыток из Google Sheets и старых результатов из профилей.</p></section><div class="module" style="padding:20px"><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"><select id="repFilterGroup" class="self-input" style="width:200px"><option value="">Все группы</option></select><select id="repFilterTest" class="self-input" style="width:280px"><option value="">Все тесты</option></select><select id="repFilterCourse" class="self-input" style="width:220px"><option value="">Все дисциплины</option></select><button class="btn" id="repRefresh">Обновить</button><button class="btn ghost" id="repExport">Экспорт CSV</button><span id="repStatus" style="color:var(--muted)"></span></div><div id="repAnalytics"></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th>Студент</th><th>Группа</th><th>Дисциплина</th><th>Работа</th><th>Оценка</th><th>Баллы</th><th>Ответ / работа</th><th>Попытки</th><th>Дата</th></tr></thead><tbody id="repTbody"><tr><td colspan="9">Загрузка…</td></tr></tbody></table></div></div><section class="module" style="padding:18px;margin-top:16px"><h2 style="margin-top:0">🧭 История действий на портале</h2><p style="font-size:13px;color:var(--muted)">Фиксируются переходы по страницам, нажатия на навигационные элементы и переключения вкладок. Ответы в полях и пароли не записываются. Время берётся с сервера.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px"><select id="activityStudent" class="self-input" style="min-width:220px"><option value="">Все обучающиеся</option></select><button class="btn" id="activityRefresh">Обновить историю</button><button class="btn ghost" id="activityExport">Экспорт загруженной истории CSV</button><span id="activityStatus" style="color:var(--muted)"></span></div><div id="activityLogList" style="max-height:520px;overflow:auto"><p>Загрузка истории…</p></div><div style="display:flex;gap:10px;align-items:center;margin-top:10px"><button class="btn ghost" id="activityLoadMore" style="display:none">Показать ещё</button><span id="activityPageStatus" style="font-size:12px;color:var(--muted)"></span></div></section>'
- let results=[],students=[],assignments=[],activityEvents=[],activityOffset=0,activityTotal=0,activityHasMore=false,activityLoading=false;
+ let results=[],students=[],assignments=[],activityEvents=[],activityOffset=0,activityTotal=0,activityHasMore=false,activityLoading=false,activityPendingReload=false;
  const labels={"07.01":"МДК 07.01","04.01":"МДК 04.01","02.01":"МДК 02.01","02.02":"МДК 02.02","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ"};
  const esc=x=>window.escapeHtml(String(x==null?"":x));
  function updateFilters(){
@@ -47,7 +47,8 @@ window.renderCourseReportsPage=function(){
 
   function loadActivityLog(append){
   const host=document.getElementById("activityLogList"),status=document.getElementById("activityStatus"),more=document.getElementById("activityLoadMore"),pageStatus=document.getElementById("activityPageStatus");
-  if(!host||!window.API.getActivityLog||activityLoading)return;
+  if(!host||!window.API.getActivityLog)return;
+  if(activityLoading){if(!append)activityPendingReload=true;return;}
   if(!append){activityOffset=0;activityTotal=0;activityHasMore=false;activityEvents=[];}
   const course=document.getElementById("repFilterCourse").value||"",email=document.getElementById("activityStudent").value||"",group=document.getElementById("repFilterGroup").value||"";
   activityLoading=true;if(more)more.disabled=true;
@@ -64,7 +65,7 @@ window.renderCourseReportsPage=function(){
    if(status)status.textContent="Показано: "+activityEvents.length+" из "+activityTotal;
    if(more){more.style.display=activityHasMore?"inline-flex":"none";more.disabled=false;}
    if(pageStatus)pageStatus.textContent=activityHasMore?"Можно загрузить следующую страницу":"Все найденные записи загружены";
-  }).catch(function(err){if(!append)host.innerHTML='<p style="color:var(--err)">'+esc(err.message||err)+'</p>';if(status)status.textContent="Ошибка загрузки";if(more)more.disabled=false;}).finally(function(){activityLoading=false;});
+  }).catch(function(err){if(!append)host.innerHTML='<p style="color:var(--err)">'+esc(err.message||err)+'</p>';if(status)status.textContent="Ошибка загрузки";if(more)more.disabled=false;}).finally(function(){activityLoading=false;if(activityPendingReload){activityPendingReload=false;loadActivityLog(false);}});
  }
  function fillActivityStudents(){
   const el=document.getElementById("activityStudent");if(!el)return;
