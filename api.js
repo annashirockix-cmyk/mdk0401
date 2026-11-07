@@ -36,7 +36,6 @@ window.API = {
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
  submitCustomTest:function(testId,answers,timeSpent){return fetchAPI("submitCustomTest",{testId:testId,answers:answers,timeSpent:timeSpent},"POST");},
  getGameAnswer:function(gameId,categoryIndex,questionIndex){return fetchAPI("getGameAnswer",{gameId:gameId,categoryIndex:categoryIndex,questionIndex:questionIndex},"POST");},
- uploadBookPdf:function(data){return fetchAPI("uploadBookPdf",data||{},"POST");},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
  deleteCustomContent:function(id){return fetchAPI("deleteCustomContent",{id:id},"POST");},
  setTeacherCourses:function(email,courses){return fetchAPI("setTeacherCourses",{email:email,courses:courses},"POST");},
