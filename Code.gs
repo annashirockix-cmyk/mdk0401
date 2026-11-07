@@ -86,6 +86,7 @@ function handleRequest_(e) {
       case "getmycourseresults": result = getMyCourseResults_(data); break;
       case "savegcodeprogress": result = saveGCodeProgress_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
+      case "submitcustomtest": result = submitCustomTest_(data); break;
       case "uploadbookpdf": result = uploadBookPdf_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
@@ -848,17 +849,55 @@ function getCustomContent_(data) {
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
 
+    // Student sessions receive test prompts and options only. Answer keys remain server-side.
+    if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
+      payload.questions = payload.questions.map(function (question) {
+        const safe = Object.assign({}, question || {});
+        ["correct", "answer", "correctAnswer", "answers", "explanation", "solution", "key"].forEach(function (key) { delete safe[key]; });
+        return safe;
+      });
+    }
     list.push(Object.assign({
-      id: String(row[0]),
-      mdkId: courseId,
-      courseId: courseId,
-      topicId: String(row[2] || ""),
-      type: String(row[3] || ""),
-      title: String(row[4] || "")
+      id: String(row[0]), mdkId: courseId, courseId: courseId,
+      topicId: String(row[2] || ""), type: String(row[3] || ""), title: String(row[4] || "")
     }, payload));
   });
 
   return { success: true, data: list };
+}
+
+
+function submitCustomTest_(data) {
+  const user = auth_(data);
+  if (user.role !== "student") throw new Error("Отправлять ответы могут только студенты.");
+  const id = String(data.testId || data.id || "");
+  if (!id) throw new Error("Не указан тест.");
+  const values = content_().getDataRange().getValues();
+  let record = null;
+  values.slice(1).forEach(function (row) {
+    if (String(row[0]) === id && String(row[3]) === "test") record = {
+      courseId: String(row[1] || ""), title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
+    };
+  });
+  if (!record) throw new Error("Тест не найден.");
+  if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
+  const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
+  const answers = Array.isArray(data.answers) ? data.answers : [];
+  if (!questions.length || answers.length !== questions.length) throw new Error("Ответьте на все вопросы теста.");
+  let score = 0;
+  questions.forEach(function (q, i) {
+    const selected = Number(answers[i]);
+    if (Number.isInteger(selected) && selected === Number(q.correct)) score++;
+  });
+  const percent = Math.round(score / questions.length * 100);
+  const grade = percent >= 90 ? 5 : percent >= 75 ? 4 : percent >= 60 ? 3 : 2;
+  const result = saveResult_({
+    token: data.token, courseId: record.courseId, testId: "custom_" + id, testTitle: record.title,
+    grade: grade, score: score, maxScore: questions.length, percent: percent,
+    timeSpent: Math.max(0, Number(data.timeSpent) || 0),
+    payload: JSON.stringify({ answers: answers.map(function (v) { return Number(v); }) })
+  });
+  return { success: true, score: score, maxScore: questions.length, percent: percent, grade: grade, attempts: result.attempts };
 }
 
 function saveCustomContent_(data) {
