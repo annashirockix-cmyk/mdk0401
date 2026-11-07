@@ -86,7 +86,7 @@
     var preview=node("div","Предпросмотр фона сертификата");preview.className="certificate-choice-preview";panel.appendChild(preview);
     var hint=node("p","Выбор сохраняется в этом браузере. При печати выберите «Сохранить как PDF» и включите печать фоновой графики, если хотите сохранить цветной фон.");
     hint.style.cssText="font-size:12px;color:var(--muted);margin-bottom:0";panel.appendChild(hint);
-    function update(){applyDesign(ds.value,bs.value);var selected=backgrounds[bs.value]||backgrounds.white;preview.style.background=selected.css||"#fff";if(selected.image)preview.style.backgroundImage="linear-gradient(rgba(255,255,255,.76),rgba(255,255,255,.76)),url(\\""+selected.image+"\\")";preview.textContent=selected.label;}
+    function update(){applyDesign(ds.value,bs.value);var selected=backgrounds[bs.value]||backgrounds.white;preview.style.background=selected.css||"#fff";if(selected.image)preview.style.backgroundImage='linear-gradient(rgba(255,255,255,.76),rgba(255,255,255,.76)),url("'+selected.image+'")';preview.textContent=selected.label;}
     update();ds.addEventListener("change",update);bs.addEventListener("change",update);
     return panel;
   }
