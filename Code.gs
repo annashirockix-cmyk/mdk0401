@@ -493,7 +493,7 @@ function saveResult_(data) {
   if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
   const testId = String(data.testId || "test");
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
-  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\\d+$/.test(testId));
+  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId));
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const sheet=results_(),values=sheet.getDataRange().getValues();
@@ -1317,7 +1317,7 @@ function legacyNorm_(v) { return String(v == null ? "" : v).toLowerCase().replac
 function legacyNumber_(v) {
   if (typeof v === "number") return v;
   const s = String(v == null ? "" : v).replace(/\\s/g,"").replace(",",".").replace("%","");
-  const m = s.match(/-?\\d+(?:\\.\\d+)?/);
+  const m = s.match(/-?\d+(?:\\.\d+)?/);
   return m ? Number(m[0]) : 0;
 }
 function legacyColumn_(headers, aliases) {
