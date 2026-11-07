@@ -395,7 +395,6 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
   assert.match(html, /lecture-visual-atlas\.js\?v=3/);
-  assert.match(html, /lecture-visual-atlas\.css\?v=3/);
   assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=6/);
   assert.match(html, /sprut-tp-document-examples\.js\?v=1/);
   assert.match(html, /lecture-visual-atlas\.css\?v=4/);
