@@ -20,7 +20,7 @@
   box.insertBefore(personalBox,box.querySelector("#maChoose"));
   function loadPersonalAdvice(){
    var student=window.state&&window.state.student;
-   if(!student||String(student.role||"").toLowerCase()!=="student"){personalBox.innerHTML="<b>Индивидуальные рекомендации</b><p>Они появятся после входа в аккаунт обучающегося и сохранения результатов по метрологии.</p>";return;}
+   if(!student||!student.email){personalBox.innerHTML="<b>Индивидуальные рекомендации</b><p>Они появятся после входа в аккаунт обучающегося и сохранения результатов по метрологии.</p>";return;}
    if(!window.API||!window.API.getMyCourseResults){personalBox.innerHTML="<b>Мои рекомендации</b><p>Сервис оценок временно недоступен.</p>";return;}
    window.API.getMyCourseResults("MET").then(function(res){
     if(!res||!res.success)throw new Error(res&&res.error||"Не удалось загрузить ваши результаты");
