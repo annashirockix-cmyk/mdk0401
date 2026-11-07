@@ -1246,7 +1246,7 @@ function resolveAttemptRequestNotifications_(studentEmail,courseId,testId) {
     if(String(row[m.Type]||"")!=="attempt_request"||String(row[m.ReadAt]||""))return;
     if(!sameCourseId_(row[m.CourseId],courseId))return;
     let ref={};try{ref=JSON.parse(String(row[m.RelatedId]||"{}"));}catch(e){}
-    if(email_(ref.email)===email_(studentEmail)&&String(ref.testId||"")===String(testId))updateMappedRecord_(sh,i+2,{ReadAt:stamp});
+    if(email_(ref.email)===email_(studentEmail)&&String(ref.testId||"")===String(testId))updateMappedRecord_(sh,i+2,{ReadAt:stamp,Type:"attempt_request_resolved"});
   });
 }
 
