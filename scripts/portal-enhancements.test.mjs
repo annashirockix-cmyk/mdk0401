@@ -180,6 +180,18 @@ test("MDK 07.01 training and final exam include the additional bank only once", 
 });
 
 
+test("MDK 07.01 topic 4.2 quiz follows its lecture rather than unsupported controller trivia", () => {
+  const source = read("data-0701.js");
+  const sandbox = { window: { MDK_DATA: {} } };
+  vm.runInNewContext(source, sandbox, { timeout: 1000 });
+  const topic = sandbox.window.MDK_DATA["07.01"].sections.flatMap((section) => section.topics || []).find((item) => item.id === "t-4-2");
+  const prompts = topic.test.map((question) => question.q).join(" ");
+  assert.match(prompts, /обратной связи/);
+  assert.match(prompts, /интерполяция/);
+  assert.match(prompts, /незнакомой командой/);
+  assert.doesNotMatch(prompts, /DNC|Fanuc|Heidenhain/);
+});
+
 test("MDK 07.01 topic tests avoid several known cross-topic repeats", () => {
   const data = read("data-0701.js");
   const hard = read("hard-questions.js");
