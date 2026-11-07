@@ -3,7 +3,7 @@ window.renderTeacherDashboard=function(){
 const app=document.getElementById("app"),crumb=document.getElementById("crumbs"),staff=window.state.staff;
 if(!app)return;crumb.textContent="Панель преподавателя";
 if(!staff||!["teacher","admin"].includes(String(staff.role).toLowerCase())){app.innerHTML='<section class="module">⛔ Доступ только преподавателю.</section>';return;}
-app.innerHTML='<div class="teacher-dashboard"><div class="td-head"><div><a href="#/">← На главную</a><h1>Панель преподавателя</h1><p>Сводка по заданиям, группам и результатам</p></div><button class="btn ghost" id="tdRefresh">↻ Обновить</button></div><p id="tdStatus">Загрузка…</p><div id="tdContent"></div></div>';
+app.innerHTML='<div class="teacher-dashboard"><div class="td-head"><div><a href="#/">← На главную</a><h1>Панель преподавателя</h1><p>Сводка по заданиям, группам и результатам</p></div><div class="td-head-actions"><a class="btn" href="#/teaching-controls">🔐 Управление доступом и попытками</a> <button class="btn ghost" id="tdRefresh">↻ Обновить</button></div></div><p id="tdStatus">Загрузка…</p><div id="tdContent"></div></div>';
 const E=v=>window.escapeHtml(String(v==null?"":v));
 const courses={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ"};
 function load(){
