@@ -54,6 +54,7 @@ window.API = {
  getTopicAccess:function(courseId,topicId){return fetchAPI("getTopicAccess",{courseId:courseId,topicId:topicId},"GET");},
  setTopicAccess:function(courseId,topicId,open){return fetchAPI("setTopicAccess",{courseId:courseId,topicId:topicId,open:open},"POST");},
  grantTestAttempts:function(courseId,testId,email,extraAttempts){return fetchAPI("grantTestAttempts",{courseId:courseId,testId:testId,email:email,extraAttempts:extraAttempts},"POST");},
+ requestTestAttempts:function(courseId,testId,message){return fetchAPI("requestTestAttempts",{courseId:courseId,testId:testId,message:message||""},"POST");},
  getTestAttemptStatus:function(courseId,testId,email){return fetchAPI("getTestAttemptStatus",{courseId:courseId,testId:testId,email:email||""},"GET");},
  gradeWrittenResult:function(email,courseId,testId,grade,feedback){return fetchAPI("gradeWrittenResult",{email:email,courseId:courseId,testId:testId,grade:grade,feedback:feedback||""},"POST");},
  logProctorEvent:function(data){return fetchAPI("logProctorEvent",data||{},"POST");},
