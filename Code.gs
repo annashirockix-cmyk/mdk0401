@@ -493,6 +493,7 @@ function saveResult_(data) {
   const sheet = results_();
   const values = sheet.getDataRange().getValues();
   const testId = String(data.testId || "test");
+  if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
   const attempts = values.slice(1).filter(function (row) {
     return email_(row[0]) === email && String(row[3]) === testId;
   }).length + 1;
@@ -908,10 +909,6 @@ function submitCustomTest_(data) {
   if (!record) throw new Error("Тест не найден.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
   const attemptKey="custom_"+id;
-  const prior=results_().getDataRange().getValues().slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey;}).length;
-  const extra=Number(settingValue_("testAttempts:"+user.email+":"+id))||0;
-  const limit=1+Math.max(0,extra);
-  if(prior>=limit) throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю за дополнительной попыткой.");
   const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   const answers = Array.isArray(data.answers) ? data.answers : [];
   if (!questions.length || answers.length !== questions.length) throw new Error("Ответьте на все вопросы теста.");
@@ -922,13 +919,18 @@ function submitCustomTest_(data) {
   });
   const percent = Math.round(score / questions.length * 100);
   const grade = percent >= 90 ? 5 : percent >= 75 ? 4 : percent >= 60 ? 3 : 2;
-  const result = saveResult_({
-    token: data.token, courseId: record.courseId, testId: "custom_" + id, testTitle: record.title,
-    grade: grade, score: score, maxScore: questions.length, percent: percent,
-    timeSpent: Math.max(0, Number(data.timeSpent) || 0),
-    payload: JSON.stringify({ answers: answers.map(function (v) { return Number(v); }) })
-  });
-  return { success: true, score: score, maxScore: questions.length, percent: percent, grade: grade, attempts: result.attempts };
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  let attemptNo=0;
+  try {
+    const resultSheet=results_(), resultRows=resultSheet.getDataRange().getValues();
+    const prior=resultRows.slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey;}).length;
+    const extra=Number(settingValue_("testAttempts:"+user.email+":"+id))||0;
+    const limit=1+Math.max(0,extra);
+    if(prior>=limit) throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю за дополнительной попыткой.");
+    attemptNo=prior+1;
+    resultSheet.appendRow([user.email,user.name,user.group,attemptKey,record.title,grade,score,questions.length,percent,Math.max(0,Number(data.timeSpent)||0),attemptNo,new Date().toISOString(),record.courseId,JSON.stringify({answers:answers.map(function(v){return Number(v);})})]);
+  } finally { lock.releaseLock(); }
+  return { success: true, score: score, maxScore: questions.length, percent: percent, grade: grade, attempts: attemptNo };
 }
 
 function getGameAnswer_(data) {
