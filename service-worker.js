@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v142'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
+const CACHE_NAME = 'portal-cache-v143'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
 
 const STATIC_ASSETS = [
   './',
@@ -109,7 +109,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Кэширование статических ресурсов версии v142');
+        console.log('[SW] Кэширование статических ресурсов версии v143');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
