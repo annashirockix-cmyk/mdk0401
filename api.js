@@ -40,6 +40,7 @@ window.API = {
  getTestAttemptStatus:function(courseId,testId){return fetchAPI("getTestAttemptStatus",{courseId:courseId,testId:testId},"GET");},
  logProctorEvent:function(data){return fetchAPI("logProctorEvent",data||{},"POST");},
  getProctorEvents:function(courseId,email,testId){return fetchAPI("getProctorEvents",{courseId:courseId,email:email||"",testId:testId||""},"GET");},
+ getAttemptAudit:function(courseId,email,testId){return fetchAPI("getAttemptAudit",{courseId:courseId,email:email||"",testId:testId||""},"GET");},
  getTutoringLink:function(courseId){return fetchAPI("getTutoringLink",{courseId:courseId},"GET");},
  saveTutoringLink:function(courseId,data){return fetchAPI("saveTutoringLink",Object.assign({courseId:courseId},data||{}),"POST");},
  submitCustomTest:function(testId,answers,timeSpent){return fetchAPI("submitCustomTest",{testId:testId,answers:answers,timeSpent:timeSpent},"POST");},
