@@ -168,7 +168,7 @@ test("MDK 07.01 final exam samples questions across all available sections", () 
   }));
   const selected = sandbox.selectBalancedExam0701({ sections }, 10);
   assert.equal(selected.length, 10);
-  const covered = new Set(selected.map((question) => Number(question.q.match(/Раздел (\\d+)/)[1])));
+  const covered = new Set(selected.map((question) => Number(question.q.match(/Раздел (\d+)/)[1])));
   assert.equal(covered.size, 5, "the exam must include questions from each available section");
 });
 
