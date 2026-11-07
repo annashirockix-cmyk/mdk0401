@@ -96,7 +96,7 @@
       box.innerHTML='<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:12px"><h3>Результат: '+score+' из 4 · предварительная оценка '+grade+'</h3><p>Предельные размеры: '+f(p.min)+'–'+f(p.max)+' мм. Допуск T = ES − EI = '+f(p.es)+' − ('+f(p.ei)+') = '+f(p.tol)+' мм.</p><ul>'+lines.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul><p id="mtpSaveStatus">Отправка результата…</p></div>';
       host.querySelector("#mtpCheck").disabled=true;
       var st=window.state&&window.state.student;
-      if(!st||!st.email||!window.API||!window.API.saveResult){host.querySelector("#mtpSaveStatus").textContent="Результат рассчитан локально. Для записи в журнал войдите в аккаунт студента.";return;}
+      if(!st||!st.email||!window.API||!window.API.saveTeacherResult){host.querySelector("#mtpSaveStatus").textContent="Результат рассчитан локально. Для записи в журнал войдите в аккаунт студента.";return;}
       var date=new Date().toISOString().slice(0,10),payload={variant:p,answers:vals,decision:decision,criteria:lines};
       window.API.saveResult({email:st.email,name:st.name||st.fullName||st.email,group:st.group||"",courseId:"MET",testId:"metrology_tolerance_practice_"+Date.now(),testTitle:"Практикум: предельные размеры и допуск",grade:grade,score:score,maxScore:4,percent:percent,feedback:"Автоматическая предварительная оценка. "+lines.join("; "),payload:JSON.stringify(payload),date:date}).then(function(r){if(!r||r.success===false)throw new Error(r&&r.error||"Сервер не подтвердил запись.");host.querySelector("#mtpSaveStatus").textContent="Результат отправлен в журнал преподавателя. Оценка предварительная.";}).catch(function(e){host.querySelector("#mtpSaveStatus").textContent="Не удалось сохранить результат: "+(e.message||e);});
     }
@@ -168,7 +168,7 @@
           if(!student||!date){host.querySelector("#mtjStatus").textContent="Выберите студента и дату.";return;}
           var title=work.options[work.selectedIndex].text,testId="metrology_"+work.value+"_"+date.replace(/-/g,"");
           var btn=this;btn.disabled=true;btn.textContent="Сохранение…";
-          window.API.saveResult({email:student.email,name:student.name,group:student.group,testId:testId,testTitle:title+" ("+date+")",grade:grade,score:grade,maxScore:5,percent:grade*20,courseId:"MET",payload:"Лабораторная работа: "+title+"; дата: "+date,feedback:feedback,date:date}).then(function(saved){
+          window.API.saveTeacherResult({email:student.email,name:student.name,group:student.group,testId:testId,testTitle:title+" ("+date+")",grade:grade,score:grade,maxScore:5,percent:grade*20,courseId:"MET",payload:"Лабораторная работа: "+title+"; дата: "+date,feedback:feedback,date:date}).then(function(saved){
             if(!saved||saved.success===false)throw new Error(saved&&saved.error||"Сервер не подтвердил сохранение.");
             var rec={email:student.email,name:student.name,group:student.group,testId:testId,testTitle:title+" ("+date+")",grade:grade,feedback:feedback,date:date,courseId:"MET"};
             rows=rows.filter(function(x){return !(x.email===student.email&&x.testId===testId);});rows.push(rec);renderRows();
