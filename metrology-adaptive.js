@@ -15,6 +15,36 @@
   box.innerHTML='<h2>Персональный тренажёр повторения</h2><p>Выбери тему, изучи короткое напоминание и реши новый индивидуальный пример. После проверки результат можно отправить в журнал.</p><div id="maChoose" style="display:flex;gap:8px;flex-wrap:wrap">'+Object.keys(topics).map(function(k){return '<button class="btn" data-topic="'+k+'">'+topics[k].name+'</button>';}).join("")+'</div><div id="maTask" style="margin-top:14px"></div>';
   app.appendChild(box);
   var chosen=null,task=null;
+  var personalBox=document.createElement("div");personalBox.id="maPersonalAdvice";personalBox.style.cssText="border:1px solid var(--border);border-radius:10px;padding:12px;margin:12px 0";
+  personalBox.innerHTML="<b>Мои рекомендации</b><p>Проверяем сохранённые результаты…</p>";
+  box.insertBefore(personalBox,box.querySelector("#maChoose"));
+  function loadPersonalAdvice(){
+   var student=window.state&&window.state.student;
+   if(!student||String(student.role||"").toLowerCase()!=="student"){personalBox.innerHTML="<b>Индивидуальные рекомендации</b><p>Они появятся после входа в аккаунт обучающегося и сохранения результатов по метрологии.</p>";return;}
+   if(!window.API||!window.API.getMyCourseResults){personalBox.innerHTML="<b>Мои рекомендации</b><p>Сервис оценок временно недоступен.</p>";return;}
+   window.API.getMyCourseResults("MET").then(function(res){
+    if(!res||!res.success)throw new Error(res&&res.error||"Не удалось загрузить ваши результаты");
+    var defs=[
+     {id:"caliper",name:"Штангенциркуль",re:/штангенцирк|caliper/i,advice:"Повтори основную шкалу, нониус и цену деления."},
+     {id:"micrometer",name:"Микрометр",re:/микрометр|micrometer/i,advice:"Повтори шкалу стебля, барабан и назначение трещотки."},
+     {id:"depth",name:"Глубиномер",re:/глубиномер|глубин/i,advice:"Повтори установку на базовую плоскость и считывание глубины."},
+     {id:"indicator",name:"Индикатор и биение",re:/индикатор|биени|runout|dial/i,advice:"Повтори определение Xmax, Xmin и расчёт R = Xmax − Xmin."},
+     {id:"tolerance",name:"Допуски и предельные размеры",re:/допуск|предельн|посадк|tolerance/i,advice:"Повтори Dmax, Dmin, допуск и проверку годности."},
+     {id:"error",name:"Погрешности измерений",re:/погрешност|ошибк.*измер|точност|error/i,advice:"Повтори абсолютную и относительную погрешность."}
+    ];
+    var rows=Array.isArray(res.results)?res.results:[];
+    var advice=defs.map(function(def){
+     var subset=rows.filter(function(r){return def.re.test([r.testId,r.testTitle,r.feedback||"",r.payload||""].join(" "));});
+     var grades=subset.map(function(r){return Number(r.grade);}).filter(Number.isFinite);
+     var low=grades.filter(function(g){return g<4;}).length;
+     var mean=grades.length?grades.reduce(function(x,y){return x+y;},0)/grades.length:null;
+     return {id:def.id,name:def.name,advice:def.advice,count:grades.length,low:low,mean:mean};
+    }).filter(function(x){return x.count&& (x.low>0||x.mean<4);}).sort(function(x,y){return y.low-x.low||(x.mean||0)-(y.mean||0);}).slice(0,3);
+    personalBox.innerHTML="<b>Мои рекомендации</b>"+(advice.length?"<p>По сохранённым оценкам стоит уделить внимание следующим темам:</p><ul>"+advice.map(function(x){return "<li><b>"+x.name+"</b> — "+x.advice+" <small>(средний балл "+x.mean.toFixed(1)+", результатов: "+x.count+")</small> <button type='button' class='btn' data-recommend-topic='"+x.id+"'>Потренироваться</button></li>";}).join("")+"</ul>":"<p>По распознанным и оценённым работам сейчас нет явных сигналов для дополнительного повторения. Если результатов мало, рекомендации могут быть неполными.</p>");
+    personalBox.querySelectorAll("[data-recommend-topic]").forEach(function(btn){btn.onclick=function(){chosen=btn.getAttribute("data-recommend-topic");next();box.querySelector("#maTask").scrollIntoView({behavior:"smooth",block:"start"});};});
+   }).catch(function(e){personalBox.innerHTML="<b>Мои рекомендации</b><p>Не удалось загрузить рекомендации: "+String(e.message||e).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];})+"</p>";});
+  }
+  loadPersonalAdvice();
   function next(){task=topics[chosen].make();var t=topics[chosen];box.querySelector("#maTask").innerHTML='<div style="border:1px solid var(--border);border-radius:10px;padding:14px"><h3>'+t.name+'</h3><p><b>Краткая теория.</b> '+t.theory+'</p><p><b>Формула:</b> <code>'+t.formula+'</code></p><p><b>Пример:</b> '+t.example+'</p><hr><p><b>Задание.</b> '+task.question+'</p><label>Ответ ('+task.unit+')<input id="maAnswer" inputmode="decimal" placeholder="Введи число" style="display:block;width:100%;max-width:280px;padding:10px;margin-top:5px"></label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-primary" id="maCheck">Проверить</button><button class="btn" id="maNext">Другой вариант</button></div><div id="maFeedback" aria-live="polite" style="margin-top:12px"></div></div>';
    box.querySelector("#maCheck").onclick=check;box.querySelector("#maNext").onclick=next;
   }
