@@ -9,6 +9,31 @@ function shuffle0701(items) {
   return copy;
 }
 
+function selectBalancedExam0701(moduleData, limit) {
+  var pools = (moduleData && moduleData.sections ? moduleData.sections : []).map(function(section) {
+    var questions = [];
+    (section.topics || []).forEach(function(topic) {
+      if (Array.isArray(topic.test)) questions = questions.concat(topic.test);
+      if (window.HARD_TESTS && Array.isArray(window.HARD_TESTS[topic.id])) questions = questions.concat(window.HARD_TESTS[topic.id]);
+    });
+    var seen = Object.create(null);
+    questions = questions.filter(function(question) {
+      var key = String(question.q || "").trim().toLocaleLowerCase("ru");
+      if (!key || seen[key]) return false;
+      seen[key] = true;
+      return true;
+    });
+    return shuffle0701(questions);
+  }).filter(function(pool) { return pool.length > 0; });
+  var selected = [];
+  while (selected.length < limit && pools.some(function(pool) { return pool.length > 0; })) {
+    pools.forEach(function(pool) {
+      if (selected.length < limit && pool.length) selected.push(pool.pop());
+    });
+  }
+  return selected;
+}
+
 window.renderTraining_0701 = function(mdkId) {
   var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
   app.innerHTML = '<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>';
@@ -93,7 +118,8 @@ window.renderFinal_0701 = function(mdkId) {
   var startBtn = document.createElement("button"); startBtn.className = "btn"; startBtn.textContent = "Начать экзамен"; startBtn.style.width = "100%"; box.appendChild(startBtn);
   
   startBtn.onclick = function() {
-    var picked = shuffle0701(allQ).slice(0, Math.min(10, allQ.length));
+    var moduleData = window.MDK_DATA && window.MDK_DATA["07.01"];
+    var picked = selectBalancedExam0701(moduleData, Math.min(10, allQ.length));
     var timeLeft = 600;
     box.innerHTML = '<div id="exTimer" style="font-size:24px; font-weight:bold; text-align:center; color:var(--accent); margin-bottom:20px;">10:00</div>';
     var form = document.createElement("form");
