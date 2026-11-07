@@ -110,10 +110,13 @@
     var credit=photo.author?'<span class="lv-credit">Источник: Wikimedia Commons · '+esc(photo.author)+' · '+esc(photo.license)+' · <a href="'+photo.page+'" target="_blank" rel="noopener noreferrer">карточка и лицензия</a></span>':"";
     return '<figure class="lv-photo"><img loading="lazy" decoding="async" src="'+photo.src+'" alt="'+esc(photo.alt)+'" onerror="this.closest(\'figure\').classList.add(\'lv-image-missing\');this.remove();"><figcaption>'+esc(photo.caption)+credit+'</figcaption></figure>';
   }
+  var usedPhotoSources = Object.create(null);
   function visualSupplement(id,topic){
     var photo=photoFor(id,topic),steps=stepsFor(id,topic),special=id==="SPRUT_TP"?specialSprutFigure(topic):"",graph=graphSvg(id,topic);
+    if(photo && usedPhotoSources[photo.src]) photo=null;
+    else if(photo) usedPhotoSources[photo.src]=true;
     if(!photo&&!steps&&!special&&!graph)return "";
-    var html='<section class="lecture-visual-atlas"><h3>Иллюстрации именно к этой теме</h3>';
+    var html='<section class="lecture-visual-atlas"><h3>Визуальные материалы по теме</h3>';
     html+=photoHtml(photo);
     if(special)html+=special;
     if(steps)html+=flowSvg(steps,"Схема по теме «"+(topic.title||"")+"»");
