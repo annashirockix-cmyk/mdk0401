@@ -223,6 +223,18 @@ test("MDK 07.01 topic tests avoid several known cross-topic repeats", () => {
   assert.ok(hardPrompts.some((prompt) => prompt.includes("значение G98/G99 нужно сверять")));
 });
 
+test("MDK 07.01 numeric practical answer keys match their stated data", () => {
+  const sandbox = { window: { MDK_DATA: {} } };
+  vm.runInNewContext(read("data-0701.js"), sandbox, { timeout: 1000 });
+  const practicals = sandbox.window.MDK_DATA["07.01"].sections.flatMap((section) => section.topics || []).flatMap((topic) => topic.practicals || []);
+  const byCode = new Map(practicals.map((item) => [item.code, item]));
+  const expected = { "ПЗ 1.1": "955", "ПЗ 1.2": "1.46", "ПЗ 2.1": "2.5", "ПЗ 2.2": "14.5", "ПЗ 2.3": "0.1", "ПЗ 3.1": "0.4", "ПЗ 3.2": "5", "ПЗ 3.3": "40", "ПЗ 3.5": "280", "ПЗ 4.4": "480", "ПЗ 5.4": "8" };
+  for (const [code, answer] of Object.entries(expected)) assert.equal(byCode.get(code)?.expectedAnswer, answer, code);
+  assert.equal(byCode.get("ПЗ 1.3")?.expectedAnswer, undefined, "PZ 1.3 is a structural practical, not an unsupported gear-ratio calculation");
+  assert.match(byCode.get("ПЗ 3.6-Б").task, /G03 X40 Y10 I0 J10/);
+  assert.match(byCode.get("ПЗ 3.6-Б").task, /G03 — дуга против часовой стрелки/);
+});
+
 test("MDK 07.01 G43 question is assigned to milling, not setup functions", () => {
   const sandbox = { window: {} };
   vm.runInNewContext(read("hard-questions.js"), sandbox, { timeout: 1000 });
