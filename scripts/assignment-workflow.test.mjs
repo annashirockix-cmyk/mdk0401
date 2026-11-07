@@ -51,7 +51,7 @@ function runtime() {
   const assignments = makeSheet(["Id","CourseId","Title","Topic","Level","WorkType","DueAt","TargetType","TargetValue","Instructions","Criteria","CreatedBy","CreatedAt","Status","LegacyNote"]);
   const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote"]);
   const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","LegacyNote"]);
-  users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01","","","",""]);
+  users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01,EN","","","",""]);
   users.appendRow(["other.teacher@example.test","","Другой преподаватель","","teacher","","MAT","","","",""]);
   const payload = JSON.stringify({ xp: 135, manualGrades: { "07.01": 4 }, avatar: "gear", custom: { keep: true } });
   users.appendRow(["student@example.test","","Иван Иванов","ТО-21","student","","07.01",payload,"","",""]);
