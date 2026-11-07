@@ -559,6 +559,67 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             if (window.HARD_TESTS && window.HARD_TESTS[topicId]) questions = questions.concat(window.HARD_TESTS[topicId]);
         }
         
+
+        // Защищённая выдача: студент получает формулировки без ключей, проверка выполняется на сервере.
+        if (window.state && window.state.student && window.API && window.API.getBuiltInTest && window.API.submitBuiltInTest) {
+            var serverWorkIndex = selfWorkCode !== null && selfWorkCode !== undefined ? (typeof selfWorkCode === "number" ? selfWorkCode : (topic ? (topic.selfWork || []).findIndex(w => w.code === selfWorkCode) : 0)) : -1;
+            if (serverWorkIndex < 0) serverWorkIndex = 0;
+            var serverTestId = selfWorkCode !== null && selfWorkCode !== undefined ? "self_" + topicId + "_" + serverWorkIndex : "test_" + topicId;
+            var serverBankIds = selfWorkCode !== null && selfWorkCode !== undefined ? ["self_" + topicId + "_" + serverWorkIndex, "topic_" + topicId] : ["topic_" + topicId, "hard_" + topicId];
+            contentArea.innerHTML = "<p>Загружаем вопросы из защищённого банка…</p>";
+            window.API.getBuiltInTest(courseId, serverTestId, serverBankIds).then(function(serverBank) {
+                if (!serverBank || !serverBank.success || !serverBank.questions || !serverBank.questions.length) {
+                    contentArea.innerHTML = "<p>Защищённый банк для этого теста ещё не импортирован. Обратитесь к преподавателю или администратору.</p>";
+                    return;
+                }
+                var secureQuestions = serverBank.questions, secureAnswers = [], secureIndex = 0, selectedMulti = {};
+                contentArea.dataset.proctorAssessment = "1";
+                function safeText(value) { return window.escapeHtml ? window.escapeHtml(String(value == null ? "" : value)) : String(value == null ? "" : value).replace(/[&<>"]/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+                function drawSecureQuestion() {
+                    if (secureIndex >= secureQuestions.length) {
+                        contentArea.innerHTML = "<p>Проверяем ответы на сервере…</p>";
+                        window.API.submitBuiltInTest({courseId:courseId,testId:serverTestId,bankIds:serverBankIds,answers:secureAnswers,timeSpent:0,testTitle:topic ? topic.title : serverTestId}).then(function(result) {
+                            if (!result || !result.success) throw new Error(result && result.error || "Сервер не смог проверить ответы.");
+                            contentArea.dataset.proctorAssessment = "0";
+                            var penaltyText = Number(result.penaltyPoints) > 0 ? "<p>Штраф за повторные нарушения: -" + result.penaltyPoints + " п.п.</p>" : "";
+                            if (!window.state.results) window.state.results = {};
+                            window.state.results[serverTestId] = {grade:result.grade,percent:result.percent,penaltyPoints:result.penaltyPoints||0};
+                            if (window.saveStudentData) window.saveStudentData();
+                            if (window.unlockAchievement) window.unlockAchievement("hacker");
+                            contentArea.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1>'+penaltyText+'<button class="btn" id="secureTestReturn">Вернуться</button></div>';
+                            var back=document.getElementById("secureTestReturn");if(back)back.onclick=function(){window.switchTopicTab(selfWorkCode!==null&&selfWorkCode!==undefined?"selfwork":"test");};
+                        }).catch(function(error) {
+                            contentArea.dataset.proctorAssessment="0";
+                            contentArea.textContent="Ошибка проверки: "+(error.message||error);
+                        });
+                        return;
+                    }
+                    var entry=secureQuestions[secureIndex], q=entry.question||{}, type=String(q.type||"mc").toLowerCase();
+                    var html='<div class="museum-muted">Вопрос '+(secureIndex+1)+' из '+secureQuestions.length+'</div><h3>'+safeText(q.q||q.question||"")+'</h3>';
+                    if(type==="num"||type==="numeric"||type==="number") {
+                        html+='<input id="secureAnswerInput" class="self-input" type="text" inputmode="decimal" placeholder="Введите числовой ответ"><button class="btn" id="secureNext">Ответить</button>';
+                    } else if(type==="multi") {
+                        html+='<p>Выберите все подходящие варианты</p>'+(q.options||[]).map(function(opt,i){return '<button class="btn ghost" data-secure-multi="'+i+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+safeText(opt)+'</button>';}).join("")+'<button class="btn" id="secureNext">Ответить</button>';
+                    } else {
+                        html+=(q.options||[]).map(function(opt,i){return '<button class="btn ghost" data-secure-choice="'+i+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+safeText(opt)+'</button>';}).join("");
+                    }
+                    contentArea.innerHTML=html;
+                    if(type==="multi") {
+                        selectedMulti={};
+                        contentArea.querySelectorAll("[data-secure-multi]").forEach(function(btn){btn.onclick=function(){var n=Number(btn.getAttribute("data-secure-multi"));selectedMulti[n]=!selectedMulti[n];btn.classList.toggle("active",!!selectedMulti[n]);};});
+                        var next=contentArea.querySelector("#secureNext");if(next)next.onclick=function(){secureAnswers.push(Object.keys(selectedMulti).filter(function(k){return selectedMulti[k];}).map(Number).sort());secureIndex++;drawSecureQuestion();};
+                    } else if(type==="num"||type==="numeric"||type==="number") {
+                        var numNext=contentArea.querySelector("#secureNext");if(numNext)numNext.onclick=function(){var input=contentArea.querySelector("#secureAnswerInput");secureAnswers.push(input?input.value:"");secureIndex++;drawSecureQuestion();};
+                    } else {
+                        contentArea.querySelectorAll("[data-secure-choice]").forEach(function(btn){btn.onclick=function(){secureAnswers.push(Number(btn.getAttribute("data-secure-choice")));secureIndex++;drawSecureQuestion();};});
+                    }
+                }
+                drawSecureQuestion();
+            }).catch(function(error) {
+                contentArea.textContent="Не удалось загрузить защищённый тест: "+(error.message||error)+". Обратитесь к преподавателю.";
+            });
+            return;
+        }
         if (!questions.length) { contentArea.innerHTML = "<p>Вопросы не найдены.</p>"; return; }
         questions = questions.sort(() => Math.random() - 0.5);
         
