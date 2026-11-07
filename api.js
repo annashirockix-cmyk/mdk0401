@@ -42,7 +42,7 @@ window.API = {
  getProctorEvents:function(courseId,email,testId){return fetchAPI("getProctorEvents",{courseId:courseId,email:email||"",testId:testId||""},"GET");},
  getAttemptAudit:function(courseId,email,testId){return fetchAPI("getAttemptAudit",{courseId:courseId,email:email||"",testId:testId||""},"GET");},
  logActivity:function(data){return fetchAPI("logActivity",data||{},"POST");},
- getActivityLog:function(courseId,email,group){return fetchAPI("getActivityLog",{courseId:courseId||"",email:email||"",group:group||""},"GET");},
+ getActivityLog:function(courseId,email,group,offset,limit){return fetchAPI("getActivityLog",{courseId:courseId||"",email:email||"",group:group||"",offset:offset||0,limit:limit||250},"GET");},
  getTutoringLink:function(courseId){return fetchAPI("getTutoringLink",{courseId:courseId},"GET");},
  saveTutoringLink:function(courseId,data){return fetchAPI("saveTutoringLink",Object.assign({courseId:courseId},data||{}),"POST");},
  submitCustomTest:function(testId,answers,timeSpent){return fetchAPI("submitCustomTest",{testId:testId,answers:answers,timeSpent:timeSpent},"POST");},
