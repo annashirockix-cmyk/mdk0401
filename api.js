@@ -48,6 +48,8 @@ window.API = {
  getQuestionBank:function(courseId,bankId){return fetchAPI("getQuestionBank",{courseId:courseId,bankId:bankId||""},"GET");},
  getBuiltInTest:function(courseId,testId,bankIds){return fetchAPI("getBuiltInTest",{courseId:courseId,testId:testId,bankIds:bankIds||[]},"POST");},
  submitBuiltInTest:function(data){return fetchAPI("submitBuiltInTest",data||{},"POST");},
+ getFinalExam:function(courseId){return fetchAPI("getFinalExam",{courseId:courseId},"POST");},
+ submitFinalExam:function(data){return fetchAPI("submitFinalExam",data||{},"POST");},
  getGameAnswer:function(gameId,categoryIndex,questionIndex){return fetchAPI("getGameAnswer",{gameId:gameId,categoryIndex:categoryIndex,questionIndex:questionIndex},"POST");},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
  deleteCustomContent:function(id){return fetchAPI("deleteCustomContent",{id:id},"POST");},
