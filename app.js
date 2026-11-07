@@ -849,6 +849,16 @@ window.router = function() {
         return;
     }
     if (overlay) overlay.style.display = "none";
+    if (window.state.student && window.API && window.API.logActivity) {
+        var activityRoute = location.hash.slice(1) || "/";
+        var activityCourse = String(window.state.activeCourseId || "");
+        var activityKey = activityRoute + "|" + activityCourse;
+        if (window._lastActivityRouteKey !== activityKey) {
+            window._lastActivityRouteKey = activityKey;
+            window.API.logActivity({route: activityRoute, courseId: activityCourse, clientAt: new Date().toISOString()})
+                .catch(function (error) { console.warn("Не удалось записать переход в журнал активности", error); });
+        }
+    }
 
     var app = document.getElementById("app"); if(!app) return;
 
