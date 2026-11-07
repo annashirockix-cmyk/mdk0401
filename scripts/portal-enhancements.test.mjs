@@ -76,15 +76,15 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
     "Импорт комплекта документов в PDF и Excel",
     "Разработка моделей и УП для деталей, требующих пост-обработки"
   ]) assert.ok(!data.includes(legacy), "legacy or mismatched practical remains: " + legacy);
-  assert.doesNotMatch(data, /МДК 02\\.0[12]/, "cross-module practical labels must be removed");
+  assert.ok(!data.includes("МДК 02.01") && !data.includes("МДК 02.02"), "cross-module practical labels must be removed");
   for (const code of ["ПЗ 1.1","ПЗ 1.2","ПЗ 1.3","ПЗ 1.4","ПЗ 2.1","ПЗ 2.2","ПЗ 2.3","ПЗ 3.1","ПЗ 3.2","ПЗ 3.3","ПЗ 3.5","ПЗ 4.1","ПЗ 4.2","ПЗ 4.4","ПЗ 5.4"]) {
     assert.ok(data.includes('code: "' + code + '"') || data.includes('"code":"' + code + '"'), "missing local practical code " + code);
   }
   assert.match(data, /title: "Составление карты функций устройства ЧПУ"/);
-  assert.doesNotMatch(data, /href="\\.\\/method\\.pdf"/);
-  assert.match(data, /href="\\.\\/materials\\/reference\\/method\\.pdf"/);
+  assert.ok(!data.includes('href="./method.pdf"'), "obsolete root PDF path must be removed");
+  assert.ok(data.includes('href="./materials/reference/method.pdf"'), "verified PDF path must be used");
   assert.ok(fs.existsSync(path.join(root, "materials/reference/method.pdf")));
   assert.match(workbook, /Учебный пример: цикл сверления/);
   assert.match(workbook, /Учебный пример: фрагмент УП для фрезерования/);
-  assert.match(workbook, /String\\(courseId\\)==="07\\.01"\\?null/);
+  assert.ok(workbook.includes('String(courseId)==="07.01"?null:'), "generic memes must be disabled for this workbook");
 });
