@@ -1589,7 +1589,7 @@ function submitFinalExam_(data) {
     let points=0;
     exam.questions.forEach(function(q,i){points+=scoreFinalAnswer_(q,answers[i]);});
     const max=exam.questions.length,pct=Math.round(points/max*100),testId="__final__"+courseId,sh=results_(),rows=sh.getDataRange().getValues();
-    const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
+    const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     const limitRaw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
     const attemptLimit=limitRaw===""?1:1+Math.max(0,Number(limitRaw)||0);
     if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
