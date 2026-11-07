@@ -698,7 +698,13 @@ function saveTeacherResult_(data) {
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const now=new Date().toISOString(),submission="Лабораторная работа: "+title+"; дата: "+date+(feedback?"\nКомментарий преподавателя: "+feedback:"");
-    appendMappedRecord_(results_(),{Email:student.email,Name:student.name,Group:student.group,TestId:testId,TestTitle:title+" ("+date+")",Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,Attempts:1,FinishedAt:now,CourseId:courseId,Submission:submission});
+    const sheet=results_(),values=sheet.getDataRange().getValues();
+    let existingRow=-1;
+    for(let i=values.length-1;i>=1;i--){
+      if(email_(values[i][0])===student.email&&String(values[i][3]||"")===testId&&sameCourseId_(values[i][12]||courseId,courseId)){existingRow=i+1;break;}
+    }
+    const record={Email:student.email,Name:student.name,Group:student.group,TestId:testId,TestTitle:title+" ("+date+")",Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,Attempts:1,FinishedAt:now,CourseId:courseId,Submission:submission};
+    if(existingRow>0)updateMappedRecord_(sheet,existingRow,record);else appendMappedRecord_(sheet,record);
     appendAttemptAudit_({EventType:"teacher_grade_entered",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20});
   } finally {lock.releaseLock();}
   createNotification_(student.email,"grade","Оценка за лабораторную работу","Преподаватель выставил оценку "+grade+"/5 за работу «"+title+"»."+(feedback?" Добавлен комментарий.":""),courseId,testId);
