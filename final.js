@@ -293,7 +293,12 @@ window.renderFinalExamPage = function (mdkId) {
           email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
           testId: "__final__" + course.id, testTitle: "Итоговый экзамен " + course.shortName,
           grade: grade, score: points, maxScore: picked.length, percent: pct, timeSpent: duration * 60 - timeLeft, courseId: course.id
-        })).catch(function (error) { console.warn("Не удалось отправить результат экзамена", error); });
+        })).then(function(saved){
+          if(saved&&Number(saved.penaltyPoints)>0){
+            gradeNode.textContent="Итоговая оценка с учётом штрафа: "+saved.grade;
+            result.appendChild(examNode("p","","Штраф за повторное нарушение: -"+saved.penaltyPoints+" процентных пунктов. Отчёт отправлен преподавателю."));
+          }
+        }).catch(function (error) { console.warn("Не удалось отправить результат экзамена", error); });
       }
       mount.innerHTML = "";
       var result = examNode("div", "exam-result");
