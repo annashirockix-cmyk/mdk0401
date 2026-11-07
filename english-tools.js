@@ -38,7 +38,7 @@
     $("englishAssessmentFinish").onclick=finish;
     function tick(){var el=$("englishAssessmentTimer");if(!el)return;var m=Math.floor(timeLeft/60),sec=timeLeft%60;el.textContent=(m<10?"0":"")+m+":"+(sec<10?"0":"")+sec;if(timeLeft<=0){finish();return;}timeLeft--;}
     tick();window.englishAssessmentTimer=setInterval(tick,1000);
-    window.addEventListener("hashchange",function(){if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}},{once:true});
+    window.addEventListener("hashchange",function(){if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}var currentApp=$("app");if(currentApp&&!String(location.hash||"").startsWith("#/english-tests")){currentApp.removeAttribute("translate");currentApp.classList.remove("notranslate");}},{once:true});
   }
   window.renderEnglishTestsPage=function(mode){
     if(!guard())return;var app=appStart("🎯 Тесты по английскому языку");if(!app)return;
