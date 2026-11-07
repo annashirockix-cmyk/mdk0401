@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v159'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
+const CACHE_NAME = 'portal-cache-v160'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
 
 const STATIC_ASSETS = [
   './',
@@ -189,6 +189,54 @@ const STATIC_ASSETS = [
   './assets/images/ui-status.jpg',
   './assets/images/ui-zen.jpg',
   './assets/images/warning-triangle.png'
+,
+  './assets/fonts/collections/atkinson-hyperlegible/atkinson-hyperlegible-400-italic.woff2',
+  './assets/fonts/collections/atkinson-hyperlegible/atkinson-hyperlegible-400-normal.woff2',
+  './assets/fonts/collections/atkinson-hyperlegible/atkinson-hyperlegible-700-italic.woff2',
+  './assets/fonts/collections/atkinson-hyperlegible/atkinson-hyperlegible-700-normal.woff2',
+  './assets/fonts/collections/bricolage-grotesque/bricolage-grotesque_normal_400.ttf',
+  './assets/fonts/collections/bricolage-grotesque/bricolage-grotesque_normal_700.ttf',
+  './assets/fonts/collections/cooper/cooper-400-italic.woff2',
+  './assets/fonts/collections/cooper/cooper-400-normal.woff2',
+  './assets/fonts/collections/cooper/cooper-700-italic.woff2',
+  './assets/fonts/collections/cooper/cooper-700-normal.woff2',
+  './assets/fonts/collections/fonts/inter_normal_400.ttf',
+  './assets/fonts/collections/fonts/inter_normal_600.ttf',
+  './assets/fonts/collections/fonts/manrope_normal_400.ttf',
+  './assets/fonts/collections/fonts/manrope_normal_600.ttf',
+  './assets/fonts/collections/libre-caslon-text/libre-caslon-text_italic_400.ttf',
+  './assets/fonts/collections/libre-caslon-text/libre-caslon-text_normal_400.ttf',
+  './assets/fonts/collections/libre-caslon-text/libre-caslon-text_normal_700.ttf',
+  './assets/fonts/collections/libre-caslon/libre-caslon-condensed_normal_400.woff2',
+  './assets/fonts/collections/libre-caslon/libre-caslon-condensed_normal_700.woff2',
+  './assets/fonts/collections/newsreader/newsreader-400-italic.woff2',
+  './assets/fonts/collections/newsreader/newsreader-400-normal.woff2',
+  './assets/fonts/collections/newsreader/newsreader-700-italic.woff2',
+  './assets/fonts/collections/newsreader/newsreader-700-normal.woff2',
+  './assets/fonts/collections/open-sauce-sans/open-sauce-sans_italic_400.ttf',
+  './assets/fonts/collections/open-sauce-sans/open-sauce-sans_italic_500.ttf',
+  './assets/fonts/collections/open-sauce-sans/open-sauce-sans_normal_400.ttf',
+  './assets/fonts/collections/open-sauce-sans/open-sauce-sans_normal_500.ttf',
+  './assets/fonts/collections/overpass-mono/overpass-mono_normal_300.ttf',
+  './assets/fonts/collections/overpass-mono/overpass-mono_normal_600.ttf',
+  './assets/fonts/collections/playwrite-us/playwrite-us-400-italic.ttf',
+  './assets/fonts/collections/playwrite-us/playwrite-us-400-normal.ttf',
+  './assets/fonts/collections/quattrocento-sans/quattrocento-sans-400-italic.woff2',
+  './assets/fonts/collections/quattrocento-sans/quattrocento-sans-400-normal.woff2',
+  './assets/fonts/collections/quattrocento-sans/quattrocento-sans-700-italic.woff2',
+  './assets/fonts/collections/quattrocento-sans/quattrocento-sans-700-normal.woff2',
+  './assets/fonts/collections/sorts-mill-goudy/sorts-mill-goudy-400-italic.woff2',
+  './assets/fonts/collections/sorts-mill-goudy/sorts-mill-goudy-400-normal.woff2',
+  './assets/fonts/collections/spectral/spectral-400-italic.woff2',
+  './assets/fonts/collections/spectral/spectral-400-normal.woff2',
+  './assets/fonts/collections/spectral/spectral-600-italic.woff2',
+  './assets/fonts/collections/spectral/spectral-600-normal.woff2',
+  './assets/fonts/collections/spectral/spectral-700-italic.woff2',
+  './assets/fonts/collections/spectral/spectral-700-normal.woff2',
+  './assets/fonts/collections/wittgenstein/wittgenstein-400-italic.woff2',
+  './assets/fonts/collections/wittgenstein/wittgenstein-400-normal.woff2',
+  './assets/fonts/collections/wittgenstein/wittgenstein-700-italic.woff2',
+  './assets/fonts/collections/wittgenstein/wittgenstein-700-normal.woff2'
 ];
 
 self.addEventListener('install', (event) => {
