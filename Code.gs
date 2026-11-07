@@ -1342,8 +1342,8 @@ function shuffledServer_(items) {
 function allFinalExamEntries_(courseId) {
   const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),out=[],seen={};
   vals.slice(1).forEach(function(row){
-    if(String(row[m.CourseId]||"")!==courseId)return;
-    const bid=String(row[m.BankId]||"");
+    if(String(row[m.CourseId]||"").trim()!==String(courseId||"").trim())return;
+    const bid=String(row[m.BankId]||"").trim();
     if(!/^exam_(primary|extra)$/.test(bid)&&bid!=="mdk_extra"&&!/^topic_|^hard_|^self_/.test(bid))return;
     let q={};try{q=JSON.parse(String(row[m.QuestionJSON]||"{}"));}catch(e){return;}
     // Встроенные тесты допускают оба поля формулировки: q и question.
@@ -1378,7 +1378,15 @@ function getFinalExam_(data) {
   const rows=results_().getDataRange().getValues(),prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&String(row[12]||courseId)===courseId;}).length;
   const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
   if(raw!==""&&prior>=1+Math.max(0,Number(raw)||0))throw new Error("Попытки экзамена закончились.");
-  const bank=allFinalExamEntries_(courseId);if(!bank.length)return {success:false,notImported:true,questions:[]};
+  const bank=allFinalExamEntries_(courseId);if(!bank.length){
+    const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),available=[];
+    vals.slice(1).forEach(function(row){
+      if(String(row[m.CourseId]||"").trim()===courseId.trim()){
+        const id=String(row[m.BankId]||"").trim();if(id&&available.indexOf(id)<0)available.push(id);
+      }
+    });
+    return {success:false,notImported:true,courseId:courseId,availableBankIds:available.slice(0,150),questions:[]};
+  }
   let selected=[];[["multi",5],["order",2],["match",2],["num",1]].forEach(function(rule){selected=selected.concat(shuffledServer_(bank.filter(function(e){return finalQuestionType_(e.question)===rule[0]&&selected.indexOf(e)===-1;})).slice(0,rule[1]));});
   const rest=shuffledServer_(bank.filter(function(e){return selected.indexOf(e)===-1;}));selected=shuffledServer_(selected.concat(rest.slice(0,Math.max(0,Math.min(30,bank.length)-selected.length))));
   const examId=Utilities.getUuid();CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,questions:selected.map(function(e){return e.question;})}),7200);
