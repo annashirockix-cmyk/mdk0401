@@ -1171,7 +1171,9 @@ function importQuestionBanks_(data) {
     const courseId = String(bank.courseId || ""), bankId = String(bank.bankId || "").slice(0,180);
     const questions = Array.isArray(bank.questions) ? bank.questions : [];
     const key=courseId+"|"+bankId;
-    if (allowed.indexOf(courseId)<0 || !bankId || seen[key]) throw new Error("Некорректная дисциплина или повторяющийся идентификатор банка.");
+    if (allowed.indexOf(courseId)<0) throw new Error("Неизвестная дисциплина в банке «"+bankId+"»: «"+courseId+"». Допустимые дисциплины: "+allowed.join(", ")+".");
+    if (!bankId) throw new Error("У банка не указан идентификатор (дисциплина «"+courseId+"»).");
+    if (seen[key]) throw new Error("Повторяющийся идентификатор банка «"+bankId+"» для дисциплины «"+courseId+"».");
     seen[key]=true;
     if (!questions.length || questions.length>1000) throw new Error("Банк "+bankId+": допустимо от 1 до 1000 вопросов.");
     const out=questions.map(function(q,index){
