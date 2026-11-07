@@ -130,19 +130,19 @@
       var extra = THEORY[topic.title];
       var task = PRACTICE[topic.title];
       (topic.lectures || []).forEach(function (lecture) {
-        if (!lecture || typeof lecture.content !== "string") return;
-        if (extra && !lecture.__sprutTheoryExpanded && !/Практическая работа|Самостоятельная работа/i.test(lecture.title || "")) {
-          lecture.content += "<section class=\"sprut-deep-dive\">" + extra + "</section>";
-          lecture.__sprutTheoryExpanded = true;
-          count++;
-        }
-        if (task && !lecture.__sprutPracticeExpanded && /Практическая работа/i.test(lecture.title || "")) {
-          lecture.content += "<section class=\"sprut-practice-expanded\"><h3>Порядок выполнения и отчёт</h3><ol>" +
-            task.map(function (step) { return "<li>" + step + "</li>"; }).join("") +
-            "</ol><h4>Критерии оценивания</h4><ul><li>Корректность исходных данных и терминологии.</li><li>Логичность и технологическая обоснованность решения.</li><li>Согласованность документов и контрольных требований.</li><li>Полнота отчёта и объяснение принятых допущений.</li></ul><h4>Вопросы для защиты</h4><ol><li>Какое исходное требование сильнее всего повлияло на ваше решение?</li><li>Какие данные нужно уточнить до передачи процесса в производство?</li><li>Как вы проверили, что результат применим именно к заданной детали?</li></ol></section>";
-          lecture.__sprutPracticeExpanded = true;
-          practicalCount++;
-        }
+        if (!lecture || typeof lecture.content !== "string" || !extra || lecture.__sprutTheoryExpanded) return;
+        lecture.content += "<section class=\"sprut-deep-dive\">" + extra + "</section>";
+        lecture.__sprutTheoryExpanded = true;
+        count++;
+      });
+      (topic.practicals || []).forEach(function (practical) {
+        if (!practical || !task || practical.__sprutPracticeExpanded) return;
+        practical.task = (practical.task || "") +
+          "<h3>Порядок выполнения и отчёт</h3><ol>" +
+          task.map(function (step) { return "<li>" + step + "</li>"; }).join("") +
+          "</ol><h4>Критерии оценивания</h4><ul><li>Корректность исходных данных и терминологии.</li><li>Логичность и технологическая обоснованность решения.</li><li>Согласованность документов и контрольных требований.</li><li>Полнота отчёта и объяснение принятых допущений.</li></ul><h4>Вопросы для защиты</h4><ol><li>Какое исходное требование сильнее всего повлияло на ваше решение?</li><li>Какие данные нужно уточнить до передачи процесса в производство?</li><li>Как вы проверили, что результат применим именно к заданной детали?</li></ol>";
+        practical.__sprutPracticeExpanded = true;
+        practicalCount++;
       });
     });
   });
