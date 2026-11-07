@@ -241,7 +241,7 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(api, /getAssignments\s*:/);
   assert.match(api, /submitAssignment\s*:/);
   assert.match(api, /gradeAssignment\s*:/);
-  assert.match(serviceWorker, /portal-cache-v\\d+/);
+  assert.match(serviceWorker, /portal-cache-v\d+/);
   assert.match(serviceWorker, /\.\/teacher-tasks\.js/);
 });
 
