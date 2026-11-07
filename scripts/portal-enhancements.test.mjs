@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import vm from "node:vm";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
@@ -98,4 +99,28 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(workbook, /String\(courseId\)==="07\.01"\?""/);
   assert.doesNotMatch(workbook, /Допустим, нужно выполнить производственную задачу/);
   assert.ok(workbook.includes('String(courseId)==="07.01"?null:'), "generic memes must be disabled for this workbook");
+});
+
+
+test("MDK 07.01 quiz questions have valid, non-duplicated options and varied answer positions", () => {
+  const source = read("data-0701.js");
+  const sandbox = { window: { MDK_DATA: {} } };
+  vm.runInNewContext(source, sandbox, { timeout: 1000 });
+  const moduleData = sandbox.window.MDK_DATA["07.01"];
+  assert.ok(moduleData && Array.isArray(moduleData.sections), "MDK 07.01 data must load");
+  const topics = moduleData.sections.flatMap((section) => section.topics || []);
+  const questions = topics.flatMap((topic) => (topic.test || []).map((question) => ({ topic: topic.title, ...question })));
+  assert.ok(questions.length >= 80, "expected the full topic quiz bank");
+  const positions = new Set();
+  for (const question of questions) {
+    assert.equal(typeof question.q, "string");
+    assert.ok(question.q.trim().length > 0, "question text must not be empty");
+    assert.ok(Array.isArray(question.options) && question.options.length >= 3, question.q);
+    assert.ok(question.options.every((option) => typeof option === "string" && option.trim()), question.q);
+    assert.ok(Number.isInteger(question.correct) && question.correct >= 0 && question.correct < question.options.length, question.q);
+    const normalized = question.options.map((option) => option.trim().toLocaleLowerCase("ru"));
+    assert.equal(new Set(normalized).size, normalized.length, "duplicate options in: " + question.q);
+    positions.add(question.correct);
+  }
+  assert.ok(positions.size >= 3, "correct answers should not always occupy the same position");
 });
