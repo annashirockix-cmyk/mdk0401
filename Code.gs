@@ -856,6 +856,10 @@ function getCustomContent_(data) {
     if (!row[0]) return;
     const courseId = String(row[1] || "");
     if (user.role !== "admin" && !hasCourseAccess_(user, courseId)) return;
+    if (user.role === "student" && (String(row[3] || "") === "lecture" || String(row[3] || "") === "topic")) {
+      const rawAccess=settingValue_("topicAccess:"+courseId+":"+String(row[2]||""));
+      if(rawAccess){try{if(JSON.parse(rawAccess).open===false)return;}catch(e){}}
+    }
 
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
