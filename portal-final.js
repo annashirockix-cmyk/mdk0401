@@ -166,81 +166,150 @@
   window.startInlineTest = function (topicId, selfWorkCode, selfIdx) {
     var area = document.getElementById("topicContent");
     if (!area) return;
-    if (typeof selfIdx !== "number") selfIdx = 0;
     topicId = topicId || tid();
-    var Q = col(topicId, selfIdx);
-    if (!Q.length) {
-      area.innerHTML = '<div class="module" style="padding:20px">Нет вопросов для <b>' + topicId + "</b>. Нажмите Ctrl+Shift+R.</div>";
+    selfIdx = typeof selfIdx === "number" ? selfIdx : 0;
+    var student = window.state && window.state.student;
+    if (!student || String(student.role || "student").toLowerCase() !== "student") {
+      area.textContent = "Пройти тест можно под учётной записью обучающегося.";
       return;
     }
-    Q = sh(Q);
-    if (Q.length > 10) Q = Q.slice(0, 10);
-    var cur = 0, ok = 0;
-
-    function fin() {
-      var pct = Math.round((ok / Q.length) * 100);
-      var g = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-      if (!window.state.results) window.state.results = {};
-      var rec = { grade: g, percent: pct, score: ok, max: Q.length, finishedAt: new Date().toISOString() };
-      if (selfWorkCode) {
-        window.state.results["self_" + topicId + "_" + selfIdx] = rec;
-        window.state.results["self_" + selfWorkCode] = rec;
-      } else {
-        window.state.results["test_" + topicId] = rec;
+    if (!window.API || !window.API.getBuiltInTest || !window.API.submitBuiltInTest) {
+      area.textContent = "Серверная проверка тестов пока недоступна. Обратитесь к администратору.";
+      return;
+    }
+    var courseId = cid();
+    var testId = selfWorkCode ? ("self_" + topicId + "_" + selfIdx) : ("test_" + topicId);
+    var bankIds = selfWorkCode ? [("self_" + topicId + "_" + selfIdx), ("topic_" + topicId)] : [("topic_" + topicId), ("hard_" + topicId)];
+    var testTitle = selfWorkCode ? ("Самостоятельная работа " + selfWorkCode) : ("Тест " + topicId);
+    var startedAt = Date.now();
+    area.textContent = "Проверяем доступ и загружаем вопросы из защищённого банка…";
+    function fail(message) {
+      area.innerHTML = "";
+      var box = document.createElement("div"); box.className = "module"; box.style.padding = "20px";
+      box.textContent = message || "Не удалось загрузить тест."; area.appendChild(box);
+    }
+    function node(tag, text) {
+      var el = document.createElement(tag); if (text !== undefined && text !== null) el.textContent = String(text); return el;
+    }
+    function typeOf(q) {
+      var t = String(q.type || "mc").toLowerCase();
+      if (t === "multiple" || t === "multiple_choice") return "multi";
+      if (t === "numeric" || t === "number") return "num";
+      if (t === "ordering") return "order";
+      if (t === "matching") return "match";
+      return t;
+    }
+    var access = window.API.getTestAttemptStatus ? window.API.getTestAttemptStatus(courseId, testId) : Promise.resolve({ success: true, allowed: true });
+    access.then(function (status) {
+      if (status && status.allowed === false) throw new Error("Попытки закончились. Обратитесь к преподавателю за дополнительной попыткой.");
+      return window.API.getBuiltInTest(courseId, testId, bankIds);
+    }).then(function (response) {
+      if (!response || !response.success || !Array.isArray(response.questions) || !response.questions.length) {
+        throw new Error("Для этой темы не найден импортированный банк вопросов. Попросите администратора повторно импортировать банк.");
       }
-      if (!(window.isStandaloneCourse && window.isStandaloneCourse(cid()))) window.state.xp = (window.state.xp || 0) + g * 10;
-      if (window.saveStudentData) window.saveStudentData();
-      if (window.renderUserChip) window.renderUserChip();
-      if (window.state.student && window.API && window.API.saveResult) {
-        try {
-          window.API.saveResult({
-            email: window.state.student.email,
-            name: window.state.student.name,
-            group: window.state.student.group,
-            testId: selfWorkCode ? ("self_" + topicId + "_" + selfIdx) : ("test_" + topicId),
-            testTitle: selfWorkCode ? ("СР " + selfWorkCode) : ("Тест " + topicId),
-            grade: g,
-            score: ok,
-            maxScore: Q.length,
-            percent: pct,
-            timeSpent: 0,
-            courseId: cid()
+      var questions = response.questions.map(function (entry) { return entry.question || {}; });
+      area.innerHTML = "";
+      var form = document.createElement("form");
+      var note = node("p", "Ответьте на все задания. Проверка и сохранение результата выполняются на сервере.");
+      note.style.color = "var(--muted)"; form.appendChild(note);
+      questions.forEach(function (q, index) {
+        var type = typeOf(q), card = document.createElement("section");
+        card.className = "question";
+        card.style.cssText = "margin:12px 0;padding:16px;background:var(--card-soft);border:1px solid var(--border);border-radius:10px;";
+        var title = node("div", (index + 1) + ". " + (q.q || q.question || q.text || "Вопрос"));
+        title.style.cssText = "font-weight:700;line-height:1.5;margin-bottom:12px;"; card.appendChild(title);
+        if (q.context) { var context = node("div", q.context); context.style.cssText = "margin:8px 0 12px;color:var(--muted);"; card.appendChild(context); }
+        if (type === "num") {
+          var numeric = node("input"); numeric.type = "number"; numeric.step = "any"; numeric.name = "q" + index;
+          numeric.required = true; numeric.className = "self-input"; numeric.style.maxWidth = "260px";
+          numeric.placeholder = q.unit ? ("Ответ, " + q.unit) : "Введите числовой ответ"; card.appendChild(numeric);
+          if (q.unit) card.appendChild(node("span", " " + q.unit));
+        } else if (type === "order") {
+          var items = q.items || [];
+          items.forEach(function (item, itemIndex) {
+            var row = document.createElement("div"); row.style.cssText = "display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0;";
+            row.appendChild(node("span", item));
+            var select = document.createElement("select"); select.className = "self-input"; select.name = "q" + index + "_order_" + itemIndex;
+            select.dataset.item = String(item); select.required = true; select.appendChild(new Option("Позиция", ""));
+            for (var pos = 1; pos <= items.length; pos++) select.appendChild(new Option(String(pos), String(pos)));
+            row.appendChild(select); card.appendChild(row);
           });
-        } catch (e) {}
-      }
-      var back = selfWorkCode ? "selfwork" : "test";
-      area.innerHTML =
-        '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px">' +
-        '<h2 style="color:var(--ok)">Тест завершён</h2>' +
-        "<p>Верных: <b>" + ok + "</b> / <b>" + Q.length + "</b> (" + pct + "%)</p>" +
-        '<h1 style="font-size:44px;color:var(--accent)">Оценка: ' + g + "</h1>" +
-        '<button type="button" class="btn" id="btnBackT">Вернуться</button></div>';
-      var b = document.getElementById("btnBackT");
-      if (b) b.onclick = function () { if (window.switchTopicTab) window.switchTopicTab(back); };
-    }
-
-    function show() {
-      if (cur >= Q.length) return fin();
-      var q = Q[cur];
-      var h =
-        '<div style="margin-bottom:12px"><b>Вопрос ' + (cur + 1) + " из " + Q.length + "</b></div>" +
-        '<div style="font-weight:bold;margin-bottom:16px;font-size:16px">' + q.q + "</div>";
-      (q.options || []).forEach(function (opt, i) {
-        h +=
-          '<button type="button" class="btn ghost opt-btn" data-i="' + i +
-          '" style="display:block;width:100%;text-align:left;margin-top:6px;padding:12px">' +
-          opt + "</button>";
+        } else if (type === "match") {
+          var pairs = q.pairs || [], options = q.options || [];
+          pairs.forEach(function (pair, pairIndex) {
+            var row = document.createElement("div"); row.style.cssText = "display:grid;grid-template-columns:minmax(120px,1fr) minmax(150px,1.2fr);gap:10px;align-items:center;margin:8px 0;";
+            row.appendChild(node("span", pair.left));
+            var select = document.createElement("select"); select.className = "self-input"; select.name = "q" + index + "_match_" + pairIndex; select.required = true;
+            select.appendChild(new Option("Выберите соответствие", ""));
+            options.forEach(function (option) { select.appendChild(new Option(String(option), String(option))); });
+            row.appendChild(select); card.appendChild(row);
+          });
+        } else {
+          var options = q.options || (type === "tf" ? ["Верно", "Неверно"] : []);
+          options.forEach(function (option, optionIndex) {
+            var label = document.createElement("label"); label.style.cssText = "display:flex;align-items:flex-start;gap:9px;padding:9px;margin:5px 0;cursor:pointer;border-radius:7px;background:var(--card);";
+            var input = document.createElement("input"); input.type = type === "multi" ? "checkbox" : "radio";
+            input.name = "q" + index; input.value = String(optionIndex); label.appendChild(input); label.appendChild(node("span", option)); card.appendChild(label);
+          });
+        }
+        form.appendChild(card);
       });
-      area.innerHTML = h;
-      area.querySelectorAll(".opt-btn").forEach(function (btn) {
-        btn.onclick = function () {
-          if (+btn.getAttribute("data-i") === q.correct) ok++;
-          cur++;
-          show();
-        };
+      var error = node("p", ""); error.style.color = "var(--err)"; error.setAttribute("role", "alert"); form.appendChild(error);
+      var submit = node("button", "Отправить ответы на проверку"); submit.type = "submit"; submit.className = "btn";
+      submit.style.cssText = "width:100%;margin-top:16px;padding:14px;"; form.appendChild(submit); area.appendChild(form);
+      form.addEventListener("submit", function (event) {
+        event.preventDefault(); if (submit.disabled) return;
+        var answers = [], validation = "";
+        questions.forEach(function (q, index) {
+          if (validation) return;
+          var type = typeOf(q), answer;
+          if (type === "num") {
+            var field = form.querySelector('[name="q' + index + '"]'); answer = field ? field.value.trim() : "";
+            if (!answer) validation = "Заполните числовой ответ в задании " + (index + 1) + ".";
+          } else if (type === "multi") {
+            answer = Array.prototype.map.call(form.querySelectorAll('input[name="q' + index + '"]:checked'), function (el) { return Number(el.value); }).sort(function (a,b) { return a-b; });
+            if (!answer.length) validation = "Выберите варианты в задании " + (index + 1) + ".";
+          } else if (type === "order") {
+            var fields = Array.prototype.slice.call(form.querySelectorAll('[name^="q' + index + '_order_"]'));
+            var arranged = fields.map(function (field) { return { item: field.dataset.item, pos: Number(field.value) }; });
+            if (!arranged.length || arranged.some(function (x) { return !x.pos; }) || new Set(arranged.map(function (x) { return x.pos; })).size !== arranged.length) validation = "Расставьте все элементы в задании " + (index + 1) + " без повторения позиций.";
+            answer = arranged.sort(function (a,b) { return a.pos-b.pos; }).map(function (x) { return x.item; });
+          } else if (type === "match") {
+            var matchFields = Array.prototype.slice.call(form.querySelectorAll('[name^="q' + index + '_match_"]'));
+            answer = matchFields.map(function (field) { return field.value; });
+            if (!answer.length || answer.some(function (value) { return !value; })) validation = "Установите все соответствия в задании " + (index + 1) + ".";
+          } else if (type === "tf" || type === "mc") {
+            var selected = form.querySelector('input[name="q' + index + '"]:checked'); answer = selected ? Number(selected.value) : -1;
+            if (answer < 0) validation = "Выберите ответ в задании " + (index + 1) + ".";
+          } else {
+            answer = Array.prototype.map.call(form.querySelectorAll('input[name="q' + index + '"]:checked'), function (el) { return Number(el.value); });
+            if (!answer.length) validation = "Выберите ответ в задании " + (index + 1) + ".";
+          }
+          answers.push(answer);
+        });
+        if (validation) { error.textContent = validation; return; }
+        submit.disabled = true; error.textContent = "Отправляем ответы на сервер…";
+        window.API.submitBuiltInTest({ courseId: courseId, testId: testId, bankIds: bankIds, answers: answers, testTitle: testTitle, timeSpent: Math.max(0, Math.round((Date.now()-startedAt)/1000)) }).then(function (result) {
+          if (!result || !result.success) throw new Error(result && result.error || "Сервер не подтвердил результат.");
+          var rec = { grade: result.grade, percent: result.percent, score: result.score, max: result.maxScore, attempts: result.attempts, courseId: courseId, testTitle: testTitle, finishedAt: new Date().toISOString() };
+          if (!window.state.results) window.state.results = {};
+          window.state.results[testId] = rec;
+          if (selfWorkCode) window.state.results["self_" + selfWorkCode] = rec;
+          if (!(window.isStandaloneCourse && window.isStandaloneCourse(courseId))) window.state.xp = (window.state.xp || 0) + (Number(result.grade) || 0) * 10;
+          if (window.saveStudentData) window.saveStudentData();
+          if (window.renderUserChip) window.renderUserChip();
+          area.innerHTML = "";
+          var resultBox = document.createElement("div"); resultBox.className = "module"; resultBox.style.cssText = "text-align:center;padding:28px;";
+          resultBox.appendChild(node("h2", "Тест завершён"));
+          resultBox.appendChild(node("p", "Верных баллов: " + result.score + " / " + result.maxScore + " (" + result.percent + "%)"));
+          var grade = node("h1", "Оценка: " + result.grade); grade.style.cssText = "font-size:44px;color:var(--accent);"; resultBox.appendChild(grade);
+          if (Number(result.penaltyPoints) > 0) resultBox.appendChild(node("p", "С учётом нарушений снято " + result.penaltyPoints + " процентных пунктов."));
+          var back = node("button", "Вернуться"); back.type = "button"; back.className = "btn";
+          back.onclick = function () { if (window.switchTopicTab) window.switchTopicTab(selfWorkCode ? "selfwork" : "test"); };
+          resultBox.appendChild(back); area.appendChild(resultBox);
+        }).catch(function (error) { submit.disabled = false; error.textContent = error.message || "Не удалось отправить ответы."; });
       });
-    }
-    show();
+    }).catch(function (error) { fail(error.message || "Не удалось загрузить тест."); });
   };
 
   function renderSelf() {
@@ -437,81 +506,6 @@
       });
   };
 
-  window.renderCourseReportsPage = function () {
-    var app = document.getElementById("app");
-    if (!app) return;
-    app.innerHTML =
-      '<a class="backlink" href="#/" style="color:var(--accent)">← На главную</a>' +
-      '<section class="hero"><h1>Отчёты</h1><p style="color:var(--muted)">Прохождение этапов курса</p></section>' +
-      '<div class="module" id="rep">Загрузка…</div>';
-    var box = document.getElementById("rep");
-    if (!window.API || !window.API.getStudents) {
-      box.textContent = "API недоступен";
-      return;
-    }
-    window.API.getStudents()
-      .then(function (d) {
-        var st = (d && d.students) || [];
-        if (!(d && (d.success || d.ok))) {
-          box.innerHTML = "Ошибка загрузки. Нужен getStudents с полем payload в Code.gs.";
-          return;
-        }
-        var rows = [];
-        st.forEach(function (s) {
-          if ((s.role || "").toLowerCase() === "teacher") return;
-          var p = {};
-          try { p = JSON.parse(s.payload || "{}"); } catch (e) {}
-          var res = p.results || {};
-          var keys = Object.keys(res);
-          if (!keys.length) {
-            rows.push([s.name || s.email, s.group || "", "—", "нет данных", ""]);
-            return;
-          }
-          keys.forEach(function (k) {
-            var v = res[k];
-            if (typeof v === "string") {
-              rows.push([s.name, s.group, k, "письм.", v.slice(0, 100)]);
-            } else if (v && typeof v === "object") {
-              if (v.text) rows.push([s.name, s.group, k, "письм.", String(v.text).slice(0, 120)]);
-              if (v.grade != null) {
-                rows.push([
-                  s.name,
-                  s.group,
-                  k,
-                  String(v.grade),
-                  (v.percent != null ? v.percent + "%" : "") + (v.finishedAt ? " · " + v.finishedAt.slice(0, 16) : "")
-                ]);
-              }
-            }
-          });
-        });
-        if (!rows.length) {
-          box.innerHTML = "Нет результатов. Студенты ещё не сдавали работы, или в getStudents нет payload.";
-          return;
-        }
-        var h =
-          "<p>Записей: <b>" + rows.length + "</b></p>" +
-          '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">' +
-          '<tr><th style="padding:6px;border:1px solid var(--border)">ФИО</th>' +
-          '<th style="padding:6px;border:1px solid var(--border)">Группа</th>' +
-          '<th style="padding:6px;border:1px solid var(--border)">Работа</th>' +
-          '<th style="padding:6px;border:1px solid var(--border)">Оценка</th>' +
-          '<th style="padding:6px;border:1px solid var(--border)">Детали</th></tr>';
-        rows.forEach(function (r) {
-          h +=
-            "<tr><td style=\"padding:6px;border:1px solid var(--border)\">" + r[0] + "</td>" +
-            "<td style=\"padding:6px;border:1px solid var(--border)\">" + r[1] + "</td>" +
-            "<td style=\"padding:6px;border:1px solid var(--border)\">" + r[2] + "</td>" +
-            "<td style=\"padding:6px;border:1px solid var(--border)\"><b>" + r[3] + "</b></td>" +
-            "<td style=\"padding:6px;border:1px solid var(--border);max-width:280px;word-break:break-word\">" + r[4] + "</td></tr>";
-        });
-        h += "</table></div>";
-        box.innerHTML = h;
-      })
-      .catch(function (e) {
-        box.textContent = String(e.message || e);
-      });
-  };
 
   window.renderAdminPanel = function () {
     var app = document.getElementById("app");
