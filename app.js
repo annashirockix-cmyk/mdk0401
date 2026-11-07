@@ -851,7 +851,8 @@ window.router = function() {
     if (overlay) overlay.style.display = "none";
     if (window.state.student && window.API && window.API.logActivity) {
         var activityRoute = location.hash.slice(1) || "/";
-        var activityCourse = String(window.state.activeCourseId || "");
+        var activityParts = activityRoute.split("/").filter(Boolean);
+        var activityCourse = activityParts[0] === "topic" && activityParts[1] ? String(activityParts[1]) : String(window.state.activeCourseId || "");
         var activityKey = activityRoute + "|" + activityCourse;
         if (window._lastActivityRouteKey !== activityKey) {
             window._lastActivityRouteKey = activityKey;
