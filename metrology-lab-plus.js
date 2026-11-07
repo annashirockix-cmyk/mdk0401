@@ -16,7 +16,7 @@
     host.className="card";host.style.cssText="padding:16px;margin-top:16px";
     app.appendChild(host);
     function make(k){
-      if(k==="depth"){var a=4+rnd(16),b=1+rnd(9);return {answer:a+b*.1,ex:"Основная шкала "+a+" мм; нониус "+b+" × 0,1 мм. Глубина = "+f(a+b*.1)+" мм."};}
+      if(k==="depth"){var a=4+rnd(16),b=1+rnd(9);return {answer:a+b*.1,main:a,vernier:b,ex:"Основная шкала "+a+" мм; нониус "+b+" × 0,1 мм. Глубина = "+f(a+b*.1)+" мм."};}
       var lo=(rnd(5)+1)*.01,hi=lo+(rnd(6)+3)*.01;return {answer:hi-lo,min:lo,max:hi,ex:"Размах = max − min = "+f(hi)+" − "+f(lo)+" = "+f(hi-lo)+" мм. Измерение выполняют при отключённом приводе, вручную вращая закреплённую деталь."};
     }
     function diagram(){
@@ -28,7 +28,7 @@
       var body="";
       if(mode==="depth"||mode==="indicator"){
         body='<p style="color:var(--muted)">'+(mode==="depth"?"Определи глубину по условным отсчётам основной шкалы и нониуса.":"Рассчитай размах показаний индикатора за полный оборот.")+'</p>'+diagram()+
-        '<p><b>Дано:</b> '+(mode==="depth"?"основная шкала — "+Math.floor(task.answer*10)/10+" мм; отсчёт нониуса учитывается в ответе.":"минимум — "+f(task.min)+" мм; максимум — "+f(task.max)+" мм.")+'</p><label>Ответ, мм <input id="plusAnswer" inputmode="decimal" placeholder="Например, 12,4" style="padding:10px;max-width:220px"></label> <button class="btn btn-primary" id="plusCheck">Проверить</button> <button class="btn" id="plusNext" disabled>Новое задание</button><div id="plusFeedback" aria-live="polite"></div>';
+        '<p><b>Дано:</b> '+(mode==="depth"?"основная шкала — "+task.main+" мм; совпавшее деление нониуса — "+task.vernier+"; цена деления — 0,1 мм.":"минимум — "+f(task.min)+" мм; максимум — "+f(task.max)+" мм.")+'</p><label>Ответ, мм <input id="plusAnswer" inputmode="decimal" placeholder="Например, 12,4" style="padding:10px;max-width:220px"></label> <button class="btn btn-primary" id="plusCheck">Проверить</button> <button class="btn" id="plusNext" disabled>Новое задание</button><div id="plusFeedback" aria-live="polite"></div>';
       }else if(mode==="tolerance"){
         body='<p>Введи номинал, верхнее и нижнее отклонения (со знаком), а также фактический размер.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px">'+[['Номинал','tolNom','20'],['Верхнее отклонение','tolES','0.1'],['Нижнее отклонение','tolEI','-0.1'],['Фактический размер','tolFact','20.04']].map(x=>'<label>'+x[0]+'<input id="'+x[1]+'" type="number" step="0.001" value="'+x[2]+'" style="display:block;width:100%;padding:10px"></label>').join("")+'</div><button class="btn btn-primary" id="plusTol" style="margin-top:12px">Рассчитать</button><div id="plusTolResult" aria-live="polite"></div><p style="font-size:13px;color:var(--muted)">Учебная оценка по предельным размерам. В реальном контроле учитываются неопределённость и установленное правило принятия решения.</p>';
       }else{
