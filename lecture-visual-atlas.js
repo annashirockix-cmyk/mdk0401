@@ -1,225 +1,126 @@
 "use strict";
 (function () {
   var courses = window.MDK_DATA || {};
-  var SOURCES = {
-    cnc: {
-      file: "CNC_milling_machine.jpg",
-      page: "https://commons.wikimedia.org/wiki/File:CNC_milling_machine.jpg",
-      author: "Impressionmanufacturer",
-      license: "CC BY-SA 4.0",
-      caption: "Фрезерный обрабатывающий центр: пример реального оборудования для сопоставления CAM-траектории со станочной операцией."
-    },
-    lathe: {
-      file: "Small_CNC_Turning_Center.jpg",
-      page: "https://commons.wikimedia.org/wiki/File:Small_CNC_Turning_Center.jpg",
-      author: "Nathaniel C. Sheetz / Spangineer",
-      license: "CC BY-SA 3.0",
-      caption: "Токарный обрабатывающий центр в лаборатории FAME Lab, Penn State."
-    },
-    metal: {
-      file: "%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0_%D1%81%D1%82%D0%B0%D0%BB%D0%B8_20%D0%A5.jpg",
-      page: "https://commons.wikimedia.org/wiki/File:Микроструктура_стали_20Х.jpg",
-      author: "Surface engineering",
-      license: "CC BY-SA 4.0",
-      caption: "Микроструктура стали 20Х: светлая ферритная матрица и тёмные перлитные участки. Изображение используется для учебного распознавания фаз."
-    },
-    metrology: {
-      file: "Using_a_caliper.JPG",
-      page: "https://commons.wikimedia.org/wiki/File:Using_a_caliper.JPG",
-      author: "Mauro Cateb",
-      license: "CC BY-SA 3.0",
-      caption: "Измерение штангенциркулем. При чтении результата важно обеспечить правильный контакт измерительных поверхностей."
-    },
-    assembly: {
-      file: "Gear_bearing_assembly.JPG",
-      page: "https://commons.wikimedia.org/wiki/File:Gear_bearing_assembly.JPG",
-      author: "Guillaume Jacquenot",
-      license: "CC BY-SA 3.0",
-      caption: "Зубчатая передача и подшипниковый узел: пример сборочной единицы и сопряжённых деталей."
-    },
-    automation: {
-      file: "Robot_arm_operates_machine_in_factory_setting.jpg",
-      page: "https://commons.wikimedia.org/wiki/File:Robot_arm_operates_machine_in_factory_setting.jpg",
-      author: "Shixart1985",
-      license: "CC BY 2.0",
-      caption: "Промышленный робот выполняет операцию у оборудования. Фото иллюстрирует автоматизацию, но не заменяет схему конкретной ячейки."
-    },
-    safety: {
-      file: "Machine_safety_guard.jpg",
-      page: "https://commons.wikimedia.org/wiki/File:Machine_safety_guard.jpg",
-      author: "Machine 1456",
-      license: "CC0 1.0",
-      caption: "Металлическое ограждение зоны оборудования. Конкретная конструкция защиты определяется оценкой риска и документацией станка."
-    },
-    workshop: {
-      file: "Mechanical_Workshop.jpg",
-      page: "https://commons.wikimedia.org/wiki/File:Mechanical_Workshop.jpg",
-      author: "Anand T R",
-      license: "CC BY-SA 3.0",
-      caption: "Механическая мастерская: общий контекст производственного оборудования и организации рабочего пространства."
-    }
+  var COMMONS = {
+    cncMill: { src:"https://commons.wikimedia.org/wiki/Special:FilePath/CNC_milling_machine.jpg?width=1200", page:"https://commons.wikimedia.org/wiki/File:CNC_milling_machine.jpg", alt:"Фрезерный обрабатывающий центр", caption:"Фрезерный обрабатывающий центр — пример оборудования для фрезерной обработки.", author:"Impressionmanufacturer", license:"CC BY-SA 4.0" },
+    lathe: { src:"https://commons.wikimedia.org/wiki/Special:FilePath/Small_CNC_Turning_Center.jpg?width=1200", page:"https://commons.wikimedia.org/wiki/File:Small_CNC_Turning_Center.jpg", alt:"Токарный обрабатывающий центр", caption:"Токарный обрабатывающий центр — оборудование для обработки поверхностей вращения.", author:"Nathaniel C. Sheetz / Spangineer", license:"CC BY-SA 3.0" },
+    metal: { src:"https://commons.wikimedia.org/wiki/Special:FilePath/%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0_%D1%81%D1%82%D0%B0%D0%BB%D0%B8_20%D0%A5.jpg?width=1200", page:"https://commons.wikimedia.org/wiki/File:Микроструктура_стали_20Х.jpg", alt:"Микроструктура стали 20Х", caption:"Микроструктура стали 20Х — пример изображения для обсуждения структуры материала; идентификацию фаз выполняют по подтверждённым данным.", author:"Surface engineering", license:"CC BY-SA 4.0" },
+    caliper: { src:"https://commons.wikimedia.org/wiki/Special:FilePath/Using_a_caliper.JPG?width=1200", page:"https://commons.wikimedia.org/wiki/File:Using_a_caliper.JPG", alt:"Измерение штангенциркулем", caption:"Измерение штангенциркулем — пример контроля линейного размера.", author:"Mauro Cateb", license:"CC BY-SA 3.0" },
+    assembly: { src:"https://commons.wikimedia.org/wiki/Special:FilePath/Gear_bearing_assembly.JPG?width=1200", page:"https://commons.wikimedia.org/wiki/File:Gear_bearing_assembly.JPG", alt:"Зубчатая передача и подшипниковый узел", caption:"Зубчатая передача и подшипниковый узел — пример сборочной единицы.", author:"Guillaume Jacquenot", license:"CC BY-SA 3.0" },
+    robot: { src:"https://commons.wikimedia.org/wiki/Special:FilePath/Robot_arm_operates_machine_in_factory_setting.jpg?width=1200", page:"https://commons.wikimedia.org/wiki/File:Robot_arm_operates_machine_in_factory_setting.jpg", alt:"Промышленный робот у оборудования", caption:"Промышленный робот у оборудования — пример автоматизированной производственной ячейки.", author:"Shixart1985", license:"CC BY 2.0" },
+    guard: { src:"https://commons.wikimedia.org/wiki/Special:FilePath/Machine_safety_guard.jpg?width=1200", page:"https://commons.wikimedia.org/wiki/File:Machine_safety_guard.jpg", alt:"Защитное ограждение станка", caption:"Защитное ограждение оборудования — пример инженерной меры снижения риска.", author:"Machine 1456", license:"CC0 1.0" }
   };
-
-  function esc(value) {
-    return String(value || "").replace(/[&<>"]/g, function (c) {
-      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c];
-    });
-  }
-
-  function photoFor(courseId, title) {
-    var t = String(title || "").toLowerCase();
-    if (courseId === "MAT") return SOURCES.metal;
-    if (courseId === "MET") return SOURCES.metrology;
-    if (courseId === "OT") return SOURCES.safety;
-    if (courseId === "02.01" || /сборк|подшипник|зубчат|соединен/.test(t)) return SOURCES.assembly;
-    if (courseId === "02.02" || /автомат|робот|датчик|контроллер/.test(t)) return SOURCES.automation;
-    if (/токар|вал|точени|шпиндел/.test(t)) return SOURCES.lathe;
-    if (["07.01", "MCAM", "SPRUT_TP", "04.01"].indexOf(courseId) >= 0) return SOURCES.cnc;
-    return SOURCES.workshop;
-  }
-
-  function flowFor(courseId, title) {
-    var t = String(title || "").toLowerCase();
-    var steps;
-    if (courseId === "SPRUT_TP") {
-      steps = /нормир/.test(t) ? ["Исходные данные", "Состав времени", "Расчёт нормы", "Проверка", "Утверждение"] :
-        /естд|документ|нормоконтрол/.test(t) ? ["Маршрутная карта", "Операционная карта", "Карта эскизов", "Сверка", "Выпуск"] :
-        /типов|групп/.test(t) ? ["Классификация деталей", "Группирование", "Типовой маршрут", "Адаптация", "Контроль"] :
-        ["Чертёж", "Анализ детали", "Заготовка и базы", "Операции", "Контроль и ТД"];
-    } else if (courseId === "MCAM") {
-      steps = /постпроцесс|симуляц/.test(t) ? ["Toolpath", "Backplot", "Verify", "Постпроцессор", "NC-код"] :
-        /инструмент|заготовк/.test(t) ? ["Модель", "Заготовка", "Инструмент", "Режимы", "Проверка"] :
-        ["Геометрия", "WCS / Cplane", "Цепочка", "Траектория", "Verify"];
-    } else if (courseId === "07.01") {
-      steps = /дуг|кругов/.test(t) ? ["Начальная точка", "Центр дуги", "Направление", "Конечная точка", "Проверка"] :
-        /сверлен/.test(t) ? ["Ноль детали", "Позиция X/Y", "Подход", "Цикл сверления", "Отвод"] :
-        ["Чертёж", "Координаты", "Кадры УП", "Симуляция", "Пробный запуск"];
-    } else if (courseId === "02.01") {
-      steps = ["Подготовка деталей", "Базирование", "Соединение", "Регулировка", "Контроль узла"];
-    } else if (courseId === "02.02") {
-      steps = ["Подача детали", "Датчик подтверждает", "Контроллер проверяет", "Исполнительный механизм", "Контроль результата"];
-    } else if (courseId === "04.01") {
-      steps = ["Признак неисправности", "Сбор данных", "Проверка гипотез", "Измерение", "Подтверждённая причина"];
-    } else if (courseId === "MAT") {
-      steps = ["Состав и структура", "Обработка", "Изменение свойств", "Испытание", "Выбор материала"];
-    } else if (courseId === "MET") {
-      steps = ["Требование чертежа", "Выбор СИ", "Подготовка", "Измерение", "Оценка допуска"];
-    } else if (courseId === "OT") {
-      steps = ["Выявить опасность", "Оценить риск", "Установить защиту", "Проверить", "Допустить работу"];
-    } else {
-      steps = ["Исходные данные", "Подготовка", "Выполнение", "Контроль", "Результат"];
+  var LOCAL = {
+    sprutInterface:{src:"./assets/images/fig-22-sprut-interface.png",alt:"Интерфейс СПРУТ-ТП",caption:"Снимок интерфейса СПРУТ-ТП из учебного портала. Используйте его для поиска элементов интерфейса, а не как универсальную инструкцию для всех версий."},
+    sprutProject:{src:"./assets/images/fig-23-sprut-project.png",alt:"Проект в СПРУТ-ТП",caption:"Пример проекта СПРУТ-ТП: иллюстрация структуры проекта и связанных данных."},
+    sprutTools:{src:"./assets/images/fig-24-sprut-tools.png",alt:"Инструменты СПРУТ-ТП",caption:"Иллюстрация инструментов/справочных данных СПРУТ-ТП."},
+    coords:{src:"./assets/images/fig-2-coords.png",alt:"Схема координат",caption:"Схема координатных осей и ориентации детали."},
+    lathe:{src:"./assets/images/fig-12-w-tokar.png",alt:"Токарная обработка",caption:"Пример токарной обработки."},
+    mill:{src:"./assets/images/fig-13-w-frez.png",alt:"Фрезерная обработка",caption:"Пример фрезерной обработки."},
+    machine:{src:"./assets/images/fig-16-machine.png",alt:"Металлорежущий станок",caption:"Металлорежущий станок — пример оборудования, параметры которого проверяют при выборе операции."},
+    flange:{src:"./assets/images/fig-21-flanets.png",alt:"Фланцевое соединение",caption:"Фланцевое соединение — пример сборочной единицы."}
+  };
+  function esc(v){return String(v||"").replace(/[&<>"]/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});}
+  function photoFor(id, topic) {
+    var t=(topic.title||"").toLowerCase(), tid=topic.id||"";
+    if(id==="SPRUT_TP"){
+      if(tid==="sprut-t1"||tid==="sprut-t4")return LOCAL.sprutInterface;
+      if(tid==="sprut-t10")return LOCAL.sprutProject;
+      if(tid==="sprut-t7"||tid==="sprut-t11")return LOCAL.sprutTools;
+      if(tid==="sprut-t3")return null;
+      return null;
     }
-    return steps;
+    if(id==="MAT" && /сталь|структур|термообработ|свойств|микроструктур/.test(t))return COMMONS.metal;
+    if(id==="MET" && /измер|штанген|микрометр|контрол|средств/.test(t))return COMMONS.caliper;
+    if(id==="OT" && /опас|ограж|стан|защит|безопас|риск/.test(t))return COMMONS.guard;
+    if(id==="02.01" && /сбор|подшип|зубчат|фланц|соедин|узел/.test(t))return /фланц/.test(t)?LOCAL.flange:COMMONS.assembly;
+    if(id==="02.02" && /автомат|робот|датчик|контроллер|механизм|систем/.test(t))return COMMONS.robot;
+    if((id==="07.01"||id==="MCAM"||id==="SPRUT_TP") && /токар|вал|точени|шпиндел/.test(t))return id==="SPRUT_TP"?LOCAL.lathe:COMMONS.lathe;
+    if((id==="07.01"||id==="MCAM") && /фрез|карман|паз|контур/.test(t))return LOCAL.mill;
+    if((id==="07.01"||id==="MCAM") && /координат|ноль|траектор|управляющ|постпроцесс/.test(t))return id==="07.01"?LOCAL.coords:COMMONS.cncMill;
+    if(id==="04.01" && /диагност|неисправ|налад|стан|оборуд/.test(t))return LOCAL.machine;
+    return null;
   }
-
-  function flowSvg(steps, label) {
-    var w = 900, gap = 12, boxW = (w - 40 - gap * (steps.length - 1)) / steps.length;
-    var nodes = steps.map(function (s, i) {
-      var x = 20 + i * (boxW + gap);
-      var words = esc(s).split(" ");
-      var lines = [];
-      var line = "";
-      words.forEach(function (word) {
-        if ((line + " " + word).trim().length > 17) { lines.push(line); line = word; }
-        else line = (line + " " + word).trim();
-      });
-      if (line) lines.push(line);
-      var text = lines.slice(0, 3).map(function (ln, j) {
-        return '<text x="' + (x + boxW / 2) + '" y="' + (87 + j * 19) + '" text-anchor="middle" class="lv-node-text">' + ln + '</text>';
-      }).join("");
-      return '<rect x="' + x + '" y="48" width="' + boxW + '" height="82" rx="12" class="lv-node"/>' +
-        '<text x="' + (x + 14) + '" y="68" class="lv-step">' + (i + 1) + '</text>' + text +
-        (i < steps.length - 1 ? '<path d="M' + (x + boxW + 2) + ' 89 h' + (gap - 4) + ' m-5 -5 l5 5 -5 5" class="lv-arrow"/>' : "");
-    }).join("");
-    return '<div class="lv-figure"><div class="lv-figure-title">' + esc(label) + '</div><svg viewBox="0 0 900 170" role="img" aria-label="' + esc(label) + '">' + nodes + '</svg><p class="lv-caption">Последовательность приведена как учебная схема; состав этапов уточняется по конкретной детали, оборудованию и документации.</p></div>';
-  }
-
-  function graphSvg(courseId, title) {
-    var t = String(title || "").toLowerCase();
-    var label = "Графическая модель темы";
-    var path = "M70 190 C150 185 190 165 250 150 S370 105 440 90 S570 60 650 52";
-    var yLabel = "Условный показатель";
-    var xLabel = "Этап процесса";
-    var marks = ["1", "2", "3", "4", "5"];
-    if (courseId === "MAT") {
-      label = "Качественная диаграмма растяжения"; yLabel = "Напряжение"; xLabel = "Относительное удлинение";
-      path = "M70 190 L170 150 Q210 125 260 118 L390 95 Q470 82 520 95 Q570 115 610 145";
-      marks = ["Упругая область", "Текучесть", "Упрочнение", "Максимум", "Разрушение"];
-    } else if (courseId === "MET") {
-      label = "Схема поля допуска"; yLabel = "Отклонение"; xLabel = "Размер";
-      path = "M140 72 L660 72 L660 152 L140 152 Z";
-      marks = ["Верхнее отклонение", "Нулевая линия", "Нижнее отклонение", "Поле допуска", "Размер"];
-    } else if (courseId === "07.01" || courseId === "MCAM") {
-      label = /дуг|круг|радиус/.test(t) ? "Траектория инструмента: прямолинейный и дуговой участок" : "Схематическая траектория инструмента";
-      yLabel = "Y"; xLabel = "X";
-      path = "M90 180 L260 180 L260 105 Q260 55 330 55 L520 55 L650 125";
-      marks = ["Старт", "G01", "G02/G03", "Переход", "Финиш"];
-    } else if (courseId === "SPRUT_TP") {
-      label = "Сравнение уровней детализации ТП"; yLabel = "Детализация"; xLabel = "Содержание документа";
-      path = "M100 170 L100 145 L310 145 L310 110 L520 110 L520 75 L720 75";
-      marks = ["Маршрутный", "Маршрутно-операционный", "Операционный", "Переходы", "Оснастка"];
-    } else if (courseId === "04.01") {
-      label = "Логика диагностики: от признака к подтверждению"; yLabel = "Уровень подтверждения"; xLabel = "Шаг проверки";
-      path = "M90 175 L210 160 L330 135 L450 105 L570 78 L690 48";
-      marks = ["Симптом", "Осмотр", "Измерение", "Сравнение", "Причина"];
-    } else if (courseId === "OT") {
-      label = "Матрица оценки риска (учебный пример)"; yLabel = "Тяжесть последствий"; xLabel = "Вероятность";
-      path = "M130 170 L260 140 L390 115 L520 85 L650 55";
-      marks = ["Редко", "Возможно", "Повторяется", "Часто", "Высокая"];
-    } else if (courseId === "02.01") {
-      label = "Схема накопления размерной цепи"; yLabel = "Суммарное отклонение"; xLabel = "Звенья цепи";
-      path = "M90 160 L220 140 L350 120 L480 100 L610 80";
-      marks = ["A1", "A2", "A3", "A4", "Замыкающее"];
-    } else if (courseId === "02.02") {
-      label = "Цикл автоматизированной сборки"; yLabel = "Состояние"; xLabel = "Время цикла";
-      path = "M80 170 L180 170 L180 115 L300 115 L300 70 L440 70 L440 130 L560 130 L560 55 L700 55";
-      marks = ["Ожидание", "Подача", "Захват", "Сборка", "Контроль"];
+  var SPRUT_STEPS = {
+    "sprut-t1":["Исходная КД","Технологический анализ","Проектирование ТП","Документы","Проверка"],
+    "sprut-t2":["Область применения","Единичный / типовой / групповой","Степень детализации","Маршрут / операции","Выбор комплекта"],
+    "sprut-t3":["МК: весь маршрут","ОК: содержание операции","КЭ: установка и поверхности","Сверка ссылок","Выпуск комплекта"],
+    "sprut-t4":["Открыть проект","Проверить изделие","Выбрать НСИ","Заполнить ТП","Проверить результат"],
+    "sprut-t5":["Чертёж и спецификация","Материал","Программа выпуска","Требования и допуски","Карта исходных данных"],
+    "sprut-t6":["Анализ детали","Выбор заготовки","Выбор баз","Последовательность операций","Контроль"],
+    "sprut-t7":["Операция","Установ","Позиция (если есть)","Переход","Контроль"],
+    "sprut-t8":["Общий маршрут","Выбор ответственных операций","Подробные ОК","Связь с КЭ","Проверка комплекта"],
+    "sprut-t9":["Сравнение чертежей","Общие признаки","Группирование","Базовый процесс","Адаптация под деталь"],
+    "sprut-t10":["Поиск аналога","Проверка применимости","Адаптация данных","Контроль ресурсов","Новый процесс"],
+    "sprut-t11":["Поверхность и требование","Метод обработки","Станок и оснастка","Инструмент и режим","Контроль"],
+    "sprut-t12":["Заготовка","Специальная операция","Учёт деформаций / слоя","Последующая обработка","Контроль"],
+    "sprut-t13":["Исходные нормативы","Основное и вспомогательное время","Обслуживание и перерывы","Подготовительно-заключительное","Проверка нормы"],
+    "sprut-t14":["Проверка комплекта","Нормоконтроль","Согласование","Утверждение","Актуальная редакция"]
+  };
+  function stepsFor(id,topic){
+    if(id==="SPRUT_TP")return SPRUT_STEPS[topic.id]||null;
+    var t=(topic.title||"").toLowerCase();
+    if(id==="07.01"||id==="MCAM"){
+      if(/дуг|круг|радиус/.test(t))return ["Начальная точка","Центр дуги","Направление","Конечная точка","Проверка"];
+      if(/сверлен|отверст/.test(t))return ["Ноль детали","Позиция X/Y","Подход","Цикл обработки","Отвод"];
+      if(/координат|ноль/.test(t))return ["Система координат","Ноль детали","Оси и знак","Положение инструмента","Проверка"];
+      if(/постпроцесс|симуляц|провер/.test(t))return ["Геометрия","Траектория","Симуляция","Постпроцессор","Контроль NC-кода"];
+      if(/токар|вал|точени/.test(t))return ["Заготовка","Закрепление","Черновая обработка","Чистовая обработка","Контроль"];
+      if(/фрез|карман|паз|контур/.test(t))return ["Геометрия","Базирование","Выбор инструмента","Траектория","Проверка"];
     }
-    var ticks = marks.map(function (m, i) {
-      return '<text x="' + (90 + i * 145) + '" y="225" text-anchor="middle" class="lv-axis-label">' + esc(m) + '</text>';
+    if(id==="02.01" && /сбор|соедин|подшип|фланц/.test(t))return ["Подготовка деталей","Базирование","Соединение","Регулировка","Контроль узла"];
+    if(id==="02.02" && /автомат|датчик|робот|контроллер/.test(t))return ["Сигнал датчика","Проверка условия","Команда контроллера","Действие механизма","Подтверждение результата"];
+    if(id==="04.01" && /диагност|неисправ|налад|контрол/.test(t))return ["Признак","Сбор данных","Гипотеза","Измерение","Подтверждение причины"];
+    if(id==="MAT" && /структур|свойств|испытан|термообработ/.test(t))return ["Состав и структура","Обработка","Изменение свойств","Испытание","Выбор материала"];
+    if(id==="MET" && /измер|допуск|калибр|контрол/.test(t))return ["Требование чертежа","Выбор средства","Подготовка","Измерение","Оценка результата"];
+    if(id==="OT" && /опас|риск|ограж|безопас/.test(t))return ["Выявить опасность","Оценить риск","Выбрать защиту","Проверить меры","Допустить работу"];
+    return null;
+  }
+  function flowSvg(steps,label){
+    var w=900,gap=12,bw=(w-40-gap*(steps.length-1))/steps.length;
+    var nodes=steps.map(function(s,i){var x=20+i*(bw+gap);var words=esc(s).split(" "),lines=[],line="";
+      words.forEach(function(word){if((line+" "+word).trim().length>17){lines.push(line);line=word;}else line=(line+" "+word).trim();});if(line)lines.push(line);
+      return '<rect x="'+x+'" y="45" width="'+bw+'" height="88" rx="12" class="lv-node"/><text x="'+(x+12)+'" y="66" class="lv-step">'+(i+1)+'</text>'+
+        lines.slice(0,3).map(function(z,j){return '<text x="'+(x+bw/2)+'" y="'+(88+j*18)+'" text-anchor="middle" class="lv-node-text">'+z+'</text>';}).join("")+
+        (i<steps.length-1?'<path d="M'+(x+bw+2)+' 89 h'+(gap-4)+' m-5 -5 l5 5 -5 5" class="lv-arrow"/>':"");
     }).join("");
-    var grid = [55, 95, 135, 175].map(function (y) { return '<line x1="70" y1="' + y + '" x2="720" y2="' + y + '" class="lv-grid"/>'; }).join("");
-    var svg = '<svg viewBox="0 0 780 285" role="img" aria-label="' + esc(label) + '">' + grid +
-      '<path d="M70 35 V190 H735" class="lv-axis"/><path d="' + path + '" class="lv-curve"/>' +
-      '<text x="18" y="28" class="lv-axis-label">' + esc(yLabel) + '</text>' +
-      '<text x="390" y="270" text-anchor="middle" class="lv-axis-label">' + esc(xLabel) + '</text>' + ticks + '</svg>';
-    return '<div class="lv-figure"><div class="lv-figure-title">' + esc(label) + '</div>' + svg +
-      '<p class="lv-caption">Иллюстративная схема, не нормативная зависимость и не результат измерения. Числовые значения не задаются: график показывает только логику взаимосвязей.</p></div>';
+    return '<figure class="lv-figure"><figcaption class="lv-figure-title">'+esc(label)+'</figcaption><svg viewBox="0 0 900 170" role="img" aria-label="'+esc(label)+'">'+nodes+'</svg></figure>';
   }
-
-  function visualSupplement(courseId, topic) {
-    var title = topic.title || "";
-    var photo = photoFor(courseId, title);
-    var img = "https://commons.wikimedia.org/wiki/Special:FilePath/" + photo.file + "?width=1200";
-    var flow = flowFor(courseId, title);
-    var html = '<section class="lecture-visual-atlas">' +
-      '<h3>Визуальный разбор темы</h3>' +
-      '<p class="lv-intro">Фото помогает увидеть реальный объект, схема — проследить связи и последовательность, график — понять характер зависимости.</p>' +
-      '<figure class="lv-photo"><a href="' + photo.page + '" target="_blank" rel="noopener noreferrer"><img loading="lazy" decoding="async" src="' + img + '" alt="' + esc(photo.caption) + '"></a>' +
-      '<figcaption>' + esc(photo.caption) + '<span class="lv-credit">Источник: Wikimedia Commons · ' + esc(photo.author) + ' · ' + esc(photo.license) + ' · <a href="' + photo.page + '" target="_blank" rel="noopener noreferrer">карточка и условия использования</a></span></figcaption></figure>' +
-      flowSvg(flow, "Схема процесса по теме «" + title + "»") +
-      graphSvg(courseId, title) +
-      '<div class="lv-task"><b>Задание по визуальным материалам</b><ol><li>Подпишите на фотографии не менее трёх элементов, связанных с темой.</li><li>Перерисуйте схему в конспект и поясните назначение каждого этапа.</li><li>Объясните, что показывает график и какие данные потребовались бы для построения реального графика.</li></ol></div>' +
-      '</section>';
-    return html;
+  function specialSprutFigure(topic){
+    var id=topic.id;
+    if(id==="sprut-t2")return '<div class="lv-figure"><div class="lv-figure-title">Две независимые оси классификации ТП</div><div class="lv-class-grid"><div><b>Область применения</b><span>Единичный</span><span>Типовой</span><span>Групповой</span></div><div><b>Степень детализации</b><span>Маршрутный</span><span>Маршрутно-операционный</span><span>Операционный</span></div></div><p class="lv-caption">Выбираются отдельно: один признак не определяет другой.</p></div>';
+    if(id==="sprut-t3")return '<div class="lv-figure"><div class="lv-figure-title">Связь технологических документов</div><div class="lv-doc-stack"><span><b>МК</b> — маршрут и операции</span><span><b>ОК</b> — установки и переходы выбранной операции</span><span><b>КЭ</b> — базирование, поверхности и эскиз</span></div><p class="lv-caption">Номера операций, обозначения и контрольные требования должны быть согласованы.</p></div>';
+    if(id==="sprut-t7")return '<div class="lv-figure"><div class="lv-figure-title">Структура операционного описания</div><div class="lv-doc-stack"><span>Операция — рабочее место</span><span>Установ — неизменное закрепление</span><span>Позиция — положение в операции (если применимо)</span><span>Переход — конкретное действие обработки</span></div></div>';
+    if(id==="sprut-t13")return '<div class="lv-figure"><div class="lv-figure-title">Состав нормирования времени</div><div class="lv-class-grid"><div><b>На единицу</b><span>Основное</span><span>Вспомогательное</span><span>Обслуживание и регламентированные перерывы</span></div><div><b>На партию</b><span>Подготовительно-заключительное</span><span>Распределение по принятой методике</span><span>Проверка исходных нормативов</span></div></div></div>';
+    return "";
   }
-
-  var count = 0;
-  Object.keys(courses).forEach(function (courseId) {
-    if (["basic", "technical"].indexOf(courseId) >= 0) return;
-    var course = courses[courseId];
-    if (!course || !Array.isArray(course.sections)) return;
-    course.sections.forEach(function (section) {
-      (section.topics || []).forEach(function (topic) {
-        if (!Array.isArray(topic.lectures)) return;
-        topic.lectures.forEach(function (lecture) {
-          if (!lecture || typeof lecture.content !== "string" || lecture.__visualAtlasAdded) return;
-          lecture.content += visualSupplement(courseId, topic);
-          lecture.__visualAtlasAdded = true;
-          count++;
-        });
+  function photoHtml(photo){
+    if(!photo)return "";
+    var credit=photo.author?'<span class="lv-credit">Источник: Wikimedia Commons · '+esc(photo.author)+' · '+esc(photo.license)+' · <a href="'+photo.page+'" target="_blank" rel="noopener noreferrer">карточка и лицензия</a></span>':"";
+    return '<figure class="lv-photo"><img loading="lazy" decoding="async" src="'+photo.src+'" alt="'+esc(photo.alt)+'" onerror="this.closest(\'figure\').classList.add(\'lv-image-missing\');this.remove();"><figcaption>'+esc(photo.caption)+credit+'</figcaption></figure>';
+  }
+  function visualSupplement(id,topic){
+    var photo=photoFor(id,topic),steps=stepsFor(id,topic),special=id==="SPRUT_TP"?specialSprutFigure(topic):"";
+    if(!photo&&!steps&&!special)return "";
+    var html='<section class="lecture-visual-atlas"><h3>Иллюстрации именно к этой теме</h3>';
+    html+=photoHtml(photo);
+    if(special)html+=special;
+    if(steps)html+=flowSvg(steps,"Схема по теме «"+(topic.title||"")+"»");
+    if(photo||special||steps)html+='<div class="lv-task"><b>Задание по иллюстрации</b><ol><li>Назовите элементы, непосредственно связанные с изучаемой темой.</li><li>Объясните последовательность или взаимосвязь, показанную на схеме.</li><li>Укажите, какие исходные данные нужны для проверки решения на реальном производстве.</li></ol></div>';
+    return html+'</section>';
+  }
+  var count=0;
+  Object.keys(courses).forEach(function(id){
+    if(["basic","technical"].indexOf(id)>=0)return;
+    var course=courses[id];if(!course||!Array.isArray(course.sections))return;
+    course.sections.forEach(function(section){(section.topics||[]).forEach(function(topic){
+      if(!Array.isArray(topic.lectures))return;
+      topic.lectures.forEach(function(lecture){
+        if(!lecture||typeof lecture.content!=="string"||lecture.__visualAtlasAdded)return;
+        var html=visualSupplement(id,topic);
+        if(html){lecture.content+=html;lecture.__visualAtlasAdded=true;count++;}
       });
-    });
+    });});
   });
-  window.LECTURE_VISUAL_ATLAS_COUNT = count;
+  window.LECTURE_VISUAL_ATLAS_COUNT=count;
 })();
