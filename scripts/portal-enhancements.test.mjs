@@ -245,7 +245,7 @@ test("MDK 07.01 numeric practical answer keys match their stated data", () => {
   assert.match(byCode.get("ПЗ 3.5").task, /единый контрольный расчёт, не зависящий от варианта/);
   assert.match(byCode.get("ПЗ 3.5").variants[0], /58×38 мм/);
   assert.match(byCode.get("ПЗ 5.1-А").task, /Для своего варианта/);
-  assert.match(byCode.get("ПЗ 5.1-А").variants[1], /центр \(40;30\).*радиусом 20 мм/);
+  assert.match(byCode.get("ПЗ 5.1-А").variants[1], /радиусом 20 мм с центром \(40;30\)/);
   assert.match(byCode.get("ПЗ 5.2-А").task, /Для своего варианта/);
   assert.match(byCode.get("ПЗ 5.3-А").task, /Для своего варианта/);
   assert.match(byCode.get("ПЗ 5.3-Б").task, /Для своего варианта/);
