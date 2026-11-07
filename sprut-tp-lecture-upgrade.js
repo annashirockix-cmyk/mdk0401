@@ -132,7 +132,7 @@
       (topic.lectures || []).forEach(function (lecture) {
         if (!lecture || typeof lecture.content !== "string") return;
         if (extra && !lecture.__sprutTheoryExpanded && !/Практическая работа|Самостоятельная работа/i.test(lecture.title || "")) {
-          lecture.content += "<section class=\"sprut-deep-dive\">" + extra.join("") + "</section>";
+          lecture.content += "<section class=\"sprut-deep-dive\">" + extra + "</section>";
           lecture.__sprutTheoryExpanded = true;
           count++;
         }
