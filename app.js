@@ -176,6 +176,19 @@ window.loadGlobalCustomContent = function(callback) {
         if (callback) callback();
     }).catch(err => {
         console.error("Ошибка загрузки кастомного контента", err);
+        // Если сервер явно отклонил токен, убираем только авторизацию,
+        // сохраняя локальный учебный прогресс. При обычном сбое сети вход не сбрасываем.
+        var tokenStillPresent = false;
+        try { tokenStillPresent = !!sessionStorage.getItem("mdk.session"); } catch (e) {}
+        if (!tokenStillPresent && window.state && (window.state.student || window.state.staff)) {
+            window.state.student = null;
+            window.state.staff = null;
+            try { localStorage.setItem("mdk.state", JSON.stringify(window.state)); } catch (e) {}
+            var login = document.getElementById("loginOverlay");
+            if (login) login.style.display = "flex";
+            if (window.renderUserChip) window.renderUserChip();
+            if (window.updateMenuVisibility) window.updateMenuVisibility();
+        }
         if (callback) callback();
     });
 };
@@ -755,6 +768,21 @@ window.renderHomePage = function() {
 function setupLogin() {
     var overlay = document.getElementById("loginOverlay"); 
     if (!overlay) return;
+
+    // Восстанавливаем интерфейс авторизованного пользователя после F5.
+    // sessionStorage сохраняется при обновлении вкладки, а mdk.state содержит профиль.
+    var hasSessionToken = false;
+    try { hasSessionToken = !!sessionStorage.getItem("mdk.session"); } catch (e) {}
+    var hasCachedIdentity = !!(window.state && (window.state.student || window.state.staff));
+    if (hasSessionToken && hasCachedIdentity) {
+        overlay.style.display = "none";
+    } else {
+        if (!hasSessionToken && window.state) {
+            window.state.student = null;
+            window.state.staff = null;
+        }
+        overlay.style.display = "flex";
+    }
     
     function applyAuthSession(res, email) {
         var role = (res.role || "student").toLowerCase();
