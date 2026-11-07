@@ -75,6 +75,13 @@ function fillActivityStudents(){
  ["repFilterGroup","repFilterTest","repFilterCourse"].forEach(id=>document.getElementById(id).onchange=render);
  document.getElementById("repRefresh").onclick=load;
  document.getElementById("activityRefresh").onclick=loadActivityLog;
+
+ document.getElementById("activityExport").onclick=function(){
+  const cell=function(v){let s=String(v==null?"":v);if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
+  const rows=[["Дата и время","Студент","Email","Группа","Дисциплина","Событие","Детали","Страница","Маршрут"].map(cell).join(";")].concat(activityEvents.map(function(x){return [x.createdAt,x.name,x.email,x.group,labels[x.courseId]||x.courseId,x.eventType,x.details,x.pageTitle,x.route].map(cell).join(";");}));
+  const blob=new Blob(["\uFEFF"+rows.join("\r\n")],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="istoriya-deistviy.csv";a.click();URL.revokeObjectURL(url);
+ };
+
  document.getElementById("activityStudent").onchange=loadActivityLog;
  document.getElementById("repFilterCourse").addEventListener("change",loadActivityLog);
  document.getElementById("repFilterGroup").addEventListener("change",loadActivityLog);
