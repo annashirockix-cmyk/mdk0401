@@ -33,7 +33,7 @@
       .certificate-choice label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:13px}
       .certificate-choice select{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card-soft);color:var(--text)}
       .certificate-supplement{max-width:900px;margin:22px auto;padding:30px;background:#fff;color:#172033;border:3px double #315b7d;border-radius:4px;page-break-before:always;break-before:page;box-sizing:border-box}
-      .certificate-supplement .cs-kicker{font-size:11px;letter-spacing:2px;font-weight:800;text-align:center}
+      .certificate-supplement .cs-kicker{font-size:11px;letter-spacing:2px;font-weight:800;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px}
       .certificate-supplement h2{text-align:center;margin:10px 0 4px;font-size:25px}
       .certificate-supplement .cs-meta{text-align:center;margin:5px 0}
       .certificate-supplement .cs-summary{margin:18px 0;padding:14px;border-radius:8px;text-align:center;font-weight:700}
@@ -138,7 +138,7 @@
     var courseId=window.state.activeCourseId||"07.01";
     var course=(window.MDK_DATA&&window.MDK_DATA[courseId])||{};
     var box=node("section");box.className="certificate-supplement";
-    box.appendChild(node("div","ПРИЛОЖЕНИЕ К СЕРТИФИКАТУ")).className="cs-kicker";
+    var kicker=node("div");kicker.className="cs-kicker";var certIcon=node("img");certIcon.src="./assets/images/icon-cert.png";certIcon.alt="";certIcon.style.cssText="width:24px;height:24px;object-fit:contain";kicker.appendChild(certIcon);kicker.appendChild(node("span","ПРИЛОЖЕНИЕ К СЕРТИФИКАТУ"));box.appendChild(kicker);
     box.appendChild(node("h2","Перечень успешно пройденных этапов"));
     box.appendChild(node("p","Обучающийся: "+(window.state.student.name||""))).className="cs-meta";
     box.appendChild(node("p","Дисциплина: "+(course.title||courseId))).className="cs-meta";
