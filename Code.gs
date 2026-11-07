@@ -870,7 +870,7 @@ function getResults_(data) {
     const rs=p.results||{};
     Object.keys(rs).forEach(function(key){
       const rec=rs[key];if(!rec||typeof rec!=="object"||rec.grade==null)return;
-      const email=email_(row[m.Email]);if(list.some(function(x){return email_(x.email)===email&&String(x.testId)===key;}))return;
+      const email=email_(row[m.Email]);if(list.some(function(x){return email_(x.email)===email&&String(x.testId)===key&&sameCourseId_(x.courseId,cid);}))return;
       let cid=normalizeCourseId_(rec.courseId||"");
       if(!cid){
         const matches=CFG.COURSES.filter(function(id){return key.indexOf(id)>=0;});
@@ -998,7 +998,7 @@ function getMyCourseResults_(data) {
       }
       if(requestedCourse&&!sameCourseId_(courseId,requestedCourse))return;
       if(isProtectedAssessment_(testId,courseId,protectedQuestionBankMap_()))return;
-      if(list.some(function(x){return x.testId===String(testId);}))return;
+      if(list.some(function(x){return x.testId===String(testId)&&sameCourseId_(x.courseId,courseId);}))return;
       list.push({testId:String(testId),testTitle:String(rec.testTitle||testId),grade:Number(rec.grade)||0,score:Number(rec.score)||0,maxScore:Number(rec.max||rec.maxScore)||0,percent:Number(rec.percent)||0,timeSpent:Number(rec.timeSpent)||0,finishedAt:String(rec.finishedAt||""),courseId:courseId});
     });
   }
@@ -1202,7 +1202,7 @@ function getTestAttemptStatus_(data) {
     if(raw!=="") break;
   }
   const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
-  const acceptedIds=isCustom?[testId,baseId]:[testId];
+  const acceptedIds=isCustom?[testId,baseId]:[testId,"custom_"+testId];
   const used=results_().getDataRange().getValues().slice(1).filter(function(r){
     return email_(r[0])===targetEmail&&acceptedIds.indexOf(String(r[3]||""))>=0&&sameCourseId_(r[12]||courseId,courseId);
   }).length;
