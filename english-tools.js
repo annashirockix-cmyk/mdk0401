@@ -15,10 +15,15 @@
   function guard(){var app=$("app");if(permitted())return true;if(app)app.innerHTML='<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';return false;}
   function cardButton(text,hash){return '<a class="btn ghost" href="'+hash+'" style="display:inline-flex;margin:4px 6px 4px 0">'+text+'</a>';}
   function runEnglishAssessment(title,questions,minutes,resultKey){
-    var app=$("app");if(!app)return;if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
+    var app=$("app");if(!app)return;
+    var existing=window.state&&window.state.results&&window.state.results[resultKey];
+    if(existing){app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="module" style="text-align:center"><h2>Работа уже завершена</h2><p>Оценка: <b>'+esc(existing.grade||"—")+'</b></p><p>Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.</p></section>';return;}
+    if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
+    app.setAttribute("translate","no");app.classList.add("notranslate");
     var timeLeft=Math.max(1,Number(minutes)||45)*60;
     app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="hero"><h1>'+esc(title)+'</h1><p>'+questions.length+' вопросов · отведённое время: '+minutes+' мин.</p><div id="englishAssessmentTimer" style="font-size:22px;font-weight:bold;color:var(--accent)"></div></section><section class="module"><div id="englishAssessmentQuestions"></div><button class="btn" id="englishAssessmentFinish">Завершить работу</button></section>';
     var area=$("englishAssessmentQuestions");
+    area.classList.add("notranslate");area.setAttribute("translate","no");
     area.innerHTML=questions.map(function(q,i){return '<article style="padding:12px 0;border-bottom:1px solid var(--border)"><b>'+(i+1)+'. '+esc(q.q||q.question||"")+'</b><div style="display:grid;gap:7px;margin-top:8px">'+(q.options||[]).map(function(o,j){return '<label style="display:flex;gap:8px;align-items:flex-start"><input type="radio" name="english-assessment-'+i+'" value="'+j+'"><span>'+esc(o)+'</span></label>';}).join("")+'</div></article>';}).join("");
     var finished=false;
     function finish(){
@@ -27,9 +32,8 @@
       var percent=Math.round(correct/questions.length*100),grade=percent>=90?5:percent>=75?4:percent>=60?3:2,now=new Date().toISOString();
       window.state.results=window.state.results||{};window.state.results[resultKey]={grade:grade,score:correct,max:questions.length,percent:percent,finishedAt:now};
       if(window.saveStudentData)window.saveStudentData();
-      app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="module" style="text-align:center"><h2>Работа завершена</h2><p>Правильных ответов: <b>'+correct+'</b> из '+questions.length+'</p><p>Отвечено: '+answered+' из '+questions.length+'</p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+grade+'</h1><p>'+percent+'%</p><button class="btn" id="englishAssessmentRetry">Пройти ещё раз</button></section>';
-      $("englishAssessmentRetry").onclick=function(){runEnglishAssessment(title,questions,minutes,resultKey);};
-      if(window.state.student&&window.API&&window.API.saveResult){window.API.saveResult({email:window.state.student.email,name:window.state.student.name,group:window.state.student.group,courseId:"EN",testId:resultKey,testTitle:title,grade:grade,score:correct,maxScore:questions.length,percent:percent,finishedAt:now}).catch(function(err){console.warn("English assessment sync failed",err);});}
+      app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="module notranslate" translate="no" style="text-align:center"><h2>Работа завершена</h2><p>Правильных ответов: <b>'+correct+'</b> из '+questions.length+'</p><p>Отвечено: '+answered+' из '+questions.length+'</p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+grade+'</h1><p>'+percent+'%</p><p>Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.</p></section>';
+      if(window.state.student&&window.API&&window.API.saveResult){window.API.saveResult({email:window.state.student.email,name:window.state.student.name,group:window.state.student.group,courseId:activeCourse(),testId:resultKey,testTitle:title,grade:grade,score:correct,maxScore:questions.length,percent:percent,finishedAt:now}).catch(function(err){console.warn("English assessment sync failed",err);if(window.showToast)window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err");});}
     }
     $("englishAssessmentFinish").onclick=finish;
     function tick(){var el=$("englishAssessmentTimer");if(!el)return;var m=Math.floor(timeLeft/60),sec=timeLeft%60;el.textContent=(m<10?"0":"")+m+":"+(sec<10?"0":"")+sec;if(timeLeft<=0){finish();return;}timeLeft--;}
@@ -49,11 +53,11 @@
     }else if(mode.indexOf("semester-")===0){
       var sem=(window.SEMESTER_TESTS&&window.SEMESTER_TESTS[track])||[];
       html+='<section class="module"><h2>Семестровые контрольные</h2><p class="museum-muted">'+sem.length+' контрольных работ · 5 курсов · 45 минут на работу</p>';
-      sem.forEach(function(test){var key="english_"+track+"_"+test.id,done=window.state.results&&window.state.results[key];html+='<article style="padding:10px 0;border-top:1px solid var(--border)"><b>'+esc(test.title)+'</b><div class="museum-muted">'+esc(test.subtitle||"")+' · '+test.questions.length+' вопросов · '+test.time+' мин'+(done?' · последняя оценка: '+esc(done.grade):'')+'</div><button class="btn" data-sem="'+esc(test.id)+'">Начать контрольную</button></article>';});html+='</section>';
+      sem.forEach(function(test){var key="english_"+track+"_"+test.id,done=window.state.results&&window.state.results[key];html+='<article style="padding:10px 0;border-top:1px solid var(--border)"><b>'+esc(test.title)+'</b><div class="museum-muted">'+esc(test.subtitle||"")+' · '+test.questions.length+' вопросов · '+test.time+' мин'+(done?' · оценка: '+esc(done.grade):'')+'</div><button class="btn" data-sem="'+esc(test.id)+'" '+(done?'disabled':'')+'>'+(done?'Работа завершена':'Начать контрольную')+'</button></article>';});html+='</section>';
     }else{
       var exams=(window.FINAL_EXAMS&&window.FINAL_EXAMS[track])||[];
       html+='<section class="module"><h2>Итоговые экзамены</h2><p class="museum-muted">'+exams.length+' экзаменов · по два варианта · 60 минут</p>';
-      exams.forEach(function(exam){html+='<article style="padding:12px 0;border-top:1px solid var(--border)"><b>'+esc(exam.title)+'</b><div class="museum-muted">'+exam.time+' мин</div><div style="display:flex;gap:8px;flex-wrap:wrap">'+(exam.variants||[]).map(function(v,i){var key="english_"+track+"_"+exam.id+"_v"+(i+1),done=window.state.results&&window.state.results[key];return '<button class="btn '+(i?"ghost":"")+'" data-final="'+esc(exam.id)+'" data-variant="'+(i+1)+'">Вариант '+(i+1)+(done?' · '+esc(done.grade):'')+'</button>';}).join("")+'</div></article>';});html+='</section>';
+      exams.forEach(function(exam){html+='<article style="padding:12px 0;border-top:1px solid var(--border)"><b>'+esc(exam.title)+'</b><div class="museum-muted">'+exam.time+' мин</div><div style="display:flex;gap:8px;flex-wrap:wrap">'+(exam.variants||[]).map(function(v,i){var key="english_"+track+"_"+exam.id+"_v"+(i+1),done=window.state.results&&window.state.results[key];return '<button class="btn '+(i?"ghost":"")+'" data-final="'+esc(exam.id)+'" data-variant="'+(i+1)+'" '+(done?'disabled':'')+'>'+(done?'Вариант '+(i+1)+' · завершён':'Вариант '+(i+1))+'</button>';}).join("")+'</div></article>';});html+='</section>';
     }
     app.insertAdjacentHTML("beforeend",html);
     app.querySelectorAll("[data-mode]").forEach(function(b){b.onclick=function(){window.renderEnglishTestsPage(b.dataset.mode);};});
