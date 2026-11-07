@@ -412,7 +412,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   }
   vm.runInNewContext(visual, sandbox, { timeout: 2000 });
   assert.ok(sandbox.window.LECTURE_VISUAL_ATLAS_COUNT >= 30, "expected topic-matched visuals in the course collection");
-  const atlasImageSources = Object.values(sandbox.window.MDK_DATA).flatMap(course => course.sections || []).flatMap(section => section.topics || []).flatMap(topic => topic.lectures || []).flatMap(lecture => [...String(lecture.content || "").matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]));
+  const atlasImageSources = Object.values(sandbox.window.MDK_DATA).flatMap(course => course.sections || []).flatMap(section => section.topics || []).flatMap(topic => topic.lectures || []).flatMap(lecture => [...String(lecture.content || "").matchAll(/<section class="lecture-visual-atlas">([\\s\\S]*?)<\\/section>/g)].flatMap(block => [...block[1].matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1])));
   assert.equal(new Set(atlasImageSources).size, atlasImageSources.length, "the same photo must not be repeated across lecture visual supplements");
   for (const id of ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT"]) {
     const course = sandbox.window.MDK_DATA[id];
