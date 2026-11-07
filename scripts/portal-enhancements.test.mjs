@@ -247,6 +247,11 @@ test("MDK 07.01 numeric practical answer keys match their stated data", () => {
   assert.match(byCode.get("ПЗ 5.2-А").task, /Для своего варианта/);
   assert.match(byCode.get("ПЗ 5.3-А").task, /Для своего варианта/);
   assert.match(byCode.get("ПЗ 5.3-Б").task, /Для своего варианта/);
+  assert.match(byCode.get("ПЗ 4.2").task, /разомкнутой и замкнутой систем управления/);
+  assert.doesNotMatch(byCode.get("ПЗ 4.2").task, /Fanuc|Siemens|Heidenhain/);
+  for (const code of ["ПЗ 1.1","ПЗ 1.2","ПЗ 2.1","ПЗ 2.2","ПЗ 2.3","ПЗ 3.1","ПЗ 3.2","ПЗ 3.3","ПЗ 4.4"]) {
+    assert.match(byCode.get(code).task, /контрольный расчёт, одинаковый для всех вариантов|отдельный контрольный расчёт, одинаковый для всех вариантов/);
+  }
   assert.match(byCode.get("ПЗ 3.6-Б").task, /G03 X40 Y10 I0 J10/);
   assert.match(byCode.get("ПЗ 3.6-Б").task, /G03 — дуга против часовой стрелки/);
 });
