@@ -1,6 +1,6 @@
 "use strict";
 var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec";
-function fetchAPI(action, params, method) {
+function fetchAPI(action, params, method, timeoutMs) {
   params = Object.assign({}, params || {}); method = method || "GET"; params.action = action;
   var url = new URL(APPS_SCRIPT_URL); url.searchParams.set("action", action); url.searchParams.set("t", String(Date.now()));
   var token = ""; try { token = sessionStorage.getItem("mdk.session") || ""; } catch(e) {}
@@ -8,13 +8,14 @@ function fetchAPI(action, params, method) {
   var options = {method:method,cache:"no-store",redirect:"follow",headers:{"Content-Type":"text/plain;charset=utf-8"}};
   if (method === "POST") options.body = JSON.stringify(params);
   else Object.keys(params).forEach(function(k){if(params[k]!=null)url.searchParams.set(k,typeof params[k]==="object"?JSON.stringify(params[k]):params[k]);});
-  var ctl = new AbortController(), timer = setTimeout(function(){ctl.abort();},30000); options.signal=ctl.signal;
+  var timeoutMs = Math.max(30000, Number(timeoutMs) || 30000), timedOut = false;
+   var ctl = new AbortController(), timer = setTimeout(function(){timedOut=true;ctl.abort();},timeoutMs); options.signal=ctl.signal;
   return fetch(url.toString(),options).then(function(r){clearTimeout(timer);if(!r.ok)throw new Error("HTTP "+r.status);return r.text();})
     .then(function(raw){if(!raw||raw.trim().charAt(0)==="<")throw new Error("Сервер вернул HTML. Проверьте публикацию Google Apps Script.");
       var result;try{result=JSON.parse(raw);}catch(e){throw new Error("Сервер вернул некорректный JSON.");}
       if(result&&result.error&&/сессия|авторизац|войдите/i.test(result.error)){try{sessionStorage.removeItem("mdk.session");}catch(e){}}
       return result;})
-    .catch(function(err){clearTimeout(timer);console.error("API ["+action+"]",err);throw err;});
+    .catch(function(err){clearTimeout(timer);if(timedOut){var timeoutError=new Error("Сервер не ответил за "+Math.round(timeoutMs/1000)+" сек. Операция могла завершиться на сервере; проверьте банк перед повторным запуском.");timeoutError.name="TimeoutError";console.error("API ["+action+"]",timeoutError);throw timeoutError;}console.error("API ["+action+"]",err);throw err;});
 }
 window.API = {
  login:function(email,password){return fetchAPI("login",{email:email,password:password},"POST").then(function(r){if(r&&r.success&&r.token){try{sessionStorage.setItem("mdk.session",r.token);}catch(e){}}return r;});},
@@ -46,7 +47,7 @@ window.API = {
  getTutoringLink:function(courseId){return fetchAPI("getTutoringLink",{courseId:courseId},"GET");},
  saveTutoringLink:function(courseId,data){return fetchAPI("saveTutoringLink",Object.assign({courseId:courseId},data||{}),"POST");},
  submitCustomTest:function(testId,answers,timeSpent){return fetchAPI("submitCustomTest",{testId:testId,answers:answers,timeSpent:timeSpent},"POST");},
- importQuestionBanks:function(banks){return fetchAPI("importQuestionBanks",{banks:banks},"POST");},
+ importQuestionBanks:function(banks){return fetchAPI("importQuestionBanks",{banks:banks},"POST",120000);},
  getQuestionBank:function(courseId,bankId){return fetchAPI("getQuestionBank",{courseId:courseId,bankId:bankId||""},"GET");},
  getBuiltInTest:function(courseId,testId,bankIds){return fetchAPI("getBuiltTest",{courseId:courseId,testId:testId,bankIds:bankIds||[]},"POST");},
  submitBuiltInTest:function(data){return fetchAPI("submitBuiltTest",data||{},"POST");},
