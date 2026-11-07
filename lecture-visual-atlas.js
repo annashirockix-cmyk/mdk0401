@@ -94,19 +94,30 @@
     if(id==="sprut-t13")return '<div class="lv-figure"><div class="lv-figure-title">Состав нормирования времени</div><div class="lv-class-grid"><div><b>На единицу</b><span>Основное</span><span>Вспомогательное</span><span>Обслуживание и регламентированные перерывы</span></div><div><b>На партию</b><span>Подготовительно-заключительное</span><span>Распределение по принятой методике</span><span>Проверка исходных нормативов</span></div></div></div>';
     return "";
   }
+  function graphSvg(id,topic){
+    var t=(topic.title||"").toLowerCase(),label="",xLabel="",yLabel="",path="";
+    if(id==="MAT" && /прочност|растяж|механическ|деформац/.test(t)){
+      label="Качественная диаграмма растяжения";xLabel="Относительное удлинение";yLabel="Напряжение";
+      path="M70 205 L145 150 Q190 118 255 118 L390 95 Q485 78 535 96 Q590 120 645 166";
+    }else if((id==="07.01"||id==="MCAM") && /координат|траектор|дуг|круг|контур|фрез/.test(t)){
+      label="Схематическая траектория инструмента в координатной плоскости";xLabel="X";yLabel="Y";
+      path="M90 190 L250 190 L250 115 Q250 55 330 55 L520 55 L650 130";
+    }else return "";
+    return '<figure class="lv-figure"><figcaption class="lv-figure-title">'+esc(label)+'</figcaption><svg viewBox="0 0 760 270" role="img" aria-label="'+esc(label)+'"><path d="M65 28 V210 H720" class="lv-axis"/><path d="M65 65 H720 M65 110 H720 M65 155 H720" class="lv-grid"/><path d="'+path+'" class="lv-curve"/><text x="18" y="24" class="lv-axis-label">'+esc(yLabel)+'</text><text x="390" y="255" text-anchor="middle" class="lv-axis-label">'+esc(xLabel)+'</text></svg><p class="lv-caption">Качественная иллюстрация формы зависимости/траектории, не числовые экспериментальные данные и не готовая управляющая программа.</p></figure>';
+  }
   function photoHtml(photo){
     if(!photo)return "";
     var credit=photo.author?'<span class="lv-credit">Источник: Wikimedia Commons · '+esc(photo.author)+' · '+esc(photo.license)+' · <a href="'+photo.page+'" target="_blank" rel="noopener noreferrer">карточка и лицензия</a></span>':"";
     return '<figure class="lv-photo"><img loading="lazy" decoding="async" src="'+photo.src+'" alt="'+esc(photo.alt)+'" onerror="this.closest(\'figure\').classList.add(\'lv-image-missing\');this.remove();"><figcaption>'+esc(photo.caption)+credit+'</figcaption></figure>';
   }
   function visualSupplement(id,topic){
-    var photo=photoFor(id,topic),steps=stepsFor(id,topic),special=id==="SPRUT_TP"?specialSprutFigure(topic):"";
-    if(!photo&&!steps&&!special)return "";
+    var photo=photoFor(id,topic),steps=stepsFor(id,topic),special=id==="SPRUT_TP"?specialSprutFigure(topic):"",graph=graphSvg(id,topic);
+    if(!photo&&!steps&&!special&&!graph)return "";
     var html='<section class="lecture-visual-atlas"><h3>Иллюстрации именно к этой теме</h3>';
     html+=photoHtml(photo);
     if(special)html+=special;
     if(steps)html+=flowSvg(steps,"Схема по теме «"+(topic.title||"")+"»");
-    if(photo||special||steps)html+='<div class="lv-task"><b>Задание по иллюстрации</b><ol><li>Назовите элементы, непосредственно связанные с изучаемой темой.</li><li>Объясните последовательность или взаимосвязь, показанную на схеме.</li><li>Укажите, какие исходные данные нужны для проверки решения на реальном производстве.</li></ol></div>';
+    if(photo||special||steps||graph)html+='<div class="lv-task"><b>Задание по иллюстрации</b><ol><li>Назовите элементы, непосредственно связанные с изучаемой темой.</li><li>Объясните последовательность или взаимосвязь, показанную на схеме.</li><li>Укажите, какие исходные данные нужны для проверки решения на реальном производстве.</li></ol></div>';
     return html+'</section>';
   }
   var count=0;
