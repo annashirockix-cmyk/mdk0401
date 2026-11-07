@@ -4,23 +4,48 @@
  if(typeof original!=="function")return;
  var names={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","MET":"Метрология","OT":"Охрана труда","PFI":"ПФИ"};
  function esc(v){return window.escapeHtml(String(v==null?"":v));}
- function route(course,topic){return topic?"#/topic/"+encodeURIComponent(course)+"/"+encodeURIComponent(topic.id):course==="MET"?"#/metrology-trainer":["07.01","04.01","02.01","02.02"].indexOf(course)>=0?"#/training/"+encodeURIComponent(course):course==="MCAM"?"#/training/MCAM":"#/grades";}
+ function route(course,topic,tab){return topic?"#/topic/"+encodeURIComponent(course)+"/"+encodeURIComponent(topic.id)+(tab?"/"+encodeURIComponent(tab):""):course==="MET"?"#/metrology-trainer":["07.01","04.01","02.01","02.02"].indexOf(course)>=0?"#/training/"+encodeURIComponent(course):course==="MCAM"?"#/training/MCAM":"#/grades";}
  function plain(v){return String(v||"").toLowerCase().replace(/ё/g,"е").replace(/[^a-zа-я0-9]+/g," ").trim();}
  function tokens(v){return plain(v).split(/\s+/).filter(function(w){return w.length>2&&!/^(тема|лекция|работа|практическая|практикум|задание|контроль|повторение|тест|пз|пр|ср|мдк)$/.test(w);});}
  function findTopic(courseId,rows){
   var course=window.MDK_DATA&&window.MDK_DATA[courseId];if(!course||!Array.isArray(course.sections))return null;
   var all=[];course.sections.forEach(function(s){(s.topics||[]).forEach(function(t){all.push(t);});});
   var hints=rows.map(function(x){return String(x.testTitle||"")+" "+String(x.testId||"")+" "+String(x.topic||"")+" "+String(x.feedback||"");}).join(" ");
+  var explicit=[];
   if(courseId==="MET"){
-   var id="";
-   if(/adaptive.*caliper|штангенцирк|штангенинструмент/i.test(hints))id="met-5";
-   else if(/adaptive.*micrometer|микрометр/i.test(hints))id="met-6";
-   else if(/adaptive.*depth|глубиномер|глубин/i.test(hints))id="met-5";
-   else if(/adaptive.*indicator|индикатор|биени/i.test(hints))id="met-7";
-   else if(/adaptive.*tolerance|допуск|посадк/i.test(hints))id="met-4";
-   else if(/adaptive.*error|погрешност|ошибк измер/i.test(hints))id="met-3";
-   if(id){var fixed=all.find(function(t){return t.id===id;});if(fixed)return fixed;}
+   if(/adaptive.*caliper|штангенцирк|штангенинструмент/i.test(hints))explicit=["met-5"];
+   else if(/adaptive.*micrometer|микрометр/i.test(hints))explicit=["met-6"];
+   else if(/adaptive.*depth|глубиномер|глубин/i.test(hints))explicit=["met-5"];
+   else if(/adaptive.*indicator|индикатор|биени/i.test(hints))explicit=["met-7"];
+   else if(/adaptive.*tolerance|допуск|посадк/i.test(hints))explicit=["met-4"];
+   else if(/adaptive.*error|погрешност|ошибк измер/i.test(hints))explicit=["met-3"];
   }
+  if(courseId==="07.01"){
+   var rules=[
+    [/t-1-4|охрана труда|безопасност|средств.*защит/i,"t-1-4"],
+    [/t-1-3|устройств.*токар|станин|шпиндел|суппорт/i,"t-1-3"],
+    [/t-1-2|классификац.*станк|вид.*станк/i,"t-1-2"],
+    [/t-2-1|техпроцесс|технологическ.*процесс|операционн.*карт|вал.*маршрут/i,"t-2-1"],
+    [/t-2-2|резьб|метчик|плашк/i,"t-2-2"],
+    [/t-2-3|коническ.*поверх|конус/i,"t-2-3"],
+    [/t-3-1|подготовк.*управляющ|подготовк.*программ/i,"t-3-1"],
+    [/t-3-2|технологическ.*документац|маршрутн.*карт|операционн.*документ/i,"t-3-2"],
+    [/t-3-3|систем.*координат|ноль детали|нулев.*точк|g54/i,"t-3-3"],
+    [/t-3-4|расч[её]т.*контур|элемент.*контур|координат.*вершин/i,"t-3-4"],
+    [/t-3-5|траектор.*инструмент|компенсац.*радиус|g41|g42/i,"t-3-5"],
+    [/t-3-6|структур.*кадр|адрес.*уп|состав.*кадр|g.?код.*структур/i,"t-3-6"],
+    [/t-4-1|наладк|регулирован.*управляющ/i,"t-4-1"],
+    [/t-4-2|систем.*программного управлен|стойк.*чпу|устройств.*чпу/i,"t-4-2"],
+    [/t-4-3|разработк.*управляющ.*программ|составлен.*уп|программирован.*чпу/i,"t-4-3"],
+    [/t-4-4|функци.*устройств.*чпу|современ.*чпу/i,"t-4-4"],
+    [/t-5-1|сверлил.*стан|сверлени|цикл.*сверлен/i,"t-5-1"],
+    [/t-5-2|токарн.*программ|токарн.*чпу|g.?код.*токар/i,"t-5-2"],
+    [/t-5-3|фрезерн.*программ|фрезерн.*чпу|g.?код.*фрез/i,"t-5-3"],
+    [/t-5-4|аддитивн|3d.?печать/i,"t-5-4"]
+   ];
+   for(var ri=0;ri<rules.length;ri++){if(rules[ri][0].test(hints)){explicit=[rules[ri][1]];break;}}
+  }
+  if(explicit.length){var chosen=all.find(function(t){return t.id===explicit[0];});if(chosen)return chosen;}
   var query=tokens(hints);if(!query.length)return null;
   var best=null,bestScore=0;
   all.forEach(function(t){
@@ -34,7 +59,7 @@
  }
  function renderDetails(item){
   var t=item.topic;if(!t)return '<p class="slr-muted">Не удалось однозначно сопоставить результат с конкретной темой. Откройте дисциплину и выберите соответствующий раздел; система не будет угадывать содержание ошибки.</p>';
-  var html='<div class="slr-detail"><p><b>Тема для повторения:</b> '+esc(t.code||"")+' '+esc(t.title)+'</p><a class="btn ghost" href="'+esc(route(item.course,t))+'">📖 Открыть лекцию и материалы темы ↗</a>';
+  var html='<div class="slr-detail"><p><b>Тема для повторения:</b> '+esc(t.code||"")+' '+esc(t.title)+'</p><a class="btn ghost" href="'+esc(route(item.course,t))+'">📖 Открыть лекцию</a>'+((t.practicals||[]).length?' <a class="btn ghost" href="'+esc(route(item.course,t,"practicals"))+'">🛠️ Перейти к практике</a>':"") + ((t.selfWork||[]).length?' <a class="btn ghost" href="'+esc(route(item.course,t,"selfwork"))+'">📝 Самостоятельная работа</a>':"") + ((t.test||[]).length?' <a class="btn ghost" href="'+esc(route(item.course,t,"test"))+'">🎯 Тест по теме</a>':"");
   var presentations=t.presentations||[];
   if(presentations.length){html+='<p><b>Презентации по теме:</b></p><ul>'+presentations.map(function(p){var file=String(p.file||"").split("/").map(encodeURIComponent).join("/");return '<li>'+esc(p.title||p.code||"Презентация")+(file?' — <a href="materials/presentations/'+file+'" target="_blank" rel="noopener">открыть файл ↗</a>':'')+(p.slides?' · '+esc(p.slides)+' слайдов':'')+'</li>';}).join("")+'</ul>';}
   var practicals=(t.practicals||[]).slice(0,2);
