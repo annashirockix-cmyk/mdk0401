@@ -126,6 +126,26 @@ test("MDK 07.01 quiz questions have valid, non-duplicated options and varied ans
 });
 
 
+test("MDK 07.01 has a core quiz for every teaching topic", () => {
+  const dataSandbox = { window: { MDK_DATA: {} } };
+  vm.runInNewContext(read("data-0701.js"), dataSandbox, { timeout: 1000 });
+  const topics = dataSandbox.window.MDK_DATA["07.01"].sections
+    .flatMap((section) => section.topics || [])
+    .filter((topic) => /^t-[1-5]-/.test(topic.id));
+  assert.equal(topics.length, 21, "expected all 21 teaching topics");
+  for (const topic of topics) {
+    assert.ok(Array.isArray(topic.test) && topic.test.length >= 5, topic.id + " must have at least five core questions");
+  }
+  const coreCount = topics.reduce((sum, topic) => sum + topic.test.length, 0);
+  assert.equal(coreCount, 105, "core bank should contain 105 questions");
+  const hardSandbox = { window: {} };
+  vm.runInNewContext(read("hard-questions.js"), hardSandbox, { timeout: 1000 });
+  const hardCount = Object.entries(hardSandbox.window.HARD_TESTS)
+    .filter(([id]) => /^t-[1-5]-/.test(id))
+    .reduce((sum, [, questions]) => sum + questions.length, 0);
+  assert.equal(hardCount, 55, "advanced bank should contain 55 additional questions");
+});
+
 test("MDK 07.01 additional quiz bank has valid varied answer keys", () => {
   const sandbox = { window: {} };
   vm.runInNewContext(read("hard-questions.js"), sandbox, { timeout: 1000 });
