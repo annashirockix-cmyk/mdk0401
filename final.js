@@ -232,7 +232,6 @@ window.renderFinalExamPage = function (mdkId) {
         ];
         writtenPrompts.forEach(function(prompt,index){var wrap=examNode("div");wrap.style.cssText="margin:12px 0;padding:15px;background:var(--card-soft);border:1px solid var(--border);border-radius:8px;";wrap.appendChild(examNode("b","",(picked.length+index+1)+". "+prompt));var area=examNode("textarea","self-input");area.name="written"+(index+1);area.rows=5;area.placeholder="Разверните решение, укажите ход рассуждений и вывод...";area.style.marginTop="10px";wrap.appendChild(area);form.appendChild(wrap);});
         var submit=examNode("button","btn","Завершить экзамен");submit.type="button";submit.style.cssText="width:100%;margin-top:18px;padding:15px;font-size:16px;";form.appendChild(submit);mount.appendChild(form);
-        if(window.proctorMonitor&&typeof window.proctorMonitor.start==="function")window.proctorMonitor.start("__final__"+course.id);
         var timeLeft=duration*60,submitted=false;
         var timer=setInterval(function(){if(!document.body.contains(timerBox)){clearInterval(timer);return;}timeLeft--;timerBox.textContent=String(Math.floor(timeLeft/60)).padStart(2,"0")+":"+String(timeLeft%60).padStart(2,"0");if(timeLeft<=60)timerBox.style.color="var(--err)";if(timeLeft<=0)submit.click();},1000);
         function collectSecureAnswers(){
