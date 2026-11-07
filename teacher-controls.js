@@ -20,13 +20,60 @@ window.renderTeacherControlsPage=function(){
  '<label style="display:block;margin-top:10px">Тест</label><select id="attemptTest" class="self-input"><option value="">Загрузка тестов…</option></select>'+
  '<label style="display:block;margin-top:10px">Идентификатор теста (можно выбрать выше или указать вручную)</label><input id="attemptTestId" class="self-input" placeholder="например: test_topic01" style="max-width:100%"><label style="display:block;margin-top:10px">Количество дополнительных попыток</label><input id="attemptCount" class="self-input" type="number" min="0" max="20" value="1" style="max-width:180px">'+
  '<button class="btn" id="grantAttemptsBtn" style="margin-top:12px">Выдать попытки</button> <span id="attemptStatus" aria-live="polite"></span></div>'+
- '<div class="module"><h3>🧩 Банк вопросов</h3><p style="color:var(--muted)">Просмотр вопросов, вариантов и ключей ответов по выбранной дисциплине. Доступен только преподавателям.</p><a class="btn" href="#/question-bank">Открыть банк вопросов</a></div>'+
+ '<div class="module"><h3>🧩 Банк вопросов</h3><p style="color:var(--muted)">Просмотр вопросов, вариантов и ключей ответов по выбранной дисциплине. Доступен только преподавателям.</p><a class="btn" href="#/question-bank">Открыть банк вопросов</a><span id="bankMigrationArea"></span></div>'+
  '<div class="module"><h3>🛡️ Контроль самостоятельности</h3><p style="color:var(--muted)">Фиксируются скрытие вкладки, потеря фокуса окна и попытки копирования/вставки. Скриншоты и запуск ИИ в другой вкладке браузер достоверно не раскрывает.</p><button class="btn ghost" id="refreshProctorEvents">Обновить журнал событий</button><div id="proctorEventList">Нажмите «Обновить журнал событий».</div><hr style="border-color:var(--border);margin:14px 0"><h4>История попыток и выданных разрешений</h4><button class="btn ghost" id="refreshAttemptAudit">Обновить историю</button><div id="attemptAuditList">Нажмите «Обновить историю».</div></div>'+
  '<div class="module"><h3>🎓 Запись на репетиторство</h3><p style="color:var(--muted)">Добавьте ссылку на сервис записи/оплаты дополнительных занятий. Она будет показана студентам этой дисциплины.</p><label>Ссылка сервиса</label><input id="tutorUrl" class="self-input" type="url" placeholder="https://…"><label style="display:block;margin-top:8px">Заголовок</label><input id="tutorTitle" class="self-input" maxlength="120" value="Запись на дополнительные занятия"><label style="display:block;margin-top:8px">Пояснение для студентов</label><textarea id="tutorDescription" class="self-input" maxlength="500" rows="3" style="width:100%"></textarea><label style="display:flex;align-items:center;gap:9px;margin-top:12px"><input type="checkbox" id="tutorVisible" checked> Показывать вкладку студентам</label><p style="font-size:12px;color:var(--muted)">Если снять флажок, вкладка исчезнет из меню студентов этой дисциплины. Ссылка и настройки сохранятся.</p><button class="btn" id="saveTutorLink" style="margin-top:10px">Сохранить ссылку</button> <span id="tutorStatus" aria-live="polite"></span></div>';
 
  window.API.getTutoringLink(cid).then(r=>{const l=r.link||{};const u=document.getElementById("tutorUrl"),t=document.getElementById("tutorTitle"),d=document.getElementById("tutorDescription"),v=document.getElementById("tutorVisible");if(u)u.value=l.url||"";if(t)t.value=l.title||"Запись на дополнительные занятия";if(d)d.value=l.description||"";if(v)v.checked=l.visible!==false;}).catch(()=>{});
  document.getElementById("saveTutorLink").onclick=function(){const btn=this,st=document.getElementById("tutorStatus");btn.disabled=true;st.textContent="Сохранение…";window.API.saveTutoringLink(cid,{url:document.getElementById("tutorUrl").value,title:document.getElementById("tutorTitle").value,description:document.getElementById("tutorDescription").value,visible:document.getElementById("tutorVisible").checked}).then(r=>{if(!r.success)throw Error(r.error||"Не удалось сохранить");st.textContent="Настройки сохранены.";window.updateMenuVisibility&&window.updateMenuVisibility();}).catch(e=>st.textContent=e.message).finally(()=>btn.disabled=false);};
 
+
+ const currentUser=(window.state&&(window.state.user||window.state.student))||{};
+ const isAdmin=!!((window.state&&window.state.admin)||String(currentUser.role||"").toLowerCase()==="admin");
+ if(isAdmin){
+  const area=document.getElementById("bankMigrationArea");
+  if(area){
+   area.innerHTML='<button class="btn ghost" id="migrateQuestionBanks" style="margin-top:10px">🔐 Скопировать встроенные банки в закрытое хранилище</button><p style="font-size:12px;color:var(--muted)">Только администратор. Создаст серверную копию ключей ответов; пока не переключает тесты на серверную проверку.</p><span id="bankMigrationStatus" aria-live="polite"></span>';
+   document.getElementById("migrateQuestionBanks").onclick=async function(){
+    const btn=this,status=document.getElementById("bankMigrationStatus");btn.disabled=true;status.textContent="Подготовка банков…";
+    try{
+     const topicCourse={},banks=[],seen={};
+     Object.keys(window.MDK_DATA||{}).forEach(cid=>{
+      const course=window.MDK_DATA[cid];
+      (course.sections||[]).forEach(sec=>(sec.topics||[]).forEach(topic=>{
+       topicCourse[String(topic.id)]=cid;
+       if(Array.isArray(topic.test)&&topic.test.length)banks.push({courseId:cid,bankId:"topic_"+topic.id,questions:topic.test});
+      }));
+     });
+     function add(cid,id,questions){
+      if(!cid||!Array.isArray(questions)||!questions.length)return;
+      const key=cid+"|"+id;if(seen[key])return;seen[key]=1;
+      banks.push({courseId:cid,bankId:id,questions:questions});
+     }
+     Object.keys(window.HARD_TESTS||{}).forEach(id=>add(topicCourse[id],"hard_"+id,window.HARD_TESTS[id]));
+     Object.keys(window.EXTRA_TESTS||{}).forEach(id=>{
+      const m=id.match(/^self_(.+)_\d+$/),topic=m&&m[1],entry=window.EXTRA_TESTS[id];
+      if(topic&&topicCourse[topic]&&entry&&Array.isArray(entry.questions))add(topicCourse[topic],id,entry.questions);
+     });
+     ["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"].forEach(cid=>{
+      add(cid,"exam_primary",window["EXAM_BANK_"+cid.replace(".","")]);
+      add(cid,"exam_extra",window.EXTRA_EXAM_BANKS&&window.EXTRA_EXAM_BANKS[cid]);
+      add(cid,"mdk_extra",window.MDK_EXTRA_QUESTIONS&&window.MDK_EXTRA_QUESTIONS[cid]);
+     });
+     if(!banks.length)throw Error("Не найдены встроенные банки. Проверьте загрузку файлов данных.");
+     const totalExpected=banks.reduce((n,b)=>n+b.questions.length,0);let total=0;
+     for(let i=0;i<banks.length;i+=4){
+      const result=await window.API.importQuestionBanks(banks.slice(i,i+4));
+      if(!result||!result.success)throw Error(result&&result.error||"Ошибка импорта блока "+(i+1));
+      total+=Number(result.questionsImported)||0;
+      status.textContent="Импортировано вопросов: "+total+" из "+totalExpected;
+     }
+     status.textContent="Готово: "+banks.length+" банков, "+total+" вопросов сохранены в закрытом листе QuestionBank. Тесты пока продолжают работать по старой схеме.";
+    }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
+    finally{btn.disabled=false;}
+   };
+  }
+ }
  document.getElementById("refreshAttemptAudit").onclick=function(){const box=document.getElementById("attemptAuditList");box.textContent="Загрузка…";window.API.getAttemptAudit(cid).then(r=>{const events=r.events||[];box.innerHTML=events.length?'<div style="overflow:auto"><table class="data-table" style="width:100%"><thead><tr><th>Дата</th><th>Студент</th><th>Событие</th><th>Тест</th><th>Детали</th></tr></thead><tbody>'+events.map(e=>'<tr><td>'+esc(e.createdAt)+'</td><td>'+esc(e.name)+' · '+esc(e.group)+'</td><td>'+esc(e.eventType==="attempts_granted"?"Выданы дополнительные попытки":e.eventType==="proctor_sanction"?"Штраф за нарушение правил":"Попытка завершена")+'</td><td>'+esc(e.testTitle||e.testId)+'</td><td>'+(e.eventType==="attempts_granted"?"Дополнительно: "+esc(e.extraAttempts):e.eventType==="proctor_sanction"?"Нарушение №"+esc(e.attemptNo)+" · штраф "+esc(e.percent)+" п.п.":"Попытка №"+esc(e.attemptNo)+" · "+esc(e.score)+"/"+esc(e.maxScore)+" · "+esc(e.percent)+"% · оценка "+esc(e.grade))+'</td></tr>').join("")+'</tbody></table></div>':'Записей пока нет.';}).catch(e=>box.textContent=e.message);};
  document.getElementById("refreshProctorEvents").onclick=function(){const box=document.getElementById("proctorEventList");box.textContent="Загрузка…";window.API.getProctorEvents(cid).then(r=>{const events=r.events||[];box.innerHTML=events.length?'<div style="overflow:auto"><table class="data-table" style="width:100%"><thead><tr><th>Время сервера</th><th>Студент</th><th>Событие</th><th>Тест</th></tr></thead><tbody>'+events.map(e=>'<tr><td>'+esc(e.serverTime)+'</td><td>'+esc(e.name)+' · '+esc(e.group)+'</td><td>'+esc(({visibility_hidden:"Вкладка скрыта / свёрнуто окно",window_blur:"Потеря фокуса окна",fullscreen_exit:"Выход из полного экрана",copy_attempt:"Попытка копирования",paste_attempt:"Попытка вставки",contextmenu_attempt:"Контекстное меню",screenshot_shortcut:"Нажата клавиша PrintScreen (снимок не подтверждён)",devtools_shortcut:"Комбинация инструментов разработчика",external_link:"Переход по внешней ссылке"}[e.eventType]||e.eventType))+(e.action==="sanction"?" · ШТРАФ -"+esc(e.penaltyPoints)+" п.п.":" · предупреждение")+(e.violationNo?" · нарушение №"+esc(e.violationNo):"")+'</td><td>'+esc(e.testId)+'</td></tr>').join("")+'</tbody></table></div>':'Событий пока нет.';}).catch(e=>box.textContent=e.message);};
  const topicBox=document.getElementById("topicAccessList");
