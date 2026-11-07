@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./games-visual.css?v=5">
     <link rel="stylesheet" href="./room-visual.css?v=1">
     <link rel="stylesheet" href="./lecture-methodical.css">
-    <link rel="stylesheet" href="./portal-ux.css?v=1">
+    <link rel="stylesheet" href="./portal-ux.css?v=2">
 </head>
 <body>
     <div id="loginOverlay" class="login-overlay" style="display: flex;">
@@ -77,48 +77,58 @@
         <div class="drawer-head"><span style="font-weight:bold;color:var(--accent)">Навигация</span><button class="drawer-close" id="drawerClose">✕</button></div>
         <div class="drawer-nav">
             <a href="#/" class="drawer-item">🏠 Главная</a>
-            <a href="#/profile" class="drawer-item">👤 Личный кабинет</a>
-            <a href="#/account" class="drawer-item">🔑 Логин и пароль</a>
-            <a href="#/grades" class="drawer-item">📊 Мои оценки</a>
-            <a href="#/learning-path" class="drawer-item" style="display:none">🧭 Моя траектория обучения</a>
-            <a href="#/missions" class="drawer-item" style="display:none">🎯 Учебные миссии</a>
-            <a href="#/seasonal" class="drawer-item" style="display:none">🍂 Сезонные события</a>
-            <a href="#/portfolio" class="drawer-item" style="display:none">📁 Электронное портфолио</a>
-            <a href="#/subject-tutor" class="drawer-item">🎓 Предметный помощник</a>
-            <a href="#/gcode-lab" class="drawer-item">⚙️ G-Code Lab — 300 уровней</a>
-            <a href="#/materials-lab" class="drawer-item">🔬 Лаборатория материаловедения</a>
-            <a href="#/metrology-trainer" class="drawer-item">📏 Тренажёр метролога</a>
-            <a href="#/english-tests" class="drawer-item english-drawer-item" style="display:none">🇬🇧 Английский — тесты</a>
-            <a href="#/english-media" class="drawer-item english-drawer-item" style="display:none">🎬 Английский — видео и презентации</a>
-            <a href="#/english-cards" class="drawer-item english-drawer-item" style="display:none">🃏 Английский — карточки и кроссворд</a>
-            <a href="#/machining-lab" class="drawer-item">🛠️ Расчёт режимов резания</a>
+            <details class="drawer-group" id="drawerCabinet">
+                <summary>👤 Личный кабинет</summary>
+                <a href="#/profile" class="drawer-item">Обзор профиля</a>
+                <a href="#/account" class="drawer-item">🔑 Логин и пароль</a>
+                <a href="#/grades" class="drawer-item">📊 Мои оценки</a>
+                <a href="#/portfolio" class="drawer-item" style="display:none">📁 Электронное портфолио</a>
+                <a href="#/achievements" class="drawer-item">🏆 Достижения</a>
+                <a href="#/learning-path" class="drawer-item" style="display:none">🧭 Моя траектория обучения</a>
+                <a href="#/missions" class="drawer-item" style="display:none">🎯 Учебные миссии</a>
+                <a href="#/seasonal" class="drawer-item" style="display:none">🍂 Сезонные события</a>
+            </details>
+            <details class="drawer-group" id="drawerLaboratory">
+                <summary>🧪 Лаборатория</summary>
+                <a href="#/laboratory" class="drawer-item">Общий экран лабораторий</a>
+                <a href="#/gcode-lab" class="drawer-item">⚙️ G-Code Lab — 300 уровней</a>
+                <a href="#/materials-lab" class="drawer-item">🔬 Лаборатория материаловедения</a>
+                <a href="#/metrology-trainer" class="drawer-item">📏 Тренажёр метролога</a>
+                <a href="#/machining-lab" class="drawer-item">🛠️ Расчёт режимов резания</a>
+            </details>
             <a href="#/shop" class="drawer-item">🛒 Магазин</a>
-            <a href="#/achievements" class="drawer-item">🏆 Достижения</a>
-            <a href="#/rating" class="drawer-item">📈 Доска почета</a>
+            <a href="#/rating" class="drawer-item">📈 Доска почёта</a>
+            <a href="#/games" class="drawer-item">🎮 Игры</a>
             <a href="#/teams" class="drawer-item" style="display:none">🏅 Командная лига групп</a>
             <a href="#/museum" class="drawer-item" style="display:none">🏛️ Музей учебных работ</a>
-            <a href="#/games" class="drawer-item">🎮 Игры</a>
-            <hr style="border-color:var(--border);margin:10px 0;width:100%">
-            <a href="#/videos" class="drawer-item">🎬 Видеоуроки</a>
-            <a href="#/resources" class="drawer-item">📽 Презентации и методические материалы</a>
-            <a href="#/safety" class="drawer-item">🦺 Охрана труда</a>
-            <a href="#/passports" class="drawer-item">📘 Паспорта станков</a>
-            <a href="#/links" class="drawer-item">🔗 Полезные ссылки</a>
-            <a href="#/training" class="drawer-item">🎯 Тренировка</a>
-            <a href="#/final/07.01" class="drawer-item">📝 Экзамен</a>
-            <a href="#/certificate" class="drawer-item">📜 Сертификат</a>
-            <hr style="border-color:var(--border);margin:10px 0;width:100%">
-            <a href="#/teacher-dashboard" class="drawer-item">📊 Панель преподавателя</a>
-            <a href="#/journal" class="drawer-item">📋 Журнал (преподаватель)</a>
-            <a href="#/teacher-tasks" class="drawer-item">🧩 Конструктор заданий</a>
-            <a href="#/tutoring" class="drawer-item" id="menuTutoring" style="display:none">🎓 Дополнительные занятия</a>
-            <a href="#/question-bank" class="drawer-item" id="menuQuestionBank" style="display:none">🧩 Банк вопросов</a>
-            <a href="#/course-editor" class="drawer-item" id="menuCourseEditor" style="display:none">✍️ Создание лекций, тестов и карточек</a>
-            <a href="#/flashcard-editor" class="drawer-item" id="menuFlashcardEditor" style="display:none">🃏 Конструктор карточек</a>
-            <a href="#/own-game" class="drawer-item">🎲 Своя игра</a>
-            <a href="#/access" class="drawer-item">🔐 Доступ и приглашения</a>
-            <a href="#/admin" class="drawer-item">⚙️ Админка</a>
-            <hr style="border-color:var(--border);margin:10px 0;width:100%">
+            <details class="drawer-group" id="drawerLearning">
+                <summary>📚 Учебные материалы</summary>
+                <a href="#/subject-tutor" class="drawer-item">🎓 Предметный помощник</a>
+                <a href="#/english-tests" class="drawer-item english-drawer-item" style="display:none">🇬🇧 Английский — тесты</a>
+                <a href="#/english-media" class="drawer-item english-drawer-item" style="display:none">🎬 Английский — видео и презентации</a>
+                <a href="#/english-cards" class="drawer-item english-drawer-item" style="display:none">🃏 Английский — карточки и кроссворд</a>
+                <a href="#/videos" class="drawer-item">🎬 Видеоуроки</a>
+                <a href="#/resources" class="drawer-item">📽 Презентации и методические материалы</a>
+                <a href="#/safety" class="drawer-item">🦺 Охрана труда</a>
+                <a href="#/passports" class="drawer-item">📘 Паспорта станков</a>
+                <a href="#/links" class="drawer-item">🔗 Полезные ссылки</a>
+                <a href="#/training" class="drawer-item">🎯 Тренировка</a>
+                <a href="#/final/07.01" class="drawer-item">📝 Экзамен</a>
+                <a href="#/certificate" class="drawer-item">📜 Сертификат</a>
+            </details>
+            <details class="drawer-group" id="drawerTeacher">
+                <summary>🧑‍🏫 Раздел преподавателя</summary>
+                <a href="#/teacher-dashboard" class="drawer-item" id="menuTeacherDashboard">📊 Панель преподавателя</a>
+                <a href="#/journal" class="drawer-item" id="menuJournal">📋 Журнал</a>
+                <a href="#/teacher-tasks" class="drawer-item">🧩 Конструктор заданий</a>
+                <a href="#/tutoring" class="drawer-item" id="menuTutoring" style="display:none">🎓 Дополнительные занятия</a>
+                <a href="#/question-bank" class="drawer-item" id="menuQuestionBank" style="display:none">🧩 Банк вопросов</a>
+                <a href="#/course-editor" class="drawer-item" id="menuCourseEditor" style="display:none">✍️ Создание лекций, тестов и карточек</a>
+                <a href="#/flashcard-editor" class="drawer-item" id="menuFlashcardEditor" style="display:none">🃏 Конструктор карточек</a>
+                <a href="#/access" class="drawer-item">🔐 Доступ и приглашения</a>
+                <a href="#/admin" class="drawer-item">⚙️ Админка</a>
+                <a href="#/own-game" class="drawer-item">🎲 Своя игра</a>
+            </details>
             <a href="javascript:void(0)" class="drawer-item" onclick="window.clearCache&&window.clearCache()">🧹 Очистить кэш</a>
         </div>
     </nav>
@@ -222,7 +232,7 @@
     <script src="./access.js?v=7"></script>
     <script src="./account.js?v=3"></script>
     <script src="./workbook-editorial.js?v=1"></script>
-    <script src="./workbooks.js?v=19"></script>
+    <script src="./workbooks.js?v=20"></script>
     <script src="./portal-genz.js?v=6"></script>
     <script src="./home-cleanup.js?v=1"></script>
     <script src="./certificate-supplement.js?v=10"></script>
@@ -233,10 +243,12 @@
     <script src="./learning-museum.js?v=1"></script>
     <script src="./museum-curator.js?v=3"></script>
     <script src="./portal-ux.js?v=6"></script>
+    <script src="./laboratory.js?v=1"></script>
+    <script src="./pdf-viewer.js?v=1"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=211', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=212', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
