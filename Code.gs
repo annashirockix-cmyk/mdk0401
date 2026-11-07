@@ -699,9 +699,10 @@ function logProctorEvent_(data) {
   const allowed=["visibility_hidden","window_blur","fullscreen_exit","copy_attempt","paste_attempt","contextmenu_attempt","screenshot_shortcut","devtools_shortcut","external_link"];
   const eventType=String(data.eventType||"");
   if(!courseId||!testId||allowed.indexOf(eventType)===-1||!hasCourseAccess_(user,courseId)) throw new Error("Некорректное событие контроля.");
-  const cache=CacheService.getScriptCache(),key="proctor:"+user.email+":"+courseId+":"+testId+":"+eventType;
+  const eventGroup=(eventType==="visibility_hidden"||eventType==="window_blur")?"focus_loss":eventType;
+  const cache=CacheService.getScriptCache(),key="proctor:"+user.email+":"+courseId+":"+testId+":"+eventGroup;
   const now=Date.now(),last=Number(cache.get(key)||0);
-  if(now-last<2500)return {success:true,throttled:true,action:"throttled"};
+  if(now-last<2500)return {success:true,throttled:true,action:"throttled",eventGroup:eventGroup};
   const page=String(data.page||"").slice(0,180),details=String(data.details||"").slice(0,240),clientTime=String(data.clientTime||"").slice(0,40);
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
