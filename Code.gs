@@ -734,7 +734,7 @@ function createAssignment_(data) {
   if (!title || !instructions) throw new Error("Заполните название и условие задания.");
   if (["group","individual"].indexOf(targetType) < 0 || !targetValue) throw new Error("Выберите адресата.");
   if (dueAt) {
-    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(dueAt)) throw new Error("Срок должен быть указан в формате даты.");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dueAt)) throw new Error("Срок должен быть указан в формате даты.");
     const parts = dueAt.split("-").map(Number);
     const parsed = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
     if (parsed.getUTCFullYear() !== parts[0] || parsed.getUTCMonth() !== parts[1] - 1 || parsed.getUTCDate() !== parts[2]) throw new Error("Указана некорректная дата срока.");
@@ -779,6 +779,7 @@ function getAssignments_(data) {
     const cid=String(r[h.CourseId]||""); if(!hasCourseAccess_(user,cid)) return;
     if(user.role==="student"){
       const typ=String(r[h.TargetType]||""),val=String(r[h.TargetValue]||"");
+      if(typ!=="individual"&&typ!=="group")return;
       if(typ==="individual"&&email_(val)!==user.email)return;
       if(typ==="group"&&String(val||"").trim().toLowerCase()!==String(user.group||"").trim().toLowerCase())return;
       if(String(r[h.Status]||"active")!=="active")return;
