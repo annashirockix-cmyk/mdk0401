@@ -156,6 +156,69 @@ window.renderQuestionBankPage=function(){
   Object.keys(extras).forEach(k=>{if(k.indexOf("self_")===0&&topicIds.some(id=>k.indexOf("self_"+id+"_")===0))add(k,extras[k]&&extras[k].questions||[]);});
   return out;
  };
+
+ const importAllBtn=isAdmin?document.createElement("button"):null;
+ if(importAllBtn){
+  importAllBtn.id="bankImportAllBtn";importAllBtn.className="btn";importAllBtn.style.cssText="margin:12px 0 12px 8px";importAllBtn.textContent="📚 Импортировать все банки всех дисциплин";
+  const currentBtn=document.getElementById("bankImportBtn");
+  if(currentBtn)currentBtn.insertAdjacentElement("afterend",importAllBtn);
+  importAllBtn.onclick=async function(){
+   const btn=this,status=document.getElementById("bankStatus");btn.disabled=true;
+   const current=document.getElementById("bankImportBtn");if(current)current.disabled=true;
+   try{
+    const all=[],seen={},courseIds=new Set(Object.keys(window.MDK_DATA||{}));
+    ["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"].forEach(x=>courseIds.add(x));
+    function add(cid,id,arr){
+     if(!cid||!Array.isArray(arr)||!arr.length)return;
+     const questions=arr.filter(q=>q&&typeof q==="object");if(!questions.length)return;
+     const key=cid+"|"+id;if(seen[key])return;seen[key]=1;
+     all.push({courseId:cid,bankId:id,questions});
+    }
+    const topicCourse={};
+    courseIds.forEach(courseId=>{
+     const course=window.MDK_DATA&&window.MDK_DATA[courseId];
+     (course&&course.sections||[]).forEach(sec=>(sec.topics||[]).forEach(tp=>{
+      topicCourse[String(tp.id)]=courseId;add(courseId,"topic_"+tp.id,tp.test||[]);
+      add(courseId,"hard_"+tp.id,window.HARD_TESTS&&window.HARD_TESTS[tp.id]||[]);
+      (tp.selfWork||[]).forEach((w,i)=>{
+       const key="self_"+tp.id+"_"+i,entry=window.EXTRA_TESTS&&window.EXTRA_TESTS[key];
+       if(entry&&Array.isArray(entry.questions))add(courseId,key,entry.questions);
+      });
+     }));
+     const key=String(courseId).replace(/\./g,"");
+     add(courseId,"exam_primary",window["EXAM_BANK_"+key]||window.EXTRA_EXAM_BANKS&&window.EXTRA_EXAM_BANKS[courseId]||[]);
+     add(courseId,"exam_extra",window["EXAM_BANK_EXTRA_"+key]||[]);
+     add(courseId,"mdk_extra",window.MDK_EXTRA_QUESTIONS&&window.MDK_EXTRA_QUESTIONS[courseId]||[]);
+    });
+    Object.keys(window.EXTRA_TESTS||{}).forEach(id=>{
+     const m=id.match(/^self_(.+)_\d+$/),topic=m&&m[1],entry=window.EXTRA_TESTS[id];
+     if(topic&&topicCourse[topic]&&entry&&Array.isArray(entry.questions))add(topicCourse[topic],id,entry.questions);
+    });
+    if(!all.length)throw new Error("Не найдены встроенные банки ни по одной дисциплине.");
+    const expected=all.reduce((n,b)=>n+b.questions.length,0);
+    let importedBanks=0,importedQuestions=0,batch=[],batchSize=0,part=0;
+    async function send(){
+     if(!batch.length)return;part++;
+     const result=await window.API.importQuestionBanks(batch);
+     if(!result||!result.success)throw new Error(result&&result.error||"Ошибка импорта пакета "+part);
+     importedBanks+=Number(result.banksImported)||batch.length;
+     importedQuestions+=Number(result.questionsImported)||0;
+     status.textContent="Пакет "+part+" · банков "+importedBanks+"/"+all.length+" · вопросов "+importedQuestions+"/"+expected;
+     batch=[];batchSize=0;
+    }
+    for(const bank of all){
+     const n=bank.questions.length;
+     if(n>1000)throw new Error("Банк "+bank.courseId+"/"+bank.bankId+" содержит "+n+" вопросов (лимит 1000).");
+     if(batch.length>=4||batchSize+n>2000)await send();
+     batch.push(bank);batchSize+=n;
+    }
+    await send();
+    status.textContent="Готово: импортировано "+importedBanks+" банков и "+importedQuestions+" вопросов по "+new Set(all.map(b=>b.courseId)).size+" дисциплинам. Обновите страницу, чтобы просмотреть банк текущей дисциплины.";
+    load();
+   }catch(e){status.textContent="Импорт всех банков прерван: "+(e.message||e);}
+   finally{btn.disabled=false;if(current)current.disabled=false;}
+  };
+ }
  const importBtn=document.getElementById("bankImportBtn");
  if(importBtn)importBtn.onclick=async function(){
   this.disabled=true;const status=document.getElementById("bankStatus");
