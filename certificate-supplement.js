@@ -29,6 +29,7 @@
     s.textContent=`
       .certificate-choice{max-width:900px;margin:14px auto;padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
       .certificate-choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+      .certificate-choice-preview{height:96px;margin:12px 0;border:1px solid #cbd5e1;border-radius:10px;background-size:cover;background-position:center;display:grid;place-items:center;color:#334155;font-weight:800;text-shadow:0 1px 2px #fff;padding:12px;text-align:center}
       .certificate-choice label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:13px}
       .certificate-choice select{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card-soft);color:var(--text)}
       .certificate-supplement{max-width:900px;margin:22px auto;padding:30px;background:#fff;color:#172033;border:3px double #315b7d;border-radius:4px;page-break-before:always;break-before:page;box-sizing:border-box}
@@ -82,10 +83,11 @@
     Object.keys(backgrounds).forEach(function(k){var o=node("option",backgrounds[k].label);o.value=k;bs.appendChild(o);});
     bs.value=backgrounds[prefs.bg]?prefs.bg:"white";bl.appendChild(bs);
     grid.appendChild(dl);grid.appendChild(bl);panel.appendChild(grid);
+    var preview=node("div","Предпросмотр фона сертификата");preview.className="certificate-choice-preview";panel.appendChild(preview);
     var hint=node("p","Выбор сохраняется в этом браузере. При печати выберите «Сохранить как PDF» и включите печать фоновой графики, если хотите сохранить цветной фон.");
     hint.style.cssText="font-size:12px;color:var(--muted);margin-bottom:0";panel.appendChild(hint);
-    function update(){applyDesign(ds.value,bs.value);}
-    ds.addEventListener("change",update);bs.addEventListener("change",update);
+    function update(){applyDesign(ds.value,bs.value);var selected=backgrounds[bs.value]||backgrounds.white;preview.style.background=selected.css||"#fff";if(selected.image)preview.style.backgroundImage="linear-gradient(rgba(255,255,255,.76),rgba(255,255,255,.76)),url(\\""+selected.image+"\\")";preview.textContent=selected.label;}
+    update();ds.addEventListener("change",update);bs.addEventListener("change",update);
     return panel;
   }
   function addCell(row,value,tag){row.appendChild(node(tag||"td",value));}
