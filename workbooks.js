@@ -20,14 +20,14 @@
       add("fig-6-lathe.png","Токарный станок и принцип точения");add("fig-12-w-tokar.png","Рабочая зона токаря");add("fig-14-e-tokar.png","Элементы токарной обработки");
     } else if(/фрезер|фрезован/.test(title)){
       add("fig-5-milling.png","Фрезерование");add("fig-13-w-frez.png","Рабочая зона фрезеровщика");add("fig-15-e-frez.png","Элементы фрезерной обработки");
-    } else if(/sprut|стойк|интерфейс/.test(title)){
+    } else if(/sprut|cam-систем|интерфейс.*sprut/.test(title)){
       add("fig-22-sprut-interface.png","Интерфейс SprutCAM");add("fig-23-sprut-project.png","Проект обработки в CAM-системе");add("fig-24-sprut-tools.png","Инструменты проекта SprutCAM");
     } else if(/программ|g-код|команд|управляющ.*программ/.test(title)){
       add("fig-19-letter-a.png","Пример записи управляющей программы");add("fig-20-letter-mama.png","Пример траектории инструмента");add("fig-10-uchpu.png","Устройство системы ЧПУ");
-    } else if(/чертеж|детал|сборк|геометри.*модел/.test(title)){
+    } else if(/чертеж|детал|фланец|3d|трехмерн|геометри.*модел/.test(title)){
       add("fig-21-flanets.png","Чертёжная геометрия детали — фланец");add("fig-3-3d.png","Трёхмерная модель детали");
     } else if(cnc&&/станок|оборудован|устройств.*чпу/.test(title)){
-      add("fig-16-machine.png","Станок с ЧПУ");add("fig-1-blocks.png","Структурная схема системы");add("fig-4-right-hand.png","Правило правой руки для координат");
+      add("fig-16-machine.png","Станок с ЧПУ");add("fig-1-blocks.png","Структурная схема системы ЧПУ");
     }
     var gallery=images.length?'<div class="wb-gallery">'+images.map(function(x){return '<figure><img loading="lazy" src="assets/images/'+esc(x.file)+'" alt="'+esc(x.caption)+'"><figcaption>'+esc(x.caption)+'</figcaption></figure>';}).join("")+'</div>':"";
     var meme=/перемен|данн|тип/.test(title)?{file:"meme-variables.jpg",caption:"Понятные имена переменных помогают читать и проверять программу."}:programming?{file:"meme-js.jpg",caption:"G00 и G01 решают разные задачи: быстрое и рабочее перемещение нельзя путать."}:/алгоритм|компьют/.test(title)?{file:"meme-python.jpg",caption:"Алгоритм сначала проверяют на учебном примере, а затем применяют к задаче."}:null;
