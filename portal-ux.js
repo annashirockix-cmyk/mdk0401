@@ -92,9 +92,9 @@
         var avg=graded.length?(graded.reduce(function(n,x){return n+Number(x.grade);},0)/graded.length).toFixed(2):"—";
         var html='<div class="portal-ux-grade-summary"><div><b>'+rows.length+'</b><span>работ в журнале</span></div><div><b>'+graded.length+'</b><span>оценено</span></div><div><b>'+avg+'</b><span>средний балл</span></div></div><div class="portal-ux-table-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Дисциплина</th><th>Дата</th><th>Результат</th></tr></thead><tbody>';
         rows.forEach(function(x){
-          var id=String(x.testId||""),grade=x.grade,date=x.finishedAt?new Date(x.finishedAt):null,dateText=date&&!isNaN(date.getTime())?date.toLocaleString("ru-RU"):"—";
+          var id=String(x.testId||""),grade=x.grade,date=x.finishedAt?new Date(x.finishedAt):null,dateText=date&&!isNaN(date.getTime())?date.toLocaleString("ru-RU"):(x.finishedAt?String(x.finishedAt):"—");
           var pending=(grade===""||grade===null||(Number(grade)===0&&/^(prac_|self_)/.test(id)));
-          var value=pending?'<span class="portal-ux-status pending">Ожидает проверки</span>':'<b class="portal-ux-grade">'+window.escapeHtml(String(grade))+'/5</b>';
+          var value=pending?'<span class="portal-ux-status pending">Ожидает проверки</span>':(x.manual?'<b class="portal-ux-grade">'+window.escapeHtml(String(grade))+'</b>':'<b class="portal-ux-grade">'+window.escapeHtml(String(grade))+'/5</b>');
           var title=window.escapeHtml(x.testTitle||id),course=window.escapeHtml((window.COURSE_LABELS&&window.COURSE_LABELS[x.courseId])||x.courseId||"—");
           html+='<tr><td>'+title+'</td><td>'+course+'</td><td>'+window.escapeHtml(dateText)+'</td><td>'+value+'</td></tr>';
         });
