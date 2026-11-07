@@ -133,6 +133,7 @@ function handleRequest_(e) {
       case "getassignments": result = getAssignments_(data); break;
       case "submitassignment": result = submitAssignment_(data); break;
       case "gradeassignment": result = gradeAssignment_(data); break;
+      case "gradewrittenresult": result = gradeWrittenResult_(data); break;
       case "getnotifications": result = getNotifications_(data); break;
       case "marknotificationread": result = markNotificationRead_(data); break;
       case "markallnotificationsread": result = markAllNotificationsRead_(data); break;
@@ -656,7 +657,7 @@ function saveResult_(data) {
     appendMappedRecord_(sheet,{Email:email,Name:String(data.name||user.name),Group:String(data.group||user.group),TestId:testId,TestTitle:title,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attempts,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:String(data.payload||"").slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:title,AttemptNo:attempts,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent});
     if(user.role==="student" && /^(prac_|self_)/.test(testId) && String(data.payload||"").trim()) {
-      notifyCourseStaff_(courseId,"submission","Новая письменная работа на проверку",
+      notifyCourseStaff_(courseId,"written_submission","Новая письменная работа на проверку",
         user.name+" ("+user.group+") отправил(а) письменную работу: "+title+". Откройте журнал результатов по дисциплине для проверки.",testId);
     }
     return {success:true,attempts:attempts,grade:grade,percent:percent,penaltyPoints:policy.penaltyPoints,violationCount:policy.violationCount};
@@ -664,6 +665,31 @@ function saveResult_(data) {
 }
 
 
+
+function gradeWrittenResult_(data) {
+  const teacher=auth_(data);
+  if(teacher.role!=="teacher"&&teacher.role!=="admin") throw new Error("Проверять письменные работы может только преподаватель.");
+  const studentEmail=email_(data.email),courseId=String(data.courseId||""),testId=String(data.testId||"");
+  const grade=Number(data.grade),feedback=String(data.feedback||"").slice(0,4000);
+  if(!studentEmail||!courseId||!testId||!/^(prac_|self_)/.test(testId)) throw new Error("Не выбрана письменная работа.");
+  if(!isFinite(grade)||grade<2||grade>5) throw new Error("Оценка должна быть от 2 до 5.");
+  const student=userByEmail_(studentEmail);
+  if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
+  editor_(data,courseId);
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const sh=results_(),rows=sh.getDataRange().getValues();
+    let rowIndex=-1;
+    for(let i=rows.length-1;i>=1;i--) {
+      if(email_(rows[i][0])===studentEmail&&String(rows[i][3]||"")===testId&&sameCourseId_(rows[i][12]||courseId,courseId)){rowIndex=i+1;break;}
+    }
+    if(rowIndex<0) throw new Error("Отправленная работа не найдена.");
+    updateMappedRecord_(sh,rowIndex,{Grade:grade,Percent:grade*20,Submission:(String(rows[rowIndex-1][13]||"")+(feedback?"\n\nКомментарий преподавателя: "+feedback:"")).slice(0,10000)});
+    appendAttemptAudit_({EventType:"written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(rows[rowIndex-1][4]||testId),Grade:grade,Percent:grade*20});
+  } finally {lock.releaseLock();}
+  createNotification_(studentEmail,"grade","Письменная работа проверена","По работе «"+testId+"» выставлена оценка: "+grade+"/5."+(feedback?" Комментарий преподавателя добавлен.":""),courseId,testId);
+  return {success:true,grade:grade};
+}
 
 /* ---------- Exam integrity events and tutoring links ---------- */
 function logProctorEvent_(data) {
@@ -954,7 +980,7 @@ function getMyCourseResults_(data) {
   const list=results_().getDataRange().getValues().slice(1).filter(function(r){
     return r[0]&&email_(r[0])===email&&(!requestedCourse||sameCourseId_(r[12],requestedCourse));
   }).map(function(r){
-    return {testId:String(r[3]||""),testTitle:String(r[4]||r[3]||""),grade:Number(r[5])||0,score:Number(r[6])||0,maxScore:Number(r[7])||0,percent:Number(r[8])||0,timeSpent:Number(r[9])||0,finishedAt:String(r[11]||""),courseId:normalizeCourseId_(r[12])};
+    return {testId:String(r[3]||""),testTitle:String(r[4]||r[3]||""),grade:r[5]===""||r[5]===null?"":Number(r[5])||0,score:Number(r[6])||0,maxScore:Number(r[7])||0,percent:Number(r[8])||0,timeSpent:Number(r[9])||0,finishedAt:String(r[11]||""),courseId:normalizeCourseId_(r[12]),payload:String(r[13]||"")};
   });
   const sheet=users_(),values=sheet.getDataRange().getValues(),map=headerMap_(sheet);
   const row=values.slice(1).find(function(r){return email_(r[map.Email])===email;});
