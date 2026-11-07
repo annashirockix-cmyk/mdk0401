@@ -3,7 +3,7 @@
   function rnd(n){return Math.floor(Math.random()*n);}
   function round(v){return Number(v.toFixed(2));}
   function fmt(v){return Number(v).toFixed(2).replace(".",",");}
-  function num(v){return Number(String(v||"").trim().replace(",","."));}
+  function num(v){var raw=String(v==null?"":v).trim();return raw===""?NaN:Number(raw.replace(",","."));}
   function esc(v){return String(v==null?"":v).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
   function makeTask(){
     var d=round(24+rnd(30)/10),l=round(38+rnd(40)/10),h=round(5+rnd(30)/10);
