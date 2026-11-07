@@ -380,7 +380,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v248/);
+  assert.match(sw, /portal-cache-v249/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -396,7 +396,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const css = read("lecture-visual-atlas.css");
   assert.match(html, /lecture-visual-atlas\.js\?v=3/);
   assert.match(html, /lecture-visual-atlas\.css\?v=3/);
-  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=1/);\n  assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
+  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=2/);\n  assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.css"));
   for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
