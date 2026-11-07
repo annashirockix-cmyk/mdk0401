@@ -429,6 +429,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             topic = { id: ct.id, code: ct.title.split(' ')[0], title: ct.title.split(' ').slice(1).join(' '), lectures: [{ code: "Лекция", title: ct.title, content: ct.content }], practicals: [], selfWork: [], test: [] };
         }
     }
+    var customTopicTests = (window.customContent.tests || []).filter(function (t) { return t.mdkId === courseId && t.topicId === topicId; });
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
     
     document.getElementById("crumbs").textContent = topic.code + " " + topic.title;
@@ -439,7 +440,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         <button class="btn tab active" id="tab-lectures" onclick="window.switchTopicTab('lectures')">📖 Лекции</button>
         ${(topic.practicals && topic.practicals.length) ? `<button class="btn tab ghost" id="tab-practicals" onclick="window.switchTopicTab('practicals')">🛠️ Практика</button>` : ''}
         ${(topic.selfWork && topic.selfWork.length) ? `<button class="btn tab ghost" id="tab-selfwork" onclick="window.switchTopicTab('selfwork')">📝 Самостоятельная</button>` : ''}
-        ${(topic.test && topic.test.length) ? `<button class="btn tab ghost" id="tab-test" onclick="window.switchTopicTab('test')">🎯 Тест</button>` : ''}
+        ${((topic.test && topic.test.length) || customTopicTests.length) ? `<button class="btn tab ghost" id="tab-test" onclick="window.switchTopicTab('test')">🎯 Тест</button>` : ''}
     </div><div id="topicContent" class="module"></div>`;
     app.innerHTML += tabsHtml;
 
@@ -497,11 +498,39 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             });
         }
         else if (tabName === 'test') {
-            if (!topic.test || !topic.test.length) { contentArea.innerHTML = "<p>Вопросов нет.</p>"; return; }
-            var testId = `test_${topic.id}`; var isDone = window.state.results && window.state.results[testId];
-            if (isDone) contentArea.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px;"><h3 style="color:var(--ok);">✅ Тест уже пройден!</h3><p>Оценка: <b>${isDone.grade}</b></p><button class="btn" onclick="window.startInlineTest('${topic.id}', null)">Пройти заново</button></div>`;
-            else contentArea.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card-soft); border-radius:8px;"><h3>🎯 Тест по теме</h3><p>Вопросов: ${topic.test.length}</p><button class="btn" onclick="window.startInlineTest('${topic.id}', null)" style="padding:15px 30px; font-size:16px;">Начать тест</button></div>`;
+            var customHtml = customTopicTests.map(function (test) {
+                return '<div class="card" style="padding:16px;margin:10px 0"><h3>'+window.escapeHtml(test.title)+'</h3><p>Вопросов: '+((test.questions||[]).length)+'</p><button class="btn" onclick="window.startCustomInlineTest(\''+window.escapeHtml(test.id)+'\')">Начать тест</button></div>';
+            }).join("");
+            if (customHtml) contentArea.innerHTML = '<h3>Тесты преподавателя</h3>'+customHtml;
+            if (topic.test && topic.test.length) {
+                var testId = "test_" + topic.id; var isDone = window.state.results && window.state.results[testId];
+                contentArea.innerHTML += isDone ? '<div style="text-align:center;padding:20px;background:var(--card-soft);border-radius:8px"><h3>Тест уже пройден</h3><p>Оценка: <b>'+isDone.grade+'</b></p><button class="btn" onclick="window.startInlineTest(\''+topic.id+'\',null)">Пройти заново</button></div>' : '<div style="text-align:center;padding:20px;background:var(--card-soft);border-radius:8px"><h3>Тест по теме</h3><p>Вопросов: '+topic.test.length+'</p><button class="btn" onclick="window.startInlineTest(\''+topic.id+'\',null)">Начать тест</button></div>';
+            }
+            if (!customHtml && !(topic.test && topic.test.length)) contentArea.innerHTML = "<p>Вопросов нет.</p>";
         }
+    };
+
+    window.startCustomInlineTest = async function(testId) {
+        var test = (window.customContent.tests || []).find(function (t) { return String(t.id) === String(testId); });
+        var area = document.getElementById("topicContent");
+        if (!test || !area) { if (area) area.textContent = "Тест не найден."; return; }
+        var questions = test.questions || [], answers = [], index = 0, started = Date.now();
+        if (!questions.length) { area.textContent = "В тесте пока нет вопросов."; return; }
+        function draw() {
+            if (index >= questions.length) {
+                area.innerHTML = "<p>Проверяем ответы на сервере…</p>";
+                window.API.submitCustomTest(testId, answers, Math.round((Date.now()-started)/1000)).then(function (result) {
+                    if (!result || !result.success) throw new Error(result && result.error || "Не удалось проверить тест.");
+                    area.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться к тестам</button></div>';
+                }).catch(function (error) { area.textContent = error.message || "Ошибка проверки теста."; });
+                return;
+            }
+            var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>';
+            (q.options||[]).forEach(function (option,i) { html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>'; });
+            area.innerHTML = html;
+            area.querySelectorAll("[data-custom-answer]").forEach(function (button) { button.onclick = function () { answers[index] = Number(button.dataset.customAnswer); index++; draw(); }; });
+        }
+        draw();
     };
 
     window.startInlineTest = function(topicId, selfWorkCode) {
