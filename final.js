@@ -171,7 +171,13 @@ window.renderFinalExamPage = function (mdkId) {
     if (!start.dataset.attemptChecked && window.state && window.state.student && window.API && window.API.getTestAttemptStatus) {
       start.disabled=true;
       window.API.getTestAttemptStatus(course.id,"__final__"+course.id).then(function(status){
-        if(!status||status.allowed===false){mount.innerHTML="<h3>Попытки экзамена закончились</h3><p>Обратитесь к преподавателю за дополнительной попыткой.</p>";return;}
+        if(!status||status.allowed===false){
+          mount.innerHTML="<h3>Попытки экзамена закончились</h3><p>Использовано: "+(status&&status.used||0)+" из "+(status&&status.limit||1)+". Можно отправить преподавателю запрос на дополнительную попытку.</p>";
+          var requestButton=examNode("button","btn","📨 Запросить дополнительную попытку");requestButton.type="button";mount.appendChild(requestButton);
+          var requestStatus=examNode("span","");requestStatus.style.cssText="display:block;margin-top:8px;color:var(--muted)";mount.appendChild(requestStatus);
+          requestButton.onclick=function(){requestButton.disabled=true;requestStatus.textContent="Отправляем запрос…";window.API.requestTestAttempts(course.id,"__final__"+course.id).then(function(r){if(!r||!r.success)throw new Error(r&&r.error||"Не удалось отправить запрос");requestStatus.textContent=r.alreadyRequested?"Запрос уже отправлен. Дождитесь ответа преподавателя.":"Запрос отправлен преподавателю.";}).catch(function(e){requestStatus.textContent=e.message;requestButton.disabled=false;});};
+          return;
+        }
         start.dataset.attemptChecked="1";start.disabled=false;start.click();
       }).catch(function(error){mount.textContent="Не удалось проверить доступ к экзамену: "+(error.message||"ошибка сервера");});
       return;
