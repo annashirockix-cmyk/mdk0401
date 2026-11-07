@@ -124,7 +124,8 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(workbook, /траектор.*инструмент|элемент.*траектор/);
   assert.match(workbook, /String\(courseId\)==="07\.01"\?""/);
   assert.match(workbook, /String\(courseId\)==="07\.01"\?"":/);
-  assert.ok(workbook.includes('String(courseId)==="07.01"?null:'), "generic memes must be disabled for this workbook");
+  assert.match(workbook, /var meme=String\\(courseId\\)==="07\\.01"\\?\\{file:"",caption:/, "MDK 07.01 uses topic-specific workshop humour rather than unrelated generic memes");
+  assert.ok(workbook.includes("Справочный блок: документы технологического процесса"), "workbook must include production document references");
 });
 
 
@@ -134,6 +135,8 @@ test("MDK 07.01 quiz questions have valid, non-duplicated options and varied ans
   vm.runInNewContext(source, sandbox, { timeout: 1000 });
   const moduleData = sandbox.window.MDK_DATA["07.01"];
   assert.ok(moduleData && Array.isArray(moduleData.sections), "MDK 07.01 data must load");
+  assert.ok(moduleData.sections[0].topics[0].lectures[0].content.includes("Исторический очерк: от механизации к ЧПУ"), "first lecture must include expanded CNC history");
+  assert.ok(moduleData.sections[0].topics[1].lectures[0].content.includes("lecture-visual-supplement"), "topic lectures must include visual and reference supplements");
   const topics = moduleData.sections.flatMap((section) => section.topics || []);
   const questions = topics.flatMap((topic) => (topic.test || []).map((question) => ({ topic: topic.title, ...question })));
   assert.ok(questions.length >= 80, "expected the full topic quiz bank");
