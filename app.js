@@ -78,6 +78,7 @@ window.updateMenuVisibility = function() {
     var flashcardEditorLink=document.getElementById('menuFlashcardEditor'); if(flashcardEditorLink)flashcardEditorLink.style.display=isTeacher?'flex':'none';
     var englishLinks=document.querySelectorAll('.english-drawer-item'); Array.prototype.forEach.call(englishLinks,function(link){link.style.display=['EN','ENB','ENT'].indexOf(window.state.activeCourseId)>=0?'flex':'none';});
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
+    var tutoringLink=document.getElementById("menuTutoring"); if(tutoringLink){tutoringLink.style.display=isTeacher?"flex":"none";if(window.state.student&&window.API&&window.API.getTutoringLink){var tutoringCourse=String(window.state.activeCourseId||"07.01");window.API.getTutoringLink(tutoringCourse).then(function(r){if(String(window.state.activeCourseId||"07.01")!==tutoringCourse)return;tutoringLink.style.display=(r&&r.link&&r.link.visible!==false)?"flex":"none";}).catch(function(){tutoringLink.style.display="none";});}}
 };
 
 window.applyGlobalEffects = function() {
