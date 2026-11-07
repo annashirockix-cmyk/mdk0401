@@ -1076,7 +1076,7 @@ function createAssignment_(data) {
   });
   matches.forEach(function(row){
     const mail=email_(row[um.Email]);
-    createNotification_(mail,"assignment","Новое задание по метрологии",
+    createNotification_(mail,"assignment","Новое учебное задание",
       "Вам назначена работа: «"+title+"»."+(dueAt?" Срок выполнения: "+dueAt+".":"")+
       " Откройте раздел «Назначенные мне работы».",courseId,id);
   });
