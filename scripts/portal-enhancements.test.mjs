@@ -79,7 +79,7 @@ test("workbooks include translation, written practice, notes and attributed exte
   assert.match(source, /Special:FilePath/);
   assert.match(source, /lectureStudySummary/);
   assert.match(source, /wb-summary/);
-  assert.match(source, /latin\/(latin\+cyr/);
+  assert.match(source, /latin\/\(latin\+cyr/);
 });
 
 test("MDK 07.01 practicals match their topics and the method PDF link resolves", () => {
