@@ -598,18 +598,37 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     var html='<div class="museum-muted">Вопрос '+(secureIndex+1)+' из '+secureQuestions.length+'</div><h3>'+safeText(q.q||q.question||"")+'</h3>';
                     if(type==="num"||type==="numeric"||type==="number") {
                         html+='<input id="secureAnswerInput" class="self-input" type="text" inputmode="decimal" placeholder="Введите числовой ответ"><button class="btn" id="secureNext">Ответить</button>';
-                    } else if(type==="multi") {
+                    } else if(type==="multi"||type==="multiple"||type==="multiple_choice") {
                         html+='<p>Выберите все подходящие варианты</p>'+(q.options||[]).map(function(opt,i){return '<button class="btn ghost" data-secure-multi="'+i+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+safeText(opt)+'</button>';}).join("")+'<button class="btn" id="secureNext">Ответить</button>';
+                    } else if(type==="order"||type==="ordering") {
+                        var orderItems=q.items||[];
+                        html+='<p>Расположите элементы в правильной последовательности</p>'+orderItems.map(function(item,i){return '<label style="display:flex;gap:10px;align-items:center;margin:8px 0"><span style="flex:1">'+safeText(item)+'</span><select class="self-input secure-order-position" data-secure-order="'+i+'" style="max-width:100px"><option value="">Позиция</option>'+orderItems.map(function(_,n){return '<option value="'+(n+1)+'">'+(n+1)+'</option>';}).join("")+'</select></label>';}).join("")+'<button class="btn" id="secureNext">Ответить</button>';
+                    } else if(type==="match"||type==="matching") {
+                        var matchPairs=q.pairs||[],matchOptions=q.options||[];
+                        html+='<p>Сопоставьте элементы левого и правого столбцов</p>'+matchPairs.map(function(pair,i){return '<label style="display:flex;gap:10px;align-items:center;margin:8px 0"><span style="flex:1">'+safeText(pair.left||"")+'</span><select class="self-input secure-match-option" data-secure-match="'+i+'" style="flex:1"><option value="">Выберите соответствие</option>'+matchOptions.map(function(option,n){return '<option value="'+n+'">'+safeText(option)+'</option>';}).join("")+'</select></label>';}).join("")+'<button class="btn" id="secureNext">Ответить</button>';
                     } else {
                         html+=(q.options||[]).map(function(opt,i){return '<button class="btn ghost" data-secure-choice="'+i+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+safeText(opt)+'</button>';}).join("");
                     }
                     contentArea.innerHTML=html;
-                    if(type==="multi") {
+                    if(type==="multi"||type==="multiple"||type==="multiple_choice") {
                         selectedMulti={};
                         contentArea.querySelectorAll("[data-secure-multi]").forEach(function(btn){btn.onclick=function(){var n=Number(btn.getAttribute("data-secure-multi"));selectedMulti[n]=!selectedMulti[n];btn.classList.toggle("active",!!selectedMulti[n]);};});
-                        var next=contentArea.querySelector("#secureNext");if(next)next.onclick=function(){secureAnswers.push(Object.keys(selectedMulti).filter(function(k){return selectedMulti[k];}).map(Number).sort());secureIndex++;drawSecureQuestion();};
+                        var next=contentArea.querySelector("#secureNext");if(next)next.onclick=function(){secureAnswers.push(Object.keys(selectedMulti).filter(function(k){return selectedMulti[k];}).map(Number).sort(function(a,b){return a-b;}));secureIndex++;drawSecureQuestion();};
                     } else if(type==="num"||type==="numeric"||type==="number") {
-                        var numNext=contentArea.querySelector("#secureNext");if(numNext)numNext.onclick=function(){var input=contentArea.querySelector("#secureAnswerInput");secureAnswers.push(input?input.value:"");secureIndex++;drawSecureQuestion();};
+                        var numNext=contentArea.querySelector("#secureNext");if(numNext)numNext.onclick=function(){var input=contentArea.querySelector("#secureAnswerInput");if(!input||!String(input.value).trim()){input&&input.focus();return;}secureAnswers.push(input.value);secureIndex++;drawSecureQuestion();};
+                    } else if(type==="order"||type==="ordering") {
+                        var orderNext=contentArea.querySelector("#secureNext");if(orderNext)orderNext.onclick=function(){
+                            var fields=Array.prototype.slice.call(contentArea.querySelectorAll(".secure-order-position")),positions=fields.map(function(field){return Number(field.value)||0;});
+                            if(positions.some(function(n){return n<1;})||new Set(positions).size!==positions.length){window.showToast&&window.showToast("Укажите каждую позицию один раз.","err");return;}
+                            var answer=new Array(fields.length);fields.forEach(function(field,i){answer[Number(field.value)-1]=(q.items||[])[i];});
+                            secureAnswers.push(answer);secureIndex++;drawSecureQuestion();
+                        };
+                    } else if(type==="match"||type==="matching") {
+                        var matchNext=contentArea.querySelector("#secureNext");if(matchNext)matchNext.onclick=function(){
+                            var fields=Array.prototype.slice.call(contentArea.querySelectorAll(".secure-match-option")),answer=fields.map(function(field){return field.value===""?"":(q.options||[])[Number(field.value)];});
+                            if(answer.some(function(value){return !value;})){window.showToast&&window.showToast("Выберите соответствие для каждой строки.","err");return;}
+                            secureAnswers.push(answer);secureIndex++;drawSecureQuestion();
+                        };
                     } else {
                         contentArea.querySelectorAll("[data-secure-choice]").forEach(function(btn){btn.onclick=function(){secureAnswers.push(Number(btn.getAttribute("data-secure-choice")));secureIndex++;drawSecureQuestion();};});
                     }
