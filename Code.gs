@@ -1228,9 +1228,11 @@ function resolvedBuiltInBankIds_(courseId, bankIds) {
 }
 function builtInQuestions_(courseId, bankIds) {
   const sh=questionBank_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), out=[], seen={};
+  const wanted=(bankIds||[]).map(function(id){return String(id||"").trim();});
+  const wantedCourse=String(courseId||"").trim();
   vals.slice(1).forEach(function(row) {
-    const cid=String(row[m.CourseId]||""), bid=String(row[m.BankId]||"");
-    if(cid!==courseId||bankIds.indexOf(bid)===-1)return;
+    const cid=String(row[m.CourseId]||"").trim(), bid=String(row[m.BankId]||"").trim();
+    if(cid!==wantedCourse||wanted.indexOf(bid)===-1)return;
     let q={};try{q=JSON.parse(String(row[m.QuestionJSON]||"{}"));}catch(e){return;}
     const signature=String(q.type||"mc")+"|"+String(q.q||q.question||"");
     if(seen[signature])return;seen[signature]=true;
@@ -1260,8 +1262,16 @@ function getBuiltInTest_(data) {
     if(used>=limit)throw new Error("Попытки закончились ("+used+" из "+limit+"). Обратитесь к преподавателю.");
   }
   const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds),entries=builtInQuestions_(courseId,resolvedIds);
-  if(!entries.length)return {success:false,notImported:true,questions:[]};
-  return {success:true,courseId:courseId,testId:testId,questions:entries.map(safeBuiltInQuestion_)};
+  if(!entries.length){
+    const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),available=[];
+    vals.slice(1).forEach(function(row){
+      if(String(row[m.CourseId]||"").trim()===courseId.trim()){
+        const id=String(row[m.BankId]||"").trim();if(id&&available.indexOf(id)<0)available.push(id);
+      }
+    });
+    return {success:false,notImported:true,courseId:courseId,testId:testId,requestedBankIds:bankIds,resolvedBankIds:resolvedIds,availableBankIds:available.slice(0,150),questions:[]};
+  }
+  return {success:true,courseId:courseId,testId:testId,bankIds:resolvedIds,questions:entries.map(safeBuiltInQuestion_)};
 }
 function sameAnswer_(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
 function scoreBuiltInQuestion_(q,answer) {
