@@ -14,3 +14,26 @@
 .bg-aurora, body.bg-aurora { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #0ea5e9 100%) fixed !important; }
 .bg-matrix, body.bg-matrix { background: radial-gradient(ellipse at center, #022c22 0%, #000 70%) fixed !important; }
 .bg-space, body.bg-space { background: radial-gradient(ellipse at top, #1e1b4b 0%, #020617 60%) fixed !important; }
+
+/* Фоны, выбираемые в персонализации кабинета */
+body[data-portal-bg="blueprint"]{background-color:#0d2035!important;background-image:linear-gradient(rgba(56,189,248,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.12) 1px,transparent 1px)!important;background-size:26px 26px!important;background-attachment:fixed!important}
+body[data-portal-bg="aurora"]{background:linear-gradient(130deg,#0b1b35,#075985,#312e81,#0b1b35)!important;background-size:300% 300%!important;animation:portalAurora 18s ease infinite}
+body[data-portal-bg="galaxy"]{background:radial-gradient(ellipse at 20% 20%,#493078 0,transparent 42%),radial-gradient(ellipse at 80% 70%,#164e72 0,transparent 45%),#080b1d!important;background-attachment:fixed!important}
+body[data-portal-bg="workshop"]{background:radial-gradient(circle at 50% 0,#3a526a 0,transparent 48%),linear-gradient(135deg,#101820,#1d2935)!important;background-attachment:fixed!important}
+body[data-portal-bg="paper"]{background-color:#dbe4ec!important;background-image:linear-gradient(rgba(58,90,120,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(58,90,120,.12) 1px,transparent 1px)!important;background-size:24px 24px!important}
+body[data-portal-bg="image-space"]{background:url("./assets/images/bg-space.jpg") center/cover fixed!important}
+body[data-portal-bg="image-matrix"]{background:url("./assets/images/bg-matrix-code.jpg") center/cover fixed!important}
+body[data-portal-bg="image-brutal"]{background:url("./assets/images/bg-brutal.jpg") center/cover fixed!important}
+body[data-portal-bg="image-hyper"]{background:url("./assets/images/bg-hyper.jpg") center/cover fixed!important}
+body[data-portal-bg="foggy-forest"]{background:url("./assets/images/backgrounds/Background 1.png") center/cover fixed!important}
+body[data-portal-bg="pumpkins"]{background:url("./assets/images/backgrounds/Background 2.png") center/cover fixed!important}
+body[data-portal-bg="spooky-room"]{background:url("./assets/images/backgrounds/Background 3.png") center/cover fixed!important}
+body[data-portal-bg="halloween"]{background:url("./assets/images/backgrounds/Background 7.png") center/cover fixed!important}
+body[data-portal-bg="red-forest"]{background:url("./assets/images/backgrounds/Background 9.png") center/cover fixed!important}
+body[data-portal-bg="lanterns"]{background:url("./assets/images/backgrounds/Background 10.png") center/cover fixed!important}
+body[data-portal-bg="dark-table"]{background:url("./assets/images/backgrounds/Background 15.png") center/cover fixed!important}
+body[data-portal-bg="graveyard"]{background:url("./assets/images/backgrounds/Background 28.png") center/cover fixed!important}
+body[data-portal-bg="cats-notebook"]{background:url("./assets/images/backgrounds/Background 31.png") center/cover fixed!important}
+body[data-portal-bg="cats-yarn"]{background:url("./assets/images/backgrounds/Background 33.png") center/cover fixed!important}
+@keyframes portalAurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+body[data-portal-bg]:not([data-portal-bg="none"]) #app{background:rgba(10,18,32,.22);border-radius:18px}
