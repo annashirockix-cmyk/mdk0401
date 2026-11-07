@@ -127,42 +127,6 @@ function renderExamQuestion(question, number) {
   return card;
 }
 
-function scoreExamQuestion(question, form, number) {
-  var type = question.type || "mc";
-  if (type === "num") {
-    var field = form.querySelector('[name="q' + number + '"]');
-    if (!field || field.value.trim() === "") return 0;
-    var value = Number(field.value);
-    return Number.isFinite(value) && Math.abs(value - Number(question.answer)) <= (question.tol || 0.01) ? 1 : 0;
-  }
-  if (type === "multi") {
-    var selected = Array.prototype.map.call(form.querySelectorAll('input[name="q' + number + '"]:checked'), function (el) { return Number(el.value); }).sort();
-    var expected = (question.correct || []).slice().sort(function (a, b) { return a - b; });
-    return selected.length === expected.length && selected.every(function (v, i) { return v === expected[i]; }) ? 1 : 0;
-  }
-  if (type === "order") {
-    var correctOrder = question.correctOrder || question.items || [];
-    var fields = form.querySelectorAll('[name^="q' + number + '_order_"]');
-    var right = 0;
-    Array.prototype.forEach.call(fields, function (field) {
-      var expectedPosition = correctOrder.indexOf(field.dataset.item) + 1;
-      if (expectedPosition > 0 && Number(field.value) === expectedPosition) right++;
-    });
-    return fields.length ? right / fields.length : 0;
-  }
-  if (type === "match") {
-    var pairs = question.pairs || [];
-    var rightMatches = 0;
-    pairs.forEach(function (pair, index) {
-      var field = form.querySelector('[name="q' + number + '_match_' + index + '"]');
-      if (field && field.value === pair.right) rightMatches++;
-    });
-    return pairs.length ? rightMatches / pairs.length : 0;
-  }
-  var checked = form.querySelector('input[name="q' + number + '"]:checked');
-  return checked && Number(checked.value) === question.correct ? 1 : 0;
-}
-
 window.renderFinalExamPage = function (mdkId) {
   var app = document.getElementById("app");
   if (!app) return;
@@ -263,106 +227,8 @@ window.renderFinalExamPage = function (mdkId) {
       }).catch(function(error){mount.textContent=error.message||"Не удалось загрузить экзамен.";});
       return;
     }
-    var bank = collectCourseQuestions(mdkId);
-    if (!bank.length) { mount.textContent = "Банк экзаменационных вопросов пока пуст."; return; }
-    var examLimit = Math.min(FINAL_EXAM_SIZE, bank.length);
-    var selected = [];
-    // Для всех курсов гарантируем смешанный вариант, если в банке есть задания нужного типа.
-    {
-      [["multi", 5], ["order", 2], ["match", 2], ["num", 1]].forEach(function (rule) {
-        var candidates = examShuffle(bank.filter(function (question) {
-          return (question.type || "mc") === rule[0] && selected.indexOf(question) === -1;
-        }));
-        selected = selected.concat(candidates.slice(0, rule[1]));
-      });
-    }
-    var remaining = examShuffle(bank.filter(function (question) { return selected.indexOf(question) === -1; }));
-    var picked = examShuffle(selected.concat(remaining.slice(0, Math.max(0, examLimit - selected.length))));
     mount.innerHTML = "";
-    var timerBox = examNode("div", "exam-timer", duration + ":00");
-    timerBox.style.cssText = "font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;color:var(--accent);";
-    mount.appendChild(timerBox);
-    var form = examNode("form");
-    form.addEventListener("submit", function (event) { event.preventDefault(); });
-    picked.forEach(function (question, index) { form.appendChild(renderExamQuestion(question, index)); });
-
-    var writtenTitle = examNode("h3", "", "✍️ Письменная и ситуационная часть");
-    writtenTitle.style.color = "var(--accent)"; form.appendChild(writtenTitle);
-    var writtenPrompts = mdkId === "04.01" ? [
-      "Составьте последовательность диагностирования станка при росте вибрации шпиндельного узла. Укажите исходные данные, приборы, контрольные точки, критерии остановки и форму фиксации результатов.",
-      "По результатам диагностики выявлены повышенная температура опоры, рост вибрации и металлические частицы в масле. Предложите дерево возможных причин, укажите, какие проверки помогут их разделить, и обоснуйте решение: продолжить работу, выполнить регулировку или вывести узел в ремонт."
-    ] : [
-      "Опишите алгоритм подготовки оборудования к выполнению технологической операции с указанием контрольных точек.",
-      "Разберите ситуацию отклонения параметров оборудования от нормы: установите возможные причины, способ проверки и корректирующие действия."
-    ];
-    writtenPrompts.forEach(function (prompt, index) {
-      var wrap = examNode("div");
-      wrap.style.cssText = "margin:12px 0;padding:15px;background:var(--card-soft);border:1px solid var(--border);border-radius:8px;";
-      wrap.appendChild(examNode("b", "", (picked.length + index + 1) + ". " + prompt));
-      var area = examNode("textarea", "self-input"); area.name = "written" + (index + 1); area.rows = 5;
-      area.placeholder = "Разверните решение, укажите ход рассуждений и вывод...";
-      area.style.marginTop = "10px"; wrap.appendChild(area); form.appendChild(wrap);
-    });
-
-    var submit = examNode("button", "btn", "Завершить экзамен"); submit.type = "button";
-    submit.style.cssText = "width:100%;margin-top:18px;padding:15px;font-size:16px;";
-    form.appendChild(submit); mount.appendChild(form);
-
-    var timeLeft = duration * 60;
-    var timer = setInterval(function () {
-      if (!document.body.contains(timerBox)) { clearInterval(timer); return; }
-      timeLeft--;
-      timerBox.textContent = String(Math.floor(timeLeft / 60)).padStart(2, "0") + ":" + String(timeLeft % 60).padStart(2, "0");
-      if (timeLeft <= 60) timerBox.style.color = "var(--err)";
-      if (timeLeft <= 0) submit.click();
-    }, 1000);
-
-    var submitted = false;
-    submit.addEventListener("click", function () {
-      if (submitted) return;
-      submitted = true; clearInterval(timer); submit.disabled = true;
-      var points = 0;
-      picked.forEach(function (question, index) { points += scoreExamQuestion(question, form, index); });
-      var pct = Math.round(points / picked.length * 100);
-      var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
-      var written1 = form.querySelector('[name="written1"]').value;
-      var written2 = form.querySelector('[name="written2"]').value;
-      if (!window.state.results) window.state.results = {};
-      if (!window.state.examSubmissions) window.state.examSubmissions = [];
-      window.state.results["__final__" + course.id] = { grade: grade, total: Math.round(points * 100) / 100, max: picked.length, percent: pct };
-      window.state.examSubmissions.push({
-        date: new Date().toLocaleString("ru-RU"), courseId: course.id,
-        student: window.state.student ? window.state.student.name : "Неизвестный",
-        group: window.state.student ? window.state.student.group : "",
-        testScore: Math.round(points * 100) / 100, maxTest: picked.length,
-        written1: written1, written2: written2, status: "На проверке",
-        teacherGrade: null, finalGrade: null
-      });
-      if (window.saveStudentData) window.saveStudentData();
-      if (window.state.student && window.API && window.API.saveResult) {
-        Promise.resolve(window.API.saveResult({
-          email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
-          testId: "__final__" + course.id, testTitle: "Итоговый экзамен " + course.shortName,
-          grade: grade, score: points, maxScore: picked.length, percent: pct, timeSpent: duration * 60 - timeLeft, courseId: course.id
-        })).then(function(saved){
-          if(saved&&Number(saved.penaltyPoints)>0){
-            gradeNode.textContent="Итоговая оценка с учётом штрафа: "+saved.grade;
-            if(window.state&&window.state.results){window.state.results["__final__"+course.id]={grade:saved.grade,percent:saved.percent,penaltyPoints:saved.penaltyPoints};if(window.saveStudentData)window.saveStudentData();}
-            result.appendChild(examNode("p","","Штраф за повторное нарушение: -"+saved.penaltyPoints+" процентных пунктов. Отчёт отправлен преподавателю."));
-          }
-        }).catch(function (error) { console.warn("Не удалось отправить результат экзамена", error); });
-      }
-      mount.innerHTML = "";
-      var result = examNode("div", "exam-result");
-      result.style.cssText = "text-align:center;padding:30px;";
-      result.appendChild(examNode("h2", "", course.shortName + " · экзамен завершён"));
-      result.appendChild(examNode("p", "", "Баллы за тестовую часть: " + Math.round(points * 100) / 100 + " из " + picked.length + " (" + pct + "%)"));
-      var gradeNode = examNode("h1", "exam-grade", "Предварительная оценка: " + grade);
-      gradeNode.style.cssText = "font-size:42px;margin:20px 0;color:" + (grade >= 3 ? "var(--ok)" : "var(--err)");
-      result.appendChild(gradeNode);
-      result.appendChild(examNode("p", "", "Письменные задания переданы на проверку преподавателю. Итоговая оценка может быть скорректирована после их проверки."));
-      var home = examNode("a", "btn", "К списку экзаменов"); home.href = "#/final"; result.appendChild(home);
-      mount.appendChild(result);
-    });
+    mount.appendChild(examNode("h3", "", "Экзамен временно недоступен"));
+    mount.appendChild(examNode("p", "", "Для проведения итогового экзамена требуется защищённый банк вопросов на сервере. Обратитесь к преподавателю или администратору."));
   });
 };
