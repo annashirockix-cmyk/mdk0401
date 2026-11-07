@@ -113,18 +113,49 @@ window.renderTeacherControlsPage=function(){
 window.renderQuestionBankPage=function(){
  const app=document.getElementById("app");if(!app)return;
  if(!staff()){app.innerHTML='<div class="module">Банк вопросов доступен только преподавателям.</div>';return;}
- const cid=courseId();if(window.loadGlobalCustomContent&&window._questionBankLoadedCourse!==cid){window._questionBankLoadedCourse=cid;app.innerHTML='<div class="module">Загрузка материалов и банка вопросов…</div>';window.loadGlobalCustomContent(function(){if((location.hash||"").indexOf("question-bank")>=0)window.renderQuestionBankPage();});return;}const c=window.MDK_DATA&&window.MDK_DATA[cid],items=[];
- function add(q,topic,source){if(!q)return;items.push({q:q.q||q.question||q.title||"Без формулировки",type:q.type||"mc",context:q.context||"",options:Array.isArray(q.options)?q.options:Array.isArray(q.answers)?q.answers:[],items:Array.isArray(q.items)?q.items:[],pairs:q.pairs||q.match||null,answer:q.correct!==undefined?q.correct:q.answer!==undefined?q.answer:q.correctAnswer,explanation:q.explanation||q.solution||"",topic:topic,source:source});}
- (c&&c.sections||[]).forEach(sec=>(sec.topics||[]).forEach(t=>{const label=[t.code,t.title].filter(Boolean).join(" ");(t.test||[]).forEach(q=>add(q,label,"Тематический тест"));(window.HARD_TESTS&&window.HARD_TESTS[t.id]||[]).forEach(q=>add(q,label,"Усложнённый банк"));}));
- const bankKey=String(cid).replace(".","");
- [window["EXAM_BANK_"+bankKey],window.EXTRA_EXAM_BANKS&&window.EXTRA_EXAM_BANKS[cid],window.MDK_EXTRA_QUESTIONS&&window.MDK_EXTRA_QUESTIONS[cid]].forEach(arr=>(Array.isArray(arr)?arr:[]).forEach(q=>add(q,"Итоговый экзамен","Экзаменационный банк")));
- const custom=(window.customContent&&window.customContent.tests||[]).filter(t=>t.mdkId===cid);
- custom.forEach(t=>(t.questions||[]).forEach(q=>add(q,t.title||t.topicId||"Авторский тест","Тест преподавателя")));
- const extra=window.EXTRA_TESTS||{},topicIds=[];(c&&c.sections||[]).forEach(sec=>(sec.topics||[]).forEach(t=>topicIds.push(String(t.id))));Object.keys(extra).forEach(k=>{if(k.indexOf("self_")===0&&topicIds.some(id=>k.indexOf("self_"+id+"_")===0))(extra[k].questions||[]).forEach(q=>add(q,k,"Самостоятельная работа"));});
- const unique=[],seen={};items.forEach(x=>{const k=x.source+"|"+x.topic+"|"+x.q;if(!seen[k]){seen[k]=1;unique.push(x);}});
- app.innerHTML='<a class="backlink" href="#/teaching-controls">← К управлению</a><section class="hero"><h1>Банк вопросов</h1><p>'+esc((window.COURSE_LABELS&&window.COURSE_LABELS[cid])||cid)+' · найдено вопросов: '+unique.length+'</p></section><div class="module"><input id="bankSearch" class="self-input" placeholder="Поиск по вопросу, теме или варианту ответа" style="width:100%"><select id="bankSource" class="self-input" style="margin-top:8px"><option value="">Все источники</option><option>Тематический тест</option><option>Экзаменационный банк</option><option>Тест преподавателя</option><option>Самостоятельная работа</option></select><div id="bankQuestions" style="margin-top:14px"></div></div>';
- const render=()=>{const term=document.getElementById("bankSearch").value.toLowerCase(),source=document.getElementById("bankSource").value;const filtered=unique.filter(x=>(!source||x.source===source)&&[x.q,x.topic,x.source].concat(x.options).join(" ").toLowerCase().includes(term));document.getElementById("bankQuestions").innerHTML=filtered.length?filtered.map((x,i)=>'<article class="module" style="margin:10px 0"><b>'+esc(i+1)+'. '+esc(x.q)+'</b><div style="font-size:12px;color:var(--muted);margin:5px 0">'+esc(x.source)+' · '+esc(x.topic)+' · '+esc(x.type)+'</div>'+(x.context?'<p>'+esc(x.context)+'</p>':'')+(x.options.length?'<ol type="A">'+x.options.map((o,j)=>'<li style="'+(String(x.answer)===String(j)?"font-weight:700;color:var(--success)":"")+'">'+esc(o)+(String(x.answer)===String(j)?" ✓":"")+'</li>').join("")+'</ol>':'')+(x.items.length?'<p><b>Элементы для упорядочивания:</b></p><ol>'+x.items.map(o=>'<li>'+esc(o)+'</li>').join("")+'</ol>':'')+(x.pairs?'<p><b>Пары для сопоставления:</b> '+esc(JSON.stringify(x.pairs))+'</p>':'')+(x.answer!==undefined?'<p><b>Правильный ответ:</b> '+esc(Array.isArray(x.answer)?x.answer.join(", "):typeof x.answer==="object"?JSON.stringify(x.answer):x.answer)+'</p>':'<p style="color:var(--muted)">Ключ не найден в структуре вопроса.</p>')+(x.explanation?'<p><b>Пояснение:</b> '+esc(x.explanation)+'</p>':'')+'</article>').join(""):'Вопросы не найдены по заданному фильтру.';};
- document.getElementById("bankSearch").oninput=render;document.getElementById("bankSource").onchange=render;render();
+ const cid=courseId(),course=window.MDK_DATA&&window.MDK_DATA[cid],isAdmin=String((window.state&&window.state.user&&window.state.user.role)||(window.state&&window.state.staff&&window.state.staff.role)||"").toLowerCase()==="admin";
+ app.innerHTML='<a class="backlink" href="#/teaching-controls">← К управлению</a><section class="hero"><h1>Банк вопросов</h1><p>'+esc((window.COURSE_LABELS&&window.COURSE_LABELS[cid])||cid)+' · защищённое хранилище</p></section><div class="module"><div id="bankStatus">Загружаем банк с сервера…</div>'+(isAdmin?'<button id="bankImportBtn" class="btn" style="margin:12px 0">⬆ Импортировать банк этого предмета на сервер</button><p style="font-size:12px;color:var(--muted)">Импорт доступен администратору. Он переносит ключи ответов в закрытый лист Google Sheets.</p>':'')+'<input id="bankSearch" class="self-input" placeholder="Поиск по вопросу, теме, ответу" style="width:100%;margin-top:10px"><select id="bankSource" class="self-input" style="margin-top:8px;width:100%"><option value="">Все источники</option><option value="Тематический тест">Тематический тест</option><option value="Усложнённый банк">Усложнённый банк</option><option value="Экзаменационный банк">Экзаменационный банк</option><option value="Самостоятельная работа">Самостоятельная работа</option></select><div id="bankQuestions" style="margin-top:14px"></div></div>';
+ const labelFor=id=>{if(id.indexOf("topic_")===0||id.indexOf("hard_")===0){const tid=id.replace(/^(topic_|hard_)/,"");let found=null;(course&&course.sections||[]).forEach(sec=>(sec.topics||[]).forEach(tp=>{if(String(tp.id)===tid)found=tp;}));return found?[found.code,found.title].filter(Boolean).join(" "):tid;}if(id.indexOf("self_")===0)return "Самостоятельная работа · "+id.slice(5);if(id.indexOf("exam_")===0||id==="mdk_extra")return "Итоговый экзамен";return id;};
+ const sourceFor=id=>id.indexOf("topic_")===0?"Тематический тест":id.indexOf("hard_")===0?"Усложнённый банк":id.indexOf("self_")===0?"Самостоятельная работа":"Экзаменационный банк";
+ function render(rows){
+  const term=(document.getElementById("bankSearch").value||"").toLowerCase(),source=document.getElementById("bankSource").value;
+  const list=rows.filter(x=>{const q=x.question||{},opts=q.options||q.answers||[];return(!source||sourceFor(x.bankId)===source)&&[q.q,q.question,q.context,q.correct,q.answer,q.explanation,labelFor(x.bankId)].concat(opts,q.items||[],q.pairs||[]).join(" ").toLowerCase().includes(term);});
+  document.getElementById("bankQuestions").innerHTML=list.length?list.map((x,i)=>{const q=x.question||{},options=q.options||q.answers||[],answer=q.correct!==undefined?q.correct:q.correctAnswer!==undefined?q.correctAnswer:q.answer,correct=Array.isArray(answer)?answer.map(Number):[Number(answer)];return '<article class="module" style="margin:10px 0"><b>'+esc(i+1)+'. '+esc(q.q||q.question||"Без формулировки")+'</b><div style="font-size:12px;color:var(--muted);margin:5px 0">'+esc(sourceFor(x.bankId))+' · '+esc(labelFor(x.bankId))+' · '+esc(q.type||"mc")+'</div>'+(q.context?'<p>'+esc(q.context)+'</p>':'')+(options.length?'<ol type="A">'+options.map((o,j)=>'<li style="'+(correct.indexOf(j)>=0?"font-weight:700;color:var(--success)":"")+'">'+esc(o)+(correct.indexOf(j)>=0?" ✓":"")+'</li>').join("")+'</ol>':'')+(q.items?'<p><b>Элементы:</b> '+esc(q.items.join(" · "))+'</p>':'')+(q.pairs?'<p><b>Пары:</b> '+esc(JSON.stringify(q.pairs))+'</p>':'')+(answer!==undefined?'<p><b>Правильный ответ:</b> '+esc(Array.isArray(answer)?answer.join(", "):typeof answer==="object"?JSON.stringify(answer):answer)+'</p>':'')+(q.correctOrder?'<p><b>Правильная последовательность:</b> '+esc(q.correctOrder.join(" → "))+'</p>':'')+(q.explanation||q.solution?'<p><b>Пояснение:</b> '+esc(q.explanation||q.solution)+'</p>':'')+'</article>';}).join(""):'Вопросы не найдены по заданному фильтру.';
+ }
+ let bankRows=[];
+ function load(){
+  document.getElementById("bankStatus").textContent="Загружаем банк из закрытого хранилища…";
+  window.API.getQuestionBank(cid,"").then(r=>{if(!r||!r.success)throw new Error(r&&r.error||"Не удалось получить банк.");
+   bankRows=r.questions||[];
+   document.getElementById("bankStatus").textContent=bankRows.length?"Загружено вопросов: "+bankRows.length+" · банков: "+new Set(bankRows.map(x=>x.bankId)).size:"В закрытом хранилище пока нет вопросов. Администратор может выполнить импорт ниже.";
+   render(bankRows);
+  }).catch(e=>{document.getElementById("bankStatus").textContent="Ошибка загрузки: "+e.message;});
+ }
+ const collect=()=>{
+  const out=[],seen={};
+  function add(bankId,arr){if(!Array.isArray(arr)||!arr.length)return;const qs=arr.filter(q=>q&&typeof q==="object");if(!qs.length)return;const k=cid+"|"+bankId;if(seen[k])return;seen[k]=1;out.push({courseId:cid,bankId:bankId,questions:qs});}
+  (course&&course.sections||[]).forEach(sec=>(sec.topics||[]).forEach(tp=>{add("topic_"+tp.id,tp.test||[]);add("hard_"+tp.id,window.HARD_TESTS&&window.HARD_TESTS[tp.id]||[]);}));
+  const key=String(cid).replace(".","");
+  add("exam_primary",window.EXTRA_EXAM_BANKS&&window.EXTRA_EXAM_BANKS[cid]||window["EXAM_BANK_"+key]||[]);
+  add("exam_extra",window["EXAM_BANK_EXTRA_"+key]||[]);
+  add("mdk_extra",window.MDK_EXTRA_QUESTIONS&&window.MDK_EXTRA_QUESTIONS[cid]||[]);
+  const extras=window.EXTRA_TESTS||{},topicIds=[];(course&&course.sections||[]).forEach(sec=>(sec.topics||[]).forEach(tp=>topicIds.push(String(tp.id))));
+  Object.keys(extras).forEach(k=>{if(k.indexOf("self_")===0&&topicIds.some(id=>k.indexOf("self_"+id+"_")===0))add(k,extras[k]&&extras[k].questions||[]);});
+  return out;
+ };
+ const importBtn=document.getElementById("bankImportBtn");
+ if(importBtn)importBtn.onclick=async function(){
+  this.disabled=true;const status=document.getElementById("bankStatus");
+  try{
+   const banks=collect();if(!banks.length)throw new Error("В файлах этого предмета не найдено вопросов для импорта.");
+   let count=0,questions=0;
+   for(let i=0;i<banks.length;i+=5){const part=banks.slice(i,i+5),r=await window.API.importQuestionBanks(part);if(!r||!r.success)throw new Error(r&&r.error||"Ошибка импорта части "+(Math.floor(i/5)+1));count+=r.banksImported||part.length;questions+=r.questionsImported||0;status.textContent="Импортировано банков: "+count+" из "+banks.length+"; вопросов: "+questions;}
+   status.textContent="Импорт завершён: "+count+" банков, "+questions+" вопросов. Загружаем закрытую копию…";load();
+  }catch(e){status.textContent="Импорт остановлен: "+e.message+" Пожалуйста, повторите после проверки сообщения.";}
+  finally{this.disabled=false;}
+ };
+ document.getElementById("bankSearch").oninput=()=>render(bankRows);document.getElementById("bankSource").onchange=()=>render(bankRows);
+ load();
 };
 window.renderTutoringPage=function(){
  const app=document.getElementById("app");if(!app)return;const cid=courseId();
