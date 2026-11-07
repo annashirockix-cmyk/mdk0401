@@ -17,7 +17,7 @@
   }
   function student(){return !!(window.state&&window.state.student);}
   function save(){if(window.saveStudentData&&student())window.saveStudentData();}
-  function award(id){if(student()&&window.unlockAchievement)window.unlockAchievement(id);}
+  function award(id){if(student()&&window.unlockAchievement&&(!Array.isArray(window.state.unlockedAchievements)||window.state.unlockedAchievements.indexOf(id)<0))window.unlockAchievement(id);}
   function stats(){var s=window.state||(window.state={});s.achievementStats=s.achievementStats||{tests:0,written:0};return s.achievementStats;}
   function recordTest(result){
     if(!student()||!result||!result.success)return;
@@ -38,7 +38,7 @@
   function wrapApi(name,handler){
     if(!window.API||typeof window.API[name]!=="function"||window.API[name]._portalUxWrapped)return;
     var original=window.API[name];
-    var wrapped=function(){var out=original.apply(this,arguments);return out&&typeof out.then==="function"?out.then(function(r){try{handler(r,arguments);}catch(e){console.warn("[portal-ux achievements]",e);}return r;}):out;};
+    var wrapped=function(){var args=Array.prototype.slice.call(arguments),out=original.apply(this,args);return out&&typeof out.then==="function"?out.then(function(r){try{handler(r,args);}catch(e){console.warn("[portal-ux achievements]",e);}return r;}):out;};
     wrapped._portalUxWrapped=true;window.API[name]=wrapped;
   }
   ["submitBuiltInTest","submitCustomTest","submitFinalExam"].forEach(function(name){wrapApi(name,function(r){recordTest(r);});});
@@ -184,7 +184,8 @@
   function restoreBackground(){
     var id=(window.state&&window.state.activeBackground)||"";
     if(!id){try{id=localStorage.getItem("mdk.background_active")||"none";}catch(e){id="none";}}
-    setBackground(id);
+    if(document.body)document.body.setAttribute("data-portal-bg",id);
+    if(window.state)window.state.activeBackground=id;
   }
   var oldChip=window.renderUserChip;
   if(oldChip&&!oldChip._portalUxWrapped){
