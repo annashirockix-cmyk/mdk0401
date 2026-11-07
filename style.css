@@ -22,30 +22,30 @@ html[data-font='monomakh']{--portal-display-font:'Monomakh',Georgia,serif}html[d
 @font-face{font-family:'Atkinson Hyperlegible';src:url('./assets/fonts/collections/atkinson-hyperlegible/atkinson-hyperlegible-700-italic.woff2') format('woff2');font-weight:700;font-style:italic;font-display:swap;}
 @font-face{font-family:'Atkinson Hyperlegible';src:url('./assets/fonts/collections/atkinson-hyperlegible/atkinson-hyperlegible-700-normal.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
 @font-face{font-family:'Bricolage Grotesque';src:url('./assets/fonts/collections/bricolage-grotesque/bricolage-grotesque_normal_400.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'Bricolage Grotesque';src:url('./assets/fonts/collections/bricolage-grotesque/bricolage-grotesque_normal_700.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Bricolage Grotesque';src:url('./assets/fonts/collections/bricolage-grotesque/bricolage-grotesque_normal_700.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap;}
 @font-face{font-family:'Cooper';src:url('./assets/fonts/collections/cooper/cooper-400-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap;}
 @font-face{font-family:'Cooper';src:url('./assets/fonts/collections/cooper/cooper-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
 @font-face{font-family:'Cooper';src:url('./assets/fonts/collections/cooper/cooper-700-italic.woff2') format('woff2');font-weight:700;font-style:italic;font-display:swap;}
 @font-face{font-family:'Cooper';src:url('./assets/fonts/collections/cooper/cooper-700-normal.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
 @font-face{font-family:'Fonts';src:url('./assets/fonts/collections/fonts/inter_normal_400.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'Fonts';src:url('./assets/fonts/collections/fonts/inter_normal_600.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Fonts';src:url('./assets/fonts/collections/fonts/inter_normal_600.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap;}
 @font-face{font-family:'Fonts';src:url('./assets/fonts/collections/fonts/manrope_normal_400.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'Fonts';src:url('./assets/fonts/collections/fonts/manrope_normal_600.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Fonts';src:url('./assets/fonts/collections/fonts/manrope_normal_600.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap;}
 @font-face{font-family:'Libre Caslon Text';src:url('./assets/fonts/collections/libre-caslon-text/libre-caslon-text_italic_400.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap;}
 @font-face{font-family:'Libre Caslon Text';src:url('./assets/fonts/collections/libre-caslon-text/libre-caslon-text_normal_400.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'Libre Caslon Text';src:url('./assets/fonts/collections/libre-caslon-text/libre-caslon-text_normal_700.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Libre Caslon Text';src:url('./assets/fonts/collections/libre-caslon-text/libre-caslon-text_normal_700.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap;}
 @font-face{font-family:'Libre Caslon';src:url('./assets/fonts/collections/libre-caslon/libre-caslon-condensed_normal_400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'Libre Caslon';src:url('./assets/fonts/collections/libre-caslon/libre-caslon-condensed_normal_700.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Libre Caslon';src:url('./assets/fonts/collections/libre-caslon/libre-caslon-condensed_normal_700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
 @font-face{font-family:'Newsreader';src:url('./assets/fonts/collections/newsreader/newsreader-400-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap;}
 @font-face{font-family:'Newsreader';src:url('./assets/fonts/collections/newsreader/newsreader-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
 @font-face{font-family:'Newsreader';src:url('./assets/fonts/collections/newsreader/newsreader-700-italic.woff2') format('woff2');font-weight:700;font-style:italic;font-display:swap;}
 @font-face{font-family:'Newsreader';src:url('./assets/fonts/collections/newsreader/newsreader-700-normal.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
 @font-face{font-family:'Open Sauce Sans';src:url('./assets/fonts/collections/open-sauce-sans/open-sauce-sans_italic_400.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap;}
-@font-face{font-family:'Open Sauce Sans';src:url('./assets/fonts/collections/open-sauce-sans/open-sauce-sans_italic_500.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap;}
+@font-face{font-family:'Open Sauce Sans';src:url('./assets/fonts/collections/open-sauce-sans/open-sauce-sans_italic_500.ttf') format('truetype');font-weight:500;font-style:italic;font-display:swap;}
 @font-face{font-family:'Open Sauce Sans';src:url('./assets/fonts/collections/open-sauce-sans/open-sauce-sans_normal_400.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'Open Sauce Sans';src:url('./assets/fonts/collections/open-sauce-sans/open-sauce-sans_normal_500.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'Overpass Mono';src:url('./assets/fonts/collections/overpass-mono/overpass-mono_normal_300.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:'Overpass Mono';src:url('./assets/fonts/collections/overpass-mono/overpass-mono_normal_600.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Open Sauce Sans';src:url('./assets/fonts/collections/open-sauce-sans/open-sauce-sans_normal_500.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Overpass Mono';src:url('./assets/fonts/collections/overpass-mono/overpass-mono_normal_300.ttf') format('truetype');font-weight:300;font-style:normal;font-display:swap;}
+@font-face{font-family:'Overpass Mono';src:url('./assets/fonts/collections/overpass-mono/overpass-mono_normal_600.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap;}
 @font-face{font-family:'Playwrite Us';src:url('./assets/fonts/collections/playwrite-us/playwrite-us-400-italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap;}
 @font-face{font-family:'Playwrite Us';src:url('./assets/fonts/collections/playwrite-us/playwrite-us-400-normal.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap;}
 @font-face{font-family:'Quattrocento Sans';src:url('./assets/fonts/collections/quattrocento-sans/quattrocento-sans-400-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap;}
@@ -77,6 +77,20 @@ html[data-font='playwrite']{--portal-display-font:'Playwrite Us',cursive}
 html[data-font='quattrocento']{--portal-display-font:'Quattrocento Sans',Arial,sans-serif}
 html[data-font='overpass']{--portal-display-font:'Overpass Mono',monospace}
 
+html[data-font='another-danger']{--portal-display-font:'Another Danger',sans-serif}
+html[data-font='buira']{--portal-display-font:'Buira',serif}
+html[data-font='jun']{--portal-display-font:'Jun',serif}
+html[data-font='neoneon']{--portal-display-font:'Neoneon',sans-serif}
+html[data-font='peter']{--portal-display-font:'Peter Ivanowitsch',serif}
+html[data-font='st-cherty']{--portal-display-font:'ST-Cherty',serif}
+html[data-font='satyr']{--portal-display-font:'Satyr SP',serif}
+html[data-font='scumbria']{--portal-display-font:'Scumbria',serif}
+html[data-font='smooz']{--portal-display-font:'Smooz',serif}
+html[data-font='tagtype']{--portal-display-font:'TagType',sans-serif}
+html[data-font='libre-caslon']{--portal-display-font:'Libre Caslon',Georgia,serif}
+html[data-font='libre-caslon-text']{--portal-display-font:'Libre Caslon Text',Georgia,serif}
+html[data-font='wittgenstein']{--portal-display-font:'Wittgenstein',Georgia,serif}
+html[data-font='sorts-mill']{--portal-display-font:'Sorts Mill Goudy',Georgia,serif}
 /* =====================================================
    БАЗОВЫЕ НАСТРОЙКИ И ПЕРЕМЕННЫЕ
    ===================================================== */
