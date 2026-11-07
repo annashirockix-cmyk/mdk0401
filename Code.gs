@@ -493,6 +493,36 @@ function login_(data) {
 
 /* ---------- Student profile and test results ---------- */
 
+function protectedQuestionBankMap_() {
+  const sh=questionBank_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),map={};
+  values.slice(1).forEach(function(row){
+    const courseId=String(row[m.CourseId]||""),bankId=String(row[m.BankId]||"");
+    if(!courseId||!bankId)return;
+    if(!map[courseId])map[courseId]={};
+    map[courseId][bankId]=true;
+  });
+  return map;
+}
+function isProtectedAssessment_(testId,courseId,bankMap) {
+  const id=String(testId||""),map=bankMap||{};
+  function protectedFor(cid) {
+    const banks=map[cid]||{};
+    if(id.indexOf("__final__")===0){
+      const examCourse=cid||id.slice("__final__".length),examBanks=map[examCourse]||{};
+      return Object.keys(examBanks).some(function(bank){return /^exam_(primary|extra)$/.test(bank)||bank==="mdk_extra"||/^topic_|^hard_|^self_/.test(bank);});
+    }
+    if(id.indexOf("test_")===0){
+      const topic=id.slice(5);
+      return !!(banks["topic_"+topic]||banks["hard_"+topic]);
+    }
+    const self=id.match(/^self_(.+)_\d+$/);
+    if(self)return !!(banks[id]||banks["topic_"+self[1]]);
+    return false;
+  }
+  if(courseId)return protectedFor(String(courseId));
+  if(id.indexOf("__final__")===0)return protectedFor(id.slice("__final__".length));
+  return Object.keys(map).some(protectedFor);
+}
 function saveStudent_(data) {
   const current = auth_(data);
   const targetEmail = email_(data.email || current.email);
@@ -514,6 +544,15 @@ function saveStudent_(data) {
       try { existing = JSON.parse(target.payload || "{}"); } catch (e) { existing = {}; }
       existing.manualGrades = incoming.manualGrades || existing.manualGrades || {};
       fields.Payload = JSON.stringify(existing);
+    } else if (current.role === "student") {
+      const payload = incoming && typeof incoming === "object" ? incoming : {};
+      if (payload.results && typeof payload.results === "object" && !Array.isArray(payload.results)) {
+        const bankMap=protectedQuestionBankMap_();
+        Object.keys(payload.results).forEach(function(testId){
+          if(isProtectedAssessment_(testId,String(payload.results[testId]&&payload.results[testId].courseId||""),bankMap))delete payload.results[testId];
+        });
+      }
+      fields.Payload = JSON.stringify(payload);
     } else {
       fields.Payload = typeof data.payload === "string" ? data.payload : JSON.stringify(data.payload || {});
     }
@@ -734,8 +773,8 @@ function assignmentResultRecords_(emailFilter) {
 function getResults_(data) {
   const user=auth_(data); if(user.role!=='admin'&&user.role!=='teacher') throw new Error('Недостаточно прав.');
   let list=results_().getDataRange().getValues().slice(1).filter(r=>r[0]).map(r=>({email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],courseId:r[12]||'',payload:String(r[13]||'')}));
-  const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
-  vals.slice(1).forEach(row=>{if(String(row[m.Role]||'').toLowerCase()!=='student')return;let p={};try{p=JSON.parse(row[m.Payload]||'{}')}catch(e){};const rs=p.results||{};Object.keys(rs).forEach(key=>{const rec=rs[key];if(!rec||typeof rec!=='object'||rec.grade==null)return;const email=email_(row[m.Email]);if(list.some(x=>email_(x.email)===email&&String(x.testId)===key))return;let cid=String(rec.courseId||'');if(!cid){const matches=CFG.COURSES.filter(id=>key.indexOf(id)>=0);if(matches.length===1)cid=matches[0];else{const enrolled=String(row[m.Courses]||'').split(',').filter(Boolean);if(enrolled.length===1)cid=enrolled[0];}}list.push({email:email,name:row[m.Name],group:row[m.Group],testId:key,testTitle:rec.testTitle||key,grade:rec.grade,score:rec.score||0,maxScore:rec.max||rec.maxScore||0,percent:rec.percent||0,timeSpent:rec.timeSpent||0,attempts:rec.attempts||1,finishedAt:rec.finishedAt||'',courseId:cid});});});
+  const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
+  vals.slice(1).forEach(row=>{if(String(row[m.Role]||'').toLowerCase()!=='student')return;let p={};try{p=JSON.parse(row[m.Payload]||'{}')}catch(e){};const rs=p.results||{};Object.keys(rs).forEach(key=>{const rec=rs[key];if(!rec||typeof rec!=='object'||rec.grade==null)return;const email=email_(row[m.Email]);if(list.some(x=>email_(x.email)===email&&String(x.testId)===key))return;let cid=String(rec.courseId||'');if(!cid){const matches=CFG.COURSES.filter(id=>key.indexOf(id)>=0);if(matches.length===1)cid=matches[0];else{const enrolled=String(row[m.Courses]||'').split(',').filter(Boolean);if(enrolled.length===1)cid=enrolled[0];}}if(isProtectedAssessment_(key,cid,protectedBanks))return;list.push({email:email,name:row[m.Name],group:row[m.Group],testId:key,testTitle:rec.testTitle||key,grade:rec.grade,score:rec.score||0,maxScore:rec.max||rec.maxScore||0,percent:rec.percent||0,timeSpent:rec.timeSpent||0,attempts:rec.attempts||1,finishedAt:rec.finishedAt||'',courseId:cid});});});
   assignmentResultRecords_().forEach(function(x){if(!list.some(function(r){return email_(r.email)===x.email&&String(r.testId)===x.testId;}))list.push(x);});
   if(user.role==='teacher')list=list.filter(x=>hasCourseAccess_(user,x.courseId));
   if(data.courseId)list=list.filter(x=>x.courseId===String(data.courseId));
@@ -748,12 +787,12 @@ function getPublicSubjectRatings_(data) {
   const user = auth_(data);
   const rows = results_().getDataRange().getValues().slice(1).filter(function (r) { return !!r[0]; });
   // Совместимость со старой схемой: часть результатов может храниться в students.payload.
-  const userSheet = users_(), userValues = userSheet.getDataRange().getValues(), userMap = headerMap_(userSheet);
+  const userSheet = users_(), userValues = userSheet.getDataRange().getValues(), userMap = headerMap_(userSheet), protectedBanks=protectedQuestionBankMap_();
   userValues.slice(1).forEach(function (row) {
     if (String(row[userMap.Role] || "").toLowerCase() !== "student" || !row[userMap.Email]) return;
     let payload = {};
     try { payload = JSON.parse(row[userMap.Payload] || "{}"); } catch (e) {}
-    const legacy = payload.results || {};
+    const legacy = payload.results || {}, protectedBanks=protectedQuestionBankMap_();
     Object.keys(legacy).forEach(function (testId) {
       const rec = legacy[testId];
       if (!rec || typeof rec !== "object" || rec.grade == null) return;
@@ -766,7 +805,7 @@ function getPublicSubjectRatings_(data) {
           if (enrolled.length === 1) courseId = enrolled[0];
         }
       }
-      if (!courseId) return;
+      if (!courseId || isProtectedAssessment_(testId,courseId,protectedBanks)) return;
       const email = email_(row[userMap.Email]);
       if (rows.some(function (r) { return email_(r[0]) === email && String(r[3]) === String(testId) && String(r[12] || "") === courseId; })) return;
       rows.push([
@@ -857,6 +896,7 @@ function getMyCourseResults_(data) {
         }
       }
       if (requestedCourse && courseId !== requestedCourse) return;
+      if (isProtectedAssessment_(testId,courseId,protectedBanks)) return;
       if (list.some(function (x) { return x.testId === String(testId); })) return;
       list.push({ testId: String(testId), testTitle: String(rec.testTitle || testId),
         grade: Number(rec.grade) || 0, score: Number(rec.score) || 0,
