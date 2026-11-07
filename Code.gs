@@ -1336,7 +1336,12 @@ function allFinalExamEntries_(courseId) {
     const bid=String(row[m.BankId]||"");
     if(!/^exam_(primary|extra)$/.test(bid)&&bid!=="mdk_extra"&&!/^topic_|^hard_|^self_/.test(bid))return;
     let q={};try{q=JSON.parse(String(row[m.QuestionJSON]||"{}"));}catch(e){return;}
-    if(!q||!q.q)return;const sig=String(q.type||"mc")+"|"+String(q.q);if(seen[sig])return;seen[sig]=true;
+    // Встроенные тесты допускают оба поля формулировки: q и question.
+    // Итоговый экзамен должен читать те же записи, иначе банк есть, но экзамен считает его пустым.
+    const prompt=String(q&&(q.q||q.question)||"").trim();
+    if(!q||!prompt)return;
+    if(!q.q)q.q=prompt;
+    const sig=String(q.type||"mc")+"|"+prompt;if(seen[sig])return;seen[sig]=true;
     out.push({bankId:bid,questionId:String(row[m.QuestionId]||""),question:q});
   });return out;
 }
