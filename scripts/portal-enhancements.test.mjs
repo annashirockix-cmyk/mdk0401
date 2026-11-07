@@ -430,11 +430,11 @@ test("SPRUT-TP theory and practical assignments are expanded with topic-specific
   assert.equal(sandbox.window.SPRUT_TP_EXPANSION.practical,14);
   for(const topic of topics){
     const theory=topic.lectures.find(lecture=>lecture.__sprutTheoryExpanded);
-    const practical=topic.lectures.find(lecture=>lecture.__sprutPracticeExpanded);
+    const practical=topic.practicals.find(practical=>practical.__sprutPracticeExpanded);
     assert.ok(theory, "expanded theory missing for "+topic.id);
     assert.ok(theory.content.length>3000, "theory remains too short for "+topic.id);
     assert.ok(practical, "expanded practical missing for "+topic.id);
-    assert.match(practical.content,/Критерии оценивания/);
-    assert.match(practical.content,/Вопросы для защиты/);
+    assert.match(practical.task,/Критерии оценивания/);
+    assert.match(practical.task,/Вопросы для защиты/);
   }
 });
