@@ -129,6 +129,22 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
 });
 
 
+test("SPRUT-TP is registered as a complete course with all major process types", () => {
+ const source=read("data-sprut-tp.js"),sandbox={window:{MDK_DATA:{}}};
+ vm.runInNewContext(source,sandbox,{timeout:1000});
+ const course=sandbox.window.MDK_DATA.SPRUT_TP;
+ assert.ok(course&&course.sections.length>=5);
+ const topics=course.sections.flatMap(s=>s.topics||[]);
+ assert.ok(topics.length>=13);
+ for(const t of topics){assert.ok(t.lectures[0].content.length>700);assert.ok(t.practicals.length);assert.ok(t.test.length);}
+ const all=topics.map(t=>t.title+" "+t.lectures[0].content).join(" ").toLowerCase();
+ for(const term of ["маршрутный","операционный","типовой","групповой","маршрутно-операционный","нормоконтроль"])assert.ok(all.includes(term));
+});
+test("lecture enrichment includes targeted Mastercam and MDK learning supports",()=>{
+ const source=read("lecture-enrichment.js");
+ for(const id of ["MCAM","02.01","02.02","04.01","MAT","MET","OT"])assert.ok(source.includes('id==="'+id+'"'));
+ assert.ok(source.includes("lecture-notes-lines"));
+});
 test("MDK 07.01 quiz questions have valid, non-duplicated options and varied answer positions", () => {
   const source = read("data-0701.js");
   const sandbox = { window: { MDK_DATA: {} } };
