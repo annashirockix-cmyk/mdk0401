@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v115'; // Удалён модуль PDF-библиотеки; обновлены статические ресурсы.
+const CACHE_NAME = 'portal-cache-v116'; // Добавлен контроль событий попыток, банк вопросов и запись на дополнительные занятия.
 
 const STATIC_ASSETS = [
   './',
@@ -98,6 +98,7 @@ const STATIC_ASSETS = [
   './portal-final.js',
   './course-admin.js',
   './teacher-controls.js',
+  './proctor-monitor.js',
   './course-announcements.js',
   './access.js',
   './account.js'
