@@ -20,7 +20,7 @@ jobs:
       - name: Check changed JavaScript modules
         run: |
           set -e
-          for file in api.js app.js portal-genz.js rating-subjects.js workbooks.js certificate-supplement.js avatar-studio.js; do
+          for file in api.js app.js portal-genz.js rating-subjects.js workbooks.js certificate-supplement.js avatar-studio.js teacher-tasks.js reports.js service-worker.js; do
             echo "Checking $file"
             node --check "$file"
           done
@@ -28,6 +28,8 @@ jobs:
           node --check < Code.gs
       - name: Check notification center contract
         run: node scripts/check-notification-contract.mjs
+      - name: Check assignment workflow
+        run: node --test scripts/assignment-workflow.test.mjs
       - name: Check inline scripts in HTML
         run: |
           python - <<'PY'
