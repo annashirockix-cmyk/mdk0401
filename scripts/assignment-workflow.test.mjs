@@ -172,7 +172,12 @@ test("group assignment workflow works before student onboarding and preserves st
   assert.equal(Number(afterGrade.grade), 5);
   assert.match(afterGrade.feedback, /Отличная работа/);
   assert.equal(afterGrade.answer, "Исправленная версия");
-  assert.equal(notifications.length, 3);
+  // Уведомление о назначении студенту, два уведомления преподавателю
+  // (первая отправка и пересдача) и уведомление студенту о результате проверки.
+  assert.equal(notifications.length, 4);
+  assert.deepEqual(notifications.map(item => item[1]), ["assignment","submission","submission","grade"]);
+  assert.equal(notifications.filter(item => item[0] === "student@example.test").length, 2);
+  assert.equal(notifications.filter(item => item[0] === "teacher@example.test").length, 2);
   const unchangedStudentRow = users.rows.find(row => row[0] === "student@example.test");
   assert.equal(unchangedStudentRow[7], r.originalPayload);
 });
