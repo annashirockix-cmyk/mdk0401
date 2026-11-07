@@ -7,7 +7,7 @@ if(!staff||!["teacher","admin"].includes(String(staff.role||"").toLowerCase())){
 var email="";
 try{email=decodeURIComponent(String(encodedEmail||""));}catch(e){email=String(encodedEmail||"");}
 var E=function(v){return window.escapeHtml(String(v==null?"":v));};
-var courseNames={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","OT":"Охрана труда","PFI":"ПФИ"};
+var courseNames={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","MET":"Метрология","OT":"Охрана труда","PFI":"ПФИ"};
 app.innerHTML='<div class="student-progress"><a href="#/teacher-dashboard">← К панели преподавателя</a><h1>Индивидуальная карта успеваемости</h1><p id="spStatus">Загрузка данных…</p><div id="spContent"></div></div>';
 Promise.all([window.API.getStudents(),window.API.getResults({}),window.API.getAssignments()]).then(function(data){
 var u=data[0],r=data[1],a=data[2];
