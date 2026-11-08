@@ -656,6 +656,7 @@
       try {
         var r = await window.API.getGameRoom(roomCode);
         if (r && r.success && r.state) {
+          if (r.selfId) self.id = String(r.selfId);
           if (!isHost) state = r.state;
           else {
             // merge presence
@@ -691,7 +692,7 @@
       busy = true;
       try {
         if (!apiReady()) throw new Error("Нужен вход в портал и сетевой API.");
-        var r = await window.API.createGameRoom({});
+        var r = await window.API.createGameRoom({ game: "detective-coop", maxPlayers: 8 });
         if (!r || !r.success) throw new Error((r && r.error) || "Не удалось создать комнату");
         roomCode = r.code;
         window.__lastRoomCode = roomCode;
@@ -718,7 +719,9 @@
         if (!r || !r.success) throw new Error((r && r.error) || "Не войти в комнату");
         roomCode = code;
         window.__lastRoomCode = roomCode;
-        isHost = false;
+        isHost = !!r.isHost;
+        if (r.selfId) self.id = String(r.selfId);
+        if (r.lastActionId) actionCursor = Number(r.lastActionId) || 0;
         state = r.state || {};
         // ensure we are listed
         var pl = state.players || [];
