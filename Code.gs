@@ -2124,7 +2124,7 @@ function createGameRoom_(data) {
     return {success:true,code:code,state:state,isHost:true};
   } finally { lock.releaseLock(); }
 }
-function publicGameState_(state) { const safe=JSON.parse(JSON.stringify(state)); (safe.players||[]).forEach(p=>{delete p.role;delete p.roleLabel;delete p.email;}); delete safe.privateMessages; delete safe.pendingNight; delete safe.votes; return safe; }
+function publicGameState_(state, viewerEmail) { const safe=JSON.parse(JSON.stringify(state)); const viewer=email_(viewerEmail); (safe.players||[]).forEach(p=>{const owner=email_(p.email); if(owner!==viewer) delete p.hand; delete p.role; delete p.roleLabel; delete p.email;}); delete safe.privateMessages; delete safe.pendingNight; delete safe.votes; return safe; }
 function joinGameRoom_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), lock=LockService.getScriptLock();
   if(!/^[A-Z2-9]{6}$/.test(code)) throw new Error("Код комнаты должен содержать 6 символов.");
@@ -2132,7 +2132,7 @@ function joinGameRoom_(data) {
   try { const room=gameRoomRow_(code); if(!room||room.status!=="open"||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
     const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true};
     state.players=state.players||[]; const existing=state.players.find(p=>email_(p.email)===user.email);
-    if(existing){if(!existing.id)existing.id=Utilities.getUuid();room.sheet.getRange(room.row,3).setValue(JSON.stringify(state));return {success:true,code:code,state:publicGameState_(state),isHost:false,selfId:existing.id,privateRole:existing.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};}
+    if(existing){if(!existing.id)existing.id=Utilities.getUuid();room.sheet.getRange(room.row,3).setValue(JSON.stringify(state));return {success:true,code:code,state:publicGameState_(state,user.email),isHost:false,selfId:existing.id,privateRole:existing.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};}
     if(state.phase!=="lobby") throw new Error("Игра уже началась. Новые участники больше не принимаются.");
     if(state.players.length>=12) throw new Error("Комната заполнена (максимум 12 игроков).");
     if(!existing) state.players.push({id:Utilities.getUuid(),email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
@@ -2145,7 +2145,7 @@ function getGameRoom_(data) {
   const state=parseGameState_(room.state), isHost=user.email===room.hostEmail, player=(state.players||[]).find(p=>email_(p.email)===user.email);
   if(!isHost&&!player) throw new Error("Вы не состоите в этой комнате.");
   if(isHost) return {success:true,code:room.code,isHost:true,state:state};
-  return {success:true,code:room.code,isHost:false,state:publicGameState_(state),selfId:player.id||"",privateRole:player.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
+  return {success:true,code:room.code,isHost:false,state:publicGameState_(state,user.email),selfId:player.id||"",privateRole:player.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
 }
 function updateGameRoom_(data) {
   const user=auth_(data), room=gameRoomRow_(String(data.code||"").trim().toUpperCase()); if(!room) throw new Error("Комната не найдена.");
@@ -2157,7 +2157,7 @@ function updateGameRoom_(data) {
 function sendGameAction_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), room=gameRoomRow_(code); if(!room||room.status!=="open") throw new Error("Комната закрыта или не найдена.");
   const state=parseGameState_(room.state), player=(state.players||[]).find(p=>email_(p.email)===user.email); if(!player||!player.alive) throw new Error("Вы не можете отправлять действия.");
-  const type=String(data.type||""); if(["night_kill","night_check","night_save","vote"].indexOf(type)<0) throw new Error("Неизвестное игровое действие.");
+  const type=String(data.type||""); const allowed=["night_kill","night_check","night_save","vote","bredo_answer","bredo_vote","bredo_next","durak_attack","durak_defend","durak_take","durak_done"]; if(allowed.indexOf(type)<0) throw new Error("Неизвестное игровое действие."); if(type.indexOf("bredo_")===0&&String(state.game||"")!=="bredo") throw new Error("Действие не соответствует игре в комнате."); if(type.indexOf("durak_")===0&&String(state.game||"")!=="durak") throw new Error("Действие не соответствует игре в комнате.");
   const payload=data.payload||{}, target=String(payload.target||""); if(target&&!(state.players||[]).some(p=>(String(p.id||"")===target||email_(p.email)===email_(target))&&p.alive!==false)) throw new Error("Выбранная цель недоступна.");
   const lock=LockService.getScriptLock(); lock.waitLock(10000); try { const sh=gameActions_(), id=sh.getLastRow(); sh.appendRow([id,code,user.email,type,JSON.stringify(payload),new Date().toISOString()]); return {success:true,id:id}; } finally { lock.releaseLock(); }
 }
