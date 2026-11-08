@@ -51,7 +51,7 @@ test("shop includes an expanded offline avatar and font collection", () => {
 test("online party games use supported server actions and stable player identity", () => {
   const server = read("Code.gs");
   const network = read("network-party-games.js");
-  for (const action of ["bredo_answer", "bredo_vote", "bredo_next", "durak_attack", "durak_defend", "durak_take", "durak_done"]) {
+  for (const action of ["bredo_answer", "bredo_vote", "bredo_next", "durak_attack", "durak_defend", "durak_take", "durak_done", "chat", "search", "mark", "theory", "dossier"]) {
     assert.ok(server.includes('"' + action + '"'), "server must accept " + action);
   }
   assert.match(server, /publicGameState_\(state,user\.email\)/);
@@ -60,6 +60,10 @@ test("online party games use supported server actions and stable player identity
   assert.match(network, /createGameRoom\(\{ game: opts\.gameId, maxPlayers: maxPlayers \}\)/);
   assert.match(network, /if \(r\.selfId\) self\.id = String\(r\.selfId\);/);
   assert.doesNotMatch(network, /h\.send\("bredo_next"/);
+  const coop = read("coop-detective.js");
+  assert.match(coop, /createGameRoom\(\{ game: "detective-coop", maxPlayers: 8 \}\)/);
+  assert.match(coop, /if \(r\.selfId\) self\.id = String\(r\.selfId\);/);
+  assert.match(server, /String\(state\.game\|\|""\)!=="detective-coop"/);
 });
 
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
