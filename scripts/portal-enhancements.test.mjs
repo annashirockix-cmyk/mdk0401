@@ -43,13 +43,34 @@ test("shop includes an expanded offline avatar and font collection", () => {
     assert.ok(shop.includes('id: "' + theme + '"'));
   }
   assert.match(shop, /data:image\/svg\+xml/);
+  assert.doesNotMatch(shop, /api\.dicebear\.com/);
+  assert.ok((shop.match(/desc: "/g) || []).length >= 16, "each avatar must have a description matching its visual");
+  for (const label of ["Инженер-наладчик", "Робот-наладчик", "Технолог", "Оператор токарного станка", "Контролёр ОТК"]) assert.ok(shop.includes(label));
+});
+
+test("online party games use supported server actions and stable player identity", () => {
+  const server = read("Code.gs");
+  const network = read("network-party-games.js");
+  for (const action of ["bredo_answer", "bredo_vote", "bredo_next", "durak_attack", "durak_defend", "durak_take", "durak_done"]) {
+    assert.ok(server.includes('"' + action + '"'), "server must accept " + action);
+  }
+  assert.match(server, /publicGameState_\(state,user\.email\)/);
+  assert.match(server, /if\(owner!==viewer\) delete p\.hand/);
+  assert.match(server, /Number\(state\.maxPlayers\)\|\|12/);
+  assert.match(network, /createGameRoom\(\{ game: opts\.gameId, maxPlayers: maxPlayers \}\)/);
+  assert.match(network, /if \(r\.selfId\) self\.id = String\(r\.selfId\);/);
+  assert.doesNotMatch(network, /h\.send\("bredo_next"/);
 });
 
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
-  assert.doesNotMatch(workbook, /meme-cat\.jpg/);
+  for (const meme of ["meme-cat.jpg", "meme-js.jpg", "meme-python.jpg", "meme-variables.jpg"]) {
+    assert.ok(workbook.includes(meme), "missing topic meme " + meme);
+    assert.ok(fs.existsSync(path.join(root, "assets", "images", meme)), "missing meme image file " + meme);
+  }
   const imageNames = [...workbook.matchAll(/add\("(fig-[^"]+\.png)"/g)].map((m) => m[1]);
+  imageNames.push(...[...workbook.matchAll(/\["(fig-[^"]+\.png|warning-triangle\.png)"/g)].map((m) => m[1]));
   assert.ok(imageNames.length > 0);
   for (const image of imageNames) {
     assert.ok(fs.existsSync(path.join(root, "assets", "images", image)), "missing workbook image: " + image);
@@ -122,9 +143,11 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(workbook, /Учебный пример: фрагмент УП для фрезерования/);
   assert.match(workbook, /контур.*детал|элемент.*контура/);
   assert.match(workbook, /траектор.*инструмент|элемент.*траектор/);
-  assert.match(workbook, /String\(courseId\)==="07\.01"\?""/);
-  assert.match(workbook, /String\(courseId\)==="07\.01"\?"":/);
-  assert.ok(workbook.includes('var meme=String(courseId)==="07.01"?{file:"",caption:'), "MDK 07.01 uses topic-specific workshop humour rather than unrelated generic memes");
+  assert.match(workbook, /cncWorkbookVisuals/);
+  assert.match(workbook, /else if\(String\(courseId\)==="07\.01"\)/);
+  assert.doesNotMatch(workbook, /var meme=String\(courseId\)==="07\.01"\?\{file:""/);
+  assert.match(workbook, /meme-js\.jpg/);
+  assert.match(workbook, /meme-variables\.jpg/);
   assert.ok(workbook.includes("Справочный блок: документы технологического процесса"), "workbook must include production document references");
 });
 
@@ -380,7 +403,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v255/);
+  assert.match(sw, /portal-cache-v256/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -396,7 +419,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const css = read("lecture-visual-atlas.css");
   assert.match(html, /lecture-visual-atlas\.js\?v=4/);
   assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=6/);
-  assert.match(html, /sprut-tp-document-examples\.js\?v=1/);
+  assert.match(html, /sprut-tp-document-examples\.js\?v=2/);
   assert.match(html, /lecture-visual-atlas\.css\?v=4/);
   assert.ok(sw.includes("./sprut-tp-document-examples.js"));
   assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
