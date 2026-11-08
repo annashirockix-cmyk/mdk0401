@@ -73,7 +73,7 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=32/);
+  assert.match(html, /workbooks\.js\?v=33/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const caption of ["Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
@@ -416,7 +416,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v257/);
+  assert.match(sw, /portal-cache-v258/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
