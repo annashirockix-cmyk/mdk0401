@@ -451,8 +451,12 @@ test("SPRUT-TP includes filled examples for every listed document and practical 
   const topics=course.sections.flatMap(section=>section.topics||[]);
   assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.documents,10);
   assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.practiceCases,14);
+  assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.formattingGuide,true);
   const docs=topics.find(topic=>topic.title==="ЕСТД и комплект технологических документов");
   const pack=docs.lectures.find(lecture=>lecture.code==="1.3.2");
+  const guide=docs.lectures.find(lecture=>lecture.code==="1.3.3");
+  assert.ok(guide, "step-by-step TP formatting guide must be added");
+  for(const term of ["маршрутную карту (МК)","операционной карты (ОК 020)","Контрольный лист перед выпуском","СПРУТ-ТП","Практическое задание"]) assert.ok(guide.content.includes(term), "TP guide missing "+term);
   for(const label of ["Карта эскизов","Технологическая инструкция","Маршрутная карта","Карта технологического процесса","Операционная карта","Комплектовочная карта","Ведомость оснастки и оборудования","Ведомость сборки изделия","Карта типового (группового) ТП","Карта типовой (групповой) операции"]) {
     assert.ok(pack.content.includes(label), "missing filled document example: "+label);
   }
