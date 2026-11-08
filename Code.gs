@@ -2136,7 +2136,7 @@ function joinGameRoom_(data) {
     if(state.phase!=="lobby") throw new Error("Игра уже началась. Новые участники больше не принимаются.");
     if(state.players.length>=Math.min(12,Number(state.maxPlayers)||12)) throw new Error("Комната заполнена (максимум "+Math.min(12,Number(state.maxPlayers)||12)+" игроков).");
     if(!existing) state.players.push({id:Utilities.getUuid(),email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
-    room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); const joined=(state.players||[]).find(p=>email_(p.email)===user.email); return {success:true,code:code,state:publicGameState_(state),selfId:joined.id,privateRole:joined.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
+    room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); const joined=(state.players||[]).find(p=>email_(p.email)===user.email); return {success:true,code:code,state:publicGameState_(state,user.email),selfId:joined.id,privateRole:joined.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
   } finally { lock.releaseLock(); }
 }
 function getGameRoom_(data) {
