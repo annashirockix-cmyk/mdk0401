@@ -2119,7 +2119,7 @@ function createGameRoom_(data) {
     for(let n=0;n<20;n++){ code=Array.from({length:6},()=> "ABCDEFGHJKLMNPQRSTUVWXYZ23456789".charAt(Math.floor(Math.random()*32))).join(""); if(!gameRoomRow_(code)) break; code=""; }
     if(!code) throw new Error("Не удалось создать код комнаты.");
     const now=new Date(), expires=new Date(now.getTime()+4*60*60*1000);
-    const state={phase:"lobby",round:0,players:[],pendingNight:{},votes:{},privateMessages:{},log:[],winner:"",updatedAt:now.toISOString()};
+    const state={game:String(data.game||"mafia"),maxPlayers:Math.max(2,Math.min(12,Number(data.maxPlayers)||12)),phase:"lobby",round:0,players:[],pendingNight:{},votes:{},privateMessages:{},log:[],winner:"",updatedAt:now.toISOString()};
     sh.appendRow([code,user.email,JSON.stringify(state),now.toISOString(),expires.toISOString(),"open"]);
     return {success:true,code:code,state:state,isHost:true};
   } finally { lock.releaseLock(); }
@@ -2130,11 +2130,11 @@ function joinGameRoom_(data) {
   if(!/^[A-Z2-9]{6}$/.test(code)) throw new Error("Код комнаты должен содержать 6 символов.");
   lock.waitLock(10000);
   try { const room=gameRoomRow_(code); if(!room||room.status!=="open"||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
-    const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true};
+    const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true,lastActionId:gameActions_().getLastRow()};
     state.players=state.players||[]; const existing=state.players.find(p=>email_(p.email)===user.email);
     if(existing){if(!existing.id)existing.id=Utilities.getUuid();room.sheet.getRange(room.row,3).setValue(JSON.stringify(state));return {success:true,code:code,state:publicGameState_(state,user.email),isHost:false,selfId:existing.id,privateRole:existing.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};}
     if(state.phase!=="lobby") throw new Error("Игра уже началась. Новые участники больше не принимаются.");
-    if(state.players.length>=12) throw new Error("Комната заполнена (максимум 12 игроков).");
+    if(state.players.length>=Math.min(12,Number(state.maxPlayers)||12)) throw new Error("Комната заполнена (максимум "+Math.min(12,Number(state.maxPlayers)||12)+" игроков).");
     if(!existing) state.players.push({id:Utilities.getUuid(),email:user.email,name:String(user.name||data.name||"Игрок").slice(0,40),group:String(user.group||""),alive:true,joinedAt:new Date().toISOString()});
     room.sheet.getRange(room.row,3).setValue(JSON.stringify(state)); const joined=(state.players||[]).find(p=>email_(p.email)===user.email); return {success:true,code:code,state:publicGameState_(state),selfId:joined.id,privateRole:joined.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};
   } finally { lock.releaseLock(); }
