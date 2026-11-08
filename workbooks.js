@@ -40,6 +40,9 @@
     var commons="https://commons.wikimedia.org/wiki/Special:FilePath/";
     if(editorial&&Array.isArray(editorial.photos)){
       editorial.photos.forEach(function(x){if(x&&x.url&&x.caption)photo(x.url,x.caption,x.credit,x.source);});
+    } else if(String(courseId)==="07.01"){
+      // Для МДК 07.01 не подставляем общие фотографии станков под разные темы.
+      // Используются только явно подобранные иллюстрации и схемы ниже.
     } else if(String(courseId)==="04.01"||/диагност|обслужив|ремонт|наладк|неисправ/.test(title)){
       photo(commons+"Skilled_technician_repairs_machinery_with_precision_in_workshop_environment_during_daylight_hours.jpg?width=1000","Фотография: техническое обслуживание оборудования","Nenad Stojković · CC BY 2.0","https://commons.wikimedia.org/wiki/File:Skilled_technician_repairs_machinery_with_precision_in_workshop_environment_during_daylight_hours.jpg");
       photo(commons+"Technician_inspecting_exposed_wiring_and_circuit_components_inside_a_control_machine.jpg?width=1000","Осмотр электрических компонентов системы управления","Shixart1985 · CC BY 2.0","https://commons.wikimedia.org/wiki/File:Technician_inspecting_exposed_wiring_and_circuit_components_inside_a_control_machine.jpg");
@@ -63,7 +66,27 @@
     }
     // Иллюстрации добавляются только при тематическом совпадении. Не назначаем
     // универсальный набор картинок всем темам одного курса.
-    if(editorial&&Array.isArray(editorial.images)){
+    if(String(courseId)==="07.01"){
+      var cncWorkbookVisuals={
+        "t-1-1":[["fig-16-machine.png","Станок с программным управлением: общее устройство"],["fig-1-blocks.png","Основные блоки системы ЧПУ"]],
+        "t-1-2":[["fig-6-lathe.png","Токарный станок: общий вид"],["fig-7-lathe-c.png","Конструктивный вариант токарного станка"]],
+        "t-1-3":[["fig-6-lathe.png","Токарно-винторезный станок"],["fig-12-w-tokar.png","Рабочая зона токарного станка"],["fig-14-e-tokar.png","Элементы токарной обработки"]],
+        "t-1-4":[["warning-triangle.png","Предупреждающий знак: опасность при работе с оборудованием"]],
+        "t-2-1":[["fig-6-lathe.png","Токарный станок для обработки ступенчатого вала"],["fig-14-e-tokar.png","Элементы токарной обработки"]],
+        "t-3-1":[["fig-1-blocks.png","Структурная схема системы ЧПУ"],["fig-10-uchpu.png","Устройство системы ЧПУ"]],
+        "t-3-3":[["fig-2-coords.png","Координатные оси X, Y и Z"],["fig-11-zero-points.png","Выбор нулевой точки детали"],["fig-18-zxy.png","Направления осей координат"]],
+        "t-3-4":[["fig-21-flanets.png","Контур детали на чертеже: фланец"],["fig-3-3d.png","Трёхмерная геометрия детали"]],
+        "t-3-5":[["fig-20-letter-mama.png","Пример траектории движения инструмента"],["fig-2-coords.png","Координатные оси для задания траектории"]],
+        "t-3-6":[["fig-19-letter-a.png","Пример записи управляющей программы в кадрах"]],
+        "t-4-1":[["fig-16-machine.png","Станок с ЧПУ: оборудование для наладки"],["fig-12-w-tokar.png","Рабочая зона токаря при наладке"]],
+        "t-4-2":[["fig-1-blocks.png","Структурная схема системы программного управления"],["fig-10-uchpu.png","Устройство системы ЧПУ"]],
+        "t-4-3":[["fig-19-letter-a.png","Фрагмент управляющей программы"],["fig-20-letter-mama.png","Траектория инструмента по контуру"]],
+        "t-4-4":[["fig-10-uchpu.png","Устройство современного устройства ЧПУ"],["fig-1-blocks.png","Функциональные блоки системы управления"]],
+        "t-5-2":[["fig-6-lathe.png","Токарный станок с ЧПУ"],["fig-14-e-tokar.png","Элементы токарной обработки"]],
+        "t-5-3":[["fig-5-milling.png","Фрезерование на станке с ЧПУ"],["fig-13-w-frez.png","Рабочая зона фрезеровщика"],["fig-15-e-frez.png","Элементы фрезерной обработки"]]
+      };
+      (cncWorkbookVisuals[String(topic.id)]||[]).forEach(function(x){add(x[0],x[1]);});
+    } else if(editorial&&Array.isArray(editorial.images)){
       editorial.images.forEach(function(x){if(x&&x.file&&x.caption)add(x.file,x.caption);});
     } else if(/систем.*программного управлен|устройств.*чпу|функци.*чпу|наладк.*управляющ/.test(title)){
       add("fig-1-blocks.png","Структурная схема системы ЧПУ");add("fig-10-uchpu.png","Устройство системы ЧПУ");
@@ -89,10 +112,16 @@
       add("fig-16-machine.png","Станок с ЧПУ");add("fig-1-blocks.png","Структурная схема системы ЧПУ");
     }
     var gallery=images.length?'<div class="wb-gallery">'+images.map(function(x){var src=x.url||("assets/images/"+esc(x.file));var credit=x.credit?'<small>'+esc(x.credit)+'</small>':"";var link=x.source?'<a class="wb-photo-source" href="'+esc(x.source)+'" target="_blank" rel="noopener">Источник и лицензия ↗</a>':"";return '<figure class="'+(x.url?"wb-photo":"")+'"><img loading="lazy" src="'+src+'" alt="'+esc(x.caption)+'"><figcaption>'+esc(x.caption)+credit+link+'</figcaption></figure>';}).join("")+'</div>':"";
-    var meme=String(courseId)==="07.01"?{file:"",caption:/истор|общ.*основ/.test(title)?"Станок не читает мысли: от перфоленты до CNC путь длинный, а проверка УП всё ещё обязательна.":/координат|нулев/.test(title)?"Ноль детали — это точка отсчёта, а не место, где оператор потерял начало смены.":/токар/.test(title)?"Резец не спорит с чертежом. Он просто честно показывает, кто ошибся в размерах.":/фрезер/.test(title)?"G00 — не телепортация без последствий: быстрый ход тоже требует безопасной траектории.":"Станок выполняет команду буквально. Поэтому «я имел в виду другое» — не аргумент для наладчика."}:(/перемен|данн|тип/.test(title)?{file:"meme-variables.jpg",caption:"Понятные имена переменных помогают читать и проверять программу."}:programming?{file:"meme-js.jpg",caption:"G00 и G01 решают разные задачи: быстрое и рабочее перемещение нельзя путать."}:/алгоритм|компьют/.test(title)?{file:"meme-python.jpg",caption:"Алгоритм сначала проверяют на учебном примере, а затем применяют к задаче."}:null);
-    var memeHtml=meme?'<figure class="wb-meme"><img loading="lazy" src="assets/images/'+meme.file+'" alt="Иллюстрация к теме программирования"><figcaption>😎 '+meme.caption+'</figcaption></figure>':"";
+    var meme=String(courseId)==="07.01"?
+      (/координат|нулев/.test(title)?{file:"meme-variables.jpg",caption:"Ноль детали — точка отсчёта. Сначала проверяем базу и активную систему координат."}:
+      /g-код|программ|команд|кадр|управляющ/.test(title)?{file:"meme-js.jpg",caption:"G00 — быстрое перемещение, G01 — рабочее с подачей. Станок различает эти команды."}:
+      /безопас|охрана/.test(title)?{file:"meme-cat.jpg",caption:"Сначала остановка и безопасное состояние станка. Стружку руками не снимают."}:
+      /алгоритм|подготовк|практическ/.test(title)?{file:"meme-python.jpg",caption:"Сначала план и проверка программы, затем пробный прогон и контроль результата."}:
+      {file:"meme-cat.jpg",caption:"Станок выполняет команду буквально. Исходные данные и чертёж проверяют до запуска."})
+      :(/перемен|данн|тип/.test(title)?{file:"meme-variables.jpg",caption:"Понятные имена переменных помогают читать и проверять программу."}:programming?{file:"meme-js.jpg",caption:"G00 и G01 решают разные задачи: быстрое и рабочее перемещение нельзя путать."}:/алгоритм|компьют/.test(title)?{file:"meme-python.jpg",caption:"Алгоритм сначала проверяют на учебном примере, а затем применяют к задаче."}:null);
+    var memeHtml=meme?'<figure class="wb-meme"><img loading="lazy" src="assets/images/'+meme.file+'" alt="'+esc(meme.caption)+'"><figcaption>😎 '+meme.caption+'</figcaption></figure>':"";
     var cncReference=String(courseId)==="07.01"?'<section class="wb-reference"><h4>📑 Справочный блок: документы технологического процесса</h4><table><thead><tr><th>Документ</th><th>Что фиксируют</th><th>Что проверить</th></tr></thead><tbody><tr><td>Чертёж детали</td><td>Геометрия, размеры, допуски, шероховатость, материал</td><td>Базы, единицы, технические требования</td></tr><tr><td>Маршрутная карта</td><td>Последовательность операций и оборудование</td><td>Соответствие маршрута производственной задаче</td></tr><tr><td>Операционная карта</td><td>Переходы, установы, инструмент, режимы и контроль</td><td>Разделять расчётные значения и данные паспорта станка</td></tr><tr><td>Карта наладки</td><td>Закрепление, инструмент, ноль, корректоры, контрольные точки</td><td>Привязка к конкретному станку и утверждённой технологии</td></tr><tr><td>Карта контроля</td><td>Контролируемый размер, средство измерения, результат</td><td>Фактическое значение и решение о годности</td></tr></tbody></table><h4>🗂️ Учебный образец записи в операционной карте</h4><table><thead><tr><th>№ перехода</th><th>Содержание перехода</th><th>Инструмент / оснастка</th><th>Контроль</th></tr></thead><tbody><tr><td>010</td><td>Подрезать торец, принять базу</td><td>Резец подрезной; закрепление — по карте наладки</td><td>Длина, перпендикулярность торца</td></tr><tr><td>020</td><td>Черновое точение наружной поверхности</td><td>Черновой проходной резец</td><td>Припуск, отсутствие дефектов</td></tr><tr><td>030</td><td>Чистовое точение до размера</td><td>Чистовой резец</td><td>Диаметр микрометром, шероховатость по заданию</td></tr></tbody></table><p class="wb-warning">Это учебный макет для понимания состава документа, а не утверждённая форма ЕСТД и не готовая технологическая документация. Поля уточняются по требованиям организации и действующим стандартам.</p></section>':"";
-    var cncJoke=String(courseId)==="07.01"?'<aside class="wb-meme wb-meme-text"><b>😄 Из цехового фольклора</b><p>'+esc(meme&&meme.caption||"Сначала проверь исходные данные. Потом ещё раз. Станок чувство юмора оценит, но размер детали — нет.")+'</p></aside>':"";
+    var cncJoke="";
     var steps=['Разобраться в терминах','Найти исходные данные','Выполнить действия по порядку','Проверить результат'];
     return '<section class="wb-extra"><div class="wb-genz"><b>🧠 Зумерский перевод без душноты</b><p>'+esc(explanation)+'</p><small>Запомни: понял принцип → можешь применить → можешь объяснить, почему сделал именно так.</small></div>'+example+(editorial?'<div class="wb-editorial-case"><h4>🎯 '+esc(editorial.caseTitle||"Профессиональный кейс")+'</h4><p>'+esc(editorial.caseText||"")+'</p><h4>⚠️ Типичные ошибки</h4><ul>'+((editorial.mistakes||[]).map(function(x){return '<li>'+esc(x)+'</li>';}).join(""))+'</ul><h4>🧭 Алгоритм по теме</h4><div class="wb-flow">'+((editorial.route||[]).map(function(x,i){return '<span><b>'+(i+1)+'.</b> '+esc(x)+'</span>';}).join('<i>→</i>'))+'</div></div>':"")+'<h4>Маршрут освоения темы</h4><div class="wb-flow">'+steps.map(function(s,i){return '<span><b>'+(i+1)+'.</b> '+s+'</span>';}).join('<i>→</i>')+'</div>'+gallery+memeHtml+cncReference+cncJoke+'<details class="wb-more"><summary>✨ Что ещё полезно помнить</summary><ul><li>Не пропускай проверку исходных данных.</li><li>Записывай единицы измерения и обозначения.</li><li>Отделяй факт из учебного материала от собственного предположения.</li><li>Если сомневаешься — вернись к схеме, чертежу или инструкции.</li></ul></details></section>';
   }
