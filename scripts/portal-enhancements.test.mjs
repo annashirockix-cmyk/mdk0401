@@ -95,11 +95,11 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=34/);
+  assert.match(html, /workbooks\.js\?v=35/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   assert.match(workbook, /else if\(String\(courseId\)==="SPRUT_TP"\)/);
-  for (const caption of ["Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
+  for (const caption of ["Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы", "Интерфейс СПРУТ-ТП: рабочая область и панели", "Проект СПРУТ-ТП: структура технологического проекта", "СПРУТ-ТП: справочники и технологические ресурсы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
   for (const meme of ["meme-cat.jpg", "meme-js.jpg", "meme-python.jpg", "meme-variables.jpg"]) {
     assert.ok(workbook.includes(meme), "missing topic meme " + meme);
     assert.ok(fs.existsSync(path.join(root, "assets", "images", meme)), "missing meme image file " + meme);
@@ -439,7 +439,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v261/);
+  assert.match(sw, /portal-cache-v262/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -455,7 +455,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const css = read("lecture-visual-atlas.css");
   assert.match(html, /lecture-visual-atlas\.js\?v=4/);
   assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=6/);
-  assert.match(html, /sprut-tp-document-examples\.js\?v=2/);
+  assert.match(html, /sprut-tp-document-examples\.js\?v=3/);
   assert.match(html, /lecture-visual-atlas\.css\?v=4/);
   assert.ok(sw.includes("./sprut-tp-document-examples.js"));
   assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
@@ -511,11 +511,15 @@ test("SPRUT-TP includes filled examples for every listed document and practical 
   assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.documents,10);
   assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.practiceCases,14);
   assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.formattingGuide,true);
+  assert.equal(sandbox.window.SPRUT_TP_DOCUMENT_EXAMPLES.machiningExample,true);
   const docs=topics.find(topic=>topic.title==="ЕСТД и комплект технологических документов");
   const pack=docs.lectures.find(lecture=>lecture.code==="1.3.2");
   const guide=docs.lectures.find(lecture=>lecture.code==="1.3.3");
+  const machining=docs.lectures.find(lecture=>lecture.code==="1.3.4");
   assert.ok(guide, "step-by-step TP formatting guide must be added");
+  assert.ok(machining, "complete stepped-shaft machining TP must be added");
   for(const term of ["маршрутной карты (МК)","операционной карты (ОК 020)","Контрольный лист перед выпуском","СПРУТ-ТП","Практическое задание"]) assert.ok(guide.content.includes(term), "TP guide missing "+term);
+  for(const term of ["Вал ступенчатый","МК) — заполненный учебный фрагмент","ОК 010","ОК 015","ОК 020","Ø30 h9","Ø24 h9","Ø20 h9","Ra 3,2","не переносить в реальное производство"]) assert.ok(machining.content.includes(term), "machining TP example missing "+term);
   for(const label of ["Карта эскизов","Технологическая инструкция","Маршрутная карта","Карта технологического процесса","Операционная карта","Комплектовочная карта","Ведомость оснастки и оборудования","Ведомость сборки изделия","Карта типового (группового) ТП","Карта типовой (групповой) операции"]) {
     assert.ok(pack.content.includes(label), "missing filled document example: "+label);
   }
