@@ -157,7 +157,7 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(workbook, /контур.*детал|элемент.*контура/);
   assert.match(workbook, /траектор.*инструмент|элемент.*траектор/);
   assert.match(workbook, /cncWorkbookVisuals/);
-  assert.match(workbook, /else if\(String\(courseId\)==="07\.01"\)/);
+  assert.match(workbook, /if\(String\(courseId\)==="07\.01"\)\{/);
   assert.doesNotMatch(workbook, /var meme=String\(courseId\)==="07\.01"\?\{file:""/);
   assert.match(workbook, /meme-js\.jpg/);
   assert.match(workbook, /meme-variables\.jpg/);
