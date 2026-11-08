@@ -118,7 +118,7 @@
         busy = true;
         try {
           if (!apiReady()) throw new Error("Сетевой API не подключён.");
-          var r = await window.API.createGameRoom({});
+          var r = await window.API.createGameRoom({ game: opts.gameId, maxPlayers: maxPlayers });
           if (!r || !r.success) throw new Error((r && r.error) || "Не удалось создать комнату.");
           roomCode = r.code; window.__lastRoomCode = roomCode;
           isHost = true;
@@ -150,7 +150,9 @@
           var r = await window.API.joinGameRoom({ code: code });
           if (!r || !r.success) throw new Error((r && r.error) || "Не удалось войти.");
           roomCode = code; window.__lastRoomCode = roomCode;
-          isHost = false;
+          isHost = !!r.isHost;
+          if (r.selfId) self.id = String(r.selfId);
+          if (r.lastActionId) actionCursor = Number(r.lastActionId) || 0;
           hostState = r.state || {};
           beginPolling();
           render();
@@ -167,6 +169,7 @@
           var r = await window.API.getGameRoom(roomCode);
           if (r && r.success && r.state) {
             hostState = r.state;
+            if (r.selfId) self.id = String(r.selfId);
             // presence heartbeat
             var me = self;
             if (hostState.players) {
@@ -427,8 +430,7 @@
       var nx = container.querySelector("#netNext");
       if (nx)
         nx.onclick = function () {
-          h.send("bredo_next", {});
-          // host also applies locally for snappiness
+          // The host is authoritative: persist the next phase directly. Do not enqueue a second action.
           if (st.round >= 5) {
             st.phase = "ended";
           } else {
