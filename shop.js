@@ -202,9 +202,11 @@ window.renderShopPage = function() {
         html += `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin-top:15px;">`;
         
         items.forEach(item => {
+            var avatarValue = item.url;
+            if (type === 'avatar' && item.id === 'custom' && window.state.avatar && !AVATARS.some(function (a) { return a.url === window.state.avatar; })) avatarValue = window.state.avatar;
             var isOwned = isTeacher || 
                           (type === 'theme' && (window.state.purchasedThemes || []).includes(item.id)) ||
-                          (type === 'avatar' && ((window.state.purchasedAvatars || []).includes(item.url) || window.state.avatar === item.url)) ||
+                          (type === 'avatar' && ((window.state.purchasedAvatars || []).includes(item.url) || window.state.avatar === item.url || (item.id === 'custom' && avatarValue && avatarValue !== 'url'))) ||
                           (type === 'text' && (window.state.purchasedTextEffects || []).includes(item.id)) ||
                           (type === 'font' && (window.state.purchasedFonts || []).includes(item.id)) ||
                           (type === 'fontSize' && (window.state.purchasedFontSizes || []).includes(item.id)) ||
@@ -214,7 +216,7 @@ window.renderShopPage = function() {
             
             var isActive = false;
             if (type === 'theme') isActive = localStorage.getItem("mdk.theme_active") === item.id;
-            if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar);
+            if (type === 'avatar') isActive = window.state.avatar === item.url || (item.id === 'default' && !window.state.avatar) || (item.id === 'custom' && avatarValue && avatarValue !== 'url' && window.state.avatar === avatarValue);
             if (type === 'text') isActive = (window.state.activeTextEffect || 'none') === item.id;
             if (type === 'font') isActive = (window.state.activeFont || 'font-default') === item.id;
             if (type === 'fontSize') isActive = (window.state.activeFontSize || 'normal') === item.id;
@@ -225,7 +227,7 @@ window.renderShopPage = function() {
             if (isActive) {
                 btnHtml = `<button class="btn ghost" disabled style="border-color:var(--ok); color:var(--ok); width:100%;">✅ Активно</button>`;
             } else if (isOwned) {
-                btnHtml = `<button class="btn" onclick="window.applyShopItem('${type}', '${item.id}', '${item.url || ''}')" style="width:100%; background:var(--card-soft); color:var(--text); border:1px solid var(--border);">Применить</button>`;
+                btnHtml = `<button class="btn" onclick="window.applyShopItem('${type}', '${item.id}', '${type === 'avatar' ? (avatarValue || item.url || '') : (item.url || '')}')" style="width:100%; background:var(--card-soft); color:var(--text); border:1px solid var(--border);">Применить</button>`;
             } else {
                 btnHtml = `<button class="btn" onclick="window.buyShopItem('${type}', '${item.id}', ${item.price}, '${item.url || ''}')" style="width:100%; background:var(--gold); color:#000;">Купить (${item.price} XP)</button>`;
             }
@@ -234,7 +236,11 @@ window.renderShopPage = function() {
             if (type === 'theme') {
                 preview = `<div style="background:${item.bg}; color:${item.text}; height:60px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; font-weight:bold;">Aa</div>`;
             }
-            if (type === 'avatar' && item.url && item.url !== 'url') {
+            if (type === 'avatar' && item.id === 'custom') {
+                preview = avatarValue && avatarValue !== 'url'
+                    ? `<img src="${avatarValue}" alt="Ваш пользовательский аватар" loading="lazy" style="width:76px; height:76px; object-fit:cover; border-radius:50%; margin:0 auto 10px; display:block; border:2px solid var(--border);">`
+                    : `<div role="img" aria-label="Добавить собственный аватар" style="font-size:42px; margin-bottom:10px;">🔗</div>`;
+            } else if (type === 'avatar' && item.url && item.url !== 'url') {
                 preview = `<img src="${item.url}" alt="${item.title}" loading="lazy" style="width:76px; height:76px; object-fit:cover; border-radius:50%; margin:0 auto 10px; display:block; border:2px solid var(--border);">`;
             } else if (type === 'avatar' && item.id === 'default') {
                 preview = `<div role="img" aria-label="Базовый аватар студента" style="font-size:48px; margin-bottom:10px;">👨‍🎓</div>`;
