@@ -68,15 +68,30 @@ test("online party games use supported server actions and stable player identity
   assert.match(coop, /createGameRoom\(\{ game: "detective-coop", maxPlayers: 8 \}\)/);
   assert.match(coop, /if \(r\.selfId\) self\.id = String\(r\.selfId\);/);
   assert.match(server, /String\(state\.game\|\|""\)!=="detective-coop"/);
+  assert.match(server, /if\(game==="bredo"\)/);
+  assert.match(server, /safe\.votes\[id\]=true/);
+  const fnStart = server.indexOf("function publicGameState_");
+  const fnEnd = server.indexOf("\\nfunction joinGameRoom_", fnStart);
+  assert.ok(fnStart >= 0 && fnEnd > fnStart);
+  const sandbox = { email_: value => String(value || "").toLowerCase() };
+  vm.runInNewContext(server.slice(fnStart, fnEnd) + ";this.publicGameState_=publicGameState_;", sandbox);
+  const gameState = { game:"bredo", phase:"write", players:[{id:"p1",email:"one@test",hand:["A"],role:"x"},{id:"p2",email:"two@test",hand:["B"],role:"y"}], answers:{p1:"secret 1",p2:"secret 2"}, votes:{p1:"p2"} };
+  const playerView = sandbox.publicGameState_(gameState,"two@test");
+  assert.deepEqual(Array.from(playerView.players[1].hand), ["B"]);
+  assert.equal(playerView.players[0].hand, undefined);
+  assert.deepEqual(JSON.parse(JSON.stringify(playerView.answers)), {p2:"secret 2"});
+  assert.equal(playerView.votes.p1, true);
+  const voteView = sandbox.publicGameState_(Object.assign({},gameState,{phase:"vote"}),"two@test");
+  assert.deepEqual(JSON.parse(JSON.stringify(voteView.answers)), {p1:"secret 1",p2:"secret 2"});
 });
 
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=33/);
+  assert.match(html, /workbooks\.js\?v=34/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
-  for (const caption of ["Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
+  assert.match(workbook, /else if\(String\(courseId\)==="SPRUT_TP"\)/);\n  for (const caption of ["Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
   for (const meme of ["meme-cat.jpg", "meme-js.jpg", "meme-python.jpg", "meme-variables.jpg"]) {
     assert.ok(workbook.includes(meme), "missing topic meme " + meme);
     assert.ok(fs.existsSync(path.join(root, "assets", "images", meme)), "missing meme image file " + meme);
@@ -416,7 +431,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v258/);
+  assert.match(sw, /portal-cache-v259/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
