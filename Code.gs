@@ -2124,7 +2124,7 @@ function createGameRoom_(data) {
     return {success:true,code:code,state:state,isHost:true};
   } finally { lock.releaseLock(); }
 }
-function publicGameState_(state, viewerEmail) { const safe=JSON.parse(JSON.stringify(state)); const viewer=email_(viewerEmail); (safe.players||[]).forEach(p=>{const owner=email_(p.email); if(owner!==viewer) delete p.hand; delete p.role; delete p.roleLabel; delete p.email;}); delete safe.privateMessages; delete safe.pendingNight; delete safe.votes; return safe; }
+function publicGameState_(state, viewerEmail) { const safe=JSON.parse(JSON.stringify(state)); const viewer=email_(viewerEmail); const game=String(safe.game||""); const viewerPlayer=(safe.players||[]).find(p=>email_(p.email)===viewer); const viewerId=viewerPlayer?String(viewerPlayer.id||""):""; (safe.players||[]).forEach(p=>{const owner=email_(p.email); if(owner!==viewer) delete p.hand; delete p.role; delete p.roleLabel; delete p.email;}); delete safe.privateMessages; delete safe.pendingNight; if(game==="mafia") delete safe.votes; if(game==="bredo"){ const answers=safe.answers||{}; if(["vote","result","ended"].indexOf(String(safe.phase||""))===-1){ safe.answers={}; if(viewerId&&Object.prototype.hasOwnProperty.call(answers,viewerId)) safe.answers[viewerId]=answers[viewerId]; } const votes=safe.votes||{}; safe.votes={}; Object.keys(votes).forEach(id=>{safe.votes[id]=true;}); } return safe; }
 function joinGameRoom_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), lock=LockService.getScriptLock();
   if(!/^[A-Z2-9]{6}$/.test(code)) throw new Error("Код комнаты должен содержать 6 символов.");
