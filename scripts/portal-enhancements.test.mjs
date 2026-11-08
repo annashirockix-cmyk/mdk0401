@@ -51,6 +51,10 @@ test("shop includes an expanded offline avatar and font collection", () => {
 test("online party games use supported server actions and stable player identity", () => {
   const server = read("Code.gs");
   const network = read("network-party-games.js");
+  const html = read("index.html");
+  assert.match(html, /network-party-games\.js\?v=7/);
+  assert.match(html, /network-detective\.js\?v=10/);
+  assert.match(html, /coop-detective\.js\?v=7/);
   for (const action of ["bredo_answer", "bredo_vote", "bredo_next", "durak_attack", "durak_defend", "durak_take", "durak_done", "chat", "search", "mark", "theory", "dossier"]) {
     assert.ok(server.includes('"' + action + '"'), "server must accept " + action);
   }
@@ -68,7 +72,11 @@ test("online party games use supported server actions and stable player identity
 
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
+  const html = read("index.html");
+  assert.match(html, /workbooks\.js\?v=32/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
+  assert.match(workbook, /function diagram\(/);
+  for (const caption of ["Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
   for (const meme of ["meme-cat.jpg", "meme-js.jpg", "meme-python.jpg", "meme-variables.jpg"]) {
     assert.ok(workbook.includes(meme), "missing topic meme " + meme);
     assert.ok(fs.existsSync(path.join(root, "assets", "images", meme)), "missing meme image file " + meme);
@@ -407,7 +415,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v256/);
+  assert.match(sw, /portal-cache-v257/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
