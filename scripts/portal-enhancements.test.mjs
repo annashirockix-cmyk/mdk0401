@@ -71,7 +71,7 @@ test("online party games use supported server actions and stable player identity
   assert.match(server, /if\(game==="bredo"\)/);
   assert.match(server, /safe\.votes\[id\]=true/);
   const fnStart = server.indexOf("function publicGameState_");
-  const fnEnd = server.indexOf("\\nfunction joinGameRoom_", fnStart);
+  const fnEnd = server.indexOf("\nfunction joinGameRoom_", fnStart);
   assert.ok(fnStart >= 0 && fnEnd > fnStart);
   const sandbox = { email_: value => String(value || "").toLowerCase() };
   vm.runInNewContext(server.slice(fnStart, fnEnd) + ";this.publicGameState_=publicGameState_;", sandbox);
@@ -91,7 +91,8 @@ test("workbook figures are selected by relevant topics and all referenced files 
   assert.match(html, /workbooks\.js\?v=34/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
-  assert.match(workbook, /else if\(String\(courseId\)==="SPRUT_TP"\)/);\n  for (const caption of ["Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
+  assert.match(workbook, /else if\(String\(courseId\)==="SPRUT_TP"\)/);
+  for (const caption of ["Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
   for (const meme of ["meme-cat.jpg", "meme-js.jpg", "meme-python.jpg", "meme-variables.jpg"]) {
     assert.ok(workbook.includes(meme), "missing topic meme " + meme);
     assert.ok(fs.existsSync(path.join(root, "assets", "images", meme)), "missing meme image file " + meme);
