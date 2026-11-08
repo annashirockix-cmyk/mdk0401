@@ -58,7 +58,7 @@ test("online party games use supported server actions and stable player identity
   assert.match(html, /shop\.js\?v=4/);
   assert.match(html, /network-party-games\.js\?v=7/);
   assert.match(html, /network-detective\.js\?v=10/);
-  assert.match(html, /coop-detective\.js\?v=7/);
+  assert.match(html, /coop-detective\.js\?v=8/);
   for (const action of ["bredo_answer", "bredo_vote", "bredo_next", "durak_attack", "durak_defend", "durak_take", "durak_done", "chat", "search", "mark", "theory", "dossier"]) {
     assert.ok(server.includes('"' + action + '"'), "server must accept " + action);
   }
@@ -70,6 +70,7 @@ test("online party games use supported server actions and stable player identity
   assert.doesNotMatch(network, /h\.send\("bredo_next"/);
   const coop = read("coop-detective.js");
   assert.match(coop, /createGameRoom\(\{ game: "detective-coop", maxPlayers: 8 \}\)/);
+  assert.match(coop, /maxPlayers: 8/);
   assert.match(coop, /if \(r\.selfId\) self\.id = String\(r\.selfId\);/);
   assert.match(server, /String\(state\.game\|\|""\)!=="detective-coop"/);
   assert.match(server, /if\(game==="bredo"\)/);
@@ -436,7 +437,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v260/);
+  assert.match(sw, /portal-cache-v261/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
