@@ -43,6 +43,8 @@ test("shop includes an expanded offline avatar and font collection", () => {
     assert.ok(shop.includes('id: "' + theme + '"'));
   }
   assert.match(shop, /data:image\/svg\+xml/);
+  assert.match(shop, /savedCustomAvatar/);
+  assert.match(shop, /Добавить собственный аватар/);
   assert.doesNotMatch(shop, /api\.dicebear\.com/);
   assert.ok((shop.match(/desc: "/g) || []).length >= 16, "each avatar must have a description matching its visual");
   for (const label of ["Инженер-наладчик", "Робот-наладчик", "Технолог", "Оператор токарного станка", "Контролёр ОТК"]) assert.ok(shop.includes(label));
@@ -51,7 +53,9 @@ test("shop includes an expanded offline avatar and font collection", () => {
 test("online party games use supported server actions and stable player identity", () => {
   const server = read("Code.gs");
   const network = read("network-party-games.js");
+  const shop = read("shop.js");
   const html = read("index.html");
+  assert.match(html, /shop\.js\?v=4/);
   assert.match(html, /network-party-games\.js\?v=7/);
   assert.match(html, /network-detective\.js\?v=10/);
   assert.match(html, /coop-detective\.js\?v=7/);
@@ -432,7 +436,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v259/);
+  assert.match(sw, /portal-cache-v260/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
