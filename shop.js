@@ -32,32 +32,44 @@ const THEMES = [
     { id: "emerald", title: "Изумруд", price: 700, bg: "#071e19", text: "#edfff6" }
 ];
 
-function avatarSvg(bg, skin, hair, shirt, accent, hairShape) {
-    var hairPath = hairShape === "long" ? "M31 52 Q25 14 50 12 Q79 12 70 54 L72 84 Q60 93 61 65 L38 65 Q35 87 27 82 Z" :
-        hairShape === "short" ? "M29 43 Q26 12 51 12 Q76 12 72 44 L65 36 Q52 28 36 38 Z" :
-        "M28 43 Q27 13 51 12 Q76 13 73 43 L67 31 Q55 38 37 31 Z";
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="b" x2="1" y2="1"><stop stop-color="' + bg + '"/><stop offset="1" stop-color="' + accent + '"/></linearGradient></defs><rect width="100" height="100" rx="50" fill="url(#b)"/><path d="M15 100 Q18 70 50 69 Q82 70 85 100" fill="' + shirt + '"/><path d="' + hairPath + '" fill="' + hair + '"/><ellipse cx="50" cy="49" rx="20" ry="25" fill="' + skin + '"/><path d="M30 44 Q31 22 50 22 Q70 22 70 45 Q58 34 43 36 Q36 40 30 44" fill="' + hair + '"/><circle cx="43" cy="50" r="2" fill="#27313b"/><circle cx="57" cy="50" r="2" fill="#27313b"/><path d="M45 61 Q50 65 55 61" fill="none" stroke="#9d5961" stroke-width="2" stroke-linecap="round"/><path d="M35 75 Q50 84 65 75" fill="none" stroke="' + accent + '" stroke-width="3" opacity=".9"/></svg>';
+function avatarSvg(bg, skin, hair, shirt, accent, hairShape, accessory) {
+    var hairPath = hairShape === "long"
+        ? "M28 51 Q23 13 50 12 Q78 13 73 53 L76 91 Q66 96 63 66 L37 66 Q34 94 24 90 Z"
+        : hairShape === "bob"
+        ? "M27 49 Q24 13 50 12 Q77 13 73 49 L68 72 Q59 62 59 48 L41 48 Q40 65 31 72 Z"
+        : "M29 45 Q27 13 50 12 Q75 12 72 45 L66 36 Q54 28 37 37 Z";
+    var face = accessory === "robot"
+        ? '<rect x="31" y="28" width="38" height="43" rx="10" fill="#b8c8d8" stroke="#40556d" stroke-width="3"/><rect x="37" y="39" width="26" height="16" rx="5" fill="#17283c"/><circle cx="44" cy="47" r="3" fill="' + accent + '"/><circle cx="56" cy="47" r="3" fill="' + accent + '"/><path d="M43 62 H57" stroke="#40556d" stroke-width="3" stroke-linecap="round"/><path d="M50 28 V19" stroke="#40556d" stroke-width="3"/><circle cx="50" cy="16" r="4" fill="' + accent + '"/>'
+        : '<ellipse cx="50" cy="49" rx="20" ry="25" fill="' + skin + '"/><path d="' + hairPath + '" fill="' + hair + '"/><path d="M30 44 Q31 22 50 22 Q70 22 70 45 Q58 34 43 36 Q36 40 30 44" fill="' + hair + '"/><circle cx="43" cy="51" r="2" fill="#27313b"/><circle cx="57" cy="51" r="2" fill="#27313b"/><path d="M45 62 Q50 65 55 62" fill="none" stroke="#9d5961" stroke-width="2" stroke-linecap="round"/>';
+    var extra = "";
+    if (accessory === "helmet") extra = '<path d="M27 39 Q29 16 50 14 Q71 16 73 39 Z" fill="#f4c95d" stroke="#9a6b16" stroke-width="2"/><path d="M24 40 H76" stroke="#9a6b16" stroke-width="4" stroke-linecap="round"/>';
+    if (accessory === "glasses") extra = '<circle cx="42" cy="51" r="7" fill="none" stroke="#27394f" stroke-width="2"/><circle cx="58" cy="51" r="7" fill="none" stroke="#27394f" stroke-width="2"/><path d="M49 51 H51" stroke="#27394f" stroke-width="2"/>';
+    if (accessory === "visor") extra = '<path d="M30 43 Q50 34 70 43 L68 55 Q50 61 32 55 Z" fill="#76e4f7" fill-opacity=".72" stroke="#155e75" stroke-width="2"/><path d="M36 48 H64" stroke="#fff" stroke-width="2" opacity=".8"/>';
+    if (accessory === "headset") extra = '<path d="M26 52 V44 Q27 18 50 18 Q73 18 74 44 V52" fill="none" stroke="#34495e" stroke-width="5"/><rect x="22" y="47" width="9" height="18" rx="4" fill="#55b7c9"/><rect x="69" y="47" width="9" height="18" rx="4" fill="#55b7c9"/>';
+    if (accessory === "goggles") extra = '<rect x="31" y="43" width="38" height="14" rx="6" fill="#d8f3ff" fill-opacity=".65" stroke="#315a76" stroke-width="2"/><path d="M50 43 V57" stroke="#315a76" stroke-width="2"/>';
+    if (accessory === "badge") extra = '<path d="M50 75 L59 84 L50 93 L41 84 Z" fill="#f4c95d" stroke="#8a641d" stroke-width="2"/><path d="M46 84 L49 87 L55 80" fill="none" stroke="#5b461b" stroke-width="2"/>';
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="' + bg + '"/><stop offset="1" stop-color="' + accent + '"/></linearGradient></defs><circle cx="50" cy="50" r="49" fill="url(#bg)"/><circle cx="50" cy="50" r="46" fill="none" stroke="#ffffff" stroke-opacity=".24" stroke-width="2"/><path d="M13 100 Q18 72 50 70 Q82 72 87 100" fill="' + shirt + '"/><path d="M39 70 L50 83 L61 70" fill="none" stroke="' + accent + '" stroke-width="4"/>' + face + extra + '<path d="M19 88 Q50 78 81 88" fill="none" stroke="#ffffff" stroke-opacity=".16" stroke-width="2"/></svg>';
     return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
 }
 const AVATARS = [
-    { id: "default", url: null, price: 0, title: "Стандарт" },
-    { id: "av1", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Felix", price: 100, title: "Парень" },
-    { id: "av2", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Aneka", price: 100, title: "Девушка" },
-    { id: "av3", url: "https://api.dicebear.com/7.x/bottts/svg?seed=Robo", price: 200, title: "Робот" },
-    { id: "av4", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Vasilisa", price: 180, title: "Василиса" },
-    { id: "av5", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=Orion", price: 180, title: "Орион" },
-    { id: "av6", url: "https://api.dicebear.com/7.x/bottts/svg?seed=GearMaster", price: 250, title: "Механоид" },
-    { id: "av7", url: avatarSvg("#203b63","#e7b99a","#33251f","#2f91a2","#79d4d0","short"), price: 160, title: "Инженер" },
-    { id: "av8", url: avatarSvg("#56365f","#f2c9ad","#39243e","#c27ba7","#e7b4d3","long"), price: 180, title: "Мечтательница" },
-    { id: "av9", url: avatarSvg("#284d45","#9b6046","#211b19","#d3a64f","#f2d58a","short"), price: 180, title: "Мастер" },
-    { id: "av10", url: avatarSvg("#32445d","#f4d3b5","#c6a36b","#6279ad","#b8d8f2","long"), price: 200, title: "Исследователь" },
-    { id: "av11", url: avatarSvg("#6a3c3b","#d99a78","#231e29","#8e5367","#e8a8a1","short"), price: 200, title: "Киберпанк" },
-    { id: "av12", url: avatarSvg("#174a62","#e7c7a5","#e0e4e8","#3b879c","#a6e5ee","long"), price: 220, title: "Полярная звезда" },
-    { id: "av13", url: avatarSvg("#34445c","#ad704e","#211a18","#6e8f64","#b5d5a0","short"), price: 190, title: "Технолог" },
-    { id: "av14", url: avatarSvg("#513c72","#f1d0b5","#76513d","#a68bd0","#d9c4f5","long"), price: 220, title: "Академия" },
-    { id: "av15", url: avatarSvg("#5b344b","#c98768","#19151c","#b16b7d","#f1b7bf","short"), price: 220, title: "Механик" },
-    { id: "av16", url: avatarSvg("#26445c","#e9c3a1","#7d4932","#416e9a","#9bc6ed","long"), price: 240, title: "Навигатор" },
-    { id: "custom", url: "url", price: 500, title: "Свой URL" }
+    { id: "default", url: null, price: 0, title: "Базовый студент", desc: "Стандартный профиль обучающегося." },
+    { id: "av1", url: avatarSvg("#183b59","#e7b99a","#33251f","#2f91a2","#79d4d0","short","helmet"), price: 100, title: "Инженер-наладчик", desc: "Защитная каска и рабочая форма." },
+    { id: "av2", url: avatarSvg("#49365f","#f2c9ad","#39243e","#c27ba7","#e7b4d3","long","glasses"), price: 100, title: "Инженер-конструктор", desc: "Очки и внимательный взгляд на чертёж." },
+    { id: "av3", url: avatarSvg("#253b54","#b8c8d8","#26384a","#50677d","#63d8e8","short","robot"), price: 200, title: "Робот-наладчик", desc: "Цифровой помощник для работы с ЧПУ." },
+    { id: "av4", url: avatarSvg("#28524a","#e8bd9c","#453329","#3f8c75","#a8e3c9","bob","goggles"), price: 180, title: "Технолог", desc: "Защитные очки и производственная экипировка." },
+    { id: "av5", url: avatarSvg("#344d71","#eac3a4","#5b3427","#657fbd","#b8d8f2","short","headset"), price: 180, title: "Мастер ЧПУ", desc: "Гарнитура оператора и сине-стальная форма." },
+    { id: "av6", url: avatarSvg("#174a62","#c7d7e6","#e0e4e8","#3b879c","#a6e5ee","short","robot"), price: 250, title: "Механоид", desc: "Роботизированный аватар с холодной подсветкой." },
+    { id: "av7", url: avatarSvg("#203b63","#e7b99a","#33251f","#2f91a2","#79d4d0","short","badge"), price: 160, title: "Оператор токарного станка", desc: "Рабочий образ оператора токарного участка." },
+    { id: "av8", url: avatarSvg("#56365f","#f2c9ad","#39243e","#c27ba7","#e7b4d3","long","goggles"), price: 180, title: "Оператор фрезерного станка", desc: "Защитные очки для работы на фрезерном участке." },
+    { id: "av9", url: avatarSvg("#284d45","#9b6046","#211b19","#d3a64f","#f2d58a","short","glasses"), price: 180, title: "Исследователь", desc: "Любознательный образ для изучения технологий." },
+    { id: "av10", url: avatarSvg("#32445d","#f4d3b5","#c6a36b","#6279ad","#b8d8f2","long","headset"), price: 200, title: "Программист ЧПУ", desc: "Гарнитура и цифровой стиль." },
+    { id: "av11", url: avatarSvg("#6a3c3b","#d99a78","#231e29","#8e5367","#e8a8a1","short","visor"), price: 200, title: "Кибер-оператор", desc: "Неоновый визор и футуристичная экипировка." },
+    { id: "av12", url: avatarSvg("#174a62","#e7c7a5","#e0e4e8","#3b879c","#a6e5ee","long","badge"), price: 220, title: "Полярная звезда", desc: "Светлый образ с ледяными оттенками." },
+    { id: "av13", url: avatarSvg("#34445c","#ad704e","#211a18","#6e8f64","#b5d5a0","short","glasses"), price: 190, title: "Контролёр ОТК", desc: "Очки специалиста по контролю качества." },
+    { id: "av14", url: avatarSvg("#513c72","#f1d0b5","#76513d","#a68bd0","#d9c4f5","long","badge"), price: 220, title: "Конструктор", desc: "Академичный образ для проектирования деталей." },
+    { id: "av15", url: avatarSvg("#5b344b","#c98768","#19151c","#b16b7d","#f1b7bf","short","headset"), price: 220, title: "Механик", desc: "Рабочая гарнитура и бордовая форма." },
+    { id: "av16", url: avatarSvg("#26445c","#e9c3a1","#7d4932","#416e9a","#9bc6ed","long","visor"), price: 240, title: "Навигатор траекторий", desc: "Цифровой визор для работы с траекториями." },
+    { id: "custom", url: "url", price: 500, title: "Свой аватар по ссылке", desc: "Добавьте собственное изображение по прямой ссылке." }
 ];
 
 const TEXT_EFFECTS = [
@@ -223,9 +235,9 @@ window.renderShopPage = function() {
                 preview = `<div style="background:${item.bg}; color:${item.text}; height:60px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; font-weight:bold;">Aa</div>`;
             }
             if (type === 'avatar' && item.url && item.url !== 'url') {
-                preview = `<img src="${item.url}" style="width:60px; height:60px; border-radius:50%; margin:0 auto 10px; display:block;">`;
+                preview = `<img src="${item.url}" alt="${item.title}" loading="lazy" style="width:76px; height:76px; object-fit:cover; border-radius:50%; margin:0 auto 10px; display:block; border:2px solid var(--border);">`;
             } else if (type === 'avatar' && item.id === 'default') {
-                preview = `<div style="font-size:40px; margin-bottom:10px;">👨‍🎓</div>`;
+                preview = `<div role="img" aria-label="Базовый аватар студента" style="font-size:48px; margin-bottom:10px;">👨‍🎓</div>`;
             }
             if (type === 'text') {
                 preview = `<div class="${item.id !== 'none' ? item.id : ''}" data-text="Текст" style="font-size:20px; font-weight:bold; margin-bottom:10px; height:40px;">${item.title}</div>`;
@@ -244,7 +256,7 @@ window.renderShopPage = function() {
             }
 
             html += `<div class="module" style="padding:15px; text-align:center; display:flex; flex-direction:column; justify-content:space-between; margin-bottom:0;">
-                <div>${preview}<h4 style="margin:0 0 10px 0; font-size:14px;">${item.title}</h4></div>
+                <div>${preview}<h4 style="margin:0 0 6px 0; font-size:14px;">${item.title}</h4>${item.desc ? `<p style="font-size:12px;line-height:1.4;color:var(--muted);margin:0 0 10px;">${item.desc}</p>` : ""}</div>
                 ${btnHtml}
             </div>`;
         });
