@@ -519,7 +519,7 @@ test("SPRUT-TP includes filled examples for every listed document and practical 
   assert.ok(guide, "step-by-step TP formatting guide must be added");
   assert.ok(machining, "complete stepped-shaft machining TP must be added");
   for(const term of ["маршрутной карты (МК)","операционной карты (ОК 020)","Контрольный лист перед выпуском","СПРУТ-ТП","Практическое задание"]) assert.ok(guide.content.includes(term), "TP guide missing "+term);
-  for(const term of ["Вал ступенчатый","МК) — заполненный учебный фрагмент","ОК 010","ОК 015","ОК 020","Ø30 h9","Ø24 h9","Ø20 h9","Ra 3,2","не переносить в реальное производство"]) assert.ok(machining.content.includes(term), "machining TP example missing "+term);
+  for(const term of ["Вал ступенчатый","МК) — заполненный учебный фрагмент","ОК 010","ОК 015","ОК 020","Ø30 h9","Ø24 h9","Ø20 h9","Ra 3,2","Не переносить в реальное производство"]) assert.ok(machining.content.includes(term), "machining TP example missing "+term);
   for(const label of ["Карта эскизов","Технологическая инструкция","Маршрутная карта","Карта технологического процесса","Операционная карта","Комплектовочная карта","Ведомость оснастки и оборудования","Ведомость сборки изделия","Карта типового (группового) ТП","Карта типовой (групповой) операции"]) {
     assert.ok(pack.content.includes(label), "missing filled document example: "+label);
   }
