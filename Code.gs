@@ -2130,7 +2130,7 @@ function joinGameRoom_(data) {
   if(!/^[A-Z2-9]{6}$/.test(code)) throw new Error("Код комнаты должен содержать 6 символов.");
   lock.waitLock(10000);
   try { const room=gameRoomRow_(code); if(!room||room.status!=="open"||new Date(room.expiresAt).getTime()<Date.now()) throw new Error("Комната не найдена или истекла.");
-    const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true,lastActionId:gameActions_().getLastRow()};
+    const state=parseGameState_(room.state); if(user.email===room.hostEmail) return {success:true,code:code,state:state,isHost:true,lastActionId:Math.max(0,gameActions_().getLastRow()-1)};
     state.players=state.players||[]; const existing=state.players.find(p=>email_(p.email)===user.email);
     if(existing){if(!existing.id)existing.id=Utilities.getUuid();room.sheet.getRange(room.row,3).setValue(JSON.stringify(state));return {success:true,code:code,state:publicGameState_(state,user.email),isHost:false,selfId:existing.id,privateRole:existing.role||"",privateMessage:(state.privateMessages||{})[user.email]||""};}
     if(state.phase!=="lobby") throw new Error("Игра уже началась. Новые участники больше не принимаются.");
