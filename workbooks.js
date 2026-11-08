@@ -41,32 +41,10 @@
       var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 260"><rect x="8" y="8" width="504" height="244" rx="14" fill="#f5f8fc" stroke="#9aaec2" stroke-width="2"/><g font-family="Arial,sans-serif" fill="#24364b">'+content+'</g></svg>';
       images.push({file:"",caption:caption,url:"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(svg),credit:"Учебная схема",source:""});
     }
-    var commons="https://commons.wikimedia.org/wiki/Special:FilePath/";
+    // В рабочую тетрадь попадают только фотографии, явно назначенные редактором
+    // конкретной теме. Универсальные фото станков/микрометра/ремонта здесь не подставляем.
     if(editorial&&Array.isArray(editorial.photos)){
       editorial.photos.forEach(function(x){if(x&&x.url&&x.caption)photo(x.url,x.caption,x.credit,x.source);});
-    } else if(String(courseId)==="07.01"){
-      // Для МДК 07.01 не подставляем общие фотографии станков под разные темы.
-      // Используются только явно подобранные иллюстрации и схемы ниже.
-    } else if(String(courseId)==="04.01"||/диагност|обслужив|ремонт|наладк|неисправ/.test(title)){
-      photo(commons+"Skilled_technician_repairs_machinery_with_precision_in_workshop_environment_during_daylight_hours.jpg?width=1000","Фотография: техническое обслуживание оборудования","Nenad Stojković · CC BY 2.0","https://commons.wikimedia.org/wiki/File:Skilled_technician_repairs_machinery_with_precision_in_workshop_environment_during_daylight_hours.jpg");
-      photo(commons+"Technician_inspecting_exposed_wiring_and_circuit_components_inside_a_control_machine.jpg?width=1000","Осмотр электрических компонентов системы управления","Shixart1985 · CC BY 2.0","https://commons.wikimedia.org/wiki/File:Technician_inspecting_exposed_wiring_and_circuit_components_inside_a_control_machine.jpg");
-    } else if(String(courseId)==="07.01"||/чпу|токар|фрезер|станок|обработк|металл|инструмент/.test(title)){
-      if(String(topic.id)==="t-1-1")photo("https://media.invisioncic.com/e326999/monthly_2025_08/mitCNC.png.244016919a2844b4266ef18a43cf8a12.png","Экспериментальный станок числового управления MIT, начало 1950-х","Историческая иллюстрация; контекст и источник изображения","https://www.thewave.engineer/articles.html/productivity/mit-vs-john-parsons-the-takeover-that-defied-an-industry-r104/");
-      if(/фрезер|фрезерован|обрабатывающ.*центр/.test(title))photo(commons+"CNC_milling_machine.jpg?width=1100","Фрезерование на станке с ЧПУ","Impressionmanufacturer · CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:CNC_milling_machine.jpg");
-      else photo(commons+"Worker_adjusts_a_metal_lathe_in_a_machine_workshop.jpg?width=1000","Рабочее место и настройка токарного станка","Shixart1985 · CC BY 2.0","https://commons.wikimedia.org/wiki/File:Worker_adjusts_a_metal_lathe_in_a_machine_workshop.jpg");
-      photo(commons+"Precision_metal_machining_and_welding_for_heavy_industrial_components.jpg?width=1100","Готовые детали и промышленная обработка","Leadingtopunion · CC0 1.0","https://commons.wikimedia.org/wiki/File:Precision_metal_machining_and_welding_for_heavy_industrial_components.jpg");
-    } else if(String(courseId)==="MET"||/метролог|микрометр|штангенциркул|измерительн/.test(title)){
-      photo(commons+"5783metric-micrometer.jpg?width=900","Микрометр — средство точного измерения","Glenn McKechnie · CC BY-SA 2.0","https://commons.wikimedia.org/wiki/File:5783metric-micrometer.jpg");
-    } else if(String(courseId)==="OT"||/охрана труда|безопасност/.test(title)){
-      photo(commons+"US_Navy_050620-N-7869M-092_Machinery_Repairman_3rd_Class_Richard_Henegar_uses_a_lathe_machine_to_turndown_a_piece_of_carbon_steel_to_3-8_of_an_inch_for_threading.jpg?width=1100","Работа у токарного станка: средства контроля и безопасная организация","U.S. Navy · Public Domain","https://commons.wikimedia.org/wiki/File:US_Navy_050620-N-7869M-092_Machinery_Repairman_3rd_Class_Richard_Henegar_uses_a_lathe_machine_to_turndown_a_piece_of_carbon_steel_to_3-8_of_an_inch_for_threading.jpg");
-    } else if(["02.01","02.02","MCAM"].indexOf(String(courseId))>=0){
-      photo(commons+"CNC_milling_machine.jpg?width=1100","Механическая обработка на станке с ЧПУ","Impressionmanufacturer · CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:CNC_milling_machine.jpg");
-      photo(commons+"Precision_metal_machining_and_welding_for_heavy_industrial_components.jpg?width=1100","Промышленная деталь после механической обработки","Leadingtopunion · CC0 1.0","https://commons.wikimedia.org/wiki/File:Precision_metal_machining_and_welding_for_heavy_industrial_components.jpg");
-    } else if(String(courseId).indexOf("EN")===0){
-      if(/material|metal|machine|tool|mainten|safety|automat|manufactur/.test(title)){
-        photo(commons+"Precision_metal_machining_and_welding_for_heavy_industrial_components.jpg?width=1100","Industrial manufacturing: precision metal components","Leadingtopunion · CC0 1.0","https://commons.wikimedia.org/wiki/File:Precision_metal_machining_and_welding_for_heavy_industrial_components.jpg");
-        photo(commons+"CNC_milling_machine.jpg?width=1100","CNC milling machine in operation","Impressionmanufacturer · CC BY-SA 4.0","https://commons.wikimedia.org/wiki/File:CNC_milling_machine.jpg");
-      } else if(/drawing|design|measure/.test(title))photo(commons+"5783metric-micrometer.jpg?width=900","A micrometer: precision measuring instrument","Glenn McKechnie · CC BY-SA 2.0","https://commons.wikimedia.org/wiki/File:5783metric-micrometer.jpg");
     }
     // Иллюстрации добавляются только при тематическом совпадении. Не назначаем
     // универсальный набор картинок всем темам одного курса.
