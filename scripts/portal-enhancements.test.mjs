@@ -101,7 +101,7 @@ test("local PDF resources have a same-site viewer and valid source files", () =>
   assert.match(viewer, /iframe/);
 });
 
-test("workbooks include translation, written practice, notes and attributed external photos", () => {
+test("workbooks include translation, written practice, notes and only curated external photos", () => {
   const source = read("workbooks.js");
   assert.match(source, /Письменный перевод текста/);
   assert.match(source, /function writtenPractice/);
@@ -109,7 +109,8 @@ test("workbooks include translation, written practice, notes and attributed exte
   assert.match(source, /Источник и лицензия/);
   assert.match(source, /data-wb="ENT"/);
   assert.match(source, /data-wb="ENB"/);
-  assert.match(source, /Special:FilePath/);
+  assert.match(source, /editorial&&Array\.isArray\(editorial\.photos\)/);
+  assert.doesNotMatch(source, /Special:FilePath/);
   assert.match(source, /lectureStudySummary/);
   assert.match(source, /wb-summary/);
   assert.match(source, /latin\/\(latin\+cyr/);
