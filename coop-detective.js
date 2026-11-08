@@ -102,6 +102,7 @@
   function emptyState(host) {
     return {
       game: "detective-coop",
+      maxPlayers: 8,
       phase: "lobby",
       players: [host],
       chat: [],
