@@ -203,7 +203,13 @@ window.renderShopPage = function() {
         
         items.forEach(item => {
             var avatarValue = item.url;
-            if (type === 'avatar' && item.id === 'custom' && window.state.avatar && !AVATARS.some(function (a) { return a.url === window.state.avatar; })) avatarValue = window.state.avatar;
+            if (type === 'avatar' && item.id === 'custom') {
+                var savedCustomAvatar = (window.state.purchasedAvatars || []).slice().reverse().find(function (url) {
+                    return url && url !== 'url' && !AVATARS.some(function (a) { return a.url === url; });
+                });
+                if (window.state.avatar && !AVATARS.some(function (a) { return a.url === window.state.avatar; })) avatarValue = window.state.avatar;
+                else if (savedCustomAvatar) avatarValue = savedCustomAvatar;
+            }
             var isOwned = isTeacher || 
                           (type === 'theme' && (window.state.purchasedThemes || []).includes(item.id)) ||
                           (type === 'avatar' && ((window.state.purchasedAvatars || []).includes(item.url) || window.state.avatar === item.url || (item.id === 'custom' && avatarValue && avatarValue !== 'url'))) ||
