@@ -63,6 +63,8 @@ test("online party games use supported server actions and stable player identity
     assert.ok(server.includes('"' + action + '"'), "server must accept " + action);
   }
   assert.match(server, /publicGameState_\(state,user\.email\)/);
+  assert.match(server, /state:publicGameState_\(state,user\.email\),selfId:joined\.id/);
+  assert.doesNotMatch(server, /state:publicGameState_\(state\),selfId:joined\.id/);
   assert.match(server, /if\(owner!==viewer\) delete p\.hand/);
   assert.match(server, /Number\(state\.maxPlayers\)\|\|12/);
   assert.match(network, /createGameRoom\(\{ game: opts\.gameId, maxPlayers: maxPlayers \}\)/);
