@@ -31,9 +31,17 @@
       app.innerHTML = '<section class="module">Нет доступа к выбранному экзамену. Попросите преподавателя открыть дисциплину ' + course + '.</section>';
       return;
     }
-    var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
-    app.setAttribute("translate","no"); app.classList.add("notranslate"); app.dataset.proctorAssessment="1"; app.dataset.testId=(window.ENGLISH_VPR_EXAMS&&window.ENGLISH_VPR_EXAMS[track]&&window.ENGLISH_VPR_EXAMS[track].id)||("english_"+track+"_exam"); window._activeAssessmentCourseId=course;
-    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero notranslate" translate="no"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 40 баллов</p></section>';
+    app.setAttribute("translate","no"); app.classList.add("notranslate"); app.dataset.proctorAssessment="1"; app.dataset.testId="english_"+track+"_exam"; window._activeAssessmentCourseId=course;
+    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero notranslate" translate="no"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 40 баллов</p></section><section class="module" id="englishVprLoading">Загружаем защищённый вариант экзамена…</section>';
+    if (!window.API || !window.API.getEnglishVprExam) { document.getElementById("englishVprLoading").textContent="Сервер экзаменов недоступен. Обратитесь к преподавателю."; return; }
+    window.API.getEnglishVprExam(track).then(function(response) {
+      if (!response || !response.success || !response.exam) throw new Error(response && response.error || "Экзамен не найден на сервере.");
+      renderLoadedExam(response.exam,track,course,app);
+    }).catch(function(error) {
+      var loading=document.getElementById("englishVprLoading");
+      if(loading) loading.textContent="Не удалось загрузить экзамен с сервера: "+(error.message||error)+". Обратитесь к преподавателю.";
+    });
+    return;
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
     if (track !== "basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) {
@@ -44,6 +52,12 @@
       var t = el("button", "btn ghost", "Technical English");
       t.type = "button"; t.onclick = function () { renderPage("final-technical"); }; tabs.appendChild(t);
     }
+    app.appendChild(tabs);
+  function renderLoadedExam(exam,track,course,app) {
+    var tabs = el("section", "module");
+    tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+    if(track!=="basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) { var b=el("button","btn ghost","Basic English"); b.type="button"; b.onclick=function(){renderPage("final-basic");}; tabs.appendChild(b); }
+    if(track!=="technical" && (!window.canAccessCourse || window.canAccessCourse("ENT") || window.canAccessCourse("EN"))) { var t=el("button","btn ghost","Technical English"); t.type="button"; t.onclick=function(){renderPage("final-technical");}; tabs.appendChild(t); }
     app.appendChild(tabs);
     var panel = el("section", "module");
     panel.appendChild(el("h2", "", exam.title));
