@@ -52,7 +52,7 @@
     var panel = el("section", "module");
     panel.appendChild(el("h2", "", exam.title));
     panel.appendChild(el("p", "", "В работе: аудирование, чтение, лексика, грамматика, словообразование и письменные ответы. Время выполнения — 90 минут."));
-    panel.appendChild(el("p", "museum-muted", "Задания 1–6 проверяются автоматически. Пять кратких ответов в задании 7 передаются преподавателю на проверку."));
+    panel.appendChild(el("p", "museum-muted", "Задания 1–6 проверяются автоматически. Десять кратких ответов в задании 7 передаются преподавателю на проверку."));
     var key = exam.id || ("english_" + track + "_vpr2026_v2");
     var existing = window.state && window.state.results && window.state.results[key];
     if (existing) {
@@ -154,7 +154,7 @@
         var text = task.text;
         var gaps = (text.match(/[A-F]_____/g) || []);
         var html = esc(text);
-        gaps.forEach(function (gap, i) { html = html.replace(gap, '<select class="self-input" name="vpr_'+ti+'_'+i+'"><option value="">'+gap+'</option>'+(task.itemOptions && task.itemOptions[i] || task.options).map(function (o, oi) { return '<option value="'+(oi+1)+'">'+(oi+1)+'. '+esc(o)+'</option>'; }).join("")+'</select>'); });
+        gaps.forEach(function (gap, i) { html = html.replace(gap, '<select class="self-input" name="vpr_'+ti+'_'+i+'"><option value="">'+gap+'</option>'+((task.itemOptions && task.itemOptions[i]) || task.options || []).map(function (o, oi) { return '<option value="'+(oi+1)+'">'+(oi+1)+'. '+esc(o)+'</option>'; }).join("")+'</select>'); });
         var textBox = el("div", "exam-reading-text"); textBox.style.cssText = "line-height:2.1"; textBox.innerHTML = html; section.appendChild(textBox);
       } else if (task.type === "transform") {
         task.items.forEach(function (item, i) {
