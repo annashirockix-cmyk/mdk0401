@@ -590,13 +590,26 @@
     var seen = {};
     for (var i = 0; i < exams.length; i++) {
       var a = exams[i];
-      var key = (a.getAttribute("href") || a.textContent || "").trim();
+      var href = (a.getAttribute("href") || "").trim();
+      var label = String(a.textContent || "").replace(/\\s+/g, " ").trim().toLowerCase();
+      var key = href || label;
+      // The professional-exam drawer item may be injected by more than one
+      // page enhancement. Treat equivalent final-exam links as one entry.
+      if (href.indexOf("#/final") === 0 || a.hasAttribute("data-exam-v2")) key = "final:" + label;
       if (seen[key]) {
         if (a.parentNode) a.parentNode.removeChild(a);
       } else {
         seen[key] = true;
       }
     }
+  }
+
+  var examDrawerObserver = null;
+  function watchExamDrawer() {
+    var nav = document.querySelector(".drawer-nav");
+    if (!nav || examDrawerObserver || !window.MutationObserver) return;
+    examDrawerObserver = new MutationObserver(function () { fixExam(); });
+    examDrawerObserver.observe(nav, { childList: true, subtree: true });
   }
 
   function patchRouter() {
@@ -616,6 +629,7 @@
     patchTopic();
     patchRouter();
     fixExam();
+    watchExamDrawer();
   }
   boot();
   document.addEventListener("DOMContentLoaded", boot);
