@@ -100,7 +100,7 @@ window.renderTeacherControlsPage=function(){
       batch.push(bank);batchQuestions+=count;
      }
      await sendImportBatch();
-     status.textContent="Готово: "+banks.length+" банков, "+total+" вопросов сохранены в закрытом листе QuestionBank. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов: "+skippedDuplicates+". Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
+     status.textContent="Импорт подтверждён сервером: "+bankCount+" из "+banks.length+" банков; "+total+" из "+totalExpected+" вопросов. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов банков: "+skippedDuplicates+"."+(bankCount!==banks.length||total!==totalExpected?" ВНИМАНИЕ: есть расхождение — запустите «Проверить закрытое хранилище» и сверьте счётчики по дисциплинам.":" Все подготовленные банки и вопросы подтверждены ответами сервера.")+" Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
     }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
     finally{btn.disabled=false;}
    };
