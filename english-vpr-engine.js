@@ -195,7 +195,7 @@
         }
       });
       var now = new Date().toISOString();
-      var record = {grade:"На проверке",score:objective,max:38,objectiveMax:maxObjective,percent:Math.round(objective/38*100),finishedAt:now,status:"pending_teacher_review",writtenAnswers:answerSummary};
+      var record = {grade:"На проверке",score:objective,max:38,objectiveMax:maxObjective,percent:Math.round(objective/33*100),finishedAt:now,status:"pending_teacher_review",writtenAnswers:answerSummary};
       window.state.results = window.state.results || {}; window.state.results[key] = record;
       if (window.saveStudentData) window.saveStudentData();
       panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 33</b> баллов.</p><p>Задание 7 содержит пять письменных ответов и будет проверено преподавателем отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
@@ -213,9 +213,35 @@
     }
     tick(); window.englishAssessmentTimer = window.setInterval(tick,1000);
   }
+  function renderChooser() {
+    var app = document.getElementById("app");
+    if (!app) return;
+    var course = activeCourse();
+    if (!window.state || (!window.state.student && !window.state.staff) || (window.canAccessCourse && !window.canAccessCourse(course))) {
+      app.innerHTML = '<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';
+      return;
+    }
+    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Формат ВПР СПО 2026 · 90 минут · 7 заданий · 38 баллов</p></section><section class="module"><h2>Выберите вариант экзамена</h2><p>В портале оставлены только две итоговые работы. Старые семестровые и прежние итоговые экзамены больше не выводятся в этом разделе.</p><div id="englishVprChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div></section>';
+    var choices = document.getElementById("englishVprChoices");
+    var tracks = course === "ENB" ? ["basic"] : course === "ENT" ? ["technical"] : ["basic", "technical"];
+    tracks.forEach(function (track) {
+      var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
+      if (!exam) return;
+      var card = el("article", "question");
+      card.style.cssText = "padding:18px;border:1px solid var(--border);border-radius:12px;background:var(--card-soft)";
+      card.appendChild(el("h3", "", track === "basic" ? "Basic English — базовый" : "Technical English — технический"));
+      card.appendChild(el("p", "", "90 минут · 7 заданий · аудирование, чтение, лексика, грамматика и письменные ответы"));
+      var button = el("button", "btn", "Открыть экзамен");
+      button.type = "button";
+      button.style.width = "100%";
+      button.onclick = function () { renderPage(track === "basic" ? "final-basic" : "final-technical"); };
+      card.appendChild(button);
+      choices.appendChild(card);
+    });
+  }
   window.renderEnglishTestsPage = function (mode) {
     if (mode === "final-basic" || mode === "final-technical") { renderPage(mode); return; }
-    if (typeof oldRender === "function") return oldRender.apply(this, arguments);
+    renderChooser();
   };
   console.info("[English VPR] Загружены только два итоговых экзамена: Basic и Technical.");
 })();
