@@ -18,6 +18,17 @@ function collectCourseQuestions(courseId) {
     course.sections.forEach(function (section) {
       (section.topics || []).forEach(function (topic) {
         (topic.test || []).forEach(function (question) { all.push(question); });
+        // Дополняем тематические тесты усложнённым банком и самостоятельными работами.
+        var hardQuestions = window.HARD_TESTS && window.HARD_TESTS[topic.id];
+        if (Array.isArray(hardQuestions)) hardQuestions.forEach(function (question) { all.push(question); });
+        var extraTests = window.EXTRA_TESTS || {};
+        Object.keys(extraTests).forEach(function (key) {
+          if (key.indexOf("self_" + topic.id + "_") !== 0) return;
+          var entry = extraTests[key];
+          if (entry && Array.isArray(entry.questions)) {
+            entry.questions.forEach(function (question) { all.push(question); });
+          }
+        });
       });
     });
   }
