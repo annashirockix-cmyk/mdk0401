@@ -152,7 +152,7 @@ window.renderFinalExamPage = function (mdkId) {
     app.querySelector(".hero").appendChild(intro);
     var grid = examNode("div");
     grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;";
-    Object.values(window.MDK_DATA || {}).forEach(function (course) {
+    Object.values(window.MDK_DATA || {}).filter(function (course) { return course && course.id !== "basic" && course.id !== "technical" && course.id !== "EN"; }).forEach(function (course) {
       var count = questionCount(course);
       var card = examNode("a", "module");
       card.href = "#/final/" + course.id;
