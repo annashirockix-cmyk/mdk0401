@@ -43,7 +43,7 @@
     panel.appendChild(el("h2", "", exam.title));
     panel.appendChild(el("p", "", "В работе: аудирование, чтение, лексика, грамматика, словообразование и письменные ответы. Время выполнения — 90 минут."));
     panel.appendChild(el("p", "museum-muted", "Задания 1–6 проверяются автоматически. Пять кратких ответов в задании 7 передаются преподавателю на проверку."));
-    var key = "english_" + track + "_vpr2026_v2";
+    var key = exam.id || ("english_" + track + "_vpr2026_v2");
     var existing = window.state && window.state.results && window.state.results[key];
     if (existing) {
       panel.appendChild(el("p", "", "Работа уже отправлена. Статус: " + (existing.grade || "на проверке") + "."));

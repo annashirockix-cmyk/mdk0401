@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v270'; // Добавлены точные маршруты повторения для студентов.
+const CACHE_NAME = 'portal-cache-v271'; // Добавлены точные маршруты повторения для студентов.
 
 const STATIC_ASSETS = [
   './',
@@ -35,6 +35,7 @@ const STATIC_ASSETS = [
   './english-assessment-data.js',
   './english-vpr-exams.js',
   './english-vpr-engine.js',
+  './english-proficiency-lab.js',
   './english-tools.js',
   './flashcard-editor.js',
   './teacher-game.js',
