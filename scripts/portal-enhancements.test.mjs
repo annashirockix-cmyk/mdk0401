@@ -585,5 +585,6 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   assert.match(read("teacher-controls.js"), /Закрыть/);
   assert.match(read("app.js"), /Fail closed: students must never fall back to client-side answer keys/);
   assert.ok(read("proctor-monitor.js").includes("_activeAssessmentCourseId"));
-  assert.ok(read("Code.gs").includes("contentType==="topic"?String(row[0]||""):String(row[2]||"")"));
+  assert.ok(read("Code.gs").includes('const accessTopicId=contentType==="topic"?String(row[0]||""):String(row[2]||"");'));
+  assert.ok(read("app.js").includes("hasEnglishAccess"));
 });
