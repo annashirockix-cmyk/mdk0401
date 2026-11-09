@@ -158,7 +158,7 @@ window.unlockAchievement = function(id) {
 // 2. ЗАГРУЗКА КАСТОМНОГО КОНТЕНТА
 // ==========================================
 window.loadGlobalCustomContent = function(callback) {
-    var hasSession = false; try { hasSession = !!sessionStorage.getItem("mdk.session"); } catch (e) {}
+    var hasSession = false; try { hasSession = !!(localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session")); } catch (e) {}
     if (!window.API || !window.API.getCustomContent || (!window.state.student && !window.state.staff) || !hasSession) {
         if (callback) callback();
         return;
@@ -175,7 +175,7 @@ window.loadGlobalCustomContent = function(callback) {
         } else if (res && res.error) {
             // API возвращает ошибки авторизации JSON-ответом, а не исключением.
             var tokenAfterResponse = false;
-            try { tokenAfterResponse = !!sessionStorage.getItem("mdk.session"); } catch (e) {}
+            try { tokenAfterResponse = !!(localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session")); } catch (e) {}
             if (!tokenAfterResponse && window.state && (window.state.student || window.state.staff)) {
                 window.state.student = null;
                 window.state.staff = null;
@@ -192,7 +192,7 @@ window.loadGlobalCustomContent = function(callback) {
         // Если сервер явно отклонил токен, убираем только авторизацию,
         // сохраняя локальный учебный прогресс. При обычном сбое сети вход не сбрасываем.
         var tokenStillPresent = false;
-        try { tokenStillPresent = !!sessionStorage.getItem("mdk.session"); } catch (e) {}
+        try { tokenStillPresent = !!(localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session")); } catch (e) {}
         if (!tokenStillPresent && window.state && (window.state.student || window.state.staff)) {
             window.state.student = null;
             window.state.staff = null;
@@ -800,9 +800,9 @@ function setupLogin() {
     if (!overlay) return;
 
     // Восстанавливаем интерфейс авторизованного пользователя после F5.
-    // sessionStorage сохраняется при обновлении вкладки, а mdk.state содержит профиль.
+    // Токен хранится в localStorage, поэтому вход сохраняется между вкладками и перезапусками браузера.
     var hasSessionToken = false;
-    try { hasSessionToken = !!sessionStorage.getItem("mdk.session"); } catch (e) {}
+    try { hasSessionToken = !!(localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session")); } catch (e) {}
     var hasCachedIdentity = !!(window.state && (window.state.student || window.state.staff));
     if (hasSessionToken && hasCachedIdentity) {
         overlay.style.display = "none";
@@ -917,6 +917,18 @@ function setupLogin() {
       .catch(function(err){alert(err.message);btn.disabled=false;btn.textContent="Зарегистрироваться";});
     };
 }
+
+window.handleAuthExpired = function(reason) {
+    // Вызывается API-клиентом только при явном отказе сервера по авторизации.
+    if (window.API && window.API.logout) window.API.logout();
+    if (window.state) { window.state.student = null; window.state.staff = null; }
+    try { localStorage.removeItem("mdk.state"); } catch (e) {}
+    var overlay = document.getElementById("loginOverlay");
+    if (overlay) overlay.style.display = "flex";
+    if (window.renderUserChip) window.renderUserChip();
+    if (window.updateMenuVisibility) window.updateMenuVisibility();
+    if (window.showToast) window.showToast(reason || "Сессия завершилась. Войдите снова.", "err");
+};
 
 window.handleLogout = function() {
     // Событие отправляется до удаления токена: fetchAPI успевает приложить действующую сессию.
