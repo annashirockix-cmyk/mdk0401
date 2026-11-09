@@ -239,7 +239,7 @@
       choices.appendChild(card);
     });
   }
-  window.renderEnglishTestsPage = function (mode) {
+  window.renderEnglishVprPage = function (mode) {\n    if (mode === "final-basic" || mode === "final-technical") { renderPage(mode); return; }\n    renderChooser();\n  };\n  window.renderEnglishTestsPage = function (mode) {
     if (mode === "final-basic" || mode === "final-technical") { renderPage(mode); return; }
     renderChooser();
   };
