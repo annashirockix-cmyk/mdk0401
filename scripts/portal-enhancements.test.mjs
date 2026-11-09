@@ -440,7 +440,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v\\d+/);
+    assert.match(sw, /portal-cache-v[0-9]+/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -533,7 +533,7 @@ test("SPRUT-TP includes filled examples for every listed document and practical 
 
 test("final exam catalogue hides duplicate English source and combined course records", () => {
   const finalPage = read("final.js");
-  assert.match(finalPage, /course\\.id !== "basic" && course\\.id !== "technical" && course\\.id !== "EN"/);
+    assert.match(finalPage, /course[.]id !== "basic" && course[.]id !== "technical" && course[.]id !== "EN"/);
 });
 
 test("English exam entry disables legacy semester/final catalogue and exposes only the two VPR tracks", () => {
