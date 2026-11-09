@@ -200,8 +200,8 @@ window.renderQuestionBankPage=function(){
   importAllBtn.onclick=async function(){
    const btn=this,status=document.getElementById("bankStatus");btn.disabled=true;
    const current=document.getElementById("bankImportBtn");if(current)current.disabled=true;
+   let backupId="",backupCreated=false;
    try{
-    let backupId="",backupCreated=false;
     const all=[],seen={},courseIds=new Set(["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"]);
     // Не перебираем исходные модули MDK_DATA.basic/technical:
     // для импорта они представлены дисциплинами ENB/ENT (и объединённой EN).
