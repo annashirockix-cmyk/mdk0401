@@ -38,8 +38,16 @@ function sanitizeEnglishVprExam_(exam) {
     if (task.type === "match") (task.items || []).forEach(function(item) { if (Array.isArray(item)) item.splice(2, 1); });
     if (task.type === "gap") delete task.answers;
     if (task.type === "transform") (task.items || []).forEach(function(item) { if (Array.isArray(item)) item.splice(3, 1); });
-    ["correct","answer","answers","key","solution","explanation","acceptedAnswers"].forEach(function(key) { delete task[key]; });
   });
+  function stripPrivateFields(value) {
+    if (!value || typeof value !== "object") return;
+    if (Array.isArray(value)) { value.forEach(stripPrivateFields); return; }
+    Object.keys(value).forEach(function(key) {
+      if (/^(correct|correctAnswer|answer|answers|key|solution|explanation|acceptedAnswers)$/i.test(key)) delete value[key];
+      else stripPrivateFields(value[key]);
+    });
+  }
+  stripPrivateFields(safe);
   return safe;
 }
 
