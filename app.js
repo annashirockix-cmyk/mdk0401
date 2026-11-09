@@ -745,7 +745,7 @@ window.renderHomePage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     var mdkId = window.state.activeCourseId || "07.01";
     if (window.canAccessCourse && !window.canAccessCourse(mdkId)) {
-        var permitted = Object.keys(window.MDK_DATA || {}).filter(id => id !== "basic" && id !== "technical" && window.canAccessCourse(id));
+        var permitted = Object.keys(window.MDK_DATA || {}).filter(id => id !== "basic" && id !== "technical" && id !== "EN" && window.canAccessCourse(id));
         mdkId = permitted[0] || "";
         if (mdkId) { window.state.activeCourseId = mdkId; window.saveStudentData(); }
     }
@@ -769,7 +769,7 @@ window.renderHomePage = function() {
     var title = course ? course.title : "Добро пожаловать!"; 
     var module = course ? course.module : "Выберите раздел.";
     var paletteHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
-    Object.keys(window.MDK_DATA || {}).filter(id => id !== "basic" && id !== "technical" && (window.canAccessCourse ? window.canAccessCourse(id) : true)).forEach(id => {
+    Object.keys(window.MDK_DATA || {}).filter(id => id !== "basic" && id !== "technical" && id !== "EN" && (window.canAccessCourse ? window.canAccessCourse(id) : true)).forEach(id => {
         var c = window.MDK_DATA[id]; var isActive = id === mdkId;
         paletteHtml += `<button class="btn ${isActive ? '' : 'ghost'}" onclick="window.state.activeCourseId='${id}'; window.saveStudentData(); window.renderHomePage();" style="padding:10px 20px;">${c.shortName}</button>`;
     });
@@ -1010,7 +1010,7 @@ window.router = function() {
     if (page === "topic" && parts.length >= 3) { if(window.canAccessCourse&&!window.canAccessCourse(parts[1])){window.renderHomePage();return;} window.renderTopicPage(parts[1], parts[2], parts[3] || "lectures"); return; }
     if (page === "english-media" && window.renderEnglishMediaPage) { if(window.canAccessCourse&&!window.canAccessCourse(window.state.activeCourseId||"EN")){window.renderHomePage();return;} window.renderEnglishMediaPage(parts[1] || ""); return; }
     if (page === "english-cards" && window.renderEnglishCardsPage) { if(window.canAccessCourse&&!window.canAccessCourse("EN")){window.renderHomePage();return;} window.renderEnglishCardsPage(parts[1] || ""); return; }
-    if (page === "english-tests" && window.renderEnglishTestsPage) { if(window.canAccessCourse&&!window.canAccessCourse("EN")){window.renderHomePage();return;} window.renderEnglishTestsPage(parts[1] || ""); return; }
+    if (page === "english-tests" && window.renderEnglishTestsPage) { var englishCourse = window.state.activeCourseId || "EN"; if(window.canAccessCourse&&!window.canAccessCourse(englishCourse)){window.renderHomePage();return;} window.renderEnglishTestsPage(parts[1] || ""); return; }
     if (page === "resources" && window.renderPortalResourcesPage) { window.renderPortalResourcesPage(); return; }
     if (page === "videos") { window.renderVideosPage(); return; }
     if (page === "safety") { window.renderSafetyPage(); return; }

@@ -440,7 +440,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v265/);
+  assert.match(sw, /portal-cache-v266/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -535,6 +535,10 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   const html = read("index.html");
   const tools = read("english-tools.js");
   const engine = read("english-vpr-engine.js");
+  const app = read("app.js");
+  assert.match(app, /id !== "EN"/);
+  assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
+  assert.match(html, /app\.js\?v=44/);
   assert.match(html, /english-tools\.js\?v=7/);
   assert.match(html, /english-vpr-engine\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
