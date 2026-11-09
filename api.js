@@ -89,6 +89,7 @@ window.API = {
  backupQuestionBanks:function(backupId,banks){return fetchAPI("backupQuestionBanks",{backupId:backupId,banks:banks},"POST",120000);},
  restoreQuestionBanks:function(backupId){return fetchAPI("restoreQuestionBanks",{backupId:backupId},"POST",120000);},
  importQuestionBanks:function(banks){return fetchAPI("importQuestionBanks",{banks:banks},"POST",120000);},
+ getQuestionBankStats:function(){return fetchAPI("getQuestionBankStats",{},"GET");},
  getQuestionBank:function(courseId,bankId){return fetchAPI("getQuestionBank",{courseId:courseId,bankId:bankId||""},"GET");},
  getEnglishVprExam:function(track){return fetchAPI("getEnglishVprExam",{track:track},"GET");},
  submitEnglishVprExam:function(data){return fetchAPI("submitEnglishVprExam",data||{},"POST",120000);},
