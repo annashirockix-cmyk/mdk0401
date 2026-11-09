@@ -106,6 +106,8 @@
                 <summary>📚 Учебные материалы</summary>
                 <a href="#/subject-tutor" class="drawer-item">🎓 Предметный помощник</a>
                 <a href="#/english-tests" class="drawer-item english-drawer-item" style="display:none">🇬🇧 Английский — тесты</a>
+                <a href="#/english-tests/lab" class="drawer-item english-drawer-item" style="display:none">🧪 Лаборатория английского CEFR A1–C2</a>
+                <a href="#/english-tests/c1c2" class="drawer-item english-drawer-item" style="display:none">🎓 Экзамен английского C1–C2</a>
                 <a href="#/english-media" class="drawer-item english-drawer-item" style="display:none">🎬 Английский — видео и презентации</a>
                 <a href="#/english-cards" class="drawer-item english-drawer-item" style="display:none">🃏 Английский — карточки и кроссворд</a>
                 <a href="#/videos" class="drawer-item">🎬 Видеоуроки</a>
@@ -237,8 +239,8 @@
     <script src="./teacher-game.js?v=4"></script>
     <script src="./english-tools.js?v=7"></script>
      <script src="./english-vpr-exams.js?v=4"></script>
-     <script src="./english-vpr-engine.js?v=8"></script>
-    <script src="./english-proficiency-lab.js?v=1"></script>
+     <script src="./english-vpr-engine.js?v=9"></script>
+    <script src="./english-proficiency-lab.js?v=2"></script>
     <script src="./course-announcements.js?v=3"></script>
     <script src="./access.js?v=8"></script>
     <script src="./account.js?v=3"></script>
@@ -259,7 +261,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=230', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=272', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
