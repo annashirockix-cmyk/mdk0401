@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'portal-cache-v10'; // <--- ВЕРСИЯ ОБНОВЛЕНА ДО v5
+const CACHE_NAME = 'portal-cache-v11';
 
 const STATIC_ASSETS = [
   './',
@@ -7,7 +7,11 @@ const STATIC_ASSETS = [
   './app.js',
   './api.js',
   './style.css',
-  './manifest.json'
+  './manifest.json',
+  './english-assessment-data.js',
+  './english-tools.js',
+  './english-vpr-exams.js',
+  './english-vpr-engine.js'
 ];
 
 self.addEventListener('install', (event) => {
