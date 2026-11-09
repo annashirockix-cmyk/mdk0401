@@ -95,6 +95,7 @@
                 <a href="#/gcode-lab" class="drawer-item">⚙️ G-Code Lab — 300 уровней</a>
                 <a href="#/materials-lab" class="drawer-item">🔬 Лаборатория материаловедения</a>
                 <a href="#/metrology-trainer" class="drawer-item">📏 Тренажёр метролога</a>
+                <a href="#/laboratory/english" class="drawer-item english-drawer-item" style="display:none">🇬🇧 Языковая лаборатория CEFR A1–C2</a>
                 <a href="#/machining-lab" class="drawer-item">🛠️ Расчёт режимов резания</a>
             </details>
             <a href="#/shop" class="drawer-item">🛒 Магазин</a>
@@ -105,9 +106,6 @@
             <details class="drawer-group" id="drawerLearning">
                 <summary>📚 Учебные материалы</summary>
                 <a href="#/subject-tutor" class="drawer-item">🎓 Предметный помощник</a>
-                <a href="#/english-tests" class="drawer-item english-drawer-item" style="display:none">🇬🇧 Английский — тесты</a>
-                <a href="#/english-tests/lab" class="drawer-item english-drawer-item" style="display:none">🧪 Лаборатория английского CEFR A1–C2</a>
-                <a href="#/english-tests/c1c2" class="drawer-item english-drawer-item" style="display:none">🎓 Экзамен английского C1–C2</a>
                 <a href="#/english-media" class="drawer-item english-drawer-item" style="display:none">🎬 Английский — видео и презентации</a>
                 <a href="#/english-cards" class="drawer-item english-drawer-item" style="display:none">🃏 Английский — карточки и кроссворд</a>
                 <a href="#/videos" class="drawer-item">🎬 Видеоуроки</a>
@@ -116,8 +114,12 @@
                 <a href="#/passports" class="drawer-item">📘 Паспорта станков</a>
                 <a href="#/links" class="drawer-item">🔗 Полезные ссылки</a>
                 <a href="#/training" class="drawer-item">🎯 Тренировка</a>
-                <a href="#/final/07.01" class="drawer-item">📝 Экзамен</a>
                 <a href="#/certificate" class="drawer-item">📜 Сертификат</a>
+            </details>
+            <details class="drawer-group" id="drawerExams">
+                <summary>📝 Экзамены</summary>
+                <a href="#/final/07.01" class="drawer-item">📝 Экзамен по профессиональным модулям</a>
+                <a href="#/english-tests" class="drawer-item english-drawer-item" style="display:none">🇬🇧 Экзамены по английскому языку</a>
             </details>
             <details class="drawer-group" id="drawerTeacher">
                 <summary>🧑‍🏫 Раздел преподавателя</summary>
@@ -232,20 +234,20 @@
     <script src="./admin.js"></script>
     <script src="./extra.js"></script>
     <script src="./portal-final.js?v=21"></script>
-    <script src="./course-admin.js?v=17"></script>
-    <script src="./teacher-controls.js?v=22"></script>
+    <script src="./course-admin.js?v=18"></script>
+    <script src="./teacher-controls.js?v=23"></script>
     <script src="./proctor-monitor.js?v=6"></script>
-    <script src="./flashcard-editor.js?v=2"></script>
+    <script src="./flashcard-editor.js?v=3"></script>
     <script src="./teacher-game.js?v=4"></script>
     <script src="./english-tools.js?v=7"></script>
      <script src="./english-vpr-exams.js?v=4"></script>
-     <script src="./english-vpr-engine.js?v=9"></script>
-    <script src="./english-proficiency-lab.js?v=2"></script>
+     <script src="./english-vpr-engine.js?v=10"></script>
+    <script src="./english-proficiency-lab.js?v=3"></script>
     <script src="./course-announcements.js?v=3"></script>
     <script src="./access.js?v=8"></script>
     <script src="./account.js?v=3"></script>
     <script src="./workbook-editorial.js?v=1"></script>
-    <script src="./workbooks.js?v=36"></script>
+    <script src="./workbooks.js?v=37"></script>
     <script src="./portal-genz.js?v=6"></script>
     <script src="./home-cleanup.js?v=1"></script>
     <script src="./certificate-supplement.js?v=10"></script>
@@ -256,12 +258,12 @@
     <script src="./learning-museum.js?v=1"></script>
     <script src="./museum-curator.js?v=3"></script>
     <script src="./portal-ux.js?v=6"></script>
-    <script src="./laboratory.js?v=1"></script>
+    <script src="./laboratory.js?v=2"></script>
     <script src="./pdf-viewer.js?v=2"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=272', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=273', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
