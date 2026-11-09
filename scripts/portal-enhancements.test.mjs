@@ -560,7 +560,7 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   const engine = read("english-vpr-engine.js");
   const lab = read("english-proficiency-lab.js");
   const sw = read("service-worker.js");
-  assert.match(html, /english-proficiency-lab\.js\?v=3/);
+  assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.ok(sw.includes("./english-proficiency-lab.js"));
   assert.match(html, /drawerExams/);
   assert.ok(html.includes('href="#/english-tests"'));
