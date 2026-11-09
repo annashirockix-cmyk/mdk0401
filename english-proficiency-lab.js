@@ -199,7 +199,7 @@
     app.setAttribute("translate","no"); app.classList.add("notranslate"); app.dataset.proctorAssessment="1"; app.dataset.testId="english_cefr_diagnostic";
     window._activeAssessmentCourseId=window.state&&window.state.activeCourseId||"EN";
     app.innerHTML = "";
-    var back = node("a","backlink","← К экзаменам"); back.href="#/laboratory"; app.appendChild(back);
+    var back = node("a","backlink","← К лабораториям"); back.href="#/laboratory"; app.appendChild(back);
     var hero=node("section","hero"); hero.appendChild(node("h1","","🧪 Лаборатория английского языка"));
     hero.appendChild(node("p","","Диагностика от A1 до C2 · 30 заданий · автоматическая оценка и рекомендации"));
     app.appendChild(hero);
@@ -297,7 +297,7 @@
 
   function renderC1C2() {
     var app=document.getElementById("app"); if(!app)return;
-    app.innerHTML="";
+    app.setAttribute("translate","no");app.classList.add("notranslate");
     var back=node("a","backlink","← К экзаменам");back.href="#/english-tests";app.appendChild(back);
     var hero=node("section","hero");hero.appendChild(node("h1","","🎓 Экзамен продвинутого уровня C1–C2"));
     hero.appendChild(node("p","","Два авторских варианта · 7 заданий · 90 минут · максимум 40 баллов"));
