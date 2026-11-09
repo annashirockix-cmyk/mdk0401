@@ -122,7 +122,7 @@
         task.items.forEach(function (item, i) {
           var row = el("div"); row.style.cssText = "padding:9px 0;border-bottom:1px solid var(--border)";
           row.appendChild(el("b", "", String.fromCharCode(65+i) + ". " + item[0]));
-          task.options.forEach(function (opt, oi) {
+          (item[2] || task.options).forEach(function (opt, oi) {
             var label = el("label"); label.style.cssText = "display:inline-flex;gap:5px;align-items:center;margin:7px 14px 0 0";
             var input = el("input"); input.type = "radio"; input.name = "vpr_" + ti + "_" + i; input.value = String(oi+1);
             label.appendChild(input); label.appendChild(document.createTextNode((oi+1) + ") " + opt)); row.appendChild(label);
@@ -159,12 +159,25 @@
           }
         section.appendChild(row);
         });
-      } else if (task.type === "short") {
-        task.items.forEach(function (q, i) {
-          section.appendChild(el("b", "", (i+1) + ". " + q));
-          var area = el("textarea", "self-input"); area.name = "vpr_" + ti + "_" + i; area.rows = 2; area.placeholder = "Write your answer in English…"; area.style.cssText = "display:block;width:100%;margin:6px 0 14px";
-          section.appendChild(area);
+      } else if (task.type === "email") {
+        section.appendChild(el("p", "", task.emailIntro || "Прочитайте полученное электронное письмо."));
+        if (task.emailFrom) section.appendChild(el("p", "", "From: " + task.emailFrom + (task.emailSubject ? " · Subject: " + task.emailSubject : "")));
+        if (task.emailText) {
+          var received = el("blockquote", "exam-reading-text", task.emailText);
+          received.style.cssText = "padding:12px 16px;margin:10px 0;border-left:3px solid var(--accent);background:var(--card)";
+          section.appendChild(received);
+        }
+        if (task.emailInstructions) section.appendChild(el("p", "", task.emailInstructions));
+        var letter = el("textarea", "self-input");
+        letter.name = "vpr_" + ti + "_email"; letter.rows = 12;
+        letter.placeholder = "Write your email in English (100–130 words)…";
+        letter.style.cssText = "display:block;width:100%;margin:8px 0;min-height:230px";
+        var counter = el("p", "museum-muted", "Количество слов: 0");
+        letter.addEventListener("input", function () {
+          var count = (letter.value.trim().match(/\S+/g) || []).length;
+          counter.textContent = "Количество слов: " + count + " (рекомендуется 100–130)";
         });
+        section.appendChild(letter); section.appendChild(counter);
       }
       form.appendChild(section);
     });
@@ -176,7 +189,7 @@
       finished = true;
       if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
       if (window.speechSynthesis) window.speechSynthesis.cancel();
-      var objective = 0, maxObjective = 33, answerSummary = [];
+      var objective = 0, maxObjective = 32, answerSummary = [];
       exam.tasks.forEach(function (task, ti) {
         if (task.type === "choice") {
           task.items.forEach(function (item, i) { var selected = form.querySelector('input[name="vpr_'+ti+'_'+i+'"]:checked'); if (selected && Number(selected.value) === item[1]+1) objective++; });
@@ -190,17 +203,18 @@
             var accepted = item[3].map(function (v) { return v.toLowerCase().replace(/\s+/g, " ").trim(); });
             if (input && accepted.indexOf(String(input.value || "").toLowerCase().replace(/\s+/g, " ").trim()) >= 0) objective++;
           });
-        } else if (task.type === "short") {
-          task.items.forEach(function (q, i) { var input = form.querySelector('[name="vpr_'+ti+'_'+i+'"]'); answerSummary.push({question:q,answer:input ? input.value.trim() : ""}); });
+        } else if (task.type === "email") {
+          var emailInput = form.querySelector('[name="vpr_'+ti+'_email"]');
+          answerSummary.push({question:"Задание 7. Электронное письмо",answer:emailInput ? emailInput.value.trim() : "",maxPoints:6});
         }
       });
       var now = new Date().toISOString();
-      var record = {grade:"На проверке",score:objective,max:38,objectiveMax:maxObjective,percent:Math.round(objective/33*100),finishedAt:now,status:"pending_teacher_review",writtenAnswers:answerSummary};
+      var record = {grade:"На проверке",score:objective,max:38,objectiveMax:maxObjective,percent:Math.round(objective/32*100),finishedAt:now,status:"pending_teacher_review",writtenAnswers:answerSummary};
       window.state.results = window.state.results || {}; window.state.results[key] = record;
       if (window.saveStudentData) window.saveStudentData();
-      panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 33</b> баллов.</p><p>Задание 7 содержит пять письменных ответов и будет проверено преподавателем отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
+      panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 32</b> баллов.</p><p>Задание 7 — электронное письмо (100–130 слов), максимум 6 баллов; его проверит преподаватель отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
       if (student && window.API && window.API.saveResult) {
-        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:activeCourse(),testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:33,percent:Math.round(objective/33*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
+        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:activeCourse(),testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:32,percent:Math.round(objective/32*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
       }
     };
     panel.appendChild(form); panel.appendChild(submit);
