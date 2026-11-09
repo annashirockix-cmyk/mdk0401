@@ -244,30 +244,73 @@
     panel.appendChild(form); panel.appendChild(submit); app.appendChild(panel);
   }
 
+  function advancedExam(variant) {
+    var sets = [
+      {
+        audio:"The review panel has examined the proposed redesign. The lead engineer considers the pilot results encouraging but not conclusive. The finance director believes that maintenance costs have been understated. The safety officer insists that the risk assessment must be revised before wider deployment. The panel has authorised a second independently monitored trial, provided that the supplier makes the raw performance data available.",
+        options:["The lead engineer","The finance director","The safety officer","The review panel"],
+        listening:[["Who regards the pilot results as promising but insufficient?",0],["Who questions the cost assumptions?",1],["Who requires a revised risk assessment?",2],["Who authorises the second trial?",3],["Who must provide the raw data?",3]],
+        passages:["The reliability audit found that most interruptions originated not in the control software but in inconsistent sensor calibration.","The revised protocol requires traceable calibration records before each production run.","Although the procedure adds time to initial setup, the audit team argues that it reduces costly rework.","The protocol establishes an escalation route when readings fall outside tolerance.","Operators must document corrective action rather than simply repeat the measurement."],
+        headings:["A record that makes measurements traceable","Why a slower start may save resources","A problem located outside the software","What to do when a value is out of tolerance","The importance of documenting corrective action","A new approach to staff recruitment"],
+        match:[3,1,2,4,5],
+        gap:"The audit challenged the assumption that software was the principal source of failure. A_____. Calibration records make it possible to establish the measurement history. B_____. The revised setup may take longer at first. C_____. Out-of-tolerance readings must trigger a defined response. D_____. The operator must record the action taken. E_____.",
+        gapOptions:["This is intended to improve accountability.","The source of the problem was identified elsewhere.","The additional time is expected to reduce rework.","The response is specified in the escalation procedure.","The records support traceability.","The procedure removes the need for calibration."],
+        gapAnswers:[2,5,3,4,1],
+        vocab:"The committee concluded that the initial estimates were overly A_____ and did not adequately account for downtime. The revised model uses a more B_____ set of assumptions and includes a contingency for unexpected C_____. The authors stress that the figures should not be D_____ as a guarantee, but as a provisional basis for E_____.",
+        vocabOptions:["optimistic","robust","disruption","interpreted","planning","arbitrary","dismissed"],vocabAnswers:[1,2,3,4,5],
+        forms:[["The findings"," by an external laboratory.","CORROBORATE",["were corroborated"]],["The engineer recommended that the sensor"," before the next trial.","REPLACE",["be replaced"]],["The revised procedure is considerably"," than the previous one.","COMPREHENSIVE",["more comprehensive"]],["Had the readings been recorded, the fault"," earlier.","DETECT",["would have been detected"]],["The team objected to the"," of the maintenance budget.","ALLOCATE",["allocation"]]],
+        questions:["What caused most interruptions?","Which records are required before production?","Why may setup take longer?","What happens when readings exceed tolerance?","What must operators document?","Who considered the pilot results inconclusive?","Which costs were questioned?","What type of trial was authorised?","What must the supplier provide?","What is the purpose of traceable records?"]
+      },
+      {
+        audio:"At the procurement review, the operations manager argued that the lowest bid should not automatically be treated as the most economical option. The proposed supplier offered a shorter delivery time, but its service network was limited. The quality specialist highlighted inconsistent test documentation, while the project engineer noted that the equipment could be integrated without major changes. The committee requested a lifecycle-cost comparison and independent verification before making a decision.",
+        options:["The operations manager","The supplier","The quality specialist","The project engineer"],
+        listening:[["Who challenges the assumption that the lowest bid is best?",0],["What advantage does the supplier offer?",1],["Who identifies weaknesses in test documentation?",2],["Who considers integration manageable?",3],["What evidence is requested before a decision?",0]],
+        passages:["The investigation distinguished between an isolated operator error and a systemic weakness in the verification process.","Several checklists had been completed retrospectively, undermining their evidential value.","The corrective plan introduces time-stamped digital records and assigns responsibility for each verification stage.","The investigators caution that digitisation alone will not resolve the issue unless staff understand why the checks matter.","Follow-up audits will examine both compliance and the quality of recorded explanations."],
+        headings:["A distinction that changes the scope of the response","Why the timing of records matters","A technical solution that is not sufficient by itself","How responsibility is assigned","A plan to assess whether changes work","A reduction in the number of inspections"],
+        match:[1,2,4,3,5],
+        gap:"The investigation did not treat every incident as an individual mistake. A_____. Some records had been completed after the event. B_____. The new system records when each check takes place. C_____. Staff must understand the purpose of verification. D_____. The follow-up will assess more than simple completion. E_____.",
+        gapOptions:["This weakened their value as evidence.","The response therefore addresses the verification process itself.","A time-stamped record makes the sequence auditable.","Digital tools cannot replace professional understanding.","Auditors will consider the reasoning recorded by staff.","The plan removes individual responsibility."],
+        gapAnswers:[2,1,3,4,5],
+        vocab:"The investigation found that the existing controls were not entirely A_____. Some records lacked sufficient B_____, making it difficult to reconstruct events. The revised procedure is intended to improve C_____ and ensure that decisions are D_____ in a consistent manner. Its effectiveness will be assessed through periodic E_____.",
+        vocabOptions:["redundant","transparent","reliability","documented","audits","specificity","arbitrary"],vocabAnswers:[3,6,2,4,5],
+        forms:[["The checklist"," only after the incident had occurred.","COMPLETE",["had been completed"]],["The revised system requires each stage"," electronically.","RECORD",["to be recorded"]],["The evidence was insufficient to support a"," conclusion.","DEFINITELY",["definite"]],["If the procedure had been followed, the discrepancy"," sooner.","IDENTIFY",["would have been identified"]],["The auditors questioned the"," of the original documentation.","RELIABLE",["reliability"]]],
+        questions:["What distinction did the investigation make?","Why were some checklists unreliable?","What does the digital record include?","Who is responsible for verification stages?","Why is staff understanding important?","What will follow-up audits examine?","What weakness did the investigation identify?","How will the revised procedure be evaluated?","What is the purpose of time-stamped records?","What should accompany a completed verification?"]
+      }
+    ];
+    var s=sets[variant-1];
+    return {
+      id:"english_cefr_c1c2_variant_"+variant,
+      title:"English proficiency examination C1–C2 · Variant "+variant,
+      time:90,maxScore:40,track:"technical",level:"C1–C2",audioText:s.audio,
+      tasks:[
+        {title:"1. Listening comprehension",type:"choice",points:5,instruction:"Listen to the briefing twice. Choose the person or group that matches each statement.",options:s.options,items:s.listening},
+        {title:"2. Reading: matching headings",type:"match",points:5,instruction:"Match paragraphs A–E with headings 1–6. One heading is extra.",options:s.headings,items:s.passages.map(function(p,i){return [String.fromCharCode(65+i),p,s.match[i]];})},
+        {title:"3. Reading: text completion",type:"gap",points:5,instruction:"Choose the sentence that best completes each gap A–E. One sentence is extra.",text:s.gap,options:s.gapOptions,answers:s.gapAnswers},
+        {title:"4. Academic and professional vocabulary",type:"gap",points:5,instruction:"Complete the text with the most appropriate words. Two options are extra.",text:s.vocab,options:s.vocabOptions,answers:s.vocabAnswers},
+        {title:"5. Word formation and advanced grammar",type:"transform",points:5,instruction:"Complete each sentence with the correct form of the word in capitals.",items:s.forms},
+        {title:"6. Precision in meaning",type:"choice",points:5,instruction:"Choose the most accurate interpretation.",options:["A claim supported by independent evidence","A provisional conclusion requiring further validation","A process that assigns clear responsibility","A cost assessed across the equipment lifecycle"],items:[["What does “independently monitored” imply?",0],["What is a provisional estimate?",1],["What does traceability support?",2],["What is a lifecycle-cost comparison concerned with?",3],["What is the strongest basis for a final decision?",0]]},
+        {title:"7. Short written responses",type:"questionnaire",points:10,instruction:"Answer in English. Keep each response concise (up to five words).",items:s.questions}
+      ]
+    };
+  }
+
   function renderC1C2() {
     var app=document.getElementById("app"); if(!app)return;
     app.innerHTML="";
     var back=node("a","backlink","← К экзаменам");back.href="#/english-tests";app.appendChild(back);
     var hero=node("section","hero");hero.appendChild(node("h1","","🎓 Экзамен продвинутого уровня C1–C2"));
-    hero.appendChild(node("p","","Два варианта · академический и профессиональный английский · 90 минут"));
+    hero.appendChild(node("p","","Два авторских варианта · 7 заданий · 90 минут · максимум 40 баллов"));
     app.appendChild(hero);
     var panel=node("section","module");
-    panel.appendChild(node("p","","Выберите один из двух вариантов. Экзамен предназначен для проверки сложной грамматики, академической лексики, понимания аргументации и профессиональной коммуникации."));
+    panel.appendChild(node("p","","Аудирование, академическое чтение, профессиональная лексика, словообразование, сложная грамматика и краткие письменные ответы."));
     [1,2].forEach(function(v){
       var card=node("article","question");card.style.cssText="padding:16px;margin:10px 0";
       card.appendChild(node("h3","","Вариант "+v+" · C1–C2"));
-      card.appendChild(node("p","","Вариант содержит задания на лексику, грамматику, понимание текста и письменную аргументацию."));
-      var button=node("button","btn","Открыть вариант "+v);button.type="button";
+      card.appendChild(node("p","","Профессиональная аргументация, точная интерпретация и сложные синтаксические конструкции."));
+      var button=node("button","btn","Начать вариант "+v);button.type="button";
       button.addEventListener("click",function(){
-        var track="technical";
-        if(!access(track)){window.alert("Для экзамена C1–C2 требуется доступ к техническому английскому (ENT) или объединённой дисциплине EN.");return;}
-        var exam=clone(baseExams.technical);
-        exam.id="english_cefr_c1c2_variant_"+v;
-        exam.title="English proficiency examination C1–C2 · Variant "+v;
-        exam.time=90;
-        exam.tasks.forEach(function(task){task.title=task.title.replace("Анкета","Written response");});
-        if(v===2){exam.tasks.forEach(function(task){if(task.items)task.items=task.items.slice().reverse();});}
-        window.ENGLISH_VPR_EXAMS.technical=exam;
+        if(!access("technical")){window.alert("Для экзамена C1–C2 требуется доступ к техническому английскому (ENT) или объединённой дисциплине EN.");return;}
+        window.ENGLISH_VPR_EXAMS.technical=advancedExam(v);
         if(baseRenderer)baseRenderer("final-technical");
       });
       card.appendChild(button);panel.appendChild(card);
