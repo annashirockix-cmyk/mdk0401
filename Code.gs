@@ -1496,7 +1496,7 @@ function getQuestionBankStats_(data) {
   const sh = questionBank_(), values = sh.getDataRange().getValues(), m = headerMap_(sh);
   const courses = {}, bankKeys = {}; let totalRows = 0, invalidJson = 0, emptyQuestionIds = 0;
   for (let i = 1; i < values.length; i++) {
-    const row = values[i], courseId = String(row[m.CourseId] || ""), bankId = String(row[m.BankId] || "");
+    const row = values[i], courseId = normalizeCourseId_(row[m.CourseId]), bankId = String(row[m.BankId] || "").trim();
     if (!courseId && !bankId && !row[m.QuestionJSON]) continue;
     const key = courseId + "|" + bankId;
     if (!courses[courseId]) courses[courseId] = { courseId: courseId, banks: 0, rows: 0, uniqueQuestions: 0, duplicateQuestionIds: 0, invalidJson: 0, emptyQuestionIds: 0 };
