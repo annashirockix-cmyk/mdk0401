@@ -471,7 +471,39 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             topic = { id: ct.id, code: ct.title.split(' ')[0], title: ct.title.split(' ').slice(1).join(' '), lectures: [{ code: "Лекция", title: ct.title, content: ct.content }], practicals: [], selfWork: [], test: [] };
         }
     }
-    var customTopicTests = (window.customContent.tests || []).filter(function (t) { return t.mdkId === courseId && t.topicId === topicId; });
+    var customTopicTests = (window.customContent.tests || []).filter(function (t) { return String(t.mdkId || t.courseId) === String(courseId) && String(t.topicId) === String(topicId); });
+    var customTopicLectures = (window.customContent.lectures || []).filter(function (lecture) {
+        return String(lecture.mdkId || lecture.courseId) === String(courseId) && String(lecture.topicId) === String(topicId);
+    });
+    function safeCustomLectureHtml(html) {
+        var box = document.createElement("div");
+        box.innerHTML = String(html || "");
+        var allowed = ["P","BR","HR","H1","H2","H3","H4","H5","H6","DIV","SPAN","B","STRONG","I","EM","U","S","UL","OL","LI","TABLE","THEAD","TBODY","TFOOT","TR","TH","TD","CAPTION","BLOCKQUOTE","PRE","CODE","SUB","SUP","A"];
+        Array.from(box.querySelectorAll("*")).reverse().forEach(function (node) {
+            if (allowed.indexOf(node.tagName) < 0) {
+                var parent = node.parentNode;
+                while (node.firstChild) parent.insertBefore(node.firstChild, node);
+                parent.removeChild(node);
+                return;
+            }
+            Array.from(node.attributes).forEach(function (attr) {
+                var name = attr.name.toLowerCase(), value = attr.value;
+                if (name === "class" || name === "title" || name === "colspan" || name === "rowspan" || name === "scope") return;
+                if (node.tagName === "A" && name === "href" && /^(https?:|mailto:|\.\/|\.\.\/|\/|#)/i.test(value)) return;
+                node.removeAttribute(attr.name);
+            });
+            if (node.tagName === "A" && node.hasAttribute("href")) {
+                node.setAttribute("rel", "noopener noreferrer");
+                if (/^https?:/i.test(node.getAttribute("href"))) node.setAttribute("target", "_blank");
+            }
+        });
+        return box.innerHTML;
+    }
+    if (topic && customTopicLectures.length) {
+        topic.lectures = (topic.lectures || []).concat(customTopicLectures.map(function (lecture) {
+            return { code: lecture.code || "Доп. лекция", title: lecture.title || "Материал преподавателя", content: safeCustomLectureHtml(lecture.content || "") };
+        }));
+    }
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
     
     document.getElementById("crumbs").textContent = topic.code + " " + topic.title;
