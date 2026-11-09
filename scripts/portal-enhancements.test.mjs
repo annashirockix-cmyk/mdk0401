@@ -645,7 +645,7 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   assert.match(read("teacher-controls.js"), /Закрыть/);
   assert.match(read("app.js"), /Fail closed: students must never fall back to client-side answer keys/);
   assert.ok(read("proctor-monitor.js").includes("_activeAssessmentCourseId"));
-  assert.ok(read("Code.gs").includes('const accessTopicId=contentType==="topic"?String(row[0]||""):String(row[2]||"");'));
+  assert.ok(read("Code.gs").includes('customContentIsOpen_(courseId, String(row[0] || ""), String(row[2] || ""), String(row[3] || ""))'));
   assert.ok(read("app.js").includes("hasEnglishAccess"));
 });
 
@@ -667,7 +667,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /window\.API\.submitEnglishVprExam/);
   assert.doesNotMatch(engine, /item\[1\]\+1/);
   assert.match(engine, /Перенести экзамены в защищённую таблицу/);
-  assert.match(html, /api\.js\?v=39/);
+  assert.match(html, /api\.js\?v=40/);
   assert.match(html, /english-vpr-engine\.js\?v=13/);
 });
 
