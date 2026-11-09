@@ -189,10 +189,10 @@
         if (task.type === "questionnaire") task.items.forEach(function (q, i) {
           var field = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
           var count = field && field.value.trim() ? field.value.trim().split(/\s+/).length : 0;
-          if (count > 5) questionnaireError = true;
+          if (!field || !field.value.trim() || count > 5) questionnaireError = true;
         });
       });
-      if (questionnaireError) { window.alert("В задании 7 каждый ответ должен содержать не более пяти слов. Исправьте отмеченные поля."); return; }
+      if (questionnaireError) { window.alert("Заполните все 10 пунктов задания 7. Каждый ответ должен содержать не более пяти слов."); return; }
       if (seconds > 0 && !window.confirm("Отправить ответы? После отправки изменить их будет нельзя.")) return;
       finished = true;
       if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
