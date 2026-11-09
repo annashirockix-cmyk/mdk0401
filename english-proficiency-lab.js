@@ -8,7 +8,7 @@
       plan.push({
         year: year, semester: semester,
         track: year <= 2 ? "basic" : "technical",
-        level: year === 1 ? "A1–A2" : year === 2 ? "A2–B1" : year === 3 ? "A2–B1" : year === 4 ? "B1–B2" : "B2",
+        level: year === 1 ? "A1–A2" : year === 2 ? "A2–B1" : year === 3 ? "B1" : year === 4 ? "B1–B2" : "B2–C1",
         title: year <= 2 ? "Basic English" : "Technical English"
       });
     }
