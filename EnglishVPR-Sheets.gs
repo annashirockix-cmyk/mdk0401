@@ -34,7 +34,7 @@ function importEnglishVprBank_(data) {
 function sanitizeEnglishVprExam_(exam) {
   const safe = JSON.parse(JSON.stringify(exam));
   (safe.tasks || []).forEach(function(task) {
-    if (task.type === "choice") (task.items || []).forEach(function(item) { if (Array.isArray(item)) item.splice(1, 1); });
+    if (task.type === "choice") (task.items || []).forEach(function(item) { if (Array.isArray(item)) item[1] = null; });
     if (task.type === "match") (task.items || []).forEach(function(item) { if (Array.isArray(item)) item.splice(2, 1); });
     if (task.type === "gap") delete task.answers;
     if (task.type === "transform") (task.items || []).forEach(function(item) { if (Array.isArray(item)) item.splice(3, 1); });
