@@ -35,7 +35,14 @@ window.renderTeacherControlsPage=function(){
  if(isAdmin){
   const area=document.getElementById("bankMigrationArea");
   if(area){
-   area.innerHTML='<button class="btn ghost" id="migrateQuestionBanks" style="margin-top:10px">🔐 Скопировать встроенные банки в закрытое хранилище</button><p style="font-size:12px;color:var(--muted)">Только администратор. Создаст серверную копию ключей ответов; пока не переключает тесты на серверную проверку.</p><span id="bankMigrationStatus" aria-live="polite"></span>';
+   area.innerHTML="<button class=\"btn ghost\" id=\"checkQuestionBankStats\" type=\"button\" style=\"margin-top:10px\">🔎 Проверить закрытый банк</button> <button class=\"btn ghost\" id=\"migrateQuestionBanks\" style=\"margin-top:10px\">🔐 Скопировать встроенные банки в закрытое хранилище</button><p style=\"font-size:12px;color:var(--muted)\">Диагностика доступна только администратору и показывает агрегированные счётчики без текста вопросов и ответов.</p><div id=\"questionBankStats\" aria-live=\"polite\"></div><span id=\"bankMigrationStatus\" aria-live=\"polite\"></span>";
+   document.getElementById("checkQuestionBankStats").onclick=async function(){
+ const btn=this,box=document.getElementById("questionBankStats");btn.disabled=true;box.textContent="Проверяем закрытый банк…";
+ try{const r=await window.API.getQuestionBankStats();if(!r||!r.success)throw Error(r&&r.error||"Не удалось получить статистику");
+ const rows=Array.isArray(r.byCourse)?r.byCourse:[];
+ box.innerHTML="<div style=\"overflow:auto;margin-top:10px\"><table class=\"data-table\" style=\"width:100%\"><thead><tr><th>Дисциплина</th><th>Строк-вопросов</th><th>Банков</th><th>Уникальных ID</th></tr></thead><tbody>"+rows.map(x=>"<tr><td>"+esc(x.courseId||"(пусто)")+"</td><td>"+Number(x.questionRows||0)+"</td><td>"+Number(x.distinctBanks||0)+"</td><td>"+Number(x.distinctQuestionIds||0)+"</td></tr>").join("")+"</tbody></table></div><p style=\"font-size:12px;color:var(--muted)\">Всего строк: "+Number(r.totalQuestionRows||0)+" · уникальных банков: "+Number(r.distinctBanks||0)+" · повторов ID: "+Number(r.duplicateQuestionIds||0)+" · некорректных строк: "+Number(r.invalidRows||0)+" · пустых JSON: "+Number(r.emptyQuestionJSON||0)+" · повреждённых JSON: "+Number(r.invalidQuestionJSON||0)+"</p>";
+ }catch(e){box.textContent="Ошибка диагностики: "+(e.message||e);}finally{btn.disabled=false;}
+};
    document.getElementById("migrateQuestionBanks").onclick=async function(){
     const btn=this,status=document.getElementById("bankMigrationStatus");btn.disabled=true;status.textContent="Подготовка банков…";
     try{
@@ -93,7 +100,7 @@ window.renderTeacherControlsPage=function(){
       batch.push(bank);batchQuestions+=count;
      }
      await sendImportBatch();
-     status.textContent="Готово: "+banks.length+" банков, "+total+" вопросов сохранены в закрытом листе QuestionBank. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов: "+skippedDuplicates+". Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
+     status.textContent="Импорт подтверждён сервером: "+bankCount+" из "+banks.length+" банков; "+total+" из "+totalExpected+" вопросов. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов банков: "+skippedDuplicates+"."+(bankCount!==banks.length||total!==totalExpected?" ВНИМАНИЕ: есть расхождение — запустите «Проверить закрытый банк» и сверьте счётчики по дисциплинам.":" Все подготовленные банки и вопросы подтверждены ответами сервера.")+" Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
     }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
     finally{btn.disabled=false;}
    };
