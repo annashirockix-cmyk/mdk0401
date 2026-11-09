@@ -435,27 +435,35 @@
   window.saveStudentData = function () {
     try {
       var st = window.state || {};
-      var student = st.student || st.staff;
-      if (!student || !student.email) return;
+      var account = st.student || st.staff;
+      if (!account || !account.email) return;
+
+      var email = String(account.email).trim().toLowerCase();
       var payload = {
         results: st.results || {},
         xp: st.xp || 0,
-        achievements: st.achievements || [],
+        achievements: st.achievements || st.unlockedAchievements || [],
         progress: st.progress || {},
+        gcodeProgress: st.gcodeProgress || null,
         activeCourseId: st.activeCourseId || "07.01",
         updatedAt: new Date().toISOString()
       };
-      localStorage.setItem("mdk.payload." + student.email.toLowerCase(), JSON.stringify(payload));
-      localStorage.setItem("mdk.state", JSON.stringify({
-        email: student.email,
-        name: student.name,
-        group: student.group,
-        role: student.role,
-        results: st.results,
-        xp: st.xp
-      }));
-      if (window.API && window.API.saveStudent) {
-        window.API.saveStudent(student.email, student.name, student.group, JSON.stringify(payload)).catch(function () {});
+
+      // Keep the complete state shape: app.js restores staff/student from these
+      // nested objects during startup. A flat profile snapshot breaks refresh login.
+      localStorage.setItem("mdk.payload." + email, JSON.stringify(payload));
+      localStorage.setItem("mdk.state", JSON.stringify(st));
+
+      // Only student accounts belong in the student progress table.
+      if (st.student && window.API && window.API.saveStudent) {
+        window.API.saveStudent(
+          email,
+          account.name,
+          account.group,
+          JSON.stringify(payload)
+        ).catch(function (error) {
+          console.warn("[portal-final] student sync failed", error);
+        });
       }
     } catch (e) {
       console.warn("[portal-final] saveStudentData", e);
