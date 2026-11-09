@@ -565,7 +565,7 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   assert.match(engine, /var key = exam\.id \|\|/);
   assert.match(lab, /for \(var year = 1; year <= 5; year\+\+\)/);
   assert.match(lab, /semester = 1; semester <= 2/);
-  assert.match(lab, /variant <= 15/);
+  assert.match(lab, /v <= 15/);
   assert.match(lab, /year <= 2 \? "basic" : "technical"/);
   assert.match(lab, /A1–A2/);
   assert.match(lab, /C1–C2/);
