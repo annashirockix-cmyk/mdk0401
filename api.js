@@ -1,9 +1,26 @@
 "use strict";
 var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0dGPf0HOelu33KON9q6TsA-tnUUdtcuVMbViwXOtKOH6MwxJA_Y5dzlh_ocn3vKEM/exec";
+function getStoredSessionToken() {
+  try {
+    var token = localStorage.getItem("mdk.session") || "";
+    if (token) return token;
+    token = sessionStorage.getItem("mdk.session") || "";
+    if (token) { try { localStorage.setItem("mdk.session", token); } catch(e) {} }
+    return token;
+  } catch(e) { return ""; }
+}
+function setStoredSessionToken(token) {
+  try { localStorage.setItem("mdk.session", String(token || "")); } catch(e) {}
+  try { sessionStorage.removeItem("mdk.session"); } catch(e) {}
+}
+function clearStoredSessionToken() {
+  try { localStorage.removeItem("mdk.session"); } catch(e) {}
+  try { sessionStorage.removeItem("mdk.session"); } catch(e) {}
+}
 function fetchAPI(action, params, method, timeoutMs) {
   params = Object.assign({}, params || {}); method = method || "GET"; params.action = action;
   var url = new URL(APPS_SCRIPT_URL); url.searchParams.set("action", action); url.searchParams.set("t", String(Date.now()));
-  var token = ""; try { token = sessionStorage.getItem("mdk.session") || ""; } catch(e) {}
+  var token = getStoredSessionToken();
   if (token) params.token = token;
   var options = {method:method,cache:"no-store",redirect:"follow",headers:{"Content-Type":"text/plain;charset=utf-8"}};
   if (method === "POST") options.body = JSON.stringify(params);
@@ -13,7 +30,10 @@ function fetchAPI(action, params, method, timeoutMs) {
   return fetch(url.toString(),options).then(function(r){clearTimeout(timer);if(!r.ok)throw new Error("HTTP "+r.status);return r.text();})
     .then(function(raw){if(!raw||raw.trim().charAt(0)==="<")throw new Error("Сервер вернул HTML. Проверьте публикацию Google Apps Script.");
       var result;try{result=JSON.parse(raw);}catch(e){throw new Error("Сервер вернул некорректный JSON.");}
-      if(result&&result.error&&/сессия|авторизац|войдите/i.test(result.error)){try{sessionStorage.removeItem("mdk.session");}catch(e){}}
+      if(result&&result.error&&/сессия|авторизац|войдите/i.test(result.error)){
+        clearStoredSessionToken();
+        if (typeof window.handleAuthExpired === "function") window.handleAuthExpired(result.error);
+      }
       return result;})
     .catch(function(err){
        clearTimeout(timer);
