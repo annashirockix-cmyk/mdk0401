@@ -1716,7 +1716,7 @@ function submitBuiltInTest_(data) {
     const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
     if(prior>=limit)throw new Error("Работа уже завершена ("+prior+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo);
-    const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=gradeFromPercent_(percent),score=Math.round(entries.length*percent)/100;
+    const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=gradeFromPercent_(percent),score=rawScore; // Показываем фактически верные ответы; штраф влияет на процент и оценку, но не меняет счётчик правильных ответов.
     appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:String(data.testTitle||testId),Grade:grade,Score:score,MaxScore:entries.length,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:JSON.stringify({answers:answers}).slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:String(data.testTitle||testId),AttemptNo:attemptNo,Grade:grade,Score:score,MaxScore:entries.length,Percent:percent});
     cache.remove("builtInAttempt:"+attemptId);
