@@ -1933,11 +1933,13 @@ function submitCustomTest_(data) {
   let record = null;
   values.slice(1).forEach(function (row) {
     if (String(row[0]) === id && String(row[3]) === "test") record = {
-      courseId: String(row[1] || ""), title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
+      id: id, courseId: String(row[1] || ""), topicId: String(row[2] || ""), type: "test",
+      title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
     };
   });
   if (!record) throw new Error("Тест не найден.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
+  if (!customContentIsOpen_(record.courseId, record.id, record.topicId, record.type)) throw new Error("Этот тест закрыт преподавателем.");
   const attemptKey="custom_"+id;
   const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   const answers = Array.isArray(data.answers) ? data.answers : [];
@@ -1974,9 +1976,10 @@ function getGameAnswer_(data) {
   if (!id || !Number.isInteger(ci) || !Number.isInteger(qi) || ci < 0 || qi < 0) throw new Error("Некорректный запрос ответа.");
   const values = content_().getDataRange().getValues();
   let record = null;
-  values.slice(1).forEach(function(row) { if (String(row[0]) === id && String(row[3]) === "game") record = {courseId:String(row[1]||""), payload:JSON.parse(row[5]||"{}")}; });
+  values.slice(1).forEach(function(row) { if (String(row[0]) === id && String(row[3]) === "game") record = {id:id,courseId:String(row[1]||""),topicId:String(row[2]||""),type:"game",payload:JSON.parse(row[5]||"{}")}; });
   if (!record) throw new Error("Игра не найдена.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
+  if (!customContentIsOpen_(record.courseId, record.id, record.topicId, record.type)) throw new Error("Эта игра закрыта преподавателем.");
   const cats = Array.isArray(record.payload.categories) ? record.payload.categories : [];
   const cat = cats[ci], q = cat && Array.isArray(cat.questions) ? cat.questions[qi] : null;
   if (!q) throw new Error("Вопрос не найден.");
