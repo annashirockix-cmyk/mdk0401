@@ -163,6 +163,55 @@ window.renderFinalExamPage = function (mdkId) {
   hero.appendChild(examNode("p", "", "30 заданий разных форматов + 2 письменных задания · " + duration + " минут"));
   app.appendChild(hero);
 
+  // Преподавательский аккаунт не должен попадать в студенческий серверный сценарий:
+  // для него доступен только локальный предпросмотр банка без отправки и выставления оценки.
+  var staffAccount = window.state && window.state.staff;
+  var staffRole = String(staffAccount && staffAccount.role || "").toLowerCase();
+  var teacherOnly = !!staffAccount && (staffRole === "teacher" || staffRole === "admin") &&
+    !(window.state && window.state.student);
+  if (teacherOnly) {
+    var teacherPanel = examNode("div", "module");
+    var localQuestions = collectCourseQuestions(mdkId);
+    teacherPanel.appendChild(examNode("h2", "", "Предпросмотр экзамена для преподавателя"));
+    teacherPanel.appendChild(examNode("p", "", "Это режим проверки содержания. Ответы не отправляются на сервер, попытка не расходуется, оценка не выставляется."));
+    teacherPanel.appendChild(examNode("p", "", "В локальном банке дисциплины: " + localQuestions.length + " вопросов."));
+    if (!localQuestions.length) {
+      teacherPanel.appendChild(examNode("p", "", "Локальный банк вопросов для этой дисциплины не найден. Студенческий экзамен использует отдельный защищённый банк на сервере."));
+    } else {
+      var previewButton = examNode("button", "btn", "Открыть предпросмотр варианта");
+      previewButton.type = "button";
+      previewButton.style.cssText = "width:100%;padding:14px;margin:8px 0 16px;";
+      teacherPanel.appendChild(previewButton);
+      var previewArea = examNode("div", "teacher-exam-preview");
+      teacherPanel.appendChild(previewArea);
+      previewButton.addEventListener("click", function () {
+        previewArea.innerHTML = "";
+        var previewQuestions = examShuffle(localQuestions).slice(0, 30);
+        previewArea.appendChild(examNode("h3", "", "Вариант: " + previewQuestions.length + " заданий"));
+        previewQuestions.forEach(function (question, index) {
+          var card = renderExamQuestion(question, index);
+          Array.prototype.forEach.call(card.querySelectorAll("input, select, textarea"), function (control) {
+            control.disabled = true;
+          });
+          var answer = question.correct;
+          var answerText;
+          if (Array.isArray(answer)) answerText = answer.join(", ");
+          else if (answer !== undefined && answer !== null) answerText = String(answer);
+          else if (question.answer !== undefined && question.answer !== null) answerText = String(question.answer);
+          else answerText = "Ключ ответа не задан";
+          var details = examNode("details", "exam-answer-key");
+          details.style.cssText = "margin-top:10px;padding:9px 12px;background:var(--card);border-radius:7px;";
+          details.appendChild(examNode("summary", "", "Показать ключ ответа"));
+          details.appendChild(examNode("p", "", answerText));
+          card.appendChild(details);
+          previewArea.appendChild(card);
+        });
+      });
+    }
+    app.appendChild(teacherPanel);
+    return;
+  }
+
   var mount = examNode("div", "module");
   var start = examNode("button", "btn", "Начать экзамен"); start.type = "button"; start.style.cssText = "width:100%;padding:16px;font-size:17px;";
   mount.appendChild(start); app.appendChild(mount);
