@@ -15,17 +15,22 @@
     var id = window.state && window.state.activeCourseId || "EN";
     return id === "ENB" ? "ENB" : id === "ENT" ? "ENT" : "EN";
   }
+  function courseForTrack(track) {
+    return track === "technical" ? "ENT" : "ENB";
+  }
   function renderPage(mode) {
     var app = document.getElementById("app");
     if (!app) return;
+    // Режим, переданный каталогом, имеет приоритет над текущим переключателем дисциплины.
+    // Иначе выбранный семестровый вариант подменялся старым экзаменом активного курса.
     var track = mode === "final-technical" ? "technical" : "basic";
-    var course = activeCourse();
-    if (!window.state || (!window.state.student && !window.state.staff) || (window.canAccessCourse && !window.canAccessCourse(course))) {
-      app.innerHTML = '<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';
+    var course = courseForTrack(track);
+    var hasCourseAccess = !window.canAccessCourse ||
+      window.canAccessCourse(course) || window.canAccessCourse("EN");
+    if (!window.state || (!window.state.student && !window.state.staff) || !hasCourseAccess) {
+      app.innerHTML = '<section class="module">Нет доступа к выбранному экзамену. Попросите преподавателя открыть дисциплину ' + course + '.</section>';
       return;
     }
-    if (course === "ENB") track = "basic";
-    if (course === "ENT") track = "technical";
     var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 40 баллов</p></section>';
     var tabs = el("section", "module");
@@ -50,22 +55,23 @@
     } else {
       var start = el("button", "btn", "Начать экзамен");
       start.type = "button"; start.style.cssText = "width:100%;padding:15px;font-size:17px";
-      start.onclick = function () { startExam(exam, key, panel); };
+      start.onclick = function () { startExam(exam, key, panel, course); };
       panel.appendChild(start);
     }
     app.appendChild(panel);
   }
-  function startExam(exam, key, panel) {
+  function startExam(exam, key, panel, courseId) {
+    courseId = courseId || courseForTrack(exam.track);
     var student = window.state && window.state.student;
     if (student && window.API && window.API.getTestAttemptStatus && window._englishVprGate !== key) {
       panel.innerHTML = "<p>Проверяем доступ к экзамену…</p>";
-      window.API.getTestAttemptStatus(activeCourse(), key).then(function (status) {
+      window.API.getTestAttemptStatus(courseId, key).then(function (status) {
         if (!status || status.allowed === false) {
           panel.textContent = "Попытка уже использована. Для повторного прохождения обратитесь к преподавателю.";
           return;
         }
         window._englishVprGate = key;
-        startExam(exam, key, panel);
+        startExam(exam, key, panel, courseId);
         window._englishVprGate = "";
       }).catch(function () { panel.textContent = "Не удалось проверить доступ. Обновите страницу и попробуйте ещё раз."; });
       return;
@@ -224,7 +230,7 @@
       if (window.saveStudentData) window.saveStudentData();
       panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 30</b> баллов.</p><p>Задание 7 — анкета из 10 пунктов (до 5 слов в каждом ответе), максимум 10 баллов; её проверит преподаватель отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
       if (student && window.API && window.API.saveResult) {
-        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:activeCourse(),testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:30,percent:Math.round(objective/30*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
+        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:courseId,testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:30,percent:Math.round(objective/30*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
       }
     };
     panel.appendChild(form); panel.appendChild(submit);
