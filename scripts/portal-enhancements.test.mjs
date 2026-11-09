@@ -537,8 +537,8 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   const engine = read("english-vpr-engine.js");
   const app = read("app.js");
   assert.match(app, /id !== "EN"/);
-  assert.match(app, /var englishCourse = window\\.state\\.activeCourseId \\|\\| "EN"/);
-  assert.match(html, /app\\.js\\?v=44/);
+  assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
+  assert.match(html, /app\.js\?v=44/);
   assert.match(html, /english-tools\.js\?v=7/);
   assert.match(html, /english-vpr-engine\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
