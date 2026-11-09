@@ -610,3 +610,13 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(html, /api\.js\?v=39/);
   assert.match(html, /english-vpr-engine\.js\?v=12/);
 });
+
+
+test("English VPR grades numbered choices correctly and renders per-gap option lists", () => {
+  const server = read("EnglishVPR-Sheets.gs");
+  const engine = read("english-vpr-engine.js");
+  assert.match(server, /Number\(ans\[i\]\)===Number\(item\[1\]\)/);
+  assert.doesNotMatch(server, /Number\(ans\[i\]\)===Number\(item\[1\]\)\+1/);
+  assert.match(engine, /\(\(task\.itemOptions && task\.itemOptions\[i\]\) \|\| task\.options \|\| \[\]\)\.map/);
+  assert.match(engine, /Десять кратких ответов в задании 7/);
+});
