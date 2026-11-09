@@ -172,7 +172,7 @@
     submit.type = "button"; submit.style.cssText = "width:100%;padding:16px;font-size:17px;margin:12px 0";
     submit.onclick = function () {
       if (finished) return;
-      if (!window.confirm("Отправить ответы? После отправки изменить их будет нельзя.")) return;
+      if (seconds > 0 && !window.confirm("Отправить ответы? После отправки изменить их будет нельзя.")) return;
       finished = true;
       if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
       if (window.speechSynthesis) window.speechSynthesis.cancel();
