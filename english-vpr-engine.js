@@ -171,7 +171,7 @@
           row.appendChild(answer);
           var count = el("small", "museum-muted", "0 words");
           answer.addEventListener("input", function () {
-            var words = (answer.value.trim().match(/\\S+/g) || []).length;
+            var words = (answer.value.trim().match(/\S+/g) || []).length;
             count.textContent = words + " words" + (words > 5 ? " — no more than 5 words" : "");
             count.style.color = words > 5 ? "var(--danger)" : "";
           });
