@@ -44,6 +44,7 @@ const HEADERS = {
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"],
   QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"],
+  QuestionBankBackup: ["BackupId", "CourseId", "BankId", "RowJSON", "BackedUpAt", "BackedUpBy"],
   ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt", "EventType", "Details"]
 };
 
@@ -104,6 +105,8 @@ function handleRequest_(e) {
       case "gettutoringlink": result = getTutoringLink_(data); break;
       case "savetutoringlink": result = saveTutoringLink_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
+      case "backupquestionbanks": result = backupQuestionBanks_(data); break;
+      case "restorequestionbanks": result = restoreQuestionBanks_(data); break;
       case "importquestionbanks": result = importQuestionBanks_(data); break;
       case "getquestionbank": result = getQuestionBank_(data); break;
       case "getbuilttest":
@@ -1512,7 +1515,7 @@ function importQuestionBanks_(data) {
     prepared.forEach(function(bank){
       const current=sh.getDataRange().getValues(),deleteRows=[];
       for(let i=1;i<current.length;i++){
-        if(String(current[i][map.CourseId])===bank.courseId&&String(current[i][map.BankId])===bank.bankId)deleteRows.push(i+1);
+        if(sameCourseId_(current[i][map.CourseId],bank.courseId)&&String(current[i][map.BankId])===bank.bankId)deleteRows.push(i+1);
       }
       for(let i=deleteRows.length-1;i>=0;i--)sh.deleteRow(deleteRows[i]);
       sh.getRange(sh.getLastRow()+1,1,bank.rows.length,6).setValues(bank.rows);
@@ -1520,6 +1523,37 @@ function importQuestionBanks_(data) {
     CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");
     return {success:true,banksImported:prepared.length,questionsImported:total};
   } finally {lock.releaseLock();}
+}
+
+function backupQuestionBanks_(data) {
+ const actor=admin_(data),backupId=String(data.backupId||"").slice(0,120),banks=Array.isArray(data.banks)?data.banks:[];
+ if(!backupId)throw new Error("Не указан идентификатор резервной копии.");
+ if(!banks.length||banks.length>100)throw new Error("Передайте от 1 до 100 банков.");
+ const keys={},prepared=[];
+ banks.forEach(function(b){const courseId=String(b.courseId||""),bankId=String(b.bankId||"").slice(0,180),key=courseId+"|"+bankId;if(CFG.COURSES.indexOf(courseId)<0||!bankId)throw new Error("Некорректный банк: "+key);if(!keys[key]){keys[key]=true;prepared.push({courseId:courseId,bankId:bankId});}});
+ const lock=LockService.getScriptLock();lock.waitLock(10000);
+ try{
+  const backup=ensureSheet_("QuestionBankBackup"),old=backup.getDataRange().getValues(),bm=headerMap_(backup),done={};
+  for(let i=1;i<old.length;i++)if(String(old[i][bm.BackupId])===backupId)done[String(old[i][bm.CourseId])+"|"+String(old[i][bm.BankId])]=true;
+  const sh=questionBank_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),now=new Date().toISOString(),records=[];
+  prepared.forEach(function(b){const key=b.courseId+"|"+b.bankId;if(done[key])return;let found=0;for(let i=1;i<values.length;i++)if(sameCourseId_(values[i][m.CourseId],b.courseId)&&String(values[i][m.BankId])===b.bankId){records.push([backupId,b.courseId,b.bankId,JSON.stringify(values[i]),now,actor.email]);found++;}if(!found)records.push([backupId,b.courseId,b.bankId,"",now,actor.email]);});
+  if(records.length)backup.getRange(backup.getLastRow()+1,1,records.length,6).setValues(records);
+  return {success:true,backupId:backupId,banksBackedUp:prepared.length,backupRows:records.length};
+ }finally{lock.releaseLock();}
+}
+function restoreQuestionBanks_(data) {
+ admin_(data);const backupId=String(data.backupId||"").slice(0,120);if(!backupId)throw new Error("Не указан идентификатор резервной копии.");
+ const lock=LockService.getScriptLock();lock.waitLock(10000);
+ try{
+  const backup=ensureSheet_("QuestionBankBackup"),bv=backup.getDataRange().getValues(),bm=headerMap_(backup),groups={},order=[];
+  for(let i=1;i<bv.length;i++)if(String(bv[i][bm.BackupId])===backupId){const courseId=String(bv[i][bm.CourseId]),bankId=String(bv[i][bm.BankId]),key=courseId+"|"+bankId;if(!groups[key]){groups[key]={courseId:courseId,bankId:bankId,rows:[]};order.push(key);}if(String(bv[i][bm.RowJSON]||""))groups[key].rows.push(JSON.parse(String(bv[i][bm.RowJSON])));}
+  if(!order.length)throw new Error("Резервная копия не найдена: "+backupId);
+  const sh=questionBank_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),remove=[];
+  for(let i=1;i<values.length;i++){for(let k=0;k<order.length;k++){const b=groups[order[k]];if(sameCourseId_(values[i][m.CourseId],b.courseId)&&String(values[i][m.BankId])===b.bankId){remove.push(i+1);break;}}}
+  for(let i=remove.length-1;i>=0;i--)sh.deleteRow(remove[i]);
+  order.forEach(function(key){const rows=groups[key].rows;if(rows.length)sh.getRange(sh.getLastRow()+1,1,rows.length,6).setValues(rows);});
+  CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");return {success:true,banksRestored:order.length};
+ }finally{lock.releaseLock();}
 }
 
 /** Полный ключ доступен только преподавателю своей дисциплины или администратору. */
