@@ -440,7 +440,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
   assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v263/);
+  assert.match(sw, /portal-cache-v265/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
   assert.match(exam, /seen\[key\]/);
   assert.match(exam, /slice\(0, 30\)/);
@@ -528,4 +528,18 @@ test("SPRUT-TP includes filled examples for every listed document and practical 
     assert.ok(topic.practicals[0].task.includes("Производственная ситуация"), "practical case missing: "+topic.title);
     assert.ok(topic.practicals[0].variants.length>=3, "practical variants missing: "+topic.title);
   }
+});
+
+
+test("English exam entry disables legacy semester/final catalogue and exposes only the two VPR tracks", () => {
+  const html = read("index.html");
+  const tools = read("english-tools.js");
+  const engine = read("english-vpr-engine.js");
+  assert.match(html, /english-tools\.js\?v=7/);
+  assert.match(html, /english-vpr-engine\.js\?v=4/);
+  assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
+  assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
+  assert.match(engine, /Basic English — базовый/);
+  assert.match(engine, /Technical English — технический/);
+  assert.match(engine, /window\.renderEnglishTestsPage = function/);
 });
