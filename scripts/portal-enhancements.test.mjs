@@ -577,7 +577,7 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   assert.match(lab, /function advancedExam\(variant\)/);
   assert.match(lab, /english_cefr_c1c2_variant_/);
   assert.match(lab, /Лаборатория английского языка/);
-  assert.ok(lab.includes('href = "#/laboratory/english"'));
+  assert.ok(read("laboratory.js").includes('href: "#/laboratory/english"'));
   assert.ok(read("laboratory.js").includes('renderEnglishTestsPage("lab")'));
   assert.ok(read("workbooks.js").includes(".sheet img,.lecture-content img"));
   assert.ok(read("flashcard-editor.js").includes("window.enhanceTopicFlashcards"));
