@@ -210,10 +210,12 @@
       if (window.speechSynthesis) window.speechSynthesis.cancel();
       var answers = exam.tasks.map(function(task,ti) {
         var row = {};
-        (task.items || []).forEach(function(item,i) {
+        var count = (task.items || []).length;
+        if (task.type === "gap") count = (task.text.match(/[A-F]_____/g) || []).length;
+        for (var i=0;i<count;i++) {
           var field = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
           row[i] = field ? (field.value || "").trim() : "";
-        });
+        }
         return row;
       });
       var elapsed = Math.max(0, Number(exam.time || 90) * 60 - seconds);
@@ -259,6 +261,21 @@
     }
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Формат ВПР СПО 2026 · 90 минут · 7 заданий · 40 баллов</p></section><section class="module"><h2>Выберите вариант экзамена</h2><p>В портале оставлены только две итоговые работы. Старые семестровые и прежние итоговые экзамены больше не выводятся в этом разделе.</p><div id="englishVprChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div></section>';
     var choices = document.getElementById("englishVprChoices");
+    if (window.state && window.state.staff && window.API && window.API.importEnglishVprBank && window.ENGLISH_VPR_EXAMS) {
+      var migrate = el("button","btn ghost","Перенести экзамены в защищённую таблицу");
+      migrate.type="button"; migrate.style.cssText="margin:0 0 14px;width:100%";
+      migrate.onclick=function(){
+        if(!window.confirm("Импортировать варианты Basic и Technical в закрытый лист EnglishVPRBank?")) return;
+        migrate.disabled=true; migrate.textContent="Импортируем…";
+        Promise.all(["basic","technical"].map(function(track){
+          var exam=window.ENGLISH_VPR_EXAMS[track];
+          if(!exam) throw new Error("Не найден вариант "+track);
+          return window.API.importEnglishVprBank(track,exam);
+        })).then(function(){migrate.textContent="Оба экзамена перенесены в таблицу";if(window.showToast)window.showToast("Импорт Basic и Technical завершён.","success");})
+          .catch(function(err){migrate.disabled=false;migrate.textContent="Повторить импорт";window.alert("Ошибка импорта: "+(err.message||err));});
+      };
+      app.querySelector(".module").appendChild(migrate);
+    }
     var tracks = course === "ENB" ? ["basic"] : course === "ENT" ? ["technical"] : ["basic", "technical"];
     tracks.forEach(function (track) {
       var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
