@@ -545,8 +545,8 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=44/);
   assert.match(html, /english-tools\.js\?v=7/);
-  assert.match(html, /english-vpr-engine\.js\?v=8/);
-  assert.match(html, /english-proficiency-lab\.js\?v=1/);
+  assert.match(html, /english-vpr-engine\.js\?v=10/);
+  assert.match(html, /english-proficiency-lab\.js\?v=3/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
   assert.match(engine, /Basic English — базовый/);
@@ -560,7 +560,7 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   const engine = read("english-vpr-engine.js");
   const lab = read("english-proficiency-lab.js");
   const sw = read("service-worker.js");
-  assert.match(html, /english-proficiency-lab\.js\?v=1/);
+  assert.match(html, /english-proficiency-lab\.js\?v=3/);
   assert.ok(sw.includes("./english-proficiency-lab.js"));
   assert.match(html, /drawerExams/);
   assert.match(html, /href="#\\/english-tests"/);
