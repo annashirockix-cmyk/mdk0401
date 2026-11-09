@@ -222,12 +222,15 @@
       if(document.getElementById("editorCourse")!==courseSel||required.some(id=>!$(id)))return;
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
       const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
+      const fs=(window.customContent.flashcards||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
       $("lectureExisting").innerHTML='<option value="">— Новая лекция —</option>'+ls.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
       $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
       $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button></div>').join(""):'<p>Лекций пока нет.</p>')+
-        '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>');
+        '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>')+
+        '<h4 style="margin-top:16px">Карточки ('+fs.length+')</h4>'+(fs.length?fs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.cards||[]).length)+' карточек · '+esc(x.track||"all")+' <button class="btn ghost pick-flashcards" data-id="'+esc(x.id)+'">Открыть конструктор</button></div>').join(""):'<p>Наборов карточек пока нет.</p>');
       $("savedMaterials").querySelectorAll(".pick-lecture").forEach(b=>b.onclick=()=>{ $("lectureExisting").value=b.dataset.id;loadLecture();});
       $("savedMaterials").querySelectorAll(".pick-test").forEach(b=>b.onclick=()=>{ $("testExisting").value=b.dataset.id;loadTest();$("previewTestBtn").click();});
+      $("savedMaterials").querySelectorAll(".pick-flashcards").forEach(b=>b.onclick=()=>{window.state.activeCourseId=courseSel.value;if(window.saveStudentData)window.saveStudentData();location.hash="#/flashcard-editor";});
     }
     function resetLecture(){
       lectureId="";$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
@@ -353,13 +356,8 @@
     const lectures=customRecords(courseId,topicId,"lecture"),tests=customRecords(courseId,topicId,"test");
     if(!lectures.length&&!tests.length)return;
     const tabs=document.querySelector("#app > div[style*='display: flex']")||document.querySelector("#app .tab")?.parentElement;
-    if(tests.length&&!document.getElementById("tab-custom-test")){
-      const bar=document.getElementById("tab-lectures")?.parentElement;
-      if(bar){const b=document.createElement("button");b.className="btn tab ghost";b.id="tab-custom-test";b.textContent="🧪 Дополнительный тест";bar.appendChild(b);b.onclick=()=>window.switchTopicTab("custom-test");}
-    }
     const originalSwitch=window.switchTopicTab;
     window.switchTopicTab=function(tab){
-      if(tab==="custom-test"){document.querySelectorAll(".tab").forEach(b=>{b.classList.remove("active");b.classList.add("ghost");});const b=document.getElementById("tab-custom-test");if(b){b.classList.add("active");b.classList.remove("ghost");}const area=document.getElementById("topicContent");area.innerHTML=tests.map((t,i)=>'<div class="module"><h3>'+esc(t.title)+'</h3><p>Вопросов: '+(t.questions||[]).length+'</p><button class="btn start-custom-test" data-i="'+i+'">Начать тест</button></div>').join("");area.querySelectorAll(".start-custom-test").forEach(b=>b.onclick=()=>runTest(tests[+b.dataset.i],courseId,topicId));return;}
       originalSwitch.apply(this,arguments);
       if(tab==="lectures"&&lectures.length){const area=document.getElementById("topicContent");lectures.forEach(l=>{const d=document.createElement("details");d.className="lec-accordion";d.open=true;const s=document.createElement("summary");s.textContent=(l.code||"Дополнительная лекция")+" · "+l.title;s.style="padding:14px;font-weight:bold;cursor:pointer";const body=document.createElement("div");body.className="lec-content";body.style="padding:18px;border-top:1px solid var(--border);line-height:1.6";body.innerHTML=safeLectureHtml(l.content);d.appendChild(s);d.appendChild(body);area.appendChild(d);});}
     };

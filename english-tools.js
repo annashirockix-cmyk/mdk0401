@@ -36,7 +36,7 @@
     var existing=window.state&&window.state.results&&window.state.results[resultKey];
     if(existing){app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="module" style="text-align:center"><h2>Работа уже завершена</h2><p>Оценка: <b>'+esc(existing.grade||"—")+'</b></p><p>Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.</p></section>';return;}
     if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
-    app.setAttribute("translate","no");app.classList.add("notranslate");
+    app.setAttribute("translate","no");app.classList.add("notranslate");app.dataset.proctorAssessment="1";app.dataset.testId=resultKey;window._activeAssessmentCourseId=activeCourse();
     var timeLeft=Math.max(1,Number(minutes)||45)*60;
     app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="hero"><h1>'+esc(title)+'</h1><p>'+questions.length+' вопросов · отведённое время: '+minutes+' мин.</p><div id="englishAssessmentTimer" style="font-size:22px;font-weight:bold;color:var(--accent)"></div></section><section class="module"><div id="englishAssessmentQuestions"></div><button class="btn" id="englishAssessmentFinish">Завершить работу</button></section>';
     var area=$("englishAssessmentQuestions");
@@ -49,6 +49,7 @@
       var percent=Math.round(correct/questions.length*100),grade=percent>=90?5:percent>=75?4:percent>=60?3:2,now=new Date().toISOString();
       window.state.results=window.state.results||{};window.state.results[resultKey]={grade:grade,score:correct,max:questions.length,percent:percent,finishedAt:now};
       if(window.saveStudentData)window.saveStudentData();
+      app.dataset.proctorAssessment="0";
       app.innerHTML='<a class="backlink" href="#/english-tests">← К списку тестов</a><section class="module notranslate" translate="no" style="text-align:center"><h2>Работа завершена</h2><p>Правильных ответов: <b>'+correct+'</b> из '+questions.length+'</p><p>Отвечено: '+answered+' из '+questions.length+'</p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+grade+'</h1><p>'+percent+'%</p><p>Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.</p></section>';
       if(window.state.student&&window.API&&window.API.saveResult){window.API.saveResult({email:window.state.student.email,name:window.state.student.name,group:window.state.student.group,courseId:activeCourse(),testId:resultKey,testTitle:title,grade:grade,score:correct,maxScore:questions.length,percent:percent,finishedAt:now}).catch(function(err){console.warn("English assessment sync failed",err);if(window.showToast)window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err");});}
     }

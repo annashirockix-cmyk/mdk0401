@@ -15,7 +15,8 @@
       { icon: "⚙️", title: "G-Code Lab", tag: "300 уровней", desc: "Редактор управляющей программы, разбор G- и M-команд, визуализация траектории и учебные задания.", href: "#/gcode-lab", color: "#4f9ee8" },
       { icon: "🔬", title: "Лаборатория материаловедения", tag: "Материалы и структуры", desc: "Кристаллические решётки ОЦК, ГЦК и ГПУ, учебная диаграмма Fe–Fe₃C и исследование состава сплавов.", href: "#/materials-lab", color: "#40b99a" },
       { icon: "📏", title: "Тренажёр метролога", tag: "Измерения и контроль", desc: "Штангенциркуль, микрометр, глубиномер, индикатор, допуски и оформление лабораторного протокола.", href: "#/metrology-trainer", color: "#b38ae8" },
-      { icon: "🛠️", title: "Расчёт режимов резания", tag: "Точение и фрезерование", desc: "Расчёт частоты вращения шпинделя и минутной подачи с проверкой исходных данных и формул.", href: "#/machining-lab", color: "#d5a34e" }
+      { icon: "🛠️", title: "Расчёт режимов резания", tag: "Точение и фрезерование", desc: "Расчёт частоты вращения шпинделя и минутной подачи с проверкой исходных данных и формул.", href: "#/machining-lab", color: "#d5a34e" },
+      { icon: "🇬🇧", title: "Языковая лаборатория CEFR", tag: "Английский A1–C2", desc: "Диагностика грамматики, лексики и понимания языка с ориентировочной оценкой уровня до C2.", href: "#/laboratory/english", color: "#6b8fe8" }
     ];
     app.innerHTML = '<section class="lab-hub"><div class="lab-hub-head"><div><span class="lab-kicker">ПРАКТИКА · МОДЕЛИРОВАНИЕ · РАСЧЁТЫ</span><h1>🧪 Учебная лаборатория</h1><p>Выберите инструмент для практической работы. Прогресс и результаты тренажёров сохраняются в учебном портале, если вы вошли в аккаунт.</p></div><span class="lab-hub-mark">LAB</span></div><div class="lab-hub-grid">' +
       tools.map(function (tool, index) {
@@ -29,6 +30,11 @@
     window.__laboratoryRouterBound = true;
     window.router = function () {
       var page = ((location.hash || "").replace(/^#/, "").split("/").filter(Boolean)[0] || "");
+      if (page === "laboratory" && ((location.hash || "").replace(/^#/, "").split("/").filter(Boolean)[1] === "english")) {
+        if (window.renderEnglishTestsPage) window.renderEnglishTestsPage("lab");
+        else window.renderLaboratoryHub();
+        return;
+      }
       if (page === "laboratory") {
         window.renderLaboratoryHub();
         return;

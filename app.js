@@ -76,7 +76,14 @@ window.updateMenuVisibility = function() {
     var museumLink=document.querySelector('.drawer-item[href="#/museum"]'); if(museumLink) museumLink.style.display=(window.state.student||isTeacher)?"flex":"none";
     var editorLink=document.getElementById('menuCourseEditor'); if(editorLink)editorLink.style.display=isTeacher?'flex':'none';
     var flashcardEditorLink=document.getElementById('menuFlashcardEditor'); if(flashcardEditorLink)flashcardEditorLink.style.display=isTeacher?'flex':'none';
-    var englishLinks=document.querySelectorAll('.english-drawer-item'); Array.prototype.forEach.call(englishLinks,function(link){link.style.display=['EN','ENB','ENT'].indexOf(window.state.activeCourseId)>=0?'flex':'none';});
+    var activeEnglish=['EN','ENB','ENT'].indexOf(String(window.state.activeCourseId||""))>=0;
+    var hasEnglishAccess=activeEnglish||!!(window.canAccessCourse&&['EN','ENB','ENT'].some(function(id){return window.canAccessCourse(id);}));
+    var englishLinks=document.querySelectorAll('.english-drawer-item');
+    Array.prototype.forEach.call(englishLinks,function(link){
+        var href=link.getAttribute("href")||"";
+        var examOrLab=href==="#/english-tests"||href==="#/laboratory/english";
+        link.style.display=(activeEnglish||(examOrLab&&hasEnglishAccess))?"flex":"none";
+    });
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
     var tutoringLink=document.getElementById("menuTutoring"); if(tutoringLink){tutoringLink.style.display=isTeacher?"flex":"none";if(window.state.student&&window.API&&window.API.getTutoringLink){var tutoringCourse=String(window.state.activeCourseId||"07.01");window.API.getTutoringLink(tutoringCourse).then(function(r){if(String(window.state.activeCourseId||"07.01")!==tutoringCourse)return;tutoringLink.style.display=(r&&r.link&&r.link.visible!==false)?"flex":"none";}).catch(function(){tutoringLink.style.display="none";});}}
 };
@@ -597,6 +604,10 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
 
         // Защищённая выдача: студент получает формулировки без ключей, проверка выполняется на сервере.
         if (window.state && window.state.student && window.API && window.API.getBuiltInTest && window.API.submitBuiltInTest) {
+            contentArea.dataset.testId = selfWorkCode !== null && selfWorkCode !== undefined ? ("self_" + topicId + "_" + (typeof selfWorkCode === "number" ? selfWorkCode : 0)) : ("test_" + topicId);
+            window._activeAssessmentCourseId = courseId;
+            contentArea.setAttribute("translate","no");
+            contentArea.classList.add("notranslate");
             var serverWorkIndex = selfWorkCode !== null && selfWorkCode !== undefined ? (typeof selfWorkCode === "number" ? selfWorkCode : (topic ? (topic.selfWork || []).findIndex(w => w.code === selfWorkCode) : 0)) : -1;
             if (serverWorkIndex < 0) serverWorkIndex = 0;
             var serverTestId = selfWorkCode !== null && selfWorkCode !== undefined ? "self_" + topicId + "_" + serverWorkIndex : "test_" + topicId;
@@ -680,6 +691,12 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             }).catch(function(error) {
                 contentArea.textContent="Не удалось загрузить защищённый тест: "+(error.message||error)+". Обратитесь к преподавателю.";
             });
+            return;
+        }
+        // Fail closed: students must never fall back to client-side answer keys.
+        if (window.state && window.state.student) {
+            contentArea.dataset.proctorAssessment = "0";
+            contentArea.innerHTML = '<div class="module"><h3>Защищённый тест недоступен</h3><p>Серверный банк вопросов не подключён. Ответы не будут проверяться в браузере. Сообщите преподавателю.</p></div>';
             return;
         }
         if (!questions.length) { contentArea.innerHTML = "<p>Вопросы не найдены.</p>"; return; }

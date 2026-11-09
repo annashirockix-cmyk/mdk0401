@@ -95,7 +95,7 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=36/);
+  assert.match(html, /workbooks\.js\?v=38/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
@@ -543,10 +543,10 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   const app = read("app.js");
   assert.match(app, /id !== "EN"/);
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
-  assert.match(html, /app\.js\?v=44/);
-  assert.match(html, /english-tools\.js\?v=7/);
-  assert.match(html, /english-vpr-engine\.js\?v=8/);
-  assert.match(html, /english-proficiency-lab\.js\?v=1/);
+  assert.match(html, /app\.js\?v=47/);
+  assert.match(html, /english-tools\.js\?v=9/);
+  assert.match(html, /english-vpr-engine\.js\?v=11/);
+  assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
   assert.match(engine, /Basic English — базовый/);
@@ -560,8 +560,13 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   const engine = read("english-vpr-engine.js");
   const lab = read("english-proficiency-lab.js");
   const sw = read("service-worker.js");
-  assert.match(html, /english-proficiency-lab\.js\?v=1/);
+  assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.ok(sw.includes("./english-proficiency-lab.js"));
+  assert.match(html, /drawerExams/);
+  assert.ok(html.includes('href="#/english-tests"'));
+  assert.ok(html.includes('href="#/laboratory/english"'));
+  assert.ok(!html.includes('href="#/english-tests/lab"'));
+  assert.ok(!html.includes('href="#/english-tests/c1c2" class="drawer-item'));
   assert.match(engine, /var key = exam\.id \|\|/);
   assert.match(lab, /for \(var year = 1; year <= 5; year\+\+\)/);
   assert.match(lab, /semester = 1; semester <= 2/);
@@ -572,4 +577,14 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   assert.match(lab, /function advancedExam\(variant\)/);
   assert.match(lab, /english_cefr_c1c2_variant_/);
   assert.match(lab, /Лаборатория английского языка/);
+  assert.ok(read("laboratory.js").includes('href: "#/laboratory/english"'));
+  assert.ok(read("laboratory.js").includes('renderEnglishTestsPage("lab")'));
+  assert.ok(read("workbooks.js").includes(".sheet img,.lecture-content img"));
+  assert.ok(read("flashcard-editor.js").includes("window.enhanceTopicFlashcards"));
+  assert.match(read("teacher-controls.js"), /Открыть студентам/);
+  assert.match(read("teacher-controls.js"), /Закрыть/);
+  assert.match(read("app.js"), /Fail closed: students must never fall back to client-side answer keys/);
+  assert.ok(read("proctor-monitor.js").includes("_activeAssessmentCourseId"));
+  assert.ok(read("Code.gs").includes('const accessTopicId=contentType==="topic"?String(row[0]||""):String(row[2]||"");'));
+  assert.ok(read("app.js").includes("hasEnglishAccess"));
 });

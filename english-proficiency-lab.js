@@ -157,9 +157,8 @@
     extras.appendChild(node("p", "", "Лаборатория — адаптивная диагностика A1–C2. Отдельно — экзамен продвинутого уровня C1–C2, два варианта."));
     var row = node("div");
     row.style.cssText = "display:flex;gap:10px;flex-wrap:wrap";
-    var lab = node("a", "btn", "🧪 Открыть языковую лабораторию"); lab.href = "#/english-tests/lab";
     var c2 = node("a", "btn ghost", "🎓 Экзамен C1–C2 · 2 варианта"); c2.href = "#/english-tests/c1c2";
-    row.appendChild(lab); row.appendChild(c2); extras.appendChild(row); app.appendChild(extras);
+    row.appendChild(c2); extras.appendChild(row); app.appendChild(extras);
   }
 
   var labQuestions = [
@@ -197,14 +196,16 @@
 
   function renderLab() {
     var app = document.getElementById("app"); if (!app) return;
+    app.setAttribute("translate","no"); app.classList.add("notranslate"); app.dataset.proctorAssessment="1"; app.dataset.testId="english_cefr_diagnostic";
+    window._activeAssessmentCourseId=window.state&&window.state.activeCourseId||"EN";
     app.innerHTML = "";
-    var back = node("a","backlink","← К экзаменам"); back.href="#/english-tests"; app.appendChild(back);
+    var back = node("a","backlink","← К лабораториям"); back.href="#/laboratory"; app.appendChild(back);
     var hero=node("section","hero"); hero.appendChild(node("h1","","🧪 Лаборатория английского языка"));
     hero.appendChild(node("p","","Диагностика от A1 до C2 · 30 заданий · автоматическая оценка и рекомендации"));
     app.appendChild(hero);
     var panel=node("section","module");
     panel.appendChild(node("p","","Выполните задания последовательно. Вопросы сгруппированы по возрастающей сложности; итоговый уровень определяется по устойчивости результатов на каждом этапе."));
-    var form=node("form","english-cefr-form");
+    var form=node("form","english-cefr-form notranslate");form.setAttribute("translate","no");
     var sections=["A1","A2","B1","B2","C1","C2"];
     sections.forEach(function(level){
       var box=node("section","question"); box.style.cssText="padding:14px;margin:12px 0;border:1px solid var(--border);border-radius:10px";
@@ -232,6 +233,7 @@
         if(selected){answered++;if(Number(selected.value)===q[3]){byLevel[q[0]].correct++;total++;}}
       });
       if(answered<25){if(!window.confirm("Отвечено только на "+answered+" из 30 вопросов. Завершить диагностику?"))return;}
+      app.dataset.proctorAssessment="0";
       var level="A1", reached=true;
       sections.forEach(function(l){if(reached && byLevel[l].correct>=4){level=l;}else{reached=false;}});
       var report=node("section","module"); report.style.cssText="margin-top:14px";
@@ -296,7 +298,7 @@
 
   function renderC1C2() {
     var app=document.getElementById("app"); if(!app)return;
-    app.innerHTML="";
+    app.setAttribute("translate","no");app.classList.add("notranslate");
     var back=node("a","backlink","← К экзаменам");back.href="#/english-tests";app.appendChild(back);
     var hero=node("section","hero");hero.appendChild(node("h1","","🎓 Экзамен продвинутого уровня C1–C2"));
     hero.appendChild(node("p","","Два авторских варианта · 7 заданий · 90 минут · максимум 40 баллов"));
