@@ -1512,12 +1512,21 @@ function importQuestionBanks_(data) {
   const sh=questionBank_(),lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const map=headerMap_(sh);
+    const targets={};
+    prepared.forEach(function(bank){targets[bank.courseId+"|"+bank.bankId]=true;});
+    const current=sh.getDataRange().getValues(),deleteRows=[];
+    for(let i=1;i<current.length;i++){
+      const key=normalizeCourseId_(current[i][map.CourseId])+"|"+String(current[i][map.BankId]);
+      if(targets[key])deleteRows.push(i+1);
+    }
+    // Delete contiguous row ranges in reverse order instead of thousands of individual calls.
+    for(let end=deleteRows.length-1;end>=0;){
+      let start=end;
+      while(start>0&&deleteRows[start-1]===deleteRows[start]-1)start--;
+      sh.deleteRows(deleteRows[start],end-start+1);
+      end=start-1;
+    }
     prepared.forEach(function(bank){
-      const current=sh.getDataRange().getValues(),deleteRows=[];
-      for(let i=1;i<current.length;i++){
-        if(sameCourseId_(current[i][map.CourseId],bank.courseId)&&String(current[i][map.BankId])===bank.bankId)deleteRows.push(i+1);
-      }
-      for(let i=deleteRows.length-1;i>=0;i--)sh.deleteRow(deleteRows[i]);
       sh.getRange(sh.getLastRow()+1,1,bank.rows.length,6).setValues(bank.rows);
     });
     CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");
@@ -1550,8 +1559,8 @@ function restoreQuestionBanks_(data) {
   if(!order.length)throw new Error("Резервная копия не найдена: "+backupId);
   const sh=questionBank_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),remove=[];
   for(let i=1;i<values.length;i++){for(let k=0;k<order.length;k++){const b=groups[order[k]];if(sameCourseId_(values[i][m.CourseId],b.courseId)&&String(values[i][m.BankId])===b.bankId){remove.push(i+1);break;}}}
-  for(let i=remove.length-1;i>=0;i--)sh.deleteRow(remove[i]);
-  order.forEach(function(key){const rows=groups[key].rows;if(rows.length)sh.getRange(sh.getLastRow()+1,1,rows.length,6).setValues(rows);});
+  for(let end=remove.length-1;end>=0;){let start=end;while(start>0&&remove[start-1]===remove[start]-1)start--;sh.deleteRows(remove[start],end-start+1);end=start-1;}
+  order.forEach(function(key){const rows=groups[key].rows;if(rows.length){rows.forEach(function(row){row[m.CourseId]=groups[key].courseId;});sh.getRange(sh.getLastRow()+1,1,rows.length,6).setValues(rows);}});
   CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");return {success:true,banksRestored:order.length};
  }finally{lock.releaseLock();}
 }
