@@ -20,7 +20,7 @@ jobs:
       - name: Check changed JavaScript modules
         run: |
           set -e
-          for file in api.js app.js portal-final.js portal-genz.js rating-subjects.js workbooks.js network-party-games.js network-detective.js coop-detective.js sprut-tp-document-examples.js certificate-supplement.js avatar-studio.js teacher-tasks.js reports.js service-worker.js shop.js laboratory.js pdf-viewer.js materials-simulator.js machining-simulator.js english-vpr-engine.js english-vpr-exams.js english-proficiency-lab.js; do
+          for file in api.js app.js portal-final.js portal-genz.js rating-subjects.js workbooks.js network-party-games.js network-detective.js coop-detective.js sprut-tp-document-examples.js certificate-supplement.js avatar-studio.js teacher-tasks.js reports.js service-worker.js teacher-controls.js shop.js laboratory.js pdf-viewer.js materials-simulator.js machining-simulator.js english-vpr-engine.js english-vpr-exams.js english-proficiency-lab.js; do
             echo "Checking $file"
             node --check "$file"
           done
