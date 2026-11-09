@@ -110,6 +110,7 @@ function handleRequest_(e) {
       case "restorequestionbanks": result = restoreQuestionBanks_(data); break;
       case "importquestionbanks": result = importQuestionBanks_(data); break;
       case "getquestionbank": result = getQuestionBank_(data); break;
+      case "getquestionbankstats": result = getQuestionBankStats_(data); break;
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
       case "submitenglishvprexam": result = submitEnglishVprExam_(data); break;
@@ -1489,6 +1490,29 @@ function getCustomContent_(data) {
 
 /* ---------- Private built-in question bank ---------- */
 function questionBank_() { return ensureSheet_("QuestionBank"); }
+/** Read-only inventory of the protected question bank. Admin only. */
+function getQuestionBankStats_(data) {
+  admin_(data);
+  const sh = questionBank_(), values = sh.getDataRange().getValues(), m = headerMap_(sh);
+  const courses = {}, bankKeys = {}; let totalRows = 0, invalidJson = 0, emptyQuestionIds = 0;
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i], courseId = String(row[m.CourseId] || ""), bankId = String(row[m.BankId] || "");
+    if (!courseId && !bankId && !row[m.QuestionJSON]) continue;
+    const key = courseId + "|" + bankId;
+    if (!courses[courseId]) courses[courseId] = { courseId: courseId, banks: 0, rows: 0, uniqueQuestions: 0, duplicateQuestionIds: 0, invalidJson: 0, emptyQuestionIds: 0 };
+    if (!bankKeys[key]) { bankKeys[key] = { courseId: courseId, bankId: bankId, questions: 0, uniqueQuestions: 0, duplicateQuestionIds: 0, invalidJson: 0, seen: {} }; courses[courseId].banks++; }
+    const course = courses[courseId], bank = bankKeys[key], questionId = String(row[m.QuestionId] || "");
+    course.rows++; bank.questions++; totalRows++;
+    if (!questionId) { course.emptyQuestionIds++; emptyQuestionIds++; }
+    if (bank.seen[questionId]) { course.duplicateQuestionIds++; bank.duplicateQuestionIds++; }
+    else { bank.seen[questionId] = true; course.uniqueQuestions++; bank.uniqueQuestions++; }
+    try { const parsed = JSON.parse(String(row[m.QuestionJSON] || "")); if (!parsed || typeof parsed !== "object") throw new Error("invalid"); }
+    catch (e) { course.invalidJson++; bank.invalidJson++; invalidJson++; }
+  }
+  const courseList = Object.keys(courses).sort().map(function(id) { return courses[id]; });
+  const bankList = Object.keys(bankKeys).sort().map(function(key) { const b = bankKeys[key]; return { courseId: b.courseId, bankId: b.bankId, questions: b.questions, uniqueQuestions: b.uniqueQuestions, duplicateQuestionIds: b.duplicateQuestionIds, invalidJson: b.invalidJson }; });
+  return { success: true, totals: { courses: courseList.length, banks: bankList.length, rows: totalRows, uniqueQuestions: courseList.reduce(function(n, c) { return n + c.uniqueQuestions; }, 0), duplicateQuestionIds: courseList.reduce(function(n, c) { return n + c.duplicateQuestionIds; }, 0), invalidJson: invalidJson, emptyQuestionIds: emptyQuestionIds }, courses: courseList, banks: bankList };
+}
 
 /**
  * Импорт встроенного банка выполняет только администратор.
