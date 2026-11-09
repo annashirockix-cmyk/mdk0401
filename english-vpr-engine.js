@@ -31,24 +31,28 @@
       app.innerHTML = '<section class="module">Нет доступа к выбранному экзамену. Попросите преподавателя открыть дисциплину ' + course + '.</section>';
       return;
     }
-    var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
-    app.setAttribute("translate","no"); app.classList.add("notranslate"); app.dataset.proctorAssessment="1"; app.dataset.testId=(window.ENGLISH_VPR_EXAMS&&window.ENGLISH_VPR_EXAMS[track]&&window.ENGLISH_VPR_EXAMS[track].id)||("english_"+track+"_exam"); window._activeAssessmentCourseId=course;
-    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero notranslate" translate="no"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 40 баллов</p></section>';
+    app.setAttribute("translate","no"); app.classList.add("notranslate"); app.dataset.proctorAssessment="1"; app.dataset.testId="english_"+track+"_exam"; window._activeAssessmentCourseId=course;
+    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero notranslate" translate="no"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 40 баллов</p></section><section class="module" id="englishVprLoading">Загружаем защищённый вариант экзамена…</section>';
+    if (!window.API || !window.API.getEnglishVprExam) { document.getElementById("englishVprLoading").textContent="Сервер экзаменов недоступен. Обратитесь к преподавателю."; return; }
+    window.API.getEnglishVprExam(track).then(function(response) {
+      if (!response || !response.success || !response.exam) throw new Error(response && response.error || "Экзамен не найден на сервере.");
+      renderLoadedExam(response.exam,track,course,app);
+    }).catch(function(error) {
+      var loading=document.getElementById("englishVprLoading");
+      if(loading) loading.textContent="Не удалось загрузить экзамен с сервера: "+(error.message||error)+". Обратитесь к преподавателю.";
+    });
+    return;
+  }
+  function renderLoadedExam(exam,track,course,app) {
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
-    if (track !== "basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) {
-      var b = el("button", "btn ghost", "Basic English");
-      b.type = "button"; b.onclick = function () { renderPage("final-basic"); }; tabs.appendChild(b);
-    }
-    if (track !== "technical" && (!window.canAccessCourse || window.canAccessCourse("ENT") || window.canAccessCourse("EN"))) {
-      var t = el("button", "btn ghost", "Technical English");
-      t.type = "button"; t.onclick = function () { renderPage("final-technical"); }; tabs.appendChild(t);
-    }
+    if(track!=="basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) { var b=el("button","btn ghost","Basic English"); b.type="button"; b.onclick=function(){renderPage("final-basic");}; tabs.appendChild(b); }
+    if(track!=="technical" && (!window.canAccessCourse || window.canAccessCourse("ENT") || window.canAccessCourse("EN"))) { var t=el("button","btn ghost","Technical English"); t.type="button"; t.onclick=function(){renderPage("final-technical");}; tabs.appendChild(t); }
     app.appendChild(tabs);
     var panel = el("section", "module");
     panel.appendChild(el("h2", "", exam.title));
     panel.appendChild(el("p", "", "В работе: аудирование, чтение, лексика, грамматика, словообразование и письменные ответы. Время выполнения — 90 минут."));
-    panel.appendChild(el("p", "museum-muted", "Задания 1–6 проверяются автоматически. Пять кратких ответов в задании 7 передаются преподавателю на проверку."));
+    panel.appendChild(el("p", "museum-muted", "Задания 1–6 проверяются автоматически. Десять кратких ответов в задании 7 передаются преподавателю на проверку."));
     var key = exam.id || ("english_" + track + "_vpr2026_v2");
     var existing = window.state && window.state.results && window.state.results[key];
     if (existing) {
@@ -56,12 +60,12 @@
     } else {
       var start = el("button", "btn", "Начать экзамен");
       start.type = "button"; start.style.cssText = "width:100%;padding:15px;font-size:17px";
-      start.onclick = function () { startExam(exam, key, panel, course); };
+      start.onclick = function () { startExam(exam, key, panel, course, track); };
       panel.appendChild(start);
     }
     app.appendChild(panel);
   }
-  function startExam(exam, key, panel, courseId) {
+  function startExam(exam, key, panel, courseId, track) {
     courseId = courseId || courseForTrack(exam.track);
     var student = window.state && window.state.student;
     if (student && window.API && window.API.getTestAttemptStatus && window._englishVprGate !== key) {
@@ -72,7 +76,7 @@
           return;
         }
         window._englishVprGate = key;
-        startExam(exam, key, panel, courseId);
+        startExam(exam, key, panel, courseId, track);
         window._englishVprGate = "";
       }).catch(function () { panel.textContent = "Не удалось проверить доступ. Обновите страницу и попробуйте ещё раз."; });
       return;
@@ -150,7 +154,7 @@
         var text = task.text;
         var gaps = (text.match(/[A-F]_____/g) || []);
         var html = esc(text);
-        gaps.forEach(function (gap, i) { html = html.replace(gap, '<select class="self-input" name="vpr_'+ti+'_'+i+'"><option value="">'+gap+'</option>'+(task.itemOptions && task.itemOptions[i] || task.options).map(function (o, oi) { return '<option value="'+(oi+1)+'">'+(oi+1)+'. '+esc(o)+'</option>'; }).join("")+'</select>'); });
+        gaps.forEach(function (gap, i) { html = html.replace(gap, '<select class="self-input" name="vpr_'+ti+'_'+i+'"><option value="">'+gap+'</option>'+((task.itemOptions && task.itemOptions[i]) || task.options || []).map(function (o, oi) { return '<option value="'+(oi+1)+'">'+(oi+1)+'. '+esc(o)+'</option>'; }).join("")+'</select>'); });
         var textBox = el("div", "exam-reading-text"); textBox.style.cssText = "line-height:2.1"; textBox.innerHTML = html; section.appendChild(textBox);
       } else if (task.type === "transform") {
         task.items.forEach(function (item, i) {
@@ -204,36 +208,38 @@
       finished = true;
       if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
       if (window.speechSynthesis) window.speechSynthesis.cancel();
-      var objective = 0, maxObjective = 30, answerSummary = [];
-      exam.tasks.forEach(function (task, ti) {
-        if (task.type === "choice") {
-          task.items.forEach(function (item, i) { var selected = form.querySelector('input[name="vpr_'+ti+'_'+i+'"]:checked'); if (selected && Number(selected.value) === item[1]+1) objective++; });
-        } else if (task.type === "match") {
-          task.items.forEach(function (item, i) { var selected = form.querySelector('[name="vpr_'+ti+'_'+i+'"]'); if (selected && Number(selected.value) === item[2]) objective++; });
-        } else if (task.type === "gap") {
-          task.answers.forEach(function (answer, i) { var selected = form.querySelector('[name="vpr_'+ti+'_'+i+'"]'); if (selected && Number(selected.value) === answer) objective++; });
-        } else if (task.type === "transform") {
-          task.items.forEach(function (item, i) {
-            var input = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
-            var accepted = item[3].map(function (v) { return v.toLowerCase().replace(/\s+/g, " ").trim(); });
-            if (input && accepted.indexOf(String(input.value || "").toLowerCase().replace(/\s+/g, " ").trim()) >= 0) objective++;
-          });
-        } else if (task.type === "questionnaire") {
-          task.items.forEach(function (q, i) {
-            var input = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
-            answerSummary.push({question:q,answer:input ? input.value.trim() : "",maxPoints:1});
-          });
+      var answers = exam.tasks.map(function(task,ti) {
+        var row = {};
+        var count = (task.items || []).length;
+        if (task.type === "gap") count = (task.text.match(/[A-F]_____/g) || []).length;
+        for (var i=0;i<count;i++) {
+          var selector = task.type === "choice" ? 'input[name="vpr_'+ti+'_'+i+'"]:checked' : '[name="vpr_'+ti+'_'+i+'"]';
+          var field = form.querySelector(selector);
+          row[i] = field ? (field.value || "").trim() : "";
         }
+        return row;
       });
-      var now = new Date().toISOString();
-      var record = {grade:"На проверке",score:objective,max:40,objectiveMax:maxObjective,percent:Math.round(objective/30*100),finishedAt:now,status:"pending_teacher_review",writtenAnswers:answerSummary};
-      window.state.results = window.state.results || {}; window.state.results[key] = record;
-      if (window.saveStudentData) window.saveStudentData();
-      app.dataset.proctorAssessment="0"; panel.dataset.proctorAssessment="0";
-      panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 30</b> баллов.</p><p>Задание 7 — анкета из 10 пунктов (до 5 слов в каждом ответе), максимум 10 баллов; её проверит преподаватель отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
-      if (student && window.API && window.API.saveResult) {
-        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:courseId,testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:30,percent:Math.round(objective/30*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
+      var elapsed = Math.max(0, Number(exam.time || 90) * 60 - seconds);
+      submit.disabled = true; submit.textContent = "Отправляем на сервер…";
+      if (!window.API || !window.API.submitEnglishVprExam) {
+        finished = false; submit.disabled = false; submit.textContent = "Завершить и отправить экзамен";
+        window.alert("Серверная проверка недоступна. Ответы не отправлены; обратитесь к преподавателю.");
+        return;
       }
+      window.API.submitEnglishVprExam({track:track,answers:answers,timeSpent:elapsed}).then(function(result) {
+        if (!result || !result.success) throw new Error(result && result.error || "Сервер не подтвердил отправку.");
+        finished = true;
+        if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        var record = {grade:result.grade || "На проверке",score:result.score,max:result.maxScore,percent:result.percent,finishedAt:new Date().toISOString(),status:"pending_teacher_review"};
+        window.state.results = window.state.results || {}; window.state.results[key] = record;
+        app.dataset.proctorAssessment="0"; panel.dataset.proctorAssessment="0";
+        panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматическая проверка: <b>'+result.score+' из '+result.maxScore+'</b> баллов ('+result.percent+'%).</p><h3>Статус: '+esc(result.grade || "На проверке")+'</h3><p>Письменные ответы переданы преподавателю, если они предусмотрены вариантом.</p></section>';
+        if (window.saveStudentData) window.saveStudentData();
+      }).catch(function(err) {
+        finished = false; submit.disabled = false; submit.textContent = "Завершить и отправить экзамен";
+        window.alert("Не удалось отправить экзамен: "+(err.message||err)+". Ответы не засчитаны; попробуйте ещё раз.");
+      });
     };
     panel.setAttribute("translate","no"); panel.classList.add("notranslate"); panel.dataset.proctorAssessment="1"; panel.dataset.testId=key; window._activeAssessmentCourseId=courseId;
     panel.appendChild(form); panel.appendChild(submit);
@@ -256,10 +262,23 @@
     }
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Формат ВПР СПО 2026 · 90 минут · 7 заданий · 40 баллов</p></section><section class="module"><h2>Выберите вариант экзамена</h2><p>В портале оставлены только две итоговые работы. Старые семестровые и прежние итоговые экзамены больше не выводятся в этом разделе.</p><div id="englishVprChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div></section>';
     var choices = document.getElementById("englishVprChoices");
+    if (window.state && window.state.staff && window.API && window.API.importEnglishVprBank && window.ENGLISH_VPR_EXAMS) {
+      var migrate = el("button","btn ghost","Перенести экзамены в защищённую таблицу");
+      migrate.type="button"; migrate.style.cssText="margin:0 0 14px;width:100%";
+      migrate.onclick=function(){
+        if(!window.confirm("Импортировать варианты Basic и Technical в закрытый лист EnglishVPRBank?")) return;
+        migrate.disabled=true; migrate.textContent="Импортируем…";
+        Promise.all(["basic","technical"].map(function(track){
+          var exam=window.ENGLISH_VPR_EXAMS[track];
+          if(!exam) throw new Error("Не найден вариант "+track);
+          return window.API.importEnglishVprBank(track,exam);
+        })).then(function(){migrate.textContent="Оба экзамена перенесены в таблицу";if(window.showToast)window.showToast("Импорт Basic и Technical завершён.","success");})
+          .catch(function(err){migrate.disabled=false;migrate.textContent="Повторить импорт";window.alert("Ошибка импорта: "+(err.message||err));});
+      };
+      app.querySelector(".module").appendChild(migrate);
+    }
     var tracks = course === "ENB" ? ["basic"] : course === "ENT" ? ["technical"] : ["basic", "technical"];
     tracks.forEach(function (track) {
-      var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
-      if (!exam) return;
       var card = el("article", "question");
       card.style.cssText = "padding:18px;border:1px solid var(--border);border-radius:12px;background:var(--card-soft)";
       card.appendChild(el("h3", "", track === "basic" ? "Basic English — базовый" : "Technical English — технический"));
