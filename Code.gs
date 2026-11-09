@@ -1704,11 +1704,16 @@ function finalQuestionType_(question) {
   if(type==="tf"||type==="true_false")return "tf";
   return "mc";
 }
-function safeFinalExamQuestion_(entry,index) {
+function safeFinalExamQuestion_(entry,index,optionMaps) {
   const q=Object.assign({},entry.question||{}),type=finalQuestionType_(q);
   ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
   if(type==="order")q.items=shuffledServer_(q.items||[]);
   if(type==="tf"&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
+  if((type==="mc"||type==="multi"||type==="tf")&&Array.isArray(q.options)&&q.options.length>1){
+    const order=shuffledServer_(q.options.map(function(_,i){return i;}));
+    q.options=order.map(function(i){return q.options[i];});
+    optionMaps[String(index)]=order;
+  }
   if(type==="match"){const pairs=q.pairs||[],right=shuffledServer_(pairs.map(function(p){return p.right;}));q.options=right;q.pairs=pairs.map(function(p){return {left:p.left};});}
   return {questionId:entry.questionId,questionIndex:index,question:q};
 }
@@ -1728,10 +1733,13 @@ function getFinalExam_(data) {
     });
     return {success:false,notImported:true,courseId:courseId,availableBankIds:available.slice(0,150),questions:[]};
   }
-  let selected=[];[["multi",5],["order",2],["match",2],["num",1]].forEach(function(rule){selected=selected.concat(shuffledServer_(bank.filter(function(e){return finalQuestionType_(e.question)===rule[0]&&selected.indexOf(e)===-1;})).slice(0,rule[1]));});
-  const rest=shuffledServer_(bank.filter(function(e){return selected.indexOf(e)===-1;}));selected=shuffledServer_(selected.concat(rest.slice(0,Math.max(0,Math.min(30,bank.length)-selected.length))));
-  const examId=Utilities.getUuid();CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,questions:selected.map(function(e){return e.question;})}),7200);
-  return {success:true,examId:examId,questions:selected.map(safeFinalExamQuestion_)};
+  const target=Math.min(40,bank.length);
+  let selected=[];[["multi",8],["order",5],["match",5],["num",2]].forEach(function(rule){selected=selected.concat(shuffledServer_(bank.filter(function(e){return finalQuestionType_(e.question)===rule[0]&&selected.indexOf(e)===-1;})).slice(0,rule[1]));});
+  const rest=shuffledServer_(bank.filter(function(e){return selected.indexOf(e)===-1;}));selected=shuffledServer_(selected.concat(rest.slice(0,Math.max(0,target-selected.length))));
+  if(selected.length<target)throw new Error("В защищённом банке недостаточно уникальных заданий: требуется 40 тестовых, найдено "+selected.length+".");
+  const optionMaps={},examId=Utilities.getUuid(),safeQuestions=selected.map(function(entry,index){return safeFinalExamQuestion_(entry,index,optionMaps);});
+  CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,questions:selected.map(function(e){return e.question;}),optionMaps:optionMaps}),7200);
+  return {success:true,examId:examId,questions:safeQuestions};
 }
 function scoreFinalAnswer_(q,answer) {
   const type=finalQuestionType_(q||{});
@@ -1787,15 +1795,23 @@ function submitFinalExam_(data) {
     const answers=Array.isArray(data.answers)?data.answers:[];
     if(answers.length!==exam.questions.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
     let points=0;
-    exam.questions.forEach(function(q,i){points+=scoreFinalAnswer_(q,answers[i]);});
+    exam.questions.forEach(function(q,i){
+      let answer=answers[i];const order=exam.optionMaps&&exam.optionMaps[String(i)];
+      if(Array.isArray(order)){
+        if(Array.isArray(answer))answer=answer.map(function(value){const pos=Number(value);return Number.isInteger(pos)&&pos>=0&&pos<order.length?order[pos]:value;});
+        else{const pos=Number(answer);if(Number.isInteger(pos)&&pos>=0&&pos<order.length)answer=order[pos];}
+      }
+      points+=scoreFinalAnswer_(q,answer);
+    });
     const max=exam.questions.length,pct=Math.round(points/max*100),testId="__final__"+courseId,sh=results_(),rows=sh.getDataRange().getValues();
     const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     const limitRaw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
     const attemptLimit=limitRaw===""?1:1+Math.max(0,Number(limitRaw)||0);
     if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
-    const written1=String(data.written1||"").slice(0,12000),written2=String(data.written2||"").slice(0,12000);
-    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Math.min(3600,Number(data.timeSpent)||0)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:("Письменное задание 1:\n"+written1+"\n\nПисьменное задание 2:\n"+written2).slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+    const writtenAnswers=Array.isArray(data.writtenAnswers)?data.writtenAnswers.slice(0,5).map(function(value){return String(value||"").slice(0,12000);}):[String(data.written1||""),String(data.written2||"")];
+    const writtenSubmission=writtenAnswers.map(function(value,index){return "Письменное задание "+(index+1)+":\\n"+value;}).join("\\n\\n");
+    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Math.min(5400,Number(data.timeSpent)||0)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:writtenSubmission.slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,AttemptNo:attemptNo,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted});
     cache.remove(cacheKey);
     return {success:true,score:Math.round(points*100)/100,maxScore:max,rawPercent:pct,percent:adjusted,grade:grade,penaltyPoints:policy.penaltyPoints,attempts:attemptNo};
