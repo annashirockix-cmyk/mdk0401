@@ -43,7 +43,7 @@
     panel.appendChild(el("h2", "", exam.title));
     panel.appendChild(el("p", "", "В работе: аудирование, чтение, лексика, грамматика, словообразование и письменные ответы. Время выполнения — 90 минут."));
     panel.appendChild(el("p", "museum-muted", "Задания 1–6 проверяются автоматически. Пять кратких ответов в задании 7 передаются преподавателю на проверку."));
-    var key = "english_" + track + "_vpr2026";
+    var key = "english_" + track + "_vpr2026_v2";
     var existing = window.state && window.state.results && window.state.results[key];
     if (existing) {
       panel.appendChild(el("p", "", "Работа уже отправлена. Статус: " + (existing.grade || "на проверке") + "."));
@@ -184,6 +184,15 @@
     submit.type = "button"; submit.style.cssText = "width:100%;padding:16px;font-size:17px;margin:12px 0";
     submit.onclick = function () {
       if (finished) return;
+      var questionnaireError = false;
+      exam.tasks.forEach(function (task, ti) {
+        if (task.type === "questionnaire") task.items.forEach(function (q, i) {
+          var field = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
+          var count = field && field.value.trim() ? field.value.trim().split(/\s+/).length : 0;
+          if (count > 5) questionnaireError = true;
+        });
+      });
+      if (questionnaireError) { window.alert("В задании 7 каждый ответ должен содержать не более пяти слов. Исправьте отмеченные поля."); return; }
       if (seconds > 0 && !window.confirm("Отправить ответы? После отправки изменить их будет нельзя.")) return;
       finished = true;
       if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
