@@ -597,6 +597,10 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
 
         // Защищённая выдача: студент получает формулировки без ключей, проверка выполняется на сервере.
         if (window.state && window.state.student && window.API && window.API.getBuiltInTest && window.API.submitBuiltInTest) {
+            contentArea.dataset.testId = selfWorkCode !== null && selfWorkCode !== undefined ? ("self_" + topicId + "_" + (typeof selfWorkCode === "number" ? selfWorkCode : 0)) : ("test_" + topicId);
+            window._activeAssessmentCourseId = courseId;
+            contentArea.setAttribute("translate","no");
+            contentArea.classList.add("notranslate");
             var serverWorkIndex = selfWorkCode !== null && selfWorkCode !== undefined ? (typeof selfWorkCode === "number" ? selfWorkCode : (topic ? (topic.selfWork || []).findIndex(w => w.code === selfWorkCode) : 0)) : -1;
             if (serverWorkIndex < 0) serverWorkIndex = 0;
             var serverTestId = selfWorkCode !== null && selfWorkCode !== undefined ? "self_" + topicId + "_" + serverWorkIndex : "test_" + topicId;
@@ -680,6 +684,12 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             }).catch(function(error) {
                 contentArea.textContent="Не удалось загрузить защищённый тест: "+(error.message||error)+". Обратитесь к преподавателю.";
             });
+            return;
+        }
+        // Fail closed: students must never fall back to client-side answer keys.
+        if (window.state && window.state.student) {
+            contentArea.dataset.proctorAssessment = "0";
+            contentArea.innerHTML = '<div class="module"><h3>Защищённый тест недоступен</h3><p>Серверный банк вопросов не подключён. Ответы не будут проверяться в браузере. Сообщите преподавателю.</p></div>';
             return;
         }
         if (!questions.length) { contentArea.innerHTML = "<p>Вопросы не найдены.</p>"; return; }
