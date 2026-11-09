@@ -545,10 +545,31 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=44/);
   assert.match(html, /english-tools\.js\?v=7/);
-  assert.match(html, /english-vpr-engine\.js\?v=7/);
+  assert.match(html, /english-vpr-engine\.js\?v=8/);
+  assert.match(html, /english-proficiency-lab\.js\?v=1/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
   assert.match(engine, /Basic English — базовый/);
   assert.match(engine, /Technical English — технический/);
   assert.match(engine, /window\.renderEnglishTestsPage = function/);
+});
+
+
+test("English course exam catalogue and CEFR laboratory expose the requested structure", () => {
+  const html = read("index.html");
+  const engine = read("english-vpr-engine.js");
+  const lab = read("english-proficiency-lab.js");
+  const sw = read("service-worker.js");
+  assert.match(html, /english-proficiency-lab\.js\?v=1/);
+  assert.ok(sw.includes("./english-proficiency-lab.js"));
+  assert.match(engine, /var key = exam\.id \|\|/);
+  assert.match(lab, /for \(var year = 1; year <= 5; year\+\+\)/);
+  assert.match(lab, /semester = 1; semester <= 2/);
+  assert.match(lab, /variant <= 15/);
+  assert.match(lab, /year <= 2 \? "basic" : "technical"/);
+  assert.match(lab, /A1–A2/);
+  assert.match(lab, /C1–C2/);
+  assert.match(lab, /function advancedExam\(variant\)/);
+  assert.match(lab, /english_cefr_c1c2_variant_/);
+  assert.match(lab, /Лаборатория английского языка/);
 });
