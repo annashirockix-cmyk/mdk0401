@@ -1462,12 +1462,12 @@ function customContentRecord_(data) {
 }
 function getCustomContentAccess_(data) {
   const item = customContentRecord_(data);
-  if (item.type === "topic") return { success: true, open: customContentIsOpen_(item.courseId, item.id, "", "topic") };
+  if (item.type === "topic") return { success: true, open: customContentIsOpen_(item.courseId, item.id, "", "topic"), topicOpen: true };
   const raw = settingValue_("contentAccess:" + item.courseId + ":" + item.id);
   let open = true;
   if (raw) { try { open = JSON.parse(raw).open !== false; } catch (e) {} }
-  if (item.topicId && !customContentIsOpen_(item.courseId, item.id, item.topicId, item.type)) open = false;
-  return { success: true, open: open };
+  const topicOpen = !item.topicId || customContentIsOpen_(item.courseId, item.id, item.topicId, item.type);
+  return { success: true, open: open, topicOpen: topicOpen, effectiveOpen: open && topicOpen };
 }
 function setCustomContentAccess_(data) {
   const item = customContentRecord_(data);
