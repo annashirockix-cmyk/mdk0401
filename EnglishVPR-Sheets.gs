@@ -83,7 +83,7 @@ function submitEnglishVprExam_(data) {
   let objective=0, maxObjective=0, written=[];
   (exam.tasks||[]).forEach(function(task,ti) {
     const ans=submitted[ti]||{};
-    if(task.type==="choice") (task.items||[]).forEach(function(item,i){maxObjective++;if(Number(ans[i])===Number(item[1])+1)objective++;});
+    if(task.type==="choice") (task.items||[]).forEach(function(item,i){maxObjective++;if(Number(ans[i])===Number(item[1]))objective++;});
     else if(task.type==="match") (task.items||[]).forEach(function(item,i){maxObjective++;if(Number(ans[i])===Number(item[2]))objective++;});
     else if(task.type==="gap") (task.answers||[]).forEach(function(expected,i){maxObjective++;if(Number(ans[i])===Number(expected))objective++;});
     else if(task.type==="transform") (task.items||[]).forEach(function(item,i){maxObjective++;const accepted=Array.isArray(item[3])?item[3]:[];if(accepted.map(englishVprNormalize_).indexOf(englishVprNormalize_(ans[i]))>=0)objective++;});
