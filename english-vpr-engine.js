@@ -60,12 +60,12 @@
     } else {
       var start = el("button", "btn", "Начать экзамен");
       start.type = "button"; start.style.cssText = "width:100%;padding:15px;font-size:17px";
-      start.onclick = function () { startExam(exam, key, panel, course); };
+      start.onclick = function () { startExam(exam, key, panel, course, track); };
       panel.appendChild(start);
     }
     app.appendChild(panel);
   }
-  function startExam(exam, key, panel, courseId) {
+  function startExam(exam, key, panel, courseId, track) {
     courseId = courseId || courseForTrack(exam.track);
     var student = window.state && window.state.student;
     if (student && window.API && window.API.getTestAttemptStatus && window._englishVprGate !== key) {
@@ -76,7 +76,7 @@
           return;
         }
         window._englishVprGate = key;
-        startExam(exam, key, panel, courseId);
+        startExam(exam, key, panel, courseId, track);
         window._englishVprGate = "";
       }).catch(function () { panel.textContent = "Не удалось проверить доступ. Обновите страницу и попробуйте ещё раз."; });
       return;
@@ -208,37 +208,35 @@
       finished = true;
       if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
       if (window.speechSynthesis) window.speechSynthesis.cancel();
-      var objective = 0, maxObjective = 30, answerSummary = [];
-      exam.tasks.forEach(function (task, ti) {
-        if (task.type === "choice") {
-          task.items.forEach(function (item, i) { var selected = form.querySelector('input[name="vpr_'+ti+'_'+i+'"]:checked'); if (selected && Number(selected.value) === item[1]+1) objective++; });
-        } else if (task.type === "match") {
-          task.items.forEach(function (item, i) { var selected = form.querySelector('[name="vpr_'+ti+'_'+i+'"]'); if (selected && Number(selected.value) === item[2]) objective++; });
-        } else if (task.type === "gap") {
-          task.answers.forEach(function (answer, i) { var selected = form.querySelector('[name="vpr_'+ti+'_'+i+'"]'); if (selected && Number(selected.value) === answer) objective++; });
-        } else if (task.type === "transform") {
-          task.items.forEach(function (item, i) {
-            var input = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
-            var accepted = item[3].map(function (v) { return v.toLowerCase().replace(/\s+/g, " ").trim(); });
-            if (input && accepted.indexOf(String(input.value || "").toLowerCase().replace(/\s+/g, " ").trim()) >= 0) objective++;
-          });
-        } else if (task.type === "questionnaire") {
-          task.items.forEach(function (q, i) {
-            var input = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
-            answerSummary.push({question:q,answer:input ? input.value.trim() : "",maxPoints:1});
-          });
-        }
+      var answers = exam.tasks.map(function(task,ti) {
+        var row = {};
+        (task.items || []).forEach(function(item,i) {
+          var field = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
+          row[i] = field ? (field.value || "").trim() : "";
+        });
+        return row;
       });
-      var now = new Date().toISOString();
-      var record = {grade:"На проверке",score:objective,max:40,objectiveMax:maxObjective,percent:Math.round(objective/30*100),finishedAt:now,status:"pending_teacher_review",writtenAnswers:answerSummary};
-      window.state.results = window.state.results || {}; window.state.results[key] = record;
-      if (window.saveStudentData) window.saveStudentData();
-      app.dataset.proctorAssessment="0"; panel.dataset.proctorAssessment="0";
-      panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 30</b> баллов.</p><p>Задание 7 — анкета из 10 пунктов (до 5 слов в каждом ответе), максимум 10 баллов; её проверит преподаватель отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
-      if (student && window.API && window.API.saveResult) {
-        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:courseId,testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:30,percent:Math.round(objective/30*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
+      var elapsed = Math.max(0, Number(exam.time || 90) * 60 - seconds);
+      submit.disabled = true; submit.textContent = "Отправляем на сервер…";
+      if (!window.API || !window.API.submitEnglishVprExam) {
+        finished = false; submit.disabled = false; submit.textContent = "Завершить и отправить экзамен";
+        window.alert("Серверная проверка недоступна. Ответы не отправлены; обратитесь к преподавателю.");
+        return;
       }
-    };
+      window.API.submitEnglishVprExam({track:track,answers:answers,timeSpent:elapsed}).then(function(result) {
+        if (!result || !result.success) throw new Error(result && result.error || "Сервер не подтвердил отправку.");
+        finished = true;
+        if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        var record = {grade:result.grade || "На проверке",score:result.score,max:result.maxScore,percent:result.percent,finishedAt:new Date().toISOString(),status:"pending_teacher_review"};
+        window.state.results = window.state.results || {}; window.state.results[key] = record;
+        app.dataset.proctorAssessment="0"; panel.dataset.proctorAssessment="0";
+        panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматическая проверка: <b>'+result.score+' из '+result.maxScore+'</b> баллов ('+result.percent+'%).</p><h3>Статус: '+esc(result.grade || "На проверке")+'</h3><p>Письменные ответы переданы преподавателю, если они предусмотрены вариантом.</p></section>';
+        if (window.saveStudentData) window.saveStudentData();
+      }).catch(function(err) {
+        finished = false; submit.disabled = false; submit.textContent = "Завершить и отправить экзамен";
+        window.alert("Не удалось отправить экзамен: "+(err.message||err)+". Ответы не засчитаны; попробуйте ещё раз.");
+      });
     panel.setAttribute("translate","no"); panel.classList.add("notranslate"); panel.dataset.proctorAssessment="1"; panel.dataset.testId=key; window._activeAssessmentCourseId=courseId;
     panel.appendChild(form); panel.appendChild(submit);
     function tick() {
