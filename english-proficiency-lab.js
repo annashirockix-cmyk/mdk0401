@@ -233,6 +233,7 @@
         if(selected){answered++;if(Number(selected.value)===q[3]){byLevel[q[0]].correct++;total++;}}
       });
       if(answered<25){if(!window.confirm("Отвечено только на "+answered+" из 30 вопросов. Завершить диагностику?"))return;}
+      app.dataset.proctorAssessment="0";
       var level="A1", reached=true;
       sections.forEach(function(l){if(reached && byLevel[l].correct>=4){level=l;}else{reached=false;}});
       var report=node("section","module"); report.style.cssText="margin-top:14px";
