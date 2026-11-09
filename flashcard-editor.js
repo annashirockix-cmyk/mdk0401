@@ -28,25 +28,28 @@
   window.renderFlashcardEditorPage=render;
   var originalEditor=window.renderCourseEditorPage;
   if(originalEditor)window.renderCourseEditorPage=function(){originalEditor.apply(this,arguments);var app=byId("app"),hero=app&&app.querySelector(".hero");if(hero&&!app.querySelector("#openFlashcardEditor")){var a=document.createElement("a");a.id="openFlashcardEditor";a.href="#/flashcard-editor";a.className="btn ghost";a.textContent="🃏 Открыть конструктор карточек";hero.insertAdjacentElement("afterend",a);}};
+  var flashcardContext=null;
   function enhanceTopicFlashcards(courseId,topicId,activeTab){
     var track="",courseData=window.MDK_DATA&&window.MDK_DATA[courseId];
     (courseData&&courseData.sections||[]).forEach(function(section){(section.topics||[]).forEach(function(t){if(String(t.id)===String(topicId))track=t.sourceTrack||"";});});
     var sets=(window.customContent.flashcards||[]).filter(function(x){return String(x.mdkId)===String(courseId)&&String(x.topicId)===String(topicId)&&(!track||!x.track||x.track==="all"||x.track===track);});
     var bar=byId("tab-lectures")&&byId("tab-lectures").parentElement;
-    if(!sets.length||!bar||!byId("topicContent"))return;
+    flashcardContext=sets.length&&bar&&byId("topicContent")?{sets:sets,courseId:courseId,topicId:topicId}:null;
+    if(!flashcardContext)return;
     var button=byId("tab-custom-flashcards");
     if(!button){button=document.createElement("button");button.id="tab-custom-flashcards";button.className="btn tab ghost";button.textContent="🃏 Карточки";bar.appendChild(button);}
     button.onclick=function(){window.switchTopicTab("custom-flashcards");};
     var oldSwitch=window.switchTopicTab;
-    if(oldSwitch&&oldSwitch.__flashcardWrapped)return;
+    if(!oldSwitch||oldSwitch.__flashcardWrapped){if(activeTab==="custom-flashcards")window.switchTopicTab("custom-flashcards");return;}
     var wrapped=function(tab){
       if(tab!=="custom-flashcards")return oldSwitch.apply(this,arguments);
+      var context=flashcardContext;if(!context)return;
       document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active");x.classList.add("ghost");});
       var active=byId("tab-custom-flashcards");if(active){active.classList.add("active");active.classList.remove("ghost");}
       var area=byId("topicContent");if(!area)return;
-      area.innerHTML=sets.map(function(set,i){return '<section class="module"><h3>'+esc(set.title)+'</h3><p>Карточек: '+((set.cards||[]).length)+'</p><button class="btn" data-start="'+i+'">Начать повторение</button></section>';}).join("");
+      area.innerHTML=context.sets.map(function(set,i){return '<section class="module"><h3>'+esc(set.title)+'</h3><p>Карточек: '+((set.cards||[]).length)+'</p><button class="btn" data-start="'+i+'">Начать повторение</button></section>';}).join("");
       area.querySelectorAll("[data-start]").forEach(function(btn){btn.onclick=function(){
-        var cards=sets[Number(btn.dataset.start)].cards||[],idx=0,flip=false;
+        var cards=context.sets[Number(btn.dataset.start)].cards||[],idx=0,flip=false;
         function draw(){if(!cards.length){area.textContent="В наборе нет карточек.";return;}var item=cards[idx];
           area.innerHTML='<section class="module" style="text-align:center"><p>'+(idx+1)+' / '+cards.length+'</p><button id="studentFlashcard" class="btn ghost" style="display:block;width:100%;min-height:160px;white-space:normal;font-size:24px">'+esc(flip?item.back:item.front)+'</button><p class="museum-muted">'+esc(flip?(item.transcription||""):"Нажмите, чтобы перевернуть")+'</p><button id="studentCardPrev" class="btn ghost" '+(idx===0?"disabled":"")+'>← Назад</button> <button id="studentCardFlip" class="btn">Перевернуть</button> <button id="studentCardNext" class="btn ghost" '+(idx===cards.length-1?"disabled":"")+'>Далее →</button></section>';
           byId("studentFlashcard").onclick=byId("studentCardFlip").onclick=function(){flip=!flip;draw();};
