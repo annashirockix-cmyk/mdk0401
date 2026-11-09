@@ -1,0 +1,221 @@
+"use strict";
+(function () {
+  var oldRender = window.renderEnglishTestsPage;
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  function esc(s) {
+    return window.escapeHtml ? window.escapeHtml(String(s == null ? "" : s)) :
+      String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; });
+  }
+  function activeCourse() {
+    var id = window.state && window.state.activeCourseId || "EN";
+    return id === "ENB" ? "ENB" : id === "ENT" ? "ENT" : "EN";
+  }
+  function renderPage(mode) {
+    var app = document.getElementById("app");
+    if (!app) return;
+    var track = mode === "final-technical" ? "technical" : "basic";
+    var course = activeCourse();
+    if (!window.state || (!window.state.student && !window.state.staff) || (window.canAccessCourse && !window.canAccessCourse(course))) {
+      app.innerHTML = '<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';
+      return;
+    }
+    if (course === "ENB") track = "basic";
+    if (course === "ENT") track = "technical";
+    var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
+    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 38 баллов</p></section>';
+    var tabs = el("section", "module");
+    tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+    if (course !== "ENB") {
+      var b = el("button", "btn " + (track === "basic" ? "" : "ghost"), "Basic English");
+      b.type = "button"; b.onclick = function () { renderPage("final-basic"); }; tabs.appendChild(b);
+    }
+    if (course !== "ENT") {
+      var t = el("button", "btn " + (track === "technical" ? "" : "ghost"), "Technical English");
+      t.type = "button"; t.onclick = function () { renderPage("final-technical"); }; tabs.appendChild(t);
+    }
+    app.appendChild(tabs);
+    var panel = el("section", "module");
+    panel.appendChild(el("h2", "", exam.title));
+    panel.appendChild(el("p", "", "В работе: аудирование, чтение, лексика, грамматика, словообразование и письменные ответы. Время выполнения — 90 минут."));
+    panel.appendChild(el("p", "museum-muted", "Задания 1–6 проверяются автоматически. Пять кратких ответов в задании 7 передаются преподавателю на проверку."));
+    var key = "english_" + track + "_vpr2026";
+    var existing = window.state && window.state.results && window.state.results[key];
+    if (existing) {
+      panel.appendChild(el("p", "", "Работа уже отправлена. Статус: " + (existing.grade || "на проверке") + "."));
+    } else {
+      var start = el("button", "btn", "Начать экзамен");
+      start.type = "button"; start.style.cssText = "width:100%;padding:15px;font-size:17px";
+      start.onclick = function () { startExam(exam, key, panel); };
+      panel.appendChild(start);
+    }
+    app.appendChild(panel);
+  }
+  function startExam(exam, key, panel) {
+    var student = window.state && window.state.student;
+    if (student && window.API && window.API.getTestAttemptStatus && window._englishVprGate !== key) {
+      panel.innerHTML = "<p>Проверяем доступ к экзамену…</p>";
+      window.API.getTestAttemptStatus(activeCourse(), key).then(function (status) {
+        if (!status || status.allowed === false) {
+          panel.textContent = "Попытка уже использована. Для повторного прохождения обратитесь к преподавателю.";
+          return;
+        }
+        window._englishVprGate = key;
+        startExam(exam, key, panel);
+        window._englishVprGate = "";
+      }).catch(function () { panel.textContent = "Не удалось проверить доступ. Обновите страницу и попробуйте ещё раз."; });
+      return;
+    }
+    if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
+    var seconds = exam.time * 60, finished = false;
+    panel.innerHTML = "";
+    var timer = el("div", "exam-timer", "90:00");
+    timer.style.cssText = "position:sticky;top:8px;z-index:3;padding:12px;text-align:center;font-size:24px;font-weight:800;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--accent)";
+    panel.appendChild(timer);
+    var form = el("form", "english-vpr-form");
+    form.addEventListener("submit", function (e) { e.preventDefault(); });
+    var audio = el("section", "question");
+    audio.style.cssText = "padding:16px;margin:14px 0;background:var(--card-soft);border:1px solid var(--border);border-radius:12px";
+    audio.appendChild(el("h2", "", "Аудиозапись к заданию 1"));
+    audio.appendChild(el("p", "", "Нажмите кнопку, чтобы прослушать диалог два раза. Не переходите к тексту аудирования во время выполнения экзамена."));
+    var play = el("button", "btn", "▶ Прослушать диалог (2 раза)");
+    play.type = "button";
+    play.onclick = function () {
+      if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+        transcript.hidden = false;
+        transcript.textContent = "В этом браузере недоступно озвучивание. Текст аудирования показан ниже.";
+        return;
+      }
+      window.speechSynthesis.cancel();
+      var utterance = new SpeechSynthesisUtterance(exam.audioText);
+      utterance.lang = "en-GB"; utterance.rate = 0.88;
+      utterance.onend = function () {
+        if (play.dataset.played !== "1") {
+          play.dataset.played = "1";
+          window.setTimeout(function () {
+            var second = new SpeechSynthesisUtterance(exam.audioText);
+            second.lang = "en-GB"; second.rate = 0.88;
+            window.speechSynthesis.speak(second);
+          }, 900);
+        } else { play.dataset.played = ""; }
+      };
+      play.dataset.played = "0";
+      window.speechSynthesis.speak(utterance);
+    };
+    audio.appendChild(play);
+    var transcript = el("details", "exam-audio-transcript");
+    transcript.style.cssText = "margin-top:12px";
+    transcript.appendChild(el("summary", "", "Техническая помощь: показать текст аудирования"));
+    transcript.appendChild(el("p", "", exam.audioText));
+    audio.appendChild(transcript);
+    form.appendChild(audio);
+    exam.tasks.forEach(function (task, ti) {
+      var section = el("section", "question");
+      section.style.cssText = "padding:16px;margin:14px 0;background:var(--card-soft);border:1px solid var(--border);border-radius:12px";
+      section.appendChild(el("h2", "", task.title + " · " + task.points + " баллов"));
+      section.appendChild(el("p", "", task.instruction));
+      if (task.type === "choice") {
+        task.items.forEach(function (item, i) {
+          var row = el("div"); row.style.cssText = "padding:9px 0;border-bottom:1px solid var(--border)";
+          row.appendChild(el("b", "", String.fromCharCode(65+i) + ". " + item[0]));
+          task.options.forEach(function (opt, oi) {
+            var label = el("label"); label.style.cssText = "display:inline-flex;gap:5px;align-items:center;margin:7px 14px 0 0";
+            var input = el("input"); input.type = "radio"; input.name = "vpr_" + ti + "_" + i; input.value = String(oi+1);
+            label.appendChild(input); label.appendChild(document.createTextNode((oi+1) + ") " + opt)); row.appendChild(label);
+          });
+          section.appendChild(row);
+        });
+      } else if (task.type === "match") {
+        task.items.forEach(function (item, i) {
+          var row = el("div"); row.style.cssText = "padding:10px 0;border-bottom:1px solid var(--border)";
+          row.appendChild(el("b", "", item[0] + ". "));
+          row.appendChild(el("span", "", item[1]));
+          var select = el("select", "self-input"); select.name = "vpr_" + ti + "_" + i;
+          select.appendChild(new Option("Выберите заголовок", ""));
+          task.options.forEach(function (opt, oi) { select.appendChild(new Option((oi+1) + ". " + opt, String(oi+1))); });
+          row.appendChild(select); section.appendChild(row);
+        });
+      } else if (task.type === "gap") {
+        var text = task.text;
+        var gaps = (text.match(/[A-F]_____/g) || []);
+        var html = esc(text);
+        gaps.forEach(function (gap, i) { html = html.replace(gap, '<select class="self-input" name="vpr_'+ti+'_'+i+'"><option value="">'+gap+'</option>'+task.options.map(function (o, oi) { return '<option value="'+(oi+1)+'">'+(oi+1)+'. '+esc(o)+'</option>'; }).join("")+'</select>'); });
+        var textBox = el("div", "exam-reading-text"); textBox.style.cssText = "line-height:2.1"; textBox.innerHTML = html; section.appendChild(textBox);
+      } else if (task.type === "transform") {
+        task.items.forEach(function (item, i) {
+          var row = el("div"); row.style.cssText = "padding:10px 0;border-bottom:1px solid var(--border);line-height:2";
+          if (item.length === 4) {
+            row.appendChild(document.createTextNode(item[0] + " "));
+            var input = el("input", "self-input"); input.name = "vpr_" + ti + "_" + i; input.placeholder = item[2]; input.style.maxWidth = "210px"; row.appendChild(input);
+            row.appendChild(document.createTextNode(" " + item[1]));
+          } else {
+            row.appendChild(document.createTextNode(item[0] + " "));
+            var inp = el("input", "self-input"); inp.name = "vpr_" + ti + "_" + i; inp.placeholder = item[2]; inp.style.maxWidth = "210px"; row.appendChild(inp);
+            row.appendChild(document.createTextNode(" " + item[1]));
+          }
+        section.appendChild(row);
+        });
+      } else if (task.type === "short") {
+        task.items.forEach(function (q, i) {
+          section.appendChild(el("b", "", (i+1) + ". " + q));
+          var area = el("textarea", "self-input"); area.name = "vpr_" + ti + "_" + i; area.rows = 2; area.placeholder = "Write your answer in English…"; area.style.cssText = "display:block;width:100%;margin:6px 0 14px";
+          section.appendChild(area);
+        });
+      }
+      form.appendChild(section);
+    });
+    var submit = el("button", "btn", "Завершить и отправить экзамен");
+    submit.type = "button"; submit.style.cssText = "width:100%;padding:16px;font-size:17px;margin:12px 0";
+    submit.onclick = function () {
+      if (finished) return;
+      if (seconds > 0 && !window.confirm("Отправить ответы? После отправки изменить их будет нельзя.")) return;
+      finished = true;
+      if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      var objective = 0, maxObjective = 33, answerSummary = [];
+      exam.tasks.forEach(function (task, ti) {
+        if (task.type === "choice") {
+          task.items.forEach(function (item, i) { var selected = form.querySelector('input[name="vpr_'+ti+'_'+i+'"]:checked'); if (selected && Number(selected.value) === item[1]+1) objective++; });
+        } else if (task.type === "match") {
+          task.items.forEach(function (item, i) { var selected = form.querySelector('[name="vpr_'+ti+'_'+i+'"]'); if (selected && Number(selected.value) === item[2]) objective++; });
+        } else if (task.type === "gap") {
+          task.answers.forEach(function (answer, i) { var selected = form.querySelector('[name="vpr_'+ti+'_'+i+'"]'); if (selected && Number(selected.value) === answer) objective++; });
+        } else if (task.type === "transform") {
+          task.items.forEach(function (item, i) {
+            var input = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
+            var accepted = item[3].map(function (v) { return v.toLowerCase().replace(/\s+/g, " ").trim(); });
+            if (input && accepted.indexOf(String(input.value || "").toLowerCase().replace(/\s+/g, " ").trim()) >= 0) objective++;
+          });
+        } else if (task.type === "short") {
+          task.items.forEach(function (q, i) { var input = form.querySelector('[name="vpr_'+ti+'_'+i+'"]'); answerSummary.push({question:q,answer:input ? input.value.trim() : ""}); });
+        }
+      });
+      var now = new Date().toISOString();
+      var record = {grade:"На проверке",score:objective,max:38,objectiveMax:maxObjective,percent:Math.round(objective/38*100),finishedAt:now,status:"pending_teacher_review",writtenAnswers:answerSummary};
+      window.state.results = window.state.results || {}; window.state.results[key] = record;
+      if (window.saveStudentData) window.saveStudentData();
+      panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 33</b> баллов.</p><p>Задание 7 содержит пять письменных ответов и будет проверено преподавателем отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
+      if (student && window.API && window.API.saveResult) {
+        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:activeCourse(),testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:33,percent:Math.round(objective/33*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
+      }
+    };
+    panel.appendChild(form); panel.appendChild(submit);
+    function tick() {
+      if (finished) return;
+      var m = Math.floor(seconds/60), s = seconds%60;
+      timer.textContent = (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+      if (seconds <= 0) { submit.click(); return; }
+      seconds--;
+    }
+    tick(); window.englishAssessmentTimer = window.setInterval(tick,1000);
+  }
+  window.renderEnglishTestsPage = function (mode) {
+    if (mode === "final-basic" || mode === "final-technical") { renderPage(mode); return; }
+    if (typeof oldRender === "function") return oldRender.apply(this, arguments);
+  };
+  console.info("[English VPR] Загружены только два итоговых экзамена: Basic и Technical.");
+})();
