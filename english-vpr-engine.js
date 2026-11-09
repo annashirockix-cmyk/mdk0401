@@ -11,6 +11,11 @@
     return window.escapeHtml ? window.escapeHtml(String(s == null ? "" : s)) :
       String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; });
   }
+  function hasStaffAccess() {
+    var s = window.state || {};
+    var role = String((s.user && s.user.role) || (s.student && s.student.role) || s.role || "").toLowerCase();
+    return !!(s.staff || s.teacher || s.admin || role === "teacher" || role === "admin");
+  }
   function activeCourse() {
     var id = window.state && window.state.activeCourseId || "EN";
     return id === "ENB" ? "ENB" : id === "ENT" ? "ENT" : "EN";
@@ -27,7 +32,7 @@
     var course = courseForTrack(track);
     var hasCourseAccess = !window.canAccessCourse ||
       window.canAccessCourse(course) || window.canAccessCourse("EN");
-    if (!window.state || (!window.state.student && !window.state.staff) || !hasCourseAccess) {
+    if (!window.state || (!window.state.student && !hasStaffAccess()) || !hasCourseAccess) {
       app.innerHTML = '<section class="module">Нет доступа к выбранному экзамену. Попросите преподавателя открыть дисциплину ' + course + '.</section>';
       return;
     }
@@ -262,7 +267,7 @@
     }
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Формат ВПР СПО 2026 · 90 минут · 7 заданий · 40 баллов</p></section><section class="module"><h2>Выберите вариант экзамена</h2><p>В портале оставлены только две итоговые работы. Старые семестровые и прежние итоговые экзамены больше не выводятся в этом разделе.</p><div id="englishVprChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div></section>';
     var choices = document.getElementById("englishVprChoices");
-    if (window.state && window.state.staff && window.API && window.API.importEnglishVprBank && window.ENGLISH_VPR_EXAMS) {
+    if (hasStaffAccess() && window.API && window.API.importEnglishVprBank && window.ENGLISH_VPR_EXAMS) {
       var migrate = el("button","btn ghost","Перенести экзамены в защищённую таблицу");
       migrate.type="button"; migrate.style.cssText="margin:0 0 14px;width:100%";
       migrate.onclick=function(){
