@@ -237,6 +237,7 @@
         finished = false; submit.disabled = false; submit.textContent = "Завершить и отправить экзамен";
         window.alert("Не удалось отправить экзамен: "+(err.message||err)+". Ответы не засчитаны; попробуйте ещё раз.");
       });
+    };
     panel.setAttribute("translate","no"); panel.classList.add("notranslate"); panel.dataset.proctorAssessment="1"; panel.dataset.testId=key; window._activeAssessmentCourseId=courseId;
     panel.appendChild(form); panel.appendChild(submit);
     function tick() {
