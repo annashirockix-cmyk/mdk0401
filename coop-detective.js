@@ -684,7 +684,7 @@
 
     function beginPoll() {
       stop();
-      timer = setInterval(poll, 1800);
+      timer = setInterval(poll, 4500);
       poll();
     }
 
