@@ -531,7 +531,12 @@ test("SPRUT-TP includes filled examples for every listed document and practical 
 });
 
 
-test("final exam catalogue hides duplicate English source and combined course records", () => {\n  const finalPage = read("final.js");\n  assert.match(finalPage, /course\\.id !== "basic" && course\\.id !== "technical" && course\\.id !== "EN"/);\n});\n\ntest("English exam entry disables legacy semester/final catalogue and exposes only the two VPR tracks", () => {
+test("final exam catalogue hides duplicate English source and combined course records", () => {
+  const finalPage = read("final.js");
+  assert.match(finalPage, /course\\.id !== "basic" && course\\.id !== "technical" && course\\.id !== "EN"/);
+});
+
+test("English exam entry disables legacy semester/final catalogue and exposes only the two VPR tracks", () => {
   const html = read("index.html");
   const tools = read("english-tools.js");
   const engine = read("english-vpr-engine.js");
