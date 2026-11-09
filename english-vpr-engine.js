@@ -20,6 +20,10 @@
     if (!app) return;
     var track = mode === "final-technical" ? "technical" : "basic";
     var course = activeCourse();
+    if (!window.state || (!window.state.student && !window.state.staff) || (window.canAccessCourse && !window.canAccessCourse(course))) {
+      app.innerHTML = '<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';
+      return;
+    }
     if (course === "ENB") track = "basic";
     if (course === "ENT") track = "technical";
     var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
@@ -196,7 +200,7 @@
       if (window.saveStudentData) window.saveStudentData();
       panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 33</b> баллов.</p><p>Задание 7 содержит пять письменных ответов и будет проверено преподавателем отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
       if (student && window.API && window.API.saveResult) {
-        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:activeCourse(),testId:key,testTitle:exam.title,grade:"На проверке",score:objective,maxScore:38,percent:record.percent,finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
+        window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:activeCourse(),testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:33,percent:Math.round(objective/33*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
       }
     };
     panel.appendChild(form); panel.appendChild(submit);
