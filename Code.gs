@@ -22,7 +22,7 @@ const CFG = {
   GAME_ROOMS: "GameRooms",
   GAME_ACTIONS: "GameActions",
   SESSION_PREFIX: "portal_session:",
-  SESSION_TTL: 21600, // 6 часов
+  SESSION_TTL: 604800, // 7 дней; серверное хранилище сессий не зависит от вытесняемого CacheService
   LEGACY_SALT: "portal_spo_2026",
   COURSES: ["07.01", "04.01", "02.01", "02.02", "MCAM", "MAT", "MET", "OT", "PFI", "EN", "ENB", "ENT"]
 };
@@ -372,7 +372,28 @@ function writeUserFields_(user, fields) {
 
 function createSession_(user) {
   const token = Utilities.getUuid() + Utilities.getUuid().replace(/-/g, "");
-  CacheService.getScriptCache().put(CFG.SESSION_PREFIX + token, user.email, CFG.SESSION_TTL);
+  const key = CFG.SESSION_PREFIX + token;
+  const expiresAt = Date.now() + CFG.SESSION_TTL * 1000;
+  // ScriptProperties сохраняет сессию надёжнее CacheService: кэш Google может
+  // вытеснять записи раньше установленного TTL, из-за чего пользователей выбрасывало.
+  PropertiesService.getScriptProperties().setProperty(key, JSON.stringify({
+    email: email_(user.email),
+    expiresAt: expiresAt
+  }));
+  // Удаляем просроченные сессии при новом входе, чтобы свойства не накапливались бесконечно.
+  const props = PropertiesService.getScriptProperties().getProperties();
+  Object.keys(props).forEach(function (propertyKey) {
+    if (propertyKey.indexOf(CFG.SESSION_PREFIX) !== 0 || propertyKey === key) return;
+    try {
+      const saved = JSON.parse(props[propertyKey]);
+      if (!saved.expiresAt || Number(saved.expiresAt) <= Date.now()) {
+        PropertiesService.getScriptProperties().deleteProperty(propertyKey);
+      }
+    } catch (e) {
+      // Старые/повреждённые значения удаляем только если это не активный ключ.
+      PropertiesService.getScriptProperties().deleteProperty(propertyKey);
+    }
+  });
   return token;
 }
 
@@ -380,7 +401,25 @@ function auth_(data) {
   const token = String(data.token || "");
   if (!token) throw new Error("Требуется авторизация. Войдите в портал заново.");
 
-  const email = CacheService.getScriptCache().get(CFG.SESSION_PREFIX + token);
+  const key = CFG.SESSION_PREFIX + token;
+  const properties = PropertiesService.getScriptProperties();
+  const raw = properties.getProperty(key);
+  let email = "";
+  if (raw) {
+    try {
+      const saved = JSON.parse(raw);
+      if (saved && saved.email && Number(saved.expiresAt) > Date.now()) {
+        email = email_(saved.email);
+      } else {
+        properties.deleteProperty(key);
+      }
+    } catch (e) {
+      // Поддерживаем сессии, созданные старой версией скрипта, до их истечения.
+      email = email_(raw);
+    }
+  }
+  // Совместимость с токенами, выданными до обновления Code.gs.
+  if (!email) email = email_(CacheService.getScriptCache().get(key) || "");
   if (!email) throw new Error("Сессия истекла. Войдите в портал заново.");
 
   const user = userByEmail_(email);
