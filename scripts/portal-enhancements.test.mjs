@@ -545,7 +545,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=47/);
   assert.match(html, /english-tools\.js\?v=9/);
-  assert.match(html, /english-vpr-engine\.js\?v=11/);
+  assert.match(html, /english-vpr-engine\\.js\\?v=12/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
@@ -587,4 +587,26 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   assert.ok(read("proctor-monitor.js").includes("_activeAssessmentCourseId"));
   assert.ok(read("Code.gs").includes('const accessTopicId=contentType==="topic"?String(row[0]||""):String(row[2]||"");'));
   assert.ok(read("app.js").includes("hasEnglishAccess"));
+});
+
+
+test("English VPR answer keys stay server-side and the client uses protected exam endpoints", () => {
+  const server = read("Code.gs");
+  const bank = read("EnglishVPR-Sheets.gs");
+  const engine = read("english-vpr-engine.js");
+  const api = read("api.js");
+  const html = read("index.html");
+  assert.match(server, /case "getenglishvprexam": result = getEnglishVprExam_\(data\)/);
+  assert.match(server, /case "submitenglishvprexam": result = submitEnglishVprExam_\(data\)/);
+  assert.match(bank, /function sanitizeEnglishVprExam_/);
+  assert.match(bank, /function submitEnglishVprExam_/);
+  assert.match(bank, /EnglishVPRBank/);
+  assert.match(api, /getEnglishVprExam:function/);
+  assert.match(api, /submitEnglishVprExam:function/);
+  assert.match(engine, /window\.API\.getEnglishVprExam\(track\)/);
+  assert.match(engine, /window\.API\.submitEnglishVprExam/);
+  assert.doesNotMatch(engine, /item\[1\]\+1/);
+  assert.match(engine, /Перенести экзамены в защищённую таблицу/);
+  assert.match(html, /api\.js\?v=39/);
+  assert.match(html, /english-vpr-engine\.js\?v=12/);
 });
