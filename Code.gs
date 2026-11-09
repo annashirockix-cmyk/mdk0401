@@ -109,6 +109,7 @@ function handleRequest_(e) {
       case "backupquestionbanks": result = backupQuestionBanks_(data); break;
       case "restorequestionbanks": result = restoreQuestionBanks_(data); break;
       case "importquestionbanks": result = importQuestionBanks_(data); break;
+      case "getquestionbankstats": result = getQuestionBankStats_(data); break;
       case "getquestionbank": result = getQuestionBank_(data); break;
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
@@ -1570,6 +1571,29 @@ function restoreQuestionBanks_(data) {
  }finally{lock.releaseLock();}
 }
 
+/** Read-only агрегированная диагностика закрытого банка; доступна только администратору. */
+function getQuestionBankStats_(data) {
+  admin_(data);
+  const sh = questionBank_(), values = sh.getDataRange().getValues(), m = headerMap_(sh);
+  const courses = {}, bankKeys = {}, questionKeys = {};
+  let duplicateQuestionIds = 0, invalidRows = 0, emptyQuestionJSON = 0, invalidQuestionJSON = 0;
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i], courseId = normalizeCourseId_(row[m.CourseId]);
+    const bankId = String(row[m.BankId] || "").trim(), questionId = String(row[m.QuestionId] || "").trim();
+    const key = courseId + "|" + bankId;
+    if (!courseId || !bankId || !questionId) invalidRows++;
+    if (!courses[courseId]) courses[courseId] = {courseId:courseId,questionRows:0,distinctBanks:0,distinctQuestionIds:0};
+    courses[courseId].questionRows++;
+    if (!bankKeys[key]) { bankKeys[key] = true; courses[courseId].distinctBanks++; }
+    const qKey = key + "|" + questionId;
+    if (questionKeys[qKey]) duplicateQuestionIds++;
+    else { questionKeys[qKey] = true; courses[courseId].distinctQuestionIds++; }
+    const json = String(row[m.QuestionJSON] || "");
+    if (!json) emptyQuestionJSON++;
+    else { try { JSON.parse(json); } catch (e) { invalidQuestionJSON++; } }
+  }
+  return {success:true,readOnly:true,totalQuestionRows:Math.max(0,values.length-1),distinctBanks:Object.keys(bankKeys).length,duplicateQuestionIds:duplicateQuestionIds,invalidRows:invalidRows,emptyQuestionJSON:emptyQuestionJSON,invalidQuestionJSON:invalidQuestionJSON,byCourse:Object.keys(courses).sort().map(function(id){return courses[id];})};
+}
 /** Полный ключ доступен только преподавателю своей дисциплины или администратору. */
 function getQuestionBank_(data) {
   const courseId = String(data.courseId || ""), teacher = editor_(data, courseId);
