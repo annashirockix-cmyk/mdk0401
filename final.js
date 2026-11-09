@@ -208,6 +208,26 @@ window.renderFinalExamPage = function (mdkId) {
           card.appendChild(details);
           previewArea.appendChild(card);
         });
+        var previewWritten = mdkId === "04.01" ? [
+          "Составьте алгоритм диагностики станка при росте вибрации шпиндельного узла.",
+          "Проанализируйте сочетание нагрева опоры, вибрации и металлических частиц в масле.",
+          "Опишите подготовку измерительной аппаратуры к проверке точности позиционирования.",
+          "Составьте фрагмент диагностической карты подшипникового узла.",
+          "Обоснуйте решение о дальнейшей эксплуатации или выводе узла в ремонт."
+        ] : [
+          "Опишите алгоритм подготовки оборудования к технологической операции.",
+          "Разберите отклонение параметров оборудования от нормы.",
+          "Составьте порядок безопасной подготовки станка к работе.",
+          "Опишите контроль качества операции и оформление результатов.",
+          "Приведите пример технологической ошибки и меры её предупреждения."
+        ];
+        previewWritten.forEach(function(prompt,index) {
+          var writtenCard=examNode("section","question");
+          writtenCard.style.cssText="margin-bottom:16px;padding:16px;background:var(--card-soft);border:1px solid var(--border);border-radius:10px;";
+          writtenCard.appendChild(examNode("b","","Письменное задание "+(index+1)+": "+prompt));
+          var field=examNode("textarea","self-input");field.rows=4;field.disabled=true;field.placeholder="Поле для развёрнутого ответа";
+          writtenCard.appendChild(field);previewArea.appendChild(writtenCard);
+        });
       });
     }
     app.appendChild(teacherPanel);
