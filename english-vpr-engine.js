@@ -32,7 +32,7 @@
       return;
     }
     var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
-    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 40 баллов</p></section>';
+    app.setAttribute("translate","no"); app.classList.add("notranslate"); app.dataset.proctorAssessment="1"; app.dataset.testId=(window.ENGLISH_VPR_EXAMS&&window.ENGLISH_VPR_EXAMS[track]&&window.ENGLISH_VPR_EXAMS[track].id)||("english_"+track+"_exam"); window._activeAssessmentCourseId=course;\n    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero notranslate" translate="no"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 40 баллов</p></section>';
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
     if (track !== "basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) {
@@ -82,7 +82,7 @@
     var timer = el("div", "exam-timer", "90:00");
     timer.style.cssText = "position:sticky;top:8px;z-index:3;padding:12px;text-align:center;font-size:24px;font-weight:800;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--accent)";
     panel.appendChild(timer);
-    var form = el("form", "english-vpr-form");
+    var form = el("form", "english-vpr-form notranslate"); form.setAttribute("translate","no");
     form.addEventListener("submit", function (e) { e.preventDefault(); });
     var audio = el("section", "question");
     audio.style.cssText = "padding:16px;margin:14px 0;background:var(--card-soft);border:1px solid var(--border);border-radius:12px";
@@ -233,7 +233,7 @@
         window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:courseId,testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:30,percent:Math.round(objective/30*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
       }
     };
-    panel.appendChild(form); panel.appendChild(submit);
+    panel.setAttribute("translate","no"); panel.classList.add("notranslate"); panel.dataset.proctorAssessment="1"; panel.dataset.testId=key; window._activeAssessmentCourseId=courseId;\n    panel.appendChild(form); panel.appendChild(submit);
     function tick() {
       if (finished) return;
       var m = Math.floor(seconds/60), s = seconds%60;
