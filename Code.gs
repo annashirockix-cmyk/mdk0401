@@ -912,7 +912,8 @@ function getResults_(data) {
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
   // сравнивался со всем массивом и отчёт резко замедлялся по мере роста журнала.
-  const resultKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId),normalizeCourseId_(x.courseId)]);}));
+  function resultCourseKey_(value){const v=normalizeCourseId_(value);return /^-?\\d+(?:\\.\\d+)?$/.test(v)?String(Number(v)):v;}
+  const resultKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId),resultCourseKey_(x.courseId)]);}));
   const assignmentKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId)]);}));
   vals.slice(1).forEach(function(row){
     if(String(row[m.Role]||"").toLowerCase()!=="student")return;
@@ -927,7 +928,7 @@ function getResults_(data) {
         if(matches.length===1)cid=matches[0];
         else{const enrolled=String(row[m.Courses]||"").split(",").filter(Boolean);if(enrolled.length===1)cid=enrolled[0];}
       }
-      const resultKey=JSON.stringify([email,String(key),normalizeCourseId_(cid)]);
+      const resultKey=JSON.stringify([email,String(key),resultCourseKey_(cid)]);
       if(resultKeys.has(resultKey))return;
       if(isProtectedAssessment_(key,cid,protectedBanks))return;
       resultKeys.add(resultKey);
