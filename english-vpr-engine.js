@@ -279,8 +279,6 @@
     }
     var tracks = course === "ENB" ? ["basic"] : course === "ENT" ? ["technical"] : ["basic", "technical"];
     tracks.forEach(function (track) {
-      var exam = window.ENGLISH_VPR_EXAMS && window.ENGLISH_VPR_EXAMS[track];
-      if (!exam) return;
       var card = el("article", "question");
       card.style.cssText = "padding:18px;border:1px solid var(--border);border-radius:12px;background:var(--card-soft)";
       card.appendChild(el("h3", "", track === "basic" ? "Basic English — базовый" : "Technical English — технический"));
