@@ -1,5 +1,5 @@
 "use strict";
-var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRqMojX_gOjCKByLFtJYrmnIwdzpWlMn0Isy-LBTGlDJi5J24GgytsjMMjfVGxDxA/exec";
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0dGPf0HOelu33KON9q6TsA-tnUUdtcuVMbViwXOtKOH6MwxJA_Y5dzlh_ocn3vKEM/exec";
 function fetchAPI(action, params, method, timeoutMs) {
   params = Object.assign({}, params || {}); method = method || "GET"; params.action = action;
   var url = new URL(APPS_SCRIPT_URL); url.searchParams.set("action", action); url.searchParams.set("t", String(Date.now()));

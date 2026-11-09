@@ -910,6 +910,11 @@ function getResults_(data) {
     return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:String(r[13]||"")};
   });
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
+  // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
+  // сравнивался со всем массивом и отчёт резко замедлялся по мере роста журнала.
+  function resultCourseKey_(value){const v=normalizeCourseId_(value);return /^-?\\d+(?:\\.\\d+)?$/.test(v)?String(Number(v)):v;}
+  const resultKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId),resultCourseKey_(x.courseId)]);}));
+  const assignmentKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId)]);}));
   vals.slice(1).forEach(function(row){
     if(String(row[m.Role]||"").toLowerCase()!=="student")return;
     let p={};try{p=JSON.parse(row[m.Payload]||"{}");}catch(e){}
@@ -923,13 +928,17 @@ function getResults_(data) {
         if(matches.length===1)cid=matches[0];
         else{const enrolled=String(row[m.Courses]||"").split(",").filter(Boolean);if(enrolled.length===1)cid=enrolled[0];}
       }
-      if(list.some(function(x){return email_(x.email)===email&&String(x.testId)===key&&sameCourseId_(x.courseId,cid);}))return;
+      const resultKey=JSON.stringify([email,String(key),resultCourseKey_(cid)]);
+      if(resultKeys.has(resultKey))return;
       if(isProtectedAssessment_(key,cid,protectedBanks))return;
+      resultKeys.add(resultKey);
+      assignmentKeys.add(JSON.stringify([email,String(key)]));
       list.push({email:email,name:row[m.Name],group:row[m.Group],testId:key,testTitle:rec.testTitle||key,grade:rec.grade,score:rec.score||0,maxScore:rec.max||rec.maxScore||0,percent:rec.percent||0,timeSpent:rec.timeSpent||0,attempts:rec.attempts||1,finishedAt:rec.finishedAt||"",courseId:cid});
     });
   });
   assignmentResultRecords_().forEach(function(x){
-    if(!list.some(function(r){return email_(r.email)===x.email&&String(r.testId)===x.testId;}))list.push(x);
+    const key=JSON.stringify([x.email,String(x.testId)]);
+    if(!assignmentKeys.has(key)){assignmentKeys.add(key);list.push(x);}
   });
   if(user.role==="teacher")list=list.filter(function(x){return hasCourseAccess_(user,x.courseId);});
   if(data.courseId)list=list.filter(function(x){return sameCourseId_(x.courseId,data.courseId);});
@@ -2164,8 +2173,12 @@ function sendGameAction_(data) {
 function getGameActions_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), room=gameRoomRow_(code); if(!room) throw new Error("Комната не найдена.");
   const state=parseGameState_(room.state), isHost=user.email===room.hostEmail; if(!isHost) throw new Error("Историю действий видит только ведущий.");
-  const after=Math.max(0,Number(data.after)||0), values=gameActions_().getDataRange().getValues(), out=[];
-  for(let i=1;i<values.length;i++){const row=values[i],id=Number(row[0])||i;if(String(row[1]).toUpperCase()===code&&id>after){let payload={};try{payload=JSON.parse(row[4]||"{}");}catch(e){}out.push({id:id,email:email_(row[2]),type:String(row[3]),payload:payload,createdAt:row[5]});}}
+  const after=Math.max(0,Number(data.after)||0), sheet=gameActions_(), last=sheet.getLastRow(), out=[];
+  // Не перечитываем всю историю действий при каждом цикле опроса комнаты.
+  // ID действия равен номеру строки, поэтому достаточно хвоста таблицы.
+  if(last<2)return {success:true,actions:[]};
+  const first=Math.max(2,last-499), values=sheet.getRange(first,1,last-first+1,6).getValues();
+  for(let i=0;i<values.length;i++){const row=values[i],id=Number(row[0])||first+i;if(String(row[1]).toUpperCase()===code&&id>after){let payload={};try{payload=JSON.parse(row[4]||"{}");}catch(e){}out.push({id:id,email:email_(row[2]),type:String(row[3]),payload:payload,createdAt:row[5]});}}
   return {success:true,actions:out.slice(-100)};
 }
 function leaveGameRoom_(data) {
