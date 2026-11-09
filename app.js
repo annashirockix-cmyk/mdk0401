@@ -489,7 +489,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             Array.from(node.attributes).forEach(function (attr) {
                 var name = attr.name.toLowerCase(), value = attr.value;
                 if (name === "class" || name === "title" || name === "colspan" || name === "rowspan" || name === "scope") return;
-                if (node.tagName === "A" && name === "href" && /^(https?:|mailto:|\\.\\/|\\.\\.\\/|\\/|#)/i.test(value)) return;
+                if (node.tagName === "A" && name === "href" && /^(https?:|mailto:|\.\/|\.\.\/|\/|#)/i.test(value)) return;
                 node.removeAttribute(attr.name);
             });
             if (node.tagName === "A" && node.hasAttribute("href")) {
