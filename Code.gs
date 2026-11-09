@@ -1521,24 +1521,19 @@ function importQuestionBanks_(data) {
   if(total>2500)throw new Error("Разбейте импорт на части: не более 2500 вопросов за запрос.");
   const sh=questionBank_(),lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
-    const map=headerMap_(sh);
-    const targets={};
+    const map=headerMap_(sh),targets={};
     prepared.forEach(function(bank){targets[bank.courseId+"|"+bank.bankId]=true;});
-    const current=sh.getDataRange().getValues(),deleteRows=[];
-    for(let i=1;i<current.length;i++){
-      const key=normalizeCourseId_(current[i][map.CourseId])+"|"+String(current[i][map.BankId]);
-      if(targets[key])deleteRows.push(i+1);
-    }
-    // Delete contiguous row ranges in reverse order instead of thousands of individual calls.
-    for(let end=deleteRows.length-1;end>=0;){
-      let start=end;
-      while(start>0&&deleteRows[start-1]===deleteRows[start]-1)start--;
-      sh.deleteRows(deleteRows[start],end-start+1);
-      end=start-1;
-    }
-    prepared.forEach(function(bank){
-      sh.getRange(sh.getLastRow()+1,1,bank.rows.length,6).setValues(bank.rows);
+    const current=sh.getDataRange().getValues(),header=current.length?current[0]:HEADERS.QuestionBank;
+    // Rebuild once: repeated row deletion and per-bank writes were timing out in Apps Script.
+    const retained=current.slice(1).filter(function(row){
+      const key=normalizeCourseId_(row[map.CourseId])+"|"+String(row[map.BankId]);
+      return !targets[key];
     });
+    const incoming=[];
+    prepared.forEach(function(bank){Array.prototype.push.apply(incoming,bank.rows);});
+    const output=[header].concat(retained,incoming);
+    sh.clearContents();
+    sh.getRange(1,1,output.length,6).setValues(output);
     CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");
     return {success:true,banksImported:prepared.length,questionsImported:total};
   } finally {lock.releaseLock();}
