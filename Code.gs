@@ -2164,8 +2164,12 @@ function sendGameAction_(data) {
 function getGameActions_(data) {
   const user=auth_(data), code=String(data.code||"").trim().toUpperCase(), room=gameRoomRow_(code); if(!room) throw new Error("Комната не найдена.");
   const state=parseGameState_(room.state), isHost=user.email===room.hostEmail; if(!isHost) throw new Error("Историю действий видит только ведущий.");
-  const after=Math.max(0,Number(data.after)||0), values=gameActions_().getDataRange().getValues(), out=[];
-  for(let i=1;i<values.length;i++){const row=values[i],id=Number(row[0])||i;if(String(row[1]).toUpperCase()===code&&id>after){let payload={};try{payload=JSON.parse(row[4]||"{}");}catch(e){}out.push({id:id,email:email_(row[2]),type:String(row[3]),payload:payload,createdAt:row[5]});}}
+  const after=Math.max(0,Number(data.after)||0), sheet=gameActions_(), last=sheet.getLastRow(), out=[];
+  // Не перечитываем всю историю действий при каждом цикле опроса комнаты.
+  // ID действия равен номеру строки, поэтому достаточно хвоста таблицы.
+  if(last<2)return {success:true,actions:[]};
+  const first=Math.max(2,last-499), values=sheet.getRange(first,1,last-first+1,6).getValues();
+  for(let i=0;i<values.length;i++){const row=values[i],id=Number(row[0])||first+i;if(String(row[1]).toUpperCase()===code&&id>after){let payload={};try{payload=JSON.parse(row[4]||"{}");}catch(e){}out.push({id:id,email:email_(row[2]),type:String(row[3]),payload:payload,createdAt:row[5]});}}
   return {success:true,actions:out.slice(-100)};
 }
 function leaveGameRoom_(data) {
