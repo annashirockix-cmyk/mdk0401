@@ -57,30 +57,14 @@
     tick();window.englishAssessmentTimer=setInterval(tick,1000);
     window.addEventListener("hashchange",function(){if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}var currentApp=$("app");if(currentApp&&!String(location.hash||"").startsWith("#/english-tests")){currentApp.removeAttribute("translate");currentApp.classList.remove("notranslate");}},{once:true});
   }
+  // Legacy semester/final exam catalogue intentionally disabled.
+  // The VPR 2026 engine loaded after this file owns the only exam entry page.
   window.renderEnglishTestsPage=function(mode){
-    if(!guard())return;var app=appStart("🎯 Тесты по английскому языку");if(!app)return;
-    var allowed=["basic","technical","semester-basic","semester-technical","final-basic","final-technical"];
-    mode=allowed.indexOf(mode)>=0?mode:activeTrack();if(activeCourse()==="ENB"&&mode.indexOf("technical")>=0)mode="basic";if(activeCourse()==="ENT"&&mode.indexOf("technical")<0)mode="technical";
-    var track=mode.indexOf("technical")>=0?"technical":"basic";
-    var labels=[["basic","Basic English"],["technical","Technical English"],["semester-basic","Семестровые · базовый"],["semester-technical","Семестровые · технический"],["final-basic","Итоговые · базовый"],["final-technical","Итоговые · технический"]];
-    var visibleLabels=activeCourse()==="ENB"?labels.filter(function(x){return x[0].indexOf("technical")<0;}):activeCourse()==="ENT"?labels.filter(function(x){return x[0].indexOf("technical")>=0;}):labels;var html='<section class="module"><div style="display:flex;gap:8px;flex-wrap:wrap">'+visibleLabels.map(function(x){return '<button class="btn '+(mode===x[0]?"":"ghost")+'" data-mode="'+x[0]+'">'+x[1]+'</button>';}).join("")+'</div></section>';
-    if(mode==="basic"||mode==="technical"){
-      html+='<div class="module"><p class="museum-muted">Тематические тесты исходного курса. Откройте тему и выберите вкладку «Тест».</p></div>';
-      (window.MDK_DATA.EN.sections||[]).filter(function(section){return section.sourceTrack===track;}).forEach(function(section){html+='<section class="module"><h2>'+esc(section.code)+' · '+esc(section.title)+'</h2>';(section.topics||[]).forEach(function(topic){var count=(topic.test||[]).length;if(!count)return;html+='<div style="padding:10px 0;border-top:1px solid var(--border)"><b>'+esc(topic.code)+' · '+esc(topic.title)+'</b><span class="museum-muted"> · '+count+' вопросов</span><div>'+cardButton("Открыть тест","#/topic/"+activeCourse()+"/"+encodeURIComponent(topic.id)+"/test")+'</div></div>';});html+='</section>';});
-    }else if(mode.indexOf("semester-")===0){
-      var sem=(window.SEMESTER_TESTS&&window.SEMESTER_TESTS[track])||[];
-      html+='<section class="module"><h2>Семестровые контрольные</h2><p class="museum-muted">'+sem.length+' контрольных работ · 5 курсов · 45 минут на работу</p>';
-      sem.forEach(function(test){var key="english_"+track+"_"+test.id,done=window.state.results&&window.state.results[key];html+='<article style="padding:10px 0;border-top:1px solid var(--border)"><b>'+esc(test.title)+'</b><div class="museum-muted">'+esc(test.subtitle||"")+' · '+test.questions.length+' вопросов · '+test.time+' мин'+(done?' · оценка: '+esc(done.grade):'')+'</div><button class="btn" data-sem="'+esc(test.id)+'" '+(done?'disabled':'')+'>'+(done?'Работа завершена':'Начать контрольную')+'</button></article>';});html+='</section>';
-    }else{
-      var exams=(window.FINAL_EXAMS&&window.FINAL_EXAMS[track])||[];
-      html+='<section class="module"><h2>Итоговые экзамены</h2><p class="museum-muted">'+exams.length+' экзаменов · по два варианта · 60 минут</p>';
-      exams.forEach(function(exam){html+='<article style="padding:12px 0;border-top:1px solid var(--border)"><b>'+esc(exam.title)+'</b><div class="museum-muted">'+exam.time+' мин</div><div style="display:flex;gap:8px;flex-wrap:wrap">'+(exam.variants||[]).map(function(v,i){var key="english_"+track+"_"+exam.id+"_v"+(i+1),done=window.state.results&&window.state.results[key];return '<button class="btn '+(i?"ghost":"")+'" data-final="'+esc(exam.id)+'" data-variant="'+(i+1)+'" '+(done?'disabled':'')+'>'+(done?'Вариант '+(i+1)+' · завершён':'Вариант '+(i+1))+'</button>';}).join("")+'</div></article>';});html+='</section>';
-    }
-    app.insertAdjacentHTML("beforeend",html);
-    app.querySelectorAll("[data-mode]").forEach(function(b){b.onclick=function(){window.renderEnglishTestsPage(b.dataset.mode);};});
-    app.querySelectorAll("[data-sem]").forEach(function(b){b.onclick=function(){var test=(window.SEMESTER_TESTS[track]||[]).find(function(x){return x.id===b.dataset.sem;});if(test)runEnglishAssessment(test.title+" · "+(test.subtitle||""),test.questions,test.time,"english_"+track+"_"+test.id);};});
-    app.querySelectorAll("[data-final]").forEach(function(b){b.onclick=function(){var exam=(window.FINAL_EXAMS[track]||[]).find(function(x){return x.id===b.dataset.final;});var v=exam&&exam.variants[Number(b.dataset.variant)-1];if(v)runEnglishAssessment(exam.title+" · вариант "+b.dataset.variant,v.questions,exam.time,"english_"+track+"_"+exam.id+"_v"+b.dataset.variant);};});
+    if(typeof window.renderEnglishVprPage==="function") return window.renderEnglishVprPage(mode||"");
+    var app=$("app"); if(!app)return;
+    app.innerHTML='<section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Доступны только два варианта: Basic English и Technical English.</p></section><section class="module"><p>Загрузка экзамена… Обновите страницу, если экран не изменится.</p></section>';
   };
+
   window.renderEnglishCardsPage=function(track,mode){
     if(!guard())return;var app=appStart("🃏 Карточки и кроссворд");if(!app)return;
     var course=window.MDK_DATA.EN,tracks=["basic","technical"],current=activeTrack();if(activeCourse()==="EN"&&tracks.indexOf(track)>=0)current=track;
