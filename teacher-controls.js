@@ -88,7 +88,8 @@ window.renderTeacherControlsPage=function(){
       const count=Array.isArray(bank.questions)?bank.questions.length:0;
       if(!count)continue;
       if(count>1000)throw Error("Банк "+bank.bankId+" содержит "+count+" вопросов. Сервер принимает не более 1000 вопросов в одном банке.");
-      if(batch.length>=25||batchQuestions+count>2000)await sendImportBatch();
+      // Smaller batches keep Apps Script executions comfortably below the request timeout.
+      if(batch.length>=10||(batch.length>0&&batchQuestions+count>500))await sendImportBatch();
       batch.push(bank);batchQuestions+=count;
      }
      await sendImportBatch();
