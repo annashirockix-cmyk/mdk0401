@@ -229,6 +229,7 @@
       var record = {grade:"На проверке",score:objective,max:40,objectiveMax:maxObjective,percent:Math.round(objective/30*100),finishedAt:now,status:"pending_teacher_review",writtenAnswers:answerSummary};
       window.state.results = window.state.results || {}; window.state.results[key] = record;
       if (window.saveStudentData) window.saveStudentData();
+      app.dataset.proctorAssessment="0"; panel.dataset.proctorAssessment="0";
       panel.innerHTML = '<section class="module" style="text-align:center"><h2>Экзамен отправлен</h2><p>Автоматически проверено: <b>'+objective+' из 30</b> баллов.</p><p>Задание 7 — анкета из 10 пунктов (до 5 слов в каждом ответе), максимум 10 баллов; её проверит преподаватель отдельно.</p><h3>Итоговая оценка: ожидает проверки</h3><p>Не закрывайте портал, если преподаватель попросит уточнить ответы.</p></section>';
       if (student && window.API && window.API.saveResult) {
         window.API.saveResult({email:student.email,name:student.name,group:student.group,courseId:courseId,testId:key,testTitle:exam.title+" (задание 7 ожидает проверки)",grade:"На проверке",score:objective,maxScore:30,percent:Math.round(objective/30*100),payload:JSON.stringify({status:"pending_teacher_review",writtenAnswers:answerSummary}),finishedAt:now}).catch(function (err) { console.warn("English VPR result sync failed",err); if (window.showToast) window.showToast("Результат сохранён на устройстве, но не синхронизирован с сервером.","err"); });
