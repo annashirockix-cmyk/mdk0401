@@ -232,8 +232,8 @@
         if(selected){answered++;if(Number(selected.value)===q[3]){byLevel[q[0]].correct++;total++;}}
       });
       if(answered<25){if(!window.confirm("Отвечено только на "+answered+" из 30 вопросов. Завершить диагностику?"))return;}
-      var level="A1";
-      sections.forEach(function(l){if(byLevel[l].correct>=4)level=l;});
+      var level="A1", reached=true;
+      sections.forEach(function(l){if(reached && byLevel[l].correct>=4){level=l;}else{reached=false;}});
       var report=node("section","module"); report.style.cssText="margin-top:14px";
       report.appendChild(node("h2","","Ваш ориентировочный уровень: "+level));
       report.appendChild(node("p","","Правильных ответов: "+total+" из 30. Заполнено: "+answered+" из 30."));
