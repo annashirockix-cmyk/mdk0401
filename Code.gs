@@ -1439,9 +1439,15 @@ function getCustomContent_(data) {
     if (!row[0]) return;
     const courseId = String(row[1] || "");
     if (user.role !== "admin" && !hasCourseAccess_(user, courseId)) return;
-    if (user.role === "student" && (String(row[3] || "") === "lecture" || String(row[3] || "") === "topic")) {
-      const rawAccess=settingValue_("topicAccess:"+courseId+":"+String(row[2]||""));
-      if(rawAccess){try{if(JSON.parse(rawAccess).open===false)return;}catch(e){}}
+    // Access is controlled per topic on the server. Hide every content type
+    // (lecture, test, flashcards, game and attachments), not just lecture text.
+    if (user.role === "student") {
+      const contentType=String(row[3]||"");
+      const accessTopicId=contentType==="topic"?String(row[0]||""):String(row[2]||"");
+      if(accessTopicId){
+        const rawAccess=settingValue_("topicAccess:"+courseId+":"+accessTopicId);
+        if(rawAccess){try{if(JSON.parse(rawAccess).open===false)return;}catch(e){}}
+      }
     }
 
     let payload = {};
