@@ -562,6 +562,11 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   const sw = read("service-worker.js");
   assert.match(html, /english-proficiency-lab\.js\?v=1/);
   assert.ok(sw.includes("./english-proficiency-lab.js"));
+  assert.match(html, /drawerExams/);
+  assert.match(html, /href="#\\/english-tests"/);
+  assert.match(html, /href="#\\/laboratory\\/english"/);
+  assert.doesNotMatch(html, /href="#\\/english-tests\\/lab"/);
+  assert.doesNotMatch(html, /href="#\\/english-tests\\/c1c2".*drawer-item/);
   assert.match(engine, /var key = exam\.id \|\|/);
   assert.match(lab, /for \(var year = 1; year <= 5; year\+\+\)/);
   assert.match(lab, /semester = 1; semester <= 2/);
@@ -572,4 +577,12 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   assert.match(lab, /function advancedExam\(variant\)/);
   assert.match(lab, /english_cefr_c1c2_variant_/);
   assert.match(lab, /Лаборатория английского языка/);
+  assert.match(lab, /href = "#\\/laboratory\\/english"/);
+  assert.match(read("laboratory.js"), /renderEnglishTestsPage\\("lab"\\)/);
+  assert.match(read("workbooks.js"), /\\.sheet img.*max-width:100%/);
+  assert.match(read("flashcard-editor.js"), /window\\.enhanceTopicFlashcards/);
+  assert.match(read("teacher-controls.js"), /Открыть студентам/);
+  assert.match(read("teacher-controls.js"), /Закрыть/);
+  assert.match(read("app.js"), /Fail closed: students must never fall back to client-side answer keys/);
+  assert.match(read("proctor-monitor.js"), /_activeAssessmentCourseId/);
 });
