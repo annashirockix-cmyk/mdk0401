@@ -213,7 +213,8 @@
         var count = (task.items || []).length;
         if (task.type === "gap") count = (task.text.match(/[A-F]_____/g) || []).length;
         for (var i=0;i<count;i++) {
-          var field = form.querySelector('[name="vpr_'+ti+'_'+i+'"]');
+          var selector = task.type === "choice" ? 'input[name="vpr_'+ti+'_'+i+'"]:checked' : '[name="vpr_'+ti+'_'+i+'"]';
+          var field = form.querySelector(selector);
           row[i] = field ? (field.value || "").trim() : "";
         }
         return row;
