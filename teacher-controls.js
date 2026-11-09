@@ -193,13 +193,14 @@ window.renderQuestionBankPage=function(){
 
  const importAllBtn=isAdmin?document.createElement("button"):null;
  if(importAllBtn){
-  importAllBtn.id="bankImportAllBtn";importAllBtn.className="btn";importAllBtn.style.cssText="margin:12px 0 12px 8px";importAllBtn.textContent="📚 Импортировать все банки всех дисциплин";
+  importAllBtn.id="bankImportAllBtn";importAllBtn.className="btn";importAllBtn.style.cssText="margin:12px 0 12px 8px";importAllBtn.textContent="🛡️ Создать копию и перезаписать все банки";
   const currentBtn=document.getElementById("bankImportBtn");
   if(currentBtn)currentBtn.insertAdjacentElement("afterend",importAllBtn);
   importAllBtn.onclick=async function(){
    const btn=this,status=document.getElementById("bankStatus");btn.disabled=true;
    const current=document.getElementById("bankImportBtn");if(current)current.disabled=true;
    try{
+    let backupId="",backupCreated=false;
     const all=[],seen={},courseIds=new Set(["07.01","04.01","02.01","02.02","MCAM","MAT","OT","PFI","EN","ENB","ENT"]);
     // Не перебираем исходные модули MDK_DATA.basic/technical:
     // для импорта они представлены дисциплинами ENB/ENT (и объединённой EN).
@@ -231,14 +232,19 @@ window.renderQuestionBankPage=function(){
     });
     if(!all.length)throw new Error("Не найдены встроенные банки ни по одной дисциплине.");
     const expected=all.reduce((n,b)=>n+b.questions.length,0);
+    backupId="qb-backup-"+Date.now();
     let importedBanks=0,importedQuestions=0,batch=[],batchSize=0,part=0;
+    if(!window.confirm("Будут созданы резервные копии и перезаписаны "+all.length+" банков ("+expected+" вопросов). Старые строки сохранятся в QuestionBankBackup. Продолжить?"))return;
+    status.textContent="Создаём резервную копию существующих банков…";
+    const backup=await window.API.backupQuestionBanks(backupId,all.map(b=>({courseId:b.courseId,bankId:b.bankId})));
+    if(!backup||!backup.success)throw new Error(backup&&backup.error||"Не удалось создать резервную копию. Данные не изменены.");
+    backupCreated=true;status.textContent="Резервная копия готова · "+backup.banksBackedUp+" банков. Начинаем перезапись…";
     async function send(){
      if(!batch.length)return;part++;
      const result=await window.API.importQuestionBanks(batch);
      if(!result||!result.success)throw new Error(result&&result.error||"Ошибка импорта пакета "+part);
-     importedBanks+=Number(result.banksImported)||batch.length;
-     importedQuestions+=Number(result.questionsImported)||0;
-     status.textContent="Пакет "+part+" · банков "+importedBanks+"/"+all.length+" · вопросов "+importedQuestions+"/"+expected;
+     importedBanks+=Number(result.banksImported)||batch.length;importedQuestions+=Number(result.questionsImported)||0;
+     status.textContent="Перезапись: пакет "+part+" · банков "+importedBanks+"/"+all.length+" · вопросов "+importedQuestions+"/"+expected;
      batch=[];batchSize=0;
     }
     for(const bank of all){
@@ -248,9 +254,17 @@ window.renderQuestionBankPage=function(){
      batch.push(bank);batchSize+=n;
     }
     await send();
-    status.textContent="Готово: импортировано "+importedBanks+" банков и "+importedQuestions+" вопросов по "+new Set(all.map(b=>b.courseId)).size+" дисциплинам. Обновите страницу, чтобы просмотреть банк текущей дисциплины.";
+    status.textContent="Готово: перезаписано "+importedBanks+" банков и "+importedQuestions+" вопросов. Резервная копия "+backupId+" сохранена.";
     load();
-   }catch(e){status.textContent="Импорт всех банков прерван: "+(e.message||e);}
+   }catch(e){
+    let message=e.message||String(e);
+    if(backupCreated){
+     status.textContent="Ошибка импорта: "+message+" · выполняем откат из резервной копии…";
+     try{const restored=await window.API.restoreQuestionBanks(backupId);if(!restored||!restored.success)throw Error(restored&&restored.error||"Откат не подтверждён");message+=" Откат выполнен: восстановлено банков "+restored.banksRestored+".";}
+     catch(re){message+=" ВНИМАНИЕ: автоматический откат не завершён: "+re.message+". Резервная копия "+backupId+" сохранена в QuestionBankBackup.";}
+    }
+    status.textContent="Импорт прерван: "+message;load();
+   }
    finally{btn.disabled=false;if(current)current.disabled=false;}
   };
  }
