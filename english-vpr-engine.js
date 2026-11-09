@@ -35,12 +35,12 @@
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Итоговый экзамен по английскому</h1><p>Формат ВПР СПО 2026 · 7 заданий · 90 минут · максимум 40 баллов</p></section>';
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
-    if (course !== "ENB") {
-      var b = el("button", "btn " + (track === "basic" ? "" : "ghost"), "Basic English");
+    if (track !== "basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) {
+      var b = el("button", "btn ghost", "Basic English");
       b.type = "button"; b.onclick = function () { renderPage("final-basic"); }; tabs.appendChild(b);
     }
-    if (course !== "ENT") {
-      var t = el("button", "btn " + (track === "technical" ? "" : "ghost"), "Technical English");
+    if (track !== "technical" && (!window.canAccessCourse || window.canAccessCourse("ENT") || window.canAccessCourse("EN"))) {
+      var t = el("button", "btn ghost", "Technical English");
       t.type = "button"; t.onclick = function () { renderPage("final-technical"); }; tabs.appendChild(t);
     }
     app.appendChild(tabs);
