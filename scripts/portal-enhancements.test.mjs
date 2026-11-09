@@ -613,7 +613,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   const app = read("app.js");
   assert.match(app, /id !== "EN"/);
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
-  assert.match(html, /app\.js\?v=48/);
+  assert.match(html, /app\.js\?v=49/);
   assert.match(html, /english-tools\.js\?v=9/);
   assert.match(html, /english-vpr-engine\.js\?v=14/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
@@ -694,4 +694,13 @@ test("English VPR grades numbered choices correctly and renders per-gap option l
   assert.doesNotMatch(server, /Number\(ans\[i\]\)===Number\(item\[1\]\)\+1/);
   assert.match(engine, /\(\(task\.itemOptions && task\.itemOptions\[i\]\) \|\| task\.options \|\| \[\]\)\.map/);
   assert.match(engine, /Десять кратких ответов в задании 7/);
+});
+
+
+test("admin role is recognized for teacher navigation and tutoring is shown only when configured", () => {
+  const app = read("app.js");
+  assert.match(app, /currentState\.user && currentState\.user\.role/);
+  assert.match(app, /currentRole === "teacher" \|\| currentRole === "admin"/);
+  assert.match(app, /tutoringLink\.style\.display=isTeacher\?"flex":"none"/);
+  assert.match(app, /link\.visible!==false&&String\(link\.url\|\|""\)\.trim\(\)/);
 });
