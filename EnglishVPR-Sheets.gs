@@ -45,7 +45,7 @@ function sanitizeEnglishVprExam_(exam) {
 
 function getEnglishVprExam_(data) {
   const user = auth_(data), track = String(data.track || "").toLowerCase();
-  if (user.role !== "student" || ["basic","technical"].indexOf(track) < 0) throw new Error("Нет доступа к экзамену.");
+  if (["student","teacher","admin"].indexOf(user.role) < 0 || ["basic","technical"].indexOf(track) < 0) throw new Error("Нет доступа к экзамену.");
   const courseId = track === "basic" ? "ENB" : "ENT";
   if (!hasCourseAccess_(user, courseId) && !hasCourseAccess_(user, "EN")) throw new Error("Эта дисциплина не назначена вашему аккаунту.");
   const sh = englishVprBank_(), values = sh.getDataRange().getValues(), map = headerMap_(sh);
