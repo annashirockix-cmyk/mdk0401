@@ -59,7 +59,9 @@ window.getLevel = function(xp) { return Math.floor((xp || 0) / 100) + 1; };
 window.getLevelTitle = function(lvl) { if (lvl < 3) return "Новичок"; if (lvl < 5) return "Ученик"; if (lvl < 8) return "Практикант"; if (lvl < 12) return "Мастер"; return "Эксперт"; };
 
 window.updateMenuVisibility = function() {
-    var isTeacher = window.state.staff && (window.state.staff.role === "teacher" || window.state.staff.role === "admin");
+    var currentState = window.state || {};
+    var currentRole = String((currentState.staff && currentState.staff.role) || (currentState.user && currentState.user.role) || (currentState.student && currentState.student.role) || currentState.role || "").toLowerCase();
+    var isTeacher = !!(currentState.staff || currentState.teacher || currentState.admin || currentRole === "teacher" || currentRole === "admin");
     var displayStyle = isTeacher ? "flex" : "none";
     ['menuJournal', 'menuReports', 'menuSchedule'].forEach(id => {
         var el = document.getElementById(id);
@@ -85,7 +87,18 @@ window.updateMenuVisibility = function() {
         link.style.display=(activeEnglish||(examOrLab&&hasEnglishAccess))?"flex":"none";
     });
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
-    var tutoringLink=document.getElementById("menuTutoring"); if(tutoringLink){tutoringLink.style.display=isTeacher?"flex":"none";if(window.state.student&&window.API&&window.API.getTutoringLink){var tutoringCourse=String(window.state.activeCourseId||"07.01");window.API.getTutoringLink(tutoringCourse).then(function(r){if(String(window.state.activeCourseId||"07.01")!==tutoringCourse)return;tutoringLink.style.display=(r&&r.link&&r.link.visible!==false)?"flex":"none";}).catch(function(){tutoringLink.style.display="none";});}}
+    var tutoringLink=document.getElementById("menuTutoring");
+    if(tutoringLink){
+        tutoringLink.style.display=isTeacher?"flex":"none";
+        if(currentState.student && window.API && window.API.getTutoringLink){
+            var tutoringCourse=String(currentState.activeCourseId||"07.01");
+            window.API.getTutoringLink(tutoringCourse).then(function(r){
+                if(String((window.state&&window.state.activeCourseId)||"07.01")!==tutoringCourse)return;
+                var link=r&&r.link;
+                tutoringLink.style.display=(link&&link.visible!==false&&String(link.url||"").trim())?"flex":"none";
+            }).catch(function(){tutoringLink.style.display="none";});
+        }
+    }
 };
 
 window.applyGlobalEffects = function() {
