@@ -1810,7 +1810,7 @@ function submitFinalExam_(data) {
     if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
     const writtenAnswers=Array.isArray(data.writtenAnswers)?data.writtenAnswers.slice(0,5).map(function(value){return String(value||"").slice(0,12000);}):[String(data.written1||""),String(data.written2||"")];
-    const writtenSubmission=writtenAnswers.map(function(value,index){return "Письменное задание "+(index+1)+":\\n"+value;}).join("\\n\\n");
+    const writtenSubmission=writtenAnswers.map(function(value,index){return "Письменное задание "+(index+1)+":\n"+value;}).join("\n\n");
     appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Math.min(5400,Number(data.timeSpent)||0)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:writtenSubmission.slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,AttemptNo:attemptNo,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted});
     cache.remove(cacheKey);
