@@ -93,6 +93,8 @@ function handleRequest_(e) {
       case "getmycourseresults": result = getMyCourseResults_(data); break;
       case "savegcodeprogress": result = saveGCodeProgress_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
+      case "getcustomcontentaccess": result = getCustomContentAccess_(data); break;
+      case "setcustomcontentaccess": result = setCustomContentAccess_(data); break;
       case "gettopicaccess": result = getTopicAccess_(data); break;
       case "settopicaccess": result = setTopicAccess_(data); break;
       case "granttestattempts": result = grantTestAttempts_(data); break;
@@ -1435,6 +1437,50 @@ function grantTestAttempts_(data) {
 
 /* ---------- Teacher-created topics, lectures and tests ---------- */
 
+function customContentIsOpen_(courseId, contentId, topicId, contentType) {
+  function isOpen(key) {
+    const raw = settingValue_(key);
+    if (!raw) return true;
+    try { return JSON.parse(raw).open !== false; } catch (e) { return true; }
+  }
+  if (contentType === "topic") return isOpen("topicAccess:" + courseId + ":" + contentId);
+  if (!isOpen("contentAccess:" + courseId + ":" + contentId)) return false;
+  if (topicId && !isOpen("topicAccess:" + courseId + ":" + topicId)) return false;
+  return true;
+}
+function customContentRecord_(data) {
+  const courseId = String(data.courseId || data.mdkId || ""), id = String(data.id || data.contentId || "");
+  if (!courseId || !id) throw new Error("Не указана дисциплина или материал.");
+  const actor = editor_(data, courseId);
+  const rows = content_().getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === id && String(rows[i][1]) === courseId) {
+      return { actor: actor, id: id, courseId: courseId, topicId: String(rows[i][2] || ""), type: String(rows[i][3] || "") };
+    }
+  }
+  throw new Error("Материал не найден в выбранной дисциплине.");
+}
+function getCustomContentAccess_(data) {
+  const item = customContentRecord_(data);
+  if (item.type === "topic") return { success: true, open: customContentIsOpen_(item.courseId, item.id, "", "topic"), topicOpen: true };
+  const raw = settingValue_("contentAccess:" + item.courseId + ":" + item.id);
+  let open = true;
+  if (raw) { try { open = JSON.parse(raw).open !== false; } catch (e) {} }
+  let topicOpen = true;
+  if (item.topicId) {
+    const topicRaw = settingValue_("topicAccess:" + item.courseId + ":" + item.topicId);
+    if (topicRaw) { try { topicOpen = JSON.parse(topicRaw).open !== false; } catch (e) {} }
+  }
+  return { success: true, open: open, topicOpen: topicOpen, effectiveOpen: open && topicOpen };
+}
+function setCustomContentAccess_(data) {
+  const item = customContentRecord_(data);
+  if (item.type === "topic") throw new Error("Для тем используйте управление доступом к темам.");
+  const open = data.open === true;
+  writeSetting_("contentAccess:" + item.courseId + ":" + item.id, JSON.stringify({ open: open }), item.actor.email);
+  return { success: true, open: open, id: item.id };
+}
+
 function getCustomContent_(data) {
   const user = auth_(data);
   const values = content_().getDataRange().getValues();
@@ -1444,16 +1490,8 @@ function getCustomContent_(data) {
     if (!row[0]) return;
     const courseId = String(row[1] || "");
     if (user.role !== "admin" && !hasCourseAccess_(user, courseId)) return;
-    // Access is controlled per topic on the server. Hide every content type
-    // (lecture, test, flashcards, game and attachments), not just lecture text.
-    if (user.role === "student") {
-      const contentType=String(row[3]||"");
-      const accessTopicId=contentType==="topic"?String(row[0]||""):String(row[2]||"");
-      if(accessTopicId){
-        const rawAccess=settingValue_("topicAccess:"+courseId+":"+accessTopicId);
-        if(rawAccess){try{if(JSON.parse(rawAccess).open===false)return;}catch(e){}}
-      }
-    }
+    // Students receive only materials whose individual switch and parent-topic switch are open.
+    if (user.role === "student" && !customContentIsOpen_(courseId, String(row[0] || ""), String(row[2] || ""), String(row[3] || ""))) return;
 
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
@@ -1899,11 +1937,13 @@ function submitCustomTest_(data) {
   let record = null;
   values.slice(1).forEach(function (row) {
     if (String(row[0]) === id && String(row[3]) === "test") record = {
-      courseId: String(row[1] || ""), title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
+      id: id, courseId: String(row[1] || ""), topicId: String(row[2] || ""), type: "test",
+      title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
     };
   });
   if (!record) throw new Error("Тест не найден.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
+  if (!customContentIsOpen_(record.courseId, record.id, record.topicId, record.type)) throw new Error("Этот тест закрыт преподавателем.");
   const attemptKey="custom_"+id;
   const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   const answers = Array.isArray(data.answers) ? data.answers : [];
@@ -1940,9 +1980,10 @@ function getGameAnswer_(data) {
   if (!id || !Number.isInteger(ci) || !Number.isInteger(qi) || ci < 0 || qi < 0) throw new Error("Некорректный запрос ответа.");
   const values = content_().getDataRange().getValues();
   let record = null;
-  values.slice(1).forEach(function(row) { if (String(row[0]) === id && String(row[3]) === "game") record = {courseId:String(row[1]||""), payload:JSON.parse(row[5]||"{}")}; });
+  values.slice(1).forEach(function(row) { if (String(row[0]) === id && String(row[3]) === "game") record = {id:id,courseId:String(row[1]||""),topicId:String(row[2]||""),type:"game",payload:JSON.parse(row[5]||"{}")}; });
   if (!record) throw new Error("Игра не найдена.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
+  if (!customContentIsOpen_(record.courseId, record.id, record.topicId, record.type)) throw new Error("Эта игра закрыта преподавателем.");
   const cats = Array.isArray(record.payload.categories) ? record.payload.categories : [];
   const cat = cats[ci], q = cat && Array.isArray(cat.questions) ? cat.questions[qi] : null;
   if (!q) throw new Error("Вопрос не найден.");

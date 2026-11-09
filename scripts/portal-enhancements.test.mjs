@@ -123,6 +123,42 @@ test("teacher-created lectures are rendered in their assigned topics and sanitiz
   assert.match(app, /topic\.lectures = \(topic\.lectures \|\| \[\]\)\.concat/);
 });
 
+test("teacher-created materials have individual server-side visibility switches", () => {
+  const server = read("Code.gs");
+  const api = read("api.js");
+  const controls = read("teacher-controls.js");
+  assert.match(server, /case "getcustomcontentaccess": result = getCustomContentAccess_\(data\)/);
+  assert.match(server, /case "setcustomcontentaccess": result = setCustomContentAccess_\(data\)/);
+  assert.match(server, /function customContentIsOpen_\(/);
+  assert.match(server, /contentAccess:/);
+  assert.match(server, /function getCustomContentAccess_\(/);
+  assert.match(server, /function setCustomContentAccess_\(/);
+  assert.match(server, /if \(!customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, record\.type\)\) throw new Error\("Этот тест закрыт преподавателем\."/);
+  assert.match(server, /if \(!customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, record\.type\)\) throw new Error\("Эта игра закрыта преподавателем\."/);
+  assert.match(api, /getCustomContentAccess:function/);
+  assert.match(api, /setCustomContentAccess:function/);
+  assert.match(controls, /customContentAccessList/);
+  assert.match(controls, /Открыть студентам/);
+  assert.match(controls, /Закрыть/);
+});
+
+test("server visibility helper closes an item or its parent topic", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function customContentIsOpen_");
+  const end = server.indexOf("\nfunction customContentRecord_", start);
+  assert.ok(start >= 0 && end > start);
+  const settings = new Map();
+  const sandbox = { settingValue_: (key) => settings.get(key) || "" };
+  vm.runInNewContext(server.slice(start, end) + ";this.customContentIsOpen_=customContentIsOpen_;", sandbox);
+  assert.equal(sandbox.customContentIsOpen_("07.01", "lec-1", "topic-1", "lecture"), true);
+  settings.set("contentAccess:07.01:lec-1", JSON.stringify({open:false}));
+  assert.equal(sandbox.customContentIsOpen_("07.01", "lec-1", "topic-1", "lecture"), false);
+  settings.delete("contentAccess:07.01:lec-1");
+  settings.set("topicAccess:07.01:topic-1", JSON.stringify({open:false}));
+  assert.equal(sandbox.customContentIsOpen_("07.01", "lec-1", "topic-1", "lecture"), false);
+  assert.equal(sandbox.customContentIsOpen_("07.01", "topic-1", "", "topic"), false);
+});
+
 test("exam drawer removes duplicate links added after initial page load", () => {
   const source = read("portal-final.js");
   assert.match(source, /function fixExam\(\)/);
@@ -609,7 +645,7 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   assert.match(read("teacher-controls.js"), /Закрыть/);
   assert.match(read("app.js"), /Fail closed: students must never fall back to client-side answer keys/);
   assert.ok(read("proctor-monitor.js").includes("_activeAssessmentCourseId"));
-  assert.ok(read("Code.gs").includes('const accessTopicId=contentType==="topic"?String(row[0]||""):String(row[2]||"");'));
+  assert.ok(read("Code.gs").includes('customContentIsOpen_(courseId, String(row[0] || ""), String(row[2] || ""), String(row[3] || ""))'));
   assert.ok(read("app.js").includes("hasEnglishAccess"));
 });
 
@@ -628,10 +664,12 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(api, /getEnglishVprExam:function/);
   assert.match(api, /submitEnglishVprExam:function/);
   assert.match(engine, /window\.API\.getEnglishVprExam\(track\)/);
+  assert.match(engine, /app\.setAttribute\("translate","no"\)/);
+  assert.match(engine, /app\.classList\.add\("notranslate"\)/);
   assert.match(engine, /window\.API\.submitEnglishVprExam/);
   assert.doesNotMatch(engine, /item\[1\]\+1/);
   assert.match(engine, /Перенести экзамены в защищённую таблицу/);
-  assert.match(html, /api\.js\?v=39/);
+  assert.match(html, /api\.js\?v=40/);
   assert.match(html, /english-vpr-engine\.js\?v=13/);
 });
 

@@ -15,6 +15,7 @@ window.renderTeacherControlsPage=function(){
  const cid=courseId(),label=(window.COURSE_LABELS&&window.COURSE_LABELS[cid])||cid;const bankNav=document.getElementById("menuQuestionBank");if(bankNav)bankNav.style.display="";
  app.innerHTML='<a class="backlink" href="#/course-editor">← В редактор курса</a><section class="hero"><h1>Управление доступом и попытками</h1><p>'+esc(label)+' · настройки применяются на сервере</p></section>'+
  '<div class="module"><h3>📖 Открытие тем лекций</h3><p style="color:var(--muted)">Закрытая тема не открывается студентам. Новые темы по умолчанию доступны, пока преподаватель не закроет их.</p><div id="topicAccessList">Загрузка тем…</div></div>'+
+ '<div class="module"><h3>📚 Доступ к отдельным материалам</h3><p style="color:var(--muted)">Можно отдельно открыть или закрыть лекцию, тест, набор карточек, игру, файл или объявление. Закрытая родительская тема всё равно скрывает вложенные материалы.</p><div id="customContentAccessList">Загрузка материалов…</div></div>'+
  '<div class="module"><h3>🎯 Дополнительные попытки теста</h3><p style="color:var(--muted)">Выдайте конкретному студенту дополнительные попытки прохождения дополнительного теста, созданного в редакторе курса. Ноль означает, что дополнительные попытки не выданы.</p>'+
  '<label>Студент</label><select id="attemptStudent" class="self-input"><option value="">Загрузка списка…</option></select>'+
  '<label style="display:block;margin-top:10px">Тест</label><select id="attemptTest" class="self-input"><option value="">Загрузка тестов…</option></select>'+
@@ -119,6 +120,47 @@ window.renderTeacherControlsPage=function(){
      row.querySelectorAll("button").forEach(x=>x.disabled=true);status.textContent="Сохраняем доступ…";
      window.API.setTopicAccess(cid,btn.dataset.topic,open).then(r=>{if(!r||!r.success)throw new Error(r&&r.error||"Не удалось сохранить");status.textContent=open?"Доступна студентам":"Закрыта для студентов";row.querySelector(".topic-open-action").disabled=open;row.querySelector(".topic-close-action").disabled=!open;}).catch(e=>{status.textContent=e.message;row.querySelector(".topic-open-action").disabled=false;row.querySelector(".topic-close-action").disabled=false;});
    });
+ });
+ const contentAccessBox=document.getElementById("customContentAccessList");
+ const contentTypes=[
+  ["lectures","lecture","Лекция"],["tests","test","Тест"],["flashcards","flashcards","Карточки"],
+  ["games","game","Игра"],["files","file","Файл"],["announcements","announcement","Объявление"]
+ ];
+ const contentItems=[];
+ contentTypes.forEach(function(group){
+  (window.customContent&&window.customContent[group[0]]||[]).forEach(function(item){
+   if(String(item.mdkId||item.courseId)===cid)contentItems.push({id:String(item.id),title:String(item.title||item.id),type:group[1],typeLabel:group[2],topicId:String(item.topicId||"")});
+  });
+ });
+ if(!contentItems.length)contentAccessBox.textContent="Дополнительных материалов в этой дисциплине пока нет.";
+ else Promise.all(contentItems.map(function(item){
+  return window.API.getCustomContentAccess(cid,item.id).then(function(access){return {item:item,access:access||{open:true,topicOpen:true}};})
+   .catch(function(error){return {item:item,error:error};});
+ })).then(function(items){
+  if(!document.getElementById("customContentAccessList"))return;
+  contentAccessBox.innerHTML=items.map(function(entry){
+   var item=entry.item,access=entry.access||{},status=entry.error?"Не удалось прочитать доступ: "+esc(entry.error.message||entry.error):
+    (!access.topicOpen?"Материал открыт/закрыт отдельно, но родительская тема закрыта":(access.open?"Доступен студентам":"Закрыт для студентов"));
+   return '<div class="module custom-content-access-row" data-content="'+esc(item.id)+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;margin:8px 0;flex-wrap:wrap"><div><b>'+esc(item.typeLabel)+': '+esc(item.title)+'</b><div class="custom-content-access-status" style="font-size:12px;color:var(--muted)">'+status+'</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn custom-content-open" data-id="'+esc(item.id)+'" '+(entry.error||access.open?"disabled":"")+'>Открыть студентам</button><button type="button" class="btn ghost custom-content-close" data-id="'+esc(item.id)+'" '+(entry.error||!access.open?"disabled":"")+'>Закрыть</button></div></div>';
+  }).join("");
+  contentAccessBox.querySelectorAll(".custom-content-open,.custom-content-close").forEach(function(btn){
+   btn.onclick=function(){
+    var row=btn.closest(".custom-content-access-row"),status=row.querySelector(".custom-content-access-status"),open=btn.classList.contains("custom-content-open"),id=btn.dataset.id;
+    row.querySelectorAll("button").forEach(function(button){button.disabled=true;});status.textContent="Сохраняем доступ…";
+    window.API.setCustomContentAccess(cid,id,open).then(function(result){
+     if(!result||!result.success)throw new Error(result&&result.error||"Не удалось сохранить доступ");
+     return window.API.getCustomContentAccess(cid,id);
+    }).then(function(access){
+     status.textContent=!access.topicOpen?"Материал "+(access.open?"открыт":"закрыт")+" отдельно, но родительская тема закрыта":(access.open?"Доступен студентам":"Закрыт для студентов");
+     row.querySelector(".custom-content-open").disabled=!!access.open;
+     row.querySelector(".custom-content-close").disabled=!access.open;
+    }).catch(function(error){
+     status.textContent=error.message||"Ошибка сохранения";
+     row.querySelector(".custom-content-open").disabled=false;
+     row.querySelector(".custom-content-close").disabled=false;
+    });
+   };
+  });
  });
  const studentSel=document.getElementById("attemptStudent"),testSel=document.getElementById("attemptTest"),testIdInput=document.getElementById("attemptTestId"),attemptStatus=document.getElementById("attemptStatus");
  function loadAttemptRequests(){
