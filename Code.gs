@@ -1466,7 +1466,11 @@ function getCustomContentAccess_(data) {
   const raw = settingValue_("contentAccess:" + item.courseId + ":" + item.id);
   let open = true;
   if (raw) { try { open = JSON.parse(raw).open !== false; } catch (e) {} }
-  const topicOpen = !item.topicId || customContentIsOpen_(item.courseId, item.id, item.topicId, item.type);
+  let topicOpen = true;
+  if (item.topicId) {
+    const topicRaw = settingValue_("topicAccess:" + item.courseId + ":" + item.topicId);
+    if (topicRaw) { try { topicOpen = JSON.parse(topicRaw).open !== false; } catch (e) {} }
+  }
   return { success: true, open: open, topicOpen: topicOpen, effectiveOpen: open && topicOpen };
 }
 function setCustomContentAccess_(data) {
