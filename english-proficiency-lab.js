@@ -196,16 +196,16 @@
 
   function renderLab() {
     var app = document.getElementById("app"); if (!app) return;
-    app.setAttribute("translate","no"); app.classList.add("notranslate");
+    app.setAttribute("translate","no"); app.classList.add("notranslate"); app.dataset.proctorAssessment="1"; app.dataset.testId="english_cefr_diagnostic";
+    window._activeAssessmentCourseId=window.state&&window.state.activeCourseId||"EN";
     app.innerHTML = "";
-    app.setAttribute("translate","no"); app.classList.add("notranslate");
     var back = node("a","backlink","← К экзаменам"); back.href="#/laboratory"; app.appendChild(back);
     var hero=node("section","hero"); hero.appendChild(node("h1","","🧪 Лаборатория английского языка"));
     hero.appendChild(node("p","","Диагностика от A1 до C2 · 30 заданий · автоматическая оценка и рекомендации"));
     app.appendChild(hero);
     var panel=node("section","module");
     panel.appendChild(node("p","","Выполните задания последовательно. Вопросы сгруппированы по возрастающей сложности; итоговый уровень определяется по устойчивости результатов на каждом этапе."));
-    var form=node("form","english-cefr-form");
+    var form=node("form","english-cefr-form notranslate");form.setAttribute("translate","no");
     var sections=["A1","A2","B1","B2","C1","C2"];
     sections.forEach(function(level){
       var box=node("section","question"); box.style.cssText="padding:14px;margin:12px 0;border:1px solid var(--border);border-radius:10px";
