@@ -356,13 +356,8 @@
     const lectures=customRecords(courseId,topicId,"lecture"),tests=customRecords(courseId,topicId,"test");
     if(!lectures.length&&!tests.length)return;
     const tabs=document.querySelector("#app > div[style*='display: flex']")||document.querySelector("#app .tab")?.parentElement;
-    if(tests.length&&!document.getElementById("tab-custom-test")){
-      const bar=document.getElementById("tab-lectures")?.parentElement;
-      if(bar){const b=document.createElement("button");b.className="btn tab ghost";b.id="tab-custom-test";b.textContent="🧪 Дополнительный тест";bar.appendChild(b);b.onclick=()=>window.switchTopicTab("custom-test");}
-    }
     const originalSwitch=window.switchTopicTab;
     window.switchTopicTab=function(tab){
-      if(tab==="custom-test"){document.querySelectorAll(".tab").forEach(b=>{b.classList.remove("active");b.classList.add("ghost");});const b=document.getElementById("tab-custom-test");if(b){b.classList.add("active");b.classList.remove("ghost");}const area=document.getElementById("topicContent");area.innerHTML=tests.map((t,i)=>'<div class="module"><h3>'+esc(t.title)+'</h3><p>Вопросов: '+(t.questions||[]).length+'</p><button class="btn start-custom-test" data-i="'+i+'">Начать тест</button></div>').join("");area.querySelectorAll(".start-custom-test").forEach(b=>b.onclick=()=>runTest(tests[+b.dataset.i],courseId,topicId));return;}
       originalSwitch.apply(this,arguments);
       if(tab==="lectures"&&lectures.length){const area=document.getElementById("topicContent");lectures.forEach(l=>{const d=document.createElement("details");d.className="lec-accordion";d.open=true;const s=document.createElement("summary");s.textContent=(l.code||"Дополнительная лекция")+" · "+l.title;s.style="padding:14px;font-weight:bold;cursor:pointer";const body=document.createElement("div");body.className="lec-content";body.style="padding:18px;border-top:1px solid var(--border);line-height:1.6";body.innerHTML=safeLectureHtml(l.content);d.appendChild(s);d.appendChild(body);area.appendChild(d);});}
     };
