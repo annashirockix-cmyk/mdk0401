@@ -42,17 +42,7 @@
       if(loading) loading.textContent="Не удалось загрузить экзамен с сервера: "+(error.message||error)+". Обратитесь к преподавателю.";
     });
     return;
-    var tabs = el("section", "module");
-    tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
-    if (track !== "basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) {
-      var b = el("button", "btn ghost", "Basic English");
-      b.type = "button"; b.onclick = function () { renderPage("final-basic"); }; tabs.appendChild(b);
-    }
-    if (track !== "technical" && (!window.canAccessCourse || window.canAccessCourse("ENT") || window.canAccessCourse("EN"))) {
-      var t = el("button", "btn ghost", "Technical English");
-      t.type = "button"; t.onclick = function () { renderPage("final-technical"); }; tabs.appendChild(t);
-    }
-    app.appendChild(tabs);
+  }
   function renderLoadedExam(exam,track,course,app) {
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
