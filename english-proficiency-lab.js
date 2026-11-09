@@ -157,9 +157,8 @@
     extras.appendChild(node("p", "", "Лаборатория — адаптивная диагностика A1–C2. Отдельно — экзамен продвинутого уровня C1–C2, два варианта."));
     var row = node("div");
     row.style.cssText = "display:flex;gap:10px;flex-wrap:wrap";
-    var lab = node("a", "btn", "🧪 Открыть языковую лабораторию"); lab.href = "#/english-tests/lab";
     var c2 = node("a", "btn ghost", "🎓 Экзамен C1–C2 · 2 варианта"); c2.href = "#/english-tests/c1c2";
-    row.appendChild(lab); row.appendChild(c2); extras.appendChild(row); app.appendChild(extras);
+    row.appendChild(c2); extras.appendChild(row); app.appendChild(extras);
   }
 
   var labQuestions = [
@@ -197,8 +196,10 @@
 
   function renderLab() {
     var app = document.getElementById("app"); if (!app) return;
+    app.setAttribute("translate","no"); app.classList.add("notranslate");
     app.innerHTML = "";
-    var back = node("a","backlink","← К экзаменам"); back.href="#/english-tests"; app.appendChild(back);
+    app.setAttribute("translate","no"); app.classList.add("notranslate");
+    var back = node("a","backlink","← К экзаменам"); back.href="#/laboratory"; app.appendChild(back);
     var hero=node("section","hero"); hero.appendChild(node("h1","","🧪 Лаборатория английского языка"));
     hero.appendChild(node("p","","Диагностика от A1 до C2 · 30 заданий · автоматическая оценка и рекомендации"));
     app.appendChild(hero);
