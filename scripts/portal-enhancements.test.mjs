@@ -590,6 +590,14 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
 });
 
 
+test("teacher bulk bank import keeps backup state available to the rollback handler", () => {
+  const source = read("teacher-controls.js");
+  const handler = source.slice(source.indexOf('importAllBtn.onclick=async function(){'), source.indexOf('const importBtn=document.getElementById("bankImportBtn")'));
+  assert.match(handler, /let backupId="",backupCreated=false;\s*try\{/);
+  assert.match(handler, /if\(backupCreated\)\{/);
+  assert.match(handler, /restoreQuestionBanks\(backupId\)/);
+});
+
 test("English VPR answer keys stay server-side and the client uses protected exam endpoints", () => {
   const server = read("Code.gs");
   const bank = read("EnglishVPR-Sheets.gs");
