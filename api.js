@@ -54,8 +54,8 @@ function fetchAPI(action, params, method, timeoutMs) {
      });
 }
 window.API = {
- login:function(email,password){return fetchAPI("login",{email:email,password:password},"POST").then(function(r){if(r&&r.success&&r.token){try{sessionStorage.setItem("mdk.session",r.token);}catch(e){}}return r;});},
- logout:function(){try{sessionStorage.removeItem("mdk.session");}catch(e){}},
+ login:function(email,password){return fetchAPI("login",{email:email,password:password},"POST").then(function(r){if(r&&r.success&&r.token)setStoredSessionToken(r.token);return r;});},
+ logout:function(){clearStoredSessionToken();},
  changeCredentials:function(data){return fetchAPI("changeCredentials",data||{},"POST");},
  requestPasswordReset:function(email,note){return fetchAPI("requestPasswordReset",{email:email,note:note||""},"POST");},
  getPasswordRequests:function(){return fetchAPI("getPasswordRequests",{},"GET");},
