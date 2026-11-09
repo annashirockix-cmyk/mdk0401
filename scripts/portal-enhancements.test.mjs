@@ -95,7 +95,7 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=38/);
+  assert.match(html, /workbooks\\.js\\?v=39/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
@@ -111,6 +111,30 @@ test("workbook figures are selected by relevant topics and all referenced files 
   for (const image of imageNames) {
     assert.ok(fs.existsSync(path.join(root, "assets", "images", image)), "missing workbook image: " + image);
   }
+});
+
+test("teacher-created lectures are rendered in their assigned topics and sanitized", () => {
+  const app = read("app.js");
+  const editor = read("course-admin.js");
+  assert.match(editor, /type:"lecture",title:title,code:"Доп\. лекция",content:content/);
+  assert.match(app, /window\.customContent\.lectures/);
+  assert.match(app, /customTopicLectures\.map/);
+  assert.match(app, /safeCustomLectureHtml/);
+  assert.match(app, /topic\.lectures = \(topic\.lectures \|\| \[\]\)\.concat/);
+});
+
+test("exam drawer removes duplicate links added after initial page load", () => {
+  const source = read("portal-final.js");
+  assert.match(source, /function fixExam\(\)/);
+  assert.match(source, /function watchExamDrawer\(\)/);
+  assert.match(source, /new MutationObserver\(function \(\) \{ fixExam\(\); \}\)/);
+});
+
+test("workbook images cannot exceed the printable page content box", () => {
+  const workbook = read("workbooks.js");
+  assert.match(workbook, /max-width:100%!important;max-height:220mm/);
+  assert.match(workbook, /overflow-x:hidden/);
+  assert.match(workbook, /\.page figure,\.sheet figure/);
 });
 
 test("local PDF resources have a same-site viewer and valid source files", () => {
