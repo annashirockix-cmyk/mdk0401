@@ -664,6 +664,8 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(api, /getEnglishVprExam:function/);
   assert.match(api, /submitEnglishVprExam:function/);
   assert.match(engine, /window\.API\.getEnglishVprExam\(track\)/);
+  assert.match(engine, /app\.setAttribute\("translate","no"\)/);
+  assert.match(engine, /app\.classList\.add\("notranslate"\)/);
   assert.match(engine, /window\.API\.submitEnglishVprExam/);
   assert.doesNotMatch(engine, /item\[1\]\+1/);
   assert.match(engine, /Перенести экзамены в защищённую таблицу/);
