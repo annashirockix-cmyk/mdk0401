@@ -1454,7 +1454,7 @@ function customContentRecord_(data) {
   const actor = editor_(data, courseId);
   const rows = content_().getDataRange().getValues();
   for (let i = 1; i < rows.length; i++) {
-    if (String(rows[i][0]) === id && String(rows[i][1]) === courseId) {
+    if (String(rows[i][0]) === id && sameCourseId_(rows[i][1], courseId)) {
       return { actor: actor, id: id, courseId: courseId, topicId: String(rows[i][2] || ""), type: String(rows[i][3] || "") };
     }
   }
@@ -1488,7 +1488,7 @@ function getCustomContent_(data) {
 
   values.slice(1).forEach(function (row) {
     if (!row[0]) return;
-    const courseId = String(row[1] || "");
+    const courseId = normalizeCourseId_(row[1] || "");
     if (user.role !== "admin" && !hasCourseAccess_(user, courseId)) return;
     // Students receive only materials whose individual switch and parent-topic switch are open.
     if (user.role === "student" && !customContentIsOpen_(courseId, String(row[0] || ""), String(row[2] || ""), String(row[3] || ""))) return;
@@ -1937,7 +1937,7 @@ function submitCustomTest_(data) {
   let record = null;
   values.slice(1).forEach(function (row) {
     if (String(row[0]) === id && String(row[3]) === "test") record = {
-      id: id, courseId: String(row[1] || ""), topicId: String(row[2] || ""), type: "test",
+      id: id, courseId: normalizeCourseId_(row[1] || ""), topicId: String(row[2] || ""), type: "test",
       title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
     };
   });
@@ -1980,7 +1980,7 @@ function getGameAnswer_(data) {
   if (!id || !Number.isInteger(ci) || !Number.isInteger(qi) || ci < 0 || qi < 0) throw new Error("Некорректный запрос ответа.");
   const values = content_().getDataRange().getValues();
   let record = null;
-  values.slice(1).forEach(function(row) { if (String(row[0]) === id && String(row[3]) === "game") record = {id:id,courseId:String(row[1]||""),topicId:String(row[2]||""),type:"game",payload:JSON.parse(row[5]||"{}")}; });
+  values.slice(1).forEach(function(row) { if (String(row[0]) === id && String(row[3]) === "game") record = {id:id,courseId:normalizeCourseId_(row[1]||""),topicId:String(row[2]||""),type:"game",payload:JSON.parse(row[5]||"{}")}; });
   if (!record) throw new Error("Игра не найдена.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
   if (!customContentIsOpen_(record.courseId, record.id, record.topicId, record.type)) throw new Error("Эта игра закрыта преподавателем.");
@@ -2004,7 +2004,7 @@ function saveCustomContent_(data) {
   let targetRow = 0;
   for (let i = 1; i < values.length; i++) {
     if (String(values[i][0]) === id) {
-      if (String(values[i][1]) !== courseId && user.role !== "admin") {
+      if (!sameCourseId_(values[i][1], courseId) && user.role !== "admin") {
         throw new Error("Нельзя переносить материал между дисциплинами.");
       }
       targetRow = i + 1;
@@ -2035,7 +2035,7 @@ function deleteCustomContent_(data) {
 
   for (let i = 1; i < values.length; i++) {
     if (String(values[i][0]) === String(data.id || "")) {
-      editor_(data, String(values[i][1] || ""));
+      editor_(data, normalizeCourseId_(values[i][1] || ""));
       sheet.deleteRow(i + 1);
       return { success: true };
     }

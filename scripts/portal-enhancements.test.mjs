@@ -123,6 +123,16 @@ test("teacher-created lectures are rendered in their assigned topics and sanitiz
   assert.match(app, /topic\.lectures = \(topic\.lectures \|\| \[\]\)\.concat/);
 });
 
+test("custom course materials normalize spreadsheet date-coerced course IDs", () => {
+  const server = read("Code.gs");
+  assert.match(server, /const courseId = normalizeCourseId_\(row\[1\] \|\| ""\);/);
+  assert.match(server, /sameCourseId_\(rows\[i\]\[1\], courseId\)/);
+  assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
+  assert.match(server, /courseId: normalizeCourseId_\(row\[1\] \|\| ""\), topicId:/);
+  assert.match(server, /courseId:normalizeCourseId_\(row\[1\]\|\|""\),topicId:/);
+  assert.match(server, /editor_\(data, normalizeCourseId_\(values\[i\]\[1\] \|\| ""\)\)/);
+});
+
 test("teacher-created materials have individual server-side visibility switches", () => {
   const server = read("Code.gs");
   const api = read("api.js");
