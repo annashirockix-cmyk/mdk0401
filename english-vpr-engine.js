@@ -257,7 +257,120 @@
     }
     tick(); window.englishAssessmentTimer = window.setInterval(tick,1000);
   }
-  function renderChooser() {
+
+  function renderSemesterTests(track, course, choices) {
+    if (!window.API || !window.API.getEnglishSemesterTests) return;
+    var section=el("section","module");
+    section.style.marginTop="18px";
+    section.appendChild(el("h2","","Семестровые контрольные"));
+    section.appendChild(el("p","museum-muted","10 работ · 20 вопросов в каждой · автоматическая проверка по серверному ключу"));
+    var list=el("div");
+    list.style.cssText="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px";
+    list.appendChild(el("p","museum-muted","Загружаем контрольные…"));
+    section.appendChild(list); choices.parentNode.parentNode.appendChild(section);
+    window.API.getEnglishSemesterTests(track).then(function(response){
+      list.innerHTML="";
+      if(!response||!response.success||!Array.isArray(response.tests)){
+        list.appendChild(el("p","museum-muted",response&&response.error||"Семестровые контрольные пока не загружены преподавателем."));
+        return;
+      }
+      response.tests.forEach(function(test,index){
+        var key="english_semester_"+track+"_"+test.id;
+        var card=el("article","question");
+        card.style.cssText="padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--card-soft)";
+        card.appendChild(el("h3","",test.title||("Контрольная работа №"+(index+1))));
+        card.appendChild(el("p","museum-muted",test.subtitle||"Семестровая контрольная"));
+        card.appendChild(el("p","","20 вопросов · "+(Number(test.time)||45)+" минут"));
+        var button=el("button","btn","Открыть контрольную"); button.type="button"; button.style.width="100%";
+        var localResult=window.state&&window.state.results&&window.state.results[key];
+        if(localResult){button.disabled=true;button.textContent="Работа уже отправлена";}
+        button.onclick=function(){startSemesterTest(test,track,course,card);};
+        card.appendChild(button); list.appendChild(card);
+        if(window.API.getTestAttemptStatus){
+          window.API.getTestAttemptStatus(course,key).then(function(status){
+            if(status&&status.allowed===false){button.disabled=true;button.textContent="Попытка использована";}
+          }).catch(function(){});
+        }
+      });
+    }).catch(function(error){
+      list.innerHTML=""; list.appendChild(el("p","museum-muted","Не удалось загрузить контрольные: "+(error.message||error)));
+    });
+  }
+  function startSemesterTest(test,track,course,card) {
+    var testKey="english_semester_"+track+"_"+test.id;
+    if(window.API&&window.API.getTestAttemptStatus){
+      card.innerHTML="<p>Проверяем доступ к контрольной…</p>";
+      window.API.getTestAttemptStatus(course,testKey).then(function(status){
+        if(!status||status.allowed===false){card.textContent="Попытка уже использована. Для повторного прохождения обратитесь к преподавателю.";return;}
+        renderSemesterAttempt(test,track,course,card);
+      }).catch(function(error){card.textContent="Не удалось проверить попытку: "+(error.message||error);});
+      return;
+    }
+    renderSemesterAttempt(test,track,course,card);
+  }
+  function renderSemesterAttempt(test,track,course,card) {
+    if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
+    var duration=Math.max(1,Number(test.time)||45)*60, seconds=duration, finished=false;
+    card.innerHTML="";
+    var heading=el("h2","",test.title||"Семестровая контрольная");
+    card.appendChild(heading); card.appendChild(el("p","museum-muted",test.subtitle||""));
+    var timer=el("div","exam-timer","45:00");
+    timer.style.cssText="position:sticky;top:8px;z-index:3;padding:10px;text-align:center;font-size:22px;font-weight:800;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--accent)";
+    card.appendChild(timer);
+    var form=el("form","english-semester-form notranslate"); form.setAttribute("translate","no");
+    test.questions.forEach(function(question,index){
+      var block=el("section","question");
+      block.style.cssText="padding:14px;margin:12px 0;background:var(--card-soft);border:1px solid var(--border);border-radius:10px";
+      block.appendChild(el("h3","","Вопрос "+(index+1)));
+      block.appendChild(el("p","",question.q));
+      (question.options||[]).forEach(function(option,oi){
+        var label=el("label"); label.style.cssText="display:flex;gap:8px;align-items:flex-start;padding:7px 0";
+        var input=el("input"); input.type="radio"; input.name="semester_"+index; input.value=String(oi); input.required=true;
+        label.appendChild(input); label.appendChild(document.createTextNode(option)); block.appendChild(label);
+      });
+      form.appendChild(block);
+    });
+    card.appendChild(form);
+    var submit=el("button","btn","Завершить и отправить"); submit.type="button"; submit.style.cssText="width:100%;padding:14px";
+    submit.onclick=function(){
+      if(finished)return;
+      var answers=[];
+      for(var i=0;i<test.questions.length;i++){
+        var chosen=form.querySelector('input[name="semester_'+i+'"]:checked');
+        if(!chosen){window.alert("Ответьте на все 20 вопросов. Не заполнен вопрос №"+(i+1)+".");return;}
+        answers.push(Number(chosen.value));
+      }
+      if(!window.confirm("Отправить контрольную на проверку? После отправки изменить ответы будет нельзя."))return;
+      finished=true; submit.disabled=true; submit.textContent="Проверяем на сервере…";
+      if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
+      window.API.submitEnglishSemesterTest({track:track,testId:test.id,answers:answers,timeSpent:duration-seconds}).then(function(result){
+        if(!result||result.success!==true)throw new Error(result&&result.error||"Сервер не подтвердил отправку.");
+        var key="english_semester_"+track+"_"+test.id;
+        window.state.results=window.state.results||{};
+        window.state.results[key]={grade:result.grade,score:result.score,max:result.maxScore,percent:result.percent,finishedAt:new Date().toISOString()};
+        if(window.saveStudentData)window.saveStudentData();
+        card.innerHTML="";
+        var done=el("section","module"); done.style.textAlign="center";
+        done.appendChild(el("h2","","Контрольная отправлена"));
+        done.appendChild(el("p","","Результат: "+result.score+" из "+result.maxScore+" ("+result.percent+"%)."));
+        done.appendChild(el("h3","","Оценка: "+result.grade));
+        done.appendChild(el("p","museum-muted","Ответы проверены сервером. Правильные ответы не передавались в браузер."));
+        card.appendChild(done);
+      }).catch(function(error){
+        finished=false; submit.disabled=false; submit.textContent="Повторить отправку";
+        window.alert("Не удалось отправить контрольную: "+(error.message||error));
+      });
+    };
+    card.appendChild(submit);
+    function tick(){
+      if(finished)return;
+      var m=Math.floor(seconds/60),s=seconds%60;
+      timer.textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+      if(seconds<=0){submit.click();return;} seconds--;
+    }
+    tick(); window.englishAssessmentTimer=window.setInterval(tick,1000);
+  }
+\n  function renderChooser() {
     var app = document.getElementById("app");
     if (!app) return;
     var course = activeCourse();
