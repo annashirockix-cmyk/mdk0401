@@ -267,6 +267,41 @@
     }
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Формат ВПР СПО 2026 · 90 минут · 7 заданий · 40 баллов</p></section><section class="module"><h2>Выберите вариант экзамена</h2><p>В портале оставлены только две итоговые работы. Старые семестровые и прежние итоговые экзамены больше не выводятся в этом разделе.</p><div id="englishVprChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div></section>';
     var choices = document.getElementById("englishVprChoices");
+    if (hasStaffAccess() && window.API && window.API.importEnglishSemesterTests && window.SEMESTER_TESTS) {
+      var semesterImport = el("button","btn ghost","Перенести 20 семестровых контрольных");
+      semesterImport.type="button";
+      semesterImport.style.cssText="margin:0 0 14px;width:100%";
+      semesterImport.onclick=function(){
+        var source=window.SEMESTER_TESTS;
+        if(!source.basic || !source.technical) { window.alert("Исходные наборы Basic/Technical не загружены."); return; }
+        if(!window.confirm("Записать 10 контрольных Basic и 10 контрольных Technical (по 20 вопросов) в закрытый лист EnglishSemesterBank?")) return;
+        semesterImport.disabled=true; semesterImport.textContent="Переносим и проверяем…";
+        (async function(){
+          var report=[];
+          for(var i=0;i<2;i++){
+            var track=["basic","technical"][i], tests=source[track];
+            var saved=await window.API.importEnglishSemesterTests(track,tests);
+            if(!saved || saved.success!==true) throw new Error("Сервер не подтвердил "+track+": "+(saved&&saved.error||"нет ответа"));
+            var check=await window.API.getEnglishSemesterTests(track);
+            if(!check || check.success!==true || !Array.isArray(check.tests) || check.tests.length!==10) throw new Error("Контрольное чтение "+track+" не прошло.");
+            var total=check.tests.reduce(function(n,t){return n+(t.questions||[]).length;},0);
+            if(total!==200 || check.questionCount!==200) throw new Error(track+": ожидалось 200 вопросов, получено "+total+".");
+            if(check.tests.some(function(t){return (t.questions||[]).some(function(q){return Object.prototype.hasOwnProperty.call(q,"correct");});})) throw new Error(track+": ключ ответа обнаружен в клиентской выдаче.");
+            report.push({track:track,tests:check.tests.length,questions:total});
+          }
+          return report;
+        })().then(function(report){
+          semesterImport.textContent="20 контрольных подтверждены сервером";
+          var details=report.map(function(x){return x.track.toUpperCase()+": "+x.tests+" работ / "+x.questions+" вопросов";}).join("; ");
+          if(window.showToast) window.showToast("Семестровые контрольные записаны и проверены: "+details,"success");
+          else window.alert("Семестровые контрольные записаны и проверены: "+details);
+        }).catch(function(err){
+          semesterImport.disabled=false; semesterImport.textContent="Повторить перенос семестровых контрольных";
+          window.alert("Перенос не завершён: "+(err.message||err));
+        });
+      };
+      app.querySelector(".module").appendChild(semesterImport);
+    }
     if (hasStaffAccess() && window.API && window.API.importEnglishVprBank && window.ENGLISH_VPR_EXAMS) {
       var migrate = el("button","btn ghost","Перенести экзамены в защищённую таблицу");
       migrate.type="button"; migrate.style.cssText="margin:0 0 14px;width:100%";
