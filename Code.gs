@@ -2692,7 +2692,7 @@ function submitEnglishSemesterTest_(data) {
   }
   const score = test.questions.reduce(function(total, question, index) {
     const correct = Number(question.correct);
-    const answer = Number(answers[index]);
+    const answer = answers[index];
     return total + (Number.isInteger(answer) && answer === correct ? 1 : 0);
   }, 0);
   const testKey = "english_semester_" + track + "_" + testId;

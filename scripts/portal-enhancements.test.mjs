@@ -798,6 +798,7 @@ test("semester tests are student-visible and scored only by the protected server
   assert.match(server, /case "submitenglishsemestertest": result = submitEnglishSemesterTest_\(data\); break;/);
   assert.match(server, /function submitEnglishSemesterTest_\(data\)/);
   assert.match(server, /question\.correct/);
+  assert.ok(server.includes("Number.isInteger(answer) && answer === correct"));
   assert.match(server, /english_semester_/);
   assert.match(server, /Submission:JSON\.stringify\(\{answers:answers\}\)/);
 });
