@@ -886,3 +886,28 @@ test("workbooks include differentiated supplemental professional learning blocks
   assert.match(html, /workbooks\.js\?v=40/);
   assert.match(sw, /portal-cache-v291/);
 });
+
+
+test("workbook editorial coverage generates subject-specific cases for every populated course track", () => {
+  const workbooks = read("workbooks.js");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.match(workbooks, /function generatedTopicEditorial\(courseId,topic\)/);
+  assert.match(workbooks, /if\(!editorial\)editorial=generatedTopicEditorial\(courseId,topic\)/);
+  for (const course of ["02.01", "02.02", "MCAM", "SPRUT_TP", "MET", "OT", "MAT", "EN", "ENB", "ENT", "04.01"]) {
+    assert.ok(workbooks.includes('id==="' + course + '"'), "missing editorial coverage: " + course);
+  }
+  for (const field of ["explanation:", "caseTitle:", "caseText:", "mistakes:", "route:"]) {
+    assert.ok(workbooks.includes(field), "generated editorial is missing " + field);
+  }
+  assert.match(workbooks, /Сборочный чертёж и спецификация/);
+  assert.match(workbooks, /Входные и выходные сигналы/);
+  assert.match(workbooks, /Модель и заготовка/);
+  assert.match(workbooks, /Исходные данные и требования/);
+  assert.match(workbooks, /Параметр и допуск/);
+  assert.match(workbooks, /Операция и источник опасности/);
+  assert.match(workbooks, /Состав и структура/);
+  assert.match(workbooks, /Термины и контекст/);
+  assert.match(html, /workbooks\.js\?v=41/);
+  assert.match(sw, /portal-cache-v292/);
+});
