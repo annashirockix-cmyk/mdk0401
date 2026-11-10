@@ -784,3 +784,20 @@ test("server builds 45-question advanced non-English exams with protected answer
   assert.equal(result.questions.filter(entry=>entry.questionId.startsWith("H")).length,14);
   assert.ok(result.questions.every(entry=>entry.questionId.startsWith("Q") || entry.questionId.startsWith("H")));
 });
+
+
+test("semester tests are student-visible and scored only by the protected server bank", async () => {
+  const engine = await read("english-vpr-engine.js");
+  const api = await read("api.js");
+  const server = await read("Code.gs");
+  assert.match(engine, /function renderSemesterTests/);
+  assert.match(engine, /window\.API\.getEnglishSemesterTests\(track\)/);
+  assert.match(engine, /function startSemesterTest/);
+  assert.match(engine, /submitEnglishSemesterTest/);
+  assert.match(api, /submitEnglishSemesterTest:function/);
+  assert.match(server, /case "submitenglishsemestertest": result = submitEnglishSemesterTest_\(data\); break;/);
+  assert.match(server, /function submitEnglishSemesterTest_\(data\)/);
+  assert.match(server, /question\.correct/);
+  assert.match(server, /english_semester_/);
+  assert.match(server, /Submission:JSON\.stringify\(\{answers:answers\}\)/);
+});
