@@ -461,6 +461,7 @@
       button.onclick = function () { renderPage(track === "basic" ? "final-basic" : "final-technical"); };
       card.appendChild(button);
       choices.appendChild(card);
+      renderSemesterTests(track, course, choices);
     });
   }
   window.renderEnglishVprPage = function (mode) {
