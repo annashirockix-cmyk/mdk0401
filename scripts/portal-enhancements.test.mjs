@@ -716,8 +716,8 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=15"));
-  assert.ok(sw.includes("portal-cache-v282"));
+  assert.ok(html.includes("english-vpr-engine.js?v=16"));
+  assert.ok(sw.includes("portal-cache-v283"));
 });
 
 
@@ -738,7 +738,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v282/);
+  assert.match(sw, /portal-cache-v283/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
