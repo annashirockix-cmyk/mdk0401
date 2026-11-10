@@ -791,6 +791,7 @@ test("semester tests are student-visible and scored only by the protected server
   const api = await read("api.js");
   const server = await read("Code.gs");
   assert.match(engine, /function renderSemesterTests/);
+  assert.match(engine, /renderSemesterTests\\(track, course, choices\\)/);
   assert.match(engine, /window\.API\.getEnglishSemesterTests\(track\)/);
   assert.match(engine, /function startSemesterTest/);
   assert.match(engine, /submitEnglishSemesterTest/);
