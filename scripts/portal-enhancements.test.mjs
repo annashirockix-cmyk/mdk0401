@@ -871,3 +871,18 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(html, /certificate-supplement\.js\?v=11/);
   assert.match(sw, /portal-cache-v290/);
 });
+
+
+test("workbooks include differentiated supplemental professional learning blocks", () => {
+  const workbooks = read("workbooks.js");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.match(workbooks, /function supplementalStudyBlock/);
+  assert.match(workbooks, /Дополнительный материал · уровень углубления/);
+  for (const course of ["07.01", "04.01", "MET", "OT", "MCAM", "ENB", "ENT"]) {
+    assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
+  }
+  assert.match(workbooks, /supplementalHtml\+checkHtml/);
+  assert.match(html, /workbooks\.js\?v=40/);
+  assert.match(sw, /portal-cache-v291/);
+});
