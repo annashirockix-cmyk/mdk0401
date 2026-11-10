@@ -56,9 +56,9 @@ test("online party games use supported server actions and stable player identity
   const shop = read("shop.js");
   const html = read("index.html");
   assert.match(html, /shop\.js\?v=4/);
-  assert.match(html, /network-party-games\.js\?v=7/);
+  assert.match(html, /network-party-games\.js\?v=8/);
   assert.match(html, /network-detective\.js\?v=10/);
-  assert.match(html, /coop-detective\.js\?v=8/);
+  assert.match(html, /coop-detective\.js\?v=9/);
   for (const action of ["bredo_answer", "bredo_vote", "bredo_next", "durak_attack", "durak_defend", "durak_take", "durak_done", "chat", "search", "mark", "theory", "dossier"]) {
     assert.ok(server.includes('"' + action + '"'), "server must accept " + action);
   }
@@ -717,7 +717,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v288"));
+  assert.ok(sw.includes("portal-cache-v289"));
 });
 
 
@@ -738,7 +738,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v288/);
+  assert.match(sw, /portal-cache-v289/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -820,4 +820,29 @@ test("semester assessment auto-submits unanswered questions when the timer expir
   assert.match(engine, /if\(seconds>0\)\{window\.alert\("Ответьте на все 20 вопросов/);
   assert.match(engine, /answers\.push\(-1\)/);
   assert.match(engine, /if\(seconds>0&&!window\.confirm/);
+});
+
+
+test("game room is curated to three educational activities without duplicate menu injection", async () => {
+  const games = await read("games.js");
+  const network = await read("network-party-games.js");
+  const detective = await read("coop-detective.js");
+  assert.match(games, /id: "gcode"/);
+  assert.match(games, /id: "party".*Блиц по ЧПУ/);
+  assert.match(games, /id: "detective"/);
+  assert.doesNotMatch(games, /id: "(casino|roulette|minesweeper|memory|tictactoe|snake|pumpkin|slime|dragon|starfield)"/);
+  assert.match(network, /Онлайн-режимы доступны по приглашению, но не засоряют основной каталог/);
+  assert.match(detective, /Не добавляем вторую карточку поверх меню/);
+});
+
+test("assessment anti-cheating monitoring remains enabled for browser-visible violations", async () => {
+  const html = await read("index.html");
+  const monitor = await read("proctor-monitor.js");
+  const server = await read("Code.gs");
+  assert.match(html, /proctor-monitor\.js/);
+  for (const event of ["visibility_hidden", "window_blur", "fullscreen_exit", "copy_attempt", "paste_attempt", "contextmenu_attempt"]) {
+    assert.ok(monitor.includes('"'+event+'"'), "missing proctor event: " + event);
+  }
+  assert.match(monitor, /window\.API\.logProctorEvent/);
+  assert.match(server, /function logProctorEvent_/);
 });

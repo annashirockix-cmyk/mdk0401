@@ -796,39 +796,8 @@
   }
 
   /* ========== МЕНЮ: кнопки онлайн ========== */
-  function patchArcade() {
-    var old = window.renderArcadePage;
-    if (!old || old.__netParty) return;
-    window.renderArcadePage = function () {
-      old.apply(this, arguments);
-      var app = document.getElementById("app");
-      if (!app || app.querySelector("[data-net-party]")) return;
-      var grid = app.querySelector("div[style*='grid-template-columns']");
-      if (!grid) return;
-      [
-        ["bredo-net", "🤪 Бредовуха онлайн", "Комната с кодом, как в Мафии. Версии + голосование."],
-        ["durak-net", "🃏 Дурак онлайн", "Подкидной дурак 2–4 игрока по сети."],
-        ["detective-cases", "🕵️ Детектив: бюро дел", "Несколько дел, загадки, ветвления и разные концовки."]
-      ].forEach(function (g) {
-        var card = document.createElement("div");
-        card.className = "module";
-        card.setAttribute("data-net-party", "1");
-        card.style.cssText = "cursor:pointer;display:flex;flex-direction:column;justify-content:space-between";
-        card.classList.add("gv-game-card");
-        card.innerHTML =
-          '<div><h3 style="color:var(--accent);margin-top:0">' +
-          g[1] +
-          ' <span class="gv-badge-online">ONLINE</span></h3><p style="color:var(--muted);font-size:14px">' +
-          g[2] +
-          '</p></div><button class="btn ghost" style="width:100%">Запустить</button>';
-        card.onclick = function () {
-          window.startGame(g[0]);
-        };
-        grid.appendChild(card);
-      });
-    };
-    window.renderArcadePage.__netParty = true;
-  }
+  // Онлайн-режимы доступны по приглашению, но не засоряют основной каталог.
+  function patchArcade() { return; }
 
   var prevStart = window.startGame;
   window.startGame = function (id) {
