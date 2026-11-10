@@ -59,11 +59,14 @@
       @media print{
         @page{size:A4 landscape;margin:10mm}
         html,body{margin:0!important;padding:0!important;background:#fff!important}
+        body *{visibility:hidden!important}
+        #certificatePrintRoot,#certificatePrintRoot *{visibility:visible!important}
         .certificate-choice,.no-print,.backlink{display:none!important}
-        #certificatePrintRoot{display:block!important;position:relative!important;width:100%!important;margin:0!important;padding:0!important}
+        #certificatePrintRoot{display:block!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;margin:0!important;padding:0!important}
         #printable-cert,.certificate-supplement{width:100%!important;max-width:none!important;min-height:190mm!important;height:auto!important;margin:0!important;padding:14mm!important;box-sizing:border-box!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid;page-break-inside:avoid;print-color-adjust:exact;-webkit-print-color-adjust:exact}
         #printable-cert{height:190mm!important;min-height:190mm!important;display:flex;flex-direction:column;justify-content:center;break-after:page;page-break-after:always}
-        .certificate-supplement{break-before:auto;page-break-before:auto}
+        .certificate-supplement{break-before:auto;page-break-before:auto;break-inside:auto;page-break-inside:auto}
+        .certificate-supplement tr{break-inside:avoid;page-break-inside:avoid}
         .certificate-supplement table{font-size:9pt;table-layout:fixed;overflow-wrap:anywhere}
         .certificate-supplement th,.certificate-supplement td{padding:6px 5px}
       }`;
