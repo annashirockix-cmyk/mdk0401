@@ -717,7 +717,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v289"));
+  assert.ok(sw.includes("portal-cache-v290"));
 });
 
 
@@ -738,7 +738,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v289/);
+  assert.match(sw, /portal-cache-v290/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -845,4 +845,29 @@ test("assessment anti-cheating monitoring remains enabled for browser-visible vi
   }
   assert.match(monitor, /window\.API\.logProctorEvent/);
   assert.match(server, /function logProctorEvent_/);
+});
+
+
+test("party mini-games no longer inject extra cards into the main educational game room", () => {
+  const party = read("party-games.js");
+  const games = read("games.js");
+  assert.match(games, /id: "gcode"/);
+  assert.match(games, /id: "party".*Блиц по ЧПУ/);
+  assert.match(games, /id: "detective"/);
+  assert.doesNotMatch(party, /data-party-extra/);
+  assert.doesNotMatch(party, /var games=\[\s*\[\s*"bredo"/);
+});
+
+test("certificate print output uses a dedicated A4 landscape print root and image-backed backgrounds", () => {
+  const cert = read("certificate-supplement.js");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.match(cert, /certificatePrintRoot/);
+  assert.match(cert, /@page\{size:A4 landscape;margin:10mm\}/);
+  assert.match(cert, /function ensurePrintBackground/);
+  assert.match(cert, /cs-print-bg/);
+  assert.match(cert, /break-after:page/);
+  assert.match(cert, /break-before:auto;page-break-before:auto/);
+  assert.match(html, /certificate-supplement\.js\?v=11/);
+  assert.match(sw, /portal-cache-v290/);
 });
