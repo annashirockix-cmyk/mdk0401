@@ -615,7 +615,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=49/);
   assert.match(html, /english-tools\.js\?v=9/);
-  assert.match(html, /english-vpr-engine\.js\?v=15/);
+  assert.match(html, /english-vpr-engine\.js\?v=16/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
@@ -683,7 +683,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
   assert.match(html, /api\.js\?v=40/);
-  assert.match(html, /english-vpr-engine\.js\?v=15/);
+  assert.match(html, /english-vpr-engine\.js\?v=16/);
 });
 
 
