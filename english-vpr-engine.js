@@ -340,7 +340,7 @@
         if(!chosen){window.alert("Ответьте на все 20 вопросов. Не заполнен вопрос №"+(i+1)+".");return;}
         answers.push(Number(chosen.value));
       }
-      if(!window.confirm("Отправить контрольную на проверку? После отправки изменить ответы будет нельзя."))return;
+      if(seconds>0&&!window.confirm("Отправить контрольную на проверку? После отправки изменить ответы будет нельзя."))return;
       finished=true; submit.disabled=true; submit.textContent="Проверяем на сервере…";
       if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
       window.API.submitEnglishSemesterTest({track:track,testId:test.id,answers:answers,timeSpent:duration-seconds}).then(function(result){
@@ -378,7 +378,7 @@
       app.innerHTML = '<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';
       return;
     }
-    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Формат ВПР СПО 2026 · 90 минут · 7 заданий · 40 баллов</p></section><section class="module"><h2>Выберите вариант экзамена</h2><p>В портале оставлены только две итоговые работы. Старые семестровые и прежние итоговые экзамены больше не выводятся в этом разделе.</p><div id="englishVprChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div></section>';
+    app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Формат ВПР СПО 2026 · 90 минут · 7 заданий · 40 баллов</p></section><section class="module"><h2>Выберите вариант экзамена</h2><p>Выберите итоговый экзамен ВПР или одну из семестровых контрольных Basic / Technical ниже.</p><div id="englishVprChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div></section>';
     var choices = document.getElementById("englishVprChoices");
     if (hasStaffAccess() && window.API && window.API.importEnglishSemesterTests && window.SEMESTER_TESTS) {
       var semesterImport = el("button","btn ghost","Перенести 20 семестровых контрольных");
