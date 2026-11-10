@@ -261,7 +261,7 @@
     var app = document.getElementById("app");
     if (!app) return;
     var course = activeCourse();
-    if (!window.state || (!window.state.student && !window.state.staff) || (window.canAccessCourse && !window.canAccessCourse(course))) {
+    if (!window.state || (!window.state.student && !hasStaffAccess()) || (window.canAccessCourse && !window.canAccessCourse(course) && !hasStaffAccess())) {
       app.innerHTML = '<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';
       return;
     }
@@ -272,13 +272,29 @@
       migrate.type="button"; migrate.style.cssText="margin:0 0 14px;width:100%";
       migrate.onclick=function(){
         if(!window.confirm("Импортировать варианты Basic и Technical в закрытый лист EnglishVPRBank?")) return;
-        migrate.disabled=true; migrate.textContent="Импортируем…";
+        migrate.disabled=true; migrate.textContent="Импортируем и проверяем…";
         Promise.all(["basic","technical"].map(function(track){
           var exam=window.ENGLISH_VPR_EXAMS[track];
-          if(!exam) throw new Error("Не найден вариант "+track);
-          return window.API.importEnglishVprBank(track,exam);
-        })).then(function(){migrate.textContent="Оба экзамена перенесены в таблицу";if(window.showToast)window.showToast("Импорт Basic и Technical завершён.","success");})
-          .catch(function(err){migrate.disabled=false;migrate.textContent="Повторить импорт";window.alert("Ошибка импорта: "+(err.message||err));});
+          if(!exam) return Promise.reject(new Error("Не найден локальный вариант "+track+". Проверьте загрузку english-vpr-exams.js."));
+          return window.API.importEnglishVprBank(track,exam).then(function(result){
+            if(!result || result.success !== true) throw new Error("Сервер не подтвердил импорт "+track+": "+(result && result.error || "пустой ответ"));
+            return window.API.getEnglishVprExam(track).then(function(check){
+              if(!check || check.success !== true || !check.exam || !Array.isArray(check.exam.tasks) || !check.exam.tasks.length) {
+                throw new Error("Импорт "+track+" не прошёл контрольное чтение: "+(check && check.error || "вариант не найден или пуст"));
+              }
+              return {track:track, tasks:check.exam.tasks.length, title:check.exam.title || track};
+            });
+          });
+        })).then(function(results){
+          migrate.textContent="Basic и Technical подтверждены сервером";
+          migrate.disabled=true;
+          var details=results.map(function(item){return item.track.toUpperCase()+": "+item.tasks+" заданий";}).join("; ");
+          if(window.showToast)window.showToast("Импорт и чтение с сервера подтверждены: "+details,"success");
+          else window.alert("Импорт и контрольное чтение подтверждены: "+details);
+        }).catch(function(err){
+          migrate.disabled=false; migrate.textContent="Повторить импорт и проверку";
+          window.alert("Импорт/проверка не завершены: "+(err.message||err)+". Ни один вариант не считается готовым без подтверждения чтением с сервера.");
+        });
       };
       app.querySelector(".module").appendChild(migrate);
     }

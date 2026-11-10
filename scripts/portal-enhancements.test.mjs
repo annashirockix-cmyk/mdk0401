@@ -615,7 +615,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=49/);
   assert.match(html, /english-tools\.js\?v=9/);
-  assert.match(html, /english-vpr-engine\.js\?v=14/);
+  assert.match(html, /english-vpr-engine\.js\?v=15/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
@@ -683,7 +683,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
   assert.match(html, /api\.js\?v=40/);
-  assert.match(html, /english-vpr-engine\.js\?v=14/);
+  assert.match(html, /english-vpr-engine\.js\?v=15/);
 });
 
 
@@ -703,4 +703,84 @@ test("admin role is recognized for teacher navigation and tutoring is shown only
   assert.match(app, /currentRole === "teacher" \|\| currentRole === "admin"/);
   assert.match(app, /tutoringLink\.style\.display=isTeacher\?"flex":"none"/);
   assert.match(app, /link\.visible!==false&&String\(link\.url\|\|""\)\.trim\(\)/);
+});
+
+
+test("English VPR chooser grants admin role access and verifies both server imports by reading them back", () => {
+  const engine = read("english-vpr-engine.js");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.ok(engine.includes("!window.state.student && !hasStaffAccess()"));
+  assert.ok(engine.includes("!window.canAccessCourse(course) && !hasStaffAccess()"));
+  assert.ok(engine.includes("result.success !== true"));
+  assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
+  assert.ok(engine.includes("check.success !== true"));
+  assert.ok(engine.includes("контрольное чтение"));
+  assert.ok(html.includes("english-vpr-engine.js?v=15"));
+  assert.ok(sw.includes("portal-cache-v282"));
+});
+
+
+test("non-English final exams contain 45 auto-graded questions and no written-response fields", () => {
+  const finalPage = read("final.js");
+  const server = read("Code.gs");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.match(finalPage, /FINAL_EXAM_TEST_SIZE = 45/);
+  assert.match(finalPage, /picked\.length!==45/);
+  assert.match(finalPage, /Все 45 заданий проверены сервером автоматически/);
+  assert.doesNotMatch(finalPage, /writtenPrompts|previewWritten|textarea\[name\^="written"\]|Письменная и ситуационная часть/);
+  assert.match(finalPage, /course\.id === "ENB" \|\| course\.id === "ENT"/);
+  assert.match(finalPage, /#\/english-tests/);
+  assert.match(server, /const target=45/);
+  assert.match(server, /\["multi",10\],\["order",7\],\["match",7\],\["num",5\],\["tf",2\]/);
+  assert.match(server, /hard_\|self_/);
+  assert.match(server, /q\.type=type/);
+  assert.match(server, /const writtenSubmission=""/);
+  assert.match(html, /final\.js\?v=25/);
+  assert.match(sw, /portal-cache-v282/);
+});
+
+test("server builds 45-question advanced non-English exams with protected answer keys", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function finalQuestionType_");
+  const end = server.indexOf("\nfunction scoreFinalAnswer_", start);
+  assert.ok(start >= 0 && end > start);
+  const bank = [];
+  let id = 0;
+  for (const type of ["multi","order","match","num","tf"]) {
+    const count = {multi:13,order:10,match:10,num:8,tf:4}[type];
+    for (let i=0;i<count;i++) {
+      id++;
+      const question = {type,q:"Сложный вопрос "+id,options:["A","B","C"],correct:type==="multi"?[0,2]:type==="num"?12:type==="tf"?1:0};
+      if(type==="order"){question.items=["шаг 1","шаг 2","шаг 3"];question.correctOrder=question.items.slice();}
+      if(type==="match"){question.pairs=[{left:"L1",right:"R1"},{left:"L2",right:"R2"}];}
+      bank.push({bankId:"exam_primary",questionId:"Q"+id,question});
+    }
+  }
+  for (let i=0;i<16;i++) bank.push({bankId:"hard_topic",questionId:"H"+i,question:{type:"mc",q:"Задача повышенной сложности "+i,options:["A","B","C"],correct:1}});
+  const sandbox = {
+    auth_:()=>({role:"student",email:"student@test"}),
+    hasCourseAccess_:()=>true,
+    results_:()=>({getDataRange:()=>({getValues:()=>[["Email"]]})}),
+    email_:value=>String(value||"").toLowerCase(),
+    sameCourseId_:()=>true,
+    settingValue_:()=>""
+    ,allFinalExamEntries_:()=>bank
+    ,shuffledServer_:items=>items.slice()
+    ,Utilities:{getUuid:()=>"exam-test"}
+    ,CacheService:{getScriptCache:()=>({put:(key,value)=>{sandbox.cached=JSON.parse(value);}})}
+  };
+  vm.runInNewContext(server.slice(start,end)+";this.getFinalExam_=getFinalExam_;",sandbox,{timeout:1000});
+  const result=sandbox.getFinalExam_({courseId:"07.01"});
+  assert.equal(result.questions.length,45);
+  assert.equal(sandbox.cached.questions.length,45);
+  assert.equal(result.questions.filter(entry=>entry.question.type==="multi").length,10);
+  assert.equal(result.questions.filter(entry=>entry.question.type==="order").length,7);
+  assert.equal(result.questions.filter(entry=>entry.question.type==="match").length,7);
+  assert.equal(result.questions.filter(entry=>entry.question.type==="num").length,5);
+  assert.equal(result.questions.filter(entry=>entry.question.type==="tf").length,2);
+  assert.ok(result.questions.every(entry=>!Object.prototype.hasOwnProperty.call(entry.question,"correct")));
+  assert.equal(result.questions.filter(entry=>entry.questionId.startsWith("H")).length,14);
+  assert.ok(result.questions.every(entry=>entry.questionId.startsWith("Q") || entry.questionId.startsWith("H")));
 });

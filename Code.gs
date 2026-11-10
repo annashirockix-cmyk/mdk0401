@@ -1816,6 +1816,7 @@ function finalQuestionType_(question) {
 }
 function safeFinalExamQuestion_(entry,index,optionMaps) {
   const q=Object.assign({},entry.question||{}),type=finalQuestionType_(q);
+  q.type=type;
   ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
   if(type==="order")q.items=shuffledServer_(q.items||[]);
   if(type==="tf"&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
@@ -1843,10 +1844,18 @@ function getFinalExam_(data) {
     });
     return {success:false,notImported:true,courseId:courseId,availableBankIds:available.slice(0,150),questions:[]};
   }
-  const target=Math.min(40,bank.length);
-  let selected=[];[["multi",8],["order",5],["match",5],["num",2]].forEach(function(rule){selected=selected.concat(shuffledServer_(bank.filter(function(e){return finalQuestionType_(e.question)===rule[0]&&selected.indexOf(e)===-1;})).slice(0,rule[1]));});
-  const rest=shuffledServer_(bank.filter(function(e){return selected.indexOf(e)===-1;}));selected=shuffledServer_(selected.concat(rest.slice(0,Math.max(0,target-selected.length))));
-  if(selected.length<target)throw new Error("В защищённом банке недостаточно уникальных заданий: требуется 40 тестовых, найдено "+selected.length+".");
+  const target=45;
+  if(bank.length<target)throw new Error("Для экзамена требуется 45 уникальных заданий с автоматической проверкой; в защищённом банке найдено "+bank.length+".");
+  let selected=[];
+  [["multi",10],["order",7],["match",7],["num",5],["tf",2]].forEach(function(rule){
+    selected=selected.concat(shuffledServer_(bank.filter(function(e){return finalQuestionType_(e.question)===rule[0]&&selected.indexOf(e)===-1;})).slice(0,rule[1]));
+  });
+  // Усложнённый состав: после заданий разных форматов добавляем материалы из hard_/self_ банков.
+  const advanced=shuffledServer_(bank.filter(function(e){return /^(hard_|self_)/i.test(String(e.bankId||""))&&selected.indexOf(e)===-1;}));
+  selected=selected.concat(advanced.slice(0,Math.max(0,target-selected.length)));
+  const rest=shuffledServer_(bank.filter(function(e){return selected.indexOf(e)===-1;}));
+  selected=shuffledServer_(selected.concat(rest.slice(0,Math.max(0,target-selected.length))));
+  if(selected.length!==target)throw new Error("Не удалось сформировать полный вариант из 45 уникальных заданий.");
   const optionMaps={},examId=Utilities.getUuid(),safeQuestions=selected.map(function(entry,index){return safeFinalExamQuestion_(entry,index,optionMaps);});
   CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,questions:selected.map(function(e){return e.question;}),optionMaps:optionMaps}),7200);
   return {success:true,examId:examId,questions:safeQuestions};
@@ -1919,8 +1928,7 @@ function submitFinalExam_(data) {
     const attemptLimit=limitRaw===""?1:1+Math.max(0,Number(limitRaw)||0);
     if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
-    const writtenAnswers=Array.isArray(data.writtenAnswers)?data.writtenAnswers.slice(0,5).map(function(value){return String(value||"").slice(0,12000);}):[String(data.written1||""),String(data.written2||"")];
-    const writtenSubmission=writtenAnswers.map(function(value,index){return "Письменное задание "+(index+1)+":\n"+value;}).join("\n\n");
+    const writtenSubmission="";
     appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Math.min(5400,Number(data.timeSpent)||0)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:writtenSubmission.slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,AttemptNo:attemptNo,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted});
     cache.remove(cacheKey);
