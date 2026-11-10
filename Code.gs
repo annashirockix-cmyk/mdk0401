@@ -118,6 +118,7 @@ function handleRequest_(e) {
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
       case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
+      case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
       case "submitenglishvprexam": result = submitEnglishVprExam_(data); break;
       case "getbuilttest":
       case "getbuiltintest": result = getBuiltInTest_(data); break;
@@ -2653,4 +2654,87 @@ function getEnglishSemesterTests_(data) {
     return {success:true, track:track, tests:sanitizeEnglishSemesterTests_(tests), testCount:tests.length, questionCount:questionCount};
   }
   return {success:false, error:"Семестровые контрольные ещё не импортированы преподавателем."};
+}
+
+
+/**
+ * Серверная проверка семестровой контрольной. Правильные ответы читаются
+ * только из закрытого EnglishSemesterBank; клиент передаёт лишь индексы ответов.
+ */
+function submitEnglishSemesterTest_(data) {
+  const user = auth_(data);
+  const track = String(data.track || "").toLowerCase();
+  const testId = String(data.testId || "").trim();
+  const answers = Array.isArray(data.answers) ? data.answers : [];
+  if (user.role !== "student" || ["basic", "technical"].indexOf(track) < 0 || !testId) {
+    throw new Error("Нет доступа к семестровой контрольной.");
+  }
+  const courseId = track === "basic" ? "ENB" : "ENT";
+  if (!hasCourseAccess_(user, courseId) && !hasCourseAccess_(user, "EN")) {
+    throw new Error("Эта дисциплина не назначена вашему аккаунту.");
+  }
+  const sh = englishSemesterBank_(), values = sh.getDataRange().getValues(), map = headerMap_(sh);
+  let tests = null;
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][map.Track] || "") === track &&
+        String(values[i][map.Active] || "").toUpperCase() === "TRUE") {
+      tests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
+      break;
+    }
+  }
+  if (!tests) throw new Error("Семестровые контрольные ещё не импортированы.");
+  const test = tests.filter(function(item) { return String(item.id || "") === testId; })[0];
+  if (!test || !Array.isArray(test.questions) || test.questions.length !== 20) {
+    throw new Error("Контрольная не найдена или имеет неверный формат.");
+  }
+  if (answers.length !== test.questions.length) {
+    throw new Error("Количество ответов не совпадает с количеством вопросов.");
+  }
+  const score = test.questions.reduce(function(total, question, index) {
+    const correct = Number(question.correct);
+    const answer = Number(answers[index]);
+    return total + (Number.isInteger(answer) && answer === correct ? 1 : 0);
+  }, 0);
+  const testKey = "english_semester_" + track + "_" + testId;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const results = results_(), rows = results.getDataRange().getValues();
+    const prior = rows.slice(1).filter(function(row) {
+      return email_(row[0]) === user.email && String(row[3] || "") === testKey &&
+        sameCourseId_(row[12] || courseId, courseId);
+    }).length;
+    const raw = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + testKey);
+    const limit = raw === "" ? 1 : 1 + Math.max(0, Number(raw) || 0);
+    if (prior >= limit) {
+      throw new Error("Контрольная уже завершена. Для повторного прохождения обратитесь к преподавателю.");
+    }
+    const attemptNo = prior + 1;
+    const policy = proctorPenalty_(user.email, courseId, testKey, attemptNo);
+    const rawPercent = Math.round(score / test.questions.length * 100);
+    const percent = Math.max(0, rawPercent - policy.penaltyPoints);
+    const grade = gradeFromPercent_(percent);
+    const title = String(test.title || "Контрольная работа") + " — " + String(test.subtitle || track.toUpperCase());
+    appendMappedRecord_(results, {
+      Email:user.email, Name:user.name, Group:user.group, TestId:testKey, TestTitle:title,
+      Grade:grade, Score:score, MaxScore:test.questions.length, Percent:percent,
+      TimeSpent:Math.max(0, Number(data.timeSpent) || 0), Attempts:attemptNo,
+      FinishedAt:new Date().toISOString(), CourseId:courseId,
+      Submission:JSON.stringify({answers:answers}).slice(0,10000),
+      PenaltyPoints:policy.penaltyPoints, ViolationCount:policy.violationCount
+    });
+    appendAttemptAudit_({
+      EventType:"attempt_submitted", ActorEmail:user.email, StudentEmail:user.email,
+      StudentName:user.name, Group:user.group, CourseId:courseId, TestId:testKey,
+      TestTitle:title, AttemptNo:attemptNo, Grade:grade, Score:score,
+      MaxScore:test.questions.length, Percent:percent
+    });
+    return {
+      success:true, testId:testKey, score:score, maxScore:test.questions.length,
+      percent:percent, rawPercent:rawPercent, grade:grade, attempts:attemptNo,
+      penaltyPoints:policy.penaltyPoints, violationCount:policy.violationCount
+    };
+  } finally {
+    lock.releaseLock();
+  }
 }
