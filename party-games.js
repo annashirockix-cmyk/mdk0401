@@ -1,7 +1,7 @@
 "use strict";
 (function(){
   var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
-  var oldStart=window.startGame, oldRender=window.renderArcadePage;
+  var oldStart=window.startGame;
   function frame(container,title,subtitle,body){
     container.innerHTML='<div class="party-shell"><div class="party-top"><div><div class="party-kicker">ИГРОВАЯ КОМНАТА / КОМАНДНЫЙ РЕЖИМ</div><h2>'+title+'</h2><p>'+subtitle+'</p></div><button class="btn ghost" id="partyBack">← К играм</button></div>'+body+'</div>';
     var back=container.querySelector("#partyBack");if(back)back.onclick=function(){window.stopCurrentGame&&window.stopCurrentGame();window.renderArcadePage();};
@@ -120,16 +120,6 @@
     if(id==="mafia"){var mafiaApp=document.getElementById("app");mafiaApp.innerHTML='<a class="backlink" href="javascript:void(0)" id="backGames">← В меню игр</a><div class="module" id="mafiaGame" style="padding:16px"></div>';mafiaApp.querySelector("#backGames").onclick=function(){window.renderArcadePage();};if(window.startMafiaNetwork)window.startMafiaNetwork(mafiaApp.querySelector("#mafiaGame"));else mafiaApp.querySelector("#mafiaGame").textContent="Сетевая мафия пока недоступна.";return;}
     oldStart(id);
   };
-  window.renderArcadePage=function(){
-    oldRender();
-    var app=document.getElementById("app");if(!app||app.querySelector("[data-party-extra]"))return;
-    var grid=app.querySelector("div[style*='grid-template-columns']");if(!grid)return;
-    var games=[
-      ["bredo","🤪 Бредовуха","Придумывайте нелепые версии, голосуйте и набирайте очки."],
-      ["durak","🃏 Дурак","Подкидной дурак для 2–4 игроков на одном устройстве."],
-      ["mafia","🎭 Мафия онлайн","Сетевая игра с тайными ролями и голосованием."]
-    ];
-    games.forEach(function(g){var card=document.createElement("div");card.className="module";card.setAttribute("data-party-extra","1");card.style.cssText="cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;margin-bottom:0";card.innerHTML='<div><h3 style="color:var(--accent);margin-top:0">'+g[1]+'</h3><p style="color:var(--muted);font-size:14px">'+g[2]+'</p></div><button class="btn ghost" style="width:100%">Запустить</button>';card.onclick=function(){window.startGame(g[0]);};grid.appendChild(card);});
-  };
+  // Основной каталог формируется games.js; дополнительные игры остаются только по прямой ссылке/приглашению.
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){}); 
 })();
