@@ -878,7 +878,7 @@ test("workbooks include differentiated supplemental professional learning blocks
   const html = read("index.html");
   const sw = read("service-worker.js");
   assert.match(workbooks, /function supplementalStudyBlock/);
-  assert.match(workbooks, /Дополнительный материал · уровень углубления/i/);
+  assert.match(workbooks, /Дополнительный материал · уровень углубления/i);
   for (const course of ["07.01", "04.01", "MET", "OT", "MCAM", "ENB", "ENT"]) {
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
