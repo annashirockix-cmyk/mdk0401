@@ -755,9 +755,10 @@ test("server builds 45-question advanced non-English exams with protected answer
       const question = {type,q:"Сложный вопрос "+id,options:["A","B","C"],correct:type==="multi"?[0,2]:type==="num"?12:type==="tf"?1:0};
       if(type==="order"){question.items=["шаг 1","шаг 2","шаг 3"];question.correctOrder=question.items.slice();}
       if(type==="match"){question.pairs=[{left:"L1",right:"R1"},{left:"L2",right:"R2"}];}
-      bank.push({bankId:id<=20?"hard_topic":"exam_primary",questionId:"Q"+id,question});
+      bank.push({bankId:"exam_primary",questionId:"Q"+id,question});
     }
   }
+  for (let i=0;i<16;i++) bank.push({bankId:"hard_topic",questionId:"H"+i,question:{type:"mc",q:"Задача повышенной сложности "+i,options:["A","B","C"],correct:1}});
   const sandbox = {
     auth_:()=>({role:"student",email:"student@test"}),
     hasCourseAccess_:()=>true,
@@ -780,5 +781,6 @@ test("server builds 45-question advanced non-English exams with protected answer
   assert.equal(result.questions.filter(entry=>entry.question.type==="num").length,5);
   assert.equal(result.questions.filter(entry=>entry.question.type==="tf").length,2);
   assert.ok(result.questions.every(entry=>!Object.prototype.hasOwnProperty.call(entry.question,"correct")));
-  assert.ok(result.questions.filter(entry=>entry.questionId.startsWith("Q")).length===45);
+  assert.equal(result.questions.filter(entry=>entry.questionId.startsWith("H")).length,14);
+  assert.ok(result.questions.every(entry=>entry.questionId.startsWith("Q") || entry.questionId.startsWith("H")));
 });
