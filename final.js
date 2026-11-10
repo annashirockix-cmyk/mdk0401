@@ -1,8 +1,8 @@
 "use strict";
 
 var FINAL_EXAM_SIZE = 45;
-var FINAL_EXAM_TEST_SIZE = 40;
-var FINAL_EXAM_WRITTEN_SIZE = 5;
+var FINAL_EXAM_TEST_SIZE = 45;
+var FINAL_EXAM_WRITTEN_SIZE = 0;
 var FINAL_EXAM_TIME = 60 * 60;
 
 window.EXTRA_EXAM_BANKS = window.EXTRA_EXAM_BANKS || {};
@@ -148,11 +148,11 @@ window.renderFinalExamPage = function (mdkId) {
   if (!mdkId) {
     app.appendChild(examNode("a", "backlink", "← На главную")).href = "#/";
     app.appendChild(examNode("section", "hero", "Итоговые экзамены"));
-    var intro = examNode("p", "", "Экзамены по дисциплинам: тестовые задания разных типов, практические ситуации и письменная часть.");
+    var intro = examNode("p", "", "Итоговые экзамены по дисциплинам: 45 сложных заданий разных форматов с автоматической серверной проверкой. Английский язык проходит отдельно в разделе «Экзамены по английскому языку».");
     app.querySelector(".hero").appendChild(intro);
     var grid = examNode("div");
     grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;";
-    Object.values(window.MDK_DATA || {}).filter(function (course) { return course && course.id !== "basic" && course.id !== "technical" && course.id !== "EN"; }).forEach(function (course) {
+    Object.values(window.MDK_DATA || {}).filter(function (course) { return course && course.id !== "basic" && course.id !== "technical" && course.id !== "EN" && course.id !== "ENB" && course.id !== "ENT"; }).forEach(function (course) {
       var count = questionCount(course);
       var card = examNode("a", "module");
       card.href = "#/final/" + course.id;
@@ -168,12 +168,13 @@ window.renderFinalExamPage = function (mdkId) {
 
   var course = programById(mdkId);
   if (!course) { location.hash = "#/final"; return; }
+  if (course.id === "ENB" || course.id === "ENT" || course.id === "EN" || course.id === "basic" || course.id === "technical") { location.hash = "#/english-tests"; return; }
   var back = examNode("a", "backlink", "← К списку экзаменов"); back.href = "#/final"; app.appendChild(back);
   var hero = examNode("section", "hero");
   hero.appendChild(examNode("span", "brand-badge", course.shortName));
   hero.appendChild(examNode("h1", "", "Итоговый экзамен"));
   var duration = Math.round(FINAL_EXAM_TIME / 60);
-  hero.appendChild(examNode("p", "", "45 заданий: 40 тестовых разных форматов и 5 письменных · " + duration + " минут"));
+  hero.appendChild(examNode("p", "", "45 заданий повышенной сложности: выбор нескольких ответов, расчётные задачи, последовательности и установление соответствий · автоматическая проверка · " + duration + " минут"));
   app.appendChild(hero);
 
   // Преподавательский аккаунт не должен попадать в студенческий серверный сценарий:
@@ -200,7 +201,7 @@ window.renderFinalExamPage = function (mdkId) {
       previewButton.addEventListener("click", function () {
         previewArea.innerHTML = "";
         var previewQuestions = examShuffle(localQuestions).slice(0, FINAL_EXAM_TEST_SIZE);
-        previewArea.appendChild(examNode("h3", "", "Вариант: " + (previewQuestions.length + FINAL_EXAM_WRITTEN_SIZE) + " заданий (" + previewQuestions.length + " тестовых + 5 письменных)"));
+        previewArea.appendChild(examNode("h3", "", "Вариант: " + previewQuestions.length + " заданий с автоматической проверкой"));
         previewQuestions.forEach(function (question, index) {
           var card = renderExamQuestion(question, index);
           Array.prototype.forEach.call(card.querySelectorAll("input, select, textarea"), function (control) {
@@ -219,26 +220,7 @@ window.renderFinalExamPage = function (mdkId) {
           card.appendChild(details);
           previewArea.appendChild(card);
         });
-        var previewWritten = mdkId === "04.01" ? [
-          "Составьте алгоритм диагностики станка при росте вибрации шпиндельного узла.",
-          "Проанализируйте сочетание нагрева опоры, вибрации и металлических частиц в масле.",
-          "Опишите подготовку измерительной аппаратуры к проверке точности позиционирования.",
-          "Составьте фрагмент диагностической карты подшипникового узла.",
-          "Обоснуйте решение о дальнейшей эксплуатации или выводе узла в ремонт."
-        ] : [
-          "Опишите алгоритм подготовки оборудования к технологической операции.",
-          "Разберите отклонение параметров оборудования от нормы.",
-          "Составьте порядок безопасной подготовки станка к работе.",
-          "Опишите контроль качества операции и оформление результатов.",
-          "Приведите пример технологической ошибки и меры её предупреждения."
-        ];
-        previewWritten.forEach(function(prompt,index) {
-          var writtenCard=examNode("section","question");
-          writtenCard.style.cssText="margin-bottom:16px;padding:16px;background:var(--card-soft);border:1px solid var(--border);border-radius:10px;";
-          writtenCard.appendChild(examNode("b","","Письменное задание "+(index+1)+": "+prompt));
-          var field=examNode("textarea","self-input");field.rows=4;field.disabled=true;field.placeholder="Поле для развёрнутого ответа";
-          writtenCard.appendChild(field);previewArea.appendChild(writtenCard);
-        });
+
       });
     }
     app.appendChild(teacherPanel);
@@ -273,38 +255,11 @@ window.renderFinalExamPage = function (mdkId) {
           throw new Error("Защищённый банк экзамена не найден для дисциплины "+course.id+". Банки в QuestionBank: "+(Array.isArray(available)&&available.length?available.join(", "):"нет записей")+". Проверьте импорт и публикацию Google Apps Script.");
         }
         var picked=serverExam.questions.map(function(entry){return entry.question;});
-        if(picked.length!==40)throw new Error("Вариант должен содержать 40 тестовых заданий; сервер вернул "+picked.length+". Проверьте объём защищённого банка.");
+        if(picked.length!==45)throw new Error("Вариант должен содержать 45 заданий с автоматической проверкой; сервер вернул "+picked.length+". Проверьте объём защищённого банка.");
         mount.innerHTML="";
         var timerBox=examNode("div","exam-timer",duration+":00");timerBox.style.cssText="font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;color:var(--accent);";mount.appendChild(timerBox);
         var form=examNode("form");form.addEventListener("submit",function(e){e.preventDefault();});
         picked.forEach(function(question,index){form.appendChild(renderExamQuestion(question,index));});
-        var writtenTitle=examNode("h3","","✍️ Письменная и ситуационная часть");writtenTitle.style.color="var(--accent)";form.appendChild(writtenTitle);
-        var writtenPrompts=mdkId==="04.01"?[
-          "Составьте алгоритм диагностики станка при росте вибрации шпиндельного узла. Укажите исходные данные, приборы и контрольные точки.",
-          "Проанализируйте сочетание признаков: нагрев опоры, рост вибрации и металлические частицы в масле. Предложите причины и порядок проверок.",
-          "Опишите порядок подготовки измерительной аппаратуры и оборудования к проверке точности позиционирования.",
-          "Составьте фрагмент диагностической карты для контроля подшипникового узла: параметры, метод, периодичность и критерии оценки.",
-          "Обоснуйте решение о дальнейшей эксплуатации, регулировке или выводе узла в ремонт по результатам диагностики."
-        ]:mdkId==="02.01"?[
-          "Опишите подготовку сборочного рабочего места: документация, комплектность, инструмент, оснастка и требования безопасности.",
-          "Составьте технологическую последовательность сборки узла с подшипниковым и резьбовым соединениями.",
-          "Объясните, как выбрать базы и проверить сопряжение деталей до окончательной затяжки крепежа.",
-          "Предложите порядок контроля качества собранного узла и оформления результатов.",
-          "Разберите ситуацию несовпадения отверстий при сборке: возможные причины и корректные действия."
-        ]:mdkId==="02.02"?[
-          "Опишите структуру управляющей программы автоматизированной сборочной линии и назначение основных блоков.",
-          "Составьте алгоритм цикла подачи, позиционирования, сборки и подтверждения готовности изделия.",
-          "Объясните назначение датчиков обратной связи и межблокировок в автоматизированной системе.",
-          "Предложите порядок поиска причины, если контроллер не получает подтверждение фиксации детали.",
-          "Опишите проверку программы в симуляции и безопасный порядок проведения наладочного цикла."
-        ]:[
-          "Опишите алгоритм подготовки оборудования к технологической операции: исходные данные, этапы и контрольные точки.",
-          "Разберите отклонение параметров оборудования от нормы: возможные причины и способы проверки.",
-          "Составьте последовательность безопасной подготовки станка к работе и проверки рабочего места.",
-          "Опишите порядок контроля качества операции и оформления результатов.",
-          "Приведите пример технологической ошибки, её последствия и меры предупреждения."
-        ];
-        writtenPrompts.forEach(function(prompt,index){var wrap=examNode("div");wrap.style.cssText="margin:12px 0;padding:15px;background:var(--card-soft);border:1px solid var(--border);border-radius:8px;";wrap.appendChild(examNode("b","",(picked.length+index+1)+". "+prompt));var area=examNode("textarea","self-input");area.name="written"+(index+1);area.rows=5;area.placeholder="Разверните решение, укажите ход рассуждений и вывод...";area.style.marginTop="10px";wrap.appendChild(area);form.appendChild(wrap);});
         var submit=examNode("button","btn","Завершить экзамен");submit.type="button";submit.style.cssText="width:100%;margin-top:18px;padding:15px;font-size:16px;";form.appendChild(submit);mount.appendChild(form);
         var timeLeft=duration*60,submitted=false;
         var timer=setInterval(function(){if(!document.body.contains(timerBox)){clearInterval(timer);return;}timeLeft--;timerBox.textContent=String(Math.floor(timeLeft/60)).padStart(2,"0")+":"+String(timeLeft%60).padStart(2,"0");if(timeLeft<=60)timerBox.style.color="var(--err)";if(timeLeft<=0)submit.click();},1000);
@@ -324,14 +279,14 @@ window.renderFinalExamPage = function (mdkId) {
         submit.addEventListener("click",function(){
           if(submitted)return;submitted=true;clearInterval(timer);submit.disabled=true;
           mount.innerHTML="<p>Передаём ответы на серверную проверку…</p>";
-          window.API.submitFinalExam({examId:serverExam.examId,courseId:course.id,answers:collectSecureAnswers(),written1:(form.querySelector('[name="written1"]')||{}).value||"",written2:(form.querySelector('[name="written2"]')||{}).value||"",writtenAnswers:Array.prototype.map.call(form.querySelectorAll('textarea[name^="written"]'),function(el){return el.value||"";}),timeSpent:duration*60-timeLeft}).then(function(result){
+          window.API.submitFinalExam({examId:serverExam.examId,courseId:course.id,answers:collectSecureAnswers(),timeSpent:duration*60-timeLeft}).then(function(result){
             if(!result||!result.success)throw new Error(result&&result.error||"Сервер не смог проверить экзамен.");
             if(!window.state.results)window.state.results={};
             window.state.results["__final__"+course.id]={grade:result.grade,total:result.score,max:result.maxScore,percent:result.percent,penaltyPoints:result.penaltyPoints||0};
             if(!window.state.examSubmissions)window.state.examSubmissions=[];
-            window.state.examSubmissions.push({date:new Date().toLocaleString("ru-RU"),courseId:course.id,student:window.state.student.name,group:window.state.student.group,testScore:result.score,maxTest:result.maxScore,written1:(form.querySelector('[name="written1"]')||{}).value||"",written2:(form.querySelector('[name="written2"]')||{}).value||"",writtenAnswers:Array.prototype.map.call(form.querySelectorAll('textarea[name^="written"]'),function(el){return el.value||"";}),status:"На проверке",teacherGrade:null,finalGrade:null});
+            window.state.examSubmissions.push({date:new Date().toLocaleString("ru-RU"),courseId:course.id,student:window.state.student.name,group:window.state.student.group,testScore:result.score,maxTest:result.maxScore,status:"Проверен автоматически",teacherGrade:null,finalGrade:result.grade});
             if(window.saveStudentData)window.saveStudentData();
-            mount.innerHTML="";var resultBox=examNode("div","exam-result");resultBox.style.cssText="text-align:center;padding:30px;";resultBox.appendChild(examNode("h2","",course.shortName+" · экзамен завершён"));resultBox.appendChild(examNode("p","","Баллы за тестовую часть: "+result.score+" из "+result.maxScore+" ("+result.percent+"%)"));var gradeNode=examNode("h1","exam-grade","Оценка: "+result.grade);gradeNode.style.cssText="font-size:42px;margin:20px 0;color:"+(result.grade>=3?"var(--ok)":"var(--err)");resultBox.appendChild(gradeNode);resultBox.appendChild(examNode("p","","Письменные задания переданы преподавателю на проверку."));if(result.penaltyPoints)resultBox.appendChild(examNode("p","","Штраф за повторные нарушения: -"+result.penaltyPoints+" п.п. Отчёт отправлен преподавателю."));var home=examNode("a","btn","К списку экзаменов");home.href="#/final";resultBox.appendChild(home);mount.appendChild(resultBox);
+            mount.innerHTML="";var resultBox=examNode("div","exam-result");resultBox.style.cssText="text-align:center;padding:30px;";resultBox.appendChild(examNode("h2","",course.shortName+" · экзамен завершён"));resultBox.appendChild(examNode("p","","Баллы за тестовую часть: "+result.score+" из "+result.maxScore+" ("+result.percent+"%)"));var gradeNode=examNode("h1","exam-grade","Оценка: "+result.grade);gradeNode.style.cssText="font-size:42px;margin:20px 0;color:"+(result.grade>=3?"var(--ok)":"var(--err)");resultBox.appendChild(gradeNode);resultBox.appendChild(examNode("p","","Все 45 заданий проверены сервером автоматически."));if(result.penaltyPoints)resultBox.appendChild(examNode("p","","Штраф за повторные нарушения: -"+result.penaltyPoints+" п.п. Отчёт отправлен преподавателю."));var home=examNode("a","btn","К списку экзаменов");home.href="#/final";resultBox.appendChild(home);mount.appendChild(resultBox);
           }).catch(function(error){mount.textContent="Не удалось отправить экзамен: "+(error.message||error)+". Обратитесь к преподавателю.";});
         });
       }).catch(function(error){mount.textContent=error.message||"Не удалось загрузить экзамен.";});
