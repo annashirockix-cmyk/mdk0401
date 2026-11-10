@@ -717,7 +717,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=15"));
-  assert.ok(sw.includes("portal-cache-v281"));
+  assert.ok(sw.includes("portal-cache-v282"));
 });
 
 
@@ -749,7 +749,7 @@ test("server builds 45-question advanced non-English exams with protected answer
   const bank = [];
   let id = 0;
   for (const type of ["multi","order","match","num","tf"]) {
-    const count = {multi:12,order:9,match:9,num:7,tf:4}[type];
+    const count = {multi:13,order:10,match:10,num:8,tf:4}[type];
     for (let i=0;i<count;i++) {
       id++;
       const question = {type,q:"Сложный вопрос "+id,options:["A","B","C"],correct:type==="multi"?[0,2]:type==="num"?12:type==="tf"?1:0};
