@@ -41,7 +41,9 @@
       .certificate-supplement table{width:100%;border-collapse:collapse;font-size:13px}
       .certificate-supplement th,.certificate-supplement td{padding:9px 8px;border-bottom:1px solid #d6e0e9;text-align:left;vertical-align:top}
       .certificate-supplement th{font-size:11px;text-transform:uppercase;letter-spacing:.4px}
-      .certificate-supplement .cs-note{font-size:11px;color:#526176;margin-top:18px}\n      .cs-print-bg{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;opacity:.20;z-index:0!important;pointer-events:none}\n      #printable-cert>:not(.cs-print-bg),.certificate-supplement>:not(.cs-print-bg){position:relative;z-index:1}
+      .certificate-supplement .cs-note{font-size:11px;color:#526176;margin-top:18px}
+      .cs-print-bg{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;opacity:.20;z-index:0!important;pointer-events:none}
+      #printable-cert>:not(.cs-print-bg),.certificate-supplement>:not(.cs-print-bg){position:relative;z-index:1}
       #printable-cert[data-design="classic"],.certificate-supplement[data-design="classic"]{border-color:#9b3d32!important}
       #printable-cert[data-design="navy"],.certificate-supplement[data-design="navy"]{border-color:#28577d!important}
       #printable-cert[data-design="emerald"],.certificate-supplement[data-design="emerald"]{border-color:#26715c!important}
