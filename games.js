@@ -16,22 +16,12 @@ window.renderArcadePage = function() {
     document.getElementById("crumbs").textContent = "Игровая комната";
     
     app.appendChild(el('<a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>'));
-    app.appendChild(el('<section class="hero"><h1>🎮 Игровая комната</h1><p>Зарабатывай XP и развлекайся!</p></section>'));
+    app.appendChild(el('<section class="hero"><h1>🎮 Учебные игры</h1><p>Три коротких формата: практика G-кода, блиц по ЧПУ и командное расследование.</p></section>'));
 
     var allGames = [
-        { id: "party", title: "☠️ Смертельная вечеринка", desc: "Викторина на выживание." },
-        { id: "detective", title: "🕵️ Детектив: дело № 014", desc: "Командное расследование: локации, улики, допросы и финальный вердикт." },
-        { id: "minesweeper", title: "💣 Сапёр", desc: "Классическая логическая игра." },
-        { id: "memory", title: "🧠 Найди пару", desc: "Тренируй зрительную память." },
-        { id: "tictactoe", title: "❌ Крестики-нолики", desc: "Сыграй против робота." },
-        { id: "casino", title: "🎰 Казино", desc: "Слоты на XP." },
-        { id: "roulette", title: "🎡 Рулетка", desc: "Красное или черное?" },
-        { id: "gcode", title: "📐 G-код Рисование", desc: "Изучи команды ЧПУ." },
-        { id: "snake", title: "🐍 Cursor Snake", desc: "Управляйте змейкой курсором мыши." },
-        { id: "pumpkin", title: "🎃 Carve Pumpkin", desc: "Вырежи лицо на тыкве." },
-        { id: "slime", title: "🟢 Желейный слайм", desc: "Интерактивный слайм." },
-        { id: "dragon", title: "🐉 Пиксельный дракон", desc: "Анимация дракона." },
-        { id: "starfield", title: "✨ Звездный дождь", desc: "Космическая анимация." }
+        { id: "gcode", title: "📐 Тренажёр G-кода", desc: "Проверь G00 и G01 на координатной плоскости. Учебная практика по ЧПУ." },
+        { id: "party", title: "⚙️ Блиц по ЧПУ", desc: "Короткая викторина по основным командам и принципам программирования." },
+        { id: "detective", title: "🕵️ Командный детектив", desc: "Разберите производственную ситуацию, соберите улики и обоснуйте решение." }
     ];
 
     var grid = el('<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px;"></div>');
@@ -59,7 +49,7 @@ window.startGame = function(gameId) {
     app.innerHTML = "";
     app.appendChild(el('<a class="backlink" href="javascript:void(0)" onclick="window.renderArcadePage()" style="color:var(--accent); cursor:pointer;">← В меню игр</a>'));
 
-    if (window.unlockAchievement) window.unlockAchievement('gamer');
+    if (window.unlockAchievement && ['gcode','party','detective'].includes(gameId)) window.unlockAchievement('gamer');
 
     var container = el('<div class="module" id="gameContainer" style="min-height:400px; padding:0; overflow-x:auto; overflow-y:hidden; position:relative; display:flex; flex-direction:column; align-items:center;"></div>');
     app.appendChild(container);
