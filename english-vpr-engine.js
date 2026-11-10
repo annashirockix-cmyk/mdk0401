@@ -370,7 +370,8 @@
     }
     tick(); window.englishAssessmentTimer=window.setInterval(tick,1000);
   }
-\n  function renderChooser() {
+
+  function renderChooser() {
     var app = document.getElementById("app");
     if (!app) return;
     var course = activeCourse();
