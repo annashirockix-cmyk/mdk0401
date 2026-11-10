@@ -704,3 +704,18 @@ test("admin role is recognized for teacher navigation and tutoring is shown only
   assert.match(app, /tutoringLink\.style\.display=isTeacher\?"flex":"none"/);
   assert.match(app, /link\.visible!==false&&String\(link\.url\|\|""\)\.trim\(\)/);
 });
+
+
+test("English VPR chooser grants admin role access and verifies both server imports by reading them back", () => {
+  const engine = read("english-vpr-engine.js");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.ok(engine.includes("!window.state.student && !hasStaffAccess()"));
+  assert.ok(engine.includes("!window.canAccessCourse(course) && !hasStaffAccess()"));
+  assert.ok(engine.includes("result.success !== true"));
+  assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
+  assert.ok(engine.includes("check.success !== true"));
+  assert.ok(engine.includes("контрольное чтение"));
+  assert.ok(html.includes("english-vpr-engine.js?v=15"));
+  assert.ok(sw.includes("portal-cache-v281"));
+});
