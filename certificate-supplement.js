@@ -77,7 +77,7 @@
   function ensurePrintBackground(target,image){
     if(!target)return;
     target.style.position="relative";
-    target.style.overflow="hidden";
+    target.style.overflow=target.classList.contains("certificate-supplement")?"visible":"hidden";
     target.style.isolation="isolate";
     var layer=target.querySelector(".cs-print-bg");
     if(image){
