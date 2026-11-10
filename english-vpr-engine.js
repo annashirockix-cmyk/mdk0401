@@ -337,8 +337,10 @@
       var answers=[];
       for(var i=0;i<test.questions.length;i++){
         var chosen=form.querySelector('input[name="semester_'+i+'"]:checked');
-        if(!chosen){window.alert("Ответьте на все 20 вопросов. Не заполнен вопрос №"+(i+1)+".");return;}
-        answers.push(Number(chosen.value));
+        if(!chosen){
+          if(seconds>0){window.alert("Ответьте на все 20 вопросов. Не заполнен вопрос №"+(i+1)+".");return;}
+          answers.push(-1);
+        } else answers.push(Number(chosen.value));
       }
       if(seconds>0&&!window.confirm("Отправить контрольную на проверку? После отправки изменить ответы будет нельзя."))return;
       finished=true; submit.disabled=true; submit.textContent="Проверяем на сервере…";
