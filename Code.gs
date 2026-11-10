@@ -46,6 +46,7 @@ const HEADERS = {
   QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"],
   QuestionBankBackup: ["BackupId", "CourseId", "BankId", "RowJSON", "BackedUpAt", "BackedUpBy"],
   EnglishVPRBank: ["Track", "ExamJSON", "Active", "UpdatedAt", "UpdatedBy"],
+  EnglishSemesterBank: ["Track", "TestsJSON", "Active", "UpdatedAt", "UpdatedBy"],
   ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt", "EventType", "Details"]
 };
 
@@ -115,6 +116,8 @@ function handleRequest_(e) {
       case "getquestionbankstats": result = getQuestionBankStats_(data); break;
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
+      case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
+      case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "submitenglishvprexam": result = submitEnglishVprExam_(data); break;
       case "getbuilttest":
       case "getbuiltintest": result = getBuiltInTest_(data); break;
