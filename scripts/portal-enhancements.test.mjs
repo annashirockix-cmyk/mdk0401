@@ -615,7 +615,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=49/);
   assert.match(html, /english-tools\.js\?v=9/);
-  assert.match(html, /english-vpr-engine\.js\?v=20/);
+  assert.match(html, /english-vpr-engine\.js\?v=21/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
@@ -683,7 +683,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
   assert.match(html, /api\.js\?v=41/);
-  assert.match(html, /english-vpr-engine\.js\?v=20/);
+  assert.match(html, /english-vpr-engine\.js\?v=21/);
 });
 
 
@@ -716,8 +716,8 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=20"));
-  assert.ok(sw.includes("portal-cache-v287"));
+  assert.ok(html.includes("english-vpr-engine.js?v=21"));
+  assert.ok(sw.includes("portal-cache-v288"));
 });
 
 
@@ -738,7 +738,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v287/);
+  assert.match(sw, /portal-cache-v288/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -791,6 +791,7 @@ test("semester tests are student-visible and scored only by the protected server
   const api = await read("api.js");
   const server = await read("Code.gs");
   assert.match(engine, /function renderSemesterTests/);
+  assert.match(engine, /renderSemesterTests\(track, course, choices\)/);
   assert.match(engine, /window\.API\.getEnglishSemesterTests\(track\)/);
   assert.match(engine, /function startSemesterTest/);
   assert.match(engine, /submitEnglishSemesterTest/);
@@ -811,4 +812,12 @@ test("English semester source bank is loaded before the student assessment engin
   assert.ok(html.indexOf("english-assessment-data.js") < html.indexOf("english-vpr-engine.js"));
   assert.match(source, /window\.SEMESTER_TESTS\.basic/);
   assert.match(source, /window\.SEMESTER_TESTS\.technical/);
+});
+
+
+test("semester assessment auto-submits unanswered questions when the timer expires", async () => {
+  const engine = await read("english-vpr-engine.js");
+  assert.match(engine, /if\(seconds>0\)\{window\.alert\("Ответьте на все 20 вопросов/);
+  assert.match(engine, /answers\.push\(-1\)/);
+  assert.match(engine, /if\(seconds>0&&!window\.confirm/);
 });
