@@ -56,9 +56,9 @@ test("online party games use supported server actions and stable player identity
   const shop = read("shop.js");
   const html = read("index.html");
   assert.match(html, /shop\.js\?v=4/);
-  assert.match(html, /network-party-games\.js\?v=7/);
+  assert.match(html, /network-party-games\.js\?v=8/);
   assert.match(html, /network-detective\.js\?v=10/);
-  assert.match(html, /coop-detective\.js\?v=8/);
+  assert.match(html, /coop-detective\.js\?v=9/);
   for (const action of ["bredo_answer", "bredo_vote", "bredo_next", "durak_attack", "durak_defend", "durak_take", "durak_done", "chat", "search", "mark", "theory", "dossier"]) {
     assert.ok(server.includes('"' + action + '"'), "server must accept " + action);
   }
