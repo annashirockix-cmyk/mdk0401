@@ -615,7 +615,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=49/);
   assert.match(html, /english-tools\.js\?v=9/);
-  assert.match(html, /english-vpr-engine\.js\?v=15/);
+  assert.match(html, /english-vpr-engine\.js\?v=20/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
@@ -682,8 +682,8 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /function hasStaffAccess\(\)/);
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
-  assert.match(html, /api\.js\?v=40/);
-  assert.match(html, /english-vpr-engine\.js\?v=15/);
+  assert.match(html, /api\.js\?v=41/);
+  assert.match(html, /english-vpr-engine\.js\?v=20/);
 });
 
 
@@ -716,8 +716,8 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=15"));
-  assert.ok(sw.includes("portal-cache-v282"));
+  assert.ok(html.includes("english-vpr-engine.js?v=20"));
+  assert.ok(sw.includes("portal-cache-v287"));
 });
 
 
@@ -738,7 +738,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v282/);
+  assert.match(sw, /portal-cache-v287/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -783,4 +783,31 @@ test("server builds 45-question advanced non-English exams with protected answer
   assert.ok(result.questions.every(entry=>!Object.prototype.hasOwnProperty.call(entry.question,"correct")));
   assert.equal(result.questions.filter(entry=>entry.questionId.startsWith("H")).length,14);
   assert.ok(result.questions.every(entry=>entry.questionId.startsWith("Q") || entry.questionId.startsWith("H")));
+});
+
+
+test("semester tests are student-visible and scored only by the protected server bank", async () => {
+  const engine = await read("english-vpr-engine.js");
+  const api = await read("api.js");
+  const server = await read("Code.gs");
+  assert.match(engine, /function renderSemesterTests/);
+  assert.match(engine, /window\.API\.getEnglishSemesterTests\(track\)/);
+  assert.match(engine, /function startSemesterTest/);
+  assert.match(engine, /submitEnglishSemesterTest/);
+  assert.match(api, /submitEnglishSemesterTest:function/);
+  assert.match(server, /case "submitenglishsemestertest": result = submitEnglishSemesterTest_\(data\); break;/);
+  assert.match(server, /function submitEnglishSemesterTest_\(data\)/);
+  assert.match(server, /question\.correct/);
+  assert.match(server, /english_semester_/);
+  assert.match(server, /Submission:JSON\.stringify\(\{answers:answers\}\)/);
+});
+
+
+test("English semester source bank is loaded before the student assessment engine", () => {
+  const html = read("index.html");
+  const source = read("english-assessment-data.js");
+  assert.match(html, /english-assessment-data\.js\?v=1/);
+  assert.ok(html.indexOf("english-assessment-data.js") < html.indexOf("english-vpr-engine.js"));
+  assert.match(source, /window\.SEMESTER_TESTS\.basic/);
+  assert.match(source, /window\.SEMESTER_TESTS\.technical/);
 });
