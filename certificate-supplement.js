@@ -33,7 +33,7 @@
       .certificate-choice-preview{height:96px;margin:12px 0;border:1px solid #cbd5e1;border-radius:10px;background-size:cover;background-position:center;display:grid;place-items:center;color:#334155;font-weight:800;text-shadow:0 1px 2px #fff;padding:12px;text-align:center}
       .certificate-choice label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:13px}
       .certificate-choice select{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card-soft);color:var(--text)}
-      .certificate-supplement{max-width:900px;margin:22px auto;padding:30px;background:#fff;color:#172033;border:3px double #315b7d;border-radius:4px;page-break-before:always;break-before:page;box-sizing:border-box}
+      .certificate-supplement{max-width:900px;margin:22px auto;padding:30px;background:#fff;color:#172033;border:3px double #315b7d;border-radius:4px;box-sizing:border-box}
       .certificate-supplement .cs-kicker{font-size:11px;letter-spacing:2px;font-weight:800;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px}
       .certificate-supplement h2{text-align:center;margin:10px 0 4px;font-size:25px}
       .certificate-supplement .cs-meta{text-align:center;margin:5px 0}
@@ -41,7 +41,7 @@
       .certificate-supplement table{width:100%;border-collapse:collapse;font-size:13px}
       .certificate-supplement th,.certificate-supplement td{padding:9px 8px;border-bottom:1px solid #d6e0e9;text-align:left;vertical-align:top}
       .certificate-supplement th{font-size:11px;text-transform:uppercase;letter-spacing:.4px}
-      .certificate-supplement .cs-note{font-size:11px;color:#526176;margin-top:18px}
+      .certificate-supplement .cs-note{font-size:11px;color:#526176;margin-top:18px}\n      .cs-print-bg{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;opacity:.20;z-index:0!important;pointer-events:none}\n      #printable-cert>:not(.cs-print-bg),.certificate-supplement>:not(.cs-print-bg){position:relative;z-index:1}
       #printable-cert[data-design="classic"],.certificate-supplement[data-design="classic"]{border-color:#9b3d32!important}
       #printable-cert[data-design="navy"],.certificate-supplement[data-design="navy"]{border-color:#28577d!important}
       #printable-cert[data-design="emerald"],.certificate-supplement[data-design="emerald"]{border-color:#26715c!important}
@@ -57,20 +57,33 @@
       #printable-cert[data-bg^="image"],.certificate-supplement[data-bg^="image"]{background-image:linear-gradient(rgba(255,255,255,.82),rgba(255,255,255,.82)),var(--cert-bg-image)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;}
       @media(max-width:600px){.certificate-supplement{padding:16px}.certificate-supplement table{font-size:11px}}
       @media print{
-        @page{size:A4 portrait;margin:14mm}
-        body{background:#fff!important}
+        @page{size:A4 landscape;margin:10mm}
+        html,body{margin:0!important;padding:0!important;background:#fff!important}
         .certificate-choice,.no-print,.backlink{display:none!important}
-        #printable-cert,.certificate-supplement{width:100%;max-width:none;margin:0 auto;border-radius:0!important;box-shadow:none!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
-        #printable-cert{min-height:245mm;display:flex;flex-direction:column;justify-content:center;break-after:page;page-break-after:always}
-        .certificate-supplement{min-height:245mm;break-before:page;page-break-before:always}
-        .certificate-supplement table{font-size:10pt}
+        #certificatePrintRoot{display:block!important;position:relative!important;width:100%!important;margin:0!important;padding:0!important}
+        #printable-cert,.certificate-supplement{width:100%!important;max-width:none!important;min-height:190mm!important;height:auto!important;margin:0!important;padding:14mm!important;box-sizing:border-box!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid;page-break-inside:avoid;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+        #printable-cert{height:190mm!important;min-height:190mm!important;display:flex;flex-direction:column;justify-content:center;break-after:page;page-break-after:always}
+        .certificate-supplement{break-before:auto;page-break-before:auto}
+        .certificate-supplement table{font-size:9pt;table-layout:fixed;overflow-wrap:anywhere}
+        .certificate-supplement th,.certificate-supplement td{padding:6px 5px}
       }`;
     document.head.appendChild(s);
+  }
+  function ensurePrintBackground(target,image){
+    if(!target)return;
+    target.style.position="relative";
+    target.style.overflow="hidden";
+    target.style.isolation="isolate";
+    var layer=target.querySelector(".cs-print-bg");
+    if(image){
+      if(!layer){layer=node("img");layer.className="cs-print-bg";layer.alt="";layer.setAttribute("aria-hidden","true");target.insertBefore(layer,target.firstChild);}
+      layer.src=image;
+    }else if(layer){layer.remove();}
   }
   function applyDesign(design,bg){
     design=designs[design]?design:"classic";bg=backgrounds[bg]?bg:"white";
     var d=designs[design],cert=document.getElementById("printable-cert"),supp=document.querySelector(".certificate-supplement");
-    [cert,supp].forEach(function(x){if(!x)return;x.dataset.design=design;x.dataset.bg=bg;x.style.setProperty("--cert-accent",d.accent);x.style.setProperty("--cert-deep",d.deep);x.style.setProperty("--cert-soft",d.soft);x.style.setProperty("--cert-bg-image",backgrounds[bg].image?"url(\""+backgrounds[bg].image+"\")":"none");});
+    [cert,supp].forEach(function(x){if(!x)return;x.dataset.design=design;x.dataset.bg=bg;x.style.setProperty("--cert-accent",d.accent);x.style.setProperty("--cert-deep",d.deep);x.style.setProperty("--cert-soft",d.soft);x.style.setProperty("--cert-bg-image",backgrounds[bg].image?"url(\""+backgrounds[bg].image+"\")":"none");ensurePrintBackground(x,backgrounds[bg].image||"");});
     var key=preferenceKey();try{localStorage.setItem(key,JSON.stringify({design:design,bg:bg}));}catch(e){}
   }
   function makeChoicePanel(){
@@ -147,6 +160,8 @@
     var tableWrap=node("div");box.appendChild(tableWrap);
     var note=node("p","В приложение включены только результаты, подтверждённые учебным порталом: тесты с оценкой не ниже 3 и проверенные практические работы с положительной оценкой. Незавершённые и ожидающие проверки задания не учитываются.");note.className="cs-note";box.appendChild(note);
     app.appendChild(box);
+    applyDesign(prefs.design||"classic",prefs.bg||"white");
+    if(cert){var printRoot=node("div");printRoot.id="certificatePrintRoot";app.insertBefore(printRoot,cert);printRoot.appendChild(cert);printRoot.appendChild(box);}
     if(printButton){printButton.disabled=true;printButton.textContent="Загружаем приложение…";}
     function enablePrint(){if(printButton){printButton.disabled=false;printButton.textContent="🖨 Распечатать сертификат и приложение";}}
     function error(message){status.textContent="Не удалось загрузить приложение";tableWrap.textContent=message;enablePrint();}
