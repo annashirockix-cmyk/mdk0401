@@ -922,6 +922,9 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(workbooks, /Worker%20assembles%20metal%20parts/);
   assert.match(workbooks, /Vernier%20Caliper/);
   assert.match(workbooks, /Machine%20guarding/);
+  assert.match(workbooks, /Первая помощь: безопасная последовательность действий/);
+  assert.match(workbooks, /металлорежущ\|станок/);
+  assert.doesNotMatch(workbooks, /опас\|защит\|безопас\|станок\|инструмент\|рабоч\|риск/);
   assert.ok(workbooks.includes("%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0"));
   assert.match(workbooks, /CNC%20milling%20machine/);
   assert.match(workbooks, /visualBlocks\+cncReference/);
