@@ -9,14 +9,15 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  const workbooks = read("workbooks.js");
  const html = read("index.html");
  const sw = read("service-worker.js");
- assert.match(workbooks, /@page\{size:A4;margin:12mm 14mm\}/);
+ assert.match(workbooks, /@page\{size:A4;margin:12mm 14mm/);
+ assert.match(workbooks, /counter\(pages\)/);
  assert.match(workbooks, /\.wb-visual-table-wrap\{overflow:visible!important/);
  assert.match(workbooks, /\.wb-visual-table\{display:table!important/);
  assert.match(workbooks, /\.wb-visual-table thead\{display:table-header-group\}/);
  assert.match(workbooks, /\.wb-visual-table tr\{break-inside:avoid;page-break-inside:avoid\}/);
  assert.match(workbooks, /\.wb-gallery img,\.wb-photo img\{width:100%!important;height:auto!important/);
  assert.match(workbooks, /img loading="eager"/);
- assert.match(html, /workbooks\.js\?v=48/);
+ assert.match(html, /workbooks\.js\?v=49/);
  assert.match(html, /style\.css\?v=22/);
- assert.match(sw, /portal-cache-v300/);
+ assert.match(sw, /portal-cache-v301/);
 });
