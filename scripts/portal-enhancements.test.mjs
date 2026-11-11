@@ -911,3 +911,26 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(html, /workbooks\.js\?v=41/);
   assert.match(sw, /portal-cache-v292/);
 });
+
+
+test("workbooks use curated photo, table and chart packs instead of generic meme filler", () => {
+  const workbooks = read("workbooks.js");
+  const html = read("index.html");
+  const css = read("style.css");
+  const sw = read("service-worker.js");
+  assert.match(workbooks, /function visualTable\(/);
+  assert.match(workbooks, /function visualChart\(/);
+  assert.match(workbooks, /Worker%20assembles%20metal%20parts/);
+  assert.match(workbooks, /Vernier%20Caliper/);
+  assert.match(workbooks, /Machine%20guarding/);
+  assert.match(workbooks, /Микроструктура%20стали/);
+  assert.match(workbooks, /CNC%20milling%20machine/);
+  assert.match(workbooks, /visualBlocks\+cncReference/);
+  assert.doesNotMatch(workbooks, /var meme=String\(courseId\)/);
+  assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
+  assert.match(css, /\.wb-visual-table/);
+  assert.match(css, /\.wb-visual-chart/);
+  assert.match(html, /workbooks\.js\?v=42/);
+  assert.match(html, /style\.css\?v=21/);
+  assert.match(sw, /portal-cache-v293/);
+});
