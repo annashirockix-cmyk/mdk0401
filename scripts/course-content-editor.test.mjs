@@ -18,7 +18,7 @@ test("custom lecture and test content has one student rendering path", () => {
  assert.ok(!editor.includes("function customRecords("));
  assert.ok(editor.includes("type:\"lecture\""));
  assert.ok(editor.includes("type:\"test\""));
- assert.ok(sw.includes("portal-cache-v304")); assert.ok(css.includes(".lec-content img"));
+ assert.ok(sw.includes("portal-cache-v305")); assert.ok(css.includes(".lec-content img"));
 });
 test("custom lecture sanitizer preserves safe images and figure captions", () => {
  const app = read("app.js");
