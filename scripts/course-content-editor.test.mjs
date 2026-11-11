@@ -24,7 +24,7 @@ test("custom lecture sanitizer preserves safe images and figure captions", () =>
  const app = read("app.js");
  assert.ok(app.includes("\"FIGURE\",\"FIGCAPTION\",\"IMG\""));
  assert.ok(app.includes("node.tagName === \"IMG\" && name === \"src\""));
- assert.ok(app.includes("data:image/"));
+ assert.ok(app.includes("png|jpeg|gif|webp"));
  assert.ok(app.includes("\"alt\", \"width\", \"height\", \"loading\""));
 });
 test("flashcard constructor saves and reopens saved sets", () => {
