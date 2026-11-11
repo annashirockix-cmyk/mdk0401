@@ -28,20 +28,23 @@ try {
 
   for (const id of courseIds) {
     assert.ok(available.includes(id), `Course ${id} is missing from MDK_DATA`);
-    await portal.evaluate((courseId) => {
-      document.getElementById("__wbAuditOpen")?.remove();
-      const button = document.createElement("button");
-      button.id = "__wbAuditOpen";
-      button.type = "button";
-      button.textContent = "Open workbook audit";
-      button.onclick = () => window.openWorkbook(courseId);
-      document.body.appendChild(button);
+    const html = await portal.evaluate((courseId) => {
+      let captured = "";
+      const originalOpen = window.open;
+      window.open = () => ({
+        document: {
+          open() {},
+          write(value) { captured = String(value); },
+          close() {}
+        }
+      });
+      try { window.openWorkbook(courseId); }
+      finally { window.open = originalOpen; }
+      return captured;
     }, id);
-
-    const popupPromise = portal.waitForEvent("popup", { timeout: 15000 });
-    await portal.locator("#__wbAuditOpen").click();
-    const workbook = await popupPromise;
-    try {
+    assert.ok(html && html.includes("<title>"), `Workbook ${id} did not generate standalone HTML`);
+    const workbook = await context.newPage();
+    await workbook.setContent(html, { waitUntil: "load" });
       await workbook.waitForLoadState("load", { timeout: 15000 });
       await workbook.emulateMedia({ media: "print" });
       await workbook.evaluate(async () => {
