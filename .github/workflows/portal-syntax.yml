@@ -36,6 +36,25 @@ jobs:
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
         run: node --test scripts/course-content-editor.test.mjs
+      - name: Install Playwright CLI for browser audit
+        run: npm install --global playwright@1.62.0
+      - name: Install Chromium for workbook print audit
+        run: PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" playwright install --with-deps chromium
+      - name: Run real-browser A4 and PDF audit
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/workbook-audit-server.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/workbook-browser-print-audit.mjs
+      - name: Upload workbook PDF audit samples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workbook-a4-pdf-audit
+          path: artifacts/workbooks/
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Check inline scripts in HTML
         run: |
           python - <<'PY'
