@@ -36,6 +36,8 @@ jobs:
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
         run: node --test scripts/course-content-editor.test.mjs
+      - name: Install Node dependencies for browser audit
+        run: npm ci --ignore-scripts
       - name: Install Chromium for workbook print audit
         run: npx playwright install --with-deps chromium
       - name: Run real-browser A4 and PDF audit
