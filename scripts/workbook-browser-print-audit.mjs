@@ -71,7 +71,7 @@ try {
           for (const el of sheet.querySelectorAll("img,table,pre,.wb-code")) {
             const r = el.getBoundingClientRect();
             if (r.width && (r.left < rect.left - 2 || r.right > rect.right + 2)) {
-              overflows.push({ kind: el.tagName.toLowerCase(), className: el.className || "", left: Math.round(r.left), right: Math.round(r.right), sheetLeft: Math.round(rect.left), sheetRight: Math.round(rect.right) });
+              overflows.push({ kind: el.tagName.toLowerCase(), className: el.className || "", left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), sheetLeft: Math.round(rect.left), sheetRight: Math.round(rect.right), parentTag: el.parentElement?.tagName, parentClass: el.parentElement?.className || "", parentLeft: Math.round(el.parentElement?.getBoundingClientRect().left || 0), parentRight: Math.round(el.parentElement?.getBoundingClientRect().right || 0), computedWidth: getComputedStyle(el).width, maxWidth: getComputedStyle(el).maxWidth, margin: getComputedStyle(el).margin, html: el.outerHTML.slice(0, 220) });
             }
           }
         }
@@ -88,7 +88,7 @@ try {
       });
 
       assert.ok(metrics.sheets >= 1, `Workbook ${id} contains no pages`);
-      assert.equal(metrics.overflows.length, 0, `Workbook ${id} has print overflow: ${JSON.stringify(metrics.overflows.slice(0, 8))}`);
+      assert.equal(metrics.overflows.length, 0, `Workbook ${id} has print overflow: ${JSON.stringify(metrics.overflows.slice(0, 30))}`);
       const broken = metrics.images.filter((img) => !img.loaded);
       if (broken.length) console.warn(`Workbook ${id}: ${broken.length} image(s) failed to load`, broken.map((img) => img.src));
 
