@@ -9,7 +9,7 @@ test("custom lecture and test content has one student rendering path", () => {
  const app = read("app.js");
  const editor = read("course-admin.js");
  const html = read("index.html");
- const sw = read("service-worker.js");
+ const sw = read("service-worker.js"); const css = read("style.css");
  assert.ok(html.includes("course-admin.js?v=19"));
  assert.ok(app.includes("customTopicLectures"));
  assert.ok(app.includes("customTopicTests"));
@@ -18,7 +18,7 @@ test("custom lecture and test content has one student rendering path", () => {
  assert.ok(!editor.includes("function customRecords("));
  assert.ok(editor.includes("type:\"lecture\""));
  assert.ok(editor.includes("type:\"test\""));
- assert.ok(sw.includes("portal-cache-v302"));
+ assert.ok(sw.includes("portal-cache-v303"));
 });
 test("custom lecture sanitizer preserves safe images and figure captions", () => {
  const app = read("app.js");
