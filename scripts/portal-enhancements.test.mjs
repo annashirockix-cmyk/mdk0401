@@ -101,10 +101,7 @@ test("workbook figures are selected by relevant topics and all referenced files 
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
   assert.match(workbook, /else if\(String\(courseId\)==="SPRUT_TP"\)/);
   for (const caption of ["Микрометр: измерительные поверхности и отсчёт", "Штангенциркуль: губки, штанга и нониус", "Контроль безопасности перед началом работы", "Последовательность диагностики и восстановления оборудования", "Цифровой маршрут подготовки управляющей программы", "Связь состава, структуры и свойств материала", "Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы", "Логика рабочего пространства СПРУТ-ТП"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
-  for (const meme of ["meme-cat.jpg", "meme-js.jpg", "meme-python.jpg", "meme-variables.jpg"]) {
-    assert.ok(workbook.includes(meme), "missing topic meme " + meme);
-    assert.ok(fs.existsSync(path.join(root, "assets", "images", meme)), "missing meme image file " + meme);
-  }
+  assert.doesNotMatch(workbook, /meme-(cat|js|python|variables)\\.jpg/, "decorative meme images must not appear in study sheets");
   const imageNames = [...workbook.matchAll(/add\("(fig-[^"]+\.png)"/g)].map((m) => m[1]);
   imageNames.push(...[...workbook.matchAll(/\["(fig-[^"]+\.png|warning-triangle\.png)"/g)].map((m) => m[1]));
   assert.ok(imageNames.length > 0);
