@@ -445,3 +445,25 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 .wb-extra,.wb-extra *{min-width:0;max-width:100%;box-sizing:border-box}
 .wb-extra table{display:block;width:100%;max-width:100%;overflow-x:auto}
 @media print{.wb-gallery img{max-height:220px;page-break-inside:avoid}}
+
+
+/* Редакционная визуальная система рабочих тетрадей */
+.wb-visual-table-wrap{width:100%;overflow-x:auto;margin:1rem 0;break-inside:avoid}
+.wb-visual-table{width:100%;border-collapse:collapse;background:#fff;color:#1c2b3a;font-size:.9rem}
+.wb-visual-table caption{text-align:left;font-weight:800;padding:.6rem 0;color:var(--text)}
+.wb-visual-table th,.wb-visual-table td{border:1px solid #cbd5df;padding:.55rem .65rem;text-align:left;vertical-align:top;min-width:105px}
+.wb-visual-table th{background:#eaf0f5;color:#20364c}
+.wb-visual-chart{margin:1rem 0;padding:.8rem;border:1px solid #d5dee7;border-radius:12px;background:#fff;break-inside:avoid}
+.wb-visual-chart img{display:block;width:100%;max-width:680px;height:auto;margin:0 auto;object-fit:contain}
+.wb-visual-chart figcaption{font-size:.88rem;line-height:1.5;color:#35485b;margin-top:.55rem}
+.wb-gallery figure.wb-photo{break-inside:avoid}
+.wb-gallery figure.wb-photo img{height:auto;max-height:320px;object-fit:contain;background:#fff}
+.wb-gallery figure.wb-photo figcaption small{display:block;margin-top:.35rem;color:#657487}
+.wb-photo-source{display:inline-block;margin-top:.35rem;font-weight:700}
+@media print{
+ .wb-visual-table-wrap,.wb-visual-chart,.wb-gallery figure{break-inside:avoid;page-break-inside:avoid}
+ .wb-visual-table{font-size:9pt}
+ .wb-visual-table th,.wb-visual-table td{padding:5pt}
+ .wb-visual-chart img{max-height:220mm}
+ .wb-gallery figure.wb-photo img{max-height:90mm}
+}

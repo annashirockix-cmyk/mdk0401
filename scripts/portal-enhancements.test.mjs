@@ -95,16 +95,13 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=41/);
+  assert.match(html, /workbooks\.js\?v=42/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
   assert.match(workbook, /else if\(String\(courseId\)==="SPRUT_TP"\)/);
-  for (const caption of ["Микрометр: измерительные поверхности и отсчёт", "Штангенциркуль: губки, штанга и нониус", "Контроль безопасности перед началом работы", "Последовательность диагностики и восстановления оборудования", "Цифровой маршрут подготовки управляющей программы", "Связь состава, структуры и свойств материала", "Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы", "Интерфейс СПРУТ-ТП: рабочая область и панели", "Проект СПРУТ-ТП: структура технологического проекта", "СПРУТ-ТП: справочники и технологические ресурсы"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
-  for (const meme of ["meme-cat.jpg", "meme-js.jpg", "meme-python.jpg", "meme-variables.jpg"]) {
-    assert.ok(workbook.includes(meme), "missing topic meme " + meme);
-    assert.ok(fs.existsSync(path.join(root, "assets", "images", meme)), "missing meme image file " + meme);
-  }
+  for (const caption of ["Микрометр: измерительные поверхности и отсчёт", "Штангенциркуль: губки, штанга и нониус", "Контроль безопасности перед началом работы", "Последовательность диагностики и восстановления оборудования", "Цифровой маршрут подготовки управляющей программы", "Связь состава, структуры и свойств материала", "Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы", "Логика рабочего пространства СПРУТ-ТП"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
+  assert.doesNotMatch(workbook, /meme-(cat|js|python|variables)\\.jpg/, "decorative meme images must not appear in study sheets");
   const imageNames = [...workbook.matchAll(/add\("(fig-[^"]+\.png)"/g)].map((m) => m[1]);
   imageNames.push(...[...workbook.matchAll(/\["(fig-[^"]+\.png|warning-triangle\.png)"/g)].map((m) => m[1]));
   assert.ok(imageNames.length > 0);
@@ -204,7 +201,9 @@ test("workbooks include translation, written practice, notes and only curated ex
   assert.match(source, /data-wb="ENT"/);
   assert.match(source, /data-wb="ENB"/);
   assert.match(source, /editorial&&Array\.isArray\(editorial\.photos\)/);
-  assert.doesNotMatch(source, /Special:FilePath/);
+  assert.match(source, /Special:FilePath/);
+  assert.match(source, /CC BY-SA 4.0/);
+  assert.match(source, /CC BY 2.0/);
   assert.match(source, /lectureStudySummary/);
   assert.match(source, /wb-summary/);
   assert.match(source, /latin\/\(latin\+cyr/);
@@ -253,8 +252,8 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(workbook, /cncWorkbookVisuals/);
   assert.match(workbook, /if\(String\(courseId\)==="07\.01"\)\{/);
   assert.doesNotMatch(workbook, /var meme=String\(courseId\)==="07\.01"\?\{file:""/);
-  assert.match(workbook, /meme-js\.jpg/);
-  assert.match(workbook, /meme-variables\.jpg/);
+  assert.doesNotMatch(workbook, /meme-(cat|js|python|variables)\.jpg/);
+  
   assert.ok(workbook.includes("Справочный блок: документы технологического процесса"), "workbook must include production document references");
 });
 
@@ -615,7 +614,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=49/);
   assert.match(html, /english-tools\.js\?v=9/);
-  assert.match(html, /english-vpr-engine\.js\?v=21/);
+  assert.match(html, /english-vpr-engine\.js\?v=\d+/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
@@ -682,7 +681,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /function hasStaffAccess\(\)/);
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
-  assert.match(html, /api\.js\?v=41/);
+  assert.match(html, /api\.js\?v=\d+/);
   assert.match(html, /english-vpr-engine\.js\?v=21/);
 });
 
@@ -717,7 +716,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v292"));
+  assert.ok(sw.includes("portal-cache-v293"));
 });
 
 
@@ -738,7 +737,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v292/);
+  assert.match(sw, /portal-cache-v293/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -869,7 +868,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v292/);
+  assert.match(sw, /portal-cache-v293/);
 });
 
 
@@ -883,8 +882,8 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=41/);
-  assert.match(sw, /portal-cache-v292/);
+  assert.match(html, /workbooks\.js\?v=42/);
+  assert.match(sw, /portal-cache-v293/);
 });
 
 
@@ -908,6 +907,29 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Операция и источник опасности/);
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /Термины и контекст/);
-  assert.match(html, /workbooks\.js\?v=41/);
-  assert.match(sw, /portal-cache-v292/);
+  assert.match(html, /workbooks\.js\?v=42/);
+  assert.match(sw, /portal-cache-v293/);
+});
+
+
+test("workbooks use curated photo, table and chart packs instead of generic meme filler", () => {
+  const workbooks = read("workbooks.js");
+  const html = read("index.html");
+  const css = read("style.css");
+  const sw = read("service-worker.js");
+  assert.match(workbooks, /function visualTable\(/);
+  assert.match(workbooks, /function visualChart\(/);
+  assert.match(workbooks, /Worker%20assembles%20metal%20parts/);
+  assert.match(workbooks, /Vernier%20Caliper/);
+  assert.match(workbooks, /Machine%20guarding/);
+  assert.ok(workbooks.includes("%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0"));
+  assert.match(workbooks, /CNC%20milling%20machine/);
+  assert.match(workbooks, /visualBlocks\+cncReference/);
+  assert.doesNotMatch(workbooks, /var meme=String\(courseId\)/);
+  assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
+  assert.match(css, /\.wb-visual-table/);
+  assert.match(css, /\.wb-visual-chart/);
+  assert.match(html, /workbooks\.js\?v=42/);
+  assert.match(html, /style\.css\?v=21/);
+  assert.match(sw, /portal-cache-v293/);
 });
