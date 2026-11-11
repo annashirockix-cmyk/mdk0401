@@ -32,6 +32,8 @@ jobs:
         run: node --test scripts/assignment-workflow.test.mjs
       - name: Check portal enhancements
         run: node --test scripts/portal-enhancements.test.mjs
+      - name: Check workbook cache and print layout
+        run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check inline scripts in HTML
         run: |
           python - <<'PY'
