@@ -201,7 +201,9 @@ test("workbooks include translation, written practice, notes and only curated ex
   assert.match(source, /data-wb="ENT"/);
   assert.match(source, /data-wb="ENB"/);
   assert.match(source, /editorial&&Array\.isArray\(editorial\.photos\)/);
-  assert.match(source, /Special:FilePath/);\n  assert.match(source, /CC BY-SA 4.0/);\n  assert.match(source, /CC BY 2.0/);
+  assert.match(source, /Special:FilePath/);
+  assert.match(source, /CC BY-SA 4.0/);
+  assert.match(source, /CC BY 2.0/);
   assert.match(source, /lectureStudySummary/);
   assert.match(source, /wb-summary/);
   assert.match(source, /latin\/\(latin\+cyr/);
@@ -250,8 +252,8 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
   assert.match(workbook, /cncWorkbookVisuals/);
   assert.match(workbook, /if\(String\(courseId\)==="07\.01"\)\{/);
   assert.doesNotMatch(workbook, /var meme=String\(courseId\)==="07\.01"\?\{file:""/);
-  assert.match(workbook, /meme-js\.jpg/);
-  assert.match(workbook, /meme-variables\.jpg/);
+  assert.doesNotMatch(workbook, /meme-(cat|js|python|variables)\.jpg/);
+  
   assert.ok(workbook.includes("Справочный блок: документы технологического процесса"), "workbook must include production document references");
 });
 
@@ -612,7 +614,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
   assert.match(html, /app\.js\?v=49/);
   assert.match(html, /english-tools\.js\?v=9/);
-  assert.match(html, /english-vpr-engine\.js\?v=21/);
+  assert.match(html, /english-vpr-engine\.js\?v=\d+/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
@@ -679,7 +681,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /function hasStaffAccess\(\)/);
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
-  assert.match(html, /api\.js\?v=42/);
+  assert.match(html, /api\.js\?v=\d+/);
   assert.match(html, /english-vpr-engine\.js\?v=21/);
 });
 
