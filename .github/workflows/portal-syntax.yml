@@ -36,7 +36,7 @@ jobs:
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
         run: node --test scripts/course-content-editor.test.mjs
-      - name: Install Node dependencies for browser audit
+      - name: Install Playwright CLI for browser audit
         run: npm install --global playwright@1.62.0
       - name: Install Chromium for workbook print audit
         run: PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" playwright install --with-deps chromium
