@@ -682,7 +682,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
   assert.match(html, /api\.js\?v=\d+/);
-  assert.match(html, /english-vpr-engine\.js\?v=22/);
+  assert.match(html, /english-vpr-engine\.js\?v=21/);
 });
 
 
