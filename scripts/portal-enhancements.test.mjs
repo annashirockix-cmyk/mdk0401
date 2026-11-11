@@ -95,7 +95,7 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=47/);
+  assert.match(html, /workbooks\.js\?v=48/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
@@ -716,7 +716,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v299"));
+  assert.ok(sw.includes("portal-cache-v300"));
 });
 
 
@@ -737,7 +737,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v299/);
+  assert.match(sw, /portal-cache-v300/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -868,7 +868,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v299/);
+  assert.match(sw, /portal-cache-v300/);
 });
 
 
@@ -882,8 +882,8 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=47/);
-  assert.match(sw, /portal-cache-v299/);
+  assert.match(html, /workbooks\.js\?v=48/);
+  assert.match(sw, /portal-cache-v300/);
 });
 
 
@@ -907,8 +907,8 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Операция и источник опасности/);
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /Термины и контекст/);
-  assert.match(html, /workbooks\.js\?v=47/);
-  assert.match(sw, /portal-cache-v299/);
+  assert.match(html, /workbooks\.js\?v=48/);
+  assert.match(sw, /portal-cache-v300/);
 });
 
 
@@ -926,16 +926,16 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(workbooks, /металлорежущ\|станок/);
   assert.doesNotMatch(workbooks, /опас\|защит\|безопас\|станок\|инструмент\|рабоч\|риск/);
   assert.ok(workbooks.includes("%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0"));
-  assert.match(workbooks, /CNC%20milling%20machine/);
+  assert.match(workbooks, /CNC%20milling%20machine/);\n  assert.match(workbooks, /String\(courseId\)==="MCAM"&&\/траектор\|фрез\|обработ\|станок\//);\n  assert.doesNotMatch(workbooks, /String\(courseId\)==="MCAM"&&\/cam\|траектор\|фрез\|обработ\|операц\|инструмент\|заготов\//);
   assert.match(workbooks, /не скриншот интерфейса Mastercam/);
   assert.match(workbooks, /visualBlocks\+cncReference/);
   assert.doesNotMatch(workbooks, /var meme=String\(courseId\)/);
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=47/);
+  assert.match(html, /workbooks\.js\?v=48/);
   assert.match(html, /style\.css\?v=22/);
-  assert.match(sw, /portal-cache-v299/);
+  assert.match(sw, /portal-cache-v300/);
 });
 
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {
@@ -953,7 +953,7 @@ test("material-science and SPRUT-TP visuals are limited to topics that match the
   const workbooks = read("workbooks.js");
   assert.match(workbooks, /String\(courseId\)==="MAT"&&\/структур\|железоуглерод\|сталь\|термическ\|легирован\//);
   assert.doesNotMatch(workbooks, /String\(courseId\)==="MAT"&&\/структур\|сталь\|металл\|сплав\|термо\|прочност\|свойств\|материал\//);
-  assert.match(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/механическ\|заготовительн\|специальн\//);
+  assert.match(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/механическ\|токар\|фрезер\|сверл\|шлиф\//);\n  assert.doesNotMatch(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/механическ\|заготовительн\|специальн\//);
   assert.doesNotMatch(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/маршрут\|операц\|технолог\|исходн\|ресурс\|документ\|процесс\|проект\//);
   assert.match(workbooks, /Микроструктура стали 20Х/);
   assert.match(workbooks, /Пример производственного оборудования, для которого разрабатывают технологический маршрут/);
