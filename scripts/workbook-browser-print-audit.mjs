@@ -45,7 +45,7 @@ try {
     assert.ok(html && html.includes("<title>"), `Workbook ${id} did not generate standalone HTML`);
     const workbook = await context.newPage();
     await workbook.setContent(html, { waitUntil: "load" });
-      await workbook.waitForLoadState("load", { timeout: 15000 });
+    try {
       await workbook.emulateMedia({ media: "print" });
       await workbook.evaluate(async () => {
         await document.fonts.ready;
