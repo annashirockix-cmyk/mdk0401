@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v293'; // Добавлены точные маршруты повторения для студентов.
+const CACHE_NAME = 'portal-cache-v294'; // Добавлены точные маршруты повторения для студентов.
 
 const STATIC_ASSETS = [
   './',
@@ -302,14 +302,19 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  const isWorkbookPhoto = url.hostname === 'commons.wikimedia.org' &&
+    url.pathname.includes('/wiki/Special:FilePath/');
+
   event.respondWith(
     fetch(request).then((networkResponse) => {
-      // Сначала пробуем сеть (Network First), чтобы всегда получать свежие данные
-      if (networkResponse && networkResponse.status === 200 && url.origin === self.location.origin) {
+      // Same-origin portal assets use Network First; Wikimedia workbook photos
+      // are cached after their first successful online load for later offline use.
+      const cacheablePortalAsset = networkResponse && networkResponse.status === 200 && url.origin === self.location.origin;
+      const cacheableWorkbookPhoto = isWorkbookPhoto && networkResponse &&
+        (networkResponse.status === 200 || networkResponse.type === 'opaque');
+      if (cacheablePortalAsset || cacheableWorkbookPhoto) {
         const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(request, responseToCache);
-        });
+        event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache)));
       }
       return networkResponse;
     }).catch(() => {
