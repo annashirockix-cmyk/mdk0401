@@ -95,7 +95,7 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=46/);
+  assert.match(html, /workbooks\.js\?v=47/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
@@ -682,7 +682,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
   assert.match(html, /api\.js\?v=\d+/);
-  assert.match(html, /english-vpr-engine\.js\?v=21/);
+  assert.match(html, /english-vpr-engine\.js\?v=22/);
 });
 
 
@@ -715,7 +715,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=21"));
+  assert.ok(html.includes("english-vpr-engine.js?v=22"));
   assert.ok(sw.includes("portal-cache-v299"));
 });
 
@@ -882,7 +882,7 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=46/);
+  assert.match(html, /workbooks\.js\?v=47/);
   assert.match(sw, /portal-cache-v299/);
 });
 
@@ -907,7 +907,7 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Операция и источник опасности/);
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /Термины и контекст/);
-  assert.match(html, /workbooks\.js\?v=46/);
+  assert.match(html, /workbooks\.js\?v=47/);
   assert.match(sw, /portal-cache-v299/);
 });
 
@@ -933,8 +933,8 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=46/);
-  assert.match(html, /style\.css\?v=21/);
+  assert.match(html, /workbooks\.js\?v=47/);
+  assert.match(html, /style\.css\?v=22/);
   assert.match(sw, /portal-cache-v299/);
 });
 
