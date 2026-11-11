@@ -1,0 +1,35 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
+test("custom lecture and test content has one student rendering path", () => {
+ const app = read("app.js");
+ const editor = read("course-admin.js");
+ const html = read("index.html");
+ const sw = read("service-worker.js");
+ assert.ok(html.includes("course-admin.js?v=19"));
+ assert.ok(app.includes("customTopicLectures"));
+ assert.ok(app.includes("customTopicTests"));
+ assert.ok(app.includes("window.startCustomInlineTest"));
+ assert.ok(!editor.includes("window.renderTopicPage=function"));
+ assert.ok(!editor.includes("function customRecords("));
+ assert.ok(editor.includes("type:\"lecture\""));
+ assert.ok(editor.includes("type:\"test\""));
+ assert.ok(sw.includes("portal-cache-v302"));
+});
+test("custom lecture sanitizer preserves safe images and figure captions", () => {
+ const app = read("app.js");
+ assert.ok(app.includes("\"FIGURE\",\"FIGCAPTION\",\"IMG\""));
+ assert.ok(app.includes("node.tagName === \"IMG\" && name === \"src\""));
+ assert.ok(app.includes("data:image/"));
+ assert.ok(app.includes("\"alt\", \"width\", \"height\", \"loading\""));
+});
+test("flashcard constructor saves and reopens saved sets", () => {
+ const cards = read("flashcard-editor.js");
+ assert.ok(cards.includes("type:\"flashcards\""));
+ assert.ok(cards.includes("function renderSaved("));
+ assert.ok(cards.includes("function loadSet("));
+});
