@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { chromium } from "playwright";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || "playwright");
 
 const baseUrl = process.env.WORKBOOK_AUDIT_URL || "http://127.0.0.1:4173/";
 const courseIds = ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT", "ENB", "ENT"];
