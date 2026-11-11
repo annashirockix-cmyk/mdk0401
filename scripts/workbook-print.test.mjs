@@ -16,6 +16,7 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(workbooks, /\.wb-visual-table thead\{display:table-header-group\}/);
  assert.match(workbooks, /\.wb-visual-table tr\{break-inside:avoid;page-break-inside:avoid\}/);
  assert.match(workbooks, /\.wb-gallery img,\.wb-photo img\{width:100%!important;height:auto!important/);
+ assert.match(workbooks, /\.page figure,\.sheet figure[^}]*margin-left:0!important;margin-right:0!important/);
  assert.match(workbooks, /img loading="eager"/);
  assert.match(html, /workbooks\.js\?v=49/);
  assert.match(html, /style\.css\?v=23/);
