@@ -926,7 +926,9 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(workbooks, /металлорежущ\|станок/);
   assert.doesNotMatch(workbooks, /опас\|защит\|безопас\|станок\|инструмент\|рабоч\|риск/);
   assert.ok(workbooks.includes("%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0"));
-  assert.match(workbooks, /CNC%20milling%20machine/);\n  assert.match(workbooks, /String\(courseId\)==="MCAM"&&\/траектор\|фрез\|обработ\|станок\//);\n  assert.doesNotMatch(workbooks, /String\(courseId\)==="MCAM"&&\/cam\|траектор\|фрез\|обработ\|операц\|инструмент\|заготов\//);
+  assert.match(workbooks, /CNC%20milling%20machine/);
+  assert.match(workbooks, /String\(courseId\)==="MCAM"&&\/траектор\|фрез\|обработ\|станок\//);
+  assert.doesNotMatch(workbooks, /String\(courseId\)==="MCAM"&&\/cam\|траектор\|фрез\|обработ\|операц\|инструмент\|заготов\//);
   assert.match(workbooks, /не скриншот интерфейса Mastercam/);
   assert.match(workbooks, /visualBlocks\+cncReference/);
   assert.doesNotMatch(workbooks, /var meme=String\(courseId\)/);
@@ -953,7 +955,8 @@ test("material-science and SPRUT-TP visuals are limited to topics that match the
   const workbooks = read("workbooks.js");
   assert.match(workbooks, /String\(courseId\)==="MAT"&&\/структур\|железоуглерод\|сталь\|термическ\|легирован\//);
   assert.doesNotMatch(workbooks, /String\(courseId\)==="MAT"&&\/структур\|сталь\|металл\|сплав\|термо\|прочност\|свойств\|материал\//);
-  assert.match(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/механическ\|токар\|фрезер\|сверл\|шлиф\//);\n  assert.doesNotMatch(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/механическ\|заготовительн\|специальн\//);
+  assert.match(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/механическ\|токар\|фрезер\|сверл\|шлиф\//);
+  assert.doesNotMatch(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/механическ\|заготовительн\|специальн\//);
   assert.doesNotMatch(workbooks, /String\(courseId\)==="SPRUT_TP"&&\/маршрут\|операц\|технолог\|исходн\|ресурс\|документ\|процесс\|проект\//);
   assert.match(workbooks, /Микроструктура стали 20Х/);
   assert.match(workbooks, /Пример производственного оборудования, для которого разрабатывают технологический маршрут/);
