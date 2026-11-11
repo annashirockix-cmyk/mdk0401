@@ -467,3 +467,11 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
  .wb-visual-chart img{max-height:220mm}
  .wb-gallery figure.wb-photo img{max-height:90mm}
 }
+
+
+/* Responsive media in teacher-authored supplemental lectures. */
+.lec-content img{display:block;width:auto;max-width:100%;height:auto;max-height:480px;object-fit:contain;margin:12px auto;border-radius:8px}
+.lec-content figure{max-width:100%;margin:16px auto;text-align:center}
+.lec-content figcaption{font-size:.9em;color:var(--muted);text-align:center;margin-top:6px}
+.lec-content table{display:block;width:100%;max-width:100%;overflow-x:auto;border-collapse:collapse}
+.lec-content pre{max-width:100%;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}

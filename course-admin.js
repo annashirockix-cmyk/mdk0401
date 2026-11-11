@@ -4,22 +4,6 @@
   const PLUGINS=["MAT","MET","OT","PFI","ENB","ENT"];
   const allIds=Object.keys(COURSE_LABELS);
   const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  function safeLectureHtml(html){
-    const box=document.createElement("div");
-    box.innerHTML=String(html||"");
-    const allowed=["P","BR","HR","H1","H2","H3","H4","H5","H6","DIV","SPAN","B","STRONG","I","EM","U","S","UL","OL","LI","TABLE","THEAD","TBODY","TFOOT","TR","TH","TD","CAPTION","BLOCKQUOTE","PRE","CODE","SUB","SUP","A"];
-    Array.from(box.querySelectorAll("*")).reverse().forEach(el=>{
-      if(allowed.indexOf(el.tagName)<0){const parent=el.parentNode;while(el.firstChild)parent.insertBefore(el.firstChild,el);parent.removeChild(el);return;}
-      Array.from(el.attributes).forEach(attr=>{
-        const name=attr.name.toLowerCase(),value=attr.value;
-        if(name==="class"||name==="title"||name==="colspan"||name==="rowspan"||name==="scope")return;
-        if(el.tagName==="A"&&name==="href"&&/^(https?:|mailto:|\.\/|\.\.\/|\/|#)/i.test(value)&&!/^\s*javascript:/i.test(value))return;
-        el.removeAttribute(attr.name);
-      });
-      if(el.tagName==="A"&&el.hasAttribute("href")){el.setAttribute("rel","noopener noreferrer");if(/^https?:/i.test(el.getAttribute("href")))el.setAttribute("target","_blank");}
-    });
-    return box.innerHTML;
-  }
   const me=()=>window.state.staff||window.state.student||{};
   const role=()=>String(me().role||(window.state.staff&&window.state.staff.role)||"student").toLowerCase();
   const isAdmin=()=>role()==="admin";
@@ -318,50 +302,6 @@
     };
     drawDraft();
     refreshContent();
-  };
-
-  function customRecords(courseId,topicId,type){return (window.customContent[type==="lecture"?"lectures":"tests"]||[]).filter(x=>x.mdkId===courseId&&x.topicId===topicId);}
-  function runTest(test,courseId,topicId){
-    const area=document.getElementById("topicContent"),questions=test.questions||[];
-    if(!questions.length){area.textContent="В тесте пока нет вопросов.";return;}
-    if(!window.state.student||!window.API||!window.API.submitCustomTest){area.textContent="Для прохождения теста войдите в аккаунт обучающегося и подключитесь к серверу.";return;}
-    let i=0,answers=[],startedAt=Date.now(),sending=false;
-    function show(){
-      if(i>=questions.length){
-        if(sending)return;sending=true;
-        area.innerHTML='<div class="module" style="text-align:center"><h2>Проверяем ответы…</h2><p id="customResultSync" aria-live="polite">Результат проверяется на сервере.</p></div>';
-        const sync=document.getElementById("customResultSync");
-        window.API.submitCustomTest(test.id,answers,Math.round((Date.now()-startedAt)/1000)).then(function(res){
-          if(!res||!res.success)throw new Error(res&&res.error||"Сервер не подтвердил результат.");
-          const pct=Number(res.percent)||0,grade=Number(res.grade)||2,score=Number(res.score)||0,max=Number(res.maxScore)||questions.length;
-          const key="test_"+topicId+"_custom_"+test.id;
-          window.state.results=window.state.results||{};
-          window.state.results[key]={grade:grade,percent:pct,score:score,max:max,attempts:res.attempts||1,finishedAt:new Date().toISOString(),courseId:courseId,testTitle:test.title};
-          if(window.saveStudentData)window.saveStudentData();
-          area.innerHTML='<div class="module" style="text-align:center"><h2>Тест завершён</h2><p>Правильных ответов: '+score+' из '+max+'</p><h2>Оценка: '+grade+'</h2><p>Попытка №'+(res.attempts||1)+'</p><button class="btn" id="retryCustomTest">Попробовать ещё раз</button></div>';
-          document.getElementById("retryCustomTest").onclick=function(){runTest(test,courseId,topicId);};
-        }).catch(function(err){area.innerHTML='<div class="module"><h3>Не удалось завершить тест</h3><p>'+esc(err.message||"Ошибка отправки")+'</p><p>Если попытки закончились, обратитесь к преподавателю.</p><button class="btn ghost" id="backCustomTest">Вернуться к тестам</button></div>';const b=document.getElementById("backCustomTest");if(b)b.onclick=()=>window.switchTopicTab("custom-test");});
-        return;
-      }
-      const q=questions[i];
-      area.innerHTML='<p><b>Вопрос '+(i+1)+' из '+questions.length+'</b></p><h3>'+esc(q.q)+'</h3>'+(q.options||[]).map((o,j)=>'<button class="btn ghost custom-answer" data-i="'+j+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+esc(o)+'</button>').join("");
-      area.querySelectorAll(".custom-answer").forEach(b=>b.onclick=function(){if(sending)return;answers[i]=Number(b.dataset.i);i++;show();});
-    }
-    show();
-  }
-  const originalTopic=window.renderTopicPage;
-  if(originalTopic)window.renderTopicPage=function(courseId,topicId){
-    if(!canCourse(courseId)){const app=document.getElementById("app");if(app)app.innerHTML="<div class='module'>Доступ к дисциплине закрыт.</div>";return;}
-    originalTopic.apply(this,arguments);
-    const lectures=customRecords(courseId,topicId,"lecture"),tests=customRecords(courseId,topicId,"test");
-    if(!lectures.length&&!tests.length)return;
-    const tabs=document.querySelector("#app > div[style*='display: flex']")||document.querySelector("#app .tab")?.parentElement;
-    const originalSwitch=window.switchTopicTab;
-    window.switchTopicTab=function(tab){
-      originalSwitch.apply(this,arguments);
-      if(tab==="lectures"&&lectures.length){const area=document.getElementById("topicContent");lectures.forEach(l=>{const d=document.createElement("details");d.className="lec-accordion";d.open=true;const s=document.createElement("summary");s.textContent=(l.code||"Дополнительная лекция")+" · "+l.title;s.style="padding:14px;font-weight:bold;cursor:pointer";const body=document.createElement("div");body.className="lec-content";body.style="padding:18px;border-top:1px solid var(--border);line-height:1.6";body.innerHTML=safeLectureHtml(l.content);d.appendChild(s);d.appendChild(body);area.appendChild(d);});}
-    };
-    window.switchTopicTab("lectures");
   };
 
   document.addEventListener("DOMContentLoaded",function(){filterCoursePicker();updateCourseChrome();});
