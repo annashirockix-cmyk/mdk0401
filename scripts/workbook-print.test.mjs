@@ -10,7 +10,7 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  const html = read("index.html");
  const sw = read("service-worker.js");
  assert.match(workbooks, /@page\{size:A4;margin:12mm 14mm/);
- assert.match(workbooks, /counter\\(pages\\)/);
+ assert.match(workbooks, /counter\(pages\)/);
  assert.match(workbooks, /\.wb-visual-table-wrap\{overflow:visible!important/);
  assert.match(workbooks, /\.wb-visual-table\{display:table!important/);
  assert.match(workbooks, /\.wb-visual-table thead\{display:table-header-group\}/);
