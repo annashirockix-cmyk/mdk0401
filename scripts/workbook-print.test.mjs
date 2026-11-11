@@ -18,6 +18,6 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(workbooks, /\.wb-gallery img,\.wb-photo img\{width:100%!important;height:auto!important/);
  assert.match(workbooks, /img loading="eager"/);
  assert.match(html, /workbooks\.js\?v=49/);
- assert.match(html, /style\.css\?v=22/);
- assert.match(sw, /portal-cache-v301/);
+ assert.match(html, /style\.css\?v=23/);
+ assert.match(sw, /portal-cache-v303/);
 });
