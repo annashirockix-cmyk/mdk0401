@@ -27,6 +27,7 @@ try {
       window.customContent.flashcards = rows.filter(x => x.type === "flashcards");
     }
     window.API = {
+      getTopicAccess: async () => ({ open: true }),
       getCustomContent: async () => ({ success: true, data: window.__constructorStore.map(x => ({ ...x })) }),
       saveCustomContent: async item => {
         const at = window.__constructorStore.findIndex(x => String(x.id) === String(item.id));
@@ -117,23 +118,27 @@ try {
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Workpiece");
   await page.locator("#studentCardFlip").click();
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Заготовка");
-  const sprutNavigation = await page.evaluate(() => {
-    const course = window.MDK_DATA.SPRUT_TP;
-    const topics = course.sections.flatMap(section => section.topics);
-    window.state.student = { role: "student", courses: ["07.01", "SPRUT_TP"] };
-    window.state.activeCourseId = "SPRUT_TP";
-    const results = topics.map(topic => {
-      window.renderTopicPage("SPRUT_TP", topic.id, "lectures");
-      const text = document.getElementById("app")?.innerText || "";
-      return { id: topic.id, code: topic.code, title: topic.title, visible: text.includes(topic.title), renderedTitle: document.querySelector("#app h1")?.innerText || "", idMatches: course.sections.flatMap(section => section.topics).filter(item => item.id === topic.id).length, preview: text.slice(0, 500) };
-    });
-    return { sectionCount: course.sections.length, topicCount: topics.length,
-      uniqueIds: new Set(topics.map(topic => topic.id)).size, results };
-  });
+  const sprutTopics = await page.evaluate(() => window.MDK_DATA.SPRUT_TP.sections.flatMap(section =>
+    section.topics.map(topic => ({ id: topic.id, code: topic.code, title: topic.title }))));
+  const sprutNavigation = { sectionCount: await page.evaluate(() => window.MDK_DATA.SPRUT_TP.sections.length),
+    topicCount: sprutTopics.length, uniqueIds: new Set(sprutTopics.map(topic => topic.id)).size, results: [] };
   assert.equal(sprutNavigation.sectionCount, 6, "All six SPRUT-TP sections must be present");
   assert.equal(sprutNavigation.topicCount, 14, "All 14 SPRUT-TP topics must be reachable");
   assert.equal(sprutNavigation.uniqueIds, 14, "Every SPRUT-TP topic must have a unique route ID");
-  for (const result of sprutNavigation.results) assert.ok(result.visible, "Student view opened the wrong SPRUT-TP topic: " + JSON.stringify(result));
+  for (const topic of sprutTopics) {
+    await page.evaluate(({ id }) => {
+      window.state.student = { role: "student", courses: ["07.01", "SPRUT_TP"] };
+      window.state.activeCourseId = "SPRUT_TP";
+      window.location.hash = "#/topic/SPRUT_TP/" + id + "/lectures";
+      window.renderTopicPage("SPRUT_TP", id, "lectures");
+    }, topic);
+    await page.waitForFunction(title => document.querySelector("#app h1")?.innerText.includes(title), topic.title);
+    const renderedTitle = await page.locator("#app h1").innerText();
+    const visible = renderedTitle.includes(topic.title);
+    const result = { ...topic, renderedTitle, visible };
+    sprutNavigation.results.push(result);
+    assert.ok(visible, "Student view opened the wrong SPRUT-TP topic: " + JSON.stringify(result));
+  }
   const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
   fs.mkdirSync("artifacts/constructors", { recursive: true });
   fs.writeFileSync("artifacts/constructors/report.json", JSON.stringify(report, null, 2));
