@@ -120,11 +120,11 @@
     if(["basic","technical"].indexOf(id)>=0)return;
     var course=courses[id];if(!course||!Array.isArray(course.sections))return;
     course.sections.forEach(function(section){(section.topics||[]).forEach(function(topic){
-      if(!Array.isArray(topic.lectures)||topic.__visualAtlasAdded)return;
+      if(!Array.isArray(topic.lectures)||topic.lectures.some(function(item){return item&&item.__visualAtlasAdded;}))return;
       var lecture=topic.lectures.find(function(item){return item&&typeof item.content==="string";});
       if(!lecture)return;
       var html=visualSupplement(id,topic);
-      if(html){lecture.content+=html;lecture.__visualAtlasAdded=true;topic.__visualAtlasAdded=true;count++;}
+      if(html){lecture.content+=html;lecture.__visualAtlasAdded=true;count++;}
     });});
   });
   window.LECTURE_VISUAL_ATLAS_COUNT=count;
