@@ -178,7 +178,7 @@ test("SPRUT-TP topic assessments and reference tables are specific to each topic
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=65/);
+  assert.match(html, /workbooks\.js\?v=66/);
   assert.match(html, /workbook-editorial\.js\?v=6/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
@@ -866,7 +866,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v337"));
+  assert.ok(sw.includes("portal-cache-v338"));
 });
 
 
@@ -887,7 +887,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v337/);
+  assert.match(sw, /portal-cache-v338/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -1018,7 +1018,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v337/);
+  assert.match(sw, /portal-cache-v338/);
 });
 
 
@@ -1049,11 +1049,22 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=65/);
-  assert.match(sw, /portal-cache-v337/);
+  assert.match(html, /workbooks\.js\?v=66/);
+  assert.match(sw, /portal-cache-v338/);
 });
 
 
+test("Basic and Technical English writing practice is specific to all seventeen units", () => {
+  const workbooks = read("workbooks.js");
+  for (const id of ["b-unit1","b-unit2","b-unit3","b-unit4","b-unit6","t-unit1","t-unit2","t-unit3","t-unit4","t-unit5","t-unit6","t-unit7","t-unit8","t-unit9","t-unit10","t-unit11","t-unit12"]) {
+    assert.match(workbooks, new RegExp('"' + id + '":\\{title:'));
+  }
+  for (const phrase of ["Introducing myself and my future profession","My town: Nizhnekamsk","Tatarstan: region and culture","Ecology and everyday action","Additional reading: summary and opinion","Materials selection note","Technical drawing interpretation","Machine tool operation brief","Electric circuit fault report","Energy production comparison","Electronic components explanation","Technical communication at work","Computer systems and CAD/CAM workflow","Automation cycle description","Maintenance log and diagnosis","Workshop safety and near-miss report"]) {
+    assert.ok(workbooks.includes(phrase), "missing unit-specific English practice: " + phrase);
+  }
+  assert.doesNotMatch(workbooks, /Составьте краткое письменное резюме темы на английском языке/);
+});
+ 
 test("workbook editorial coverage generates subject-specific cases for every populated course track", () => {
   const workbooks = read("workbooks.js");
   const html = read("index.html");
@@ -1075,8 +1086,8 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
-  assert.match(html, /workbooks\.js\?v=65/);
-  assert.match(sw, /portal-cache-v337/);
+  assert.match(html, /workbooks\.js\?v=66/);
+  assert.match(sw, /portal-cache-v338/);
 });
 
 
@@ -1103,9 +1114,9 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=65/);
+  assert.match(html, /workbooks\.js\?v=66/);
   assert.match(html, /style\.css\?v=24/);
-  assert.match(sw, /portal-cache-v337/);
+  assert.match(sw, /portal-cache-v338/);
 });
 
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {

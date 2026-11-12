@@ -9,7 +9,7 @@ const serviceWorker = fs.readFileSync(path.join(root, "service-worker.js"), "utf
 const workbooks = fs.readFileSync(path.join(root, "workbooks.js"), "utf8");
 
 test("Wikimedia workbook photos are cached after first successful online load", () => {
-  assert.match(serviceWorker, /portal-cache-v337/);
+  assert.match(serviceWorker, /portal-cache-v338/);
   assert.match(serviceWorker, /url\.hostname === 'commons\.wikimedia\.org'/);
   assert.match(serviceWorker, /url\.pathname\.includes\('\/wiki\/Special:FilePath\/'\)/);
   assert.match(serviceWorker, /networkResponse\.status === 200 \|\| networkResponse\.type === 'opaque'/);
