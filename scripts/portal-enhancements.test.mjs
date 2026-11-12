@@ -949,7 +949,15 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
 });
 
 
-test("English workbook renderer preserves source writing tasks instead of generic fallback assignments", () => {\n  const workbooks = read("workbooks.js");\n  assert.match(workbooks, /writing=Array\\.isArray\\(t\\.writing\\)\\?t\\.writing:\\[\\]/);\n  assert.match(workbooks, /wb-source-writing-task/);\n  assert.match(workbooks, /Grammar Exercises: Pronouns & Verbs/);\n  assert.match(workbooks, /Match words with definitions/);\n  assert.match(workbooks, /isEnglishCourse/);\n});\n\ntest("workbooks include differentiated supplemental professional learning blocks", () => {
+test("English workbook renderer preserves source writing tasks instead of generic fallback assignments", () => {
+  const workbooks = read("workbooks.js");
+  assert.match(workbooks, /writing=Array\.isArray\(t\.writing\)\?t\.writing:\[\]/);
+  assert.match(workbooks, /wb-source-writing-task/);
+  assert.match(workbooks, /Grammar Exercises: Pronouns & Verbs/);
+  assert.match(workbooks, /Match words with definitions/);
+  assert.match(workbooks, /isEnglishCourse/);
+});
+
   const workbooks = read("workbooks.js");
   const html = read("index.html");
   const sw = read("service-worker.js");
