@@ -18,7 +18,7 @@ test("custom lecture and test content has one student rendering path", () => {
  assert.ok(!editor.includes("function customRecords("));
  assert.ok(editor.includes("type:\"lecture\""));
  assert.ok(editor.includes("type:\"test\""));
- assert.ok(sw.includes("portal-cache-v322")); assert.ok(css.includes(".lec-content img"));
+ assert.ok(sw.includes("portal-cache-v323")); assert.ok(css.includes(".lec-content img"));
  assert.ok(enrichment.includes('["07.01","SPRUT_TP","basic","technical","EN","ENB","ENT"].indexOf(id)>=0'));
 });
 test("custom lecture sanitizer preserves safe images and figure captions", () => {
