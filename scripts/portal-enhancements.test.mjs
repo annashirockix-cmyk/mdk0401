@@ -539,7 +539,9 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
     assert.ok(visual.includes(term), "visual atlas missing " + term);
   }
   assert.match(css, /\.lecture-visual-atlas/);
-  assert.match(css, /\.lv-flow\{/);\n  assert.match(css, /\.lv-flow-node\{/);\n  assert.doesNotMatch(visual, /<svg|<path|<rect|graphSvg|flowSvg/);
+  assert.match(css, /\.lv-flow\{/);
+  assert.match(css, /\.lv-flow-node\{/);
+  assert.doesNotMatch(visual, /<svg|<path|<rect|graphSvg|flowSvg/);
   const sandbox = { window: { MDK_DATA: {} } };
   for (const file of ["data-0701.js", "data-0401.js", "data-0201.js", "data-0202.js", "data-mastercam.js", "data-sprut-tp.js", "data-material.js", "data-metrology.js", "data-safety.js"]) {
     vm.runInNewContext(read(file), sandbox, { timeout: 2000 });
