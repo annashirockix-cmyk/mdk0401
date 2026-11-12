@@ -19,12 +19,15 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(workbooks, /\.page figure,\.sheet figure[^}]*margin-left:0!important;margin-right:0!important/);
  assert.match(workbooks, /\.lecture-content h3,\.lecture-content h4,\.lecture-content h5\{break-after:avoid;page-break-after:avoid\}/);
  assert.match(workbooks, /img loading="eager"/);
+ assert.ok(workbooks.includes("safeLectureHtml(p.task||p.description"));
+ assert.ok(workbooks.includes('var allowed=["SECTION","P","BR"'));
+ assert.ok(workbooks.includes("Тема '+(index+1)"));
  assert.match(workbooks, /kind:"diagram"/);
  assert.match(workbooks, /x\.kind==="diagram"\?"wb-diagram"/);
  assert.match(workbooks, /class="wb-image-credit"/);
  assert.match(workbooks, /\.wb-gallery figure\.wb-diagram\{grid-column:1 \/ -1\}/);
  assert.match(workbooks, /\.wb-image-credit\{display:block;margin-top:4px/);
- assert.match(html, /workbooks\.js\?v=52/);
+ assert.match(html, /workbooks\.js\?v=53/);
  assert.match(html, /style\.css\?v=23/);
- assert.match(sw, /portal-cache-v306/);
+ assert.match(sw, /portal-cache-v307/);
 });
