@@ -94,7 +94,7 @@ test("online party games use supported server actions and stable player identity
 
 test("SPRUT-TP topic assessments and reference tables are specific to each topic", () => {
   const source = read("data-sprut-tp.js");
-  assert.equal((source.match(/"test":\\[\\{/g) || []).length, 14);
+  assert.equal((source.match(/"test":\[\{/g) || []).length, 14);
   assert.equal((source.match(/"q":/g) || []).length, 42);
   assert.doesNotMatch(source, /Какое утверждение верно по теме|Как следует поступить при недостатке исходных данных|Что обязательно после автоматизированного формирования документа/);
   assert.doesNotMatch(source, /Подготовьте письменный ответ по теме|Проверить полноту, последовательность и соответствие исходным требованиям/);
