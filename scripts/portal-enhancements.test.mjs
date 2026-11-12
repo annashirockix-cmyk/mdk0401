@@ -131,6 +131,9 @@ test("occupational safety workbook topics have distinct hazard-specific profiles
   for (const id of ["ot-1","ot-2","ot-3","ot-4","ot-5","ot-6","ot-7","ot-8","ot-9","ot-10","ot-11","ot-12"]) assert.ok(course.includes(JSON.stringify(id)), "missing safety profile: "+id);
   for (const phrase of ["Электробезопасность","Пожарная безопасность","Средства коллективной защиты","металлорежущем оборудовании","Слесарно-сборочные","Термические, химические и композитные","электрической опасности","Расследование несчастных случаев"]) assert.ok(course.includes(phrase), "missing topic-specific safety content: "+phrase);
   assert.doesNotMatch(course, /Допустим, нужно выполнить производственную задачу/);
+  const source = read("data-mastercam.js");
+  assert.ok(source.includes("Управление видами и анализ геометрии"));
+  assert.doesNotMatch(source, /[\u4e00-\u9fff]/, "unexpected CJK characters in Russian Mastercam course content");
 });
 
 test("Mastercam workbook topics have distinct CAM-specific editorial profiles", () => {
@@ -798,7 +801,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v324"));
+  assert.ok(sw.includes("portal-cache-v325"));
 });
 
 
@@ -819,7 +822,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v324/);
+  assert.match(sw, /portal-cache-v325/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -950,7 +953,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v324/);
+  assert.match(sw, /portal-cache-v325/);
 });
 
 
@@ -980,7 +983,7 @@ test("workbooks include differentiated supplemental professional learning blocks
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
   assert.match(html, /workbooks\.js\?v=60/);
-  assert.match(sw, /portal-cache-v324/);
+  assert.match(sw, /portal-cache-v325/);
 });
 
 
@@ -1006,7 +1009,7 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
   assert.match(html, /workbooks\.js\?v=60/);
-  assert.match(sw, /portal-cache-v324/);
+  assert.match(sw, /portal-cache-v325/);
 });
 
 
@@ -1035,7 +1038,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(css, /\.wb-visual-chart/);
   assert.match(html, /workbooks\.js\?v=60/);
   assert.match(html, /style\.css\?v=23/);
-  assert.match(sw, /portal-cache-v324/);
+  assert.match(sw, /portal-cache-v325/);
 });
 
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {
