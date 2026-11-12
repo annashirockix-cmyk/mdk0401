@@ -92,6 +92,14 @@ test("online party games use supported server actions and stable player identity
   assert.deepEqual(JSON.parse(JSON.stringify(voteView.answers)), {p1:"secret 1",p2:"secret 2"});
 });
 
+test("Mastercam workbook topics have distinct CAM-specific editorial profiles", () => {
+  const editorial = read("workbook-editorial.js");
+  const course = editorial.slice(editorial.indexOf('"MCAM": {'), editorial.indexOf('"SPRUT_TP": {'));
+  for (const id of ["mc-t11","mc-t12","mc-t13","mc-t21","mc-t22","mc-t23","mc-t31","mc-t32","mc-t41","mc-t42","mc-t51"]) assert.ok(course.includes(JSON.stringify(id)), "missing Mastercam profile: "+id);
+  for (const phrase of ["Рабочее пространство Mastercam","Zip2Go","Levels","WCS","Chaining","Tool Manager","Stock Setup","Contour","Pocket","постпроцессор"]) assert.ok(course.includes(phrase), "missing CAM-specific content: "+phrase);
+  assert.doesNotMatch(course, /Допустим, нужно выполнить производственную задачу/);
+});
+
 test("SPRUT-TP topic assessments and reference tables are specific to each topic", () => {
   const source = read("data-sprut-tp.js");
   assert.equal((source.match(/"test":\[\{/g) || []).length, 14);
