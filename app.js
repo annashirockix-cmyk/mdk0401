@@ -746,13 +746,22 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             contentArea.innerHTML = '<div class="module"><h3>Защищённый тест недоступен</h3><p>Серверный банк вопросов не подключён. Ответы не будут проверяться в браузере. Сообщите преподавателю.</p></div>';
             return;
         }
+        if (!window.state || !window.state.staff) {
+            contentArea.dataset.proctorAssessment = "0";
+            contentArea.innerHTML = '<div class="module"><h3>Предпросмотр теста недоступен</h3><p>Войдите в учётную запись преподавателя. Ключи ответов не хранятся в открытых файлах портала.</p></div>';
+            return;
+        }
         if (!questions.length) { contentArea.innerHTML = "<p>Вопросы не найдены.</p>"; return; }
         questions = questions.sort(() => Math.random() - 0.5);
-        
+        var previewOnly = true;
         var currentQ = 0, correct = 0;
         function renderQ() {
             if (currentQ >= questions.length) {
                 contentArea.dataset.proctorAssessment="0";
+                if (previewOnly) {
+                    contentArea.innerHTML = '<div class="module" style="text-align:center"><h2>Предпросмотр завершён</h2><p>Вопросы показаны без ключей и оценки. Студенческая попытка проверяется защищённым серверным банком.</p><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться</button></div>';
+                    return;
+                }
                 var pct = Math.round((correct / questions.length) * 100); 
                 var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
                 var resKey = selfWorkCode !== null && selfWorkCode !== undefined ? `self_${topicId}_${typeof selfWorkCode === "number" ? selfWorkCode : 0}` : `test_${topicId}`;
@@ -783,7 +792,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             q.options.forEach((opt, i) => { html += `<button class="btn ghost" style="display:block; width:100%; text-align:left; margin-top:5px; padding:10px;" onclick="window.answerInlineTest(${i})">${opt}</button>`; });
             contentArea.innerHTML = html;
         }
-        window.answerInlineTest = function(selected) { if (Number(selected) === Number(questions[currentQ].correct)) correct++; currentQ++; renderQ(); };
+        window.answerInlineTest = function(selected) { if (!previewOnly && Number(selected) === Number(questions[currentQ].correct)) correct++; currentQ++; renderQ(); };
         renderQ();
     };
     window.switchTopicTab(activeTab || 'lectures');
