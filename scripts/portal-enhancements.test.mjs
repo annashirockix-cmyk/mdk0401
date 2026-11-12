@@ -95,7 +95,7 @@ test("online party games use supported server actions and stable player identity
 test("MDK 02.02 contains expanded assembly automation lectures and assessments", () => {
   const source = read("data-0202.js");
   const html = read("index.html");
-  assert.match(html, /data-0202\.js\?v=2/);
+  assert.match(html, /data-0202\.js\?v=3/);
   assert.equal((source.match(/"id": "m0202-t/g) || []).length, 7);
   assert.equal((source.match(/"q":/g) || []).length, 28);
   assert.equal((source.match(/"practical": \{/g) || []).length, 7);
@@ -170,7 +170,7 @@ test("SPRUT-TP topic assessments and reference tables are specific to each topic
   assert.doesNotMatch(source, /программа ускоряет оформление, но не исправляет неверный чертёж/);
   for (const phrase of ["объяснять назначение СПРУТ-ТП","раздельно классифицировать ТП","различать назначение МК, ОК и КЭ","находить в установленной конфигурации проект","фиксировать пробелы и формулировать запросы","обосновывать заготовку и базы","разрабатывать структуру операции","распределять сведения между маршрутной","выявлять технологическую общность деталей","сравнивать новую деталь с аналогом","сопоставлять поверхности и требования чертежа","обосновывать включение заготовительных","определять состав нормы времени","выполнять нормоконтроль комплекта ТД"]) assert.ok(source.includes(phrase), "missing topic-specific learning outcome: "+phrase);
   assert.doesNotMatch(source, /Подготовьте письменный ответ по теме|Проверить полноту, последовательность и соответствие исходным требованиям/);
-  assert.equal((source.match(/"correct":/g) || []).length, 42);
+  assert.equal((source.match(/"correct":/g) || []).length, 0, "public SPRUT-TP questions must not contain answer keys");
   assert.match(source, /Маршрутная карта показывает последовательность операций/);
   assert.match(source, /Нормоконтроль и выпуск технологической документации/);
 });
@@ -178,7 +178,7 @@ test("SPRUT-TP topic assessments and reference tables are specific to each topic
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=65/);
+  assert.match(html, /workbooks\.js\?v=62/);
   assert.match(html, /workbook-editorial\.js\?v=6/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
@@ -349,7 +349,7 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
 test("SPRUT-TP is registered as a complete course with all major process types", () => {
  const source=read("data-sprut-tp.js"),sandbox={window:{MDK_DATA:{}}};
  const html=read("index.html");
- assert.match(html,/data-sprut-tp\.js\?v=5/);
+ assert.match(html,/data-sprut-tp\.js\?v=6/);
  vm.runInNewContext(source,sandbox,{timeout:1000});
  const course=sandbox.window.MDK_DATA.SPRUT_TP;
  assert.ok(course&&course.sections.length>=5);
@@ -364,7 +364,54 @@ test("lecture enrichment includes targeted Mastercam and MDK learning supports",
  for(const id of ["MCAM","02.01","02.02","04.01","MAT","MET","OT"])assert.ok(source.includes('id==="'+id+'"'));
  assert.ok(source.includes("lecture-notes-lines"));
 });
-test("MDK 07.01 quiz questions have valid, non-duplicated options and varied answer positions", () => {
+test("lecture atlas uses topic-matched photos and diagrams instead of generic repeated graphics", () => {
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  const visual = read("lecture-visual-atlas.js");
+  const css = read("lecture-visual-atlas.css");
+  assert.match(html, /lecture-visual-atlas\.js\?v=5/);
+  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=7/);
+  assert.match(html, /sprut-tp-document-examples\.js\?v=3/);
+  assert.match(html, /lecture-visual-atlas\.css\?v=6/);
+  assert.ok(sw.includes("./sprut-tp-document-examples.js"));
+  assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
+  assert.ok(sw.includes("./lecture-visual-atlas.js"));
+  assert.ok(sw.includes("./lecture-visual-atlas.css"));
+  assert.ok(visual.includes('if(id==="SPRUT_TP")return null'));
+  assert.ok(!visual.includes("LOCAL.sprutInterface") && !visual.includes("LOCAL.sprutProject") && !visual.includes("LOCAL.sprutTools"));
+  assert.ok(visual.includes("Расположение нулевой точки фрезерной заготовки"));
+  assert.ok(visual.includes("return COMMONS.cncMill"), "milling operation topics should use an equipment photo, not a zero-point diagram");
+  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowHtml", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
+    assert.ok(visual.includes(term), "visual atlas missing " + term);
+  }
+  assert.match(css, /\.lecture-visual-atlas/);
+  assert.match(css, /\.lv-flow\{/);
+  assert.match(css, /\.lv-flow-node\{/);
+  assert.doesNotMatch(visual, /<svg|<path|<rect|graphSvg|flowSvg/);
+  const sandbox = { window: { MDK_DATA: {} } };
+  for (const file of ["data-0701.js", "data-0401.js", "data-0201.js", "data-0202.js", "data-mastercam.js", "data-sprut-tp.js", "data-material.js", "data-metrology.js", "data-safety.js"]) {
+    vm.runInNewContext(read(file), sandbox, { timeout: 2000 });
+  }
+  vm.runInNewContext(visual, sandbox, { timeout: 2000 });
+  assert.ok(sandbox.window.LECTURE_VISUAL_ATLAS_COUNT >= 30, "expected topic-matched visuals in the course collection");
+  for (const course of Object.values(sandbox.window.MDK_DATA)) {
+    for (const topic of (course.sections || []).flatMap(section => section.topics || [])) {
+      assert.ok((topic.lectures || []).filter(lecture => lecture && lecture.__visualAtlasAdded).length <= 1, "visual supplement duplicated within topic " + topic.title);
+    }
+  }
+  const atlasImageSources = Object.values(sandbox.window.MDK_DATA).flatMap(course => course.sections || []).flatMap(section => section.topics || []).flatMap(topic => topic.lectures || []).flatMap(lecture => [...String(lecture.content || "").matchAll(/<section class="lecture-visual-atlas">([\s\S]*?)<\/section>/g)].flatMap(block => [...block[1].matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1])));
+  assert.equal(new Set(atlasImageSources).size, atlasImageSources.length, "the same photo must not be repeated across lecture visual supplements");
+  for (const id of ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT"]) {
+    const course = sandbox.window.MDK_DATA[id];
+    assert.ok(course && course.sections.length, "course missing: " + id);
+    const lectures = course.sections.flatMap(section => section.topics || []).flatMap(topic => topic.lectures || []);
+    assert.ok(lectures.length > 0, "no lectures in " + id);
+    assert.ok(lectures.some(lecture => lecture.content && lecture.content.includes("lecture-visual-atlas")), "visual atlas missing in " + id);
+  }
+});
+
+
+test("MDK 07.01 quiz prompts and options remain available without client answer keys", () => {
   const source = read("data-0701.js");
   const sandbox = { window: { MDK_DATA: {} } };
   vm.runInNewContext(source, sandbox, { timeout: 1000 });
@@ -375,18 +422,15 @@ test("MDK 07.01 quiz questions have valid, non-duplicated options and varied ans
   const topics = moduleData.sections.flatMap((section) => section.topics || []);
   const questions = topics.flatMap((topic) => (topic.test || []).map((question) => ({ topic: topic.title, ...question })));
   assert.ok(questions.length >= 80, "expected the full topic quiz bank");
-  const positions = new Set();
   for (const question of questions) {
     assert.equal(typeof question.q, "string");
     assert.ok(question.q.trim().length > 0, "question text must not be empty");
     assert.ok(Array.isArray(question.options) && question.options.length >= 3, question.q);
     assert.ok(question.options.every((option) => typeof option === "string" && option.trim()), question.q);
-    assert.ok(Number.isInteger(question.correct) && question.correct >= 0 && question.correct < question.options.length, question.q);
+    assert.equal(Object.prototype.hasOwnProperty.call(question, "correct"), false, "answer keys must not be in the public course object");
     const normalized = question.options.map((option) => option.trim().toLocaleLowerCase("ru"));
     assert.equal(new Set(normalized).size, normalized.length, "duplicate options in: " + question.q);
-    positions.add(question.correct);
   }
-  assert.ok(positions.size >= 3, "correct answers should not always occupy the same position");
 });
 
 
@@ -410,12 +454,11 @@ test("MDK 07.01 has a core quiz for every teaching topic", () => {
   assert.equal(hardCount, 56, "advanced bank should contain 56 additional questions");
 });
 
-test("MDK 07.01 additional quiz bank has valid varied answer keys", () => {
+test("MDK 07.01 additional quiz bank keeps questions but no public answer keys", () => {
   const sandbox = { window: {} };
   vm.runInNewContext(read("hard-questions.js"), sandbox, { timeout: 1000 });
   const bank = sandbox.window.HARD_TESTS;
   const topicIds = new Set(["t-1-1","t-1-2","t-1-3","t-1-4","t-2-1","t-2-2","t-2-3","t-3-1","t-3-2","t-3-3","t-3-4","t-3-5","t-3-6","t-4-1","t-4-2","t-4-3","t-4-4","t-5-1","t-5-2","t-5-3","t-5-4"]);
-  const positions = new Set();
   let count = 0;
   for (const [topicId, questions] of Object.entries(bank)) {
     if (!topicId.startsWith("t-")) continue;
@@ -425,14 +468,12 @@ test("MDK 07.01 additional quiz bank has valid varied answer keys", () => {
       count++;
       assert.ok(question.q && question.q.trim(), "empty hard question");
       assert.ok(Array.isArray(question.options) && question.options.length >= 3, question.q);
-      assert.ok(Number.isInteger(question.correct) && question.correct >= 0 && question.correct < question.options.length, question.q);
+      assert.equal(Object.prototype.hasOwnProperty.call(question, "correct"), false, "answer keys must not be public");
       const normalized = question.options.map((option) => option.trim().toLocaleLowerCase("ru"));
       assert.equal(new Set(normalized).size, normalized.length, "duplicate options: " + question.q);
-      positions.add(question.correct);
     }
   }
   assert.ok(count >= 50, "additional bank should contain at least 50 MDK 07.01 questions");
-  assert.ok(positions.size >= 3, "additional correct answers should use varied positions");
   assert.doesNotMatch(read("hard-questions.js"), /Не менее 1 метра от вращающихся частей|16К20|6Р82/);
 });
 
@@ -487,15 +528,17 @@ test("MDK 07.01 topic tests avoid several known cross-topic repeats", () => {
   assert.ok(hardPrompts.some((prompt) => prompt.includes("значение G98/G99 нужно сверять")));
 });
 
-test("MDK 07.01 numeric practical answer keys match their stated data", () => {
+test("MDK 07.01 numeric practical prompts do not expose expected answers in public data", () => {
   const sandbox = { window: { MDK_DATA: {} } };
   vm.runInNewContext(read("data-0701.js"), sandbox, { timeout: 1000 });
   const practicals = sandbox.window.MDK_DATA["07.01"].sections.flatMap((section) => section.topics || []).flatMap((topic) => topic.practicals || []);
   const byCode = new Map(practicals.map((item) => [item.code, item]));
-  const expected = { "ПЗ 1.1": "955", "ПЗ 1.2": "1.46", "ПЗ 2.1": "2.5", "ПЗ 2.2": "14.5", "ПЗ 2.3": "0.1", "ПЗ 3.1": "0.4", "ПЗ 3.2": "5", "ПЗ 3.3": "40", "ПЗ 3.5": "280", "ПЗ 4.4": "480" };
-  for (const [code, answer] of Object.entries(expected)) assert.equal(byCode.get(code)?.expectedAnswer, answer, code);
-  assert.equal(byCode.get("ПЗ 1.3")?.expectedAnswer, undefined, "PZ 1.3 is a structural practical, not an unsupported gear-ratio calculation");
-  assert.equal(byCode.get("ПЗ 5.4")?.expectedAnswer, undefined, "PZ 5.4 is a slicer setup practical, not unrelated arithmetic");
+  for (const code of ["ПЗ 1.1","ПЗ 1.2","ПЗ 2.1","ПЗ 2.2","ПЗ 2.3","ПЗ 3.1","ПЗ 3.2","ПЗ 3.3","ПЗ 3.5","ПЗ 4.4"]) {
+    assert.ok(byCode.has(code), "missing practical " + code);
+    assert.equal(byCode.get(code).expectedAnswer, undefined, code + " must not expose its expected answer");
+  }
+  assert.equal(byCode.get("ПЗ 1.3")?.expectedAnswer, undefined, "PZ 1.3 is a structural practical");
+  assert.equal(byCode.get("ПЗ 5.4")?.expectedAnswer, undefined, "PZ 5.4 is a slicer setup practical");
   assert.match(byCode.get("ПЗ 5.4").title, /параметров печати/);
   assert.match(byCode.get("ПЗ 5.4").task, /подготовьте задание для слайсера/);
   assert.match(byCode.get("ПЗ 5.4").task, /высота слоя, ширина линии, число периметров, заполнение/);
@@ -567,7 +610,7 @@ test("MDK 07.01 topic 4.3 quiz tests program-development theory, not turning-cyc
 });
 
 
-test("SPRUT-TP has a topic-specific assessment bank with stable unique topic ids", () => {
+test("SPRUT-TP has topic-specific assessment prompts without public answer keys", () => {
   const sandbox = { window: { MDK_DATA: {}, HARD_TESTS: {} } };
   vm.runInNewContext(read("data-sprut-tp.js"), sandbox, { timeout: 1000 });
   vm.runInNewContext(read("sprut-tp-question-bank.js"), sandbox, { timeout: 1000 });
@@ -578,18 +621,23 @@ test("SPRUT-TP has a topic-specific assessment bank with stable unique topic ids
   assert.equal(sandbox.window.SPRUT_TP_QUESTION_TOPICS, 14);
   assert.ok(sandbox.window.SPRUT_TP_QUESTION_COUNT >= 50);
   const questions = topics.flatMap(topic => topic.test || []);
-  const answerPositions = new Set();
   const questionTexts = new Set();
   for (const question of questions) {
     assert.ok(question.q && question.q.trim().length > 10);
     assert.equal(question.options.length, 4);
-    assert.ok(question.correct >= 0 && question.correct < question.options.length);
+    assert.equal(Object.prototype.hasOwnProperty.call(question, "correct"), false, "answer keys must not be public");
     assert.equal(new Set(question.options.map(x => x.toLocaleLowerCase("ru"))).size, 4);
     assert.ok(!questionTexts.has(question.q), "question text must be unique: " + question.q);
     questionTexts.add(question.q);
-    answerPositions.add(question.correct);
   }
-  assert.ok(answerPositions.size >= 3, "correct answer positions should vary");
+});
+
+test("course training routes open topic tests through the protected server workflow", () => {
+  const app = read("app.js");
+  assert.match(app, /window\.renderSecureTrainingPage\(mdkId\)/);
+  assert.match(app, /window\.renderTopicPage\(courseId, topic\.id, "test"\)/);
+  assert.match(app, /window\.API\.getBuiltInTest/);
+  assert.match(app, /window\.API\.submitBuiltInTest/);
 });
 
 test("course selector and exam engine use the new course bank without duplicate or placeholder questions", () => {
@@ -597,7 +645,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   const sw = read("service-worker.js");
   const exam = read("exam-engine.js");
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
-  assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
+  assert.match(html, /sprut-tp-question-bank\.js\?v=2/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
   assert.match(sw, /portal-cache-v[0-9]+/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
@@ -614,7 +662,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
   assert.match(html, /lecture-visual-atlas\.js\?v=5/);
-  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=7/);
+  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=6/);
   assert.match(html, /sprut-tp-document-examples\.js\?v=3/);
   assert.match(html, /lecture-visual-atlas\.css\?v=6/);
   assert.ok(sw.includes("./sprut-tp-document-examples.js"));
@@ -672,10 +720,6 @@ test("SPRUT-TP theory and practical assignments are expanded with topic-specific
     assert.match(practical.task,/Критерии оценивания/);
     assert.match(practical.task,/Вопросы для защиты/);
   }
-  assert.equal((upgrade.match(/<h3>Дополнение:/g)||[]).length,42, "all supplemental headings must be clearly marked as additions");
-  assert.doesNotMatch(upgrade, /<h3>[456]\.\s/);
-  for(const topic of topics){
-  }
 });
 
 test("SPRUT-TP includes filled examples for every listed document and practical cases for all topics", () => {
@@ -718,7 +762,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   const app = read("app.js");
   assert.match(app, /id !== "EN"/);
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
-  assert.match(html, /app\.js\?v=50/);
+  assert.match(html, /app\.js\?v=51/);
   assert.match(html, /english-tools\.js\?v=9/);
   assert.match(html, /english-vpr-engine\.js\?v=\d+/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);
@@ -822,7 +866,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v336"));
+  assert.ok(sw.includes("portal-cache-v337"));
 });
 
 
@@ -843,7 +887,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v336/);
+  assert.match(sw, /portal-cache-v337/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -910,13 +954,13 @@ test("semester tests are student-visible and scored only by the protected server
 });
 
 
-test("English semester source bank is loaded before the student assessment engine", () => {
+test("English semester and VPR answer data are not loaded into the public student page", () => {
   const html = read("index.html");
   const source = read("english-assessment-data.js");
-  assert.match(html, /english-assessment-data\.js\?v=1/);
-  assert.ok(html.indexOf("english-assessment-data.js") < html.indexOf("english-vpr-engine.js"));
-  assert.match(source, /window\.SEMESTER_TESTS\.basic/);
-  assert.match(source, /window\.SEMESTER_TESTS\.technical/);
+  assert.doesNotMatch(html, /english-assessment-data\.js/);
+  assert.doesNotMatch(source, /\bcorrect\s*:/);
+  assert.match(read("english-vpr-engine.js"), /window\.API\.getEnglishSemesterTests/);
+  assert.match(read("english-vpr-engine.js"), /window\.API\.getEnglishVprExam/);
 });
 
 
@@ -974,7 +1018,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v336/);
+  assert.match(sw, /portal-cache-v337/);
 });
 
 
@@ -1005,8 +1049,8 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=65/);
-  assert.match(sw, /portal-cache-v336/);
+  assert.match(html, /workbooks\.js\?v=62/);
+  assert.match(sw, /portal-cache-v337/);
 });
 
 
@@ -1031,8 +1075,8 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
-  assert.match(html, /workbooks\.js\?v=65/);
-  assert.match(sw, /portal-cache-v336/);
+  assert.match(html, /workbooks\.js\?v=62/);
+  assert.match(sw, /portal-cache-v337/);
 });
 
 
@@ -1059,9 +1103,9 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=65/);
+  assert.match(html, /workbooks\.js\?v=62/);
   assert.match(html, /style\.css\?v=24/);
-  assert.match(sw, /portal-cache-v336/);
+  assert.match(sw, /portal-cache-v337/);
 });
 
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {
