@@ -95,7 +95,7 @@ test("online party games use supported server actions and stable player identity
 test("MDK 02.02 contains expanded assembly automation lectures and assessments", () => {
   const source = read("data-0202.js");
   const html = read("index.html");
-  assert.match(html, /data-0202\.js\?v=2/);
+  assert.match(html, /data-0202\.js\?v=3/);
   assert.equal((source.match(/"id": "m0202-t/g) || []).length, 7);
   assert.equal((source.match(/"q":/g) || []).length, 28);
   assert.equal((source.match(/"practical": \{/g) || []).length, 7);
@@ -349,7 +349,7 @@ test("MDK 07.01 practicals match their topics and the method PDF link resolves",
 test("SPRUT-TP is registered as a complete course with all major process types", () => {
  const source=read("data-sprut-tp.js"),sandbox={window:{MDK_DATA:{}}};
  const html=read("index.html");
- assert.match(html,/data-sprut-tp\.js\?v=5/);
+ assert.match(html,/data-sprut-tp\.js\?v=6/);
  vm.runInNewContext(source,sandbox,{timeout:1000});
  const course=sandbox.window.MDK_DATA.SPRUT_TP;
  assert.ok(course&&course.sections.length>=5);
@@ -598,7 +598,7 @@ test("course selector and exam engine use the new course bank without duplicate 
   const sw = read("service-worker.js");
   const exam = read("exam-engine.js");
   assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
-  assert.match(html, /sprut-tp-question-bank\.js\?v=1/);
+  assert.match(html, /sprut-tp-question-bank\.js\?v=2/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
   assert.match(sw, /portal-cache-v[0-9]+/);
   assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
