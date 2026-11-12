@@ -533,6 +533,8 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   assert.ok(sw.includes("./lecture-visual-atlas.css"));
   assert.ok(visual.includes('if(id==="SPRUT_TP")return null'));
   assert.ok(!visual.includes("LOCAL.sprutInterface") && !visual.includes("LOCAL.sprutProject") && !visual.includes("LOCAL.sprutTools"));
+  assert.ok(visual.includes("Расположение нулевой точки фрезерной заготовки"));
+  assert.ok(visual.includes("return COMMONS.cncMill"), "milling operation topics should use an equipment photo, not a zero-point diagram");
   for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
     assert.ok(visual.includes(term), "visual atlas missing " + term);
   }
