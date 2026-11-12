@@ -364,7 +364,7 @@ test("lecture enrichment includes targeted Mastercam and MDK learning supports",
  for(const id of ["MCAM","02.01","02.02","04.01","MAT","MET","OT"])assert.ok(source.includes('id==="'+id+'"'));
  assert.ok(source.includes("lecture-notes-lines"));
 });
-test("MDK 07.01 quiz questions have valid, non-duplicated options and varied answer positions", () => {
+test("MDK 07.01 quiz prompts and options remain available without client answer keys", () => {
   const source = read("data-0701.js");
   const sandbox = { window: { MDK_DATA: {} } };
   vm.runInNewContext(source, sandbox, { timeout: 1000 });
@@ -375,18 +375,15 @@ test("MDK 07.01 quiz questions have valid, non-duplicated options and varied ans
   const topics = moduleData.sections.flatMap((section) => section.topics || []);
   const questions = topics.flatMap((topic) => (topic.test || []).map((question) => ({ topic: topic.title, ...question })));
   assert.ok(questions.length >= 80, "expected the full topic quiz bank");
-  const positions = new Set();
   for (const question of questions) {
     assert.equal(typeof question.q, "string");
     assert.ok(question.q.trim().length > 0, "question text must not be empty");
     assert.ok(Array.isArray(question.options) && question.options.length >= 3, question.q);
     assert.ok(question.options.every((option) => typeof option === "string" && option.trim()), question.q);
-    assert.ok(Number.isInteger(question.correct) && question.correct >= 0 && question.correct < question.options.length, question.q);
+    assert.equal(Object.prototype.hasOwnProperty.call(question, "correct"), false, "answer keys must not be in the public course object");
     const normalized = question.options.map((option) => option.trim().toLocaleLowerCase("ru"));
     assert.equal(new Set(normalized).size, normalized.length, "duplicate options in: " + question.q);
-    positions.add(question.correct);
   }
-  assert.ok(positions.size >= 3, "correct answers should not always occupy the same position");
 });
 
 
@@ -410,12 +407,11 @@ test("MDK 07.01 has a core quiz for every teaching topic", () => {
   assert.equal(hardCount, 56, "advanced bank should contain 56 additional questions");
 });
 
-test("MDK 07.01 additional quiz bank has valid varied answer keys", () => {
+test("MDK 07.01 additional quiz bank keeps questions but no public answer keys", () => {
   const sandbox = { window: {} };
   vm.runInNewContext(read("hard-questions.js"), sandbox, { timeout: 1000 });
   const bank = sandbox.window.HARD_TESTS;
   const topicIds = new Set(["t-1-1","t-1-2","t-1-3","t-1-4","t-2-1","t-2-2","t-2-3","t-3-1","t-3-2","t-3-3","t-3-4","t-3-5","t-3-6","t-4-1","t-4-2","t-4-3","t-4-4","t-5-1","t-5-2","t-5-3","t-5-4"]);
-  const positions = new Set();
   let count = 0;
   for (const [topicId, questions] of Object.entries(bank)) {
     if (!topicId.startsWith("t-")) continue;
@@ -425,14 +421,12 @@ test("MDK 07.01 additional quiz bank has valid varied answer keys", () => {
       count++;
       assert.ok(question.q && question.q.trim(), "empty hard question");
       assert.ok(Array.isArray(question.options) && question.options.length >= 3, question.q);
-      assert.ok(Number.isInteger(question.correct) && question.correct >= 0 && question.correct < question.options.length, question.q);
+      assert.equal(Object.prototype.hasOwnProperty.call(question, "correct"), false, "answer keys must not be public");
       const normalized = question.options.map((option) => option.trim().toLocaleLowerCase("ru"));
       assert.equal(new Set(normalized).size, normalized.length, "duplicate options: " + question.q);
-      positions.add(question.correct);
     }
   }
   assert.ok(count >= 50, "additional bank should contain at least 50 MDK 07.01 questions");
-  assert.ok(positions.size >= 3, "additional correct answers should use varied positions");
   assert.doesNotMatch(read("hard-questions.js"), /Не менее 1 метра от вращающихся частей|16К20|6Р82/);
 });
 
@@ -487,15 +481,17 @@ test("MDK 07.01 topic tests avoid several known cross-topic repeats", () => {
   assert.ok(hardPrompts.some((prompt) => prompt.includes("значение G98/G99 нужно сверять")));
 });
 
-test("MDK 07.01 numeric practical answer keys match their stated data", () => {
+test("MDK 07.01 numeric practical prompts do not expose expected answers in public data", () => {
   const sandbox = { window: { MDK_DATA: {} } };
   vm.runInNewContext(read("data-0701.js"), sandbox, { timeout: 1000 });
   const practicals = sandbox.window.MDK_DATA["07.01"].sections.flatMap((section) => section.topics || []).flatMap((topic) => topic.practicals || []);
   const byCode = new Map(practicals.map((item) => [item.code, item]));
-  const expected = { "ПЗ 1.1": "955", "ПЗ 1.2": "1.46", "ПЗ 2.1": "2.5", "ПЗ 2.2": "14.5", "ПЗ 2.3": "0.1", "ПЗ 3.1": "0.4", "ПЗ 3.2": "5", "ПЗ 3.3": "40", "ПЗ 3.5": "280", "ПЗ 4.4": "480" };
-  for (const [code, answer] of Object.entries(expected)) assert.equal(byCode.get(code)?.expectedAnswer, answer, code);
-  assert.equal(byCode.get("ПЗ 1.3")?.expectedAnswer, undefined, "PZ 1.3 is a structural practical, not an unsupported gear-ratio calculation");
-  assert.equal(byCode.get("ПЗ 5.4")?.expectedAnswer, undefined, "PZ 5.4 is a slicer setup practical, not unrelated arithmetic");
+  for (const code of ["ПЗ 1.1","ПЗ 1.2","ПЗ 2.1","ПЗ 2.2","ПЗ 2.3","ПЗ 3.1","ПЗ 3.2","ПЗ 3.3","ПЗ 3.5","ПЗ 4.4"]) {
+    assert.ok(byCode.has(code), "missing practical " + code);
+    assert.equal(byCode.get(code).expectedAnswer, undefined, code + " must not expose its expected answer");
+  }
+  assert.equal(byCode.get("ПЗ 1.3")?.expectedAnswer, undefined, "PZ 1.3 is a structural practical");
+  assert.equal(byCode.get("ПЗ 5.4")?.expectedAnswer, undefined, "PZ 5.4 is a slicer setup practical");
   assert.match(byCode.get("ПЗ 5.4").title, /параметров печати/);
   assert.match(byCode.get("ПЗ 5.4").task, /подготовьте задание для слайсера/);
   assert.match(byCode.get("ПЗ 5.4").task, /высота слоя, ширина линии, число периметров, заполнение/);
@@ -567,7 +563,7 @@ test("MDK 07.01 topic 4.3 quiz tests program-development theory, not turning-cyc
 });
 
 
-test("SPRUT-TP has a topic-specific assessment bank with stable unique topic ids", () => {
+test("SPRUT-TP has topic-specific assessment prompts without public answer keys", () => {
   const sandbox = { window: { MDK_DATA: {}, HARD_TESTS: {} } };
   vm.runInNewContext(read("data-sprut-tp.js"), sandbox, { timeout: 1000 });
   vm.runInNewContext(read("sprut-tp-question-bank.js"), sandbox, { timeout: 1000 });
@@ -578,18 +574,23 @@ test("SPRUT-TP has a topic-specific assessment bank with stable unique topic ids
   assert.equal(sandbox.window.SPRUT_TP_QUESTION_TOPICS, 14);
   assert.ok(sandbox.window.SPRUT_TP_QUESTION_COUNT >= 50);
   const questions = topics.flatMap(topic => topic.test || []);
-  const answerPositions = new Set();
   const questionTexts = new Set();
   for (const question of questions) {
     assert.ok(question.q && question.q.trim().length > 10);
     assert.equal(question.options.length, 4);
-    assert.ok(question.correct >= 0 && question.correct < question.options.length);
+    assert.equal(Object.prototype.hasOwnProperty.call(question, "correct"), false, "answer keys must not be public");
     assert.equal(new Set(question.options.map(x => x.toLocaleLowerCase("ru"))).size, 4);
     assert.ok(!questionTexts.has(question.q), "question text must be unique: " + question.q);
     questionTexts.add(question.q);
-    answerPositions.add(question.correct);
   }
-  assert.ok(answerPositions.size >= 3, "correct answer positions should vary");
+});
+
+test("course training routes open topic tests through the protected server workflow", () => {
+  const app = read("app.js");
+  assert.match(app, /window\.renderSecureTrainingPage\(mdkId\)/);
+  assert.match(app, /window\.renderTopicPage\(courseId, topic\.id, "test"\)/);
+  assert.match(app, /window\.API\.getBuiltInTest/);
+  assert.match(app, /window\.API\.submitBuiltInTest/);
 });
 
 test("course selector and exam engine use the new course bank without duplicate or placeholder questions", () => {
