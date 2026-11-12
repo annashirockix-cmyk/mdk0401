@@ -137,7 +137,7 @@ test("lecture enrichment supplies topic-specific written practice for technical 
   const source = read("lecture-enrichment.js");
   assert.match(source, /function writtenPractice\(id,title\)/);
   assert.doesNotMatch(source, /Составьте краткую технологическую карту по теме/);
-  for (const phrase of ["санитарная оценка рабочего места","контроль специального процесса","чек-лист допуска","дерево поиска неисправности","протокол измерений","диаграммы Fe–C","статуса средства измерений","Карта оборудования и сигналов"]) assert.ok(source.includes(phrase), "missing topic-specific task: "+phrase);
+  for (const phrase of ["санитарная оценка рабочего места","контроль специального процесса","чек-лист допуска","дерево поиска неисправности","протокол измерений","диаграммы Fe–C","статус средства измерений","Карта оборудования и сигналов"]) assert.ok(source.includes(phrase), "missing topic-specific task: "+phrase);
   for (const phrase of ["Проверка геометрии","Контроль цепочки","Stock Setup","Verify и постпроцессирование","Карта оценки риска","Безопасная работа с электрооборудованием","действия при пожаре","предсменный осмотр станка","протокол измерений","диагностическая карта","алгоритм автоматизированного цикла"]) assert.ok(source.toLowerCase().includes(phrase.toLowerCase()), "missing topic-specific lecture practice: "+phrase);
 });
 
