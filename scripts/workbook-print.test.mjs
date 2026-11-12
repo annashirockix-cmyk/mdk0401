@@ -11,7 +11,7 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  const sw = read("service-worker.js");
  assert.match(workbooks, /@page\{size:A4;margin:12mm 14mm/);
  assert.match(workbooks, /counter\(pages\)/);
- assert.match(workbooks, /\.wb-visual-table-wrap\{overflow:visible!important/);
+ assert.match(workbooks, /\.wb-answer-group\{break-inside:avoid;page-break-inside:avoid\}/);\n assert.match(workbooks, /class="wb-answer-group"/);\n assert.match(workbooks, /\.wb-visual-table-wrap\{overflow:visible!important/);
  assert.match(workbooks, /\.wb-visual-table\{display:table!important/);
  assert.match(workbooks, /\.wb-visual-table thead\{display:table-header-group\}/);
  assert.match(workbooks, /\.wb-visual-table tr\{break-inside:avoid;page-break-inside:avoid\}/);
