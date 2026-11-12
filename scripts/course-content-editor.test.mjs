@@ -29,6 +29,11 @@ test("custom lecture sanitizer preserves safe images and figure captions", () =>
  assert.ok(app.includes("\"alt\", \"width\", \"height\", \"loading\""));
 });
 test("flashcard constructor saves and reopens saved sets", () => {
+ const workflow = read(".github/workflows/portal-syntax.yml");
+ const audit = read("scripts/course-constructor-browser-audit.mjs");
+ assert.ok(workflow.includes("Run real-browser course constructor round-trip audit"));
+ assert.ok(audit.includes("Содержимое тестовой лекции"));
+ assert.ok(audit.includes("Карточки конструктора"));
  const cards = read("flashcard-editor.js");
  assert.ok(cards.includes("type:\"flashcards\""));
  assert.ok(cards.includes("function renderSaved("));
