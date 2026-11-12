@@ -92,6 +92,14 @@ test("online party games use supported server actions and stable player identity
   assert.deepEqual(JSON.parse(JSON.stringify(voteView.answers)), {p1:"secret 1",p2:"secret 2"});
 });
 
+test("occupational safety workbook topics have distinct hazard-specific profiles", () => {
+  const editorial = read("workbook-editorial.js");
+  const course = editorial.slice(editorial.indexOf('"OT": {'), editorial.indexOf('"MCAM": {'));
+  for (const id of ["ot-1","ot-2","ot-3","ot-4","ot-5","ot-6","ot-7","ot-8","ot-9","ot-10","ot-11","ot-12"]) assert.ok(course.includes(JSON.stringify(id)), "missing safety profile: "+id);
+  for (const phrase of ["Электробезопасность","Пожарная безопасность","Средства коллективной защиты","металлорежущем оборудовании","Слесарно-сборочные","Термические, химические и композитные","электрической опасности","Расследование несчастных случаев"]) assert.ok(course.includes(phrase), "missing topic-specific safety content: "+phrase);
+  assert.doesNotMatch(course, /Допустим, нужно выполнить производственную задачу/);
+});
+
 test("Mastercam workbook topics have distinct CAM-specific editorial profiles", () => {
   const editorial = read("workbook-editorial.js");
   const course = editorial.slice(editorial.indexOf('"MCAM": {'), editorial.indexOf('"SPRUT_TP": {'));
