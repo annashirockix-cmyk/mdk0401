@@ -134,7 +134,7 @@ try {
   assert.equal(sprutNavigation.topicCount, 14, "All 14 SPRUT-TP topics must be reachable");
   assert.equal(sprutNavigation.uniqueIds, 14, "Every SPRUT-TP topic must have a unique route ID");
   for (const result of sprutNavigation.results) assert.ok(result.visible, "Student view opened the wrong SPRUT-TP topic: " + result.code + " " + result.title);
-  const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true , sprutNavigation };
+  const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
   fs.mkdirSync("artifacts/constructors", { recursive: true });
   fs.writeFileSync("artifacts/constructors/report.json", JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
