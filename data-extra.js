@@ -55,8 +55,8 @@
         ],
         practicals: [],
         test: [
-            { q: "Первый станок с ЧПУ появился в", options: ["1940","1952","1965","1975"], correct: 1 },
-            { q: "Что означает CNC?", options: ["Central Numerical Control","Computer Numerical Control","Common NC","Complex NC"], correct: 1 }
+            { q: "Первый станок с ЧПУ появился в", options: ["1940","1952","1965","1975"]},
+            { q: "Что означает CNC?", options: ["Central Numerical Control","Computer Numerical Control","Common NC","Complex NC"]}
         ]
     };
 
