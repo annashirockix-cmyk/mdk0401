@@ -31,7 +31,8 @@ const publicAssessmentSources = [
   "exam_0202.js",
   "exam_0701.js",
   "english-vpr-exams.js",
-  "final-exam-question-types.js"
+  "final-exam-question-types.js",
+  "portal-final.js"
 ];
 
 test("public course and assessment data contain no embedded answer keys", () => {
