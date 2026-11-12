@@ -918,7 +918,8 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Параметр и допуск/);
   assert.match(workbooks, /Операция и источник опасности/);
   assert.match(workbooks, /Состав и структура/);
-  assert.match(workbooks, /basicProfiles/);\n  assert.match(workbooks, /technicalProfiles/);
+  assert.match(workbooks, /basicProfiles/);
+  assert.match(workbooks, /technicalProfiles/);
   assert.match(html, /workbooks\.js\?v=56/);
   assert.match(sw, /portal-cache-v311/);
 });
