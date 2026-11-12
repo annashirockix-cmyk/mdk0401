@@ -42,7 +42,7 @@ try {
       finally { window.open = originalOpen; }
       return captured;
     }, id);
-    assert.ok(html && html.includes("<title>"), `Workbook ${id} did not generate standalone HTML`);
+    assert.ok(html && html.includes("<title>"), `Workbook ${id} did not generate standalone HTML`);\n    if (id !== "ENB" && id !== "ENT") assert.doesNotMatch(html, /Письменная работа по теме/, `Workbook ${id} contains generic written-practice filler`);
     if (id === "ENB" || id === "ENT") {
       assert.doesNotMatch(html, /Дополнительный методический разбор|Составьте краткую технологическую карту по теме/);
       if (id === "ENB") { assert.match(html, /Language practice:/); assert.match(html, /Grammar Exercises: Pronouns(?: &amp;| &) Verbs/); assert.doesNotMatch(html, /Задание 1\. Анализ темы/); }
