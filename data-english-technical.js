@@ -6,7 +6,7 @@ window.MDK_DATA = window.MDK_DATA || {};
   function lec(code, title, content) { return { code, title, content }; }
   function prac(code, title, goal, task, variants) { return { code, title, goal, task, variants: variants || [] }; }
   function selfwork(code, title, task) { return { code, title, task }; }
-  function tq(q, options, correct) { return { q, options, correct }; }
+  function tq(q, options) { return { q: q, options: options }; }
   function topic(id, code, title, lectures, practicals, selfWork, test, writing) {
     return { id, code, title, lectures, practicals, selfWork, test, writing };
   }
@@ -43,12 +43,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [], // Practicals
             [], // SelfWork
             [
-              tq("Which material is lightweight and corrosion-resistant?", ["Aluminium", "Cast iron", "Steel", "Ceramic"], 0),
-              tq("'Ductility' means the ability to", ["be drawn into wire", "break easily", "resist heat", "conduct electricity"], 0),
-              tq("Cast iron is ___ than steel.", ["more brittle", "stronger", "lighter", "softer"], 0),
-              tq("An alloy of iron and carbon is called", ["steel", "aluminium", "copper", "brass"], 0),
-              tq("What process uses a die to create wires?", ["Drawing", "Casting", "Forging", "Rolling"], 0),
-              tq("Which process requires heating metal and shaping it with a press?", ["Forging", "Drawing", "Extrusion", "Rolling"], 0)
+              tq("Which material is lightweight and corrosion-resistant?", ["Aluminium", "Cast iron", "Steel", "Ceramic"]),
+              tq("'Ductility' means the ability to", ["be drawn into wire", "break easily", "resist heat", "conduct electricity"]),
+              tq("Cast iron is ___ than steel.", ["more brittle", "stronger", "lighter", "softer"]),
+              tq("An alloy of iron and carbon is called", ["steel", "aluminium", "copper", "brass"]),
+              tq("What process uses a die to create wires?", ["Drawing", "Casting", "Forging", "Rolling"]),
+              tq("Which process requires heating metal and shaping it with a press?", ["Forging", "Drawing", "Extrusion", "Rolling"])
             ],
             [
               { code: "W 1.1", title: "Match words with definitions", task: "Match the words with their definitions:\n1 alloy\na a type of plastic used for insulation\n2 steel\nb a combination of different metals\n3 PVC\nc an alloy formed by mixing iron and carbon\n4 concrete\nd an alloy formed by mixing copper and zinc\n5 brass\ne metals containing iron\n6 ferrous materials\nf a composite material used to build houses\n7 ceramic\ng a metal not suitable as structural material\n8 iron\nh a good insulator but brittle" },
@@ -79,12 +79,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Technical drawing is needed to...", ["make a scale of the product", "practise pens, rulers and stencils", "let the manufacturer understand the requirements"], 2),
-              tq("The drafter needs...", ["some paper and a pencil", "a wide range of technical instruments", "the final product"], 1),
-              tq("Paper is chosen considering...", ["what sort of drawing the drafter is going to make", "the pencils he/she is going to use", "the drafter's preference"], 0),
-              tq("Pencils are graded according to...", ["hardness", "hardness and colour", "hardness and point"], 0),
-              tq("A technical pen...", ["makes regular lines", "maintains the same line width", "draws lines of the same length"], 1),
-              tq("CAD helps designers...", ["to draw, modify and correct designs", "to build prototypes", "to manufacture parts"], 0)
+              tq("Technical drawing is needed to...", ["make a scale of the product", "practise pens, rulers and stencils", "let the manufacturer understand the requirements"]),
+              tq("The drafter needs...", ["some paper and a pencil", "a wide range of technical instruments", "the final product"]),
+              tq("Paper is chosen considering...", ["what sort of drawing the drafter is going to make", "the pencils he/she is going to use", "the drafter's preference"]),
+              tq("Pencils are graded according to...", ["hardness", "hardness and colour", "hardness and point"]),
+              tq("A technical pen...", ["makes regular lines", "maintains the same line width", "draws lines of the same length"]),
+              tq("CAD helps designers...", ["to draw, modify and correct designs", "to build prototypes", "to manufacture parts"])
             ],
             [
               { code: "W 2.1", title: "Complete the text about CAD/CAM", task: "Complete the text with the words: creation, advantages, boards, drawings, software, defects, faster, instructions, traditional, reduce, modification, electronically.\n\nDrawing (1) ______ and manual drawing are not always precise and rapid: (2) ______ design is usually slow, especially in its revision and (3) ______. For this reason manufacturing firms have replaced manual drawing with computer-aided design (CAD)... This computer technology assists the designer in the (4) ______, modification and analysis... Nowadays computer (5) ______ can easily provide a three-dimensional drawing... CAD is much (6) ______ and more accurate... designs can be quickly modified, reproduced and transmitted (7) ______. Computer simulated analysis... helps experts find problems and (8) ______... the CAD system can generate the detailed (9) ______ needed to start product manufacturing... CAM offers significant (10) ______... it gives (11) ______ to the computer regarding machine operations. Thanks to CAD/CAM systems it is possible to eliminate operator errors and (12) ______ manufacturing costs." },
@@ -118,12 +118,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("A lathe rotates the", ["workpiece", "tool", "spindle only", "bed"], 0),
-              tq("A milling machine uses", ["rotary cutters", "a single point tool", "a drill bit only", "a grinding wheel"], 0),
-              tq("CNC stands for", ["Computer Numerical Control", "Central Numerical Center", "Common Numerical Control", "Complex NC"], 0),
-              tq("A drill creates", ["holes", "threads", "flat surfaces", "grooves"], 0),
-              tq("Grinding is used for", ["finishing", "roughing", "drilling", "turning"], 0),
-              tq("The tailstock is part of a", ["lathe", "milling machine", "drill", "grinder"], 0)
+              tq("A lathe rotates the", ["workpiece", "tool", "spindle only", "bed"]),
+              tq("A milling machine uses", ["rotary cutters", "a single point tool", "a drill bit only", "a grinding wheel"]),
+              tq("CNC stands for", ["Computer Numerical Control", "Central Numerical Center", "Common Numerical Control", "Complex NC"]),
+              tq("A drill creates", ["holes", "threads", "flat surfaces", "grooves"]),
+              tq("Grinding is used for", ["finishing", "roughing", "drilling", "turning"]),
+              tq("The tailstock is part of a", ["lathe", "milling machine", "drill", "grinder"])
             ],
             [
               { code: "W 3.1", title: "Match the processes", task: "Read the texts again and write the correct processes that produce the objects listed below:\n1 wires - ______\n2 pasta - ______\n3 sheet - ______\n4 bricks - ______\n5 tubes - ______\n6 rods and bars - ______\n7 golden leaves - ______\n8 machine parts - ______\n9 concrete - ______" },
@@ -155,12 +155,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("A flow of electrons moving inside a conductor creates an electric current.", ["True", "False"], 0),
-              tq("A generator is used to move the charges.", ["True", "False"], 0),
-              tq("Electrons can easily pass through any material.", ["True", "False"], 1),
-              tq("Conductors are coated with insulators.", ["True", "False"], 0),
-              tq("Impurities are introduced to increase conductivity.", ["True", "False"], 0),
-              tq("Insulating materials resist the flow of electrons.", ["True", "False"], 0)
+              tq("A flow of electrons moving inside a conductor creates an electric current.", ["True", "False"]),
+              tq("A generator is used to move the charges.", ["True", "False"]),
+              tq("Electrons can easily pass through any material.", ["True", "False"]),
+              tq("Conductors are coated with insulators.", ["True", "False"]),
+              tq("Impurities are introduced to increase conductivity.", ["True", "False"]),
+              tq("Insulating materials resist the flow of electrons.", ["True", "False"])
             ],
             [
               { code: "W 4.1", title: "Complete the sentences", task: "Complete the sentences with the missing information:\n1 Elements make up ______.\n2 Identical atoms ______.\n3 Atoms consist of ______ and ______.\n4 Inside ______ there are ______ and ______, while outside ______.\n5 Shells ______.\n6 Valence electrons ______.\n7 Neutrons do not have ______.\n8 Electricity is generated when ______." },
@@ -192,12 +192,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("A device which interrupts the circuit is a...", ["load", "switch", "source", "fuse"], 1),
-              tq("A circuit in which wires are disconnected is...", ["closed", "broken", "short", "parallel"], 1),
-              tq("A device which provides power is a...", ["load", "switch", "source", "fuse"], 2),
-              tq("A complete circuit with no breaks is a...", ["closed circuit", "broken circuit", "short circuit", "series circuit"], 0),
-              tq("A device which consumes electric power is a...", ["load", "switch", "source", "fuse"], 0),
-              tq("A protective device is a...", ["load", "switch", "source", "fuse"], 3)
+              tq("A device which interrupts the circuit is a...", ["load", "switch", "source", "fuse"]),
+              tq("A circuit in which wires are disconnected is...", ["closed", "broken", "short", "parallel"]),
+              tq("A device which provides power is a...", ["load", "switch", "source", "fuse"]),
+              tq("A complete circuit with no breaks is a...", ["closed circuit", "broken circuit", "short circuit", "series circuit"]),
+              tq("A device which consumes electric power is a...", ["load", "switch", "source", "fuse"]),
+              tq("A protective device is a...", ["load", "switch", "source", "fuse"])
             ],
             [
               { code: "W 5.1", title: "Match definitions", task: "Match the words with their definitions:\n1 load\na a device which interrupts the circuit\n2 switch\nb a circuit in which wires are disconnected\n3 source\nc a device which provides power\n4 fuse\nd a complete circuit with no breaks at all\n5 closed circuit\ne a device which consumes electric power\n6 broken circuit\nf a protective device" },
@@ -229,12 +229,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Which power plant produces energy by splitting atoms?", ["Nuclear", "Thermoelectric", "Hydroelectric"], 0),
-              tq("Which power plant burns coal, oil or gas?", ["Nuclear", "Thermoelectric", "Hydroelectric"], 1),
-              tq("Which power plant uses a dam?", ["Nuclear", "Thermoelectric", "Hydroelectric"], 2),
-              tq("Which alternative source converts light into electricity?", ["Solar", "Wind", "Tidal"], 0),
-              tq("Which alternative source uses blades turned by air?", ["Solar", "Wind", "Tidal"], 1),
-              tq("Which alternative source uses rising and falling water?", ["Solar", "Wind", "Tidal"], 2)
+              tq("Which power plant produces energy by splitting atoms?", ["Nuclear", "Thermoelectric", "Hydroelectric"]),
+              tq("Which power plant burns coal, oil or gas?", ["Nuclear", "Thermoelectric", "Hydroelectric"]),
+              tq("Which power plant uses a dam?", ["Nuclear", "Thermoelectric", "Hydroelectric"]),
+              tq("Which alternative source converts light into electricity?", ["Solar", "Wind", "Tidal"]),
+              tq("Which alternative source uses blades turned by air?", ["Solar", "Wind", "Tidal"]),
+              tq("Which alternative source uses rising and falling water?", ["Solar", "Wind", "Tidal"])
             ],
             [
               { code: "W 6.1", title: "True or False", task: "Decide if the following sentences are true (T) or false (F), then correct the false ones:\n1 Nuclear power plants do not produce air pollution at all.\n2 Accidents in nuclear power plants can have terrible consequences for the environment.\n3 Nuclear power plants produce biodegradable waste material.\n4 Thermoelectric power is generated by the combustion of renewable resources.\n5 Thermoelectric power plants are environmentally friendly.\n6 Dams are built on rivers to store water.\n7 The water released from the reservoir flows through the generator.\n8 The only disadvantage of hydropower is its high initial cost." },
@@ -271,12 +271,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Electronics uses...", ["semiconductor materials", "only metals", "wood"], 0),
-              tq("The first computer appeared in...", ["1946", "1920", "1957"], 0),
-              tq("The first transistor replaced...", ["valves", "chips", "computers"], 0),
-              tq("A printed circuit board is called...", ["PCB", "CPU", "RAM"], 0),
-              tq("A chip is also called...", ["integrated circuit", "transistor", "valve"], 0),
-              tq("The brain of a computer is the...", ["microprocessor", "chip", "PCB"], 0)
+              tq("Electronics uses...", ["semiconductor materials", "only metals", "wood"]),
+              tq("The first computer appeared in...", ["1946", "1920", "1957"]),
+              tq("The first transistor replaced...", ["valves", "chips", "computers"]),
+              tq("A printed circuit board is called...", ["PCB", "CPU", "RAM"]),
+              tq("A chip is also called...", ["integrated circuit", "transistor", "valve"]),
+              tq("The brain of a computer is the...", ["microprocessor", "chip", "PCB"])
             ],
             [
               { code: "W 7.1", title: "Complete the table", task: "Complete the table with missing information:\nInvention | Year | Function\n______ | ______ | read and understand electronic signals\nRadar | 1920s | ______\nTelevision | 1920s | ______\nFirst computer | ______ | ______\nTransistor | ______ | ______" },
@@ -311,12 +311,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Which cable supports about 60 channels?", ["Coaxial", "Optical fibre", "Simple wire"], 0),
-              tq("Which cable uses pure glass?", ["Coaxial", "Optical fibre", "Simple wire"], 1),
-              tq("Which is used for long-distance transmission in space?", ["Antennas", "Satellites", "Cables"], 1),
-              tq("A LAN covers...", ["a limited space", "the whole world", "a country"], 0),
-              tq("A WAN covers...", ["a limited space", "a large area/world", "a room"], 1),
-              tq("In which topology is there a central hub?", ["Bus", "Star", "Ring"], 1)
+              tq("Which cable supports about 60 channels?", ["Coaxial", "Optical fibre", "Simple wire"]),
+              tq("Which cable uses pure glass?", ["Coaxial", "Optical fibre", "Simple wire"]),
+              tq("Which is used for long-distance transmission in space?", ["Antennas", "Satellites", "Cables"]),
+              tq("A LAN covers...", ["a limited space", "the whole world", "a country"]),
+              tq("A WAN covers...", ["a limited space", "a large area/world", "a room"]),
+              tq("In which topology is there a central hub?", ["Bus", "Star", "Ring"])
             ],
             [
               { code: "W 8.1", title: "Answer questions (Networks)", task: "Answer the following questions based on the text 'Networks':\n1 What does a network consist of?\n2 What is a router?\n3 What is a LAN?\n4 What is a WAN?\n5 What is the function of communications protocols?\n6 What is Ethernet used for?\n7 What are the advantages of using a network?\n8 What are the disadvantages of using a network?" },
@@ -350,12 +350,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("The CPU consists of ALU and...", ["CU", "RAM", "ROM"], 0),
-              tq("Which memory loses its contents when the computer is off?", ["RAM", "ROM", "Hard disk"], 0),
-              tq("Which memory contains essential and permanent information?", ["RAM", "ROM", "Hard disk"], 1),
-              tq("A USB flash drive is...", ["removable", "built-in", "not rewritable"], 0),
-              tq("Which computer is the most powerful and expensive?", ["Mainframe", "Laptop", "Palmtop"], 0),
-              tq("Who created the World Wide Web?", ["Timothy Berners-Lee", "Bill Gates", "Steve Jobs"], 0)
+              tq("The CPU consists of ALU and...", ["CU", "RAM", "ROM"]),
+              tq("Which memory loses its contents when the computer is off?", ["RAM", "ROM", "Hard disk"]),
+              tq("Which memory contains essential and permanent information?", ["RAM", "ROM", "Hard disk"]),
+              tq("A USB flash drive is...", ["removable", "built-in", "not rewritable"]),
+              tq("Which computer is the most powerful and expensive?", ["Mainframe", "Laptop", "Palmtop"]),
+              tq("Who created the World Wide Web?", ["Timothy Berners-Lee", "Bill Gates", "Steve Jobs"])
             ],
             [
               { code: "W 9.1", title: "Complete the table (Components)", task: "Complete the table with missing information:\nComponent (acronym) | Full name / Description | Functions and properties\nhardware | ______ | ______\nsoftware | ______ | ______\nCPU | ______ | ______\nALU | ______ | ______\nCU | ______ | ______\nRAM | ______ | ______\nROM | ______ | ______" },
@@ -393,12 +393,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Mechanisation uses machinery to assist with...", ["muscular requirements", "mental work", "both"], 0),
-              tq("Automation reduces the need for...", ["physical work", "mental work", "both physical and mental work"], 2),
-              tq("What is the main advantage of automation?", ["higher consistency and quality", "unemployment", "high costs"], 0),
-              tq("Sensors translate physical information into...", ["electrical signals", "mechanical signals", "light signals"], 0),
-              tq("Which sensors are sensitive to touch?", ["Tactile", "Visual", "Acoustic"], 0),
-              tq("The optical mouse uses...", ["LED and sensor", "a ball", "a wheel"], 0)
+              tq("Mechanisation uses machinery to assist with...", ["muscular requirements", "mental work", "both"]),
+              tq("Automation reduces the need for...", ["physical work", "mental work", "both physical and mental work"]),
+              tq("What is the main advantage of automation?", ["higher consistency and quality", "unemployment", "high costs"]),
+              tq("Sensors translate physical information into...", ["electrical signals", "mechanical signals", "light signals"]),
+              tq("Which sensors are sensitive to touch?", ["Tactile", "Visual", "Acoustic"]),
+              tq("The optical mouse uses...", ["LED and sensor", "a ball", "a wheel"])
             ],
             [
               { code: "W 10.1", title: "Match words with definitions", task: "Match the words with their definitions:\n1 manufacturing\na the time between the design of a product and its production\n2 information technologies\nb the amount of confidence that a group of people have\n3 goods\nc a set of tasks performed to complete a procedure\n4 service jobs\nd the process of packing and distributing goods\n5 skilled\ne the industry in which machinery is used to produce goods\n6 morale\nf the development and application of computer systems\n7 unemployment\ng having the knowledge and the ability to do something well\n8 lead times\nh things that are made to be sold\n9 handling\ni jobs in transports, communications, hospitals, energy industry, etc.\n10 work flow\nj the state of not having a job" },
@@ -431,12 +431,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Preventive maintenance is done...", ["before a failure occurs", "after a breakdown", "only when the machine stops"], 0),
-              tq("Corrective maintenance is...", ["repair", "prevention", "inspection"], 0),
-              tq("What can be replaced during preventive maintenance?", ["worn components", "the whole machine", "nothing"], 0),
-              tq("Car maintenance includes checking...", ["engine oil", "only tyres", "only brakes"], 0),
-              tq("A tune-up is a combination of...", ["tasks with equivalent service intervals", "only electrical tasks", "only mechanical tasks"], 0),
-              tq("Where are maintenance services recorded?", ["In a service book", "In a notebook", "In a file"], 0)
+              tq("Preventive maintenance is done...", ["before a failure occurs", "after a breakdown", "only when the machine stops"]),
+              tq("Corrective maintenance is...", ["repair", "prevention", "inspection"]),
+              tq("What can be replaced during preventive maintenance?", ["worn components", "the whole machine", "nothing"]),
+              tq("Car maintenance includes checking...", ["engine oil", "only tyres", "only brakes"]),
+              tq("A tune-up is a combination of...", ["tasks with equivalent service intervals", "only electrical tasks", "only mechanical tasks"]),
+              tq("Where are maintenance services recorded?", ["In a service book", "In a notebook", "In a file"])
             ],
             [
               { code: "W 11.1", title: "Match words with definitions", task: "Match the words with their definitions:\n1 fault\na damaged and in poor condition as a result of much use\n2 to mitigate\nb a set of rules about how something must be done\n3 to fix\nc expert advice within a particular field\n4 overhaul\nd applying a greasy substance to reduce friction\n5 worn\ne a break or other defect in a piece of machinery\n6 lubrication\nf to do the necessary work to repair something that doesn't work properly\n7 code\ng to make something less severe or unpleasant\n8 consultancy\nh a careful examination of a machinery or system that must be repaired" },
@@ -471,12 +471,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("What is the main cause of industrial accidents?", ["individual carelessness", "bad machinery", "lack of training"], 0),
-              tq("What does the Health and Safety at Work Act regulate?", ["workplace safety", "traffic rules", "education"], 0),
-              tq("Who is responsible for providing a safe environment?", ["employers", "employees", "clients"], 0),
-              tq("What should be worn when working with loud machinery?", ["Hearing protection", "Safety glasses", "Gloves"], 0),
-              tq("What is used to protect the head from falling objects?", ["Hard hat", "Safety glasses", "Face shield"], 0),
-              tq("What is used to protect from dust or chemicals?", ["Face mask or respirator", "Gloves", "Boots"], 0)
+              tq("What is the main cause of industrial accidents?", ["individual carelessness", "bad machinery", "lack of training"]),
+              tq("What does the Health and Safety at Work Act regulate?", ["workplace safety", "traffic rules", "education"]),
+              tq("Who is responsible for providing a safe environment?", ["employers", "employees", "clients"]),
+              tq("What should be worn when working with loud machinery?", ["Hearing protection", "Safety glasses", "Gloves"]),
+              tq("What is used to protect the head from falling objects?", ["Hard hat", "Safety glasses", "Face shield"]),
+              tq("What is used to protect from dust or chemicals?", ["Face mask or respirator", "Gloves", "Boots"])
             ],
             [
               { code: "W 12.1", title: "Match words with definitions", task: "Match the words with their definitions:\n1 precautionary measure\na a responsibility or task that you have to do as part of your job\n2 carelessness\nb to deal effectively with a difficult situation\n3 welfare\nc the buildings and land occupied by a business\n4 duty\nd poor attention to an activity, which results in harm or errors\n5 premises\ne action taken in order to prevent something dangerous from happening\n6 to cope with\nf the health, comfort and well-being of a person or group" },
