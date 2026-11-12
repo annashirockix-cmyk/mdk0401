@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
-test("generated workbooks preserve English source exercises and print answer blocks", () => {
+test("generated workbooks include topic-specific safety supplements", () => {
  const workbooks = read("workbooks.js");
  const html = read("index.html");
  const sw = read("service-worker.js");
