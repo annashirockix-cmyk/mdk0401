@@ -170,7 +170,7 @@ test("SPRUT-TP topic assessments and reference tables are specific to each topic
   assert.doesNotMatch(source, /программа ускоряет оформление, но не исправляет неверный чертёж/);
   for (const phrase of ["объяснять назначение СПРУТ-ТП","раздельно классифицировать ТП","различать назначение МК, ОК и КЭ","находить в установленной конфигурации проект","фиксировать пробелы и формулировать запросы","обосновывать заготовку и базы","разрабатывать структуру операции","распределять сведения между маршрутной","выявлять технологическую общность деталей","сравнивать новую деталь с аналогом","сопоставлять поверхности и требования чертежа","обосновывать включение заготовительных","определять состав нормы времени","выполнять нормоконтроль комплекта ТД"]) assert.ok(source.includes(phrase), "missing topic-specific learning outcome: "+phrase);
   assert.doesNotMatch(source, /Подготовьте письменный ответ по теме|Проверить полноту, последовательность и соответствие исходным требованиям/);
-  assert.equal((source.match(/"correct":/g) || []).length, 42);
+  assert.equal((source.match(/"correct":/g) || []).length, 0, "public SPRUT-TP questions must not contain answer keys");
   assert.match(source, /Маршрутная карта показывает последовательность операций/);
   assert.match(source, /Нормоконтроль и выпуск технологической документации/);
 });
@@ -819,7 +819,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v332"));
+  assert.ok(sw.includes("portal-cache-v333"));
 });
 
 
@@ -840,7 +840,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v332/);
+  assert.match(sw, /portal-cache-v333/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -971,7 +971,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v332/);
+  assert.match(sw, /portal-cache-v333/);
 });
 
 
@@ -1003,7 +1003,7 @@ test("workbooks include differentiated supplemental professional learning blocks
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
   assert.match(html, /workbooks\.js\?v=62/);
-  assert.match(sw, /portal-cache-v332/);
+  assert.match(sw, /portal-cache-v333/);
 });
 
 
@@ -1029,7 +1029,7 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
   assert.match(html, /workbooks\.js\?v=62/);
-  assert.match(sw, /portal-cache-v332/);
+  assert.match(sw, /portal-cache-v333/);
 });
 
 
@@ -1058,7 +1058,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(css, /\.wb-visual-chart/);
   assert.match(html, /workbooks\.js\?v=62/);
   assert.match(html, /style\.css\?v=24/);
-  assert.match(sw, /portal-cache-v332/);
+  assert.match(sw, /portal-cache-v333/);
 });
 
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {
