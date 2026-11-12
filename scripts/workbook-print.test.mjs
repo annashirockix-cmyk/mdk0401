@@ -35,4 +35,6 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(html, /workbooks\.js\?v=55/);
  assert.match(html, /style\.css\?v=23/);
  assert.match(sw, /portal-cache-v310/);
+  const audit = read("scripts/workbook-browser-print-audit.mjs");
+  assert.match(audit, /const pdfCourses = new Set\\(courseIds\\)/);
 });
