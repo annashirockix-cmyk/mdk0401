@@ -6,7 +6,7 @@ window.MDK_DATA = window.MDK_DATA || {};
   function lec(code, title, content) { return { code, title, content }; }
   function prac(code, title, goal, task, variants) { return { code, title, goal, task, variants: variants || [] }; }
   function selfwork(code, title, task) { return { code, title, task }; }
-  function tq(q, options, correct) { return { q, options, correct }; }
+  function tq(q, options) { return { q: q, options: options }; }
   function topic(id, code, title, lectures, practicals, selfWork, test, writing) {
     return { id, code, title, lectures, practicals, selfWork, test, writing };
   }
@@ -82,13 +82,13 @@ window.MDK_DATA = window.MDK_DATA || {};
             [], // Practicals
             [], // SelfWork
             [
-              tq("This computer is ...", ["me", "my", "mine"], 2),
-              tq("You can ask ... teacher about it.", ["our", "ours", "ourselves"], 0),
-              tq("Can you see ... through the window?", ["something", "anything", "nothing"], 1),
-              tq("You will ... learn the poem.", ["must", "have to", "can"], 1),
-              tq("Nobody ... heard about this writer.", ["haven't", "have", "has"], 2),
-              tq("I don't believe he is ... cruel.", ["what", "so", "that"], 2),
-              tq("He had read the article ... yesterday evening.", ["must", "had", "by"], 2)
+              tq("This computer is ...", ["me", "my", "mine"]),
+              tq("You can ask ... teacher about it.", ["our", "ours", "ourselves"]),
+              tq("Can you see ... through the window?", ["something", "anything", "nothing"]),
+              tq("You will ... learn the poem.", ["must", "have to", "can"]),
+              tq("Nobody ... heard about this writer.", ["haven't", "have", "has"]),
+              tq("I don't believe he is ... cruel.", ["what", "so", "that"]),
+              tq("He had read the article ... yesterday evening.", ["must", "had", "by"])
             ],
             [
               { code: "W 1.1", title: "Grammar Exercises: Pronouns & Verbs", task: "1. Are you in the library? I'd like to join ... .\n2. The professor is at the University. You can meet ... .\n3. Your test is on the desk. Take ... .\n4. We can't make a conclusion. Can you help ... ?\n5. Are they still analyzing the data? May I speak to ... ?\n6. The secretary may be late. Tell ... the time, please.\n7. The assistant is at the laboratory. Ask ... to come, please.\n8. The researchers are to arrive at 12. Meet ... in the hall.\n\nInsert possessive pronouns:\n1. My friends and I live in a little village. There are many old houses in ... village.\n2. You take chemistry at University. Are there many students at ... faculty?\n3. Joe teaches at school. Does he like ... job?\n4. I have got a family. I spend every weekend with ... family.\n5. Your parents live in Moscow. Do they have ... own flat?" },
@@ -133,11 +133,11 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Nizhnekamsk is located on the river...", ["Volga", "Kama", "Oka"], 1),
-              tq("The architectural symbol of Nizhnekamsk is...", ["The Kremlin", "The Mosque", "The Cathedral"], 1),
-              tq("The biggest industrial enterprises are...", ["car and tyre plants", "petrochemical and tyre plants", "food and textile plants"], 1),
-              tq("What is exported to other countries?", ["cars", "useful goods", "oil"], 1),
-              tq("The town has a widely developed...", ["infrastructure", "agriculture", "tourism"], 0)
+              tq("Nizhnekamsk is located on the river...", ["Volga", "Kama", "Oka"]),
+              tq("The architectural symbol of Nizhnekamsk is...", ["The Kremlin", "The Mosque", "The Cathedral"]),
+              tq("The biggest industrial enterprises are...", ["car and tyre plants", "petrochemical and tyre plants", "food and textile plants"]),
+              tq("What is exported to other countries?", ["cars", "useful goods", "oil"]),
+              tq("The town has a widely developed...", ["infrastructure", "agriculture", "tourism"])
             ],
             [
               { code: "W 2.1", title: "Translate noun chains", task: "Translate the following noun chains into Russian:\n1. internal combustion engine\n2. the temperature limit determination\n3. the modern house ventilation facilities\n4. the Moscow region newspaper\n5. essential research program\n6. National Oil and Gas Research Institute\n7. wooden house advantages\n8. nineteenth century physics achievements\n9. new digital computer effectiveness\n10. modern sport car average velocity\n11. computer software possibilities" },
@@ -183,11 +183,11 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Tatarstan is situated in the middle part of...", ["the Volga basin", "the Dnieper basin", "the Ural mountains"], 0),
-              tq("The population is about...", ["1 million", "4 million", "10 million"], 1),
-              tq("The state languages are...", ["Russian and English", "Tatar and Russian", "Tatar and English"], 1),
-              tq("The main branches of industry are...", ["oil extracting and chemical production", "agriculture", "tourism"], 0),
-              tq("The capital of the republic is...", ["Nizhnekamsk", "Kazan", "Yelabuga"], 1)
+              tq("Tatarstan is situated in the middle part of...", ["the Volga basin", "the Dnieper basin", "the Ural mountains"]),
+              tq("The population is about...", ["1 million", "4 million", "10 million"]),
+              tq("The state languages are...", ["Russian and English", "Tatar and Russian", "Tatar and English"]),
+              tq("The main branches of industry are...", ["oil extracting and chemical production", "agriculture", "tourism"]),
+              tq("The capital of the republic is...", ["Nizhnekamsk", "Kazan", "Yelabuga"])
             ],
             [
               { code: "W 3.1", title: "Translation Practice (Unit 3)", task: "Translate the following sentences into English:\n1. Флаг Франции состоит из трех вертикальных полос: белой, красной и голубой.\n2. Столица Италии – Рим, исторический и культурный центр Европы.\n3. Государственные языки Канады – английский и французский.\n4. Швейцария расположена в центре Европы.\n5. Климат Гренландии очень суровый: лето прохладное, зима очень холодная.\n6. Антарктида богата природными ресурсами.\n7. Основная отрасль промышленности Японии – высокотехнологичное машиностроение.\n8. Основная продукция сельского хозяйства Индии – чай и рис.\n9. Нефтедобыча – основа промышленности стран Ближнего Востока.\n10. Самые крупные промышленные центры Великобритании – Ливерпуль и Манчестер." },
@@ -234,11 +234,11 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("The main reason for ecological problems is...", ["intensive development of industry", "natural disasters", "animal migration"], 0),
-              tq("People living in big cities suffer from...", ["smog", "clean air", "noise"], 0),
-              tq("What throws out harmful substances into the atmosphere?", ["Trees", "Factories and power stations", "Rivers"], 1),
-              tq("The destruction of the ozone layer could lead to...", ["global catastrophe", "economic growth", "new discoveries"], 0),
-              tq("The Earth is our home, that's why we must...", ["conquer it", "take care of it", "ignore it"], 1)
+              tq("The main reason for ecological problems is...", ["intensive development of industry", "natural disasters", "animal migration"]),
+              tq("People living in big cities suffer from...", ["smog", "clean air", "noise"]),
+              tq("What throws out harmful substances into the atmosphere?", ["Trees", "Factories and power stations", "Rivers"]),
+              tq("The destruction of the ozone layer could lead to...", ["global catastrophe", "economic growth", "new discoveries"]),
+              tq("The Earth is our home, that's why we must...", ["conquer it", "take care of it", "ignore it"])
             ],
             [
               { code: "W 4.1", title: "Translation Practice (Unit 4)", task: "Translate the following sentences into English using Conditionals:\n1. Если бы у меня было больше времени, я бы прочитал эту книгу.\n2. Если вы нагреете металл, он расширится.\n3. Если бы они проверили чертеж, они бы избежали ошибки.\n4. Если мы понизим температуру, жидкость может превратиться в лед.\n5. Если бы я выиграл соревнования, меня отправили бы за границу. (Had I won...)\n6. Если увидишь родителей, тебе следует спросить у них совета." },
@@ -288,11 +288,11 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Physics begins with...", ["Galileo", "Newton", "Einstein"], 0),
-              tq("The first revolutionary novelty was...", ["Planck's quantum constant", "Einstein's relativity", "Rutherford's atom"], 0),
-              tq("X-rays were discovered by...", ["Rontgen", "Curie", "Bohr"], 0),
-              tq("The term automation includes...", ["program, action, sensing, decision, control", "only computers", "only robots"], 0),
-              tq("Only four chemical elements are essential for the biosphere: hydrogen, carbon, nitrogen and...", ["oxygen", "sulphur", "phosphorus"], 0)
+              tq("Physics begins with...", ["Galileo", "Newton", "Einstein"]),
+              tq("The first revolutionary novelty was...", ["Planck's quantum constant", "Einstein's relativity", "Rutherford's atom"]),
+              tq("X-rays were discovered by...", ["Rontgen", "Curie", "Bohr"]),
+              tq("The term automation includes...", ["program, action, sensing, decision, control", "only computers", "only robots"]),
+              tq("Only four chemical elements are essential for the biosphere: hydrogen, carbon, nitrogen and...", ["oxygen", "sulphur", "phosphorus"])
             ],
             [
               { code: "W 6.1", title: "Reading: The History of Physics", task: "Answer the questions based on the text:\n1. Who introduced the law of inertia?\n2. What did Newton apply to large bodies?\n3. When did Planck introduce the quantum constant?\n4. Why is physics penetrating other sciences?" },
