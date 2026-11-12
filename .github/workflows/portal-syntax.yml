@@ -55,6 +55,21 @@ jobs:
           path: artifacts/workbooks/
           if-no-files-found: ignore
           retention-days: 7
+      - name: Run real-browser certificate A4 landscape audit
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/certificate-audit-server.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/certificate-browser-print-audit.mjs
+      - name: Upload certificate PDF audit sample
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: certificate-a4-landscape-audit
+          path: artifacts/certificate/
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Check inline scripts in HTML
         run: |
           python - <<'PY'
