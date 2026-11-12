@@ -6,7 +6,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || "playwright")
 
 const baseUrl = process.env.WORKBOOK_AUDIT_URL || "http://127.0.0.1:4173/";
 const courseIds = ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT", "ENB", "ENT"];
-const pdfCourses = new Set(["07.01", "OT", "MCAM", "SPRUT_TP", "MET", "MAT"]);
+const pdfCourses = new Set(courseIds);
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 794, height: 1123 }, serviceWorkers: "block" });
 const portal = await context.newPage();
