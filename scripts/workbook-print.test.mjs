@@ -27,7 +27,10 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(workbooks, /class="wb-image-credit"/);
  assert.match(workbooks, /\.wb-gallery figure\.wb-diagram\{grid-column:1 \/ -1\}/);
  assert.match(workbooks, /\.wb-image-credit\{display:block;margin-top:4px/);
- assert.match(html, /workbooks\.js\?v=53/);
+ assert.match(workbooks, /\.lv-flow-node\{display:flex/);
+ assert.match(workbooks, /\.lv-flow-step\{display:inline-flex/);
+ assert.match(workbooks, /\.lecture-visual-atlas\{margin:18px 0/);
+ assert.match(html, /workbooks\.js\?v=54/);
  assert.match(html, /style\.css\?v=23/);
- assert.match(sw, /portal-cache-v308/);
+ assert.match(sw, /portal-cache-v309/);
 });
