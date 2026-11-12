@@ -27,6 +27,7 @@ try {
       window.customContent.flashcards = rows.filter(x => x.type === "flashcards");
     }
     window.API = {
+      getTopicAccess: async () => ({ open: true }),
       getCustomContent: async () => ({ success: true, data: window.__constructorStore.map(x => ({ ...x })) }),
       saveCustomContent: async item => {
         const at = window.__constructorStore.findIndex(x => String(x.id) === String(item.id));
@@ -117,7 +118,28 @@ try {
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Workpiece");
   await page.locator("#studentCardFlip").click();
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Заготовка");
-  const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true };
+  const sprutTopics = await page.evaluate(() => window.MDK_DATA.SPRUT_TP.sections.flatMap(section =>
+    section.topics.map(topic => ({ id: topic.id, code: topic.code, title: topic.title }))));
+  const sprutNavigation = { sectionCount: await page.evaluate(() => window.MDK_DATA.SPRUT_TP.sections.length),
+    topicCount: sprutTopics.length, uniqueIds: new Set(sprutTopics.map(topic => topic.id)).size, results: [] };
+  assert.equal(sprutNavigation.sectionCount, 6, "All six SPRUT-TP sections must be present");
+  assert.equal(sprutNavigation.topicCount, 14, "All 14 SPRUT-TP topics must be reachable");
+  assert.equal(sprutNavigation.uniqueIds, 14, "Every SPRUT-TP topic must have a unique route ID");
+  for (const topic of sprutTopics) {
+    await page.evaluate(({ id }) => {
+      window.state.student = { role: "student", courses: ["07.01", "SPRUT_TP"] };
+      window.state.activeCourseId = "SPRUT_TP";
+      window.location.hash = "#/topic/SPRUT_TP/" + id + "/lectures";
+      window.renderTopicPage("SPRUT_TP", id, "lectures");
+    }, topic);
+    await page.waitForFunction(title => document.querySelector("#app h1")?.innerText.includes(title), topic.title);
+    const renderedTitle = await page.locator("#app h1").innerText();
+    const visible = renderedTitle.includes(topic.title);
+    const result = { ...topic, renderedTitle, visible };
+    sprutNavigation.results.push(result);
+    assert.ok(visible, "Student view opened the wrong SPRUT-TP topic: " + JSON.stringify(result));
+  }
+  const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
   fs.mkdirSync("artifacts/constructors", { recursive: true });
   fs.writeFileSync("artifacts/constructors/report.json", JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
