@@ -98,7 +98,7 @@ test("materials science and metrology workbook topics have distinct profiles", (
   const met = editorial.slice(editorial.indexOf('"MET": {'), editorial.indexOf('"OT": {'));
   for (const id of ["mat-t1","mat-t2","mat-t3","mat-t4","mat-t5","mat-t6","mat-t7","mat-t8","mat-t9","mat-t10","mat-t11"]) assert.ok(mat.includes(JSON.stringify(id)), "missing materials profile: "+id);
   for (const id of ["met-1","met-2","met-3","met-4","met-5","met-6","met-7","met-8"]) assert.ok(met.includes(JSON.stringify(id)), "missing metrology profile: "+id);
-  for (const phrase of ["диаграмму железо–цементит","Термическая обработка","Коррозия","Композитная панель","Система SI","погрешность","Допуск","микрометр","радиальное биение","Поверка"]) assert.ok(editorial.includes(phrase), "missing topic-specific content: "+phrase);
+  for (const phrase of ["Диаграмма железо–цементит","Термическая обработка","Коррозия","Композитная панель","Система SI","погрешность","Допуск","микрометр","радиальное биение","Поверка"]) assert.ok(editorial.includes(phrase), "missing topic-specific content: "+phrase);
 });
 
 test("occupational safety workbook topics have distinct hazard-specific profiles", () => {
