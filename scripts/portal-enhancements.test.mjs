@@ -673,7 +673,7 @@ test("SPRUT-TP theory and practical assignments are expanded with topic-specific
     assert.match(practical.task,/Вопросы для защиты/);
   }
   assert.equal((upgrade.match(/<h3>Дополнение:/g)||[]).length,42, "all supplemental headings must be clearly marked as additions");
-  assert.doesNotMatch(upgrade, /<h3>[456]\\.\\s/);
+  assert.doesNotMatch(upgrade, /<h3>[456]\.\s/);
   for(const topic of topics){
   }
 });
