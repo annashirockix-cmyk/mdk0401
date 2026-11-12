@@ -30,7 +30,7 @@
   return '<section class="lecture-visual-supplement">'+out+'<h4>Письменное закрепление</h4><p>Составьте краткую технологическую карту по теме: исходные данные, последовательность действий, оборудование или средства, контроль и вывод.</p><div class="lecture-notes-lines"><div>Ключевые понятия:</div><div></div><div>Что проверить на практике:</div><div></div><div>Мой вопрос:</div><div></div></div></section>';
  }
  Object.keys(courses).forEach(function(id){
-  if(["07.01","SPRUT_TP","basic","technical"].indexOf(id)>=0)return;
+  if(["07.01","SPRUT_TP","basic","technical","EN","ENB","ENT"].indexOf(id)>=0)return;
   var c=courses[id];if(!c||!Array.isArray(c.sections))return;
   c.sections.forEach(function(sec){(sec.topics||[]).forEach(function(topic){
    if(topic.__lectureEnriched)return;
