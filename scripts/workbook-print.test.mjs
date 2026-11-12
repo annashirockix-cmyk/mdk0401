@@ -5,12 +5,14 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
-test("generated workbooks use A4 print sizing and print-safe visual blocks", () => {
+test("generated workbooks use A4 print sizing and keep answer fields together", () => {
  const workbooks = read("workbooks.js");
  const html = read("index.html");
  const sw = read("service-worker.js");
  assert.match(workbooks, /@page\{size:A4;margin:12mm 14mm/);
  assert.match(workbooks, /counter\(pages\)/);
+ assert.match(workbooks, /\.wb-answer-group\{break-inside:avoid;page-break-inside:avoid\}/);
+ assert.match(workbooks, /class="wb-answer-group"/);
  assert.match(workbooks, /\.wb-visual-table-wrap\{overflow:visible!important/);
  assert.match(workbooks, /\.wb-visual-table\{display:table!important/);
  assert.match(workbooks, /\.wb-visual-table thead\{display:table-header-group\}/);
@@ -32,10 +34,10 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(workbooks, /\.lv-flow\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
  assert.match(workbooks, /overflow-wrap:break-word;word-break:normal/);
  assert.match(workbooks, /\.lecture-visual-atlas\{margin:18px 0/);
- assert.match(html, /workbooks\.js\?v=57/);
+ assert.match(html, /workbooks\.js\?v=58/);
  assert.match(html, /workbook-editorial\.js\?v=6/);
  assert.match(html, /style\.css\?v=23/);
- assert.match(sw, /portal-cache-v320/);
+ assert.match(sw, /portal-cache-v321/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Письменная практика Basic English/);
  assert.match(editorialSource, /Language practice:/);
