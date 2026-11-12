@@ -48,6 +48,9 @@ try {
       if (id === "ENB") { assert.match(html, /Language practice:/); assert.match(html, /Grammar Exercises: Pronouns(?: &amp;| &) Verbs/); assert.doesNotMatch(html, /Задание 1\. Анализ темы/); }
       if (id === "ENT") { assert.match(html, /ESP practice:/); assert.match(html, /Match words with definitions/); assert.doesNotMatch(html, /Задание 1\. Анализ темы/); }
     }
+    if (id === "OT") {
+      for (const phrase of ["Составьте карту санитарной оценки выбранного рабочего места", "не прикасайтесь к пострадавшему", "Разработайте карту предсменного осмотра станка с ЧПУ", "Карточка анализа происшествия"]) assert.ok(html.includes(phrase), `Safety workbook is missing topic-specific supplemental task: ${phrase}`);
+    }
     const workbook = await context.newPage();
     await workbook.setContent(html, { waitUntil: "load" });
     try {

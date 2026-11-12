@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
-test("generated workbooks preserve English source exercises and print answer blocks", () => {
+test("generated workbooks print all twelve safety supplement profiles", () => {
  const workbooks = read("workbooks.js");
  const html = read("index.html");
  const sw = read("service-worker.js");
@@ -36,10 +36,10 @@ test("generated workbooks preserve English source exercises and print answer blo
  assert.match(workbooks, /\.lv-flow\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
  assert.match(workbooks, /overflow-wrap:break-word;word-break:normal/);
  assert.match(workbooks, /\.lecture-visual-atlas\{margin:18px 0/);
- assert.match(html, /workbooks\.js\?v=59/);
+ assert.match(html, /workbooks\.js\?v=60/);
  assert.match(html, /workbook-editorial\.js\?v=6/);
  assert.match(html, /style\.css\?v=23/);
- assert.match(sw, /portal-cache-v322/);
+ assert.match(sw, /portal-cache-v323/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Письменная практика Basic English/);
  assert.match(editorialSource, /Language practice:/);
