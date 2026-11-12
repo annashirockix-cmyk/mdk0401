@@ -24,7 +24,7 @@
     return '<section class="wb-summary"><h3>📌 Опорный конспект и справочные ориентиры</h3>'+(terms.length?'<p><b>Разделы и понятия:</b> '+terms.map(esc).join(' · ')+'</p>':"")+(points.length?'<ol>'+points.map(function(p){return '<li>'+esc(p)+'</li>';}).join("")+'</ol>':"")+'<p class="wb-summary-hint">Используйте этот блок для повторения; точные значения, режимы и требования сверяйте с исходным чертежом, паспортом или нормативным документом.</p></section>';
   }
   function writtenPractice(courseId,topic){
-    var id=String(courseId),english=id==="EN"||id==="ENB"||id==="ENT",basic=id==="ENB";
+    var id=String(courseId),basic=id==="ENB";
     if(basic)return '<section class="wb-writing"><h3>📝 Письменная практика Basic English</h3><ol><li>Напишите 6–8 предложений по теме «'+esc(topic.title||"Unit")+'», используя лексику раздела.</li><li>Выпишите 5 новых слов, укажите перевод и составьте с каждым короткое предложение.</li><li>Добавьте один вопрос собеседнику и краткий ответ на него на английском языке.</li></ol><div class="write-lines wb-writing-lines"></div></section>';
     if(id==="ENT"){
       var profiles={
@@ -45,7 +45,6 @@
       if(!profile)return "";
       return '<section class="wb-writing wb-writing-technical"><h3>📝 '+esc(profile.title)+'</h3><p>Complete the tasks in English. Use the technical terms accurately and support each recommendation with information from the lecture or the equipment documentation.</p><ol>'+profile.tasks.map(function(task){return '<li>'+esc(task)+'</li>';}).join("")+'</ol><p class="wb-writing-vocab"><b>Required vocabulary:</b> '+profile.terms.map(esc).join(" · ")+'</p><div class="write-lines wb-writing-lines"></div></section>';
     }
-    if(id==="EN")return '<section class="wb-writing"><h3>📝 Письменная практика</h3><ol><li>Составьте краткое письменное резюме темы на английском языке (5–7 предложений).</li><li>Выпишите 8–10 ключевых слов и составьте с пятью из них собственные предложения.</li><li>Опишите на английском один пример применения темы в профессиональной или повседневной ситуации.</li></ol><div class="write-lines wb-writing-lines"></div></section>';
     return "";
   }
   function notesBlock(){return '<section class="wb-notes"><h3>📒 Мои заметки</h3><p>Что важно запомнить? Какие вопросы остались? Что нужно уточнить у преподавателя?</p><div class="write-lines wb-notes-lines"></div></section>';}
