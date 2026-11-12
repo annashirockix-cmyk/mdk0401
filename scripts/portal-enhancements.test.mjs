@@ -535,10 +535,11 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   assert.ok(!visual.includes("LOCAL.sprutInterface") && !visual.includes("LOCAL.sprutProject") && !visual.includes("LOCAL.sprutTools"));
   assert.ok(visual.includes("Расположение нулевой точки фрезерной заготовки"));
   assert.ok(visual.includes("return COMMONS.cncMill"), "milling operation topics should use an equipment photo, not a zero-point diagram");
-  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
+  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowHtml", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
     assert.ok(visual.includes(term), "visual atlas missing " + term);
   }
   assert.match(css, /\.lecture-visual-atlas/);
+  assert.match(css, /\.lv-flow\{/);\n  assert.match(css, /\.lv-flow-node\{/);\n  assert.doesNotMatch(visual, /<svg|<path|<rect|graphSvg|flowSvg/);
   const sandbox = { window: { MDK_DATA: {} } };
   for (const file of ["data-0701.js", "data-0401.js", "data-0201.js", "data-0202.js", "data-mastercam.js", "data-sprut-tp.js", "data-material.js", "data-metrology.js", "data-safety.js"]) {
     vm.runInNewContext(read(file), sandbox, { timeout: 2000 });
