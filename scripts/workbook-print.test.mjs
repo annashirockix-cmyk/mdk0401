@@ -34,7 +34,7 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(workbooks, /\.lecture-visual-atlas\{margin:18px 0/);
  assert.match(html, /workbooks\.js\?v=56/);
  assert.match(html, /style\.css\?v=23/);
- assert.match(sw, /portal-cache-v311/);
+ assert.match(sw, /portal-cache-v312/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Письменная практика Basic English/);
  assert.match(editorialSource, /Language practice:/);
@@ -45,6 +45,7 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.doesNotMatch(editorialSource, /How can you use this knowledge in your future profession/);
   const audit = read("scripts/workbook-browser-print-audit.mjs");
   assert.match(audit, /const pdfCourses = new Set\(courseIds\)/);
+  assert.match(audit, /Дополнительный методический разбор|Составьте краткую технологическую карту/);
   const certAudit = read("scripts/certificate-browser-print-audit.mjs");
   const workflow = read(".github/workflows/portal-syntax.yml");
   assert.match(workflow, /Run real-browser certificate A4 landscape audit/);
