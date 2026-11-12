@@ -92,6 +92,21 @@ test("online party games use supported server actions and stable player identity
   assert.deepEqual(JSON.parse(JSON.stringify(voteView.answers)), {p1:"secret 1",p2:"secret 2"});
 });
 
+test("MDK 02.02 contains expanded assembly automation lectures and assessments", () => {
+  const source = read("data-0202.js");
+  const html = read("index.html");
+  assert.match(html, /data-0202\.js\?v=2/);
+  assert.equal((source.match(/"id": "m0202-t/g) || []).length, 7);
+  assert.equal((source.match(/"q":/g) || []).length, 28);
+  assert.match(source, /конечный автомат/);
+  assert.match(source, /обратная связь/);
+  assert.match(source, /постпроцессор/);
+  assert.match(source, /анизотропия/);
+  assert.match(source, /покадровый режим/);
+  assert.match(source, /безопасное состояние/);
+  assert.doesNotMatch(source, /Первый этап сборки —|Размерная база в программе задаёт/);
+});
+
 test("automated assembly workbook topics have distinct automation profiles", () => {
   const editorial = read("workbook-editorial.js");
   const course = editorial.slice(editorial.indexOf('"02.02": {'), editorial.indexOf('"MAT": {'));
