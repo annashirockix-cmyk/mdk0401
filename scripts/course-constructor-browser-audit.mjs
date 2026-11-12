@@ -96,6 +96,10 @@ try {
   await page.evaluate(() => {
     window.state.staff = null;
     window.state.student = { role: "student", courses: ["07.01"] };
+    const originalInlineTest = window.startInlineTest;
+    window.startInlineTest = function () { console.log("START_INLINE_TEST_CALLED", JSON.stringify(Array.from(arguments))); return originalInlineTest.apply(this, arguments); };
+    const originalCustomTest = window.startCustomInlineTest;
+    window.startCustomInlineTest = function () { console.log("START_CUSTOM_TEST_CALLED", JSON.stringify(Array.from(arguments))); return originalCustomTest.apply(this, arguments); };
     const topicId = document.getElementById("fcTopic").value;
     window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
