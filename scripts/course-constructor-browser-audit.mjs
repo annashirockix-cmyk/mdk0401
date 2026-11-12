@@ -102,7 +102,7 @@ try {
   });
   await page.waitForTimeout(750);
   console.log("STUDENT_RENDER_DEBUG", JSON.stringify(await page.evaluate(() => ({ hash: location.hash, appText: document.getElementById("app")?.innerText?.slice(0,900), topicId: document.getElementById("fcTopic")?.value, topics: window.customContent?.topics, lectures: window.customContent?.lectures, topicAccess: typeof window.API?.getTopicAccess, lectureText: document.querySelector("#topicContent .lec-content")?.innerText?.slice(0,300) }))));
-  await page.waitForFunction(() => document.querySelector("#topicContent .lec-content")?.innerText.includes("Содержимое тестовой лекции"));
+  await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
   const lectureVisible = await page.locator("#topicContent").innerText();
   assert.ok(lectureVisible.includes("Тестовая лекция конструктора"));
 
