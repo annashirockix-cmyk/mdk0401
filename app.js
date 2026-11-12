@@ -290,6 +290,53 @@ window.renderTrainingListPage = function() {
     app.appendChild(grid);
 };
 
+window.renderSecureTrainingPage = function(courseId) {
+    var app = document.getElementById("app"); if (!app) return;
+    var course = window.MDK_DATA && window.MDK_DATA[courseId];
+    if (!course || (window.canAccessCourse && !window.canAccessCourse(courseId))) {
+        app.innerHTML = '<div class="module">Нет доступа к дисциплине.</div>';
+        return;
+    }
+    app.innerHTML = '<a class="backlink" href="#/training" style="color:var(--accent);">← Назад к тренировкам</a>' +
+      '<section class="hero"><h1>🎯 Защищённые тесты</h1><p>' + window.escapeHtml(course.shortName || course.title || courseId) + '</p>' +
+      '<p>Вопросы и проверка загружаются из серверного банка. В браузере нет ключей ответов.</p></section>';
+    var total = 0;
+    (course.sections || []).forEach(function(section) {
+        var topics = (section.topics || []).filter(function(topic) { return Array.isArray(topic.test) && topic.test.length; });
+        if (!topics.length) return;
+        var block = document.createElement("section");
+        block.className = "module";
+        var heading = document.createElement("h3");
+        heading.textContent = section.title || section.code || "Раздел";
+        block.appendChild(heading);
+        topics.forEach(function(topic) {
+            total++;
+            var card = document.createElement("div");
+            card.style.cssText = "display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--border);";
+            var label = document.createElement("div");
+            var name = document.createElement("b");
+            name.textContent = (topic.code ? topic.code + " · " : "") + topic.title;
+            var count = document.createElement("div");
+            count.style.color = "var(--muted)";
+            count.textContent = "Вопросов в теме: " + topic.test.length;
+            label.appendChild(name); label.appendChild(count);
+            var button = document.createElement("button");
+            button.className = "btn";
+            button.type = "button";
+            button.textContent = "Открыть тест";
+            button.onclick = function() { window.renderTopicPage(courseId, topic.id, "test"); };
+            card.appendChild(label); card.appendChild(button); block.appendChild(card);
+        });
+        app.appendChild(block);
+    });
+    if (!total) {
+        var empty = document.createElement("div");
+        empty.className = "module";
+        empty.textContent = "В этой дисциплине пока нет тематических тестов в защищённом банке.";
+        app.appendChild(empty);
+    }
+};
+ 
 window.renderGcodeTrainerPage = function() {
     var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
     app.innerHTML = '<a class="backlink" href="#/training" style="color:var(--accent);">← Назад</a><section class="hero"><h1>📐 Тренажер G-кода</h1></section>';
@@ -746,13 +793,22 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             contentArea.innerHTML = '<div class="module"><h3>Защищённый тест недоступен</h3><p>Серверный банк вопросов не подключён. Ответы не будут проверяться в браузере. Сообщите преподавателю.</p></div>';
             return;
         }
+        if (!window.state || !window.state.staff) {
+            contentArea.dataset.proctorAssessment = "0";
+            contentArea.innerHTML = '<div class="module"><h3>Предпросмотр теста недоступен</h3><p>Войдите в учётную запись преподавателя. Ключи ответов не хранятся в открытых файлах портала.</p></div>';
+            return;
+        }
         if (!questions.length) { contentArea.innerHTML = "<p>Вопросы не найдены.</p>"; return; }
         questions = questions.sort(() => Math.random() - 0.5);
-        
+        var previewOnly = true;
         var currentQ = 0, correct = 0;
         function renderQ() {
             if (currentQ >= questions.length) {
                 contentArea.dataset.proctorAssessment="0";
+                if (previewOnly) {
+                    contentArea.innerHTML = '<div class="module" style="text-align:center"><h2>Предпросмотр завершён</h2><p>Вопросы показаны без ключей и оценки. Студенческая попытка проверяется защищённым серверным банком.</p><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться</button></div>';
+                    return;
+                }
                 var pct = Math.round((correct / questions.length) * 100); 
                 var grade = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : 2;
                 var resKey = selfWorkCode !== null && selfWorkCode !== undefined ? `self_${topicId}_${typeof selfWorkCode === "number" ? selfWorkCode : 0}` : `test_${topicId}`;
@@ -783,7 +839,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             q.options.forEach((opt, i) => { html += `<button class="btn ghost" style="display:block; width:100%; text-align:left; margin-top:5px; padding:10px;" onclick="window.answerInlineTest(${i})">${opt}</button>`; });
             contentArea.innerHTML = html;
         }
-        window.answerInlineTest = function(selected) { if (Number(selected) === Number(questions[currentQ].correct)) correct++; currentQ++; renderQ(); };
+        window.answerInlineTest = function(selected) { if (!previewOnly && Number(selected) === Number(questions[currentQ].correct)) correct++; currentQ++; renderQ(); };
         renderQ();
     };
     window.switchTopicTab(activeTab || 'lectures');
@@ -1084,10 +1140,7 @@ window.router = function() {
         if (parts.length > 1 && window.canAccessCourse && !window.canAccessCourse(parts[1])) { window.renderHomePage(); return; }
         if (parts.length > 1) {
             var mdkId = parts[1];
-            if (mdkId === "07.01" && window.renderTraining_0701) window.renderTraining_0701(mdkId);
-            else if (mdkId === "04.01" && window.renderTraining_0401) window.renderTraining_0401(mdkId);
-            else if (mdkId === "02.01" && window.renderTraining_0201) window.renderTraining_0201(mdkId);
-            else if (mdkId === "02.02" && window.renderTraining_0202) window.renderTraining_0202(mdkId);
+            if (window.renderSecureTrainingPage) window.renderSecureTrainingPage(mdkId);
             else window.renderTrainingListPage();
         } else { window.renderTrainingListPage(); }
         return; 
