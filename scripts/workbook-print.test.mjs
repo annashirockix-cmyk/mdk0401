@@ -39,7 +39,7 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(html, /workbooks\.js\?v=60/);
  assert.match(html, /workbook-editorial\.js\?v=6/);
  assert.match(html, /style\.css\?v=23/);
- assert.match(sw, /portal-cache-v329/);
+ assert.match(sw, /portal-cache-v330/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Письменная практика Basic English/);
  assert.match(editorialSource, /Language practice:/);
@@ -48,7 +48,10 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(editorialSource, /technicalProfiles/);
  assert.match(editorialSource, /id==="ENB"\)\{\s*intro="Дополнительная языковая практика/);
  assert.doesNotMatch(editorialSource, /How can you use this knowledge in your future profession/);
-  const audit = read("scripts/workbook-browser-print-audit.mjs");
+  const css = read("style.css");
+ assert.match(css.slice(css.lastIndexOf("@media print")), /\.wb-code[^}]*background:#fff!important/);
+ assert.match(css.slice(css.lastIndexOf("@media print")), /\.wb-code \\*[^}]*color:#111!important/);
+ const audit = read("scripts/workbook-browser-print-audit.mjs");
   assert.match(audit, /const pdfCourses = new Set\(courseIds\)/);
   assert.match(audit, /Дополнительный методический разбор|Составьте краткую технологическую карту/);
   const certAudit = read("scripts/certificate-browser-print-audit.mjs");
