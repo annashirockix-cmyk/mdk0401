@@ -136,8 +136,8 @@ test("occupational safety workbook topics have distinct hazard-specific profiles
 test("lecture enrichment supplies topic-specific written practice for technical courses", () => {
   const source = read("lecture-enrichment.js");
   assert.match(source, /function writtenPractice\(id,title\)/);
-  assert.match(source, /карта опасностей\\|анализ\\.\\*риска\\|производствен\\.\\*риск\\|фактор риска/);
-  assert.match(source, /организац\\.\\*проект\\|слоя\\|плоскост/);
+  assert.ok(source.includes("if(/карта опасностей|анализ.*риска|производствен.*риск|фактор риска/.test(t))"));
+  assert.ok(source.includes("if(/уров|levels|организац.*проект|слоя|плоскост/.test(t))"));
   for (const phrase of ["Практика: безопасная работа с электрооборудованием","Практика: действия при пожаре","Практика: выбор средств защиты","Практика: предсменный осмотр станка","Практика: контроль специального процесса","Практика: анализ культуры безопасности"]) assert.ok(source.includes(phrase), "missing focused safety practice: "+phrase);
   assert.doesNotMatch(source, /Составьте краткую технологическую карту по теме/);
   for (const phrase of ["санитарная оценка рабочего места","контроль специального процесса","чек-лист допуска","дерево поиска неисправности","протокол измерений","диаграммы Fe–C","статус средства измерений","Карта оборудования и сигналов"]) assert.ok(source.toLowerCase().includes(phrase.toLowerCase()), "missing topic-specific task: "+phrase);
