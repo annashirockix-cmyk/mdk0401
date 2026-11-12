@@ -9,7 +9,7 @@ test("custom lecture and test content has one student rendering path", () => {
  const app = read("app.js");
  const editor = read("course-admin.js");
  const html = read("index.html");
- const sw = read("service-worker.js"); const css = read("style.css");
+ const sw = read("service-worker.js"); const css = read("style.css"); const enrichment = read("lecture-enrichment.js");
  assert.ok(html.includes("course-admin.js?v=19"));
  assert.ok(app.includes("customTopicLectures"));
  assert.ok(app.includes("customTopicTests"));
@@ -18,7 +18,8 @@ test("custom lecture and test content has one student rendering path", () => {
  assert.ok(!editor.includes("function customRecords("));
  assert.ok(editor.includes("type:\"lecture\""));
  assert.ok(editor.includes("type:\"test\""));
- assert.ok(sw.includes("portal-cache-v311")); assert.ok(css.includes(".lec-content img"));
+ assert.ok(sw.includes("portal-cache-v312")); assert.ok(css.includes(".lec-content img"));
+ assert.ok(enrichment.includes('["07.01","SPRUT_TP","basic","technical","EN","ENB","ENT"].indexOf(id)>=0'));
 });
 test("custom lecture sanitizer preserves safe images and figure captions", () => {
  const app = read("app.js");
