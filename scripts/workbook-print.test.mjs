@@ -29,7 +29,8 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(workbooks, /kind:"diagram"/);
  assert.match(workbooks, /x\.kind==="diagram"\?"wb-diagram"/);
  assert.match(workbooks, /class="wb-image-credit"/);
- assert.match(workbooks, /\.wb-gallery figure\.wb-diagram\{grid-column:1 \/ -1\}/);\n assert.match(workbooks, /\.wb-gallery figure\.wb-diagram img\{max-height:48mm!important\}/);
+ assert.match(workbooks, /\.wb-gallery figure\.wb-diagram\{grid-column:1 \/ -1\}/);
+ assert.match(workbooks, /\.wb-gallery figure\.wb-diagram img\{max-height:48mm!important\}/);
  assert.match(workbooks, /\.wb-image-credit\{display:block;margin-top:4px/);
  assert.match(workbooks, /\.lv-flow-node\{display:flex/);
  assert.match(workbooks, /\.lv-flow-step\{display:inline-flex/);
