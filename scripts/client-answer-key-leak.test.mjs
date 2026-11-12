@@ -28,7 +28,9 @@ const publicAssessmentSources = [
   "sprut-tp-question-bank.js",
   "exam_0401.js",
   "exam_0201.js",
-  "exam_0202.js"
+  "exam_0202.js",
+  "exam_0701.js",
+  "english-vpr-exams.js"
 ];
 
 test("public course and assessment data contain no embedded answer keys", () => {
@@ -40,6 +42,13 @@ test("public course and assessment data contain no embedded answer keys", () => 
     assert.doesNotMatch(source, /\bcorrectOrder\s*:/, file + " exposes correctOrder:");
     assert.doesNotMatch(source, /\banswer\s*:/, file + " exposes answer:");
     assert.doesNotMatch(source, /function\s+(?:tq|q)\s*\([^)]*\bcorrect\b/, file + " retains a key-bearing question helper");
+  }
+});
+
+test("public question helper calls no longer carry a third answer argument", () => {
+  for (const file of ["data-0401.js", "data-0201.js", "data-mastercam.js", "data-english-basic.js", "data-english-technical.js", "english-assessment-data.js", "data-metrology.js", "challenge-questions.js"]) {
+    const source = read(file);
+    assert.doesNotMatch(source, /\\b(?:tq|q)\\(\\s*(?:"[^"]*"|'[^']*')\\s*,\\s*\\[[^\\]]*\\]\\s*,\\s*-?\\d+\\s*\\)/, file + " retains a public answer argument");
   }
 });
 
