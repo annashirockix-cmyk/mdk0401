@@ -953,8 +953,10 @@ test("English workbook renderer preserves source writing tasks instead of generi
   const workbooks = read("workbooks.js");
   assert.match(workbooks, /writing=Array\.isArray\(t\.writing\)\?t\.writing:\[\]/);
   assert.match(workbooks, /wb-source-writing-task/);
-  assert.match(workbooks, /Grammar Exercises: Pronouns & Verbs/);
-  assert.match(workbooks, /Match words with definitions/);
+  const basicEnglish = read("data-english-basic.js");
+  const technicalEnglish = read("data-english-technical.js");
+  assert.match(basicEnglish, /Grammar Exercises: Pronouns & Verbs/);
+  assert.match(technicalEnglish, /Match words with definitions/);
   assert.match(workbooks, /isEnglishCourse/);
 });
 
