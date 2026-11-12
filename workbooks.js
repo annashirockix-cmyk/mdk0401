@@ -27,7 +27,7 @@
     var id=String(courseId),english=id==="EN"||id==="ENB"||id==="ENT",basic=id==="ENB";
     if(basic)return '<section class="wb-writing"><h3>📝 Письменная практика Basic English</h3><ol><li>Напишите 6–8 предложений по теме «'+esc(topic.title||"Unit")+'», используя лексику раздела.</li><li>Выпишите 5 новых слов, укажите перевод и составьте с каждым короткое предложение.</li><li>Добавьте один вопрос собеседнику и краткий ответ на него на английском языке.</li></ol><div class="write-lines wb-writing-lines"></div></section>';
     if(english)return '<section class="wb-writing"><h3>📝 Письменная практика</h3><ol><li>Составьте краткое письменное резюме темы на английском языке (5–7 предложений).</li><li>Выпишите 8–10 ключевых слов и составьте с пятью из них собственные предложения.</li><li>Опишите на английском один пример применения темы в профессиональной или повседневной ситуации.</li></ol><div class="write-lines wb-writing-lines"></div></section>';
-    return '<section class="wb-writing"><h3>📝 Письменная работа по теме</h3><ol><li>Дайте определение двум ключевым понятиям темы своими словами.</li><li>Опишите последовательность действий по изученному процессу и укажите, что контролируется на каждом этапе.</li><li>Разберите одну возможную ошибку: признак, вероятная причина, безопасный способ проверки и профилактика.</li></ol><div class="write-lines wb-writing-lines"></div></section>';
+    return "";
   }
   function notesBlock(){return '<section class="wb-notes"><h3>📒 Мои заметки</h3><p>Что важно запомнить? Какие вопросы остались? Что нужно уточнить у преподавателя?</p><div class="write-lines wb-notes-lines"></div></section>';}
   function generatedTopicEditorial(courseId,topic){
