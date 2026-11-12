@@ -44,7 +44,7 @@ try {
     }, id);
     assert.ok(html && html.includes("<title>"), `Workbook ${id} did not generate standalone HTML`);
     assert.doesNotMatch(html, /Маршрут освоения темы|Разобраться в терминах|Что ещё полезно помнить|Запомни: понял принцип/, `Workbook ${id} contains repeated generic route filler`);
-    if (id !== "ENB" && id !== "ENT") assert.doesNotMatch(html, /Пример из практики/, `Workbook ${id} contains a generic example filler`);
+    if (id !== "ENB" && id !== "ENT") assert.doesNotMatch(html, /Допустим, нужно выполнить производственную задачу/, `Workbook ${id} contains a generic example filler`);
     if (id !== "ENB" && id !== "ENT") assert.doesNotMatch(html, /Письменная работа по теме/, `Workbook ${id} contains generic written-practice filler`);
     if (id === "ENB" || id === "ENT") {
       assert.doesNotMatch(html, /Дополнительный методический разбор|Составьте краткую технологическую карту по теме/);
