@@ -25,7 +25,18 @@
   }
   function writtenPractice(courseId,topic){
     var id=String(courseId),basic=id==="ENB";
-    if(basic)return '<section class="wb-writing"><h3>📝 Письменная практика Basic English</h3><ol><li>Напишите 6–8 предложений по теме «'+esc(topic.title||"Unit")+'», используя лексику раздела.</li><li>Выпишите 5 новых слов, укажите перевод и составьте с каждым короткое предложение.</li><li>Добавьте один вопрос собеседнику и краткий ответ на него на английском языке.</li></ol><div class="write-lines wb-writing-lines"></div></section>';
+    if(basic){
+      var basicProfiles={
+        "b-unit1":{title:"Introducing myself and my future profession",terms:["personal information","daily routine","skills","career plans"],tasks:["Introduce yourself and describe your daily routine in 6–8 sentences.","Explain why you chose your professional field and name two skills you want to develop.","Write three interview questions for a new student and prepare short answers."]},
+        "b-unit2":{title:"My town: Nizhnekamsk",terms:["location","industry","landmark","directions"],tasks:["Write a short description of Nizhnekamsk: location, one landmark and one important local industry.","Give simple directions from a familiar starting point to a college, workshop or public place.","Prepare a short welcome note for a visitor and recommend two places to see."]},
+        "b-unit3":{title:"Tatarstan: region and culture",terms:["region","tradition","culture","industry"],tasks:["Introduce Tatarstan to a visitor in 6–8 sentences. Include its location and one cultural feature.","Describe one local tradition or celebration and explain why it is important.","Name two industries or products associated with the region and write one sentence about each."]},
+        "b-unit4":{title:"Ecology and everyday action",terms:["environment","waste","recycling","pollution"],tasks:["Describe one environmental problem that can affect a town or industrial area.","Suggest three practical actions a college workshop can take to reduce waste or pollution.","Write a short poster message encouraging students to save energy and sort recyclable materials."]},
+        "b-unit6":{title:"Additional reading: summary and opinion",terms:["main idea","key detail","summary","opinion"],tasks:["Read the additional text and write its main idea in one clear sentence.","Select five useful words from the text, translate them and use each in a new sentence.","Write a short opinion about the text and support it with two details from the reading."]}
+      };
+      var basicProfile=basicProfiles[String(topic&&topic.id||"")];
+      if(!basicProfile)return "";
+      return '<section class="wb-writing"><h3>📝 '+esc(basicProfile.title)+'</h3><p>Complete the tasks in English. Use full sentences and vocabulary from the unit.</p><ol>'+basicProfile.tasks.map(function(task){return '<li>'+esc(task)+'</li>';}).join("")+'</ol><p class="wb-writing-vocab"><b>Useful vocabulary:</b> '+basicProfile.terms.map(esc).join(" · ")+'</p><div class="write-lines wb-writing-lines"></div></section>';
+    }
     if(id==="ENT"){
       var profiles={
         "t-unit1":{title:"Materials selection note",terms:["ferrous","non-ferrous","alloy","corrosion resistance"],tasks:["Compare steel and aluminium for a machine bracket. Mention strength, mass and corrosion resistance.","Choose a suitable material for a component used in a damp workshop. Explain which properties matter and why.","Write a short material-selection note for a technician. Use at least four terms from the list."]},
