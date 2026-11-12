@@ -56,6 +56,8 @@ test("public question helper calls no longer carry a third answer argument", () 
 
 test("English protected banks are not shipped as a public assessment source", () => {
   const html = read("index.html");
+  assert.match(html, /final-exam-question-types\.js\?v=2/);
+  assert.match(html, /portal-final\.js\?v=23/);
   assert.doesNotMatch(html, /english-assessment-data\.js/);
   const engine = read("english-vpr-engine.js");
   assert.match(engine, /window\.API\.getEnglishSemesterTests/);
