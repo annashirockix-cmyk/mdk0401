@@ -13,7 +13,7 @@
 .lv-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-top:12px}
 .lv-flow-node{display:flex;flex-direction:column;gap:8px;min-width:0;padding:12px;border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:10px;background:rgba(80,145,190,.10);break-inside:avoid;page-break-inside:avoid}
 .lv-flow-step{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;background:var(--accent);color:#fff;font-weight:750;font-size:.85rem}
-.lv-flow-text{font-weight:650;line-height:1.4;overflow-wrap:anywhere}
+.lv-flow-text{font-weight:650;line-height:1.4;overflow-wrap:break-word;word-break:normal}
 .lv-task{padding:15px 18px;border-left:4px solid var(--accent);border-radius:8px;background:var(--card,rgba(0,0,0,.08));line-height:1.55}
 .lv-task ol{margin-bottom:0;padding-left:22px}
 @media(max-width:650px){.lecture-visual-atlas{padding:13px}.lv-flow{grid-template-columns:repeat(2,minmax(0,1fr))}.lv-flow-node{padding:10px}.lv-figure{padding:8px}}
@@ -49,3 +49,5 @@
 .sprut-practice-case h4{margin-top:0;}
 .sprut-practice-case ol{padding-left:24px;line-height:1.6;}
 @media(max-width:650px){.sprut-document-pack,.sprut-practice-case{padding:11px}.sprut-document-pack table{font-size:.82rem;display:block;overflow-x:auto;white-space:normal;}}
+
+@media print{.lv-flow{grid-template-columns:repeat(3,minmax(0,1fr))}.lv-flow-node{break-inside:avoid;page-break-inside:avoid}}
