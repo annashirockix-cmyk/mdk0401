@@ -899,7 +899,7 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=56/);
+  assert.match(html, /workbooks\.js\?v=57/);
   assert.match(sw, /portal-cache-v313/);
 });
 
@@ -925,7 +925,7 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
-  assert.match(html, /workbooks\.js\?v=56/);
+  assert.match(html, /workbooks\.js\?v=57/);
   assert.match(sw, /portal-cache-v313/);
 });
 
@@ -953,7 +953,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=56/);
+  assert.match(html, /workbooks\.js\?v=57/);
   assert.match(html, /style\.css\?v=23/);
   assert.match(sw, /portal-cache-v313/);
 });
