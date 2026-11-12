@@ -6,6 +6,8 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || "playwright")
 const baseUrl = process.env.CONSTRUCTOR_AUDIT_URL || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+page.on("pageerror", error => console.log("PAGE_ERROR", error.stack || error.message));
+page.on("console", message => { if (message.type() === "error") console.log("PAGE_CONSOLE_ERROR", message.text()); });
 try {
   const response = await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45000 });
   assert.ok(response && response.ok(), `Portal did not load: ${response?.status()}`);
@@ -98,6 +100,8 @@ try {
     window.location.hash = "#/topic/" + topicId;
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
+  await page.waitForTimeout(750);
+  console.log("STUDENT_RENDER_DEBUG", JSON.stringify(await page.evaluate(() => ({ hash: location.hash, appText: document.getElementById("app")?.innerText?.slice(0,900), topicId: document.getElementById("fcTopic")?.value, topics: window.customContent?.topics, lectures: window.customContent?.lectures, topicAccess: typeof window.API?.getTopicAccess, lectureText: document.querySelector("#topicContent .lec-content")?.innerText?.slice(0,300) }))));
   await page.waitForFunction(() => document.querySelector("#topicContent .lec-content")?.innerText.includes("Содержимое тестовой лекции"));
   const lectureVisible = await page.locator("#topicContent").innerText();
   assert.ok(lectureVisible.includes("Тестовая лекция конструктора"));
