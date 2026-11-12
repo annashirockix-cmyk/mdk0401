@@ -92,6 +92,23 @@ test("online party games use supported server actions and stable player identity
   assert.deepEqual(JSON.parse(JSON.stringify(voteView.answers)), {p1:"secret 1",p2:"secret 2"});
 });
 
+test("MDK 02.02 contains expanded assembly automation lectures and assessments", () => {
+  const source = read("data-0202.js");
+  const html = read("index.html");
+  assert.match(html, /data-0202\.js\?v=2/);
+  assert.equal((source.match(/"id": "m0202-t/g) || []).length, 7);
+  assert.equal((source.match(/"q":/g) || []).length, 28);
+  assert.equal((source.match(/"practical": \{/g) || []).length, 7);
+  assert.equal((source.match(/"selfWork": \[/g) || []).length, 7);
+  assert.match(source, /конечный автомат/);
+  assert.match(source, /обратная связь/);
+  assert.match(source, /постпроцессор/);
+  assert.match(source, /анизотропия/);
+  assert.match(source, /покадровый режим/);
+  assert.match(source, /безопасное состояние/);
+  assert.doesNotMatch(source, /Первый этап сборки —|Размерная база в программе задаёт/);
+});
+
 test("automated assembly workbook topics have distinct automation profiles", () => {
   const editorial = read("workbook-editorial.js");
   const course = editorial.slice(editorial.indexOf('"02.02": {'), editorial.indexOf('"MAT": {'));
@@ -776,7 +793,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v318"));
+  assert.ok(sw.includes("portal-cache-v319"));
 });
 
 
@@ -797,7 +814,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v318/);
+  assert.match(sw, /portal-cache-v319/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -928,7 +945,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v318/);
+  assert.match(sw, /portal-cache-v319/);
 });
 
 
@@ -943,7 +960,7 @@ test("workbooks include differentiated supplemental professional learning blocks
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
   assert.match(html, /workbooks\.js\?v=57/);
-  assert.match(sw, /portal-cache-v318/);
+  assert.match(sw, /portal-cache-v319/);
 });
 
 
@@ -969,7 +986,7 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
   assert.match(html, /workbooks\.js\?v=57/);
-  assert.match(sw, /portal-cache-v318/);
+  assert.match(sw, /portal-cache-v319/);
 });
 
 
@@ -998,7 +1015,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(css, /\.wb-visual-chart/);
   assert.match(html, /workbooks\.js\?v=57/);
   assert.match(html, /style\.css\?v=23/);
-  assert.match(sw, /portal-cache-v318/);
+  assert.match(sw, /portal-cache-v319/);
 });
 
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {
