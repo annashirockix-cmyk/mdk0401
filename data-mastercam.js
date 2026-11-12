@@ -26,9 +26,7 @@ window.MDK_DATA = window.MDK_DATA || {};
     return '<p style="color:#94a3b8;font-size:14px;margin-top:24px;border-top:1px solid #334155;padding-top:12px;">Проверьте свои знания, пройдя тест ниже.</p>';
   }
 
-  function tq(q, options, correct) {
-    return { q: q, options: options, correct: correct };
-  }
+  function tq(q, options) { return { q: q, options: options }; }
 
   function lec(code, title, content) {
     return { code: code, title: title, content: content };
