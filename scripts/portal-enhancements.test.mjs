@@ -178,7 +178,7 @@ test("SPRUT-TP topic assessments and reference tables are specific to each topic
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=62/);
+  assert.match(html, /workbooks\.js\?v=65/);
   assert.match(html, /workbook-editorial\.js\?v=6/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
@@ -662,7 +662,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
   assert.match(html, /lecture-visual-atlas\.js\?v=5/);
-  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=6/);
+  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=7/);
   assert.match(html, /sprut-tp-document-examples\.js\?v=3/);
   assert.match(html, /lecture-visual-atlas\.css\?v=6/);
   assert.ok(sw.includes("./sprut-tp-document-examples.js"));
@@ -1049,7 +1049,7 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=62/);
+  assert.match(html, /workbooks\.js\?v=65/);
   assert.match(sw, /portal-cache-v337/);
 });
 
@@ -1075,7 +1075,7 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
-  assert.match(html, /workbooks\.js\?v=62/);
+  assert.match(html, /workbooks\.js\?v=65/);
   assert.match(sw, /portal-cache-v337/);
 });
 
@@ -1103,7 +1103,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=62/);
+  assert.match(html, /workbooks\.js\?v=65/);
   assert.match(html, /style\.css\?v=24/);
   assert.match(sw, /portal-cache-v337/);
 });
