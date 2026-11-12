@@ -95,11 +95,16 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=56/);
+  assert.match(html, /workbooks\.js\?v=57/);
+  assert.match(html, /workbook-editorial\.js\?v=2/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
   assert.match(workbook, /else if\(String\(courseId\)==="SPRUT_TP"\)/);
+  assert.match(workbook, /courseEditorial\[String\(topic\.code\)\]\|\|courseEditorial\[String\(topic\.id\)\]/);
+  const editorial = read("workbook-editorial.js");
+  for (const code of ["Тема 1.1","Тема 1.2","Тема 1.3","Тема 2.1","Тема 2.2","Тема 3.1","Тема 3.2","Тема 3.3","Тема 4.1","Тема 4.2","Тема 5.1","Тема 5.2","Тема 6.1","Тема 6.2"]) assert.ok(editorial.includes(JSON.stringify(code)), "missing section-specific SPRUT editorial: "+code);
+
   for (const caption of ["Микрометр: измерительные поверхности и отсчёт", "Штангенциркуль: губки, штанга и нониус", "Контроль безопасности перед началом работы", "Последовательность диагностики и восстановления оборудования", "Цифровой маршрут подготовки управляющей программы", "Связь состава, структуры и свойств материала", "Рабочий цикл технолога в СПРУТ-ТП", "Две независимые классификации ТП", "Состав и связи комплекта технологических документов", "Логика рабочего пространства СПРУТ-ТП", "Источники исходных данных для разработки ТП", "Маршрутная карта: последовательность операций", "Операционная карта: что раскрывается в операции", "Маршрутно-операционный процесс: маршрут плюс детализация", "Типовой и групповой технологические процессы", "Использование аналога и шаблона без слепого копирования", "Типовая последовательность механической обработки", "Заготовительные и специальные операции", "Состав нормы штучно-калькуляционного времени", "Проверка и выпуск технологической документации", "Профиль наружной и внутренней резьбы", "Коническая поверхность", "Связь технологических документов", "Принцип сверления", "Послойное формирование детали", "Порядок выполнения и сдачи практической работы", "Логика рабочего пространства СПРУТ-ТП"]) assert.ok(workbook.includes(caption), "missing topic-specific workbook diagram: " + caption);
   assert.doesNotMatch(workbook, /meme-(cat|js|python|variables)\\.jpg/, "decorative meme images must not appear in study sheets");
   const imageNames = [...workbook.matchAll(/add\("(fig-[^"]+\.png)"/g)].map((m) => m[1]);
@@ -728,7 +733,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v312"));
+  assert.ok(sw.includes("portal-cache-v313"));
 });
 
 
@@ -749,7 +754,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v312/);
+  assert.match(sw, /portal-cache-v313/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -880,7 +885,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v312/);
+  assert.match(sw, /portal-cache-v313/);
 });
 
 
@@ -894,8 +899,8 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=56/);
-  assert.match(sw, /portal-cache-v312/);
+  assert.match(html, /workbooks\.js\?v=57/);
+  assert.match(sw, /portal-cache-v313/);
 });
 
 
@@ -920,8 +925,8 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
-  assert.match(html, /workbooks\.js\?v=56/);
-  assert.match(sw, /portal-cache-v312/);
+  assert.match(html, /workbooks\.js\?v=57/);
+  assert.match(sw, /portal-cache-v313/);
 });
 
 
@@ -948,9 +953,9 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=56/);
+  assert.match(html, /workbooks\.js\?v=57/);
   assert.match(html, /style\.css\?v=23/);
-  assert.match(sw, /portal-cache-v312/);
+  assert.match(sw, /portal-cache-v313/);
 });
 
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {
