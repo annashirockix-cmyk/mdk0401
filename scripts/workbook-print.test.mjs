@@ -37,7 +37,7 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(html, /workbooks\.js\?v=58/);
  assert.match(html, /workbook-editorial\.js\?v=6/);
  assert.match(html, /style\.css\?v=23/);
- assert.match(sw, /portal-cache-v320/);
+ assert.match(sw, /portal-cache-v321/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Письменная практика Basic English/);
  assert.match(editorialSource, /Language practice:/);
