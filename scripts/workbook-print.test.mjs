@@ -12,7 +12,7 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(workbooks, /@page\{size:A4;margin:12mm 14mm/);
  assert.match(workbooks, /counter\(pages\)/);
  assert.match(workbooks, /\.wb-answer-group\{break-inside:avoid;page-break-inside:avoid\}/);
- assert.doesNotMatch(workbooks, /Письменная работа по теме/);
+ assert.doesNotMatch(workbooks, /Письменная работа по теме|Маршрут освоения темы|Разобраться в терминах|Что ещё полезно помнить|Пример из практики|Запомни: понял принцип/);
  assert.match(workbooks, /class="wb-answer-group"/);
  assert.match(workbooks, /writing=Array\.isArray\(t\.writing\)\?t\.writing:\[\]/);
  assert.match(workbooks, /wb-source-writing-text/);
@@ -40,10 +40,10 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(workbooks, /\.lv-flow\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
  assert.match(workbooks, /overflow-wrap:break-word;word-break:normal/);
  assert.match(workbooks, /\.lecture-visual-atlas\{margin:18px 0/);
- assert.match(html, /workbooks\.js\?v=63/);
+ assert.match(html, /workbooks\.js\?v=64/);
  assert.match(html, /workbook-editorial\.js\?v=6/);
  assert.match(html, /style\.css\?v=24/);
- assert.match(sw, /portal-cache-v334/);
+ assert.match(sw, /portal-cache-v335/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Письменная практика Basic English/);
  assert.match(editorialSource, /Language practice:/);
