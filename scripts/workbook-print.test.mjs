@@ -50,7 +50,7 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.doesNotMatch(editorialSource, /How can you use this knowledge in your future profession/);
   const css = read("style.css");
  assert.match(css.slice(css.lastIndexOf("@media print")), /\.wb-code[^}]*background:#fff!important/);
- assert.match(css.slice(css.lastIndexOf("@media print")), /\.wb-code \\*[^}]*color:#111!important/);
+ assert.match(css.slice(css.lastIndexOf("@media print")), /\.wb-code \*[^}]*color:#111!important/);
  const audit = read("scripts/workbook-browser-print-audit.mjs");
   assert.match(audit, /const pdfCourses = new Set\(courseIds\)/);
   assert.match(audit, /Дополнительный методический разбор|Составьте краткую технологическую карту/);
