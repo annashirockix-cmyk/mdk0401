@@ -102,6 +102,7 @@ try {
       });
 
       assert.ok(metrics.sheets >= 1, `Workbook ${id} contains no pages`);
+      if (id !== "ENB" && id !== "ENT") assert.ok(metrics.images.length > 0, `Workbook ${id} lost all curated visual material`);
       assert.equal(metrics.overflows.length, 0, `Workbook ${id} has print overflow: ${JSON.stringify(metrics.overflows.slice(0, 30))}`);
       const broken = metrics.images.filter((img) => !img.loaded);
       if (broken.length) console.warn(`Workbook ${id}: ${broken.length} image(s) failed to load`, broken.map((img) => img.src));
