@@ -48,7 +48,7 @@ test("public course and assessment data contain no embedded answer keys", () => 
 test("public question helper calls no longer carry a third answer argument", () => {
   for (const file of ["data-0401.js", "data-0201.js", "data-mastercam.js", "data-english-basic.js", "data-english-technical.js", "english-assessment-data.js", "data-metrology.js", "challenge-questions.js"]) {
     const source = read(file);
-    assert.doesNotMatch(source, /\\b(?:tq|q)\\(\\s*(?:"[^"]*"|'[^']*')\\s*,\\s*\\[[^\\]]*\\]\\s*,\\s*-?\\d+\\s*\\)/, file + " retains a public answer argument");
+    assert.doesNotMatch(source, /\b(?:tq|q)\(\s*(?:"[^"]*"|'[^']*')\s*,\s*\[[^\]]*\]\s*,\s*-?\d+\s*\)/, file + " retains a public answer argument");
   }
 });
 
