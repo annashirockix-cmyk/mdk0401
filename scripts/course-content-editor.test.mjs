@@ -30,6 +30,11 @@ test("custom lecture sanitizer preserves safe images and figure captions", () =>
 });
 test("flashcard constructor saves and reopens saved sets", () => {
  const cards = read("flashcard-editor.js");
+ const workflow = read(".github/workflows/portal-syntax.yml");
+ const audit = read("scripts/course-constructor-browser-audit.mjs");
+ assert.ok(workflow.includes("Run real-browser course constructor round-trip audit"));
+ assert.ok(audit.includes("Содержимое тестовой лекции"));
+ assert.ok(audit.includes("Карточки конструктора"));
  assert.ok(cards.includes("type:\"flashcards\""));
  assert.ok(cards.includes("function renderSaved("));
  assert.ok(cards.includes("function loadSet("));
