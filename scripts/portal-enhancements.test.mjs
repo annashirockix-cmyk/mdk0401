@@ -1054,6 +1054,17 @@ test("workbooks include differentiated supplemental professional learning blocks
 });
 
 
+test("Technical English writing practice is specific to all twelve units", () => {
+  const workbooks = read("workbooks.js");
+  for (const id of ["t-unit1","t-unit2","t-unit3","t-unit4","t-unit5","t-unit6","t-unit7","t-unit8","t-unit9","t-unit10","t-unit11","t-unit12"]) {
+    assert.match(workbooks, new RegExp('"' + id + '":\\{title:'));
+  }
+  for (const phrase of ["Materials selection note","Technical drawing interpretation","Machine tool operation brief","Electric circuit fault report","Energy production comparison","Electronic components explanation","Technical communication at work","Computer systems and CAD/CAM workflow","Automation cycle description","Maintenance log and diagnosis","Workshop safety and near-miss report"]) {
+    assert.ok(workbooks.includes(phrase), "missing unit-specific English practice: " + phrase);
+  }
+  assert.doesNotMatch(workbooks, /Составьте краткое письменное резюме темы на английском языке/);
+});
+ 
 test("workbook editorial coverage generates subject-specific cases for every populated course track", () => {
   const workbooks = read("workbooks.js");
   const html = read("index.html");
