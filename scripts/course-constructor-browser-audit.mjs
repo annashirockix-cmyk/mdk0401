@@ -96,16 +96,10 @@ try {
   await page.evaluate(() => {
     window.state.staff = null;
     window.state.student = { role: "student", courses: ["07.01"] };
-    const originalInlineTest = window.startInlineTest;
-    window.startInlineTest = function () { console.log("START_INLINE_TEST_CALLED", JSON.stringify(Array.from(arguments))); return originalInlineTest.apply(this, arguments); };
-    const originalCustomTest = window.startCustomInlineTest;
-    window.startCustomInlineTest = function () { console.log("START_CUSTOM_TEST_CALLED", JSON.stringify(Array.from(arguments))); return originalCustomTest.apply(this, arguments); };
     const topicId = document.getElementById("fcTopic").value;
     window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
-  await page.waitForTimeout(750);
-  console.log("STUDENT_RENDER_DEBUG", JSON.stringify(await page.evaluate(() => ({ hash: location.hash, appText: document.getElementById("app")?.innerText?.slice(0,900), topicId: document.getElementById("fcTopic")?.value, topics: window.customContent?.topics, lectures: window.customContent?.lectures, topicAccess: typeof window.API?.getTopicAccess, lectureText: document.querySelector("#topicContent .lec-content")?.innerText?.slice(0,300) }))));
   await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
   const lectureVisible = await page.locator("#topicContent").innerText();
   assert.ok(lectureVisible.includes("Тестовая лекция конструктора"));
@@ -119,10 +113,7 @@ try {
   assert.ok(testStarted.includes("Какой вариант правильный?"));
 
   await page.locator("#tab-custom-flashcards").click();
-  console.log("FLASHCARD_TAB_DEBUG", JSON.stringify(await page.evaluate(() => ({ topicContent: document.getElementById("topicContent")?.innerText, sets: window.customContent?.flashcards }))));
   await page.locator("#topicContent button").filter({ hasText: "Начать повторение" }).click();
-  await page.waitForTimeout(500);
-  console.log("FLASHCARD_START_DEBUG", JSON.stringify(await page.evaluate(() => ({ topicContent: document.getElementById("topicContent")?.innerText, card: document.getElementById("studentFlashcard")?.innerText, sets: window.customContent?.flashcards }))));
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Workpiece");
   await page.locator("#studentCardFlip").click();
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Заготовка");
