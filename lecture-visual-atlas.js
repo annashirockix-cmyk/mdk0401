@@ -13,7 +13,7 @@
   var LOCAL = {
     coords:{src:"./assets/images/fig-2-coords.png",alt:"Схема координат",caption:"Схема координатных осей и ориентации детали."},
     lathe:{src:"./assets/images/fig-12-w-tokar.png",alt:"Токарная обработка",caption:"Пример токарной обработки."},
-    mill:{src:"./assets/images/fig-13-w-frez.png",alt:"Фрезерная обработка",caption:"Пример фрезерной обработки."},
+    mill:{src:"./assets/images/fig-13-w-frez.png",alt:"Нулевая точка фрезерной заготовки",caption:"Расположение нулевой точки фрезерной заготовки; схема не изображает рабочую зону станка."},
     machine:{src:"./assets/images/fig-16-machine.png",alt:"Металлорежущий станок",caption:"Металлорежущий станок — пример оборудования, параметры которого проверяют при выборе операции."},
     flange:{src:"./assets/images/fig-21-flanets.png",alt:"Фланцевое соединение",caption:"Фланцевое соединение — пример сборочной единицы."}
   };
@@ -27,7 +27,8 @@
     if(id==="02.01" && /сбор|подшип|зубчат|фланц|соедин|узел/.test(t))return /фланц/.test(t)?LOCAL.flange:COMMONS.assembly;
     if(id==="02.02" && /автомат|робот|датчик|контроллер|механизм|систем/.test(t))return COMMONS.robot;
     if((id==="07.01"||id==="MCAM"||id==="SPRUT_TP") && /токар|вал|точени|шпиндел/.test(t))return id==="SPRUT_TP"?LOCAL.lathe:COMMONS.lathe;
-    if((id==="07.01"||id==="MCAM") && /фрез|карман|паз|контур/.test(t))return LOCAL.mill;
+    if((id==="07.01"||id==="MCAM") && /нулев.*точк|ноль.*заготов|заготов.*ноль/.test(t))return LOCAL.mill;
+    if((id==="07.01"||id==="MCAM") && /фрез|карман|паз|контур/.test(t))return COMMONS.cncMill;
     if((id==="07.01"||id==="MCAM") && /координат|ноль|траектор|управляющ|постпроцесс/.test(t))return id==="07.01"?LOCAL.coords:COMMONS.cncMill;
     if(id==="04.01" && /диагност|неисправ|налад|стан|оборуд/.test(t))return LOCAL.machine;
     return null;
