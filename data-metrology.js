@@ -1,7 +1,7 @@
 "use strict";
 (function(){
   function topic(id,code,title,lectureTitle,content,practical,selfWork,test){return{id:id,code:code,title:title,lectures:[{code:code.replace("Тема ","")+".1",title:lectureTitle,content:content}],practicals:[practical],selfWork:[selfWork],test:test};}
-  function q(question,options,correct){return{q:question,options:options,correct:correct};}
+  function q(question, options) { return { q: question, options: options }; }
   var sections=[
   {code:"Раздел 1",title:"Основы метрологии и единство измерений",topics:[
   topic("met-1","Тема 1","Метрология: предмет, задачи и значение в машиностроении","Введение в метрологию и измерительный контроль",`
