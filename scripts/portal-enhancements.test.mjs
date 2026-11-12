@@ -98,6 +98,8 @@ test("MDK 02.02 contains expanded assembly automation lectures and assessments",
   assert.match(html, /data-0202\.js\?v=2/);
   assert.equal((source.match(/"id": "m0202-t/g) || []).length, 7);
   assert.equal((source.match(/"q":/g) || []).length, 28);
+  assert.equal((source.match(/"practicals": \[/g) || []).length, 7);
+  assert.equal((source.match(/"selfWork": \[/g) || []).length, 7);
   assert.match(source, /конечный автомат/);
   assert.match(source, /обратная связь/);
   assert.match(source, /постпроцессор/);
