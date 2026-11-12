@@ -11,7 +11,8 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  const sw = read("service-worker.js");
  assert.match(workbooks, /@page\{size:A4;margin:12mm 14mm/);
  assert.match(workbooks, /counter\(pages\)/);
- assert.match(workbooks, /\.wb-answer-group\{break-inside:avoid;page-break-inside:avoid\}/);\n assert.doesNotMatch(workbooks, /Письменная работа по теме/);
+ assert.match(workbooks, /\.wb-answer-group\{break-inside:avoid;page-break-inside:avoid\}/);
+ assert.doesNotMatch(workbooks, /Письменная работа по теме/);
  assert.match(workbooks, /class="wb-answer-group"/);
  assert.match(workbooks, /writing=Array\.isArray\(t\.writing\)\?t\.writing:\[\]/);
  assert.match(workbooks, /wb-source-writing-text/);
