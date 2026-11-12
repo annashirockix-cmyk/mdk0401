@@ -115,7 +115,10 @@ try {
   assert.ok(testStarted.includes("Какой вариант правильный?"));
 
   await page.locator("#tab-custom-flashcards").click();
+  console.log("FLASHCARD_TAB_DEBUG", JSON.stringify(await page.evaluate(() => ({ topicContent: document.getElementById("topicContent")?.innerText, sets: window.customContent?.flashcards }))));
   await page.locator("#topicContent button").filter({ hasText: "Начать повторение" }).click();
+  await page.waitForTimeout(500);
+  console.log("FLASHCARD_START_DEBUG", JSON.stringify(await page.evaluate(() => ({ topicContent: document.getElementById("topicContent")?.innerText, card: document.getElementById("studentFlashcard")?.innerText, sets: window.customContent?.flashcards }))));
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Workpiece");
   await page.locator("#studentCardFlip").click();
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Заготовка");
