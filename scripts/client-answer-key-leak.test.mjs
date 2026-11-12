@@ -25,7 +25,6 @@ const publicAssessmentSources = [
   "course-assessment-advanced.js",
   "hard-questions.js",
   "challenge-questions.js",
-  "data-metrology.js",
   "questions-setup.js",
   "questions-mdk.js",
   "questions-anime.js",
