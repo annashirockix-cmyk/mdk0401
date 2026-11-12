@@ -37,7 +37,9 @@ try {
         window.__constructorStore = window.__constructorStore.filter(x => String(x.id) !== String(id));
         sync();
         return { success: true };
-      }
+      },
+      getTopicAccess: async () => ({ open: true }),
+      getTestAttemptStatus: async () => ({ allowed: true, used: 0, limit: 1 })
     };
     window.loadGlobalCustomContent = callback => { sync(); if (callback) callback(); };
     window.showToast = message => { window.__auditToast = String(message); };
@@ -92,7 +94,9 @@ try {
   await page.evaluate(() => {
     window.state.staff = null;
     window.state.student = { role: "student" };
-    window.renderTopicPage(window.state.activeCourseId, document.getElementById("fcTopic").value, "lectures");
+    const topicId = document.getElementById("fcTopic").value;
+    window.location.hash = "#/topic/" + topicId;
+    window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
   await page.waitForFunction(() => document.querySelector("#topicContent .lec-content")?.innerText.includes("Содержимое тестовой лекции"));
   const lectureVisible = await page.locator("#topicContent").innerText();
