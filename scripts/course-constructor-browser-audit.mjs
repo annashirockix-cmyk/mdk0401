@@ -12,6 +12,7 @@ try {
   await page.waitForFunction(() => typeof window.renderCourseEditorPage === "function" &&
     typeof window.renderFlashcardEditorPage === "function" && window.MDK_DATA && window.MDK_DATA["07.01"]);
   await page.evaluate(() => {
+    document.getElementById("loginOverlay")?.remove();
     window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
     window.__constructorStore = [];
