@@ -45,8 +45,8 @@ try {
     assert.ok(html && html.includes("<title>"), `Workbook ${id} did not generate standalone HTML`);
     if (id === "ENB" || id === "ENT") {
       assert.doesNotMatch(html, /Дополнительный методический разбор|Составьте краткую технологическую карту по теме/);
-      if (id === "ENB") assert.match(html, /Language practice:/);
-      if (id === "ENT") assert.match(html, /ESP practice:/);
+      if (id === "ENB") { assert.match(html, /Language practice:/); assert.match(html, /Grammar Exercises: Pronouns & Verbs/); assert.doesNotMatch(html, /Задание 1\. Анализ темы/); }
+      if (id === "ENT") { assert.match(html, /ESP practice:/); assert.match(html, /Match words with definitions/); assert.doesNotMatch(html, /Задание 1\. Анализ темы/); }
     }
     const workbook = await context.newPage();
     await workbook.setContent(html, { waitUntil: "load" });
