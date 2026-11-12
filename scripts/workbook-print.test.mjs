@@ -29,5 +29,5 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(workbooks, /\.wb-image-credit\{display:block;margin-top:4px/);
  assert.match(html, /workbooks\.js\?v=53/);
  assert.match(html, /style\.css\?v=23/);
- assert.match(sw, /portal-cache-v307/);
+ assert.match(sw, /portal-cache-v308/);
 });
