@@ -34,6 +34,8 @@ jobs:
         run: node --test scripts/portal-enhancements.test.mjs
       - name: Check client assessment answer-key isolation
         run: node --test scripts/client-answer-key-leak.test.mjs
+      - name: Check public assessment data syntax
+        run: node --check data-0701.js && node --check data-0401.js && node --check data-0201.js && node --check data-0202.js && node --check data-mastercam.js && node --check data-sprut-tp.js && node --check data-material.js && node --check data-safety.js && node --check data-metrology.js && node --check data-extra.js && node --check data-english-basic.js && node --check data-english-technical.js && node --check english-assessment-data.js && node --check tests-extra.js && node --check course-assessment-advanced.js && node --check hard-questions.js && node --check challenge-questions.js && node --check sprut-tp-question-bank.js && node --check exam_0401.js && node --check exam_0201.js && node --check exam_0202.js
       - name: Check workbook cache and print layout
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
