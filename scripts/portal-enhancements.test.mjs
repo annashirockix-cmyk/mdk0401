@@ -906,13 +906,13 @@ test("semester tests are student-visible and scored only by the protected server
 });
 
 
-test("English semester source bank is loaded before the student assessment engine", () => {
+test("English semester and VPR answer data are not loaded into the public student page", () => {
   const html = read("index.html");
   const source = read("english-assessment-data.js");
-  assert.match(html, /english-assessment-data\.js\?v=1/);
-  assert.ok(html.indexOf("english-assessment-data.js") < html.indexOf("english-vpr-engine.js"));
-  assert.match(source, /window\.SEMESTER_TESTS\.basic/);
-  assert.match(source, /window\.SEMESTER_TESTS\.technical/);
+  assert.doesNotMatch(html, /english-assessment-data\.js/);
+  assert.doesNotMatch(source, /\bcorrect\s*:/);
+  assert.match(read("english-vpr-engine.js"), /window\.API\.getEnglishSemesterTests/);
+  assert.match(read("english-vpr-engine.js"), /window\.API\.getEnglishVprExam/);
 });
 
 
