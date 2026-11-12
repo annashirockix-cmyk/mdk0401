@@ -150,11 +150,10 @@ test("Mastercam workbook topics have distinct CAM-specific editorial profiles", 
 });
 
 test("SPRUT-TP topic assessments and reference tables are specific to each topic", () => {
+  const source = read("data-sprut-tp.js");
   const topicIds = [...source.matchAll(/"id":"([^"]+)","code":"Тема [1-6]\\.[1-3]"/g)].map(match => match[1]);
   assert.equal(topicIds.length, 14);
   assert.equal(new Set(topicIds).size, 14, "SPRUT-TP topic IDs must be unique across all six sections");
-
-  const source = read("data-sprut-tp.js");
   assert.equal((source.match(/"test":\[\{/g) || []).length, 14);
   assert.doesNotMatch(source, /"title":"Самостоятельная работа"/);
   assert.doesNotMatch(source, /"goal":"Закрепить тему и применить её при разработке технологической документации\."/);
