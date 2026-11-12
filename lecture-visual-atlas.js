@@ -11,9 +11,6 @@
     guard: { src:"https://commons.wikimedia.org/wiki/Special:FilePath/Machine_safety_guard.jpg?width=1200", page:"https://commons.wikimedia.org/wiki/File:Machine_safety_guard.jpg", alt:"Защитное ограждение станка", caption:"Защитное ограждение оборудования — пример инженерной меры снижения риска.", author:"Machine 1456", license:"CC0 1.0" }
   };
   var LOCAL = {
-    sprutInterface:{src:"./assets/images/fig-22-sprut-interface.png",alt:"Интерфейс СПРУТ-ТП",caption:"Снимок интерфейса СПРУТ-ТП из учебного портала. Используйте его для поиска элементов интерфейса, а не как универсальную инструкцию для всех версий."},
-    sprutProject:{src:"./assets/images/fig-23-sprut-project.png",alt:"Проект в СПРУТ-ТП",caption:"Пример проекта СПРУТ-ТП: иллюстрация структуры проекта и связанных данных."},
-    sprutTools:{src:"./assets/images/fig-24-sprut-tools.png",alt:"Инструменты СПРУТ-ТП",caption:"Иллюстрация инструментов/справочных данных СПРУТ-ТП."},
     coords:{src:"./assets/images/fig-2-coords.png",alt:"Схема координат",caption:"Схема координатных осей и ориентации детали."},
     lathe:{src:"./assets/images/fig-12-w-tokar.png",alt:"Токарная обработка",caption:"Пример токарной обработки."},
     mill:{src:"./assets/images/fig-13-w-frez.png",alt:"Фрезерная обработка",caption:"Пример фрезерной обработки."},
@@ -23,13 +20,7 @@
   function esc(v){return String(v||"").replace(/[&<>"]/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});}
   function photoFor(id, topic) {
     var t=(topic.title||"").toLowerCase();
-    if(id==="SPRUT_TP"){
-      if(topic.title==="Введение в СПРУТ-ТП"||topic.title==="Интерфейс, проект и справочники")return LOCAL.sprutInterface;
-      if(topic.title==="Аналоги, шаблоны и база технологических знаний")return LOCAL.sprutProject;
-      if(topic.title==="Разработка операционного ТП"||topic.title==="ТП механической обработки")return LOCAL.sprutTools;
-      if(topic.title==="ЕСТД и комплект технологических документов")return null;
-      return null;
-    }
+    if(id==="SPRUT_TP")return null;
     if(id==="MAT" && /сталь|структур|термообработ|свойств|микроструктур/.test(t))return COMMONS.metal;
     if(id==="MET" && /измер|штанген|микрометр|контрол|средств/.test(t))return COMMONS.caliper;
     if(id==="OT" && /опас|ограж|стан|защит|безопас|риск/.test(t))return COMMONS.guard;
