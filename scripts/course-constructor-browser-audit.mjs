@@ -117,7 +117,24 @@ try {
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Workpiece");
   await page.locator("#studentCardFlip").click();
   await page.waitForFunction(() => document.getElementById("studentFlashcard")?.innerText === "Заготовка");
-  const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true };
+  const sprutNavigation = await page.evaluate(() => {
+    const course = window.MDK_DATA.SPRUT_TP;
+    const topics = course.sections.flatMap(section => section.topics);
+    window.state.student = { role: "student", courses: ["07.01", "SPRUT_TP"] };
+    window.state.activeCourseId = "SPRUT_TP";
+    const results = topics.map(topic => {
+      window.renderTopicPage("SPRUT_TP", topic.id, "lectures");
+      const text = document.getElementById("app")?.innerText || "";
+      return { id: topic.id, code: topic.code, title: topic.title, visible: text.includes(topic.title) };
+    });
+    return { sectionCount: course.sections.length, topicCount: topics.length,
+      uniqueIds: new Set(topics.map(topic => topic.id)).size, results };
+  });
+  assert.equal(sprutNavigation.sectionCount, 6, "All six SPRUT-TP sections must be present");
+  assert.equal(sprutNavigation.topicCount, 14, "All 14 SPRUT-TP topics must be reachable");
+  assert.equal(sprutNavigation.uniqueIds, 14, "Every SPRUT-TP topic must have a unique route ID");
+  for (const result of sprutNavigation.results) assert.ok(result.visible, "Student view opened the wrong SPRUT-TP topic: " + result.code + " " + result.title);
+  const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true , sprutNavigation };
   fs.mkdirSync("artifacts/constructors", { recursive: true });
   fs.writeFileSync("artifacts/constructors/report.json", JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
