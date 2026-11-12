@@ -37,4 +37,8 @@ test("generated workbooks use A4 print sizing and print-safe visual blocks", () 
  assert.match(sw, /portal-cache-v310/);
   const audit = read("scripts/workbook-browser-print-audit.mjs");
   assert.match(audit, /const pdfCourses = new Set\(courseIds\)/);
+  const certAudit = read("scripts/certificate-browser-print-audit.mjs");
+  const workflow = read(".github/workflows/portal-syntax.yml");
+  assert.match(workflow, /Run real-browser certificate A4 landscape audit/);
+  assert.match(certAudit, /certificate-a4-landscape\.pdf/);
 });
