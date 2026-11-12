@@ -97,7 +97,7 @@ try {
     window.state.staff = null;
     window.state.student = { role: "student", courses: ["07.01"] };
     const topicId = document.getElementById("fcTopic").value;
-    window.location.hash = "#/topic/" + topicId;
+    window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
   await page.waitForTimeout(750);
