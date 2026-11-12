@@ -976,6 +976,8 @@ test("workbooks include differentiated supplemental professional learning blocks
   const html = read("index.html");
   const sw = read("service-worker.js");
   assert.match(workbooks, /function supplementalStudyBlock/);
+  assert.match(workbooks, /Коротко о главном/);
+  assert.doesNotMatch(workbooks, /Зумерский перевод без душноты/);
   for (const topicId of ["ot-1","ot-2","ot-3","ot-4","ot-5","ot-6","ot-7","ot-8","ot-9","ot-10","ot-11","ot-12"]) assert.match(workbooks, new RegExp('"'+topicId+'":\\{intro:'));
   assert.match(workbooks, /не прикасайтесь к пострадавшему/i);
   assert.match(workbooks, /Составьте карту санитарной оценки выбранного рабочего места/);
