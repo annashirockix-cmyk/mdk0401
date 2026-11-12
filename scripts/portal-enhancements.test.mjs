@@ -531,7 +531,9 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.css"));
-  assert.match(visual, /if\(id==="SPRUT_TP"\)return null/);\n  assert.doesNotMatch(visual, /LOCAL\.sprut(?:Interface|Project|Tools)/);\n  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
+  assert.ok(visual.includes('if(id==="SPRUT_TP")return null'));
+  assert.ok(!visual.includes("LOCAL.sprutInterface") && !visual.includes("LOCAL.sprutProject") && !visual.includes("LOCAL.sprutTools"));
+  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
     assert.ok(visual.includes(term), "visual atlas missing " + term);
   }
   assert.match(css, /\.lecture-visual-atlas/);
