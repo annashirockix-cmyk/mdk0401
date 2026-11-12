@@ -43,6 +43,11 @@ try {
       return captured;
     }, id);
     assert.ok(html && html.includes("<title>"), `Workbook ${id} did not generate standalone HTML`);
+    if (id === "ENB" || id === "ENT") {
+      assert.doesNotMatch(html, /Дополнительный методический разбор|Составьте краткую технологическую карту по теме/);
+      if (id === "ENB") assert.match(html, /Language practice:/);
+      if (id === "ENT") assert.match(html, /ESP practice:/);
+    }
     const workbook = await context.newPage();
     await workbook.setContent(html, { waitUntil: "load" });
     try {
