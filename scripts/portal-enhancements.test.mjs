@@ -95,7 +95,7 @@ test("online party games use supported server actions and stable player identity
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=53/);
+  assert.match(html, /workbooks\.js\?v=55/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
@@ -523,24 +523,36 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const sw = read("service-worker.js");
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
-  assert.match(html, /lecture-visual-atlas\.js\?v=4/);
+  assert.match(html, /lecture-visual-atlas\.js\?v=5/);
   assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=6/);
   assert.match(html, /sprut-tp-document-examples\.js\?v=3/);
-  assert.match(html, /lecture-visual-atlas\.css\?v=4/);
+  assert.match(html, /lecture-visual-atlas\.css\?v=6/);
   assert.ok(sw.includes("./sprut-tp-document-examples.js"));
   assert.ok(sw.includes("./sprut-tp-lecture-upgrade.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.js"));
   assert.ok(sw.includes("./lecture-visual-atlas.css"));
-  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowSvg", "graphSvg", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
+  assert.ok(visual.includes('if(id==="SPRUT_TP")return null'));
+  assert.ok(!visual.includes("LOCAL.sprutInterface") && !visual.includes("LOCAL.sprutProject") && !visual.includes("LOCAL.sprutTools"));
+  assert.ok(visual.includes("Расположение нулевой точки фрезерной заготовки"));
+  assert.ok(visual.includes("return COMMONS.cncMill"), "milling operation topics should use an equipment photo, not a zero-point diagram");
+  for (const term of ["commons.wikimedia.org/wiki/Special:FilePath", "CC BY-SA 4.0", "CC BY 2.0", "CC0 1.0", "flowHtml", "SPRUT_STEPS", "specialSprutFigure", "LECTURE_VISUAL_ATLAS_COUNT"]) {
     assert.ok(visual.includes(term), "visual atlas missing " + term);
   }
   assert.match(css, /\.lecture-visual-atlas/);
+  assert.match(css, /\.lv-flow\{/);
+  assert.match(css, /\.lv-flow-node\{/);
+  assert.doesNotMatch(visual, /<svg|<path|<rect|graphSvg|flowSvg/);
   const sandbox = { window: { MDK_DATA: {} } };
   for (const file of ["data-0701.js", "data-0401.js", "data-0201.js", "data-0202.js", "data-mastercam.js", "data-sprut-tp.js", "data-material.js", "data-metrology.js", "data-safety.js"]) {
     vm.runInNewContext(read(file), sandbox, { timeout: 2000 });
   }
   vm.runInNewContext(visual, sandbox, { timeout: 2000 });
   assert.ok(sandbox.window.LECTURE_VISUAL_ATLAS_COUNT >= 30, "expected topic-matched visuals in the course collection");
+  for (const course of Object.values(sandbox.window.MDK_DATA)) {
+    for (const topic of (course.sections || []).flatMap(section => section.topics || [])) {
+      assert.ok((topic.lectures || []).filter(lecture => lecture && lecture.__visualAtlasAdded).length <= 1, "visual supplement duplicated within topic " + topic.title);
+    }
+  }
   const atlasImageSources = Object.values(sandbox.window.MDK_DATA).flatMap(course => course.sections || []).flatMap(section => section.topics || []).flatMap(topic => topic.lectures || []).flatMap(lecture => [...String(lecture.content || "").matchAll(/<section class="lecture-visual-atlas">([\s\S]*?)<\/section>/g)].flatMap(block => [...block[1].matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1])));
   assert.equal(new Set(atlasImageSources).size, atlasImageSources.length, "the same photo must not be repeated across lecture visual supplements");
   for (const id of ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT"]) {
@@ -716,7 +728,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v307"));
+  assert.ok(sw.includes("portal-cache-v310"));
 });
 
 
@@ -737,7 +749,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v307/);
+  assert.match(sw, /portal-cache-v310/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -868,7 +880,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v307/);
+  assert.match(sw, /portal-cache-v310/);
 });
 
 
@@ -882,8 +894,8 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=53/);
-  assert.match(sw, /portal-cache-v307/);
+  assert.match(html, /workbooks\.js\?v=55/);
+  assert.match(sw, /portal-cache-v310/);
 });
 
 
@@ -907,8 +919,8 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Операция и источник опасности/);
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /Термины и контекст/);
-  assert.match(html, /workbooks\.js\?v=53/);
-  assert.match(sw, /portal-cache-v307/);
+  assert.match(html, /workbooks\.js\?v=55/);
+  assert.match(sw, /portal-cache-v310/);
 });
 
 
@@ -935,9 +947,9 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=53/);
+  assert.match(html, /workbooks\.js\?v=55/);
   assert.match(html, /style\.css\?v=23/);
-  assert.match(sw, /portal-cache-v307/);
+  assert.match(sw, /portal-cache-v310/);
 });
 
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {
