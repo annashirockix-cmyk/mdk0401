@@ -45,7 +45,7 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(html, /style\.css\?v=24/);
  assert.match(sw, /portal-cache-v338/);
  const editorialSource = read("workbooks.js");
- assert.match(editorialSource, /Письменная практика Basic English/);
+ assert.match(editorialSource, /Introducing myself and my future profession/);
  assert.match(editorialSource, /Language practice:/);
  assert.match(editorialSource, /ESP practice:/);
  assert.match(editorialSource, /basicProfiles/);
