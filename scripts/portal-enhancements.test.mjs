@@ -92,6 +92,13 @@ test("online party games use supported server actions and stable player identity
   assert.deepEqual(JSON.parse(JSON.stringify(voteView.answers)), {p1:"secret 1",p2:"secret 2"});
 });
 
+test("automated assembly workbook topics have distinct automation profiles", () => {
+  const editorial = read("workbook-editorial.js");
+  const course = editorial.slice(editorial.indexOf('"02.02": {'), editorial.indexOf('"MAT": {'));
+  for (const id of ["m0202-t11","m0202-t12","m0202-t13","m0202-t21","m0202-t22","m0202-t23","m0202-t24"]) assert.ok(course.includes(JSON.stringify(id)), "missing assembly automation profile: "+id);
+  for (const phrase of ["конечный автомат","датчики","подпрограмму","ПЛК","сухой прогон","постпроцессор","слайсере"]) assert.ok(course.includes(phrase), "missing automation-specific content: "+phrase);
+});
+
 test("materials science and metrology workbook topics have distinct profiles", () => {
   const editorial = read("workbook-editorial.js");
   const mat = editorial.slice(editorial.indexOf('"MAT": {'), editorial.indexOf('"MET": {'));
