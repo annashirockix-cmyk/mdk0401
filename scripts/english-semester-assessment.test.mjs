@@ -75,9 +75,9 @@ test("server rejects duplicate options and track-mismatched identifiers", () => 
 });
 
 test("student-facing payload strips all answer-key and explanation fields", () => {
-  const safe = sanitize([{ questions: [{ q: "Q", options: ["A", "B"], correct: 1, answer: "B", correctAnswer: "B", explanation: "key", rationale: "key" }] }]);
+  const safe = sanitize([{ questions: [{ q: "Q", options: ["A", "B"], correct: 1, answer: "B", correctAnswer: "B", explanation: "key", rationale: "key", answerIndex: 1, solution: "hidden" }] }]);
   const question = safe[0].questions[0];
-  for (const key of ["correct", "answer", "correctAnswer", "explanation", "rationale"]) assert.equal(Object.hasOwn(question, key), false);
+  for (const key of ["correct", "answer", "correctAnswer", "explanation", "rationale", "answerIndex", "solution"]) assert.equal(Object.hasOwn(question, key), false);
 });
 
 test("unreviewed legacy seed stays out of the production page", () => {
