@@ -1235,8 +1235,8 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.match(app, /window\.API\.getResults\(\{\}\)/);
   assert.match(app, /window\.API\.saveManualGrade\(payload\)/);
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
-  assert.match(html, /api\.js\?v=43/);
-  assert.match(html, /app\.js\?v=53/);
+  assert.match(html, /api\.js\?v=44/);
+  assert.match(html, /app\.js\?v=54/);
   assert.match(sw, /portal-cache-v351/);
 });
 
