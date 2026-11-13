@@ -144,6 +144,57 @@ function sanitizeEnglishVprExam_(exam) {
   return safe;
 }
 
+function englishVprPrepareAttempt_(source) {
+  const display = JSON.parse(JSON.stringify(source)), maps = {};
+  (display.tasks || []).forEach(function(task, ti) {
+    if (task.type === "choice") {
+      if (Array.isArray(task.options) && task.options.length > 1) {
+        const order = shuffledServer_(task.options.map(function(_, i) { return i; }));
+        const original = task.options.slice();
+        task.options = order.map(function(i) { return original[i]; });
+        (task.items || []).forEach(function(item, qi) {
+          const key = "choice|" + ti + "|" + qi;
+          maps[key] = order;
+          if (Number.isInteger(Number(item[1])) && Number(item[1]) >= 1) item[1] = order.indexOf(Number(item[1]) - 1) + 1;
+        });
+      }
+      (task.items || []).forEach(function(item, qi) {
+        if (Array.isArray(item[2]) && item[2].length > 1) {
+          const original = item[2].slice(), order = shuffledServer_(original.map(function(_, i) { return i; }));
+          item[2] = order.map(function(i) { return original[i]; });
+          maps["choice|" + ti + "|" + qi] = order;
+          if (Number.isInteger(Number(item[1])) && Number(item[1]) >= 1) item[1] = order.indexOf(Number(item[1]) - 1) + 1;
+        }
+      });
+    } else if (task.type === "match") {
+      const original = (task.options || []).slice();
+      const order = shuffledServer_(original.map(function(_, i) { return i; }));
+      task.options = order.map(function(i) { return original[i]; });
+      maps["match|" + ti] = order;
+      (task.items || []).forEach(function(item) {
+        if (Number.isInteger(Number(item[2])) && Number(item[2]) >= 1) item[2] = order.indexOf(Number(item[2]) - 1) + 1;
+      });
+    } else if (task.type === "gap") {
+      if (Array.isArray(task.itemOptions) && task.itemOptions.length) {
+        task.itemOptions = task.itemOptions.map(function(options, qi) {
+          const original = (options || []).slice(), order = shuffledServer_(original.map(function(_, i) { return i; }));
+          maps["gap|" + ti + "|" + qi] = order;
+          if (Number.isInteger(Number(task.answers[qi])) && Number(task.answers[qi]) >= 1) task.answers[qi] = order.indexOf(Number(task.answers[qi]) - 1) + 1;
+          return order.map(function(i) { return original[i]; });
+        });
+      } else if (Array.isArray(task.options) && task.options.length > 1) {
+        const original = task.options.slice(), order = shuffledServer_(original.map(function(_, i) { return i; }));
+        task.options = order.map(function(i) { return original[i]; });
+        maps["gap|" + ti] = order;
+        task.answers = (task.answers || []).map(function(answer) {
+          return Number.isInteger(Number(answer)) && Number(answer) >= 1 ? order.indexOf(Number(answer) - 1) + 1 : answer;
+        });
+      }
+    }
+  });
+  return {exam:display, optionMaps:maps};
+}
+
 function getEnglishVprExam_(data) {
   const user = auth_(data), track = String(data.track || "").toLowerCase();
   if (["student","teacher","admin"].indexOf(user.role) < 0 || ["basic","technical"].indexOf(track) < 0) throw new Error("Нет доступа к экзамену.");
@@ -152,9 +203,15 @@ function getEnglishVprExam_(data) {
   const sh = englishVprBank_(), values = sh.getDataRange().getValues(), map = headerMap_(sh);
   for (let i=1;i<values.length;i++) {
     if (String(values[i][map.Track]||"") !== track || String(values[i][map.Active]||"").toUpperCase() !== "TRUE") continue;
-    const exam = JSON.parse(String(values[i][map.ExamJSON]||"{}"));
-    validateEnglishVprExam_(track, exam);
-    return {success:true,track:track,exam:sanitizeEnglishVprExam_(exam)};
+    const source = JSON.parse(String(values[i][map.ExamJSON]||"{}"));
+    validateEnglishVprExam_(track, source);
+    if (user.role !== "student") return {success:true,track:track,exam:sanitizeEnglishVprExam_(source)};
+    const attemptId = Utilities.getUuid().replace(/-/g, "");
+    const prepared = englishVprPrepareAttempt_(source);
+    CacheService.getScriptCache().put("englishVprAttempt:" + attemptId, JSON.stringify({
+      email:user.email, track:track, courseId:courseId, exam:source, optionMaps:prepared.optionMaps
+    }), 7200);
+    return {success:true,track:track,attemptId:attemptId,exam:sanitizeEnglishVprExam_(prepared.exam)};
   }
   return {success:false,error:"Экзамен ещё не импортирован преподавателем."};
 }
@@ -186,18 +243,37 @@ function submitEnglishVprExam_(data) {
   if (user.role !== "student" || ["basic","technical"].indexOf(track)<0) throw new Error("Нет доступа к отправке экзамена.");
   const courseId = track === "basic" ? "ENB" : "ENT";
   if (!hasCourseAccess_(user,courseId) && !hasCourseAccess_(user,"EN")) throw new Error("Дисциплина не назначена.");
-  const sh=englishVprBank_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh);
-  let exam=null;
-  for(let i=1;i<vals.length;i++) if(String(vals[i][m.Track]||"")===track && String(vals[i][m.Active]||"").toUpperCase()==="TRUE") { exam=JSON.parse(String(vals[i][m.ExamJSON]||"{}")); validateEnglishVprExam_(track, exam); break; }
-  if(!exam) throw new Error("Экзамен не найден на сервере.");
+  const attemptId = String(data.attemptId || "").trim();
+  if (!attemptId) throw new Error("Не найдена серверная попытка экзамена. Обновите страницу и начните заново.");
+  const cache = CacheService.getScriptCache(), attemptRaw = cache.get("englishVprAttempt:" + attemptId);
+  if (!attemptRaw) throw new Error("Время попытки истекло. Обновите страницу и начните экзамен заново.");
+  const attempt = JSON.parse(attemptRaw);
+  if (attempt.email !== user.email || attempt.track !== track || attempt.courseId !== courseId) throw new Error("Попытка не принадлежит этой учётной записи.");
+  const exam = attempt.exam;
+  validateEnglishVprExam_(track, exam);
   const submitted=Array.isArray(data.answers)?data.answers:[];
   if(submitted.length!==(exam.tasks||[]).length) throw new Error("Не все задания отправлены.");
   let objective=0, maxObjective=0, written=[];
   (exam.tasks||[]).forEach(function(task,ti) {
-    const ans=submitted[ti]||{};
-    if(task.type==="choice") (task.items||[]).forEach(function(item,i){maxObjective++;if(Number(ans[i])===Number(item[1]))objective++;});
-    else if(task.type==="match") (task.items||[]).forEach(function(item,i){maxObjective++;if(Number(ans[i])===Number(item[2]))objective++;});
-    else if(task.type==="gap") (task.answers||[]).forEach(function(expected,i){maxObjective++;if(Number(ans[i])===Number(expected))objective++;});
+    const ans=submitted[ti]||{}, maps=attempt.optionMaps||{};
+    if(task.type==="choice") (task.items||[]).forEach(function(item,i){
+      maxObjective++;
+      let selected=Number(ans[i]), order=maps["choice|"+ti+"|"+i]||maps["choice|"+ti];
+      if(Array.isArray(order) && Number.isInteger(selected) && selected>=1 && selected<=order.length) selected=order[selected-1]+1;
+      if(selected===Number(item[1]))objective++;
+    });
+    else if(task.type==="match") (task.items||[]).forEach(function(item,i){
+      maxObjective++;
+      let selected=Number(ans[i]), order=maps["match|"+ti];
+      if(Array.isArray(order) && Number.isInteger(selected) && selected>=1 && selected<=order.length) selected=order[selected-1]+1;
+      if(selected===Number(item[2]))objective++;
+    });
+    else if(task.type==="gap") (task.answers||[]).forEach(function(expected,i){
+      maxObjective++;
+      let selected=Number(ans[i]), order=maps["gap|"+ti+"|"+i]||maps["gap|"+ti];
+      if(Array.isArray(order) && Number.isInteger(selected) && selected>=1 && selected<=order.length) selected=order[selected-1]+1;
+      if(selected===Number(expected))objective++;
+    });
     else if(task.type==="transform") (task.items||[]).forEach(function(item,i){maxObjective++;const accepted=Array.isArray(item[3])?item[3]:[];if(accepted.map(englishVprNormalize_).indexOf(englishVprNormalize_(ans[i]))>=0)objective++;});
     else if(task.type==="questionnaire") written=written.concat(validateEnglishVprWrittenAnswers_(task,ans,ti));
   });
@@ -205,6 +281,7 @@ function submitEnglishVprExam_(data) {
   const percent=maxObjective?Math.round(objective/maxObjective*100):0;
   const testId=String(exam.id||("english_vpr_"+track+"_2026"));
   const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Number(data.timeSpent)||0,payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
+  cache.remove("englishVprAttempt:" + attemptId);
   if (written.length) {
     notifyCourseStaff_(courseId,"written_submission","Письменная часть английского ВПР ожидает проверки",
       user.name+" ("+user.group+") отправил(а) письменную часть экзамена "+String(exam.title||track)+". Откройте журнал результатов по дисциплине "+courseId+" для проверки ответов.",testId);
