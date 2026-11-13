@@ -1344,11 +1344,19 @@ function settingValue_(key) {
   return "";
 }
 function writeSetting_(key,value,actorEmail) {
-  const sh=settings_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), now=new Date().toISOString();
-  let row=0;
-  for(let i=1;i<vals.length;i++) if(String(vals[i][m.Key]||"")===key){row=i+1;break;}
-  const record=[key,String(value),now,String(actorEmail||"")];
-  if(row) sh.getRange(row,1,1,record.length).setValues([record]); else sh.appendRow(record);
+  // Serialize settings upserts so simultaneous access toggles or attempt grants
+  // cannot create duplicate keys or overwrite one another's row selection.
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sh=settings_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), now=new Date().toISOString();
+    let row=0;
+    for(let i=1;i<vals.length;i++) if(String(vals[i][m.Key]||"")===key){row=i+1;break;}
+    const record=[key,String(value),now,String(actorEmail||"")];
+    if(row) sh.getRange(row,1,1,record.length).setValues([record]); else sh.appendRow(record);
+  } finally {
+    lock.releaseLock();
+  }
 }
 function getTopicAccess_(data) {
   const user=auth_(data), courseId=String(data.courseId||""), topicId=String(data.topicId||"");
