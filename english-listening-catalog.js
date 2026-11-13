@@ -7,6 +7,102 @@
 
   var activities = [
     {
+      id: "en-c04-s02-l01",
+      title: "Course 4 · Semester 2 · Lesson 1 — Means of Transmission",
+      level: "B1+–B2",
+      script: "In a technical communication system, information can be transmitted in different ways. A wired connection uses a physical cable. A wireless connection sends information through radio waves or another wireless signal. Fibre-optic communication uses light travelling through a thin glass or plastic fibre. Each method has advantages and limitations. A cable can provide a stable connection, but it may require physical installation. Wireless communication can support mobility, but signal quality may be affected by distance or interference. Fibre optics can carry large amounts of data over long distances. In an aircraft-related training example, engineers may discuss communication links between equipment, but the exact design must always be taken from approved system documentation.",
+      questions: [
+        { prompt: "What are the three transmission methods mentioned?", options: ["Wired, wireless and fibre-optic", "Digital, mechanical and hydraulic", "Local, national and international", "Manual, automatic and visual"], answerIndex: 0, explanation: "The briefing describes wired, wireless and fibre-optic communication." },
+        { prompt: "What does a wired connection use?", options: ["A physical cable", "Only light", "A printed chart", "A mechanical lever"], answerIndex: 0, explanation: "A wired connection uses a physical cable." },
+        { prompt: "What may affect wireless signal quality?", options: ["Distance or interference", "The colour of a cable", "The size of a printed manual", "The revision letter"], answerIndex: 0, explanation: "The speaker identifies distance and interference." },
+        { prompt: "Where should engineers find exact system design information?", options: ["Approved system documentation", "An informal guess", "A social media post", "An unrelated classroom worksheet"], answerIndex: 0, explanation: "The speaker says exact design information must come from approved documentation." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l02",
+      title: "Course 4 · Semester 2 · Lesson 2 — Networks and Topologies",
+      level: "B1+–B2",
+      script: "A computer network connects devices so that they can exchange information. In a star topology, each device is connected to a central point. In a bus topology, devices share a common communication line. In a ring topology, each device is connected to two neighbouring devices, forming a closed path. A mesh topology provides several possible connections between devices. The choice of topology depends on the system requirements, including reliability, cost, complexity and the amount of data. This classroom diagram uses four computers and a central switch to illustrate a star network. It is a simplified learning model, not a description of an aircraft network.",
+      questions: [
+        { prompt: "What does a computer network allow devices to do?", options: ["Exchange information", "Change their physical size", "Produce electricity", "Measure temperature directly"], answerIndex: 0, explanation: "A network connects devices so they can exchange information." },
+        { prompt: "Which topology uses a central point?", options: ["Star", "Ring", "Bus", "Mesh"], answerIndex: 0, explanation: "In a star topology, devices connect to a central point." },
+        { prompt: "How are devices connected in a ring topology?", options: ["To two neighbouring devices in a closed path", "Only to one central switch", "To a single shared cable with no branches", "Without any connection"], answerIndex: 0, explanation: "A ring connects each device to two neighbours." },
+        { prompt: "Which factors influence topology selection?", options: ["Reliability, cost, complexity and data volume", "Device colour only", "The operator's age", "The room number"], answerIndex: 0, explanation: "The speaker lists system and resource requirements." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l03",
+      title: "Course 4 · Semester 2 · Lesson 3 — Computer Hardware and Software",
+      level: "B1+–B2",
+      script: "A computer system consists of hardware and software. Hardware means the physical components, such as the processor, memory, storage devices, keyboard and display. Software is the set of programs and instructions that tell the hardware what to do. The operating system manages the computer's resources and provides an environment for applications. An application is designed for a particular task, such as editing a document or analysing a training dataset. In an engineering office, a workstation may be used to read drawings, review records or prepare reports. The computer itself does not guarantee that the information is correct: users must check the source, version and context of the data.",
+      questions: [
+        { prompt: "What is hardware?", options: ["The physical components of a computer", "A set of written instructions only", "An internet connection", "A type of network topology"], answerIndex: 0, explanation: "Hardware refers to physical computer components." },
+        { prompt: "What does software include?", options: ["Programs and instructions", "Only cables and connectors", "The monitor casing", "A printed circuit board only"], answerIndex: 0, explanation: "Software is the set of programs and instructions." },
+        { prompt: "What does an operating system do?", options: ["Manages computer resources", "Manufactures the processor", "Measures electrical current", "Replaces every application"], answerIndex: 0, explanation: "The operating system manages resources and supports applications." },
+        { prompt: "What must users check when reviewing data?", options: ["Source, version and context", "Screen brightness only", "Keyboard layout only", "The colour of the computer"], answerIndex: 0, explanation: "The speaker emphasizes checking the source, version and context." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l04",
+      title: "Course 4 · Semester 2 · Lesson 4 — USB Storage and Types of Computers",
+      level: "B1+–B2",
+      script: "Computers are designed for different purposes. A desktop computer is usually installed in one place. A laptop is portable and has a built-in screen and keyboard. A tablet is a lightweight mobile device with a touch screen. A server provides services or resources to other computers on a network. Removable storage devices, such as USB flash drives, can be used to transfer files. However, removable media may introduce security risks if its origin is unknown. In this classroom scenario, a student receives a USB drive from an unidentified source. The correct response is not to open files automatically. The student should follow the college's approved procedure and ask the responsible teacher or IT staff for guidance.",
+      questions: [
+        { prompt: "Which computer is designed to be portable?", options: ["Laptop", "Desktop", "Server rack", "Mainframe cabinet"], answerIndex: 0, explanation: "A laptop is described as portable." },
+        { prompt: "What does a server provide?", options: ["Services or resources to other computers", "A touch screen for every user", "A mechanical drive system", "A paper drawing"], answerIndex: 0, explanation: "A server provides network services or resources." },
+        { prompt: "What is one risk of removable media?", options: ["Files may come from an unknown or unsafe source", "It always improves network speed", "It cannot store information", "It changes the screen resolution"], answerIndex: 0, explanation: "The speaker warns about removable media from unknown sources." },
+        { prompt: "What should the student do with an unidentified USB drive?", options: ["Follow the college procedure and ask responsible staff", "Open every file immediately", "Copy it to a personal device", "Ignore all security rules"], answerIndex: 0, explanation: "The recommended action is to use the approved local procedure." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l05",
+      title: "Course 4 · Semester 2 · Lesson 5 — The Internet and Technical Information Sources",
+      level: "B1+–B2",
+      script: "The internet provides access to a large amount of technical information. Engineers and students may use online catalogues, digital libraries, manufacturer websites and educational resources. However, not every page is reliable or current. Before using information, check who published it, when it was updated, what document or product it refers to and whether the source is authoritative for the task. A forum post may help you understand a common question, but it should not replace an approved technical document. In this exercise, two websites give different descriptions of the same training component. The student records both references and checks the supplied course materials before deciding which description is relevant.",
+      questions: [
+        { prompt: "What sources are mentioned?", options: ["Online catalogues, digital libraries, manufacturer sites and educational resources", "Only private messages", "Only social networks", "Only printed advertisements"], answerIndex: 0, explanation: "The speaker lists several types of online information sources." },
+        { prompt: "What should a user check before relying on a webpage?", options: ["Publisher, update date, reference and authority", "Font size only", "Number of pictures only", "The colour of the logo"], answerIndex: 0, explanation: "The briefing lists publisher, date, reference and authority." },
+        { prompt: "What should a forum post not replace?", options: ["An approved technical document", "A personal diary", "A timetable", "A classroom seating plan"], answerIndex: 0, explanation: "A forum post is not a substitute for an approved technical document." },
+        { prompt: "What does the student do when two websites disagree?", options: ["Records both references and checks course materials", "Chooses the first result automatically", "Deletes both references", "Invents a third description"], answerIndex: 0, explanation: "The student records both sources and checks the course materials." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l06",
+      title: "Course 4 · Semester 2 · Lesson 6 — Automation and Robotics",
+      level: "B2",
+      script: "Automation uses control systems to perform tasks with limited direct human intervention. A robot is a programmable machine that can carry out a range of movements or operations. In manufacturing, robots may support material handling, welding, painting or inspection tasks. Automated systems can improve consistency and repeatability, but they also require planning, monitoring and appropriate safeguards. A human operator remains responsible for following the local procedures and responding to abnormal conditions. In our classroom case, a diagram shows a robot arm moving a training part between two marked positions. The diagram illustrates a sequence of programmed actions; it does not provide instructions for operating real equipment.",
+      questions: [
+        { prompt: "What is automation?", options: ["Using control systems to perform tasks with limited direct intervention", "A method of drawing by hand", "A type of storage device", "A process of translating documents"], answerIndex: 0, explanation: "The speaker defines automation in terms of controlled task execution." },
+        { prompt: "Which task may a manufacturing robot perform?", options: ["Material handling", "Writing a personal email", "Approving a document revision", "Teaching a language class"], answerIndex: 0, explanation: "Material handling is one of the listed examples." },
+        { prompt: "What do automated systems still require?", options: ["Planning, monitoring and safeguards", "No human oversight", "No documentation", "No maintenance planning"], answerIndex: 0, explanation: "The briefing stresses planning, monitoring and safeguards." },
+        { prompt: "What does the classroom diagram illustrate?", options: ["A sequence of programmed robot movements", "A real operating procedure", "An aircraft flight path", "A network security policy"], answerIndex: 0, explanation: "The diagram is a learning model of a programmed sequence." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l07",
+      title: "Course 4 · Semester 2 · Lesson 7 — Sensors and Measurement Data",
+      level: "B2",
+      script: "A sensor detects a physical condition and produces a signal that can be used by an electronic system. Different sensors are designed to measure different quantities. A temperature sensor responds to temperature, a pressure sensor measures pressure, and a proximity sensor detects the presence of an object nearby. The signal may be converted into digital data and displayed or stored. When engineers review sensor information, they consider the measurement range, units, timestamp and source. A missing value or an unusual reading should be described carefully. It may require further investigation, but one reading alone does not always identify the cause of a problem.",
+      questions: [
+        { prompt: "What does a sensor do?", options: ["Detects a physical condition and produces a signal", "Stores every document revision", "Controls all network users", "Creates a technical drawing"], answerIndex: 0, explanation: "A sensor detects a condition and produces a signal." },
+        { prompt: "Which sensor detects the presence of a nearby object?", options: ["Proximity sensor", "Temperature sensor", "Pressure sensor", "Light bulb"], answerIndex: 0, explanation: "A proximity sensor detects an object nearby." },
+        { prompt: "What should engineers consider when reviewing sensor data?", options: ["Range, units, timestamp and source", "Colour and font only", "The room temperature only", "The computer brand"], answerIndex: 0, explanation: "The speaker lists four important data details." },
+        { prompt: "Does one unusual reading always identify the cause?", options: ["Yes", "No"], answerIndex: 1, explanation: "The speaker says one reading alone may not identify the cause." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l08",
+      title: "Course 4 · Semester 2 · Lesson 8 — Human–Computer Interaction and Input Devices",
+      level: "B1+–B2",
+      script: "A human–computer interface allows a person to interact with a digital system. Common input devices include a keyboard, mouse, touch screen, scanner and microphone. A mouse usually controls a pointer on the screen. The user can move the pointer, select an item, open a menu or drag an object. In a technical office, an input device may be used to navigate a drawing, enter a search term or review a digital record. Good interface design should make actions clear and reduce the risk of accidental selection. In this classroom task, students compare two interface layouts and explain which one is easier to use and why.",
+      questions: [
+        { prompt: "What is a human–computer interface?", options: ["A way for a person to interact with a digital system", "A type of aircraft structure", "A material testing method", "A network cable"], answerIndex: 0, explanation: "The interface enables interaction between a person and a digital system." },
+        { prompt: "What does a mouse usually control?", options: ["A pointer on the screen", "The room temperature", "The network voltage", "A robot's power supply"], answerIndex: 0, explanation: "A mouse controls a pointer on the screen." },
+        { prompt: "Which action can a user perform with a mouse?", options: ["Select an item or open a menu", "Measure pressure directly", "Transmit radio signals", "Change a material's properties"], answerIndex: 0, explanation: "The speaker lists selecting items and opening menus." },
+        { prompt: "What should good interface design do?", options: ["Make actions clear and reduce accidental selection", "Hide all controls", "Use as many menus as possible", "Remove user feedback"], answerIndex: 0, explanation: "The speaker describes clarity and reduced accidental selection." }
+      ]
+    },
+    {
       id: "en-c04-s02-l09",
       title: "Course 4 · Semester 2 · Lesson 9 — Avionics Overview: Systems and Information Exchange",
       level: "B1+–B2",
