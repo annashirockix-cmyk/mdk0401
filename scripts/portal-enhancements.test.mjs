@@ -1579,7 +1579,7 @@ test("all assessment attempt gates use compact Results rows", () => {
 test("proctor penalty reads only identity and sanction columns", () => {
   const server = read("Code.gs");
   const start = server.indexOf("function proctorPenalty_(studentEmail,courseId,testId,attemptNo)");
-  const end = server.indexOf("\\nfunction ", start + 20);
+  const end = server.indexOf("\nfunction ", start + 20);
   assert.ok(start >= 0 && end > start);
   const calls = [];
   const identityRows = [
@@ -1602,9 +1602,13 @@ test("proctor penalty reads only identity and sanction columns", () => {
     server.slice(start,end) + ";this.proctorPenalty_=proctorPenalty_;",
     sandbox
   );
-  assert.deepEqual(sandbox.proctorPenalty_("student@test","07.01","test-A"),{penaltyPoints:10,violationCount:2});
-  assert.deepEqual(sandbox.proctorPenalty_("student@test","07.01","test-A",1),{penaltyPoints:0,violationCount:1});
-  assert.deepEqual(calls.slice(0,2),[[2,2,3,6],[2,13,3,3]]);
+  const allAttempts=sandbox.proctorPenalty_("student@test","07.01","test-A");
+  assert.equal(allAttempts.penaltyPoints,10);
+  assert.equal(allAttempts.violationCount,2);
+  const firstAttempt=sandbox.proctorPenalty_("student@test","07.01","test-A",1);
+  assert.equal(firstAttempt.penaltyPoints,0);
+  assert.equal(firstAttempt.violationCount,1);
+  assert.equal(JSON.stringify(calls.slice(0,2)),JSON.stringify([[2,2,3,6],[2,13,3,3]]));
   const logStart=server.indexOf("function logProctorEvent_(data)");
   const logEnd=server.indexOf("\\nfunction ",logStart+20);
   const log=server.slice(logStart,logEnd);
