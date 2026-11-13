@@ -1498,7 +1498,7 @@ test("custom materials reload for the current student identity after a staff ses
 test("English VPR enforces the five-word written-answer limit on the server", () => {
   const bank = read("EnglishVPR-Sheets.gs");
   const helperStart = bank.indexOf("function validateEnglishVprWrittenAnswers_");
-  const helperEnd = bank.indexOf("\\nfunction submitEnglishVprExam_", helperStart);
+  const helperEnd = bank.indexOf("\nfunction submitEnglishVprExam_", helperStart);
   assert.ok(helperStart >= 0 && helperEnd > helperStart);
   const sandbox = {};
   vm.runInNewContext(
