@@ -22,9 +22,9 @@
     if(!teacher()||(window.canAccessCourse&&!window.canAccessCourse(course()))){app.insertAdjacentHTML("beforeend",'<section class="module">Создавать игры могут только преподаватели, которым назначена выбранная дисциплина.</section>');return;}
     const old=games().find(g=>g.id===id);
     const model={title:old?old.title:"Своя игра",categories:old?JSON.parse(JSON.stringify(old.categories||[])):[{title:"Новая категория",questions:[{points:100,q:"",a:""}]}]};
-    app.insertAdjacentHTML("beforeend",'<section class="module"><label for="ownGameTitle">Название игры</label><input class="self-input" id="ownGameTitle" placeholder="Например: Знатоки материаловедения"><p class="museum-muted">Добавляйте категории и вопросы. Ответы видны студентам только после отдельного запроса к серверу.</p><div id="ownGameCategories"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><button class="btn ghost" id="ownGameAddCategory" type="button">＋ Добавить категорию</button><button class="btn" id="ownGameSave" type="button">Сохранить игру</button><a class="btn ghost" href="#/own-game">К списку игр</a></div><details class="module" style="margin-top:12px"><summary>Дополнительно: импорт / экспорт JSON</summary><p class="museum-muted">Можно вставить подготовленные категории в формате JSON или скопировать текущую структуру.</p><textarea class="self-input" id="ownGameJson" rows="12" spellcheck="false"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn ghost" id="ownGameImport" type="button">Загрузить JSON в редактор</button><button class="btn ghost" id="ownGameExport" type="button">Обновить JSON из редактора</button></div></details><section class="module"><h3>Предпросмотр игрового поля</h3><div id="ownGamePreviewBox"></div></section><p id="ownGameStatus" aria-live="polite"></p></section>');
+    app.insertAdjacentHTML("beforeend",'<section class="module"><label for="ownGameTitle">Название игры</label><input class="self-input" id="ownGameTitle" placeholder="Например: Знатоки материаловедения"><p class="museum-muted">Добавляйте категории и вопросы. Ответы видны студентам только после отдельного запроса к серверу.</p><div id="ownGameCategories"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><button class="btn ghost" id="ownGameLoadExample" type="button">✨ Загрузить пример по G-коду</button><button class="btn ghost" id="ownGameAddCategory" type="button">＋ Добавить категорию</button><button class="btn" id="ownGameSave" type="button">Сохранить игру</button><a class="btn ghost" href="#/own-game">К списку игр</a></div><details class="module" style="margin-top:12px"><summary>Дополнительно: импорт / экспорт JSON</summary><p class="museum-muted">Можно вставить подготовленные категории в формате JSON или скопировать текущую структуру.</p><textarea class="self-input" id="ownGameJson" rows="12" spellcheck="false"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn ghost" id="ownGameImport" type="button">Загрузить JSON в редактор</button><button class="btn ghost" id="ownGameExport" type="button">Обновить JSON из редактора</button></div></details><section class="module"><h3>Предпросмотр игрового поля</h3><div id="ownGamePreviewBox"></div></section><p id="ownGameStatus" aria-live="polite"></p></section>');
     $("ownGameTitle").value=model.title;
-    const status=()=> $("ownGameStatus").textContent;
+    const status=message=>{ $("ownGameStatus").textContent=message; };
     function syncJson(){ $("ownGameJson").value=JSON.stringify(model.categories,null,2); }
     function draw(){
       const host=$("ownGameCategories");
@@ -50,6 +50,23 @@
         if(b.dataset.removeQ){const [c,q]=b.dataset.removeQ.split(":").map(Number);model.categories[c].questions.splice(q,1);draw();}
       });
     }
+    $("ownGameLoadExample").onclick=()=>{model.title="Своя игра: основы G-кода";$("ownGameTitle").value=model.title;model.categories=[
+      {title:"Команды перемещения",questions:[
+        {points:100,q:"Какая команда задаёт быстрое позиционирование инструмента без обработки?",a:"G00 — быстрое перемещение."},
+        {points:200,q:"Чем отличается G01 от G00?",a:"G01 выполняет линейное перемещение с заданной рабочей подачей; G00 — быстрое позиционирование."},
+        {points:300,q:"В программе задано G01 X50 Y-20 F120. Что означают X, Y и F?",a:"X50 и Y-20 — координаты конечной точки; F120 — заданная подача (единицы зависят от режима и системы ЧПУ)."}
+      ]},
+      {title:"Шпиндель и инструмент",questions:[
+        {points:100,q:"Какая команда обычно включает вращение шпинделя по часовой стрелке?",a:"M03 (M3)."},
+        {points:200,q:"Для чего используется команда M05?",a:"Для остановки шпинделя."},
+        {points:300,q:"Что необходимо проверить перед запуском команды M03 S1200?",a:"Допустимую частоту вращения, закрепление заготовки и инструмента, закрытие ограждений и соответствие режимов карте наладки."}
+      ]},
+      {title:"Координаты и безопасность",questions:[
+        {points:100,q:"Как называется точка, от которой отсчитываются координаты детали в выбранной системе?",a:"Ноль детали (рабочий ноль)."},
+        {points:200,q:"Что задаёт G54 в распространённых системах ЧПУ?",a:"Первую рабочую систему координат детали; точная реализация зависит от стойки."},
+        {points:300,q:"Почему нельзя переносить программу на другой станок без проверки?",a:"Могут отличаться стойка, кинематика, нули, коррекции, формат циклов и M-коды; программу нужно проверить по документации и безопасно отработать."}
+      ]}
+    ];draw();status("Пример загружен. Проверьте формулировки и сохраните игру, когда будете готовы.");};
     $("ownGameAddCategory").onclick=()=>{model.categories.push({title:"Новая категория",questions:[{points:100,q:"",a:""}]});draw();};
     $("ownGameImport").onclick=()=>{try{const parsed=JSON.parse($("ownGameJson").value);validate(parsed);model.categories=parsed;draw();status("JSON загружен в визуальный редактор.");}catch(e){status(e.message);}};
     $("ownGameExport").onclick=()=>{syncJson();status("JSON обновлён.");};

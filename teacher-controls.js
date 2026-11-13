@@ -356,8 +356,26 @@ window.renderTutoringPage=function(){
 
 const oldRouter=window.router;
 if(oldRouter)window.router=function(){const route=(location.hash||"").replace(/^#\/?/,"").split("/")[0];if(route==="teaching-controls"){window.renderTeacherControlsPage();return;}if(route==="question-bank"){window.renderQuestionBankPage();return;}if(route==="tutoring"){window.renderTutoringPage();return;}return oldRouter.apply(this,arguments);};
+function appendTutoringEditor(app,courseSel){
+ if(!app||!courseSel||document.getElementById("editorTutoringPanel")||!window.API)return;
+ const panel=document.createElement("section");panel.className="module";panel.id="editorTutoringPanel";
+ panel.innerHTML='<h3>🎓 Запись на репетиторство</h3><p style="color:var(--muted)">Добавьте ссылку на сервис записи/оплаты дополнительных занятий. Настройки сохраняются отдельно для выбранной дисциплины.</p><label for="editorTutorUrl">Ссылка сервиса</label><input id="editorTutorUrl" class="self-input" type="url" placeholder="https://…"><label for="editorTutorTitle" style="display:block;margin-top:8px">Заголовок</label><input id="editorTutorTitle" class="self-input" maxlength="120" value="Запись на дополнительные занятия"><label for="editorTutorDescription" style="display:block;margin-top:8px">Пояснение для студентов</label><textarea id="editorTutorDescription" class="self-input" maxlength="500" rows="3" style="width:100%"></textarea><label style="display:flex;align-items:center;gap:9px;margin-top:12px"><input type="checkbox" id="editorTutorVisible" checked> Показывать вкладку студентам</label><p style="font-size:12px;color:var(--muted)">Если снять флажок, вкладка исчезнет из меню студентов этой дисциплины. Ссылка и настройки сохранятся.</p><button class="btn" id="saveEditorTutorLink" type="button" style="margin-top:10px">Сохранить ссылку</button> <span id="editorTutorStatus" aria-live="polite"></span>';
+ app.appendChild(panel);
+ const url=panel.querySelector("#editorTutorUrl"),title=panel.querySelector("#editorTutorTitle"),description=panel.querySelector("#editorTutorDescription"),visible=panel.querySelector("#editorTutorVisible"),status=panel.querySelector("#editorTutorStatus"),save=panel.querySelector("#saveEditorTutorLink");
+ let requestNo=0;
+ function load(){const cid=String(courseSel.value||""),current=++requestNo;status.textContent="Загрузка настроек…";save.disabled=true;
+  window.API.getTutoringLink(cid).then(r=>{if(current!==requestNo||!panel.isConnected)return;const l=r&&r.link||{};url.value=l.url||"";title.value=l.title||"Запись на дополнительные занятия";description.value=l.description||"";visible.checked=l.visible!==false;status.textContent="";save.disabled=false;})
+   .catch(e=>{if(current!==requestNo||!panel.isConnected)return;status.textContent="Не удалось загрузить настройки: "+(e.message||e);save.disabled=false;});
+ }
+ courseSel.addEventListener("change",load);
+ save.addEventListener("click",function(){const cid=String(courseSel.value||"");save.disabled=true;status.textContent="Сохранение…";
+  window.API.saveTutoringLink(cid,{url:url.value,title:title.value,description:description.value,visible:visible.checked}).then(r=>{if(!r||!r.success)throw Error(r&&r.error||"Не удалось сохранить ссылку");status.textContent="Настройки дисциплины сохранены.";if(String((window.state&&window.state.activeCourseId)||"07.01")===cid&&window.updateMenuVisibility)window.updateMenuVisibility();})
+   .catch(e=>{status.textContent=e.message||String(e);}).finally(()=>{save.disabled=false;});
+ });
+ load();
+}
 const oldEditor=window.renderCourseEditorPage;
-if(oldEditor)window.renderCourseEditorPage=function(){oldEditor.apply(this,arguments);if(!staff())return;const app=document.getElementById("app");if(app&&!document.getElementById("teachingControlsLink")){const link=document.createElement("a");link.id="teachingControlsLink";link.href="#/teaching-controls";link.className="btn";link.textContent="🔐 Управление доступом и попытками";const hero=app.querySelector(".hero");if(hero)hero.insertAdjacentElement("afterend",link);else app.prepend(link);link.style.margin="0 0 14px";}};
+if(oldEditor)window.renderCourseEditorPage=function(){oldEditor.apply(this,arguments);if(!staff())return;const app=document.getElementById("app"),courseSel=document.getElementById("editorCourse");if(app&&!document.getElementById("teachingControlsLink")){const link=document.createElement("a");link.id="teachingControlsLink";link.href="#/teaching-controls";link.className="btn";link.textContent="🔐 Управление доступом и попытками";const hero=app.querySelector(".hero");if(hero)hero.insertAdjacentElement("afterend",link);else app.prepend(link);link.style.margin="0 0 14px";}appendTutoringEditor(app,courseSel);};
 const originalInline=window.startInlineTest;
 if(originalInline)window.startInlineTest=function(topicId,selfWorkCode){
  const state=window.state||{},student=!!state.student;

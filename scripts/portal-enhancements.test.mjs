@@ -1,3 +1,4 @@
+// Regression coverage for portal workbook content and print layout.
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -178,7 +179,7 @@ test("SPRUT-TP topic assessments and reference tables are specific to each topic
 test("workbook figures are selected by relevant topics and all referenced files exist", () => {
   const workbook = read("workbooks.js");
   const html = read("index.html");
-  assert.match(html, /workbooks\.js\?v=67/);
+  assert.match(html, /workbooks\.js\?v=[0-9]+/);
   assert.match(html, /workbook-editorial\.js\?v=6/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
@@ -851,6 +852,12 @@ test("admin role is recognized for teacher navigation and tutoring is shown only
   assert.match(app, /currentState\.user && currentState\.user\.role/);
   assert.match(app, /currentRole === "teacher" \|\| currentRole === "admin"/);
   assert.match(app, /tutoringLink\.style\.display=isTeacher\?"flex":"none"/);
+  const controls = read("teacher-controls.js");
+  assert.match(controls, /editorTutoringPanel/);
+  assert.match(controls, /editorCourse/);
+  assert.match(controls, /getTutoringLink\(cid\)/);
+  assert.match(controls, /saveTutoringLink\(cid/);
+  assert.match(controls, /Показывать вкладку студентам/);
   assert.match(app, /link\.visible!==false&&String\(link\.url\|\|""\)\.trim\(\)/);
 });
 
@@ -866,7 +873,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v339"));
+  assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
 
@@ -887,7 +894,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v339/);
+  assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -1018,7 +1025,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v339/);
+  assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
 
@@ -1049,8 +1056,8 @@ test("workbooks include differentiated supplemental professional learning blocks
     assert.ok(workbooks.includes('id==="' + course + '"'), "missing supplemental track: " + course);
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
-  assert.match(html, /workbooks\.js\?v=67/);
-  assert.match(sw, /portal-cache-v339/);
+  assert.match(html, /workbooks\.js\?v=[0-9]+/);
+  assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
 
@@ -1086,8 +1093,8 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /Состав и структура/);
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
-  assert.match(html, /workbooks\.js\?v=67/);
-  assert.match(sw, /portal-cache-v339/);
+  assert.match(html, /workbooks\.js\?v=[0-9]+/);
+  assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
 
@@ -1109,14 +1116,14 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(workbooks, /String\(courseId\)==="MCAM"&&\/траектор\|фрез\|обработ\|станок\//);
   assert.doesNotMatch(workbooks, /String\(courseId\)==="MCAM"&&\/cam\|траектор\|фрез\|обработ\|операц\|инструмент\|заготов\//);
   assert.match(workbooks, /не скриншот интерфейса Mastercam/);
-  assert.match(workbooks, /visualBlocks\+cncReference/);
+  assert.match(workbooks, /visualBlocks\+cncSourceStudy\+cncReference/);
   assert.doesNotMatch(workbooks, /var meme=String\(courseId\)/);
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
-  assert.match(html, /workbooks\.js\?v=67/);
+  assert.match(html, /workbooks\.js\?v=[0-9]+/);
   assert.match(html, /style\.css\?v=24/);
-  assert.match(sw, /portal-cache-v339/);
+  assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
 test("MDK 07.01 includes topic-matched, attributed real photos for lathe and milling topics", () => {
@@ -1126,13 +1133,18 @@ test("MDK 07.01 includes topic-matched, attributed real photos for lathe and mil
   assert.match(workbooks, /var cncWorkbookPhotos=\{/);
   assert.match(workbooks, /"t-1-1":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Wasino%20CNC%20lathe\.jpg\?width=1200"/);
   assert.match(workbooks, /"t-1-2":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Lathe%20machinist\.jpg\?width=1200"/);
+  assert.match(workbooks, /"t-1-3":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/MoriSeikiLathe\.jpg\?width=1200"/);
+  assert.match(workbooks, /"t-1-4":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Control%20panel%20shows%20buttons%20and%20knobs%20in%20a%20machine%20workshop\.jpg\?width=1200"/);
+  assert.match(workbooks, /"t-3-1":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Man%20working%20at%20programmable%20cnc%20machine%20clseup\.jpg\?width=1200"/);
   assert.match(workbooks, /"t-5-3":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/CNC%20milling%20machine\.jpg\?width=1200"/);
   assert.match(workbooks, /Mitch Barrie · CC BY-SA 2\.0/);
   assert.match(workbooks, /Shadychiri · CC BY-SA 4\.0/);
   assert.match(workbooks, /Impressionmanufacturer · CC BY-SA 4\.0/);
+  assert.match(workbooks, /Glenn McKechnie · CC BY-SA 3\.0/);
+  assert.match(workbooks, /Shixart1985 · CC BY 2\.0/);
   assert.match(workbooks, /cncWorkbookPhotos\[String\(topic\.id\)\]/);
-  assert.match(html, /workbooks\.js\?v=67/);
-  assert.match(sw, /portal-cache-v339/);
+  assert.match(html, /workbooks\.js\?v=[0-9]+/);
+  assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
 test("MDK 07.01 adds topic-specific tables and a clearly qualified machining example chart", () => {

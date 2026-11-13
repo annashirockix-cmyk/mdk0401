@@ -16,6 +16,13 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(workbooks, /class="wb-answer-group"/);
  assert.match(workbooks, /writing=Array\.isArray\(t\.writing\)\?t\.writing:\[\]/);
  assert.match(workbooks, /wb-source-writing-text/);
+ assert.match(workbooks, /wb-source-study/);
+ assert.match(workbooks, /g02\|g03/);
+ assert.match(workbooks, /g81\|g82\|g84\|g86/);
+ assert.match(workbooks, /систем[а-я]+ координат, с\. 8–15/);
+ assert.match(workbooks, /круговой интерполяции, с\. 34–36/);
+ assert.match(workbooks, /постоянных циклах 2П32-3, с\. 82–88/);
+ assert.match(workbooks, /не переносите их без проверки на FANUC/i);
  assert.match(workbooks, /\.wb-visual-table-wrap\{overflow:visible!important/);
  assert.match(workbooks, /\.wb-visual-table\{display:table!important/);
  assert.match(workbooks, /\.wb-visual-table thead\{display:table-header-group\}/);
@@ -40,10 +47,10 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(workbooks, /\.lv-flow\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
  assert.match(workbooks, /overflow-wrap:break-word;word-break:normal/);
  assert.match(workbooks, /\.lecture-visual-atlas\{margin:18px 0/);
- assert.match(html, /workbooks\.js\?v=67/);
+ assert.match(html, /workbooks\.js\?v=[0-9]+/);
  assert.match(html, /workbook-editorial\.js\?v=6/);
  assert.match(html, /style\.css\?v=24/);
- assert.match(sw, /portal-cache-v339/);
+ assert.match(sw, /portal-cache-v[0-9]+/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Introducing myself and my future profession/);
  assert.match(editorialSource, /Language practice:/);

@@ -7,6 +7,8 @@ const baseUrl = process.env.CONSTRUCTOR_AUDIT_URL || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 page.on("pageerror", error => console.log("PAGE_ERROR", error.stack || error.message));
+page.on("console", message => { if (message.type() === "error" || /FLASHCARD_/.test(message.text())) console.log("BROWSER_CONSOLE", message.type(), JSON.stringify(message.location()), message.text()); });
+page.on("requestfailed", request => console.log("REQUEST_FAILED", request.url(), request.failure()?.errorText));
 page.on("console", message => { if (message.type() === "error") console.log("PAGE_CONSOLE_ERROR", message.text()); });
 try {
   const response = await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45000 });
@@ -25,8 +27,15 @@ try {
       window.customContent.lectures = rows.filter(x => x.type === "lecture");
       window.customContent.tests = rows.filter(x => x.type === "test");
       window.customContent.flashcards = rows.filter(x => x.type === "flashcards");
+      window.customContent.games = rows.filter(x => x.type === "game");
     }
+    window.__tutoringSettings = {};
     window.API = {
+      getTutoringLink: async courseId => ({ success: true, link: { ...(window.__tutoringSettings[courseId] || {}) } }),
+      saveTutoringLink: async (courseId, data) => {
+        window.__tutoringSettings[courseId] = { ...data };
+        return { success: true };
+      },
       getTopicAccess: async () => ({ open: true }),
       getCustomContent: async () => ({ success: true, data: window.__constructorStore.map(x => ({ ...x })) }),
       saveCustomContent: async item => {
@@ -53,6 +62,17 @@ try {
 
   await page.evaluate(() => window.renderCourseEditorPage());
   await page.waitForSelector("#createTopicBtn");
+  await page.waitForSelector("#editorTutoringPanel");
+  await page.locator("#editorTutorUrl").fill("https://example.invalid/tutoring");
+  await page.locator("#editorTutorTitle").fill("Запись на консультацию");
+  await page.locator("#editorTutorDescription").fill("Выберите удобное время.");
+  await page.locator("#editorTutorVisible").uncheck();
+  await page.locator("#saveEditorTutorLink").click();
+  await page.waitForFunction(() => document.getElementById("editorTutorStatus")?.textContent.includes("сохранены"));
+  assert.deepEqual(await page.evaluate(() => window.__tutoringSettings["07.01"]), {
+    url: "https://example.invalid/tutoring", title: "Запись на консультацию",
+    description: "Выберите удобное время.", visible: false
+  }, "Tutoring settings must save against the selected course");
   await page.locator("#newTopicCode").fill("AUDIT");
   await page.locator("#newTopicTitle").fill("Проверка конструктора");
   await page.locator("#createTopicBtn").click();
@@ -78,8 +98,84 @@ try {
   assert.ok((await page.locator("#savedMaterials").innerText()).includes("Тест конструктора"));
   assert.ok((await page.locator("#savedMaterials").innerText()).includes("Тестовая лекция конструктора"));
 
-  await page.evaluate(() => window.renderFlashcardEditorPage());
-  await page.waitForSelector("#fcTopic");
+  await page.evaluate(() => window.renderOwnGameEditor());
+  await page.waitForSelector("#ownGameLoadExample");
+  await page.locator("#ownGameLoadExample").click();
+  await page.waitForFunction(() => document.getElementById("ownGamePreviewBox")?.innerText.includes("Команды перемещения"));
+  assert.equal(await page.locator("#ownGameCategories article.module").count(), 3, "Sample own-game board must contain three categories");
+  assert.equal(await page.locator("#ownGameCategories [data-q-text]").count(), 9, "Sample own-game board must contain nine questions");
+  await page.locator("#ownGameSave").click();
+  await page.waitForFunction(() => window.__constructorStore.some(x => x.type === "game" && x.title === "Своя игра: основы G-кода"));
+  assert.equal(await page.evaluate(() => window.__constructorStore.find(x => x.type === "game")?.categories.reduce((n,c)=>n+c.questions.length,0)), 9,
+    "Sample own-game board must be saved with all nine questions");
+
+  await page.evaluate(() => {
+    window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
+      student: null, activeCourseId: "07.01", results: {}, xp: 0 };
+    window.customContent = window.customContent || { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
+    const appNode = document.getElementById("app");
+    const originalAppNode = appNode;
+    const documentObserver = new MutationObserver(() => {
+      const currentApp = document.getElementById("app");
+      const topic = document.getElementById("fcTopic");
+      if (!topic || currentApp !== originalAppNode) {
+        console.log("FLASHCARD_DOCUMENT_MUTATION", JSON.stringify({
+          hash: location.hash,
+          appStillConnected: originalAppNode?.isConnected,
+          appReplaced: currentApp !== originalAppNode,
+          currentAppText: (currentApp?.innerText || "").slice(0, 500),
+          currentAppHtml: (currentApp?.innerHTML || "").slice(0, 900),
+          stackHint: new Error().stack
+        }));
+        documentObserver.disconnect();
+      }
+    });
+    documentObserver.observe(document.documentElement, { childList: true, subtree: true });
+    const innerHtmlDescriptor = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
+    if (appNode && innerHtmlDescriptor && innerHtmlDescriptor.set) {
+      Object.defineProperty(appNode, "innerHTML", {
+        configurable: true,
+        get() { return innerHtmlDescriptor.get.call(this); },
+        set(value) {
+          if (document.getElementById("fcTopic") && !String(value).includes('id="fcTopic"')) {
+            console.log("FLASHCARD_APP_REPLACED", JSON.stringify({ hash: location.hash, nextHtml: String(value).slice(0, 500), stack: new Error().stack }));
+          }
+          return innerHtmlDescriptor.set.call(this, value);
+        }
+      });
+    }
+    if (appNode) {
+      const observer = new MutationObserver(() => {
+        if (window.__flashcardTopicWasMounted && !document.getElementById("fcTopic")) {
+          console.log("FLASHCARD_TOPIC_REMOVED", JSON.stringify({ hash: location.hash, appText: (appNode.innerText || "").slice(0, 500) }));
+          observer.disconnect();
+        }
+        if (document.getElementById("fcTopic")) window.__flashcardTopicWasMounted = true;
+      });
+      observer.observe(appNode, { childList: true, subtree: true });
+    }
+    window.addEventListener("hashchange", () => console.log("FLASHCARD_HASH_CHANGE", location.hash));
+    location.hash = "#/flashcard-editor";
+  });
+  await page.waitForSelector("#fcTopic", { state: "attached", timeout: 10000 });
+  await page.waitForFunction(() => document.getElementById("fcTopic")?.options.length > 0);
+  const flashcardDiagnostics = await page.evaluate(() => ({
+    staff: window.state && window.state.staff,
+    courseKeys: Object.keys(window.MDK_DATA || {}),
+    activeCourseId: window.state && window.state.activeCourseId,
+    courseSections: (window.MDK_DATA && window.MDK_DATA["07.01"] && window.MDK_DATA["07.01"].sections || []).length,
+    builtInTopics: (window.MDK_DATA && window.MDK_DATA["07.01"] && window.MDK_DATA["07.01"].sections || []).reduce((n, s) => n + (s.topics || []).length, 0),
+    customTopics: (window.customContent && window.customContent.topics || []).map(t => ({id:t.id,mdkId:t.mdkId,title:t.title})),
+    selectedCourse: document.getElementById("fcCourse")?.value,
+    topicOptionCount: document.getElementById("fcTopic")?.options.length,
+    appText: (document.getElementById("app")?.innerText || "").slice(0, 1200),
+    appHtml: (document.getElementById("app")?.innerHTML || "").slice(0, 1800)
+  }));
+  console.log("FLASHCARD_AUDIT_DIAGNOSTICS", JSON.stringify(flashcardDiagnostics));
+  await page.locator("#fcLoadExample").click();
+  await page.waitForFunction(() => document.getElementById("fcDrafts")?.innerText.includes("G00"));
+  assert.equal(await page.locator("#fcDrafts article.module").count(), 8, "Sample G-code flashcard set must contain eight cards");
+  await page.locator("#fcReset").click();
   await page.locator("#fcTopic").selectOption(topicId);
   await page.locator("#fcTitle").fill("Карточки конструктора");
   await page.locator("#fcFront").fill("Workpiece");
