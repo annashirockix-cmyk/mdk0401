@@ -1130,10 +1130,19 @@ function getMyCourseResults_(data) {
     }
   });
   list.sort(function(a,b){return String(a.finishedAt).localeCompare(String(b.finishedAt));});
-  const graded=list.filter(function(x){return x.grade!==""&&x.grade!==null&&Number(x.grade)>0;});
+  // Keep every attempt in results for the student's history, but calculate
+  // summary statistics from only the latest attempt for each course/work pair.
+  const latestByAssessment=Object.create(null);
+  list.forEach(function(x){
+    const key=JSON.stringify([normalizeCourseId_(x.courseId),String(x.testId||"")]);
+    const previous=latestByAssessment[key];
+    if(!previous||String(x.finishedAt||"")>=String(previous.finishedAt||""))latestByAssessment[key]=x;
+  });
+  const latestResults=Object.keys(latestByAssessment).map(function(key){return latestByAssessment[key];});
+  const graded=latestResults.filter(function(x){return x.grade!==""&&x.grade!==null&&Number(x.grade)>0;});
   const averageGrade=graded.length?Math.round(graded.reduce(function(n,x){return n+Number(x.grade||0);},0)/graded.length*100)/100:0;
   const averagePercent=graded.length?Math.round(graded.reduce(function(n,x){return n+Number(x.percent||0);},0)/graded.length):0;
-  return {success:true,results:list,summary:{completed:list.length,graded:graded.length,averageGrade:averageGrade,averagePercent:averagePercent}};
+  return {success:true,results:list,summary:{completed:latestResults.length,graded:graded.length,averageGrade:averageGrade,averagePercent:averagePercent}};
 }
 
 /* ---------- Assignments and student submissions ---------- */
