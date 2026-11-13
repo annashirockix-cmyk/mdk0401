@@ -1864,7 +1864,7 @@
       return;
     }
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a>' +
-      '<section class="hero"><h1>English Listening Lab</h1><p>Курсы 4–5 · 4 семестровых блока · 48 аудирований · браузерное озвучивание</p></section>' +
+      '<section class="hero"><h1>English Listening Lab</h1><p>Курсы 3–5 · 6 семестровых блоков · 72 аудирования · браузерное озвучивание</p></section>' +
       '<section class="module"><p>Выберите аудирование. Браузер прочитает английский текст вслух. В тренировочном режиме после ответа доступны проверка и расшифровка. Это учебные упражнения, не экзаменационные попытки.</p></section>';
     var currentSemester = "";
     activities.forEach(function (activity) {
