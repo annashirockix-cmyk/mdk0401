@@ -359,33 +359,28 @@ function updateMappedRecord_(sheet, rowNumber, record) {
 }
 
 function userByEmail_(email) {
-  const sheet = users_();
-  const values = sheet.getDataRange().getValues();
-  if (!values.length) return null;
-
-  const headers = values[0].map(String);
-  const index = {};
-  headers.forEach(function (header, i) { index[header] = i; });
-  const target = email_(email);
-
-  for (let row = 1; row < values.length; row++) {
-    if (email_(values[row][index.Email]) === target) {
-      return {
-        row: row + 1,
-        email: target,
-        passwordHash: String(values[row][index.PasswordHash] || ""),
-        passwordSalt: String(values[row][index.PasswordSalt] || ""),
-        loginChangedAt: index.LoginChangedAt !== undefined ? String(values[row][index.LoginChangedAt] || "") : "",
-        passwordChangedAt: index.PasswordChangedAt !== undefined ? String(values[row][index.PasswordChangedAt] || "") : "",
-        name: String(values[row][index.Name] || ""),
-        group: String(values[row][index.Group] || ""),
-        role: String(values[row][index.Role] || "student").toLowerCase(),
-        courses: String(values[row][index.Courses] || ""),
-        payload: String(values[row][index.Payload] || "")
-      };
-    }
-  }
-  return null;
+  const sheet=users_(),lastRow=sheet.getLastRow(),lastColumn=sheet.getLastColumn(),target=email_(email);
+  if(!target||lastRow<2||lastColumn<1)return null;
+  const headers=sheet.getRange(1,1,1,lastColumn).getValues()[0].map(String),index={};
+  headers.forEach(function(header,i){index[header]=i;});
+  if(index.Email===undefined)return null;
+  // Search only the Email column; do not download every student's large Payload on each authenticated API call.
+  const found=sheet.getRange(2,index.Email+1,lastRow-1,1).createTextFinder(target).matchEntireCell(true).matchCase(false).findNext();
+  if(!found)return null;
+  const rowNumber=found.getRow(),row=sheet.getRange(rowNumber,1,1,lastColumn).getValues()[0];
+  return {
+    row:rowNumber,
+    email:target,
+    passwordHash:String(row[index.PasswordHash]||""),
+    passwordSalt:String(row[index.PasswordSalt]||""),
+    loginChangedAt:index.LoginChangedAt!==undefined?String(row[index.LoginChangedAt]||""):"",
+    passwordChangedAt:index.PasswordChangedAt!==undefined?String(row[index.PasswordChangedAt]||""):"",
+    name:String(row[index.Name]||""),
+    group:String(row[index.Group]||""),
+    role:String(row[index.Role]||"student").toLowerCase(),
+    courses:String(row[index.Courses]||""),
+    payload:String(row[index.Payload]||"")
+  };
 }
 
 function writeUserFields_(user, fields) {
@@ -1065,7 +1060,7 @@ function getPublicSubjectRatings_(data) {
     if (String(row[userMap.Role] || "").toLowerCase() !== "student" || !row[userMap.Email]) return;
     let payload = {};
     try { payload = JSON.parse(row[userMap.Payload] || "{}"); } catch (e) {}
-    const legacy = payload.results || {}, protectedBanks=protectedQuestionBankMap_();
+    const legacy = payload.results || {};
     Object.keys(legacy).forEach(function (testId) {
       const rec = legacy[testId];
       if (!rec || typeof rec !== "object" || rec.grade == null) return;
@@ -1147,37 +1142,34 @@ function getMyCourseResults_(data) {
   }).map(function(r){
     return {testId:String(r[3]||""),testTitle:String(r[4]||r[3]||""),grade:r[5]===""||r[5]===null?"":Number(r[5])||0,score:Number(r[6])||0,maxScore:Number(r[7])||0,percent:Number(r[8])||0,timeSpent:Number(r[9])||0,finishedAt:String(r[11]||""),courseId:normalizeCourseId_(r[12]),payload:String(r[13]||"")};
   });
-  const sheet=users_(),values=sheet.getDataRange().getValues(),map=headerMap_(sheet);
-  const row=values.slice(1).find(function(r){return email_(r[map.Email])===email;});
-  if(row){
-    let payload={};try{payload=JSON.parse(row[map.Payload]||"{}");}catch(e){}
-    const legacy=payload.results||{};
-    Object.keys(legacy).forEach(function(testId){
-      const rec=legacy[testId];if(!rec||typeof rec!=="object"||rec.grade==null)return;
-      let courseId=normalizeCourseId_(rec.courseId||"");
-      if(!courseId){
-        const matches=CFG.COURSES.filter(function(id){return testId.indexOf(id)>=0;});
-        if(matches.length===1)courseId=matches[0];
-        else{const enrolled=String(row[map.Courses]||"").split(",").filter(Boolean);if(enrolled.length===1)courseId=enrolled[0];}
-      }
-      if(requestedCourse&&!sameCourseId_(courseId,requestedCourse))return;
-      if(isProtectedAssessment_(testId,courseId,protectedQuestionBankMap_()))return;
-      if(list.some(function(x){return x.testId===String(testId)&&sameCourseId_(x.courseId,courseId);}))return;
-      list.push({testId:String(testId),testTitle:String(rec.testTitle||testId),grade:Number(rec.grade)||0,score:Number(rec.score)||0,maxScore:Number(rec.max||rec.maxScore)||0,percent:Number(rec.percent)||0,timeSpent:Number(rec.timeSpent)||0,finishedAt:String(rec.finishedAt||""),courseId:courseId});
-    });
-    // Оценки из журнала преподавателя хранятся в payload.manualGrades по дате.
-    // У старого формата нет поля дисциплины, поэтому показываем их в общем журнале,
-    // не приписывая произвольный курс.
-    if(!requestedCourse){
-      const manual=payload.manualGrades||{};
-      Object.keys(manual).forEach(function(date){
-        const value=manual[date];if(value===undefined||value===null||String(value).trim()==="")return;
-        const id="manual_"+String(date);
-        if(list.some(function(x){return x.testId===id;}))return;
-        const numeric=Number(value);
-        list.push({testId:id,testTitle:"Оценка преподавателя",grade:String(value),score:isFinite(numeric)?numeric:0,maxScore:5,percent:isFinite(numeric)?numeric*20:0,timeSpent:0,finishedAt:String(date),courseId:"",manual:true});
-      });
+  // auth_ already resolved this student's row; reuse its payload instead of downloading the full Users sheet again.
+  let payload={};try{payload=JSON.parse(user.payload||"{}");}catch(e){}
+  const legacy=payload.results||{},protectedBanks=protectedQuestionBankMap_();
+  Object.keys(legacy).forEach(function(testId){
+    const rec=legacy[testId];if(!rec||typeof rec!=="object"||rec.grade==null)return;
+    let courseId=normalizeCourseId_(rec.courseId||"");
+    if(!courseId){
+      const matches=CFG.COURSES.filter(function(id){return testId.indexOf(id)>=0;});
+      if(matches.length===1)courseId=matches[0];
+      else{const enrolled=String(user.courses||"").split(",").filter(Boolean);if(enrolled.length===1)courseId=enrolled[0];}
     }
+    if(requestedCourse&&!sameCourseId_(courseId,requestedCourse))return;
+    if(isProtectedAssessment_(testId,courseId,protectedBanks))return;
+    if(list.some(function(x){return x.testId===String(testId)&&sameCourseId_(x.courseId,courseId);}))return;
+    list.push({testId:String(testId),testTitle:String(rec.testTitle||testId),grade:Number(rec.grade)||0,score:Number(rec.score)||0,maxScore:Number(rec.max||rec.maxScore)||0,percent:Number(rec.percent)||0,timeSpent:Number(rec.timeSpent)||0,finishedAt:String(rec.finishedAt||""),courseId:courseId});
+  });
+  // Оценки из журнала преподавателя хранятся в payload.manualGrades по дате.
+  // У старого формата нет поля дисциплины, поэтому показываем их в общем журнале,
+  // не приписывая произвольный курс.
+  if(!requestedCourse){
+    const manual=payload.manualGrades||{};
+    Object.keys(manual).forEach(function(date){
+      const value=manual[date];if(value===undefined||value===null||String(value).trim()==="")return;
+      const id="manual_"+String(date);
+      if(list.some(function(x){return x.testId===id;}))return;
+      const numeric=Number(value);
+      list.push({testId:id,testTitle:"Оценка преподавателя",grade:String(value),score:isFinite(numeric)?numeric:0,maxScore:5,percent:isFinite(numeric)?numeric*20:0,timeSpent:0,finishedAt:String(date),courseId:"",manual:true});
+    });
   }
   assignmentResultRecords_(email).forEach(function(x){
     if((!requestedCourse||sameCourseId_(x.courseId,requestedCourse))&&!list.some(function(r){return r.testId===x.testId;})){

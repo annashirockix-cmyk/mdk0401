@@ -1414,7 +1414,8 @@ test("legacy student payloads cannot restore protected English exam grades", () 
   const save = server.slice(saveStart, saveEnd);
   assert.ok(save.includes("isProtectedAssessment_(testId"));
   const studentResults = server.slice(server.indexOf("function getMyCourseResults_(data)"));
-  assert.ok(studentResults.includes("isProtectedAssessment_(testId,courseId,protectedQuestionBankMap_())"));
+  assert.ok(studentResults.includes("isProtectedAssessment_(testId,courseId,protectedBanks)"));
+  assert.ok(studentResults.includes("const legacy=payload.results||{},protectedBanks=protectedQuestionBankMap_()"));
 });
 
 
@@ -1625,4 +1626,55 @@ test("Apps Script load harness is read-only and uses only student GET actions", 
   assert.ok(script.includes('name: "getTestAttemptStatus"'));
   assert.ok(script.includes('name: "getEnglishVprExam"'));
   assert.doesNotMatch(script, /saveResult|submitEnglishVprExam|setCustomContentAccess|saveStudent/);
+});
+
+
+test("student authentication looks up one user row instead of downloading all user payloads", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function userByEmail_(email)");
+  const end = server.indexOf("\nfunction writeUserFields_", start);
+  assert.ok(start >= 0 && end > start);
+  const calls = [];
+  const sandbox = {
+    users_:()=>({
+      getLastRow:()=>41,
+      getLastColumn:()=>4,
+      getRange:(row,column,numRows,numColumns)=>{
+        calls.push([row,column,numRows,numColumns]);
+        if(row===1)return {getValues:()=>[["Email","Name","Role","Payload"]]};
+        if(row===2&&column===1)return {
+          createTextFinder:needle=>({
+            matchEntireCell:()=>({matchCase:()=>({findNext:()=>({getRow:()=>23})})})
+          })
+        };
+        if(row===23)return {getValues:()=>[["student@test","Test Student","student","{}"]]};
+        throw new Error("Unexpected full-sheet read");
+      }
+    }),
+    email_:value=>String(value||"").trim().toLowerCase()
+  };
+  vm.runInNewContext(server.slice(start,end)+";this.userByEmail_=userByEmail_;",sandbox);
+  const user=sandbox.userByEmail_("STUDENT@TEST");
+  assert.equal(user.email,"student@test");
+  assert.equal(user.name,"Test Student");
+  assert.equal(user.role,"student");
+  assert.equal(user.row,23);
+  assert.equal(JSON.stringify(calls),JSON.stringify([[1,1,1,4],[2,1,40,1],[23,1,1,4]]));
+});
+
+test("student results reuse the authenticated payload and compute the protected bank map once", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function getMyCourseResults_(data)");
+  const end = server.indexOf("\n/* ---------- Assignments", start);
+  assert.ok(start >= 0 && end > start);
+  const fn=server.slice(start,end);
+  assert.match(fn,/JSON\.parse\(user\.payload\|\|"\{\}"\)/);
+  assert.match(fn,/const legacy=payload\.results\|\|\{\},protectedBanks=protectedQuestionBankMap_\(\)/);
+  assert.doesNotMatch(fn,/users_\(\)\.getDataRange\(\)/);
+  assert.doesNotMatch(fn,/protectedQuestionBankMap_\(\)\)return/);
+  const publicStart=server.indexOf("function getPublicSubjectRatings_(data)");
+  const publicEnd=server.indexOf("\nfunction ",publicStart+20);
+  const publicFn=server.slice(publicStart,publicEnd);
+  assert.match(publicFn,/protectedBanks=protectedQuestionBankMap_\(\)/);
+  assert.doesNotMatch(publicFn,/const legacy = payload\.results \|\| \{\}, protectedBanks=/);
 });
