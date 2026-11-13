@@ -10,15 +10,15 @@ This is the second independent batch of 20 Technical English questions. Together
 **Which unit is used to measure electric current?**
 
 A. Volt  
-B. Ampere  
-C. Ohm  
-D. Watt
+B. Ohm  
+C. Watt
+D. Ampere  
 
 ### 22. Electrical engineering
 **A voltmeter is connected…**
 
-A. in series with the component  
-B. in parallel with the component  
+A. in parallel with the component  
+B. in series with the component  
 C. only to the protective earth  
 D. across an open mechanical joint
 
@@ -26,8 +26,8 @@ D. across an open mechanical joint
 **According to Ohm's law, current is equal to…**
 
 A. voltage multiplied by resistance  
-B. voltage divided by resistance  
-C. resistance divided by power  
+B. resistance divided by power  
+C. voltage divided by resistance  
 D. power multiplied by time
 
 ### 24. Electrical engineering
@@ -41,17 +41,17 @@ D. To measure resistance continuously
 ### 25. Electrical engineering
 **In a simple series circuit, the current…**
 
-A. is the same through each component  
-B. is always zero after the first component  
-C. is different in every component  
-D. flows only through the largest resistor
+A. is always zero after the first component  
+B. is different in every component  
+C. flows only through the largest resistor
+D. is the same through each component  
 
 ### 26. Electronics
 **What is the main function of a diode in a basic circuit?**
 
-A. To allow current mainly in one direction  
-B. To convert sound into mechanical motion  
-C. To measure temperature directly  
+A. To convert sound into mechanical motion  
+B. To measure temperature directly  
+C. To allow current mainly in one direction  
 D. To increase the physical length of a conductor
 
 ### 27. Electronics
@@ -66,8 +66,8 @@ D. measure an object's mass
 **What does LED stand for?**
 
 A. Low Energy Device  
-B. Light-Emitting Diode  
-C. Linear Electrical Display  
+B. Linear Electrical Display  
+C. Light-Emitting Diode  
 D. Light-Energy Detector
 
 ### 29. Engineering software
@@ -81,32 +81,32 @@ D. To certify a finished aircraft automatically
 ### 30. Engineering software
 **In a spreadsheet, a formula usually begins with…**
 
-A. #  
-B. =  
+A. =  
+B. #  
 C. @  
 D. ?
 
 ### 31. Technical data
 **A graph shows temperature on the vertical axis and time on the horizontal axis. What does a rising line indicate?**
 
-A. Temperature is increasing over time  
-B. Time is moving backwards  
-C. The sensor is certainly defective  
-D. The measured object has stopped existing
+A. Time is moving backwards  
+B. The sensor is certainly defective  
+C. The measured object has stopped existing
+D. Temperature is increasing over time  
 
 ### 32. Technical data
 **Why should the unit be included when reporting a measurement?**
 
 A. It makes the report longer  
-B. It identifies the scale and gives the value its meaning  
-C. It replaces the measured value  
-D. It guarantees that the instrument is calibrated
+B. It replaces the measured value  
+C. It guarantees that the instrument is calibrated
+D. It identifies the scale and gives the value its meaning  
 
 ### 33. Maintenance
 **What is preventive maintenance intended to do?**
 
-A. Reduce the likelihood of failures through planned actions  
-B. Repair equipment only after a serious breakdown  
+A. Repair equipment only after a serious breakdown  
+B. Reduce the likelihood of failures through planned actions  
 C. Remove the need for maintenance records  
 D. Increase the number of unexpected stoppages
 
@@ -122,8 +122,8 @@ D. passwords for the equipment network
 **Which phrase is most suitable for reporting that a check has not yet been completed?**
 
 A. “The check is complete.”  
-B. “The check is still pending.”  
-C. “The check was never necessary.”  
+B. “The check was never necessary.”  
+C. “The check is still pending.”  
 D. “The result is approved.”
 
 ### 36. Maintenance communication
@@ -137,9 +137,9 @@ D. Close the work order without comment
 ### 37. Technical documentation
 **What is a “revision history” in a technical document?**
 
-A. A record of changes made to the document  
-B. A list of all employees in a factory  
-C. A description of the document's colour  
+A. A list of all employees in a factory  
+B. A description of the document's colour  
+C. A record of changes made to the document  
 D. A forecast of future production costs
 
 ### 38. Technical documentation
@@ -163,33 +163,33 @@ D. Assume that both sensors are correct
 
 A. “Hello”  
 B. “Important!!!”  
-C. “CNC-04 — spindle temperature reading — 13 November”  
-D. “Please read this whenever”
+C. “Please read this whenever”
+D. “CNC-04 — spindle temperature reading — 13 November”  
 
 ## Teacher key and rationale (do not expose to students)
 
 | Item | Key | Rationale |
 |---:|:---:|---|
-| 21 | B | Electric current is measured in amperes. |
-| 22 | B | A voltmeter measures potential difference across a component, so it is connected in parallel. |
-| 23 | B | Ohm's law gives I = V/R for an ohmic element under the stated conditions. |
+| 21 | D | Electric current is measured in amperes. |
+| 22 | A | A voltmeter measures potential difference across a component, so it is connected in parallel. |
+| 23 | C | Ohm's law gives I = V/R for an ohmic element under the stated conditions. |
 | 24 | B | A fuse opens the circuit when current exceeds its rated operating conditions. |
-| 25 | A | The same current passes through all elements in an ideal series circuit. |
-| 26 | A | A conventional diode conducts primarily in the forward direction. |
+| 25 | D | The same current passes through all elements in an ideal series circuit. |
+| 26 | C | A conventional diode conducts primarily in the forward direction. |
 | 27 | A | Resistance is used to limit current and form voltage drops/dividers. |
-| 28 | B | LED means light-emitting diode. |
+| 28 | C | LED means light-emitting diode. |
 | 29 | A | CAD supports digital creation and modification of engineering designs. |
-| 30 | B | Spreadsheet formulas conventionally begin with an equals sign. |
-| 31 | A | With time on x and temperature on y, a rising line means temperature rises as time passes. |
-| 32 | B | A number without a unit can be ambiguous or unusable. |
-| 33 | A | Preventive maintenance is planned to reduce the probability of failure. |
+| 30 | A | Spreadsheet formulas conventionally begin with an equals sign. |
+| 31 | D | With time on x and temperature on y, a rising line means temperature rises as time passes. |
+| 32 | D | A number without a unit can be ambiguous or unusable. |
+| 33 | B | Preventive maintenance is planned to reduce the probability of failure. |
 | 34 | B | A useful log records traceable work, findings and dates. |
-| 35 | B | “Still pending” accurately reports an incomplete task. |
+| 35 | C | “Still pending” accurately reports an incomplete task. |
 | 36 | B | Equipment/component identity must be confirmed rather than guessed. |
-| 37 | A | Revision history records document changes and versions. |
+| 37 | C | Revision history records document changes and versions. |
 | 38 | A | A procedure is instructional; a report records observations, actions or results. |
 | 39 | B | Preserve evidence and investigate conditions/instrument status before drawing conclusions. |
-| 40 | C | It identifies the equipment, subject and date clearly. |
+| 40 | D | It identifies the equipment, subject and date clearly. |
 
 ## Review checklist
 
