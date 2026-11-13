@@ -11,8 +11,8 @@
 - D. completion
 
 **62.** Choose the best meaning of *to isolate a circuit* in an electrical safety context.
-- A. To connect it to another circuit
-- B. To disconnect it from its energy source
+- A. To disconnect it from its energy source
+- B. To connect it to another circuit
 - C. To measure its resistance
 - D. To increase its voltage
 
@@ -24,8 +24,8 @@
 
 **64.** Choose the correct passive form: “The technician ___ the damaged cable yesterday.”
 - A. replaces
-- B. was replaced
-- C. replaced
+- B. replaced
+- C. was replaced
 - D. has replacing
 
 **65.** A warning label says “Keep clear of moving parts.” What should an operator do?
@@ -35,10 +35,10 @@
 - D. Increase the machine speed
 
 **66.** Select the correct word: “The sensor provides a ___ signal to the controller.”
-- A. feedback
-- B. feedbacks
-- C. fed back
-- D. feeding back
+- A. feedbacks
+- B. fed back
+- C. feeding back
+- D. feedback
 
 **67.** Read the note: “The measured value is outside the permitted range. Repeat the measurement using a calibrated instrument.” What is the required next step?
 - A. Change the permitted range
@@ -47,74 +47,74 @@
 - D. Delete the measurement record
 
 **68.** Choose the most appropriate heading for a document describing the sequence of tasks required to return equipment to service.
-- A. Return-to-Service Procedure
-- B. Staff Holiday List
-- C. Product Advertisement
+- A. Staff Holiday List
+- B. Product Advertisement
+- C. Return-to-Service Procedure
 - D. Visitor Feedback Form
 
 **69.** Complete the sentence: “If the temperature ___ above the limit, the system sends an alarm.”
 - A. rise
-- B. rises
-- C. rising
+- B. rising
+- C. rises
 - D. risen
 
 **70.** What is the main purpose of a *bill of materials (BOM)*?
-- A. To list the components and materials needed for a product
-- B. To record employees’ working hours
-- C. To describe the weather during production
+- A. To record employees’ working hours
+- B. To describe the weather during production
+- C. To list the components and materials needed for a product
 - D. To replace the assembly drawing
 
 **71.** Choose the correct instruction for a technical email.
-- A. “Please find attached the updated wiring diagram.”
-- B. “I attaching you the diagram yesterday.”
+- A. “I attaching you the diagram yesterday.”
+- B. “Please find attached the updated wiring diagram.”
 - C. “See attached it, maybe.”
 - D. “The diagram are in attach.”
 
 **72.** A PLC input receives a signal from a limit switch. What does the limit switch typically detect?
-- A. A position or end-of-travel condition
-- B. The colour of the machine frame
-- C. The operator’s job title
+- A. The colour of the machine frame
+- B. The operator’s job title
+- C. A position or end-of-travel condition
 - D. The price of the equipment
 
 **73.** Choose the correct comparative: “This test procedure is ___ than the previous one.”
 - A. reliable
-- B. more reliable
-- C. most reliable
-- D. the reliable
+- B. most reliable
+- C. the reliable
+- D. more reliable
 
 **74.** In a technical specification, *shall* most commonly expresses:
-- A. A mandatory requirement
-- B. A personal wish
+- A. A personal wish
+- B. A mandatory requirement
 - C. A past habit
 - D. An uncertain possibility
 
 **75.** Read the log entry: “Unit 4: intermittent signal loss observed during the second test. Connector inspected; no visible damage found. Further diagnosis required.” Which statement is supported?
 - A. The unit passed every test
-- B. Signal loss occurred intermittently during the second test
-- C. The connector was replaced
-- D. The cause of the fault was confirmed
+- B. The connector was replaced
+- C. The cause of the fault was confirmed
+- D. Signal loss occurred intermittently during the second test
 
 **76.** Choose the correct term for a device that converts a physical quantity, such as pressure, into a signal.
-- A. Transducer
-- B. Fastener
-- C. Gasket
-- D. Bearing
+- A. Fastener
+- B. Gasket
+- C. Bearing
+- D. Transducer
 
 **77.** Complete the sentence: “Neither the operator nor the supervisor ___ the revised schedule.”
 - A. have received
-- B. has received
-- C. receiving
-- D. receive
+- B. receiving
+- C. receive
+- D. has received
 
 **78.** What does *non-conformance* mean in quality management?
-- A. A failure to meet a specified requirement
-- B. A routine staff meeting
-- C. A completed delivery
+- A. A routine staff meeting
+- B. A completed delivery
+- C. A failure to meet a specified requirement
 - D. A type of measuring instrument
 
 **79.** Choose the clearest report sentence.
-- A. “The readings were recorded at 14:30 and checked against the specified limits.”
-- B. “Readings was doing at half past two.”
+- A. “Readings was doing at half past two.”
+- B. “The readings were recorded at 14:30 and checked against the specified limits.”
 - C. “We see numbers and it was okay maybe.”
 - D. “The limits checked the readings yesterday by them.”
 
@@ -129,24 +129,24 @@
 | No. | Key | Rationale |
 |---:|:---:|---|
 | 61 | A | Singular subject “team” takes the present simple form “completes”; the sentence describes a required routine. |
-| 62 | B | “Isolate” means separate from the energy source; the item checks vocabulary comprehension, not a work procedure. |
+| 62 | A | “Isolate” means separate from the energy source; the item checks vocabulary comprehension, not a work procedure. |
 | 63 | A | Revision letters identify successive document revisions; local document-control rules should be checked in the applicable standard. |
-| 64 | C | The time marker “yesterday” requires the past simple active form. |
+| 64 | B | The time marker “yesterday” requires the past simple active form. |
 | 65 | A | The warning instructs personnel to maintain distance from moving parts. |
-| 66 | A | “Feedback” is used as an uncountable technical noun in this context. |
+| 66 | D | “Feedback” is used as an uncountable technical noun in this context. |
 | 67 | B | The note explicitly instructs a repeat measurement with a calibrated instrument. |
-| 68 | A | The heading accurately describes a procedure for returning equipment to service. |
-| 69 | B | In a first conditional/general rule, the singular subject “temperature” takes “rises”. |
-| 70 | A | A BOM is a structured list of components/materials required for a product or assembly. |
-| 71 | A | This is the conventional concise phrasing for identifying an attachment in a technical email. |
-| 72 | A | A limit switch commonly detects a defined position or travel limit. |
-| 73 | B | The comparative form of “reliable” is “more reliable”. |
-| 74 | A | In many specifications, “shall” denotes a requirement; confirm the convention used by the relevant standard/document set. |
-| 75 | B | The log states intermittent signal loss was observed during test two; it does not identify a confirmed cause. |
-| 76 | A | A transducer converts a physical quantity into another form of signal. |
-| 77 | B | With “neither…nor”, agreement commonly follows the nearer singular subject “supervisor”; verify house style if teaching an alternative convention. |
-| 78 | A | Non-conformance is failure to satisfy a defined requirement. |
-| 79 | A | The sentence is grammatical, precise and includes time and verification context. |
+| 68 | C | The heading accurately describes a procedure for returning equipment to service. |
+| 69 | C | In a first conditional/general rule, the singular subject “temperature” takes “rises”. |
+| 70 | C | A BOM is a structured list of components/materials required for a product or assembly. |
+| 71 | B | This is the conventional concise phrasing for identifying an attachment in a technical email. |
+| 72 | C | A limit switch commonly detects a defined position or travel limit. |
+| 73 | D | The comparative form of “reliable” is “more reliable”. |
+| 74 | B | In many specifications, “shall” denotes a requirement; confirm the convention used by the relevant standard/document set. |
+| 75 | D | The log states intermittent signal loss was observed during test two; it does not identify a confirmed cause. |
+| 76 | D | A transducer converts a physical quantity into another form of signal. |
+| 77 | D | With “neither…nor”, agreement commonly follows the nearer singular subject “supervisor”; verify house style if teaching an alternative convention. |
+| 78 | C | Non-conformance is failure to satisfy a defined requirement. |
+| 79 | B | The sentence is grammatical, precise and includes time and verification context. |
 | 80 | A | Traceability depends on a dated, attributable record linked to the task and equipment. |
 
 ## Review checklist
