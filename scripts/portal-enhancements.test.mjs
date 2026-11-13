@@ -1615,3 +1615,14 @@ test("proctor penalty reads only identity and sanction columns", () => {
   assert.ok(log.includes("proctorPenalty_(user.email,courseId,testId).violationCount"));
   assert.doesNotMatch(log,/vals=sh\.getDataRange\(\)\.getValues\(\)/);
 });
+
+
+test("Apps Script load harness is read-only and uses only student GET actions", () => {
+  const script = read("scripts/gas-read-load-test.mjs");
+  assert.ok(script.includes('method: "GET"'));
+  assert.ok(script.includes('name: "getMyCourseResults"'));
+  assert.ok(script.includes('name: "getCustomContent"'));
+  assert.ok(script.includes('name: "getTestAttemptStatus"'));
+  assert.ok(script.includes('name: "getEnglishVprExam"'));
+  assert.doesNotMatch(script, /saveResult|submitEnglishVprExam|setCustomContentAccess|saveStudent/);
+});
