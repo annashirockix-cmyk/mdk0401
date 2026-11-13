@@ -1260,8 +1260,23 @@ function getAssignments_(data) {
   const user = auth_(data);
   if (["student","teacher","admin"].indexOf(user.role) < 0) throw new Error("Недостаточно прав.");
   const sh = assignments_(), rows = sh.getDataRange().getValues(), h = headerMap_(sh);
-  const ss = assignmentSubmissions_(), subs = ss.getDataRange().getValues(), m = headerMap_(ss);
-  const hs = assignmentSubmissionHistory_(), historyRows = hs.getDataRange().getValues(), hm = headerMap_(hs), list = [];
+  const ss = assignmentSubmissions_(), m = headerMap_(ss);
+  const hs = assignmentSubmissionHistory_(), hm = headerMap_(hs), list = [];
+  function rowsForStudent(sheet, map) {
+    const lastRow = sheet.getLastRow(), lastColumn = sheet.getLastColumn();
+    if (lastColumn < 1) return [];
+    const header = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+    if (lastRow <= 1 || map.StudentEmail === undefined) return [header];
+    // Student views must not download every student's answers or attempt history.
+    const matches = sheet.getRange(2, map.StudentEmail + 1, lastRow - 1, 1)
+      .createTextFinder(user.email).matchEntireCell(true).matchCase(false).findAll();
+    const ownRows = matches.map(function(cell) {
+      return sheet.getRange(cell.getRow(), 1, 1, lastColumn).getValues()[0];
+    }).filter(function(row) { return email_(row[map.StudentEmail]) === user.email; });
+    return [header].concat(ownRows);
+  }
+  const subs = user.role === "student" ? rowsForStudent(ss, m) : ss.getDataRange().getValues();
+  const historyRows = user.role === "student" ? rowsForStudent(hs, hm) : hs.getDataRange().getValues();
   function historyFor(submission) {
     const sid = String(submission[m.Id] || "");
     const saved = historyRows.slice(1).filter(function(x){return String(x[hm.SubmissionId]||"")===sid;})
