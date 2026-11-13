@@ -15,8 +15,10 @@ function validateEnglishVprExam_(track, exam) {
     throw new Error("Структура экзамена не соответствует утверждённому варианту " + track.toUpperCase() + ".");
   }
   exam.tasks.forEach(function(task, index) {
-    if (!task || task.type !== expectedTypes[index] || !Array.isArray(task.items) ||
-        task.items.length !== expectedCounts[index]) {
+    const count = task && task.type === "gap"
+      ? (Array.isArray(task.answers) ? task.answers.length : 0)
+      : (task && Array.isArray(task.items) ? task.items.length : 0);
+    if (!task || task.type !== expectedTypes[index] || count !== expectedCounts[index]) {
       throw new Error("Неверная структура задания " + (index + 1) + " экзамена " + track.toUpperCase() + ".");
     }
     if (Number(task.points) !== (index === 6 ? 10 : 5)) {
