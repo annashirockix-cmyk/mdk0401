@@ -271,3 +271,8 @@ The latest catalogue read-back confirms 48 unique activities across four complet
 ### Verified browser listening coverage — 72 activities
 
 The latest catalogue includes 72 unique activities: Course 3 (12 + 12), Course 4 (12 + 12), Course 5 (12 + 12). Course 3 Semester 1 follows the five existing Materials/Metal Processes/Technical Drawing/CAD-CAM lessons and adds seven aviation-focused lessons. Course 3 Semester 2 follows the existing machine-tool/CNC/safety topics and adds seven detailed CNC, measurement and communication lessons. Courses 1–2 remain outstanding. The listening catalogue is practice-only and does not write grades or create protected exam attempts. Direct embedding into every lesson and browser/device playback verification remain outstanding.
+
+
+### Verified browser listening coverage — 96 activities
+
+The catalogue now includes 96 unique activities: Course 2 (12 + 12), Course 3 (12 + 12), Course 4 (12 + 12), and Course 5 (12 + 12). Course 2 listening uses accessible B1–B1+ language and follows the approved project map: social and professional communication in Semester 1; science, environment and argumentation in Semester 2. Course 1 remains to be converted. All catalogue items are practice-only and do not create exam attempts or gradebook entries. Direct lesson embedding and browser/device playback checks remain outstanding.
