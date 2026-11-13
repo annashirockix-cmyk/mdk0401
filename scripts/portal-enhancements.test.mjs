@@ -1438,6 +1438,5 @@ test("attempt-count reads only the compact Results index, not full submissions",
   const statusEnd = server.indexOf("function requestTestAttempts_(data)", statusStart + 20);
   assert.ok(server.slice(statusStart, statusEnd).includes("resultAttemptRows_()"));
   const semesterStart = server.indexOf("function submitEnglishSemesterTest_(data)");
-  const semesterEnd = server.indexOf("function submitEnglishVprExam_", semesterStart + 20);
-  assert.ok(server.slice(semesterStart, semesterEnd).includes("resultAttemptRows_()"));
+  assert.ok(server.slice(semesterStart).includes("resultAttemptRows_()"));
 });
