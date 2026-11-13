@@ -3090,6 +3090,1254 @@
         }
       ]
     },
+      {
+      "id": "en-c01-s01-l01",
+      "title": "Course 1 · Semester 1 · Phonetics and Pronunciation",
+      "level": "A1–A2",
+      "script": "Teacher: Good morning, everyone. Today we will practise the English sounds in ship and sheep. Listen first: ship, sheep. Student: They sound similar, but the vowel is different. Teacher: Good. Now repeat: sit, seat; live, leave. Do not worry if it is difficult at first. Listen carefully, speak slowly and practise a little every day.",
+      "questions": [
+        {
+          "prompt": "Which words does the teacher compare first?",
+          "options": [
+            "Ship and sheep",
+            "Sit and stand",
+            "Live and love",
+            "Good and morning"
+          ],
+          "answerIndex": 0,
+          "explanation": "The first pair is ship and sheep."
+        },
+        {
+          "prompt": "What is different in the words?",
+          "options": [
+            "The vowel sound",
+            "The number of letters",
+            "The first consonant",
+            "The meaning of teacher"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher focuses on the vowel."
+        },
+        {
+          "prompt": "What does the teacher ask students to do?",
+          "options": [
+            "Listen carefully and speak slowly",
+            "Speak as fast as possible",
+            "Stop practising",
+            "Write only numbers"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher recommends careful listening and slow speech."
+        },
+        {
+          "prompt": "Which pair is mentioned next?",
+          "options": [
+            "Sit and seat",
+            "Cat and dog",
+            "Red and blue",
+            "Book and pen"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says sit and seat."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l02",
+      "title": "Course 1 · Semester 1 · Pronouns, Verbs and Modal Verbs",
+      "level": "A1–A2",
+      "script": "Hello. My name is Alex. I am a first-year student. My group is friendly, and our teacher is helpful. We study English on Monday. I can read simple texts, but I cannot speak quickly yet. Our teacher says, You should practise every day. We must bring our notebooks to class. I like English because it helps me communicate with people.",
+      "questions": [
+        {
+          "prompt": "Who is speaking?",
+          "options": [
+            "Alex",
+            "The teacher",
+            "A parent",
+            "A shop assistant"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker introduces himself as Alex."
+        },
+        {
+          "prompt": "When does the group study English?",
+          "options": [
+            "On Monday",
+            "On Friday",
+            "Every evening",
+            "On Sunday"
+          ],
+          "answerIndex": 0,
+          "explanation": "Alex says they study English on Monday."
+        },
+        {
+          "prompt": "What can Alex do?",
+          "options": [
+            "Read simple texts",
+            "Speak quickly",
+            "Teach the class",
+            "Write long reports"
+          ],
+          "answerIndex": 0,
+          "explanation": "He can read simple texts."
+        },
+        {
+          "prompt": "What must students bring?",
+          "options": [
+            "Their notebooks",
+            "A passport",
+            "A football",
+            "A camera"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says they must bring notebooks."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l03",
+      "title": "Course 1 · Semester 1 · Reading: Speak About Yourself",
+      "level": "A1–A2",
+      "script": "Interviewer: Can you tell me about yourself? Student: My name is Maria. I am eighteen years old and I live with my family. I am a college student. I like drawing and listening to music. My favourite subject is English because I want to travel and meet new people. Interviewer: What are your plans? Student: I want to study well and find an interesting job.",
+      "questions": [
+        {
+          "prompt": "How old is Maria?",
+          "options": [
+            "Eighteen",
+            "Sixteen",
+            "Twenty",
+            "Seventeen"
+          ],
+          "answerIndex": 0,
+          "explanation": "Maria says she is eighteen."
+        },
+        {
+          "prompt": "Who does she live with?",
+          "options": [
+            "Her family",
+            "Her classmates",
+            "Her teacher",
+            "Her friends"
+          ],
+          "answerIndex": 0,
+          "explanation": "She lives with her family."
+        },
+        {
+          "prompt": "What is her favourite subject?",
+          "options": [
+            "English",
+            "Physics",
+            "History",
+            "Art"
+          ],
+          "answerIndex": 0,
+          "explanation": "Maria says English is her favourite subject."
+        },
+        {
+          "prompt": "Why does she like English?",
+          "options": [
+            "She wants to travel and meet people",
+            "She wants to become a singer",
+            "She dislikes other subjects",
+            "She wants to move house"
+          ],
+          "answerIndex": 0,
+          "explanation": "She gives travel and communication as reasons."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l04",
+      "title": "Course 1 · Semester 1 · Classroom English: Instructions and Questions",
+      "level": "A1–A2",
+      "script": "Teacher: Open your books, please. Look at exercise two. Listen to the recording and choose the correct answer. Student: Excuse me, could you repeat the instruction? Teacher: Of course. Listen first, then write your answers. Student: Should we work alone? Teacher: Yes, work individually for five minutes. After that, compare your answers with a partner.",
+      "questions": [
+        {
+          "prompt": "Which exercise should students open?",
+          "options": [
+            "Exercise two",
+            "Exercise five",
+            "Exercise ten",
+            "No exercise"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says exercise two."
+        },
+        {
+          "prompt": "What should students do first?",
+          "options": [
+            "Listen to the recording",
+            "Compare answers",
+            "Close their books",
+            "Leave the classroom"
+          ],
+          "answerIndex": 0,
+          "explanation": "They should listen first."
+        },
+        {
+          "prompt": "How long should they work individually?",
+          "options": [
+            "Five minutes",
+            "Ten minutes",
+            "One hour",
+            "Two minutes"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher gives five minutes."
+        },
+        {
+          "prompt": "What happens after individual work?",
+          "options": [
+            "They compare answers with a partner",
+            "They go home",
+            "They start a new course",
+            "They take a bus"
+          ],
+          "answerIndex": 0,
+          "explanation": "They compare answers after five minutes."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l05",
+      "title": "Course 1 · Semester 1 · Present Simple: Facts and Habits",
+      "level": "A1–A2",
+      "script": "My name is Dan. I live near the college. I get up at seven o'clock and have breakfast at home. I walk to the bus stop and take the bus to college. My first lesson starts at nine. I study English twice a week. In the evening, I do my homework and sometimes play computer games. I usually go to bed at eleven.",
+      "questions": [
+        {
+          "prompt": "What time does Dan get up?",
+          "options": [
+            "At seven",
+            "At six",
+            "At eight",
+            "At nine"
+          ],
+          "answerIndex": 0,
+          "explanation": "Dan gets up at seven."
+        },
+        {
+          "prompt": "How does he travel to college?",
+          "options": [
+            "By bus",
+            "By train",
+            "By bicycle",
+            "By taxi"
+          ],
+          "answerIndex": 0,
+          "explanation": "He takes the bus."
+        },
+        {
+          "prompt": "How often does he study English?",
+          "options": [
+            "Twice a week",
+            "Every day",
+            "Once a month",
+            "Three times a day"
+          ],
+          "answerIndex": 0,
+          "explanation": "He studies English twice a week."
+        },
+        {
+          "prompt": "What time does he usually go to bed?",
+          "options": [
+            "At eleven",
+            "At nine",
+            "At ten",
+            "At midnight"
+          ],
+          "answerIndex": 0,
+          "explanation": "He usually goes to bed at eleven."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l06",
+      "title": "Course 1 · Semester 1 · Present Simple: Third-person Forms",
+      "level": "A1–A2",
+      "script": "Teacher: What does your brother do, Nina? Nina: He works in a workshop. He checks parts and writes short reports. Teacher: Does he work every day? Nina: Yes, he works from Monday to Friday. He does not work at the weekend. Teacher: Does he like his job? Nina: Yes, he likes it because he learns new things.",
+      "questions": [
+        {
+          "prompt": "Where does Nina's brother work?",
+          "options": [
+            "In a workshop",
+            "In a hospital",
+            "In a shop",
+            "At a hotel"
+          ],
+          "answerIndex": 0,
+          "explanation": "He works in a workshop."
+        },
+        {
+          "prompt": "What does he check?",
+          "options": [
+            "Parts",
+            "Books",
+            "Tickets",
+            "Food"
+          ],
+          "answerIndex": 0,
+          "explanation": "He checks parts."
+        },
+        {
+          "prompt": "When does he work?",
+          "options": [
+            "From Monday to Friday",
+            "Only on Sunday",
+            "Every weekend",
+            "Only on Monday"
+          ],
+          "answerIndex": 0,
+          "explanation": "He works weekdays."
+        },
+        {
+          "prompt": "Why does he like his job?",
+          "options": [
+            "He learns new things",
+            "He never writes reports",
+            "He works at night",
+            "He travels every day"
+          ],
+          "answerIndex": 0,
+          "explanation": "Nina says he likes learning."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l07",
+      "title": "Course 1 · Semester 1 · Questions and Negatives in Present Simple",
+      "level": "A1–A2",
+      "script": "Receptionist: Do you study at this college? Visitor: Yes, I do. Receptionist: Do you live in the city? Visitor: No, I do not. I live in a village near the city. Receptionist: Does your bus arrive early? Visitor: No, it does not. It usually arrives at eight thirty. Receptionist: Thank you. Please wait in room twelve.",
+      "questions": [
+        {
+          "prompt": "Does the visitor study at the college?",
+          "options": [
+            "Yes",
+            "No",
+            "The recording does not say",
+            "Only on weekends"
+          ],
+          "answerIndex": 0,
+          "explanation": "The visitor answers yes."
+        },
+        {
+          "prompt": "Where does the visitor live?",
+          "options": [
+            "In a village near the city",
+            "In the city centre",
+            "At the college",
+            "At the station"
+          ],
+          "answerIndex": 0,
+          "explanation": "The visitor lives in a nearby village."
+        },
+        {
+          "prompt": "What time does the bus usually arrive?",
+          "options": [
+            "At eight thirty",
+            "At seven",
+            "At nine thirty",
+            "At twelve"
+          ],
+          "answerIndex": 0,
+          "explanation": "The visitor gives eight thirty."
+        },
+        {
+          "prompt": "Where should the visitor wait?",
+          "options": [
+            "In room twelve",
+            "At the bus stop",
+            "In the library",
+            "Outside the college"
+          ],
+          "answerIndex": 0,
+          "explanation": "The receptionist says room twelve."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l08",
+      "title": "Course 1 · Semester 1 · Nouns, Articles and Plural Forms",
+      "level": "A1–A2",
+      "script": "Teacher: Look at the picture. What can you see? Student: I can see a desk, a chair and an apple. Teacher: Good. What about the books? Student: There are three books on the desk. Teacher: Is there a computer? Student: Yes, there is a computer next to the books. Teacher: Excellent. Remember: one book, two books; one box, two boxes.",
+      "questions": [
+        {
+          "prompt": "What is on the desk?",
+          "options": [
+            "A desk, a chair and an apple",
+            "Only a phone",
+            "Two bags",
+            "A bicycle"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student names a desk, chair and apple in the picture."
+        },
+        {
+          "prompt": "How many books are there?",
+          "options": [
+            "Three",
+            "One",
+            "Two",
+            "Five"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student says there are three books."
+        },
+        {
+          "prompt": "Where is the computer?",
+          "options": [
+            "Next to the books",
+            "Under the chair",
+            "In the bag",
+            "Outside"
+          ],
+          "answerIndex": 0,
+          "explanation": "It is next to the books."
+        },
+        {
+          "prompt": "What plural form does the teacher give?",
+          "options": [
+            "Boxes",
+            "Boxs",
+            "Boxies",
+            "Boxen"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says one box, two boxes."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l09",
+      "title": "Course 1 · Semester 1 · Family, Friends and Personal Information",
+      "level": "A1–A2",
+      "script": "Hello, my name is Pavel. I have a small family. My mother is a nurse and my father is an engineer. I have one younger sister. She is fourteen and she likes sport. My best friend is Timur. We study in the same group and often do our homework together. At weekends, we visit our grandparents or go for a walk.",
+      "questions": [
+        {
+          "prompt": "What is Pavel's father's job?",
+          "options": [
+            "Engineer",
+            "Nurse",
+            "Teacher",
+            "Driver"
+          ],
+          "answerIndex": 0,
+          "explanation": "His father is an engineer."
+        },
+        {
+          "prompt": "How old is his sister?",
+          "options": [
+            "Fourteen",
+            "Twelve",
+            "Sixteen",
+            "Eighteen"
+          ],
+          "answerIndex": 0,
+          "explanation": "His sister is fourteen."
+        },
+        {
+          "prompt": "Who is Timur?",
+          "options": [
+            "Pavel's best friend",
+            "His brother",
+            "His teacher",
+            "His cousin"
+          ],
+          "answerIndex": 0,
+          "explanation": "Pavel calls Timur his best friend."
+        },
+        {
+          "prompt": "What do they often do together?",
+          "options": [
+            "Homework",
+            "Shopping for cars",
+            "Cooking at work",
+            "Playing tennis professionally"
+          ],
+          "answerIndex": 0,
+          "explanation": "They often do homework together."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l10",
+      "title": "Course 1 · Semester 1 · Prepositions of Place and Time",
+      "level": "A1–A2",
+      "script": "Student: Where is the English classroom? Teacher: It is on the second floor, next to the computer room. Student: What time does the lesson start? Teacher: It starts at ten past nine on Tuesday. Student: Is the library open in the evening? Teacher: Yes, it is open until six o'clock. Student: Thank you. Teacher: You are welcome.",
+      "questions": [
+        {
+          "prompt": "Where is the English classroom?",
+          "options": [
+            "On the second floor",
+            "On the ground floor",
+            "In the basement",
+            "Outside the building"
+          ],
+          "answerIndex": 0,
+          "explanation": "It is on the second floor."
+        },
+        {
+          "prompt": "What room is next to it?",
+          "options": [
+            "The computer room",
+            "The gym",
+            "The canteen",
+            "The laboratory"
+          ],
+          "answerIndex": 0,
+          "explanation": "It is next to the computer room."
+        },
+        {
+          "prompt": "When does the lesson start?",
+          "options": [
+            "At ten past nine on Tuesday",
+            "At eight on Monday",
+            "At ten on Friday",
+            "At six in the evening"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher gives the exact time and day."
+        },
+        {
+          "prompt": "When does the library close?",
+          "options": [
+            "At six o'clock",
+            "At four o'clock",
+            "At nine o'clock",
+            "At midnight"
+          ],
+          "answerIndex": 0,
+          "explanation": "It is open until six."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l11",
+      "title": "Course 1 · Semester 1 · Daily Routines and Frequency Adverbs",
+      "level": "A1–A2",
+      "script": "Anna has a busy day. She usually gets up at half past six. She always has breakfast before leaving home. She sometimes walks to college when the weather is good. After lessons, she often meets her friend in the library. She rarely watches television on weekdays because she has homework. She never goes to bed before finishing her tasks.",
+      "questions": [
+        {
+          "prompt": "What time does Anna usually get up?",
+          "options": [
+            "Half past six",
+            "Seven thirty",
+            "Six o'clock",
+            "Eight"
+          ],
+          "answerIndex": 0,
+          "explanation": "She gets up at half past six."
+        },
+        {
+          "prompt": "What does she always do before leaving?",
+          "options": [
+            "Have breakfast",
+            "Watch television",
+            "Visit the library",
+            "Call her teacher"
+          ],
+          "answerIndex": 0,
+          "explanation": "She always has breakfast."
+        },
+        {
+          "prompt": "Where does she often meet her friend?",
+          "options": [
+            "In the library",
+            "At the station",
+            "In a supermarket",
+            "At the airport"
+          ],
+          "answerIndex": 0,
+          "explanation": "They often meet in the library."
+        },
+        {
+          "prompt": "Why does she rarely watch television on weekdays?",
+          "options": [
+            "She has homework",
+            "She dislikes music",
+            "She works at a hotel",
+            "She goes swimming"
+          ],
+          "answerIndex": 0,
+          "explanation": "She has homework to do."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s01-l12",
+      "title": "Course 1 · Semester 1 · Filling in Basic Forms",
+      "level": "A1–A2",
+      "script": "A college administrator is helping a new student complete a form. The student writes her surname, first name, date of birth, address and telephone number. The administrator asks her to check every number carefully. The student writes her email address and names her study group. At the end, she reads the form again and signs it. The administrator says that clear and correct information helps the college contact students.",
+      "questions": [
+        {
+          "prompt": "What does the student write first?",
+          "options": [
+            "Surname and first name",
+            "Favourite film",
+            "Shopping list",
+            "Travel plans"
+          ],
+          "answerIndex": 0,
+          "explanation": "The form asks for surname and first name."
+        },
+        {
+          "prompt": "Which date-related detail is required?",
+          "options": [
+            "Date of birth",
+            "Date of a holiday",
+            "Date of a concert",
+            "Date of a football match"
+          ],
+          "answerIndex": 0,
+          "explanation": "Date of birth is requested."
+        },
+        {
+          "prompt": "What should the student check carefully?",
+          "options": [
+            "Every number",
+            "The classroom colour",
+            "The weather",
+            "The teacher's shoes"
+          ],
+          "answerIndex": 0,
+          "explanation": "The administrator asks her to check numbers."
+        },
+        {
+          "prompt": "What does the student do at the end?",
+          "options": [
+            "Reads the form again and signs it",
+            "Throws the form away",
+            "Leaves it blank",
+            "Sends it to a shop"
+          ],
+          "answerIndex": 0,
+          "explanation": "She reviews and signs the form."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l01",
+      "title": "Course 1 · Semester 2 · Word Formation and Definitions",
+      "level": "A1–A2",
+      "script": "Teacher: What is a driver? Student: A person who drives a car, bus or lorry. Teacher: Good. What is a painter? Student: A person who paints pictures or walls. Teacher: And what is a reader? Student: A person who reads. Teacher: Excellent. Many English nouns for people end in -er. Listen to the word and think about the action.",
+      "questions": [
+        {
+          "prompt": "What is a driver?",
+          "options": [
+            "A person who drives",
+            "A person who cooks",
+            "A person who paints",
+            "A person who reads"
+          ],
+          "answerIndex": 0,
+          "explanation": "A driver is a person who drives."
+        },
+        {
+          "prompt": "What can a painter paint?",
+          "options": [
+            "Pictures or walls",
+            "Only books",
+            "Only cars",
+            "Only food"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student says pictures or walls."
+        },
+        {
+          "prompt": "What does a reader do?",
+          "options": [
+            "Reads",
+            "Drives",
+            "Builds",
+            "Sings"
+          ],
+          "answerIndex": 0,
+          "explanation": "A reader reads."
+        },
+        {
+          "prompt": "Which ending is mentioned?",
+          "options": [
+            "-er",
+            "-ing",
+            "-ful",
+            "-less"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher highlights -er."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l02",
+      "title": "Course 1 · Semester 2 · Reading: Nizhnekamsk",
+      "level": "A1–A2",
+      "script": "A student is describing Nizhnekamsk to a new classmate. It is a city in the Republic of Tatarstan. The city has residential areas, schools, parks and sports facilities. Industry is important to the local economy, and many people work at large enterprises or in service organizations. The student likes the city because it has places to study, meet friends and spend free time.",
+      "questions": [
+        {
+          "prompt": "Where is Nizhnekamsk?",
+          "options": [
+            "In the Republic of Tatarstan",
+            "In the Republic of Karelia",
+            "In the south of Spain",
+            "On the coast of France"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student says it is in Tatarstan."
+        },
+        {
+          "prompt": "What facilities are mentioned?",
+          "options": [
+            "Schools, parks and sports facilities",
+            "Only airports",
+            "Only museums",
+            "Only factories"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker lists schools, parks and sports facilities."
+        },
+        {
+          "prompt": "What is important to the local economy?",
+          "options": [
+            "Industry",
+            "Fishing only",
+            "Tourism only",
+            "Film production"
+          ],
+          "answerIndex": 0,
+          "explanation": "Industry is described as important."
+        },
+        {
+          "prompt": "Why does the student like the city?",
+          "options": [
+            "It has places to study and spend free time",
+            "There are no schools",
+            "It has no traffic",
+            "It is always quiet"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student mentions study, friends and leisure."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l03",
+      "title": "Course 1 · Semester 2 · Reading: A Machine Should Work",
+      "level": "A1–A2",
+      "script": "A student visits a workshop with a teacher. The teacher explains that a machine is designed to perform a particular task. Before work begins, the operator checks the work area and follows the instructions. If a machine makes an unusual noise or stops unexpectedly, the operator must report the problem. Students should never touch controls without permission. The teacher says that machines are useful when people understand their purpose and use them responsibly.",
+      "questions": [
+        {
+          "prompt": "Why is a machine designed?",
+          "options": [
+            "To perform a particular task",
+            "To decorate a room",
+            "To replace every worker",
+            "To store books"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says a machine performs a particular task."
+        },
+        {
+          "prompt": "What should happen before work begins?",
+          "options": [
+            "The work area is checked",
+            "The controls are changed",
+            "The machine is painted",
+            "The operator leaves"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher mentions checking the work area."
+        },
+        {
+          "prompt": "What should the operator do if there is an unusual noise?",
+          "options": [
+            "Report the problem",
+            "Ignore it",
+            "Increase the speed",
+            "Ask a visitor to fix it"
+          ],
+          "answerIndex": 0,
+          "explanation": "The operator must report unusual conditions."
+        },
+        {
+          "prompt": "Can students touch controls without permission?",
+          "options": [
+            "No",
+            "Yes",
+            "Only at lunchtime",
+            "Only when alone"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says not to touch controls without permission."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l04",
+      "title": "Course 1 · Semester 2 · My College: Departments and People",
+      "level": "A1–A2",
+      "script": "A new student is visiting the college. A guide explains that the main building has classrooms, laboratories, a library and a sports hall. The technology department is on the first floor, and the language classrooms are on the second floor. Students can ask the receptionist for help. Teachers work in department offices, while the librarian helps students find books and digital resources.",
+      "questions": [
+        {
+          "prompt": "What is in the main building?",
+          "options": [
+            "Classrooms, laboratories, a library and a sports hall",
+            "Only offices",
+            "Only a canteen",
+            "Only workshops"
+          ],
+          "answerIndex": 0,
+          "explanation": "The guide lists four facilities."
+        },
+        {
+          "prompt": "Where is the technology department?",
+          "options": [
+            "On the first floor",
+            "On the second floor",
+            "In the basement",
+            "Outside"
+          ],
+          "answerIndex": 0,
+          "explanation": "It is on the first floor."
+        },
+        {
+          "prompt": "Where are the language classrooms?",
+          "options": [
+            "On the second floor",
+            "On the first floor",
+            "In the sports hall",
+            "In the library"
+          ],
+          "answerIndex": 0,
+          "explanation": "They are on the second floor."
+        },
+        {
+          "prompt": "Who helps students find books?",
+          "options": [
+            "The librarian",
+            "The receptionist",
+            "The sports coach",
+            "The bus driver"
+          ],
+          "answerIndex": 0,
+          "explanation": "The librarian helps with books and resources."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l05",
+      "title": "Course 1 · Semester 2 · Subjects, Timetables and Classroom Language",
+      "level": "A1–A2",
+      "script": "A student checks her timetable for Wednesday. The first lesson is mathematics at eight thirty. After a short break, the group has English at ten fifteen. In the afternoon, they study materials science in a laboratory. The student writes the room numbers in her notebook. She asks a classmate to explain the abbreviation for the laboratory building. Her classmate shows her the timetable key.",
+      "questions": [
+        {
+          "prompt": "What is the first lesson?",
+          "options": [
+            "Mathematics",
+            "English",
+            "Materials science",
+            "History"
+          ],
+          "answerIndex": 0,
+          "explanation": "Mathematics is first."
+        },
+        {
+          "prompt": "When does English begin?",
+          "options": [
+            "At ten fifteen",
+            "At eight thirty",
+            "At eleven thirty",
+            "At two o'clock"
+          ],
+          "answerIndex": 0,
+          "explanation": "The timetable gives ten fifteen."
+        },
+        {
+          "prompt": "Where do they study materials science?",
+          "options": [
+            "In a laboratory",
+            "In the library",
+            "In the sports hall",
+            "Outside"
+          ],
+          "answerIndex": 0,
+          "explanation": "The afternoon lesson is in a laboratory."
+        },
+        {
+          "prompt": "Where does the classmate find the abbreviation meaning?",
+          "options": [
+            "In the timetable key",
+            "In a restaurant menu",
+            "On a bus ticket",
+            "In a phone game"
+          ],
+          "answerIndex": 0,
+          "explanation": "The classmate shows the timetable key."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l06",
+      "title": "Course 1 · Semester 2 · Places in Town and Giving Directions",
+      "level": "A1–A2",
+      "script": "Visitor: Excuse me, how can I get to the railway station? Local resident: Go straight along this street and turn left at the bank. The station is opposite the post office. Visitor: Is it far? Local resident: No, it is about a ten-minute walk. Visitor: Thank you. Local resident: You are welcome. Be careful when you cross the road.",
+      "questions": [
+        {
+          "prompt": "Where does the visitor want to go?",
+          "options": [
+            "The railway station",
+            "The airport",
+            "The library",
+            "The hospital"
+          ],
+          "answerIndex": 0,
+          "explanation": "The visitor asks for the railway station."
+        },
+        {
+          "prompt": "Where should the visitor turn left?",
+          "options": [
+            "At the bank",
+            "At the school",
+            "At the park",
+            "At the cinema"
+          ],
+          "answerIndex": 0,
+          "explanation": "The directions say turn left at the bank."
+        },
+        {
+          "prompt": "What is opposite the station?",
+          "options": [
+            "The post office",
+            "The bank",
+            "The college",
+            "The museum"
+          ],
+          "answerIndex": 0,
+          "explanation": "The station is opposite the post office."
+        },
+        {
+          "prompt": "How long is the walk?",
+          "options": [
+            "About ten minutes",
+            "Two minutes",
+            "Half an hour",
+            "One hour"
+          ],
+          "answerIndex": 0,
+          "explanation": "The local resident says ten minutes."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l07",
+      "title": "Course 1 · Semester 2 · Public Services and Everyday Situations",
+      "level": "A1–A2",
+      "script": "A student needs to send a parcel. At the post office, she asks for a small box and a form. The assistant explains that she must write the receiver's name and address clearly. The student asks how much the service costs. The assistant checks the parcel size and gives the price. The student pays by card and keeps the receipt.",
+      "questions": [
+        {
+          "prompt": "Where does the student go?",
+          "options": [
+            "The post office",
+            "The library",
+            "The hospital",
+            "The railway station"
+          ],
+          "answerIndex": 0,
+          "explanation": "She goes to the post office."
+        },
+        {
+          "prompt": "What does she need?",
+          "options": [
+            "A small box and a form",
+            "A passport and a suitcase",
+            "A book and a pen only",
+            "A train ticket"
+          ],
+          "answerIndex": 0,
+          "explanation": "She asks for a box and a form."
+        },
+        {
+          "prompt": "What information must be written clearly?",
+          "options": [
+            "The receiver's name and address",
+            "The sender's favourite food",
+            "The weather",
+            "The parcel's colour"
+          ],
+          "answerIndex": 0,
+          "explanation": "The assistant asks for name and address."
+        },
+        {
+          "prompt": "What does the student keep?",
+          "options": [
+            "The receipt",
+            "The empty box",
+            "The assistant's phone",
+            "A timetable"
+          ],
+          "answerIndex": 0,
+          "explanation": "She keeps the receipt."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l08",
+      "title": "Course 1 · Semester 2 · Food, Shopping and Polite Requests",
+      "level": "A1–A2",
+      "script": "Customer: Good afternoon. Could I have a bottle of water and a cheese sandwich, please? Shop assistant: Certainly. Would you like anything else? Customer: No, thank you. How much is it? Shop assistant: It is four euros fifty. Customer: Can I pay by card? Shop assistant: Yes, of course. Here is your receipt.",
+      "questions": [
+        {
+          "prompt": "What does the customer buy?",
+          "options": [
+            "Water and a cheese sandwich",
+            "Coffee and soup",
+            "Tea and cake",
+            "Juice and fruit"
+          ],
+          "answerIndex": 0,
+          "explanation": "The customer asks for water and a sandwich."
+        },
+        {
+          "prompt": "How much does it cost?",
+          "options": [
+            "Four euros fifty",
+            "Three euros",
+            "Five euros fifty",
+            "Four euros"
+          ],
+          "answerIndex": 0,
+          "explanation": "The assistant says four euros fifty."
+        },
+        {
+          "prompt": "How does the customer want to pay?",
+          "options": [
+            "By card",
+            "In cash only",
+            "By cheque",
+            "With a travel ticket"
+          ],
+          "answerIndex": 0,
+          "explanation": "The customer asks to pay by card."
+        },
+        {
+          "prompt": "What does the assistant give?",
+          "options": [
+            "A receipt",
+            "A timetable",
+            "A map",
+            "A library card"
+          ],
+          "answerIndex": 0,
+          "explanation": "The assistant gives a receipt."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l09",
+      "title": "Course 1 · Semester 2 · Present Continuous: Actions in Progress",
+      "level": "A1–A2",
+      "script": "Teacher: What are the students doing now? Student: Two students are reading, and one student is writing on the board. Teacher: What is the teacher doing? Student: She is explaining a new word. Teacher: Are the students talking? Student: No, they are listening carefully. Teacher: Good. Describe what is happening in the picture.",
+      "questions": [
+        {
+          "prompt": "What are two students doing?",
+          "options": [
+            "Reading",
+            "Running",
+            "Eating",
+            "Sleeping"
+          ],
+          "answerIndex": 0,
+          "explanation": "Two students are reading."
+        },
+        {
+          "prompt": "What is one student doing?",
+          "options": [
+            "Writing on the board",
+            "Opening a window",
+            "Playing football",
+            "Drawing a map"
+          ],
+          "answerIndex": 0,
+          "explanation": "One student is writing on the board."
+        },
+        {
+          "prompt": "What is the teacher doing?",
+          "options": [
+            "Explaining a new word",
+            "Leaving the room",
+            "Making a phone call",
+            "Reading a newspaper"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher is explaining a word."
+        },
+        {
+          "prompt": "Are the students talking?",
+          "options": [
+            "No, they are listening",
+            "Yes, loudly",
+            "They are singing",
+            "The recording does not say"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student says they are listening carefully."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l10",
+      "title": "Course 1 · Semester 2 · Past Simple: Regular and Irregular Verbs",
+      "level": "A1–A2",
+      "script": "Last Saturday, Mark visited his grandparents. He travelled by bus and arrived at noon. His grandmother cooked lunch, and they talked about college. In the afternoon, Mark helped his grandfather in the garden. They planted flowers and watered the trees. Mark returned home in the evening. He enjoyed the day because he spent time with his family.",
+      "questions": [
+        {
+          "prompt": "When did Mark visit his grandparents?",
+          "options": [
+            "Last Saturday",
+            "Last Monday",
+            "Yesterday morning",
+            "Next weekend"
+          ],
+          "answerIndex": 0,
+          "explanation": "The story begins last Saturday."
+        },
+        {
+          "prompt": "How did he travel?",
+          "options": [
+            "By bus",
+            "By train",
+            "By car",
+            "On foot"
+          ],
+          "answerIndex": 0,
+          "explanation": "He travelled by bus."
+        },
+        {
+          "prompt": "What did they do in the garden?",
+          "options": [
+            "Planted flowers and watered trees",
+            "Built a house",
+            "Painted a fence",
+            "Played football"
+          ],
+          "answerIndex": 0,
+          "explanation": "They planted flowers and watered trees."
+        },
+        {
+          "prompt": "Why did Mark enjoy the day?",
+          "options": [
+            "He spent time with his family",
+            "He bought a new phone",
+            "He missed his bus",
+            "He stayed at college"
+          ],
+          "answerIndex": 0,
+          "explanation": "He enjoyed being with his family."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l11",
+      "title": "Course 1 · Semester 2 · Countable and Uncountable Nouns",
+      "level": "A1–A2",
+      "script": "A student is preparing breakfast. She has two eggs, some bread and a little cheese. There is a bottle of milk in the fridge and three apples on the table. Her brother asks, Have we got any tea? She answers, Yes, there is some tea in the cupboard. They decide to make breakfast before leaving for college.",
+      "questions": [
+        {
+          "prompt": "How many eggs are there?",
+          "options": [
+            "Two",
+            "Three",
+            "Four",
+            "One"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student has two eggs."
+        },
+        {
+          "prompt": "Where is the milk?",
+          "options": [
+            "In the fridge",
+            "On the table",
+            "In the cupboard",
+            "In the bag"
+          ],
+          "answerIndex": 0,
+          "explanation": "The milk is in the fridge."
+        },
+        {
+          "prompt": "How many apples are on the table?",
+          "options": [
+            "Three",
+            "Two",
+            "Five",
+            "One"
+          ],
+          "answerIndex": 0,
+          "explanation": "There are three apples."
+        },
+        {
+          "prompt": "Where is the tea?",
+          "options": [
+            "In the cupboard",
+            "In the fridge",
+            "On the floor",
+            "In the classroom"
+          ],
+          "answerIndex": 0,
+          "explanation": "The tea is in the cupboard."
+        }
+      ]
+    },
+    {
+      "id": "en-c01-s02-l12",
+      "title": "Course 1 · Semester 2 · Short Messages and Informal Emails",
+      "level": "A1–A2",
+      "script": "Hi Kate, I cannot meet you at the library today because I have an extra lesson. Can we meet tomorrow at four? Please bring the English workbook. I will bring my notes. Let me know if the time is good for you. See you, Anna. Kate replies that tomorrow is fine and she will be there at four.",
+      "questions": [
+        {
+          "prompt": "Why can't Anna meet today?",
+          "options": [
+            "She has an extra lesson",
+            "She is ill",
+            "She is travelling",
+            "The library is closed"
+          ],
+          "answerIndex": 0,
+          "explanation": "Anna says she has an extra lesson."
+        },
+        {
+          "prompt": "When do they plan to meet?",
+          "options": [
+            "Tomorrow at four",
+            "Today at four",
+            "Tomorrow at six",
+            "Next Monday"
+          ],
+          "answerIndex": 0,
+          "explanation": "Anna suggests tomorrow at four."
+        },
+        {
+          "prompt": "What should Kate bring?",
+          "options": [
+            "The English workbook",
+            "A passport",
+            "A sports bag",
+            "A laptop charger"
+          ],
+          "answerIndex": 0,
+          "explanation": "Anna asks her to bring the workbook."
+        },
+        {
+          "prompt": "What will Anna bring?",
+          "options": [
+            "Her notes",
+            "A dictionary for Kate",
+            "A camera",
+            "A lunch box"
+          ],
+          "answerIndex": 0,
+          "explanation": "Anna says she will bring her notes."
+        }
+      ]
+    },
   ];
 
   function el(tag, cls, text) {
