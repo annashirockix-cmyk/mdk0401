@@ -251,3 +251,8 @@ The browser practice catalogue now includes Course 4, Semester 2, lessons 9–12
 ### Course 4, Semester 2 listening completed
 
 All twelve lessons in Course 4, Semester 2 now have browser-listening practice activities. Lessons 1–8 preserve the existing source sequence on communication, networks, computers, internet, automation, sensors and input devices; lessons 9–12 cover avionics, algorithms, sensor data and cybersecurity. The catalogue contains 36 activities across Course 4 Semester 2 and both semesters of Course 5. It remains a practice-only feature, not a protected assessment.
+
+
+### Browser listening coverage — 40 activities
+
+The practice catalogue now contains 40 activities: Course 4 Semester 1 lessons 1–4, Course 4 Semester 2 lessons 1–12, and both semesters of Course 5 (12 lessons each). The first four Course 4 Semester 1 activities cover electrical materials, current and units, circuit components, and series/parallel circuits. Course 4 Semester 1 lessons 5–12 and Courses 1–3 remain to be converted. All activities remain practice-only and do not affect grades or protected exam banks.
