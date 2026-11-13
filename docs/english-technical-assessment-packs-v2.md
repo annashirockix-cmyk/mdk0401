@@ -127,7 +127,7 @@
    D) “Machine probably bad.”
 ### Answer key — комплект B (server-only)
 
-1 B; 2 C; 3 D; 4 A; 5 B; 6 C; 7: 1–C, 2–A, 3–D, 4–B; 8 D; 9 A; 10 B; 11 C; 12 C; 13 D; 14 A; 15 B; 16 C; 17 D; 18 A; 19 B; 20 C
+1 B; 2 C; 3 D; 4 A; 5 B; 6 C; 7: 1–C, 2–A, 3–D, 4–B; 8 D; 9 A; 10 B; 11 A; 12 C; 13 D; 14 A; 15 B; 16 C; 17 D; 18 A; 19 B; 20 C
 
 ## Комплект C — Pneumatics, Hydraulics, Quality and Technical Documentation (20 заданий)
 
@@ -254,7 +254,7 @@
    D) the coupling must be heated
 ### Answer key — комплект C (server-only)
 
-1 C; 2 D; 3 A; 4 B; 5 C; 6 D; 7: 1–D, 2–C, 3–A, 4–B; 8 A; 9 B; 10 C; 11 D; 12 A; 13 B; 14 C; 15 D; 16 D; 17 A; 18 B; 19 B; 20 C
+1 C; 2 D; 3 A; 4 B; 5 C; 6 D; 7: 1–D, 2–C, 3–A, 4–B; 8 A; 9 B; 10 C; 11 D; 12 A; 13 B; 14 C; 15 D; 16 D; 17 A; 18 B; 19 A; 20 C
 
 ## Проверка качества и дальнейшее применение
 
