@@ -1324,6 +1324,8 @@ test("English VPR written answers can be graded from the teacher journal and upd
   assert.ok(bank.includes("objectiveScore + writtenPoints"));
   assert.ok(bank.includes('notifyCourseStaff_(courseId,"written_submission","Письменная часть английского ВПР ожидает проверки"'));
   assert.ok(bank.includes("writtenMaxPoints"));
+  assert.ok(bank.includes("Number(rows[i][map.Attempts] || 0) === Number(data.attempts)"));
+  assert.ok(app.includes("attempts:Number(button.dataset.attempts)"));
   assert.ok(bank.includes("row[map.Submission]") && bank.includes("Submission: JSON.stringify(payload)"));
   assert.ok(bank.includes("editor_(data, courseId)"));
   assert.ok(api.includes("gradeEnglishVprWrittenPart:function(data)"));
