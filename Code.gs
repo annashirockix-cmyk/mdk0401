@@ -1343,11 +1343,11 @@ function settingValue_(key) {
   for(let i=1;i<vals.length;i++) if(String(vals[i][m.Key]||"")===key) return String(vals[i][m.Value]||"");
   return "";
 }
-function writeSetting_(key,value,actorEmail) {
-  // Serialize settings upserts so simultaneous access toggles or attempt grants
-  // cannot create duplicate keys or overwrite one another's row selection.
-  const lock=LockService.getScriptLock();
-  lock.waitLock(10000);
+function writeSetting_(key,value,actorEmail,lockAlreadyHeld) {
+  // Serialize settings upserts. Callers already inside a ScriptLock transaction
+  // pass lockAlreadyHeld=true to avoid attempting to acquire the non-reentrant lock twice.
+  const lock=lockAlreadyHeld?null:LockService.getScriptLock();
+  if(lock) lock.waitLock(10000);
   try {
     const sh=settings_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), now=new Date().toISOString();
     let row=0;
@@ -1355,7 +1355,7 @@ function writeSetting_(key,value,actorEmail) {
     const record=[key,String(value),now,String(actorEmail||"")];
     if(row) sh.getRange(row,1,1,record.length).setValues([record]); else sh.appendRow(record);
   } finally {
-    lock.releaseLock();
+    if(lock) lock.releaseLock();
   }
 }
 function getTopicAccess_(data) {
@@ -1437,7 +1437,7 @@ function grantTestAttempts_(data) {
   const extra=Math.max(0,Math.min(20,Math.floor(Number(data.extraAttempts)||0)));
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
-    writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);
+    writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email,true);
     appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra});
     resolveAttemptRequestNotifications_(studentEmail,courseId,testId);
     CacheService.getScriptCache().remove("attempt_request:"+studentEmail+":"+courseId+":"+testId.slice(0,120));
