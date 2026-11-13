@@ -114,6 +114,23 @@ try {
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
     window.customContent = window.customContent || { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
     const appNode = document.getElementById("app");
+    const originalAppNode = appNode;
+    const documentObserver = new MutationObserver(() => {
+      const currentApp = document.getElementById("app");
+      const topic = document.getElementById("fcTopic");
+      if (!topic || currentApp !== originalAppNode) {
+        console.log("FLASHCARD_DOCUMENT_MUTATION", JSON.stringify({
+          hash: location.hash,
+          appStillConnected: originalAppNode?.isConnected,
+          appReplaced: currentApp !== originalAppNode,
+          currentAppText: (currentApp?.innerText || "").slice(0, 500),
+          currentAppHtml: (currentApp?.innerHTML || "").slice(0, 900),
+          stackHint: new Error().stack
+        }));
+        documentObserver.disconnect();
+      }
+    });
+    documentObserver.observe(document.documentElement, { childList: true, subtree: true });
     const innerHtmlDescriptor = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
     if (appNode && innerHtmlDescriptor && innerHtmlDescriptor.set) {
       Object.defineProperty(appNode, "innerHTML", {
