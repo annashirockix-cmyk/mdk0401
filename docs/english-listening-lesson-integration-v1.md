@@ -140,3 +140,14 @@ A fresh read-back of the catalogue confirms 48 unique activities, with 12 lesson
 - Course 5, Semester 2 — lessons 1–12.
 
 Each activity has a script, questions, answer indices and matching feedback explanations. The earlier 40-activity count was an intermediate count and is superseded by this verified 48-activity read-back. Courses 1–3 remain outstanding. These are practice-only client-side activities, not graded or protected assessment.
+
+
+## Coverage update — 72 browser listening activities
+
+The catalogue now contains 72 unique practice activities, with all 12 lessons covered in each of six semester blocks:
+- Course 3, Semester 1 — aviation industry, aircraft structure, materials, manufacturing processes, technical drawings, CAD/CAM and specification reading.
+- Course 3, Semester 2 — machine tools, CNC, workshop safety, axes and coordinates, G-code reading, cutting tools, tolerances, measurement and shift handover.
+- Course 4, Semesters 1–2 — 24 activities.
+- Course 5, Semesters 1–2 — 24 activities.
+
+Every new Course 3 activity has a browser-readable English script and four multiple-choice comprehension questions with practice answer feedback. The catalogue is still practice-only: client-side answer keys, no gradebook writes, no exam attempts. Courses 1–2 remain outstanding. Lesson-page embedding and real-browser playback testing are still separate integration tasks.
