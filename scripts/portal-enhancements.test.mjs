@@ -1528,3 +1528,19 @@ test("English VPR enforces the five-word written-answer limit on the server", ()
   const submitEnd = bank.indexOf("function gradeEnglishVprWrittenPart_(data)", submitStart);
   assert.ok(bank.slice(submitStart, submitEnd).includes("validateEnglishVprWrittenAnswers_(task,ans,ti)"));
 });
+
+
+test("English VPR listening answer keys match the speaker roles in both dialogues", () => {
+  const bank = read("EnglishVPR-Sheets.gs");
+  const start = bank.indexOf("function englishVprSeedExams_");
+  const end = bank.indexOf("\\nfunction englishVprBank_", start);
+  assert.ok(start >= 0 && end > start);
+  const sandbox = {};
+  vm.runInNewContext(
+    bank.slice(start, end) + ";this.englishVprSeedExams_=englishVprSeedExams_;",
+    sandbox
+  );
+  const exams = sandbox.englishVprSeedExams_();
+  assert.deepEqual(exams.basic.tasks[0].items.map(item => item[1]), [1,2,2,2,3]);
+  assert.deepEqual(exams.technical.tasks[0].items.map(item => item[1]), [1,1,1,1,2]);
+});
