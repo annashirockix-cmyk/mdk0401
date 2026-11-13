@@ -9,3 +9,18 @@ window._shuffle = function(arr) {
     }
     return a;
 };
+window._shuffleQuestionOptions = function(question) {
+    if (!question || !Array.isArray(question.options) || question.options.length < 2) return question;
+    var order = window._shuffle(question.options.map(function(_, index) { return index; }));
+    var original = question.options.slice();
+    question.options = order.map(function(index) { return original[index]; });
+    function remap(value) {
+        if (Array.isArray(value)) return value.map(remap);
+        if (typeof value === "number" && Number.isInteger(value) && value >= 0 && value < order.length) return order.indexOf(value);
+        return value;
+    }
+    ["correct", "correctAnswer", "answer", "answers"].forEach(function(key) {
+        if (Object.prototype.hasOwnProperty.call(question, key)) question[key] = remap(question[key]);
+    });
+    return question;
+};
