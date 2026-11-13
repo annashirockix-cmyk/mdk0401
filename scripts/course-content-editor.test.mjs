@@ -39,3 +39,12 @@ test("flashcard constructor saves and reopens saved sets", () => {
  assert.ok(cards.includes("function renderSaved("));
  assert.ok(cards.includes("function loadSet("));
 });
+
+test("global custom-content loads ignore stale responses after account changes", () => {
+ const app = read("app.js");
+ assert.ok(app.includes("window.invalidateGlobalCustomContentLoad = function(clearContent)"));
+ assert.ok(app.includes("requestId === window._customContentLoadRequestId"));
+ assert.ok(app.includes("currentToken === token"));
+ assert.ok(app.includes("currentIdentity.email"));
+ assert.ok(app.includes("window.invalidateGlobalCustomContentLoad(true)"));
+});
