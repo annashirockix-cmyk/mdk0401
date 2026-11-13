@@ -63,7 +63,7 @@ test("server rejects missing answer keys, duplicate IDs, wrong semester order an
   const duplicateId = validBank("basic"); duplicateId[1].id = duplicateId[0].id;
   assert.throws(() => validate(duplicateId, "basic"), /уникальным ID/);
   const wrongSemester = validBank("basic"); wrongSemester[0].semester = 2;
-  assert.throws(() => validate(wrongSemester, "basic"), /курс\/семестр/);
+  assert.throws(() => validate(wrongSemester, "basic"), /курсу\/семестру/);
   const repeatedQuestion = validBank("basic"); repeatedQuestion[0].questions[1].q = repeatedQuestion[0].questions[0].q;
   assert.throws(() => validate(repeatedQuestion, "basic"), /Повторяющийся вопрос/);
 });
