@@ -96,6 +96,7 @@ Pedagogical minimum for a full lecture:
 Do not fill missing lectures with generic duplicated text. Keep the current lecture HTML as source material while migrating it into structured records incrementally.
 
 - Course 2, semester 2 lessons 1–3 are expanded in `docs/english-basic-c02-s02-lessons-01-03-enrichment-draft.md`. The original source lessons (Basic 4.1–4.3) remain unchanged; this file adds guided practice, listening scripts, formative checks and teacher keys.
+- Course 2, semester 2 lessons 4–7 are expanded in `docs/english-basic-c02-s02-lessons-04-07-enrichment-draft.md`. The existing Basic 6.1–6.4 source lessons remain unchanged; enrichment adds guided reading, grammar, listening scripts, speaking/writing tasks and teacher keys.
 
 ## 5. Assessment banks
 
