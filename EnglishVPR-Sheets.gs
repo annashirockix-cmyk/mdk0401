@@ -95,3 +95,53 @@ function submitEnglishVprExam_(data) {
   const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Number(data.timeSpent)||0,payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()});
   return {success:true,score:objective,maxScore:maxObjective,percent:percent,grade:written.length?"На проверке":gradeFromPercent_(percent),writtenCount:written.length};
 }
+
+
+/** Проверка письменной части Basic/Technical VPR преподавателем. */
+function gradeEnglishVprWrittenPart_(data) {
+  const teacher = auth_(data);
+  if (teacher.role !== "teacher" && teacher.role !== "admin") throw new Error("Проверять экзамены может только преподаватель.");
+  const studentEmail = email_(data.email), testId = String(data.testId || "").trim();
+  const trackMatch = /^english_vpr_(basic|technical)_/.exec(testId);
+  if (!studentEmail || !trackMatch) throw new Error("Не выбрана письменная часть экзамена ВПР.");
+  const courseId = trackMatch[1] === "basic" ? "ENB" : "ENT";
+  editor_(data, courseId);
+  const student = userByEmail_(studentEmail);
+  if (!student || student.role !== "student" || (!hasCourseAccess_(student, courseId) && !hasCourseAccess_(student, "EN"))) throw new Error("Студент не обучается по этой дисциплине.");
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  let grade, writtenPoints, writtenMax;
+  try {
+    const sh = results_(), rows = sh.getDataRange().getValues(), map = headerMap_(sh);
+    let rowNo = -1, row = null;
+    for (let i = rows.length - 1; i >= 1; i--) {
+      if (email_(rows[i][map.Email]) === studentEmail && String(rows[i][map.TestId] || "") === testId && sameCourseId_(rows[i][map.CourseId] || courseId, courseId)) {
+        rowNo = i + 1; row = rows[i]; break;
+      }
+    }
+    if (!row) throw new Error("Результат экзамена не найден.");
+    let payload = {};
+    try { payload = JSON.parse(String(row[map.Submission] || "{}")); } catch (e) {}
+    const answers = Array.isArray(payload.writtenAnswers) ? payload.writtenAnswers : [];
+    if (!answers.length || payload.status !== "pending_teacher_review") throw new Error("У этой попытки нет ожидающей проверки письменной части.");
+    writtenMax = answers.reduce(function(sum, item) { return sum + Math.max(0, Number(item.maxPoints) || 1); }, 0);
+    writtenPoints = Number(data.points);
+    if (!isFinite(writtenPoints) || writtenPoints < 0 || writtenPoints > writtenMax) throw new Error("Баллы за письменную часть должны быть от 0 до " + writtenMax + ".");
+    const objectiveScore = Math.max(0, Number(row[map.Score]) || 0);
+    const objectiveMax = Math.max(0, Number(row[map.MaxScore]) || 0);
+    const totalMax = objectiveMax + writtenMax, totalScore = objectiveScore + writtenPoints;
+    const percent = totalMax ? Math.round(totalScore / totalMax * 100) : 0;
+    grade = gradeFromPercent_(percent);
+    const feedback = String(data.feedback || "").slice(0, 4000);
+    payload.status = "graded"; payload.writtenPoints = writtenPoints; payload.writtenMaxPoints = writtenMax;
+    payload.writtenFeedback = feedback; payload.reviewedAt = new Date().toISOString();
+    updateMappedRecord_(sh, rowNo, {
+      Score: totalScore, MaxScore: totalMax, Percent: percent, Grade: grade,
+      TestTitle: String(row[map.TestTitle] || "English VPR").replace(/ \(письменная часть ожидает проверки\)$/, ""),
+      Submission: JSON.stringify(payload)
+    });
+    appendAttemptAudit_({EventType:"english_vpr_written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(row[map.TestTitle]||"English VPR"),Grade:grade,Score:totalScore,MaxScore:totalMax,Percent:percent});
+  } finally { lock.releaseLock(); }
+  createNotification_(studentEmail,"grade","Письменная часть ВПР проверена","Итоговая оценка за экзамен: "+grade+"/5. Баллы за письменную часть: "+writtenPoints+"/"+writtenMax+".",courseId,testId);
+  return {success:true,grade:grade,writtenPoints:writtenPoints,writtenMaxPoints:writtenMax};
+}

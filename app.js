@@ -462,7 +462,8 @@ window.renderStudentGradesPage = function() {
         assessmentHost.innerHTML=records.length?records.map(function(item){
           var x=item.latest;
           var course=String(x.courseId||"—");
-          var grade=x.grade!==""&&x.grade!=null?window.escapeHtml(x.grade):"—";
+          var pendingWritten=false;try{pendingWritten=JSON.parse(String(x.payload||"{}")).status==="pending_teacher_review";}catch(e){}
+          var grade=pendingWritten?"На проверке":(x.grade!==""&&x.grade!=null?window.escapeHtml(x.grade):"—");
           var percent=Number(x.percent)||0;
           var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
           var title=window.escapeHtml(x.testTitle||x.testId||"Работа");
@@ -516,6 +517,7 @@ window.renderTeacherJournalPage = function() {
         </div>
         <div id="journal-load-status" style="padding:8px;color:var(--muted)">Загрузка данных с сервера…</div>
         <div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Группа</th><th>Студент</th><th>Дисциплина</th><th>Работа</th><th>Оценка</th><th>Попытка</th></tr></thead><tbody id="journal-results-body"><tr><td colspan="7">Загрузка…</td></tr></tbody></table></div>
+        <div id="english-vpr-pending" style="margin-top:16px"></div>
       </div>
       ${legacy.length?`<details class="module"><summary>Старые локальные записи (${legacy.length})</summary><p style="color:var(--muted)">Эти записи сохранены в браузере преподавателя и не синхронизированы с таблицей. Новые оценки сохраняются на сервере.</p><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Группа</th><th>Email</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${legacy.map(function(g){return "<tr><td>"+window.escapeHtml(g.date||"—")+"</td><td>"+window.escapeHtml(g.group||"—")+"</td><td>"+window.escapeHtml(g.student||"—")+"</td><td>"+window.escapeHtml(g.subject||"—")+"</td><td>"+window.escapeHtml(g.value||"—")+"</td></tr>";}).join("")}</tbody></table></div></details>`:""}
     `;
@@ -535,13 +537,39 @@ window.renderTeacherJournalPage = function() {
       var host=document.getElementById("journal-results-body");if(!host)return;
       host.innerHTML=filtered.length?filtered.map(function(x){
         var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
-        var grade=x.grade!==""&&x.grade!=null?x.grade:"На проверке";
+        var pendingWritten=false;try{pendingWritten=JSON.parse(String(x.payload||"{}")).status==="pending_teacher_review";}catch(e){}
+        var grade=pendingWritten?"На проверке":(x.grade!==""&&x.grade!=null?x.grade:"—");
         var attempt=Number(x.attempts)||1;
         return "<tr><td>"+window.escapeHtml(date)+"</td><td>"+window.escapeHtml(x.group||"—")+"</td><td>"+window.escapeHtml(x.name||x.email||"—")+"</td><td>"+window.escapeHtml(courseTitle(x.courseId||""))+"</td><td>"+window.escapeHtml(x.testTitle||x.testId||"Работа")+"</td><td style='text-align:center;font-weight:bold'>"+window.escapeHtml(grade)+"</td><td style='text-align:center'>"+attempt+"</td></tr>";
       }).join(""):'<tr><td colspan="7" style="text-align:center;color:var(--muted)">Нет записей по выбранной дисциплине</td></tr>';
+      var pendingHost=document.getElementById("english-vpr-pending");
+      if(pendingHost){
+        var pending=filtered.filter(function(x){if(!/^english_vpr_(basic|technical)_/.test(String(x.testId||"")))return false;try{return JSON.parse(String(x.payload||"{}")).status==="pending_teacher_review";}catch(e){return false;}});
+        pendingHost.innerHTML=pending.length?'<h3>Письменная часть английского ВПР — ожидает проверки ('+pending.length+')</h3>'+pending.map(function(x){
+          var p={};try{p=JSON.parse(String(x.payload||"{}"));}catch(e){}
+          var answers=Array.isArray(p.writtenAnswers)?p.writtenAnswers:[];
+          var max=answers.reduce(function(s,a){return s+(Number(a.maxPoints)||1);},0);
+          var details=answers.map(function(a,i){var q=typeof a.question==="string"?a.question:(a.question&&(a.question.text||a.question.question))||JSON.stringify(a.question||"");return '<div style="padding:10px 0;border-top:1px solid var(--border)"><b>Вопрос '+(i+1)+':</b> '+window.escapeHtml(q)+'<p style="white-space:pre-wrap;margin:6px 0"><b>Ответ студента:</b> '+window.escapeHtml(a.answer||"—")+'</p></div>';}).join("");
+          return '<details class="module"><summary>'+window.escapeHtml(x.name||x.email)+' · '+window.escapeHtml(x.testTitle||x.testId)+' · '+answers.length+' ответов</summary>'+details+
+            '<label>Баллы за письменную часть (0–'+max+') <input class="self-input" type="number" min="0" max="'+max+'" step="0.5" data-vpr-points style="width:100px"></label>'+
+            '<label style="display:block;margin-top:8px">Комментарий студенту <textarea class="self-input" data-vpr-feedback maxlength="4000" style="width:100%;min-height:70px"></textarea></label>'+
+            '<button class="btn btn-primary" type="button" data-grade-english-vpr data-email="'+window.escapeHtml(x.email)+'" data-course="'+window.escapeHtml(x.courseId)+'" data-test="'+window.escapeHtml(x.testId)+'">Сохранить проверку и итоговую оценку</button></details>';
+        }).join(""):'';
+      }
       var status=document.getElementById("journal-load-status");if(status)status.textContent="Записей: "+filtered.length+" · источник: сервер";
     }
     var resultRows=[];
+    document.getElementById("english-vpr-pending").addEventListener("click",function(event){
+      var button=event.target.closest("[data-grade-english-vpr]");if(!button)return;
+      var card=button.closest("details"),points=card&&card.querySelector("[data-vpr-points]"),feedback=card&&card.querySelector("[data-vpr-feedback]");
+      var value=points?Number(points.value):NaN;
+      if(!isFinite(value)||value<0||value>Number(points.max)){window.alert("Укажите корректное количество баллов за письменную часть.");return;}
+      button.disabled=true;button.textContent="Сохранение…";
+      window.API.gradeEnglishVprWrittenPart({email:button.dataset.email,courseId:button.dataset.course,testId:button.dataset.test,points:value,feedback:feedback?feedback.value:""})
+        .then(function(r){if(!r||!r.success)throw new Error(r&&r.error||"Не удалось сохранить проверку");return window.API.getResults({});})
+        .then(function(r){if(!r||!r.success)throw new Error(r&&r.error||"Проверка сохранена, но журнал не обновился");resultRows=r.results||[];renderResults(resultRows);})
+        .catch(function(e){window.alert(e.message);button.disabled=false;button.textContent="Сохранить проверку и итоговую оценку";});
+    });
     filterSelect.addEventListener("change",function(){renderResults(resultRows);});
     courseSelect.addEventListener("change",populateStudents);
     document.getElementById("journal-save-grade").addEventListener("click",function(){

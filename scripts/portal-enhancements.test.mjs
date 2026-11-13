@@ -1235,9 +1235,9 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.match(app, /window\.API\.getResults\(\{\}\)/);
   assert.match(app, /window\.API\.saveManualGrade\(payload\)/);
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
-  assert.match(html, /api\.js\?v=43/);
-  assert.match(html, /app\.js\?v=53/);
-  assert.match(sw, /portal-cache-v350/);
+  assert.match(html, /api\.js\?v=44/);
+  assert.match(html, /app\.js\?v=54/);
+  assert.match(sw, /portal-cache-v351/);
 });
 
 test("manual teacher grades appear in the teacher-grade section, not the automatic-tests section", () => {
@@ -1281,7 +1281,7 @@ test("English exam tab shows only the two final tracks while CEFR lab stays sepa
   assert.match(read("english-vpr-exams.js"), /technical:\s*\{/);
   assert.match(read("laboratory.js"), /renderEnglishTestsPage\("lab"\)/);
   assert.match(read("index.html"), /english-proficiency-lab\.js\?v=5/);
-  assert.match(read("service-worker.js"), /portal-cache-v350/);
+  assert.match(read("service-worker.js"), /portal-cache-v351/);
 });
 
 
@@ -1306,4 +1306,29 @@ test("teacher course and role permission changes share the content lock", () => 
   assert.ok(write > authorization, name + " must update permissions while holding the lock");
   assert.ok(release > write && fn.includes("finally {"), name + " must release the lock on success or error");
  });
+});
+
+
+test("English VPR written answers can be graded from the teacher journal and update the final score", () => {
+  const bank = read("EnglishVPR-Sheets.gs");
+  const server = read("Code.gs");
+  const api = read("api.js");
+  const app = read("app.js");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.ok(server.includes('case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_(data); break;'));
+  assert.ok(bank.includes("function gradeEnglishVprWrittenPart_(data)"));
+  assert.ok(bank.includes("pending_teacher_review"));
+  assert.ok(bank.includes("objectiveScore + writtenPoints"));
+  assert.ok(bank.includes("writtenMaxPoints"));
+  assert.ok(bank.includes("row[map.Submission]") && bank.includes("Submission: JSON.stringify(payload)"));
+  assert.ok(bank.includes("editor_(data, courseId)"));
+  assert.ok(api.includes("gradeEnglishVprWrittenPart:function(data)"));
+  assert.ok(app.includes("english-vpr-pending"));
+  assert.ok(app.includes("Ответ студента:"));
+  assert.ok(app.includes("window.API.gradeEnglishVprWrittenPart"));
+  assert.ok(app.includes('pendingWritten?"На проверке"'));
+  assert.ok(html.includes("api.js?v=44"));
+  assert.ok(html.includes("app.js?v=54"));
+  assert.ok(sw.includes("portal-cache-v351"));
 });
