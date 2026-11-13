@@ -226,3 +226,8 @@ This is a runtime helper only. It does not automatically convert Markdown drafts
 - The four scripts are embedded as text and read by the browser; no MP3 files are required for these exercises.
 - Scope: only lessons 9–12 in Course 5 Semester 2 are currently playable in this catalogue. Lessons 1–8 and the other semesters still need structured conversion.
 - Practice keys are client-side and must not be reused for protected graded assessment. The catalogue does not save attempts, award grades or touch the existing VPR engine.
+
+
+### Listening catalogue coverage update
+
+The browser practice catalogue now contains eight activities for Course 5, Semester 2, lessons 5–12. It covers manufacturing process review, CNC revision communication, an electrical training case, software test reporting, materials records, reliability trends, integrated handover and the capstone review. Lessons 1–4 of this semester and all other semesters still need conversion into playable lesson records. All catalogue activities are practice-only; client-side keys are not suitable for protected assessment.
