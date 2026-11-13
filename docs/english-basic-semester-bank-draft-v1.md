@@ -56,8 +56,8 @@
 
 **9.** There isn't ___ milk in the fridge.
 - A. many
-- B. much
-- C. a few
+- B. a few
+- C. much
 - D. several
 
 **10.** Choose the most polite request.
@@ -142,7 +142,7 @@
 | 6 | B | “Mustn’t” expresses prohibition. |
 | 7 | C | The comparative form of “easy” is “easier”. |
 | 8 | D | First conditional uses present simple in the if-clause. |
-| 9 | B | “Milk” is uncountable; “much” is used in a negative sentence. |
+| 9 | C | “Milk” is uncountable; “much” is used in a negative sentence. |
 | 10 | A | “Could you…please?” is a polite request. |
 | 11 | B | The text says “Every Friday afternoon”. |
 | 12 | C | The volunteers show new students where to find information. |
