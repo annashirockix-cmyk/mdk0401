@@ -462,7 +462,8 @@ window.renderStudentGradesPage = function() {
         assessmentHost.innerHTML=records.length?records.map(function(item){
           var x=item.latest;
           var course=String(x.courseId||"—");
-          var pendingWritten=false;try{pendingWritten=JSON.parse(String(x.payload||"{}")).status==="pending_teacher_review";}catch(e){}\n          var grade=pendingWritten?"На проверке":(x.grade!==""&&x.grade!=null?window.escapeHtml(x.grade):"—");
+          var pendingWritten=false;try{pendingWritten=JSON.parse(String(x.payload||"{}")).status==="pending_teacher_review";}catch(e){}
+          var grade=pendingWritten?"На проверке":(x.grade!==""&&x.grade!=null?window.escapeHtml(x.grade):"—");
           var percent=Number(x.percent)||0;
           var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
           var title=window.escapeHtml(x.testTitle||x.testId||"Работа");
@@ -536,7 +537,8 @@ window.renderTeacherJournalPage = function() {
       var host=document.getElementById("journal-results-body");if(!host)return;
       host.innerHTML=filtered.length?filtered.map(function(x){
         var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
-        var pendingWritten=false;try{pendingWritten=JSON.parse(String(x.payload||"{}")).status==="pending_teacher_review";}catch(e){}\n        var grade=pendingWritten?"На проверке":(x.grade!==""&&x.grade!=null?x.grade:"—");
+        var pendingWritten=false;try{pendingWritten=JSON.parse(String(x.payload||"{}")).status==="pending_teacher_review";}catch(e){}
+        var grade=pendingWritten?"На проверке":(x.grade!==""&&x.grade!=null?x.grade:"—");
         var attempt=Number(x.attempts)||1;
         return "<tr><td>"+window.escapeHtml(date)+"</td><td>"+window.escapeHtml(x.group||"—")+"</td><td>"+window.escapeHtml(x.name||x.email||"—")+"</td><td>"+window.escapeHtml(courseTitle(x.courseId||""))+"</td><td>"+window.escapeHtml(x.testTitle||x.testId||"Работа")+"</td><td style='text-align:center;font-weight:bold'>"+window.escapeHtml(grade)+"</td><td style='text-align:center'>"+attempt+"</td></tr>";
       }).join(""):'<tr><td colspan="7" style="text-align:center;color:var(--muted)">Нет записей по выбранной дисциплине</td></tr>';
