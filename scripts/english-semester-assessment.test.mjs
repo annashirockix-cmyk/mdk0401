@@ -34,8 +34,10 @@ function extractFunction(name) {
 
 const validateSource = extractFunction("validateEnglishSemesterTests_");
 const sanitizeSource = extractFunction("sanitizeEnglishSemesterTests_");
+const fingerprintSource = extractFunction("englishSemesterBankFingerprint_");
 const validate = new Function(validateSource + "; return validateEnglishSemesterTests_;")();
 const sanitize = new Function(sanitizeSource + "; return sanitizeEnglishSemesterTests_;")();
+const fingerprint = new Function(fingerprintSource + "; return englishSemesterBankFingerprint_;")();
 
 function validBank(track) {
   const prefix = track === "basic" ? "b_" : "t_";
@@ -98,4 +100,13 @@ test("unreviewed legacy seed stays out of the production page", () => {
     basic.map((item) => item.questions),
     "Technical is still a direct copy of Basic and must not be imported",
   );
+});
+
+test("Basic and Technical banks must not be exact copies", () => {
+  const basic = validBank("basic");
+  const technicalClone = validBank("technical");
+  const distinctTechnical = validBank("technical");
+  distinctTechnical[0].questions[0].q = "Describe the purpose of a machine-tool safety interlock.";
+  assert.equal(fingerprint(basic), fingerprint(technicalClone));
+  assert.notEqual(fingerprint(basic), fingerprint(distinctTechnical));
 });
