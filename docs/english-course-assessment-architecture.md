@@ -190,3 +190,5 @@ Suggested metadata:
 - Entry diagnostic does not affect grades or semester attempt counters.
 - A refresh cannot change an assigned exam variant or reset an attempt.
 - Existing Basic and Technical VPR load and render exactly as before.
+
+- Course 5, semester 1 lessons 7–10 are drafted in `docs/english-technical-c05-s01-lessons-07-10-draft.md` (document revisions and configuration control; shift handover and technical correspondence; teamwork across engineering specialisms; interpreting drawings, tables and trend charts). The package includes four full lessons, five original listening scripts including an integrated checkpoint, vocabulary, reading, language focus, four-specialism tasks, self-checks, keys and a semester checkpoint. All examples and chart values are fictional classroom data; no operational aircraft instructions or real acceptance criteria are provided.
