@@ -34,9 +34,9 @@
 | 7 | [НОВАЯ] en-c01-s01-l07 | Questions and Negatives in Present Simple |
 | 8 | [НОВАЯ] en-c01-s01-l08 | Nouns, Articles and Plural Forms |
 | 9 | [НОВАЯ] en-c01-s01-l09 | Family, Friends and Personal Information |
-| 10 | [НОВАЯ] en-c01-s01-l10 | Daily Routines and Frequency Adverbs |
-| 11 | [НОВАЯ] en-c01-s01-l11 | Numbers, Dates, Time and Personal Details |
-| 12 | [НОВАЯ] en-c01-s01-l12 | A Short Self-introduction: Speaking and Writing |
+| 10 | [НОВАЯ] en-c01-s01-l10 | Prepositions of Place and Time |
+| 11 | [НОВАЯ] en-c01-s01-l11 | Daily Routines and Frequency Adverbs |
+| 12 | [НОВАЯ] en-c01-s01-l12 | Filling in Basic Forms and Personal Records |
 
 Результат: студент понимает простые инструкции и короткие сообщения, сообщает базовую информацию о себе и строит простые предложения. Входная диагностика школьной базы проводится отдельно до курса.
 
