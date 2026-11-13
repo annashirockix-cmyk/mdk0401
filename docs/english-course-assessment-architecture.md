@@ -103,6 +103,8 @@ Do not fill missing lectures with generic duplicated text. Keep the current lect
 - Course 3, semester 1 lessons 9–12 are drafted in `docs/english-technical-c03-s01-lessons-09-12-draft.md` (manufacturing workflow and process sheets; dimensions and measurement; technical word formation and abbreviations; technical descriptions and specification tables). All examples and numerical values are explicitly classroom-only.
 
 - Course 3, semester 2 lessons 6–8 are drafted in `docs/english-technical-c03-s02-lessons-06-08-draft.md` (CNC machine components; axes and coordinates; introductory G-code text reading). The G-code sample is comments-only and explicitly read-only, not executable.
+
+- Course 4, semester 2 lessons 9–12 are drafted in `docs/english-technical-c04-s02-lessons-09-12-draft.md` (avionics overview and information exchange; programming logic, flowcharts and algorithms; sensor-data validation and diagnostic logs; cybersecurity vocabulary and safe data handling). The four lessons include original Spotlight-style listening scripts, comprehension tasks, language focus, guided practice, teacher keys and an integrated semester review. Listening scripts are text for future recording, not MP3; fictional data and conceptual explanations are not operational aircraft instructions.
 - Course 3, semester 2 lessons 9–12 are drafted in `docs/english-technical-c03-s02-lessons-09-12-draft.md` (cutting tools and tool condition; tolerances, fits and surface finish; measuring instruments and first-piece inspection; workshop handover and stop-work language). Classroom values are fictional and not production criteria.
 
 ## 5. Assessment banks
