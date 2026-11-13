@@ -2,7 +2,11 @@
 (function () {
   "use strict";
   if (window._englishListeningRouteInstalled) return;
-
+  if (typeof window.router !== "function") {
+    console.error("[English Listening] Main router is not available.");
+    return;
+  }
+  var originalRouter = window.router;
   function isListeningRoute() {
     return String(location.hash || "").replace(/^#/, "") === "/english-listening";
   }
@@ -14,17 +18,16 @@
       if (app) app.textContent = "Модуль аудирования пока недоступен.";
     }
   }
-
-  // Capture-phase listener runs before the router's existing hashchange listener.
-  // This prevents the generic fallback route from immediately replacing the lab page.
+  window.router = function () {
+    if (isListeningRoute()) { renderListeningRoute(); return; }
+    return originalRouter.apply(this, arguments);
+  };
+  // Existing hashchange listeners may hold the old router function reference.
+  // Capture phase intercepts this one route before the old generic fallback runs.
   window.addEventListener("hashchange", function (event) {
     if (!isListeningRoute()) return;
     if (event && event.stopImmediatePropagation) event.stopImmediatePropagation();
     renderListeningRoute();
   }, true);
-
-  // Support opening the listening route directly in the address bar.
-  if (isListeningRoute()) renderListeningRoute();
-
   window._englishListeningRouteInstalled = true;
 })();
