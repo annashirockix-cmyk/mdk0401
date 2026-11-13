@@ -2712,18 +2712,42 @@ function saveSchedule_(data) {
  */
 function englishSemesterBank_() { return ensureSheet_("EnglishSemesterBank"); }
 
-function validateEnglishSemesterTests_(tests) {
+function validateEnglishSemesterTests_(tests, track) {
   if (!Array.isArray(tests) || tests.length !== 10) {
     throw new Error("Для каждого направления требуется ровно 10 семестровых контрольных.");
   }
+  const normalizedTrack = String(track || "").toLowerCase();
+  if (["basic", "technical"].indexOf(normalizedTrack) < 0) {
+    throw new Error("Не указано направление семестровых контрольных.");
+  }
+  const prefix = normalizedTrack === "basic" ? "b_" : "t_";
+  const seenIds = {};
   let questionCount = 0;
   tests.forEach(function(test, index) {
-    if (!test || !test.id || !Array.isArray(test.questions) || test.questions.length !== 20) {
-      throw new Error("Контрольная №" + (index + 1) + " должна содержать ровно 20 вопросов.");
+    const expectedYear = Math.floor(index / 2) + 1;
+    const expectedSemester = index % 2 + 1;
+    if (!test || !test.id || String(test.id).indexOf(prefix) !== 0 ||
+        seenIds[String(test.id)] || Number(test.year) !== expectedYear ||
+        Number(test.semester) !== expectedSemester ||
+        !Array.isArray(test.questions) || test.questions.length !== 20) {
+      throw new Error("Контрольная №" + (index + 1) + " должна соответствовать своему курсу/семестру и содержать ровно 20 вопросов с уникальным ID.");
     }
+    seenIds[String(test.id)] = true;
+    const seenQuestions = {};
     test.questions.forEach(function(q, qi) {
-      if (!q || !String(q.q || "").trim() || !Array.isArray(q.options) || q.options.length < 2) {
+      const questionText = String(q && q.q || "").trim();
+      if (!q || !questionText || !Array.isArray(q.options) || q.options.length < 2) {
         throw new Error("Некорректный вопрос " + (qi + 1) + " в контрольной №" + (index + 1) + ".");
+      }
+      const questionKey = questionText.toLowerCase().replace(/\\s+/g, " ");
+      if (seenQuestions[questionKey]) {
+        throw new Error("Повторяющийся вопрос " + (qi + 1) + " в контрольной №" + (index + 1) + ".");
+      }
+      seenQuestions[questionKey] = true;
+      const optionKeys = q.options.map(function(option) { return String(option == null ? "" : option).trim().toLowerCase(); });
+      if (optionKeys.some(function(option) { return !option; }) ||
+          optionKeys.some(function(option, optionIndex) { return optionKeys.indexOf(option) !== optionIndex; })) {
+        throw new Error("Пустые или повторяющиеся варианты ответа в вопросе " + (qi + 1) + " контрольной №" + (index + 1) + ".");
       }
       const correct = Number(q.correct);
       if (!Number.isInteger(correct) || correct < 0 || correct >= q.options.length) {
@@ -2744,7 +2768,7 @@ function importEnglishSemesterTests_(data) {
     throw new Error("Нет доступа к импорту этого направления.");
   }
   const tests = data.tests;
-  const questionCount = validateEnglishSemesterTests_(tests);
+  const questionCount = validateEnglishSemesterTests_(tests, track);
   const json = JSON.stringify(tests);
   if (json.length > 450000) throw new Error("Размер набора превышает 450 КБ.");
   const sh = englishSemesterBank_(), lock = LockService.getScriptLock();
@@ -2762,7 +2786,7 @@ function importEnglishSemesterTests_(data) {
 function sanitizeEnglishSemesterTests_(tests) {
   return (tests || []).map(function(test) {
     const safe = JSON.parse(JSON.stringify(test));
-    (safe.questions || []).forEach(function(question) { delete question.correct; });
+    (safe.questions || []).forEach(function(question) { delete question.correct; delete question.answer; delete question.correctAnswer; delete question.explanation; delete question.rationale; });
     return safe;
   });
 }
