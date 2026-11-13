@@ -1237,7 +1237,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
   assert.match(html, /api\.js\?v=43/);
   assert.match(html, /app\.js\?v=53/);
-  assert.match(sw, /portal-cache-v349/);
+  assert.match(sw, /portal-cache-v350/);
 });
 
 test("manual teacher grades appear in the teacher-grade section, not the automatic-tests section", () => {
