@@ -1574,3 +1574,40 @@ test("all assessment attempt gates use compact Results rows", () => {
   }
   assert.match(server, /function resultAttemptRows_\(\)[\s\S]*getRange\(2,1,lastRow-1,13\)\.getValues\(\)/);
 });
+
+
+test("proctor penalty reads only identity and sanction columns", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function proctorPenalty_(studentEmail,courseId,testId,attemptNo)");
+  const end = server.indexOf("\\nfunction ", start + 20);
+  assert.ok(start >= 0 && end > start);
+  const calls = [];
+  const identityRows = [
+    ["student@test","Student","G1","07.01","test-A",1],
+    ["student@test","Student","G1","07.01","test-A",2],
+    ["other@test","Other","G2","07.01","test-A",3]
+  ];
+  const sanctionRows = [[1,"warning",0],[2,"sanction",10],[3,"sanction",20]];
+  const sandbox = {
+    proctorEvents_:()=>({
+      getLastRow:()=>4,
+      getRange:(row,column,count,width)=>{
+        calls.push([row,column,count,width]);
+        return {getValues:()=>column===2?identityRows:sanctionRows};
+      }
+    }),
+    email_:value=>String(value||"").toLowerCase()
+  };
+  vm.runInNewContext(
+    server.slice(start,end) + ";this.proctorPenalty_=proctorPenalty_;",
+    sandbox
+  );
+  assert.deepEqual(sandbox.proctorPenalty_("student@test","07.01","test-A"),{penaltyPoints:10,violationCount:2});
+  assert.deepEqual(sandbox.proctorPenalty_("student@test","07.01","test-A",1),{penaltyPoints:0,violationCount:1});
+  assert.deepEqual(calls.slice(0,2),[[2,2,3,6],[2,13,3,3]]);
+  const logStart=server.indexOf("function logProctorEvent_(data)");
+  const logEnd=server.indexOf("\\nfunction ",logStart+20);
+  const log=server.slice(logStart,logEnd);
+  assert.ok(log.includes("proctorPenalty_(user.email,courseId,testId).violationCount"));
+  assert.doesNotMatch(log,/vals=sh\.getDataRange\(\)\.getValues\(\)/);
+});
