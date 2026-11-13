@@ -139,4 +139,10 @@ test("settings upserts serialize lookup and writes", () => {
  const release = write.indexOf("lock.releaseLock()");
  assert.ok(lock >= 0 && wait > lock && lookup > wait && update > lookup);
  assert.ok(release > update && write.includes("finally {"));
+ const grantStart = server.indexOf("function grantTestAttempts_(data)");
+ const grantEnd = server.indexOf("\n/* ---------- Teacher-created", grantStart);
+ const grant = server.slice(grantStart, grantEnd);
+ assert.match(grant, /lock\.waitLock\(10000\)/);
+ assert.match(grant, /writeSetting_\("testAttempts:"\+studentEmail\+":"\+courseId\+":"\+testId,String\(extra\),teacher\.email,true\)/,
+  "attempt grants must reuse the existing lock instead of acquiring it recursively");
 });
