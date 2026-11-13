@@ -103,3 +103,8 @@ The browser practice catalogue now contains all twelve lessons in this semester,
 The catalogue now contains 24 activities: 12 for Course 5 Semester 1 and 12 for Course 5 Semester 2. The page groups the activities under separate semester headings. Semester 1 lessons 1–2 are based on the existing Technical English source topics (materials; technical drawing/CAD/CAM); lessons 3–12 use the new lesson drafts and their original scripts. Semester 2 lessons 1–12 use the original lesson scripts developed for that semester.
 
 Each activity has a browser-readable English script and comprehension questions. Practice mode provides answer feedback and transcript reveal. The activities are not graded attempts: answer keys are present in the client-side practice catalogue, and no grades or attempts are persisted. Other courses and semesters are not yet converted.
+
+
+## Additional coverage: Course 4, Semester 2
+
+Four browser-listening activities have also been added for Course 4, Semester 2, lessons 9–12: avionics information flow; programming logic and validation algorithms; sensor-data quality and diagnostic logs; and cybersecurity/safe data handling. The lab now groups activities by both course and semester. Combined catalogue coverage is 28 activities: Course 4 Semester 2 (4), Course 5 Semester 1 (12) and Course 5 Semester 2 (12). Course 4 lessons 1–8 and the other course-semester blocks remain outstanding.
