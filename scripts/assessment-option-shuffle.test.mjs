@@ -113,6 +113,7 @@ test("all course practice exam renderers invoke the shared option shuffle", () =
   for (const file of ["exam_0201.js","exam_0202.js","exam_0401.js","exam_0701.js"]) {
     const source = fs.readFileSync(path.join(root,file),"utf8");
     assert.match(source,/window\._shuffleQuestionOptions\) questions\.forEach\(window\._shuffleQuestionOptions\)/,file+" must shuffle options");
+    assert.match(source,/window\._shuffleQuestionOptions\) allQ\.forEach\(window\._shuffleQuestionOptions\)/,file+" standalone exam route must shuffle options");
   }
 });
 
