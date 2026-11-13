@@ -28,9 +28,9 @@
 | 1 | [ЕСТЬ] Basic 1.1 | Phonetics and Pronunciation |
 | 2 | [ЕСТЬ] Basic 1.2 | Grammar: Pronouns, Verbs, Modals |
 | 3 | [ЕСТЬ] Basic 1.3 | Reading: Speak about yourself |
-| 4 | [НОВАЯ] en-c01-s01-l04 | The English Alphabet, Spelling and Word Stress |
-| 5 | [НОВАЯ] en-c01-s01-l05 | The Verb To Be and Have Got |
-| 6 | [НОВАЯ] en-c01-s01-l06 | Present Simple: Affirmative Sentences |
+| 4 | [НОВАЯ] en-c01-s01-l04 | Classroom English: Instructions, Questions and Learning Strategies |
+| 5 | [НОВАЯ] en-c01-s01-l05 | Present Simple: Facts, Habits and Daily Routines |
+| 6 | [НОВАЯ] en-c01-s01-l06 | Present Simple: Third-person Forms and Spelling Rules |
 | 7 | [НОВАЯ] en-c01-s01-l07 | Questions and Negatives in Present Simple |
 | 8 | [НОВАЯ] en-c01-s01-l08 | Nouns, Articles and Plural Forms |
 | 9 | [НОВАЯ] en-c01-s01-l09 | Family, Friends and Personal Information |
