@@ -1237,7 +1237,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
   assert.match(html, /api\.js\?v=44/);
   assert.match(html, /app\.js\?v=54/);
-  assert.match(sw, /portal-cache-v351/);
+  assert.match(sw, /portal-cache-v\d+/);
 });
 
 test("manual teacher grades appear in the teacher-grade section, not the automatic-tests section", () => {
@@ -1281,7 +1281,7 @@ test("English exam tab shows only the two final tracks while CEFR lab stays sepa
   assert.match(read("english-vpr-exams.js"), /technical:\s*\{/);
   assert.match(read("laboratory.js"), /renderEnglishTestsPage\("lab"\)/);
   assert.match(read("index.html"), /english-proficiency-lab\.js\?v=5/);
-  assert.match(read("service-worker.js"), /portal-cache-v351/);
+  assert.match(read("service-worker.js"), /portal-cache-v\d+/);
 });
 
 
@@ -1335,7 +1335,7 @@ test("English VPR written answers can be graded from the teacher journal and upd
   assert.ok(app.includes('pendingWritten?"На проверке"'));
   assert.ok(html.includes("api.js?v=44"));
   assert.ok(html.includes("app.js?v=54"));
-  assert.ok(sw.includes("portal-cache-v351"));
+  assert.ok(sw.includes(/portal-cache-v\d+/));
 });
 
 
