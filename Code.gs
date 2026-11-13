@@ -2958,7 +2958,7 @@ function submitEnglishSemesterTest_(data) {
       Grade:grade, Score:score, MaxScore:test.questions.length, Percent:percent,
       TimeSpent:Math.max(0, Number(data.timeSpent) || 0), Attempts:attemptNo,
       FinishedAt:new Date().toISOString(), CourseId:courseId,
-      Submission:JSON.stringify({answers:answers}).slice(0,10000),
+      Submission:JSON.stringify({answers:canonicalAnswers}).slice(0,10000),
       PenaltyPoints:policy.penaltyPoints, ViolationCount:policy.violationCount
     });
     appendAttemptAudit_({
