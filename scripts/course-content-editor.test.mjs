@@ -145,4 +145,7 @@ test("settings upserts serialize lookup and writes", () => {
  assert.match(grant, /lock\.waitLock\(10000\)/);
  assert.match(grant, /writeSetting_\("testAttempts:"\+studentEmail\+":"\+courseId\+":"\+testId,String\(extra\),teacher\.email,true\)/,
   "attempt grants must reuse the existing lock instead of acquiring it recursively");
+ assert.ok(grant.indexOf("lock.waitLock(10000)") < grant.indexOf("teacher=editor_(data,courseId)"));
+ assert.ok(grant.indexOf("lock.waitLock(10000)") < grant.indexOf("student=userByEmail_(studentEmail)"),
+  "teacher permission and student enrollment must be rechecked inside the lock");
 });
