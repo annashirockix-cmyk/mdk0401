@@ -155,24 +155,23 @@ try {
       observer.observe(appNode, { childList: true, subtree: true });
     }
     window.addEventListener("hashchange", () => console.log("FLASHCARD_HASH_CHANGE", location.hash));
-    window.renderFlashcardEditorPage();
-    window.__flashcardAuditDiagnostics = {
-      staff: window.state && window.state.staff,
-      courseKeys: Object.keys(window.MDK_DATA || {}),
-      activeCourseId: window.state && window.state.activeCourseId,
-      courseSections: (window.MDK_DATA && window.MDK_DATA["07.01"] && window.MDK_DATA["07.01"].sections || []).length,
-      builtInTopics: (window.MDK_DATA && window.MDK_DATA["07.01"] && window.MDK_DATA["07.01"].sections || []).reduce((n, s) => n + (s.topics || []).length, 0),
-      customTopics: (window.customContent && window.customContent.topics || []).map(t => ({id:t.id,mdkId:t.mdkId,title:t.title})),
-      selectedCourse: document.getElementById("fcCourse")?.value,
-      topicOptionCount: document.getElementById("fcTopic")?.options.length,
-      appText: (document.getElementById("app")?.innerText || "").slice(0, 1200),
-      appHtml: (document.getElementById("app")?.innerHTML || "").slice(0, 1800)
-    };
+    location.hash = "#/flashcard-editor";
   });
-  const flashcardDiagnostics = await page.evaluate(() => window.__flashcardAuditDiagnostics);
-  console.log("FLASHCARD_AUDIT_DIAGNOSTICS", JSON.stringify(flashcardDiagnostics));
   await page.waitForSelector("#fcTopic", { state: "attached", timeout: 10000 });
   await page.waitForFunction(() => document.getElementById("fcTopic")?.options.length > 0);
+  const flashcardDiagnostics = await page.evaluate(() => ({
+    staff: window.state && window.state.staff,
+    courseKeys: Object.keys(window.MDK_DATA || {}),
+    activeCourseId: window.state && window.state.activeCourseId,
+    courseSections: (window.MDK_DATA && window.MDK_DATA["07.01"] && window.MDK_DATA["07.01"].sections || []).length,
+    builtInTopics: (window.MDK_DATA && window.MDK_DATA["07.01"] && window.MDK_DATA["07.01"].sections || []).reduce((n, s) => n + (s.topics || []).length, 0),
+    customTopics: (window.customContent && window.customContent.topics || []).map(t => ({id:t.id,mdkId:t.mdkId,title:t.title})),
+    selectedCourse: document.getElementById("fcCourse")?.value,
+    topicOptionCount: document.getElementById("fcTopic")?.options.length,
+    appText: (document.getElementById("app")?.innerText || "").slice(0, 1200),
+    appHtml: (document.getElementById("app")?.innerHTML || "").slice(0, 1800)
+  }));
+  console.log("FLASHCARD_AUDIT_DIAGNOSTICS", JSON.stringify(flashcardDiagnostics));
   await page.locator("#fcLoadExample").click();
   await page.waitForFunction(() => document.getElementById("fcDrafts")?.innerText.includes("G00"));
   assert.equal(await page.locator("#fcDrafts article.module").count(), 8, "Sample G-code flashcard set must contain eight cards");
