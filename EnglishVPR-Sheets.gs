@@ -121,7 +121,7 @@ function gradeEnglishVprWrittenPart_(data) {
     }
     if (!row) throw new Error("Результат экзамена не найден.");
     let payload = {};
-    try { payload = JSON.parse(String(row[map.Payload] || "{}")); } catch (e) {}
+    try { payload = JSON.parse(String(row[map.Submission] || "{}")); } catch (e) {}
     const answers = Array.isArray(payload.writtenAnswers) ? payload.writtenAnswers : [];
     if (!answers.length || payload.status !== "pending_teacher_review") throw new Error("У этой попытки нет ожидающей проверки письменной части.");
     writtenMax = answers.reduce(function(sum, item) { return sum + Math.max(0, Number(item.maxPoints) || 1); }, 0);
@@ -138,7 +138,7 @@ function gradeEnglishVprWrittenPart_(data) {
     updateMappedRecord_(sh, rowNo, {
       Score: totalScore, MaxScore: totalMax, Percent: percent, Grade: grade,
       TestTitle: String(row[map.TestTitle] || "English VPR").replace(/ \(письменная часть ожидает проверки\)$/, ""),
-      Payload: JSON.stringify(payload)
+      Submission: JSON.stringify(payload)
     });
     appendAttemptAudit_({EventType:"english_vpr_written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(row[map.TestTitle]||"English VPR"),Grade:grade,Score:totalScore,MaxScore:totalMax,Percent:percent});
   } finally { lock.releaseLock(); }
