@@ -34,6 +34,7 @@
     var currentVoice = null;
     var completedPlays = 0;
     var active = false;
+    var runToken = 0;
     var disposed = false;
 
     container.innerHTML = "";
@@ -103,6 +104,7 @@
     }
 
     function stopSpeech(message) {
+      runToken += 1;
       if (supported()) window.speechSynthesis.cancel();
       completedPlays = 0;
       setIdle(message || "Озвучивание остановлено.");
@@ -114,6 +116,7 @@
         setIdle("Прослушивание завершено. Можно запустить его ещё раз.");
         return;
       }
+      var token = runToken;
       var utterance = new window.SpeechSynthesisUtterance(text);
       utterance.lang = lang;
       utterance.rate = currentRate;
@@ -121,7 +124,7 @@
       utterance.volume = 1;
       utterance.voice = currentVoice || selectedVoice() || null;
       utterance.onend = function () {
-        if (disposed || !active) return;
+        if (disposed || !active || token !== runToken) return;
         completedPlays += 1;
         if (completedPlays < repeatCount) {
           status.textContent = "Первое прослушивание завершено. Повтор " + (completedPlays + 1) + " из " + repeatCount + "…";
@@ -131,6 +134,7 @@
         }
       };
       utterance.onerror = function (event) {
+        if (disposed || token !== runToken) return;
         setIdle("Не удалось озвучить текст (" + (event && event.error || "ошибка синтеза речи") + "). Проверьте голосовые настройки браузера.");
       };
       status.textContent = "Идёт прослушивание " + (completedPlays + 1) + " из " + repeatCount + "…";
@@ -141,6 +145,7 @@
       if (!supported() || !text) return;
       window.speechSynthesis.cancel();
       completedPlays = 0;
+      runToken += 1;
       currentRate = Number(rate.value) || initialRate;
       currentVoice = selectedVoice();
       active = true;
@@ -165,6 +170,7 @@
     rate.addEventListener("change", function () {
       currentRate = Number(rate.value) || initialRate;
       if (active) {
+        runToken += 1;
         window.speechSynthesis.cancel();
         completedPlays = 0;
         speakNext();
