@@ -266,8 +266,3 @@ All twelve lessons for Course 4, Semester 1 now have browser-listening activitie
 ### Verified catalogue coverage — 48 activities
 
 The latest catalogue read-back confirms 48 unique activities across four complete semester blocks: Course 4 Semester 1 (12), Course 4 Semester 2 (12), Course 5 Semester 1 (12), and Course 5 Semester 2 (12). All 48 have scripts, questions and matching practice feedback. Courses 1–3 still need conversion. The catalogue remains practice-only; it does not save marks or attempts and must not be used as a protected assessment bank.
-
-
-### Verified browser listening coverage — 72 activities
-
-The latest catalogue includes 72 unique activities: Course 3 (12 + 12), Course 4 (12 + 12), Course 5 (12 + 12). Course 3 Semester 1 follows the five existing Materials/Metal Processes/Technical Drawing/CAD-CAM lessons and adds seven aviation-focused lessons. Course 3 Semester 2 follows the existing machine-tool/CNC/safety topics and adds seven detailed CNC, measurement and communication lessons. Courses 1–2 remain outstanding. The listening catalogue is practice-only and does not write grades or create protected exam attempts. Direct embedding into every lesson and browser/device playback verification remain outstanding.
