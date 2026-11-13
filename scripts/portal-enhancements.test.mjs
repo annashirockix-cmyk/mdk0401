@@ -1547,3 +1547,29 @@ test("English VPR listening answer keys match the speaker roles in both dialogue
   assert.equal(exams.basic.tasks[3].options[1], "teamwork");
   assert.equal(exams.basic.tasks[5].items[0][1], "popular with local students many years ago.");
 });
+
+
+test("all assessment attempt gates use compact Results rows", () => {
+  const server = read("Code.gs");
+  const sections = [
+    ["function logProctorEvent_(data)", "function getProctorEvents_(data)"],
+    ["function getBuiltInTest_(data)", "function sameAnswer_"],
+    ["function submitBuiltInTest_(data)", "function shuffledServer_"],
+    ["function getFinalExam_(data)", "function scoreFinalAnswer_"],
+    ["function submitFinalExam_(data)", "function submitCustomTest_(data)"],
+    ["function submitCustomTest_(data)", "function getGameAnswer_(data)"]
+  ];
+  for (const [startMarker, endMarker] of sections) {
+    const start = server.indexOf(startMarker);
+    const end = server.indexOf(endMarker, start + 20);
+    assert.ok(start >= 0 && end > start, startMarker + " boundaries must exist");
+    const fn = server.slice(start, end);
+    assert.ok(fn.includes("resultAttemptRows_()"), startMarker + " must use compact attempt rows");
+    assert.doesNotMatch(fn, /results_\(\)\.getDataRange\(\)\.getValues\(\)/);
+    assert.doesNotMatch(fn, /resultSheet\.getDataRange\(\)\.getValues\(\)/);
+    if (startMarker.indexOf("submitBuiltInTest_") === 0 || startMarker.indexOf("submitFinalExam_") === 0) {
+      assert.doesNotMatch(fn, /rows=sh\.getDataRange\(\)\.getValues\(\)/);
+    }
+  }
+  assert.match(server, /function resultAttemptRows_\(\)[\s\S]*getRange\(2,1,lastRow-1,13\)\.getValues\(\)/);
+});
