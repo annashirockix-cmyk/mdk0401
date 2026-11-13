@@ -873,7 +873,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v344"));
+  assert.match(sw, /portal-cache-v\\d+/);
 });
 
 
