@@ -7,7 +7,8 @@
 | Сборочные технологии (02.01) | [Worker assembles metal parts in factory.jpg](https://commons.wikimedia.org/wiki/File:Worker_assembles_metal_parts_in_factory.jpg) | Shixart1985 | CC BY 2.0 | Сборка металлических деталей на производственной линии |
 | Автоматизация (02.02) | [Robot arm operates machine in factory setting.jpg](https://commons.wikimedia.org/wiki/File:Robot_arm_operates_machine_in_factory_setting.jpg) | Shixart1985 | CC BY 2.0 | Промышленный робот и производственная ячейка |
 | Mastercam / ЧПУ | [CNC milling machine.jpg](https://commons.wikimedia.org/wiki/File:CNC_milling_machine.jpg) | Impressionmanufacturer | CC BY-SA 4.0 | Фрезерная обработка на станке с ЧПУ |
-| МДК 07.01, токарная обработка | [Lathe machinist.jpg](https://commons.wikimedia.org/wiki/File:Lathe_machinist.jpg) | Shadychiri | CC BY-SA 4.0 | Оператор токарного станка с ЧПУ |
+| МДК 07.01, токарная обработка | [Cnc lathe.png](https://commons.wikimedia.org/wiki/File:Cnc_lathe.png) | Somesomething243 | CC BY-SA 4.0 | Наладчик осматривает токарный станок с ЧПУ |
+| МДК 07.01, сверление | [Professional drilling metal closeup.jpg](https://commons.wikimedia.org/wiki/File:Professional_drilling_metal_closeup.jpg) | Shixart1985 | CC BY 2.0 | Крупный план сверления металла; фото иллюстрирует операцию, не модель ЧПУ |
 | Метрология | [Vernier Caliper.jpg](https://commons.wikimedia.org/wiki/File:Vernier_Caliper.jpg) | Jeremyida002 | CC BY-SA 4.0 | Штангенциркуль и измерительные шкалы |
 | Охрана труда | [Machine guarding.jpg](https://commons.wikimedia.org/wiki/File:Machine_guarding.jpg) | Machine 1456 | CC0 1.0 | Защитное ограждение оборудования |
 | Материаловедение | [Микроструктура стали 20Х.jpg](https://commons.wikimedia.org/wiki/File:Микроструктура_стали_20Х.jpg) | Surface engineering | CC BY-SA 4.0 | Феррито-перлитная микроструктура стали 20Х |
