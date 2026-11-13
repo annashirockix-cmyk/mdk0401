@@ -276,7 +276,7 @@
     $("deleteLectureBtn").onclick=function(){
       if(!lectureId||!confirm("Удалить выбранную лекцию?"))return;
       const id=lectureId;$("lectureStatus").textContent="Удаление…";
-      window.API.deleteCustomContent(id).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка удаления");resetLecture();return new Promise(resolve=>refreshContent(resolve));}).then(()=>$("lectureStatus").textContent="Лекция удалена.").catch(e=>$("lectureStatus").textContent=e.message);
+      window.API.deleteCustomContent(id,courseSel.value).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка удаления");resetLecture();return new Promise(resolve=>refreshContent(resolve));}).then(()=>$("lectureStatus").textContent="Лекция удалена.").catch(e=>$("lectureStatus").textContent=e.message);
     };
     $("addQuestionBtn").onclick=function(){
       const q=$("qText").value.trim(),options=["qA","qB","qC","qD"].map(id=>$(id).value.trim()),correct=Number($("qCorrect").value);
@@ -298,7 +298,7 @@
     $("deleteTestBtn").onclick=function(){
       if(!testId||!confirm("Удалить выбранный тест? Результаты студентов в журнале сохранятся."))return;
       const id=testId;$("testStatus").textContent="Удаление…";
-      window.API.deleteCustomContent(id).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка удаления");resetTest();return new Promise(resolve=>refreshContent(resolve));}).then(()=>$("testStatus").textContent="Тест удалён.").catch(e=>$("testStatus").textContent=e.message);
+      window.API.deleteCustomContent(id,courseSel.value).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка удаления");resetTest();return new Promise(resolve=>refreshContent(resolve));}).then(()=>$("testStatus").textContent="Тест удалён.").catch(e=>$("testStatus").textContent=e.message);
     };
     drawDraft();
     refreshContent();
