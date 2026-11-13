@@ -297,3 +297,18 @@ The topic-page renderer now mounts matching listening practice inside lecture ac
 - The Service Worker precaches the runtime and listening modules and uses `portal-cache-v355`; the runtime script URL uses `v=2`.
 - This is runtime integration of draft materials, not formal curriculum approval or deployment verification. PR #125 remains open and Draft; no GitHub Actions run or status check has yet been returned for its current head.
 - Semester assessment is a separate outstanding task. The existing `english-assessment-data.js` is not loaded by `index.html`; its legacy Basic tests have 20 questions each, while Technical is currently cloned from Basic. The seed helper does not supply the `correct` indices required by server validation. Do not expose/import this client-side seed as a protected graded bank until the assessment content and server-only answer-key path are corrected.
+
+
+## Semester-assessment security gate — 2026-11-13
+
+A focused review found that the legacy `english-assessment-data.js` is intentionally **not loaded** by `index.html`. It contains ten Basic tests with 20 questions each, but all 200 questions lack `correct` answer indices. Its Technical set is a direct clone of Basic. The teacher import button is therefore not rendered; importing this file would either fail server validation or, if keys were guessed, create a misleading Technical assessment.
+
+The server validator has been strengthened before the content is rebuilt:
+- exactly ten tests in the expected year/semester order;
+- track-specific unique test IDs;
+- exactly 20 questions per test;
+- no duplicate question text or empty/duplicate options;
+- every correct-answer index must be an integer within the option range;
+- student-facing sanitization removes answer and explanation fields.
+
+Regression tests cover valid banks, missing keys, duplicate IDs/questions/options, wrong semester order, track mismatch, and removal of answer-key fields. A separate guard asserts that the unreviewed legacy seed remains out of the production page while Basic/Technical are still cloned. The bank is **not ready for import**; do not publish it or claim that the 20 works are available to students until new Basic and genuinely distinct Technical questions have been authored, keyed, reviewed, imported and read back from the protected sheet.
