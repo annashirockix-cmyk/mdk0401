@@ -849,9 +849,11 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /Перенести экзамены в защищённую таблицу/);
   assert.match(engine, /function hasStaffAccess\(\)/);
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
-  assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank/);
+  assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank\)/);
+  assert.doesNotMatch(engine, /window\.ENGLISH_VPR_EXAMS/);
+  assert.match(bank, /const exam = seeds\[track\]/);
   assert.match(html, /api\.js\?v=\d+/);
-  assert.match(html, /english-vpr-engine\.js\?v=21/);
+  assert.match(html, /english-vpr-engine\.js\?v=22/);
 });
 
 
@@ -890,7 +892,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=21"));
+  assert.ok(html.includes("english-vpr-engine.js?v=22"));
   assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
@@ -1237,7 +1239,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.match(app, /window\.API\.getResults\(\{\}\)/);
   assert.match(app, /window\.API\.saveManualGrade\(payload\)/);
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
-  assert.match(html, /api\.js\?v=44/);
+  assert.match(html, /api\.js\?v=45/);
   assert.match(html, /app\.js\?v=54/);
   assert.match(sw, /portal-cache-v\d+/);
 });
@@ -1279,8 +1281,9 @@ test("English exam tab shows only the two final tracks while CEFR lab stays sepa
   assert.match(route, /mode==="lab"\)\{renderLab\(\);return;\}/);
   assert.match(route, /baseRenderer\(mode==="final-basic"\|\|mode==="final-technical"\?mode:""\)/);
   assert.doesNotMatch(route, /renderC1C2|variant-|renderHome/);
-  assert.match(read("english-vpr-exams.js"), /basic:\s*\{/);
-  assert.match(read("english-vpr-exams.js"), /technical:\s*\{/);
+  assert.match(read("EnglishVPR-Sheets.gs"), /function englishVprSeedExams_\(\)/);
+  assert.match(read("EnglishVPR-Sheets.gs"), /basic:\s*\{/);
+  assert.match(read("EnglishVPR-Sheets.gs"), /technical:\s*\{/);
   assert.match(read("laboratory.js"), /renderEnglishTestsPage\("lab"\)/);
   assert.match(read("index.html"), /english-proficiency-lab\.js\?v=5/);
   assert.match(read("service-worker.js"), /portal-cache-v\d+/);
@@ -1335,7 +1338,7 @@ test("English VPR written answers can be graded from the teacher journal and upd
   assert.ok(app.includes("Ответ студента:"));
   assert.ok(app.includes("window.API.gradeEnglishVprWrittenPart"));
   assert.ok(app.includes('pendingWritten?"На проверке"'));
-  assert.ok(html.includes("api.js?v=44"));
+  assert.ok(html.includes("api.js?v=45"));
   assert.ok(html.includes("app.js?v=54"));
   assert.ok(/portal-cache-v\d+/.test(sw));
 });
@@ -1362,10 +1365,15 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
   });
   assert.equal(sandbox.validateEnglishVprExam_("basic", exam("basic")), true);
   assert.equal(sandbox.validateEnglishVprExam_("technical", exam("technical")), true);
-  const window = {};
-  vm.runInNewContext(read("english-vpr-exams.js"), {window});
-  assert.equal(sandbox.validateEnglishVprExam_("basic", window.ENGLISH_VPR_EXAMS.basic), true);
-  assert.equal(sandbox.validateEnglishVprExam_("technical", window.ENGLISH_VPR_EXAMS.technical), true);
+  const seedStart = bank.indexOf("function englishVprSeedExams_");
+  const seedEnd = bank.indexOf("\nfunction englishVprBank_", seedStart);
+  assert.ok(seedStart >= 0 && seedEnd > seedStart);
+  vm.runInNewContext(bank.slice(seedStart, seedEnd) + ";this.englishVprSeedExams_=englishVprSeedExams_;", sandbox);
+  const seeds = sandbox.englishVprSeedExams_();
+  assert.equal(sandbox.validateEnglishVprExam_("basic", seeds.basic), true);
+  assert.equal(sandbox.validateEnglishVprExam_("technical", seeds.technical), true);
+  assert.doesNotMatch(read("index.html"), /english-vpr-exams\.js/);
+  assert.doesNotMatch(read("service-worker.js"), /english-vpr-exams\.js/);
   const invalid = exam("basic"); invalid.tasks.pop();
   assert.throws(() => sandbox.validateEnglishVprExam_("basic", invalid), /структура экзамена/i);
 });

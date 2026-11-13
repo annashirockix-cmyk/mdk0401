@@ -427,16 +427,14 @@
       };
       app.querySelector(".module").appendChild(semesterImport);
     }
-    if (hasStaffAccess() && window.API && window.API.importEnglishVprBank && window.ENGLISH_VPR_EXAMS) {
+    if (hasStaffAccess() && window.API && window.API.importEnglishVprBank) {
       var migrate = el("button","btn ghost","Перенести экзамены в защищённую таблицу");
       migrate.type="button"; migrate.style.cssText="margin:0 0 14px;width:100%";
       migrate.onclick=function(){
         if(!window.confirm("Импортировать варианты Basic и Technical в закрытый лист EnglishVPRBank?")) return;
         migrate.disabled=true; migrate.textContent="Импортируем и проверяем…";
         Promise.all(["basic","technical"].map(function(track){
-          var exam=window.ENGLISH_VPR_EXAMS[track];
-          if(!exam) return Promise.reject(new Error("Не найден локальный вариант "+track+". Проверьте загрузку english-vpr-exams.js."));
-          return window.API.importEnglishVprBank(track,exam).then(function(result){
+          return window.API.importEnglishVprBank(track).then(function(result){
             if(!result || result.success !== true) throw new Error("Сервер не подтвердил импорт "+track+": "+(result && result.error || "пустой ответ"));
             return window.API.getEnglishVprExam(track).then(function(check){
               if(!check || check.success !== true || !check.exam || !Array.isArray(check.exam.tasks) || !check.exam.tasks.length) {

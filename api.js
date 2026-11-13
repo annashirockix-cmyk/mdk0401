@@ -100,7 +100,7 @@ window.API = {
  submitEnglishSemesterTest:function(data){return fetchAPI("submitEnglishSemesterTest",data||{},"POST",120000);},
  submitEnglishVprExam:function(data){return fetchAPI("submitEnglishVprExam",data||{},"POST",120000);},
  gradeEnglishVprWrittenPart:function(data){return fetchAPI("gradeEnglishVprWrittenPart",data||{},"POST",120000);},
- importEnglishVprBank:function(track,exam){return fetchAPI("importEnglishVprBank",{track:track,exam:exam},"POST",120000);},
+ importEnglishVprBank:function(track){return fetchAPI("importEnglishVprBank",{track:track},"POST",120000);},
  getBuiltInTest:function(courseId,testId,bankIds){return fetchAPI("getBuiltTest",{courseId:courseId,testId:testId,bankIds:bankIds||[]},"POST");},
  submitBuiltInTest:function(data){return fetchAPI("submitBuiltTest",data||{},"POST");},
  getFinalExam:function(courseId){return fetchAPI("getFinalExam",{courseId:courseId},"POST");},
