@@ -96,3 +96,17 @@ test("custom test attempts are counted within the selected course", () => {
  assert.match(status, /sameCourseId_\(r\[12\]\|\|courseId,courseId\)/,
   "the displayed attempt status and submission check must use the same course scope");
 });
+
+
+test("custom test submissions resolve the test within the active course", () => {
+ const server = read("Code.gs");
+ const api = read("api.js");
+ const app = read("app.js");
+ const start = server.indexOf("function submitCustomTest_(data)");
+ const end = server.indexOf("\nfunction getGameAnswer_", start);
+ const submit = server.slice(start, end);
+ assert.match(submit, /requestedCourseId = String\(data\.courseId \|\| data\.mdkId \|\| ""\)/);
+ assert.match(submit, /String\(row\[0\]\) === id && String\(row\[3\]\) === "test" && sameCourseId_\(row\[1\], requestedCourseId\)/);
+ assert.match(api, /submitCustomTest:function\(testId,answers,timeSpent,courseId\)/);
+ assert.match(app, /submitCustomTest\(testId, answers, Math\.round\(\(Date\.now\(\)-started\)\/1000\), test\.courseId \|\| test\.mdkId\)/);
+});
