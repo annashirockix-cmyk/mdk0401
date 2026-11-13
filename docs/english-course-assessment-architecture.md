@@ -201,3 +201,6 @@ Suggested metadata:
 Lesson listening uses browser text-to-speech by default, matching the approach already present in the English VPR exam. The reusable `english-listening-tts.js` helper is loaded from `index.html` and exposes `window.EnglishListeningTTS.render(container, {text, lang, repeatCount, rate})`. It provides play/pause/resume/stop, replay, playback rate and available English voice selection. The helper does not contain transcripts or answer keys. Lesson renderers must keep transcript reveal separate and follow the practice-mode/exam-mode rules in `docs/english-listening-lesson-standard-v1.md`.
 
 This is a runtime helper only. It does not automatically convert Markdown drafts into portal lessons; the lesson content schema and renderer integration remain a separate step. The working Basic and Technical VPR exams and their server-side banks are not modified.
+
+
+- Course 5, semester 2 lessons 1–4 (technical presentations; structured technical reports; professional interview/oral examination; specifications, procedures and standards) are drafted in `docs/english-technical-c05-s02-lessons-01-04-draft.md`. The package contains browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a semester checkpoint. It remains a draft and is not imported into the portal.
