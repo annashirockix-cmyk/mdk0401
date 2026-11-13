@@ -49,14 +49,14 @@
     if (!window.API || !window.API.getEnglishVprExam) { document.getElementById("englishVprLoading").textContent="Сервер экзаменов недоступен. Обратитесь к преподавателю."; return; }
     window.API.getEnglishVprExam(track).then(function(response) {
       if (!response || !response.success || !response.exam) throw new Error(response && response.error || "Экзамен не найден на сервере.");
-      renderLoadedExam(response.exam,track,course,app);
+      renderLoadedExam(response.exam,track,course,app,response.attemptId);
     }).catch(function(error) {
       var loading=document.getElementById("englishVprLoading");
       if(loading) loading.textContent="Не удалось загрузить экзамен с сервера: "+(error.message||error)+". Обратитесь к преподавателю.";
     });
     return;
   }
-  function renderLoadedExam(exam,track,course,app) {
+  function renderLoadedExam(exam,track,course,app,attemptId) {
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
     if(track!=="basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) { var b=el("button","btn ghost","Basic English"); b.type="button"; b.onclick=function(){renderPage("final-basic");}; tabs.appendChild(b); }
@@ -239,7 +239,7 @@
         window.alert("Серверная проверка недоступна. Ответы не отправлены; обратитесь к преподавателю.");
         return;
       }
-      window.API.submitEnglishVprExam({track:track,answers:answers,timeSpent:elapsed}).then(function(result) {
+      window.API.submitEnglishVprExam({track:track,attemptId:attemptId,answers:answers,timeSpent:elapsed}).then(function(result) {
         if (!result || !result.success) throw new Error(result && result.error || "Сервер не подтвердил отправку.");
         finished = true;
         if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
