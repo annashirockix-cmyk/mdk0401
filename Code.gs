@@ -1944,16 +1944,18 @@ function submitCustomTest_(data) {
   const user = auth_(data);
   if (user.role !== "student") throw new Error("Отправлять ответы могут только студенты.");
   const id = String(data.testId || data.id || "");
+  const requestedCourseId = String(data.courseId || data.mdkId || "");
   if (!id) throw new Error("Не указан тест.");
+  if (!requestedCourseId) throw new Error("Не указана дисциплина теста.");
   const values = content_().getDataRange().getValues();
   let record = null;
   values.slice(1).forEach(function (row) {
-    if (String(row[0]) === id && String(row[3]) === "test") record = {
+    if (String(row[0]) === id && String(row[3]) === "test" && sameCourseId_(row[1], requestedCourseId)) record = {
       id: id, courseId: normalizeCourseId_(row[1] || ""), topicId: String(row[2] || ""), type: "test",
       title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
     };
   });
-  if (!record) throw new Error("Тест не найден.");
+  if (!record) throw new Error("Тест не найден в выбранной дисциплине.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
   if (!customContentIsOpen_(record.courseId, record.id, record.topicId, record.type)) throw new Error("Этот тест закрыт преподавателем.");
   const attemptKey="custom_"+id;
