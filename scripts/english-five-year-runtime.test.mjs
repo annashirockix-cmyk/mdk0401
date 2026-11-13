@@ -85,4 +85,9 @@ test("runtime loads before app.js and lecture rendering resolves explicit listen
   assert.match(app, /lecture\.listeningId/);
   assert.match(read("english-listening-tts.js"), /speechSynthesis/);
   assert.match(read("english-listening-tts.js"), /SpeechSynthesisUtterance/);
+  const serviceWorker = read("service-worker.js");
+  assert.match(serviceWorker, /portal-cache-v355/);
+  for (const file of ["english-five-year-runtime.js", "english-listening-tts.js", "english-listening-lesson.js", "english-listening-catalog.js", "english-listening-route.js"]) {
+    assert.ok(serviceWorker.includes("./" + file), `service worker must precache ${file}`);
+  }
 });
