@@ -1683,7 +1683,7 @@ test("student results reuse the authenticated payload and compute the protected 
 test("student assignment results query only matching submissions and history IDs", () => {
   const server = read("Code.gs");
   const start = server.indexOf("function assignmentResultRecords_(emailFilter)");
-  const end = server.indexOf("\\nfunction getResults_(data)", start);
+  const end = server.indexOf("\nfunction getResults_(data)", start);
   assert.ok(start >= 0 && end > start);
   const calls=[];
   const assignmentRows=[
