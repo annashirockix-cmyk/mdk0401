@@ -113,6 +113,31 @@ try {
     window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
     window.customContent = window.customContent || { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
+    const appNode = document.getElementById("app");
+    const innerHtmlDescriptor = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
+    if (appNode && innerHtmlDescriptor && innerHtmlDescriptor.set) {
+      Object.defineProperty(appNode, "innerHTML", {
+        configurable: true,
+        get() { return innerHtmlDescriptor.get.call(this); },
+        set(value) {
+          if (document.getElementById("fcTopic") && !String(value).includes('id="fcTopic"')) {
+            console.log("FLASHCARD_APP_REPLACED", JSON.stringify({ hash: location.hash, nextHtml: String(value).slice(0, 500), stack: new Error().stack }));
+          }
+          return innerHtmlDescriptor.set.call(this, value);
+        }
+      });
+    }
+    if (appNode) {
+      const observer = new MutationObserver(() => {
+        if (window.__flashcardTopicWasMounted && !document.getElementById("fcTopic")) {
+          console.log("FLASHCARD_TOPIC_REMOVED", JSON.stringify({ hash: location.hash, appText: (appNode.innerText || "").slice(0, 500) }));
+          observer.disconnect();
+        }
+        if (document.getElementById("fcTopic")) window.__flashcardTopicWasMounted = true;
+      });
+      observer.observe(appNode, { childList: true, subtree: true });
+    }
+    window.addEventListener("hashchange", () => console.log("FLASHCARD_HASH_CHANGE", location.hash));
     window.renderFlashcardEditorPage();
     window.__flashcardAuditDiagnostics = {
       staff: window.state && window.state.staff,
