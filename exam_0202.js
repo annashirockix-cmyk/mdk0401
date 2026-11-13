@@ -76,6 +76,7 @@ window.renderTraining_0202 = function(mdkId) {
 
   var allQuestions = baseQuestions.concat(extraQuestions);
   var questions = allQuestions.sort(function(){ return Math.random() - 0.5; });
+        if (window._shuffleQuestionOptions) questions.forEach(window._shuffleQuestionOptions);
   var idx = 0, correct = 0, answered = 0;
 
   app.innerHTML += '<section class="hero"><h1>🎯 МДК 02.02</h1><p>Вопросов для тренировки: ' + questions.length + '</p></section>';
