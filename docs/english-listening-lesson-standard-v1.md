@@ -1,6 +1,6 @@
 # Listening in English lessons — Spotlight-style lesson standard
 
-Status: instructional and technical specification for adding listening to existing English lectures. Existing lesson texts and assessment banks remain intact. This document defines the content model and a complete aviation-themed sample; it does not claim that audio files or a portal audio player have already been deployed.
+Status: instructional and technical specification for adding listening to existing English lectures. Existing lesson texts and assessment banks remain intact. The default delivery method is browser text-to-speech, using the same SpeechSynthesis API family already used by the English VPR exam. No MP3 recording is required for a lesson to include listening.
 
 ## 1. Pedagogical model
 
@@ -72,7 +72,7 @@ The student response must not contain the transcript before the reveal condition
 - Typical duration: 45–90 seconds for A2; 60–120 seconds for B1; 90–180 seconds for B2.
 - Record clean speech with minimal background noise. Any aviation/industrial ambience must remain quiet and must not mask speech.
 - Do not imitate real aircraft warning sounds or use a recording that could be mistaken for an operational alert.
-- MP3 is suitable for the portal; retain a lossless master for editing.
+- Browser text-to-speech is the default for lesson listening. Optional human-recorded MP3 may be added later for accent variety or assessment standardisation, but is not a prerequisite.
 - Provide a transcript, speaker labels, pronunciation notes, and an answer key for every recording.
 - Audio files must be hosted as stable assets and checked for playback on desktop and mobile.
 
@@ -262,3 +262,22 @@ Acceptance:
 - Transcript and answer key are not exposed prematurely.
 - Existing lectures, tests and VPR remain unchanged.
 - All four professional pathways receive listening material over the planned course sequence.
+
+
+## 8. Browser speech implementation
+
+A reusable helper is provided in `english-listening-tts.js` and loaded by `index.html`. It exposes:
+
+```js
+window.EnglishListeningTTS.supported();
+window.EnglishListeningTTS.render(containerElement, {
+  text: listeningScript,
+  lang: "en-GB",
+  repeatCount: 2,
+  rate: 0.88
+});
+```
+
+The helper creates play, pause/resume, stop, rate and available-English-voice controls. It does not expose the transcript, answers or assessment keys. The lecture renderer must pass only the listening script to the helper and render transcript reveal separately under the lesson's practice/reveal policy. For a formal exam, the renderer should lock transcript reveal until submission and should not allow a rate/voice selector if the exam specification requires standardised playback.
+
+The helper is a reusable runtime component, not yet a claim that every Markdown lecture draft is imported into the portal. The current VPR implementation remains unchanged; it continues to use its existing speech synthesis logic.
