@@ -104,6 +104,62 @@
         { prompt: "Which test has a missing unit field?", options: ["SW-01", "SW-02", "SW-03", "SW-04"], answerIndex: 1, explanation: "SW-02 failed because its unit field was missing." }
       ]
     }
+    ,
+    {
+      id: "en-c05-s02-l01",
+      title: "Lesson 1 — Delivering a Technical Presentation",
+      level: "B2",
+      script: "Good morning, everyone. The purpose of this briefing is to present the results of the fictional Aviation Training Data Review, reference ATD-08. Our audience includes colleagues from four specialisms, so I will explain the terms that may be unfamiliar. The scope is limited to four classroom documents: a sample process sheet, a data dictionary, a wiring-diagram glossary and a CNC drawing extract. We identified an inconsistent term, one missing identifier and two records with incomplete units. The review did not include physical equipment, live production data, aircraft maintenance or operational testing. I will begin by explaining the sources, then present the findings and limitations. After that, I will hand over to the programmer for the data-label example.",
+      questions: [
+        { prompt: "What is the speaker doing?", options: ["Giving a passenger announcement", "Opening a technical briefing about a fictional information-pack review", "Explaining how to repair an aircraft", "Giving instructions for operating a CNC machine"], answerIndex: 1, explanation: "The speaker opens a briefing about a fictional classroom review." },
+        { prompt: "What is the scope?", options: ["A physical inspection of an aircraft", "A production release decision", "A review of four classroom documents", "A live electrical test"], answerIndex: 2, explanation: "The scope is limited to four classroom documents." },
+        { prompt: "What is the project reference?", options: ["ATD-08", "ATD-80", "ADB-08", "ATD-18"], answerIndex: 0, explanation: "The project reference is ATD-08." },
+        { prompt: "How many classroom documents are included?", options: ["Two", "Three", "Four", "Eight"], answerIndex: 2, explanation: "The briefing lists four classroom documents." },
+        { prompt: "Which issue is mentioned?", options: ["A missing passenger record", "An inconsistent term", "A damaged aircraft component", "An unapproved machine setting"], answerIndex: 1, explanation: "One inconsistent term was identified." },
+        { prompt: "What is explicitly excluded?", options: ["A review of document labels", "A review of classroom sources", "Physical equipment, live production data, maintenance and operational testing", "A handover to the programmer"], answerIndex: 2, explanation: "The speaker explicitly excludes real equipment and operational activity." }
+      ]
+    },
+    {
+      id: "en-c05-s02-l02",
+      title: "Lesson 2 — Writing a Structured Technical Report",
+      level: "B2",
+      script: "Could we review the draft report before it is submitted? The objective and scope are clear, but the source document reference is missing. Please add the reference to the sample data dictionary. I also noticed that the results section says the information system is unreliable. The review only identified one missing label and one inconsistent term in a five-row classroom sample. That evidence does not support a general statement about system reliability. Please separate the observation from the interpretation, describe the sample limitation and list the two items that require clarification. The conclusion should state only what the review established. The document owner can then confirm the preferred labels and update the report history.",
+      questions: [
+        { prompt: "What are the speakers reviewing?", options: ["A draft classroom technical report", "A real aircraft release certificate", "A staff timetable", "A passenger announcement"], answerIndex: 0, explanation: "They are reviewing a draft classroom report." },
+        { prompt: "What is the main problem?", options: ["The report has no title and no pictures", "It makes a conclusion that is broader than the evidence", "It contains too many appendices", "It is written in the wrong language"], answerIndex: 1, explanation: "The claim about system reliability exceeds the small sample evidence." },
+        { prompt: "Which reference is missing?", options: ["The source document reference", "The student group number", "The room number", "The printer model"], answerIndex: 0, explanation: "The source document reference is missing." },
+        { prompt: "What should be separated?", options: ["The title and date", "The observation and interpretation", "The author and reader", "The table and appendix"], answerIndex: 1, explanation: "The writer should separate the observed finding from its interpretation." },
+        { prompt: "What should the writer add?", options: ["An unsupported cause", "A list of passenger names", "The limitations of the review", "A production approval"], answerIndex: 2, explanation: "The report must explain the sample limitation." }
+      ]
+    },
+    {
+      id: "en-c05-s02-l03",
+      title: "Lesson 3 — Professional Interview and Oral Examination Skills",
+      level: "B2",
+      script: "Examiner: Why is revision control important in a technical environment? Candidate: Revision control helps a team identify the version of a document being used. It reduces confusion when information is updated. Examiner: Can you give an example? Candidate: Yes. In a fictional classroom case, a drawing extract showed revision C, while a related process sheet referred to revision B. The difference was recorded as an open question. Examiner: Does that prove that one document is incorrect? Candidate: Not by itself. We would need to check the controlled document register and confirm which revision applies to the task. The cause of the mismatch has not been established. Examiner: What would you do next? Candidate: I would record the two references, avoid making an unsupported choice and ask the responsible document owner to confirm the current version. I would then update the handover with the confirmed information.",
+      questions: [
+        { prompt: "What is the situation?", options: ["A candidate is answering an oral technical question", "A pilot is speaking to passengers", "An operator is starting a production cycle", "A student is ordering lunch"], answerIndex: 0, explanation: "The recording is an examiner-candidate exchange." },
+        { prompt: "What is the candidate's main strength?", options: ["The candidate guesses quickly", "The candidate structures the answer and identifies a limitation", "The candidate avoids every question", "The candidate changes the subject"], answerIndex: 1, explanation: "The candidate explains the concept and states what remains unconfirmed." },
+        { prompt: "What topic is the examiner asking about?", options: ["Revision control", "Staff holidays", "Aircraft seating", "Food safety"], answerIndex: 0, explanation: "The examiner asks about revision control." },
+        { prompt: "What example does the candidate use?", options: ["A fictional mismatch between two document revisions", "A real aircraft repair", "A passenger complaint", "A personal travel story"], answerIndex: 0, explanation: "The candidate describes a fictional revision mismatch." },
+        { prompt: "What does the candidate say is not established?", options: ["The document title", "The cause of the mismatch", "The candidate's name", "The classroom number"], answerIndex: 1, explanation: "The cause of the mismatch has not been established." },
+        { prompt: "What does the candidate recommend?", options: ["Guess which revision is correct", "Delete the older file", "Record both references and ask the document owner to confirm the current version", "Use either file without checking"], answerIndex: 2, explanation: "The candidate recommends checking the controlled register and confirming the current version." }
+      ]
+    },
+    {
+      id: "en-c05-s02-l04",
+      title: "Lesson 4 — Reading Specifications, Procedures and Standards",
+      level: "B2",
+      script: "Student: I found a document extract for our technical report. It is called Training Specification TS-17, revision B. Can I use it as the source? Teacher: First, check its scope and status. The extract says that it is a classroom language exercise. Student: So it can help us practise document vocabulary, but it is not an operational specification? Teacher: Correct. Also, do not assume that revision B is the current controlled version. The exercise only identifies the revision printed on this extract. Student: Should I write that limitation in the report? Teacher: Yes. State that the source is a classroom extract and that its current applicability has not been confirmed. If a real task requires a controlled document, the responsible person must verify the approved source. Student: Understood. I will cite TS-17, revision B, as the supplied classroom extract and keep the limitation clear.",
+      questions: [
+        { prompt: "What are the speakers discussing?", options: ["Whether a fictional document extract is applicable to a classroom task", "How to repair an aircraft", "How to change a live electrical system", "Which machine should be operated"], answerIndex: 0, explanation: "They discuss the use and limitations of a classroom document extract." },
+        { prompt: "What is the main concern?", options: ["The document's title is too long", "The scope and revision need to be checked", "The classroom is too noisy", "The report needs a photograph"], answerIndex: 1, explanation: "The student must verify scope and controlled revision." },
+        { prompt: "What is the document reference?", options: ["TS-17", "ST-71", "TS-71", "T5-17"], answerIndex: 0, explanation: "The document is identified as TS-17." },
+        { prompt: "Which revision appears in the classroom extract?", options: ["A", "B", "C", "D"], answerIndex: 1, explanation: "The printed revision is B." },
+        { prompt: "What does the student need to confirm?", options: ["The document's applicability and current controlled revision", "The colour of the cover", "The author's personal opinion", "The number of pages only"], answerIndex: 0, explanation: "The student must confirm applicability and current controlled status." },
+        { prompt: "What should the student do if the source cannot be confirmed?", options: ["Treat the extract as approved", "Guess the current revision", "State the limitation and ask the responsible person to verify the approved source", "Use it for a real maintenance task"], answerIndex: 2, explanation: "The source must remain identified as an unconfirmed classroom extract." }
+      ]
+    },
   ];
 
   function el(tag, cls, text) {
