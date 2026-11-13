@@ -159,6 +159,130 @@
         { prompt: "What should the final presentation include?", options: ["Unsupported conclusions", "Confirmed facts, limitations, owners and follow-up actions", "A real maintenance procedure", "Invented missing values"], answerIndex: 1, explanation: "The capstone requires evidence-based reporting and explicit limitations." }
       ]
     },
+    ,
+    {
+      id: "en-c05-s01-l03",
+      title: "Lesson 3 — Maintenance Documentation and Technical Manuals",
+      level: "B2",
+      script: "Before you use this training record, check the document header. The reference number is TRN-QA-014 and the revision is C. Revision B is listed as superseded in this fictional example. The status field says ‘classroom example’, and the applicability field limits the document to a fictional training component. If a revision or applicability statement is unclear, do not guess. Ask the document owner or teacher to confirm which controlled copy is intended for the exercise. In a real organization, follow its approved document-control process.",
+      questions: [
+        { prompt: "What is the speaker explaining?", options: ["How to check a training document header", "How to repair a component", "How to operate a machine", "How to approve an aircraft"], answerIndex: 0, explanation: "The speaker explains how to check a fictional training record." },
+        { prompt: "What is the document reference?", options: ["TRN-QA-014", "TRN-QA-041", "TRN-EL-014", "TRN-QA-104"], answerIndex: 0, explanation: "The reference is TRN-QA-014." },
+        { prompt: "Which revision is marked as superseded?", options: ["A", "B", "C", "D"], answerIndex: 1, explanation: "Revision B is listed as superseded." },
+        { prompt: "What should a student do if applicability is unclear?", options: ["Guess", "Use the oldest copy", "Ask the document owner or teacher", "Change the revision"], answerIndex: 2, explanation: "The speaker says to ask the responsible document owner or teacher." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l04",
+      title: "Lesson 4 — Fault Diagnosis: Symptoms, Evidence and Reports",
+      level: "B2",
+      script: "The reported condition is that a warning message appeared during the classroom simulation. In training log TL-08, revision A, we can see two identical entries. This is an observation from the supplied record. One possible hypothesis is that the entry was duplicated during data handling, but the available evidence does not confirm the cause. The report should identify the time, the source document and the repeated entries. It should also state that the cause remains unresolved. Do not recommend a repair or identify a failed component on the basis of this classroom example.",
+      questions: [
+        { prompt: "What happened in the classroom simulation?", options: ["A warning message appeared", "A machine stopped permanently", "A component was replaced", "A test was approved"], answerIndex: 0, explanation: "The reported condition is a warning message." },
+        { prompt: "What does training log TL-08 contain?", options: ["Two identical entries", "Two different revisions", "A completed repair", "A production approval"], answerIndex: 0, explanation: "The log contains two identical entries." },
+        { prompt: "Is the cause confirmed?", options: ["Yes, data handling is confirmed", "No, the cause remains unresolved", "Yes, a component failed", "No, there is no observation"], answerIndex: 1, explanation: "The speaker says the evidence does not confirm the cause." },
+        { prompt: "What should the report include?", options: ["An invented repair", "The time, source document and repeated entries", "A component replacement decision", "An operational instruction"], answerIndex: 1, explanation: "The report should identify traceable facts and the unresolved cause." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l05",
+      title: "Lesson 5 — Electrical Troubleshooting Communication",
+      level: "B2",
+      script: "Could you give me the document reference for the handover? It is TRN-EL-022, revision B. Let me read that back: TRN-EL-022, revision B. Is that correct? Yes. The classroom record shows a difference between two status descriptions. Has the cause been confirmed? No. We have only recorded the discrepancy. The source information still needs to be reviewed by the responsible teacher. Understood. I will note that the issue remains unresolved and will not make assumptions about the cause. Thank you. Please include the date and the reference in the handover note.",
+      questions: [
+        { prompt: "What reference is given in the handover?", options: ["TRN-EL-022", "TRN-EL-202", "TRN-QA-022", "TRN-EL-012"], answerIndex: 0, explanation: "The reference is TRN-EL-022." },
+        { prompt: "Which revision is mentioned?", options: ["A", "B", "C", "D"], answerIndex: 1, explanation: "The speakers identify revision B." },
+        { prompt: "Why does one speaker read the reference back?", options: ["To confirm that it was heard correctly", "To change the revision", "To approve the record", "To identify a fault"], answerIndex: 0, explanation: "Read-back is used to confirm the reference." },
+        { prompt: "What is the status of the cause?", options: ["Confirmed", "Unresolved", "Approved", "Closed"], answerIndex: 1, explanation: "The cause has not been confirmed." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l06",
+      title: "Lesson 6 — Quality Assurance and Non-conformity Reports",
+      level: "B2",
+      script: "This is a classroom non-conformity example for sample part P-04. The reference is drawing DR-04, revision A. The stated training requirement is that the feature label must be present. The inspection sheet QF-06 shows that the label is missing from the sample record. The report should identify the requirement, the observation and the evidence. No disposition has been assigned in this exercise. The case is for learning how to write a factual report; it does not define a real acceptance criterion or authorize a production decision. Second briefing: The handover concerns training record QA-17. The process sheet is revision B, while the attached classroom summary refers to revision A. This is a document discrepancy. We have not established why the two revisions differ. Please confirm the intended source document with the teacher before continuing the exercise. In the report, identify both references, state that the cause is unknown and keep the original records unchanged.",
+      questions: [
+        { prompt: "Which sample part is discussed?", options: ["P-04", "P-40", "QF-06", "DR-04"], answerIndex: 0, explanation: "The sample part is P-04." },
+        { prompt: "What is missing from the sample record?", options: ["The feature label", "The date", "The drawing title", "The revision letter"], answerIndex: 0, explanation: "The inspection sheet shows that the feature label is missing." },
+        { prompt: "Which inspection sheet is mentioned?", options: ["QF-06", "QA-17", "TRN-EL-022", "DR-04"], answerIndex: 0, explanation: "The inspection sheet reference is QF-06." },
+        { prompt: "What discrepancy appears in the second briefing?", options: ["Revision B versus revision A", "Two missing part numbers", "A missing date", "A confirmed production defect"], answerIndex: 0, explanation: "The process sheet is B and the summary is A." },
+        { prompt: "Has the reason for the revision difference been established?", options: ["Yes", "No"], answerIndex: 1, explanation: "The speaker says the reason has not been established." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l07",
+      title: "Lesson 7 — Document Revisions and Configuration Control",
+      level: "B2",
+      script: "Here is the change summary for training document TRN-ENG-031. The previous classroom version was revision C, issued on the fourth of April. The updated classroom version is revision D, issued on the eighteenth of April. The change adds a document-reference field to the training layout. This is a change to the training document, not a statement that an aircraft system has been modified. The change log identifies the two versions. If a related classroom record still shows revision C, note the discrepancy and ask the document owner which version is intended for the exercise. Do not select a version by date alone.",
+      questions: [
+        { prompt: "Which document is being discussed?", options: ["TRN-ENG-031", "TRN-ENG-013", "TRN-EL-031", "TRN-QA-031"], answerIndex: 0, explanation: "The document reference is TRN-ENG-031." },
+        { prompt: "What was the previous revision?", options: ["A", "B", "C", "D"], answerIndex: 2, explanation: "The previous classroom version was revision C." },
+        { prompt: "What is the updated revision?", options: ["A", "B", "C", "D"], answerIndex: 3, explanation: "The updated version is revision D." },
+        { prompt: "What does the change add?", options: ["A document-reference field", "A new aircraft component", "A maintenance interval", "A production setting"], answerIndex: 0, explanation: "The change adds a reference field to the training layout." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l08",
+      title: "Lesson 8 — Shift Handover and Technical Correspondence",
+      level: "B2",
+      script: "This is the handover for training package TP-09. The comparison of the two document headers has been completed. One item remains outstanding: the classroom records refer to revisions C and D of TRN-ENG-031. The intended version has not yet been confirmed. The course tutor is the action owner for this clarification. Please keep the discrepancy visible in the handover note and acknowledge receipt of the message. No operational task or technical approval is being transferred; this is a classroom document-review exercise.",
+      questions: [
+        { prompt: "What is the training package reference?", options: ["TP-09", "TP-90", "TRN-09", "TP-19"], answerIndex: 0, explanation: "The handover is for TP-09." },
+        { prompt: "What remains outstanding?", options: ["Confirmation of the intended document revision", "A physical inspection", "A production approval", "A component delivery"], answerIndex: 0, explanation: "The intended version has not yet been confirmed." },
+        { prompt: "Who owns the clarification action?", options: ["The course tutor", "The passenger service manager", "The CNC operator", "The document printer"], answerIndex: 0, explanation: "The course tutor is named as the action owner." },
+        { prompt: "What should remain visible in the handover note?", options: ["The discrepancy", "A guessed revision", "A repair decision", "A production release"], answerIndex: 0, explanation: "The discrepancy should remain visible until clarified." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l09",
+      title: "Lesson 9 — Teamwork Across Engineering Specialisms",
+      level: "B2+",
+      script: "Let us review the training information pack. The technologist has prepared the process overview, but the material note still needs clarification. The programmer has found that one sample data field uses a different label in the summary. The electrician has identified two different labels in the classroom system glossary; the intended wording is not confirmed. The CNC operator has checked the training drawing and reports that the feature identifier is missing from the example. These are four separate observations, not one confirmed technical fault. We will list each source, keep the questions open and refer them to the relevant document owners. Before closing the meeting, each person will read back their action.",
+      questions: [
+        { prompt: "How many professional roles contribute observations?", options: ["Two", "Three", "Four", "Five"], answerIndex: 2, explanation: "The technologist, programmer, electrician and CNC operator contribute." },
+        { prompt: "What does the programmer identify?", options: ["A different label in a sample data field", "A missing drawing feature", "A material note", "A safety boundary"], answerIndex: 0, explanation: "The programmer reports a different field label." },
+        { prompt: "What is missing from the training drawing?", options: ["The feature identifier", "The date", "The revision history", "The material certificate"], answerIndex: 0, explanation: "The CNC operator reports a missing feature identifier." },
+        { prompt: "How should the team treat the observations?", options: ["As four separate open observations", "As one confirmed technical fault", "As an approval decision", "As reasons to delete the records"], answerIndex: 0, explanation: "The speaker explicitly distinguishes four observations from one confirmed fault." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l10",
+      title: "Lesson 10 — Interpreting Drawings, Tables and Trend Charts",
+      level: "B2+",
+      script: "This chart presents two fictional data series over six weeks. The horizontal axis shows the week number, and the vertical axis shows arbitrary index units. Series A rises from ten units in Week 1 to a peak of fourteen in Week 4. It then falls to twelve in Week 5 before increasing slightly to thirteen. Series B increases more gradually and reaches eleven units in Week 5, then falls to ten. Series A remains above Series B throughout the period. The chart describes the pattern, but it does not explain the cause. The source is a classroom dataset, and the values must not be interpreted as real engineering measurements. Second briefing: The team has completed the first review of the classroom information pack. The document register identifies revision D of TRN-ENG-031 as the updated training version, but one attached summary still refers to revision C. The technologist has supplied the process overview, and the programmer has supplied the sample data dictionary. The data dictionary contains one field label that needs confirmation. The electrician’s glossary and the CNC drawing example are included, but the drawing identifier remains an open question. The team will record each discrepancy, identify the relevant document owner and update the handover note after confirmation.",
+      questions: [
+        { prompt: "How many weeks are shown in the chart?", options: ["Four", "Five", "Six", "Seven"], answerIndex: 2, explanation: "The chart covers six weeks." },
+        { prompt: "When does Series A reach its peak?", options: ["Week 1", "Week 3", "Week 4", "Week 6"], answerIndex: 2, explanation: "Series A reaches fourteen units in Week 4." },
+        { prompt: "What happens to Series A in Week 5?", options: ["It rises to sixteen", "It falls to twelve", "It remains at fourteen", "It falls to ten"], answerIndex: 1, explanation: "Series A falls to twelve in Week 5." },
+        { prompt: "Does the chart explain the cause of the pattern?", options: ["Yes", "No"], answerIndex: 1, explanation: "The speaker says the chart describes the pattern but does not explain its cause." },
+        { prompt: "Which revision is identified as the updated classroom version?", options: ["A", "B", "C", "D"], answerIndex: 3, explanation: "The document register identifies revision D." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l11",
+      title: "Lesson 11 — Risk Assessment and Safety Reporting",
+      level: "B2+",
+      script: "I would like to report a concern from the simulated training area. In photograph SAFE-TR-05, the marked boundary is not visible. I cannot confirm from the photograph whether the boundary was missing in the room or simply outside the camera view. I informed the teacher and kept the original image with the classroom record. No risk rating has been assigned in this language exercise. The teacher will review the training setup under the institution’s local safety arrangements. I am reporting what I observed, not making a conclusion about the cause.",
+      questions: [
+        { prompt: "What is not visible in photograph SAFE-TR-05?", options: ["The marked boundary", "A document title", "A data label", "A revision letter"], answerIndex: 0, explanation: "The marked boundary is not visible in the photograph." },
+        { prompt: "Can the speaker confirm why it is not visible?", options: ["Yes, it was removed", "No, it may be outside the camera view", "Yes, the room was empty", "No, the photo is deleted"], answerIndex: 1, explanation: "The speaker cannot distinguish absence from camera framing." },
+        { prompt: "Who was informed?", options: ["The teacher", "The document supplier", "The passenger", "The data owner"], answerIndex: 0, explanation: "The speaker informed the teacher." },
+        { prompt: "Has a risk rating been assigned?", options: ["Yes", "No"], answerIndex: 1, explanation: "No risk rating is assigned in the language exercise." }
+      ]
+    },
+    {
+      id: "en-c05-s01-l12",
+      title: "Lesson 12 — Integrated Technical Briefing: From Task to Report",
+      level: "B2+",
+      script: "Good morning. This briefing summarizes the fictional Training Information Pack Review, reference TP-15. Our objective was to review the clarity and consistency of four classroom documents. We compared their references, labels and sample information. The review identified one process-sheet note that needs clarification and one data field with inconsistent labels. We also found two terms for the same sample concept in the glossary, while the training drawing example does not show its feature identifier. The scope excluded physical inspection, equipment operation, production approval and aircraft maintenance. The source pack contains fictional information only. We recommend recording each finding, assigning a document owner to clarify it and updating the handover after confirmation. No operational status or approval decision has been made. Follow-up: The team has completed the language and document-consistency review for TP-15. The glossary owner has confirmed the preferred classroom term. Two items remain open: the process-sheet note and the missing feature identifier in the training drawing. The technologist and CNC operator will refer those questions to the relevant document owners. The final report will state that the review covered classroom documents only. It did not include physical inspection, equipment operation, production approval or aircraft maintenance.",
+      questions: [
+        { prompt: "What is the project reference?", options: ["TP-15", "TP-51", "TRN-15", "TP-05"], answerIndex: 0, explanation: "The fictional review is TP-15." },
+        { prompt: "How many classroom documents were reviewed?", options: ["Two", "Three", "Four", "Five"], answerIndex: 2, explanation: "The review covered four classroom documents." },
+        { prompt: "Which item has a missing identifier?", options: ["The training drawing feature", "The glossary owner", "The process sheet date", "The data dictionary title"], answerIndex: 0, explanation: "The training drawing example lacks its feature identifier." },
+        { prompt: "Which activities were excluded?", options: ["Physical inspection, equipment operation, production approval and aircraft maintenance", "Vocabulary review and listening", "Document comparison and reporting", "Glossary clarification"], answerIndex: 0, explanation: "The speaker explicitly lists the excluded operational activities." },
+        { prompt: "What remains open after the follow-up?", options: ["The process-sheet note and missing drawing feature identifier", "The glossary term only", "The project reference", "The number of documents"], answerIndex: 0, explanation: "Two items remain open." }
+      ]
+    },
   ];
 
   function el(tag, cls, text) {
