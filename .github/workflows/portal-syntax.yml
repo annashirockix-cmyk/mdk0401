@@ -26,6 +26,7 @@ jobs:
           done
           echo "Checking Google Apps Script backend"
           node --check < Code.gs
+          node --check scripts/gas-read-load-test.mjs
       - name: Check notification center contract
         run: node scripts/check-notification-contract.mjs
       - name: Check assignment workflow
