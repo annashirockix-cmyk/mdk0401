@@ -1222,7 +1222,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   const sw = read("service-worker.js");
   assert.match(server, /case "savemanualgrade": result = saveManualGrade_\(data\); break;/);
   const start = server.indexOf("function saveManualGrade_(data)");
-  const end = server.indexOf("\\nfunction gradeWrittenResult_", start);
+  const end = server.indexOf("function gradeWrittenResult_", start);
   assert.ok(start >= 0 && end > start);
   const save = server.slice(start, end);
   assert.match(save, /editor_\(data,courseId\)/);
