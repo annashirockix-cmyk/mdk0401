@@ -1394,3 +1394,20 @@ test("English VPR and semester grades cannot be forged through the generic saveR
     "only the server-verified VPR submission may pass the internal trust flag");
   assert.ok(!bank.includes("data.serverVerifiedEnglishVpr"));
 });
+
+
+test("legacy student payloads cannot restore protected English exam grades", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function isProtectedAssessment_(testId,courseId,bankMap)");
+  const end = server.indexOf("function saveStudent_(data)", start + 20);
+  assert.ok(start >= 0 && end > start);
+  const guard = server.slice(start, end);
+  assert.ok(guard.includes("/^english_vpr_/.test(id)"));
+  assert.ok(guard.includes("/^english_semester_/.test(id)"));
+  const saveStart = server.indexOf("function saveStudent_(data)");
+  const saveEnd = server.indexOf("function getStudents_(data)", saveStart + 20);
+  const save = server.slice(saveStart, saveEnd);
+  assert.ok(save.includes("isProtectedAssessment_(testId"));
+  const studentResults = server.slice(server.indexOf("function getMyCourseResults_(data)"));
+  assert.ok(studentResults.includes("isProtectedAssessment_(testId,courseId,protectedQuestionBankMap_())"));
+});
