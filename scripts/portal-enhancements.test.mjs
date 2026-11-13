@@ -1197,3 +1197,18 @@ test("material-science and SPRUT-TP visuals are limited to topics that match the
   assert.match(workbooks, /Микроструктура стали 20Х/);
   assert.match(workbooks, /Пример производственного оборудования, для которого разрабатывают технологический маршрут/);
 });
+
+test("student average uses only the latest attempt per course and assessment", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function getMyCourseResults_(data)");
+  const end = server.indexOf("\\n/* ---------- Assignments and student submissions ---------- */", start);
+  assert.ok(start >= 0 && end > start);
+  const fn = server.slice(start, end);
+  assert.match(fn, /const latestByAssessment=Object\\.create\\(null\\)/);
+  assert.match(fn, /JSON\\.stringify\\(\\[normalizeCourseId_\\(x\\.courseId\\),String\\(x\\.testId\\|\\|\\"\\"\\)\\]\\)/);
+  assert.match(fn, /if\\(!previous\\|\\|String\\(x\\.finishedAt\\|\\|\\"\\"\\)>=String\\(previous\\.finishedAt\\|\\|\\"\\"\\)\\)latestByAssessment\\[key\\]=x/);
+  assert.match(fn, /const latestResults=Object\\.keys\\(latestByAssessment\\)/);
+  assert.match(fn, /const graded=latestResults\\.filter/);
+  assert.match(fn, /completed:latestResults\\.length/);
+  assert.match(fn, /results:list,summary/);
+});
