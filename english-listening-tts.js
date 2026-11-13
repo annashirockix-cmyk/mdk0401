@@ -179,6 +179,7 @@
     voiceSelect.addEventListener("change", function () {
       currentVoice = selectedVoice();
       if (active) {
+        runToken += 1;
         window.speechSynthesis.cancel();
         completedPlays = 0;
         speakNext();
