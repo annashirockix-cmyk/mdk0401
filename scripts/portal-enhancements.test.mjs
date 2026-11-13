@@ -1479,7 +1479,7 @@ test("custom materials reload for the current student identity after a staff ses
   const app = read("app.js");
   const server = read("Code.gs");
   const start = app.indexOf("window.loadGlobalCustomContent = function(callback)");
-  const end = app.indexOf("// ==========================================\\n// 3. СОХРАНЕНИЕ ОТВЕТОВ", start);
+  const end = app.indexOf("window.savePracAnswer = function(code)", start + 20);
   assert.ok(start >= 0 && end > start);
   const loader = app.slice(start, end);
   assert.ok(loader.includes("requestId === window._customContentLoadRequestId"));
