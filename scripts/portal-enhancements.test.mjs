@@ -1283,3 +1283,27 @@ test("English exam tab shows only the two final tracks while CEFR lab stays sepa
   assert.match(read("index.html"), /english-proficiency-lab\.js\?v=5/);
   assert.match(read("service-worker.js"), /portal-cache-v350/);
 });
+
+
+test("teacher course and role permission changes share the content lock", () => {
+ const server = read("Code.gs");
+ [
+  ["setTeacherCourses_", "setUserRole_"],
+  ["setUserRole_", "promoteUserToAdmin"]
+ ].forEach(([name, next]) => {
+  const start = server.indexOf("function " + name + "(data)");
+  const end = server.indexOf("\nfunction " + next + "(data)", start) >= 0
+   ? server.indexOf("\nfunction " + next + "(data)", start)
+   : server.indexOf("\n/**", start);
+  assert.ok(start >= 0 && end > start, name + " function boundaries must exist");
+  const fn = server.slice(start, end);
+  const lock = fn.indexOf("LockService.getScriptLock()");
+  const wait = fn.indexOf("lock.waitLock(10000)");
+  const authorization = fn.indexOf("admin_(data)");
+  const write = fn.indexOf("writeUserFields_(");
+  const release = fn.indexOf("lock.releaseLock()");
+  assert.ok(lock >= 0 && wait > lock && authorization > wait, name + " must re-check admin access under the shared lock");
+  assert.ok(write > authorization, name + " must update permissions while holding the lock");
+  assert.ok(release > write && fn.includes("finally {"), name + " must release the lock on success or error");
+ });
+});
