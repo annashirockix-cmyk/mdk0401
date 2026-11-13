@@ -5848,7 +5848,1004 @@
         ]
       }
     ],
+    [
+      {
+        "id": "en-c04-s01-l01",
+        "title": "Course 4 · Semester 1 · Lesson 1 — Atoms, Conductors, Semiconductors and Insulators",
+        "level": "B1+–B2",
+        "script": "All materials are made of atoms. In conductors such as copper and aluminium, electric charge can move easily. Insulators such as rubber and glass strongly resist current. Semiconductors have properties between conductors and insulators, and their behaviour can be controlled. This makes them important in electronic devices. Engineers select materials according to electrical properties, operating conditions and component requirements.",
+        "questions": [
+          {
+            "prompt": "Which materials are common conductors?",
+            "options": [
+              "Copper and aluminium",
+              "Rubber and glass",
+              "Wood and paper",
+              "Ceramic and air"
+            ],
+            "answerIndex": 0,
+            "explanation": "Copper and aluminium conduct current."
+          },
+          {
+            "prompt": "Why are rubber and glass insulators?",
+            "options": [
+              "They produce current",
+              "They strongly resist current",
+              "They contain no atoms",
+              "They are magnetic"
+            ],
+            "answerIndex": 1,
+            "explanation": "Insulators resist electric current."
+          },
+          {
+            "prompt": "Where are semiconductors important?",
+            "options": [
+              "Fuel tanks",
+              "Hydraulic pipes",
+              "Electronic devices",
+              "Paper documents"
+            ],
+            "answerIndex": 2,
+            "explanation": "Semiconductors are used in electronic devices."
+          },
+          {
+            "prompt": "How should engineers select a material?",
+            "options": [
+              "By colour only",
+              "By price only",
+              "By name",
+              "By properties and operating requirements"
+            ],
+            "answerIndex": 3,
+            "explanation": "Selection depends on properties and requirements."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l02",
+        "title": "Course 4 · Semester 1 · Lesson 2 — Types of Current and Units",
+        "level": "B1+–B2",
+        "script": "Direct current flows in one direction, while alternating current changes direction periodically. Current is measured in amperes, voltage in volts and resistance in ohms. A multimeter can measure several quantities, but the operator must select the correct function and range. The instrument must be used according to its instructions. A recorded value should always include its unit because a number without a unit may be difficult to interpret.",
+        "questions": [
+          {
+            "prompt": "How does direct current flow?",
+            "options": [
+              "In one direction",
+              "In random directions",
+              "Only through air",
+              "Without charge"
+            ],
+            "answerIndex": 0,
+            "explanation": "Direct current flows in one direction."
+          },
+          {
+            "prompt": "What is the unit of voltage?",
+            "options": [
+              "Ampere",
+              "Volt",
+              "Ohm",
+              "Watt-hour"
+            ],
+            "answerIndex": 1,
+            "explanation": "Voltage is measured in volts."
+          },
+          {
+            "prompt": "What should an operator select on a multimeter?",
+            "options": [
+              "Display colour",
+              "Random setting",
+              "Correct function and range",
+              "Longest cable"
+            ],
+            "answerIndex": 2,
+            "explanation": "The function and range must match the measurement."
+          },
+          {
+            "prompt": "Why record a unit with a value?",
+            "options": [
+              "To decorate a table",
+              "To replace the instrument",
+              "To make a report longer",
+              "To make the reading interpretable"
+            ],
+            "answerIndex": 3,
+            "explanation": "A value without a unit can be ambiguous."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l03",
+        "title": "Course 4 · Semester 1 · Lesson 3 — Circuit Components",
+        "level": "B1+–B2",
+        "script": "A simple circuit contains a power source, conductors and a load. A switch opens or closes the circuit. A fuse interrupts excessive current. A resistor limits current or produces a voltage drop. A capacitor stores energy in an electric field, while an inductor stores energy in a magnetic field. Components have ratings that must be respected. Before replacing a component, a technician checks its identification, specification and suitability for the circuit.",
+        "questions": [
+          {
+            "prompt": "What does a switch do?",
+            "options": [
+              "Opens or closes a circuit",
+              "Stores fuel",
+              "Measures temperature",
+              "Changes wire colour"
+            ],
+            "answerIndex": 0,
+            "explanation": "A switch controls whether a circuit is open or closed."
+          },
+          {
+            "prompt": "What is the function of a fuse?",
+            "options": [
+              "Store energy",
+              "Interrupt excessive current",
+              "Increase resistance",
+              "Display voltage"
+            ],
+            "answerIndex": 1,
+            "explanation": "A fuse protects against excessive current."
+          },
+          {
+            "prompt": "Where does a capacitor store energy?",
+            "options": [
+              "Magnetic field",
+              "Mechanical spring",
+              "Electric field",
+              "Fuel chamber"
+            ],
+            "answerIndex": 2,
+            "explanation": "A capacitor stores energy in an electric field."
+          },
+          {
+            "prompt": "What should be checked before replacing a component?",
+            "options": [
+              "Colour only",
+              "Supplier address",
+              "Technician shift",
+              "Identification and specification"
+            ],
+            "answerIndex": 3,
+            "explanation": "The component must suit the circuit."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l04",
+        "title": "Course 4 · Semester 1 · Lesson 4 — Series and Parallel Circuits",
+        "level": "B1+–B2",
+        "script": "In a series circuit, components are connected along one path and the same current passes through each component. If one component opens the circuit, current stops throughout the path. In a parallel circuit, components are connected on separate branches. Each branch has the same voltage, while total current is divided between branches. Many practical systems combine both arrangements. A circuit diagram helps a technician identify the connection before testing.",
+        "questions": [
+          {
+            "prompt": "How many paths are in a series circuit?",
+            "options": [
+              "One",
+              "Two or more branches",
+              "No path",
+              "Unlimited paths"
+            ],
+            "answerIndex": 0,
+            "explanation": "A series circuit has one path."
+          },
+          {
+            "prompt": "What happens if one series component opens?",
+            "options": [
+              "Other branches continue",
+              "Current stops in the whole path",
+              "Voltage becomes mechanical energy",
+              "The circuit becomes parallel"
+            ],
+            "answerIndex": 1,
+            "explanation": "An open component interrupts the single path."
+          },
+          {
+            "prompt": "What is the same across parallel branches?",
+            "options": [
+              "Current",
+              "Resistance",
+              "Voltage",
+              "Power rating"
+            ],
+            "answerIndex": 2,
+            "explanation": "Parallel branches have the same voltage."
+          },
+          {
+            "prompt": "Why use a circuit diagram?",
+            "options": [
+              "Replace all tests",
+              "Calculate staff hours",
+              "Identify component colour",
+              "Identify the arrangement before testing"
+            ],
+            "answerIndex": 3,
+            "explanation": "The diagram helps identify the circuit arrangement."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l05",
+        "title": "Course 4 · Semester 1 · Lesson 5 — Conventional Power Plants",
+        "level": "B1+–B2",
+        "script": "Conventional power plants convert energy from a fuel or another source into electricity. In a thermal station, fuel heats water and produces steam. The steam turns a turbine connected to a generator. Some plants use gas turbines, while hydroelectric stations use moving water. Each technology has advantages and limitations involving efficiency, cost, emissions and location. Engineers compare these factors when selecting a power source.",
+        "questions": [
+          {
+            "prompt": "What turns a generator in a steam power station?",
+            "options": [
+              "A turbine",
+              "A battery",
+              "A transformer alone",
+              "A cooling fan"
+            ],
+            "answerIndex": 0,
+            "explanation": "Steam turns a turbine connected to a generator."
+          },
+          {
+            "prompt": "What drives turbines in a hydroelectric station?",
+            "options": [
+              "Compressed air",
+              "Moving water",
+              "Coal dust",
+              "Solar cells"
+            ],
+            "answerIndex": 1,
+            "explanation": "Moving water drives the turbine."
+          },
+          {
+            "prompt": "Which factors are compared?",
+            "options": [
+              "Name only",
+              "Colour only",
+              "Efficiency, cost, emissions and location",
+              "Staff uniforms"
+            ],
+            "answerIndex": 2,
+            "explanation": "These factors influence the choice of power source."
+          },
+          {
+            "prompt": "What does a generator produce?",
+            "options": [
+              "Steam",
+              "Fuel",
+              "Mechanical drawings",
+              "Electrical energy"
+            ],
+            "answerIndex": 3,
+            "explanation": "A generator produces electrical energy."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l06",
+        "title": "Course 4 · Semester 1 · Lesson 6 — Alternative Power Sources",
+        "level": "B1+–B2",
+        "script": "Renewable energy sources include solar, wind, hydro and geothermal power. Solar panels convert light into electricity. Wind turbines use moving air to rotate a generator. Hydroelectric systems use flowing or falling water. Output may depend on weather, season and location. Energy storage and grid management help balance supply and demand. Engineers assess available resources, environmental effects, installation costs and connection to the electrical grid.",
+        "questions": [
+          {
+            "prompt": "What do solar panels convert?",
+            "options": [
+              "Light into electrical energy",
+              "Wind into heat",
+              "Water into fuel",
+              "Sound into movement"
+            ],
+            "answerIndex": 0,
+            "explanation": "Solar panels convert light into electricity."
+          },
+          {
+            "prompt": "What rotates a wind turbine?",
+            "options": [
+              "Battery",
+              "Moving air",
+              "Steam pipe",
+              "Hand tool"
+            ],
+            "answerIndex": 1,
+            "explanation": "Wind turns the turbine blades."
+          },
+          {
+            "prompt": "Why can renewable output vary?",
+            "options": [
+              "Generator has no parts",
+              "Grid is always disconnected",
+              "Weather, season and location",
+              "Panels change material"
+            ],
+            "answerIndex": 2,
+            "explanation": "Output depends on environmental conditions."
+          },
+          {
+            "prompt": "What do engineers assess?",
+            "options": [
+              "Project name only",
+              "Number of panels only",
+              "Installation date only",
+              "Resources, effects, cost and grid connection"
+            ],
+            "answerIndex": 3,
+            "explanation": "All these factors matter."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l07",
+        "title": "Course 4 · Semester 1 · Lesson 7 — Main Inventions in Electronics",
+        "level": "B1+–B2",
+        "script": "The vacuum tube made early electronic amplification and switching possible. The transistor was smaller, more reliable and required less power. Integrated circuits placed many components on a small semiconductor chip. Microprocessors made programmable control available in many products. These inventions supported computers, mobile devices and modern automation. Engineers study component history to understand changes in size, power consumption, reliability and processing capability.",
+        "questions": [
+          {
+            "prompt": "What improved with the transistor?",
+            "options": [
+              "Size, reliability and power use",
+              "Fuel capacity",
+              "Wing strength",
+              "Water pressure"
+            ],
+            "answerIndex": 0,
+            "explanation": "Transistors were smaller, more reliable and used less power."
+          },
+          {
+            "prompt": "What does an integrated circuit contain?",
+            "options": [
+              "One wire",
+              "Many components on a semiconductor chip",
+              "Mechanical gears",
+              "Hydraulic pump"
+            ],
+            "answerIndex": 1,
+            "explanation": "Integrated circuits place components on a chip."
+          },
+          {
+            "prompt": "What enabled programmable control in many products?",
+            "options": [
+              "Vacuum flask",
+              "Relay cabinet only",
+              "Microprocessors",
+              "Paper diagram"
+            ],
+            "answerIndex": 2,
+            "explanation": "Microprocessors enabled programmable control."
+          },
+          {
+            "prompt": "Why study component history?",
+            "options": [
+              "Memorise dates only",
+              "Avoid modern systems",
+              "Replace practical training",
+              "Understand changes in size, power and capability"
+            ],
+            "answerIndex": 3,
+            "explanation": "History explains changes in modern performance."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l08",
+        "title": "Course 4 · Semester 1 · Lesson 8 — Electronic Circuits",
+        "level": "B1+–B2",
+        "script": "An electronic circuit processes signals using resistors, capacitors, diodes and transistors. A diode allows current to pass mainly in one direction. A transistor can act as a switch or amplifier. Printed circuit boards support components and connect them through conductive tracks. Circuit diagrams use standard symbols so engineers can understand a design without seeing the physical board. During inspection, a technician checks markings, visible damage and reference information before approved tests.",
+        "questions": [
+          {
+            "prompt": "What does a diode do?",
+            "options": [
+              "Allows current mainly in one direction",
+              "Stores mechanical energy",
+              "Measures distance",
+              "Produces compressed air"
+            ],
+            "answerIndex": 0,
+            "explanation": "A diode conducts mainly in one direction."
+          },
+          {
+            "prompt": "What can a transistor do?",
+            "options": [
+              "Filter fuel",
+              "Act as a switch or amplifier",
+              "Measure mass",
+              "Protect a hydraulic line"
+            ],
+            "answerIndex": 1,
+            "explanation": "A transistor can switch or amplify signals."
+          },
+          {
+            "prompt": "What connects components on a printed circuit board?",
+            "options": [
+              "Plastic covers",
+              "Screws only",
+              "Conductive tracks",
+              "Cooling water"
+            ],
+            "answerIndex": 2,
+            "explanation": "Conductive tracks connect components."
+          },
+          {
+            "prompt": "Why use standard circuit symbols?",
+            "options": [
+              "Decorate drawings",
+              "Replace all inspections",
+              "Identify the owner",
+              "Help engineers understand a design"
+            ],
+            "answerIndex": 3,
+            "explanation": "Standard symbols make diagrams readable."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l09",
+        "title": "Course 4 · Semester 1 · Lesson 9 — Mobile Phones and Wireless Communication",
+        "level": "B1+–B2",
+        "script": "A mobile phone communicates with a network using radio signals. It sends and receives information through an antenna and a nearby base station. Digital networks carry voice, messages and data. Connection quality may depend on distance, obstacles, interference and network capacity. Wireless communication is also used in navigation, telemetry and industrial monitoring. In technical work, staff use approved communication channels and protect confidential information when sending files or service records.",
+        "questions": [
+          {
+            "prompt": "How does a mobile phone communicate with a network?",
+            "options": [
+              "Radio signals",
+              "Fuel pipe",
+              "Mechanical cable only",
+              "Air pressure"
+            ],
+            "answerIndex": 0,
+            "explanation": "Mobile phones use radio signals."
+          },
+          {
+            "prompt": "What sends and receives radio signals?",
+            "options": [
+              "Battery cover",
+              "Antenna",
+              "Loudspeaker only",
+              "Screen"
+            ],
+            "answerIndex": 1,
+            "explanation": "The antenna transmits and receives signals."
+          },
+          {
+            "prompt": "What can affect connection quality?",
+            "options": [
+              "Phone colour",
+              "Handwriting",
+              "Distance, obstacles and interference",
+              "Paper size"
+            ],
+            "answerIndex": 2,
+            "explanation": "These factors can affect signal quality."
+          },
+          {
+            "prompt": "What should staff protect when sending records?",
+            "options": [
+              "Phone case",
+              "Screen brightness",
+              "Wallpaper",
+              "Confidential information"
+            ],
+            "answerIndex": 3,
+            "explanation": "Confidential information must be protected."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l01",
+        "title": "Course 4 · Semester 2 · Lesson 1 — Means of Transmission",
+        "level": "B1+–B2",
+        "script": "Communication systems transfer information through different media. Copper cables carry electrical signals and are common over short and medium distances. Optical fibre carries pulses of light and supports high data rates over long distances. Radio links transmit information through the air and are useful when cables are impractical. Each medium has limits involving bandwidth, distance, interference, cost and security. Engineers select a medium according to system requirements and the operating environment.",
+        "questions": [
+          {
+            "prompt": "What do copper cables carry?",
+            "options": [
+              "Electrical signals",
+              "Light pulses only",
+              "Water pressure",
+              "Mechanical vibration"
+            ],
+            "answerIndex": 0,
+            "explanation": "Copper cables carry electrical signals."
+          },
+          {
+            "prompt": "What does optical fibre carry?",
+            "options": [
+              "Fuel",
+              "Pulses of light",
+              "Sound in air",
+              "Magnetic tools"
+            ],
+            "answerIndex": 1,
+            "explanation": "Optical fibre transmits light."
+          },
+          {
+            "prompt": "When are radio links useful?",
+            "options": [
+              "Inside metal pipes only",
+              "For printed documents only",
+              "When cables are impractical",
+              "When no data is sent"
+            ],
+            "answerIndex": 2,
+            "explanation": "Radio links work where cables are impractical."
+          },
+          {
+            "prompt": "What guides the choice of medium?",
+            "options": [
+              "Colour",
+              "Brand",
+              "Installation date",
+              "Performance and environment"
+            ],
+            "answerIndex": 3,
+            "explanation": "Selection depends on performance and environment."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l02",
+        "title": "Course 4 · Semester 2 · Lesson 2 — Networks and Topologies",
+        "level": "B1+–B2",
+        "script": "A computer network connects devices so they can exchange information and share resources. In a star topology, devices connect to a central switch. In a bus topology, devices share one main communication line. In a ring topology, each device connects to two neighbours. The topology affects installation, fault isolation and performance. A network diagram shows devices, links and key connections. When a connection fails, technicians use the diagram and approved diagnostic tools to identify the affected segment.",
+        "questions": [
+          {
+            "prompt": "Where do devices connect in a star topology?",
+            "options": [
+              "To a central switch",
+              "To one shared ring",
+              "Directly to every device",
+              "To a generator"
+            ],
+            "answerIndex": 0,
+            "explanation": "A star topology uses a central connection point."
+          },
+          {
+            "prompt": "What do devices share in a bus topology?",
+            "options": [
+              "Central screen",
+              "One main communication line",
+              "Single keyboard",
+              "Printer tray"
+            ],
+            "answerIndex": 1,
+            "explanation": "A bus topology uses one main line."
+          },
+          {
+            "prompt": "What can a network diagram show?",
+            "options": [
+              "Staff salaries",
+              "Weather",
+              "Devices and links",
+              "Maintenance costs only"
+            ],
+            "answerIndex": 2,
+            "explanation": "The diagram represents devices and connections."
+          },
+          {
+            "prompt": "What helps locate a failed segment?",
+            "options": [
+              "Guesswork",
+              "Replacing every device",
+              "Changing network names",
+              "Diagram and approved diagnostic tools"
+            ],
+            "answerIndex": 3,
+            "explanation": "The diagram and tools support fault isolation."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l03",
+        "title": "Course 4 · Semester 2 · Lesson 3 — Computer Hardware and Software",
+        "level": "B1+–B2",
+        "script": "A computer system includes hardware and software. Hardware consists of physical components such as the processor, memory, storage and input or output devices. Software contains instructions that tell hardware what to do. The operating system manages resources and provides services for applications. A fault may be caused by a physical component, incorrect settings or software. Technicians collect error messages and system information before changing a configuration or replacing hardware.",
+        "questions": [
+          {
+            "prompt": "Which item is hardware?",
+            "options": [
+              "Processor",
+              "Operating system",
+              "Spreadsheet application",
+              "Device driver"
+            ],
+            "answerIndex": 0,
+            "explanation": "The processor is a physical component."
+          },
+          {
+            "prompt": "What does software contain?",
+            "options": [
+              "Metal parts",
+              "Instructions for hardware",
+              "Cooling liquid",
+              "Network cables"
+            ],
+            "answerIndex": 1,
+            "explanation": "Software provides instructions."
+          },
+          {
+            "prompt": "What does an operating system manage?",
+            "options": [
+              "Aircraft fuel",
+              "Workshop lighting",
+              "Computer resources",
+              "Tool wear"
+            ],
+            "answerIndex": 2,
+            "explanation": "It manages computer resources."
+          },
+          {
+            "prompt": "What should technicians collect before changes?",
+            "options": [
+              "Computer colour",
+              "Staff photograph",
+              "Unrelated invoice",
+              "Error messages and system information"
+            ],
+            "answerIndex": 3,
+            "explanation": "Evidence should be collected first."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l04",
+        "title": "Course 4 · Semester 2 · Lesson 4 — USB Storage and Types of Computers",
+        "level": "B1+–B2",
+        "script": "USB flash drives provide portable data storage and transfer files between compatible devices. Before using removable storage at work, staff follow the security policy and check the file source. Computers are designed for different tasks. Desktop computers are common in offices, laptops are portable, servers provide services to other devices and embedded computers control dedicated equipment. The correct type depends on processing needs, environment, reliability and maintenance requirements.",
+        "questions": [
+          {
+            "prompt": "What is a USB flash drive used for?",
+            "options": [
+              "Portable data storage and transfer",
+              "Measuring voltage",
+              "Cooling a processor",
+              "Generating electricity"
+            ],
+            "answerIndex": 0,
+            "explanation": "USB drives store and transfer files."
+          },
+          {
+            "prompt": "What should staff check before using removable storage?",
+            "options": [
+              "Colour",
+              "Security policy and file source",
+              "Desk size",
+              "Monitor brand"
+            ],
+            "answerIndex": 1,
+            "explanation": "Workplace policy and source must be checked."
+          },
+          {
+            "prompt": "What does a server provide?",
+            "options": [
+              "Portable screen",
+              "Aircraft sensor",
+              "Services to other devices",
+              "Mechanical power"
+            ],
+            "answerIndex": 2,
+            "explanation": "Servers provide services over a network."
+          },
+          {
+            "prompt": "How should a computer type be selected?",
+            "options": [
+              "Appearance only",
+              "Price alone",
+              "Brand name",
+              "Task and operating requirements"
+            ],
+            "answerIndex": 3,
+            "explanation": "Selection depends on workload and environment."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l05",
+        "title": "Course 4 · Semester 2 · Lesson 5 — The Internet and Technical Sources",
+        "level": "B1+–B2",
+        "script": "The internet gives engineers access to technical manuals, standards, training materials and manufacturer information. Not every online source is accurate or current. A reliable source identifies its publisher, publication date, document revision and intended audience. Engineers use approved sources for safety-critical decisions and verify that a document applies to the correct equipment configuration. Search results and forum discussions can provide background, but they do not replace controlled maintenance information or authorised procedures.",
+        "questions": [
+          {
+            "prompt": "What can engineers find online?",
+            "options": [
+              "Manuals, standards and training materials",
+              "Entertainment only",
+              "Personal messages only",
+              "Advertisements only"
+            ],
+            "answerIndex": 0,
+            "explanation": "These are examples of technical resources."
+          },
+          {
+            "prompt": "What should a reliable source identify?",
+            "options": [
+              "Author's favourite colour",
+              "Publisher, date and revision",
+              "Reader's address",
+              "Social media password"
+            ],
+            "answerIndex": 1,
+            "explanation": "Source details help assess reliability."
+          },
+          {
+            "prompt": "What should be used for safety-critical decisions?",
+            "options": [
+              "Any search result",
+              "Anonymous forum post",
+              "Approved and applicable sources",
+              "Old copied document"
+            ],
+            "answerIndex": 2,
+            "explanation": "Safety-critical decisions require approved information."
+          },
+          {
+            "prompt": "Do forum discussions replace controlled maintenance data?",
+            "options": [
+              "Always",
+              "If popular",
+              "If easy to read",
+              "No, they do not replace authorised procedures"
+            ],
+            "answerIndex": 3,
+            "explanation": "Background discussion is not a substitute for controlled information."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l06",
+        "title": "Course 4 · Semester 2 · Lesson 6 — Automation and Robotics",
+        "level": "B1+–B2",
+        "script": "Automation uses control systems to operate processes with limited manual intervention. A robot can perform repeated movements, handle components or carry out tasks in a controlled work area. Sensors provide information about position, temperature or the presence of an object. A controller processes signals and sends commands to actuators. Safety systems may include guards, interlocks and emergency stops. Before an automated cell is operated, staff check the work area, safety devices and approved procedure.",
+        "questions": [
+          {
+            "prompt": "What can a robot do?",
+            "options": [
+              "Perform repeated movements and handle components",
+              "Approve records",
+              "Replace every sensor",
+              "Generate electricity"
+            ],
+            "answerIndex": 0,
+            "explanation": "Robots can perform repeated industrial tasks."
+          },
+          {
+            "prompt": "What do sensors provide?",
+            "options": [
+              "Decoration",
+              "Information about position or conditions",
+              "Mechanical power",
+              "Printed reports"
+            ],
+            "answerIndex": 1,
+            "explanation": "Sensors supply information to the controller."
+          },
+          {
+            "prompt": "What sends commands to actuators?",
+            "options": [
+              "Storage box",
+              "Paper manual",
+              "Controller",
+              "Warning label"
+            ],
+            "answerIndex": 2,
+            "explanation": "The controller processes signals and sends commands."
+          },
+          {
+            "prompt": "What should staff check before operation?",
+            "options": [
+              "Robot colour",
+              "Production target only",
+              "Operator name only",
+              "Work area, safety devices and procedure"
+            ],
+            "answerIndex": 3,
+            "explanation": "Safety checks precede operation."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l07",
+        "title": "Course 4 · Semester 2 · Lesson 7 — Sensors",
+        "level": "B1+–B2",
+        "script": "A sensor detects a physical condition and converts it into a signal. Temperature sensors monitor heat, pressure sensors measure pressure and proximity sensors detect nearby objects. Some sensors produce analogue signals, while others provide digital outputs. A control unit reads the signal and compares it with configured limits. Incorrect installation, damaged wiring or poor calibration can affect accuracy. When a reading appears unusual, technicians check the sensor identification, connection and calibration records before deciding on further action.",
+        "questions": [
+          {
+            "prompt": "What does a sensor do?",
+            "options": [
+              "Detects a condition and produces a signal",
+              "Stores fuel",
+              "Changes a drawing revision",
+              "Moves a robot by itself"
+            ],
+            "answerIndex": 0,
+            "explanation": "A sensor converts a physical condition into a usable signal."
+          },
+          {
+            "prompt": "Which sensor detects nearby objects?",
+            "options": [
+              "Temperature sensor",
+              "Proximity sensor",
+              "Pressure gauge",
+              "Ammeter"
+            ],
+            "answerIndex": 1,
+            "explanation": "A proximity sensor detects nearby objects."
+          },
+          {
+            "prompt": "What can affect sensor accuracy?",
+            "options": [
+              "Report font",
+              "Room number",
+              "Installation, wiring or calibration",
+              "Handwriting"
+            ],
+            "answerIndex": 2,
+            "explanation": "These factors can affect accuracy."
+          },
+          {
+            "prompt": "What should technicians check when a reading is unusual?",
+            "options": [
+              "Display colour",
+              "Shift time",
+              "Purchase price",
+              "ID, connection and calibration records"
+            ],
+            "answerIndex": 3,
+            "explanation": "These checks help investigate the reading."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l08",
+        "title": "Course 4 · Semester 2 · Lesson 8 — Optical Mouse and Human–Computer Interaction",
+        "level": "B1+–B2",
+        "script": "Human–computer interaction describes how people communicate with digital systems. Common input devices include keyboards, touchscreens, scanners and pointing devices. An optical mouse uses light and an image sensor to detect movement across a surface. The computer translates this movement into pointer movement on the screen. Good interface design uses clear labels, consistent controls and feedback. In technical systems, operators confirm the selected command before starting a process and report unexpected interface behaviour.",
+        "questions": [
+          {
+            "prompt": "What does human–computer interaction describe?",
+            "options": [
+              "How people communicate with digital systems",
+              "How engines produce thrust",
+              "How metal is forged",
+              "How fuel is stored"
+            ],
+            "answerIndex": 0,
+            "explanation": "It describes communication between users and systems."
+          },
+          {
+            "prompt": "How does an optical mouse detect movement?",
+            "options": [
+              "By measuring temperature",
+              "Using light and an image sensor",
+              "By reading sound",
+              "By measuring pressure"
+            ],
+            "answerIndex": 1,
+            "explanation": "It uses light and an image sensor."
+          },
+          {
+            "prompt": "What helps users understand an interface?",
+            "options": [
+              "Hidden commands",
+              "Changing controls on every screen",
+              "Clear labels and feedback",
+              "Unlabelled buttons"
+            ],
+            "answerIndex": 2,
+            "explanation": "Clear controls and feedback improve usability."
+          },
+          {
+            "prompt": "What should operators do before starting a process?",
+            "options": [
+              "Click every option",
+              "Ignore the selected command",
+              "Disable feedback",
+              "Confirm the selected command"
+            ],
+            "answerIndex": 3,
+            "explanation": "The selected command should be confirmed."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l01",
+        "title": "Course 5 · Semester 1 · Lesson 1 — Types of Maintenance",
+        "level": "B1+–B2",
+        "script": "Maintenance activities are often divided into preventive and corrective work. Preventive maintenance is planned to reduce the likelihood of failure and may include inspections, lubrication or scheduled replacement. Corrective maintenance takes place after a fault has been identified. Condition-based maintenance uses information such as vibration, temperature or operating hours to decide when attention is needed. A maintenance plan follows approved requirements and considers equipment history, operating conditions and available resources.",
+        "questions": [
+          {
+            "prompt": "What is the aim of preventive maintenance?",
+            "options": [
+              "Reduce the likelihood of failure",
+              "Wait until systems stop",
+              "Remove records",
+              "Increase unplanned downtime"
+            ],
+            "answerIndex": 0,
+            "explanation": "Preventive maintenance aims to reduce failure risk."
+          },
+          {
+            "prompt": "When does corrective maintenance take place?",
+            "options": [
+              "Before installation",
+              "After a fault is identified",
+              "Only during training",
+              "When no defect exists"
+            ],
+            "answerIndex": 1,
+            "explanation": "Corrective work responds to an identified fault."
+          },
+          {
+            "prompt": "What can condition-based maintenance use?",
+            "options": [
+              "Staff birthdays",
+              "Office furniture",
+              "Vibration and temperature data",
+              "Marketing reports"
+            ],
+            "answerIndex": 2,
+            "explanation": "Condition data supports maintenance decisions."
+          },
+          {
+            "prompt": "What should a maintenance plan consider?",
+            "options": [
+              "Calendar colour",
+              "Equipment brand only",
+              "Paper cost only",
+              "Requirements, history, conditions and resources"
+            ],
+            "answerIndex": 3,
+            "explanation": "Planning combines requirements and practical information."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l02",
+        "title": "Course 5 · Semester 1 · Lesson 2 — Automotive and Equipment Maintenance",
+        "level": "B1+–B2",
+        "script": "A technician inspects a vehicle before it returns to service. The inspection includes fluid levels, visible leaks, tyre condition, warning indicators and safety equipment. The technician records defects and compares them with the manufacturer's service requirements. A worn component is not replaced with an unapproved alternative. After repair, the technician completes required functional checks and updates the service record. Clear documentation helps the next technician understand equipment history and outstanding work.",
+        "questions": [
+          {
+            "prompt": "What is checked during the inspection?",
+            "options": [
+              "Fluid levels, leaks, tyres and warning indicators",
+              "Vehicle colour only",
+              "Driver's address",
+              "Workshop timetable"
+            ],
+            "answerIndex": 0,
+            "explanation": "These are examples of inspection points."
+          },
+          {
+            "prompt": "What should defects be compared with?",
+            "options": [
+              "Social media post",
+              "Manufacturer service requirements",
+              "Unrelated invoice",
+              "Weather forecast"
+            ],
+            "answerIndex": 1,
+            "explanation": "Manufacturer requirements guide maintenance."
+          },
+          {
+            "prompt": "Can an unapproved alternative component be installed?",
+            "options": [
+              "If it looks similar",
+              "If it is cheaper",
+              "No, use an approved component",
+              "If the record is not updated"
+            ],
+            "answerIndex": 2,
+            "explanation": "The replacement must be approved."
+          },
+          {
+            "prompt": "What happens after repair?",
+            "options": [
+              "Release without checks",
+              "Delete old records",
+              "Clean the tool only",
+              "Complete checks and update the service record"
+            ],
+            "answerIndex": 3,
+            "explanation": "The repair is verified and documented."
+          }
+        ]
+      }
+    ],
   ];
+
+  // Sort all 120 activities by course, semester and lesson.
+  activities.sort(function (a, b) {
+    var x = a.id.match(/en-c(\\d+)-s(\\d+)-l(\\d+)/);
+    var y = b.id.match(/en-c(\\d+)-s(\\d+)-l(\\d+)/);
+    return Number(x[1]) - Number(y[1]) || Number(x[2]) - Number(y[2]) || Number(x[3]) - Number(y[3]);
+  });
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
