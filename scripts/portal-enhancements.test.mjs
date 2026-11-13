@@ -1237,7 +1237,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
   assert.match(html, /api\.js\?v=43/);
   assert.match(html, /app\.js\?v=53/);
-  assert.match(sw, /portal-cache-v350/);
+  assert.match(sw, /portal-cache-v351/);
 });
 
 test("manual teacher grades appear in the teacher-grade section, not the automatic-tests section", () => {
@@ -1316,17 +1316,18 @@ test("English VPR written answers can be graded from the teacher journal and upd
   const app = read("app.js");
   const html = read("index.html");
   const sw = read("service-worker.js");
-  assert.match(server, /case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_\\(data\\); break;/);
-  assert.match(bank, /function gradeEnglishVprWrittenPart_\\(data\\)/);
-  assert.match(bank, /pending_teacher_review/);
-  assert.match(bank, /objectiveScore \\+ writtenPoints/);
-  assert.match(bank, /writtenMaxPoints/);
-  assert.match(bank, /editor_\\(data, courseId\\)/);
-  assert.match(api, /gradeEnglishVprWrittenPart:function\\(data\\)/);
-  assert.match(app, /english-vpr-pending/);
-  assert.match(app, /Ответ студента:/);
-  assert.match(app, /window\\.API\\.gradeEnglishVprWrittenPart/);
-  assert.match(html, /api\\.js\\?v=44/);
-  assert.match(html, /app\\.js\\?v=54/);
-  assert.match(sw, /portal-cache-v351/);
+  assert.ok(server.includes('case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_(data); break;'));
+  assert.ok(bank.includes("function gradeEnglishVprWrittenPart_(data)"));
+  assert.ok(bank.includes("pending_teacher_review"));
+  assert.ok(bank.includes("objectiveScore + writtenPoints"));
+  assert.ok(bank.includes("writtenMaxPoints"));
+  assert.ok(bank.includes("editor_(data, courseId)"));
+  assert.ok(api.includes("gradeEnglishVprWrittenPart:function(data)"));
+  assert.ok(app.includes("english-vpr-pending"));
+  assert.ok(app.includes("Ответ студента:"));
+  assert.ok(app.includes("window.API.gradeEnglishVprWrittenPart"));
+  assert.ok(app.includes('pendingWritten?"На проверке"'));
+  assert.ok(html.includes("api.js?v=44"));
+  assert.ok(html.includes("app.js?v=54"));
+  assert.ok(sw.includes("portal-cache-v351"));
 });
