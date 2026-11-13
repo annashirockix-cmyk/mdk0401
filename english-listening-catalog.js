@@ -1842,6 +1842,1254 @@
         }
       ]
     },
+      {
+      "id": "en-c02-s01-l01",
+      "title": "Course 2 · Semester 1 · Participles, Gerunds and Infinitives",
+      "level": "B1–B1+",
+      "script": "A student is talking to her teacher about learning English. She enjoys reading short articles and listening to podcasts because these activities help her remember new words. She wants to improve her speaking, so she has decided to practise every day. Her teacher suggests writing down useful phrases and trying to use them in conversation. The student agrees that learning a language takes time, but she is happy to continue.",
+      "questions": [
+        {
+          "prompt": "What does the student enjoy?",
+          "options": [
+            "Reading and listening",
+            "Only writing tests",
+            "Watching films without sound",
+            "Memorising numbers"
+          ],
+          "answerIndex": 0,
+          "explanation": "She enjoys reading articles and listening to podcasts."
+        },
+        {
+          "prompt": "Why does she listen to podcasts?",
+          "options": [
+            "To remember new words",
+            "To avoid speaking",
+            "To learn mathematics",
+            "To prepare a meal"
+          ],
+          "answerIndex": 0,
+          "explanation": "She says these activities help her remember vocabulary."
+        },
+        {
+          "prompt": "What does she want to improve?",
+          "options": [
+            "Speaking",
+            "Drawing",
+            "Driving",
+            "Cooking"
+          ],
+          "answerIndex": 0,
+          "explanation": "She wants to improve her speaking."
+        },
+        {
+          "prompt": "What does the teacher suggest?",
+          "options": [
+            "Write useful phrases and use them",
+            "Stop listening to English",
+            "Translate every word",
+            "Study only once a month"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher suggests recording and using useful phrases."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l02",
+      "title": "Course 2 · Semester 1 · Reading: Tatarstan",
+      "level": "B1–B1+",
+      "script": "A visitor is preparing a short presentation about Tatarstan. She explains that the republic is located in the Volga region of Russia and has a rich cultural history. Kazan is its capital and an important educational and cultural centre. People use Russian and Tatar in everyday life. The visitor also mentions industry, agriculture and modern universities. She wants her classmates to understand that a region can combine historical traditions with new technology and education.",
+      "questions": [
+        {
+          "prompt": "Where is Tatarstan located?",
+          "options": [
+            "In the Volga region of Russia",
+            "In the Arctic Ocean",
+            "In Central Africa",
+            "On the island of Sicily"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker places Tatarstan in the Volga region."
+        },
+        {
+          "prompt": "What is the capital of Tatarstan?",
+          "options": [
+            "Kazan",
+            "Moscow",
+            "Samara",
+            "Sochi"
+          ],
+          "answerIndex": 0,
+          "explanation": "Kazan is named as the capital."
+        },
+        {
+          "prompt": "Which languages are mentioned?",
+          "options": [
+            "Russian and Tatar",
+            "English and French",
+            "German and Spanish",
+            "Chinese and Japanese"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker mentions Russian and Tatar."
+        },
+        {
+          "prompt": "What does the presentation compare?",
+          "options": [
+            "Traditions and modern development",
+            "Two sports teams",
+            "Different planets",
+            "Types of cooking"
+          ],
+          "answerIndex": 0,
+          "explanation": "It describes traditions together with technology and education."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l03",
+      "title": "Course 2 · Semester 1 · Reading: Dealing with People",
+      "level": "B1–B1+",
+      "script": "A college student has a problem with a group project. One team member often arrives late, and another does not answer messages. The student decides to speak to them politely instead of complaining. She explains what the group needs and asks everyone to agree on a simple schedule. They listen to each other and divide the tasks more clearly. The project becomes easier because everyone knows what to do and when to finish it.",
+      "questions": [
+        {
+          "prompt": "What is the problem in the group?",
+          "options": [
+            "Some members do not communicate or arrive on time",
+            "The classroom is closed",
+            "The project has no topic",
+            "The teacher has lost the books"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker describes lateness and unanswered messages."
+        },
+        {
+          "prompt": "What does the student decide to do?",
+          "options": [
+            "Speak politely to the group",
+            "Leave the project immediately",
+            "Send an angry public message",
+            "Do all the work alone"
+          ],
+          "answerIndex": 0,
+          "explanation": "She chooses a polite conversation."
+        },
+        {
+          "prompt": "What do they agree on?",
+          "options": [
+            "A simple schedule",
+            "A new college building",
+            "A sports competition",
+            "A holiday trip"
+          ],
+          "answerIndex": 0,
+          "explanation": "They agree on a schedule."
+        },
+        {
+          "prompt": "Why does the project become easier?",
+          "options": [
+            "Everyone understands their tasks and deadlines",
+            "The project is cancelled",
+            "Nobody has to communicate",
+            "The deadline disappears"
+          ],
+          "answerIndex": 0,
+          "explanation": "Clear task division helps the group."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l04",
+      "title": "Course 2 · Semester 1 · Future Forms: Plans and Predictions",
+      "level": "B1–B1+",
+      "script": "Two friends are discussing their plans for the next year. Lena is going to apply for a technical course because she wants to learn more about electronics. Her friend has already arranged a summer placement at a local company. They think technology will create new opportunities, but they know that success will require effort. They are meeting the college adviser next week to ask about applications and practical training.",
+      "questions": [
+        {
+          "prompt": "What is Lena going to apply for?",
+          "options": [
+            "A technical course",
+            "A cooking competition",
+            "A driving licence",
+            "A music festival"
+          ],
+          "answerIndex": 0,
+          "explanation": "She plans to apply for a technical course."
+        },
+        {
+          "prompt": "What has her friend arranged?",
+          "options": [
+            "A summer placement",
+            "A winter holiday",
+            "A new apartment",
+            "A language exam"
+          ],
+          "answerIndex": 0,
+          "explanation": "The friend has arranged a summer placement."
+        },
+        {
+          "prompt": "What do they think technology will create?",
+          "options": [
+            "New opportunities",
+            "Fewer subjects",
+            "Longer holidays",
+            "No changes"
+          ],
+          "answerIndex": 0,
+          "explanation": "They expect new opportunities."
+        },
+        {
+          "prompt": "Who are they meeting next week?",
+          "options": [
+            "The college adviser",
+            "A sports coach",
+            "A travel guide",
+            "A shop assistant"
+          ],
+          "answerIndex": 0,
+          "explanation": "They plan to meet the college adviser."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l05",
+      "title": "Course 2 · Semester 1 · Comparatives and Describing Change",
+      "level": "B1–B1+",
+      "script": "A teacher compares two ways of studying. Reading a short text on paper is sometimes easier for students who want to underline important details. Digital materials are more convenient when students need to search quickly or study away from college. Neither method is always better. The teacher says that the best choice depends on the task. She asks the class to compare the advantages and disadvantages and give examples from their own experience.",
+      "questions": [
+        {
+          "prompt": "What can be easier with a paper text?",
+          "options": [
+            "Underlining important details",
+            "Searching thousands of files",
+            "Sending an email",
+            "Changing a screen setting"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says paper can make underlining easier."
+        },
+        {
+          "prompt": "When are digital materials more convenient?",
+          "options": [
+            "When searching quickly or studying away",
+            "When no device is available",
+            "When students need to draw on paper",
+            "When the internet is forbidden"
+          ],
+          "answerIndex": 0,
+          "explanation": "Digital materials help with quick searching and remote study."
+        },
+        {
+          "prompt": "Does the teacher say one method is always better?",
+          "options": [
+            "No",
+            "Yes",
+            "Only paper is better",
+            "Only digital is better"
+          ],
+          "answerIndex": 0,
+          "explanation": "She says the best choice depends on the task."
+        },
+        {
+          "prompt": "What does she ask students to do?",
+          "options": [
+            "Compare advantages and disadvantages",
+            "Memorise the text word for word",
+            "Stop using both methods",
+            "Write a shopping list"
+          ],
+          "answerIndex": 0,
+          "explanation": "Students should compare both approaches."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l06",
+      "title": "Course 2 · Semester 1 · Modal Verbs: Advice and Obligation",
+      "level": "B1–B1+",
+      "script": "A college tutor is giving advice before a practical lesson. Students must wear the required protective equipment and follow the workshop rules. They should read the task sheet before starting and ask questions if something is unclear. They can work in pairs during the planning stage, but they must not operate equipment without permission. The tutor says that asking for help is a sign of responsibility, not weakness.",
+      "questions": [
+        {
+          "prompt": "What must students wear?",
+          "options": [
+            "Required protective equipment",
+            "A uniform from another college",
+            "Sports clothes only",
+            "No special clothing"
+          ],
+          "answerIndex": 0,
+          "explanation": "The tutor says required PPE must be worn."
+        },
+        {
+          "prompt": "What should students read before starting?",
+          "options": [
+            "The task sheet",
+            "A travel brochure",
+            "A restaurant menu",
+            "A newspaper about sport"
+          ],
+          "answerIndex": 0,
+          "explanation": "They should read the task sheet."
+        },
+        {
+          "prompt": "When can they work in pairs?",
+          "options": [
+            "During the planning stage",
+            "When operating equipment without permission",
+            "During an emergency",
+            "Only after the lesson"
+          ],
+          "answerIndex": 0,
+          "explanation": "Pair work is allowed during planning."
+        },
+        {
+          "prompt": "What does the tutor say about asking for help?",
+          "options": [
+            "It shows responsibility",
+            "It is a weakness",
+            "It is forbidden",
+            "It wastes everyone's time"
+          ],
+          "answerIndex": 0,
+          "explanation": "The tutor encourages asking questions."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l07",
+      "title": "Course 2 · Semester 1 · Education Systems and Lifelong Learning",
+      "level": "B1–B1+",
+      "script": "A careers adviser explains that education does not end when a student receives a diploma. People continue learning through short courses, workplace training, online lessons and professional qualifications. Some skills become outdated as technology changes, so workers need to update their knowledge. The adviser recommends setting realistic goals and choosing courses that match a person's work or career plans. Lifelong learning can help people adapt to new tasks and responsibilities.",
+      "questions": [
+        {
+          "prompt": "When does learning end, according to the adviser?",
+          "options": [
+            "It does not end with a diploma",
+            "At the age of eighteen",
+            "After the first job",
+            "After one online course"
+          ],
+          "answerIndex": 0,
+          "explanation": "The adviser says learning continues after graduation."
+        },
+        {
+          "prompt": "Why do workers need to update their knowledge?",
+          "options": [
+            "Technology and job requirements change",
+            "Books become illegal",
+            "All jobs stay the same",
+            "Training is always compulsory every day"
+          ],
+          "answerIndex": 0,
+          "explanation": "Skills can become outdated as technology changes."
+        },
+        {
+          "prompt": "What should course choices match?",
+          "options": [
+            "Work or career plans",
+            "A random advertisement",
+            "A friend's timetable only",
+            "The weather"
+          ],
+          "answerIndex": 0,
+          "explanation": "Courses should fit goals and career plans."
+        },
+        {
+          "prompt": "What can lifelong learning help people do?",
+          "options": [
+            "Adapt to new tasks",
+            "Avoid all responsibility",
+            "Stop communicating",
+            "Guarantee an easy job"
+          ],
+          "answerIndex": 0,
+          "explanation": "It helps people adapt to changing tasks."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l08",
+      "title": "Course 2 · Semester 1 · Professions, Skills and Career Choices",
+      "level": "B1–B1+",
+      "script": "A student is choosing between several technical professions. She enjoys solving practical problems and working carefully with information. Her teacher explains that different jobs require different combinations of skills. A technologist plans and improves production processes. A programmer develops and tests software. An electrician works with electrical systems, while a machine-tool operator works with equipment and manufacturing tasks. The student decides to learn more about each profession before choosing her pathway.",
+      "questions": [
+        {
+          "prompt": "What does the student enjoy?",
+          "options": [
+            "Solving practical problems",
+            "Performing on stage",
+            "Selling clothes",
+            "Cooking meals"
+          ],
+          "answerIndex": 0,
+          "explanation": "She enjoys practical problem-solving."
+        },
+        {
+          "prompt": "What does a technologist do?",
+          "options": [
+            "Plans and improves production processes",
+            "Writes novels",
+            "Repairs mobile phones only",
+            "Teaches history only"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher describes a technologist's role."
+        },
+        {
+          "prompt": "What does a programmer develop and test?",
+          "options": [
+            "Software",
+            "Metal sheets",
+            "Electrical cables only",
+            "Food products"
+          ],
+          "answerIndex": 0,
+          "explanation": "Programmers develop and test software."
+        },
+        {
+          "prompt": "What does the student decide to do?",
+          "options": [
+            "Learn more about each profession",
+            "Choose without information",
+            "Change colleges immediately",
+            "Ignore the teacher"
+          ],
+          "answerIndex": 0,
+          "explanation": "She wants to research the professions first."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l09",
+      "title": "Course 2 · Semester 1 · A First CV",
+      "level": "B1–B1+",
+      "script": "A student is preparing a first CV for a summer placement. She includes her contact details, education, practical skills and a short personal profile. She has no full-time work experience, so she describes college projects and volunteer activities. Her teacher advises her to use clear headings, correct dates and action verbs. The CV should be honest and easy to read. The student checks spelling and saves the document as a PDF before sending it.",
+      "questions": [
+        {
+          "prompt": "What is the student applying for?",
+          "options": [
+            "A summer placement",
+            "A university scholarship abroad",
+            "A sports team",
+            "A driving test"
+          ],
+          "answerIndex": 0,
+          "explanation": "She is preparing a CV for a summer placement."
+        },
+        {
+          "prompt": "What does she include instead of full-time work experience?",
+          "options": [
+            "College projects and volunteering",
+            "Invented job titles",
+            "Personal passwords",
+            "Unrelated family information"
+          ],
+          "answerIndex": 0,
+          "explanation": "She describes projects and volunteer activities."
+        },
+        {
+          "prompt": "What does the teacher recommend?",
+          "options": [
+            "Clear headings and correct dates",
+            "Long paragraphs with no headings",
+            "Unverified information",
+            "Decorative fonts only"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher recommends clear structure and accurate dates."
+        },
+        {
+          "prompt": "What file format does she save?",
+          "options": [
+            "PDF",
+            "MP3",
+            "JPEG",
+            "ZIP only"
+          ],
+          "answerIndex": 0,
+          "explanation": "She saves the CV as a PDF."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l10",
+      "title": "Course 2 · Semester 1 · Communication at Work: Requests and Clarification",
+      "level": "B1–B1+",
+      "script": "A trainee is helping prepare a work area but does not understand one instruction. Instead of guessing, he asks, Could you explain the last step, please? The supervisor repeats the instruction and shows the relevant section of the task sheet. The trainee repeats the key information to check that he has understood. The supervisor says that polite questions prevent mistakes and save time. They agree to check unclear details before continuing.",
+      "questions": [
+        {
+          "prompt": "What does the trainee not understand?",
+          "options": [
+            "One instruction",
+            "The college timetable",
+            "The bus route",
+            "The lunch menu"
+          ],
+          "answerIndex": 0,
+          "explanation": "He does not understand one instruction."
+        },
+        {
+          "prompt": "What does he do instead of guessing?",
+          "options": [
+            "Asks a polite question",
+            "Continues without checking",
+            "Changes the task",
+            "Leaves the workplace"
+          ],
+          "answerIndex": 0,
+          "explanation": "He asks for clarification."
+        },
+        {
+          "prompt": "What does the supervisor show him?",
+          "options": [
+            "The relevant section of the task sheet",
+            "A holiday photograph",
+            "A sports result",
+            "A shopping receipt"
+          ],
+          "answerIndex": 0,
+          "explanation": "The supervisor points to the task sheet."
+        },
+        {
+          "prompt": "Why are polite questions useful?",
+          "options": [
+            "They prevent mistakes and save time",
+            "They make tasks longer",
+            "They replace documentation",
+            "They avoid teamwork"
+          ],
+          "answerIndex": 0,
+          "explanation": "The supervisor explains their value."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l11",
+      "title": "Course 2 · Semester 1 · Travel, Transport and Travel Problems",
+      "level": "B1–B1+",
+      "script": "A student is travelling to a college competition by train. At the station, she hears an announcement that the service is delayed because of a technical problem. She checks the information board and asks a member of staff about the next connection. The employee explains that another train will leave from a different platform. The student sends a message to her teacher to explain that she may arrive late. She keeps her ticket and follows the updated information.",
+      "questions": [
+        {
+          "prompt": "Where is the student travelling?",
+          "options": [
+            "To a college competition",
+            "To a hospital appointment",
+            "To a family wedding",
+            "To a music lesson"
+          ],
+          "answerIndex": 0,
+          "explanation": "She is travelling to a college competition."
+        },
+        {
+          "prompt": "Why is the train delayed?",
+          "options": [
+            "A technical problem",
+            "Heavy snow",
+            "A missing ticket",
+            "A sports event"
+          ],
+          "answerIndex": 0,
+          "explanation": "The announcement mentions a technical problem."
+        },
+        {
+          "prompt": "Where does the next train leave from?",
+          "options": [
+            "A different platform",
+            "The same platform immediately",
+            "The airport",
+            "A bus stop"
+          ],
+          "answerIndex": 0,
+          "explanation": "The employee says it leaves from a different platform."
+        },
+        {
+          "prompt": "Who does the student message?",
+          "options": [
+            "Her teacher",
+            "A hotel manager",
+            "A shop assistant",
+            "A taxi driver"
+          ],
+          "answerIndex": 0,
+          "explanation": "She informs her teacher that she may be late."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s01-l12",
+      "title": "Course 2 · Semester 1 · Reading Strategies: Main Idea and Detail",
+      "level": "B1–B1+",
+      "script": "A student reads a short article about a new college laboratory. First, she reads the title and opening paragraph to understand the main idea. Then she looks for specific information, such as the opening date, the equipment available and the courses that will use the laboratory. She does not translate every word. When she meets an unfamiliar word, she uses the surrounding sentence to guess its meaning and checks the glossary later. This helps her read more efficiently.",
+      "questions": [
+        {
+          "prompt": "What does the student read first?",
+          "options": [
+            "The title and opening paragraph",
+            "The last footnote",
+            "Every word in a dictionary",
+            "Only the picture captions"
+          ],
+          "answerIndex": 0,
+          "explanation": "She begins with the title and opening paragraph."
+        },
+        {
+          "prompt": "What information does she look for?",
+          "options": [
+            "Opening date and available equipment",
+            "The author's home address",
+            "The colour of the website",
+            "Unrelated news"
+          ],
+          "answerIndex": 0,
+          "explanation": "She scans for specific details."
+        },
+        {
+          "prompt": "Does she translate every word?",
+          "options": [
+            "No",
+            "Yes",
+            "Only the title",
+            "Only the numbers"
+          ],
+          "answerIndex": 0,
+          "explanation": "She does not translate every word."
+        },
+        {
+          "prompt": "How does she guess an unfamiliar word?",
+          "options": [
+            "From the surrounding sentence",
+            "From its font size",
+            "From a random number",
+            "By ignoring the whole paragraph"
+          ],
+          "answerIndex": 0,
+          "explanation": "She uses context to infer meaning."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l01",
+      "title": "Course 2 · Semester 2 · Conditionals and Reported Speech",
+      "level": "B1–B1+",
+      "script": "A student tells her friend about a conversation with a teacher. The teacher said that if students planned their work carefully, they would have more time for revision. She also explained that if someone missed a lesson, they should check the online materials and ask about any important changes. The student reports the advice to her friend and says that good planning can reduce stress before exams.",
+      "questions": [
+        {
+          "prompt": "What did the teacher recommend?",
+          "options": [
+            "Planning work carefully",
+            "Avoiding revision",
+            "Missing lessons",
+            "Studying only the night before"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher recommends careful planning."
+        },
+        {
+          "prompt": "What should a student do after missing a lesson?",
+          "options": [
+            "Check online materials and ask about changes",
+            "Ignore the lesson",
+            "Delete the timetable",
+            "Wait until the exam"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher gives two steps."
+        },
+        {
+          "prompt": "What can good planning reduce?",
+          "options": [
+            "Stress before exams",
+            "The number of subjects",
+            "The length of the school year",
+            "The need for sleep"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student says planning can reduce exam stress."
+        },
+        {
+          "prompt": "What is the student doing?",
+          "options": [
+            "Reporting the teacher's advice",
+            "Giving a weather forecast",
+            "Describing a machine",
+            "Ordering a meal"
+          ],
+          "answerIndex": 0,
+          "explanation": "She reports what the teacher said."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l02",
+      "title": "Course 2 · Semester 2 · Reading: Environmental Protection",
+      "level": "B1–B1+",
+      "script": "A college group is planning an environmental campaign. They discuss saving electricity, sorting waste and using less paper. One student suggests putting clear labels on recycling containers. Another proposes switching off lights and equipment when they are not needed. The group also wants to explain that small actions are more effective when many people take part. They prepare posters and a short announcement for the college website.",
+      "questions": [
+        {
+          "prompt": "What is the group planning?",
+          "options": [
+            "An environmental campaign",
+            "A music concert",
+            "A sports tournament",
+            "A new restaurant"
+          ],
+          "answerIndex": 0,
+          "explanation": "They are planning an environmental campaign."
+        },
+        {
+          "prompt": "What does one student suggest for recycling containers?",
+          "options": [
+            "Clear labels",
+            "New locks",
+            "More advertising",
+            "Different colours of walls"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student suggests clear labels."
+        },
+        {
+          "prompt": "What should people switch off?",
+          "options": [
+            "Lights and unused equipment",
+            "All computers during lessons",
+            "The heating in winter always",
+            "The college website"
+          ],
+          "answerIndex": 0,
+          "explanation": "The group discusses saving electricity."
+        },
+        {
+          "prompt": "When are small actions more effective?",
+          "options": [
+            "When many people take part",
+            "When only one person acts",
+            "When nobody notices",
+            "When the campaign ends"
+          ],
+          "answerIndex": 0,
+          "explanation": "The students say participation makes actions more effective."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l03",
+      "title": "Course 2 · Semester 2 · Reading: The Speed Limit",
+      "level": "B1–B1+",
+      "script": "A driving instructor explains why speed limits are important. A safe speed depends on the road, traffic, visibility and weather conditions. The posted limit is a maximum, not a target that drivers must always reach. In heavy rain or poor visibility, a driver may need to travel more slowly. The instructor asks students to read road signs carefully and leave enough distance from the vehicle ahead. Responsible driving means adjusting speed to the conditions.",
+      "questions": [
+        {
+          "prompt": "What does a posted speed limit represent?",
+          "options": [
+            "A maximum",
+            "A minimum target",
+            "A recommended speed in every condition",
+            "A distance"
+          ],
+          "answerIndex": 0,
+          "explanation": "The instructor says it is a maximum."
+        },
+        {
+          "prompt": "When may a driver need to slow down?",
+          "options": [
+            "In heavy rain or poor visibility",
+            "On every empty road",
+            "Only during daylight",
+            "When the radio is on"
+          ],
+          "answerIndex": 0,
+          "explanation": "Weather and visibility affect safe speed."
+        },
+        {
+          "prompt": "What should drivers leave?",
+          "options": [
+            "Enough distance from the vehicle ahead",
+            "No space at all",
+            "Their documents at home",
+            "The road without looking"
+          ],
+          "answerIndex": 0,
+          "explanation": "The instructor stresses following distance."
+        },
+        {
+          "prompt": "What is responsible driving?",
+          "options": [
+            "Adjusting speed to conditions",
+            "Always driving at the maximum",
+            "Ignoring road signs",
+            "Following another car very closely"
+          ],
+          "answerIndex": 0,
+          "explanation": "The instructor defines it as adapting to conditions."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l04",
+      "title": "Course 2 · Semester 2 · The History of Physics",
+      "level": "B1–B1+",
+      "script": "A teacher is preparing a short lesson about the history of physics. Early scientists observed motion, light and the stars. Over time, experiments and mathematical models helped people explain natural phenomena. Classical mechanics described many everyday movements, while later discoveries changed ideas about electricity, atoms and energy. The teacher explains that scientific knowledge develops when researchers test ideas, compare evidence and revise explanations. Students are asked to identify the main stages rather than memorize every date.",
+      "questions": [
+        {
+          "prompt": "What did early scientists observe?",
+          "options": [
+            "Motion, light and the stars",
+            "Only modern computers",
+            "The internet",
+            "Factory timetables"
+          ],
+          "answerIndex": 0,
+          "explanation": "These observations are named in the recording."
+        },
+        {
+          "prompt": "What helped people explain natural phenomena?",
+          "options": [
+            "Experiments and mathematical models",
+            "Advertising and rumours",
+            "Travel tickets",
+            "Social media comments"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher mentions experiments and models."
+        },
+        {
+          "prompt": "What did later discoveries change?",
+          "options": [
+            "Ideas about electricity, atoms and energy",
+            "The length of the week",
+            "The names of continents",
+            "The college uniform"
+          ],
+          "answerIndex": 0,
+          "explanation": "These scientific ideas are listed."
+        },
+        {
+          "prompt": "What should students focus on?",
+          "options": [
+            "Main stages of development",
+            "Every date in detail",
+            "Unrelated biographies",
+            "Only the lesson title"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says to identify the main stages."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l05",
+      "title": "Course 2 · Semester 2 · The Revolution in Physics",
+      "level": "B1–B1+",
+      "script": "A science teacher explains that new discoveries sometimes change accepted scientific ideas. Research into atoms and very small particles showed that classical physics could not explain every observation. New theories provided different models for understanding matter and energy. The teacher emphasizes that scientific theories are not simply guesses; they are explanations supported by evidence and tested against observations. Students discuss why scientists need to remain open to new results while checking claims carefully.",
+      "questions": [
+        {
+          "prompt": "Why did new theories develop?",
+          "options": [
+            "Classical physics could not explain every observation",
+            "Scientists stopped doing experiments",
+            "All old books disappeared",
+            "Technology became unnecessary"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says classical physics had limits."
+        },
+        {
+          "prompt": "What do scientific theories provide?",
+          "options": [
+            "Models for understanding matter and energy",
+            "Personal opinions without evidence",
+            "A list of college rules",
+            "A machine operating schedule"
+          ],
+          "answerIndex": 0,
+          "explanation": "The theories offer explanatory models."
+        },
+        {
+          "prompt": "Are scientific theories simply guesses?",
+          "options": [
+            "No",
+            "Yes",
+            "Only in history",
+            "Only in school"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher distinguishes theories from unsupported guesses."
+        },
+        {
+          "prompt": "What should scientists do with new results?",
+          "options": [
+            "Remain open and check claims carefully",
+            "Accept every claim immediately",
+            "Ignore evidence",
+            "Avoid experiments"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher advises openness and careful checking."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l06",
+      "title": "Course 2 · Semester 2 · Automation",
+      "level": "B1–B1+",
+      "script": "A factory guide describes how automation changes production. Some tasks are performed by machines or computer-controlled systems, while people plan the process, monitor results and solve problems. Automation can make repeated operations more consistent and help collect production data. However, systems still need maintenance, correct information and trained staff. The guide explains that automation does not mean that people are no longer important. It changes the skills workers need and creates new responsibilities.",
+      "questions": [
+        {
+          "prompt": "What can perform some production tasks?",
+          "options": [
+            "Machines and computer-controlled systems",
+            "Only handwritten notes",
+            "Passenger vehicles",
+            "Printed posters"
+          ],
+          "answerIndex": 0,
+          "explanation": "The guide describes machines and computer-controlled systems."
+        },
+        {
+          "prompt": "What do people still do?",
+          "options": [
+            "Plan, monitor and solve problems",
+            "Leave all decisions to machines",
+            "Avoid learning new skills",
+            "Stop checking results"
+          ],
+          "answerIndex": 0,
+          "explanation": "People remain involved in planning and problem-solving."
+        },
+        {
+          "prompt": "What can automation improve?",
+          "options": [
+            "Consistency and data collection",
+            "The weather",
+            "The size of every component",
+            "The number of holidays"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker mentions consistency and production data."
+        },
+        {
+          "prompt": "Does automation make people unimportant?",
+          "options": [
+            "No",
+            "Yes",
+            "Only in large factories",
+            "Only in small workshops"
+          ],
+          "answerIndex": 0,
+          "explanation": "The guide says people remain important."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l07",
+      "title": "Course 2 · Semester 2 · Environmental Pollution",
+      "level": "B1–B1+",
+      "script": "A student is preparing a report about pollution. She explains that air pollution can come from transport, industry and heating. Water pollution may be caused by waste, chemicals or oil entering rivers and lakes. Noise pollution affects people and animals, especially in busy urban areas. The student says that prevention is important: companies should follow environmental rules, communities should reduce waste and people should use resources responsibly. She ends by saying that reliable information is needed before proposing solutions.",
+      "questions": [
+        {
+          "prompt": "Which source of air pollution is mentioned?",
+          "options": [
+            "Transport",
+            "Library books",
+            "School uniforms",
+            "Musical instruments"
+          ],
+          "answerIndex": 0,
+          "explanation": "Transport is one of the sources named."
+        },
+        {
+          "prompt": "What can cause water pollution?",
+          "options": [
+            "Waste, chemicals or oil",
+            "Clean rainwater only",
+            "Paper labels",
+            "Solar panels"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker lists waste, chemicals and oil."
+        },
+        {
+          "prompt": "Who should help prevent pollution?",
+          "options": [
+            "Companies, communities and individuals",
+            "Only tourists",
+            "Only children",
+            "No one"
+          ],
+          "answerIndex": 0,
+          "explanation": "The report describes shared responsibility."
+        },
+        {
+          "prompt": "What is needed before proposing solutions?",
+          "options": [
+            "Reliable information",
+            "A guess",
+            "An advertisement",
+            "A personal preference"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student stresses reliable information."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l08",
+      "title": "Course 2 · Semester 2 · Passive Voice in Scientific Texts",
+      "level": "B1–B1+",
+      "script": "A student is reading a short description of a laboratory experiment. The equipment is checked before the experiment begins. The sample is placed in a container, and the temperature is recorded at regular intervals. After the experiment, the results are compared with the initial prediction. The teacher explains that scientific texts often use the passive voice because the process or result is more important than the person performing the action. Students practise changing active sentences into passive sentences.",
+      "questions": [
+        {
+          "prompt": "What is checked before the experiment?",
+          "options": [
+            "The equipment",
+            "The weather forecast",
+            "The classroom timetable",
+            "The student's phone"
+          ],
+          "answerIndex": 0,
+          "explanation": "The text says the equipment is checked."
+        },
+        {
+          "prompt": "Where is the sample placed?",
+          "options": [
+            "In a container",
+            "On a bus",
+            "In a library",
+            "Under a desk"
+          ],
+          "answerIndex": 0,
+          "explanation": "The sample is placed in a container."
+        },
+        {
+          "prompt": "When is the temperature recorded?",
+          "options": [
+            "At regular intervals",
+            "Only before the lesson",
+            "Once a year",
+            "After the report is printed"
+          ],
+          "answerIndex": 0,
+          "explanation": "The recording says it is recorded regularly."
+        },
+        {
+          "prompt": "Why is passive voice common in scientific texts?",
+          "options": [
+            "The process or result is often more important",
+            "The author is unknown in every case",
+            "It makes every sentence shorter",
+            "It replaces all technical words"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher explains the focus on process or result."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l09",
+      "title": "Course 2 · Semester 2 · Linking Words and Coherent Paragraphs",
+      "level": "B1–B1+",
+      "script": "A student is writing a paragraph about renewable energy. She begins with the main idea, then adds examples. She uses because to give a reason, however to introduce a contrast and therefore to show a result. Her teacher asks her to organize the ideas in a logical order and avoid repeating the same linking word in every sentence. The final paragraph is easier to follow because each sentence has a clear connection with the next one.",
+      "questions": [
+        {
+          "prompt": "What is the student writing about?",
+          "options": [
+            "Renewable energy",
+            "A travel diary",
+            "A sports match",
+            "A cooking recipe"
+          ],
+          "answerIndex": 0,
+          "explanation": "The topic is renewable energy."
+        },
+        {
+          "prompt": "Which word introduces a reason?",
+          "options": [
+            "Because",
+            "However",
+            "Therefore",
+            "Finally"
+          ],
+          "answerIndex": 0,
+          "explanation": "Because introduces a reason."
+        },
+        {
+          "prompt": "Which word introduces contrast?",
+          "options": [
+            "However",
+            "Because",
+            "Therefore",
+            "For example"
+          ],
+          "answerIndex": 0,
+          "explanation": "However introduces contrast."
+        },
+        {
+          "prompt": "Why is the final paragraph easier to follow?",
+          "options": [
+            "The ideas are logically connected",
+            "It has no examples",
+            "Every sentence is identical",
+            "It contains no linking words"
+          ],
+          "answerIndex": 0,
+          "explanation": "Logical links improve coherence."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l10",
+      "title": "Course 2 · Semester 2 · Climate, Resources and Sustainable Development",
+      "level": "B1–B1+",
+      "script": "A lecturer explains sustainable development to a college group. It means meeting people's needs today while protecting the ability of future generations to meet their needs. Energy, water, forests and minerals are limited resources, so they should be used responsibly. Renewable energy can reduce dependence on fossil fuels, but every energy source has advantages and limitations. The lecturer asks students to compare solutions and consider environmental, social and economic factors.",
+      "questions": [
+        {
+          "prompt": "What does sustainable development try to protect?",
+          "options": [
+            "The needs of future generations",
+            "Only short-term profits",
+            "One type of transport",
+            "A single industry"
+          ],
+          "answerIndex": 0,
+          "explanation": "The definition includes future generations."
+        },
+        {
+          "prompt": "Which resource is mentioned?",
+          "options": [
+            "Water",
+            "Plastic toys",
+            "Mobile phone apps",
+            "Road signs"
+          ],
+          "answerIndex": 0,
+          "explanation": "Water is one of the listed resources."
+        },
+        {
+          "prompt": "Does every energy source have only advantages?",
+          "options": [
+            "No",
+            "Yes",
+            "Only renewable sources do",
+            "Only fossil fuels do"
+          ],
+          "answerIndex": 0,
+          "explanation": "The lecturer says every source has advantages and limitations."
+        },
+        {
+          "prompt": "Which factors should students consider?",
+          "options": [
+            "Environmental, social and economic",
+            "Only fashion",
+            "Only distance",
+            "Only advertising"
+          ],
+          "answerIndex": 0,
+          "explanation": "The lecturer names three factors."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l11",
+      "title": "Course 2 · Semester 2 · Science and Technology in Everyday Life",
+      "level": "B1–B1+",
+      "script": "A student describes how technology is used in everyday life. Smartphones help people communicate, maps support navigation and digital payment systems make shopping faster. Medical equipment helps doctors monitor patients, while sensors can measure temperature and movement in homes and factories. The student adds that technology also creates responsibilities: people should protect personal information, check sources and use devices safely. The class discusses how technology can be useful when people understand both its benefits and its risks.",
+      "questions": [
+        {
+          "prompt": "What can digital maps support?",
+          "options": [
+            "Navigation",
+            "Cooking",
+            "Metal casting",
+            "Laundry"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker says maps support navigation."
+        },
+        {
+          "prompt": "What can sensors measure?",
+          "options": [
+            "Temperature and movement",
+            "Personal opinions",
+            "Book titles",
+            "The price of food"
+          ],
+          "answerIndex": 0,
+          "explanation": "Sensors can measure physical conditions."
+        },
+        {
+          "prompt": "What responsibility is mentioned?",
+          "options": [
+            "Protect personal information",
+            "Share every password",
+            "Believe every website",
+            "Ignore device safety"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student mentions privacy and safe use."
+        },
+        {
+          "prompt": "When is technology most useful?",
+          "options": [
+            "When people understand benefits and risks",
+            "When people never check information",
+            "When devices are used without care",
+            "When all decisions are automatic"
+          ],
+          "answerIndex": 0,
+          "explanation": "The class considers benefits and risks."
+        }
+      ]
+    },
+    {
+      "id": "en-c02-s02-l12",
+      "title": "Course 2 · Semester 2 · Expressing an Opinion: Short Presentation",
+      "level": "B1–B1+",
+      "script": "A student is giving a short presentation about practical training. She believes that practical tasks help students connect theory with real situations. First, she gives her opinion. Then she provides two reasons and an example from a college project. She also mentions a possible disadvantage: practical work takes time and requires careful preparation. In conclusion, she says that practical learning is valuable when it is well organized and supported by clear instructions.",
+      "questions": [
+        {
+          "prompt": "What is the presentation about?",
+          "options": [
+            "Practical training",
+            "Online shopping",
+            "A sports event",
+            "A family holiday"
+          ],
+          "answerIndex": 0,
+          "explanation": "The student discusses practical training."
+        },
+        {
+          "prompt": "How does she support her opinion?",
+          "options": [
+            "With reasons and an example",
+            "With unrelated jokes",
+            "With a list of names",
+            "With no explanation"
+          ],
+          "answerIndex": 0,
+          "explanation": "She gives two reasons and a project example."
+        },
+        {
+          "prompt": "What disadvantage does she mention?",
+          "options": [
+            "Practical work takes time and preparation",
+            "It never helps students",
+            "It is always unsafe",
+            "It requires no instructions"
+          ],
+          "answerIndex": 0,
+          "explanation": "She notes time and preparation."
+        },
+        {
+          "prompt": "What is her conclusion?",
+          "options": [
+            "Practical learning is valuable when well organized",
+            "Practical work should stop",
+            "Theory is never useful",
+            "Instructions are unnecessary"
+          ],
+          "answerIndex": 0,
+          "explanation": "She gives a balanced conclusion."
+        }
+      ]
+    },
   ];
 
   function el(tag, cls, text) {
