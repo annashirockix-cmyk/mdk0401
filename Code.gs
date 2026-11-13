@@ -2065,6 +2065,13 @@ function getCustomTest_(data) {
   });
   if (!record) throw new Error("Тест не найден в выбранной дисциплине.");
   if (!customContentIsOpen_(record.courseId, record.id, record.topicId, "test")) throw new Error("Этот тест закрыт преподавателем.");
+  const attemptKey = "custom_" + id;
+  const prior = resultAttemptRows_().filter(function(row) {
+    return email_(row[0]) === user.email && String(row[3]) === attemptKey && sameCourseId_(row[12] || courseId, courseId);
+  }).length;
+  const scopedExtra = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + id);
+  const extra = Number(scopedExtra !== "" ? scopedExtra : settingValue_("testAttempts:" + user.email + ":" + id)) || 0;
+  if (prior >= 1 + Math.max(0, extra)) throw new Error("Попытки закончились. Обратитесь к преподавателю за дополнительной попыткой.");
   const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   if (!questions.length) throw new Error("В тесте пока нет вопросов.");
   const optionMaps = {}, safeQuestions = questions.map(function(question, index) {
