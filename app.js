@@ -550,10 +550,10 @@ window.renderTeacherJournalPage = function() {
           var answers=Array.isArray(p.writtenAnswers)?p.writtenAnswers:[];
           var max=answers.reduce(function(s,a){return s+(Number(a.maxPoints)||1);},0);
           var details=answers.map(function(a,i){var q=typeof a.question==="string"?a.question:(a.question&&(a.question.text||a.question.question))||JSON.stringify(a.question||"");return '<div style="padding:10px 0;border-top:1px solid var(--border)"><b>Вопрос '+(i+1)+':</b> '+window.escapeHtml(q)+'<p style="white-space:pre-wrap;margin:6px 0"><b>Ответ студента:</b> '+window.escapeHtml(a.answer||"—")+'</p></div>';}).join("");
-          return '<details class="module"><summary>'+window.escapeHtml(x.name||x.email)+' · '+window.escapeHtml(x.testTitle||x.testId)+' · '+answers.length+' ответов</summary>'+details+
+          return '<details class="module"><summary>'+window.escapeHtml(x.name||x.email)+' · '+window.escapeHtml(x.testTitle||x.testId)+' · попытка '+window.escapeHtml(x.attempts||1)+' · '+answers.length+' ответов</summary>'+details+
             '<label>Баллы за письменную часть (0–'+max+') <input class="self-input" type="number" min="0" max="'+max+'" step="0.5" data-vpr-points style="width:100px"></label>'+
             '<label style="display:block;margin-top:8px">Комментарий студенту <textarea class="self-input" data-vpr-feedback maxlength="4000" style="width:100%;min-height:70px"></textarea></label>'+
-            '<button class="btn btn-primary" type="button" data-grade-english-vpr data-email="'+window.escapeHtml(x.email)+'" data-course="'+window.escapeHtml(x.courseId)+'" data-test="'+window.escapeHtml(x.testId)+'">Сохранить проверку и итоговую оценку</button></details>';
+            '<button class="btn btn-primary" type="button" data-grade-english-vpr data-email="'+window.escapeHtml(x.email)+'" data-course="'+window.escapeHtml(x.courseId)+'" data-test="'+window.escapeHtml(x.testId)+'" data-attempts="'+window.escapeHtml(x.attempts||1)+'">Сохранить проверку и итоговую оценку</button></details>';
         }).join(""):'';
       }
       var status=document.getElementById("journal-load-status");if(status)status.textContent="Записей: "+filtered.length+" · источник: сервер";
@@ -565,7 +565,7 @@ window.renderTeacherJournalPage = function() {
       var value=points?Number(points.value):NaN;
       if(!isFinite(value)||value<0||value>Number(points.max)){window.alert("Укажите корректное количество баллов за письменную часть.");return;}
       button.disabled=true;button.textContent="Сохранение…";
-      window.API.gradeEnglishVprWrittenPart({email:button.dataset.email,courseId:button.dataset.course,testId:button.dataset.test,points:value,feedback:feedback?feedback.value:""})
+      window.API.gradeEnglishVprWrittenPart({email:button.dataset.email,courseId:button.dataset.course,testId:button.dataset.test,attempts:Number(button.dataset.attempts),points:value,feedback:feedback?feedback.value:""})
         .then(function(r){if(!r||!r.success)throw new Error(r&&r.error||"Не удалось сохранить проверку");return window.API.getResults({});})
         .then(function(r){if(!r||!r.success)throw new Error(r&&r.error||"Проверка сохранена, но журнал не обновился");resultRows=r.results||[];renderResults(resultRows);})
         .catch(function(e){window.alert(e.message);button.disabled=false;button.textContent="Сохранить проверку и итоговую оценку";});
