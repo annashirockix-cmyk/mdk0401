@@ -256,3 +256,8 @@ All twelve lessons in Course 4, Semester 2 now have browser-listening practice a
 ### Browser listening coverage — 40 activities
 
 The practice catalogue now contains 40 activities: Course 4 Semester 1 lessons 1–4, Course 4 Semester 2 lessons 1–12, and both semesters of Course 5 (12 lessons each). The first four Course 4 Semester 1 activities cover electrical materials, current and units, circuit components, and series/parallel circuits. Course 4 Semester 1 lessons 5–12 and Courses 1–3 remain to be converted. All activities remain practice-only and do not affect grades or protected exam banks.
+
+
+### Course 4, Semester 1 listening completed
+
+All twelve lessons for Course 4, Semester 1 now have browser-listening activities. The first nine preserve the source topics in the five-year map; lessons 10–12 extend them to aviation electrical power, wiring-diagram language and evidence-based fault descriptions. Combined with Course 4 Semester 2 and both Course 5 semesters, the catalogue now contains 48 activities across four semester blocks. The catalogue remains practice-only, not a protected assessment.
