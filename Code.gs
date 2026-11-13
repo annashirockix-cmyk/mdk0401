@@ -2053,21 +2053,24 @@ function saveCustomContent_(data) {
 }
 
 function deleteCustomContent_(data) {
-  auth_(data);
+  const courseId = String(data.courseId || data.mdkId || "");
+  const id = String(data.id || "");
+  if (!courseId || !id) throw new Error("Не указана дисциплина или материал.");
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
+    // Resolve and authorize the exact record within the requested course.
+    const user = editor_(data, courseId);
     const sheet = content_();
     const values = sheet.getDataRange().getValues();
 
     for (let i = 1; i < values.length; i++) {
-      if (String(values[i][0]) === String(data.id || "")) {
-        editor_(data, normalizeCourseId_(values[i][1] || ""));
+      if (String(values[i][0]) === id && sameCourseId_(values[i][1], courseId)) {
         sheet.deleteRow(i + 1);
         return { success: true };
       }
     }
-    return { success: false, error: "Материал не найден." };
+    return { success: false, error: "Материал не найден в выбранной дисциплине." };
   } finally {
     lock.releaseLock();
   }
