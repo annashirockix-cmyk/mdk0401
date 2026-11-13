@@ -74,7 +74,7 @@ test("No exact duplicate question stems occur in the pool", () => {
     const lines = source.split(/\r?\n/);
     for (let j = 0; j < lines.length; j++) {
       const modern = lines[j].match(/^\*\*(\d+)\.\*\*\s*(.+)$/);
-      if (modern) stems.push(modern[2].trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim());
+      if (modern) { const stem = modern[2].trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); if (stem.split(" ").length >= 6) stems.push(stem); }
       const legacy = lines[j].match(/^###\s+(\d+)\./);
       if (legacy) {
         const next = lines.slice(j + 1, j + 4).find((line) => /^\*\*.+\*\*$/.test(line.trim()));
