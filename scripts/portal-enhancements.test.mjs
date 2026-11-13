@@ -1414,7 +1414,8 @@ test("legacy student payloads cannot restore protected English exam grades", () 
   const save = server.slice(saveStart, saveEnd);
   assert.ok(save.includes("isProtectedAssessment_(testId"));
   const studentResults = server.slice(server.indexOf("function getMyCourseResults_(data)"));
-  assert.ok(studentResults.includes("isProtectedAssessment_(testId,courseId,protectedQuestionBankMap_())"));
+  assert.ok(studentResults.includes("isProtectedAssessment_(testId,courseId,protectedBanks)"));
+  assert.ok(studentResults.includes("const legacy=payload.results||{},protectedBanks=protectedQuestionBankMap_()"));
 });
 
 
