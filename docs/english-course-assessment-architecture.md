@@ -25,7 +25,7 @@ A separate working map is maintained in `docs/english-five-year-120-lecture-map-
 - Planned additions: 32 Basic + 43 Technical = 75 new lectures.
 - Courses 1–2 are Basic English; courses 3–5 are Technical English.
 - The allocation is provisional and must be checked against the approved English work programme, semester hours, and the exact Belova textbook edition before it is treated as an official syllabus.
-- The 75 planned lectures are not yet authored or imported. The first six Basic English lesson drafts are in `docs/english-basic-c01-s01-lessons-01-03-draft.md` and `docs/english-basic-c01-s01-lessons-04-06-draft.md`; they still require review against the Belova textbook and the approved work programme. The map and drafts do not change runtime or the current VPR exams.
+- The 75 planned lectures are not yet authored or imported. The first nine Basic English lesson drafts are in `docs/english-basic-c01-s01-lessons-01-03-draft.md`, `docs/english-basic-c01-s01-lessons-04-06-draft.md`, and `docs/english-basic-c01-s01-lessons-07-09-draft.md`. The final three first-semester drafts are in `docs/english-basic-c01-s01-lessons-10-12-draft.md`. All require review against the Belova textbook and the approved work programme. The map and drafts do not change runtime or the current VPR exams.
 
 ## 3. Existing content inventory
 
