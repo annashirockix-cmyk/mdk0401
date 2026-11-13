@@ -45,6 +45,9 @@ function percentile(values, p) {
 }
 async function request(action, token, params, userNumber) {
   const url = new URL(baseUrl);
+  url.searchParams.delete("action");
+  url.searchParams.delete("token");
+  url.searchParams.delete("t");
   url.searchParams.set("action", action);
   url.searchParams.set("t", String(Date.now()));
   url.searchParams.set("token", token);
