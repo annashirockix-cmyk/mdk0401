@@ -115,6 +115,12 @@ try {
     window.__flashcardAuditDiagnostics = {
       staff: window.state && window.state.staff,
       courseKeys: Object.keys(window.MDK_DATA || {}),
+      activeCourseId: window.state && window.state.activeCourseId,
+      courseSections: (window.MDK_DATA && window.MDK_DATA["07.01"] && window.MDK_DATA["07.01"].sections || []).length,
+      builtInTopics: (window.MDK_DATA && window.MDK_DATA["07.01"] && window.MDK_DATA["07.01"].sections || []).reduce((n, s) => n + (s.topics || []).length, 0),
+      customTopics: (window.customContent && window.customContent.topics || []).map(t => ({id:t.id,mdkId:t.mdkId,title:t.title})),
+      selectedCourse: document.getElementById("fcCourse")?.value,
+      topicOptionCount: document.getElementById("fcTopic")?.options.length,
       appText: (document.getElementById("app")?.innerText || "").slice(0, 1200),
       appHtml: (document.getElementById("app")?.innerHTML || "").slice(0, 1800)
     };
