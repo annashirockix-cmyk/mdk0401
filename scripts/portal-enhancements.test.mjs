@@ -1276,7 +1276,7 @@ test("English exam tab shows only the two final tracks while CEFR lab stays sepa
   const route = lab.slice(start, end);
   assert.match(route, /mode==="lab"\)\{renderLab\(\);return;\}/);
   assert.match(route, /baseRenderer\(mode==="final-basic"\|\|mode==="final-technical"\?mode:""\)/);
-  assert.doesNotMatch(route, /renderC1C2|variant-/);
+  assert.doesNotMatch(route, /renderC1C2|variant-|renderHome/);
   assert.match(read("english-vpr-exams.js"), /basic:\s*\{/);
   assert.match(read("english-vpr-exams.js"), /technical:\s*\{/);
   assert.match(read("laboratory.js"), /renderEnglishTestsPage\("lab"\)/);
