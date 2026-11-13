@@ -1212,3 +1212,30 @@ test("student average uses only the latest attempt per course and assessment", (
   assert.ok(fn.includes("completed:latestResults.length"));
   assert.ok(fn.includes("results:list,summary"));
 });
+
+
+test("teacher journal loads server results and saves grades to the shared Results sheet", () => {
+  const server = read("Code.gs");
+  const api = read("api.js");
+  const app = read("app.js");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.match(server, /case "savemanualgrade": result = saveManualGrade_\(data\); break;/);
+  const start = server.indexOf("function saveManualGrade_(data)");
+  const end = server.indexOf("\\nfunction gradeWrittenResult_", start);
+  assert.ok(start >= 0 && end > start);
+  const save = server.slice(start, end);
+  assert.match(save, /editor_\(data,courseId\)/);
+  assert.match(save, /hasCourseAccess_\(currentStudent,courseId\)/);
+  assert.match(save, /LockService\.getScriptLock\(\)/);
+  assert.match(save, /appendMappedRecord_\(results_\(\)/);
+  assert.match(save, /appendAttemptAudit_/);
+  assert.match(api, /saveManualGrade:function\(data\)/);
+  assert.match(app, /window\.API\.getStudents\(\)/);
+  assert.match(app, /window\.API\.getResults\(\{\}\)/);
+  assert.match(app, /window\.API\.saveManualGrade\(payload\)/);
+  assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
+  assert.match(html, /api\.js\?v=43/);
+  assert.match(html, /app\.js\?v=53/);
+  assert.match(sw, /portal-cache-v348/);
+});
