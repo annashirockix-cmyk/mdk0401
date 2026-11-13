@@ -1383,7 +1383,7 @@ test("English VPR and semester grades cannot be forged through the generic saveR
   const server = read("Code.gs");
   const bank = read("EnglishVPR-Sheets.gs");
   const start = server.indexOf("function saveResult_(data, serverVerifiedEnglishVpr)");
-  const end = server.indexOf("\\nfunction getResults_", start);
+  const end = server.indexOf("\\nfunction saveTeacherResult_", start);
   assert.ok(start >= 0 && end > start);
   const save = server.slice(start, end);
   assert.ok(save.includes("/^english_vpr_/.test(testId)"));
