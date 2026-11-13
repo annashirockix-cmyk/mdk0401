@@ -1340,7 +1340,7 @@ test("English VPR written answers can be graded from the teacher journal and upd
 test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technical shape", () => {
   const bank = read("EnglishVPR-Sheets.gs");
   const start = bank.indexOf("function validateEnglishVprExam_");
-  const end = bank.indexOf("\\nfunction importEnglishVprBank_", start);
+  const end = bank.indexOf("\nfunction importEnglishVprBank_", start);
   assert.ok(start >= 0 && end > start);
   const sandbox = {};
   vm.runInNewContext(bank.slice(start, end) + ";this.validateEnglishVprExam_=validateEnglishVprExam_;", sandbox);
