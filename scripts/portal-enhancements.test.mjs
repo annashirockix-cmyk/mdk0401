@@ -785,6 +785,8 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(html, /english-proficiency-lab\.js\?v=5/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
+  assert.match(engine, /var basic = window\.canAccessCourse\("ENB"\) \|\| window\.canAccessCourse\("EN"\)/);
+  assert.match(engine, /var hasEnglishAccess = !window\.canAccessCourse \|\| \["EN","ENB","ENT"\]\.some/);
   assert.match(engine, /Basic English — базовый/);
   assert.match(engine, /Technical English — технический/);
   assert.match(engine, /window\.renderEnglishTestsPage = function/);
