@@ -748,7 +748,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             }
         };
         var route = map[track] && map[track][topic.id];
-        var match = String(lecture && lecture.code || "").match(/\\.(\\d+)$/);
+        var match = String(lecture && lecture.code || "").match(/\.(\d+)$/);
         if (!route || !match) return null;
         var lessonNumber = Number(match[1]) + route[2];
         if (!Number.isFinite(lessonNumber) || lessonNumber < 1 || lessonNumber > 12) return null;
