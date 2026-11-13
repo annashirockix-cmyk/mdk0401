@@ -112,7 +112,15 @@ try {
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
     window.customContent = window.customContent || { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
     window.renderFlashcardEditorPage();
+    window.__flashcardAuditDiagnostics = {
+      staff: window.state && window.state.staff,
+      courseKeys: Object.keys(window.MDK_DATA || {}),
+      appText: (document.getElementById("app")?.innerText || "").slice(0, 1200),
+      appHtml: (document.getElementById("app")?.innerHTML || "").slice(0, 1800)
+    };
   });
+  const flashcardDiagnostics = await page.evaluate(() => window.__flashcardAuditDiagnostics);
+  console.log("FLASHCARD_AUDIT_DIAGNOSTICS", JSON.stringify(flashcardDiagnostics));
   await page.waitForSelector("#fcTopic", { state: "attached", timeout: 10000 });
   await page.waitForFunction(() => document.getElementById("fcTopic")?.options.length > 0);
   await page.locator("#fcLoadExample").click();
