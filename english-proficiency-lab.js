@@ -322,19 +322,10 @@
 
   window.renderEnglishTestsPage=function(mode){
     if(mode==="lab"){renderLab();return;}
-    if(mode==="c1c2"){renderC1C2();return;}
-    var match=/^variant-(basic|technical)-(\d)-(\d)-(\d+)$/.exec(String(mode||""));
-    if(match){
-      var track=match[1],year=Number(match[2]),semester=Number(match[3]),variant=Number(match[4]);
-      if(year<1||year>5||semester<1||semester>2||variant<1||variant>15)return renderHome();
-      if((year<=2&&track!=="basic")||(year>=3&&track!=="technical"))return renderHome();
-      if(!access(track)){var app=document.getElementById("app");if(app)app.textContent="Нет доступа к выбранной дисциплине.";return;}
-      var exam=makeVariant(track,year,semester,variant);
-      window.ENGLISH_VPR_EXAMS[track]=exam;
-      if(baseRenderer)baseRenderer(track==="basic"?"final-basic":"final-technical");
-      return;
-    }
-    renderHome();
+    // Keep the examination tab focused on the two final server-backed VPR tracks.
+    // Legacy semester/variant/C1-C2 links return to the current two-exam chooser.
+    if(baseRenderer)baseRenderer(mode==="final-basic"||mode==="final-technical"?mode:"");
+    else { var app=document.getElementById("app"); if(app)app.textContent="Экзамены временно недоступны: не загружен модуль итоговых экзаменов."; }
   };
-  console.info("[English] Каталог: 10 экзаменов, 15 форм на каждый; лаборатория CEFR A1–C2; два экзаменационных варианта C1–C2.");
+  console.info("[English] В экзаменах доступны только два итоговых варианта: Basic и Technical. Лаборатория CEFR A1–C2 открывается отдельно.");
 })();

@@ -782,7 +782,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   assert.match(html, /app\.js\?v=\d+/);
   assert.match(html, /english-tools\.js\?v=9/);
   assert.match(html, /english-vpr-engine\.js\?v=\d+/);
-  assert.match(html, /english-proficiency-lab\.js\?v=4/);
+  assert.match(html, /english-proficiency-lab\.js\?v=5/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
   assert.match(engine, /Basic English — базовый/);
@@ -796,7 +796,7 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
   const engine = read("english-vpr-engine.js");
   const lab = read("english-proficiency-lab.js");
   const sw = read("service-worker.js");
-  assert.match(html, /english-proficiency-lab\.js\?v=4/);
+  assert.match(html, /english-proficiency-lab\.js\?v=5/);
   assert.ok(sw.includes("./english-proficiency-lab.js"));
   assert.match(html, /drawerExams/);
   assert.ok(html.includes('href="#/english-tests"'));
@@ -1237,7 +1237,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
   assert.match(html, /api\.js\?v=43/);
   assert.match(html, /app\.js\?v=53/);
-  assert.match(sw, /portal-cache-v349/);
+  assert.match(sw, /portal-cache-v350/);
 });
 
 test("manual teacher grades appear in the teacher-grade section, not the automatic-tests section", () => {
@@ -1265,4 +1265,21 @@ test("all custom-content delete callers send the owning course ID", () => {
   for (const source of [flashcards, games, announcements, admin]) {
     assert.doesNotMatch(source, /deleteCustomContent\((?:setId|b\.dataset\.delete|item\.id|id)\s*\)/);
   }
+});
+
+
+test("English exam tab shows only the two final tracks while CEFR lab stays separate", () => {
+  const lab = read("english-proficiency-lab.js");
+  const start = lab.indexOf("window.renderEnglishTestsPage=function(mode){");
+  const end = lab.indexOf("console.info(\"[English] В экзаменах доступны только два итоговых варианта", start);
+  assert.ok(start >= 0 && end > start);
+  const route = lab.slice(start, end);
+  assert.match(route, /mode==="lab"\)\{renderLab\(\);return;\}/);
+  assert.match(route, /baseRenderer\(mode==="final-basic"\|\|mode==="final-technical"\?mode:""\)/);
+  assert.doesNotMatch(route, /renderC1C2|variant-|renderHome/);
+  assert.match(read("english-vpr-exams.js"), /basic:\s*\{/);
+  assert.match(read("english-vpr-exams.js"), /technical:\s*\{/);
+  assert.match(read("laboratory.js"), /renderEnglishTestsPage\("lab"\)/);
+  assert.match(read("index.html"), /english-proficiency-lab\.js\?v=5/);
+  assert.match(read("service-worker.js"), /portal-cache-v350/);
 });
