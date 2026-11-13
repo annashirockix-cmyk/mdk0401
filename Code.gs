@@ -2927,6 +2927,7 @@ function getEnglishSemesterTests_(data) {
             sameCourseId_(row[12] || courseId, courseId);
         }).length;
         const attemptNo = prior + 1;
+        safeTest.attemptNo = attemptNo;
         safeTest.questions.forEach(function(question, questionIndex) {
           const originalOptions = question.options.slice();
           const order = englishSemesterOptionOrder_(user.email, safeTest.id, attemptNo, questionIndex, originalOptions.length);
@@ -2988,6 +2989,10 @@ function submitEnglishSemesterTest_(data) {
       throw new Error("Контрольная уже завершена. Для повторного прохождения обратитесь к преподавателю.");
     }
     const attemptNo = prior + 1;
+    const requestedAttemptNo = Number(data.attemptNo);
+    if (!Number.isInteger(requestedAttemptNo) || requestedAttemptNo !== attemptNo) {
+      throw new Error("Номер попытки изменился. Обновите список контрольных и откройте работу заново.");
+    }
     const canonicalAnswers = answers.map(function(answer, index) {
       const optionCount = (test.questions[index].options || []).length;
       if (!Number.isInteger(answer) || answer < 0 || answer >= optionCount) return -1;
