@@ -93,6 +93,10 @@ function submitEnglishVprExam_(data) {
   const percent=maxObjective?Math.round(objective/maxObjective*100):0;
   const testId=String(exam.id||("english_vpr_"+track+"_2026"));
   const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Number(data.timeSpent)||0,payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()});
+  if (written.length) {
+    notifyCourseStaff_(courseId,"written_submission","Письменная часть английского ВПР ожидает проверки",
+      user.name+" ("+user.group+") отправил(а) письменную часть экзамена "+String(exam.title||track)+". Откройте журнал результатов по дисциплине "+courseId+" для проверки ответов.",testId);
+  }
   return {success:true,score:objective,maxScore:maxObjective,percent:percent,grade:written.length?"На проверке":gradeFromPercent_(percent),writtenCount:written.length};
 }
 
