@@ -1864,14 +1864,17 @@ function submitBuiltInTest_(data) {
   const entries=builtInQuestions_(courseId,resolvedIds);
   if(!entries.length)throw new Error("Серверный банк не найден. Обратитесь к преподавателю.");
   if(answers.length!==entries.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
-  const rawScore=entries.reduce(function(total,entry,index){
+  const canonicalAnswers=entries.map(function(entry,index){
     const order=attempt.optionMaps&&attempt.optionMaps[String(index)];
     let answer=answers[index];
     if(Array.isArray(order)){
-      if(Array.isArray(answer))answer=answer.map(function(value){const pos=Number(value);return Number.isInteger(pos)&&pos>=0&&pos<order.length?order[pos]:value;});
-      else{const pos=Number(answer);if(Number.isInteger(pos)&&pos>=0&&pos<order.length)answer=order[pos];}
+      if(Array.isArray(answer))answer=answer.map(function(value){const pos=Number(value);return Number.isInteger(pos)&&pos>=0&&pos<order.length?order[pos]:-1;});
+      else{const pos=Number(answer);answer=Number.isInteger(pos)&&pos>=0&&pos<order.length?order[pos]:-1;}
     }
-    return total+(scoreBuiltInQuestion_(entry.question,answer)?1:0);
+    return answer;
+  });
+  const rawScore=entries.reduce(function(total,entry,index){
+    return total+(scoreBuiltInQuestion_(entry.question,canonicalAnswers[index])?1:0);
   },0);
   const rawPercent=Math.round(rawScore/entries.length*100),lock=LockService.getScriptLock();lock.waitLock(10000);
   try{
