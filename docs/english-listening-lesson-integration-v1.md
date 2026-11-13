@@ -108,3 +108,8 @@ Each activity has a browser-readable English script and comprehension questions.
 ## Additional coverage: Course 4, Semester 2
 
 Four browser-listening activities have also been added for Course 4, Semester 2, lessons 9–12: avionics information flow; programming logic and validation algorithms; sensor-data quality and diagnostic logs; and cybersecurity/safe data handling. The lab now groups activities by both course and semester. Combined catalogue coverage is 28 activities: Course 4 Semester 2 (4), Course 5 Semester 1 (12) and Course 5 Semester 2 (12). Course 4 lessons 1–8 and the other course-semester blocks remain outstanding.
+
+
+## Course 4, Semester 2 — complete browser listening set
+
+The catalogue now contains all twelve lessons for Course 4, Semester 2. Lessons 1–8 preserve the existing source topics: means of transmission; networks and topologies; hardware/software; USB storage and computer types; the internet and technical sources; automation and robotics; sensors; and human–computer interaction/input devices. Lessons 9–12 cover avionics information exchange, programming logic, sensor-data validation and cybersecurity. The activities use original browser-readable scripts and multiple-choice comprehension checks. Total catalogue coverage is now 36 activities: Course 4 Semester 2 (12), Course 5 Semester 1 (12), Course 5 Semester 2 (12). All are practice-only; keys remain client-side and attempts/grades are not persisted.
