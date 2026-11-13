@@ -125,3 +125,18 @@ test("custom content deletion is scoped to the requested course", () => {
  assert.match(api, /deleteCustomContent:function\\(id,courseId\\)/);
  assert.equal((editor.match(/deleteCustomContent\\(id,courseSel\\.value\\)/g) || []).length, 2);
 });
+
+test("settings upserts serialize lookup and writes", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function writeSetting_(key,value,actorEmail)");
+ const end = server.indexOf("\\nfunction getTopicAccess_", start);
+ assert.ok(start >= 0 && end > start);
+ const write = server.slice(start, end);
+ const lock = write.indexOf("LockService.getScriptLock()");
+ const wait = write.indexOf("lock.waitLock(10000)");
+ const lookup = write.indexOf("sh.getDataRange().getValues()");
+ const update = Math.max(write.indexOf("sh.getRange(row"), write.indexOf("sh.appendRow(record)"));
+ const release = write.indexOf("lock.releaseLock()");
+ assert.ok(lock >= 0 && wait > lock && lookup > wait && update > lookup);
+ assert.ok(release > update && write.includes("finally {"));
+});
