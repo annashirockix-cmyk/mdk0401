@@ -450,6 +450,55 @@
         { prompt: "What should the final presentation include?", options: ["Unsupported conclusions", "Confirmed facts, limitations, owners and follow-up actions", "A real maintenance procedure", "Invented missing values"], answerIndex: 1, explanation: "The capstone requires evidence-based reporting and explicit limitations." }
       ]
     },
+    ,
+    {
+      id: "en-c04-s01-l01",
+      title: "Course 4 · Semester 1 · Lesson 1 — Conductors, Semiconductors and Insulators",
+      level: "B1+–B2",
+      script: "In an electrical system, materials behave differently when an electric charge is applied. Conductors, such as copper and aluminium, allow current to flow relatively easily. Insulators, such as rubber and many plastics, resist the flow of current and are used to protect conductors. Semiconductors, including silicon, have electrical properties between those of conductors and insulators. Their behaviour can be controlled and they are essential in electronic devices. When discussing aircraft electrical equipment, it is important to distinguish the function of a conductor, an insulator and a semiconductor. This is a general materials lesson, not a procedure for working on aircraft wiring.",
+      questions: [
+        { prompt: "Which materials allow current to flow relatively easily?", options: ["Conductors", "Insulators", "Ceramics only", "Adhesives"], answerIndex: 0, explanation: "Conductors allow current to flow relatively easily." },
+        { prompt: "What is the purpose of an insulator?", options: ["To resist current flow and protect conductors", "To increase current without limit", "To store mechanical energy", "To measure frequency"], answerIndex: 0, explanation: "Insulators resist current flow and provide protection." },
+        { prompt: "Which material is a common semiconductor?", options: ["Silicon", "Rubber", "Copper cable", "Dry wood"], answerIndex: 0, explanation: "Silicon is identified as a semiconductor." },
+        { prompt: "What is the main topic of the lesson?", options: ["Different electrical properties of materials", "Aircraft navigation procedures", "CNC tool selection", "Network topology"], answerIndex: 0, explanation: "The recording compares conductors, insulators and semiconductors." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l02",
+      title: "Course 4 · Semester 1 · Lesson 2 — Direct Current, Alternating Current and Units",
+      level: "B1+–B2",
+      script: "A technician is reading a classroom information sheet about electrical quantities. The sheet explains that direct current flows in one direction, while alternating current changes direction periodically. Voltage is measured in volts, current in amperes and resistance in ohms. Electrical power is measured in watts. Frequency describes how many cycles occur in one second and is measured in hertz. When reading a technical value, always pay attention to the unit as well as the number. A value without a unit may be unclear or misleading. These are basic definitions for language learning, not aircraft electrical limits or test values.",
+      questions: [
+        { prompt: "How does direct current flow?", options: ["In one direction", "It changes direction periodically", "It has no direction", "Only through air"], answerIndex: 0, explanation: "Direct current flows in one direction." },
+        { prompt: "What is the unit of voltage?", options: ["Volt", "Ampere", "Ohm", "Watt"], answerIndex: 0, explanation: "Voltage is measured in volts." },
+        { prompt: "What does frequency describe?", options: ["The number of cycles per second", "The amount of resistance", "The length of a cable", "The mass of a component"], answerIndex: 0, explanation: "Frequency is the number of cycles in one second." },
+        { prompt: "Why is the unit important?", options: ["A number without a unit may be unclear", "Units are only decorative", "Units replace all measurements", "A unit identifies the operator"], answerIndex: 0, explanation: "The recording warns that values need units to be interpreted." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l03",
+      title: "Course 4 · Semester 1 · Lesson 3 — Basic Electrical Circuit Components",
+      level: "B2",
+      script: "A simple electrical circuit contains a source, conductors, a load and often a switch. The source provides electrical energy. Conductors create a path for current. The load converts electrical energy into another form, such as light, heat or mechanical movement. A switch opens or closes the circuit. When the path is complete, the circuit is closed and current can flow. When the path is interrupted, the circuit is open. A fuse is a protective device designed to interrupt a circuit if the current becomes too high. In this classroom example, students identify each component on a simplified diagram. They do not connect or test real equipment.",
+      questions: [
+        { prompt: "What does the source provide?", options: ["Electrical energy", "A mechanical drawing", "A data backup", "A network address"], answerIndex: 0, explanation: "The source provides electrical energy." },
+        { prompt: "What does a load do?", options: ["Converts electrical energy into another form", "Always measures frequency", "Stores document revisions", "Connects computers to a WAN"], answerIndex: 0, explanation: "A load converts electrical energy into another form." },
+        { prompt: "When is a circuit closed?", options: ["When the path is complete", "When a conductor is removed", "When the source is missing", "When the diagram is printed"], answerIndex: 0, explanation: "A closed circuit has a complete path." },
+        { prompt: "What is the purpose of a fuse?", options: ["To interrupt a circuit if current becomes too high", "To increase voltage indefinitely", "To store energy for months", "To convert light into sound"], answerIndex: 0, explanation: "A fuse is a protective device that interrupts excessive current." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l04",
+      title: "Course 4 · Semester 1 · Lesson 4 — Series and Parallel Circuits",
+      level: "B2",
+      script: "An instructor compares two simplified circuit diagrams. In a series circuit, components are connected along one path. If one component interrupts that path, the whole circuit may stop operating. In a parallel circuit, components are connected on separate branches. If one branch is interrupted, current may still flow through the other branches. This is why parallel connections are common in many electrical installations. The instructor asks the students to describe the difference using the words branch, path, current and component. The diagrams are classroom examples. They do not represent a specific aircraft electrical network or provide instructions for modifying a circuit.",
+      questions: [
+        { prompt: "How many paths are there in a simple series circuit?", options: ["One", "Two", "Three", "No path"], answerIndex: 0, explanation: "A series circuit has one path." },
+        { prompt: "What happens if the single path is interrupted?", options: ["The whole circuit may stop operating", "All branches continue independently", "The source changes type", "The voltage unit changes"], answerIndex: 0, explanation: "An interruption in the single path can stop the whole circuit." },
+        { prompt: "What is a feature of a parallel circuit?", options: ["It has separate branches", "It has only one path", "It has no load", "It cannot contain a switch"], answerIndex: 0, explanation: "Parallel circuits have separate branches." },
+        { prompt: "Which vocabulary is used in the comparison?", options: ["Branch, path, current and component", "Fuselage, wing, tail and cockpit", "Router, node, server and protocol", "Casting, forging, milling and grinding"], answerIndex: 0, explanation: "The instructor asks students to use four circuit terms." }
+      ]
+    },
   ];
 
   function el(tag, cls, text) {
