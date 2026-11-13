@@ -48,7 +48,7 @@ test("generic protected question-bank engine shuffles options and keeps a server
 
 test("VPR shuffles choice, matching and gap options while remapping protected keys", () => {
   const source = {tasks:[
-    {type:"choice",options:["one","two","three","four"],items:[["q",3]]},
+    {type:"choice",options:["one","two","three","four"],items:[["q",3],["local",2,["x","y","z","w"]]]},
     {type:"match",options:["east","west","north","south"],items:[["A","text",2]]},
     {type:"gap",options:["first","second","third","fourth"],answers:[4]},
     {type:"gap",itemOptions:[["a","b","c","d"]],answers:[2]}
@@ -57,6 +57,9 @@ test("VPR shuffles choice, matching and gap options while remapping protected ke
   const choiceOrder = maps["choice|0|0"];
   assert.equal(display.tasks[0].options[display.tasks[0].items[0][1]-1],"three");
   assert.equal(choiceOrder.indexOf(2)+1,display.tasks[0].items[0][1]);
+  const localChoiceOrder = maps["choice|0|1"];
+  assert.equal(display.tasks[0].items[1][2][display.tasks[0].items[1][1]-1],"y");
+  assert.equal(localChoiceOrder.indexOf(1)+1,display.tasks[0].items[1][1]);
   const matchOrder = maps["match|1"];
   assert.equal(display.tasks[1].options[display.tasks[1].items[0][2]-1],"west");
   assert.equal(matchOrder.indexOf(1)+1,display.tasks[1].items[0][2]);
