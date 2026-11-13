@@ -1266,3 +1266,20 @@ test("all custom-content delete callers send the owning course ID", () => {
     assert.doesNotMatch(source, /deleteCustomContent\((?:setId|b\.dataset\.delete|item\.id|id)\s*\)/);
   }
 });
+
+
+test("English exam tab shows only the two final tracks while CEFR lab stays separate", () => {
+  const lab = read("english-proficiency-lab.js");
+  const start = lab.indexOf("window.renderEnglishTestsPage=function(mode){");
+  const end = lab.indexOf("console.info(\"[English] В экзаменах доступны только два итоговых варианта", start);
+  assert.ok(start >= 0 && end > start);
+  const route = lab.slice(start, end);
+  assert.match(route, /mode==="lab"\)\{renderLab\(\);return;\}/);
+  assert.match(route, /baseRenderer\(mode==="final-basic"\|\|mode==="final-technical"\?mode:""\)/);
+  assert.doesNotMatch(route, /renderC1C2|variant-|renderHome\(\);\s*\}/);
+  assert.match(read("english-vpr-exams.js"), /basic:\s*\{/);
+  assert.match(read("english-vpr-exams.js"), /technical:\s*\{/);
+  assert.match(read("laboratory.js"), /renderEnglishTestsPage\("lab"\)/);
+  assert.match(read("index.html"), /english-proficiency-lab\.js\?v=5/);
+  assert.match(read("service-worker.js"), /portal-cache-v350/);
+});
