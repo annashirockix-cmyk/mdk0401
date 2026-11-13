@@ -107,8 +107,13 @@ try {
   assert.equal(await page.evaluate(() => window.__constructorStore.find(x => x.type === "game")?.categories.reduce((n,c)=>n+c.questions.length,0)), 9,
     "Sample own-game board must be saved with all nine questions");
 
-  await page.evaluate(() => window.renderFlashcardEditorPage());
-  await page.waitForSelector("#fcTopic");
+  await page.evaluate(() => {
+    window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
+    window.state.activeCourseId = "07.01";
+    window.renderFlashcardEditorPage();
+  });
+  await page.waitForSelector("#fcTopic", { state: "attached" });
+  await page.waitForFunction(() => document.getElementById("fcTopic")?.options.length > 0);
   await page.locator("#fcLoadExample").click();
   await page.waitForFunction(() => document.getElementById("fcDrafts")?.innerText.includes("G00"));
   assert.equal(await page.locator("#fcDrafts article.module").count(), 8, "Sample G-code flashcard set must contain eight cards");
