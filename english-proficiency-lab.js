@@ -325,7 +325,7 @@
     // Keep the examination tab focused on the two final server-backed VPR tracks.
     // Legacy semester/variant/C1-C2 links return to the current two-exam chooser.
     if(baseRenderer)baseRenderer(mode==="final-basic"||mode==="final-technical"?mode:"");
-    else renderHome();
+    else { var app=document.getElementById("app"); if(app)app.textContent="Экзамены временно недоступны: не загружен модуль итоговых экзаменов."; }
   };
   console.info("[English] В экзаменах доступны только два итоговых варианта: Basic и Technical. Лаборатория CEFR A1–C2 открывается отдельно.");
 })();
