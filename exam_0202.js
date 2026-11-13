@@ -135,6 +135,7 @@ window.renderFinal_0202 = function(mdkId) {
   }
   var extraQuestions = [ /* Тот же массив, что и выше */ ]; 
   var allQ = baseQuestions.concat(extraQuestions);
+  if (window._shuffleQuestionOptions) allQ.forEach(window._shuffleQuestionOptions);
 
   app.innerHTML += '<section class="hero"><h1>📋 МДК 02.02</h1><p>Итоговый экзамен: 10 вопросов · 10 минут</p></section>';
   var box = document.createElement("div"); box.className = "module"; app.appendChild(box);
