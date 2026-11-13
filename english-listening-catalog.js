@@ -7,6 +7,150 @@
 
   var activities = [
     {
+      id: "en-c04-s01-l01",
+      title: "Course 4 · Semester 1 · Lesson 1 — Conductors, Semiconductors and Insulators",
+      level: "B1+–B2",
+      script: "In an electrical system, materials behave differently when an electric charge is applied. Conductors, such as copper and aluminium, allow current to flow relatively easily. Insulators, such as rubber and many plastics, resist the flow of current and are used to protect conductors. Semiconductors, including silicon, have electrical properties between those of conductors and insulators. Their behaviour can be controlled and they are essential in electronic devices. When discussing aircraft electrical equipment, it is important to distinguish the function of a conductor, an insulator and a semiconductor. This is a general materials lesson, not a procedure for working on aircraft wiring.",
+      questions: [
+        { prompt: "Which materials allow current to flow relatively easily?", options: ["Conductors", "Insulators", "Ceramics only", "Adhesives"], answerIndex: 0, explanation: "Conductors allow current to flow relatively easily." },
+        { prompt: "What is the purpose of an insulator?", options: ["To resist current flow and protect conductors", "To increase current without limit", "To store mechanical energy", "To measure frequency"], answerIndex: 0, explanation: "Insulators resist current flow and provide protection." },
+        { prompt: "Which material is a common semiconductor?", options: ["Silicon", "Rubber", "Copper cable", "Dry wood"], answerIndex: 0, explanation: "Silicon is identified as a semiconductor." },
+        { prompt: "What is the main topic of the lesson?", options: ["Different electrical properties of materials", "Aircraft navigation procedures", "CNC tool selection", "Network topology"], answerIndex: 0, explanation: "The recording compares conductors, insulators and semiconductors." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l02",
+      title: "Course 4 · Semester 1 · Lesson 2 — Direct Current, Alternating Current and Units",
+      level: "B1+–B2",
+      script: "A technician is reading a classroom information sheet about electrical quantities. The sheet explains that direct current flows in one direction, while alternating current changes direction periodically. Voltage is measured in volts, current in amperes and resistance in ohms. Electrical power is measured in watts. Frequency describes how many cycles occur in one second and is measured in hertz. When reading a technical value, always pay attention to the unit as well as the number. A value without a unit may be unclear or misleading. These are basic definitions for language learning, not aircraft electrical limits or test values.",
+      questions: [
+        { prompt: "How does direct current flow?", options: ["In one direction", "It changes direction periodically", "It has no direction", "Only through air"], answerIndex: 0, explanation: "Direct current flows in one direction." },
+        { prompt: "What is the unit of voltage?", options: ["Volt", "Ampere", "Ohm", "Watt"], answerIndex: 0, explanation: "Voltage is measured in volts." },
+        { prompt: "What does frequency describe?", options: ["The number of cycles per second", "The amount of resistance", "The length of a cable", "The mass of a component"], answerIndex: 0, explanation: "Frequency is the number of cycles in one second." },
+        { prompt: "Why is the unit important?", options: ["A number without a unit may be unclear", "Units are only decorative", "Units replace all measurements", "A unit identifies the operator"], answerIndex: 0, explanation: "The recording warns that values need units to be interpreted." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l03",
+      title: "Course 4 · Semester 1 · Lesson 3 — Basic Electrical Circuit Components",
+      level: "B2",
+      script: "A simple electrical circuit contains a source, conductors, a load and often a switch. The source provides electrical energy. Conductors create a path for current. The load converts electrical energy into another form, such as light, heat or mechanical movement. A switch opens or closes the circuit. When the path is complete, the circuit is closed and current can flow. When the path is interrupted, the circuit is open. A fuse is a protective device designed to interrupt a circuit if the current becomes too high. In this classroom example, students identify each component on a simplified diagram. They do not connect or test real equipment.",
+      questions: [
+        { prompt: "What does the source provide?", options: ["Electrical energy", "A mechanical drawing", "A data backup", "A network address"], answerIndex: 0, explanation: "The source provides electrical energy." },
+        { prompt: "What does a load do?", options: ["Converts electrical energy into another form", "Always measures frequency", "Stores document revisions", "Connects computers to a WAN"], answerIndex: 0, explanation: "A load converts electrical energy into another form." },
+        { prompt: "When is a circuit closed?", options: ["When the path is complete", "When a conductor is removed", "When the source is missing", "When the diagram is printed"], answerIndex: 0, explanation: "A closed circuit has a complete path." },
+        { prompt: "What is the purpose of a fuse?", options: ["To interrupt a circuit if current becomes too high", "To increase voltage indefinitely", "To store energy for months", "To convert light into sound"], answerIndex: 0, explanation: "A fuse is a protective device that interrupts excessive current." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l04",
+      title: "Course 4 · Semester 1 · Lesson 4 — Series and Parallel Circuits",
+      level: "B2",
+      script: "An instructor compares two simplified circuit diagrams. In a series circuit, components are connected along one path. If one component interrupts that path, the whole circuit may stop operating. In a parallel circuit, components are connected on separate branches. If one branch is interrupted, current may still flow through the other branches. This is why parallel connections are common in many electrical installations. The instructor asks the students to describe the difference using the words branch, path, current and component. The diagrams are classroom examples. They do not represent a specific aircraft electrical network or provide instructions for modifying a circuit.",
+      questions: [
+        { prompt: "How many paths are there in a simple series circuit?", options: ["One", "Two", "Three", "No path"], answerIndex: 0, explanation: "A series circuit has one path." },
+        { prompt: "What happens if the single path is interrupted?", options: ["The whole circuit may stop operating", "All branches continue independently", "The source changes type", "The voltage unit changes"], answerIndex: 0, explanation: "An interruption in the single path can stop the whole circuit." },
+        { prompt: "What is a feature of a parallel circuit?", options: ["It has separate branches", "It has only one path", "It has no load", "It cannot contain a switch"], answerIndex: 0, explanation: "Parallel circuits have separate branches." },
+        { prompt: "Which vocabulary is used in the comparison?", options: ["Branch, path, current and component", "Fuselage, wing, tail and cockpit", "Router, node, server and protocol", "Casting, forging, milling and grinding"], answerIndex: 0, explanation: "The instructor asks students to use four circuit terms." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l05",
+      title: "Course 4 · Semester 1 · Lesson 5 — Conventional Power Plants",
+      level: "B1+–B2",
+      script: "Conventional power plants generate electricity using different energy sources. In a thermal power station, fuel is used to produce heat. The heat creates steam, and the steam drives a turbine connected to a generator. Hydroelectric power stations use moving water to turn turbines. Nuclear power stations use heat from nuclear reactions to produce steam. Each type of plant has different operating principles, resource requirements and environmental considerations. When comparing energy sources, engineers may discuss efficiency, availability, emissions and cost. The figures in a classroom comparison table are simplified examples and should not be treated as current national energy statistics.",
+      questions: [
+        { prompt: "What drives a turbine in a thermal power station?", options: ["Steam", "A USB device", "A network signal", "A mouse pointer"], answerIndex: 0, explanation: "Steam drives the turbine in the described thermal plant." },
+        { prompt: "What does a hydroelectric power station use?", options: ["Moving water", "A fuel cell only", "A computer fan", "A mobile phone battery"], answerIndex: 0, explanation: "Hydroelectric stations use moving water." },
+        { prompt: "Which factors may be compared?", options: ["Efficiency, availability, emissions and cost", "Keyboard layout and screen size", "Document font and page count", "Cable colour and connector shape"], answerIndex: 0, explanation: "The speaker lists four comparison factors." },
+        { prompt: "How should classroom figures be treated?", options: ["As simplified examples, not current national statistics", "As official live data", "As operating instructions", "As guaranteed forecasts"], answerIndex: 0, explanation: "The speaker explicitly limits the status of the figures." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l06",
+      title: "Course 4 · Semester 1 · Lesson 6 — Alternative Energy Sources",
+      level: "B1+–B2",
+      script: "Alternative energy sources include solar, wind, tidal and geothermal energy. Solar panels convert sunlight into electrical energy. Wind turbines use moving air to drive a generator. Tidal systems use the movement of sea water, while geothermal systems use heat from below the Earth's surface. Some renewable sources depend on weather or local geography, so energy storage and connection to the electricity network may be important. Engineers compare the available resource, environmental impact, reliability and cost. In this listening exercise, a student explains why a combination of energy sources may be useful for a training project. The discussion is conceptual and does not provide a site design.",
+      questions: [
+        { prompt: "What do solar panels convert?", options: ["Sunlight into electrical energy", "Wind into steam", "Water into plastic", "Sound into mechanical force"], answerIndex: 0, explanation: "Solar panels convert sunlight into electrical energy." },
+        { prompt: "What drives a wind turbine?", options: ["Moving air", "Underground heat", "Tidal water only", "A computer program"], answerIndex: 0, explanation: "Moving air drives a wind turbine." },
+        { prompt: "Why may energy storage be important?", options: ["Some renewable sources depend on weather or local geography", "All renewable sources are constant", "Storage changes the unit of voltage", "It replaces every generator"], answerIndex: 0, explanation: "Availability may vary with weather and location." },
+        { prompt: "What is the status of the discussion?", options: ["A conceptual classroom exercise", "A certified site design", "A live power-grid instruction", "A maintenance authorization"], answerIndex: 0, explanation: "The speaker says it is conceptual and not a site design." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l07",
+      title: "Course 4 · Semester 1 · Lesson 7 — Inventions in Electronics",
+      level: "B2",
+      script: "The development of electronics has changed communication, computing, transport and manufacturing. The transistor made it possible to build smaller and more efficient electronic circuits. Integrated circuits placed many electronic components on a small piece of semiconductor material. Microprocessors brought processing functions into compact devices. Later developments in sensors and digital communication allowed systems to collect and exchange more information. These inventions developed through research, testing and improvements in materials and manufacturing. In a short presentation, a student should describe the invention, explain the problem it addressed and give an example of its impact without claiming that one invention changed every industry in the same way.",
+      questions: [
+        { prompt: "What did the transistor make possible?", options: ["Smaller and more efficient electronic circuits", "The end of all electrical systems", "A replacement for every sensor", "A new type of mechanical turbine"], answerIndex: 0, explanation: "The transistor supported smaller and more efficient circuits." },
+        { prompt: "What do integrated circuits contain?", options: ["Many electronic components on a small semiconductor piece", "Only mechanical gears", "A complete power station", "A set of paper instructions"], answerIndex: 0, explanation: "Integrated circuits place many components on a small semiconductor substrate." },
+        { prompt: "How did these inventions develop?", options: ["Through research, testing and improvements", "All at the same time", "Without materials research", "Only through advertising"], answerIndex: 0, explanation: "The speaker describes gradual development through research and testing." },
+        { prompt: "What should a student avoid?", options: ["Claiming one invention changed every industry in the same way", "Explaining an invention's impact", "Giving an example", "Describing the problem addressed"], answerIndex: 0, explanation: "The speaker cautions against overgeneralization." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l08",
+      title: "Course 4 · Semester 1 · Lesson 8 — Electronic Circuits and Signal Processing",
+      level: "B2",
+      script: "Electronic circuits process electrical signals. A resistor limits or controls current in a circuit, a capacitor stores electrical energy in an electric field, and a diode allows current to pass more easily in one direction than the other. Transistors can be used as switches or amplifying devices. Some circuits process analogue signals, which vary continuously. Other circuits process digital signals, which use discrete values. In a simplified sensor example, an analogue signal is converted into digital data so that a computer can process and display it. The example explains general concepts only; it does not describe a particular aircraft circuit.",
+      questions: [
+        { prompt: "What can a resistor do?", options: ["Limit or control current", "Store a document revision", "Generate radio waves by itself", "Measure distance without a sensor"], answerIndex: 0, explanation: "A resistor can limit or control current." },
+        { prompt: "What does a diode do?", options: ["Allows current to pass more easily in one direction", "Stores data permanently", "Converts every signal into sound", "Connects a computer to the internet"], answerIndex: 0, explanation: "The diode is described as conducting more easily in one direction." },
+        { prompt: "How do analogue signals vary?", options: ["Continuously", "Only as letters", "Only as fixed text labels", "Not at all"], answerIndex: 0, explanation: "Analogue signals vary continuously." },
+        { prompt: "What happens in the sensor example?", options: ["An analogue signal is converted into digital data", "A digital file becomes a turbine", "A resistor becomes a sensor", "A drawing becomes a circuit"], answerIndex: 0, explanation: "The example describes analogue-to-digital conversion." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l09",
+      title: "Course 4 · Semester 1 · Lesson 9 — Mobile Phones and Wireless Communication",
+      level: "B1+–B2",
+      script: "A mobile phone is a portable communication device. It can send and receive voice, text and data through a wireless network. The device contains a processor, memory, battery, display, antenna and radio components. A mobile network uses base stations to provide coverage over an area. When a user moves, the network can transfer the connection between cells. Wireless communication is useful, but performance may be affected by signal strength, obstacles, interference and network capacity. In a technical workplace, personal devices must be used according to local information-security rules. Do not photograph or share controlled technical information unless you are authorized to do so.",
+      questions: [
+        { prompt: "What can a mobile phone send and receive?", options: ["Voice, text and data", "Only printed drawings", "Only electrical current", "Only analogue measurements"], answerIndex: 0, explanation: "The phone sends and receives voice, text and data." },
+        { prompt: "What does a mobile network use to provide coverage?", options: ["Base stations", "Circuit fuses", "CNC axes", "Hydraulic pumps"], answerIndex: 0, explanation: "Base stations provide network coverage." },
+        { prompt: "What may affect wireless performance?", options: ["Signal strength, obstacles, interference and capacity", "The colour of the device", "The font in a report", "The number of pages in a manual"], answerIndex: 0, explanation: "The speaker lists four factors." },
+        { prompt: "What should users follow in a technical workplace?", options: ["Local information-security rules", "Personal preference only", "Unverified online advice", "No restrictions"], answerIndex: 0, explanation: "The speaker stresses local information-security rules." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l10",
+      title: "Course 4 · Semester 1 · Lesson 10 — Aircraft Electrical Power: Sources and Distribution",
+      level: "B2",
+      script: "This classroom briefing introduces the vocabulary of aircraft electrical power. An aircraft may have more than one source of electrical energy, and the distribution system supplies different groups of equipment. A technical overview may refer to generators, batteries, buses, converters and protective devices. A bus is a distribution path that supplies electrical power to connected loads. The system description explains how power sources and loads are represented in approved documentation. Different aircraft designs may use different arrangements, so students must not assume that one simplified diagram applies to every aircraft. This lesson teaches terminology and relationships, not how to operate or isolate a real electrical system.",
+      questions: [
+        { prompt: "What is the focus of the briefing?", options: ["Vocabulary for aircraft electrical power", "A live aircraft power test", "A repair procedure", "A passenger service announcement"], answerIndex: 0, explanation: "The speaker introduces the vocabulary of electrical power systems." },
+        { prompt: "What is a bus in this context?", options: ["A distribution path supplying connected loads", "A passenger vehicle", "A battery chemistry", "A network password"], answerIndex: 0, explanation: "A bus is a power distribution path." },
+        { prompt: "Why should students avoid assuming one diagram fits every aircraft?", options: ["Aircraft designs may use different arrangements", "All aircraft use identical systems", "Diagrams never contain symbols", "A bus is always a computer"], answerIndex: 0, explanation: "The speaker notes that designs differ." },
+        { prompt: "What is the lesson intended to teach?", options: ["Identify terms and describe relationships", "Operate or isolate a real system", "Approve maintenance work", "Select live electrical settings"], answerIndex: 0, explanation: "The lesson is language and conceptual learning only." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l11",
+      title: "Course 4 · Semester 1 · Lesson 11 — Wiring Diagrams, Connectors, Bonding and Grounding",
+      level: "B2",
+      script: "A wiring diagram shows how electrical components and connections are represented in a system. It may identify wires, connectors, terminals, reference numbers and symbols. A connector joins conductors and allows a connection to be made or separated in a controlled design. Bonding and grounding are terms used to describe electrical connections intended to manage potential differences and provide defined reference paths. In a technical document, the symbol, wire identification and connector reference must be read together. A training diagram can help students practise describing connections, but it is not a work instruction. Real aircraft wiring tasks require current approved data, appropriate authorization and the organization's procedures.",
+      questions: [
+        { prompt: "What does a wiring diagram show?", options: ["Representations of components and electrical connections", "A passenger seating plan", "A list of software passwords", "A manufacturing timetable"], answerIndex: 0, explanation: "A wiring diagram represents components and connections." },
+        { prompt: "What does a connector do?", options: ["Joins conductors", "Measures temperature", "Stores a program", "Generates mechanical movement"], answerIndex: 0, explanation: "A connector joins conductors." },
+        { prompt: "What must be read together?", options: ["Symbol, wire identification and connector reference", "Only the page colour", "Only the document title", "Only the author's name"], answerIndex: 0, explanation: "The briefing names all three pieces of information." },
+        { prompt: "What is required for real aircraft wiring tasks?", options: ["Current approved data, authorization and procedures", "A training diagram alone", "An informal online comment", "A guess based on a similar aircraft"], answerIndex: 0, explanation: "The speaker lists approved data, authorization and procedures." }
+      ]
+    },
+    {
+      id: "en-c04-s01-l12",
+      title: "Course 4 · Semester 1 · Lesson 12 — Electrical Measurements and Describing a Fault",
+      level: "B2",
+      script: "When describing an electrical measurement, include the quantity, the value, the unit, the source and the conditions stated in the record. For example, a classroom report might say: ‘The training table lists a voltage value of twelve volts for sample point B.’ The report should distinguish the recorded value from an interpretation. If a field is missing or two records disagree, describe the discrepancy and identify what needs confirmation. Do not invent a measurement or diagnose a failed component without sufficient evidence. Clear professional communication helps another person understand what was observed, what remains unknown and what information is required next.",
+      questions: [
+        { prompt: "What should a measurement description include?", options: ["Quantity, value, unit, source and stated conditions", "Only a number", "Only the student's name", "A suggested repair"], answerIndex: 0, explanation: "The speaker lists five elements for a clear measurement record." },
+        { prompt: "What should a report do when records disagree?", options: ["Describe the discrepancy and identify what needs confirmation", "Choose a value at random", "Delete the source", "Invent a new measurement"], answerIndex: 0, explanation: "The discrepancy should be reported without guessing." },
+        { prompt: "What should be distinguished?", options: ["The recorded value and the interpretation", "The title and page colour", "The student and teacher", "The date and room number"], answerIndex: 0, explanation: "The speaker separates observation from interpretation." },
+        { prompt: "What is the goal of clear professional communication?", options: ["Explain observations, unknowns and required next information", "Hide uncertainty", "Make an unsupported diagnosis", "Replace technical records"], answerIndex: 0, explanation: "The report should make evidence and remaining questions clear." }
+      ]
+    },
+    {
       id: "en-c04-s02-l01",
       title: "Course 4 · Semester 2 · Lesson 1 — Means of Transmission",
       level: "B1+–B2",
@@ -448,55 +592,6 @@
         { prompt: "Which record needs a certificate source reference?", options: ["MAT-22", "CNC-TR-04", "ELEC-CASE-12", "SW-02"], answerIndex: 0, explanation: "MAT-22 has no certificate source entered." },
         { prompt: "Why is no electrical cause stated?", options: ["The diagram is too colourful", "The complete measurement record and test conditions are missing", "The software test passed", "The material family is unknown"], answerIndex: 1, explanation: "The case lacks the measurement record and test conditions needed to establish a cause." },
         { prompt: "What should the final presentation include?", options: ["Unsupported conclusions", "Confirmed facts, limitations, owners and follow-up actions", "A real maintenance procedure", "Invented missing values"], answerIndex: 1, explanation: "The capstone requires evidence-based reporting and explicit limitations." }
-      ]
-    },
-    ,
-    {
-      id: "en-c04-s01-l01",
-      title: "Course 4 · Semester 1 · Lesson 1 — Conductors, Semiconductors and Insulators",
-      level: "B1+–B2",
-      script: "In an electrical system, materials behave differently when an electric charge is applied. Conductors, such as copper and aluminium, allow current to flow relatively easily. Insulators, such as rubber and many plastics, resist the flow of current and are used to protect conductors. Semiconductors, including silicon, have electrical properties between those of conductors and insulators. Their behaviour can be controlled and they are essential in electronic devices. When discussing aircraft electrical equipment, it is important to distinguish the function of a conductor, an insulator and a semiconductor. This is a general materials lesson, not a procedure for working on aircraft wiring.",
-      questions: [
-        { prompt: "Which materials allow current to flow relatively easily?", options: ["Conductors", "Insulators", "Ceramics only", "Adhesives"], answerIndex: 0, explanation: "Conductors allow current to flow relatively easily." },
-        { prompt: "What is the purpose of an insulator?", options: ["To resist current flow and protect conductors", "To increase current without limit", "To store mechanical energy", "To measure frequency"], answerIndex: 0, explanation: "Insulators resist current flow and provide protection." },
-        { prompt: "Which material is a common semiconductor?", options: ["Silicon", "Rubber", "Copper cable", "Dry wood"], answerIndex: 0, explanation: "Silicon is identified as a semiconductor." },
-        { prompt: "What is the main topic of the lesson?", options: ["Different electrical properties of materials", "Aircraft navigation procedures", "CNC tool selection", "Network topology"], answerIndex: 0, explanation: "The recording compares conductors, insulators and semiconductors." }
-      ]
-    },
-    {
-      id: "en-c04-s01-l02",
-      title: "Course 4 · Semester 1 · Lesson 2 — Direct Current, Alternating Current and Units",
-      level: "B1+–B2",
-      script: "A technician is reading a classroom information sheet about electrical quantities. The sheet explains that direct current flows in one direction, while alternating current changes direction periodically. Voltage is measured in volts, current in amperes and resistance in ohms. Electrical power is measured in watts. Frequency describes how many cycles occur in one second and is measured in hertz. When reading a technical value, always pay attention to the unit as well as the number. A value without a unit may be unclear or misleading. These are basic definitions for language learning, not aircraft electrical limits or test values.",
-      questions: [
-        { prompt: "How does direct current flow?", options: ["In one direction", "It changes direction periodically", "It has no direction", "Only through air"], answerIndex: 0, explanation: "Direct current flows in one direction." },
-        { prompt: "What is the unit of voltage?", options: ["Volt", "Ampere", "Ohm", "Watt"], answerIndex: 0, explanation: "Voltage is measured in volts." },
-        { prompt: "What does frequency describe?", options: ["The number of cycles per second", "The amount of resistance", "The length of a cable", "The mass of a component"], answerIndex: 0, explanation: "Frequency is the number of cycles in one second." },
-        { prompt: "Why is the unit important?", options: ["A number without a unit may be unclear", "Units are only decorative", "Units replace all measurements", "A unit identifies the operator"], answerIndex: 0, explanation: "The recording warns that values need units to be interpreted." }
-      ]
-    },
-    {
-      id: "en-c04-s01-l03",
-      title: "Course 4 · Semester 1 · Lesson 3 — Basic Electrical Circuit Components",
-      level: "B2",
-      script: "A simple electrical circuit contains a source, conductors, a load and often a switch. The source provides electrical energy. Conductors create a path for current. The load converts electrical energy into another form, such as light, heat or mechanical movement. A switch opens or closes the circuit. When the path is complete, the circuit is closed and current can flow. When the path is interrupted, the circuit is open. A fuse is a protective device designed to interrupt a circuit if the current becomes too high. In this classroom example, students identify each component on a simplified diagram. They do not connect or test real equipment.",
-      questions: [
-        { prompt: "What does the source provide?", options: ["Electrical energy", "A mechanical drawing", "A data backup", "A network address"], answerIndex: 0, explanation: "The source provides electrical energy." },
-        { prompt: "What does a load do?", options: ["Converts electrical energy into another form", "Always measures frequency", "Stores document revisions", "Connects computers to a WAN"], answerIndex: 0, explanation: "A load converts electrical energy into another form." },
-        { prompt: "When is a circuit closed?", options: ["When the path is complete", "When a conductor is removed", "When the source is missing", "When the diagram is printed"], answerIndex: 0, explanation: "A closed circuit has a complete path." },
-        { prompt: "What is the purpose of a fuse?", options: ["To interrupt a circuit if current becomes too high", "To increase voltage indefinitely", "To store energy for months", "To convert light into sound"], answerIndex: 0, explanation: "A fuse is a protective device that interrupts excessive current." }
-      ]
-    },
-    {
-      id: "en-c04-s01-l04",
-      title: "Course 4 · Semester 1 · Lesson 4 — Series and Parallel Circuits",
-      level: "B2",
-      script: "An instructor compares two simplified circuit diagrams. In a series circuit, components are connected along one path. If one component interrupts that path, the whole circuit may stop operating. In a parallel circuit, components are connected on separate branches. If one branch is interrupted, current may still flow through the other branches. This is why parallel connections are common in many electrical installations. The instructor asks the students to describe the difference using the words branch, path, current and component. The diagrams are classroom examples. They do not represent a specific aircraft electrical network or provide instructions for modifying a circuit.",
-      questions: [
-        { prompt: "How many paths are there in a simple series circuit?", options: ["One", "Two", "Three", "No path"], answerIndex: 0, explanation: "A series circuit has one path." },
-        { prompt: "What happens if the single path is interrupted?", options: ["The whole circuit may stop operating", "All branches continue independently", "The source changes type", "The voltage unit changes"], answerIndex: 0, explanation: "An interruption in the single path can stop the whole circuit." },
-        { prompt: "What is a feature of a parallel circuit?", options: ["It has separate branches", "It has only one path", "It has no load", "It cannot contain a switch"], answerIndex: 0, explanation: "Parallel circuits have separate branches." },
-        { prompt: "Which vocabulary is used in the comparison?", options: ["Branch, path, current and component", "Fuselage, wing, tail and cockpit", "Router, node, server and protocol", "Casting, forging, milling and grinding"], answerIndex: 0, explanation: "The instructor asks students to use four circuit terms." }
       ]
     },
   ];
