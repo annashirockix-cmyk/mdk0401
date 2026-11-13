@@ -5,10 +5,10 @@
 ## Questions
 
 **181.** Choose the correct completion: “The maintenance team ___ the inspection records every Friday.”
-- A. reviews
-- B. review
-- C. reviewing
-- D. have review
+- A. review
+- B. reviewing
+- C. have review
+- D. reviews
 
 **182.** What does *shelf life* mean for a stored material or product?
 - A. The period during which it is expected to remain suitable for use under specified storage conditions
@@ -17,20 +17,20 @@
 - D. The number of items on a delivery vehicle
 
 **183.** Complete the sentence: “The test procedure is available ___ the document management system.”
-- A. in
-- B. at
-- C. by
-- D. onto
+- A. at
+- B. by
+- C. onto
+- D. in
 
 **184.** A report states: “The result is inconclusive because the sample size was limited.” What does *inconclusive* mean here?
-- A. The evidence is insufficient to support a firm conclusion
-- B. The result proves the hypothesis beyond doubt
-- C. The sample was definitely contaminated
+- A. The result proves the hypothesis beyond doubt
+- B. The sample was definitely contaminated
+- C. The evidence is insufficient to support a firm conclusion
 - D. The test was repeated successfully many times
 
 **185.** Which phrase is best for reporting a possible risk without overstating certainty?
-- A. “This condition may affect the reliability of the measurement.”
-- B. “This condition always destroys every measurement.”
+- A. “This condition always destroys every measurement.”
+- B. “This condition may affect the reliability of the measurement.”
 - C. “There is no possible effect under any circumstances.”
 - D. “The measurement is certainly incorrect, although no evidence is available.”
 
@@ -41,68 +41,68 @@
 - D. The number of pages in a textbook
 
 **187.** Choose the correct completion: “The list of required documents, together with the latest revision, ___ attached.”
-- A. is
-- B. are
-- C. have
+- A. are
+- B. have
+- C. is
 - D. be
 
 **188.** A process chart shows that Stage B starts only after Stage A is complete. Which word best describes this relationship?
-- A. Sequential
-- B. Simultaneous
+- A. Simultaneous
+- B. Sequential
 - C. Unrelated
 - D. Optional
 
 **189.** What does *deviation* mean in a controlled process?
-- A. A departure from an established requirement, procedure or expected value
-- B. A routine meeting invitation
+- A. A routine meeting invitation
+- B. A departure from an established requirement, procedure or expected value
 - C. A synonym for a product catalogue
 - D. The final approval signature
 
 **190.** Complete the sentence: “The report was returned ___ several fields had been left blank.”
-- A. because
-- B. although
+- A. although
+- B. because
 - C. unless
 - D. whereas
 
 **191.** Which sentence gives a clear comparison?
-- A. “The revised model is 15% lighter than the previous version.”
-- B. “The revised model is light and previous.”
-- C. “The model has 15% than weight.”
+- A. “The revised model is light and previous.”
+- B. “The model has 15% than weight.”
+- C. “The revised model is 15% lighter than the previous version.”
 - D. “The previous version was comparison.”
 
 **192.** What is the main purpose of an *acceptance test*?
-- A. To determine whether specified acceptance criteria have been met
-- B. To select the colour of a product label
-- C. To calculate an employee's annual leave
-- D. To replace all design reviews
+- A. To select the colour of a product label
+- B. To calculate an employee's annual leave
+- C. To replace all design reviews
+- D. To determine whether specified acceptance criteria have been met
 
 **193.** Choose the correct completion: “Neither of the two proposed dates ___ suitable for the inspection.”
-- A. is
-- B. are
-- C. have
-- D. be
+- A. are
+- B. have
+- C. be
+- D. is
 
 **194.** An aviation component record says: “The part was installed in accordance with the approved data.” What does the statement claim?
-- A. The installation followed the applicable approved information
-- B. The part was installed without reference to documentation
-- C. The part has never been inspected
+- A. The part was installed without reference to documentation
+- B. The part has never been inspected
+- C. The installation followed the applicable approved information
 - D. The component is exempt from all future maintenance
 
 **195.** What does *to retrieve a file* mean?
-- A. To find and access a stored file
-- B. To permanently delete a file
-- C. To change a file's language automatically
-- D. To print every file in a folder
+- A. To permanently delete a file
+- B. To change a file's language automatically
+- C. To print every file in a folder
+- D. To find and access a stored file
 
 **196.** Complete the sentence: “The issue remains open ___ the responsible team provides documented evidence of resolution.”
-- A. until
-- B. since
-- C. despite
+- A. since
+- B. despite
+- C. until
 - D. during
 
 **197.** Which item is an example of objective evidence in a quality report?
-- A. A dated measurement record showing the measured value and instrument identification
-- B. A personal feeling that the product is probably acceptable
+- A. A personal feeling that the product is probably acceptable
+- B. A dated measurement record showing the measured value and instrument identification
 - C. An unverified rumour about the supplier
 - D. A comment that the product looks impressive
 
@@ -128,23 +128,23 @@
 
 | No. | Key | Rationale |
 |---:|:---:|---|
-| 181 | A | The singular collective subject “team” is treated as singular in this sentence. |
+| 181 | D | The singular collective subject “team” is treated as singular in this sentence. |
 | 182 | A | Shelf life is the period a material or product remains suitable under specified storage conditions. |
-| 183 | A | The natural expression is “available in the document management system”. |
-| 184 | A | Inconclusive evidence does not justify a firm conclusion. |
-| 185 | A | “May affect” communicates a possible risk without claiming certainty. |
+| 183 | D | The natural expression is “available in the document management system”. |
+| 184 | C | Inconclusive evidence does not justify a firm conclusion. |
+| 185 | B | “May affect” communicates a possible risk without claiming certainty. |
 | 186 | A | Configuration management identifies configurations and controls changes to them. |
-| 187 | A | The head subject is “list”; the phrase “together with…” does not make it plural. |
-| 188 | A | Sequential means one stage follows another. |
-| 189 | A | A deviation is a departure from an established requirement or expected condition. |
-| 190 | A | “Because” introduces the reason the report was returned. |
-| 191 | A | It makes a grammatically correct comparison and gives a measurable difference. |
-| 192 | A | Acceptance testing checks whether defined criteria are satisfied. |
-| 193 | A | “Neither” is singular in this construction and takes “is”. |
-| 194 | A | The record claims the installation followed applicable approved data; it does not imply exemption from future maintenance. |
-| 195 | A | Retrieve means to locate and access stored information. |
-| 196 | A | “Until” marks the condition that must occur before the issue is closed. |
-| 197 | A | A dated, attributable measurement record is verifiable evidence. |
+| 187 | C | The head subject is “list”; the phrase “together with…” does not make it plural. |
+| 188 | B | Sequential means one stage follows another. |
+| 189 | B | A deviation is a departure from an established requirement or expected condition. |
+| 190 | B | “Because” introduces the reason the report was returned. |
+| 191 | C | It makes a grammatically correct comparison and gives a measurable difference. |
+| 192 | D | Acceptance testing checks whether defined criteria are satisfied. |
+| 193 | D | “Neither” is singular in this construction and takes “is”. |
+| 194 | C | The record claims the installation followed applicable approved data; it does not imply exemption from future maintenance. |
+| 195 | D | Retrieve means to locate and access stored information. |
+| 196 | C | “Until” marks the condition that must occur before the issue is closed. |
+| 197 | B | A dated, attributable measurement record is verifiable evidence. |
 | 198 | A | Backward compatibility concerns continued compatibility with earlier interfaces or data within a defined scope. |
 | 199 | A | This is a polite and conventional formal-email closing. |
 | 200 | A | It preserves the distinction between two units meeting the stated dimensional criteria and one requiring further assessment. |
