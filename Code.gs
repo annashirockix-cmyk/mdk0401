@@ -2004,7 +2004,6 @@ function getGameAnswer_(data) {
 function saveCustomContent_(data) {
   const courseId = String(data.mdkId || data.courseId || "");
   if (!courseId) throw new Error("Не указана дисциплина.");
-  const user = editor_(data, courseId);
   const id = String(data.id || Utilities.getUuid());
   const type = String(data.type || "");
   if (["topic", "lecture", "test", "flashcards", "file", "announcement", "game"].indexOf(type) === -1) {
@@ -2016,6 +2015,9 @@ function saveCustomContent_(data) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
+    // Re-check the caller's current role and course permissions after acquiring
+    // the lock, immediately before touching the content sheet.
+    const user = editor_(data, courseId);
     const sheet = content_();
     const values = sheet.getDataRange().getValues();
     let targetRow = 0;

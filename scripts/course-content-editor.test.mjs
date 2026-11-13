@@ -57,11 +57,13 @@ test("custom content upserts serialize duplicate-ID checks and writes", () => {
  const save = server.slice(start, end);
  const lock = save.indexOf("LockService.getScriptLock()");
  const wait = save.indexOf("lock.waitLock(10000)");
+ const authorization = save.indexOf("editor_(data, courseId)");
  const readIndex = save.indexOf("sheet.getDataRange().getValues()");
  const write = Math.max(save.indexOf("sheet.getRange(targetRow"), save.indexOf("sheet.appendRow(row)"));
  const release = save.indexOf("lock.releaseLock()");
  assert.ok(lock >= 0 && wait > lock, "acquire a script-wide lock before reading");
- assert.ok(readIndex > wait && write > readIndex, "keep duplicate lookup and write inside the lock");
+ assert.ok(authorization > wait && readIndex > authorization, "re-check current editor permissions inside the lock before reading or writing");
+ assert.ok(write > readIndex, "keep duplicate lookup and write inside the lock");
  assert.ok(release > write && save.includes("finally {"), "release the lock even when a save fails");
 });
 
