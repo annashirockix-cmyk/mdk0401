@@ -121,6 +121,7 @@ function handleRequest_(e) {
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
       case "submitenglishvprexam": result = submitEnglishVprExam_(data); break;
+      case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_(data); break;
       case "getbuilttest":
       case "getbuiltintest": result = getBuiltInTest_(data); break;
       case "submitbuilttest":
