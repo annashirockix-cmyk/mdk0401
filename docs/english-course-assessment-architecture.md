@@ -215,3 +215,14 @@ This is a runtime helper only. It does not automatically convert Markdown drafts
 - Assessment mode rejects client-side answer keys, submits selected indices through an optional host callback and keeps the transcript hidden until the host calls `closeAssessment()` after formal closure. Server-side grading and attempt persistence remain the host assessment engine's responsibility.
 - Integration contract and usage example: `docs/english-listening-lesson-integration-v1.md`.
 - Important boundary: the component is loaded and reusable, but the Markdown lecture drafts are not yet converted to portal lesson records and no course lesson catalogue/renderer route is wired to them. This is not a claim that all drafted listening tasks are already playable inside the lecture pages. The existing VPR engine/banks are untouched.
+
+
+## Browser listening lab — playable practice catalogue
+
+- Added `english-listening-catalog.js` with four practice activities for Course 5, Semester 2, lessons 9–12.
+- Added `english-listening-route.js` and the `#/english-listening` route.
+- Added an **Аудирование** quick-access link in `english-tools.js`, shown when EN, ENB or ENT is the active course.
+- The catalogue invokes `EnglishListeningLesson.render` in practice mode, so browser speech, questions, feedback and transcript reveal are available on that page.
+- The four scripts are embedded as text and read by the browser; no MP3 files are required for these exercises.
+- Scope: only lessons 9–12 in Course 5 Semester 2 are currently playable in this catalogue. Lessons 1–8 and the other semesters still need structured conversion.
+- Practice keys are client-side and must not be reused for protected graded assessment. The catalogue does not save attempts, award grades or touch the existing VPR engine.
