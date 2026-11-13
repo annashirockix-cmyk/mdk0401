@@ -150,7 +150,7 @@ function gradeEnglishVprWrittenPart_(data) {
     const sh = results_(), rows = sh.getDataRange().getValues(), map = headerMap_(sh);
     let rowNo = -1, row = null;
     for (let i = rows.length - 1; i >= 1; i--) {
-      if (email_(rows[i][map.Email]) === studentEmail && String(rows[i][map.TestId] || "") === testId && sameCourseId_(rows[i][map.CourseId] || courseId, courseId)) {
+      if (email_(rows[i][map.Email]) === studentEmail && String(rows[i][map.TestId] || "") === testId && sameCourseId_(rows[i][map.CourseId] || courseId, courseId) && (!Number(data.attempts) || Number(rows[i][map.Attempts] || 0) === Number(data.attempts))) {
         rowNo = i + 1; row = rows[i]; break;
       }
     }
