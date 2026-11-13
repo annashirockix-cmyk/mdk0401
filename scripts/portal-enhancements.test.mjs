@@ -1610,7 +1610,7 @@ test("proctor penalty reads only identity and sanction columns", () => {
   assert.equal(firstAttempt.violationCount,1);
   assert.equal(JSON.stringify(calls.slice(0,2)),JSON.stringify([[2,2,3,6],[2,13,3,3]]));
   const logStart=server.indexOf("function logProctorEvent_(data)");
-  const logEnd=server.indexOf("\\nfunction ",logStart+20);
+  const logEnd=server.indexOf("\nfunction ",logStart+20);
   const log=server.slice(logStart,logEnd);
   assert.ok(log.includes("proctorPenalty_(user.email,courseId,testId).violationCount"));
   assert.doesNotMatch(log,/vals=sh\.getDataRange\(\)\.getValues\(\)/);
