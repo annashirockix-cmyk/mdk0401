@@ -48,3 +48,19 @@ test("global custom-content loads ignore stale responses after account changes",
  assert.ok(app.includes("currentIdentity.email"));
  assert.ok(app.includes("window.invalidateGlobalCustomContentLoad(true)"));
 });
+
+test("custom content upserts serialize duplicate-ID checks and writes", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function saveCustomContent_(data)");
+ const end = server.indexOf("\nfunction deleteCustomContent_(data)", start);
+ assert.ok(start >= 0 && end > start);
+ const save = server.slice(start, end);
+ const lock = save.indexOf("LockService.getScriptLock()");
+ const wait = save.indexOf("lock.waitLock(10000)");
+ const read = save.indexOf("sheet.getDataRange().getValues()");
+ const write = Math.max(save.indexOf("sheet.getRange(targetRow"), save.indexOf("sheet.appendRow(row)"));
+ const release = save.indexOf("lock.releaseLock()");
+ assert.ok(lock >= 0 && wait > lock, "acquire a script-wide lock before reading");
+ assert.ok(read > wait && write > read, "keep duplicate lookup and write inside the lock");
+ assert.ok(release > write && save.includes("finally {"), "release the lock even when a save fails");
+});
