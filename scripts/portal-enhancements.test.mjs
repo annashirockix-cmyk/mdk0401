@@ -1110,7 +1110,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(workbooks, /String\(courseId\)==="MCAM"&&\/траектор\|фрез\|обработ\|станок\//);
   assert.doesNotMatch(workbooks, /String\(courseId\)==="MCAM"&&\/cam\|траектор\|фрез\|обработ\|операц\|инструмент\|заготов\//);
   assert.match(workbooks, /не скриншот интерфейса Mastercam/);
-  assert.match(workbooks, /visualBlocks\+cncReference/);
+  assert.match(workbooks, /visualBlocks\+cncSourceStudy\+cncReference/);
   assert.doesNotMatch(workbooks, /var meme=String\(courseId\)/);
   assert.doesNotMatch(workbooks, /meme-cat\.jpg/);
   assert.match(css, /\.wb-visual-table/);
