@@ -89,6 +89,7 @@ function handleRequest_(e) {
       case "getstudents": result = getStudents_(data); break;
       case "saveresult": result = saveResult_(data); break;
       case "saveteacherresult": result = saveTeacherResult_(data); break;
+      case "savemanualgrade": result = saveManualGrade_(data); break;
       case "getresults": result = getResults_(data); break;
       case "getpublicsubjectratings": result = getPublicSubjectRatings_(data); break;
       case "getmycourseresults": result = getMyCourseResults_(data); break;
@@ -762,6 +763,42 @@ function saveTeacherResult_(data) {
   } finally {lock.releaseLock();}
   createNotification_(student.email,"grade","Оценка за лабораторную работу","Преподаватель выставил оценку "+grade+"/5 за работу «"+title+"»."+(feedback?" Добавлен комментарий.":""),courseId,testId);
   return {success:true,grade:grade};
+}
+
+
+function saveManualGrade_(data) {
+  const teacher=auth_(data);
+  if(teacher.role!=="teacher"&&teacher.role!=="admin") throw new Error("Выставлять оценки может только преподаватель.");
+  const courseId=normalizeCourseId_(data.courseId||"");
+  if(!courseId||CFG.COURSES.indexOf(courseId)<0) throw new Error("Выберите дисциплину.");
+  editor_(data,courseId);
+  const studentEmail=email_(data.email),student=userByEmail_(studentEmail);
+  if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по выбранной дисциплине.");
+  const title=String(data.testTitle||"").trim().slice(0,180);
+  const grade=Number(data.grade),date=String(data.date||"").trim(),feedback=String(data.feedback||"").trim().slice(0,3000);
+  if(!title) throw new Error("Укажите название работы.");
+  if(!isFinite(grade)||grade<2||grade>5) throw new Error("Оценка должна быть от 2 до 5.");
+  if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) throw new Error("Укажите корректную дату работы.");
+  const parts=date.split("-").map(Number),check=new Date(Date.UTC(parts[0],parts[1]-1,parts[2]));
+  if(check.getUTCFullYear()!==parts[0]||check.getUTCMonth()!==parts[1]-1||check.getUTCDate()!==parts[2]) throw new Error("Указана некорректная дата работы.");
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  let testId="";
+  try {
+    const authorizedTeacher=editor_(data,courseId);
+    const currentStudent=userByEmail_(studentEmail);
+    if(!currentStudent||currentStudent.role!=="student"||!hasCourseAccess_(currentStudent,courseId)) throw new Error("Студент больше не обучается по выбранной дисциплине.");
+    testId="manual_"+Utilities.getUuid();
+    const finishedAt=new Date(date+"T12:00:00.000Z").toISOString();
+    appendMappedRecord_(results_(),{
+      Email:currentStudent.email,Name:currentStudent.name,Group:currentStudent.group,
+      TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,
+      TimeSpent:0,Attempts:1,FinishedAt:finishedAt,CourseId:courseId,
+      Submission:feedback
+    });
+    appendAttemptAudit_({EventType:"manual_grade_entered",ActorEmail:authorizedTeacher.email,StudentEmail:currentStudent.email,StudentName:currentStudent.name,Group:currentStudent.group,CourseId:courseId,TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20});
+  } finally {lock.releaseLock();}
+  createNotification_(student.email,"grade","Новая оценка","Преподаватель выставил оценку "+grade+"/5 за работу «"+title+"».",courseId,testId);
+  return {success:true,grade:grade,testId:testId};
 }
 
 
