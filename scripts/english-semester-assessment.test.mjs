@@ -79,3 +79,23 @@ test("student-facing payload strips all answer-key and explanation fields", () =
   const question = safe[0].questions[0];
   for (const key of ["correct", "answer", "correctAnswer", "explanation", "rationale"]) assert.equal(Object.hasOwn(question, key), false);
 });
+
+test("unreviewed legacy seed stays out of the production page", () => {
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const legacy = fs.readFileSync(path.join(root, "english-assessment-data.js"), "utf8");
+  assert.equal(html.includes("english-assessment-data.js"), false);
+  const sandbox = { window: {}, console: { log() {} } };
+  new Function("window", "console", legacy)(sandbox.window, sandbox.console);
+  const basic = sandbox.window.SEMESTER_TESTS.basic;
+  const technical = sandbox.window.SEMESTER_TESTS.technical;
+  assert.equal(basic.length, 10);
+  assert.equal(technical.length, 10);
+  assert.equal(basic.every((item) => item.questions.length === 20), true);
+  assert.equal(technical.every((item) => item.questions.length === 20), true);
+  assert.equal(basic.every((item) => item.questions.every((question) => Number.isInteger(question.correct))), false);
+  assert.deepEqual(
+    technical.map((item) => item.questions),
+    basic.map((item) => item.questions),
+    "Technical is still a direct copy of Basic and must not be imported",
+  );
+});
