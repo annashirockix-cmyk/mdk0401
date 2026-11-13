@@ -2136,49 +2136,59 @@ function deleteCustomContent_(data) {
 /* ---------- Administrator: roles and course permissions ---------- */
 
 function setTeacherCourses_(data) {
-  admin_(data);
-  const teacher = userByEmail_(data.email);
-  if (!teacher) throw new Error("Пользователь не найден: " + email_(data.email));
-  if (teacher.role !== "teacher") throw new Error("Дисциплины можно назначать только пользователю с ролью teacher.");
-
-  const requested = Array.isArray(data.courses) ? data.courses : [];
-  const courses = [];
-  requested.forEach(function (id) {
-    id = String(id);
-    if (CFG.COURSES.indexOf(id) !== -1 && courses.indexOf(id) === -1) courses.push(id);
-  });
-
-  writeUserFields_(teacher, { Courses: courses.join(","), UpdatedAt: new Date().toISOString() });
-  return { success: true, courses: courses };
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    // Serialize permission changes with custom-content writes. Re-check the
+    // administrator session after acquiring the same script-wide lock.
+    admin_(data);
+    const teacher = userByEmail_(data.email);
+    if (!teacher) throw new Error("Пользователь не найден: " + email_(data.email));
+    if (teacher.role !== "teacher") throw new Error("Дисциплины можно назначать только пользователю с ролью teacher.");
+    const requested = Array.isArray(data.courses) ? data.courses : [];
+    const courses = [];
+    requested.forEach(function (id) {
+      id = String(id);
+      if (CFG.COURSES.indexOf(id) !== -1 && courses.indexOf(id) === -1) courses.push(id);
+    });
+    writeUserFields_(teacher, { Courses: courses.join(","), UpdatedAt: new Date().toISOString() });
+    return { success: true, courses: courses };
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function setUserRole_(data) {
-  admin_(data);
-  const target = userByEmail_(data.email);
-  if (!target) throw new Error("Пользователь не найден: " + email_(data.email));
-
-  const role = String(data.role || "").toLowerCase();
-  if (["student", "teacher", "admin"].indexOf(role) === -1) {
-    throw new Error("Роль должна быть student, teacher или admin.");
-  }
-
-  if (target.role === "admin" && role !== "admin") {
-    const all = users_().getDataRange().getValues();
-    const map = headerMap_(users_());
-    const admins = all.slice(1).filter(function (row) {
-      return String(row[map.Role]).toLowerCase() === "admin";
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    // Role changes must use the same lock as content writes so a permission
+    // update cannot race the editor authorization check.
+    admin_(data);
+    const target = userByEmail_(data.email);
+    if (!target) throw new Error("Пользователь не найден: " + email_(data.email));
+    const role = String(data.role || "").toLowerCase();
+    if (["student", "teacher", "admin"].indexOf(role) === -1) {
+      throw new Error("Роль должна быть student, teacher или admin.");
+    }
+    if (target.role === "admin" && role !== "admin") {
+      const all = users_().getDataRange().getValues();
+      const map = headerMap_(users_());
+      const admins = all.slice(1).filter(function (row) {
+        return String(row[map.Role]).toLowerCase() === "admin";
+      });
+      if (admins.length <= 1) throw new Error("Нельзя снять права с последнего администратора.");
+    }
+    writeUserFields_(target, {
+      Role: role,
+      Courses: role === "admin" ? "*" : (role === "student" ? "" : target.courses),
+      UpdatedAt: new Date().toISOString()
     });
-    if (admins.length <= 1) throw new Error("Нельзя снять права с последнего администратора.");
+    return { success: true, role: role };
+  } finally {
+    lock.releaseLock();
   }
-
-  writeUserFields_(target, {
-    Role: role,
-    Courses: role === "admin" ? "*" : (role === "student" ? "" : target.courses),
-    UpdatedAt: new Date().toISOString()
-  });
-  return { success: true, role: role };
 }
-
 /**
  * Ручное назначение администратора из редактора Apps Script.
  * Не является HTTP-действием и не может быть вызван обычным пользователем сайта.
