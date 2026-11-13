@@ -137,7 +137,7 @@ e) Соединить слова.
 
 ---
 
-## Лекция en-c01-s01-l05. Present Simple: Facts, Habits and Daily Routines
+## Лекция en-c01-s01-l05. Present Simple: Facts, Habits and General Truths
 
 **Место в курсе:** курс 1, семестр 1.  
 **Цель:** научиться описывать факты, регулярные действия и распорядок дня в Present Simple.
