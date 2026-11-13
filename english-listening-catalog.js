@@ -103,8 +103,7 @@
         { prompt: "How many test cases are listed?", options: ["Three", "Four", "Five", "Eight"], answerIndex: 2, explanation: "Five test cases were reviewed." },
         { prompt: "Which test has a missing unit field?", options: ["SW-01", "SW-02", "SW-03", "SW-04"], answerIndex: 1, explanation: "SW-02 failed because its unit field was missing." }
       ]
-    }
-    ,
+    },
     {
       id: "en-c05-s02-l01",
       title: "Lesson 1 — Delivering a Technical Presentation",
