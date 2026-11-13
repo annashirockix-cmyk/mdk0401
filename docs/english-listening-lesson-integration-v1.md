@@ -91,3 +91,8 @@ The practice catalogue now includes eight lessons in Course 5, Semester 2:
 - Lessons 9–12 — Materials records, reliability planning, integrated handover and capstone review.
 
 Each activity has a browser-readable script, gist/detail questions and practice feedback. The catalogue still uses practice-mode answer keys in the client bundle and does not create graded attempts. Lessons 1–4 and the other semesters are not yet in the playable catalogue.
+
+
+## Complete playable catalogue: Course 5, Semester 2
+
+The browser practice catalogue now contains all twelve lessons in this semester, in lesson order (1–12). Each has a text-to-speech script and multiple-choice gist/detail questions. The browser reads the script directly; no MP3 is required. Transcript reveal and practice feedback are provided by the shared component. This is still a practice catalogue: answer keys are client-side, no grades/attempts are persisted, and it is not a protected exam.
