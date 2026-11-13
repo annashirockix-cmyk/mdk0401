@@ -778,7 +778,7 @@ function saveManualGrade_(data) {
   const grade=Number(data.grade),date=String(data.date||"").trim(),feedback=String(data.feedback||"").trim().slice(0,3000);
   if(!title) throw new Error("Укажите название работы.");
   if(!isFinite(grade)||grade<2||grade>5) throw new Error("Оценка должна быть от 2 до 5.");
-  if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) throw new Error("Укажите корректную дату работы.");
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error("Укажите корректную дату работы.");
   const parts=date.split("-").map(Number),check=new Date(Date.UTC(parts[0],parts[1]-1,parts[2]));
   if(check.getUTCFullYear()!==parts[0]||check.getUTCMonth()!==parts[1]-1||check.getUTCDate()!==parts[2]) throw new Error("Указана некорректная дата работы.");
   const lock=LockService.getScriptLock();lock.waitLock(10000);
