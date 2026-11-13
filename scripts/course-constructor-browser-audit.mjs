@@ -15,7 +15,7 @@ try {
   assert.ok(response && response.ok(), `Portal did not load: ${response?.status()}`);
   await page.waitForFunction(() => typeof window.renderCourseEditorPage === "function" &&
     typeof window.renderFlashcardEditorPage === "function" && window.MDK_DATA && window.MDK_DATA["07.01"]);
-  await page.evaluate(() => {
+  await page.evaluate(async () => {
     document.getElementById("loginOverlay")?.remove();
     window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
