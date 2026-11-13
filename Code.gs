@@ -2759,6 +2759,23 @@ function validateEnglishSemesterTests_(tests, track) {
   return questionCount;
 }
 
+function englishSemesterBankFingerprint_(tests) {
+  return JSON.stringify((tests || []).map(function(test) {
+    return {
+      year: Number(test.year),
+      semester: Number(test.semester),
+      questions: (test.questions || []).map(function(question) {
+        return {
+          q: String(question.q || "").trim().toLowerCase().replace(/\\s+/g, " "),
+          options: (question.options || []).map(function(option) {
+            return String(option == null ? "" : option).trim().toLowerCase();
+          })
+        };
+      })
+    };
+  }));
+}
+
 function importEnglishSemesterTests_(data) {
   const actor = auth_(data);
   if (actor.role !== "admin" && actor.role !== "teacher") throw new Error("Импорт доступен только преподавателю.");
@@ -2771,10 +2788,20 @@ function importEnglishSemesterTests_(data) {
   const questionCount = validateEnglishSemesterTests_(tests, track);
   const json = JSON.stringify(tests);
   if (json.length > 450000) throw new Error("Размер набора превышает 450 КБ.");
-  const sh = englishSemesterBank_(), lock = LockService.getScriptLock();
+  const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
+    const sh = englishSemesterBank_();
     const values = sh.getDataRange().getValues(), map = headerMap_(sh);
+    const otherTrack = track === "basic" ? "technical" : "basic";
+    for (let i = 1; i < values.length; i++) {
+      if (String(values[i][map.Track] || "") !== otherTrack ||
+          String(values[i][map.Active] || "").toUpperCase() !== "TRUE") continue;
+      const otherTests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
+      if (englishSemesterBankFingerprint_(tests) === englishSemesterBankFingerprint_(otherTests)) {
+        throw new Error("Наборы Basic и Technical совпадают. Для Technical требуется самостоятельный комплект вопросов.");
+      }
+    }
     let rowNo = 0;
     for (let i = 1; i < values.length; i++) if (String(values[i][map.Track] || "") === track) { rowNo = i + 1; break; }
     const record = {Track:track, TestsJSON:json, Active:"TRUE", UpdatedAt:new Date().toISOString(), UpdatedBy:actor.email};
