@@ -1543,4 +1543,7 @@ test("English VPR listening answer keys match the speaker roles in both dialogue
   const exams = sandbox.englishVprSeedExams_();
   assert.deepEqual(exams.basic.tasks[0].items.map(item => item[1]), [1,2,2,2,3]);
   assert.deepEqual(exams.technical.tasks[0].items.map(item => item[1]), [1,1,1,1,2]);
+  assert.equal(exams.basic.tasks[3].text.includes("Teachers encourage B_____ because it develops communication skills."), true);
+  assert.equal(exams.basic.tasks[3].options[1], "teamwork");
+  assert.equal(exams.basic.tasks[5].items[0][1], "popular with local students many years ago.");
 });
