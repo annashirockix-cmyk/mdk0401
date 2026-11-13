@@ -1464,9 +1464,11 @@ test("login session and nested role state persist across a page refresh", () => 
 
 test("main games catalogue stays limited to three educational formats", () => {
   const games = read("games.js");
-  const match = games.match(/var allGames = \[([\\s\\S]*?)\\n    \];/);
-  assert.ok(match, "main educational games catalogue must exist");
-  const ids = Array.from(match[1].matchAll(/id: "([^"]+)"/g)).map(item => item[1]);
+  const start = games.indexOf("var allGames = [");
+  const end = games.indexOf("\\n    ];", start);
+  assert.ok(start >= 0 && end > start, "main educational games catalogue must exist");
+  const catalogue = games.slice(start, end);
+  const ids = Array.from(catalogue.matchAll(/id: "([^"]+)"/g)).map(item => item[1]);
   assert.deepEqual(ids, ["gcode", "party", "detective"]);
   assert.ok(read("teacher-game.js").includes("window.renderOwnGames"));
   assert.ok(read("flashcard-editor.js").includes("window.renderFlashcardEditorPage"));
