@@ -40,10 +40,10 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(workbooks, /\.lv-flow\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
  assert.match(workbooks, /overflow-wrap:break-word;word-break:normal/);
  assert.match(workbooks, /\.lecture-visual-atlas\{margin:18px 0/);
- assert.match(html, /workbooks\.js\?v=67/);
+ assert.match(html, /workbooks\.js\?v=68/);
  assert.match(html, /workbook-editorial\.js\?v=6/);
  assert.match(html, /style\.css\?v=24/);
- assert.match(sw, /portal-cache-v339/);
+ assert.match(sw, /portal-cache-v340/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Introducing myself and my future profession/);
  assert.match(editorialSource, /Language practice:/);
