@@ -207,6 +207,12 @@ function ensureSheet_(name) {
 
 function users_() { return ensureSheet_(CFG.USERS); }
 function results_() { return ensureSheet_(CFG.RESULTS); }
+// Attempt checks need only Email, TestId and CourseId (columns A, D and M).
+// Read A:M once, excluding large submission payloads and audit-only columns.
+function resultAttemptRows_() {
+  const sheet=results_(),lastRow=sheet.getLastRow();
+  return lastRow>1?sheet.getRange(2,1,lastRow-1,13).getValues():[];
+}
 function content_() { return ensureSheet_(CFG.CONTENT); }
 function schedule_() { return ensureSheet_(CFG.SCHEDULE); }
 function invites_() { return ensureSheet_(CFG.INVITES); }
@@ -713,8 +719,8 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
   }
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
-    const sheet=results_(),values=sheet.getDataRange().getValues();
-    const prior=values.slice(1).filter(function(row){return email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
+    const sheet=results_(),values=resultAttemptRows_();
+    const prior=values.filter(function(row){return email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     if(assessment){
       const raw=settingValue_("testAttempts:"+email+":"+courseId+":"+testId);
       const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
@@ -1450,7 +1456,7 @@ function getTestAttemptStatus_(data) {
   }
   const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
   const acceptedIds=isCustom?[testId,baseId]:[testId,"custom_"+testId];
-  const used=results_().getDataRange().getValues().slice(1).filter(function(r){
+  const used=resultAttemptRows_().filter(function(r){
     return email_(r[0])===targetEmail&&acceptedIds.indexOf(String(r[3]||""))>=0&&sameCourseId_(r[12]||courseId,courseId);
   }).length;
   return {success:true,email:targetEmail,testId:testId,used:used,limit:limit,remaining:Math.max(0,limit-used),extraAttempts:Math.max(0,limit-1),unlimited:false,allowed:used<limit};
@@ -2796,8 +2802,8 @@ function submitEnglishSemesterTest_(data) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    const results = results_(), rows = results.getDataRange().getValues();
-    const prior = rows.slice(1).filter(function(row) {
+    const results = results_(), rows = resultAttemptRows_();
+    const prior = rows.filter(function(row) {
       return email_(row[0]) === user.email && String(row[3] || "") === testKey &&
         sameCourseId_(row[12] || courseId, courseId);
     }).length;
