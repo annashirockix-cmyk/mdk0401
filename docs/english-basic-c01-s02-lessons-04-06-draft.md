@@ -381,3 +381,20 @@ C: Go straight ahead, cross the street at the pedestrian crossing and turn left 
 - Примеры расписаний и планов являются учебными моделями, а не сведениями о реальном колледже.
 - После предметной проверки перенести материалы в структурированный формат портала с courseId и semesterId.
 - Оценочные ключи должны быть вынесены из публичной клиентской части.
+
+
+---
+
+## Browser listening integration note — lessons 04–06
+
+The matching activities are available in the portal's English Listening Lab. The browser reads each original English script using its installed English voice; no MP3 recording is required.
+
+| Lesson | Catalogue ID | Browser-readable topic | Level |
+|---|---|---|---|
+| 04 | `en-c01-s02-l04` | My College: Departments and People | A1–A2 |
+| 05 | `en-c01-s02-l05` | Subjects, Timetables and Classroom Language | A1–A2 |
+| 06 | `en-c01-s02-l06` | Places in Town and Giving Directions | A1–A2 |
+
+Students open **English → Аудирование**, select an English voice if needed, listen to the script (normally twice), answer the comprehension questions and submit for practice feedback and transcript reveal. The same catalogue item can be embedded inside the lesson after its lecture record is imported into the course data.
+
+**Boundary:** these are practice activities. Their answer keys are client-side; they do not save grades or protected exam attempts. The new lesson drafts have not yet been imported into the portal, so the standalone Listening Lab is the available access route until that import is completed. Existing lecture text, VPR banks, Apps Script and gradebook are unchanged.
