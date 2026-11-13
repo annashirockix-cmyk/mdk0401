@@ -135,3 +135,13 @@ test("shuffled display indices map back to the protected original answer key", (
   assert.equal(order[displayedCorrectIndex], correctOriginalIndex);
   assert.equal(displayedOptions[displayedCorrectIndex], "charlie");
 });
+
+
+test("semester shuffled options are bound to the server-verified attempt number and canonical indices", () => {
+  const get = extractFunction("getEnglishSemesterTests_");
+  const submit = extractFunction("submitEnglishSemesterTest_");
+  assert.match(get, /safeTest\.attemptNo = attemptNo/);
+  assert.match(submit, /requestedAttemptNo !== attemptNo/);
+  assert.match(submit, /englishSemesterOptionOrder_\(user\.email, testId, attemptNo, index, optionCount\)/);
+  assert.match(submit, /Submission:JSON\.stringify\(\{answers:canonicalAnswers\}\)/);
+});
