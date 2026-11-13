@@ -22,3 +22,14 @@ test("only the dedicated Wikimedia file endpoint is eligible for external photo 
   assert.match(workbooks, /commons\.wikimedia\.org\/wiki\/Special:FilePath\//);
   assert.match(workbooks, /Источник и лицензия/);
 });
+
+
+test("CNC workbook photos are mapped to the matching topic and credited", () => {
+  assert.ok(workbooks.includes("Special:FilePath/Cnc%20lathe.png?width=1200"));
+  assert.ok(workbooks.includes("Special:FilePath/Machine%20guarding.jpg?width=1200"));
+  assert.ok(workbooks.includes("Special:FilePath/Professional%20drilling%20metal%20closeup.jpg?width=1000"));
+  assert.ok(!workbooks.includes("Special:FilePath/Lathe%20machinist.jpg"));
+  assert.ok(workbooks.includes("Фото: Somesomething243 · CC BY-SA 4.0"));
+  assert.ok(workbooks.includes("Фото: Machine 1456 · CC0 1.0"));
+  assert.ok(workbooks.includes("Фото: Shixart1985 · CC BY 2.0"));
+});
