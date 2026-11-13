@@ -129,3 +129,14 @@ All activities include a browser-readable script and multiple-choice comprehensi
 ## Course 4, Semester 1 — complete browser listening set
 
 All twelve lessons for Course 4, Semester 1 now have browser-readable practice activities. Lessons 1–9 follow the existing source sequence: conductors/semiconductors/insulators; types of current and units; circuit components; series and parallel circuits; conventional power plants; alternative energy; inventions in electronics; electronic circuits; mobile phones and wireless communication. Lessons 10–12 cover aircraft electrical power distribution, wiring-diagram vocabulary and describing electrical measurements/fault evidence. Together with Course 4 Semester 2 and both Course 5 semesters, the catalogue now contains 48 activities across four semester blocks. All remain practice-only, with client-side answer keys and no persisted attempts or grades.
+
+
+## Coverage correction — 48 playable activities
+
+A fresh read-back of the catalogue confirms 48 unique activities, with 12 lessons in each of four semester blocks:
+- Course 4, Semester 1 — lessons 1–12.
+- Course 4, Semester 2 — lessons 1–12.
+- Course 5, Semester 1 — lessons 1–12.
+- Course 5, Semester 2 — lessons 1–12.
+
+Each activity has a script, questions, answer indices and matching feedback explanations. The earlier 40-activity count was an intermediate count and is superseded by this verified 48-activity read-back. Courses 1–3 remain outstanding. These are practice-only client-side activities, not graded or protected assessment.
