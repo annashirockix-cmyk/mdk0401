@@ -993,13 +993,30 @@ function markAllNotificationsRead_(data) {
 }
 
 function assignmentResultRecords_(emailFilter) {
-  const as=assignments_(), av=as.getDataRange().getValues(), ah=headerMap_(as);
-  const ss=assignmentSubmissions_(), sv=ss.getDataRange().getValues(), sh=headerMap_(ss), byId={};
-  const hs=assignmentSubmissionHistory_(), hv=hs.getDataRange().getValues(), hm=headerMap_(hs), attemptCounts={};
-  hv.slice(1).forEach(function(r){const sid=String(r[hm.SubmissionId]||"");if(sid)attemptCounts[sid]=(attemptCounts[sid]||0)+1;});
+  const as=assignments_(),av=as.getDataRange().getValues(),ah=headerMap_(as);
+  const ss=assignmentSubmissions_(),sh=headerMap_(ss),byId={},wanted=emailFilter?email_(emailFilter):"";
+  let submissions=[];
+  const submissionLastRow=ss.getLastRow(),submissionLastColumn=ss.getLastColumn();
+  if(wanted&&submissionLastRow>1&&sh.StudentEmail!==undefined){
+    // Find this student's submissions in the email column; avoid downloading every student's answer payload.
+    const matches=ss.getRange(2,sh.StudentEmail+1,submissionLastRow-1,1).createTextFinder(wanted).matchEntireCell(true).matchCase(false).findAll();
+    submissions=matches.map(function(cell){return ss.getRange(cell.getRow(),1,1,submissionLastColumn).getValues()[0];});
+    submissions=submissions.filter(function(row){return email_(row[sh.StudentEmail])===wanted;});
+  }else{
+    submissions=ss.getDataRange().getValues().slice(1);
+  }
+  const wantedIds=new Set(submissions.map(function(row){return String(row[sh.Id]||"");}).filter(Boolean));
+  const hs=assignmentSubmissionHistory_(),hm=headerMap_(hs),historyLastRow=hs.getLastRow(),attemptCounts={};
+  if(historyLastRow>1&&hm.SubmissionId!==undefined&&(!wanted||wantedIds.size)){
+    // Only SubmissionId is needed to count attempts; Answer and other history payloads stay unloaded.
+    const historyIds=hs.getRange(2,hm.SubmissionId+1,historyLastRow-1,1).getValues();
+    historyIds.forEach(function(row){
+      const sid=String(row[0]||"");
+      if(sid&&(!wanted||wantedIds.has(sid)))attemptCounts[sid]=(attemptCounts[sid]||0)+1;
+    });
+  }
   av.slice(1).forEach(function(r){if(r[ah.Id])byId[String(r[ah.Id])]=r;});
-  const wanted=emailFilter?email_(emailFilter):"";
-  return sv.slice(1).filter(function(r){return r[sh.Id]&&(!wanted||email_(r[sh.StudentEmail])===wanted);}).map(function(r){
+  return submissions.filter(function(r){return r[sh.Id]&&(!wanted||email_(r[sh.StudentEmail])===wanted);}).map(function(r){
     const a=byId[String(r[sh.AssignmentId])];if(!a)return null;
     const grade=r[sh.Grade]===""||r[sh.Grade]===null?"":Number(r[sh.Grade]);
     return {email:email_(r[sh.StudentEmail]),name:String(r[sh.StudentName]||""),group:String(r[sh.Group]||""),testId:"assignment_"+String(a[ah.Id]),testTitle:"Задание: "+String(a[ah.Title]||""),grade:grade,score:grade===""?0:grade,maxScore:5,percent:grade===""?0:grade*20,timeSpent:0,attempts:Math.max(1,attemptCounts[String(r[sh.Id])]||1),finishedAt:String(r[sh.SubmittedAt]||""),courseId:normalizeCourseId_(a[ah.CourseId]),payload:String(r[sh.Answer]||""),assignmentStatus:String(r[sh.Status]||"submitted"),feedback:String(r[sh.Feedback]||""),assignmentId:String(a[ah.Id])};
