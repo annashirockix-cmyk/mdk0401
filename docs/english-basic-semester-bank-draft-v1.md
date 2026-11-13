@@ -96,9 +96,9 @@
 
 **15.** What does the group plan to do next term?
 - A. Open a new college building
-- B. Organise a book exchange
-- C. Cancel the volunteering project
-- D. Sell all the library books
+- B. Cancel the volunteering project
+- C. Sell all the library books
+- D. Organise a book exchange
 
 **16.** Choose the correct email opening when writing to a teacher whose name you know.
 - A. “Hey you!”
@@ -148,7 +148,7 @@
 | 12 | C | The volunteers show new students where to find information. |
 | 13 | A | Mr Brown says they are becoming more confident with visitors. |
 | 14 | D | “Gain experience” means get or obtain experience. |
-| 15 | B | The final sentence says they plan to organise a book exchange. |
+| 15 | D | The final sentence says they plan to organise a book exchange. |
 | 16 | B | “Dear Ms Green,” is a suitable formal email opening when the recipient is known. |
 | 17 | C | Present continuous can describe a fixed future arrangement. |
 | 18 | D | An adverb (“carefully”) modifies the verb “read”. |
