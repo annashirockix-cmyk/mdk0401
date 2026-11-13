@@ -79,3 +79,15 @@ The browser player and activity component are now loaded by the portal. They are
 - The catalogue uses the reusable listening component in **practice mode only**. It contains practice answer keys in the client bundle; therefore it must not be treated as a protected exam or graded assessment.
 - The catalogue currently covers lessons 9–12 of course 5, semester 2. The other eight lessons have not yet been mapped into this playable catalogue.
 - No grades or attempts are saved by this catalogue. It does not call the VPR API and does not modify the VPR bank.
+
+
+## Expanded playable catalogue: lessons 5–12
+
+The practice catalogue now includes eight lessons in Course 5, Semester 2:
+- Lesson 5 — Manufacturing Process Review and Improvement.
+- Lesson 6 — CNC Program Review and Revision Communication.
+- Lesson 7 — Electrical System Fault-isolation Case Discussion.
+- Lesson 8 — Software Test Results and Data-processing Reports.
+- Lessons 9–12 — Materials records, reliability planning, integrated handover and capstone review.
+
+Each activity has a browser-readable script, gist/detail questions and practice feedback. The catalogue still uses practice-mode answer keys in the client bundle and does not create graded attempts. Lessons 1–4 and the other semesters are not yet in the playable catalogue.
