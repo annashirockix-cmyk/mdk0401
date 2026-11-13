@@ -12,11 +12,28 @@ function makeSheet(headers) {
   const rows = [headers.slice()];
   return {
     rows,
+    getDataRangeCalls: 0,
     getLastRow() { return rows.length; },
     getLastColumn() { return rows[0].length; },
-    getDataRange() { return { getValues: () => rows.map(row => row.slice()) }; },
+    getDataRange() { this.getDataRangeCalls++; return { getValues: () => rows.map(row => row.slice()) }; },
     getRange(row, column, rowCount = 1, columnCount = 1) {
       return {
+        createTextFinder(value) {
+          return {
+            matchEntireCell() { return this; },
+            matchCase() { return this; },
+            findAll() {
+              const target = String(value).toLowerCase();
+              const found = [];
+              for (let r = row; r < row + rowCount; r++) {
+                if (String((rows[r - 1] || [])[column - 1] || "").toLowerCase() === target) {
+                  found.push({ getRow: () => r });
+                }
+              }
+              return found;
+            }
+          };
+        },
         getValues() {
           const result = [];
           for (let r = 0; r < rowCount; r++) {
@@ -167,7 +184,13 @@ test("group assignment workflow works before student onboarding and preserves st
   });
   assert.equal(graded.success, true);
 
+  const submissionReadsBeforeStudentView = submissions.getDataRangeCalls;
+  const historyReadsBeforeStudentView = history.getDataRangeCalls;
   const afterGrade = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
+  assert.equal(submissions.getDataRangeCalls, submissionReadsBeforeStudentView,
+    "student view must not load every student's submission rows");
+  assert.equal(history.getDataRangeCalls, historyReadsBeforeStudentView,
+    "student view must not load every student's attempt history");
   assert.equal(afterGrade.status, "reviewed");
   assert.equal(Number(afterGrade.grade), 5);
   assert.match(afterGrade.feedback, /Отличная работа/);
