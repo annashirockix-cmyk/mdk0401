@@ -24,7 +24,7 @@
     const model={title:old?old.title:"Своя игра",categories:old?JSON.parse(JSON.stringify(old.categories||[])):[{title:"Новая категория",questions:[{points:100,q:"",a:""}]}]};
     app.insertAdjacentHTML("beforeend",'<section class="module"><label for="ownGameTitle">Название игры</label><input class="self-input" id="ownGameTitle" placeholder="Например: Знатоки материаловедения"><p class="museum-muted">Добавляйте категории и вопросы. Ответы видны студентам только после отдельного запроса к серверу.</p><div id="ownGameCategories"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><button class="btn ghost" id="ownGameLoadExample" type="button">✨ Загрузить пример по G-коду</button><button class="btn ghost" id="ownGameAddCategory" type="button">＋ Добавить категорию</button><button class="btn" id="ownGameSave" type="button">Сохранить игру</button><a class="btn ghost" href="#/own-game">К списку игр</a></div><details class="module" style="margin-top:12px"><summary>Дополнительно: импорт / экспорт JSON</summary><p class="museum-muted">Можно вставить подготовленные категории в формате JSON или скопировать текущую структуру.</p><textarea class="self-input" id="ownGameJson" rows="12" spellcheck="false"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn ghost" id="ownGameImport" type="button">Загрузить JSON в редактор</button><button class="btn ghost" id="ownGameExport" type="button">Обновить JSON из редактора</button></div></details><section class="module"><h3>Предпросмотр игрового поля</h3><div id="ownGamePreviewBox"></div></section><p id="ownGameStatus" aria-live="polite"></p></section>');
     $("ownGameTitle").value=model.title;
-    const status=()=> $("ownGameStatus").textContent;
+    const status=message=>{ $("ownGameStatus").textContent=message; };
     function syncJson(){ $("ownGameJson").value=JSON.stringify(model.categories,null,2); }
     function draw(){
       const host=$("ownGameCategories");
@@ -50,7 +50,7 @@
         if(b.dataset.removeQ){const [c,q]=b.dataset.removeQ.split(":").map(Number);model.categories[c].questions.splice(q,1);draw();}
       });
     }
-    $("ownGameLoadExample").onclick=()=>{model.title="Своя игра: основы G-кода";model.categories=[
+    $("ownGameLoadExample").onclick=()=>{model.title="Своя игра: основы G-кода";$("ownGameTitle").value=model.title;model.categories=[
       {title:"Команды перемещения",questions:[
         {points:100,q:"Какая команда задаёт быстрое позиционирование инструмента без обработки?",a:"G00 — быстрое перемещение."},
         {points:200,q:"Чем отличается G01 от G00?",a:"G01 выполняет линейное перемещение с заданной рабочей подачей; G00 — быстрое позиционирование."},
