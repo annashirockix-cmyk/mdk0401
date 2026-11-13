@@ -1,0 +1,81 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const code = fs.readFileSync(path.join(root, "Code.gs"), "utf8");
+
+function extractFunction(name) {
+  const marker = "function " + name + "(";
+  const start = code.indexOf(marker);
+  assert.notEqual(start, -1, `missing server function: ${name}`);
+  const open = code.indexOf("{", start);
+  let depth = 0, quote = "", escaped = false, lineComment = false, blockComment = false;
+  for (let i = open; i < code.length; i++) {
+    const c = code[i], n = code[i + 1];
+    if (lineComment) { if (c === "\n") lineComment = false; continue; }
+    if (blockComment) { if (c === "*" && n === "/") { blockComment = false; i++; } continue; }
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (c === "\\") escaped = true;
+      else if (c === quote) quote = "";
+      continue;
+    }
+    if (c === "/" && n === "/") { lineComment = true; i++; continue; }
+    if (c === "/" && n === "*") { blockComment = true; i++; continue; }
+    if (c === "'" || c === '"' || c === "`") { quote = c; continue; }
+    if (c === "{") depth++;
+    if (c === "}" && --depth === 0) return code.slice(start, i + 1);
+  }
+  throw new Error("unterminated function " + name);
+}
+
+const validateSource = extractFunction("validateEnglishSemesterTests_");
+const sanitizeSource = extractFunction("sanitizeEnglishSemesterTests_");
+const validate = new Function(validateSource + "; return validateEnglishSemesterTests_;")();
+const sanitize = new Function(sanitizeSource + "; return sanitizeEnglishSemesterTests_;")();
+
+function validBank(track) {
+  const prefix = track === "basic" ? "b_" : "t_";
+  return Array.from({ length: 10 }, (_, i) => ({
+    id: prefix + "sem" + (i + 1),
+    year: Math.floor(i / 2) + 1,
+    semester: i % 2 + 1,
+    time: 45,
+    questions: Array.from({ length: 20 }, (_, q) => ({
+      q: `Question ${i + 1}-${q + 1}`,
+      options: ["A", "B", "C", "D"],
+      correct: q % 4,
+    })),
+  }));
+}
+
+test("server accepts exactly ten correctly ordered semester tests with 20 keyed questions each", () => {
+  assert.equal(validate(validBank("basic"), "basic"), 200);
+  assert.equal(validate(validBank("technical"), "technical"), 200);
+});
+
+test("server rejects missing answer keys, duplicate IDs, wrong semester order and repeated questions", () => {
+  const missingKey = validBank("basic"); delete missingKey[0].questions[0].correct;
+  assert.throws(() => validate(missingKey, "basic"), /ключ ответа/);
+  const duplicateId = validBank("basic"); duplicateId[1].id = duplicateId[0].id;
+  assert.throws(() => validate(duplicateId, "basic"), /уникальным ID/);
+  const wrongSemester = validBank("basic"); wrongSemester[0].semester = 2;
+  assert.throws(() => validate(wrongSemester, "basic"), /курс\/семестр/);
+  const repeatedQuestion = validBank("basic"); repeatedQuestion[0].questions[1].q = repeatedQuestion[0].questions[0].q;
+  assert.throws(() => validate(repeatedQuestion, "basic"), /Повторяющийся вопрос/);
+});
+
+test("server rejects duplicate options and track-mismatched identifiers", () => {
+  const duplicateOptions = validBank("technical"); duplicateOptions[0].questions[0].options[2] = "A";
+  assert.throws(() => validate(duplicateOptions, "technical"), /повторяющиеся варианты/);
+  assert.throws(() => validate(validBank("basic"), "technical"), /уникальным ID/);
+});
+
+test("student-facing payload strips all answer-key and explanation fields", () => {
+  const safe = sanitize([{ questions: [{ q: "Q", options: ["A", "B"], correct: 1, answer: "B", correctAnswer: "B", explanation: "key", rationale: "key" }] }]);
+  const question = safe[0].questions[0];
+  for (const key of ["correct", "answer", "correctAnswer", "explanation", "rationale"]) assert.equal(Object.hasOwn(question, key), false);
+});
