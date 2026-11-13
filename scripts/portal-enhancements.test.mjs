@@ -1678,3 +1678,64 @@ test("student results reuse the authenticated payload and compute the protected 
   assert.match(publicFn,/protectedBanks=protectedQuestionBankMap_\(\)/);
   assert.doesNotMatch(publicFn,/const legacy = payload\.results \|\| \{\}, protectedBanks=/);
 });
+
+
+test("student assignment results query only matching submissions and history IDs", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function assignmentResultRecords_(emailFilter)");
+  const end = server.indexOf("\\nfunction getResults_(data)", start);
+  assert.ok(start >= 0 && end > start);
+  const calls=[];
+  const assignmentRows=[
+    ["Id","CourseId","Title"],
+    ["A1","07.01","Практическое задание"]
+  ];
+  const submissionRows={
+    2:["S1","A1","student@test","Student","G1","Ответ 1","2026-11-13","submitted",4,"Хорошо","",""],
+    3:["S3","A1","other@test","Other","G2","Чужой ответ","2026-11-13","submitted",3,"","",""],
+    4:["S2","A1","student@test","Student","G1","Ответ 2","2026-11-14","submitted",5,"Отлично","",""]
+  };
+  const historyIds=[["S1"],["S1"],["S2"]];
+  const assignmentSheet={getDataRange:()=>({getValues:()=>assignmentRows}),headers:assignmentRows[0]};
+  const submissionSheet={
+    headers:["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt"],
+    getLastRow:()=>4,getLastColumn:()=>12,
+    getDataRange:()=>{throw new Error("Student query must not read all submissions");},
+    getRange:(row,column,numRows,numColumns)=>{
+      calls.push([row,column,numRows,numColumns]);
+      if(row===2&&column===3&&numColumns===1)return {
+        createTextFinder:needle=>({
+          matchEntireCell:()=>({matchCase:()=>({findAll:()=>[{getRow:()=>2},{getRow:()=>4}]})})
+        })
+      };
+      if(numRows===1&&numColumns===12&&submissionRows[row])return {getValues:()=>[submissionRows[row]]};
+      throw new Error("Unexpected submissions range");
+    }
+  };
+  const historySheet={
+    headers:["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo"],
+    getLastRow:()=>4,
+    getRange:(row,column,numRows,numColumns)=>{
+      calls.push([row,column,numRows,numColumns]);
+      if(row===2&&column===3&&numColumns===1)return {getValues:()=>historyIds};
+      throw new Error("History query must read only SubmissionId");
+    },
+    getDataRange:()=>{throw new Error("History query must not read full history");}
+  };
+  const sandbox={
+    assignments_:()=>assignmentSheet,
+    assignmentSubmissions_:()=>submissionSheet,
+    assignmentSubmissionHistory_:()=>historySheet,
+    headerMap_:sheet=>Object.fromEntries(sheet.headers.map((name,index)=>[name,index])),
+    email_:value=>String(value||"").trim().toLowerCase(),
+    normalizeCourseId_:value=>String(value||"")
+  };
+  vm.runInNewContext(server.slice(start,end)+";this.assignmentResultRecords_=assignmentResultRecords_;",sandbox);
+  const records=sandbox.assignmentResultRecords_("STUDENT@TEST");
+  assert.equal(records.length,2);
+  assert.equal(records[0].email,"student@test");
+  assert.equal(records[0].attempts,2);
+  assert.equal(records[1].attempts,1);
+  assert.equal(records[1].payload,"Ответ 2");
+  assert.equal(JSON.stringify(calls),JSON.stringify([[2,3,3,1],[2,1,1,12],[4,1,1,12],[2,3,3,1]]));
+});
