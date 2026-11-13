@@ -662,16 +662,16 @@ test("course selector and active final exam use the protected course bank", () =
   const sw = read("service-worker.js");
   const finalExam = read("final.js");
   const server = read("Code.gs");
-  assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\\/option>/);
-  assert.match(html, /sprut-tp-question-bank\\.js\\?v=2/);
+  assert.ok(html.includes('<option value="SPRUT_TP">СПРУТ-ТП</option>'));
+  assert.ok(html.includes("sprut-tp-question-bank.js?v=2"));
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.doesNotMatch(html, /exam-engine\\.js/);
-  assert.doesNotMatch(sw, /exam-engine\\.js/);
-  assert.match(finalExam, /FINAL_EXAM_TEST_SIZE = 45/);
-  assert.match(finalExam, /getFinalExam/);
-  assert.match(finalExam, /submitFinalExam/);
-  assert.match(server, /function getFinalExam_/);
-  assert.match(server, /function submitFinalExam_/);
+  assert.ok(!html.includes("exam-engine.js"));
+  assert.ok(!sw.includes("exam-engine.js"));
+  assert.ok(finalExam.includes("FINAL_EXAM_TEST_SIZE = 45"));
+  assert.ok(finalExam.includes("getFinalExam"));
+  assert.ok(finalExam.includes("submitFinalExam"));
+  assert.ok(server.includes("function getFinalExam_"));
+  assert.ok(server.includes("function submitFinalExam_"));
 });
 
 
