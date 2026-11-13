@@ -423,7 +423,7 @@ window.renderStudentGradesPage = function() {
 
     app.innerHTML += `
         <section class="hero"><h1>📊 Мои оценки</h1></section>
-        <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}</tbody></table></div></div>
+        <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}<tr id="serverManualGrades"><td colspan="3" style="text-align:center;color:var(--muted)">Загрузка серверных оценок…</td></tr></tbody></table></div></div>
         <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody id="serverAssessmentGrades">${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody></table></div></div>
         <div class="module"><h3>Задания преподавателя</h3><div id="serverAssignmentGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
         <div class="module"><h3>Лабораторные работы по метрологии</h3><div id="serverMetrologyGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
@@ -435,9 +435,15 @@ window.renderStudentGradesPage = function() {
     if(assessmentHost&&window.API&&window.API.getMyCourseResults){
       window.API.getMyCourseResults("").then(function(r){
         if(!r||!r.success)throw new Error(r&&r.error||"Не удалось загрузить результаты");
+        var manualRecords=(r.results||[]).filter(function(x){return String(x.testId||"").indexOf("manual_")===0;});
+        var manualHost=document.getElementById("serverManualGrades");
+        if(manualHost)manualHost.outerHTML=manualRecords.length?manualRecords.map(function(x){
+          var date=x.finishedAt?new Date(x.finishedAt).toLocaleDateString("ru-RU"):"—";
+          return "<tr><td>"+window.escapeHtml(date)+"</td><td>"+window.escapeHtml(x.testTitle||"Оценка преподавателя")+" ("+window.escapeHtml(x.courseId||"—")+")</td><td style='text-align:center;font-weight:bold'>"+window.escapeHtml(x.grade==null?"—":x.grade)+"</td></tr>";
+        }).join(""):'<tr id="serverManualGrades"><td colspan="3" style="text-align:center;color:var(--muted)">Серверных оценок преподавателя пока нет</td></tr>';
         var source=(r.results||[]).filter(function(x){
           var id=String(x.testId||"");
-          return id.indexOf("assignment_")!==0&&id.indexOf("metrology_")!==0;
+          return id.indexOf("assignment_")!==0&&id.indexOf("metrology_")!==0&&id.indexOf("manual_")!==0;
         });
         var grouped=Object.create(null);
         source.forEach(function(x){
