@@ -1882,7 +1882,7 @@ function submitBuiltInTest_(data) {
     if(prior>=limit)throw new Error("Работа уже завершена ("+prior+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo);
     const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=gradeFromPercent_(percent),score=rawScore; // Показываем фактически верные ответы; штраф влияет на процент и оценку, но не меняет счётчик правильных ответов.
-    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:String(data.testTitle||testId),Grade:grade,Score:score,MaxScore:entries.length,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:JSON.stringify({answers:answers}).slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:String(data.testTitle||testId),Grade:grade,Score:score,MaxScore:entries.length,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:JSON.stringify({answers:canonicalAnswers}).slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:String(data.testTitle||testId),AttemptNo:attemptNo,Grade:grade,Score:score,MaxScore:entries.length,Percent:percent});
     cache.remove("builtInAttempt:"+attemptId);
     return {success:true,score:score,rawScore:rawScore,maxScore:entries.length,percent:percent,rawPercent:rawPercent,grade:grade,attempts:attemptNo,penaltyPoints:policy.penaltyPoints,violationCount:policy.violationCount};
@@ -2823,6 +2823,34 @@ function sanitizeEnglishSemesterTests_(tests) {
   });
 }
 
+/**
+ * Возвращает детерминированный порядок исходных индексов вариантов ответа
+ * для конкретного студента, контрольной, попытки и вопроса.
+ * Ключ не передаётся клиенту; сервер повторно вычисляет тот же порядок при проверке.
+ */
+function englishSemesterOptionOrder_(email, testId, attemptNo, questionIndex, optionCount) {
+  const seedText = [String(email || "").toLowerCase(), String(testId || ""),
+    String(attemptNo || 1), String(questionIndex || 0)].join("|");
+  let seed = 2166136261;
+  for (let i = 0; i < seedText.length; i++) {
+    seed ^= seedText.charCodeAt(i);
+    seed = Math.imul(seed, 16777619) >>> 0;
+  }
+  if (!seed) seed = 0x6d2b79f5;
+  function nextRandom() {
+    seed ^= seed << 13; seed >>>= 0;
+    seed ^= seed >>> 17; seed >>>= 0;
+    seed ^= seed << 5; seed >>>= 0;
+    return seed / 4294967296;
+  }
+  const order = Array.from({length:Math.max(0, Number(optionCount) || 0)}, function(_, index) { return index; });
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(nextRandom() * (i + 1));
+    const value = order[i]; order[i] = order[j]; order[j] = value;
+  }
+  return order;
+}
+
 function getEnglishSemesterTests_(data) {
   const user = auth_(data), track = String(data.track || "").toLowerCase();
   if (["student","teacher","admin"].indexOf(user.role) < 0 || ["basic","technical"].indexOf(track) < 0) {
@@ -2837,7 +2865,24 @@ function getEnglishSemesterTests_(data) {
     if (String(values[i][map.Track] || "") !== track || String(values[i][map.Active] || "").toUpperCase() !== "TRUE") continue;
     const tests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
     const questionCount = (tests || []).reduce(function(sum, test) { return sum + ((test.questions || []).length); }, 0);
-    return {success:true, track:track, tests:sanitizeEnglishSemesterTests_(tests), testCount:tests.length, questionCount:questionCount};
+    const safeTests = sanitizeEnglishSemesterTests_(tests);
+    if (user.role === "student") {
+      const rows = resultAttemptRows_();
+      safeTests.forEach(function(safeTest) {
+        const testKey = "english_semester_" + track + "_" + String(safeTest.id || "");
+        const prior = rows.filter(function(row) {
+          return email_(row[0]) === user.email && String(row[3] || "") === testKey &&
+            sameCourseId_(row[12] || courseId, courseId);
+        }).length;
+        const attemptNo = prior + 1;
+        safeTest.questions.forEach(function(question, questionIndex) {
+          const originalOptions = question.options.slice();
+          const order = englishSemesterOptionOrder_(user.email, safeTest.id, attemptNo, questionIndex, originalOptions.length);
+          question.options = order.map(function(originalIndex) { return originalOptions[originalIndex]; });
+        });
+      });
+    }
+    return {success:true, track:track, tests:safeTests, testCount:tests.length, questionCount:questionCount};
   }
   return {success:false, error:"Семестровые контрольные ещё не импортированы преподавателем."};
 }
@@ -2876,11 +2921,6 @@ function submitEnglishSemesterTest_(data) {
   if (answers.length !== test.questions.length) {
     throw new Error("Количество ответов не совпадает с количеством вопросов.");
   }
-  const score = test.questions.reduce(function(total, question, index) {
-    const correct = Number(question.correct);
-    const answer = answers[index];
-    return total + (Number.isInteger(answer) && answer === correct ? 1 : 0);
-  }, 0);
   const testKey = "english_semester_" + track + "_" + testId;
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -2896,6 +2936,15 @@ function submitEnglishSemesterTest_(data) {
       throw new Error("Контрольная уже завершена. Для повторного прохождения обратитесь к преподавателю.");
     }
     const attemptNo = prior + 1;
+    const canonicalAnswers = answers.map(function(answer, index) {
+      const optionCount = (test.questions[index].options || []).length;
+      if (!Number.isInteger(answer) || answer < 0 || answer >= optionCount) return -1;
+      const order = englishSemesterOptionOrder_(user.email, testId, attemptNo, index, optionCount);
+      return Number.isInteger(order[answer]) ? order[answer] : -1;
+    });
+    const score = test.questions.reduce(function(total, question, index) {
+      return total + (canonicalAnswers[index] === Number(question.correct) ? 1 : 0);
+    }, 0);
     const policy = proctorPenalty_(user.email, courseId, testKey, attemptNo);
     const rawPercent = Math.round(score / test.questions.length * 100);
     const percent = Math.max(0, rawPercent - policy.penaltyPoints);
