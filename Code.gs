@@ -228,14 +228,20 @@ function activityLog_() { return ensureSheet_("ActivityLog"); }
 function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString()]); }
 
 function proctorPenalty_(studentEmail,courseId,testId,attemptNo) {
-  const sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+  const sh=proctorEvents_(),lastRow=sh.getLastRow();
   let penalty=0,count=0;
-  vals.slice(1).forEach(function(row){
-    if(email_(row[m.StudentEmail])===email_(studentEmail)&&String(row[m.CourseId]||"")===String(courseId)&&String(row[m.TestId]||"")===String(testId)&&(!attemptNo||Number(row[m.AttemptNo]||1)===Number(attemptNo))){
-      count=Math.max(count,Number(row[m.ViolationNo])||0);
-      penalty=Math.max(penalty,Number(row[m.PenaltyPoints])||0);
+  if(lastRow<=1)return {penaltyPoints:0,violationCount:0};
+  // B:G contains identity and attempt scope; M:O contains violation and penalty totals.
+  // Avoid loading the potentially large Page, Details and timestamp fields on every assessment request.
+  const identityRows=sh.getRange(2,2,lastRow-1,6).getValues();
+  const sanctionRows=sh.getRange(2,13,lastRow-1,3).getValues();
+  for(let i=0;i<identityRows.length;i++){
+    const identity=identityRows[i],sanction=sanctionRows[i];
+    if(email_(identity[0])===email_(studentEmail)&&String(identity[3]||"")===String(courseId)&&String(identity[4]||"")===String(testId)&&(!attemptNo||Number(identity[5]||1)===Number(attemptNo))){
+      count=Math.max(count,Number(sanction[0])||0);
+      penalty=Math.max(penalty,Number(sanction[2])||0);
     }
-  });
+  }
   return {penaltyPoints:Math.min(30,penalty),violationCount:count};
 }
 function gradeFromPercent_(percent) { return percent>=90?5:percent>=75?4:percent>=60?3:2; }
@@ -857,14 +863,11 @@ function logProctorEvent_(data) {
   const page=String(data.page||"").slice(0,180),details=String(data.details||"").slice(0,240),clientTime=String(data.clientTime||"").slice(0,40);
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
-    const sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
+    const sh=proctorEvents_();
     const resultRows=resultAttemptRows_();
     const attemptNo=resultRows.filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length+1;
-    let previous=0;
-    vals.slice(1).forEach(function(row){
-      // Счётчик нарушений ведётся по всему тесту и не сбрасывается при новой попытке.
-      if(email_(row[m.StudentEmail])===user.email&&String(row[m.CourseId]||"")===courseId&&String(row[m.TestId]||"")===testId)previous=Math.max(previous,Number(row[m.ViolationNo])||0);
-    });
+    // Счётчик нарушений ведётся по всему тесту и не сбрасывается при новой попытке.
+    const previous=proctorPenalty_(user.email,courseId,testId).violationCount;
     const violationNo=previous+1,action=violationNo===1?"warning":"sanction";
     const penaltyPoints=Math.min(30,Math.max(0,violationNo-1)*10);
     appendMappedRecord_(sh,{Id:Utilities.getUuid(),StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,AttemptNo:attemptNo,EventType:eventType,Page:page,ClientTime:clientTime,ServerTime:new Date().toISOString(),Details:details,ViolationNo:violationNo,Action:action,PenaltyPoints:penaltyPoints});
