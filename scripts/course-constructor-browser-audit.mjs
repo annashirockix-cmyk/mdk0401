@@ -99,11 +99,11 @@ try {
   await page.evaluate(() => window.renderOwnGameEditor());
   await page.waitForSelector("#ownGameLoadExample");
   await page.locator("#ownGameLoadExample").click();
-  await page.waitForFunction(() => document.getElementById("ownGamePreviewBox")?.innerText.includes("G00"));
+  await page.waitForFunction(() => document.getElementById("ownGamePreviewBox")?.innerText.includes("Команды перемещения"));
   assert.equal(await page.locator("#ownGameCategories article.module").count(), 3, "Sample own-game board must contain three categories");
   assert.equal(await page.locator("#ownGameCategories [data-q-text]").count(), 9, "Sample own-game board must contain nine questions");
   await page.locator("#ownGameSave").click();
-  await page.waitForFunction(() => document.getElementById("ownGameStatus")?.textContent.includes("Игра сохранена"));
+  await page.waitForFunction(() => window.__constructorStore.some(x => x.type === "game" && x.title === "Своя игра: основы G-кода"));
   assert.equal(await page.evaluate(() => window.__constructorStore.find(x => x.type === "game")?.categories.reduce((n,c)=>n+c.questions.length,0)), 9,
     "Sample own-game board must be saved with all nine questions");
 
