@@ -1469,5 +1469,5 @@ test("main games catalogue stays limited to three educational formats", () => {
   const ids = Array.from(match[1].matchAll(/id: "([^"]+)"/g)).map(item => item[1]);
   assert.deepEqual(ids, ["gcode", "party", "detective"]);
   assert.ok(read("teacher-game.js").includes("window.renderOwnGames"));
-  assert.ok(read("flashcard-editor.js").includes("window.renderFlashcard"));
+  assert.ok(read("flashcard-editor.js").includes("window.renderFlashcardEditorPage"));
 });
