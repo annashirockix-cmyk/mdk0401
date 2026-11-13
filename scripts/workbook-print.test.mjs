@@ -16,6 +16,11 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(workbooks, /class="wb-answer-group"/);
  assert.match(workbooks, /writing=Array\.isArray\(t\.writing\)\?t\.writing:\[\]/);
  assert.match(workbooks, /wb-source-writing-text/);
+ assert.match(workbooks, /wb-source-study/);
+ assert.match(workbooks, /системы координат, с\. 8–15/);
+ assert.match(workbooks, /круговой интерполяции, с\. 34–36/);
+ assert.match(workbooks, /постоянных циклах 2П32-3, с\. 82–88/);
+ assert.match(workbooks, /не переносите их без проверки на FANUC/);
  assert.match(workbooks, /\.wb-visual-table-wrap\{overflow:visible!important/);
  assert.match(workbooks, /\.wb-visual-table\{display:table!important/);
  assert.match(workbooks, /\.wb-visual-table thead\{display:table-header-group\}/);
