@@ -941,6 +941,7 @@ test("server builds 45-question advanced non-English exams with protected answer
     auth_:()=>({role:"student",email:"student@test"}),
     hasCourseAccess_:()=>true,
     results_:()=>({getDataRange:()=>({getValues:()=>[["Email"]]})}),
+    resultAttemptRows_:()=>[],
     email_:value=>String(value||"").toLowerCase(),
     sameCourseId_:()=>true,
     settingValue_:()=>""
