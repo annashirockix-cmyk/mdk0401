@@ -1,3 +1,62 @@
+function englishVprSeedExams_() {
+  return {
+    basic: {
+      id:"english_vpr_basic_2026", track:"basic", title:"Basic English — итоговая проверочная работа", time:90, maxScore:40,
+      audioText:"Hello, Kate. Are you ready for the college open day? Almost. I have prepared the presentation about our college library. I visited it last week to collect some information. What about you, Mark? I am going to show the new sports centre. I have never been inside it before, so I asked our teacher to give me a short tour yesterday. Are you taking part in the English quiz? Yes, but I am a little worried because the quiz starts at ten and my bus arrives at ten past nine. That should be enough time. I hope so. I usually travel by bus, but tomorrow my father will drive me because he has a day off. Are your parents coming too? My mother is coming, but my father is working on Saturday. We both want to visit the science exhibition after the presentations. That sounds interesting. I would like to see it too. Let's meet near the main entrance at half past nine.",
+      tasks:[
+        {title:"1. Аудирование",type:"choice",points:5,instruction:"Прослушайте диалог два раза. Выберите: 1 — Kate, 2 — Mark, 3 — оба, 4 — никто из них.",options:["Kate","Mark","Both speakers","Neither speaker"],items:[
+          ["Who prepared a presentation about the college library?",1],["Who has not visited the sports centre before?",2],["Who is worried about arriving on time?",2],["Whose father will drive them to college?",2],["Who wants to visit the science exhibition?",3]
+        ]},
+        {title:"2. Чтение: установление соответствия",type:"match",points:5,instruction:"Соотнесите тексты A–E с заголовками 1–6. Один заголовок лишний.",options:["A place to study together","Learning through travel","Keeping fit every day","A useful way to save money","Helping the local community","A new hobby for a rainy day"],items:[
+          ["A","Our college has a modern library with computers and quiet rooms. Students can borrow books, use the Internet and work on group projects. The library is open until seven in the evening.",1],
+          ["B","Last month our group visited a historical town. We walked around the old streets, listened to a guide and learned how people lived many years ago.",2],
+          ["C","I cycle to college every morning. At weekends I play volleyball with my friends. Regular activity helps me feel energetic and sleep better.",3],
+          ["D","I started making simple models from paper. I watch online lessons and try new designs. It is an inexpensive hobby I can do at home.",6],
+          ["E","Our students organised a clean-up day in the park. We collected rubbish, planted flowers and put up signs asking visitors to keep the area clean.",5]
+        ]},
+        {title:"3. Чтение: восстановление текста",type:"gap",points:5,instruction:"Заполните пропуски A–E частями предложений 1–6. Одна часть лишняя.",text:"Many students have a part-time job while they are studying. A_____. Some work in cafés or shops, while others help younger pupils. A part-time job can teach students to be responsible. B_____. It is also important to plan your time carefully. C_____. Students should remember that education comes first. D_____. A good employer understands that young people need time for classes and homework. E_____.",options:["They choose different kinds of work.","They learn how to communicate with other people.","If they work too many hours, they may become tired.","Some students prefer spending all their time online.","That is why a flexible work schedule is useful.","They can also earn money for personal needs."],answers:[1,6,3,5,2]},
+        {title:"4. Лексика: заполнение пропусков",type:"gap",points:5,instruction:"Прочитайте текст. Заполните пропуски A–E подходящими словами из списка. Два слова лишние.",text:"College life helps young people prepare for their future. Students can gain useful A_____ by taking part in practical activities. Teachers encourage B_____ work because it develops communication skills. A well-equipped workshop gives students an opportunity to work C_____ with modern tools. Students should always follow safety D_____ and use equipment E_____.",options:["experience","team","safely","rules","carefully","danger","develop"],answers:[1,2,3,4,5]},
+        {title:"5. Словообразование в контексте",type:"gap",points:5,instruction:"Прочитайте текст. Для каждого пропуска выберите правильное однокоренное слово из трёх вариантов.",text:"A_____ a car, a motorcycle has only two wheels. Large, B_____ motorcycles are often used for sports. Two German C_____ designed the first motorcycle with an internal combustion engine. The first D_____ motorcycle in the United States appeared in the nineteenth century. It was popular and E_____.",itemOptions:[["Unlike","Dislike","Likely"],["powerfully","powerful","powerless"],["inventors","invent","inventions"],["produced","production","product"],["unreliable","reliable","rely"]],answers:[1,2,1,1,2]},
+        {title:"6. Грамматические преобразования",type:"transform",points:5,instruction:"Прочитайте текст. Преобразуйте слова, напечатанные заглавными буквами, так, чтобы они грамматически соответствовали содержанию текста.",items:[
+          ["Our college", "many years ago.", "BECOME", ["became"]],
+          ["Several new workshops", "last year.", "BUILD", ["were built"]],
+          ["It is one of the", "colleges in the region.", "GOOD", ["best"]],
+          ["Students develop", "professional skills during practical classes.", "THEY", ["their"]],
+          ["Our graduates are often the", "to find a job.", "ONE", ["first"]]
+        ]},
+        {title:"7. Анкета",type:"questionnaire",points:10,instruction:"Вы хотите стать участником международного студенческого клуба. Заполните анкету на английском языке. Каждый ответ — не более 5 слов.",items:["First name","Home country","Hometown","Favourite subject","Future profession","Can you speak any foreign languages?","What do you do in your free time?","Where do you usually study?","Have you taken part in a college event?","Why would you like to join the club?"]}
+      ]
+    },
+    technical: {
+      id:"english_vpr_technical_2026", track:"technical", title:"Technical English — итоговая проверочная работа", time:90, maxScore:40,
+      audioText:"Good morning, Alex. Are you ready for the workshop demonstration? I think so. I checked the machine instructions yesterday, but I still need to prepare the workpiece. Have you checked the cutting tool? Yes. I inspected it this morning and replaced the worn insert. What about the measuring instruments? The teacher asked me to bring a calliper and a micrometer. They are in the tool cabinet. Remember to wear your safety glasses before the machine starts. Of course. I also checked that the guard is closed. Are we using the CNC lathe today? Yes, we are going to demonstrate a simple turning operation. First, we will set the workpiece in the chuck. Then we will check the tool position and run the programme in simulation mode. Will the spindle start automatically? Only after the operator confirms the setup and presses the cycle start button. Good. I will record the measurements after the operation.",
+      tasks:[
+        {title:"1. Аудирование",type:"choice",points:5,instruction:"Прослушайте диалог два раза. Выберите: 1 — Alex, 2 — второй студент, 3 — оба, 4 — никто.",options:["Alex","The other student","Both speakers","Neither speaker"],items:[
+          ["Who checked the machine instructions yesterday?",1],["Who replaced the worn cutting insert?",2],["Who must bring measuring instruments?",1],["Who mentions checking the safety guard?",1],["Who will record the measurements after machining?",1]
+        ]},
+        {title:"2. Чтение: установление соответствия",type:"match",points:5,instruction:"Соотнесите тексты A–E с заголовками 1–6. Один заголовок лишний.",options:["Measuring a workpiece accurately","Why machine guards are important","A tool for making round holes","Removing metal with a rotating cutter","Holding a workpiece during turning","Checking a finished surface"],items:[
+          ["A","A calliper is a common measuring instrument. It can measure outside dimensions, inside dimensions and depth. The operator should check it before use.",1],
+          ["B","A guard protects the operator from moving parts and flying chips. It must be in place before the machine is started.",2],
+          ["C","A drill is used to make holes in different materials. Its cutting edges remove material as the tool rotates.",3],
+          ["D","During milling, a rotating cutter removes material from a workpiece. Different cutters produce slots and flat surfaces.",4],
+          ["E","A chuck is fitted to the spindle of a lathe. It holds the workpiece securely while it rotates.",5]
+        ]},
+        {title:"3. Чтение: восстановление текста",type:"gap",points:5,instruction:"Заполните пропуски A–E частями предложений 1–6. Одна часть лишняя.",text:"Computer numerical control is widely used in modern manufacturing. A_____. The programme contains instructions for the machine tool. Before machining begins, the operator checks the drawing and the workpiece. B_____. The correct tool must be installed in the tool holder. C_____. The operator should also check the work offset and tool length. D_____. After the setup has been verified, the programme can be tested in simulation mode. E_____.",options:["It allows machines to perform operations automatically and accurately.","The workpiece must be fixed securely in the chuck or vice.","A damaged tool should never be used.","These checks help prevent collisions and incorrect machining.","The machine should be left unattended during the first run.","The operator starts the cycle only after confirming that the area is safe."],answers:[1,2,3,4,6]},
+        {title:"4. Лексика: заполнение пропусков",type:"gap",points:5,instruction:"Прочитайте текст. Заполните пропуски A–E подходящими словами из списка. Два слова лишние.",text:"Before machining, the operator must check the A_____ and the technical drawing. The workpiece is fixed securely in a B_____ or vice. A cutting C_____ removes material from the surface. Coolant reduces heat and D_____ during machining. After the operation, the part is checked with a measuring E_____.",options:["workpiece","chuck","tool","friction","instrument","ladder","uniform"],answers:[1,2,3,4,5]},
+        {title:"5. Словообразование в контексте",type:"gap",points:5,instruction:"Прочитайте текст. Для каждого пропуска выберите правильное однокоренное слово из трёх вариантов.",text:"A_____ a manual machine, a CNC machine is controlled by a computer. Modern machines can work very B_____. The operator enters a C_____ into the controller. Before machining, all D_____ devices must be checked. Accurate measurement is E_____ for quality control.",itemOptions:[["Unlike","Dislike","Likely"],["precise","precision","precisely"],["programme","programming","programmer"],["protect","protective","protection"],["importance","important","importantly"]],answers:[1,3,1,2,2]},
+        {title:"6. Грамматические преобразования",type:"transform",points:5,instruction:"Прочитайте текст. Преобразуйте слова, напечатанные заглавными буквами, так, чтобы они грамматически соответствовали содержанию текста.",items:[
+          ["The CNC lathe", "in our workshop last year.", "INSTALL", ["was installed"]],
+          ["The operator", "the programme before each cycle.", "CHECK", ["checks"]],
+          ["This is one of the", "measuring instruments in the laboratory.", "ACCURATE", ["most accurate"]],
+          ["The cutting tool must be returned to", "holder after use.", "IT", ["its"]],
+          ["The finished parts", "before delivery to the customer.", "INSPECT", ["are inspected"]]
+        ]},
+        {title:"7. Анкета",type:"questionnaire",points:10,instruction:"Вы хотите пройти производственную практику в международной компании. Заполните анкету на английском языке. Каждый ответ — не более 5 слов.",items:["First name","Home country","Hometown","What profession are you studying for?","Which machine can you operate?","Which measuring instrument have you used?","Can you read technical drawings?","What safety equipment do you use?","Where would you like to do your work placement?","Why are you interested in this company?"]}
+      ]
+    }
+  };
+}
+
 /**
  * Защищённый банк экзаменов English VPR.
  * Добавляется как отдельный файл EnglishVPR-Sheets.gs в проект Apps Script.
@@ -39,9 +98,13 @@ function importEnglishVprBank_(data) {
   const actor = auth_(data);
   if (actor.role !== "admin" && actor.role !== "teacher") throw new Error("Импорт доступен только преподавателю.");
   const track = String(data.track || "").toLowerCase();
-  const exam = data.exam;
-  if (["basic", "technical"].indexOf(track) < 0 || !exam || typeof exam !== "object" || !Array.isArray(exam.tasks) || !exam.tasks.length) {
-    throw new Error("Передайте корректный экзамен Basic или Technical.");
+  if (["basic", "technical"].indexOf(track) < 0) {
+    throw new Error("Укажите вариант Basic или Technical.");
+  }
+  const seeds = englishVprSeedExams_();
+  const exam = seeds[track];
+  if (!exam || typeof exam !== "object" || !Array.isArray(exam.tasks) || !exam.tasks.length) {
+    throw new Error("Серверный вариант экзамена не найден: " + track + ".");
   }
   if (actor.role === "teacher" && !hasCourseAccess_(actor, track === "basic" ? "ENB" : "ENT") && !hasCourseAccess_(actor, "EN")) {
     throw new Error("Нет доступа к импорту этого экзамена.");
