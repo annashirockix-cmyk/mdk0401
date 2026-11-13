@@ -59,7 +59,7 @@ test("five-year runtime preserves the original 45 lectures and adds all 75 mappe
 test("all 75 new lecture IDs are in the five-year map and have browser listening activities", () => {
   const window = loadEnglishRuntime();
   const mapIds = [
-    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\\d{2}-s\\d{2}-l\\d{2}/g)),
+    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\d{2}-s\d{2}-l\d{2}/g)),
   ];
   const additions = [window.MDK_DATA.ENB, window.MDK_DATA.ENT].flatMap((track) =>
     track.sections.flatMap((section) =>
@@ -82,7 +82,7 @@ test("runtime loads before app.js and lecture rendering resolves explicit listen
   const html = read("index.html");
   const app = read("app.js");
   assert.ok(html.indexOf("english-five-year-runtime.js") < html.indexOf("app.js"));
-  assert.match(app, /lecture\\.listeningId/);
+  assert.match(app, /lecture\.listeningId/);
   assert.match(read("english-listening-tts.js"), /speechSynthesis/);
   assert.match(read("english-listening-tts.js"), /SpeechSynthesisUtterance/);
 });
