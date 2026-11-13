@@ -1411,3 +1411,13 @@ test("legacy student payloads cannot restore protected English exam grades", () 
   const studentResults = server.slice(server.indexOf("function getMyCourseResults_(data)"));
   assert.ok(studentResults.includes("isProtectedAssessment_(testId,courseId,protectedQuestionBankMap_())"));
 });
+
+
+test("legacy non-English written exam engine is no longer shipped or cached", () => {
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.doesNotMatch(html, /exam-engine\\.js/);
+  assert.doesNotMatch(sw, /exam-engine\\.js/);
+  assert.match(sw, /portal-cache-v354/);
+  assert.doesNotMatch(read("final.js"), /writtenPrompts|textarea\\[name\\^="written"\\]/);
+});
