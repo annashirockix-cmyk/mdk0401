@@ -124,3 +124,8 @@ The browser listening catalogue contains 40 practice activities:
 - Course 5, Semester 2: lessons 1–12.
 
 All activities include a browser-readable script and multiple-choice comprehension questions with practice answer feedback. This does not mean the remaining lessons are converted: Course 4 Semester 1 lessons 5–12 and Courses 1–3 are still outstanding. Practice answer keys are client-side; no graded attempts or marks are stored.
+
+
+## Course 4, Semester 1 — complete browser listening set
+
+All twelve lessons for Course 4, Semester 1 now have browser-readable practice activities. Lessons 1–9 follow the existing source sequence: conductors/semiconductors/insulators; types of current and units; circuit components; series and parallel circuits; conventional power plants; alternative energy; inventions in electronics; electronic circuits; mobile phones and wireless communication. Lessons 10–12 cover aircraft electrical power distribution, wiring-diagram vocabulary and describing electrical measurements/fault evidence. Together with Course 4 Semester 2 and both Course 5 semesters, the catalogue now contains 48 activities across four semester blocks. All remain practice-only, with client-side answer keys and no persisted attempts or grades.
