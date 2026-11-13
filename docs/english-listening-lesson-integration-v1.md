@@ -96,3 +96,10 @@ Each activity has a browser-readable script, gist/detail questions and practice 
 ## Complete playable catalogue: Course 5, Semester 2
 
 The browser practice catalogue now contains all twelve lessons in this semester, in lesson order (1–12). Each has a text-to-speech script and multiple-choice gist/detail questions. The browser reads the script directly; no MP3 is required. Transcript reveal and practice feedback are provided by the shared component. This is still a practice catalogue: answer keys are client-side, no grades/attempts are persisted, and it is not a protected exam.
+
+
+## Course 5: complete two-semester browser practice catalogue
+
+The catalogue now contains 24 activities: 12 for Course 5 Semester 1 and 12 for Course 5 Semester 2. The page groups the activities under separate semester headings. Semester 1 lessons 1–2 are based on the existing Technical English source topics (materials; technical drawing/CAD/CAM); lessons 3–12 use the new lesson drafts and their original scripts. Semester 2 lessons 1–12 use the original lesson scripts developed for that semester.
+
+Each activity has a browser-readable English script and comprehension questions. Practice mode provides answer feedback and transcript reveal. The activities are not graded attempts: answer keys are present in the client-side practice catalogue, and no grades or attempts are persisted. Other courses and semesters are not yet converted.
