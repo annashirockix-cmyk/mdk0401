@@ -25,6 +25,7 @@ try {
       window.customContent.lectures = rows.filter(x => x.type === "lecture");
       window.customContent.tests = rows.filter(x => x.type === "test");
       window.customContent.flashcards = rows.filter(x => x.type === "flashcards");
+      window.customContent.games = rows.filter(x => x.type === "game");
     }
     window.__tutoringSettings = {};
     window.API = {
@@ -95,8 +96,23 @@ try {
   assert.ok((await page.locator("#savedMaterials").innerText()).includes("Тест конструктора"));
   assert.ok((await page.locator("#savedMaterials").innerText()).includes("Тестовая лекция конструктора"));
 
+  await page.evaluate(() => window.renderOwnGameEditor());
+  await page.waitForSelector("#ownGameLoadExample");
+  await page.locator("#ownGameLoadExample").click();
+  await page.waitForFunction(() => document.getElementById("ownGamePreviewBox")?.innerText.includes("G00"));
+  assert.equal(await page.locator("#ownGameCategories article.module").count(), 3, "Sample own-game board must contain three categories");
+  assert.equal(await page.locator("#ownGameCategories [data-q-text]").count(), 9, "Sample own-game board must contain nine questions");
+  await page.locator("#ownGameSave").click();
+  await page.waitForFunction(() => document.getElementById("ownGameStatus")?.textContent.includes("Игра сохранена"));
+  assert.equal(await page.evaluate(() => window.__constructorStore.find(x => x.type === "game")?.categories.reduce((n,c)=>n+c.questions.length,0)), 9,
+    "Sample own-game board must be saved with all nine questions");
+
   await page.evaluate(() => window.renderFlashcardEditorPage());
   await page.waitForSelector("#fcTopic");
+  await page.locator("#fcLoadExample").click();
+  await page.waitForFunction(() => document.getElementById("fcDrafts")?.innerText.includes("G00"));
+  assert.equal(await page.locator("#fcDrafts article.module").count(), 8, "Sample G-code flashcard set must contain eight cards");
+  await page.locator("#fcReset").click();
   await page.locator("#fcTopic").selectOption(topicId);
   await page.locator("#fcTitle").fill("Карточки конструктора");
   await page.locator("#fcFront").fill("Workpiece");
