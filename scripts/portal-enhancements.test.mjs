@@ -34,6 +34,21 @@ test("personal cabinet provides login, grades, portfolio and achievements", () =
   assert.match(html, /drawerCabinet/);
 });
 
+
+test("student grades refresh from server and show the latest retake", () => {
+  const app = read("app.js");
+  const server = read("Code.gs");
+  assert.match(app, /id="serverAssessmentGrades"/);
+  assert.match(app, /getMyCourseResults\(""/);
+  assert.match(app, /var grouped=Object\.create\(null\)/);
+  assert.match(app, /attempts\[attempts\.length-1\]/);
+  assert.match(app, /Попыток:/);
+  assert.match(app, /indexOf\("assignment_"\)!==0/);
+  assert.match(app, /indexOf\("metrology_"\)!==0/);
+  assert.match(server, /function getMyCourseResults_\(data\)/);
+  assert.match(server, /finishedAt:String\(r\[11\]\|\|""\)/);
+});
+
 test("shop includes an expanded offline avatar and font collection", () => {
   const shop = read("shop.js");
   const avatarIds = [...shop.matchAll(/\{ id: "av\d+"/g)].length;
