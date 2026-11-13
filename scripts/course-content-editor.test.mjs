@@ -128,7 +128,7 @@ test("custom content deletion is scoped to the requested course", () => {
 
 test("settings upserts serialize lookup and writes", () => {
  const server = read("Code.gs");
- const start = server.indexOf("function writeSetting_(key,value,actorEmail)");
+ const start = server.indexOf("function writeSetting_(key,value,actorEmail,lockAlreadyHeld)");
  const end = server.indexOf("\nfunction getTopicAccess_", start);
  assert.ok(start >= 0 && end > start);
  const write = server.slice(start, end);
