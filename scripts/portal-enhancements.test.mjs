@@ -1358,6 +1358,10 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
   });
   assert.equal(sandbox.validateEnglishVprExam_("basic", exam("basic")), true);
   assert.equal(sandbox.validateEnglishVprExam_("technical", exam("technical")), true);
+  const window = {};
+  vm.runInNewContext(read("english-vpr-exams.js"), {window});
+  assert.equal(sandbox.validateEnglishVprExam_("basic", window.ENGLISH_VPR_EXAMS.basic), true);
+  assert.equal(sandbox.validateEnglishVprExam_("technical", window.ENGLISH_VPR_EXAMS.technical), true);
   const invalid = exam("basic"); invalid.tasks.pop();
   assert.throws(() => sandbox.validateEnglishVprExam_("basic", invalid), /структура экзамена/i);
 });
