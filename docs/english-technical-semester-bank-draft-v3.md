@@ -9,32 +9,32 @@ Third independent batch of 20 Technical English items. Combined v1–v3 draft po
 ### 41. Sensors
 **What does a temperature sensor measure?**
 
-A. The mass of an object  
-B. The temperature of a medium or object  
+A. The temperature of a medium or object  
+B. The mass of an object  
 C. The length of a cable  
 D. The speed of a network connection
 
 ### 42. Sensors
 **A sensor converts a physical quantity into…**
 
-A. a signal that can be interpreted by a system  
-B. a mechanical drawing automatically  
-C. a maintenance certificate  
+A. a mechanical drawing automatically  
+B. a maintenance certificate  
+C. a signal that can be interpreted by a system  
 D. a new physical material
 
 ### 43. Control systems
 **In a feedback control system, the measured output is compared with…**
 
-A. the setpoint or reference value  
-B. the operator's name  
+A. the operator's name  
+B. the setpoint or reference value  
 C. the document revision date  
 D. the equipment colour
 
 ### 44. Control systems
 **What is the purpose of an alarm in a monitoring system?**
 
-A. To notify the operator of a defined condition requiring attention  
-B. To guarantee that no fault can occur  
+A. To guarantee that no fault can occur  
+B. To notify the operator of a defined condition requiring attention  
 C. To replace all measurements  
 D. To increase the sensor's physical size
 
@@ -49,10 +49,10 @@ D. a measured unit
 ### 46. Programming logic
 **In a simple algorithm, a loop is used to…**
 
-A. repeat a set of instructions  
-B. delete every variable  
-C. translate a drawing into a photograph  
-D. stop all input permanently
+A. delete every variable  
+B. translate a drawing into a photograph  
+C. stop all input permanently
+D. repeat a set of instructions  
 
 ### 47. Programming logic
 **A variable in a program is…**
@@ -73,96 +73,96 @@ D. the coolant hose only
 ### 49. CNC vocabulary
 **What is the purpose of a tool offset in CNC machining?**
 
-A. To account for tool geometry or position in the machine coordinate setup  
-B. To change the material grade automatically  
-C. To increase the workpiece mass  
-D. To replace the machine enclosure
+A. To change the material grade automatically  
+B. To increase the workpiece mass  
+C. To replace the machine enclosure
+D. To account for tool geometry or position in the machine coordinate setup  
 
 ### 50. CNC documentation
 **Why should a CNC programme be checked against the correct machine and setup information before use?**
 
-A. Different machines and setups may use different configurations and offsets  
-B. All CNC machines use identical settings  
-C. The programme name determines the material strength  
+A. All CNC machines use identical settings  
+B. The programme name determines the material strength  
+C. Different machines and setups may use different configurations and offsets  
 D. A programme never contains coordinate information
 
 ### 51. Troubleshooting
 **A machine stops and displays an unfamiliar alarm code. What is the best first step?**
 
-A. Bypass the alarm  
-B. Record the code and consult the approved machine documentation or responsible specialist  
+A. Record the code and consult the approved machine documentation or responsible specialist  
+B. Bypass the alarm  
 C. Restart repeatedly without checking the cause  
 D. Remove an electrical cover while the machine is energised
 
 ### 52. Troubleshooting
 **Which phrase describes an intermittent fault?**
 
-A. A fault that occurs only sometimes  
-B. A fault that is permanently absent  
-C. A fault caused only by paint colour  
-D. A fault that has already been repaired and verified
+A. A fault that is permanently absent  
+B. A fault caused only by paint colour  
+C. A fault that has already been repaired and verified
+D. A fault that occurs only sometimes  
 
 ### 53. Aviation systems
 **What is the primary purpose of an aircraft's landing gear?**
 
-A. To support the aircraft on the ground and absorb loads during landing and taxiing  
-B. To generate cabin oxygen  
-C. To provide the main source of lift in cruise  
+A. To generate cabin oxygen  
+B. To provide the main source of lift in cruise  
+C. To support the aircraft on the ground and absorb loads during landing and taxiing  
 D. To control radio communication
 
 ### 54. Aviation systems
 **What does “avionics” refer to?**
 
-A. Electronic systems used on aircraft  
-B. The aircraft's passenger seats only  
-C. The external paint coating  
+A. The aircraft's passenger seats only  
+B. The external paint coating  
+C. Electronic systems used on aircraft  
 D. Airport catering equipment
 
 ### 55. Aviation communication
 **Why is standard phraseology used in aviation communication?**
 
-A. To make messages more predictable and reduce ambiguity  
-B. To make every message longer  
+A. To make every message longer  
+B. To make messages more predictable and reduce ambiguity  
 C. To replace technical training  
 D. To allow speakers to omit essential information
 
 ### 56. Technical records
 **What is traceability in a technical process?**
 
-A. The ability to follow the history, location or use of an item or record  
-B. The ability to change a result without a record  
-C. The speed of a machine spindle  
-D. The colour coding of a tool cabinet
+A. The ability to change a result without a record  
+B. The speed of a machine spindle  
+C. The colour coding of a tool cabinet
+D. The ability to follow the history, location or use of an item or record  
 
 ### 57. Technical records
 **A report states “sensor replaced”, but gives no part number or serial number. What information would improve traceability?**
 
-A. The installed component identification and relevant work-record details  
-B. The technician's favourite brand  
-C. The weather forecast  
+A. The technician's favourite brand  
+B. The weather forecast  
+C. The installed component identification and relevant work-record details  
 D. The colour of the workshop walls
 
 ### 58. Data interpretation
 **A diagnostic trend shows vibration increasing over several inspections. What is the most accurate statement?**
 
-A. The recorded vibration values show an upward trend  
-B. The machine will certainly fail tomorrow  
+A. The machine will certainly fail tomorrow  
+B. The recorded vibration values show an upward trend  
 C. The sensor must be broken  
 D. The cause is definitely a damaged bearing
 
 ### 59. Collaborative work
 **A programmer and a machine operator disagree about a setup value. What is the best professional response?**
 
-A. Compare the value with the current approved setup documentation and resolve the discrepancy before proceeding  
-B. Use whichever value is faster  
-C. Change both values and see what happens  
-D. Ignore the disagreement
+A. Use whichever value is faster  
+B. Change both values and see what happens  
+C. Ignore the disagreement
+D. Compare the value with the current approved setup documentation and resolve the discrepancy before proceeding  
 
 ### 60. Technical reading
 **In a technical instruction, “ensure that the connector is fully seated” means…**
 
-A. Check that the connector is inserted correctly and completely  
-B. Place the connector on a chair  
+A. Place the connector on a chair  
+B. Check that the connector is inserted correctly and completely  
 C. Paint the connector  
 D. Remove the connector permanently
 
@@ -170,26 +170,26 @@ D. Remove the connector permanently
 
 | Item | Key | Rationale |
 |---:|:---:|---|
-| 41 | B | A temperature sensor measures temperature. |
-| 42 | A | Sensors produce signals representing measured physical quantities. |
-| 43 | A | Feedback compares measured output with a reference/setpoint. |
-| 44 | A | An alarm communicates a defined abnormal or attention condition; it does not guarantee safety. |
+| 41 | A | A temperature sensor measures temperature. |
+| 42 | C | Sensors produce signals representing measured physical quantities. |
+| 43 | B | Feedback compares measured output with a reference/setpoint. |
+| 44 | B | An alarm communicates a defined abnormal or attention condition; it does not guarantee safety. |
 | 45 | A | A diamond is the conventional flowchart decision symbol. |
-| 46 | A | A loop repeats instructions while a condition or count permits. |
+| 46 | D | A loop repeats instructions while a condition or count permits. |
 | 47 | A | A variable is a named storage location/value in a program. |
 | 48 | A | In common milling-machine conventions, Z is along the spindle axis; machine-specific conventions must still be checked. |
-| 49 | A | Tool offsets compensate for tool dimensions/position in the coordinate setup. |
-| 50 | A | Machine configuration, coordinate systems and offsets are setup-dependent. |
-| 51 | B | Record and investigate the alarm using approved documentation and qualified support; do not bypass safeguards. |
-| 52 | A | Intermittent faults appear under some conditions but not continuously. |
-| 53 | A | Landing gear supports ground operations and absorbs landing/taxi loads. |
-| 54 | A | Avionics are aircraft electronic systems. |
-| 55 | A | Standard phraseology reduces ambiguity and improves predictability. |
-| 56 | A | Traceability links an item or record to its history and status. |
-| 57 | A | Component identity and work-record details support traceability. |
-| 58 | A | The data support an upward trend, not a certain diagnosis or forecast. |
-| 59 | A | Resolve discrepancies against controlled, current documentation before action. |
-| 60 | A | “Fully seated” means correctly and completely inserted/engaged. |
+| 49 | D | Tool offsets compensate for tool dimensions/position in the coordinate setup. |
+| 50 | C | Machine configuration, coordinate systems and offsets are setup-dependent. |
+| 51 | A | Record and investigate the alarm using approved documentation and qualified support; do not bypass safeguards. |
+| 52 | D | Intermittent faults appear under some conditions but not continuously. |
+| 53 | C | Landing gear supports ground operations and absorbs landing/taxi loads. |
+| 54 | C | Avionics are aircraft electronic systems. |
+| 55 | B | Standard phraseology reduces ambiguity and improves predictability. |
+| 56 | D | Traceability links an item or record to its history and status. |
+| 57 | C | Component identity and work-record details support traceability. |
+| 58 | B | The data support an upward trend, not a certain diagnosis or forecast. |
+| 59 | D | Resolve discrepancies against controlled, current documentation before action. |
+| 60 | B | “Fully seated” means correctly and completely inserted/engaged. |
 
 ## Review checklist
 
