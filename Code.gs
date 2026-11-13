@@ -1343,12 +1343,20 @@ function settingValue_(key) {
   for(let i=1;i<vals.length;i++) if(String(vals[i][m.Key]||"")===key) return String(vals[i][m.Value]||"");
   return "";
 }
-function writeSetting_(key,value,actorEmail) {
-  const sh=settings_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), now=new Date().toISOString();
-  let row=0;
-  for(let i=1;i<vals.length;i++) if(String(vals[i][m.Key]||"")===key){row=i+1;break;}
-  const record=[key,String(value),now,String(actorEmail||"")];
-  if(row) sh.getRange(row,1,1,record.length).setValues([record]); else sh.appendRow(record);
+function writeSetting_(key,value,actorEmail,lockAlreadyHeld) {
+  // Serialize settings upserts. Callers already inside a ScriptLock transaction
+  // pass lockAlreadyHeld=true to avoid attempting to acquire the non-reentrant lock twice.
+  const lock=lockAlreadyHeld?null:LockService.getScriptLock();
+  if(lock) lock.waitLock(10000);
+  try {
+    const sh=settings_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh), now=new Date().toISOString();
+    let row=0;
+    for(let i=1;i<vals.length;i++) if(String(vals[i][m.Key]||"")===key){row=i+1;break;}
+    const record=[key,String(value),now,String(actorEmail||"")];
+    if(row) sh.getRange(row,1,1,record.length).setValues([record]); else sh.appendRow(record);
+  } finally {
+    if(lock) lock.releaseLock();
+  }
 }
 function getTopicAccess_(data) {
   const user=auth_(data), courseId=String(data.courseId||""), topicId=String(data.topicId||"");
@@ -1422,14 +1430,17 @@ function resolveAttemptRequestNotifications_(studentEmail,courseId,testId) {
 
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
-  const teacher=editor_(data,courseId);
-  if(!testId||!studentEmail) throw new Error("Выберите тест и студента.");
-  const student=userByEmail_(studentEmail);
-  if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
+  if(!courseId||!testId||!studentEmail) throw new Error("Выберите дисциплину, тест и студента.");
   const extra=Math.max(0,Math.min(20,Math.floor(Number(data.extraAttempts)||0)));
   const lock=LockService.getScriptLock();lock.waitLock(10000);
+  let teacher,student;
   try {
-    writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email);
+    // Re-check both the teacher's current course permission and the student's
+    // enrollment after acquiring the same lock used for the settings write.
+    teacher=editor_(data,courseId);
+    student=userByEmail_(studentEmail);
+    if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
+    writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email,true);
     appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra});
     resolveAttemptRequestNotifications_(studentEmail,courseId,testId);
     CacheService.getScriptCache().remove("attempt_request:"+studentEmail+":"+courseId+":"+testId.slice(0,120));
@@ -1944,16 +1955,18 @@ function submitCustomTest_(data) {
   const user = auth_(data);
   if (user.role !== "student") throw new Error("Отправлять ответы могут только студенты.");
   const id = String(data.testId || data.id || "");
+  const requestedCourseId = String(data.courseId || data.mdkId || "");
   if (!id) throw new Error("Не указан тест.");
+  if (!requestedCourseId) throw new Error("Не указана дисциплина теста.");
   const values = content_().getDataRange().getValues();
   let record = null;
   values.slice(1).forEach(function (row) {
-    if (String(row[0]) === id && String(row[3]) === "test") record = {
+    if (String(row[0]) === id && String(row[3]) === "test" && sameCourseId_(row[1], requestedCourseId)) record = {
       id: id, courseId: normalizeCourseId_(row[1] || ""), topicId: String(row[2] || ""), type: "test",
       title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
     };
   });
-  if (!record) throw new Error("Тест не найден.");
+  if (!record) throw new Error("Тест не найден в выбранной дисциплине.");
   if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
   if (!customContentIsOpen_(record.courseId, record.id, record.topicId, record.type)) throw new Error("Этот тест закрыт преподавателем.");
   const attemptKey="custom_"+id;
@@ -1971,7 +1984,7 @@ function submitCustomTest_(data) {
   let attemptNo=0;
   try {
     const resultSheet=results_(), resultRows=resultSheet.getDataRange().getValues();
-    const prior=resultRows.slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey;}).length;
+    const prior=resultRows.slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey&&sameCourseId_(r[12]||record.courseId,record.courseId);}).length;
     const scopedExtra=settingValue_("testAttempts:"+user.email+":"+record.courseId+":"+id);
     const extra=Number(scopedExtra!==""?scopedExtra:settingValue_("testAttempts:"+user.email+":"+id))||0;
     const limit=1+Math.max(0,extra);
@@ -2051,21 +2064,24 @@ function saveCustomContent_(data) {
 }
 
 function deleteCustomContent_(data) {
-  auth_(data);
+  const courseId = String(data.courseId || data.mdkId || "");
+  const id = String(data.id || "");
+  if (!courseId || !id) throw new Error("Не указана дисциплина или материал.");
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
+    // Resolve and authorize the exact record within the requested course.
+    const user = editor_(data, courseId);
     const sheet = content_();
     const values = sheet.getDataRange().getValues();
 
     for (let i = 1; i < values.length; i++) {
-      if (String(values[i][0]) === String(data.id || "")) {
-        editor_(data, normalizeCourseId_(values[i][1] || ""));
+      if (String(values[i][0]) === id && sameCourseId_(values[i][1], courseId)) {
         sheet.deleteRow(i + 1);
         return { success: true };
       }
     }
-    return { success: false, error: "Материал не найден." };
+    return { success: false, error: "Материал не найден в выбранной дисциплине." };
   } finally {
     lock.releaseLock();
   }

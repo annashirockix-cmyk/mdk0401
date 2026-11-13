@@ -689,7 +689,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         function draw() {
             if (index >= questions.length) {
                 area.innerHTML = "<p>Проверяем ответы на сервере…</p>";
-                window.API.submitCustomTest(testId, answers, Math.round((Date.now()-started)/1000)).then(function (result) {
+                window.API.submitCustomTest(testId, answers, Math.round((Date.now()-started)/1000), test.courseId || test.mdkId).then(function (result) {
                     if (!result || !result.success) throw new Error(result && result.error || "Не удалось проверить тест.");
                     area.dataset.proctorAssessment="0";
                     area.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться к тестам</button></div>';

@@ -216,7 +216,8 @@ test("custom course materials normalize spreadsheet date-coerced course IDs", ()
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
   assert.match(server, /courseId: normalizeCourseId_\(row\[1\] \|\| ""\), topicId:/);
   assert.match(server, /courseId:normalizeCourseId_\(row\[1\]\|\|""\),topicId:/);
-  assert.match(server, /editor_\(data, normalizeCourseId_\(values\[i\]\[1\] \|\| ""\)\)/);
+  assert.match(server, /editor_\(data, courseId\)/);
+  assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
 });
 
 test("teacher-created materials have individual server-side visibility switches", () => {
@@ -763,7 +764,7 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   const app = read("app.js");
   assert.match(app, /id !== "EN"/);
   assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
-  assert.match(html, /app\.js\?v=51/);
+  assert.match(html, /app\.js\?v=\d+/);
   assert.match(html, /english-tools\.js\?v=9/);
   assert.match(html, /english-vpr-engine\.js\?v=\d+/);
   assert.match(html, /english-proficiency-lab\.js\?v=4/);

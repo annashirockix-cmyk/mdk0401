@@ -81,3 +81,71 @@ test("custom content deletion shares the upsert lock", () => {
  assert.ok(lock >= 0 && wait > lock && readIndex > wait && deletion > readIndex);
  assert.ok(release > deletion && remove.includes("finally {"), "delete must release the shared lock");
 });
+
+test("custom test attempts are counted within the selected course", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function submitCustomTest_(data)");
+ const end = server.indexOf("\nfunction getGameAnswer_", start);
+ assert.ok(start >= 0 && end > start);
+ const submit = server.slice(start, end);
+ assert.match(submit, /email_\(r\[0\]\)===user\.email&&String\(r\[3\]\)===attemptKey&&sameCourseId_\(r\[12\]\|\|record\.courseId,record\.courseId\)/,
+  "attempt history must be scoped by student, test ID, and course ID");
+ const statusStart = server.indexOf("function getTestAttemptStatus_(data)");
+ const statusEnd = server.indexOf("\nfunction requestTestAttempts_", statusStart);
+ const status = server.slice(statusStart, statusEnd);
+ assert.match(status, /sameCourseId_\(r\[12\]\|\|courseId,courseId\)/,
+  "the displayed attempt status and submission check must use the same course scope");
+});
+
+
+test("custom test submissions resolve the test within the active course", () => {
+ const server = read("Code.gs");
+ const api = read("api.js");
+ const app = read("app.js");
+ const start = server.indexOf("function submitCustomTest_(data)");
+ const end = server.indexOf("\nfunction getGameAnswer_", start);
+ const submit = server.slice(start, end);
+ assert.match(submit, /requestedCourseId = String\(data\.courseId \|\| data\.mdkId \|\| ""\)/);
+ assert.match(submit, /String\(row\[0\]\) === id && String\(row\[3\]\) === "test" && sameCourseId_\(row\[1\], requestedCourseId\)/);
+ assert.match(api, /submitCustomTest:function\(testId,answers,timeSpent,courseId\)/);
+ assert.match(app, /submitCustomTest\(testId, answers, Math\.round\(\(Date\.now\(\)-started\)\/1000\), test\.courseId \|\| test\.mdkId\)/);
+});
+
+test("custom content deletion is scoped to the requested course", () => {
+ const server = read("Code.gs");
+ const api = read("api.js");
+ const editor = read("course-admin.js");
+ const start = server.indexOf("function deleteCustomContent_(data)");
+ const end = server.indexOf("\n/* ---------- Administrator", start);
+ assert.ok(start >= 0 && end > start);
+ const remove = server.slice(start, end);
+ assert.match(remove, /courseId = String\(data\.courseId \|\| data\.mdkId \|\| ""\)/);
+ assert.match(remove, /editor_\(data, courseId\)/);
+ assert.match(remove, /String\(values\[i\]\[0\]\) === id && sameCourseId_\(values\[i\]\[1\], courseId\)/);
+ assert.match(api, /deleteCustomContent:function\(id,courseId\)/);
+ assert.equal((editor.match(/deleteCustomContent\(id,courseSel\.value\)/g) || []).length, 2);
+});
+
+test("settings upserts serialize lookup and writes", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function writeSetting_(key,value,actorEmail,lockAlreadyHeld)");
+ const end = server.indexOf("\nfunction getTopicAccess_", start);
+ assert.ok(start >= 0 && end > start);
+ const write = server.slice(start, end);
+ const lock = write.indexOf("LockService.getScriptLock()");
+ const wait = write.indexOf("lock.waitLock(10000)");
+ const lookup = write.indexOf("sh.getDataRange().getValues()");
+ const update = Math.max(write.indexOf("sh.getRange(row"), write.indexOf("sh.appendRow(record)"));
+ const release = write.indexOf("lock.releaseLock()");
+ assert.ok(lock >= 0 && wait > lock && lookup > wait && update > lookup);
+ assert.ok(release > update && write.includes("finally {"));
+ const grantStart = server.indexOf("function grantTestAttempts_(data)");
+ const grantEnd = server.indexOf("\n/* ---------- Teacher-created", grantStart);
+ const grant = server.slice(grantStart, grantEnd);
+ assert.match(grant, /lock\.waitLock\(10000\)/);
+ assert.match(grant, /writeSetting_\("testAttempts:"\+studentEmail\+":"\+courseId\+":"\+testId,String\(extra\),teacher\.email,true\)/,
+  "attempt grants must reuse the existing lock instead of acquiring it recursively");
+ assert.ok(grant.indexOf("lock.waitLock(10000)") < grant.indexOf("teacher=editor_(data,courseId)"));
+ assert.ok(grant.indexOf("lock.waitLock(10000)") < grant.indexOf("student=userByEmail_(studentEmail)"),
+  "teacher permission and student enrollment must be rechecked inside the lock");
+});
