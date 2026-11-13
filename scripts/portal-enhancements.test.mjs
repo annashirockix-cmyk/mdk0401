@@ -657,19 +657,21 @@ test("course training routes open topic tests through the protected server workf
   assert.match(app, /window\.API\.submitBuiltInTest/);
 });
 
-test("course selector and exam engine use the new course bank without duplicate or placeholder questions", () => {
+test("course selector and active final exam use the protected course bank", () => {
   const html = read("index.html");
   const sw = read("service-worker.js");
-  const exam = read("exam-engine.js");
-  assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
-  assert.match(html, /sprut-tp-question-bank\.js\?v=2/);
+  const finalExam = read("final.js");
+  const server = read("Code.gs");
+  assert.ok(html.includes('<option value="SPRUT_TP">СПРУТ-ТП</option>'));
+  assert.ok(html.includes("sprut-tp-question-bank.js?v=2"));
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v[0-9]+/);
-  assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
-  assert.match(exam, /seen\[key\]/);
-  assert.match(exam, /slice\(0, 30\)/);
-  assert.match(exam, /correct \/ total/);
-  assert.match(exam, /courseId === "SPRUT_TP"/);
+  assert.ok(!html.includes("exam-engine.js"));
+  assert.ok(!sw.includes("exam-engine.js"));
+  assert.ok(finalExam.includes("FINAL_EXAM_TEST_SIZE = 45"));
+  assert.ok(finalExam.includes("getFinalExam"));
+  assert.ok(finalExam.includes("submitFinalExam"));
+  assert.ok(server.includes("function getFinalExam_"));
+  assert.ok(server.includes("function submitFinalExam_"));
 });
 
 
@@ -1410,4 +1412,14 @@ test("legacy student payloads cannot restore protected English exam grades", () 
   assert.ok(save.includes("isProtectedAssessment_(testId"));
   const studentResults = server.slice(server.indexOf("function getMyCourseResults_(data)"));
   assert.ok(studentResults.includes("isProtectedAssessment_(testId,courseId,protectedQuestionBankMap_())"));
+});
+
+
+test("legacy non-English written exam engine is no longer shipped or cached", () => {
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.doesNotMatch(html, /exam-engine\\.js/);
+  assert.doesNotMatch(sw, /exam-engine\\.js/);
+  assert.match(sw, /portal-cache-v354/);
+  assert.doesNotMatch(read("final.js"), /writtenPrompts|textarea\\[name\\^="written"\\]/);
 });
