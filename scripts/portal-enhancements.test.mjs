@@ -1631,7 +1631,7 @@ test("Apps Script load harness is read-only and uses only student GET actions", 
 test("student authentication looks up one user row instead of downloading all user payloads", () => {
   const server = read("Code.gs");
   const start = server.indexOf("function userByEmail_(email)");
-  const end = server.indexOf("\\nfunction writeUserFields_", start);
+  const end = server.indexOf("\nfunction writeUserFields_", start);
   assert.ok(start >= 0 && end > start);
   const calls = [];
   const sandbox = {
@@ -1664,7 +1664,7 @@ test("student authentication looks up one user row instead of downloading all us
 test("student results reuse the authenticated payload and compute the protected bank map once", () => {
   const server = read("Code.gs");
   const start = server.indexOf("function getMyCourseResults_(data)");
-  const end = server.indexOf("\\n/* ---------- Assignments", start);
+  const end = server.indexOf("\n/* ---------- Assignments", start);
   assert.ok(start >= 0 && end > start);
   const fn=server.slice(start,end);
   assert.match(fn,/JSON\.parse\(user\.payload\|\|"\{\}"\)/);
@@ -1672,7 +1672,7 @@ test("student results reuse the authenticated payload and compute the protected 
   assert.doesNotMatch(fn,/users_\(\)\.getDataRange\(\)/);
   assert.doesNotMatch(fn,/protectedQuestionBankMap_\(\)\)return/);
   const publicStart=server.indexOf("function getPublicSubjectRatings_(data)");
-  const publicEnd=server.indexOf("\\nfunction ",publicStart+20);
+  const publicEnd=server.indexOf("\nfunction ",publicStart+20);
   const publicFn=server.slice(publicStart,publicEnd);
   assert.match(publicFn,/protectedBanks=protectedQuestionBankMap_\(\)/);
   assert.doesNotMatch(publicFn,/const legacy = payload\.results \|\| \{\}, protectedBanks=/);
