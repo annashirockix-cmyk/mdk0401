@@ -505,3 +505,31 @@ Complete a short integrated task:
 **Review criteria:** correct use of Past Simple; accurate countable/uncountable forms; clear message structure; ability to identify the main point and key details in a short recording.
 
 **Implementation note:** all listening scripts in this document are text originals prepared for recording. They are not MP3 files. The current portal's listening player, transcript-reveal flow and server-side scoring must be verified and implemented separately before these activities are presented as playable audio.
+
+
+---
+
+## Browser listening integration note — lessons 10–12
+
+The portal's English Listening Lab already contains matching browser-readable activities for these three lessons. The browser synthesises the English script with its installed English voice; a separate MP3 recording is not required.
+
+| Lesson | Listening catalogue ID | Browser-readable topic | Level |
+|---|---|---|---|
+| 10 — Past Simple | `en-c01-s02-l10` | Mark's visit to his grandparents; completed past events | A1–A2 |
+| 11 — Countable and Uncountable Nouns | `en-c01-s02-l11` | Preparing breakfast; quantities and food vocabulary | A1–A2 |
+| 12 — Short Messages and Informal Emails | `en-c01-s02-l12` | A short message arranging a study meeting | A1–A2 |
+
+### Student workflow
+
+1. Open the matching activity in **English → Аудирование** (or the lesson's embedded listening block when the new lesson record is imported).
+2. Select an available English browser voice if necessary; the default language is English (United Kingdom).
+3. Listen twice at the default practice speed, or adjust the speed for additional practice.
+4. Complete the comprehension questions.
+5. Submit to receive practice feedback and reveal the transcript.
+
+### Implementation boundary
+
+- The three catalogue IDs above are present in `english-listening-catalog.js` and are distinct from the optional teacher-led scripts retained in the lesson draft.
+- The catalogue runs in practice mode. Its answer keys are client-side; it must not be used as a graded examination or as a substitute for the protected server-side assessment flow.
+- The three new lesson pages are not yet imported into the portal's course data. Until that import is completed, students can access the activities through the standalone English Listening Lab; the catalogue does not automatically make them appear inside these draft lecture pages.
+- This note does not alter the existing VPR Basic/Technical banks, Apps Script, gradebook or student attempts.
