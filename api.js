@@ -87,7 +87,7 @@ window.API = {
  getActivityLog:function(courseId,email,group,offset,limit){return fetchAPI("getActivityLog",{courseId:courseId||"",email:email||"",group:group||"",offset:offset||0,limit:limit||250},"GET");},
  getTutoringLink:function(courseId){return fetchAPI("getTutoringLink",{courseId:courseId},"GET");},
  saveTutoringLink:function(courseId,data){return fetchAPI("saveTutoringLink",Object.assign({courseId:courseId},data||{}),"POST");},
- submitCustomTest:function(testId,answers,timeSpent){return fetchAPI("submitCustomTest",{testId:testId,answers:answers,timeSpent:timeSpent},"POST");},
+ submitCustomTest:function(testId,answers,timeSpent,courseId){return fetchAPI("submitCustomTest",{testId:testId,answers:answers,timeSpent:timeSpent,courseId:courseId||""},"POST");},
  backupQuestionBanks:function(backupId,banks){return fetchAPI("backupQuestionBanks",{backupId:backupId,banks:banks},"POST",120000);},
  restoreQuestionBanks:function(backupId){return fetchAPI("restoreQuestionBanks",{backupId:backupId},"POST",120000);},
  importQuestionBanks:function(banks){return fetchAPI("importQuestionBanks",{banks:banks},"POST",120000);},
