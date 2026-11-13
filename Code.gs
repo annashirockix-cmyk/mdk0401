@@ -2074,7 +2074,7 @@ function getCustomTest_(data) {
     const order = shuffledServer_(options.map(function(_, i) { return i; }));
     safe.options = order.map(function(i) { return options[i]; });
     optionMaps[String(index)] = order;
-    ["correct","answer","correctAnswer","answers","explanation","solution","key","rationale","answerIndex"].forEach(function(key) { delete safe[key]; });
+    ["correct","answer","correctAnswer","answers","explanation","solution","key","rationale","answerIndex","correctIndex","correctOption","expectedAnswer","acceptedAnswers","correctOrder","isCorrect"].forEach(function(key) { delete safe[key]; });
     return safe;
   });
   const attemptId = Utilities.getUuid().replace(/-/g, "");
