@@ -1135,6 +1135,19 @@ test("MDK 07.01 includes topic-matched, attributed real photos for lathe and mil
   assert.match(sw, /portal-cache-v339/);
 });
 
+test("MDK 07.01 adds topic-specific tables and a clearly qualified machining example chart", () => {
+  const workbooks = read("workbooks.js");
+  assert.match(workbooks, /Основные узлы типового токарного станка с ЧПУ/);
+  assert.match(workbooks, /Маршрут разработки техпроцесса для вала/);
+  assert.match(workbooks, /Системы координат при подготовке обработки/);
+  assert.match(workbooks, /Адреса и команды в учебном фрагменте управляющей программы/);
+  assert.match(workbooks, /Ориентиры при программировании токарной обработки/);
+  assert.match(workbooks, /Проверка программы фрезерной обработки/);
+  assert.match(workbooks, /Изменение наружного диаметра в учебном примере/);
+  assert.match(workbooks, /не режим резания и не рекомендация по глубине прохода/);
+  assert.match(workbooks, /if\(String\(courseId\)==="07\.01"\)/);
+});
+
 test("CNC workbook image captions describe the actual diagrams rather than guessed subjects", () => {
   const workbooks = read("workbooks.js");
   assert.match(workbooks, /Основные и вспомогательные движения станка/);
