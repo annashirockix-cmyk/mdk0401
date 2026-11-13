@@ -161,3 +161,14 @@ The catalogue now contains 96 unique practice activities across eight complete s
 - Courses 3–5 — 72 activities, with 12 lessons in each semester.
 
 All Course 2 activities include browser-readable English scripts and four multiple-choice comprehension questions with practice feedback. The catalogue remains practice-only: client-side answer keys, no gradebook writes, no exam attempts. Course 1 remains outstanding. Direct embedding in every lesson and real-browser playback testing remain separate tasks.
+
+
+## Coverage update — 120 browser listening activities
+
+The catalogue now contains 120 unique practice activities: 12 lessons in each semester of all five courses.
+- Course 1 (A1–A2): pronunciation, basic grammar, personal information, classroom language, routines, college life, town, shopping and everyday communication.
+- Course 2 (B1–B1+): social and professional communication, careers, CVs, environment, physics, automation, science and short presentations.
+- Course 3 (B1+–B2): aviation industry, aircraft structure and materials, manufacturing, drawings, CAD/CAM, CNC, measurement and workshop safety.
+- Courses 4–5 (B1+–B2): electrical systems, avionics, networks, programming, sensor data, technical reporting and professional communication.
+
+All 120 activities have browser-readable scripts and comprehension questions with practice feedback. This completes the catalogue's five-year lesson coverage, but does not yet mean the listening exercises are embedded in all 120 lecture pages. The catalogue is practice-only: it does not save grades or create protected exam attempts. Real-browser and device playback testing is still required.
