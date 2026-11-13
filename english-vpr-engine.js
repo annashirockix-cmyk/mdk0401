@@ -353,7 +353,7 @@
       if(seconds>0&&!window.confirm("Отправить контрольную на проверку? После отправки изменить ответы будет нельзя."))return;
       finished=true; submit.disabled=true; submit.textContent="Проверяем на сервере…";
       if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
-      window.API.submitEnglishSemesterTest({track:track,testId:test.id,answers:answers,timeSpent:duration-seconds}).then(function(result){
+      window.API.submitEnglishSemesterTest({track:track,testId:test.id,attemptNo:test.attemptNo,answers:answers,timeSpent:duration-seconds}).then(function(result){
         if(!result||result.success!==true)throw new Error(result&&result.error||"Сервер не подтвердил отправку.");
         var key="english_semester_"+track+"_"+test.id;
         window.state.results=window.state.results||{};
