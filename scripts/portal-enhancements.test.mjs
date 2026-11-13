@@ -1473,3 +1473,23 @@ test("main games catalogue stays limited to three educational formats", () => {
   assert.ok(read("teacher-game.js").includes("window.renderOwnGames"));
   assert.ok(read("flashcard-editor.js").includes("window.renderFlashcardEditorPage"));
 });
+
+
+test("custom materials reload for the current student identity after a staff session changes", () => {
+  const app = read("app.js");
+  const server = read("Code.gs");
+  const start = app.indexOf("window.loadGlobalCustomContent = function(callback)");
+  const end = app.indexOf("window.savePracAnswer = function(code)", start + 20);
+  assert.ok(start >= 0 && end > start);
+  const loader = app.slice(start, end);
+  assert.ok(loader.includes("requestId === window._customContentLoadRequestId"));
+  assert.ok(loader.includes("currentToken === token"));
+  assert.ok(loader.includes("String(currentIdentity && currentIdentity.email"));
+  assert.ok(loader.includes("String(currentIdentity && currentIdentity.role"));
+  assert.ok(loader.includes("if (!isCurrentRequest()) return;"));
+  const deliveryStart = server.indexOf("function getCustomContent_(data)");
+  const deliveryEnd = server.indexOf("function questionBank_()", deliveryStart + 20);
+  const delivery = server.slice(deliveryStart, deliveryEnd);
+  assert.ok(delivery.includes('user.role === "student" && !customContentIsOpen_('));
+  assert.ok(delivery.includes("hasCourseAccess_(user, courseId)"));
+});
