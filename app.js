@@ -177,26 +177,57 @@ window.unlockAchievement = function(id) {
 // ==========================================
 // 2. ЗАГРУЗКА КАСТОМНОГО КОНТЕНТА
 // ==========================================
+window.invalidateGlobalCustomContentLoad = function(clearContent) {
+    // A response started under a previous account must never replace the current
+    // account's materials after a quick logout/login or role switch.
+    window._customContentLoadRequestId = (window._customContentLoadRequestId || 0) + 1;
+    if (clearContent) {
+        window.customContent = window.customContent || {};
+        ["topics", "files", "lectures", "tests", "flashcards", "games", "announcements"].forEach(function(key) {
+            window.customContent[key] = [];
+        });
+    }
+};
+
 window.loadGlobalCustomContent = function(callback) {
-    var hasSession = false; try { hasSession = !!(localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session")); } catch (e) {}
-    if (!window.API || !window.API.getCustomContent || (!window.state.student && !window.state.staff) || !hasSession) {
+    var requestId = window._customContentLoadRequestId = (window._customContentLoadRequestId || 0) + 1;
+    var hasSession = false, token = "", identity = window.state && (window.state.student || window.state.staff);
+    var email = String(identity && identity.email || "").toLowerCase();
+    var role = String(identity && identity.role || "").toLowerCase();
+    try { token = localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session") || ""; hasSession = !!token; } catch (e) {}
+    function isCurrentRequest() {
+        var currentIdentity = window.state && (window.state.student || window.state.staff);
+        var currentToken = "";
+        try { currentToken = localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session") || ""; } catch (e) {}
+        return requestId === window._customContentLoadRequestId &&
+            currentToken === token &&
+            String(currentIdentity && currentIdentity.email || "").toLowerCase() === email &&
+            String(currentIdentity && currentIdentity.role || "").toLowerCase() === role;
+    }
+    function finish() { if (isCurrentRequest() && callback) callback(); }
+    if (!window.API || !window.API.getCustomContent || !identity || !hasSession) {
+        window.invalidateGlobalCustomContentLoad(true);
         if (callback) callback();
         return;
     }
-    return window.API.getCustomContent().then(res => {
+    return window.API.getCustomContent().then(function(res) {
+        if (!isCurrentRequest()) return;
         if (res && res.success) {
-            window.customContent.topics = res.data.filter(d => d.type === 'topic');
-            window.customContent.files = res.data.filter(d => d.type === 'file');
-            window.customContent.lectures = res.data.filter(d => d.type === 'lecture');
-            window.customContent.tests = res.data.filter(d => d.type === 'test');
-            window.customContent.flashcards = res.data.filter(d => d.type === 'flashcards');
-            window.customContent.games = res.data.filter(d => d.type === 'game');
-            window.customContent.announcements = res.data.filter(d => d.type === 'announcement');
+            var rows = Array.isArray(res.data) ? res.data : [];
+            window.customContent = window.customContent || {};
+            window.customContent.topics = rows.filter(function(d) { return d.type === "topic"; });
+            window.customContent.files = rows.filter(function(d) { return d.type === "file"; });
+            window.customContent.lectures = rows.filter(function(d) { return d.type === "lecture"; });
+            window.customContent.tests = rows.filter(function(d) { return d.type === "test"; });
+            window.customContent.flashcards = rows.filter(function(d) { return d.type === "flashcards"; });
+            window.customContent.games = rows.filter(function(d) { return d.type === "game"; });
+            window.customContent.announcements = rows.filter(function(d) { return d.type === "announcement"; });
         } else if (res && res.error) {
-            // API возвращает ошибки авторизации JSON-ответом, а не исключением.
-            var tokenAfterResponse = false;
-            try { tokenAfterResponse = !!(localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session")); } catch (e) {}
+            // Keep the cached identity only while the server still accepts this token.
+            var tokenAfterResponse = "";
+            try { tokenAfterResponse = localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session") || ""; } catch (e) {}
             if (!tokenAfterResponse && window.state && (window.state.student || window.state.staff)) {
+                window.invalidateGlobalCustomContentLoad(true);
                 window.state.student = null;
                 window.state.staff = null;
                 try { localStorage.setItem("mdk.state", JSON.stringify(window.state)); } catch (e) {}
@@ -206,14 +237,16 @@ window.loadGlobalCustomContent = function(callback) {
                 if (window.updateMenuVisibility) window.updateMenuVisibility();
             }
         }
-        if (callback) callback();
-    }).catch(err => {
+        finish();
+    }).catch(function(err) {
+        if (!isCurrentRequest()) return;
         console.error("Ошибка загрузки кастомного контента", err);
-        // Если сервер явно отклонил токен, убираем только авторизацию,
-        // сохраняя локальный учебный прогресс. При обычном сбое сети вход не сбрасываем.
-        var tokenStillPresent = false;
-        try { tokenStillPresent = !!(localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session")); } catch (e) {}
+        // A normal network failure must not sign the user out or erase the last
+        // successful materials snapshot. An auth failure clears the token in API.
+        var tokenStillPresent = "";
+        try { tokenStillPresent = localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session") || ""; } catch (e) {}
         if (!tokenStillPresent && window.state && (window.state.student || window.state.staff)) {
+            window.invalidateGlobalCustomContentLoad(true);
             window.state.student = null;
             window.state.staff = null;
             try { localStorage.setItem("mdk.state", JSON.stringify(window.state)); } catch (e) {}
@@ -222,7 +255,7 @@ window.loadGlobalCustomContent = function(callback) {
             if (window.renderUserChip) window.renderUserChip();
             if (window.updateMenuVisibility) window.updateMenuVisibility();
         }
-        if (callback) callback();
+        finish();
     });
 };
 
@@ -935,6 +968,7 @@ function setupLogin() {
     }
     
     function applyAuthSession(res, email) {
+        if (window.invalidateGlobalCustomContentLoad) window.invalidateGlobalCustomContentLoad(true);
         var role = (res.role || "student").toLowerCase();
         if (role === "teacher" || role === "admin") {
             window.state.staff = { name: res.name || email, role: role, email: email, courses: res.courses || [] };
@@ -1039,6 +1073,7 @@ function setupLogin() {
 }
 
 window.handleAuthExpired = function(reason) {
+    if (window.invalidateGlobalCustomContentLoad) window.invalidateGlobalCustomContentLoad(true);
     // Вызывается API-клиентом только при явном отказе сервера по авторизации.
     if (window.API && window.API.logout) window.API.logout();
     if (window.state) { window.state.student = null; window.state.staff = null; }
@@ -1051,6 +1086,7 @@ window.handleAuthExpired = function(reason) {
 };
 
 window.handleLogout = function() {
+    if (window.invalidateGlobalCustomContentLoad) window.invalidateGlobalCustomContentLoad(true);
     // Событие отправляется до удаления токена: fetchAPI успевает приложить действующую сессию.
     if (window.state && window.state.student && window.API && window.API.logActivity) {
         try {

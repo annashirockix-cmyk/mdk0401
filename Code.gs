@@ -2011,48 +2011,62 @@ function saveCustomContent_(data) {
     throw new Error("Допустимые типы материалов: topic, lecture, test, flashcards, file, announcement, game.");
   }
 
-  const sheet = content_();
-  const values = sheet.getDataRange().getValues();
-  let targetRow = 0;
-  for (let i = 1; i < values.length; i++) {
-    if (String(values[i][0]) === id) {
-      if (!sameCourseId_(values[i][1], courseId) && user.role !== "admin") {
-        throw new Error("Нельзя переносить материал между дисциплинами.");
+  // Serialize the read/modify/write sequence: simultaneous saves with the same
+  // ID must update one row rather than append duplicate records.
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = content_();
+    const values = sheet.getDataRange().getValues();
+    let targetRow = 0;
+    for (let i = 1; i < values.length; i++) {
+      if (String(values[i][0]) === id) {
+        if (!sameCourseId_(values[i][1], courseId) && user.role !== "admin") {
+          throw new Error("Нельзя переносить материал между дисциплинами.");
+        }
+        targetRow = i + 1;
+        break;
       }
-      targetRow = i + 1;
-      break;
     }
+
+    const payload = Object.assign({}, data);
+    ["token", "action", "id", "mdkId", "courseId", "topicId", "type", "title"].forEach(function (key) {
+      delete payload[key];
+    });
+
+    const row = [
+      id, courseId, String(data.topicId || ""), type, String(data.title || ""),
+      JSON.stringify(payload), user.email, new Date().toISOString()
+    ];
+
+    if (targetRow) sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
+    else sheet.appendRow(row);
+
+    return { success: true, id: id };
+  } finally {
+    lock.releaseLock();
   }
-
-  const payload = Object.assign({}, data);
-  ["token", "action", "id", "mdkId", "courseId", "topicId", "type", "title"].forEach(function (key) {
-    delete payload[key];
-  });
-
-  const row = [
-    id, courseId, String(data.topicId || ""), type, String(data.title || ""),
-    JSON.stringify(payload), user.email, new Date().toISOString()
-  ];
-
-  if (targetRow) sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
-  else sheet.appendRow(row);
-
-  return { success: true, id: id };
 }
 
 function deleteCustomContent_(data) {
   auth_(data);
-  const sheet = content_();
-  const values = sheet.getDataRange().getValues();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = content_();
+    const values = sheet.getDataRange().getValues();
 
-  for (let i = 1; i < values.length; i++) {
-    if (String(values[i][0]) === String(data.id || "")) {
-      editor_(data, normalizeCourseId_(values[i][1] || ""));
-      sheet.deleteRow(i + 1);
-      return { success: true };
+    for (let i = 1; i < values.length; i++) {
+      if (String(values[i][0]) === String(data.id || "")) {
+        editor_(data, normalizeCourseId_(values[i][1] || ""));
+        sheet.deleteRow(i + 1);
+        return { success: true };
+      }
     }
+    return { success: false, error: "Материал не найден." };
+  } finally {
+    lock.releaseLock();
   }
-  return { success: false, error: "Материал не найден." };
 }
 
 /* ---------- Administrator: roles and course permissions ---------- */

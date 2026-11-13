@@ -39,3 +39,43 @@ test("flashcard constructor saves and reopens saved sets", () => {
  assert.ok(cards.includes("function renderSaved("));
  assert.ok(cards.includes("function loadSet("));
 });
+
+test("global custom-content loads ignore stale responses after account changes", () => {
+ const app = read("app.js");
+ assert.ok(app.includes("window.invalidateGlobalCustomContentLoad = function(clearContent)"));
+ assert.ok(app.includes("requestId === window._customContentLoadRequestId"));
+ assert.ok(app.includes("currentToken === token"));
+ assert.ok(app.includes("currentIdentity.email"));
+ assert.ok(app.includes("window.invalidateGlobalCustomContentLoad(true)"));
+});
+
+test("custom content upserts serialize duplicate-ID checks and writes", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function saveCustomContent_(data)");
+ const end = server.indexOf("\nfunction deleteCustomContent_(data)", start);
+ assert.ok(start >= 0 && end > start);
+ const save = server.slice(start, end);
+ const lock = save.indexOf("LockService.getScriptLock()");
+ const wait = save.indexOf("lock.waitLock(10000)");
+ const readIndex = save.indexOf("sheet.getDataRange().getValues()");
+ const write = Math.max(save.indexOf("sheet.getRange(targetRow"), save.indexOf("sheet.appendRow(row)"));
+ const release = save.indexOf("lock.releaseLock()");
+ assert.ok(lock >= 0 && wait > lock, "acquire a script-wide lock before reading");
+ assert.ok(readIndex > wait && write > readIndex, "keep duplicate lookup and write inside the lock");
+ assert.ok(release > write && save.includes("finally {"), "release the lock even when a save fails");
+});
+
+test("custom content deletion shares the upsert lock", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function deleteCustomContent_(data)");
+ const end = server.indexOf("\n/* ---------- Administrator", start);
+ assert.ok(start >= 0 && end > start);
+ const remove = server.slice(start, end);
+ const lock = remove.indexOf("LockService.getScriptLock()");
+ const wait = remove.indexOf("lock.waitLock(10000)");
+ const readIndex = remove.indexOf("sheet.getDataRange().getValues()");
+ const deletion = remove.indexOf("sheet.deleteRow(");
+ const release = remove.indexOf("lock.releaseLock()");
+ assert.ok(lock >= 0 && wait > lock && readIndex > wait && deletion > readIndex);
+ assert.ok(release > deletion && remove.includes("finally {"), "delete must release the shared lock");
+});

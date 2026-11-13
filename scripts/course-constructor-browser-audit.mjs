@@ -15,7 +15,7 @@ try {
   assert.ok(response && response.ok(), `Portal did not load: ${response?.status()}`);
   await page.waitForFunction(() => typeof window.renderCourseEditorPage === "function" &&
     typeof window.renderFlashcardEditorPage === "function" && window.MDK_DATA && window.MDK_DATA["07.01"]);
-  await page.evaluate(() => {
+  await page.evaluate(async () => {
     document.getElementById("loginOverlay")?.remove();
     window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
@@ -53,6 +53,44 @@ try {
       getTopicAccess: async () => ({ open: true }),
       getTestAttemptStatus: async () => ({ allowed: true, used: 0, limit: 1 })
     };
+    // Reproduce an admin request finishing after a student has signed in.
+    // The late admin response must not overwrite the student's role-filtered list.
+    const originalGetCustomContent = window.API.getCustomContent;
+    window.customContent = { topics: [], files: [], lectures: [], tests: [], flashcards: [], games: [], announcements: [] };
+    window.state.staff = { role: "admin", courses: ["07.01"], email: "audit-admin@example.invalid" };
+    window.state.student = null;
+    localStorage.setItem("mdk.session", "audit-admin-token");
+    let resolveAdminContent, resolveStudentContent, contentRequestNo = 0;
+    window.API.getCustomContent = () => new Promise(resolve => {
+      contentRequestNo += 1;
+      if (contentRequestNo === 1) resolveAdminContent = resolve;
+      else resolveStudentContent = resolve;
+    });
+    const adminContentLoad = window.loadGlobalCustomContent();
+    window.state.staff = null;
+    window.state.student = { role: "student", courses: ["07.01"], email: "audit-student@example.invalid" };
+    localStorage.setItem("mdk.session", "audit-student-token");
+    const studentContentLoad = window.loadGlobalCustomContent();
+    resolveStudentContent({ success: true, data: [{ id: "student-only", type: "lecture", title: "Материал студента" }] });
+    await studentContentLoad;
+    resolveAdminContent({ success: true, data: [{ id: "admin-only", type: "lecture", title: "Скрытый материал преподавателя" }] });
+    await adminContentLoad;
+    if (!window.customContent.lectures.some(item => item.id === "student-only") ||
+        window.customContent.lectures.some(item => item.id === "admin-only")) {
+      throw new Error("A stale admin content response overwrote the active student's materials");
+    }
+    window.__accountRaceAudit = {
+      pass: true,
+      activeRole: "student",
+      activeEmail: window.state.student.email,
+      studentMaterialPresent: true,
+      staleAdminMaterialRejected: true
+    };
+    window.API.getCustomContent = originalGetCustomContent;
+    window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
+    window.state.student = null;
+    localStorage.setItem("mdk.session", "audit-teacher-token");
+    window.customContent = { topics: [], lectures: [], tests: [], flashcards: [], files: [], games: [], announcements: [] };
     window.loadGlobalCustomContent = callback => { sync(); if (callback) callback(); };
     window.showToast = message => { window.__auditToast = String(message); };
     window.saveStudentData = () => {};
@@ -235,7 +273,10 @@ try {
     sprutNavigation.results.push(result);
     assert.ok(visible, "Student view opened the wrong SPRUT-TP topic: " + JSON.stringify(result));
   }
-  const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
+  const accountRaceAudit = await page.evaluate(() => window.__accountRaceAudit || null);
+  assert.ok(accountRaceAudit && accountRaceAudit.pass && accountRaceAudit.staleAdminMaterialRejected,
+    "Account-switch race audit did not produce a passing result");
+  const report = { topicId, savedCount, accountRaceAudit, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
   fs.mkdirSync("artifacts/constructors", { recursive: true });
   fs.writeFileSync("artifacts/constructors/report.json", JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
