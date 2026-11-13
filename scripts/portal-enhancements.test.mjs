@@ -885,7 +885,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   const html = read("index.html");
   const sw = read("service-worker.js");
   assert.ok(engine.includes("!window.state.student && !hasStaffAccess()"));
-  assert.ok(engine.includes("!window.canAccessCourse(course) && !hasStaffAccess()"));
+  assert.ok(engine.includes("!hasEnglishAccess && !hasStaffAccess()"));
   assert.ok(engine.includes("result.success !== true"));
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
