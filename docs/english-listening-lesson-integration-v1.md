@@ -113,3 +113,14 @@ Four browser-listening activities have also been added for Course 4, Semester 2,
 ## Course 4, Semester 2 — complete browser listening set
 
 The catalogue now contains all twelve lessons for Course 4, Semester 2. Lessons 1–8 preserve the existing source topics: means of transmission; networks and topologies; hardware/software; USB storage and computer types; the internet and technical sources; automation and robotics; sensors; and human–computer interaction/input devices. Lessons 9–12 cover avionics information exchange, programming logic, sensor-data validation and cybersecurity. The activities use original browser-readable scripts and multiple-choice comprehension checks. Total catalogue coverage is now 36 activities: Course 4 Semester 2 (12), Course 5 Semester 1 (12), Course 5 Semester 2 (12). All are practice-only; keys remain client-side and attempts/grades are not persisted.
+
+
+## Current playable catalogue coverage
+
+The browser listening catalogue contains 40 practice activities:
+- Course 4, Semester 1: lessons 1–4 (conductors/insulators/semiconductors; DC/AC and units; circuit components; series and parallel circuits).
+- Course 4, Semester 2: lessons 1–12 (transmission media; networks; computer hardware/software; data storage; internet/source evaluation; automation; sensors; integrated data flow; avionics; algorithms; sensor-data validation; cybersecurity).
+- Course 5, Semester 1: lessons 1–12.
+- Course 5, Semester 2: lessons 1–12.
+
+All activities include a browser-readable script and multiple-choice comprehension questions with practice answer feedback. This does not mean the remaining lessons are converted: Course 4 Semester 1 lessons 5–12 and Courses 1–3 are still outstanding. Practice answer keys are client-side; no graded attempts or marks are stored.
