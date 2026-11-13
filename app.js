@@ -1286,7 +1286,7 @@ window.router = function() {
     if (page === "topic" && parts.length >= 3) { if(window.canAccessCourse&&!window.canAccessCourse(parts[1])){window.renderHomePage();return;} window.renderTopicPage(parts[1], parts[2], parts[3] || "lectures"); return; }
     if (page === "english-media" && window.renderEnglishMediaPage) { if(window.canAccessCourse&&!window.canAccessCourse(window.state.activeCourseId||"EN")){window.renderHomePage();return;} window.renderEnglishMediaPage(parts[1] || ""); return; }
     if (page === "english-cards" && window.renderEnglishCardsPage) { if(window.canAccessCourse&&!window.canAccessCourse("EN")){window.renderHomePage();return;} window.renderEnglishCardsPage(parts[1] || ""); return; }
-    if (page === "english-tests" && window.renderEnglishTestsPage) { var englishCourse = window.state.activeCourseId || "EN"; if(window.canAccessCourse&&!window.canAccessCourse(englishCourse)){window.renderHomePage();return;} window.renderEnglishTestsPage(parts[1] || ""); return; }
+    if (page === "english-tests" && window.renderEnglishTestsPage) { var hasEnglishAccess = !window.canAccessCourse || ["EN","ENB","ENT"].some(function(id){return window.canAccessCourse(id);}); if(!hasEnglishAccess){window.renderHomePage();return;} window.renderEnglishTestsPage(parts[1] || ""); return; }
     if (page === "resources" && window.renderPortalResourcesPage) { window.renderPortalResourcesPage(); return; }
     if (page === "videos") { window.renderVideosPage(); return; }
     if (page === "safety") { window.renderSafetyPage(); return; }

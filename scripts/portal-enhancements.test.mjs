@@ -778,13 +778,15 @@ test("English exam entry disables legacy semester/final catalogue and exposes on
   const engine = read("english-vpr-engine.js");
   const app = read("app.js");
   assert.match(app, /id !== "EN"/);
-  assert.match(app, /var englishCourse = window\.state\.activeCourseId \|\| "EN"/);
+  assert.match(app, /var hasEnglishAccess = !window\.canAccessCourse \|\| \["EN","ENB","ENT"\]\.some/);
   assert.match(html, /app\.js\?v=\d+/);
   assert.match(html, /english-tools\.js\?v=9/);
   assert.match(html, /english-vpr-engine\.js\?v=\d+/);
   assert.match(html, /english-proficiency-lab\.js\?v=5/);
   assert.match(tools, /Legacy semester\/final exam catalogue intentionally disabled/);
   assert.doesNotMatch(tools, /Семестровые · базовый|Итоговые · базовый|Семестровые · технический|Итоговые · технический/);
+  assert.match(engine, /var basic = window\.canAccessCourse\("ENB"\) \|\| window\.canAccessCourse\("EN"\)/);
+  assert.match(engine, /var hasEnglishAccess = !window\.canAccessCourse \|\| \["EN","ENB","ENT"\]\.some/);
   assert.match(engine, /Basic English — базовый/);
   assert.match(engine, /Technical English — технический/);
   assert.match(engine, /window\.renderEnglishTestsPage = function/);
@@ -883,7 +885,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   const html = read("index.html");
   const sw = read("service-worker.js");
   assert.ok(engine.includes("!window.state.student && !hasStaffAccess()"));
-  assert.ok(engine.includes("!window.canAccessCourse(course) && !hasStaffAccess()"));
+  assert.ok(engine.includes("!hasEnglishAccess && !hasStaffAccess()"));
   assert.ok(engine.includes("result.success !== true"));
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));

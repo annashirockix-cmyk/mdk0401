@@ -17,8 +17,16 @@
     return !!(s.staff || s.teacher || s.admin || role === "teacher" || role === "admin");
   }
   function activeCourse() {
-    var id = window.state && window.state.activeCourseId || "EN";
-    return id === "ENB" ? "ENB" : id === "ENT" ? "ENT" : "EN";
+    var id = window.state && window.state.activeCourseId || "";
+    if (id === "ENB" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) return "ENB";
+    if (id === "ENT" && (!window.canAccessCourse || window.canAccessCourse("ENT") || window.canAccessCourse("EN"))) return "ENT";
+    if (!window.canAccessCourse) return "EN";
+    var basic = window.canAccessCourse("ENB") || window.canAccessCourse("EN");
+    var technical = window.canAccessCourse("ENT") || window.canAccessCourse("EN");
+    if (basic && technical) return "EN";
+    if (basic) return "ENB";
+    if (technical) return "ENT";
+    return "EN";
   }
   function courseForTrack(track) {
     return track === "technical" ? "ENT" : "ENB";
@@ -377,7 +385,8 @@
     var app = document.getElementById("app");
     if (!app) return;
     var course = activeCourse();
-    if (!window.state || (!window.state.student && !hasStaffAccess()) || (window.canAccessCourse && !window.canAccessCourse(course) && !hasStaffAccess())) {
+    var hasEnglishAccess = !window.canAccessCourse || ["EN","ENB","ENT"].some(function(id){return window.canAccessCourse(id);});
+    if (!window.state || (!window.state.student && !hasStaffAccess()) || (!hasEnglishAccess && !hasStaffAccess())) {
       app.innerHTML = '<section class="module">Нет доступа к дисциплине «Английский язык». Попросите администратора назначить её вашему аккаунту.</section>';
       return;
     }
