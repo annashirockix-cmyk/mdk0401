@@ -241,3 +241,8 @@ All twelve lessons in the semester now have a playable browser-listening activit
 ### Course 5 listening coverage — both semesters
 
 The browser listening catalogue now contains all 24 activities for Course 5: 12 activities in Semester 1 and 12 in Semester 2. The page groups activities by semester. Semester 1 lessons 1–2 draw on existing Technical English source lessons (materials and metal processes; technical drawing/CAD/CAM), and lessons 3–12 use the developed course drafts. Semester 2 lessons 1–12 are also represented. This is a practice catalogue, not a protected assessment: practice answer keys are client-side and no grades or attempts are saved. Other semesters remain to be converted.
+
+
+### Listening catalogue expansion — Course 4
+
+The browser practice catalogue now includes Course 4, Semester 2, lessons 9–12 in addition to all 24 activities for Course 5. The page groups activities by course and semester. Current coverage is 28 activities across three blocks: Course 4 Semester 2 (lessons 9–12), Course 5 Semester 1 (lessons 1–12) and Course 5 Semester 2 (lessons 1–12). Course 4 Semester 2 lessons 1–8 and the remaining course-semester blocks still require conversion. All catalogue activities remain practice-only.
