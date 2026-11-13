@@ -309,6 +309,7 @@ The server validator has been strengthened before the content is rebuilt:
 - exactly 20 questions per test;
 - no duplicate question text or empty/duplicate options;
 - every correct-answer index must be an integer within the option range;
+- Basic and Technical imports are compared with the other active bank; an exact clone is rejected server-side;
 - student-facing sanitization uses a strict question whitelist (`q`, `options`), so answer keys, explanations and any unexpected hidden metadata cannot reach students.
 
-Regression tests cover valid banks, missing keys, duplicate IDs/questions/options, wrong semester order, track mismatch, and removal of answer-key fields. A separate guard asserts that the unreviewed legacy seed remains out of the production page while Basic/Technical are still cloned. The bank is **not ready for import**; do not publish it or claim that the 20 works are available to students until new Basic and genuinely distinct Technical questions have been authored, keyed, reviewed, imported and read back from the protected sheet.
+Regression tests cover valid banks, missing keys, duplicate IDs/questions/options, wrong semester order, track mismatch, removal of answer-key fields, and exact Basic/Technical clone detection. A separate guard asserts that the unreviewed legacy seed remains out of the production page while Basic/Technical are still cloned. The bank is **not ready for import**; do not publish it or claim that the 20 works are available to students until new Basic and genuinely distinct Technical questions have been authored, keyed, reviewed, imported and read back from the protected sheet.
