@@ -74,9 +74,9 @@ test("teacher course and role permission changes share the content lock", () => 
   ["setUserRole_", "promoteUserToAdmin"]
  ].forEach(([name, next]) => {
   const start = server.indexOf("function " + name + "(data)");
-  const end = server.indexOf("\\nfunction " + next + "(data)", start) >= 0
-   ? server.indexOf("\\nfunction " + next + "(data)", start)
-   : server.indexOf("\\n/**", start);
+  const end = server.indexOf("\nfunction " + next + "(data)", start) >= 0
+   ? server.indexOf("\nfunction " + next + "(data)", start)
+   : server.indexOf("\n/**", start);
   assert.ok(start >= 0 && end > start, name + " function boundaries must exist");
   const fn = server.slice(start, end);
   const lock = fn.indexOf("LockService.getScriptLock()");
