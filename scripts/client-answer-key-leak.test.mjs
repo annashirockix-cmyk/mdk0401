@@ -36,7 +36,6 @@ const publicAssessmentSources = [
   "exam_0201.js",
   "exam_0202.js",
   "exam_0701.js",
-  "english-vpr-exams.js",
   "final-exam-question-types.js",
   "portal-final.js",
   "mdk-upgrade.js"
@@ -67,6 +66,7 @@ test("English protected banks are not shipped as a public assessment source", ()
   assert.match(html, /portal-final\.js\?v=23/);
   assert.match(html, /mdk-upgrade\.js\?v=8/);
   assert.doesNotMatch(html, /english-assessment-data\.js/);
+  assert.doesNotMatch(html, /english-vpr-exams\.js/);
   const engine = read("english-vpr-engine.js");
   assert.match(engine, /window\.API\.getEnglishSemesterTests/);
   assert.match(engine, /window\.API\.getEnglishVprExam/);
