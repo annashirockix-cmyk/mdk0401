@@ -7,6 +7,54 @@
 
   var activities = [
     {
+      id: "en-c04-s02-l09",
+      title: "Course 4 · Semester 2 · Lesson 9 — Avionics Overview: Systems and Information Exchange",
+      level: "B1+–B2",
+      script: "Let us look at a simplified avionics information chain. First, a sensor provides information about a particular condition. The signal is received by an electronic unit. The processing unit checks the incoming data and prepares information for another part of the system. Depending on the system design, the result may be shown on a display, stored in a record or shared through an approved data interface. Engineers use system descriptions to understand the relationship between inputs, processing and outputs. Remember that this is a classroom model. Real aircraft systems are more complex, and all maintenance or operational work must follow the current approved documentation and the person’s authorization.",
+      questions: [
+        { prompt: "What is the briefing about?", options: ["A simplified avionics information chain", "A passenger boarding process", "A real aircraft repair", "A CNC machining cycle"], answerIndex: 0, explanation: "The speaker describes a high-level classroom model of information flow." },
+        { prompt: "What provides information first?", options: ["A sensor", "A display", "A report", "A printer"], answerIndex: 0, explanation: "The chain begins when a sensor provides information." },
+        { prompt: "What does the processing unit do?", options: ["Checks incoming data", "Repairs the sensor", "Approves maintenance", "Changes the aircraft configuration"], answerIndex: 0, explanation: "The processing unit checks incoming data." },
+        { prompt: "Where may the result appear?", options: ["On a display or in a record", "Only in a paper manual", "Only in a passenger list", "In a workshop timetable"], answerIndex: 0, explanation: "The result may be displayed, stored or shared through an approved interface." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l10",
+      title: "Course 4 · Semester 2 · Lesson 10 — Programming Logic, Flowcharts and Algorithms",
+      level: "B2",
+      script: "Our classroom example checks a data file. First, the program receives the file name and the file format. Next, it checks whether the format is on the approved list for this exercise. If the format is not valid, the program displays an error message and records the result as ‘not accepted’. If the format is valid, the program continues to the next training step. The same check is repeated for each file in the sample list. This is a simple algorithm for learning about sequence, selection and iteration. It is not aircraft software and must not be used as a real avionics program.",
+      questions: [
+        { prompt: "What does the classroom algorithm check?", options: ["A data file and its format", "An aircraft engine", "A passenger ticket", "A machine tool"], answerIndex: 0, explanation: "The example checks a data file and its format." },
+        { prompt: "What happens if the format is invalid?", options: ["An error message is displayed", "The file is automatically approved", "The program deletes all records", "The program skips every check"], answerIndex: 0, explanation: "An invalid format produces an error message and a not-accepted result." },
+        { prompt: "What happens when the format is valid?", options: ["The program continues to the next training step", "The program stops permanently", "The file is deleted", "A maintenance task begins"], answerIndex: 0, explanation: "The program continues to the next training step." },
+        { prompt: "Which programming concepts does the example illustrate?", options: ["Sequence, selection and iteration", "Encryption, compression and printing", "Drawing, casting and forging", "Heating, cooling and cutting"], answerIndex: 0, explanation: "The script explicitly names sequence, selection and iteration." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l11",
+      title: "Course 4 · Semester 2 · Lesson 11 — Sensor Data, Validation and Diagnostic Logs",
+      level: "B2",
+      script: "We have reviewed five lines in the training log. Most records contain a timestamp and a sample value. Record A-03 has a missing value, so it cannot be included in the same comparison without a note. Record A-04 appears twice with the same timestamp and value. This may be a duplicate, but we should check the source file before removing anything. The available information does not prove a sensor fault. In the report, describe the missing field, identify the possible duplicate and state what evidence is still required. Keep observations separate from assumptions.",
+      questions: [
+        { prompt: "How many lines were reviewed?", options: ["Three", "Four", "Five", "Six"], answerIndex: 2, explanation: "The speaker says five lines were reviewed." },
+        { prompt: "Which record has a missing value?", options: ["A-01", "A-02", "A-03", "A-04"], answerIndex: 2, explanation: "Record A-03 has a missing value." },
+        { prompt: "What is unusual about A-04?", options: ["It appears twice with the same timestamp and value", "It has no timestamp", "It contains five different values", "It has been approved"], answerIndex: 0, explanation: "A-04 appears twice with the same timestamp and value." },
+        { prompt: "Does the information prove a sensor fault?", options: ["Yes", "No"], answerIndex: 1, explanation: "The speaker says the available information does not prove a sensor fault." }
+      ]
+    },
+    {
+      id: "en-c04-s02-l12",
+      title: "Course 4 · Semester 2 · Lesson 12 — Cybersecurity Vocabulary and Safe Data Handling",
+      level: "B2",
+      script: "I received an unexpected message that appears to come from a technical support team. It says that my account will be blocked unless I open an attachment and confirm my password. There are several warning signs: the request is urgent, the attachment was not expected, and the message asks for confidential information. I will not open the attachment or reply with my password. I will use the organization’s approved reporting channel and follow the local incident procedure. I will not send the message or any technical records to my personal account. The security team can review the report through the correct process. Follow-up handover: We checked the sample log and found one incomplete record. The document revision is shown in the header, but the source file still needs to be confirmed. We have not identified the cause of the missing field. Please keep the observation separate from any possible explanation. The next student team should compare the source record with the training copy, note the result and update the classroom report. Do not use this exercise as an operational instruction.",
+      questions: [
+        { prompt: "What does the unexpected message request?", options: ["Opening an attachment and confirming a password", "Booking a training room", "Updating a timetable", "Reading a public notice"], answerIndex: 0, explanation: "The message threatens to block the account unless the user opens an attachment and confirms a password." },
+        { prompt: "Which is a warning sign?", options: ["Urgency and an unexpected attachment", "A familiar classroom schedule", "A normal public announcement", "A completed lesson"], answerIndex: 0, explanation: "Urgency and an unexpected attachment are identified as warning signs." },
+        { prompt: "What should the recipient do?", options: ["Use the approved reporting channel", "Reply with the password", "Forward records to a personal account", "Open the attachment immediately"], answerIndex: 0, explanation: "The speaker recommends the organization's approved reporting channel." },
+        { prompt: "What does the follow-up log review identify?", options: ["One incomplete record", "A confirmed sensor fault", "A completed maintenance task", "A production approval"], answerIndex: 0, explanation: "The handover says one record is incomplete." }
+      ]
+    },
+    {
       id: "en-c05-s01-l01",
       title: "Lesson 1 — Materials in Mechanical Engineering",
       level: "B1+–B2",
