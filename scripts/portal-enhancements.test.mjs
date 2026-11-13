@@ -1493,3 +1493,36 @@ test("custom materials reload for the current student identity after a staff ses
   assert.ok(delivery.includes('user.role === "student" && !customContentIsOpen_('));
   assert.ok(delivery.includes("hasCourseAccess_(user, courseId)"));
 });
+
+
+test("English VPR enforces the five-word written-answer limit on the server", () => {
+  const bank = read("EnglishVPR-Sheets.gs");
+  const helperStart = bank.indexOf("function validateEnglishVprWrittenAnswers_");
+  const helperEnd = bank.indexOf("\\nfunction submitEnglishVprExam_", helperStart);
+  assert.ok(helperStart >= 0 && helperEnd > helperStart);
+  const sandbox = {};
+  vm.runInNewContext(
+    bank.slice(helperStart, helperEnd) + ";this.validateEnglishVprWrittenAnswers_=validateEnglishVprWrittenAnswers_;",
+    sandbox
+  );
+  const task = {type:"questionnaire",items:["Name","Profession"]};
+  const accepted = sandbox.validateEnglishVprWrittenAnswers_(task,{0:"Alex",1:"I want to be a mechanic"},6);
+  assert.equal(accepted.length,2);
+  assert.equal(accepted[1].answer,"I want to be a mechanic");
+  assert.equal(accepted[0].task,6);
+  assert.throws(
+    () => sandbox.validateEnglishVprWrittenAnswers_(task,{0:"Alex has been studying at college for many years",1:"Mechanic"},6),
+    /от 1 до 5 слов/
+  );
+  assert.throws(
+    () => sandbox.validateEnglishVprWrittenAnswers_(task,{0:"",1:"Mechanic"},6),
+    /от 1 до 5 слов/
+  );
+  assert.throws(
+    () => sandbox.validateEnglishVprWrittenAnswers_(task,{0:"x".repeat(101),1:"Mechanic"},6),
+    /100 символов/
+  );
+  const submitStart = bank.indexOf("function submitEnglishVprExam_(data)");
+  const submitEnd = bank.indexOf("function gradeEnglishVprWrittenPart_(data)", submitStart);
+  assert.ok(bank.slice(submitStart, submitEnd).includes("validateEnglishVprWrittenAnswers_(task,ans,ti)"));
+});
