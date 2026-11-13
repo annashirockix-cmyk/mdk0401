@@ -71,6 +71,7 @@ window.API = {
  saveGCodeProgress:function(progress){return fetchAPI("saveGCodeProgress",{progress:progress||{}}, "POST");},
  saveResult:function(data){data=Object.assign({},data||{});if(!data.courseId&&window.state)data.courseId=window.state.activeCourseId||"";return fetchAPI("saveResult",data,"POST");},
  saveTeacherResult:function(data){return fetchAPI("saveTeacherResult",data||{},"POST");},
+ saveManualGrade:function(data){return fetchAPI("saveManualGrade",data||{},"POST");},
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
  getCustomContentAccess:function(courseId,id){return fetchAPI("getCustomContentAccess",{courseId:courseId,id:id},"GET");},
  setCustomContentAccess:function(courseId,id,open){return fetchAPI("setCustomContentAccess",{courseId:courseId,id:id,open:open},"POST");},

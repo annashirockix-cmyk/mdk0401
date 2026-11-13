@@ -423,7 +423,7 @@ window.renderStudentGradesPage = function() {
 
     app.innerHTML += `
         <section class="hero"><h1>📊 Мои оценки</h1></section>
-        <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}</tbody></table></div></div>
+        <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}<tr id="serverManualGrades"><td colspan="3" style="text-align:center;color:var(--muted)">Загрузка серверных оценок…</td></tr></tbody></table></div></div>
         <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody id="serverAssessmentGrades">${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody></table></div></div>
         <div class="module"><h3>Задания преподавателя</h3><div id="serverAssignmentGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
         <div class="module"><h3>Лабораторные работы по метрологии</h3><div id="serverMetrologyGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
@@ -435,9 +435,15 @@ window.renderStudentGradesPage = function() {
     if(assessmentHost&&window.API&&window.API.getMyCourseResults){
       window.API.getMyCourseResults("").then(function(r){
         if(!r||!r.success)throw new Error(r&&r.error||"Не удалось загрузить результаты");
+        var manualRecords=(r.results||[]).filter(function(x){return String(x.testId||"").indexOf("manual_")===0;});
+        var manualHost=document.getElementById("serverManualGrades");
+        if(manualHost)manualHost.outerHTML=manualRecords.length?manualRecords.map(function(x){
+          var date=x.finishedAt?new Date(x.finishedAt).toLocaleDateString("ru-RU"):"—";
+          return "<tr><td>"+window.escapeHtml(date)+"</td><td>"+window.escapeHtml(x.testTitle||"Оценка преподавателя")+" ("+window.escapeHtml(x.courseId||"—")+")</td><td style='text-align:center;font-weight:bold'>"+window.escapeHtml(x.grade==null?"—":x.grade)+"</td></tr>";
+        }).join(""):'<tr id="serverManualGrades"><td colspan="3" style="text-align:center;color:var(--muted)">Серверных оценок преподавателя пока нет</td></tr>';
         var source=(r.results||[]).filter(function(x){
           var id=String(x.testId||"");
-          return id.indexOf("assignment_")!==0&&id.indexOf("metrology_")!==0;
+          return id.indexOf("assignment_")!==0&&id.indexOf("metrology_")!==0&&id.indexOf("manual_")!==0;
         });
         var grouped=Object.create(null);
         source.forEach(function(x){
@@ -479,44 +485,92 @@ window.renderStudentGradesPage = function() {
 };
 
 window.renderTeacherJournalPage = function() {
-    var app = document.getElementById("app"); if (!app) return; app.innerHTML = "";
-    if (!window.state.staff) { app.innerHTML = "<h2>Доступ запрещен</h2>"; return; }
-    document.getElementById("crumbs").textContent = "Журнал (Преподаватель)";
-    
-    var grades = JSON.parse(localStorage.getItem('portal_grades') || '[]');
-    app.innerHTML = `
-        <a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>
-        <section class="hero"><h1>📓 Журнал группы</h1></section>
-        <div class="module">
-            <h3>Выставить оценку</h3>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <select id="grade-group" class="self-input" style="flex:1;"><option value="Группа 1">Группа 1</option><option value="Группа 2">Группа 2</option></select>
-                <input type="text" id="grade-student" placeholder="Email студента" class="self-input" style="flex:2;">
-                <input type="text" id="grade-subject" placeholder="Предмет" class="self-input" style="flex:1;">
-                <input type="number" id="grade-value" placeholder="Оценка" class="self-input" style="width:100px;" min="2" max="5">
-            </div>
-            <button class="btn btn-primary" onclick="window.addGrade()" style="margin-top:10px;">Сохранить оценку</button>
+    var app=document.getElementById("app");if(!app)return;app.innerHTML="";
+    if(!window.state.staff){app.innerHTML="<h2>Доступ запрещен</h2>";return;}
+    document.getElementById("crumbs").textContent="Журнал (Преподаватель)";
+    var staff=window.state.staff;
+    var availableCourses=staff.role==="admin"?Object.keys(window.MDK_DATA||{}):(staff.courses||[]);
+    availableCourses=availableCourses.filter(function(id){return id&&window.canAccessCourse(id);});
+    var legacy=[];
+    try{legacy=JSON.parse(localStorage.getItem("portal_grades")||"[]");if(!Array.isArray(legacy))legacy=[];}catch(e){legacy=[];}
+    app.innerHTML=`
+      <a class="backlink" href="#/" style="color:var(--accent);">← На главную</a>
+      <section class="hero"><h1>📓 Журнал группы</h1><p>Оценки и история попыток загружаются с сервера</p></section>
+      <div class="module">
+        <h3>Выставить оценку</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;">
+          <label>Дисциплина<select id="journal-course" class="self-input" style="width:100%"></select></label>
+          <label>Студент<select id="journal-student" class="self-input" style="width:100%"><option value="">Загрузка списка…</option></select></label>
+          <label>Название работы<input id="journal-title" class="self-input" style="width:100%" maxlength="180" placeholder="Например, практическая работа № 3"></label>
+          <label>Дата<input id="journal-date" type="date" class="self-input" style="width:100%" value="${new Date().toISOString().slice(0,10)}"></label>
+          <label>Оценка<select id="journal-grade" class="self-input" style="width:100%"><option value="">Выберите оценку</option><option value="5">5 — отлично</option><option value="4">4 — хорошо</option><option value="3">3 — удовлетворительно</option><option value="2">2 — неудовлетворительно</option></select></label>
+          <label style="grid-column:1/-1">Комментарий<textarea id="journal-feedback" class="self-input" style="width:100%;min-height:70px" maxlength="3000" placeholder="Необязательно"></textarea></label>
         </div>
-        <div class="module">
-            <h3>Все оценки</h3>
-            <div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Группа</th><th>Студент</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody id="grades-table-body">
-                ${grades.map(g => `<tr><td>${g.date}</td><td>${g.group}</td><td>${g.student}</td><td>${g.subject}</td><td><b style="color:var(--ok); font-size:16px;">${g.value}</b></td></tr>`).join('')}
-            </tbody></table></div>
+        <button id="journal-save-grade" class="btn btn-primary" style="margin-top:12px">Сохранить оценку</button>
+        <p id="journal-status" role="status" style="margin-top:8px;color:var(--muted)"></p>
+      </div>
+      <div class="module">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <h3>История оценок и попыток</h3>
+          <label>Дисциплина для просмотра<select id="journal-filter-course" class="self-input"><option value="">Все доступные дисциплины</option></select></label>
         </div>
+        <div id="journal-load-status" style="padding:8px;color:var(--muted)">Загрузка данных с сервера…</div>
+        <div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Группа</th><th>Студент</th><th>Дисциплина</th><th>Работа</th><th>Оценка</th><th>Попытка</th></tr></thead><tbody id="journal-results-body"><tr><td colspan="7">Загрузка…</td></tr></tbody></table></div>
+      </div>
+      ${legacy.length?`<details class="module"><summary>Старые локальные записи (${legacy.length})</summary><p style="color:var(--muted)">Эти записи сохранены в браузере преподавателя и не синхронизированы с таблицей. Новые оценки сохраняются на сервере.</p><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Группа</th><th>Email</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${legacy.map(function(g){return "<tr><td>"+window.escapeHtml(g.date||"—")+"</td><td>"+window.escapeHtml(g.group||"—")+"</td><td>"+window.escapeHtml(g.student||"—")+"</td><td>"+window.escapeHtml(g.subject||"—")+"</td><td>"+window.escapeHtml(g.value||"—")+"</td></tr>";}).join("")}</tbody></table></div></details>`:""}
     `;
-};
-
-window.addGrade = function() {
-    const group = document.getElementById('grade-group').value;
-    const student = document.getElementById('grade-student').value.trim();
-    const subject = document.getElementById('grade-subject').value.trim();
-    const value = document.getElementById('grade-value').value;
-    if (!student || !subject || !value) { alert("Заполните все поля!"); return; }
-    const grades = JSON.parse(localStorage.getItem('portal_grades') || '[]');
-    grades.push({ date: new Date().toLocaleDateString(), group, student, subject, value });
-    localStorage.setItem('portal_grades', JSON.stringify(grades));
-    alert("Оценка выставлена!");
-    window.renderTeacherJournalPage(); 
+    var courseSelect=document.getElementById("journal-course"),studentSelect=document.getElementById("journal-student"),filterSelect=document.getElementById("journal-filter-course");
+    function courseTitle(id){var item=window.MDK_DATA&&window.MDK_DATA[id];return item&&item.title?item.title:id;}
+    courseSelect.innerHTML=availableCourses.map(function(id){return '<option value="'+window.escapeHtml(id)+'">'+window.escapeHtml(courseTitle(id))+'</option>';}).join("")||'<option value="">Нет доступных дисциплин</option>';
+    filterSelect.innerHTML+='<option value="__all__">Все</option>'+availableCourses.map(function(id){return '<option value="'+window.escapeHtml(id)+'">'+window.escapeHtml(courseTitle(id))+'</option>';}).join("");
+    var students=[];
+    function populateStudents(){
+      var cid=courseSelect.value;
+      var eligible=students.filter(function(st){var courses=st.courses||[];return courses.indexOf(cid)>=0||((cid==="ENB"||cid==="ENT")&&courses.indexOf("EN")>=0);});
+      studentSelect.innerHTML=eligible.map(function(st){return '<option value="'+window.escapeHtml(st.email)+'">'+window.escapeHtml(st.name||st.email)+' — '+window.escapeHtml(st.group||"без группы")+'</option>';}).join("")||'<option value="">Нет студентов на этой дисциплине</option>';
+    }
+    function renderResults(rows){
+      var cid=filterSelect.value;
+      var filtered=(rows||[]).filter(function(x){return !cid||cid==="__all__"||String(x.courseId||"")===cid;});
+      var host=document.getElementById("journal-results-body");if(!host)return;
+      host.innerHTML=filtered.length?filtered.map(function(x){
+        var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
+        var grade=x.grade!==""&&x.grade!=null?x.grade:"На проверке";
+        var attempt=Number(x.attempts)||1;
+        return "<tr><td>"+window.escapeHtml(date)+"</td><td>"+window.escapeHtml(x.group||"—")+"</td><td>"+window.escapeHtml(x.name||x.email||"—")+"</td><td>"+window.escapeHtml(courseTitle(x.courseId||""))+"</td><td>"+window.escapeHtml(x.testTitle||x.testId||"Работа")+"</td><td style='text-align:center;font-weight:bold'>"+window.escapeHtml(grade)+"</td><td style='text-align:center'>"+attempt+"</td></tr>";
+      }).join(""):'<tr><td colspan="7" style="text-align:center;color:var(--muted)">Нет записей по выбранной дисциплине</td></tr>';
+      var status=document.getElementById("journal-load-status");if(status)status.textContent="Записей: "+filtered.length+" · источник: сервер";
+    }
+    var resultRows=[];
+    filterSelect.addEventListener("change",function(){renderResults(resultRows);});
+    courseSelect.addEventListener("change",populateStudents);
+    document.getElementById("journal-save-grade").addEventListener("click",function(){
+      var status=document.getElementById("journal-status");
+      var payload={courseId:courseSelect.value,email:studentSelect.value,testTitle:document.getElementById("journal-title").value.trim(),date:document.getElementById("journal-date").value,grade:document.getElementById("journal-grade").value,feedback:document.getElementById("journal-feedback").value.trim()};
+      if(!payload.courseId||!payload.email||!payload.testTitle||!payload.date||!payload.grade){status.textContent="Заполните дисциплину, студента, название, дату и оценку.";return;}
+      status.textContent="Сохранение на сервере…";
+      window.API.saveManualGrade(payload).then(function(r){
+        if(!r||!r.success)throw new Error(r&&r.error||"Не удалось сохранить оценку");
+        status.textContent="Оценка сохранена в журнале.";
+        document.getElementById("journal-title").value="";
+        document.getElementById("journal-grade").value="";
+        document.getElementById("journal-feedback").value="";
+        return window.API.getResults({});
+      }).then(function(r){
+        if(!r||!r.success)throw new Error(r&&r.error||"Оценка сохранена, но журнал не удалось обновить");
+        resultRows=r.results||[];renderResults(resultRows);
+      }).catch(function(e){status.textContent=e.message;});
+    });
+    Promise.all([window.API.getStudents(),window.API.getResults({})]).then(function(values){
+      var studentResult=values[0],result=values[1];
+      if(!studentResult||!studentResult.success)throw new Error(studentResult&&studentResult.error||"Не удалось загрузить список студентов");
+      if(!result||!result.success)throw new Error(result&&result.error||"Не удалось загрузить журнал");
+      students=(studentResult.students||[]).filter(function(st){return String(st.role||"").toLowerCase()==="student";});
+      populateStudents();resultRows=result.results||[];renderResults(resultRows);
+    }).catch(function(e){
+      var status=document.getElementById("journal-load-status");if(status)status.textContent="Ошибка загрузки журнала: "+e.message;
+      studentSelect.innerHTML='<option value="">Список студентов недоступен</option>';
+    });
 };
 
 window.renderCertificatePage = function() {
