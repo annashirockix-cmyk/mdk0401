@@ -1383,14 +1383,14 @@ test("English VPR and semester grades cannot be forged through the generic saveR
   const server = read("Code.gs");
   const bank = read("EnglishVPR-Sheets.gs");
   const start = server.indexOf("function saveResult_(data, serverVerifiedEnglishVpr)");
-  const end = server.indexOf("\\nfunction ", start + 20);
+  const end = server.indexOf("\\nfunction getResults_", start);
   assert.ok(start >= 0 && end > start);
   const save = server.slice(start, end);
-  assert.match(save, /\^english_vpr_\//);
-  assert.match(save, /serverVerifiedEnglishVpr !== true/);
-  assert.match(save, /\^english_semester_\//);
-  assert.match(server, /case "saveresult": result = saveResult_\(data\); break;/);
-  assert.match(bank, /finishedAt:new Date\(\)\.toISOString\(\)\}, true\)/,
+  assert.ok(save.includes("/^english_vpr_/.test(testId)"));
+  assert.ok(save.includes("serverVerifiedEnglishVpr !== true"));
+  assert.ok(save.includes("/^english_semester_/.test(testId)"));
+  assert.match(server, /case "saveresult": result = saveResult_\\(data\\); break;/);
+  assert.match(bank, /finishedAt:new Date\\(\\)\\.toISOString\\(\\)\\}, true\\)/,
     "only the server-verified VPR submission may pass the internal trust flag");
-  assert.doesNotMatch(bank, /data\.serverVerifiedEnglishVpr/);
+  assert.doesNotMatch(bank, /data\\.serverVerifiedEnglishVpr/);
 });
