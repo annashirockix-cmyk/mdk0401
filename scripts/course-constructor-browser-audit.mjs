@@ -79,7 +79,13 @@ try {
         window.customContent.lectures.some(item => item.id === "admin-only")) {
       throw new Error("A stale admin content response overwrote the active student's materials");
     }
-    console.log("CUSTOM_CONTENT_ACCOUNT_RACE_AUDIT PASS");
+    window.__accountRaceAudit = {
+      pass: true,
+      activeRole: "student",
+      activeEmail: window.state.student.email,
+      studentMaterialPresent: true,
+      staleAdminMaterialRejected: true
+    };
     window.API.getCustomContent = originalGetCustomContent;
     window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
     window.state.student = null;
@@ -267,7 +273,10 @@ try {
     sprutNavigation.results.push(result);
     assert.ok(visible, "Student view opened the wrong SPRUT-TP topic: " + JSON.stringify(result));
   }
-  const report = { topicId, savedCount, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
+  const accountRaceAudit = await page.evaluate(() => window.__accountRaceAudit || null);
+  assert.ok(accountRaceAudit && accountRaceAudit.pass && accountRaceAudit.staleAdminMaterialRejected,
+    "Account-switch race audit did not produce a passing result");
+  const report = { topicId, savedCount, accountRaceAudit, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
   fs.mkdirSync("artifacts/constructors", { recursive: true });
   fs.writeFileSync("artifacts/constructors/report.json", JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
