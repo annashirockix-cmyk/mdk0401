@@ -1237,7 +1237,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
   assert.match(html, /api\.js\?v=43/);
   assert.match(html, /app\.js\?v=53/);
-  assert.match(sw, /portal-cache-v348/);
+  assert.match(sw, /portal-cache-v349/);
 });
 
 test("manual teacher grades appear in the teacher-grade section, not the automatic-tests section", () => {
@@ -1250,4 +1250,19 @@ test("manual teacher grades appear in the teacher-grade section, not the automat
   assert.match(page, /indexOf\("manual_"\)===0/);
   assert.match(page, /indexOf\("manual_"\)!==0/);
   assert.match(page, /id="serverAssessmentGrades"/);
+});
+
+
+test("all custom-content delete callers send the owning course ID", () => {
+  const flashcards = read("flashcard-editor.js");
+  const games = read("teacher-game.js");
+  const announcements = read("course-announcements.js");
+  const admin = read("course-admin.js");
+  assert.match(flashcards, /deleteCustomContent\(setId,course\.value\)/);
+  assert.match(games, /deleteCustomContent\(b\.dataset\.delete,course\(\)\)/);
+  assert.match(announcements, /deleteCustomContent\(item\.id,courseSelect\.value\)/);
+  assert.match(admin, /deleteCustomContent\(id,courseSel\.value\)/);
+  for (const source of [flashcards, games, announcements, admin]) {
+    assert.doesNotMatch(source, /deleteCustomContent\((?:setId|b\.dataset\.delete|item\.id|id)\s*\)/);
+  }
 });

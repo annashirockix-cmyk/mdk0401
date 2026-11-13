@@ -85,7 +85,7 @@
           var item = items.find(function (x) { return x.id === button.dataset.id; });
           if (!item || !window.confirm("Удалить объявление «" + item.title + "»?")) return;
           button.disabled = true;
-          window.API.deleteCustomContent(item.id).then(function (result) {
+          window.API.deleteCustomContent(item.id,courseSelect.value).then(function (result) {
             if (!result.success) throw new Error(result.error || "Не удалось удалить объявление.");
             return new Promise(function (resolve) { window.loadGlobalCustomContent(resolve); });
           }).then(function () { if (editId === item.id) clearForm(); renderList(); })
