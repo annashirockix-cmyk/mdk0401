@@ -16,7 +16,18 @@ Target: 10 course-semester exams × 15 variants = 150 variants.
 
 Do not infer the semester-to-topic allocation from the current Unit numbering. The repository does not currently contain an authoritative five-course/two-semester curriculum map. Until the approved curriculum is attached or located, topic allocation below is provisional and must not be published as a confirmed syllabus.
 
-## 2. Existing content inventory
+## 2. Five-year lecture target and provisional map
+
+A separate working map is maintained in `docs/english-five-year-120-lecture-map-v1.md`.
+
+- Target editorial volume: 120 lectures across 10 semesters (12 per semester).
+- Existing inventory: 16 Basic + 29 Technical = 45 lectures.
+- Planned additions: 32 Basic + 43 Technical = 75 new lectures.
+- Courses 1–2 are Basic English; courses 3–5 are Technical English.
+- The allocation is provisional and must be checked against the approved English work programme, semester hours, and the exact Belova textbook edition before it is treated as an official syllabus.
+- The 75 planned lectures are not yet authored or imported. The map does not change runtime or the current VPR exams.
+
+## 3. Existing content inventory
 
 ### Basic English
 Source: `data-english-basic.js`
@@ -47,7 +58,7 @@ Source: `data-english-technical.js`
 
 The current files provide lesson content, but the topic sequence is not mapped to five named courses and ten semesters. Before expanding the syllabus, validate the topics against the approved work programmes and the Belova textbook used for Basic English.
 
-## 3. Lecture record contract
+## 4. Lecture record contract
 
 Every lecture should be addressable independently and linked to its course and semester.
 
@@ -84,7 +95,7 @@ Pedagogical minimum for a full lecture:
 
 Do not fill missing lectures with generic duplicated text. Keep the current lecture HTML as source material while migrating it into structured records incrementally.
 
-## 4. Assessment banks
+## 5. Assessment banks
 
 Keep the three assessment purposes separate.
 
@@ -133,7 +144,7 @@ Suggested metadata:
 }
 ```
 
-## 5. Server/API boundaries
+## 6. Server/API boundaries
 
 - Server owns bank contents, correct answers, scoring rules, variant assignment, attempt records, and final grades.
 - Student endpoints return sanitized tasks only.
@@ -143,18 +154,19 @@ Suggested metadata:
 - Teacher review for writing must be role-checked and auditable.
 - Do not create fake student attempts for smoke tests; use a dedicated test mode or fixture dataset.
 
-## 6. Migration sequence
+## 7. Migration sequence
 
-1. Obtain/confirm the approved curriculum map for courses 1–5 and semesters 1–2.
-2. Map existing 45 lectures to that map; identify gaps, overlaps, and misplaced units.
-3. Build and review the entry diagnostic independently.
-4. Replace the Technical semester clone with independently authored, source-aligned items.
-5. Implement the course-semester exam registry and 150-variant validation.
-6. Add teacher review and skill reports.
-7. Test server sanitization, access control, retakes, concurrency, and persistence in a non-production test environment.
-8. Only then import banks to Sheets and deploy Apps Script; keep VPR regression tests green.
+1. Obtain/confirm the approved curriculum map for courses 1–5 and semesters 1–2, including hours and the exact Belova textbook edition.
+2. Review the provisional 120-lecture map in `docs/english-five-year-120-lecture-map-v1.md`; validate the allocation of all 45 existing lectures and revise it against the approved programme before publication.
+3. Author and review the 75 planned new lectures (32 Basic and 43 Technical); do not treat titles in the map as completed content.
+4. Build and review the entry diagnostic independently.
+5. Replace the Technical semester clone with independently authored, source-aligned items.
+6. Implement the course-semester exam registry and 150-variant validation.
+7. Add teacher review and skill reports.
+8. Test server sanitization, access control, retakes, concurrency, and persistence in a non-production test environment.
+9. Only then import banks to Sheets and deploy Apps Script; keep VPR regression tests green.
 
-## 7. Acceptance checks
+## 8. Acceptance checks
 
 - Exactly 5 course IDs and 10 course-semester slots exist.
 - Exactly 10 final-exam definitions and 150 unique variant IDs exist.
