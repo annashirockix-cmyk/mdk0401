@@ -858,8 +858,8 @@ function logProctorEvent_(data) {
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const sh=proctorEvents_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
-    const resultRows=results_().getDataRange().getValues();
-    const attemptNo=resultRows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length+1;
+    const resultRows=resultAttemptRows_();
+    const attemptNo=resultRows.filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length+1;
     let previous=0;
     vals.slice(1).forEach(function(row){
       // Счётчик нарушений ведётся по всему тесту и не сбрасывается при новой попытке.
@@ -1768,7 +1768,7 @@ function getBuiltInTest_(data) {
   if(user.role!=="student"||!courseId||!testId||!bankIds.length||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к тесту.");
   const policy=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
   const limit=policy===""?1:1+Math.max(0,Number(policy)||0);
-  const used=results_().getDataRange().getValues().slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
+  const used=resultAttemptRows_().filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
   if(used>=limit)throw new Error("Работа уже завершена ("+used+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
   const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds),entries=builtInQuestions_(courseId,resolvedIds);
   if(!entries.length){
@@ -1848,8 +1848,8 @@ function submitBuiltInTest_(data) {
   },0);
   const rawPercent=Math.round(rawScore/entries.length*100),lock=LockService.getScriptLock();lock.waitLock(10000);
   try{
-    const sh=results_(),rows=sh.getDataRange().getValues();
-    const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
+    const sh=results_(),rows=resultAttemptRows_();
+    const prior=rows.filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
     const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
     if(prior>=limit)throw new Error("Работа уже завершена ("+prior+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
@@ -1907,7 +1907,7 @@ function safeFinalExamQuestion_(entry,index,optionMaps) {
 function getFinalExam_(data) {
   const user=auth_(data),courseId=String(data.courseId||""),testId="__final__"+courseId;
   if(user.role!=="student"||!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к экзамену.");
-  const rows=results_().getDataRange().getValues(),prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
+  const rows=resultAttemptRows_(),prior=rows.filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
   const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
   const attemptLimit=raw===""?1:1+Math.max(0,Number(raw)||0);
   if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
@@ -1998,8 +1998,8 @@ function submitFinalExam_(data) {
       }
       points+=scoreFinalAnswer_(q,answer);
     });
-    const max=exam.questions.length,pct=Math.round(points/max*100),testId="__final__"+courseId,sh=results_(),rows=sh.getDataRange().getValues();
-    const prior=rows.slice(1).filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
+    const max=exam.questions.length,pct=Math.round(points/max*100),testId="__final__"+courseId,sh=results_(),rows=resultAttemptRows_();
+    const prior=rows.filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     const limitRaw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
     const attemptLimit=limitRaw===""?1:1+Math.max(0,Number(limitRaw)||0);
     if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
@@ -2044,8 +2044,8 @@ function submitCustomTest_(data) {
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   let attemptNo=0;
   try {
-    const resultSheet=results_(), resultRows=resultSheet.getDataRange().getValues();
-    const prior=resultRows.slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey&&sameCourseId_(r[12]||record.courseId,record.courseId);}).length;
+    const resultSheet=results_(), resultRows=resultAttemptRows_();
+    const prior=resultRows.filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey&&sameCourseId_(r[12]||record.courseId,record.courseId);}).length;
     const scopedExtra=settingValue_("testAttempts:"+user.email+":"+record.courseId+":"+id);
     const extra=Number(scopedExtra!==""?scopedExtra:settingValue_("testAttempts:"+user.email+":"+id))||0;
     const limit=1+Math.max(0,extra);
