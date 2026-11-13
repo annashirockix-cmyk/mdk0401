@@ -57,11 +57,11 @@ test("custom content upserts serialize duplicate-ID checks and writes", () => {
  const save = server.slice(start, end);
  const lock = save.indexOf("LockService.getScriptLock()");
  const wait = save.indexOf("lock.waitLock(10000)");
- const read = save.indexOf("sheet.getDataRange().getValues()");
+ const readIndex = save.indexOf("sheet.getDataRange().getValues()");
  const write = Math.max(save.indexOf("sheet.getRange(targetRow"), save.indexOf("sheet.appendRow(row)"));
  const release = save.indexOf("lock.releaseLock()");
  assert.ok(lock >= 0 && wait > lock, "acquire a script-wide lock before reading");
- assert.ok(read > wait && write > read, "keep duplicate lookup and write inside the lock");
+ assert.ok(readIndex > wait && write > readIndex, "keep duplicate lookup and write inside the lock");
  assert.ok(release > write && save.includes("finally {"), "release the lock even when a save fails");
 });
 
@@ -73,9 +73,9 @@ test("custom content deletion shares the upsert lock", () => {
  const remove = server.slice(start, end);
  const lock = remove.indexOf("LockService.getScriptLock()");
  const wait = remove.indexOf("lock.waitLock(10000)");
- const read = remove.indexOf("sheet.getDataRange().getValues()");
+ const readIndex = remove.indexOf("sheet.getDataRange().getValues()");
  const deletion = remove.indexOf("sheet.deleteRow(");
  const release = remove.indexOf("lock.releaseLock()");
- assert.ok(lock >= 0 && wait > lock && read > wait && deletion > read);
+ assert.ok(lock >= 0 && wait > lock && readIndex > wait && deletion > readIndex);
  assert.ok(release > deletion && remove.includes("finally {"), "delete must release the shared lock");
 });
