@@ -320,3 +320,4 @@ Regression tests cover valid banks, missing keys, duplicate IDs/questions/option
 - This is an authoring draft only. It is not loaded by `index.html`, not imported to Sheets and not available to students.
 - The draft's Course 3 / Semester 1 placement is provisional pending the approved curriculum map. A second teacher must verify the technical terminology and all answer keys before conversion to the protected server bank.
 - Progress for the provisional two-track / ten-set target: 20 of 200 Technical items drafted; Basic legacy items remain unkeyed and the old Technical clone remains blocked.
+- Added `docs/english-technical-semester-bank-draft-v2.md`: second independent batch of 20 Technical English questions (electrical engineering, electronics, CAD, technical data, maintenance and documentation), with a separate teacher key and review checklist. Combined Technical draft pool: 40 items. Still review-only and not connected to the portal.
