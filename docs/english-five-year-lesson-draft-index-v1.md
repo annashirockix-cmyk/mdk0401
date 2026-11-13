@@ -20,7 +20,7 @@
 | Курс 3 / семестр 1 | en-c03-s01-l09–l12 | `docs/english-technical-c03-s01-lessons-09-12-draft.md` | Черновик |
 | Курс 3 / семестр 2 | en-c03-s02-l06–l08 | `docs/english-technical-c03-s02-lessons-06-08-draft.md` | Черновик |
 | Курс 3 / семестр 2 | en-c03-s02-l09–l12 | `docs/english-technical-c03-s02-lessons-09-12-draft.md` | Черновик |
-| Курс 4 / семестр 1 | en-c04-s01-l10–l12 | `docs/english-technical-c04-s01-lessons-10-12-draft.md` | Черновик добавлен в PR |
+| Курс 4 / семестр 1 | en-c04-s01-l10–l12 | `docs/english-technical-c04-s01-lessons-10-12-draft.md` | Черновик подключён к ENТ в runtime; аудирование берётся из каталога |
 | Курс 4 / семестр 2 | en-c04-s02-l09–l12 | `docs/english-technical-c04-s02-lessons-09-12-draft.md` | Черновик |
 | Курс 5 / семестр 1 | en-c05-s01-l03–l06 | `docs/english-technical-c05-s01-lessons-03-06-draft.md` | Черновик |
 | Курс 5 / семестр 1 | en-c05-s01-l07–l10 | `docs/english-technical-c05-s01-lessons-07-10-draft.md` | Черновик |
@@ -46,6 +46,8 @@
 | **Итого** | **75** |
 
 ## Важные редакционные замечания
+
+6. Runtime-подключение пока частичное: `english-five-year-runtime.js` добавляет три лекции курса 4 / семестра 1 в существующую тему `t-unit4` дисциплины ENT. `index.html` загружает расширение после `english-course.js` и до `app.js`. Аудирование для ID `en-c04-s01-l10`–`l12` уже есть в каталоге и подхватывается существующим механизмом `getEmbeddedEnglishListening`. Остальные 72 новых лекции в студенческий интерфейс пока не подключены.
 
 1. В трёх файлах курса 1, семестра 1, диапазоны в именах файлов исторически смещены относительно ID внутри заголовков. Для сопоставления использовать ID в заголовке лекции; имена файлов следует нормализовать отдельным техническим коммитом.
 2. Материалы курса 2, семестра 2, лекции 1–7 — это расширение существующих лекций, а не часть 75 новых ID. Они хранятся отдельно в `english-basic-c02-s02-lessons-01-03-enrichment-draft.md` и `english-basic-c02-s02-lessons-04-07-enrichment-draft.md`.
