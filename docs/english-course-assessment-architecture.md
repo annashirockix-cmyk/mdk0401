@@ -102,6 +102,8 @@ Do not fill missing lectures with generic duplicated text. Keep the current lect
 - Course 3, semester 1 lessons 6–8 (aviation industry, aircraft structure and materials) are drafted in `docs/english-technical-c03-s01-lessons-06-08-draft.md`. The existing Technical 1.1–1.3 and 2.1–2.2 lessons remain unchanged.
 - Course 3, semester 1 lessons 9–12 are drafted in `docs/english-technical-c03-s01-lessons-09-12-draft.md` (manufacturing workflow and process sheets; dimensions and measurement; technical word formation and abbreviations; technical descriptions and specification tables). All examples and numerical values are explicitly classroom-only.
 
+- Course 3, semester 2 lessons 6–8 are drafted in `docs/english-technical-c03-s02-lessons-06-08-draft.md` (CNC machine components; axes and coordinates; introductory G-code text reading). The G-code sample is comments-only and explicitly read-only, not executable.
+
 ## 5. Assessment banks
 
 Keep the three assessment purposes separate.
