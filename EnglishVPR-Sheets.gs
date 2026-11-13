@@ -6,6 +6,35 @@
 
 function englishVprBank_() { return ensureSheet_("EnglishVPRBank"); }
 
+function validateEnglishVprExam_(track, exam) {
+  const expectedTypes = ["choice","match","gap","gap","gap","transform","questionnaire"];
+  const expectedCounts = [5,5,5,5,5,5,10];
+  if (!exam || String(exam.track || "").toLowerCase() !== track ||
+      String(exam.id || "") !== "english_vpr_" + track + "_2026" ||
+      !Array.isArray(exam.tasks) || exam.tasks.length !== expectedTypes.length) {
+    throw new Error("Структура экзамена не соответствует утверждённому варианту " + track.toUpperCase() + ".");
+  }
+  exam.tasks.forEach(function(task, index) {
+    const count = task && task.type === "gap"
+      ? (Array.isArray(task.answers) ? task.answers.length : 0)
+      : (task && Array.isArray(task.items) ? task.items.length : 0);
+    if (!task || task.type !== expectedTypes[index] || count !== expectedCounts[index]) {
+      throw new Error("Неверная структура задания " + (index + 1) + " экзамена " + track.toUpperCase() + ".");
+    }
+    if (Number(task.points) !== (index === 6 ? 10 : 5)) {
+      throw new Error("Неверное количество баллов в задании " + (index + 1) + ".");
+    }
+    if (task.type === "gap" && (!Array.isArray(task.answers) || task.answers.length !== 5)) {
+      throw new Error("В задании " + (index + 1) + " должны быть пять ключей ответов.");
+    }
+    if (task.type === "transform" && task.items.some(function(item) {
+      return !Array.isArray(item) || !Array.isArray(item[3]) || !item[3].length;
+    })) throw new Error("В задании 6 отсутствуют допустимые варианты ответов.");
+  });
+  if (Number(exam.maxScore) !== 40) throw new Error("Максимальный балл экзамена должен быть равен 40.");
+  return true;
+}
+
 function importEnglishVprBank_(data) {
   const actor = auth_(data);
   if (actor.role !== "admin" && actor.role !== "teacher") throw new Error("Импорт доступен только преподавателю.");
@@ -17,6 +46,7 @@ function importEnglishVprBank_(data) {
   if (actor.role === "teacher" && !hasCourseAccess_(actor, track === "basic" ? "ENB" : "ENT") && !hasCourseAccess_(actor, "EN")) {
     throw new Error("Нет доступа к импорту этого экзамена.");
   }
+  validateEnglishVprExam_(track, exam);
   const json = JSON.stringify(exam);
   if (json.length > 450000) throw new Error("Размер экзамена превышает 450 КБ.");
   const sh = englishVprBank_(), lock = LockService.getScriptLock();
@@ -60,6 +90,7 @@ function getEnglishVprExam_(data) {
   for (let i=1;i<values.length;i++) {
     if (String(values[i][map.Track]||"") !== track || String(values[i][map.Active]||"").toUpperCase() !== "TRUE") continue;
     const exam = JSON.parse(String(values[i][map.ExamJSON]||"{}"));
+    validateEnglishVprExam_(track, exam);
     return {success:true,track:track,exam:sanitizeEnglishVprExam_(exam)};
   }
   return {success:false,error:"Экзамен ещё не импортирован преподавателем."};
@@ -76,7 +107,7 @@ function submitEnglishVprExam_(data) {
   if (!hasCourseAccess_(user,courseId) && !hasCourseAccess_(user,"EN")) throw new Error("Дисциплина не назначена.");
   const sh=englishVprBank_(), vals=sh.getDataRange().getValues(), m=headerMap_(sh);
   let exam=null;
-  for(let i=1;i<vals.length;i++) if(String(vals[i][m.Track]||"")===track && String(vals[i][m.Active]||"").toUpperCase()==="TRUE") { exam=JSON.parse(String(vals[i][m.ExamJSON]||"{}")); break; }
+  for(let i=1;i<vals.length;i++) if(String(vals[i][m.Track]||"")===track && String(vals[i][m.Active]||"").toUpperCase()==="TRUE") { exam=JSON.parse(String(vals[i][m.ExamJSON]||"{}")); validateEnglishVprExam_(track, exam); break; }
   if(!exam) throw new Error("Экзамен не найден на сервере.");
   const submitted=Array.isArray(data.answers)?data.answers:[];
   if(submitted.length!==(exam.tasks||[]).length) throw new Error("Не все задания отправлены.");
@@ -119,7 +150,7 @@ function gradeEnglishVprWrittenPart_(data) {
     const sh = results_(), rows = sh.getDataRange().getValues(), map = headerMap_(sh);
     let rowNo = -1, row = null;
     for (let i = rows.length - 1; i >= 1; i--) {
-      if (email_(rows[i][map.Email]) === studentEmail && String(rows[i][map.TestId] || "") === testId && sameCourseId_(rows[i][map.CourseId] || courseId, courseId)) {
+      if (email_(rows[i][map.Email]) === studentEmail && String(rows[i][map.TestId] || "") === testId && sameCourseId_(rows[i][map.CourseId] || courseId, courseId) && (!Number(data.attempts) || Number(rows[i][map.Attempts] || 0) === Number(data.attempts))) {
         rowNo = i + 1; row = rows[i]; break;
       }
     }

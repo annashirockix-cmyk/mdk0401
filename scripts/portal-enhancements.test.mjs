@@ -1318,10 +1318,14 @@ test("English VPR written answers can be graded from the teacher journal and upd
   const sw = read("service-worker.js");
   assert.ok(server.includes('case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_(data); break;'));
   assert.ok(bank.includes("function gradeEnglishVprWrittenPart_(data)"));
+  assert.ok(bank.includes("function validateEnglishVprExam_(track, exam)"));
+  assert.ok(bank.includes("expectedTypes = [\"choice\",\"match\",\"gap\",\"gap\",\"gap\",\"transform\",\"questionnaire\"]"));
   assert.ok(bank.includes("pending_teacher_review"));
   assert.ok(bank.includes("objectiveScore + writtenPoints"));
   assert.ok(bank.includes('notifyCourseStaff_(courseId,"written_submission","Письменная часть английского ВПР ожидает проверки"'));
   assert.ok(bank.includes("writtenMaxPoints"));
+  assert.ok(bank.includes("Number(rows[i][map.Attempts] || 0) === Number(data.attempts)"));
+  assert.ok(app.includes("attempts:Number(button.dataset.attempts)"));
   assert.ok(bank.includes("row[map.Submission]") && bank.includes("Submission: JSON.stringify(payload)"));
   assert.ok(bank.includes("editor_(data, courseId)"));
   assert.ok(api.includes("gradeEnglishVprWrittenPart:function(data)"));
@@ -1332,4 +1336,34 @@ test("English VPR written answers can be graded from the teacher journal and upd
   assert.ok(html.includes("api.js?v=44"));
   assert.ok(html.includes("app.js?v=54"));
   assert.ok(sw.includes("portal-cache-v351"));
+});
+
+
+test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technical shape", () => {
+  const bank = read("EnglishVPR-Sheets.gs");
+  const start = bank.indexOf("function validateEnglishVprExam_");
+  const end = bank.indexOf("\nfunction importEnglishVprBank_", start);
+  assert.ok(start >= 0 && end > start);
+  const sandbox = {};
+  vm.runInNewContext(bank.slice(start, end) + ";this.validateEnglishVprExam_=validateEnglishVprExam_;", sandbox);
+  const exam = (track) => ({
+    id: "english_vpr_" + track + "_2026", track, maxScore: 40,
+    tasks: [
+      {type:"choice",points:5,items:Array(5).fill(["q",1])},
+      {type:"match",points:5,items:Array(5).fill(["A","text",1])},
+      {type:"gap",points:5,answers:Array(5).fill(1)},
+      {type:"gap",points:5,answers:Array(5).fill(1)},
+      {type:"gap",points:5,answers:Array(5).fill(1)},
+      {type:"transform",points:5,items:Array(5).fill(["a","b","c",["answer"]])},
+      {type:"questionnaire",points:10,items:Array(10).fill("Question")}
+    ]
+  });
+  assert.equal(sandbox.validateEnglishVprExam_("basic", exam("basic")), true);
+  assert.equal(sandbox.validateEnglishVprExam_("technical", exam("technical")), true);
+  const window = {};
+  vm.runInNewContext(read("english-vpr-exams.js"), {window});
+  assert.equal(sandbox.validateEnglishVprExam_("basic", window.ENGLISH_VPR_EXAMS.basic), true);
+  assert.equal(sandbox.validateEnglishVprExam_("technical", window.ENGLISH_VPR_EXAMS.technical), true);
+  const invalid = exam("basic"); invalid.tasks.pop();
+  assert.throws(() => sandbox.validateEnglishVprExam_("basic", invalid), /структура экзамена/i);
 });
