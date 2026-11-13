@@ -204,3 +204,4 @@ This is a runtime helper only. It does not automatically convert Markdown drafts
 
 
 - Course 5, semester 2 lessons 1–4 (technical presentations; structured technical reports; professional interview/oral examination; specifications, procedures and standards) are drafted in `docs/english-technical-c05-s02-lessons-01-04-draft.md`. The package contains browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a semester checkpoint. It remains a draft and is not imported into the portal.
+- Course 5, semester 2 lessons 5–8 (manufacturing process review; CNC revision communication; electrical case discussion; software test reports) are drafted in `docs/english-technical-c05-s02-lessons-05-08-draft.md`. The package contains four browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and an integrated checkpoint. It remains a draft and is not imported into the portal.
