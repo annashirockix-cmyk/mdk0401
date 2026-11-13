@@ -231,3 +231,8 @@ This is a runtime helper only. It does not automatically convert Markdown drafts
 ### Listening catalogue coverage update
 
 The browser practice catalogue now contains eight activities for Course 5, Semester 2, lessons 5–12. It covers manufacturing process review, CNC revision communication, an electrical training case, software test reporting, materials records, reliability trends, integrated handover and the capstone review. Lessons 1–4 of this semester and all other semesters still need conversion into playable lesson records. All catalogue activities are practice-only; client-side keys are not suitable for protected assessment.
+
+
+### Course 5 Semester 2 — browser audio coverage completed
+
+All twelve lessons in the semester now have a playable browser-listening activity in `english-listening-catalog.js`. The catalogue is accessible from the English quick-access block through `#/english-listening`. It includes lesson scripts, comprehension questions and practice feedback/transcript reveal. Only this semester is fully represented in the catalogue; other semesters still need conversion. The catalogue is practice-only and does not submit or grade exam attempts.
