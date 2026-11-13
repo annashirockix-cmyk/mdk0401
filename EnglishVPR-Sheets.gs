@@ -148,20 +148,20 @@ function englishVprPrepareAttempt_(source) {
   const display = JSON.parse(JSON.stringify(source)), maps = {};
   (display.tasks || []).forEach(function(task, ti) {
     if (task.type === "choice") {
+      let globalOrder = null;
       if (Array.isArray(task.options) && task.options.length > 1) {
-        const order = shuffledServer_(task.options.map(function(_, i) { return i; }));
+        globalOrder = shuffledServer_(task.options.map(function(_, i) { return i; }));
         const original = task.options.slice();
-        task.options = order.map(function(i) { return original[i]; });
-        (task.items || []).forEach(function(item, qi) {
-          const key = "choice|" + ti + "|" + qi;
-          maps[key] = order;
-          if (Number.isInteger(Number(item[1])) && Number(item[1]) >= 1) item[1] = order.indexOf(Number(item[1]) - 1) + 1;
-        });
+        task.options = globalOrder.map(function(i) { return original[i]; });
       }
       (task.items || []).forEach(function(item, qi) {
+        let order = globalOrder;
         if (Array.isArray(item[2]) && item[2].length > 1) {
-          const original = item[2].slice(), order = shuffledServer_(original.map(function(_, i) { return i; }));
+          const original = item[2].slice();
+          order = shuffledServer_(original.map(function(_, i) { return i; }));
           item[2] = order.map(function(i) { return original[i]; });
+        }
+        if (Array.isArray(order)) {
           maps["choice|" + ti + "|" + qi] = order;
           if (Number.isInteger(Number(item[1])) && Number(item[1]) >= 1) item[1] = order.indexOf(Number(item[1]) - 1) + 1;
         }
