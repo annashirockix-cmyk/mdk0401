@@ -1307,3 +1307,26 @@ test("teacher course and role permission changes share the content lock", () => 
   assert.ok(release > write && fn.includes("finally {"), name + " must release the lock on success or error");
  });
 });
+
+
+test("English VPR written answers can be graded from the teacher journal and update the final score", () => {
+  const bank = read("EnglishVPR-Sheets.gs");
+  const server = read("Code.gs");
+  const api = read("api.js");
+  const app = read("app.js");
+  const html = read("index.html");
+  const sw = read("service-worker.js");
+  assert.match(server, /case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_\\(data\\); break;/);
+  assert.match(bank, /function gradeEnglishVprWrittenPart_\\(data\\)/);
+  assert.match(bank, /pending_teacher_review/);
+  assert.match(bank, /objectiveScore \\+ writtenPoints/);
+  assert.match(bank, /writtenMaxPoints/);
+  assert.match(bank, /editor_\\(data, courseId\\)/);
+  assert.match(api, /gradeEnglishVprWrittenPart:function\\(data\\)/);
+  assert.match(app, /english-vpr-pending/);
+  assert.match(app, /Ответ студента:/);
+  assert.match(app, /window\\.API\\.gradeEnglishVprWrittenPart/);
+  assert.match(html, /api\\.js\\?v=44/);
+  assert.match(html, /app\\.js\\?v=54/);
+  assert.match(sw, /portal-cache-v351/);
+});
