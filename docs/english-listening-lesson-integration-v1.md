@@ -151,3 +151,13 @@ The catalogue now contains 72 unique practice activities, with all 12 lessons co
 - Course 5, Semesters 1–2 — 24 activities.
 
 Every new Course 3 activity has a browser-readable English script and four multiple-choice comprehension questions with practice answer feedback. The catalogue is still practice-only: client-side answer keys, no gradebook writes, no exam attempts. Courses 1–2 remain outstanding. Lesson-page embedding and real-browser playback testing are still separate integration tasks.
+
+
+## Coverage update — 96 browser listening activities
+
+The catalogue now contains 96 unique practice activities across eight complete semester blocks:
+- Course 2, Semester 1 — 12 activities, from participles/gerunds/infinitives and Tatarstan reading to careers, CVs, workplace communication and reading strategies.
+- Course 2, Semester 2 — 12 activities, including conditionals, environmental protection, physics, automation, passive voice, coherent paragraphs and short presentations.
+- Courses 3–5 — 72 activities, with 12 lessons in each semester.
+
+All Course 2 activities include browser-readable English scripts and four multiple-choice comprehension questions with practice feedback. The catalogue remains practice-only: client-side answer keys, no gradebook writes, no exam attempts. Course 1 remains outstanding. Direct embedding in every lesson and real-browser playback testing remain separate tasks.
