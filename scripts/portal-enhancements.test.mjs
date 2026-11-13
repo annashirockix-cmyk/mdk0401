@@ -1335,7 +1335,7 @@ test("English VPR written answers can be graded from the teacher journal and upd
   assert.ok(app.includes('pendingWritten?"На проверке"'));
   assert.ok(html.includes("api.js?v=44"));
   assert.ok(html.includes("app.js?v=54"));
-  assert.ok(sw.includes(/portal-cache-v\d+/));
+  assert.ok(/portal-cache-v\d+/.test(sw));
 });
 
 
