@@ -1318,6 +1318,8 @@ test("English VPR written answers can be graded from the teacher journal and upd
   const sw = read("service-worker.js");
   assert.ok(server.includes('case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_(data); break;'));
   assert.ok(bank.includes("function gradeEnglishVprWrittenPart_(data)"));
+  assert.ok(bank.includes("function validateEnglishVprExam_(track, exam)"));
+  assert.ok(bank.includes("expectedTypes = [\"choice\",\"match\",\"gap\",\"gap\",\"gap\",\"transform\",\"questionnaire\"]"));
   assert.ok(bank.includes("pending_teacher_review"));
   assert.ok(bank.includes("objectiveScore + writtenPoints"));
   assert.ok(bank.includes('notifyCourseStaff_(courseId,"written_submission","Письменная часть английского ВПР ожидает проверки"'));
