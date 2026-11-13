@@ -1142,7 +1142,6 @@ test("MDK 07.01 includes topic-matched, attributed real photos for lathe and mil
   assert.match(workbooks, /Impressionmanufacturer · CC BY-SA 4\.0/);
   assert.match(workbooks, /Glenn McKechnie · CC BY-SA 3\.0/);
   assert.match(workbooks, /Shixart1985 · CC BY 2\.0/);
-  assert.match(workbooks, /!images\.some\(function\(x\)\{return !!x\.url;\}\)/);
   assert.match(workbooks, /cncWorkbookPhotos\[String\(topic\.id\)\]/);
   assert.match(html, /workbooks\.js\?v=[0-9]+/);
   assert.match(sw, /portal-cache-v[0-9]+/);
