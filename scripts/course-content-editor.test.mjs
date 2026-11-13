@@ -81,3 +81,18 @@ test("custom content deletion shares the upsert lock", () => {
  assert.ok(lock >= 0 && wait > lock && readIndex > wait && deletion > readIndex);
  assert.ok(release > deletion && remove.includes("finally {"), "delete must release the shared lock");
 });
+
+test("custom test attempts are counted within the selected course", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function submitCustomTest_(data)");
+ const end = server.indexOf("\nfunction getGameAnswer_", start);
+ assert.ok(start >= 0 && end > start);
+ const submit = server.slice(start, end);
+ assert.match(submit, /email_\(r\[0\]\)===user\.email&&String\(r\[3\]\)===attemptKey&&sameCourseId_\(r\[12\]\|\|record\.courseId,record\.courseId\)/,
+  "attempt history must be scoped by student, test ID, and course ID");
+ const statusStart = server.indexOf("function getTestAttemptStatus_(data)");
+ const statusEnd = server.indexOf("\nfunction requestTestAttempts_", statusStart);
+ const status = server.slice(statusStart, statusEnd);
+ assert.match(status, /sameCourseId_\(r\[12\]\|\|courseId,courseId\)/,
+  "the displayed attempt status and submission check must use the same course scope");
+});
