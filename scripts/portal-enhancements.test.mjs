@@ -852,6 +852,12 @@ test("admin role is recognized for teacher navigation and tutoring is shown only
   assert.match(app, /currentState\.user && currentState\.user\.role/);
   assert.match(app, /currentRole === "teacher" \|\| currentRole === "admin"/);
   assert.match(app, /tutoringLink\.style\.display=isTeacher\?"flex":"none"/);
+  const controls = read("teacher-controls.js");
+  assert.match(controls, /editorTutoringPanel/);
+  assert.match(controls, /editorCourse/);
+  assert.match(controls, /getTutoringLink\(cid\)/);
+  assert.match(controls, /saveTutoringLink\(cid/);
+  assert.match(controls, /Показывать вкладку студентам/);
   assert.match(app, /link\.visible!==false&&String\(link\.url\|\|""\)\.trim\(\)/);
 });
 
@@ -867,7 +873,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
   assert.ok(html.includes("english-vpr-engine.js?v=21"));
-  assert.ok(sw.includes("portal-cache-v340"));
+  assert.ok(sw.includes("portal-cache-v341"));
 });
 
 
@@ -888,7 +894,7 @@ test("non-English final exams contain 45 auto-graded questions and no written-re
   assert.match(server, /q\.type=type/);
   assert.match(server, /const writtenSubmission=""/);
   assert.match(html, /final\.js\?v=25/);
-  assert.match(sw, /portal-cache-v340/);
+  assert.match(sw, /portal-cache-v341/);
 });
 
 test("server builds 45-question advanced non-English exams with protected answer keys", () => {
@@ -1019,7 +1025,7 @@ test("certificate print output uses a dedicated A4 landscape print root and imag
   assert.match(cert, /break-after:page/);
   assert.match(cert, /break-before:auto;page-break-before:auto/);
   assert.match(html, /certificate-supplement\.js\?v=11/);
-  assert.match(sw, /portal-cache-v340/);
+  assert.match(sw, /portal-cache-v341/);
 });
 
 
@@ -1051,7 +1057,7 @@ test("workbooks include differentiated supplemental professional learning blocks
   }
   assert.match(workbooks, /supplementalHtml\+checkHtml/);
   assert.match(html, /workbooks\.js\?v=68/);
-  assert.match(sw, /portal-cache-v340/);
+  assert.match(sw, /portal-cache-v341/);
 });
 
 
@@ -1088,7 +1094,7 @@ test("workbook editorial coverage generates subject-specific cases for every pop
   assert.match(workbooks, /basicProfiles/);
   assert.match(workbooks, /technicalProfiles/);
   assert.match(html, /workbooks\.js\?v=68/);
-  assert.match(sw, /portal-cache-v340/);
+  assert.match(sw, /portal-cache-v341/);
 });
 
 
@@ -1117,7 +1123,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(css, /\.wb-visual-chart/);
   assert.match(html, /workbooks\.js\?v=68/);
   assert.match(html, /style\.css\?v=24/);
-  assert.match(sw, /portal-cache-v340/);
+  assert.match(sw, /portal-cache-v341/);
 });
 
 test("MDK 07.01 includes topic-matched, attributed real photos for lathe and milling topics", () => {
@@ -1139,7 +1145,7 @@ test("MDK 07.01 includes topic-matched, attributed real photos for lathe and mil
   assert.match(workbooks, /!images\.some\(function\(x\)\{return !!x\.url;\}\)/);
   assert.match(workbooks, /cncWorkbookPhotos\[String\(topic\.id\)\]/);
   assert.match(html, /workbooks\.js\?v=68/);
-  assert.match(sw, /portal-cache-v340/);
+  assert.match(sw, /portal-cache-v341/);
 });
 
 test("MDK 07.01 adds topic-specific tables and a clearly qualified machining example chart", () => {
