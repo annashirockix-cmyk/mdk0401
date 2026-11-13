@@ -1465,7 +1465,7 @@ test("login session and nested role state persist across a page refresh", () => 
 test("main games catalogue stays limited to three educational formats", () => {
   const games = read("games.js");
   const start = games.indexOf("var allGames = [");
-  const end = games.indexOf("\\n    ];", start);
+  const end = games.indexOf("];", start);
   assert.ok(start >= 0 && end > start, "main educational games catalogue must exist");
   const catalogue = games.slice(start, end);
   const ids = Array.from(catalogue.matchAll(/id: "([^"]+)"/g)).map(item => item[1]);
