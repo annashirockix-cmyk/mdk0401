@@ -1,0 +1,166 @@
+# English courses and assessment architecture
+
+Status: design specification only. This document does not change the current portal runtime, Google Sheets, Apps Script deployment, or the working Basic/Technical VPR exams.
+
+## 1. Target course map
+
+| Course | Track | Semesters | Final exam variants |
+|---|---|---:|---:|
+| 1 | Basic English | 1–2 | 15 per semester |
+| 2 | Basic English | 1–2 | 15 per semester |
+| 3 | Technical English | 1–2 | 15 per semester |
+| 4 | Technical English | 1–2 | 15 per semester |
+| 5 | Technical English | 1–2 | 15 per semester |
+
+Target: 10 course-semester exams × 15 variants = 150 variants.
+
+Do not infer the semester-to-topic allocation from the current Unit numbering. The repository does not currently contain an authoritative five-course/two-semester curriculum map. Until the approved curriculum is attached or located, topic allocation below is provisional and must not be published as a confirmed syllabus.
+
+## 2. Existing content inventory
+
+### Basic English
+Source: `data-english-basic.js`
+- Unit 1 — About Myself (3 lectures)
+- Unit 2 — Nizhnekamsk (3)
+- Unit 3 — Tatarstan (3)
+- Unit 4 — Ecology (3)
+- Unit 6 — Additional Reading (4)
+- Total: 5 topic blocks, 16 lectures.
+
+Gap: Unit 5 is absent from the topic inventory. Unit 6 is additional reading and should not be treated automatically as a semester unit.
+
+### Technical English
+Source: `data-english-technical.js`
+- Unit 1 — Materials (3 lectures)
+- Unit 2 — Technical Drawing (2)
+- Unit 3 — Machine Tools (3)
+- Unit 4 — Electricity (2)
+- Unit 5 — Electric Circuits (2)
+- Unit 6 — Energy Production (2)
+- Unit 7 — Electronics (3)
+- Unit 8 — Communication (2)
+- Unit 9 — Computers (3)
+- Unit 10 — Automation (3)
+- Unit 11 — Maintenance (2)
+- Unit 12 — Safety (2)
+- Total: 12 topic blocks, 29 lectures.
+
+The current files provide lesson content, but the topic sequence is not mapped to five named courses and ten semesters. Before expanding the syllabus, validate the topics against the approved work programmes and the Belova textbook used for Basic English.
+
+## 3. Lecture record contract
+
+Every lecture should be addressable independently and linked to its course and semester.
+
+Suggested record:
+```js
+{
+  id: "en-c03-s01-u03-l03",
+  courseId: "EN_C03",
+  track: "technical",
+  semester: 1,
+  unitId: "t-unit3",
+  title: "Computer Numerical Control (CNC)",
+  order: 3,
+  outcomes: [],
+  keyTerms: [],
+  content: "",
+  examples: [],
+  visuals: [],
+  practice: [],
+  selfCheck: [],
+  answerKeyRef: "server-only"
+}
+```
+
+Pedagogical minimum for a full lecture:
+- measurable learning outcomes and prerequisite knowledge;
+- clear explanation, not only a short abstract;
+- key terms with contextual examples and Russian equivalents where useful;
+- tables, diagrams, relevant photographs or technical illustrations;
+- examples tied to the relevant professional context;
+- guided practice and independent practice;
+- self-check questions with feedback;
+- sources / textbook section where applicable.
+
+Do not fill missing lectures with generic duplicated text. Keep the current lecture HTML as source material while migrating it into structured records incrementally.
+
+## 4. Assessment banks
+
+Keep the three assessment purposes separate.
+
+### 4.1 Entry diagnostic — `EnglishEntryDiagnosticBank`
+- One initial school-English diagnostic for all five courses.
+- Suggested format: 30 items, 30–40 minutes.
+- Areas: core school grammar, everyday vocabulary, short reading, short dialogues/messages, and a brief writing response.
+- No technical vocabulary that students have not yet studied.
+- Objective items are graded on the server; writing is routed to teacher review.
+- Diagnostic result is informational and must not lower semester grades.
+- Store skill-level breakdown and recommendations; allow a later repeat diagnostic for progress comparison.
+
+Suggested metadata: `diagnosticId`, `version`, `timeLimit`, `sections`, `items`, `scoring`, `writingReview`.
+Never expose answer keys or scoring rules that reveal answers in the student payload.
+
+### 4.2 Semester checks — `EnglishSemesterBank`
+Current source: `english-assessment-data.js`.
+- There are 10 Basic source tests, one for each course-year/semester pair, each with 20 items.
+- Technical is currently created by mapping over Basic and changing IDs and labels. This is not valid Technical content.
+- The target must contain independent items for each track; do not clone Basic questions into Technical.
+- Preserve server-side storage, sanitized student payloads, attempt limits, and result persistence already provided by the existing implementation.
+- Before finalizing the number of banks, reconcile the legacy 10 Basic + 10 Technical layout with the five-course map. The correct course map has ten course-semester slots; a second parallel set must only exist if the curriculum explicitly requires two distinct track-specific checks for the same slot.
+
+Suggested item metadata: `id`, `type`, `prompt`, `options`, `correctAnswer` (server-only), `points`, `feedbackRef` (optional).
+Supported task types should be deliberately limited to those the current renderer and server grader can validate.
+
+### 4.3 Final exams — `EnglishExamVariantsBank`
+- 10 exam definitions: one for each course and semester.
+- 15 independently assembled variants per exam: 150 total.
+- Each variant references a balanced set of tasks from the appropriate course-semester blueprint.
+- Store answer keys and rubrics server-side only.
+- Student API returns a sanitized variant with no correct answers, rubric internals, or hidden metadata.
+- Variant selection must be recorded server-side to prevent changing variants by refreshing the page.
+- Preserve the separate 2026 VPR Basic and Technical exams; do not replace or refactor them as part of this work.
+
+Suggested metadata:
+```js
+{
+  examId: "en_c03_s01_final",
+  courseId: "EN_C03",
+  track: "technical",
+  semester: 1,
+  durationMinutes: 90,
+  maxScore: 40,
+  variants: [{ variantId: "v01", blueprintId: "..." }]
+}
+```
+
+## 5. Server/API boundaries
+
+- Server owns bank contents, correct answers, scoring rules, variant assignment, attempt records, and final grades.
+- Student endpoints return sanitized tasks only.
+- Submission endpoints accept answers and an assessment/attempt token, not a client-calculated score.
+- Server validates course access, assessment availability, attempt count, deadline, task IDs, and answer formats.
+- Entry diagnostics must use a separate result namespace and must not write into the semester gradebook.
+- Teacher review for writing must be role-checked and auditable.
+- Do not create fake student attempts for smoke tests; use a dedicated test mode or fixture dataset.
+
+## 6. Migration sequence
+
+1. Obtain/confirm the approved curriculum map for courses 1–5 and semesters 1–2.
+2. Map existing 45 lectures to that map; identify gaps, overlaps, and misplaced units.
+3. Build and review the entry diagnostic independently.
+4. Replace the Technical semester clone with independently authored, source-aligned items.
+5. Implement the course-semester exam registry and 150-variant validation.
+6. Add teacher review and skill reports.
+7. Test server sanitization, access control, retakes, concurrency, and persistence in a non-production test environment.
+8. Only then import banks to Sheets and deploy Apps Script; keep VPR regression tests green.
+
+## 7. Acceptance checks
+
+- Exactly 5 course IDs and 10 course-semester slots exist.
+- Exactly 10 final-exam definitions and 150 unique variant IDs exist.
+- No duplicate variant IDs or cross-course task leakage.
+- Technical items are independently authored and technically accurate.
+- No answer keys appear in student API responses or browser source.
+- Entry diagnostic does not affect grades or semester attempt counters.
+- A refresh cannot change an assigned exam variant or reset an attempt.
+- Existing Basic and Technical VPR load and render exactly as before.
