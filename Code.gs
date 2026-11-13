@@ -1971,7 +1971,7 @@ function submitCustomTest_(data) {
   let attemptNo=0;
   try {
     const resultSheet=results_(), resultRows=resultSheet.getDataRange().getValues();
-    const prior=resultRows.slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey;}).length;
+    const prior=resultRows.slice(1).filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey&&sameCourseId_(r[12]||record.courseId,record.courseId);}).length;
     const scopedExtra=settingValue_("testAttempts:"+user.email+":"+record.courseId+":"+id);
     const extra=Number(scopedExtra!==""?scopedExtra:settingValue_("testAttempts:"+user.email+":"+id))||0;
     const limit=1+Math.max(0,extra);
