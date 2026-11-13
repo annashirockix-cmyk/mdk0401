@@ -424,10 +424,48 @@ window.renderStudentGradesPage = function() {
     app.innerHTML += `
         <section class="hero"><h1>📊 Мои оценки</h1></section>
         <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}</tbody></table></div></div>
-        <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody>${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody></table></div></div>
+        <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody id="serverAssessmentGrades">${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody></table></div></div>
         <div class="module"><h3>Задания преподавателя</h3><div id="serverAssignmentGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
         <div class="module"><h3>Лабораторные работы по метрологии</h3><div id="serverMetrologyGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
     `;
+    // The authoritative Results sheet contains every submitted attempt.
+    // Refresh this table from the server so retakes are visible even when the
+    // legacy local profile payload has not changed.
+    var assessmentHost=document.getElementById("serverAssessmentGrades");
+    if(assessmentHost&&window.API&&window.API.getMyCourseResults){
+      window.API.getMyCourseResults("").then(function(r){
+        if(!r||!r.success)throw new Error(r&&r.error||"Не удалось загрузить результаты");
+        var source=(r.results||[]).filter(function(x){
+          var id=String(x.testId||"");
+          return id.indexOf("assignment_")!==0&&id.indexOf("metrology_")!==0;
+        });
+        var grouped=Object.create(null);
+        source.forEach(function(x){
+          var key=String(x.courseId||"")+"|"+String(x.testId||"");
+          if(!grouped[key])grouped[key]=[];
+          grouped[key].push(x);
+        });
+        var records=Object.keys(grouped).map(function(key){
+          var attempts=grouped[key].slice().sort(function(a,b){
+            return String(a.finishedAt||"").localeCompare(String(b.finishedAt||""));
+          });
+          return {latest:attempts[attempts.length-1],count:attempts.length};
+        }).sort(function(a,b){
+          return String(b.latest.finishedAt||"").localeCompare(String(a.latest.finishedAt||""));
+        });
+        assessmentHost.innerHTML=records.length?records.map(function(item){
+          var x=item.latest;
+          var course=String(x.courseId||"—");
+          var grade=x.grade!==""&&x.grade!=null?window.escapeHtml(x.grade):"—";
+          var percent=Number(x.percent)||0;
+          var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
+          var title=window.escapeHtml(x.testTitle||x.testId||"Работа");
+          return "<tr><td>"+title+"<div style='font-size:12px;color:var(--muted)'>"+window.escapeHtml(course)+"</div></td><td style='text-align:center;font-weight:bold'>"+grade+" <span style='font-size:12px;color:var(--muted)'>("+percent+"%)</span><div style='font-size:12px;color:var(--muted)'>Попыток: "+item.count+"</div><div style='font-size:11px;color:var(--muted)'>"+window.escapeHtml(date)+"</div></td></tr>";
+        }).join(""):'<tr><td colspan="2" style="text-align:center;color:var(--muted)">Вы еще не проходили тесты</td></tr>';
+      }).catch(function(e){
+        console.warn("Не удалось обновить серверные оценки:",e);
+      });
+    }
     var remoteHost=document.getElementById("serverAssignmentGrades");
     if(remoteHost&&window.API&&window.API.getMyCourseResults){window.API.getMyCourseResults("").then(function(r){if(!r||!r.success)throw new Error(r&&r.error||"Не удалось загрузить оценки");var rows=(r.results||[]).filter(function(x){return String(x.testId||"").indexOf("assignment_")===0;});remoteHost.innerHTML=rows.length?'<div class="journal-wrap"><table class="journal-table"><thead><tr><th>Задание</th><th>Дата отправки</th><th>Оценка</th><th>Комментарий</th></tr></thead><tbody>'+rows.map(function(x){return "<tr><td>"+window.escapeHtml(x.testTitle)+"</td><td>"+window.escapeHtml(x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—")+"</td><td style='text-align:center;font-weight:bold'>"+(x.grade!==""&&x.grade!=null?window.escapeHtml(x.grade):"На проверке")+"</td><td style='white-space:pre-wrap'>"+window.escapeHtml(x.feedback||"—")+"</td></tr>";}).join("")+"</tbody></table></div>":"Пока нет отправленных заданий.";}).catch(function(e){remoteHost.textContent="Не удалось загрузить оценки за задания: "+e.message;});}
     var metrologyHost=document.getElementById("serverMetrologyGrades");
