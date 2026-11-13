@@ -876,25 +876,51 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         var test = (window.customContent.tests || []).find(function (t) { return String(t.id) === String(testId); });
         var area = document.getElementById("topicContent");
         if (!test || !area) { if (area) area.textContent = "Тест не найден."; return; }
-        area.dataset.testId="custom_"+testId;area.dataset.proctorAssessment="1";
-        var questions = test.questions || [], answers = [], index = 0, started = Date.now();
-        if (!questions.length) { area.textContent = "В тесте пока нет вопросов."; return; }
-        function draw() {
-            if (index >= questions.length) {
-                area.innerHTML = "<p>Проверяем ответы на сервере…</p>";
-                window.API.submitCustomTest(testId, answers, Math.round((Date.now()-started)/1000), test.courseId || test.mdkId).then(function (result) {
-                    if (!result || !result.success) throw new Error(result && result.error || "Не удалось проверить тест.");
-                    area.dataset.proctorAssessment="0";
-                    area.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться к тестам</button></div>';
-                }).catch(function (error) { area.textContent = error.message || "Ошибка проверки теста."; });
-                return;
-            }
-            var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>';
-            (q.options||[]).forEach(function (option,i) { html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>'; });
-            area.innerHTML = html;
-            area.querySelectorAll("[data-custom-answer]").forEach(function (button) { button.onclick = function () { answers[index] = Number(button.dataset.customAnswer); index++; draw(); }; });
+        var courseId = test.courseId || test.mdkId || (window.state && window.state.activeCourseId) || "";
+        if (!window.API || !window.API.getCustomTest || !window.API.submitCustomTest) {
+            area.textContent = "Защищённый режим тестирования недоступен. Обратитесь к преподавателю.";
+            return;
         }
-        draw();
+        area.dataset.testId = "custom_" + testId;
+        area.dataset.proctorAssessment = "1";
+        area.textContent = "Получаем индивидуальный вариант теста…";
+        try {
+            var attempt = await window.API.getCustomTest(testId, courseId);
+            if (!attempt || !attempt.success || !Array.isArray(attempt.questions) || !attempt.attemptId) {
+                throw new Error(attempt && attempt.error || "Сервер не выдал защищённую попытку.");
+            }
+            var questions = attempt.questions, answers = [], index = 0, started = Date.now();
+            if (!questions.length) throw new Error("В тесте пока нет вопросов.");
+            function draw() {
+                if (index >= questions.length) {
+                    area.innerHTML = "<p>Проверяем ответы на сервере…</p>";
+                    window.API.submitCustomTest({
+                        testId: testId, courseId: courseId, attemptId: attempt.attemptId,
+                        answers: answers, timeSpent: Math.round((Date.now() - started) / 1000)
+                    }).then(function (result) {
+                        if (!result || !result.success) throw new Error(result && result.error || "Не удалось проверить тест.");
+                        area.dataset.proctorAssessment = "0";
+                        area.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться к тестам</button></div>';
+                    }).catch(function (error) {
+                        area.dataset.proctorAssessment = "0";
+                        area.textContent = error.message || "Ошибка проверки теста.";
+                    });
+                    return;
+                }
+                var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>';
+                (q.options || []).forEach(function(option, i) {
+                    html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>';
+                });
+                area.innerHTML = html;
+                area.querySelectorAll("[data-custom-answer]").forEach(function(button) {
+                    button.onclick = function() { answers[index] = Number(button.dataset.customAnswer); index++; draw(); };
+                });
+            }
+            draw();
+        } catch (error) {
+            area.dataset.proctorAssessment = "0";
+            area.textContent = error.message || "Не удалось открыть защищённый тест.";
+        }
     };
 
     window.startInlineTest = function(topicId, selfWorkCode) {
