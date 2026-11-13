@@ -20,12 +20,13 @@ jobs:
       - name: Check changed JavaScript modules
         run: |
           set -e
-          for file in api.js app.js portal-final.js portal-genz.js rating-subjects.js workbooks.js network-party-games.js network-detective.js coop-detective.js sprut-tp-document-examples.js certificate-supplement.js avatar-studio.js teacher-tasks.js reports.js service-worker.js teacher-controls.js shop.js laboratory.js pdf-viewer.js materials-simulator.js machining-simulator.js english-vpr-engine.js english-proficiency-lab.js; do
+          for file in api.js app.js questions-setup.js exam_0701.js exam_0401.js exam_0201.js exam_0202.js portal-final.js portal-genz.js rating-subjects.js workbooks.js network-party-games.js network-detective.js coop-detective.js sprut-tp-document-examples.js certificate-supplement.js avatar-studio.js teacher-tasks.js reports.js service-worker.js teacher-controls.js shop.js laboratory.js pdf-viewer.js materials-simulator.js machining-simulator.js english-vpr-engine.js english-proficiency-lab.js; do
             echo "Checking $file"
             node --check "$file"
           done
           echo "Checking Google Apps Script backend"
           node --check < Code.gs
+          node --check < EnglishVPR-Sheets.gs
           node --check scripts/gas-read-load-test.mjs
       - name: Check notification center contract
         run: node scripts/check-notification-contract.mjs
@@ -44,6 +45,7 @@ jobs:
           node --test scripts/english-five-year-runtime.test.mjs
           node --test scripts/english-semester-assessment.test.mjs
           node --test scripts/english-technical-draft-bank.test.mjs
+          node --test scripts/assessment-option-shuffle.test.mjs
       - name: Check public assessment data syntax
         run: node --check data-0701.js && node --check data-0401.js && node --check data-0201.js && node --check data-0202.js && node --check data-mastercam.js && node --check data-sprut-tp.js && node --check data-material.js && node --check data-safety.js && node --check data-metrology.js && node --check data-extra.js && node --check data-english-basic.js && node --check data-english-technical.js && node --check english-assessment-data.js && node --check tests-extra.js && node --check course-assessment-advanced.js && node --check hard-questions.js && node --check challenge-questions.js && node --check sprut-tp-question-bank.js && node --check exam_0401.js && node --check exam_0201.js && node --check exam_0202.js
       - name: Check workbook cache and print layout
