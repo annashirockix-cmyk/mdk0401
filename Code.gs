@@ -1894,7 +1894,10 @@ function submitBuiltInTest_(data) {
 }
 
 function shuffledServer_(items) {
-  const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;
+  const a=items.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}
+  if(a.length>1&&a.every(function(value,index){return value===items[index];})){const first=a.shift();a.push(first);}
+  return a;
 }
 function allFinalExamEntries_(courseId) {
   const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),out=[],seen={};
@@ -2896,6 +2899,7 @@ function englishSemesterOptionOrder_(email, testId, attemptNo, questionIndex, op
     const j = Math.floor(nextRandom() * (i + 1));
     const value = order[i]; order[i] = order[j]; order[j] = value;
   }
+  if (order.length > 1 && order.every(function(value, index) { return value === index; })) order.push(order.shift());
   return order;
 }
 
