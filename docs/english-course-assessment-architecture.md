@@ -99,6 +99,8 @@ Do not fill missing lectures with generic duplicated text. Keep the current lect
 - Course 2, semester 2 lessons 4–7 are expanded in `docs/english-basic-c02-s02-lessons-04-07-enrichment-draft.md`. The existing Basic 6.1–6.4 source lessons remain unchanged; enrichment adds guided reading, grammar, listening scripts, speaking/writing tasks and teacher keys.
 - Course 2, semester 2 new lessons 8–12 are drafted in `docs/english-basic-c02-s02-lessons-08-12-draft.md` (passive voice; coherent paragraphs; climate/resources; science and technology; opinion essay and presentation). These are draft teaching materials, not yet imported into the portal.
 
+- Course 3, semester 1 lessons 6–8 (aviation industry, aircraft structure and materials) are drafted in `docs/english-technical-c03-s01-lessons-06-08-draft.md`. The existing Technical 1.1–1.3 and 2.1–2.2 lessons remain unchanged.
+
 ## 5. Assessment banks
 
 Keep the three assessment purposes separate.
