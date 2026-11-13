@@ -173,7 +173,7 @@ function validateEnglishVprWrittenAnswers_(task, answers, taskIndex) {
       throw new Error("Ответ " + (index + 1) + " письменного задания должен быть текстом.");
     }
     const answer = raw.trim();
-    const words = answer ? answer.split(/\\s+/).length : 0;
+    const words = answer ? answer.split(/\s+/).length : 0;
     if (!answer || answer.length > 100 || words > 5) {
       throw new Error("В письменном задании каждый ответ должен содержать от 1 до 5 слов и не более 100 символов.");
     }
