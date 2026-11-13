@@ -172,3 +172,10 @@ The catalogue now contains 120 unique practice activities: 12 lessons in each se
 - Courses 4–5 (B1+–B2): electrical systems, avionics, networks, programming, sensor data, technical reporting and professional communication.
 
 All 120 activities have browser-readable scripts and comprehension questions with practice feedback. This completes the catalogue's five-year lesson coverage, but does not yet mean the listening exercises are embedded in all 120 lecture pages. The catalogue is practice-only: it does not save grades or create protected exam attempts. Real-browser and device playback testing is still required.
+
+
+## Inline lecture integration — existing source lessons
+
+The existing lecture renderer now looks up the matching listening activity by the source topic and lecture code, then mounts the browser TTS practice widget inside that lecture accordion. The mapping covers the 45 pre-existing source lectures (16 Basic + 29 Technical) across Courses 1–5 where those source lectures exist. The mapping uses the current Basic/Technical topic IDs and lecture numbering; it does not rely on title matching.
+
+Important boundary: the other 75 lessons are still draft materials and are not yet present as lecture objects in `data-english-basic.js` / `data-english-technical.js`. Their 75 listening activities are available in the catalogue, but cannot appear inside a lecture page until those lesson texts are imported into the course data. The standalone Listening Lab remains available for all 120 activities. Browser playback and in-page layout still require a real browser check.
