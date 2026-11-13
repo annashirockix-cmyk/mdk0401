@@ -136,7 +136,7 @@ function sanitizeEnglishVprExam_(exam) {
     if (!value || typeof value !== "object") return;
     if (Array.isArray(value)) { value.forEach(stripPrivateFields); return; }
     Object.keys(value).forEach(function(key) {
-      if (/^(correct|correctAnswer|answer|answers|key|solution|explanation|acceptedAnswers)$/i.test(key)) delete value[key];
+      if (/^(correct|correctAnswer|correctIndex|correctOption|answer|answerIndex|answers|expectedAnswer|acceptedAnswers|correctOrder|key|solution|explanation|rationale|isCorrect)$/i.test(key)) delete value[key];
       else stripPrivateFields(value[key]);
     });
   }
