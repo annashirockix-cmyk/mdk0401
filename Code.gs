@@ -601,7 +601,7 @@ function protectedQuestionBankMap_() {
 }
 function isProtectedAssessment_(testId,courseId,bankMap) {
   const id=String(testId||""),map=bankMap||{};
-  if(id.indexOf("__final__")===0||id.indexOf("custom_")===0)return true;
+  if(id.indexOf("__final__")===0||id.indexOf("custom_")===0||/^english_vpr_/.test(id)||/^english_semester_/.test(id))return true;
   function protectedFor(cid) {
     const banks=map[cid]||{};
     if(id.indexOf("test_")===0){
