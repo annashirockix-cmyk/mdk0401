@@ -246,3 +246,8 @@ The browser listening catalogue now contains all 24 activities for Course 5: 12 
 ### Listening catalogue expansion — Course 4
 
 The browser practice catalogue now includes Course 4, Semester 2, lessons 9–12 in addition to all 24 activities for Course 5. The page groups activities by course and semester. Current coverage is 28 activities across three blocks: Course 4 Semester 2 (lessons 9–12), Course 5 Semester 1 (lessons 1–12) and Course 5 Semester 2 (lessons 1–12). Course 4 Semester 2 lessons 1–8 and the remaining course-semester blocks still require conversion. All catalogue activities remain practice-only.
+
+
+### Course 4, Semester 2 listening completed
+
+All twelve lessons in Course 4, Semester 2 now have browser-listening practice activities. Lessons 1–8 preserve the existing source sequence on communication, networks, computers, internet, automation, sensors and input devices; lessons 9–12 cover avionics, algorithms, sensor data and cybersecurity. The catalogue contains 36 activities across Course 4 Semester 2 and both semesters of Course 5. It remains a practice-only feature, not a protected assessment.
