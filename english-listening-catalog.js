@@ -4338,6 +4338,1516 @@
         }
       ]
     },
+    [
+      {
+        "id": "en-c04-s01-l10",
+        "title": "Course 4 · Semester 1 · Lesson 10 — Aircraft Electrical Power: Sources and Distribution",
+        "level": "B1+–B2",
+        "script": "An aircraft electrical system receives power from several sources. During normal flight, engine driven generators supply most electrical loads. The auxiliary power unit can provide power on the ground and may serve as a backup in flight, depending on the aircraft design. Batteries support essential services and help during start-up or an emergency. Electrical power is distributed through buses and protected by circuit breakers. Before maintenance, technicians follow the approved isolation procedure and confirm that the system is safe.",
+        "questions": [
+          {
+            "prompt": "Which source normally supplies most electrical loads in flight?",
+            "options": [
+              "Engine driven generators",
+              "Cabin lighting",
+              "Passenger service units",
+              "Ground vehicles"
+            ],
+            "answerIndex": 0,
+            "explanation": "Engine driven generators supply most loads in normal flight."
+          },
+          {
+            "prompt": "When can the auxiliary power unit provide power?",
+            "options": [
+              "Only during landing",
+              "On the ground and sometimes as an in-flight backup",
+              "Only with the battery removed",
+              "Only during maintenance"
+            ],
+            "answerIndex": 1,
+            "explanation": "The APU can provide ground power and may be an in-flight backup."
+          },
+          {
+            "prompt": "What distributes electrical power?",
+            "options": [
+              "Hydraulic pipes",
+              "Fuel tanks",
+              "Electrical buses",
+              "Oxygen masks"
+            ],
+            "answerIndex": 2,
+            "explanation": "Electrical buses distribute power."
+          },
+          {
+            "prompt": "What must technicians do before maintenance?",
+            "options": [
+              "Switch on every consumer",
+              "Ignore circuit protection",
+              "Remove labels",
+              "Follow the approved isolation procedure"
+            ],
+            "answerIndex": 3,
+            "explanation": "Safe isolation is required before maintenance."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l11",
+        "title": "Course 4 · Semester 1 · Lesson 11 — Wiring Diagrams, Connectors, Bonding and Grounding",
+        "level": "B1+–B2",
+        "script": "A maintenance technician checks a wiring diagram before replacing a connector. The diagram shows wire numbers, connector references and the route between two units. The technician compares the drawing revision with the aircraft records because an older diagram may not show a later modification. Bonding provides a low resistance electrical connection between conductive parts. Grounding connects a system to its designated electrical reference. The technician records the connector identification and inspection result, and never pulls a wire by its insulation.",
+        "questions": [
+          {
+            "prompt": "What information can a wiring diagram show?",
+            "options": [
+              "Wire numbers and connector references",
+              "Passenger names",
+              "Fuel prices",
+              "Weather forecasts"
+            ],
+            "answerIndex": 0,
+            "explanation": "The diagram contains wire numbers, connector references and routes."
+          },
+          {
+            "prompt": "Why check the drawing revision?",
+            "options": [
+              "To change the aircraft type",
+              "An older drawing may omit a modification",
+              "To calculate passenger weight",
+              "To avoid recording the task"
+            ],
+            "answerIndex": 1,
+            "explanation": "The revision must match the current configuration."
+          },
+          {
+            "prompt": "What is the purpose of bonding?",
+            "options": [
+              "To increase wire length",
+              "To identify a fuse",
+              "To connect conductive parts with low resistance",
+              "To measure air pressure"
+            ],
+            "answerIndex": 2,
+            "explanation": "Bonding creates electrical continuity between conductive parts."
+          },
+          {
+            "prompt": "How should a technician handle a wire?",
+            "options": [
+              "Pull it by the insulation",
+              "Twist it sharply",
+              "Cut it to test it",
+              "Do not pull it by its insulation"
+            ],
+            "answerIndex": 3,
+            "explanation": "The script warns against pulling a wire by its insulation."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s01-l12",
+        "title": "Course 4 · Semester 1 · Lesson 12 — Electrical Measurements and Describing a Fault",
+        "level": "B1+–B2",
+        "script": "During an inspection, an electrician measures voltage at a test point and compares the reading with the maintenance manual. The value is below the specified range. The electrician checks the instrument setting and confirms that the test leads are connected correctly before repeating the measurement. The fault report includes equipment identification, test point, measured value, expected range and operating conditions. It describes evidence rather than guessing at a cause. The system is left in the condition required by the approved procedure.",
+        "questions": [
+          {
+            "prompt": "What does the electrician compare the voltage with?",
+            "options": [
+              "A passenger list",
+              "The maintenance manual specification",
+              "A weather report",
+              "A flight plan"
+            ],
+            "answerIndex": 1,
+            "explanation": "The reading is compared with the specified range."
+          },
+          {
+            "prompt": "What is checked before repeating the measurement?",
+            "options": [
+              "Instrument setting and test leads",
+              "Aircraft paint",
+              "Cabin temperature only",
+              "Flight timetable"
+            ],
+            "answerIndex": 0,
+            "explanation": "The meter setting and lead connections are checked."
+          },
+          {
+            "prompt": "What should the fault report contain?",
+            "options": [
+              "Only a guess",
+              "Only the technician's name",
+              "Measured value and expected range",
+              "Unrelated spare parts"
+            ],
+            "answerIndex": 2,
+            "explanation": "The report records measurable evidence and conditions."
+          },
+          {
+            "prompt": "How should the report describe the problem?",
+            "options": [
+              "As a cause without evidence",
+              "With an estimate only",
+              "Without equipment identification",
+              "By recording evidence, not guessing"
+            ],
+            "answerIndex": 3,
+            "explanation": "The report separates evidence from assumptions."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l09",
+        "title": "Course 4 · Semester 2 · Lesson 9 — Avionics Overview: Systems and Information Exchange",
+        "level": "B1+–B2",
+        "script": "Modern aircraft use avionics systems to collect, process and display information. Navigation equipment provides position and route data. Communication equipment supports contact between the flight crew and air traffic services. Flight instruments present information about speed, altitude and aircraft attitude. These systems may exchange data through approved digital networks. A technician investigating a message fault identifies the affected unit and checks the relevant maintenance documentation. The technician records the message exactly as displayed and avoids replacing a unit before completing the required fault isolation.",
+        "questions": [
+          {
+            "prompt": "Which equipment provides position and route data?",
+            "options": [
+              "Navigation equipment",
+              "Cabin entertainment",
+              "Galley equipment",
+              "Seat controls"
+            ],
+            "answerIndex": 0,
+            "explanation": "Navigation equipment provides position and route information."
+          },
+          {
+            "prompt": "What do flight instruments display?",
+            "options": [
+              "Passenger bookings",
+              "Fuel prices",
+              "Speed, altitude and aircraft attitude",
+              "Staff schedules"
+            ],
+            "answerIndex": 2,
+            "explanation": "These flight parameters are listed in the script."
+          },
+          {
+            "prompt": "What should be recorded exactly?",
+            "options": [
+              "A technician's guess",
+              "The displayed fault message",
+              "An unrelated number",
+              "A passenger announcement"
+            ],
+            "answerIndex": 1,
+            "explanation": "The message should be recorded exactly as displayed."
+          },
+          {
+            "prompt": "Should a unit be replaced before fault isolation?",
+            "options": [
+              "Yes, always",
+              "To save time",
+              "Without documentation",
+              "No, complete fault isolation first"
+            ],
+            "answerIndex": 3,
+            "explanation": "The required fault isolation comes before replacement."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l10",
+        "title": "Course 4 · Semester 2 · Lesson 10 — Programming Logic, Flowcharts and Algorithms",
+        "level": "B1+–B2",
+        "script": "A control program follows a sequence of instructions. A flowchart can show the sequence with standard symbols: an oval for start or end, a rectangle for a process and a diamond for a decision. The algorithm reads a sensor value and compares it with a permitted limit. If the value is within the limit, the process continues. If it is outside the limit, the program records a warning and requests a safe response. Before use, engineers review the logic, test normal inputs and check how the system responds to invalid data.",
+        "questions": [
+          {
+            "prompt": "Which flowchart symbol represents a decision?",
+            "options": [
+              "Rectangle",
+              "Diamond",
+              "Oval",
+              "Arrow"
+            ],
+            "answerIndex": 1,
+            "explanation": "A diamond represents a decision."
+          },
+          {
+            "prompt": "What happens when the sensor value is outside the limit?",
+            "options": [
+              "The program ignores it",
+              "The algorithm is deleted",
+              "A warning is recorded and a safe response is requested",
+              "The sensor is replaced"
+            ],
+            "answerIndex": 2,
+            "explanation": "The algorithm records a warning and requests a safe response."
+          },
+          {
+            "prompt": "What should engineers test?",
+            "options": [
+              "Only screen colour",
+              "Only the program title",
+              "Only one expected value",
+              "Normal inputs and invalid data"
+            ],
+            "answerIndex": 3,
+            "explanation": "Both normal and invalid inputs must be checked."
+          },
+          {
+            "prompt": "What does the algorithm compare?",
+            "options": [
+              "A sensor value with a permitted limit",
+              "A drawing with a timetable",
+              "A password with a serial number",
+              "A tool with a workbench"
+            ],
+            "answerIndex": 0,
+            "explanation": "The sensor reading is checked against a limit."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l11",
+        "title": "Course 4 · Semester 2 · Lesson 11 — Sensor Data, Validation and Diagnostic Logs",
+        "level": "B1+–B2",
+        "script": "A temperature sensor sends readings to a monitoring unit. The software checks whether each value is within the expected range and whether the signal arrives at the correct interval. A missing value, an impossible jump or a repeated identical reading may indicate a data quality problem. The diagnostic log records the time, sensor identifier, value and warning code. Engineers compare the log with other evidence before deciding whether the sensor, wiring or processing unit requires inspection. One unusual reading is not enough to prove component failure.",
+        "questions": [
+          {
+            "prompt": "What does the software check?",
+            "options": [
+              "The operator's name",
+              "Value range and signal interval",
+              "Sensor colour",
+              "Aircraft registration only"
+            ],
+            "answerIndex": 1,
+            "explanation": "It checks the permitted range and timing."
+          },
+          {
+            "prompt": "Which event may indicate a data quality problem?",
+            "options": [
+              "A missing value",
+              "A normal value on time",
+              "A complete record",
+              "A signed checklist"
+            ],
+            "answerIndex": 0,
+            "explanation": "A missing reading is one example."
+          },
+          {
+            "prompt": "What does the diagnostic log record?",
+            "options": [
+              "Only repair cost",
+              "Only sensor model",
+              "Time, sensor ID, value and warning code",
+              "Airport weather"
+            ],
+            "answerIndex": 2,
+            "explanation": "These are the listed log fields."
+          },
+          {
+            "prompt": "Does one unusual reading prove component failure?",
+            "options": [
+              "Yes, always",
+              "Only if printed",
+              "Only after an update",
+              "No, compare it with other evidence"
+            ],
+            "answerIndex": 3,
+            "explanation": "A single reading is not sufficient evidence."
+          }
+        ]
+      },
+      {
+        "id": "en-c04-s02-l12",
+        "title": "Course 4 · Semester 2 · Lesson 12 — Cybersecurity Vocabulary and Safe Data Handling",
+        "level": "B1+–B2",
+        "script": "Aircraft maintenance organisations use digital systems to store technical records and exchange approved information. Staff protect accounts with strong authentication and must not share passwords. Files should come from trusted sources, and unexpected links or attachments must be reported. Removable storage is used only when permitted by local policy. Technicians lock a workstation when leaving it and store records in the approved system. Cybersecurity is part of operational safety because inaccurate or unauthorised data can affect maintenance decisions.",
+        "questions": [
+          {
+            "prompt": "What should staff do with passwords?",
+            "options": [
+              "Share them",
+              "Protect them and never share them",
+              "Write them on a screen",
+              "Use a public password"
+            ],
+            "answerIndex": 1,
+            "explanation": "Passwords must not be shared."
+          },
+          {
+            "prompt": "What should happen to an unexpected attachment?",
+            "options": [
+              "Open it immediately",
+              "Forward it to everyone",
+              "Report it according to procedure",
+              "Rename and ignore it"
+            ],
+            "answerIndex": 2,
+            "explanation": "Unexpected links and attachments should be reported."
+          },
+          {
+            "prompt": "When may removable storage be used?",
+            "options": [
+              "Whenever convenient",
+              "After deleting records",
+              "Without checking policy",
+              "Only when local policy permits"
+            ],
+            "answerIndex": 3,
+            "explanation": "Use is controlled by local policy."
+          },
+          {
+            "prompt": "Why is cybersecurity relevant to safety?",
+            "options": [
+              "Unauthorised or inaccurate data can affect maintenance decisions",
+              "It makes documents shorter",
+              "It replaces inspections",
+              "It removes training"
+            ],
+            "answerIndex": 0,
+            "explanation": "Data integrity can affect maintenance decisions."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l03",
+        "title": "Course 5 · Semester 1 · Lesson 3 — Maintenance Documentation and Technical Manuals",
+        "level": "B1+–B2",
+        "script": "A technician receives a task card for a scheduled inspection. Before starting, the technician checks the equipment identification, task reference and current revision of the maintenance instructions. The manual defines required tools, access conditions, inspection steps and acceptance criteria. If a reference is unclear or inconsistent with the task, the technician asks the supervisor for clarification rather than improvising. After the work, the technician records the result, any finding and the required sign-off in the approved maintenance record.",
+        "questions": [
+          {
+            "prompt": "What does the technician check first?",
+            "options": [
+              "Equipment ID, task reference and current revision",
+              "Lunch schedule",
+              "Weather only",
+              "Aircraft cost"
+            ],
+            "answerIndex": 0,
+            "explanation": "These are the initial document checks."
+          },
+          {
+            "prompt": "Where are acceptance criteria defined?",
+            "options": [
+              "Passenger notice",
+              "Maintenance instructions",
+              "Staff holiday list",
+              "Social media post"
+            ],
+            "answerIndex": 1,
+            "explanation": "The manual defines acceptance criteria."
+          },
+          {
+            "prompt": "What should happen if an instruction is unclear?",
+            "options": [
+              "Improvise",
+              "Skip the task",
+              "Ask the supervisor for clarification",
+              "Sign it as complete"
+            ],
+            "answerIndex": 2,
+            "explanation": "The technician must clarify rather than improvise."
+          },
+          {
+            "prompt": "What is recorded after the work?",
+            "options": [
+              "Arrival time only",
+              "Tool brand only",
+              "Personal opinion",
+              "Result, findings and required sign-off"
+            ],
+            "answerIndex": 3,
+            "explanation": "The approved record captures these details."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l04",
+        "title": "Course 5 · Semester 1 · Lesson 4 — Fault Diagnosis: Symptoms, Evidence and Reports",
+        "level": "B1+–B2",
+        "script": "An operator reports that a pump makes an unusual noise. The maintenance team does not assume that the pump itself has failed. They confirm the operating conditions and ask when the noise occurs. They inspect the equipment history and collect evidence such as vibration readings, temperature and visible leakage. The report separates the operator's description from measured findings. It states which checks are complete and which questions remain open. This record helps the next technician continue the investigation without repeating unnecessary work.",
+        "questions": [
+          {
+            "prompt": "What is the reported symptom?",
+            "options": [
+              "An unusual pump noise",
+              "A broken display",
+              "A missing document",
+              "A high room temperature"
+            ],
+            "answerIndex": 0,
+            "explanation": "The operator reports an unusual pump noise."
+          },
+          {
+            "prompt": "What evidence may the team collect?",
+            "options": [
+              "Only an opinion",
+              "Vibration, temperature and leakage observations",
+              "Aircraft colour",
+              "Staff attendance"
+            ],
+            "answerIndex": 1,
+            "explanation": "These observations support diagnosis."
+          },
+          {
+            "prompt": "What should the report separate?",
+            "options": [
+              "Passwords and tools",
+              "Parts and suppliers",
+              "Operator description and measured findings",
+              "Task number and date"
+            ],
+            "answerIndex": 2,
+            "explanation": "It distinguishes reported symptoms from evidence."
+          },
+          {
+            "prompt": "Why record completed checks?",
+            "options": [
+              "To make the report longer",
+              "To avoid informing the next technician",
+              "To replace the manual",
+              "To help the next technician continue efficiently"
+            ],
+            "answerIndex": 3,
+            "explanation": "The record supports continuity."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l05",
+        "title": "Course 5 · Semester 1 · Lesson 5 — Electrical Troubleshooting Communication",
+        "level": "B1+–B2",
+        "script": "An electrician receives a report that a warning lamp does not illuminate during a functional check. The electrician confirms the condition with the operator and repeats the approved check under the stated conditions. The team reviews the wiring diagram and checks the relevant protection device using the prescribed method. During handover, the electrician explains what was observed, what was tested and what remains unresolved. The electrician does not claim that the circuit is repaired until the required test has passed and the result has been recorded.",
+        "questions": [
+          {
+            "prompt": "What is the reported problem?",
+            "options": [
+              "A warning lamp does not illuminate",
+              "A pump is leaking",
+              "A door is stuck",
+              "A document is missing"
+            ],
+            "answerIndex": 0,
+            "explanation": "The warning lamp fails to illuminate."
+          },
+          {
+            "prompt": "What does the team review?",
+            "options": [
+              "Passenger manifest",
+              "Wiring diagram and protection device",
+              "Catering order",
+              "Weather chart"
+            ],
+            "answerIndex": 1,
+            "explanation": "The team checks the diagram and protection device."
+          },
+          {
+            "prompt": "What should the handover explain?",
+            "options": [
+              "Who arrived first",
+              "Repair cost only",
+              "Observations, tests and unresolved points",
+              "A diagnosis without tests"
+            ],
+            "answerIndex": 2,
+            "explanation": "A handover includes findings and remaining issues."
+          },
+          {
+            "prompt": "When can the electrician say the circuit is repaired?",
+            "options": [
+              "Before testing",
+              "When the warning disappears once",
+              "When a colleague agrees",
+              "After the required test passes and is recorded"
+            ],
+            "answerIndex": 3,
+            "explanation": "The test and recorded result are necessary."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l06",
+        "title": "Course 5 · Semester 1 · Lesson 6 — Quality Assurance and Non-conformity Reports",
+        "level": "B1+–B2",
+        "script": "During inspection, a component is found with a dimension outside the drawing tolerance. The inspector identifies the part and records the measured value, specified limit and measuring equipment. The component is marked and controlled so that it cannot be installed by mistake. A non-conformity report describes the requirement, actual condition and evidence. The responsible team investigates the cause and decides on an authorised disposition. The inspector does not alter the drawing or accept the part without approval.",
+        "questions": [
+          {
+            "prompt": "What was found?",
+            "options": [
+              "A dimension outside tolerance",
+              "A missing lunch order",
+              "A new password",
+              "A clean workbench"
+            ],
+            "answerIndex": 0,
+            "explanation": "The measured dimension is outside tolerance."
+          },
+          {
+            "prompt": "What evidence is recorded?",
+            "options": [
+              "Inspector's initials only",
+              "Measured value, limit and measuring equipment",
+              "Supplier address only",
+              "Building photograph"
+            ],
+            "answerIndex": 1,
+            "explanation": "These details make the finding traceable."
+          },
+          {
+            "prompt": "Why is the component controlled?",
+            "options": [
+              "To paint it",
+              "To reduce weight",
+              "To prevent accidental installation",
+              "To avoid recording it"
+            ],
+            "answerIndex": 2,
+            "explanation": "The part must not be installed by mistake."
+          },
+          {
+            "prompt": "Who decides the disposition?",
+            "options": [
+              "Inspector alone without approval",
+              "Storekeeper",
+              "Operator's friend",
+              "Responsible authorised team"
+            ],
+            "answerIndex": 3,
+            "explanation": "The responsible team decides the disposition."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l07",
+        "title": "Course 5 · Semester 1 · Lesson 7 — Document Revisions and Configuration Control",
+        "level": "B1+–B2",
+        "script": "An organisation updates a procedure after an approved design change. The document controller assigns a new revision, records the change and identifies the affected equipment configuration. Staff are notified which version is effective and where the controlled copy is stored. Printed copies are checked so obsolete instructions are not used. When a technician finds two documents with different revision numbers, the technician stops and confirms which one is authorised. Configuration control ensures maintenance uses correct approved information.",
+        "questions": [
+          {
+            "prompt": "What does the document controller assign?",
+            "options": [
+              "A new revision",
+              "An aircraft route",
+              "A uniform",
+              "A tool serial number"
+            ],
+            "answerIndex": 0,
+            "explanation": "An approved update receives a new revision."
+          },
+          {
+            "prompt": "What does the change record identify?",
+            "options": [
+              "Author's lunch break",
+              "Change and affected configuration",
+              "Weather conditions",
+              "Visitors"
+            ],
+            "answerIndex": 1,
+            "explanation": "The change and affected equipment are recorded."
+          },
+          {
+            "prompt": "What should happen to obsolete printed copies?",
+            "options": [
+              "Keep them at every bench",
+              "Use until damaged",
+              "Remove them from use",
+              "Change revision by hand"
+            ],
+            "answerIndex": 2,
+            "explanation": "Obsolete instructions must not be used."
+          },
+          {
+            "prompt": "What should a technician do with conflicting revisions?",
+            "options": [
+              "Choose the shorter one",
+              "Use both",
+              "Ignore the difference",
+              "Stop and confirm the authorised version"
+            ],
+            "answerIndex": 3,
+            "explanation": "The current authorised revision must be confirmed."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l08",
+        "title": "Course 5 · Semester 1 · Lesson 8 — Shift Handover and Technical Correspondence",
+        "level": "B1+–B2",
+        "script": "At the end of a shift, a technician prepares a handover note for the incoming team. It identifies the equipment, describes the issue and lists checks already completed. It states the equipment status, safety precautions and next action. The writer uses short factual sentences and avoids unclear expressions such as 'it is still bad'. If a task is waiting for a part, the part number and expected delivery information are included when known. The incoming technician reads the note and confirms critical points.",
+        "questions": [
+          {
+            "prompt": "What is the purpose of the note?",
+            "options": [
+              "Transfer work information to the next shift",
+              "Advertise a product",
+              "Replace the manual",
+              "Record holidays"
+            ],
+            "answerIndex": 0,
+            "explanation": "A handover supports continuity."
+          },
+          {
+            "prompt": "What should be included?",
+            "options": [
+              "Technician opinion only",
+              "Equipment, issue, completed checks and next action",
+              "Lunch time only",
+              "Unrelated tasks"
+            ],
+            "answerIndex": 1,
+            "explanation": "The note identifies status and completed work."
+          },
+          {
+            "prompt": "How should the writer communicate?",
+            "options": [
+              "With vague phrases",
+              "With emotional descriptions",
+              "With short factual sentences",
+              "Without equipment identification"
+            ],
+            "answerIndex": 2,
+            "explanation": "Clear factual wording prevents misunderstanding."
+          },
+          {
+            "prompt": "What if a part is awaited?",
+            "options": [
+              "Do not mention it",
+              "Guess the part number",
+              "Close the task",
+              "Include known part and delivery information"
+            ],
+            "answerIndex": 3,
+            "explanation": "Known supply information helps the incoming team."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l09",
+        "title": "Course 5 · Semester 1 · Lesson 9 — Teamwork Across Engineering Specialisms",
+        "level": "B1+–B2",
+        "script": "An aircraft maintenance task involves mechanical, electrical and avionics specialists. The mechanical technician checks mounting and moving parts. The electrician verifies the power supply and wiring condition. The avionics specialist reviews system messages and approved test results. Before work begins, the team agrees on responsibilities and confirms access to correct documentation. They share findings through a coordinated handover. No team member changes another discipline's work without required authorisation. Clear role boundaries reduce the risk of missed checks.",
+        "questions": [
+          {
+            "prompt": "Who checks mounting and moving parts?",
+            "options": [
+              "Mechanical technician",
+              "Avionics specialist",
+              "Document controller",
+              "Store manager"
+            ],
+            "answerIndex": 0,
+            "explanation": "Mechanical work includes mounting and moving parts."
+          },
+          {
+            "prompt": "Who reviews system messages?",
+            "options": [
+              "Electrician only",
+              "Avionics specialist",
+              "Passenger service team",
+              "Finance officer"
+            ],
+            "answerIndex": 1,
+            "explanation": "The avionics specialist reviews system messages."
+          },
+          {
+            "prompt": "What should the team agree before work?",
+            "options": [
+              "Uniform colour",
+              "Lunch location",
+              "Responsibilities and document access",
+              "Holiday dates"
+            ],
+            "answerIndex": 2,
+            "explanation": "Roles and documents are agreed first."
+          },
+          {
+            "prompt": "Can a team member change another discipline's work without authorisation?",
+            "options": [
+              "Yes, if hurried",
+              "Yes, if small",
+              "After shift only",
+              "No, authorisation is required"
+            ],
+            "answerIndex": 3,
+            "explanation": "Role boundaries and authorisation must be respected."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l10",
+        "title": "Course 5 · Semester 1 · Lesson 10 — Interpreting Drawings, Tables and Trend Charts",
+        "level": "B1+–B2",
+        "script": "An engineer reviews a report with a component drawing, measurement table and trend chart. The drawing identifies inspection points. The table lists measured values with units and acceptance limits. The chart shows how vibration changed over several operating cycles. The engineer checks the time scale and compares similar operating conditions before interpreting the trend. A single high value is highlighted for review, but is not described as a confirmed failure until more evidence is available.",
+        "questions": [
+          {
+            "prompt": "What does the drawing identify?",
+            "options": [
+              "Inspection points",
+              "Delivery dates",
+              "Staff shifts",
+              "Fuel prices"
+            ],
+            "answerIndex": 0,
+            "explanation": "The drawing identifies inspection points."
+          },
+          {
+            "prompt": "What does the table contain?",
+            "options": [
+              "Photographs only",
+              "Measured values, units and limits",
+              "Engineer names only",
+              "Aircraft routes"
+            ],
+            "answerIndex": 1,
+            "explanation": "The table presents values and limits."
+          },
+          {
+            "prompt": "What should be checked before interpreting a trend?",
+            "options": [
+              "Font size",
+              "Report title",
+              "Time scale and comparable conditions",
+              "Chart colour"
+            ],
+            "answerIndex": 2,
+            "explanation": "Comparable conditions and time scale matter."
+          },
+          {
+            "prompt": "Does one high value confirm failure?",
+            "options": [
+              "Yes, automatically",
+              "If printed",
+              "After a shift change",
+              "No, more evidence is needed"
+            ],
+            "answerIndex": 3,
+            "explanation": "A high value requires review, not an immediate conclusion."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l11",
+        "title": "Course 5 · Semester 1 · Lesson 11 — Risk Assessment and Safety Reporting",
+        "level": "B1+–B2",
+        "script": "Before a maintenance task, the team reviews the work area and identifies possible hazards. They consider stored energy, moving equipment, access restrictions and foreign object damage. Each hazard is assessed for likelihood and consequence. Suitable controls may include isolation, barriers, protective equipment or a second-person check. If conditions change, the assessment is reviewed again. After an incident or near miss, staff report facts promptly so the organisation can investigate and improve controls. Reporting supports prevention.",
+        "questions": [
+          {
+            "prompt": "What hazards are considered?",
+            "options": [
+              "Stored energy and moving equipment",
+              "Tool colour",
+              "Lunch menu",
+              "Number of emails"
+            ],
+            "answerIndex": 0,
+            "explanation": "These are examples of maintenance hazards."
+          },
+          {
+            "prompt": "What is assessed for each hazard?",
+            "options": [
+              "Staff age",
+              "Likelihood and consequence",
+              "Uniform cost",
+              "Report length"
+            ],
+            "answerIndex": 1,
+            "explanation": "Risk assessment considers likelihood and consequence."
+          },
+          {
+            "prompt": "What happens if conditions change?",
+            "options": [
+              "Continue without review",
+              "Delete the assessment",
+              "Review the assessment again",
+              "Ignore the change"
+            ],
+            "answerIndex": 2,
+            "explanation": "A changed situation requires review."
+          },
+          {
+            "prompt": "Why report a near miss?",
+            "options": [
+              "To blame one person",
+              "To avoid investigation",
+              "To close the task early",
+              "To help prevent future incidents"
+            ],
+            "answerIndex": 3,
+            "explanation": "Reporting supports investigation and prevention."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s01-l12",
+        "title": "Course 5 · Semester 1 · Lesson 12 — Integrated Technical Briefing: From Task to Report",
+        "level": "B1+–B2",
+        "script": "A team leader briefs staff before an inspection. The briefing explains the objective, equipment, relevant procedure and expected completion time. Team members confirm responsibilities and ask questions about unclear steps. During the task, findings are recorded with equipment identifiers and measured evidence. At the end, the team leader summarises results, outstanding items and any restrictions on equipment use. The final report is concise, traceable and consistent with approved records. It excludes unverified assumptions.",
+        "questions": [
+          {
+            "prompt": "What does the briefing explain?",
+            "options": [
+              "Objective, equipment, procedure and expected time",
+              "Team leader's opinion",
+              "Unrelated aircraft",
+              "Holiday plan"
+            ],
+            "answerIndex": 0,
+            "explanation": "The briefing sets out the task and its conditions."
+          },
+          {
+            "prompt": "What do team members do if a step is unclear?",
+            "options": [
+              "Guess",
+              "Ask questions",
+              "Skip it",
+              "Change the procedure"
+            ],
+            "answerIndex": 1,
+            "explanation": "Questions clarify uncertain instructions."
+          },
+          {
+            "prompt": "How are findings recorded?",
+            "options": [
+              "Without identifiers",
+              "From memory only",
+              "With equipment IDs and measured evidence",
+              "As opinions"
+            ],
+            "answerIndex": 2,
+            "explanation": "Traceable records include identifiers and evidence."
+          },
+          {
+            "prompt": "What should the final report avoid?",
+            "options": [
+              "Clear results",
+              "Outstanding items",
+              "Use restrictions",
+              "Unverified assumptions"
+            ],
+            "answerIndex": 3,
+            "explanation": "The report must not present assumptions as facts."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l01",
+        "title": "Course 5 · Semester 2 · Lesson 1 — Delivering a Technical Presentation",
+        "level": "B1+–B2",
+        "script": "An engineering student prepares a presentation about improving a workshop inspection process. The opening slide states the problem and project aim. The next slides explain the method, show collected measurements and compare results before and after the change. The speaker uses labelled charts and defines technical abbreviations. In the conclusion, the student summarises the evidence and recommends a controlled trial. During questions, the student answers directly and admits when further data is needed.",
+        "questions": [
+          {
+            "prompt": "What does the opening slide state?",
+            "options": [
+              "Problem and project aim",
+              "Travel plans",
+              "Unrelated products",
+              "Exam date"
+            ],
+            "answerIndex": 0,
+            "explanation": "The opening introduces the problem and aim."
+          },
+          {
+            "prompt": "What do the middle slides compare?",
+            "options": [
+              "Unrelated aircraft",
+              "Measurements before and after the change",
+              "Student grades",
+              "Presentation templates"
+            ],
+            "answerIndex": 1,
+            "explanation": "The presentation compares results."
+          },
+          {
+            "prompt": "What should the speaker do with abbreviations?",
+            "options": [
+              "Use without explanation",
+              "Avoid all technical terms",
+              "Define them before use",
+              "Put them only in title"
+            ],
+            "answerIndex": 2,
+            "explanation": "Technical abbreviations should be defined."
+          },
+          {
+            "prompt": "What does the student recommend?",
+            "options": [
+              "Immediate fleet-wide adoption",
+              "Deleting records",
+              "Changing specifications without approval",
+              "A controlled trial"
+            ],
+            "answerIndex": 3,
+            "explanation": "The conclusion recommends a controlled trial."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l02",
+        "title": "Course 5 · Semester 2 · Lesson 2 — Writing a Structured Technical Report",
+        "level": "B1+–B2",
+        "script": "A technical report describes a test on a small electric motor. The introduction states the purpose and scope. The method section explains the equipment and test conditions. The results section presents measured current, voltage and temperature in a table. The discussion compares readings with expected values and identifies limitations. The conclusion answers the original question without adding new evidence. References identify manuals and standards. The report is checked for units, figure labels, revision details and separation between measured results and interpretation.",
+        "questions": [
+          {
+            "prompt": "What does the introduction state?",
+            "options": [
+              "Purpose and scope",
+              "Final result only",
+              "Staff names",
+              "Supplier advertising"
+            ],
+            "answerIndex": 0,
+            "explanation": "The introduction defines purpose and scope."
+          },
+          {
+            "prompt": "Where are measured values presented?",
+            "options": [
+              "References",
+              "Results section",
+              "Conclusion only",
+              "Footer"
+            ],
+            "answerIndex": 1,
+            "explanation": "The results section presents measurements."
+          },
+          {
+            "prompt": "What should the conclusion avoid?",
+            "options": [
+              "Answering the question",
+              "Summarising findings",
+              "Introducing new evidence",
+              "Being concise"
+            ],
+            "answerIndex": 2,
+            "explanation": "A conclusion should not add new evidence."
+          },
+          {
+            "prompt": "What details are checked?",
+            "options": [
+              "Page colour",
+              "Author job title",
+              "File name only",
+              "Units, labels, revisions and evidence separation"
+            ],
+            "answerIndex": 3,
+            "explanation": "These checks improve accuracy and traceability."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l03",
+        "title": "Course 5 · Semester 2 · Lesson 3 — Professional Interview and Oral Examination Skills",
+        "level": "B1+–B2",
+        "script": "During a technical interview, a candidate is asked how a measurement was verified. The candidate describes the instrument, its calibration status, test conditions and acceptance limit. When a question is unclear, the candidate asks for repetition or clarification. The answer follows a logical order: situation, action and result. The candidate does not invent experience and distinguishes personal responsibility from work completed by the whole team. A precise example is more useful than a long answer with unsupported claims.",
+        "questions": [
+          {
+            "prompt": "What does the candidate describe?",
+            "options": [
+              "Instrument, calibration, conditions and limit",
+              "Instrument colour",
+              "Travel story",
+              "Interviewer timetable"
+            ],
+            "answerIndex": 0,
+            "explanation": "These details explain how the measurement was verified."
+          },
+          {
+            "prompt": "What should the candidate do if a question is unclear?",
+            "options": [
+              "Ignore it",
+              "Ask for repetition or clarification",
+              "Change the subject",
+              "Give an unrelated answer"
+            ],
+            "answerIndex": 1,
+            "explanation": "Clarification helps answer the actual question."
+          },
+          {
+            "prompt": "What answer structure is suggested?",
+            "options": [
+              "Problem, joke, opinion",
+              "Name, address, age",
+              "Situation, action and result",
+              "Title, contents, references"
+            ],
+            "answerIndex": 2,
+            "explanation": "The answer follows situation-action-result."
+          },
+          {
+            "prompt": "Should the candidate invent experience?",
+            "options": [
+              "Yes, to sound confident",
+              "For simple tasks",
+              "If interview is short",
+              "No, describe experience honestly"
+            ],
+            "answerIndex": 3,
+            "explanation": "The candidate must not invent experience."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l04",
+        "title": "Course 5 · Semester 2 · Lesson 4 — Reading Specifications, Procedures and Standards",
+        "level": "B1+–B2",
+        "script": "An engineer receives a specification for a replacement component. The document gives material grade, dimensions, permitted tolerances and inspection requirements. The engineer checks the document number and revision, then confirms that the component is intended for the correct equipment configuration. A procedure describes the sequence of work and precautions. A standard provides agreed technical requirements. If two documents appear to conflict, the engineer uses document control to identify the applicable approved requirement.",
+        "questions": [
+          {
+            "prompt": "What information may a specification give?",
+            "options": [
+              "Material grade, dimensions and tolerances",
+              "Component colour only",
+              "Supplier phone number",
+              "Staff rota"
+            ],
+            "answerIndex": 0,
+            "explanation": "The specification defines technical characteristics."
+          },
+          {
+            "prompt": "What is checked before using the specification?",
+            "options": [
+              "Document font",
+              "Number, revision and equipment configuration",
+              "Lunch break",
+              "Number of pages only"
+            ],
+            "answerIndex": 1,
+            "explanation": "The current revision and applicability must be confirmed."
+          },
+          {
+            "prompt": "What does a procedure describe?",
+            "options": [
+              "Project purpose only",
+              "History of a standard",
+              "Work sequence and precautions",
+              "Supplier list"
+            ],
+            "answerIndex": 2,
+            "explanation": "A procedure explains how work is carried out."
+          },
+          {
+            "prompt": "What if two documents conflict?",
+            "options": [
+              "Choose the newest-looking one",
+              "Ignore both",
+              "Use the shorter one",
+              "Follow document control to confirm the approved requirement"
+            ],
+            "answerIndex": 3,
+            "explanation": "The applicable approved requirement must be established."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l05",
+        "title": "Course 5 · Semester 2 · Lesson 5 — Manufacturing Process Review and Improvement",
+        "level": "B1+–B2",
+        "script": "A production team reviews a machining process after several parts require rework. The team studies the process sheet, tool condition, cutting parameters and inspection results. The data shows that dimensional variation increases near the end of a tool's service interval. The team proposes a controlled trial with a revised tool-change point. During the trial, operators record cycle time, tool use and measured dimensions. The team compares results with the original process and checks that quality improves without creating a safety or production problem.",
+        "questions": [
+          {
+            "prompt": "Why does the team review the process?",
+            "options": [
+              "Several parts require rework",
+              "Workshop posters",
+              "Shift starts earlier",
+              "Supplier changed its logo"
+            ],
+            "answerIndex": 0,
+            "explanation": "Rework is the reason for the review."
+          },
+          {
+            "prompt": "What does the data suggest?",
+            "options": [
+              "Drawing is missing",
+              "Variation increases near the end of tool life",
+              "Operator forgot task number",
+              "Machine is always off"
+            ],
+            "answerIndex": 1,
+            "explanation": "Variation rises near the end of the tool interval."
+          },
+          {
+            "prompt": "What is proposed?",
+            "options": [
+              "Unapproved production change",
+              "Removal of inspections",
+              "Controlled trial of a revised tool-change point",
+              "Product advertisement"
+            ],
+            "answerIndex": 2,
+            "explanation": "The proposal is tested in a controlled trial."
+          },
+          {
+            "prompt": "What should the team compare?",
+            "options": [
+              "Operator opinions only",
+              "Trial duration only",
+              "Tool price only",
+              "Trial results with the original process"
+            ],
+            "answerIndex": 3,
+            "explanation": "The trial is compared with the baseline."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l06",
+        "title": "Course 5 · Semester 2 · Lesson 6 — CNC Program Review and Revision Communication",
+        "level": "B1+–B2",
+        "script": "Before a CNC program is released for a new batch, a programmer checks the drawing revision, workpiece zero point, tool list and program comments. A second qualified person reviews the changes and confirms that simulation results match the intended operation. The revision note identifies changed blocks and explains why the change was made. The program is not sent to the machine until required approval and setup checks are complete. If an unexpected result appears during a controlled test, the operator stops and reports it.",
+        "questions": [
+          {
+            "prompt": "What does the programmer check?",
+            "options": [
+              "Drawing revision, zero point, tools and comments",
+              "Machine colour",
+              "Staff timetable",
+              "Shipping invoice"
+            ],
+            "answerIndex": 0,
+            "explanation": "These are the listed program review checks."
+          },
+          {
+            "prompt": "Who reviews the changes?",
+            "options": [
+              "Visitor",
+              "Second qualified person",
+              "Marketing team",
+              "Untrained person"
+            ],
+            "answerIndex": 1,
+            "explanation": "A second qualified person performs the review."
+          },
+          {
+            "prompt": "When can the program be sent to the machine?",
+            "options": [
+              "As soon as saved",
+              "Before simulation",
+              "After approval and setup checks",
+              "When file name changes"
+            ],
+            "answerIndex": 2,
+            "explanation": "Approval and setup checks must be complete."
+          },
+          {
+            "prompt": "What should the operator do after an unexpected result?",
+            "options": [
+              "Continue faster",
+              "Delete report",
+              "Ignore it",
+              "Stop and report it"
+            ],
+            "answerIndex": 3,
+            "explanation": "The operator stops and reports unexpected results."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l07",
+        "title": "Course 5 · Semester 2 · Lesson 7 — Electrical System Fault-isolation Case Discussion",
+        "level": "B1+–B2",
+        "script": "A team investigates an intermittent loss of power to a control panel. The fault does not occur during every test, so the team records the conditions each time it appears. They check approved wiring information, connector security and relevant protection devices. A technician compares voltage readings at defined test points and notes the time of each measurement. The team avoids changing several items at once because that would make the result difficult to interpret. After the cause is confirmed through the approved process, the repair and functional test are recorded.",
+        "questions": [
+          {
+            "prompt": "What makes the fault difficult to investigate?",
+            "options": [
+              "It is intermittent",
+              "Panel is new",
+              "Report is short",
+              "Equipment has no label"
+            ],
+            "answerIndex": 0,
+            "explanation": "The fault does not occur during every test."
+          },
+          {
+            "prompt": "What does the team record?",
+            "options": [
+              "Repair cost only",
+              "Conditions when the fault appears",
+              "Staff names only",
+              "Weather"
+            ],
+            "answerIndex": 1,
+            "explanation": "Recording conditions helps identify a pattern."
+          },
+          {
+            "prompt": "Why avoid changing several items at once?",
+            "options": [
+              "It takes more paper",
+              "It makes machine quieter",
+              "It makes results difficult to interpret",
+              "It removes testing"
+            ],
+            "answerIndex": 2,
+            "explanation": "Multiple changes obscure cause and effect."
+          },
+          {
+            "prompt": "What is recorded after repair?",
+            "options": [
+              "Verbal promise",
+              "New timetable",
+              "Photograph only",
+              "Required functional test"
+            ],
+            "answerIndex": 3,
+            "explanation": "The repair is followed by a recorded test."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l08",
+        "title": "Course 5 · Semester 2 · Lesson 8 — Software Test Results and Data-processing Reports",
+        "level": "B1+–B2",
+        "script": "A software team tests a data-processing tool used to organise inspection records. The test plan defines input data, expected output and acceptance criteria. Testers include normal records, missing fields and values outside the permitted range. The results table shows each test case, actual output and whether it passed. When a test fails, the team saves the error message and steps needed to reproduce it. The report distinguishes a software defect from incorrect input data and identifies the software version used.",
+        "questions": [
+          {
+            "prompt": "What does the test plan define?",
+            "options": [
+              "Input, expected output and acceptance criteria",
+              "Software logo",
+              "Holiday dates",
+              "Computer room"
+            ],
+            "answerIndex": 0,
+            "explanation": "The plan sets out inputs, expected output and criteria."
+          },
+          {
+            "prompt": "Which test data is included?",
+            "options": [
+              "Perfect records only",
+              "Normal, missing and out-of-range data",
+              "Blank files only",
+              "Old passwords"
+            ],
+            "answerIndex": 1,
+            "explanation": "The team tests normal and invalid cases."
+          },
+          {
+            "prompt": "What is saved when a test fails?",
+            "options": [
+              "New product name",
+              "Staff photograph",
+              "Error message and reproduction steps",
+              "Lunch menu"
+            ],
+            "answerIndex": 2,
+            "explanation": "The error and reproduction steps are retained."
+          },
+          {
+            "prompt": "What version should the report identify?",
+            "options": [
+              "Operating system colour",
+              "Latest internet version",
+              "Unknown version",
+              "Software version used for testing"
+            ],
+            "answerIndex": 3,
+            "explanation": "The tested software version must be traceable."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l09",
+        "title": "Course 5 · Semester 2 · Lesson 9 — Aircraft Component Materials and Inspection Records",
+        "level": "B1+–B2",
+        "script": "An inspection team receives a batch of aircraft brackets. The records identify the material specification, batch number and supplier certificate. Inspectors check part markings and compare documents with purchase requirements. They sample selected dimensions and examine the surface for visible damage. If a certificate is missing or a marking does not match, the batch is placed on hold until the discrepancy is resolved. The inspection record links each finding to the batch and the person who performed the check.",
+        "questions": [
+          {
+            "prompt": "What do the records identify?",
+            "options": [
+              "Material specification, batch number and certificate",
+              "Delivery driver's name",
+              "Aircraft route",
+              "Workshop temperature"
+            ],
+            "answerIndex": 0,
+            "explanation": "These records establish material and batch traceability."
+          },
+          {
+            "prompt": "What do inspectors compare documents with?",
+            "options": [
+              "Staff rota",
+              "Purchase requirements",
+              "Passenger list",
+              "Marketing brochure"
+            ],
+            "answerIndex": 1,
+            "explanation": "The documents must meet purchase requirements."
+          },
+          {
+            "prompt": "What happens if a certificate is missing?",
+            "options": [
+              "Install immediately",
+              "Change marking",
+              "Place batch on hold",
+              "Discard records"
+            ],
+            "answerIndex": 2,
+            "explanation": "The discrepancy must be resolved before release."
+          },
+          {
+            "prompt": "What does the inspection record link?",
+            "options": [
+              "Supplier logo",
+              "Date only",
+              "Part colour",
+              "Findings, batch and inspector"
+            ],
+            "answerIndex": 3,
+            "explanation": "Traceability includes the batch and person who checked it."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l10",
+        "title": "Course 5 · Semester 2 · Lesson 10 — Maintenance Planning, Reliability and Service Records",
+        "level": "B1+–B2",
+        "script": "A maintenance planner reviews service records to prepare the next inspection schedule. The planner considers operating hours, calendar limits, previous findings and component reliability information. A recurring defect may require closer monitoring or a technical investigation. The schedule also considers qualified staff, approved tools and replacement parts. Changes are coordinated with operations so equipment is not released before required work is complete. After maintenance, the service record shows the work performed and the next due requirement.",
+        "questions": [
+          {
+            "prompt": "What information does the planner consider?",
+            "options": [
+              "Operating hours, calendar limits and previous findings",
+              "Aircraft colour",
+              "Lunch menu",
+              "Number of visitors"
+            ],
+            "answerIndex": 0,
+            "explanation": "These are key planning inputs."
+          },
+          {
+            "prompt": "What may a recurring defect require?",
+            "options": [
+              "No action",
+              "Closer monitoring or technical investigation",
+              "New logo",
+              "Weather report"
+            ],
+            "answerIndex": 1,
+            "explanation": "Recurring defects need investigation or monitoring."
+          },
+          {
+            "prompt": "Why coordinate with operations?",
+            "options": [
+              "Change equipment type",
+              "Avoid recording work",
+              "Prevent release before required work is complete",
+              "Reduce staff"
+            ],
+            "answerIndex": 2,
+            "explanation": "Coordination prevents premature release."
+          },
+          {
+            "prompt": "What is updated after maintenance?",
+            "options": [
+              "Holiday list",
+              "Supplier advertisement",
+              "Meeting room booking",
+              "Service record"
+            ],
+            "answerIndex": 3,
+            "explanation": "The service record captures completed work and next due requirements."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l11",
+        "title": "Course 5 · Semester 2 · Lesson 11 — Integrated Listening: Technical Briefings and Handover",
+        "level": "B1+–B2",
+        "script": "During a morning briefing, a supervisor explains that an inspection found a loose support bracket on a test rig. The rig is isolated and labelled while the team checks the approved repair instruction. The mechanical technician will inspect the fasteners, and the quality inspector will verify the final condition. The electrical team must not reconnect the rig until the inspection is signed off. At shift change, the supervisor repeats equipment status, completed work and the remaining approval step. The incoming team reads back the restriction.",
+        "questions": [
+          {
+            "prompt": "What was found on the test rig?",
+            "options": [
+              "A loose support bracket",
+              "Missing software licence",
+              "Damaged window",
+              "Incorrect timetable"
+            ],
+            "answerIndex": 0,
+            "explanation": "The briefing identifies a loose bracket."
+          },
+          {
+            "prompt": "What happens to the rig?",
+            "options": [
+              "It is returned to service",
+              "It is isolated and labelled",
+              "It is moved without records",
+              "It is connected immediately"
+            ],
+            "answerIndex": 1,
+            "explanation": "The rig remains isolated during the check."
+          },
+          {
+            "prompt": "Who verifies the final condition?",
+            "options": [
+              "Stores assistant",
+              "Software developer",
+              "Quality inspector",
+              "Delivery driver"
+            ],
+            "answerIndex": 2,
+            "explanation": "The quality inspector verifies the condition."
+          },
+          {
+            "prompt": "Why does the incoming team read back the restriction?",
+            "options": [
+              "To shorten meeting",
+              "To change the task",
+              "To avoid signing the record",
+              "To confirm understanding"
+            ],
+            "answerIndex": 3,
+            "explanation": "Read-back confirms the restriction is understood."
+          }
+        ]
+      },
+      {
+        "id": "en-c05-s02-l12",
+        "title": "Course 5 · Semester 2 · Lesson 12 — Capstone Case: Presenting an Engineering Solution",
+        "level": "B1+–B2",
+        "script": "A student team is asked to reduce repeated measurement errors in a workshop. They review the inspection method, interview operators and compare several weeks of measurement records. The evidence suggests that different teams use slightly different measurement procedures. The students propose a standard checklist, a short training session and a periodic comparison of measuring instruments. Their presentation explains the problem, evidence, proposed actions and risks. They recommend a pilot with clear success criteria before the method is adopted across the workshop.",
+        "questions": [
+          {
+            "prompt": "What problem does the team investigate?",
+            "options": [
+              "Repeated measurement errors",
+              "Shortage of slides",
+              "New aircraft route",
+              "Missing photograph"
+            ],
+            "answerIndex": 0,
+            "explanation": "The case focuses on repeated measurement errors."
+          },
+          {
+            "prompt": "What does the evidence suggest?",
+            "options": [
+              "Machines are always broken",
+              "Teams use different measurement procedures",
+              "Drawings have no dimensions",
+              "Workshop has no operators"
+            ],
+            "answerIndex": 1,
+            "explanation": "Different teams follow slightly different methods."
+          },
+          {
+            "prompt": "What does the team propose?",
+            "options": [
+              "Remove all checks",
+              "Replace every instrument immediately",
+              "Checklist, training and instrument comparison",
+              "Stop recording"
+            ],
+            "answerIndex": 2,
+            "explanation": "The proposal combines standardisation and training."
+          },
+          {
+            "prompt": "What is recommended before wider adoption?",
+            "options": [
+              "Immediate untested rollout",
+              "Change without approval",
+              "Delete baseline records",
+              "Pilot with clear success criteria"
+            ],
+            "answerIndex": 3,
+            "explanation": "The solution should be piloted before wider use."
+          }
+        ]
+      }
+    ],
   ];
 
   function el(tag, cls, text) {
