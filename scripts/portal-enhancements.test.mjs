@@ -1281,7 +1281,7 @@ test("English exam tab shows only the two final tracks while CEFR lab stays sepa
   assert.match(read("english-vpr-exams.js"), /technical:\s*\{/);
   assert.match(read("laboratory.js"), /renderEnglishTestsPage\("lab"\)/);
   assert.match(read("index.html"), /english-proficiency-lab\.js\?v=5/);
-  assert.match(read("service-worker.js"), /portal-cache-v350/);
+  assert.match(read("service-worker.js"), /portal-cache-v351/);
 });
 
 
