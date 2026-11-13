@@ -108,11 +108,12 @@ try {
     "Sample own-game board must be saved with all nine questions");
 
   await page.evaluate(() => {
-    window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
-    window.state.activeCourseId = "07.01";
+    window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
+      student: null, activeCourseId: "07.01", results: {}, xp: 0 };
+    window.customContent = window.customContent || { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
     window.renderFlashcardEditorPage();
   });
-  await page.waitForSelector("#fcTopic", { state: "attached" });
+  await page.waitForSelector("#fcTopic", { state: "attached", timeout: 10000 });
   await page.waitForFunction(() => document.getElementById("fcTopic")?.options.length > 0);
   await page.locator("#fcLoadExample").click();
   await page.waitForFunction(() => document.getElementById("fcDrafts")?.innerText.includes("G00"));
