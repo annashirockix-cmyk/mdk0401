@@ -169,7 +169,7 @@ test("student custom-content delivery enforces publication switches and strips a
 test("custom test grading reads the protected answer key from Sheets, not the browser payload", () => {
  const server = read("Code.gs");
  const start = server.indexOf("function submitCustomTest_(data)");
- const end = server.indexOf("\\nfunction getGameAnswer_", start);
+ const end = server.indexOf("\nfunction getGameAnswer_", start);
  assert.ok(start >= 0 && end > start);
  const submit = server.slice(start, end);
  assert.match(submit, /const values = content_\(\)\.getDataRange\(\)\.getValues\(\)/);
