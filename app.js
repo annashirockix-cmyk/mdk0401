@@ -721,6 +721,41 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
     }
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
     
+    function getEmbeddedEnglishListening(lecture) {
+        var track = topic.sourceTrack || course.sourceTrack ||
+            (courseId === "ENB" ? "basic" : (courseId === "ENT" ? "technical" : ""));
+        var map = {
+            basic: {
+                "b-unit1": [1, 1, 0],
+                "b-unit2": [1, 2, 0],
+                "b-unit3": [2, 1, 0],
+                "b-unit4": [2, 2, 0],
+                "b-unit6": [2, 2, 3]
+            },
+            technical: {
+                "t-unit1": [3, 1, 0],
+                "t-unit2": [3, 1, 3],
+                "t-unit3": [3, 2, 0],
+                "t-unit12": [3, 2, 3],
+                "t-unit4": [4, 1, 0],
+                "t-unit5": [4, 1, 2],
+                "t-unit6": [4, 1, 4],
+                "t-unit7": [4, 1, 6],
+                "t-unit8": [4, 2, 0],
+                "t-unit9": [4, 2, 2],
+                "t-unit10": [4, 2, 5],
+                "t-unit11": [5, 1, 0]
+            }
+        };
+        var route = map[track] && map[track][topic.id];
+        var match = String(lecture && lecture.code || "").match(/\\.(\\d+)$/);
+        if (!route || !match) return null;
+        var lessonNumber = Number(match[1]) + route[2];
+        if (!Number.isFinite(lessonNumber) || lessonNumber < 1 || lessonNumber > 12) return null;
+        var pad = String(lessonNumber).padStart(2, "0");
+        return "en-c" + String(route[0]).padStart(2, "0") + "-s" + String(route[1]).padStart(2, "0") + "-l" + pad;
+    }
+
     document.getElementById("crumbs").textContent = topic.code + " " + topic.title;
     app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
     app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
@@ -741,7 +776,44 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         if (tabName === 'lectures') {
             if (topic.lectures && topic.lectures.length) {
                 topic.lectures.forEach(lec => {
-                    contentArea.innerHTML += `<details class="lec-accordion" open style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;"><summary style="padding:15px; font-weight:bold; cursor:pointer;">${lec.code} ${lec.title}</summary><div class="lec-content" style="padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;">${lec.content}</div></details>`;
+                    var details = document.createElement("details");
+                    details.className = "lec-accordion";
+                    details.open = true;
+                    details.style.cssText = "margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;";
+                    var summary = document.createElement("summary");
+                    summary.style.cssText = "padding:15px; font-weight:bold; cursor:pointer;";
+                    summary.textContent = String(lec.code || "") + " " + String(lec.title || "");
+                    details.appendChild(summary);
+                    var lectureBody = document.createElement("div");
+                    lectureBody.className = "lec-content";
+                    lectureBody.style.cssText = "padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;";
+                    lectureBody.innerHTML = lec.content || "";
+                    details.appendChild(lectureBody);
+
+                    var listeningId = getEmbeddedEnglishListening(lec);
+                    var listening = listeningId && window.EnglishListeningCatalogue &&
+                        window.EnglishListeningCatalogue.getById
+                        ? window.EnglishListeningCatalogue.getById(listeningId) : null;
+                    if (listening && window.EnglishListeningLesson && window.EnglishListeningLesson.render) {
+                        var listeningSection = document.createElement("section");
+                        listeningSection.className = "english-listening-inline";
+                        listeningSection.style.cssText = "margin:16px 0 4px; padding:16px; border:1px solid var(--border); border-radius:10px; background:var(--card-soft);";
+                        var listeningTitle = document.createElement("h4");
+                        listeningTitle.textContent = "🎧 Аудирование · " + listening.title;
+                        listeningSection.appendChild(listeningTitle);
+                        var listeningMount = document.createElement("div");
+                        listeningSection.appendChild(listeningMount);
+                        details.appendChild(listeningSection);
+                        window.EnglishListeningLesson.render(listeningMount, {
+                            mode: "practice",
+                            script: listening.script,
+                            lang: "en-GB",
+                            repeatCount: 2,
+                            rate: 0.88,
+                            questions: listening.questions
+                        });
+                    }
+                    contentArea.appendChild(details);
                 });
             } else {
                 contentArea.innerHTML += "<p>Текстовых лекций нет.</p>";
