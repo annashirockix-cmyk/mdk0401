@@ -1430,13 +1430,16 @@ function resolveAttemptRequestNotifications_(studentEmail,courseId,testId) {
 
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
-  const teacher=editor_(data,courseId);
-  if(!testId||!studentEmail) throw new Error("Выберите тест и студента.");
-  const student=userByEmail_(studentEmail);
-  if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
+  if(!courseId||!testId||!studentEmail) throw new Error("Выберите дисциплину, тест и студента.");
   const extra=Math.max(0,Math.min(20,Math.floor(Number(data.extraAttempts)||0)));
   const lock=LockService.getScriptLock();lock.waitLock(10000);
+  let teacher,student;
   try {
+    // Re-check both the teacher's current course permission and the student's
+    // enrollment after acquiring the same lock used for the settings write.
+    teacher=editor_(data,courseId);
+    student=userByEmail_(studentEmail);
+    if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
     writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email,true);
     appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra});
     resolveAttemptRequestNotifications_(studentEmail,courseId,testId);
