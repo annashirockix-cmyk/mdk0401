@@ -6842,8 +6842,8 @@
 
   // Sort all 120 activities by course, semester and lesson.
   activities.sort(function (a, b) {
-    var x = a.id.match(/en-c(\\d+)-s(\\d+)-l(\\d+)/);
-    var y = b.id.match(/en-c(\\d+)-s(\\d+)-l(\\d+)/);
+    var x = a.id.match(/en-c(\d+)-s(\d+)-l(\d+)/);
+    var y = b.id.match(/en-c(\d+)-s(\d+)-l(\d+)/);
     return Number(x[1]) - Number(y[1]) || Number(x[2]) - Number(y[2]) || Number(x[3]) - Number(y[3]);
   });
 
