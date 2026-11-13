@@ -194,3 +194,10 @@ Suggested metadata:
 - Course 5, semester 1 lessons 7–10 are drafted in `docs/english-technical-c05-s01-lessons-07-10-draft.md` (document revisions and configuration control; shift handover and technical correspondence; teamwork across engineering specialisms; interpreting drawings, tables and trend charts). The package includes four full lessons, five original listening scripts including an integrated checkpoint, vocabulary, reading, language focus, four-specialism tasks, self-checks, keys and a semester checkpoint. All examples and chart values are fictional classroom data; no operational aircraft instructions or real acceptance criteria are provided.
 
 - Course 5, semester 1 lessons 11–12 are drafted in `docs/english-technical-c05-s01-lessons-11-12-draft.md` (risk assessment and safety reporting; integrated technical briefing from task to report). This closes the 12-topic semester draft map: existing lessons 1–2 plus new draft lessons 3–12. The file includes two full lessons, original listening scripts, four-specialism tasks, keys, an integrated semester checkpoint and a 20-point rubric. Risk cases are fictional and do not provide real risk ratings or safety instructions; the pack remains subject to syllabus/textbook/teaching-hours review.
+
+
+## Browser-read listening
+
+Lesson listening uses browser text-to-speech by default, matching the approach already present in the English VPR exam. The reusable `english-listening-tts.js` helper is loaded from `index.html` and exposes `window.EnglishListeningTTS.render(container, {text, lang, repeatCount, rate})`. It provides play/pause/resume/stop, replay, playback rate and available English voice selection. The helper does not contain transcripts or answer keys. Lesson renderers must keep transcript reveal separate and follow the practice-mode/exam-mode rules in `docs/english-listening-lesson-standard-v1.md`.
+
+This is a runtime helper only. It does not automatically convert Markdown drafts into portal lessons; the lesson content schema and renderer integration remain a separate step. The working Basic and Technical VPR exams and their server-side banks are not modified.
