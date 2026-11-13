@@ -722,6 +722,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
     
     function getEmbeddedEnglishListening(lecture) {
+        if (lecture && typeof lecture.listeningId === "string" && /^en-c\d{2}-s\d{2}-l\d{2}$/.test(lecture.listeningId)) return lecture.listeningId;
         var track = topic.sourceTrack || course.sourceTrack ||
             (courseId === "ENB" ? "basic" : (courseId === "ENT" ? "technical" : ""));
         var map = {
