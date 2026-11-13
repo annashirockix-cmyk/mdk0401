@@ -2786,7 +2786,12 @@ function importEnglishSemesterTests_(data) {
 function sanitizeEnglishSemesterTests_(tests) {
   return (tests || []).map(function(test) {
     const safe = JSON.parse(JSON.stringify(test));
-    (safe.questions || []).forEach(function(question) { delete question.correct; delete question.answer; delete question.correctAnswer; delete question.explanation; delete question.rationale; });
+    safe.questions = (safe.questions || []).map(function(question) {
+      return {
+        q: String(question && question.q || ""),
+        options: Array.isArray(question && question.options) ? question.options.slice() : []
+      };
+    });
     return safe;
   });
 }
