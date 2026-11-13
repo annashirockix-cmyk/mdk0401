@@ -281,3 +281,8 @@ The catalogue now includes 96 unique activities: Course 2 (12 + 12), Course 3 (1
 ### Verified five-year browser listening coverage — 120 activities
 
 The listening catalogue now contains 120 unique activities across all five courses and ten semesters (12 per semester). Course 1 is A1–A2, Course 2 B1–B1+, and Courses 3–5 are Technical English/ESP at B1+–B2 with aviation and four professional pathways represented. Each activity includes a browser-readable script and comprehension questions. This completes the catalogue coverage only; direct embedding in each of the 120 lecture pages and real-browser/device verification remain outstanding. The catalogue is practice-only and does not write grades or protected assessment attempts.
+
+
+### Inline listening integration status
+
+The topic-page renderer now mounts the matching listening practice inside each existing English lecture accordion, using source topic IDs and lecture codes. This maps the 45 existing lecture objects (16 Basic + 29 Technical) to their corresponding listening activities. The remaining 75 new lecture drafts are not yet imported into the course data objects, so their activities remain accessible through the standalone Listening Lab rather than inline in those draft lecture pages. Real-browser playback/layout testing remains pending.
