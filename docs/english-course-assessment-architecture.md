@@ -97,6 +97,7 @@ Do not fill missing lectures with generic duplicated text. Keep the current lect
 
 - Course 2, semester 2 lessons 1–3 are expanded in `docs/english-basic-c02-s02-lessons-01-03-enrichment-draft.md`. The original source lessons (Basic 4.1–4.3) remain unchanged; this file adds guided practice, listening scripts, formative checks and teacher keys.
 - Course 2, semester 2 lessons 4–7 are expanded in `docs/english-basic-c02-s02-lessons-04-07-enrichment-draft.md`. The existing Basic 6.1–6.4 source lessons remain unchanged; enrichment adds guided reading, grammar, listening scripts, speaking/writing tasks and teacher keys.
+- Course 2, semester 2 new lessons 8–12 are drafted in `docs/english-basic-c02-s02-lessons-08-12-draft.md` (passive voice; coherent paragraphs; climate/resources; science and technology; opinion essay and presentation). These are draft teaching materials, not yet imported into the portal.
 
 ## 5. Assessment banks
 
