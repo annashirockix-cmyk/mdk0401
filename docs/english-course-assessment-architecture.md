@@ -1,6 +1,6 @@
 # English courses and assessment architecture
 
-Status: design specification only. This document does not change the current portal runtime, Google Sheets, Apps Script deployment, or the working Basic/Technical VPR exams.
+Status: design specification plus partial portal runtime implementation. The five-year English runtime, inline listening integration, Service Worker precache and regression checks are now updated in this PR. Google Sheets, Apps Script deployment and the working Basic/Technical VPR banks are not changed by this runtime stage.
 
 ## 1. Target course map
 
@@ -25,7 +25,7 @@ A separate working map is maintained in `docs/english-five-year-120-lecture-map-
 - Planned additions: 32 Basic + 43 Technical = 75 new lectures.
 - Courses 1–2 are Basic English; courses 3–5 are Technical English.
 - The allocation is provisional and must be checked against the approved English work programme, semester hours, and the exact Belova textbook edition before it is treated as an official syllabus.
-- The 75 planned lectures are not yet authored or imported. All 12 first-semester Basic English lesson drafts are in three files: `docs/english-basic-c01-s01-lessons-01-03-draft.md` contains lessons l04–l06; `docs/english-basic-c01-s01-lessons-04-06-draft.md` contains l07–l09; `docs/english-basic-c01-s01-lessons-07-09-draft.md` contains l10–l12. The filename ranges reflect drafting batches, while the lesson IDs are authoritative. The first three new semester-two lessons (l04–l06) are in `docs/english-basic-c01-s02-lessons-04-06-draft.md`. Course 2, semester 1 lessons l04–l06, l07–l09 and l10–l12 are in `docs/english-basic-c02-s01-lessons-04-06-draft.md`, `docs/english-basic-c02-s01-lessons-07-09-draft.md` and `docs/english-basic-c02-s01-lessons-10-12-draft.md` respectively. The first three new lessons for Course 1, semester 2 (l04–l06) are in `docs/english-basic-c01-s02-lessons-04-06-draft.md`. All drafts require review against the Belova textbook and approved work programme. All drafts require review against the Belova textbook and the approved work programme. The map and drafts do not change runtime or the current VPR exams.
+- All 75 new lectures have draft teaching materials and are connected to the five-year runtime in ENB/ENT, grouped by course and semester. The filename ranges in the Course 1 / Semester 1 Basic English batch files reflect drafting batches; lesson IDs in headings are authoritative. The full file-to-ID inventory is maintained in `docs/english-five-year-lesson-draft-index-v1.md`. All drafts still require review against the exact Belova textbook edition and approved work programme before formal approval or student publication.
 
 ## 3. Existing content inventory
 
@@ -97,7 +97,7 @@ Do not fill missing lectures with generic duplicated text. Keep the current lect
 
 - Course 2, semester 2 lessons 1–3 are expanded in `docs/english-basic-c02-s02-lessons-01-03-enrichment-draft.md`. The original source lessons (Basic 4.1–4.3) remain unchanged; this file adds guided practice, listening scripts, formative checks and teacher keys.
 - Course 2, semester 2 lessons 4–7 are expanded in `docs/english-basic-c02-s02-lessons-04-07-enrichment-draft.md`. The existing Basic 6.1–6.4 source lessons remain unchanged; enrichment adds guided reading, grammar, listening scripts, speaking/writing tasks and teacher keys.
-- Course 2, semester 2 new lessons 8–12 are drafted in `docs/english-basic-c02-s02-lessons-08-12-draft.md` (passive voice; coherent paragraphs; climate/resources; science and technology; opinion essay and presentation). These are draft teaching materials, not yet imported into the portal.
+- Course 2, semester 2 new lessons 8–12 are drafted in `docs/english-basic-c02-s02-lessons-08-12-draft.md` (passive voice; coherent paragraphs; climate/resources; science and technology; opinion essay and presentation). These are draft teaching materials connected to the ENB runtime; they remain subject to subject review and curriculum approval.
 
 - Course 3, semester 1 lessons 6–8 (aviation industry, aircraft structure and materials) are drafted in `docs/english-technical-c03-s01-lessons-06-08-draft.md`. The existing Technical 1.1–1.3 and 2.1–2.2 lessons remain unchanged.
 - Course 3, semester 1 lessons 9–12 are drafted in `docs/english-technical-c03-s01-lessons-09-12-draft.md` (manufacturing workflow and process sheets; dimensions and measurement; technical word formation and abbreviations; technical descriptions and specification tables). All examples and numerical values are explicitly classroom-only.
@@ -203,9 +203,9 @@ Lesson listening uses browser text-to-speech by default, matching the approach a
 This is a runtime helper only. It does not automatically convert Markdown drafts into portal lessons; the lesson content schema and renderer integration remain a separate step. The working Basic and Technical VPR exams and their server-side banks are not modified.
 
 
-- Course 5, semester 2 lessons 1–4 (technical presentations; structured technical reports; professional interview/oral examination; specifications, procedures and standards) are drafted in `docs/english-technical-c05-s02-lessons-01-04-draft.md`. The package contains browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a semester checkpoint. It remains a draft and is not imported into the portal.
+- Course 5, semester 2 lessons 1–4 (technical presentations; structured technical reports; professional interview/oral examination; specifications, procedures and standards) are drafted in `docs/english-technical-c05-s02-lessons-01-04-draft.md`. The package contains browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a semester checkpoint. It is connected to the ENT runtime as draft content and is not yet formally approved.
 - Course 5, semester 2 lessons 5–8 (manufacturing process review; CNC revision communication; electrical case discussion; software test reports) are drafted in `docs/english-technical-c05-s02-lessons-05-08-draft.md`. The package contains four browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and an integrated checkpoint. It remains a draft and is not imported into the portal.
-- Course 5, semester 2 lessons 9–12 are drafted in `docs/english-technical-c05-s02-lessons-09-12-draft.md`: aircraft component materials and inspection records; maintenance planning and reliability; integrated multi-speaker handover listening; and an evidence-based capstone presentation/report. The pack closes the 12-lesson draft semester and includes browser-readable scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a 20-point formative rubric. All identifiers and datasets are fictional. The pack is not imported into the portal and remains subject to syllabus/textbook/teaching-hours review.
+- Course 5, semester 2 lessons 9–12 are drafted in `docs/english-technical-c05-s02-lessons-09-12-draft.md`: aircraft component materials and inspection records; maintenance planning and reliability; integrated multi-speaker handover listening; and an evidence-based capstone presentation/report. The pack closes the 12-lesson draft semester and includes browser-readable scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a 20-point formative rubric. All identifiers and datasets are fictional. It is connected to the ENT runtime as draft content and remains subject to syllabus/textbook/teaching-hours review.
 
 
 ## Browser listening lesson component
@@ -214,7 +214,7 @@ This is a runtime helper only. It does not automatically convert Markdown drafts
 - Practice mode checks lesson-level practice keys and reveals the transcript after answers are submitted.
 - Assessment mode rejects client-side answer keys, submits selected indices through an optional host callback and keeps the transcript hidden until the host calls `closeAssessment()` after formal closure. Server-side grading and attempt persistence remain the host assessment engine's responsibility.
 - Integration contract and usage example: `docs/english-listening-lesson-integration-v1.md`.
-- Important boundary: the component is loaded and reusable, but the Markdown lecture drafts are not yet converted to portal lesson records and no course lesson catalogue/renderer route is wired to them. This is not a claim that all drafted listening tasks are already playable inside the lecture pages. The existing VPR engine/banks are untouched.
+- Current boundary: the 75 new draft lectures are converted to runtime lecture records and the topic-page renderer mounts the matching practice listening activity by explicit `listeningId`. The listening component remains practice-only; it does not submit grades or create protected exam attempts. The existing VPR engine/banks are untouched.
 
 
 ## Browser listening lab — playable practice catalogue
@@ -285,4 +285,15 @@ The listening catalogue now contains 120 unique activities across all five cours
 
 ### Inline listening integration status
 
-The topic-page renderer now mounts the matching listening practice inside each existing English lecture accordion, using source topic IDs and lecture codes. This maps the 45 existing lecture objects (16 Basic + 29 Technical) to their corresponding listening activities. The remaining 75 new lecture drafts are not yet imported into the course data objects, so their activities remain accessible through the standalone Listening Lab rather than inline in those draft lecture pages. Real-browser playback/layout testing remains pending.
+The topic-page renderer now mounts matching listening practice inside lecture accordions. The five-year runtime preserves the 45 existing lecture objects and adds 75 new draft lecture records (48 Basic + 72 Technical total). Every new lecture has an explicit listening ID; all 75 IDs resolve in the 120-entry catalogue. Browser speech uses Speech Synthesis. Runtime and listening files are precached by `portal-cache-v355`; the runtime URL is cache-busted to `v=2`. Automated regression coverage was added, but GitHub Actions has not yet returned a run for the current PR head, so real-browser playback/layout verification remains pending.
+
+
+## Current verified implementation status — 2026-11-13
+
+- Runtime simulation from the repository sources preserves the original 45 lectures and produces 120 total lecture records: 48 Basic and 72 Technical.
+- All 75 IDs in the five-year map are present exactly once in the runtime, and each resolves to a listening activity in the 120-entry catalogue.
+- The 75 new lectures are grouped into course/semester sections. Browser listening is embedded in each lecture through the existing topic renderer and Speech Synthesis component.
+- A regression test was added at `scripts/english-five-year-runtime.test.mjs`; the CI workflow now syntax-checks the runtime/listening modules and runs that test.
+- The Service Worker precaches the runtime and listening modules and uses `portal-cache-v355`; the runtime script URL uses `v=2`.
+- This is runtime integration of draft materials, not formal curriculum approval or deployment verification. PR #125 remains open and Draft; no GitHub Actions run or status check has yet been returned for its current head.
+- Semester assessment is a separate outstanding task. The existing `english-assessment-data.js` is not loaded by `index.html`; its legacy Basic tests have 20 questions each, while Technical is currently cloned from Basic. The seed helper does not supply the `correct` indices required by server validation. Do not expose/import this client-side seed as a protected graded bank until the assessment content and server-only answer-key path are corrected.
