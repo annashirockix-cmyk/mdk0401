@@ -4387,5 +4387,11 @@
     });
   }
 
-  window.EnglishListeningCatalogue = { render: render, count: activities.length };
+  window.EnglishListeningCatalogue = {
+    render: render,
+    count: activities.length,
+    getById: function (id) {
+      return activities.find(function (activity) { return activity.id === id; }) || null;
+    }
+  };
 })();
