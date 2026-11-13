@@ -376,14 +376,15 @@
       return;
     }
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a>' +
-      '<section class="hero"><h1>English Listening Lab</h1><p>Курс 5 · 2 семестра · 24 аудирования · браузерное озвучивание</p></section>' +
+      '<section class="hero"><h1>English Listening Lab</h1><p>Курсы 4–5 · 3 семестровых блока · 28 аудирований · браузерное озвучивание</p></section>' +
       '<section class="module"><p>Выберите аудирование. Браузер прочитает английский текст вслух. В тренировочном режиме после ответа доступны проверка и расшифровка. Это учебные упражнения, не экзаменационные попытки.</p></section>';
     var currentSemester = "";
     activities.forEach(function (activity) {
-      var semester = activity.id.indexOf("-s01-") >= 0 ? "Семестр 1" : "Семестр 2";
+      var courseParts = activity.id.match(/en-c(\\d+)-s(\\d+)-/);
+      var semester = courseParts ? "Курс " + Number(courseParts[1]) + " · Семестр " + Number(courseParts[2]) : "Аудирование";
       if (semester !== currentSemester) {
         currentSemester = semester;
-        app.appendChild(el("h2", "section-title", "Курс 5 · " + semester));
+        app.appendChild(el("h2", "section-title", semester));
       }
       var card = el("section", "module");
       card.appendChild(el("h2", "", activity.title));
