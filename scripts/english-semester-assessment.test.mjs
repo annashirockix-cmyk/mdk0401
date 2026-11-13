@@ -38,6 +38,9 @@ const fingerprintSource = extractFunction("englishSemesterBankFingerprint_");
 const validate = new Function(validateSource + "; return validateEnglishSemesterTests_;")();
 const sanitize = new Function(sanitizeSource + "; return sanitizeEnglishSemesterTests_;")();
 const fingerprint = new Function(fingerprintSource + "; return englishSemesterBankFingerprint_;")();
+const optionOrderSource = extractFunction("englishSemesterOptionOrder_");
+const optionOrder = new Function(optionOrderSource + "; return englishSemesterOptionOrder_;")();
+
 
 function validBank(track) {
   const prefix = track === "basic" ? "b_" : "t_";
@@ -109,4 +112,26 @@ test("Basic and Technical banks must not be exact copies", () => {
   distinctTechnical[0].questions[0].q = "Describe the purpose of a machine-tool safety interlock.";
   assert.equal(fingerprint(basic), fingerprint(technicalClone));
   assert.notEqual(fingerprint(basic), fingerprint(distinctTechnical));
+});
+
+
+test("semester answer options are shuffled deterministically per student and attempt", () => {
+  const first = optionOrder("student@example.test", "b_sem1", 1, 0, 4);
+  const repeated = optionOrder("student@example.test", "b_sem1", 1, 0, 4);
+  const nextAttempt = optionOrder("student@example.test", "b_sem1", 2, 0, 4);
+  const otherStudent = optionOrder("other@example.test", "b_sem1", 1, 0, 4);
+  assert.deepEqual(first, repeated, "the same attempt must retain its order after reload");
+  assert.deepEqual([...first].sort(), [0, 1, 2, 3], "every original option must appear once");
+  assert.notDeepEqual(first, nextAttempt, "a new attempt should get a new order");
+  assert.notDeepEqual(first, otherStudent, "different students should get independent orders");
+});
+
+test("shuffled display indices map back to the protected original answer key", () => {
+  const originalOptions = ["alpha", "bravo", "charlie", "delta"];
+  const correctOriginalIndex = 2;
+  const order = optionOrder("student@example.test", "t_sem3", 4, 7, 4);
+  const displayedOptions = order.map((index) => originalOptions[index]);
+  const displayedCorrectIndex = displayedOptions.indexOf(originalOptions[correctOriginalIndex]);
+  assert.equal(order[displayedCorrectIndex], correctOriginalIndex);
+  assert.equal(displayedOptions[displayedCorrectIndex], "charlie");
 });
