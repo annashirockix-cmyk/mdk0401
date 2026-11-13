@@ -1154,13 +1154,15 @@ test("MDK 07.01 includes topic-matched, attributed real photos for lathe and mil
   const sw = read("service-worker.js");
   assert.match(workbooks, /var cncWorkbookPhotos=\{/);
   assert.match(workbooks, /"t-1-1":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Wasino%20CNC%20lathe\.jpg\?width=1200"/);
-  assert.match(workbooks, /"t-1-2":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Lathe%20machinist\.jpg\?width=1200"/);
+  assert.match(workbooks, /"t-1-2":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Cnc%20lathe\.png\?width=1200"/);
   assert.match(workbooks, /"t-1-3":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/MoriSeikiLathe\.jpg\?width=1200"/);
   assert.match(workbooks, /"t-1-4":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Control%20panel%20shows%20buttons%20and%20knobs%20in%20a%20machine%20workshop\.jpg\?width=1200"/);
+  assert.match(workbooks, /Special:FilePath\/Machine%20guarding\.jpg\?width=1200/);
+  assert.match(workbooks, /Special:FilePath\/Professional%20drilling%20metal%20closeup\.jpg\?width=1000/);
   assert.match(workbooks, /"t-3-1":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/Man%20working%20at%20programmable%20cnc%20machine%20clseup\.jpg\?width=1200"/);
   assert.match(workbooks, /"t-5-3":\[\["https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/CNC%20milling%20machine\.jpg\?width=1200"/);
   assert.match(workbooks, /Mitch Barrie · CC BY-SA 2\.0/);
-  assert.match(workbooks, /Shadychiri · CC BY-SA 4\.0/);
+  assert.match(workbooks, /Somesomething243 · CC BY-SA 4\.0/);
   assert.match(workbooks, /Impressionmanufacturer · CC BY-SA 4\.0/);
   assert.match(workbooks, /Glenn McKechnie · CC BY-SA 3\.0/);
   assert.match(workbooks, /Shixart1985 · CC BY 2\.0/);
