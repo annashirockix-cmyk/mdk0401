@@ -1377,3 +1377,20 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
   const invalid = exam("basic"); invalid.tasks.pop();
   assert.throws(() => sandbox.validateEnglishVprExam_("basic", invalid), /структура экзамена/i);
 });
+
+
+test("English VPR and semester grades cannot be forged through the generic saveResult endpoint", () => {
+  const server = read("Code.gs");
+  const bank = read("EnglishVPR-Sheets.gs");
+  const start = server.indexOf("function saveResult_(data, serverVerifiedEnglishVpr)");
+  const end = server.indexOf("function saveTeacherResult_", start + 20);
+  assert.ok(start >= 0 && end > start);
+  const save = server.slice(start, end);
+  assert.ok(save.includes("/^english_vpr_/.test(testId)"));
+  assert.ok(save.includes("serverVerifiedEnglishVpr !== true"));
+  assert.ok(save.includes("/^english_semester_/.test(testId)"));
+  assert.ok(server.includes('case "saveresult": result = saveResult_(data); break;'));
+  assert.ok(bank.includes('finishedAt:new Date().toISOString()}, true);'),
+    "only the server-verified VPR submission may pass the internal trust flag");
+  assert.ok(!bank.includes("data.serverVerifiedEnglishVpr"));
+});
