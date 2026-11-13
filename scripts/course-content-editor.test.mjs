@@ -149,3 +149,47 @@ test("settings upserts serialize lookup and writes", () => {
  assert.ok(grant.indexOf("lock.waitLock(10000)") < grant.indexOf("student=userByEmail_(studentEmail)"),
   "teacher permission and student enrollment must be rechecked inside the lock");
 });
+
+
+test("student custom-content delivery enforces publication switches and strips answer keys", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function getCustomContent_(data)");
+ const end = server.indexOf("/* ---------- Private built-in question bank", start);
+ assert.ok(start >= 0 && end > start);
+ const delivery = server.slice(start, end);
+ assert.match(delivery, /const user = auth_\(data\)/);
+ assert.match(delivery, /user\.role !== "admin" && !hasCourseAccess_\(user, courseId\)/);
+ assert.match(delivery, /user\.role === "student" && !customContentIsOpen_\(/);
+ for (const key of ["correct", "answer", "correctAnswer", "answers", "explanation", "solution", "key"]) {
+  assert.ok(delivery.includes('"'+key+'"'), "student delivery must remove "+key);
+ }
+ assert.match(delivery, /return \{ success: true, data: list \}/);
+});
+
+test("custom test grading reads the protected answer key from Sheets, not the browser payload", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function submitCustomTest_(data)");
+ const end = server.indexOf("\\nfunction getGameAnswer_", start);
+ assert.ok(start >= 0 && end > start);
+ const submit = server.slice(start, end);
+ assert.match(submit, /const values = content_\(\)\.getDataRange\(\)\.getValues\(\)/);
+ assert.match(submit, /payload: JSON\.parse\(row\[5\] \|\| "\{\}"\)/);
+ assert.match(submit, /const questions = Array\.isArray\(record\.payload\.questions\)/);
+ assert.match(submit, /selected === Number\(q\.correct\)/);
+ assert.match(submit, /customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, record\.type\)/);
+ assert.doesNotMatch(submit, /data\.questions/);
+ assert.match(submit, /LockService\.getScriptLock\(\)/);
+});
+
+test("teacher publication controls call server-backed topic and material access APIs", () => {
+ const controls = read("teacher-controls.js");
+ const api = read("api.js");
+ const server = read("Code.gs");
+ assert.match(controls, /API\.setTopicAccess\(cid,btn\.dataset\.topic,open\)/);
+ assert.match(controls, /API\.setCustomContentAccess\(cid,id,open\)/);
+ assert.match(api, /setCustomContentAccess:function\(courseId,id,open\)/);
+ assert.match(api, /setTopicAccess:function\(courseId,topicId,open\)/);
+ assert.match(server, /function setCustomContentAccess_\(data\)/);
+ assert.match(server, /function setTopicAccess_\(data\)/);
+ assert.match(server, /function customContentIsOpen_\(courseId, contentId, topicId, contentType\)/);
+});
