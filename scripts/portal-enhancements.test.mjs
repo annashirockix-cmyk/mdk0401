@@ -1389,8 +1389,8 @@ test("English VPR and semester grades cannot be forged through the generic saveR
   assert.ok(save.includes("/^english_vpr_/.test(testId)"));
   assert.ok(save.includes("serverVerifiedEnglishVpr !== true"));
   assert.ok(save.includes("/^english_semester_/.test(testId)"));
-  assert.match(server, /case "saveresult": result = saveResult_\\(data\\); break;/);
-  assert.match(bank, /finishedAt:new Date\\(\\)\\.toISOString\\(\\)\\}, true\\)/,
+  assert.ok(server.includes('case "saveresult": result = saveResult_(data); break;'));
+  assert.ok(bank.includes('finishedAt:new Date().toISOString()}, true);'),
     "only the server-verified VPR submission may pass the internal trust flag");
-  assert.doesNotMatch(bank, /data\\.serverVerifiedEnglishVpr/);
+  assert.ok(!bank.includes("data.serverVerifiedEnglishVpr"));
 });
