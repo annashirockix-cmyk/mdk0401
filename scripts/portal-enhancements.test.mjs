@@ -1239,3 +1239,15 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.match(html, /app\.js\?v=53/);
   assert.match(sw, /portal-cache-v348/);
 });
+
+test("manual teacher grades appear in the teacher-grade section, not the automatic-tests section", () => {
+  const app = read("app.js");
+  const start = app.indexOf("window.renderStudentGradesPage = function()");
+  const end = app.indexOf("window.renderTeacherJournalPage = function()", start);
+  assert.ok(start >= 0 && end > start);
+  const page = app.slice(start, end);
+  assert.match(page, /id="serverManualGrades"/);
+  assert.match(page, /indexOf\("manual_"\)===0/);
+  assert.match(page, /indexOf\("manual_"\)!==0/);
+  assert.match(page, /id="serverAssessmentGrades"/);
+});
