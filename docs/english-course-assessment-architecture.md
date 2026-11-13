@@ -313,3 +313,10 @@ The server validator has been strengthened before the content is rebuilt:
 - student-facing sanitization uses a strict question whitelist (`q`, `options`), so answer keys, explanations and any unexpected hidden metadata cannot reach students.
 
 Regression tests cover valid banks, missing keys, duplicate IDs/questions/options, wrong semester order, track mismatch, removal of answer-key fields, and exact Basic/Technical clone detection. A separate guard asserts that the unreviewed legacy seed remains out of the production page while Basic/Technical are still cloned. The bank is **not ready for import**; do not publish it or claim that the 20 works are available to students until new Basic and genuinely distinct Technical questions have been authored, keyed, reviewed, imported and read back from the protected sheet.
+
+### Current assessment authoring batch (2026-11-13)
+
+- Added `docs/english-technical-semester-bank-draft-v1.md`: first 20 independently authored Technical English multiple-choice items, with a separate teacher key, rationales and review checklist.
+- This is an authoring draft only. It is not loaded by `index.html`, not imported to Sheets and not available to students.
+- The draft's Course 3 / Semester 1 placement is provisional pending the approved curriculum map. A second teacher must verify the technical terminology and all answer keys before conversion to the protected server bank.
+- Progress for the provisional two-track / ten-set target: 20 of 200 Technical items drafted; Basic legacy items remain unkeyed and the old Technical clone remains blocked.
