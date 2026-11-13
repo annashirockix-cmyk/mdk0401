@@ -261,3 +261,8 @@ The practice catalogue now contains 40 activities: Course 4 Semester 1 lessons 1
 ### Course 4, Semester 1 listening completed
 
 All twelve lessons for Course 4, Semester 1 now have browser-listening activities. The first nine preserve the source topics in the five-year map; lessons 10–12 extend them to aviation electrical power, wiring-diagram language and evidence-based fault descriptions. Combined with Course 4 Semester 2 and both Course 5 semesters, the catalogue now contains 48 activities across four semester blocks. The catalogue remains practice-only, not a protected assessment.
+
+
+### Verified catalogue coverage — 48 activities
+
+The latest catalogue read-back confirms 48 unique activities across four complete semester blocks: Course 4 Semester 1 (12), Course 4 Semester 2 (12), Course 5 Semester 1 (12), and Course 5 Semester 2 (12). All 48 have scripts, questions and matching practice feedback. Courses 1–3 still need conversion. The catalogue remains practice-only; it does not save marks or attempts and must not be used as a protected assessment bank.
