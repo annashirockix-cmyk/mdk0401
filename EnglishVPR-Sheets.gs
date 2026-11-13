@@ -44,7 +44,8 @@ function importEnglishVprBank_(data) {
   if (actor.role === "teacher" && !hasCourseAccess_(actor, track === "basic" ? "ENB" : "ENT") && !hasCourseAccess_(actor, "EN")) {
     throw new Error("Нет доступа к импорту этого экзамена.");
   }
-  validateEnglishVprExam_(track, exam);\n  const json = JSON.stringify(exam);
+  validateEnglishVprExam_(track, exam);
+  const json = JSON.stringify(exam);
   if (json.length > 450000) throw new Error("Размер экзамена превышает 450 КБ.");
   const sh = englishVprBank_(), lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -86,7 +87,8 @@ function getEnglishVprExam_(data) {
   const sh = englishVprBank_(), values = sh.getDataRange().getValues(), map = headerMap_(sh);
   for (let i=1;i<values.length;i++) {
     if (String(values[i][map.Track]||"") !== track || String(values[i][map.Active]||"").toUpperCase() !== "TRUE") continue;
-    const exam = JSON.parse(String(values[i][map.ExamJSON]||"{}"));\n    validateEnglishVprExam_(track, exam);
+    const exam = JSON.parse(String(values[i][map.ExamJSON]||"{}"));
+    validateEnglishVprExam_(track, exam);
     return {success:true,track:track,exam:sanitizeEnglishVprExam_(exam)};
   }
   return {success:false,error:"Экзамен ещё не импортирован преподавателем."};
