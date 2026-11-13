@@ -1440,3 +1440,36 @@ test("attempt-count reads only the compact Results index, not full submissions",
   const semesterStart = server.indexOf("function submitEnglishSemesterTest_(data)");
   assert.ok(server.slice(semesterStart).includes("resultAttemptRows_()"));
 });
+
+
+test("login session and nested role state persist across a page refresh", () => {
+  const api = read("api.js");
+  const server = read("Code.gs");
+  const app = read("app.js");
+  const final = read("portal-final.js");
+  assert.ok(api.includes('localStorage.getItem("mdk.session")'));
+  assert.ok(api.includes('localStorage.setItem("mdk.session", String(token || ""))'));
+  assert.ok(api.includes('sessionStorage.getItem("mdk.session")'));
+  assert.ok(api.includes('if(r&&r.success&&r.token)setStoredSessionToken(r.token)'));
+  assert.ok(server.includes('PropertiesService.getScriptProperties().setProperty(key, JSON.stringify({'));
+  assert.ok(server.includes("function auth_(data)"));
+  assert.ok(server.includes("properties.getProperty(key)"));
+  assert.ok(app.includes('var savedState = localStorage.getItem("mdk.state")'));
+  assert.ok(app.includes("Object.assign(window.state, JSON.parse(savedState))"));
+  assert.ok(final.includes('localStorage.setItem("mdk.state", JSON.stringify(st))'));
+  assert.ok(final.includes("st.student && window.API && window.API.saveStudent"));
+  assert.ok(final.includes("Keep the complete state shape"));
+});
+
+
+test("main games catalogue stays limited to three educational formats", () => {
+  const games = read("games.js");
+  const start = games.indexOf("var allGames = [");
+  const end = games.indexOf("];", start);
+  assert.ok(start >= 0 && end > start, "main educational games catalogue must exist");
+  const catalogue = games.slice(start, end);
+  const ids = Array.from(catalogue.matchAll(/id: "([^"]+)"/g)).map(item => item[1]);
+  assert.deepEqual(ids, ["gcode", "party", "detective"]);
+  assert.ok(read("teacher-game.js").includes("window.renderOwnGames"));
+  assert.ok(read("flashcard-editor.js").includes("window.renderFlashcardEditorPage"));
+});
