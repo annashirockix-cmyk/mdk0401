@@ -1602,11 +1602,15 @@ function getCustomContent_(data) {
 
     // Student sessions receive test prompts and options only. Answer keys remain server-side.
     if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
-      payload.questions = payload.questions.map(function (question) {
-        const safe = Object.assign({}, question || {});
-        ["correct", "answer", "correctAnswer", "answers", "explanation", "solution", "key"].forEach(function (key) { delete safe[key]; });
-        return safe;
-      });
+      function stripTestKeys_(value) {
+        if (!value || typeof value !== "object") return;
+        if (Array.isArray(value)) { value.forEach(stripTestKeys_); return; }
+        Object.keys(value).forEach(function(key) {
+          if (/^(correct|correctAnswer|correctIndex|correctOption|answer|answerIndex|answers|expectedAnswer|acceptedAnswers|correctOrder|key|solution|explanation|rationale|isCorrect)$/i.test(key)) delete value[key];
+          else stripTestKeys_(value[key]);
+        });
+      }
+      payload.questions.forEach(stripTestKeys_);
     }
     if (user.role === "student" && String(row[3] || "") === "game" && Array.isArray(payload.categories)) {
       payload.categories = payload.categories.map(function (category) {
@@ -1775,7 +1779,7 @@ function builtInQuestions_(courseId, bankIds) {
 }
 function safeBuiltInQuestion_(entry, optionMaps) {
   const q=Object.assign({},entry.question||{}),type=String(q.type||"mc").toLowerCase();
-  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
+  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder","answerIndex","correctIndex","correctOption","rationale","isCorrect"].forEach(function(k){delete q[k];});
   if((type==="mc"||type==="single"||type==="single_select"||type==="choice"||type==="multi"||type==="multiple"||type==="multiple_choice"||type==="tf"||type==="true_false")&&Array.isArray(q.options)&&q.options.length>1){
     const order=shuffledServer_(q.options.map(function(_,i){return i;}));
     q.options=order.map(function(i){return q.options[i];});
@@ -1927,7 +1931,7 @@ function finalQuestionType_(question) {
 function safeFinalExamQuestion_(entry,index,optionMaps) {
   const q=Object.assign({},entry.question||{}),type=finalQuestionType_(q);
   q.type=type;
-  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
+  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder","answerIndex","correctIndex","correctOption","rationale","isCorrect"].forEach(function(k){delete q[k];});
   if(type==="order")q.items=shuffledServer_(q.items||[]);
   if(type==="tf"&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
   if((type==="mc"||type==="multi"||type==="tf")&&Array.isArray(q.options)&&q.options.length>1){
