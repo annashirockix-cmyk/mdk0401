@@ -1,3 +1,4 @@
+// Regression coverage for portal workbook content and print layout.
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
