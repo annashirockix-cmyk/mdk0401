@@ -69,3 +69,13 @@ For an assessment, build a separate question payload without keys and connect `o
 ## Current integration boundary
 
 The browser player and activity component are now loaded by the portal. They are reusable building blocks; the Markdown lesson drafts are not yet converted into portal lesson records, and no lesson catalogue/renderer route has been connected to these drafts. A future integration must map each lesson's listening script and questions into this schema, keep transcripts/keys out of graded client payloads, and use the existing server-side assessment flow. Do not modify the working Basic/Technical VPR bank or its submit/grading functions as part of that work.
+
+
+## Course 5 Semester 2 practice catalogue
+
+- `english-listening-catalog.js` contains four browser-readable practice activities for lessons 9–12.
+- `english-listening-route.js` provides the `#/english-listening` route and intercepts the route before the generic fallback router.
+- `english-tools.js` adds an **Аудирование** entry to the English quick-access block for EN, ENB and ENT courses.
+- The catalogue uses the reusable listening component in **practice mode only**. It contains practice answer keys in the client bundle; therefore it must not be treated as a protected exam or graded assessment.
+- The catalogue currently covers lessons 9–12 of course 5, semester 2. The other eight lessons have not yet been mapped into this playable catalogue.
+- No grades or attempts are saved by this catalogue. It does not call the VPR API and does not modify the VPR bank.
