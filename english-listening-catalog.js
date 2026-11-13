@@ -594,6 +594,1254 @@
         { prompt: "What should the final presentation include?", options: ["Unsupported conclusions", "Confirmed facts, limitations, owners and follow-up actions", "A real maintenance procedure", "Invented missing values"], answerIndex: 1, explanation: "The capstone requires evidence-based reporting and explicit limitations." }
       ]
     },
+      {
+      "id": "en-c03-s01-l01",
+      "title": "Course 3 · Semester 1 · Materials in Mechanical Engineering",
+      "level": "B1+–B2",
+      "script": "A materials engineer is explaining why material selection matters in mechanical engineering. Metals are often chosen for strength, toughness and the ability to be formed or machined. Aluminium alloys are valued when low weight is important. Steel is widely used where strength and wear resistance are required. Polymers can provide electrical insulation or reduce weight, while ceramics can resist heat and wear but may be brittle. No material is best for every application. Engineers compare properties, operating conditions, manufacturing methods, cost and documentation. In aviation, material selection is especially important because a component must meet defined requirements. This recording is an introduction to material vocabulary, not a material approval or repair instruction.",
+      "questions": [
+        {
+          "prompt": "Which property may make aluminium alloys useful?",
+          "options": [
+            "Low weight",
+            "High transparency",
+            "Magnetic memory",
+            "Electrical conductivity only"
+          ],
+          "answerIndex": 0,
+          "explanation": "Aluminium alloys are valued when low weight is important."
+        },
+        {
+          "prompt": "What is one possible use of polymers?",
+          "options": [
+            "Electrical insulation",
+            "Aircraft navigation",
+            "Measuring pressure directly",
+            "Generating radio waves"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker says polymers can provide electrical insulation."
+        },
+        {
+          "prompt": "Why is no material best for every application?",
+          "options": [
+            "Engineers must compare properties and conditions",
+            "All materials have identical properties",
+            "Cost is always the only factor",
+            "Manufacturing methods never matter"
+          ],
+          "answerIndex": 0,
+          "explanation": "The choice depends on properties, conditions, process, cost and documentation."
+        },
+        {
+          "prompt": "What is the purpose of this recording?",
+          "options": [
+            "Introduce material vocabulary",
+            "Approve an aircraft component",
+            "Give repair instructions",
+            "Set production acceptance limits"
+          ],
+          "answerIndex": 0,
+          "explanation": "It is explicitly an introductory vocabulary lesson."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l02",
+      "title": "Course 3 · Semester 1 · Casting, Drawing and Forging",
+      "level": "B1+–B2",
+      "script": "A production instructor compares three metal-forming processes. In casting, molten metal is poured into a mould and allowed to solidify. The mould gives the part its general shape. In drawing, a metal rod or wire is pulled through a die to reduce its cross-section and increase its length. In forging, a workpiece is shaped by compressive force, often using a hammer or press. The instructor asks students to match each process with its description and to notice the verbs pour, solidify, pull and compress. The processes can produce different shapes and properties, so engineers select them according to the component design and production requirements. The examples are for language study and do not specify production parameters.",
+      "questions": [
+        {
+          "prompt": "What happens during casting?",
+          "options": [
+            "Molten metal is poured into a mould",
+            "A rod is pulled through a die",
+            "A workpiece is joined by a cable",
+            "A surface is polished"
+          ],
+          "answerIndex": 0,
+          "explanation": "Casting uses molten metal and a mould."
+        },
+        {
+          "prompt": "What happens during drawing?",
+          "options": [
+            "Metal is pulled through a die",
+            "Metal is poured into sand",
+            "A part is measured with a caliper",
+            "A tool rotates against a surface"
+          ],
+          "answerIndex": 0,
+          "explanation": "Drawing reduces cross-section by pulling material through a die."
+        },
+        {
+          "prompt": "Which process uses compressive force?",
+          "options": [
+            "Forging",
+            "Casting",
+            "Drawing",
+            "Painting"
+          ],
+          "answerIndex": 0,
+          "explanation": "Forging shapes a workpiece by compressive force."
+        },
+        {
+          "prompt": "Which verbs are highlighted?",
+          "options": [
+            "Pour, solidify, pull and compress",
+            "Upload, download, click and save",
+            "Heat, fly, land and taxi",
+            "Open, print, scan and email"
+          ],
+          "answerIndex": 0,
+          "explanation": "These verbs describe the processes."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l03",
+      "title": "Course 3 · Semester 1 · Rolling, Extrusion and Sheet Forming",
+      "level": "B1+–B2",
+      "script": "A manufacturing lecturer describes three processes used to shape metal. Rolling passes material between rotating rolls to reduce thickness or create a profile. Extrusion pushes material through a shaped opening called a die, producing a long product with a constant cross-section. Sheet forming changes the shape of thin metal sheet by bending, stretching or pressing it. The lecturer shows examples such as a rolled plate, an extruded profile and a formed panel. Students compare the starting material, the direction of force and the resulting shape. They also practise describing a sequence with first, then, after that and finally. The examples explain process vocabulary only; actual production depends on approved process documentation.",
+      "questions": [
+        {
+          "prompt": "What do rotating rolls do?",
+          "options": [
+            "Reduce thickness or create a profile",
+            "Measure electrical resistance",
+            "Join two wires",
+            "Read a drawing revision"
+          ],
+          "answerIndex": 0,
+          "explanation": "Rolling passes material between rotating rolls."
+        },
+        {
+          "prompt": "What is pushed through a die in extrusion?",
+          "options": [
+            "Material",
+            "A measuring instrument",
+            "A software file",
+            "A sensor signal"
+          ],
+          "answerIndex": 0,
+          "explanation": "Extrusion pushes material through a shaped opening."
+        },
+        {
+          "prompt": "Which process shapes thin metal sheet?",
+          "options": [
+            "Sheet forming",
+            "Network routing",
+            "Casting only",
+            "Electrical bonding"
+          ],
+          "answerIndex": 0,
+          "explanation": "Sheet forming changes the shape of thin metal sheet."
+        },
+        {
+          "prompt": "Which words help describe process sequence?",
+          "options": [
+            "First, then, after that, finally",
+            "Although, unless, despite, whereas",
+            "Above, below, beside, between",
+            "Who, whose, whom, which"
+          ],
+          "answerIndex": 0,
+          "explanation": "These are sequence markers."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l04",
+      "title": "Course 3 · Semester 1 · Technical Drawing and Tools",
+      "level": "B1+–B2",
+      "script": "A design tutor is introducing a technical drawing. The drawing includes a title block, a scale, dimensions, symbols and several views of the component. The front view shows the main shape, while the side and top views provide additional information. A centre line indicates an axis or centre. A hidden line represents an edge that cannot be seen in that view. The title block may contain the drawing number, revision, material and approval information. The tutor reminds students to check the drawing revision before discussing a component. A drawing is a controlled technical document, not simply a picture. The class uses a training example and does not make manufacturing decisions from an incomplete drawing.",
+      "questions": [
+        {
+          "prompt": "What information may appear in the title block?",
+          "options": [
+            "Drawing number and revision",
+            "Weather and temperature outside",
+            "Student attendance only",
+            "Network password"
+          ],
+          "answerIndex": 0,
+          "explanation": "The title block may contain drawing number and revision."
+        },
+        {
+          "prompt": "What does a hidden line represent?",
+          "options": [
+            "An edge that cannot be seen in that view",
+            "The centre of a circle",
+            "A dimension tolerance only",
+            "A material certificate"
+          ],
+          "answerIndex": 0,
+          "explanation": "The recording defines a hidden line this way."
+        },
+        {
+          "prompt": "Why check the revision?",
+          "options": [
+            "To make sure the drawing version is current for the task",
+            "To find the drawing colour",
+            "To estimate the component weight",
+            "To choose a computer password"
+          ],
+          "answerIndex": 0,
+          "explanation": "Revision control helps avoid using an outdated drawing."
+        },
+        {
+          "prompt": "What is a technical drawing?",
+          "options": [
+            "A controlled technical document",
+            "An informal sketch with no requirements",
+            "A production machine",
+            "A measurement device"
+          ],
+          "answerIndex": 0,
+          "explanation": "The tutor stresses that it is a controlled document."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l05",
+      "title": "Course 3 · Semester 1 · CAD and CAM Systems",
+      "level": "B1+–B2",
+      "script": "A manufacturing engineer explains the difference between CAD and CAM. Computer-aided design, or CAD, is used to create and modify digital models and technical drawings. Computer-aided manufacturing, or CAM, uses digital information to help plan or generate manufacturing operations. A CAD model may describe geometry, while a CAM project may contain toolpath information for a particular manufacturing process. The two systems can exchange data, but the information must be checked. A model is not automatically a complete manufacturing instruction. The engineer highlights file versions, units, coordinate systems and approved post-processing. Students practise explaining how design information moves into production planning without treating a classroom model as a machine-ready program.",
+      "questions": [
+        {
+          "prompt": "What is CAD mainly used for?",
+          "options": [
+            "Creating and modifying digital models and drawings",
+            "Measuring current",
+            "Inspecting a finished surface",
+            "Transmitting radio signals"
+          ],
+          "answerIndex": 0,
+          "explanation": "CAD supports digital design and drawing."
+        },
+        {
+          "prompt": "What does CAM help with?",
+          "options": [
+            "Planning or generating manufacturing operations",
+            "Writing passenger announcements",
+            "Checking a student's attendance",
+            "Measuring temperature"
+          ],
+          "answerIndex": 0,
+          "explanation": "CAM uses digital information for manufacturing operations."
+        },
+        {
+          "prompt": "Does a CAD model automatically become a complete manufacturing instruction?",
+          "options": [
+            "No",
+            "Yes, in every case",
+            "Only if the file is colourful",
+            "Only if it is printed"
+          ],
+          "answerIndex": 0,
+          "explanation": "The recording explicitly says it does not."
+        },
+        {
+          "prompt": "Which details must be checked when exchanging data?",
+          "options": [
+            "Versions, units and coordinate systems",
+            "Only file colour",
+            "The computer wallpaper",
+            "The operator's age"
+          ],
+          "answerIndex": 0,
+          "explanation": "The engineer lists versions, units and coordinate systems."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l06",
+      "title": "Course 3 · Semester 1 · The Aviation Industry: Aircraft Types and Main Sectors",
+      "level": "B1+–B2",
+      "script": "A college group is preparing a presentation about the aviation industry. The instructor explains that civil aviation includes passenger and cargo transport, while general aviation includes a wide range of non-scheduled activities. Military aviation has different missions and requirements. Aircraft can also be grouped by their design and purpose: fixed-wing aeroplanes, helicopters and unmanned aircraft are familiar examples. The industry is broader than aircraft operators. It includes design organizations, manufacturers, airports, maintenance providers, suppliers, regulators and training centres. Each organization has a different role, but they depend on clear technical communication. The students are asked to describe the sector using terms such as manufacturer, operator, supplier and regulator.",
+      "questions": [
+        {
+          "prompt": "What does civil aviation include?",
+          "options": [
+            "Passenger and cargo transport",
+            "Only military missions",
+            "Only space exploration",
+            "Only model aircraft"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker names passenger and cargo transport."
+        },
+        {
+          "prompt": "Which is an example of a rotorcraft?",
+          "options": [
+            "Helicopter",
+            "Glider",
+            "Cargo ship",
+            "Railway locomotive"
+          ],
+          "answerIndex": 0,
+          "explanation": "A helicopter is listed as an aircraft type."
+        },
+        {
+          "prompt": "Which organization may supply components?",
+          "options": [
+            "A supplier",
+            "A passenger",
+            "A runway marking",
+            "A weather report"
+          ],
+          "answerIndex": 0,
+          "explanation": "Suppliers are part of the wider aviation industry."
+        },
+        {
+          "prompt": "Why is technical communication important?",
+          "options": [
+            "Different organizations depend on clear information",
+            "It replaces all engineering work",
+            "It removes the need for documentation",
+            "It is used only in advertising"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker says organizations depend on clear technical communication."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l07",
+      "title": "Course 3 · Semester 1 · Aircraft Structure: Fuselage, Wings and Control Surfaces",
+      "level": "B1+–B2",
+      "script": "An instructor uses a simplified aircraft diagram to introduce the main structural parts. The fuselage is the main body and provides space for the cockpit, cabin, equipment and other systems. The wings generate most of the lift in a conventional fixed-wing aircraft. The tail assembly contributes to stability and control. Ailerons are located on the wings and help control roll. The elevator is usually part of the horizontal tail and controls pitch. The rudder is part of the vertical tail and controls yaw. The instructor asks students to identify each part and describe its general function. The diagram is educational; it is not a structural repair manual or an aircraft-specific technical reference.",
+      "questions": [
+        {
+          "prompt": "What is the fuselage?",
+          "options": [
+            "The main body of the aircraft",
+            "A wing control surface",
+            "A type of engine",
+            "A landing light"
+          ],
+          "answerIndex": 0,
+          "explanation": "The fuselage is the aircraft's main body."
+        },
+        {
+          "prompt": "Which surfaces help control roll?",
+          "options": [
+            "Ailerons",
+            "Elevators",
+            "Rudder pedals only",
+            "Flaps only"
+          ],
+          "answerIndex": 0,
+          "explanation": "Ailerons help control roll."
+        },
+        {
+          "prompt": "What does the elevator control?",
+          "options": [
+            "Pitch",
+            "Yaw",
+            "Cabin temperature",
+            "Fuel quantity"
+          ],
+          "answerIndex": 0,
+          "explanation": "The elevator controls pitch."
+        },
+        {
+          "prompt": "What is the purpose of the diagram?",
+          "options": [
+            "Introduce general structural vocabulary",
+            "Provide repair instructions",
+            "Specify inspection intervals",
+            "Approve a modification"
+          ],
+          "answerIndex": 0,
+          "explanation": "It is explicitly an educational diagram."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l08",
+      "title": "Course 3 · Semester 1 · Materials Used in Aircraft Structures",
+      "level": "B1+–B2",
+      "script": "A materials specialist describes several material groups used in aircraft structures. Aluminium alloys have a useful combination of strength, low density and formability. Titanium alloys can offer high strength and good performance in demanding environments, although they are more difficult and costly to process. Composite materials combine fibres and a matrix to achieve selected properties, including high stiffness and low weight. Material selection depends on loads, temperature, corrosion environment, manufacturing method, inspection requirements and approved design data. A material name alone is not enough: grade, specification, condition and traceability also matter. The specialist asks students to compare advantages and limitations without assuming that one material is suitable for every aircraft component.",
+      "questions": [
+        {
+          "prompt": "Why are aluminium alloys widely used?",
+          "options": [
+            "They combine strength, low density and formability",
+            "They are always the cheapest material",
+            "They need no inspection",
+            "They are transparent"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker names these three properties."
+        },
+        {
+          "prompt": "What can composite materials combine?",
+          "options": [
+            "Fibres and a matrix",
+            "Copper and water",
+            "Glass and fuel",
+            "Steel and rubber only"
+          ],
+          "answerIndex": 0,
+          "explanation": "Composites combine fibres with a matrix."
+        },
+        {
+          "prompt": "What else matters besides a material name?",
+          "options": [
+            "Grade, specification, condition and traceability",
+            "Colour and packaging only",
+            "The supplier's logo",
+            "The component's advertising name"
+          ],
+          "answerIndex": 0,
+          "explanation": "The recording lists these identification details."
+        },
+        {
+          "prompt": "What determines material selection?",
+          "options": [
+            "Loads, environment, process and approved design data",
+            "A single property only",
+            "Personal preference",
+            "The shortest delivery time only"
+          ],
+          "answerIndex": 0,
+          "explanation": "Selection depends on multiple engineering factors."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l09",
+      "title": "Course 3 · Semester 1 · Manufacturing Workflow and Process Sheets",
+      "level": "B1+–B2",
+      "script": "A production technologist is explaining a simplified manufacturing workflow. First, the team reviews the drawing and the approved process documentation. Next, materials and required resources are confirmed. The operation sequence is then planned and recorded on a process sheet. During production, operators follow the authorized instructions and record the required information. Inspection results are documented at the specified stages. If a discrepancy appears, it is reported through the established process rather than corrected informally. The technologist points out common document fields: operation number, description, equipment reference, responsible role and record entry. The class uses a fictional process sheet to practise reading and describing a workflow.",
+      "questions": [
+        {
+          "prompt": "What should the team review first?",
+          "options": [
+            "The drawing and approved process documentation",
+            "A personal notebook only",
+            "An old unverified message",
+            "A supplier advertisement"
+          ],
+          "answerIndex": 0,
+          "explanation": "The workflow begins with document review."
+        },
+        {
+          "prompt": "Where is the operation sequence recorded?",
+          "options": [
+            "On a process sheet",
+            "On a passenger ticket",
+            "In a social media post",
+            "On a personal calendar"
+          ],
+          "answerIndex": 0,
+          "explanation": "The process sheet records the sequence."
+        },
+        {
+          "prompt": "What should happen if a discrepancy appears?",
+          "options": [
+            "Report it through the established process",
+            "Change the record informally",
+            "Ignore it",
+            "Delete the process sheet"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker says discrepancies must be reported."
+        },
+        {
+          "prompt": "Which field may appear on a process sheet?",
+          "options": [
+            "Operation number",
+            "Favourite colour",
+            "Personal password",
+            "Holiday destination"
+          ],
+          "answerIndex": 0,
+          "explanation": "Operation number is one of the listed fields."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l10",
+      "title": "Course 3 · Semester 1 · Dimensions, Units and Measurement in Engineering",
+      "level": "B1+–B2",
+      "script": "A quality technician is checking a training drawing with a group of students. The drawing gives dimensions in millimetres, and the students must read the decimal point carefully. The technician explains that a dimension describes size or location, while a unit tells us how the value is measured. A length may be expressed in millimetres or metres. Mass may be expressed in kilograms, and temperature in degrees Celsius. Students practise saying decimal values clearly and repeating them back to confirm understanding. The technician also reminds them that a measurement result should include the value, unit, instrument identification where required and the relevant record. The exercise uses fictional dimensions, not acceptance criteria.",
+      "questions": [
+        {
+          "prompt": "What does a unit tell us?",
+          "options": [
+            "How a value is measured",
+            "Who designed the component",
+            "Which machine made the part",
+            "When the drawing was printed"
+          ],
+          "answerIndex": 0,
+          "explanation": "A unit identifies the measurement scale."
+        },
+        {
+          "prompt": "Which unit is commonly used for engineering length in the example?",
+          "options": [
+            "Millimetre",
+            "Kilogram",
+            "Hertz",
+            "Ampere"
+          ],
+          "answerIndex": 0,
+          "explanation": "The drawing gives dimensions in millimetres."
+        },
+        {
+          "prompt": "Why repeat a decimal value back?",
+          "options": [
+            "To confirm that it was heard correctly",
+            "To change the drawing revision",
+            "To make the value larger",
+            "To avoid recording the unit"
+          ],
+          "answerIndex": 0,
+          "explanation": "Repeating confirms communication accuracy."
+        },
+        {
+          "prompt": "What may a measurement record include?",
+          "options": [
+            "Value, unit and instrument identification",
+            "Only the operator's opinion",
+            "A photograph without context",
+            "A component colour"
+          ],
+          "answerIndex": 0,
+          "explanation": "The speaker lists value, unit and instrument ID."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l11",
+      "title": "Course 3 · Semester 1 · Technical Word Formation, Abbreviations and Symbols",
+      "level": "B1+–B2",
+      "script": "An English teacher is helping engineering students understand technical vocabulary. Many technical words contain prefixes and suffixes. The prefix micro- refers to a very small scale, while multi- means many. The suffix -meter appears in words for measuring instruments, such as thermometer and voltmeter. Technical texts also use abbreviations, for example CAD for computer-aided design and CNC for computer numerical control. Symbols can represent units or features on drawings, but their meaning depends on the relevant standard and context. The teacher advises students not to guess an unfamiliar abbreviation from its letters alone. They should check the glossary, drawing legend or approved reference document.",
+      "questions": [
+        {
+          "prompt": "What does the prefix multi- mean?",
+          "options": [
+            "Many",
+            "Small",
+            "Before",
+            "Without"
+          ],
+          "answerIndex": 0,
+          "explanation": "Multi- means many."
+        },
+        {
+          "prompt": "Which suffix appears in names of measuring instruments?",
+          "options": [
+            "-meter",
+            "-ology",
+            "-less",
+            "-ship"
+          ],
+          "answerIndex": 0,
+          "explanation": "Thermometer and voltmeter illustrate -meter."
+        },
+        {
+          "prompt": "What does CNC stand for?",
+          "options": [
+            "Computer numerical control",
+            "Central network cable",
+            "Current number calculation",
+            "Control navigation chart"
+          ],
+          "answerIndex": 0,
+          "explanation": "CNC means computer numerical control."
+        },
+        {
+          "prompt": "Where should an unfamiliar drawing abbreviation be checked?",
+          "options": [
+            "In the glossary or drawing legend",
+            "In an unrelated advertisement",
+            "In a personal guess",
+            "In a weather report"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher recommends the glossary, legend or approved reference."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s01-l12",
+      "title": "Course 3 · Semester 1 · Reading Technical Descriptions and Specification Tables",
+      "level": "B1+–B2",
+      "script": "A student is comparing two fictional material specification entries. The teacher explains how to read a table systematically. First, identify the column headings. Then check the material designation, condition, unit and stated property. A value in a table is meaningful only when its unit and context are clear. Notes may contain limitations or references to another document. The student should not compare values from different test conditions as if they were equivalent. The teacher asks the class to summarize the main difference in two sentences and to cite the table row used. This activity develops technical reading skills; the fictional table is not an approved material specification.",
+      "questions": [
+        {
+          "prompt": "What should a reader identify first?",
+          "options": [
+            "The column headings",
+            "The page number only",
+            "The font style",
+            "The author's photograph"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher says to begin with column headings."
+        },
+        {
+          "prompt": "Why is the unit important?",
+          "options": [
+            "A value needs its unit and context",
+            "Units are optional decoration",
+            "Units identify the author",
+            "A unit replaces the material designation"
+          ],
+          "answerIndex": 0,
+          "explanation": "The unit is necessary to interpret the value."
+        },
+        {
+          "prompt": "Can values from different test conditions always be compared directly?",
+          "options": [
+            "No",
+            "Yes, always",
+            "Only if they are rounded",
+            "Only if the table has colours"
+          ],
+          "answerIndex": 0,
+          "explanation": "Different test conditions may make values non-equivalent."
+        },
+        {
+          "prompt": "What should the student include in the summary?",
+          "options": [
+            "The main difference and the table row used",
+            "A personal guess",
+            "An unrelated quotation",
+            "Only the table title"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher asks for a two-sentence summary citing the row."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l01",
+      "title": "Course 3 · Semester 2 · Turning, Shaping and Drilling",
+      "level": "B1+–B2",
+      "script": "A workshop instructor introduces three machine-tool operations. Turning is commonly performed on a lathe, where the workpiece rotates while a cutting tool removes material. In shaping, a single-point tool moves back and forth across the workpiece. Drilling produces a round hole with a rotating drill. The instructor asks students to focus on the relationship between the tool and the workpiece. In turning, the workpiece rotates; in drilling, the drill rotates; in shaping, the tool has a reciprocating movement. Students match operation names to simplified diagrams. The lesson describes general principles only and does not give machine settings or instructions for operating equipment.",
+      "questions": [
+        {
+          "prompt": "Which part normally rotates during turning?",
+          "options": [
+            "The workpiece",
+            "The workshop door",
+            "The measuring scale",
+            "The operator's chair"
+          ],
+          "answerIndex": 0,
+          "explanation": "The workpiece rotates on a lathe."
+        },
+        {
+          "prompt": "What movement is typical of shaping?",
+          "options": [
+            "Back-and-forth movement of a single-point tool",
+            "Continuous movement of a passenger aircraft",
+            "A wireless signal",
+            "A circular movement of the whole workshop"
+          ],
+          "answerIndex": 0,
+          "explanation": "The shaping tool moves back and forth."
+        },
+        {
+          "prompt": "What does drilling produce?",
+          "options": [
+            "A round hole",
+            "A flat sheet",
+            "A threaded cable",
+            "A network connection"
+          ],
+          "answerIndex": 0,
+          "explanation": "Drilling produces a round hole."
+        },
+        {
+          "prompt": "What is the lesson's boundary?",
+          "options": [
+            "General principles, not machine operating instructions",
+            "Exact machine parameters",
+            "A production approval",
+            "A repair procedure"
+          ],
+          "answerIndex": 0,
+          "explanation": "The script explicitly avoids machine settings and operating instructions."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l02",
+      "title": "Course 3 · Semester 2 · Milling, Grinding, Pressing and Band Sawing",
+      "level": "B1+–B2",
+      "script": "A manufacturing tutor compares four workshop processes. Milling removes material with a rotating multi-edge cutter. Grinding uses an abrasive wheel to remove small amounts of material and improve a surface. A press applies force to form or cut material using suitable tooling. A band saw uses a continuous toothed blade to cut stock. The tutor asks students to identify the main tool in each process and describe the action with verbs such as rotate, abrade, press and cut. The class also discusses why process choice depends on material, shape, required finish and production plan. The recording is a vocabulary exercise, not a machine setup or safety procedure.",
+      "questions": [
+        {
+          "prompt": "Which process uses a rotating multi-edge cutter?",
+          "options": [
+            "Milling",
+            "Grinding",
+            "Pressing",
+            "Band sawing"
+          ],
+          "answerIndex": 0,
+          "explanation": "Milling uses a rotating multi-edge cutter."
+        },
+        {
+          "prompt": "What does grinding use?",
+          "options": [
+            "An abrasive wheel",
+            "A network router",
+            "A welding cable",
+            "A plastic mould only"
+          ],
+          "answerIndex": 0,
+          "explanation": "Grinding uses an abrasive wheel."
+        },
+        {
+          "prompt": "What applies force to form or cut material?",
+          "options": [
+            "A press",
+            "A band saw",
+            "A caliper",
+            "A CAD screen"
+          ],
+          "answerIndex": 0,
+          "explanation": "A press applies force using tooling."
+        },
+        {
+          "prompt": "Which verb is associated with grinding?",
+          "options": [
+            "Abrade",
+            "Transmit",
+            "Calculate",
+            "Archive"
+          ],
+          "answerIndex": 0,
+          "explanation": "Abrade describes material removal by an abrasive wheel."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l03",
+      "title": "Course 3 · Semester 2 · Computer Numerical Control (CNC)",
+      "level": "B1+–B2",
+      "script": "A teacher introduces computer numerical control, or CNC. A CNC machine uses a computer-based control system to coordinate machine movements and operations. A part program contains instructions that describe selected movements or functions. The control system interprets the program and coordinates the machine according to its configuration. CNC equipment can improve repeatability and support complex shapes, but the quality of the result depends on many factors, including the program, tooling, workholding, machine condition and verification. Students compare the terms machine tool, controller, part program and workpiece. They are reminded that classroom examples are for reading and vocabulary only, not for loading or running a machine.",
+      "questions": [
+        {
+          "prompt": "What does CNC stand for?",
+          "options": [
+            "Computer numerical control",
+            "Central network communication",
+            "Calculated number code",
+            "Computer navigation chart"
+          ],
+          "answerIndex": 0,
+          "explanation": "CNC stands for computer numerical control."
+        },
+        {
+          "prompt": "What does a part program describe?",
+          "options": [
+            "Selected movements or functions",
+            "The operator's lunch break",
+            "A supplier's bank details",
+            "The weather conditions"
+          ],
+          "answerIndex": 0,
+          "explanation": "A part program contains instructions for movements or functions."
+        },
+        {
+          "prompt": "What can CNC support?",
+          "options": [
+            "Repeatability and complex shapes",
+            "Automatic approval of every component",
+            "The removal of all inspection",
+            "Operation without a verified program"
+          ],
+          "answerIndex": 0,
+          "explanation": "The recording mentions repeatability and complex shapes."
+        },
+        {
+          "prompt": "What is the purpose of classroom code examples?",
+          "options": [
+            "Reading and vocabulary practice",
+            "Loading a production machine",
+            "Changing machine parameters",
+            "Approving a finished part"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher limits examples to reading and vocabulary."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l04",
+      "title": "Course 3 · Semester 2 · Health and Safety Regulations in the Workshop",
+      "level": "B1+–B2",
+      "script": "A safety coordinator is speaking to a new student group. Before entering a workshop, students must complete the required induction and understand the local rules. Personal protective equipment depends on the task and the risk assessment. Walkways must be kept clear, and damaged tools or equipment must be reported. Students must never remove guards or bypass safety devices. If they see an unsafe condition, they should stop, keep clear and inform the responsible person according to the site's procedure. The coordinator explains that safety rules are not optional and that local instructions take priority. This recording teaches safety language; it does not replace the institution's formal induction or risk assessment.",
+      "questions": [
+        {
+          "prompt": "What must students complete before entering the workshop?",
+          "options": [
+            "The required induction",
+            "A production order",
+            "A network installation",
+            "A material certificate"
+          ],
+          "answerIndex": 0,
+          "explanation": "The coordinator says students must complete induction."
+        },
+        {
+          "prompt": "What determines the required PPE?",
+          "options": [
+            "The task and risk assessment",
+            "The student's favourite colour",
+            "The machine's brand name only",
+            "The time of day"
+          ],
+          "answerIndex": 0,
+          "explanation": "PPE depends on task and risk assessment."
+        },
+        {
+          "prompt": "What should students do with damaged equipment?",
+          "options": [
+            "Report it",
+            "Hide it",
+            "Continue using it",
+            "Remove its safety label"
+          ],
+          "answerIndex": 0,
+          "explanation": "Damaged equipment must be reported."
+        },
+        {
+          "prompt": "What should happen if an unsafe condition is noticed?",
+          "options": [
+            "Stop, keep clear and inform the responsible person",
+            "Ignore it",
+            "Attempt an unauthorized repair",
+            "Ask another student to bypass a guard"
+          ],
+          "answerIndex": 0,
+          "explanation": "The coordinator describes stopping and reporting."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l05",
+      "title": "Course 3 · Semester 2 · Safety Rules and Protective Equipment",
+      "level": "B1+–B2",
+      "script": "A workshop supervisor explains that personal protective equipment is selected according to hazards. Safety glasses protect the eyes from specified risks, while hearing protection may be required in noisy areas. Safety footwear protects the feet from certain impact or compression hazards. Gloves are not suitable for every machine task; they may create additional risks around rotating equipment. Long hair must be secured and loose clothing avoided where it could become caught. Students must follow local instructions and never assume that PPE makes an unsafe action acceptable. The supervisor asks students to practise phrases such as keep clear, do not operate and report the hazard. The recording is general training and does not replace local rules.",
+      "questions": [
+        {
+          "prompt": "How should PPE be selected?",
+          "options": [
+            "According to hazards and task requirements",
+            "According to fashion",
+            "By choosing the most expensive item",
+            "The same for every activity"
+          ],
+          "answerIndex": 0,
+          "explanation": "PPE is selected according to hazards."
+        },
+        {
+          "prompt": "Why may gloves be unsuitable around some rotating equipment?",
+          "options": [
+            "They may create an additional entanglement risk",
+            "They always reduce visibility",
+            "They change the machine speed",
+            "They prevent all injuries"
+          ],
+          "answerIndex": 0,
+          "explanation": "The supervisor warns of risks around rotating equipment."
+        },
+        {
+          "prompt": "What should be done with long hair?",
+          "options": [
+            "Secure it",
+            "Leave it loose",
+            "Cover it with a scarf that can catch",
+            "Ignore the local rule"
+          ],
+          "answerIndex": 0,
+          "explanation": "Long hair must be secured."
+        },
+        {
+          "prompt": "Does PPE make an unsafe action acceptable?",
+          "options": [
+            "No",
+            "Yes",
+            "Only during training",
+            "Only when a supervisor is absent"
+          ],
+          "answerIndex": 0,
+          "explanation": "The supervisor explicitly says PPE does not justify unsafe actions."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l06",
+      "title": "Course 3 · Semester 2 · CNC Machine Components and Setup Vocabulary",
+      "level": "B1+–B2",
+      "script": "A technical instructor points to a simplified CNC machine diagram. The machine has a control panel, an enclosure, a spindle, axes of movement and a workholding device. The tool is held in a toolholder, while the workpiece is secured in a suitable fixture or chuck, depending on the machine type. The instructor explains that setup information is documented and checked by authorized personnel. Students learn the words spindle, axis, enclosure, fixture and toolholder, and practise describing where each component is located. The diagram is generic and does not identify a particular machine model. It is not a setup checklist and must not be used to prepare real equipment.",
+      "questions": [
+        {
+          "prompt": "What is the spindle associated with?",
+          "options": [
+            "Rotation and tooling",
+            "The operator's identification card",
+            "A network switch",
+            "A drawing revision"
+          ],
+          "answerIndex": 0,
+          "explanation": "The spindle is associated with rotation and tooling."
+        },
+        {
+          "prompt": "What is a fixture used for?",
+          "options": [
+            "Securing or locating a workpiece",
+            "Displaying a software menu",
+            "Measuring room temperature",
+            "Transmitting a radio signal"
+          ],
+          "answerIndex": 0,
+          "explanation": "A fixture helps secure or locate the workpiece."
+        },
+        {
+          "prompt": "Where are setup details documented?",
+          "options": [
+            "In approved setup information",
+            "In an informal chat only",
+            "On a random website",
+            "On the machine enclosure with no control"
+          ],
+          "answerIndex": 0,
+          "explanation": "The instructor says setup information is documented and checked."
+        },
+        {
+          "prompt": "Can this generic diagram be used as a real setup checklist?",
+          "options": [
+            "No",
+            "Yes, for every machine",
+            "Only for aircraft components",
+            "Only if printed"
+          ],
+          "answerIndex": 0,
+          "explanation": "The script says it is not a setup checklist."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l07",
+      "title": "Course 3 · Semester 2 · Machine Axes, Coordinates and Reference Points",
+      "level": "B1+–B2",
+      "script": "A student is learning how a CNC machine describes movement. The instructor explains that machine axes are commonly identified by letters such as X, Y and Z, although the actual arrangement depends on the machine configuration. Coordinates describe a position relative to a defined reference system. A work coordinate system may be used to describe the part location, while the machine coordinate system refers to the machine's own reference. The terms origin, positive direction, negative direction and reference point are introduced. The instructor emphasizes that students must not assume that axis directions are identical on every machine. The exercise uses a paper diagram and does not instruct students to set machine zero or move real equipment.",
+      "questions": [
+        {
+          "prompt": "Which letters commonly identify linear machine axes?",
+          "options": [
+            "X, Y and Z",
+            "A, B and C only",
+            "L, M and N",
+            "P, Q and R"
+          ],
+          "answerIndex": 0,
+          "explanation": "X, Y and Z are common axis labels."
+        },
+        {
+          "prompt": "What do coordinates describe?",
+          "options": [
+            "A position relative to a reference system",
+            "The age of the machine",
+            "The material price",
+            "The operator's work schedule"
+          ],
+          "answerIndex": 0,
+          "explanation": "Coordinates define position relative to a reference."
+        },
+        {
+          "prompt": "What does a work coordinate system describe?",
+          "options": [
+            "The part location in a defined reference system",
+            "The machine's electricity bill",
+            "The tool supplier's address",
+            "The workshop temperature"
+          ],
+          "answerIndex": 0,
+          "explanation": "It is used to describe the part location."
+        },
+        {
+          "prompt": "Are axis directions identical on every machine?",
+          "options": [
+            "No, they depend on machine configuration",
+            "Yes, always",
+            "Only on older machines",
+            "Only on machines with a display"
+          ],
+          "answerIndex": 0,
+          "explanation": "The instructor warns against assuming identical directions."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l08",
+      "title": "Course 3 · Semester 2 · G-code: Reading Basic Program Blocks and Comments",
+      "level": "B1+–B2",
+      "script": "A programming teacher displays a short, non-executable training example to explain how CNC program text is organized. A program is divided into blocks, and each block may contain address letters and values. The letter N may identify a block number. G and M words have different groups of functions, while axis letters can be followed by coordinate values. Comments provide human-readable notes and are often enclosed in brackets, depending on the control format. The teacher asks students to identify the block number, a comment and the general role of an address letter. The example is deliberately incomplete and must not be loaded into a machine. Real programs require machine-specific verification and authorized procedures.",
+      "questions": [
+        {
+          "prompt": "What may the letter N identify?",
+          "options": [
+            "A block number",
+            "A material grade",
+            "A network node",
+            "A measurement unit"
+          ],
+          "answerIndex": 0,
+          "explanation": "N may identify a block number."
+        },
+        {
+          "prompt": "What are comments used for?",
+          "options": [
+            "Human-readable notes",
+            "Automatic material approval",
+            "Measuring spindle speed",
+            "Replacing every program block"
+          ],
+          "answerIndex": 0,
+          "explanation": "Comments provide explanatory notes."
+        },
+        {
+          "prompt": "Why is the example deliberately incomplete?",
+          "options": [
+            "It is for reading practice and must not be run",
+            "It is a certified production program",
+            "It is a machine repair procedure",
+            "It contains approved production parameters"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher explicitly says it must not be loaded."
+        },
+        {
+          "prompt": "Do real CNC programs require machine-specific verification?",
+          "options": [
+            "Yes",
+            "No",
+            "Only if they contain comments",
+            "Only if they are printed"
+          ],
+          "answerIndex": 0,
+          "explanation": "The teacher emphasizes machine-specific verification."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l09",
+      "title": "Course 3 · Semester 2 · Cutting Tools, Tool Wear and Tool Data",
+      "level": "B1+–B2",
+      "script": "A process engineer is reviewing a training chart about cutting tools. Different operations use different tool geometries and materials. A cutting edge gradually wears during use, and wear can affect surface quality, dimensions and process stability. Tool data may include a tool identifier, type, material, geometry and approved reference information. Students learn to distinguish tool wear from sudden tool damage. The engineer explains that an unusual sound, visible damage or unexpected result must be reported according to the workshop procedure. The class practises describing a tool condition with neutral language and recording observations. The chart is fictional and does not specify cutting speeds, feeds or replacement limits.",
+      "questions": [
+        {
+          "prompt": "What can tool wear affect?",
+          "options": [
+            "Surface quality and dimensions",
+            "The drawing title only",
+            "The network password",
+            "The room lighting"
+          ],
+          "answerIndex": 0,
+          "explanation": "The recording names surface quality and dimensions."
+        },
+        {
+          "prompt": "What may tool data include?",
+          "options": [
+            "Tool identifier, type, material and geometry",
+            "Operator's home address",
+            "Weather conditions",
+            "Student grades"
+          ],
+          "answerIndex": 0,
+          "explanation": "These are listed examples of tool data."
+        },
+        {
+          "prompt": "How is tool wear different from tool damage?",
+          "options": [
+            "Wear develops gradually; damage may be sudden",
+            "They are always identical",
+            "Wear only affects software",
+            "Damage is always invisible"
+          ],
+          "answerIndex": 0,
+          "explanation": "The lesson distinguishes gradual wear from sudden damage."
+        },
+        {
+          "prompt": "What should happen if an unusual result appears?",
+          "options": [
+            "Report it according to the workshop procedure",
+            "Change parameters without authorization",
+            "Ignore it",
+            "Delete the observation"
+          ],
+          "answerIndex": 0,
+          "explanation": "The engineer says unusual conditions must be reported."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l10",
+      "title": "Course 3 · Semester 2 · Tolerances, Fits and Surface Finish",
+      "level": "B1+–B2",
+      "script": "A quality tutor explains that a nominal dimension is the target value shown on a drawing, while a tolerance defines the permitted variation. A fit describes the relationship between two mating parts, such as a shaft and a hole. Depending on the design, a fit may provide clearance, interference or a transition between the two. Surface finish describes the condition of a surface and may be specified using a symbol and a parameter. Students practise reading the vocabulary in a fictional specification table. The tutor warns that tolerance values and surface requirements must be taken from the current approved drawing or specification, not guessed from a similar component.",
+      "questions": [
+        {
+          "prompt": "What does a tolerance define?",
+          "options": [
+            "Permitted variation from a nominal dimension",
+            "The component's colour",
+            "The number of production shifts",
+            "The material supplier"
+          ],
+          "answerIndex": 0,
+          "explanation": "Tolerance defines permitted variation."
+        },
+        {
+          "prompt": "What does a fit describe?",
+          "options": [
+            "The relationship between mating parts",
+            "The shape of a network",
+            "The quality of a spoken presentation",
+            "The machine's electricity supply"
+          ],
+          "answerIndex": 0,
+          "explanation": "A fit describes the relationship between mating parts."
+        },
+        {
+          "prompt": "Which fit type may provide clearance?",
+          "options": [
+            "Clearance fit",
+            "Interference fit only",
+            "Transition fit only",
+            "No fit"
+          ],
+          "answerIndex": 0,
+          "explanation": "Clearance fit is one of the fit categories."
+        },
+        {
+          "prompt": "Where should actual tolerance values be taken from?",
+          "options": [
+            "The current approved drawing or specification",
+            "A similar part from memory",
+            "An informal message",
+            "A general internet comment"
+          ],
+          "answerIndex": 0,
+          "explanation": "The tutor warns not to guess values."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l11",
+      "title": "Course 3 · Semester 2 · Measuring Instruments and First-piece Inspection",
+      "level": "B1+–B2",
+      "script": "A quality inspector describes a training exercise involving a first-piece inspection. The inspector identifies the characteristic to be checked and selects an appropriate measuring instrument according to the inspection plan. A caliper can measure several external, internal and depth dimensions within its range. A micrometer is used for more precise dimensional measurements in its intended range. A dial indicator can show small changes in position or runout when used in a suitable setup. The inspector records the measured value, unit, instrument identification and result. If a value is unclear or outside the stated requirement, the part is held for review and the issue is reported. The exercise uses fictional values and is not an acceptance procedure.",
+      "questions": [
+        {
+          "prompt": "What should determine the instrument selection?",
+          "options": [
+            "The characteristic and inspection plan",
+            "The instrument's colour",
+            "The operator's preference only",
+            "The component's packaging"
+          ],
+          "answerIndex": 0,
+          "explanation": "Instrument choice is based on the characteristic and plan."
+        },
+        {
+          "prompt": "What can a caliper measure?",
+          "options": [
+            "External, internal and depth dimensions",
+            "Only electrical current",
+            "Only surface temperature",
+            "Only network speed"
+          ],
+          "answerIndex": 0,
+          "explanation": "The recording lists these measurement types."
+        },
+        {
+          "prompt": "What does a dial indicator show?",
+          "options": [
+            "Small changes in position or runout",
+            "Material chemical composition",
+            "Electrical frequency",
+            "Document revision history"
+          ],
+          "answerIndex": 0,
+          "explanation": "A dial indicator can show small positional changes or runout."
+        },
+        {
+          "prompt": "What happens if a result is unclear or outside the requirement?",
+          "options": [
+            "The part is held for review and the issue is reported",
+            "The value is changed to fit",
+            "The record is deleted",
+            "The part is automatically approved"
+          ],
+          "answerIndex": 0,
+          "explanation": "The inspector describes holding and reporting."
+        }
+      ]
+    },
+    {
+      "id": "en-c03-s02-l12",
+      "title": "Course 3 · Semester 2 · Workshop Handover, Safety Briefings and Stop-work Language",
+      "level": "B1+–B2",
+      "script": "Two technicians are handing over a training job at the end of a shift. The first technician summarizes the task status, documents reviewed, work completed and any outstanding questions. The second technician repeats the key points to confirm understanding. They identify a tool that has been tagged for inspection and agree that it must not be used until the responsible person has reviewed it. During the briefing, one technician notices that a guard appears loose. They stop the activity, keep clear and report the condition. The instructor highlights clear phrases: do not operate, keep clear, this needs checking and please confirm. The scenario is a communication exercise, not a substitute for local stop-work procedures.",
+      "questions": [
+        {
+          "prompt": "What information is included in the handover?",
+          "options": [
+            "Task status, documents reviewed and outstanding questions",
+            "Personal opinions only",
+            "The next shift's private details",
+            "A list of unrelated websites"
+          ],
+          "answerIndex": 0,
+          "explanation": "The technician summarizes task status and open points."
+        },
+        {
+          "prompt": "Why does the second technician repeat key points?",
+          "options": [
+            "To confirm understanding",
+            "To change the task without agreement",
+            "To avoid making a record",
+            "To shorten the safety briefing"
+          ],
+          "answerIndex": 0,
+          "explanation": "Repeating confirms that the information was understood."
+        },
+        {
+          "prompt": "What happens when a loose guard is noticed?",
+          "options": [
+            "Stop, keep clear and report it",
+            "Continue working carefully",
+            "Remove the guard",
+            "Ask an untrained person to repair it"
+          ],
+          "answerIndex": 0,
+          "explanation": "The scenario models stopping and reporting."
+        },
+        {
+          "prompt": "Which phrase is suitable for a safety warning?",
+          "options": [
+            "Do not operate",
+            "It probably looks fine",
+            "Ignore the label",
+            "Carry on regardless"
+          ],
+          "answerIndex": 0,
+          "explanation": "Do not operate is a clear stop-work phrase."
+        }
+      ]
+    },
   ];
 
   function el(tag, cls, text) {
