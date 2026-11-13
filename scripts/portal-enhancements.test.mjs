@@ -1460,3 +1460,14 @@ test("login session and nested role state persist across a page refresh", () => 
   assert.ok(final.includes("st.student && window.API && window.API.saveStudent"));
   assert.ok(final.includes("Keep the complete state shape"));
 });
+
+
+test("main games catalogue stays limited to three educational formats", () => {
+  const games = read("games.js");
+  const match = games.match(/var allGames = \[([\\s\\S]*?)\\n    \];/);
+  assert.ok(match, "main educational games catalogue must exist");
+  const ids = Array.from(match[1].matchAll(/id: "([^"]+)"/g)).map(item => item[1]);
+  assert.deepEqual(ids, ["gcode", "party", "detective"]);
+  assert.ok(read("teacher-game.js").includes("window.renderOwnGames"));
+  assert.ok(read("flashcard-editor.js").includes("window.renderFlashcard"));
+});
