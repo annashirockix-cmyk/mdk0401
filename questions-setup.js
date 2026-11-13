@@ -7,6 +7,7 @@ window._shuffle = function(arr) {
         var j = Math.floor(Math.random() * (i + 1));
         var t = a[i]; a[i] = a[j]; a[j] = t;
     }
+    if (a.length > 1 && a.every(function(value, index) { return value === index; })) a.push(a.shift());
     return a;
 };
 window._shuffleQuestionOptions = function(question) {
