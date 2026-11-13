@@ -110,3 +110,18 @@ test("custom test submissions resolve the test within the active course", () => 
  assert.match(api, /submitCustomTest:function\(testId,answers,timeSpent,courseId\)/);
  assert.match(app, /submitCustomTest\(testId, answers, Math\.round\(\(Date\.now\(\)-started\)\/1000\), test\.courseId \|\| test\.mdkId\)/);
 });
+
+test("custom content deletion is scoped to the requested course", () => {
+ const server = read("Code.gs");
+ const api = read("api.js");
+ const editor = read("course-admin.js");
+ const start = server.indexOf("function deleteCustomContent_(data)");
+ const end = server.indexOf("\\n/* ---------- Administrator", start);
+ assert.ok(start >= 0 && end > start);
+ const remove = server.slice(start, end);
+ assert.match(remove, /courseId = String\\(data\\.courseId \\|\\| data\\.mdkId \\|\\| ""\\)/);
+ assert.match(remove, /editor_\\(data, courseId\\)/);
+ assert.match(remove, /String\\(values\\[i\\]\\[0\\]\\) === id && sameCourseId_\\(values\\[i\\]\\[1\\], courseId\\)/);
+ assert.match(api, /deleteCustomContent:function\\(id,courseId\\)/);
+ assert.equal((editor.match(/deleteCustomContent\\(id,courseSel\\.value\\)/g) || []).length, 2);
+});
