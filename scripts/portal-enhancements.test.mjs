@@ -657,19 +657,21 @@ test("course training routes open topic tests through the protected server workf
   assert.match(app, /window\.API\.submitBuiltInTest/);
 });
 
-test("course selector and exam engine use the new course bank without duplicate or placeholder questions", () => {
+test("course selector and active final exam use the protected course bank", () => {
   const html = read("index.html");
   const sw = read("service-worker.js");
-  const exam = read("exam-engine.js");
-  assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\/option>/);
-  assert.match(html, /sprut-tp-question-bank\.js\?v=2/);
+  const finalExam = read("final.js");
+  const server = read("Code.gs");
+  assert.match(html, /<option value="SPRUT_TP">СПРУТ-ТП<\\/option>/);
+  assert.match(html, /sprut-tp-question-bank\\.js\\?v=2/);
   assert.ok(sw.includes("./sprut-tp-question-bank.js"));
-  assert.match(sw, /portal-cache-v[0-9]+/);
-  assert.doesNotMatch(exam, /Дополнительный вопрос по МДК/);
-  assert.match(exam, /seen\[key\]/);
-  assert.match(exam, /slice\(0, 30\)/);
-  assert.match(exam, /correct \/ total/);
-  assert.match(exam, /courseId === "SPRUT_TP"/);
+  assert.doesNotMatch(html, /exam-engine\\.js/);
+  assert.doesNotMatch(sw, /exam-engine\\.js/);
+  assert.match(finalExam, /FINAL_EXAM_TEST_SIZE = 45/);
+  assert.match(finalExam, /getFinalExam/);
+  assert.match(finalExam, /submitFinalExam/);
+  assert.match(server, /function getFinalExam_/);
+  assert.match(server, /function submitFinalExam_/);
 });
 
 
