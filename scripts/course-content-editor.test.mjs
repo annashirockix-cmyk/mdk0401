@@ -64,3 +64,18 @@ test("custom content upserts serialize duplicate-ID checks and writes", () => {
  assert.ok(read > wait && write > read, "keep duplicate lookup and write inside the lock");
  assert.ok(release > write && save.includes("finally {"), "release the lock even when a save fails");
 });
+
+test("custom content deletion shares the upsert lock", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function deleteCustomContent_(data)");
+ const end = server.indexOf("\n/* ---------- Administrator", start);
+ assert.ok(start >= 0 && end > start);
+ const remove = server.slice(start, end);
+ const lock = remove.indexOf("LockService.getScriptLock()");
+ const wait = remove.indexOf("lock.waitLock(10000)");
+ const read = remove.indexOf("sheet.getDataRange().getValues()");
+ const deletion = remove.indexOf("sheet.deleteRow(");
+ const release = remove.indexOf("lock.releaseLock()");
+ assert.ok(lock >= 0 && wait > lock && read > wait && deletion > read);
+ assert.ok(release > deletion && remove.includes("finally {"), "delete must release the shared lock");
+});
