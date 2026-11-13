@@ -126,6 +126,7 @@ window.renderFinal_0701 = function(mdkId) {
       }));
   }
   var allQ = baseQuestions;
+  if (window._shuffleQuestionOptions) allQ.forEach(window._shuffleQuestionOptions);
 
   app.innerHTML += '<section class="hero"><h1>📋 МДК 07.01</h1><p>Итоговый экзамен: 10 вопросов · 10 минут</p></section>';
   var box = document.createElement("div"); box.className = "module"; app.appendChild(box);
