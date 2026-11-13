@@ -115,3 +115,19 @@ test("all course practice exam renderers invoke the shared option shuffle", () =
     assert.match(source,/window\._shuffleQuestionOptions\) questions\.forEach\(window\._shuffleQuestionOptions\)/,file+" must shuffle options");
   }
 });
+
+
+test("student-facing assessment sanitizers strip alternate answer-key field names", () => {
+  const safeBuiltIn = new Function("shuffledServer_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer);
+  const privateFields = {
+    type:"mc",q:"Question",options:["a","b","c","d"],correct:1,correctIndex:1,
+    correctOption:"b",answerIndex:1,expectedAnswer:"b",acceptedAnswers:["b"],
+    correctOrder:["a"],rationale:"teacher note",isCorrect:true
+  };
+  const output = safeBuiltIn({bankId:"bank",questionId:"q2",question:privateFields},{});
+  for (const key of ["correct","correctIndex","correctOption","answerIndex","expectedAnswer","acceptedAnswers","correctOrder","rationale","isCorrect"]) {
+    assert.equal(Object.hasOwn(output.question,key),false,key+" must not reach the browser");
+  }
+  assert.match(extract(code,"getCustomContent_"),/stripTestKeys_/);
+  assert.match(extract(vpr,"sanitizeEnglishVprExam_"),/correctIndex\|correctOption/);
+});
