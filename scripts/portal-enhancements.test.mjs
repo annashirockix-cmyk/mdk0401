@@ -1423,3 +1423,21 @@ test("legacy non-English written exam engine is no longer shipped or cached", ()
   assert.match(sw, /portal-cache-v354/);
   assert.doesNotMatch(read("final.js"), /writtenPrompts|textarea\\[name\\^="written"\\]/);
 });
+
+
+test("attempt-count reads only the compact Results index, not full submissions", () => {
+  const server = read("Code.gs");
+  assert.match(server, /function resultAttemptRows_\(\)/);
+  assert.match(server, /getRange\(2,1,lastRow-1,13\)\.getValues\(\)/);
+  const saveStart = server.indexOf("function saveResult_(data, serverVerifiedEnglishVpr)");
+  const saveEnd = server.indexOf("function saveTeacherResult_", saveStart + 20);
+  const save = server.slice(saveStart, saveEnd);
+  assert.ok(save.includes("resultAttemptRows_()"));
+  assert.doesNotMatch(save, /sheet\.getDataRange\(\)\.getValues\(\)/);
+  const statusStart = server.indexOf("function getTestAttemptStatus_(data)");
+  const statusEnd = server.indexOf("function requestTestAttempts_(data)", statusStart + 20);
+  assert.ok(server.slice(statusStart, statusEnd).includes("resultAttemptRows_()"));
+  const semesterStart = server.indexOf("function submitEnglishSemesterTest_(data)");
+  const semesterEnd = server.indexOf("function submitEnglishVprExam_", semesterStart + 20);
+  assert.ok(server.slice(semesterStart, semesterEnd).includes("resultAttemptRows_()"));
+});
