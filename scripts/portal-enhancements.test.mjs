@@ -1533,7 +1533,7 @@ test("English VPR enforces the five-word written-answer limit on the server", ()
 test("English VPR listening answer keys match the speaker roles in both dialogues", () => {
   const bank = read("EnglishVPR-Sheets.gs");
   const start = bank.indexOf("function englishVprSeedExams_");
-  const end = bank.indexOf("\\nfunction englishVprBank_", start);
+  const end = bank.indexOf("\nfunction englishVprBank_", start);
   assert.ok(start >= 0 && end > start);
   const sandbox = {};
   vm.runInNewContext(
