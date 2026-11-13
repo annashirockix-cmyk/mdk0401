@@ -380,7 +380,7 @@
       '<section class="module"><p>Выберите аудирование. Браузер прочитает английский текст вслух. В тренировочном режиме после ответа доступны проверка и расшифровка. Это учебные упражнения, не экзаменационные попытки.</p></section>';
     var currentSemester = "";
     activities.forEach(function (activity) {
-      var courseParts = activity.id.match(/en-c(\\d+)-s(\\d+)-/);
+      var courseParts = activity.id.match(/en-c(\d+)-s(\d+)-/);
       var semester = courseParts ? "Курс " + Number(courseParts[1]) + " · Семестр " + Number(courseParts[2]) : "Аудирование";
       if (semester !== currentSemester) {
         currentSemester = semester;
