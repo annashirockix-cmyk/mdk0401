@@ -684,7 +684,7 @@ function getStudents_(data) {
   return { success: true, students: students };
 }
 
-function saveResult_(data) {
+function saveResult_(data, serverVerifiedEnglishVpr) {
   const user = auth_(data);
   const email = email_(data.email || user.email);
   if (email !== user.email && user.role !== "admin") {
@@ -695,6 +695,14 @@ function saveResult_(data) {
   if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
   const testId = String(data.testId || "test");
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
+  // English VPR and semester tests have dedicated server-side graders. A browser
+  // must never be able to create a trusted-looking result by calling saveResult.
+  if (user.role === "student" && /^english_vpr_/.test(testId) && serverVerifiedEnglishVpr !== true) {
+    throw new Error("Результат английского ВПР принимается только через серверную проверку ответов.");
+  }
+  if (user.role === "student" && /^english_semester_/.test(testId)) {
+    throw new Error("Результат семестровой контрольной принимается только через серверную проверку ответов.");
+  }
   const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId)||/^english_/.test(testId));
   if(user.role==="student"&&/^__final__/.test(testId))throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
   if(user.role==="student"&&(testId.indexOf("test_")===0||/^self_.+_\d+$/.test(testId))){
