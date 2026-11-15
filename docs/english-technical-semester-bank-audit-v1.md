@@ -43,7 +43,17 @@ The following items need particular attention during expert review:
 - Q144 and Q173: make sure the examples remain reading-comprehension items, not operational instructions.
 - Q194: aviation maintenance wording must be checked against the approved programme and specialist terminology.
 
-## 5. Remaining release gates
+## 5. Remaining release gates## 4A. Editorial near-duplicate review (2026-11-15)
+
+A manual content-level pass identified three repeated concepts that were not exact duplicate stems and therefore were not caught by the normalized-stem check:
+
+- Q70 and Q126 both tested the definition/purpose of a bill of materials (BOM). Q126 has been replaced with a purchase-requisition purpose item.
+- Q92 and Q137 both tested the purpose of root-cause analysis. Q137 has been replaced with the purpose of corrective action after a non-conformity investigation.
+- Q98 and Q149 both tested the meaning of obsolete documentation. Q149 has been replaced with the meaning of a controlled copy.
+
+These edits retain the four-option format and the existing answer-key positions. They reduce repeated content but do not constitute a full semantic review of every question pair. Basic–Technical cross-track semantic comparison and protected VPR variant comparison remain outstanding.
+
+
 
 1. Complete semantic duplicate review against the active Basic and Technical VPR banks, including any variants stored in Sheets.
 2. Review difficulty, CEFR/ESP progression, distractor quality and distribution across technologists, programmers, electricians, machine operators and aviation contexts.
