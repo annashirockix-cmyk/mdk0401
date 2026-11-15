@@ -94,6 +94,9 @@ test("built-in and final exams keep answer keys server-side and remap submitted 
   const builtInSubmit = extract(code,"submitBuiltInTest_");
   assert.match(builtInSubmit,/lockedAttemptRaw=cache\\.get\\("builtInAttempt:"\\+attemptId\\)/);
   assert.match(builtInSubmit,/cache\\.remove\\("builtInAttempt:"\\+attemptId\\)/);
+  assert.match(code,/questions:entries\\.map\\(function\\(entry\\)\\{return \\{bankId:entry\\.bankId,question:JSON\\.parse\\(JSON\\.stringify\\(entry\\.question\\)\\)\\};\\}\\)/);
+  assert.match(builtInSubmit,/Array\\.isArray\\(attempt\\.questions\\)\\?attempt\\.questions:\\[\\]/);
+  assert.doesNotMatch(builtInSubmit,/const entries=builtInQuestions_\\(courseId,resolvedIds\\)/);
   const customSubmit = extract(code,"submitCustomTest_");
   assert.match(customSubmit,/lockedAttemptRaw = cache\\.get\\("customTestAttempt:" \\+ attemptId\\)/);
   assert.match(customSubmit,/cache\\.remove\\("customTestAttempt:" \\+ attemptId\\)/);
