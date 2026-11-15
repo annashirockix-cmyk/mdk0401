@@ -894,7 +894,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=23"));
+  assert.ok(html.includes("english-vpr-engine.js?v=24"));
   assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
