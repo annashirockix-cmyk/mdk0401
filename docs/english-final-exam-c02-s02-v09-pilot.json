@@ -94,7 +94,12 @@
     {
       "id": "c2s2v09_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "The information about a person that remains visible through online activity is a digital ___.",
+      "acceptedAnswers": [
+        "footprint",
+        "digital footprint"
+      ]
     },
     {
       "id": "c2s2v09_f01",
