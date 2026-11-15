@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 07",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v07_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to Oliver's message. Where will the project group meet?",
+      "audioText": "Hi, Oliver. Our project group is meeting in the media room tomorrow. The room is free from two until three thirty. Please bring the pictures you found and your notes. I will bring my laptop. We need to choose three pictures for the college website and write short captions. If you cannot come, send your ideas to the group chat before lunch.",
+      "options": [
+        "In the media room",
+        "In the library",
+        "In the sports hall",
+        "In the main office"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v07_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should a student do if they cannot attend the meeting?",
+      "audioText": "Hi, Oliver. Our project group is meeting in the media room tomorrow. The room is free from two until three thirty. Please bring the pictures you found and your notes. I will bring my laptop. We need to choose three pictures for the college website and write short captions. If you cannot come, send your ideas to the group chat before lunch.",
+      "options": [
+        "Bring the laptop next week",
+        "Send ideas to the group chat before lunch",
+        "Ask the teacher to cancel the project",
+        "Wait outside the media room"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v07_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Last month, Irina helped at the college open day. She welcomed visitors at the entrance and showed them where to find the workshops. She also gave out maps and answered simple questions about the timetable. Irina was tired at the end of the day, but she enjoyed meeting new people. Next year, she wants to help organise the event. What did Irina give to visitors?",
+      "options": [
+        "Maps",
+        "Notebooks",
+        "Bus tickets",
+        "Certificates"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v07_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does Irina want to do next year?",
+      "options": [
+        "Study at another college",
+        "Help organise the open day",
+        "Work in the sports hall",
+        "Write a new timetable"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v07_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct Past Simple form: 'Yesterday our group ___ a short presentation.'",
+      "options": [
+        "prepare",
+        "prepares",
+        "prepared",
+        "preparing"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v07_g02",
+      "type": "multiple_choice",
+      "prompt": "Select TWO grammatically correct questions in the Past Simple.",
+      "options": [
+        "Did you visit the workshop?",
+        "Did she helped at the open day?",
+        "Where did they meet?",
+        "Where they did meet?"
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v07_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'A person who works to help others without receiving money is a ___.'",
+      "acceptedAnswers": [
+        "volunteer"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v07_f01",
+      "type": "single_choice",
+      "prompt": "You cannot attend a group meeting. Which message is the most appropriate?",
+      "options": [
+        "I no come. Bye.",
+        "I'm sorry, I can't attend the meeting. I'll send my ideas before lunch.",
+        "You meeting without me now.",
+        "I am not meeting yesterday."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v07_o01",
+      "type": "ordering",
+      "prompt": "Put the steps for preparing a short group presentation in a logical order.",
+      "options": [
+        "Practise the presentation",
+        "Choose the topic and main points",
+        "Collect useful information and pictures",
+        "Prepare the slides"
+      ],
+      "correctOrder": [
+        "Choose the topic and main points",
+        "Collect useful information and pictures",
+        "Prepare the slides",
+        "Practise the presentation"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v07_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about a college event or group project you took part in, or would like to take part in. Explain what students do, what your role is and why teamwork is useful.",
+      "rubric": "8 points total: relevant event/project details and a clear role (0–2); understandable sentence structure and basic grammar (0–2); suitable teamwork and event vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v07_audio",
+    "readingPassageId": "c1s1v07_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
