@@ -3093,8 +3093,8 @@ function validateEnglishExamVariantRegistry_(exams) {
  */
 function importEnglishExamVariants_(data) {
   const actor = auth_(data);
-  if (actor.role !== "admin" && actor.role !== "teacher") {
-    throw new Error("Импорт итоговых экзаменов доступен только преподавателю.");
+  if (actor.role !== "admin") {
+    throw new Error("Импорт итоговых экзаменов доступен только администратору после редакторского утверждения.");
   }
   const exams = data.exams;
   const summary = validateEnglishExamVariantRegistry_(exams);
@@ -3105,8 +3105,15 @@ function importEnglishExamVariants_(data) {
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
         throw new Error("Для варианта " + variant.variantId + " требуется объект variantJSON с содержимым экзамена.");
       }
+      if (!payload.sourceNotes || payload.sourceNotes.status !== "approved_for_import") {
+        throw new Error("Вариант " + variant.variantId + " ещё не прошёл редакторское утверждение. Статус должен быть approved_for_import.");
+      }
       validateEnglishFinalVariantPayload_(payload, String(variant.variantId));
-      const variantJSON = JSON.stringify(payload);
+      const approvedPayload = JSON.parse(JSON.stringify(payload));
+      approvedPayload.sourceNotes = Object.assign({}, approvedPayload.sourceNotes, {
+        approvedBy:actor.email, approvedAt:new Date().toISOString()
+      });
+      const variantJSON = JSON.stringify(approvedPayload);
       if (!variantJSON || variantJSON.length > 45000) {
         throw new Error("Содержимое варианта " + variant.variantId + " пустое или превышает безопасный лимит 45 000 символов.");
       }
@@ -3145,17 +3152,32 @@ function importEnglishExamVariants_(data) {
     });
     if (matrix.length) sh.getRange(startRow, 1, matrix.length, headers.length).setValues(matrix);
     SpreadsheetApp.flush();
-    // Сначала подготовить все новые строки неактивными; только затем переключить активную версию.
-    if (oldLastRow >= 2) {
-      const map = headerMap_(sh);
-      const activeCol = map.Active + 1;
-      const activeValues = sh.getRange(2, activeCol, oldLastRow - 1, 1).getValues();
-      for (let i = 0; i < activeValues.length; i++) activeValues[i][0] = "FALSE";
-      sh.getRange(2, activeCol, activeValues.length, 1).setValues(activeValues);
+    // Prepare new rows inactive, then switch under the same script lock used by exam start.
+    const map = headerMap_(sh), activeCol = map.Active + 1;
+    const previousActive = oldLastRow >= 2
+      ? sh.getRange(2, activeCol, oldLastRow - 1, 1).getValues()
+      : [];
+    try {
+      sh.getRange(startRow, activeCol, matrix.length, 1)
+        .setValues(matrix.map(function() { return ["TRUE"]; }));
+      SpreadsheetApp.flush();
+      if (previousActive.length) {
+        const disabledOld = previousActive.map(function() { return ["FALSE"]; });
+        sh.getRange(2, activeCol, disabledOld.length, 1).setValues(disabledOld);
+      }
+      SpreadsheetApp.flush();
+    } catch (activationError) {
+      // Best-effort rollback prevents a failed replacement from leaving no active version.
+      try {
+        if (previousActive.length) sh.getRange(2, activeCol, previousActive.length, 1).setValues(previousActive);
+        sh.getRange(startRow, activeCol, matrix.length, 1)
+          .setValues(matrix.map(function() { return ["FALSE"]; }));
+        SpreadsheetApp.flush();
+      } catch (rollbackError) {
+        throw new Error("Не удалось переключить реестр итоговых экзаменов; автоматический откат также завершился ошибкой: " + rollbackError.message);
+      }
+      throw activationError;
     }
-    sh.getRange(startRow, headers.indexOf("Active") + 1, matrix.length, 1)
-      .setValues(matrix.map(function() { return ["TRUE"]; }));
-    SpreadsheetApp.flush();
     return {success:true, examCount:summary.examCount, variantCount:summary.variantCount,
       basicSlots:summary.basicSlots, technicalSlots:summary.technicalSlots,
       activeVariants:records.length, updatedAt:new Date().toISOString()};
