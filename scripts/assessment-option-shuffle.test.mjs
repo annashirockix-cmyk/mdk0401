@@ -221,3 +221,28 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(journal,/Письменная работа проверена/);
 
 });
+
+
+test("English semester submissions require a server-issued timed attempt", () => {
+  assert.match(extract(code, "englishSemesterAttemptCacheKey_"), /SHA_256/);
+  const get = extract(code, "getEnglishSemesterTests_");
+  assert.match(get, /englishSemesterAttemptCacheKey_/);
+  assert.match(get, /startedAt:Date\.now\(\)/);
+  assert.match(get, /safeTest\.attemptId = attempt\.attemptId/);
+  const submit = extract(code, "submitEnglishSemesterTest_");
+  assert.match(submit, /data\.attemptId/);
+  assert.match(submit, /serverAttempt\.attemptId !== attemptId/);
+  assert.match(submit, /elapsedSeconds > allowedSeconds \+ 300/);
+  assert.match(submit, /TimeSpent:Math\.min\(elapsedSeconds, allowedSeconds\)/);
+  assert.match(submit, /attemptCache\.remove\(attemptKey\)/);
+  assert.match(fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8"), /attemptNo:test\.attemptNo,attemptId:test\.attemptId/);
+});
+
+test("English VPR duration is measured from the server attempt start", () => {
+  const prepare = extract(vpr, "getEnglishVprExam_");
+  assert.match(prepare, /startedAt:Date\.now\(\)/);
+  const submit = extract(vpr, "submitEnglishVprExam_");
+  assert.match(submit, /const startedAt = Number\(attempt\.startedAt\)/);
+  assert.match(submit, /Date\.now\(\) - startedAt/);
+  assert.match(submit, /timeSpent:Math\.min\(Math\.max\(0,Math\.floor\(\(Date\.now\(\)-startedAt\)\/1000\)\)/);
+});
