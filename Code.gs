@@ -1838,6 +1838,15 @@ function safeBuiltInQuestion_(entry, optionMaps) {
   return {bankId:entry.bankId,questionId:entry.questionId,questionIndex:entry.questionIndex,question:q};
 }
 
+function builtInScoringSnapshot_(question) {
+  const source = question && typeof question === "object" ? question : {};
+  const snapshot = {};
+  ["type","correct","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"].forEach(function(key) {
+    if (source[key] !== undefined) snapshot[key] = JSON.parse(JSON.stringify(source[key]));
+  });
+  return snapshot;
+}
+
 function getBuiltInTest_(data) {
   const user=auth_(data),courseId=String(data.courseId||""),testId=String(data.testId||"");
   const bankIds=Array.isArray(data.bankIds)?data.bankIds.map(String).slice(0,10):[];
@@ -1858,7 +1867,7 @@ function getBuiltInTest_(data) {
   }
   const attemptId=Utilities.getUuid().replace(/-/g,""),optionMaps={};
   const questions=entries.map(function(entry){return safeBuiltInQuestion_(entry,optionMaps);});
-  CacheService.getScriptCache().put("builtInAttempt:"+attemptId,JSON.stringify({email:user.email,courseId:courseId,testId:testId,bankIds:resolvedIds,questions:entries.map(function(entry){return {bankId:entry.bankId,question:JSON.parse(JSON.stringify(entry.question))};}),optionMaps:optionMaps}),3600);
+  CacheService.getScriptCache().put("builtInAttempt:"+attemptId,JSON.stringify({email:user.email,courseId:courseId,testId:testId,bankIds:resolvedIds,questions:entries.map(function(entry){return {bankId:entry.bankId,question:builtInScoringSnapshot_(entry.question)};}),optionMaps:optionMaps}),3600);
   return {success:true,courseId:courseId,testId:testId,bankIds:resolvedIds,attemptId:attemptId,questions:questions};
 }
 
