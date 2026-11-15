@@ -25,7 +25,7 @@
     {
       "id": "c4s2v05_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which two documents should students bring?",
+      "prompt": "Listening 2. Which sample project-report materials are needed for the data-summary exercise?",
       "audioText": "The systems engineering tutor will review a technical data report on Friday at ten. Students should bring the sample table and the report template. The session will focus on units, data sources and clear descriptions of trends. Students will practise writing a short summary that distinguishes measured results from possible explanations.",
       "options": [
         "On Friday",
