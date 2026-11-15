@@ -31,11 +31,12 @@ Scope: legacy Basic semester seed, independent Basic authoring drafts v1–v3, a
 - Draft v2: questions 21–40.
 - Draft v3: questions 41–60.
 - Draft v4: questions 61–80.
-- Draft v5: questions 81–120.
+- Draft v5: questions 81–140.
 - Draft v6: questions 101–120.
+- Draft v7: questions 121–140.
 - Each draft contains four answer options per question and a separate teacher key with rationale.
 - The drafts are original authoring material, not yet checked against the exact Belova edition or the approved work programme. They are not imported or student-visible.
-- Structural checks across all 120 questions found no repeated question stems, missing keys, missing key options, or incorrect option counts.
+- Structural checks across all 140 questions found no repeated question stems, missing keys, missing key options, or incorrect option counts.
 
 ## Safety and release gates
 
