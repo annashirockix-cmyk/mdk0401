@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 09",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v09_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to the computer room notice. Why will the computer room be unavailable on Wednesday morning?",
+      "audioText": "Hello, Alex. This is the notice for the college computer room. It will be unavailable on Wednesday morning from nine until eleven because technicians are installing new software. Students can use the computers in the library during this time. Please save your work and log out before leaving the room on Tuesday. The computer room will reopen at eleven thirty.",
+      "options": [
+        "Students are taking an exam",
+        "Technicians are installing new software",
+        "The room is being painted",
+        "The teacher is holding a meeting"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v09_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Where can students use computers during the maintenance?",
+      "audioText": "Hello, Alex. This is the notice for the college computer room. It will be unavailable on Wednesday morning from nine until eleven because technicians are installing new software. Students can use the computers in the library during this time. Please save your work and log out before leaving the room on Tuesday. The computer room will reopen at eleven thirty.",
+      "options": [
+        "In the library",
+        "In the workshop",
+        "In the main office",
+        "At home only"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v09_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Amina is learning to use a digital measuring tool in her technology class. First, her teacher demonstrates how to switch it on and select the correct unit. Amina then measures several metal parts and writes the results in a table. She checks each measurement twice to avoid mistakes. When she finishes, she cleans the tool and returns it to its case. Why does Amina check each measurement twice?",
+      "options": [
+        "To finish the lesson early",
+        "To avoid mistakes",
+        "To change the measuring unit",
+        "To help another teacher"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v09_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does Amina do with the measuring tool after finishing?",
+      "options": [
+        "She leaves it on the table",
+        "She gives it to another student",
+        "She cleans it and returns it to its case",
+        "She puts it in the workshop cupboard without cleaning"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v09_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct comparative form: 'This digital measuring tool is ___ than the old one.'",
+      "options": [
+        "accurate",
+        "more accurate",
+        "most accurate",
+        "the accurate"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v09_g02",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO instructions that use the imperative correctly.",
+      "options": [
+        "Select the correct unit.",
+        "You selecting the correct unit.",
+        "Check the result twice.",
+        "Checks the result twice."
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v09_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'A device used to find the size, length or amount of something is a measuring ___.'",
+      "acceptedAnswers": [
+        "tool",
+        "instrument",
+        "device"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v09_f01",
+      "type": "single_choice",
+      "prompt": "You need to use a digital measuring tool but have not been shown how. What should you say?",
+      "options": [
+        "Could you show me how to use this tool, please?",
+        "I use it any way.",
+        "You must give me this now.",
+        "Why is this tool here yesterday?"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v09_o01",
+      "type": "ordering",
+      "prompt": "Put the steps for taking and recording a measurement in the correct order.",
+      "options": [
+        "Write the result in a table",
+        "Select the correct unit",
+        "Switch on the measuring tool",
+        "Measure the part"
+      ],
+      "correctOrder": [
+        "Switch on the measuring tool",
+        "Select the correct unit",
+        "Measure the part",
+        "Write the result in a table"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v09_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words explaining how to use a simple tool or piece of equipment safely. Describe the main steps, name one possible mistake and explain how to avoid it.",
+      "rubric": "8 points total: clear sequence of steps and safety advice (0–2); understandable sentence structure and grammar (0–2); relevant tools and measurement vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v09_audio",
+    "readingPassageId": "c1s1v09_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
