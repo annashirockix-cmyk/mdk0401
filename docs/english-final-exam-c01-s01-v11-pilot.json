@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 11",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v11_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Why will the library close early?",
+      "audioText": "The college library will close at four thirty this Friday because staff are checking the book catalogue. Students should return borrowed books before four o'clock. The study room on the second floor will remain open until six, but the library computers will not be available. You can use the computer room in Block B instead. Normal library hours begin again on Monday.",
+      "options": [
+        "Staff are checking the catalogue",
+        "There is a student meeting",
+        "The building needs repairs",
+        "A new class is starting"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v11_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Where can students use a computer?",
+      "audioText": "The college library will close at four thirty this Friday because staff are checking the book catalogue. Students should return borrowed books before four o'clock. The study room on the second floor will remain open until six, but the library computers will not be available. You can use the computer room in Block B instead. Normal library hours begin again on Monday.",
+      "options": [
+        "In the study room",
+        "In Block B",
+        "At the library desk",
+        "In the sports hall"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v11_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Nadia has to prepare a short report about renewable energy. She searches the college library catalogue and finds two useful books. She writes down their titles and shelf numbers before going to the reading area. She uses the books to check facts, but she writes the report in her own words. At the end, she lists the sources she used. What does Nadia write down from the catalogue?",
+      "options": [
+        "The authors' home addresses",
+        "The library opening times",
+        "The titles and shelf numbers",
+        "Her classmates' names"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v11_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. How does Nadia use information from the books?",
+      "options": [
+        "She asks a friend to write the report",
+        "She checks facts and writes in her own words",
+        "She removes the pages",
+        "She copies every paragraph"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s1v11_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct sentence.",
+      "options": [
+        "Nadia has found two useful books.",
+        "Nadia finding two books.",
+        "Nadia have found two books.",
+        "Nadia finded two books."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v11_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO useful ways to make a short report reliable.",
+      "options": [
+        "Check information in suitable sources.",
+        "Copy an unknown website without checking it.",
+        "Record the sources you use.",
+        "Remove facts that disagree with your opinion."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v11_v01",
+      "type": "short_text",
+      "prompt": "Complete with one word: 'A list of books and websites used in a report is a list of ___.'",
+      "acceptedAnswers": [
+        "sources",
+        "references",
+        "reference"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v11_f01",
+      "type": "single_choice",
+      "prompt": "You cannot find a book in the catalogue. What should you ask?",
+      "options": [
+        "Why do you hide the books?",
+        "Could you help me locate this book, please?",
+        "You must search for me.",
+        "I want it immediately."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v11_o01",
+      "type": "ordering",
+      "prompt": "Put the research steps in the correct order.",
+      "options": [
+        "Write the report in your own words",
+        "Choose a suitable topic",
+        "Find and check reliable sources",
+        "List the sources used"
+      ],
+      "correctOrder": [
+        "Write the report in your own words",
+        "Choose a suitable topic",
+        "Find and check reliable sources",
+        "List the sources used"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v11_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words describing how to find and use information for a college report. Include searching a catalogue, checking facts and recording sources.",
+      "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v11_audio",
+    "readingPassageId": "c1s1v11_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
