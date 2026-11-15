@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO professional habits for the first day of a placement.",
       "options": [
-        "Arrive on time",
         "Ignore the supervisor's instructions",
-        "Introduce yourself politely",
-        "Use a colleague's password"
+        "Use a colleague's password",
+        "Arrive on time",
+        "Introduce yourself politely"
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
