@@ -3026,6 +3026,19 @@ function getEnglishSemesterTests_(data) {
         }).length;
         const attemptNo = prior + 1;
         safeTest.attemptNo = attemptNo;
+        const testKey = "english_semester_" + track + "_" + String(safeTest.id || "");
+        const attemptKey = englishSemesterAttemptCacheKey_(user.email, testKey, attemptNo);
+        const attemptCache = CacheService.getScriptCache();
+        let attempt = null;
+        const cachedAttempt = attemptCache.get(attemptKey);
+        if (cachedAttempt) {
+          try { attempt = JSON.parse(cachedAttempt); } catch (e) { attempt = null; }
+        }
+        if (!attempt || !attempt.attemptId || !Number(attempt.startedAt)) {
+          attempt = {attemptId:Utilities.getUuid().replace(/-/g, ""), startedAt:Date.now()};
+          attemptCache.put(attemptKey, JSON.stringify(attempt), 21600);
+        }
+        safeTest.attemptId = attempt.attemptId;
         safeTest.questions.forEach(function(question, questionIndex) {
           const originalOptions = question.options.slice();
           const order = englishSemesterOptionOrder_(user.email, safeTest.id, attemptNo, questionIndex, originalOptions.length);
@@ -3038,6 +3051,12 @@ function getEnglishSemesterTests_(data) {
   return {success:false, error:"Семестровые контрольные ещё не импортированы преподавателем."};
 }
 
+
+function englishSemesterAttemptCacheKey_(email, testKey, attemptNo) {
+  const raw = String(email || "").toLowerCase() + "|" + String(testKey || "") + "|" + String(attemptNo || "");
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, raw);
+  return "englishSemesterAttempt:" + Utilities.base64EncodeWebSafe(digest).replace(/=+$/g, "");
+}
 
 /**
  * Серверная проверка семестровой контрольной. Правильные ответы читаются
@@ -3091,6 +3110,22 @@ function submitEnglishSemesterTest_(data) {
     if (!Number.isInteger(requestedAttemptNo) || requestedAttemptNo !== attemptNo) {
       throw new Error("Номер попытки изменился. Обновите список контрольных и откройте работу заново.");
     }
+    const attemptId = String(data.attemptId || "").trim();
+    const attemptKey = englishSemesterAttemptCacheKey_(user.email, testKey, attemptNo);
+    const attemptCache = CacheService.getScriptCache();
+    const attemptRaw = attemptCache.get(attemptKey);
+    if (!attemptId || !attemptRaw) throw new Error("Серверная попытка не найдена или истекла. Обновите список контрольных.");
+    let serverAttempt;
+    try { serverAttempt = JSON.parse(attemptRaw); } catch (e) { throw new Error("Не удалось проверить серверную попытку."); }
+    if (serverAttempt.attemptId !== attemptId || !Number(serverAttempt.startedAt)) {
+      throw new Error("Эта попытка не принадлежит текущей контрольной. Откройте работу заново.");
+    }
+    const elapsedSeconds = Math.max(0, Math.floor((Date.now() - Number(serverAttempt.startedAt)) / 1000));
+    const allowedSeconds = Math.max(1, Number(test.time) || 45) * 60;
+    if (elapsedSeconds > allowedSeconds + 300) {
+      attemptCache.remove(attemptKey);
+      throw new Error("Время контрольной истекло. Обратитесь к преподавателю для новой попытки.");
+    }
     const canonicalAnswers = answers.map(function(answer, index) {
       const optionCount = (test.questions[index].options || []).length;
       if (!Number.isInteger(answer) || answer < 0 || answer >= optionCount) return -1;
@@ -3108,11 +3143,12 @@ function submitEnglishSemesterTest_(data) {
     appendMappedRecord_(results, {
       Email:user.email, Name:user.name, Group:user.group, TestId:testKey, TestTitle:title,
       Grade:grade, Score:score, MaxScore:test.questions.length, Percent:percent,
-      TimeSpent:Math.min(Math.max(0, Number(data.timeSpent) || 0), Math.max(1, Number(test.time) || 45) * 60), Attempts:attemptNo,
+      TimeSpent:Math.min(elapsedSeconds, allowedSeconds), Attempts:attemptNo,
       FinishedAt:new Date().toISOString(), CourseId:courseId,
       Submission:JSON.stringify({answers:canonicalAnswers}).slice(0,10000),
       PenaltyPoints:policy.penaltyPoints, ViolationCount:policy.violationCount
     });
+    attemptCache.remove(attemptKey);
     appendAttemptAudit_({
       EventType:"attempt_submitted", ActorEmail:user.email, StudentEmail:user.email,
       StudentName:user.name, Group:user.group, CourseId:courseId, TestId:testKey,
