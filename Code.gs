@@ -462,9 +462,13 @@ function admin_(data) {
 function hasCourseAccess_(user, courseId) {
   if (user.role === "admin") return true;
   if (user.role !== "teacher" && user.role !== "student") return false;
-  const assigned = user.courses.split(",").map(function (id) { return id.trim(); });
-  if ((courseId === "ENB" || courseId === "ENT") && assigned.indexOf("EN") !== -1) return true;
-  return assigned.indexOf(String(courseId)) !== -1;
+  const assigned = String(user.courses || "").split(",").map(function (id) { return id.trim(); }).filter(Boolean);
+  const requested = String(courseId || "").trim();
+  // Legacy/general English enrollment grants access to both English tracks.
+  // Keep this fallback symmetric for teachers and students so ENB/ENT journals,
+  // assignments and protected assessments use the same authorization rule.
+  if ((requested === "ENB" || requested === "ENT") && assigned.indexOf("EN") !== -1) return true;
+  return assigned.indexOf(requested) !== -1;
 }
 
 function editor_(data, courseId) {
