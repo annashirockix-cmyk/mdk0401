@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 14",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v14_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When do the presentation skills lessons take place?",
+      "audioText": "The college is offering students a choice of two optional short courses next term. The first course focuses on presentation skills and meets on Mondays. The second introduces basic project management and meets on Wednesdays. Both courses have the same number of lessons. Students should read the descriptions and submit their preference by the end of the month.",
+      "options": [
+        "On Mondays",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v14_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. When should students submit their preference?",
+      "audioText": "The college is offering students a choice of two optional short courses next term. The first course focuses on presentation skills and meets on Mondays. The second introduces basic project management and meets on Wednesdays. Both courses have the same number of lessons. Students should read the descriptions and submit their preference by the end of the month.",
+      "options": [
+        "On Friday",
+        "By the end of the month",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v14_r01",
+      "type": "single_choice",
+      "prompt": "Maksim wanted to improve his communication skills, but he was also interested in learning how to organise projects. He compared the course descriptions and checked his timetable. The project management course fitted his schedule better, while presentation skills were already included in another college activity. He chose project management and saved the course confirmation. Reading 1. Which course did Maksim choose?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "The project management course",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v14_r02",
+      "type": "single_choice",
+      "prompt": "Why did he make that choice?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "It fitted his schedule and presentation skills were covered elsewhere"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v14_g01",
+      "type": "single_choice",
+      "prompt": "This course is ___ than the one I attended last term.",
+      "options": [
+        "more practical",
+        "most practical",
+        "practicaler",
+        "the more practical"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v14_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO factors to consider when selecting an optional course.",
+      "options": [
+        "Whether it fits your timetable",
+        "Whether it supports your learning goals",
+        "Whether a friend dislikes it",
+        "The colour of the course website"
+      ],
+      "correctIndices": [
+        0,
+        1
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v14_v01",
+      "type": "short_text",
+      "prompt": "A decision made after comparing possibilities is a ___.",
+      "acceptedAnswers": [
+        "choice",
+        "decision"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v14_f01",
+      "type": "single_choice",
+      "prompt": "You need more information before choosing a course. What should you ask?",
+      "options": [
+        "Could you explain what topics the course covers?",
+        "I choose without reading anything.",
+        "Send me somebody else's results.",
+        "You must decide for me."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v14_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of making decisions in a sensible order.",
+      "options": [
+        "Check the timetable and requirements",
+        "Identify what you want to learn",
+        "Submit your chosen option",
+        "Read the available course descriptions"
+      ],
+      "correctOrder": [
+        "Identify what you want to learn",
+        "Read the available course descriptions",
+        "Check the timetable and requirements",
+        "Submit your chosen option"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v14_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words comparing two optional courses. Explain which one you would choose and give two reasons.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v14_audio",
+    "readingPassageId": "c2s1v14_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
