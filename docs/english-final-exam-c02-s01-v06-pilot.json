@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO professional habits that help a new employee.",
       "options": [
-        "Arriving on time",
-        "Ignoring instructions",
         "Asking when a task is unclear",
-        "Sharing private passwords"
+        "Sharing private passwords",
+        "Arriving on time",
+        "Ignoring instructions"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -105,12 +105,12 @@
       "type": "single_choice",
       "prompt": "You need to change an interview appointment. What is the most appropriate message?",
       "options": [
-        "Could we arrange another time for the interview, please?",
         "Change it. I am busy.",
+        "Could we arrange another time for the interview, please?",
         "I will not come. Goodbye.",
         "You must wait for me."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
