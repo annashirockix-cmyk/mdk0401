@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful details to include in a short CV.",
       "options": [
-        "Relevant skills",
         "A friend's private password",
-        "Education and training",
-        "Unrelated personal opinions"
+        "Unrelated personal opinions",
+        "Relevant skills",
+        "Education and training"
       ],
       "correctIndices": [
         2,
