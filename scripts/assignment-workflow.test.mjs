@@ -469,6 +469,9 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /Отправить исправленную работу/);
   assert.match(ui, /Комментарий преподавателя:/);
   assert.match(journal, /window\.API\.saveManualGrade\(/);
+  assert.match(journal, /window\.API\.getResults\(\{courseId:window\.state\.activeCourseId\}\)/);
+  assert.match(journal, /manualByStudent\[String\(s\.email\|\|""\)\.toLowerCase\(\)\+"\|"+dateInput\]/);
+  assert.match(journal, /escapeHtml\(currentFeedback\)/);
   assert.doesNotMatch(journal.slice(journal.indexOf("function renderManual"), journal.indexOf('document.getElementById("tabAuto")')), /window\.API\.saveStudent/);
   assert.match(backend, /AssignmentSubmissionHistory: \[[^\]]*"Grade"[^\]]*"Feedback"/);
   assert.match(ui, /window\.API\.gradeAssignment/);
