@@ -125,6 +125,7 @@ function handleRequest_(e) {
       case "importenglishexamvariants": result = importEnglishExamVariants_(data); break;
       case "startenglishfinalexam": result = startEnglishFinalExam_(data); break;
       case "resumeenglishfinalexam": result = resumeEnglishFinalExam_(data); break;
+      case "saveenglishfinalexamresponses": result = saveEnglishFinalExamResponses_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
@@ -3215,6 +3216,48 @@ function resumeEnglishFinalExam_(data) {
       startedAt:row[m.StartedAt],deadlineAt:row[m.DeadlineAt],
       tasks:sanitizeEnglishFinalExamTask_(snapshot.tasks||[]),
       responses:(function(){try{return JSON.parse(String(row[m.ResponsesJSON]||"{}"));}catch(e){return {};}})()};
+  } finally { lock.releaseLock(); }
+}
+
+
+/**
+ * Persist student responses incrementally. The server never accepts a client score
+ * or answer key, and only the authenticated owner may update an active attempt.
+ */
+function saveEnglishFinalExamResponses_(data) {
+  const user=auth_(data), attemptId=String(data.attemptId||"").trim();
+  const responses=data.responses;
+  if(user.role!=="student" || !attemptId || !responses || typeof responses!=="object" || Array.isArray(responses)) {
+    throw new Error("Некорректные данные для сохранения ответов.");
+  }
+  const serialized=JSON.stringify(responses);
+  if(!serialized || serialized.length>45000) throw new Error("Ответы пусты или превышают допустимый размер.");
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet=ensureSheet_("EnglishExamAttempts"), found=englishFinalAttemptRow_(sheet,attemptId);
+    if(!found) throw new Error("Попытка экзамена не найдена.");
+    const row=found.values,m=found.map;
+    if(email_(row[m.StudentEmail])!==user.email) throw new Error("Эта попытка не принадлежит текущему аккаунту.");
+    if(String(row[m.Status])!=="in_progress") throw new Error("Ответы нельзя изменить: попытка уже закрыта.");
+    if(new Date(row[m.DeadlineAt]).getTime()<=Date.now()) {
+      updateMappedRecord_(sheet,found.row,{Status:"expired",UpdatedAt:new Date().toISOString()});
+      throw new Error("Время итогового экзамена истекло.");
+    }
+    const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}"));
+    const tasks=snapshot.tasks||[];
+    const allowed={};
+    tasks.forEach(function(task,index) {
+      const id=String(task.id||task.questionId||index);
+      allowed[id]=true;
+    });
+    Object.keys(responses).forEach(function(id) {
+      if(!allowed[id]) throw new Error("Получен ответ на неизвестное задание: "+id);
+    });
+    const now=new Date().toISOString();
+    updateMappedRecord_(sheet,found.row,{ResponsesJSON:serialized,UpdatedAt:now});
+    SpreadsheetApp.flush();
+    return {success:true,attemptId:attemptId,savedAt:now,responseCount:Object.keys(responses).length};
   } finally { lock.releaseLock(); }
 }
 
