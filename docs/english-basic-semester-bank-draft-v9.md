@@ -18,7 +18,7 @@
 - C. during
 - D. while
 
-**163.** The doctor asked me how long I ___ that medicine.
+**163.** At the time of the appointment, I ___ the medicine for two weeks and was still taking it.
 - A. take
 - B. am taking
 - C. had been taking
@@ -124,7 +124,7 @@
 - C. very important
 - D. temporary
 
-**180.** Neither the teacher nor the students ___ ready to start when the fire alarm sounded.
+**180.** The teacher and the students ___ ready to start when the fire alarm sounded.
 - A. was
 - B. is
 - C. has been
