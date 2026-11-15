@@ -302,3 +302,12 @@ test("English VPR attempt token is retained until the result write succeeds", ()
   assert.match(submit.slice(cleanupAt), /cache\.remove\("englishVprAttempt:" \+ attemptId\)/);
   assert.match(submit.slice(cleanupAt), /cache\.remove\(String\(finalAttempt\.stableKey\)\)/);
 });
+
+
+test("student cannot create duplicate pending written submissions", () => {
+  const save = extract(code, "saveResult_");
+  assert.match(save, /const matchingRows=values\.filter/);
+  assert.match(save, /Number\(latest\[5\]\)===0/);
+  assert.match(save, /Работа уже отправлена и ожидает проверки преподавателя/);
+  assert.match(save, /matchingRows\.length\s*\)/);
+});
