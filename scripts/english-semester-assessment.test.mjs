@@ -45,9 +45,11 @@ const optionOrder = new Function(optionOrderSource + "; return englishSemesterOp
 
 function validBank(track) {
   const prefix = track === "basic" ? "b_" : "t_";
-  return Array.from({ length: 10 }, (_, i) => ({
+  const firstYear = track === "basic" ? 1 : 3;
+  const count = track === "basic" ? 4 : 6;
+  return Array.from({ length: count }, (_, i) => ({
     id: prefix + "sem" + (i + 1),
-    year: Math.floor(i / 2) + 1,
+    year: firstYear + Math.floor(i / 2),
     semester: i % 2 + 1,
     time: 45,
     questions: Array.from({ length: 20 }, (_, q) => ({
@@ -58,9 +60,19 @@ function validBank(track) {
   }));
 }
 
-test("server accepts exactly ten correctly ordered semester tests with 20 keyed questions each", () => {
-  assert.equal(validate(validBank("basic"), "basic"), 200);
-  assert.equal(validate(validBank("technical"), "technical"), 200);
+test("server accepts four Basic and six Technical semester tests in their five-year course slots", () => {
+  assert.equal(validate(validBank("basic"), "basic"), 80);
+  assert.equal(validate(validBank("technical"), "technical"), 120);
+});
+
+test("server rejects ten-per-track legacy layout and wrong course-year mapping", () => {
+  const tooManyBasic = [...validBank("basic"), ...validBank("basic")].slice(0, 10);
+  assert.throws(() => validate(tooManyBasic, "basic"), /ровно 4/);
+  const tooFewTechnical = validBank("technical").slice(0, 4);
+  assert.throws(() => validate(tooFewTechnical, "technical"), /ровно 6/);
+  const wrongTechnicalYear = validBank("technical");
+  wrongTechnicalYear[0].year = 1;
+  assert.throws(() => validate(wrongTechnicalYear, "technical"), /курсу\\/семестру/);
 });
 
 test("server rejects missing answer keys, duplicate IDs, wrong semester order and repeated questions", () => {
