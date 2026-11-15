@@ -25,7 +25,7 @@
     {
       "id": "c5s2v14_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which two documents should students bring?",
+      "prompt": "Listening 2. Which proposal materials should students bring?",
       "audioText": "The engineering manager will review improvement proposals on Friday at eleven. Students should bring a one-page proposal and a short evidence summary. Each proposal should describe the current issue, the suggested change, expected benefits and possible limitations. The manager will ask how success could be measured and who would be responsible for reviewing the results.",
       "options": [
         "On Friday",
