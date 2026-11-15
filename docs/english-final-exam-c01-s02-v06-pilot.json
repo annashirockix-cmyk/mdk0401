@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 06",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v06_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Why have the outdoor activities been moved?",
+      "audioText": "The college sports day was planned for Friday afternoon, but the weather forecast says there will be heavy rain. The organisers have moved the outdoor activities to Monday. The indoor chess competition will still take place on Friday in Room 12. Students who have registered for a team event should check their email for the new schedule.",
+      "options": [
+        "There will be heavy rain",
+        "The sports hall is closed",
+        "The teachers are ill",
+        "The equipment is missing"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v06_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What will still happen on Friday?",
+      "audioText": "The college sports day was planned for Friday afternoon, but the weather forecast says there will be heavy rain. The organisers have moved the outdoor activities to Monday. The indoor chess competition will still take place on Friday in Room 12. Students who have registered for a team event should check their email for the new schedule.",
+      "options": [
+        "The football final",
+        "The indoor chess competition",
+        "The team parade",
+        "The outdoor race"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v06_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. When the weather became colder, Irina changed her journey to college. She used to walk for twenty minutes, but now she takes a bus on rainy mornings. She checks the forecast before leaving home and keeps a light waterproof jacket in her bag. If the bus is late, she sends a message to her group so they know she may arrive after the lesson starts. How does Irina travel on rainy mornings?",
+      "options": [
+        "By bicycle",
+        "By taxi",
+        "By bus",
+        "By train"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v06_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. Why does she message her group?",
+      "options": [
+        "To cancel the lesson",
+        "To ask for homework",
+        "To change the classroom",
+        "To explain that she may be late"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v06_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct conditional: 'If it rains tomorrow, we ___ the indoor activity.'",
+      "options": [
+        "will choose",
+        "chose",
+        "choosing",
+        "chooses"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v06_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO sensible actions when plans change because of weather.",
+      "options": [
+        "Ignore the new schedule.",
+        "Check messages from the organisers.",
+        "Take suitable clothing.",
+        "Continue an outdoor event during dangerous weather."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v06_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A report about expected weather is a weather ___.'",
+      "acceptedAnswers": [
+        "forecast"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v06_f01",
+      "type": "single_choice",
+      "prompt": "You cannot attend an outdoor event because of heavy rain. What should you ask?",
+      "options": [
+        "Why you moved it?",
+        "Could you tell me whether the event has been rescheduled?",
+        "I don't attend, that's all.",
+        "You must change the weather."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v06_o01",
+      "type": "ordering",
+      "prompt": "Check the updated college message; Read the weather information; Prepare suitable clothing; Follow the revised event schedule",
+      "options": [
+        "Follow the revised event schedule",
+        "Prepare suitable clothing",
+        "Read the weather information",
+        "Check the updated college message"
+      ],
+      "correctOrder": [
+        "Check the updated college message",
+        "Read the weather information",
+        "Prepare suitable clothing",
+        "Follow the revised event schedule"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v06_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about how bad weather can change a college or travel plan. Explain how you would get updated information and what preparations you would make.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v06_audio",
+    "readingPassageId": "c1s2v06_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
