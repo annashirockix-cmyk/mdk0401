@@ -25,7 +25,7 @@
     {
       "id": "c4s2v01_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which diagram should students bring?",
+      "prompt": "Listening 2. Which communication-system diagram should students bring?",
       "audioText": "The communications engineering tutor will introduce basic system diagrams on Wednesday at ten. Students should meet in the network classroom and bring the labelled diagram from the course folder. The lesson will identify a transmitter, communication channel and receiver. Students will discuss the purpose of each block using a simple example.",
       "options": [
         "On Friday",
