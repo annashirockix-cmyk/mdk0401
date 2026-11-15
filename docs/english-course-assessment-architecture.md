@@ -410,79 +410,21 @@ Regression tests cover valid banks, missing keys, duplicate IDs/questions/option
 
 Оставшийся аудит: отдельно проверить все нестандартные интерактивные задания, игры и старые автономные HTML/JS-модули, которые могут оценивать ответы вне перечисленных общих движков. До завершения этого аудита нельзя заявлять, что буквально каждый автономный виджет портала уже использует единый механизм.
 
-## Final-exam content authoring status — Course 1, Semester 1
+## Final-exam content authoring status — all ten slots drafted
 
-The first slot now has 15 authored Basic English pilot variants (`docs/english-final-exam-c01-s01-v01-pilot.json` through `v15`). Each form has 10 tasks, 20 points, 90 minutes, browser-readable listening scripts and one teacher-reviewed written response. The regression test validates all 15 against the protected runtime schema, checks unique task prompts and listening scripts across variants, and enforces a balanced A/B/C/D answer-key distribution. All 15 remain marked `pilot_for_editorial_review`; this is not a formal pedagogical sign-off and the forms have not been imported into the protected Google Sheet. Nine of the ten course/semester slots remain to be authored.
+The five-year final-exam pilot bank now contains all **150 planned variants**: 10 course/semester slots × 15 variants. Each variant contains 10 tasks, 20 points, 90 minutes, two browser-readable listening tasks sharing one script, and one teacher-reviewed written response. The 1,500 task prompts and 150 listening scripts are unique across the bank. Every variant is checked against `validateEnglishFinalVariantPayload_`; regression tests also check variant-specific task IDs, answer-key balance (A/B/C/D = 2 each per variant), multiple-choice keys and functional-response keys.
 
-### Course 1, Semester 2 — partial authoring status
+| Slot | Track | Variants | Main content focus |
+|---|---|---:|---|
+| C1-S1 | Basic English | 15/15 | College life, classroom communication, study routines, campus services and introductory workshop language |
+| C1-S2 | Basic English | 15/15 | Directions, transport, town services, events, weather, food, digital communication, shopping and future plans |
+| C2-S1 | Basic English | 15/15 | Career fairs, CVs, interviews, education routes, skills portfolios, part-time work, teamwork and workplace communication |
+| C2-S2 | Basic English | 15/15 | Environment, online information, renewable energy, data security, transport, research, volunteering and organisational change |
+| C3-S1 | Technical English | 15/15 | Materials, dimensions, drawings, workshop orientation, components, tolerances, inspection, measurement and technical records |
+| C3-S2 | Technical English | 15/15 | Machine tools, CNC programmes, machining, cutting tools, workholding, process planning, quality and production documentation |
+| C4-S1 | Technical English | 15/15 | Electrical circuits and measurements, electronic components, transformers, sensors, relays, faults and electrical documentation |
+| C4-S2 | Technical English | 15/15 | Communication and computer systems, automation, PLCs, networks, industrial IoT, digital twins and aviation ground-support systems |
+| C5-S1 | Technical English | 15/15 | Maintenance planning, inspection, diagnostics, technical publications, revision control, traceability, human factors and airworthiness records |
+| C5-S2 | Technical English | 15/15 | Maintenance handover, risk communication, fault analysis, controlled documents, supplier clarification, audits and integrated technical reporting |
 
-C1-S2 now has all 15 planned Basic English final-exam pilots (`v01`–`v15`). The 150 task prompts and 15 listening scripts are unique; every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. Regression tests check schema validity and balanced A/B/C/D key positions. These are editorial-review drafts only, not imported or released to students.
-
-C1-S2 authoring is complete: 15 of 15 Basic English pilots are present. All 150 task prompts and 15 listening scripts are unique, with ten tasks, 20 points, 90 minutes and balanced A/B/C/D answer positions per form. The pilots remain in editorial review and are not imported into the protected Google Sheet or released to students.
-
-
-### Course 2, Semester 1 — partial final-exam authoring
-
-### Course 2, Semester 1 — complete pilot authoring
-
-C2-S1 now has all 15 planned Basic English pilots (`v01`–`v15`). The set covers career fairs, CVs, interviews, education routes, skills portfolios, part-time work, teamwork, digital learning, environmental choices, customer service, study visits, study-life balance, everyday problem solving, course selection and workplace communication. Each form has ten tasks, 20 points, 90 minutes, two listening items and one teacher-reviewed written response. Regression tests validate all 15 against the protected runtime schema, require unique task IDs and prompts, check unique listening scripts, enforce balanced A/B/C/D answer positions and inspect functional-response keys. The first five forms were corrected during review to repair task IDs and an incorrect functional key; all remain editorial-review drafts and have not been imported or released.
-
-
-## Course 2, Semester 2 — complete pilot authoring
-
-C2-S2 now has all 15 planned Basic English pilots (`v01`–`v15`). Topics include plastic waste, online source evaluation, renewable energy, data security, community transport, air quality, scientific claims, energy conservation, digital footprints, recycling, responsible consumer choices, climate adaptation, research data, volunteering and communicating organisational change. Each variant contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 task prompts and 15 listening scripts are unique; every form passes the protected server payload validator and has balanced A/B/C/D answer positions. Functional-response keys are checked by regression tests. These remain editorial-review drafts, not imported or released.
-
-Ten of 15 Basic English pilots are drafted for C2-S2 (`v01`–`v10`). Topics cover reducing plastic waste, evaluating online information, renewable energy, responsible technology use, community transport, urban air quality, scientific claims, energy conservation, digital footprints and recycling systems. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. The protected server validator and regression test cover all ten; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys have been reviewed. Five variants remain. These are editorial-review drafts only and are not imported or released.
-
-Five of 15 Basic English pilots are drafted for C2-S2 (`v01`–`v05`), covering environmental choices, evaluating online information, renewable energy, responsible technology use and community transport. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys have been checked. These are editorial-review drafts only and are not imported or released.
-
-
-## Course 3, Semester 1 — complete pilot authoring
-
-C3-S1 now has all 15 planned Technical English pilots (`v01`–`v15`). Topics include material properties, technical dimensions, drawing interpretation, workshop orientation, component records, aviation component identification, tolerances, technical labels, inspection reports, measurement tools, aviation-industry roles, technical email, material certificates, technical notices and component traceability. Every form contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 task prompts and 15 listening scripts are unique; every variant passes the protected server payload validator, has balanced A/B/C/D answer positions and is covered by regression tests. These remain editorial-review drafts, not imported or released.
-
-Ten of 15 Technical English pilots are drafted for C3-S1 (`v01`–`v10`). Topics cover material properties, technical dimensions, drawing interpretation, workshop orientation, component records, aviation component identification, tolerances, technical labels, inspection reports and measurement tools. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Five variants remain. These are editorial-review drafts only and are not imported or released.
-
-Five of 15 Technical English pilots are drafted for C3-S1 (`v01`–`v05`), covering material properties, technical dimensions, drawing interpretation, workshop orientation and component records. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, A/B/C/D answer positions are balanced, and functional-response keys are checked in regression tests. Ten variants remain. These are editorial-review drafts only and are not imported or released.
-
-
-## Course 3, Semester 2 — complete pilot authoring
-
-C3-S2 now has all 15 planned Technical English pilots (`v01`–`v15`). Topics include machine-tool components, CNC programme structure, machining operations, cutting-tool identification, workholding, workshop safety communication, process planning, quality terminology, CNC documentation, production planning, drawing revisions, CNC programme interpretation, toolpath concepts, process capability and technical problem-solving. Every form contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 task prompts and 15 listening scripts are unique; every variant passes the protected server payload validator, has balanced A/B/C/D answer positions and is covered by regression tests. These remain editorial-review drafts, not imported or released.
-
-Ten of 15 Technical English pilots are drafted for C3-S2 (`v01`–`v10`). Topics cover machine-tool components, CNC programme structure, machining operations, cutting-tool identification, workholding, workshop safety communication, process planning, quality terminology, CNC documentation and production planning. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Five variants remain. These are editorial-review drafts only and are not imported or released.
-
-Five of 15 Technical English pilots are drafted for C3-S2 (`v01`–`v05`), covering machine-tool components, CNC programme structure, machining operations, cutting-tool identification and workholding concepts. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Ten variants remain. These are editorial-review drafts only and are not imported or released.
-
-
-## Course 4, Semester 1 — complete pilot authoring
-
-C4-S1 now has all 15 planned Technical English pilots (`v01`–`v15`). Topics include basic electrical circuits, electrical measurements, electronic components, energy consumption, fault description, transformers, equipment warning information, troubleshooting reports, power-supply documentation, cable identification, sensors, relay concepts, fault categories, signal descriptions and documentation review. Every form contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 prompts and 15 listening scripts are unique; every variant passes the protected server payload validator, has balanced A/B/C/D answer positions and is covered by regression tests. These remain editorial-review drafts, not imported or released.
-
-Ten of 15 Technical English pilots are drafted for C4-S1 (`v01`–`v10`). Topics cover basic electrical circuits, electrical measurements, electronic components, energy consumption, fault description, transformer basics, equipment warning information, troubleshooting reports, power-supply documentation and cable identification. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Five variants remain. These are editorial-review drafts only and are not imported or released.
-
-Five of 15 Technical English pilots are drafted for C4-S1 (`v01`–`v05`), covering basic electrical circuits, electrical measurements, electronic components, energy consumption and fault description. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Ten variants remain. These are editorial-review drafts only and are not imported or released.
-
-
-## Course 4, Semester 2 — pilot authoring underway
-
-Ten of 15 Technical English pilots are drafted for C4-S2 (`v01`–`v10`). Topics cover communication systems, computer hardware and software, automation systems, PLC documentation, technical data reporting, network protocols, software version control, PLC input-output records, automation data logs and information security. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Five variants remain. These are editorial-review drafts only and are not imported or released.
-
-Fifteen of 15 Technical English pilots are now drafted for C4-S2 (`v01`–`v15`). In addition to communication systems, computer hardware and software, automation systems, PLC documentation, technical data reporting, network protocols, software version control, PLC input-output records, automation data logs and information security, the set covers industrial IoT, digital twins, predictive maintenance, aviation ground support equipment and engineering incident communication. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 prompts and 15 listening scripts are unique; every variant passes the protected server payload validator, answer positions are balanced A/B/C/D, and functional-response keys are covered by regression tests. These remain editorial-review drafts only and are not imported or released.
-
-
-## Course 5, Semester 1 — pilot authoring underway
-
-All 15 Technical English pilots are now drafted for C5-S1 (`v01`–`v15`). Topics cover maintenance planning, inspection findings, diagnostic evidence, technical manual applicability, revision control, aircraft task applicability, maintenance shift handover, non-conformance reporting, reliability analysis, technical publication revision control, task prioritisation, component traceability, maintenance human factors, special tooling control and airworthiness directive records. Every form contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 prompts and 15 listening scripts are unique; every variant passes the protected server payload validator and has balanced A/B/C/D answer positions. These remain editorial-review drafts and are not imported or released.
-
-
-## Course 5, Semester 2 — complete pilot authoring
-
-C5-S2 now has all 15 planned Technical English pilots (`v01`–`v15`). Topics include maintenance handover, risk communication, integrated reporting, fault analysis, controlled document release, evidence-based replacement decisions, supplier clarification, quality improvement, aviation maintenance records, cross-disciplinary handover, discrepancy analysis, quality audits, system integration, improvement proposals and multi-source technical summaries. Every form contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 task prompts and 15 listening scripts are unique; every variant passes the protected server payload validator, has balanced A/B/C/D answer positions and is covered by regression tests. These remain editorial-review drafts, not imported or released.
-
-Five of 15 Technical English pilots are drafted for C5-S2 (`v01`–`v05`), covering maintenance handover, risk communication, integrated technical reporting, fault analysis and controlled document release. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Ten variants remain. These are editorial-review drafts only and are not imported or released.
-
-
-## Course 5, Semester 2 — pilot authoring underway
-
-Ten of 15 Technical English pilots are drafted for C5-S2 (`v01`–`v10`). Topics cover maintenance handover, risk communication, integrated technical reporting, fault analysis, controlled document release, evidence-based replacement decisions, supplier clarification, quality improvement, aviation maintenance records and cross-disciplinary handover. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Five variants remain. These are editorial-review drafts only and are not imported or released.
+**Release boundary:** all 150 files are editorial-review pilots marked `pilot_for_editorial_review`. They have not been imported into the protected Google Sheet, activated in the live exam bank or released to students. Editorial and subject-matter review, followed by a controlled import and acceptance test, remains required.
