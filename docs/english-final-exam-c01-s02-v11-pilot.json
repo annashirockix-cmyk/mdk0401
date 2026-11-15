@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 11",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will volunteers meet?",
+      "audioText": "Our class is joining a community clean-up on Saturday morning. We will meet outside the college sports hall at nine fifteen. The organisers will provide gloves and rubbish bags, but please bring a bottle of water. After the activity, the group will visit the community garden. Tell the class representative by Wednesday if you can take part, because the organisers need the final number of volunteers.",
+      "options": [
+        "Outside the college sports hall",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. By which day should students confirm?",
+      "audioText": "Our class is joining a community clean-up on Saturday morning. We will meet outside the college sports hall at nine fifteen. The organisers will provide gloves and rubbish bags, but please bring a bottle of water. After the activity, the group will visit the community garden. Tell the class representative by Wednesday if you can take part, because the organisers need the final number of volunteers.",
+      "options": [
+        "On Friday",
+        "By Wednesday",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r01",
+      "type": "single_choice",
+      "prompt": "On Thursday, Noor and her classmates visited a community garden as part of a college project. The coordinator explained how volunteers look after the plants and sort waste. Noor worked with a partner to label three new herb beds. Before leaving, the group wrote down the tasks for the next visit and agreed to bring reusable containers. Reading 1. What did Noor help to do?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "Label three herb beds",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r02",
+      "type": "single_choice",
+      "prompt": "What did the group agree before leaving?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "Bring reusable containers"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'The volunteers ___ the garden every Saturday.'",
+      "options": [
+        "look after",
+        "looks after",
+        "looking after",
+        "looked after"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO useful items to take to a community clean-up.",
+      "options": [
+        "A bottle of water",
+        "A personal password",
+        "Protective gloves",
+        "An unrelated textbook"
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A person who freely helps without payment is a ___.'",
+      "acceptedAnswers": [
+        "volunteer"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_f01",
+      "type": "single_choice",
+      "prompt": "A coordinator explains a task you do not understand. What should you say?",
+      "options": [
+        "I refuse to listen.",
+        "Could you explain that step again, please?",
+        "You must do it for me.",
+        "This is not my problem."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_o01",
+      "type": "ordering",
+      "prompt": "Agree the volunteer task; Receive the safety briefing; Complete the activity; Report back to the coordinator",
+      "options": [
+        "Report back to the coordinator",
+        "Agree the volunteer task",
+        "Receive the safety briefing",
+        "Complete the activity"
+      ],
+      "correctOrder": [
+        "Receive the safety briefing",
+        "Agree the volunteer task",
+        "Complete the activity",
+        "Report back to the coordinator"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about a volunteering activity that could improve your college or town. Explain what volunteers would do, what they should bring and how students could join.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v11_audio",
+    "readingPassageId": "c1s2v11_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
