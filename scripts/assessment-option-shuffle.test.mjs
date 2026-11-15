@@ -277,6 +277,11 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(gradeAssignment,/assignment_regraded/);
   assert.match(gradeAssignment,/assignment_graded/);
   assert.match(gradeAssignment,/lock\.waitLock\(10000\)/);
+  const submitAssignment = extract(code,"submitAssignment_");
+  assert.match(submitAssignment,/assignmentSubmissionHistory_\(\)/);
+  assert.match(submitAssignment,/AttemptNo:attempt/);
+  assert.match(submitAssignment,/updateMappedRecord_\(sub, i \+ 2, record\)/,
+    "resubmission updates the current submission while preserving attempt history");
   const getResults = extract(code,"getResults_");
   assert.match(getResults,/feedbackMatch=submission\.match/);
   assert.match(getResults,/storedFeedback=resultMap\.Feedback/);
