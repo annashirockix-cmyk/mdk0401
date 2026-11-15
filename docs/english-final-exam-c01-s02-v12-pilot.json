@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO details that make a project display clear for visitors.",
       "options": [
-        "A clear project title",
         "A private login password",
-        "Readable labels",
-        "Unrelated decoration"
+        "Unrelated decoration",
+        "A clear project title",
+        "Readable labels"
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
