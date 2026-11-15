@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Listen to Noah. What time does the bus usually arrive?",
       "audioText": "Hi, I'm Noah. I leave home at quarter past seven and walk to the bus stop. The bus usually arrives at half past seven. My first lesson begins at half past eight. I must bring my student ID card today because we are visiting the college library. The library office is on the ground floor, opposite the reception desk.",
       "options": [
-        "At 7:15",
         "At 7:30",
+        "At 7:15",
         "At 7:45",
         "At 8:30"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "Reading 1. Read the text. Aisha wants to learn English words more effectively. She makes small cards: the English word is on one side and its meaning is on the other. She looks at five cards on the way to college and checks them again before dinner. When she learns a new word, she writes a sentence about college life. At the end of the week, she asks a friend to test her. What does Aisha write when she learns a new word?",
       "options": [
-        "A sentence about college life",
         "A long story about a holiday",
         "A list of bus numbers",
+        "A sentence about college life",
         "A message to her teacher"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -55,11 +55,11 @@
       "prompt": "Reading 2. When does Aisha ask a friend to test her?",
       "options": [
         "Every morning",
-        "At the end of the week",
         "Before every lesson",
-        "Only in the summer"
+        "Only in the summer",
+        "At the end of the week"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO grammatically correct sentences.",
       "options": [
-        "There are two windows in the classroom.",
         "There is three books on the desk.",
-        "My sister studies English every day.",
-        "Do he live near the college?"
+        "Do he live near the college?",
+        "There are two windows in the classroom.",
+        "My sister studies English every day."
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
