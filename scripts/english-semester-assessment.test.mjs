@@ -32,6 +32,43 @@ function extractFunction(name) {
   throw new Error("unterminated function " + name);
 }
 
+
+const registrySource = extractFunction("validateEnglishExamVariantRegistry_");
+const validateRegistry = new Function(registrySource + "; return validateEnglishExamVariantRegistry_;")();
+
+function validExamRegistry() {
+  return Array.from({length:10}, (_, slot) => {
+    const courseNo = Math.floor(slot / 2) + 1;
+    const semester = slot % 2 + 1;
+    return {
+      courseId:"EN_C0" + courseNo,
+      track:courseNo >= 3 ? "technical" : "basic",
+      semester,
+      variants:Array.from({length:15}, (_, variant) => ({
+        variantId:"EN_C0" + courseNo + "_S" + semester + "_V" + String(variant + 1).padStart(2,"0"),
+        blueprintId:"BP_C0" + courseNo + "_S" + semester
+      }))
+    };
+  });
+}
+
+test("final exam registry requires all ten course-semester slots and 150 unique variants", () => {
+  assert.deepEqual(validateRegistry(validExamRegistry()), {examCount:10,variantCount:150,basicSlots:4,technicalSlots:6});
+});
+
+test("final exam registry rejects missing slots, wrong tracks, wrong variant counts and duplicate IDs", () => {
+  const missingSlot=validExamRegistry().slice(0,9);
+  assert.throws(()=>validateRegistry(missingSlot), /ровно 10/);
+  const wrongTrack=validExamRegistry(); wrongTrack[4].track="basic";
+  assert.throws(()=>validateRegistry(wrongTrack), /правильным направлением/);
+  const shortVariants=validExamRegistry(); shortVariants[0].variants.pop();
+  assert.throws(()=>validateRegistry(shortVariants), /ровно 15/);
+  const duplicate=validExamRegistry(); duplicate[1].variants[0].variantId=duplicate[0].variants[0].variantId;
+  assert.throws(()=>validateRegistry(duplicate), /уникальный ID/);
+  const missingBlueprint=validExamRegistry(); missingBlueprint[0].variants[0].blueprintId="";
+  assert.throws(()=>validateRegistry(missingBlueprint), /ссылку на blueprint/);
+});
+
 const validateSource = extractFunction("validateEnglishSemesterTests_");
 const sanitizeSource = extractFunction("sanitizeEnglishSemesterTests_");
 const fingerprintSource = extractFunction("englishSemesterBankFingerprint_");
