@@ -333,7 +333,8 @@ test("all 150 final exam variants have globally unique task IDs and prompts",()=
   const taskIds=variants.flatMap(variant=>variant.tasks.map(task=>task.id));
   const prompts=variants.flatMap(variant=>variant.tasks.map(task=>task.prompt.trim().toLowerCase()));
   assert.equal(taskIds.length,1500);
-  assert.equal(new Set(taskIds).size,taskIds.length);
+  const duplicateTaskIds=taskIds.filter((id,index)=>taskIds.indexOf(id)!==index);
+  assert.equal(new Set(taskIds).size,taskIds.length,`duplicate task IDs: ${[...new Set(duplicateTaskIds)].join(", ")}`);
   assert.equal(new Set(prompts).size,prompts.length);
 });
 
