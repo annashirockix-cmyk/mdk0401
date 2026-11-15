@@ -233,6 +233,7 @@ try {
     window.state.student = { role: "student", courses: ["07.01"] };
     const topicId = document.getElementById("fcTopic").value;
     window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
+    window.API.getTopicAccess = async () => ({ success: true, open: true });
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
   await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
