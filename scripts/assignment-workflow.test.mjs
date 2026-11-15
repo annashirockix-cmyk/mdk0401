@@ -8,6 +8,7 @@ const ui = readFileSync(new URL("../teacher-tasks.js", import.meta.url), "utf8")
 const journal = readFileSync(new URL("../journal.js", import.meta.url), "utf8");
 const api = readFileSync(new URL("../api.js", import.meta.url), "utf8");
 const serviceWorker = readFileSync(new URL("../service-worker.js", import.meta.url), "utf8");
+const studentProgress = readFileSync(new URL("../student-progress.js", import.meta.url), "utf8");
 
 function extractFunction(source, name) {
   const start = source.indexOf("function " + name + "(");
