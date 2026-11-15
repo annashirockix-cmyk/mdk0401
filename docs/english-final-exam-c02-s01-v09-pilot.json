@@ -9,7 +9,7 @@
   "maxScore": 20,
   "tasks": [
     {
-      "id": "c2s1v9_l01",
+      "id": "c2s1v09_l01",
       "type": "single_choice",
       "prompt": "Listening 1. When will the event take place?",
       "audioText": "The college environmental team is organising a repair and reuse day next Wednesday. Students can bring small electrical items that are safe to inspect, clean containers and unwanted books. The event starts at ten in the technology hall. Please do not bring damaged batteries or equipment with exposed wires. Volunteers should register online by Tuesday.",
@@ -23,7 +23,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v9_l02",
+      "id": "c2s1v09_l02",
       "type": "single_choice",
       "prompt": "Listening 2. Which items should students not bring?",
       "audioText": "The college environmental team is organising a repair and reuse day next Wednesday. Students can bring small electrical items that are safe to inspect, clean containers and unwanted books. The event starts at ten in the technology hall. Please do not bring damaged batteries or equipment with exposed wires. Volunteers should register online by Tuesday.",
@@ -37,7 +37,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v9_r01",
+      "id": "c2s1v09_r01",
       "type": "single_choice",
       "prompt": "The college canteen introduced reusable cups to reduce waste. Students pay a small deposit when they borrow a cup and receive it back when they return the cup to the collection point. At first, some students forgot to return them. Clear signs and reminders near the exits helped the system work better, and the amount of disposable cup waste fell. Reading 1. How does the reusable cup system work?",
       "options": [
@@ -50,7 +50,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v9_r02",
+      "id": "c2s1v09_r02",
       "type": "single_choice",
       "prompt": "What helped students remember to return cups?",
       "options": [
@@ -63,7 +63,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v9_g01",
+      "id": "c2s1v09_g01",
       "type": "single_choice",
       "prompt": "If more students ___ reusable cups, the college will produce less waste.",
       "options": [
@@ -76,7 +76,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v9_m01",
+      "id": "c2s1v09_m01",
       "type": "multiple_choice",
       "prompt": "Choose TWO actions that can reduce waste at college.",
       "options": [
@@ -92,7 +92,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v9_v01",
+      "id": "c2s1v09_v01",
       "type": "short_text",
       "prompt": "Using an item again instead of throwing it away is to ___.",
       "acceptedAnswers": [
@@ -101,7 +101,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v9_f01",
+      "id": "c2s1v09_f01",
       "type": "single_choice",
       "prompt": "You notice a damaged cable in a classroom. What should you do?",
       "options": [
@@ -114,7 +114,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v9_o01",
+      "id": "c2s1v09_o01",
       "type": "ordering",
       "prompt": "Put the stages of environmental choices in a sensible order.",
       "options": [
@@ -132,7 +132,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v9_w01",
+      "id": "c2s1v09_w01",
       "type": "written",
       "prompt": "Write 60–80 words suggesting two practical ways your college could reduce waste. Explain why they would help.",
       "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
