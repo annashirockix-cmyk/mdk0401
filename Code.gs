@@ -566,7 +566,7 @@ function login_(data) {
     gcodeProgress: savedPayload.gcodeProgress && typeof savedPayload.gcodeProgress === "object" ? savedPayload.gcodeProgress : null,
     xp: Number(savedPayload.xp) || 0,
     activeCourseId: String(savedPayload.activeCourseId || ""),
-    results: savedPayload.results && typeof savedPayload.results === "object" ? savedPayload.results : {},
+    results: safeStudentProgressResults_(savedPayload.results),
     unlockedAchievements: Array.isArray(savedPayload.unlockedAchievements) ? savedPayload.unlockedAchievements : [],
     avatar: savedPayload.avatar || null,
     avatarEmoji: savedPayload.avatarEmoji || null,
@@ -593,6 +593,23 @@ function login_(data) {
 }
 
 /* ---------- Student profile and test results ---------- */
+
+// Legacy profile grades are browser-writable payload data, not an authoritative
+// assessment record. Only rows in the protected Results sheet may contribute grades.
+function isTrustedLegacyGrade_(record) {
+  return false;
+}
+function safeStudentProgressResults_(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const safe = {};
+  Object.keys(value).forEach(function(key) {
+    const item = value[key];
+    if (item && typeof item === "object" && (item.grade != null || item.score != null || item.percent != null)) return;
+    safe[key] = item;
+  });
+  return safe;
+}
+
 
 function protectedQuestionBankMap_() {
   const cache=CacheService.getScriptCache(),cacheKey="protectedQuestionBankMap:v1",cached=cache.get(cacheKey);
@@ -655,7 +672,12 @@ function saveStudent_(data) {
       if (payload.results && typeof payload.results === "object" && !Array.isArray(payload.results)) {
         const bankMap=protectedQuestionBankMap_();
         Object.keys(payload.results).forEach(function(testId){
-          if(isProtectedAssessment_(testId,String(payload.results[testId]&&payload.results[testId].courseId||""),bankMap))delete payload.results[testId];
+          const record=payload.results[testId];
+          // Student profile sync may carry local completion markers, never grades or scores.
+          if (isProtectedAssessment_(testId,String(record&&record.courseId||""),bankMap) ||
+              (record && typeof record === "object" && (record.grade != null || record.score != null || record.percent != null))) {
+            delete payload.results[testId];
+          }
         });
       }
       fields.Payload = JSON.stringify(payload);
@@ -1063,7 +1085,7 @@ function getResults_(data) {
     let p={};try{p=JSON.parse(row[m.Payload]||"{}");}catch(e){}
     const rs=p.results||{};
     Object.keys(rs).forEach(function(key){
-      const rec=rs[key];if(!rec||typeof rec!=="object"||rec.grade==null)return;
+      const rec=rs[key];if(!rec||typeof rec!=="object"||rec.grade==null||!isTrustedLegacyGrade_(rec))return;
       const email=email_(row[m.Email]);
       let cid=normalizeCourseId_(rec.courseId||"");
       if(!cid){
@@ -1103,7 +1125,7 @@ function getPublicSubjectRatings_(data) {
     const legacy = payload.results || {};
     Object.keys(legacy).forEach(function (testId) {
       const rec = legacy[testId];
-      if (!rec || typeof rec !== "object" || rec.grade == null) return;
+      if (!rec || typeof rec !== "object" || rec.grade == null || !isTrustedLegacyGrade_(rec)) return;
       let courseId = String(rec.courseId || "");
       if (!courseId) {
         const matches = CFG.COURSES.filter(function (id) { return testId.indexOf(id) >= 0; });
@@ -1186,7 +1208,7 @@ function getMyCourseResults_(data) {
   let payload={};try{payload=JSON.parse(user.payload||"{}");}catch(e){}
   const legacy=payload.results||{},protectedBanks=protectedQuestionBankMap_();
   Object.keys(legacy).forEach(function(testId){
-    const rec=legacy[testId];if(!rec||typeof rec!=="object"||rec.grade==null)return;
+    const rec=legacy[testId];if(!rec||typeof rec!=="object"||rec.grade==null||!isTrustedLegacyGrade_(rec))return;
     let courseId=normalizeCourseId_(rec.courseId||"");
     if(!courseId){
       const matches=CFG.COURSES.filter(function(id){return testId.indexOf(id)>=0;});
