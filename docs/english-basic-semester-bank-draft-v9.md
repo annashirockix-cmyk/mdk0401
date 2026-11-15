@@ -24,7 +24,7 @@
 - C. had been taking
 - D. will take
 
-**164.** You must ___ your hands before preparing food.
+**164.** All visitors must ___ a safety helmet before entering the workshop.
 - A. washing
 - B. washed
 - C. to wash
@@ -137,7 +137,7 @@
 | 161 | A | “Should” gives advice; the verb after it is in the base form. |
 | 162 | B | “Since” is used with a starting point in time. |
 | 163 | C | Past perfect continuous describes an activity continuing up to a past reference point; the reported question refers to the period before the doctor asked. |
-| 164 | D | A modal verb (“must”) is followed by the base form. |
+| 164 | D | A modal verb (“must”) is followed by the base form “wear”. |
 | 165 | B | “Sugar” is uncountable; “much” is used in a negative sentence. |
 | 166 | A | The fixed expression is “good at” + noun or gerund. |
 | 167 | C | Past simple passive is used for an action completed in the past. |
