@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 01",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v01_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to Daniel. On which days does he have English lessons?",
+      "audioText": "Hello, I'm Daniel. It's my first week at college. My English lesson is on Tuesday and Thursday mornings. I usually come by bus, but today my sister is driving me because it is raining. After classes, I want to join the robotics club. The first meeting is in Room 14 on Friday at three o'clock.",
+      "options": [
+        "Monday and Wednesday",
+        "Tuesday and Thursday",
+        "Wednesday and Friday",
+        "Tuesday and Saturday"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v01_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. How is Daniel travelling to college today?",
+      "audioText": "Hello, I'm Daniel. It's my first week at college. My English lesson is on Tuesday and Thursday mornings. I usually come by bus, but today my sister is driving me because it is raining. After classes, I want to join the robotics club. The first meeting is in Room 14 on Friday at three o'clock.",
+      "options": [
+        "By bus",
+        "On foot",
+        "By car with his sister",
+        "By bicycle"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v01_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. My name is Lena and I am a first-year college student. I study engineering basics and enjoy learning how things work. My timetable is busy, but I plan my week on Sunday evening. I keep a notebook for new English words and write a short example next to each word. I want to improve my listening because I hope to take part in an international student project next year. Why does Lena keep a notebook?",
+      "options": [
+        "To record new English words and examples",
+        "To draw engineering machines",
+        "To write down bus times",
+        "To copy her classmates' homework"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v01_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. According to the text, what skill does Lena want to improve?",
+      "options": [
+        "Speaking",
+        "Writing",
+        "Listening",
+        "Reading"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v01_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'My classmates ___ in the English room now.'",
+      "options": [
+        "is",
+        "are",
+        "am",
+        "be"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v01_g02",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO correct questions in the Present Simple.",
+      "options": [
+        "Where do you study?",
+        "Where you do study?",
+        "Does he speak English?",
+        "Do she speak English?"
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v01_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'A document that shows the days, times and rooms of your lessons is a ___.",
+      "acceptedAnswers": [
+        "timetable"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v01_f01",
+      "type": "single_choice",
+      "prompt": "Your teacher speaks too quickly. What is the most polite response?",
+      "options": [
+        "Say it again now!",
+        "I don't listen.",
+        "Could you repeat that, please?",
+        "You are speaking bad."
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v01_o01",
+      "type": "ordering",
+      "prompt": "Put these actions in a logical morning order, from the first action to the last.",
+      "options": [
+        "Have breakfast",
+        "Get up",
+        "Go to college",
+        "Attend the first lesson"
+      ],
+      "correctOrder": [
+        "Get up",
+        "Have breakfast",
+        "Go to college",
+        "Attend the first lesson"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v01_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words introducing yourself as a college student. Include your course, one usual weekday activity, one English-learning habit and one goal for this academic year. Use complete sentences.",
+      "rubric": "10 points total: task completion and relevant details (0–3); understandable sentence structure and basic grammar (0–3); appropriate vocabulary (0–2); spelling, punctuation and paragraph organisation (0–2). Accept minor errors that do not prevent understanding.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v01_audio",
+    "readingPassageId": "c1s1v01_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
