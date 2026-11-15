@@ -24,7 +24,7 @@
 - C. sending
 - D. will sent
 
-**124.** It is only Wednesday, and this is the most useful advice I ___ this week.
+**124.** It is only Wednesday, and this is the most useful advice I ___ so far this week.
 - A. receive
 - B. am receiving
 - C. received
