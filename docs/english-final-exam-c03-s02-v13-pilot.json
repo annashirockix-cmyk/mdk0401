@@ -25,7 +25,7 @@
     {
       "id": "c3s2v13_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which sheet should students bring?",
+      "prompt": "Listening 2. Which process-capability data sheet should students bring?",
       "audioText": "The manufacturing lecturer will introduce toolpath terminology on Wednesday at nine thirty. Students should meet in the CNC theory room and bring the illustrated toolpath sheet. The lesson will compare a straight-line path with a curved path and identify the difference between the programmed geometry and the actual machine movement. The class will use diagrams only.",
       "options": [
         "On Friday",
