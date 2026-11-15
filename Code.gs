@@ -118,6 +118,7 @@ function handleRequest_(e) {
       case "getquestionbankstats": result = getQuestionBankStats_(data); break;
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
+      case "startenglishvprexam": result = startEnglishVprExam_(data); break;
       case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
