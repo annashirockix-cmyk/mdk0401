@@ -291,3 +291,14 @@ test("English VPR start is serialized and enforces the server attempt limit", ()
   assert.match(start, /prior >= limit/);
   assert.match(start, /finally\s*\{\s*lock\.releaseLock\(\)/);
 });
+
+
+test("English VPR attempt token is retained until the result write succeeds", () => {
+  const submit = extract(vpr, "submitEnglishVprExam_");
+  const saveAt = submit.indexOf("const result=saveResult_");
+  const cleanupAt = submit.indexOf("const cleanupLock = LockService.getScriptLock()");
+  assert.ok(saveAt >= 0 && cleanupAt > saveAt, "cleanup must happen after server result persistence");
+  assert.match(submit.slice(0, saveAt), /attemptLock\.releaseLock\(\)/);
+  assert.match(submit.slice(cleanupAt), /cache\.remove\("englishVprAttempt:" \+ attemptId\)/);
+  assert.match(submit.slice(cleanupAt), /cache\.remove\(String\(finalAttempt\.stableKey\)\)/);
+});
