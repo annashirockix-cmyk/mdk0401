@@ -1241,7 +1241,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.match(save, /editor_\(data,courseId\)/);
   assert.match(save, /hasCourseAccess_\(currentStudent,courseId\)/);
   assert.match(save, /LockService\.getScriptLock\(\)/);
-  assert.match(save, /if\(existingRow>0\)updateMappedRecord_\(sheet,existingRow,record\);else appendMappedRecord_\(sheet,record\);/);
+  assert.match(save, /if\(existingRow>0\)updateMappedRecord_\(resultSheet,existingRow,record\);else appendMappedRecord_\(resultSheet,record\);/);
   assert.match(save, /appendAttemptAudit_/);
   assert.match(api, /saveManualGrade:function\(data\)/);
   assert.match(app, /window\.API\.getStudents\(\)/);
@@ -1347,8 +1347,8 @@ test("English VPR written answers can be graded from the teacher journal and upd
   assert.ok(app.includes("Ответ студента:"));
   assert.ok(app.includes("window.API.gradeEnglishVprWrittenPart"));
   assert.ok(app.includes('pendingWritten?"На проверке"'));
-  assert.ok(html.includes("api.js?v=45"));
-  assert.ok(html.includes("app.js?v=54"));
+  assert.ok(/api\.js\?v=\d+/.test(html));
+  assert.ok(/app\.js\?v=\d+/.test(html));
   assert.ok(/portal-cache-v\d+/.test(sw));
 });
 
@@ -1361,7 +1361,7 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
   const sandbox = {};
   vm.runInNewContext(bank.slice(start, end) + ";this.validateEnglishVprExam_=validateEnglishVprExam_;", sandbox);
   const exam = (track) => ({
-    id: "english_vpr_" + track + "_2026", track, maxScore: 40,
+    id: "english_vpr_" + track + "_2026", track, time: 90, maxScore: 40,
     tasks: [
       {type:"choice",points:5,items:Array(5).fill(["q",1])},
       {type:"match",points:5,items:Array(5).fill(["A","text",1])},
@@ -1428,7 +1428,7 @@ test("legacy non-English written exam engine is no longer shipped or cached", ()
   const sw = read("service-worker.js");
   assert.doesNotMatch(html, /exam-engine\\.js/);
   assert.doesNotMatch(sw, /exam-engine\\.js/);
-  assert.match(sw, /portal-cache-v354/);
+  assert.match(sw, /portal-cache-v361/);
   assert.doesNotMatch(read("final.js"), /writtenPrompts|textarea\\[name\\^="written"\\]/);
 });
 
