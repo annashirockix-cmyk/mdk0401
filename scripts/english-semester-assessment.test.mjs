@@ -85,6 +85,19 @@ test("final exam import validates task types, private answer keys, scoring and d
   assert.match(code,/validateEnglishFinalVariantPayload_\(payload, String\(variant\.variantId\)\)/);
 });
 
+test("the first authored Basic English final-exam pilot matches the protected runtime schema", () => {
+  const pilot = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v01-pilot.json"),"utf8"));
+  const source = extractFunction("validateEnglishFinalVariantPayload_");
+  const validate = new Function(source + "; return validateEnglishFinalVariantPayload_;")();
+  assert.equal(pilot.examId,"english_final_c1_s1");
+  assert.equal(pilot.courseNo,1);
+  assert.equal(pilot.track,"basic");
+  assert.equal(pilot.tasks.length,10);
+  assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1);
+  assert.ok(pilot.tasks.some(task=>task.audioText));
+  assert.deepEqual(validate(pilot,"C1-S1-V01"),{taskCount:10,maxScore:20,durationMinutes:90});
+});
+
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
   const start = extractFunction("startEnglishFinalExam_");
   const resume = extractFunction("resumeEnglishFinalExam_");
