@@ -1851,7 +1851,8 @@ function sanitizeAssessmentQuestionForStudent_(question) {
 function safeBuiltInQuestion_(entry, optionMaps) {
   const q=sanitizeAssessmentQuestionForStudent_(entry.question),type=String(q.type||"mc").toLowerCase();
   ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder","answerIndex","correctIndex","correctOption","rationale","isCorrect"].forEach(function(k){delete q[k];});
-  if((type==="mc"||type==="single"||type==="single_select"||type==="choice"||type==="multi"||type==="multiple"||type==="multiple_choice"||type==="tf"||type==="true_false")&&Array.isArray(q.options)&&q.options.length>1){
+  if((type==="mc"||type==="single"||type==="single_select"||type==="choice"||type==="multi"||type==="multiple"||type==="multiple_choice"||type==="tf"||type==="true_false")&&Array.isArray(q.options)&&q.options.length>1){  if((type==="tf"||type==="true_false")&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
+
     const order=shuffledServer_(q.options.map(function(_,i){return i;}));
     q.options=order.map(function(i){return q.options[i];});
     optionMaps[String(entry.questionIndex)]=order;
