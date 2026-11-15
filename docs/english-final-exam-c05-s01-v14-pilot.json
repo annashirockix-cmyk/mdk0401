@@ -52,7 +52,7 @@
     {
       "id": "c5s1v14_r02",
       "type": "single_choice",
-      "prompt": "What should happen if applicability is uncertain?",
+      "prompt": "Which team should confirm a notice's applicability when the configuration is unclear?",
       "options": [
         "At the sports centre",
         "In the computer room",
