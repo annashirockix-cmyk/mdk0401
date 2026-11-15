@@ -25,7 +25,7 @@
     {
       "id": "c5s2v07_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which two documents should students bring?",
+      "prompt": "Listening 2. Which drawing and supplier document are needed for the clarification email?",
       "audioText": "The procurement engineer will demonstrate a technical clarification email on Thursday at nine thirty. Students should bring the supplier specification and the component drawing. The demonstration will show how to state a part reference, describe a discrepancy and ask a precise question. The instructor will also explain why attachments should be named clearly and referenced in the message.",
       "options": [
         "On Friday",
