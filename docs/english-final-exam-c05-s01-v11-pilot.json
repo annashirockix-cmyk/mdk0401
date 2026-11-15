@@ -116,7 +116,7 @@
     {
       "id": "c5s1v11_o01",
       "type": "ordering",
-      "prompt": "Put the stages of non-conformance reporting in a logical order.",
+      "prompt": "Arrange the steps for documenting a requirement failure and its supporting evidence.",
       "options": [
         "Attach or reference supporting evidence",
         "Identify the affected item and requirement",
