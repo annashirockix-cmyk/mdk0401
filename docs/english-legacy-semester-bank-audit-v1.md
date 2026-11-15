@@ -14,7 +14,7 @@ Scope: `english-assessment-data.js`, the ten Technical draft batches, and the pr
 
 ## Containment change
 
-The client-side legacy Technical array is now empty instead of cloning Basic. Basic remains unchanged. The 200 Technical draft items remain authoring material only; their answer keys are not moved into browser-delivered code and no protected Google Sheet is modified.
+The client-side legacy Technical array is now empty instead of cloning Basic. Basic remains unchanged. The 200 Technical draft items remain authoring material only; their answer keys are not moved into browser-delivered code and no protected Google Sheet is modified. The server import validator now normalizes whitespace, rejects repeated question stems across all ten tests in one track, and rejects identical substantive stems between the Basic and Technical banks.
 
 ## Release gates
 
