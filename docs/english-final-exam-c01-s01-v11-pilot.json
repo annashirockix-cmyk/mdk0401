@@ -65,7 +65,7 @@
     {
       "id": "c1s1v11_g01",
       "type": "single_choice",
-      "prompt": "Choose the correct sentence.",
+      "prompt": "Choose the grammatically correct sentence about Nadia's library research.",
       "options": [
         "Nadia has found two useful books.",
         "Nadia finding two books.",
