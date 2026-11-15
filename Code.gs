@@ -2205,8 +2205,9 @@ function submitCustomTest_(data) {
   });
   let score = 0;
   questions.forEach(function(question, index) {
-    const expected = Number(question.correct);
-    if (Number.isInteger(canonicalAnswers[index]) && canonicalAnswers[index] === expected) score++;
+    // Reuse the common server-side scorer so legacy custom questions whose
+    // correct answer is stored as option text (not only a numeric index) work.
+    if (scoreBuiltInQuestion_(question || {}, canonicalAnswers[index])) score++;
   });
   const percent = Math.round(score / questions.length * 100);
   const attemptKey = "custom_" + id;
