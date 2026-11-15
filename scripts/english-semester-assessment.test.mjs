@@ -61,6 +61,27 @@ function validExamRegistry() {
   });
 }
 
+test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
+  const start = extractFunction("startEnglishFinalExam_");
+  const resume = extractFunction("resumeEnglishFinalExam_");
+  const sanitizeTask = extractFunction("sanitizeEnglishFinalExamTask_");
+  assert.match(start, /auth_\(data\)/);
+  assert.match(start, /hasCourseAccess_\(user, courseId\)/);
+  assert.match(start, /LockService\.getScriptLock\(\)/);
+  assert.match(start, /EnglishExamVariantsBank/);
+  assert.match(start, /EnglishExamAttempts/);
+  assert.match(start, /Status:"in_progress"/);
+  assert.match(start, /AttemptJSON:JSON\.stringify\(privateSnapshot\)/);
+  assert.match(start, /sanitizeEnglishFinalExamTask_\(tasks\)/);
+  assert.match(resume, /email_\(row\[m\.StudentEmail\]\)!==user\.email/);
+  assert.match(resume, /Status\)\!=="in_progress"/);
+  assert.match(resume, /DeadlineAt/);
+  assert.match(resume, /sanitizeEnglishFinalExamTask_\(snapshot\.tasks\|\|\[\]\)/);
+  assert.match(sanitizeTask, /answer|correct|solution|rubric|grading/i);
+  assert.match(code, /case "starenglishfinalexam": result = startEnglishFinalExam_\(data\); break;/);
+  assert.match(code, /case "resumenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
+});
+
 test("final exam variant importer stores one bounded private payload per variant and activates only after staging", () => {
   const importer = extractFunction("importEnglishExamVariants_");
   assert.match(importer, /auth_\(data\)/);
