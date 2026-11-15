@@ -78,7 +78,7 @@
     {
       "id": "c1s2v05_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO correct sentences about completed past events.",
+      "prompt": "Choose TWO correct sentences describing completed past events.",
       "options": [
         "The event finish at two yesterday.",
         "Pavel join the club last month.",
