@@ -155,6 +155,8 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(written[0],/testId: `written_self_\$\{code\}`/);
   assert.match(save,/written_self_/);
   assert.match(save,/Письменная работа принимается без оценки/);
+  assert.match(save,/Результат студента должен отправляться через защищённый маршрут проверки/);
+  assert.match(save,/serverVerifiedEnglishVpr !== true/);
   const gradeWritten = extract(code,"gradeWrittenResult_");
   assert.match(gradeWritten,/\^\(prac_\|self_\|written_self_\)/);
   assert.match(gradeWritten,/Проверять письменные работы может только преподаватель/);
