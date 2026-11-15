@@ -34,11 +34,11 @@
 - C. “You must sending me interface.”
 - D. “I want that you provides newest.”
 
-**126.** What is a *bill of materials (BOM)*?
-- A. A list of employee salaries
-- B. A structured list of materials, parts or components required for a product or assembly
-- C. A record of customer complaints only
-- D. A schedule of public holidays
+**126.** What is a *purchase requisition* used for?
+- A. To record the final inspection results of a finished product
+- B. To request authorization to purchase specified goods or services
+- C. To list the dimensions of a manufactured component
+- D. To document the transfer of a shift
 
 **127.** Complete the sentence: “Neither the drawing nor the accompanying notes ___ the revised connector type.”
 - A. specifies
@@ -100,11 +100,11 @@
 - C. at
 - D. by
 
-**137.** What does *root-cause analysis* aim to identify?
-- A. The person who wrote the report, regardless of the issue
-- B. The colour of the equipment
-- C. The underlying reason or reasons for a problem
-- D. The number of pages in a manual
+**137.** What is the main purpose of a *corrective action* after a non-conformity has been investigated?
+- A. To remove the evidence from the quality record
+- B. To assign blame without examining the process
+- C. To address the cause so that the problem is less likely to recur
+- D. To change the acceptance criteria without approval
 
 **138.** A CAD drawing uses separate layers for dimensions, centre lines and annotations. What is the main benefit?
 - A. Different drawing information can be organized and managed separately
@@ -133,7 +133,7 @@
 | 123 | D | The natural collocation is “notify someone about” a change. |
 | 124 | A | Dimensions should be taken from stated values, not estimated from the printed or displayed image. |
 | 125 | B | This is a polite, grammatically correct formal request. |
-| 126 | B | A BOM lists the materials and components needed for a product or assembly. |
+| 126 | B | A purchase requisition requests authorization to obtain specified goods or services. |
 | 127 | B | With the nearer plural subject “notes”, the verb is plural: “specify”. Check the chosen grammar reference's notional/agreement guidance for neither…nor. |
 | 128 | D | The statement gives the sequence: inspection completed, record signed, unit returned to service. |
 | 129 | D | “Feasible” means capable of being done or put into practice; “practical” is the closest option. |
@@ -144,7 +144,7 @@
 | 134 | D | A technical log records relevant aircraft technical status and maintenance information under applicable procedures. |
 | 135 | C | It reports a measurable value and location without speculation. |
 | 136 | B | “Compare … with” is the standard construction here. |
-| 137 | C | Root-cause analysis seeks underlying causes, not merely visible symptoms. |
+| 137 | C | Corrective action addresses the cause of a detected non-conformity to prevent recurrence. |
 | 138 | A | Layers organize drawing elements so categories can be displayed, edited or managed separately. |
 | 139 | C | Past perfect describes the earlier completed action before another past event. |
 | 140 | D | The evidence is limited to the stated 30-minute observation period. |
