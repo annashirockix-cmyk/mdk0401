@@ -94,7 +94,11 @@
     {
       "id": "c3s1v01_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "The mass of a material in relation to its volume is its ___.",
+      "acceptedAnswers": [
+        "density"
+      ]
     },
     {
       "id": "c3s1v01_f01",
