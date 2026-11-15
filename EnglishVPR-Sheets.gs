@@ -211,7 +211,8 @@ function getEnglishVprExam_(data) {
     const attemptId = Utilities.getUuid().replace(/-/g, "");
     const prepared = englishVprPrepareAttempt_(source);
     CacheService.getScriptCache().put("englishVprAttempt:" + attemptId, JSON.stringify({
-      email:user.email, track:track, courseId:courseId, exam:source, optionMaps:prepared.optionMaps
+      email:user.email, track:track, courseId:courseId, exam:source, optionMaps:prepared.optionMaps,
+      startedAt:Date.now()
     }), 7200);
     return {success:true,track:track,attemptId:attemptId,exam:sanitizeEnglishVprExam_(prepared.exam)};
   }
@@ -253,6 +254,10 @@ function submitEnglishVprExam_(data) {
   if (attempt.email !== user.email || attempt.track !== track || attempt.courseId !== courseId) throw new Error("Попытка не принадлежит этой учётной записи.");
   const exam = attempt.exam;
   validateEnglishVprExam_(track, exam);
+  const startedAt = Number(attempt.startedAt);
+  if (!startedAt || Date.now() - startedAt > (Math.max(1, Number(exam.time) || 90) * 60 + 300) * 1000) {
+    throw new Error("Время экзамена истекло. Обратитесь к преподавателю.");
+  }
   const submitted=Array.isArray(data.answers)?data.answers:[];
   if(submitted.length!==(exam.tasks||[]).length) throw new Error("Не все задания отправлены.");
   let objective=0, maxObjective=0, written=[];
@@ -291,7 +296,7 @@ function submitEnglishVprExam_(data) {
     if (lockedAttempt.email !== user.email || lockedAttempt.track !== track || lockedAttempt.courseId !== courseId || String(lockedAttempt.exam && lockedAttempt.exam.id || "") !== String(exam.id || "")) throw new Error("Данные серверной попытки изменились. Начните экзамен заново.");
     cache.remove("englishVprAttempt:" + attemptId);
   } finally { attemptLock.releaseLock(); }
-  const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Math.min(Math.max(0,Number(data.timeSpent)||0),Math.max(1,Number(exam.time)||90)*60),payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
+  const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Math.min(Math.max(0,Math.floor((Date.now()-startedAt)/1000)),Math.max(1,Number(exam.time)||90)*60),payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
   if (written.length) {
     notifyCourseStaff_(courseId,"written_submission","Письменная часть английского ВПР ожидает проверки",
       user.name+" ("+user.group+") отправил(а) письменную часть экзамена "+String(exam.title||track)+". Откройте журнал результатов по дисциплине "+courseId+" для проверки ответов.",testId);
