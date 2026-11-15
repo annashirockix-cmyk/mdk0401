@@ -33,6 +33,15 @@ function extractFunction(name) {
 }
 
 
+test("persistent final-exam tables have explicit private attempt and variant columns and are initialized by setupPortal", () => {
+  const headersBlock = code.slice(code.indexOf("const HEADERS = {"), code.indexOf("/* ---------- HTTP entry points ---------- */"));
+  assert.match(headersBlock, /EnglishExamVariantsBank:\s*\["ExamId", "CourseNo", "CourseId", "Track", "Semester", "VariantId", "BlueprintId", "VariantJSON", "Active", "UpdatedAt", "UpdatedBy"\]/);
+  assert.match(headersBlock, /EnglishExamAttempts:\s*\["AttemptId", "StudentEmail", "StudentName", "Group", "CourseId", "ExamId", "VariantId", "Status", "StartedAt", "DeadlineAt", "SubmittedAt", "AttemptJSON", "ResponsesJSON", "ResultJSON", "UpdatedAt"\]/);
+  const setup = extractFunction("setupPortal");
+  assert.match(setup, /"EnglishExamVariantsBank"/);
+  assert.match(setup, /"EnglishExamAttempts"/);
+});
+
 const registrySource = extractFunction("validateEnglishExamVariantRegistry_");
 const validateRegistry = new Function(registrySource + "; return validateEnglishExamVariantRegistry_;")();
 
