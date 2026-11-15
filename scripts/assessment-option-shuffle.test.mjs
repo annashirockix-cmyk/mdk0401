@@ -150,7 +150,8 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(save,/Самостоятельные тесты должны отправляться через защищённую серверную проверку/);
   assert.match(save,/written_self_/);
   const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
-  const written = extract(app, "saveSelfAnswer");
-  assert.match(written,/testId: `written_self_\$\{code\}`/);
+  const written = app.match(/window\\.saveSelfAnswer\\s*=\\s*function\\(code\\)\\s*\\{[\\s\\S]*?\\n\\};/);
+  assert.ok(written, "saveSelfAnswer handler must exist");
+  assert.match(written[0],/testId: `written_self_\\$\\{code\\}`/);
   assert.match(save,/written_self_/);
 });
