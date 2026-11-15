@@ -25,7 +25,7 @@
     {
       "id": "c3s2v12_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which glossary should students bring?",
+      "prompt": "Listening 2. Which terminology resource should students use for the drawing-revision activity?",
       "audioText": "The CNC theory tutor will review a sample programme on Monday at one. Students should bring the printed programme extract and the controller glossary. The class will identify programme blocks, axis words and feed information. The tutor will explain why a code should be interpreted in the context of the controller and the complete programme.",
       "options": [
         "On Friday",
