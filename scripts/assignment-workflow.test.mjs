@@ -87,7 +87,7 @@ function runtime() {
   const users = makeSheet(["Email","PasswordHash","Name","Group","Role","UpdatedAt","Courses","Payload","PasswordSalt","LoginChangedAt","PasswordChangedAt"]);
   const assignments = makeSheet(["Id","CourseId","Title","Topic","Level","WorkType","DueAt","TargetType","TargetValue","Instructions","Criteria","CreatedBy","CreatedAt","Status","LegacyNote"]);
   const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote"]);
-  const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","LegacyNote"]);
+  const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","LegacyNote"]);
   users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01,EN","","","",""]);
   users.appendRow(["other.teacher@example.test","","Другой преподаватель","","teacher","","MAT","","","",""]);
   users.appendRow(["english.teacher@example.test","","Преподаватель английского","","teacher","","ENB","","","",""]);
@@ -213,7 +213,11 @@ test("assignment resubmission is allowed after a grade of 2 but not after accept
   api.gradeAssignment_({ token: "teacherToken", submissionId: first.submissionId, grade: 2, feedback: "Нужна доработка." });
   const retry = api.submitAssignment_({ token: "studentToken", assignmentId: created.id, answer: "Исправленная версия" });
   assert.equal(retry.attempt, 2);
-  assert.equal(api.getAssignments_({ token: "studentToken" }).assignments[0].submission.status, "submitted");
+  const afterRetry = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
+  assert.equal(afterRetry.status, "submitted");
+  assert.equal(afterRetry.history[0].grade, 2);
+  assert.match(afterRetry.history[0].feedback, /Нужна доработка/);
+  assert.equal(afterRetry.history[0].status, "reviewed");
 });
 
 test("group assignment workflow works before student onboarding and preserves student payload", async () => {
