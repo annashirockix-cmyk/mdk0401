@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful ways to make a short report reliable.",
       "options": [
-        "Check information in suitable sources.",
         "Copy an unknown website without checking it.",
-        "Record the sources you use.",
-        "Remove facts that disagree with your opinion."
+        "Remove facts that disagree with your opinion.",
+        "Check information in suitable sources.",
+        "Record the sources you use."
       ],
       "correctIndices": [
         2,
