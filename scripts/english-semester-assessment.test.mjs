@@ -160,6 +160,11 @@ test("teacher dashboard exposes a written-exam review panel and submits explicit
   assert.match(dashboard, /gradeEnglishFinalExamWritten/);
   assert.match(dashboard, /Укажите баллы за каждое письменное задание/);
   assert.match(dashboard, /ef-review-feedback/);
+  assert.match(dashboard, /efVariantImportOpen/);
+  assert.match(dashboard, /staff\.role!=="admin"/);
+  assert.match(dashboard, /importEnglishExamVariants\(exams\)/);
+  assert.match(dashboard, /count!==150/);
+  assert.match(dashboard, /Текущая активная версия будет заменена/);
 });
 
 test("teacher review queue filters by assigned course and exposes written responses", () => {
