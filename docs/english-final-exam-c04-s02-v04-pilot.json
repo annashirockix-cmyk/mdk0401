@@ -25,7 +25,7 @@
     {
       "id": "c4s2v04_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which table should students bring?",
+      "prompt": "Listening 2. Which PLC address table is required for the documentation workshop?",
       "audioText": "The PLC documentation workshop will take place on Tuesday at one fifteen in the control systems room. Students should bring the sample input-output table. The instructor will explain how input and output addresses are listed and why the controller model should be included in the document. The exercise will use a printed example only.",
       "options": [
         "On Friday",
