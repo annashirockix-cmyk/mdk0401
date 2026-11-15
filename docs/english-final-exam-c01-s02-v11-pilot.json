@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful items to take to a community clean-up.",
       "options": [
-        "A bottle of water",
+        "An unrelated textbook",
         "A personal password",
-        "Protective gloves",
-        "An unrelated textbook"
+        "A bottle of water",
+        "Protective gloves"
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
