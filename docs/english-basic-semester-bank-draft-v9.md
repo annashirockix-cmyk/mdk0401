@@ -112,11 +112,11 @@
 - C. following
 - D. followed
 
-**178.** Choose the most appropriate response to “Would you mind opening the window?”
-- A. Yes, I open yesterday.
-- B. No, I wouldn't mind.
-- C. The window is opening me.
-- D. You must ask the window.
+**178.** Choose the most appropriate response to “Could you show me where to submit this form?”
+- A. Certainly. The submission desk is next to the main reception.
+- B. I submitted it next Monday.
+- C. No, I am not a form.
+- D. You should showing me yesterday.
 
 **179.** In the text, the word *essential* is closest in meaning to:
 - A. unnecessary
@@ -151,7 +151,7 @@
 | 175 | B | Downloaded materials remain available if the connection fails. |
 | 176 | C | Future perfect describes completion before a specified future time. |
 | 177 | A | “Adjective + enough + to-infinitive” expresses sufficient ability or suitability. |
-| 178 | B | “No, I wouldn't mind” politely indicates willingness to open the window. |
+| 178 | A | This is a clear and helpful response that directly answers a request for directions. |
 | 179 | C | “Essential” means necessary or very important. |
 | 180 | D | With “neither…nor”, the verb agrees with the nearer plural subject “students”. |
 
