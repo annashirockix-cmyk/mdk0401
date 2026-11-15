@@ -2988,6 +2988,61 @@ function saveSchedule_(data) {
  * This validates the 10 course/semester slots and 150 variant identifiers;
  * task content and blueprint coverage require separate editorial validation.
  */
+
+/** Validate one final-exam payload against the student renderer and server grader. */
+function validateEnglishFinalVariantPayload_(payload, variantId) {
+  const fail=function(message){throw new Error("Вариант "+variantId+": "+message);};
+  if(!payload||typeof payload!=="object"||Array.isArray(payload)) fail("ожидается объект variantJSON.");
+  const duration=Number(payload.time||payload.durationMinutes);
+  if(!Number.isInteger(duration)||duration<15||duration>240) fail("время должно составлять от 15 до 240 минут.");
+  if(!Array.isArray(payload.tasks)||payload.tasks.length<10||payload.tasks.length>60) {
+    fail("необходимо от 10 до 60 заданий в массиве tasks.");
+  }
+  const seen={},stems={};
+  let pointsTotal=0;
+  payload.tasks.forEach(function(task,index){
+    const id=String(task&&task.id||"").trim(),prompt=String(task&&task.prompt||"").trim();
+    const type=String(task&&task.type||"").toLowerCase(),points=Number(task&&task.points);
+    if(!id||seen[id]||!prompt||prompt.length>12000||!Number.isFinite(points)||points<=0||points>20) {
+      fail("задание №"+(index+1)+" имеет пустой/повторный ID, формулировку или неверный балл.");
+    }
+    seen[id]=true;
+    const stem=prompt.toLowerCase().replace(/\s+/g," ").trim();
+    if(stems[stem]) fail("повторяется формулировка задания '"+id+"'.");
+    stems[stem]=true;
+    if(["single_choice","multiple_choice","ordering","short_text","written"].indexOf(type)<0) {
+      fail("неподдерживаемый тип задания '"+type+"' (ID "+id+").");
+    }
+    if((type==="single_choice"||type==="multiple_choice"||type==="ordering")&&
+       (!Array.isArray(task.options)||task.options.length<2||task.options.length>8)) {
+      fail("задание "+id+" должно содержать от 2 до 8 вариантов/элементов.");
+    }
+    if(type==="single_choice") {
+      if(!Number.isInteger(task.correctIndex)||task.correctIndex<0||task.correctIndex>=task.options.length) fail("неверный correctIndex в задании "+id+".");
+    } else if(type==="multiple_choice") {
+      if(!Array.isArray(task.correctIndices)||!task.correctIndices.length||
+         task.correctIndices.some(function(v){return !Number.isInteger(v)||v<0||v>=task.options.length;})||
+         new Set(task.correctIndices).size!==task.correctIndices.length) fail("неверный correctIndices в задании "+id+".");
+    } else if(type==="ordering") {
+      if(!Array.isArray(task.correctOrder)||task.correctOrder.length!==task.options.length||
+         task.correctOrder.some(function(v){return task.options.map(String).indexOf(String(v))<0;})||
+         new Set(task.correctOrder.map(String)).size!==task.options.length) fail("неверный correctOrder в задании "+id+".");
+    } else if(type==="short_text") {
+      if(!Array.isArray(task.acceptedAnswers)||!task.acceptedAnswers.length||
+         task.acceptedAnswers.some(function(v){return !String(v==null?"":v).trim();})) fail("не заданы acceptedAnswers в задании "+id+".");
+    } else if(type==="written") {
+      if(!String(task.rubric||task.criteria||"").trim()) fail("для письменного задания "+id+" нужны критерии проверки.");
+    }
+    if(task.audioText!=null&&String(task.audioText).length>12000) fail("аудиотекст слишком длинный в задании "+id+".");
+    pointsTotal+=points;
+  });
+  const maxScore=Number(payload.maxScore);
+  if(!Number.isFinite(maxScore)||maxScore<=0||Math.abs(pointsTotal-maxScore)>0.001) {
+    fail("maxScore должен совпадать с суммой баллов заданий ("+pointsTotal+").");
+  }
+  return {taskCount:payload.tasks.length,maxScore:pointsTotal,durationMinutes:duration};
+}
+
 function validateEnglishExamVariantRegistry_(exams) {
   if (!Array.isArray(exams) || exams.length !== 10) {
     throw new Error("Реестр итоговых экзаменов должен содержать ровно 10 записей — по одной на каждый курс и семестр.");
@@ -3050,6 +3105,7 @@ function importEnglishExamVariants_(data) {
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
         throw new Error("Для варианта " + variant.variantId + " требуется объект variantJSON с содержимым экзамена.");
       }
+      validateEnglishFinalVariantPayload_(payload, String(variant.variantId));
       const variantJSON = JSON.stringify(payload);
       if (!variantJSON || variantJSON.length > 45000) {
         throw new Error("Содержимое варианта " + variant.variantId + " пустое или превышает безопасный лимит 45 000 символов.");
