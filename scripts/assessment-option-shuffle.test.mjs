@@ -259,7 +259,7 @@ test("English VPR server timer starts only when the student launches the exam", 
   const start = extract(vpr, "startEnglishVprExam_");
   assert.match(start, /startedAt:Date\.now\(\)/);
   assert.match(start, /englishVprPrepareAttempt_\(source\)/);
-  assert.match(extract(code, "doPost_"), /startenglishvprexam/);
+  assert.match(code, /case "startenglishvprexam": result = startEnglishVprExam_\(data\); break;/);
   const client = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
   assert.match(client, /API\.startEnglishVprExam\(track\)/);
   assert.match(client, /startExam\(started\.exam, key, panel, courseId, track, started\.attemptId\)/);
