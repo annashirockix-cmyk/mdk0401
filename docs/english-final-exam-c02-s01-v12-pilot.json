@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 12",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v12_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where is the workshop?",
+      "audioText": "The student support centre is running a workshop on managing study time and rest. It takes place in Room 12 on Tuesday at one o'clock. The session will cover planning revision, taking regular breaks and finding support when workloads become difficult. Students do not need to bring books, but they should bring a weekly timetable.",
+      "options": [
+        "In Room 12",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v12_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should students bring?",
+      "audioText": "The student support centre is running a workshop on managing study time and rest. It takes place in Room 12 on Tuesday at one o'clock. The session will cover planning revision, taking regular breaks and finding support when workloads become difficult. Students do not need to bring books, but they should bring a weekly timetable.",
+      "options": [
+        "On Friday",
+        "A weekly timetable",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v12_r01",
+      "type": "single_choice",
+      "prompt": "During the examination period, Pavel tried to study late every night. He found it difficult to concentrate in morning lessons. His tutor suggested making a realistic weekly plan and taking short breaks between study sessions. Pavel also started preparing his materials the evening before. After two weeks, he felt more organised and participated more actively in class. Reading 1. What problem did Pavel experience?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "He found it difficult to concentrate in morning lessons",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v12_r02",
+      "type": "single_choice",
+      "prompt": "What changes did he make?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "He planned his week, took breaks and prepared materials in advance"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v12_g01",
+      "type": "single_choice",
+      "prompt": "You look tired. You ___ take a short break before continuing.",
+      "options": [
+        "should",
+        "should to",
+        "mustn't",
+        "are"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v12_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO habits that support effective study.",
+      "options": [
+        "Plan realistic study sessions",
+        "Take regular short breaks",
+        "Skip sleep to revise longer",
+        "Ignore every deadline"
+      ],
+      "correctIndices": [
+        0,
+        1
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v12_v01",
+      "type": "short_text",
+      "prompt": "A short period when you stop working to rest is a ___.",
+      "acceptedAnswers": [
+        "break",
+        "rest"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v12_f01",
+      "type": "single_choice",
+      "prompt": "A classmate says they are overwhelmed by deadlines. What is a supportive response?",
+      "options": [
+        "Would it help to make a list and speak to the tutor?",
+        "That is not my problem.",
+        "Just stop attending lessons.",
+        "You should finish everything tonight."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v12_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of health and study balance in a sensible order.",
+      "options": [
+        "Work with short planned breaks",
+        "List the tasks and deadlines",
+        "Review progress and adjust the plan",
+        "Choose realistic study periods"
+      ],
+      "correctOrder": [
+        "List the tasks and deadlines",
+        "Choose realistic study periods",
+        "Work with short planned breaks",
+        "Review progress and adjust the plan"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v12_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words giving a classmate advice on balancing study, rest and deadlines. Include two practical suggestions.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v12_audio",
+    "readingPassageId": "c2s1v12_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
