@@ -477,3 +477,8 @@ Five of 15 Technical English pilots are drafted for C5-S1 (`v01`–`v05`), cover
 ## Course 5, Semester 2 — pilot authoring underway
 
 Five of 15 Technical English pilots are drafted for C5-S2 (`v01`–`v05`), covering maintenance handover, risk communication, integrated technical reporting, fault analysis and controlled document release. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Ten variants remain. These are editorial-review drafts only and are not imported or released.
+
+
+## Course 5, Semester 2 — pilot authoring underway
+
+Ten of 15 Technical English pilots are drafted for C5-S2 (`v01`–`v10`). Topics cover maintenance handover, risk communication, integrated technical reporting, fault analysis, controlled document release, evidence-based replacement decisions, supplier clarification, quality improvement, aviation maintenance records and cross-disciplinary handover. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Five variants remain. These are editorial-review drafts only and are not imported or released.
