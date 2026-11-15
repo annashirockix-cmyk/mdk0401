@@ -78,7 +78,7 @@
     }
     app.appendChild(panel);
   }
-  function startExam(exam, key, panel, courseId, track, attemptId) {
+  function startExam(exam, key, panel, courseId, track, attemptId, startedAt) {
     courseId = courseId || courseForTrack(exam.track);
     var student = window.state && window.state.student;
     if (student && window.API && window.API.getTestAttemptStatus && window._englishVprGate !== key) {
@@ -89,7 +89,7 @@
           return;
         }
         window._englishVprGate = key;
-        startExam(exam, key, panel, courseId, track, attemptId);
+        startExam(exam, key, panel, courseId, track, attemptId, startedAt);
         window._englishVprGate = "";
       }).catch(function () { panel.textContent = "Не удалось проверить доступ. Обновите страницу и попробуйте ещё раз."; });
       return;
@@ -104,7 +104,7 @@
         if (!started || started.success !== true || !started.attemptId || !started.exam) {
           throw new Error(started && started.error || "Сервер не выдал вариант экзамена.");
         }
-        startExam(started.exam, key, panel, courseId, track, started.attemptId);
+        startExam(started.exam, key, panel, courseId, track, started.attemptId, started.startedAt);
       }).catch(function(error) {
         panel.textContent = "Не удалось запустить экзамен: " + (error.message || error);
       });
@@ -112,7 +112,11 @@
     }
     exam = exam || {};
     if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
-    var seconds = Math.max(1, Number(exam.time) || 90) * 60, finished = false;
+    var durationSeconds = Math.max(1, Number(exam.time) || 90) * 60;
+    var seconds = Number(startedAt) > 0 ?
+      Math.max(0, durationSeconds - Math.floor(Math.max(0, Date.now() - Number(startedAt)) / 1000)) :
+      durationSeconds;
+    var finished = false;
     panel.innerHTML = "";
     var timer = el("div", "exam-timer", "90:00");
     timer.style.cssText = "position:sticky;top:8px;z-index:3;padding:12px;text-align:center;font-size:24px;font-weight:800;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--accent)";
@@ -341,14 +345,16 @@
     card.innerHTML="<p>Запускаем контрольную и фиксируем время начала…</p>";
     window.API.startEnglishSemesterTest({track:track,testId:test.id,attemptNo:test.attemptNo}).then(function(started){
       if(!started || started.success!==true || !started.attemptId) throw new Error(started&&started.error||"Сервер не выдал идентификатор попытки.");
-      renderSemesterAttempt(test,track,course,card,started.attemptId);
+      renderSemesterAttempt(test,track,course,card,started.attemptId,started.startedAt);
     }).catch(function(error){
       card.textContent="Не удалось запустить контрольную: "+(error.message||error);
     });
   }
-  function renderSemesterAttempt(test,track,course,card,attemptId) {
+  function renderSemesterAttempt(test,track,course,card,attemptId,startedAt) {
     if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
-    var duration=Math.max(1,Number(test.time)||45)*60, seconds=duration, finished=false;
+    var duration=Math.max(1,Number(test.time)||45)*60;
+    var seconds=Number(startedAt)>0?Math.max(0,duration-Math.floor(Math.max(0,Date.now()-Number(startedAt))/1000)):duration;
+    var finished=false;
     card.innerHTML="";
     var heading=el("h2","",test.title||"Семестровая контрольная");
     card.appendChild(heading); card.appendChild(el("p","museum-muted",test.subtitle||""));
