@@ -471,7 +471,7 @@ Fifteen of 15 Technical English pilots are now drafted for C4-S2 (`v01`–`v15`)
 
 ## Course 5, Semester 1 — pilot authoring underway
 
-Five of 15 Technical English pilots are drafted for C5-S1 (`v01`–`v05`), covering maintenance planning, inspection findings, diagnostic evidence, technical manual applicability and revision control. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Ten variants remain. These are editorial-review drafts only and are not imported or released.
+Ten of 15 Technical English pilots are drafted for C5-S1 (`v01`–`v10`), covering maintenance planning, inspection findings, diagnostic evidence, technical manual applicability, revision control, aircraft task applicability, maintenance shift handover, non-conformance reporting, reliability analysis and technical publication revision control. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected server payload validator; 100 prompts and ten listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys are checked in regression tests. Five variants remain. These are editorial-review drafts only and are not imported or released.
 
 
 ## Course 5, Semester 2 — complete pilot authoring
