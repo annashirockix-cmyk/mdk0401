@@ -82,6 +82,26 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(code, /case "resumeenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
 });
 
+test("final exam submission grades objective tasks on the server and routes written work to review", () => {
+  const submit = extractFunction("submitEnglishFinalExam_");
+  assert.match(submit, /auth_\(data\)/);
+  assert.match(submit, /email_\(row\[m\.StudentEmail\]\)!==user\.email/);
+  assert.match(submit, /correctIndex/);
+  assert.match(submit, /correctIndices/);
+  assert.match(submit, /correctOrder/);
+  assert.match(submit, /acceptedAnswers/);
+  assert.match(submit, /pending_review/);
+  assert.match(submit, /ResultJSON:JSON\.stringify\(result\)/);
+  assert.match(submit, /Status:status/);
+  assert.match(code, /case "submitenglishfinalexam": result = submitEnglishFinalExam_\(data\); break;/);
+});
+
+test("final exam sanitization removes exact answer-key fields without deleting unrelated key-named fields", () => {
+  const source = extractFunction("sanitizeEnglishFinalExamTask_");
+  assert.match(source, /\^\(answer\|answers\|correct/);
+  assert.doesNotMatch(source, /\(answer\|correct\|solution\|explanation\|rationale\|rubric\|markscheme\|marking\|grading\|teacher\|key\)\/i/);
+});
+
 test("final exam response autosave validates owner, attempt status, deadline and task IDs", () => {
   const save = extractFunction("saveEnglishFinalExamResponses_");
   assert.match(save, /auth_\(data\)/);
