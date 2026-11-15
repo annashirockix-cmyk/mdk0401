@@ -42,7 +42,7 @@
 - C. whose
 - D. what
 
-**147.** Choose the correct sentence.
+**147.** Which sentence correctly describes a person's life experience up to the present?
 - A. I have never been to Prague.
 - B. I never have be to Prague.
 - C. I have never went to Prague.
