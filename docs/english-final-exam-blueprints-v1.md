@@ -133,3 +133,8 @@ Five Technical English pilot variants are drafted for C4-S2 (`v01`–`v05`), add
 ### Course 5, Semester 1 — pilot authoring underway
 
 Five Technical English pilot variants are drafted for C5-S1 (`v01`–`v05`), addressing maintenance planning, inspection findings, diagnostic evidence, technical manual applicability and revision control. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
+
+
+### Course 5, Semester 2 — pilot authoring underway
+
+Five Technical English pilot variants are drafted for C5-S2 (`v01`–`v05`), addressing maintenance handover, risk communication, integrated technical reporting, fault analysis and controlled document release. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
