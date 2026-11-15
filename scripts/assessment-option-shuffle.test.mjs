@@ -132,6 +132,19 @@ test("all course practice exam renderers invoke the shared option shuffle", () =
 });
 
 
+test("all server assessment renderers recursively strip private answer metadata aliases", () => {
+  const sanitize = new Function(extract(code, "sanitizeAssessmentQuestionForStudent_") + "; return sanitizeAssessmentQuestionForStudent_;")();
+  const input = {q:"Question",options:["A","B"],correctText:"A",answer_key:"A",expected_answer:"A",
+    nested:{correctExplanation:"private",answerIndex:0,feedback:"teacher note",prompt:"keep this"}};
+  const safe = sanitize(input);
+  for (const key of ["correctText","answer_key","expected_answer"]) assert.equal(Object.hasOwn(safe,key),false,key);
+  for (const key of ["correctExplanation","answerIndex","feedback"]) assert.equal(Object.hasOwn(safe.nested,key),false,key);
+  assert.equal(safe.nested.prompt,"keep this");
+  assert.match(extract(code,"safeBuiltInQuestion_"),/sanitizeAssessmentQuestionForStudent_/);
+  assert.match(extract(code,"safeFinalExamQuestion_"),/sanitizeAssessmentQuestionForStudent_/);
+  assert.match(extract(code,"getCustomTest_"),/sanitizeAssessmentQuestionForStudent_/);
+});
+
 test("student-facing assessment sanitizers strip alternate answer-key field names", () => {
   const safeBuiltIn = new Function("shuffledServer_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer);
   const privateFields = {
