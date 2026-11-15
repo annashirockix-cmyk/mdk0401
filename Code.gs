@@ -2973,6 +2973,53 @@ function saveSchedule_(data) {
  * Защищённое хранилище семестровых контрольных по английскому языку.
  * Ключи ответов остаются на сервере; клиент получает только вопросы и варианты.
  */
+
+/**
+ * Structural guard for the planned five-year final-exam registry.
+ * This validates the 10 course/semester slots and 150 variant identifiers;
+ * task content and blueprint coverage require separate editorial validation.
+ */
+function validateEnglishExamVariantRegistry_(exams) {
+  if (!Array.isArray(exams) || exams.length !== 10) {
+    throw new Error("Реестр итоговых экзаменов должен содержать ровно 10 записей — по одной на каждый курс и семестр.");
+  }
+  const seenSlots = {}, seenVariants = {};
+  let variantCount = 0;
+  exams.forEach(function(exam) {
+    const match = /^EN_C0([1-5])$/.exec(String(exam && exam.courseId || ""));
+    const courseNo = match ? Number(match[1]) : 0;
+    const semester = Number(exam && exam.semester);
+    const expectedTrack = courseNo >= 3 ? "technical" : "basic";
+    const slotKey = String(exam && exam.courseId || "") + "_S" + semester;
+    if (!courseNo || (semester !== 1 && semester !== 2) ||
+        String(exam.track || "").toLowerCase() !== expectedTrack ||
+        seenSlots[slotKey] || !Array.isArray(exam.variants) || exam.variants.length !== 15) {
+      throw new Error("Каждый курс и семестр должен иметь одну запись с правильным направлением и ровно 15 вариантами.");
+    }
+    seenSlots[slotKey] = true;
+    exam.variants.forEach(function(variant) {
+      const id = String(variant && variant.variantId || "").trim();
+      const blueprintId = String(variant && variant.blueprintId || "").trim();
+      if (!id || !blueprintId || seenVariants[id]) {
+        throw new Error("Каждый из 150 вариантов должен иметь уникальный ID и ссылку на blueprint.");
+      }
+      seenVariants[id] = true;
+      variantCount++;
+    });
+  });
+  if (Object.keys(seenSlots).length !== 10 || variantCount !== 150) {
+    throw new Error("Реестр должен покрывать все 10 семестров и содержать 150 уникальных вариантов.");
+  }
+  for (let courseNo = 1; courseNo <= 5; courseNo++) {
+    for (let semester = 1; semester <= 2; semester++) {
+      if (!seenSlots["EN_C0" + courseNo + "_S" + semester]) {
+        throw new Error("В реестре отсутствует курс " + courseNo + ", семестр " + semester + ".");
+      }
+    }
+  }
+  return {examCount:10, variantCount:variantCount, basicSlots:4, technicalSlots:6};
+}
+
 function englishSemesterBank_() { return ensureSheet_("EnglishSemesterBank"); }
 
 function validateEnglishSemesterTests_(tests, track) {
