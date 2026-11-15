@@ -94,7 +94,11 @@
     {
       "id": "c2s2v07_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A statement that is presented as true and can be checked is a ___.",
+      "acceptedAnswers": [
+        "claim"
+      ]
     },
     {
       "id": "c2s2v07_f01",
