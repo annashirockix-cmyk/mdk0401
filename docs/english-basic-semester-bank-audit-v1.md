@@ -29,7 +29,7 @@ Scope: legacy Basic semester seed, independent Basic authoring drafts v1–v3, a
 
 - Draft v1: questions 1–20.
 - Draft v2: questions 21–40.
-- Draft v3: questions 41–100.
+- Draft v3: questions 41–60.
 - Draft v4: questions 61–80.
 - Draft v5: questions 81–100.
 - Each draft contains four answer options per question and a separate teacher key with rationale.
