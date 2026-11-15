@@ -39,7 +39,7 @@ const HEADERS = {
   GameActions: ["Id", "RoomCode", "Email", "Type", "Payload", "CreatedAt"],
   Assignments: ["Id", "CourseId", "Title", "Topic", "Level", "WorkType", "DueAt", "TargetType", "TargetValue", "Instructions", "Criteria", "CreatedBy", "CreatedAt", "Status"],
   AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
-  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"],
+  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "Status"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"],
@@ -1363,9 +1363,9 @@ function getAssignments_(data) {
   function historyFor(submission) {
     const sid = String(submission[m.Id] || "");
     const saved = historyRows.slice(1).filter(function(x){return String(x[hm.SubmissionId]||"")===sid;})
-      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||"")};})
+      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||""),grade:x[hm.Grade]===undefined||x[hm.Grade]===""?null:x[hm.Grade],feedback:String(x[hm.Feedback]||""),reviewedBy:String(x[hm.ReviewedBy]||""),reviewedAt:String(x[hm.ReviewedAt]||""),status:String(x[hm.Status]||"")};})
       .sort(function(x,y){return x.attempt-y.attempt;});
-    return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||"")}];
+    return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||""),grade:submission[m.Grade]===undefined||submission[m.Grade]===""?null:submission[m.Grade],feedback:String(submission[m.Feedback]||""),reviewedBy:String(submission[m.ReviewedBy]||""),reviewedAt:String(submission[m.ReviewedAt]||""),status:String(submission[m.Status]||"")}];
   }
   rows.slice(1).forEach(function(r){
     if (!r[h.Id]) return;
@@ -1418,12 +1418,28 @@ function submitAssignment_(data) {
     const hist = assignmentSubmissionHistory_(), hv = hist.getDataRange().getValues(), hm = headerMap_(hist);
     const saved = hv.slice(1).filter(function(r){ return String(r[hm.SubmissionId] || "") === submissionId; });
     let attempt = saved.length + 1;
-    if (i >= 0 && !saved.length) {
+    if (i >= 0) {
       const previous = v[i+1], previousAt = String(previous[m.SubmittedAt] || now);
-      appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1});
-      attempt = 2;
+      const reviewSnapshot = {
+        Grade:previous[m.Grade] === undefined ? "" : previous[m.Grade],
+        Feedback:String(previous[m.Feedback] || ""),
+        ReviewedBy:String(previous[m.ReviewedBy] || ""),
+        ReviewedAt:String(previous[m.ReviewedAt] || ""),
+        Status:String(previous[m.Status] || "submitted")
+      };
+      if (!saved.length) {
+        appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1,Grade:reviewSnapshot.Grade,Feedback:reviewSnapshot.Feedback,ReviewedBy:reviewSnapshot.ReviewedBy,ReviewedAt:reviewSnapshot.ReviewedAt,Status:reviewSnapshot.Status});
+        attempt = 2;
+      } else {
+        for (let h = hv.length - 1; h >= 1; h--) {
+          if (String(hv[h][hm.SubmissionId] || "") === submissionId) {
+            updateMappedRecord_(hist, h + 1, reviewSnapshot);
+            break;
+          }
+        }
+      }
     }
-    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt});
+    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt,Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Status:"submitted"});
     const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
     if (i >= 0) updateMappedRecord_(sub, i + 2, record); else appendMappedRecord_(sub, record);
     notifyCourseStaff_(cid,"submission",attempt > 1 ? "Повторная отправка задания" : "Новый ответ на задание",
