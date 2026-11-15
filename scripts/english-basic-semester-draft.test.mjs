@@ -53,10 +53,21 @@ test("Basic semester drafts 1–200 have four options and one valid teacher key 
   }
 });
 
-test("Basic semester drafts 1–120 contain no repeated question stems", () => {
+test("Basic semester drafts 1–200 contain no repeated question stems", () => {
   const questions = files.flatMap((file) => parseDraft(readFileSync(path.join(root, file), "utf8")).questions);
   const normalized = questions.map((question) => question.stem.toLowerCase().replace(/\s+/g, " ").trim());
   assert.equal(new Set(normalized).size, normalized.length);
+});
+
+test("Basic semester answer-key positions are balanced across the 200-item pool", () => {
+  const counts = { A: 0, B: 0, C: 0, D: 0 };
+  for (const file of files) {
+    const draft = parseDraft(readFileSync(path.join(root, file), "utf8"));
+    for (const key of draft.keys.values()) counts[key] += 1;
+  }
+  for (const count of Object.values(counts)) {
+    assert.ok(count >= 49 && count <= 51, "Answer position distribution must stay balanced: " + JSON.stringify(counts));
+  }
 });
 
 test("legacy Basic seed cannot pass the protected bank validator without server answer keys", () => {
