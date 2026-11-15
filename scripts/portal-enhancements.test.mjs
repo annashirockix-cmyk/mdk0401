@@ -230,7 +230,7 @@ test("custom course materials normalize spreadsheet date-coerced course IDs", ()
   assert.match(server, /sameCourseId_\(rows\[i\]\[1\], courseId\)/);
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
   assert.match(server, /id: String\(row\[0\]\), mdkId: courseId, courseId: courseId,/);
-  assert.match(server, /courseId: courseId, topicId: String\(row\[2\] \|\| ""\), type: String\(row\[3\] \|\| ""\)/);
+  assert.match(server, /topicId: String\(row\[2\] \|\| ""\), type: String\(row\[3\] \|\| ""\)/);
   assert.match(server, /editor_\(data, courseId\)/);
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
 });
@@ -950,7 +950,10 @@ test("server builds 45-question advanced non-English exams with protected answer
     ,Utilities:{getUuid:()=>"exam-test"}
     ,CacheService:{getScriptCache:()=>({put:(key,value)=>{sandbox.cached=JSON.parse(value);}})}
   };
-  vm.runInNewContext(extractFunction(server, "sanitizeAssessmentQuestionForStudent_")+"\n"+server.slice(start,end)+";this.getFinalExam_=getFinalExam_;",sandbox,{timeout:1000});
+  const sanitizeStart = server.indexOf("function sanitizeAssessmentQuestionForStudent_");
+  const sanitizeEnd = server.indexOf("\nfunction safeBuiltInQuestion_", sanitizeStart);
+  assert.ok(sanitizeStart >= 0 && sanitizeEnd > sanitizeStart);
+  vm.runInNewContext(server.slice(sanitizeStart,sanitizeEnd)+"\n"+server.slice(start,end)+";this.getFinalExam_=getFinalExam_;",sandbox,{timeout:1000});
   const result=sandbox.getFinalExam_({courseId:"07.01"});
   assert.equal(result.questions.length,45);
   assert.equal(sandbox.cached.questions.length,45);
@@ -981,7 +984,7 @@ test("semester tests are student-visible and scored only by the protected server
   assert.ok(server.includes("return Number.isInteger(order[answer]) ? order[answer] : -1;"));
   assert.ok(server.includes("canonicalAnswers[index] === Number(question.correct)"));
   assert.match(server, /english_semester_/);
-  assert.match(server, /Submission:JSON\.stringify\(\{answers:answers\}\)/);
+  assert.match(server, /Submission:JSON\.stringify\(\{answers:canonicalAnswers\}\)/);
 });
 
 
@@ -1238,7 +1241,7 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.match(save, /editor_\(data,courseId\)/);
   assert.match(save, /hasCourseAccess_\(currentStudent,courseId\)/);
   assert.match(save, /LockService\.getScriptLock\(\)/);
-  assert.match(save, /appendMappedRecord_\(results_\(\)/);
+  assert.match(save, /if\(existingRow>0\)updateMappedRecord_\(sheet,existingRow,record\);else appendMappedRecord_\(sheet,record\);/);
   assert.match(save, /appendAttemptAudit_/);
   assert.match(api, /saveManualGrade:function\(data\)/);
   assert.match(app, /window\.API\.getStudents\(\)/);
