@@ -137,7 +137,7 @@ test("built-in and final exams keep answer keys server-side and remap submitted 
   assert.match(builtInSubmit, /lockedAttemptRaw=cache\.get\("builtInAttempt:"\+attemptId\)/);
   assert.match(builtInSubmit, /cache\.remove\("builtInAttempt:"\+attemptId\)/);
   assert.match(code, /function builtInScoringSnapshot_\(question\)/);
-  assert.match(code,/builtInScoringSnapshot_\\(entry\\.question\\)/);
+  assert.match(code, /builtInScoringSnapshot_\(entry\.question\)/);
   assert.match(code,/\["type","correct","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"\]/);
   assert.match(builtInSubmit, /Array\.isArray\(attempt\.questions\)\?attempt\.questions:\[\]/);
   assert.doesNotMatch(builtInSubmit,/const entries=builtInQuestions_\\(courseId,resolvedIds\\)/);
@@ -262,7 +262,7 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(save,/Результат студента должен отправляться через защищённый маршрут проверки/);
   assert.match(save,/serverVerifiedEnglishVpr !== true/);
   assert.match(code, /function isTrustedLegacyGrade_\(record\) \{\s*return false;/);
-  assert.match(code,/safeStudentProgressResults_\\(savedPayload\\.results\\)/);
+  assert.match(code, /safeStudentProgressResults_\(savedPayload\.results\)/);
   assert.match(code,/record\\.grade != null \\|\\| record\\.score != null \\|\\| record\\.percent != null/);
   assert.match(app,/Grades are displayed only from server-authoritative result records/);
   assert.doesNotMatch(app,/localStorage\\.getItem\\('portal_grades'\\)/);
@@ -324,7 +324,7 @@ test("English VPR duration is measured from the server attempt start", () => {
   const submit = extract(vpr, "submitEnglishVprExam_");
   assert.match(submit, /const startedAt = Number\(attempt\.startedAt\)/);
   assert.match(submit, /Date\.now\(\) - startedAt/);
-  assert.match(submit, /timeSpent:Math\.min\(Math\.max\(0,Math\.floor\(\(Date\.now\(\)-startedAt\)\/1000\)\)/);
+  assert.match(submit, /timeSpent:Math\.min\(elapsedSeconds,allowedSeconds\)/);
 });
 
 
@@ -337,7 +337,7 @@ test("English VPR server timer starts only when the student launches the exam", 
   assert.match(code, /case "startenglishvprexam": result = startEnglishVprExam_\(data\); break;/);
   const client = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
   assert.match(client, /API\.startEnglishVprExam\(track\)/);
-  assert.match(client, /startExam\(started\.exam, key, panel, courseId, track, started\.attemptId\)/);
+  assert.match(client, /startExam\(started\.exam, key, panel, courseId, track, started\.attemptId, started\.startedAt\)/);
   assert.match(fs.readFileSync(path.join(root, "api.js"), "utf8"), /startEnglishVprExam:function/);
 });
 
