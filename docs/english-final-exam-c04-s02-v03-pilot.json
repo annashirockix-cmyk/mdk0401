@@ -25,7 +25,7 @@
     {
       "id": "c4s2v03_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which diagram should students bring?",
+      "prompt": "Listening 2. Which block diagram should students use for the automation lesson?",
       "audioText": "The automation tutor will introduce sensors and actuators on Thursday at nine thirty. Students should bring the system block diagram and meet in the automation classroom. The lesson will explain how a sensor provides information and how an actuator produces a physical response. Students will analyse a simplified diagram rather than operate equipment.",
       "options": [
         "On Friday",
