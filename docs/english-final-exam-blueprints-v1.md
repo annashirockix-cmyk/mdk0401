@@ -87,3 +87,8 @@ C1-S2 is complete at 15 of 15 authored pilot variants. Across the slot, all 150 
 ### Course 2, Semester 1 — complete pilot authoring
 
 Fifteen Basic English pilots are now authored for C2-S1 (`v01`–`v15`). Topics progress from career fairs, CVs and interviews to skills portfolios, part-time work, teamwork, digital learning, environmental choices, customer service, study visits, study-life balance, everyday problem solving, course selection and workplace communication. Every variant has ten tasks, 20 points, 90 minutes, two listening items and one written response. Regression tests validate the full set against the protected payload validator, verify variant-specific task IDs, unique prompts and audio scripts, balanced A/B/C/D key positions and functional-response keys. Editorial review is still required; these variants are not imported or released.
+
+
+### Course 2, Semester 2 — pilot authoring underway
+
+Five Basic English pilot variants are drafted for C2-S2 (`v01`–`v05`). Topics include reducing plastic waste, evaluating online information, renewable energy, responsible technology use and community transport. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator; prompts and listening scripts are unique, answer positions are balanced and functional-response keys have been checked. Ten variants remain. These are editorial-review drafts, not imported or released.
