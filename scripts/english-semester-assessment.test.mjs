@@ -82,6 +82,25 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(code, /case "resumeenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
 });
 
+test("teacher review queue filters by assigned course and exposes written responses", () => {
+  const list = extractFunction("getEnglishFinalExamReviews_");
+  assert.match(list, /teacher\.role!=="admin" && teacher\.role!=="teacher"/);
+  assert.match(list, /hasCourseAccess_\(teacher,courseId\)/);
+  assert.match(list, /pending_review/);
+  assert.match(list, /ResponsesJSON/);
+  assert.match(code, /case "getenglishfinalexamreviews": result = getEnglishFinalExamReviews_\(data\); break;/);
+});
+
+test("written grading validates teacher scope and per-task score bounds before finalizing", () => {
+  const grade = extractFunction("gradeEnglishFinalExamWritten_");
+  assert.match(grade, /hasCourseAccess_\(teacher,courseId\)/);
+  assert.match(grade, /known\[id\]===undefined/);
+  assert.match(grade, /score<0\|\|score>known\[id\]/);
+  assert.match(grade, /gradeFromPercent_\(percent\)/);
+  assert.match(grade, /Status:"submitted"/);
+  assert.match(code, /case "gradeenglishfinalexamwritten": result = gradeEnglishFinalExamWritten_\(data\); break;/);
+});
+
 test("final exam submission grades objective tasks on the server and routes written work to review", () => {
   const submit = extractFunction("submitEnglishFinalExam_");
   assert.match(submit, /auth_\(data\)/);
