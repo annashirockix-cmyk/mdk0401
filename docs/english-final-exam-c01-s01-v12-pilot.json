@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO good ways to work in a project team.",
       "options": [
-        "Tell the group about a problem early.",
         "Keep important changes secret.",
-        "Agree on tasks and deadlines.",
-        "Ignore the project plan."
+        "Ignore the project plan.",
+        "Tell the group about a problem early.",
+        "Agree on tasks and deadlines."
       ],
       "correctIndices": [
         2,
