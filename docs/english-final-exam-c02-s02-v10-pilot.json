@@ -94,7 +94,11 @@
     {
       "id": "c2s2v10_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "The unwanted material mixed into a recycling container is called ___.",
+      "acceptedAnswers": [
+        "contamination"
+      ]
     },
     {
       "id": "c2s2v10_f01",
