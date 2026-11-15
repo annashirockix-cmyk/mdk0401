@@ -94,7 +94,7 @@
     {
       "id": "c5s1v08_v01",
       "type": "short_text",
-      "prompt": "A failure to meet a specified requirement is a non-___.",
+      "prompt": "A failure to meet a specified requirement is called a non-conformance. Complete the term: non-___.",
       "acceptedAnswers": [
         "conformance",
         "non-conformance",
