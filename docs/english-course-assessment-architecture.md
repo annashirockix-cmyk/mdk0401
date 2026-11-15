@@ -127,11 +127,14 @@ Never expose answer keys or scoring rules that reveal answers in the student pay
 
 ### 4.2 Semester checks — `EnglishSemesterBank`
 Current source: `english-assessment-data.js`.
-- There are 10 Basic source tests, one for each course-year/semester pair, each with 20 items.
-- Technical is currently created by mapping over Basic and changing IDs and labels. This is not valid Technical content.
-- The target must contain independent items for each track; do not clone Basic questions into Technical.
+
+- The five-course map contains ten course-semester slots in total: Courses 1–2 are Basic English (four slots); Courses 3–5 are Technical English (six slots).
+- The target is therefore ten semester checks overall, not ten Basic plus ten Technical checks, unless an approved work programme explicitly requires parallel assessments for a slot.
+- The legacy client seed contains ten Basic tests, but that legacy layout is not authoritative for the five-course map. Its Technical set was cloned from Basic and is not valid Technical content.
+- The new Basic authoring files `docs/english-basic-semester-bank-draft-v1.md` through `v10.md` are ten 20-item drafting batches (200 items total), **not** an approved one-file-per-semester allocation. Keep them as an editorial question pool until the approved course/semester blueprint is confirmed.
+- The independent Technical drafts are likewise a content pool; neither track's draft batches should be assigned to semester slots solely by filename order.
+- After the approved curriculum is available, curate the required Basic and Technical item sets for the ten slots, preserving independent track content and avoiding cross-track duplicates.
 - Preserve server-side storage, sanitized student payloads, attempt limits, and result persistence already provided by the existing implementation.
-- Before finalizing the number of banks, reconcile the legacy 10 Basic + 10 Technical layout with the five-course map. The correct course map has ten course-semester slots; a second parallel set must only exist if the curriculum explicitly requires two distinct track-specific checks for the same slot.
 
 Suggested item metadata: `id`, `type`, `prompt`, `options`, `correctAnswer` (server-only), `points`, `feedbackRef` (optional).
 Supported task types should be deliberately limited to those the current renderer and server grader can validate.
