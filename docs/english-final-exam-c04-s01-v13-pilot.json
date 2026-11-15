@@ -25,7 +25,7 @@
     {
       "id": "c4s1v13_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which worksheet should students bring?",
+      "prompt": "Listening 2. Which worksheet is required for the fault-category lesson?",
       "audioText": "The maintenance lecturer will compare common electrical fault descriptions on Monday at eleven thirty. Students should bring the fault-category worksheet. The lesson will distinguish open circuit, short circuit and intermittent fault as descriptive terms. Students will analyse written examples and identify what information is still needed before a cause can be confirmed.",
       "options": [
         "On Friday",
