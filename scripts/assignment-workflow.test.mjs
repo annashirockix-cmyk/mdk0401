@@ -105,7 +105,7 @@ function runtime() {
   const notifications = [], audit = [];
   const sandbox = {
     console,
-    Utilities: { getUuid: () => "test-uuid-" + (++uuid) },
+    Utilities: { getUuid: () => "test-uuid-" + (++uuid), base64EncodeWebSafe: value => Buffer.from(String(value)).toString("base64").replace(/\+/g,"-").replace(/\//g,"_") },
     LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) }
   };
   vm.createContext(sandbox);
@@ -512,7 +512,7 @@ test("group assignments may be prepared without any connected students", () => {
 test("legacy EN course access is respected for ENB individual assignments", () => {
   const r = runtime();
   const created = r.sandbox.createAssignment_({
-    token: "teacherToken",
+    token: "englishTeacherToken",
     courseId: "ENB",
     targetType: "individual",
     targetValue: "legacy.english@example.test",
