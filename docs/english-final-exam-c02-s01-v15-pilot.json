@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO features of a useful workplace progress update.",
       "options": [
-        "Clear information about completed tasks",
-        "A note about any problem that needs attention",
         "Unrelated personal comments",
-        "Unconfirmed guesses presented as facts"
+        "Unconfirmed guesses presented as facts",
+        "Clear information about completed tasks",
+        "A note about any problem that needs attention"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -106,12 +106,12 @@
       "type": "single_choice",
       "prompt": "You do not understand a workplace instruction. What should you say?",
       "options": [
-        "Could you show me that step once more, please?",
         "I will guess what to do.",
+        "Could you show me that step once more, please?",
         "I will ignore the instruction.",
         "You explained it badly."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
