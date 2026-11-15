@@ -218,15 +218,17 @@ window.renderJournalPage = function() {
                   var manualGrades = p.manualGrades || {};
                   var currentVal = String(manualGrades[formattedDate] || "");
                   var inputId = "manualGrade_" + studentIndex;
+                  var feedbackId = "manualFeedback_" + studentIndex;
                   var statusId = "manualGradeStatus_" + studentIndex;
 
                   tableHtml += `<tr>
                       <td style="padding:12px; border:1px solid var(--border);"><b>${window.escapeHtml(s.name)}</b> <span style="font-size:12px; color:var(--muted);">(${window.escapeHtml(s.group)})</span></td>
                       <td style="padding:12px; border:1px solid var(--border); text-align:center;">
-                          <input type="text" id="${inputId}" class="self-input" style="margin:0; text-align:center; font-size:18px; font-weight:bold; height:40px;" maxlength="3" placeholder="-" value="${window.escapeHtml(currentVal)}">
+                          <input type="number" min="2" max="5" step="1" id="${inputId}" class="self-input" style="margin:0; text-align:center; font-size:18px; font-weight:bold; height:40px;" placeholder="—" value="${window.escapeHtml(currentVal)}">
+                          <textarea id="${feedbackId}" class="self-input" rows="2" style="margin-top:5px;font-size:11px" placeholder="Комментарий преподавателя (необязательно)"></textarea>
                       </td>
                       <td style="padding:12px; border:1px solid var(--border); text-align:center;" id="${statusId}">
-                          ${currentVal ? '<span style="color:var(--ok);">Сохранено</span>' : '<span style="color:var(--muted);">Не выставлено</span>'}
+                          ${currentVal ? '<span style="color:var(--ok);">Сохранено ранее</span>' : '<span style="color:var(--muted);">Не выставлено</span>'}
                       </td>
                   </tr>`;
               });
@@ -246,14 +248,18 @@ window.renderJournalPage = function() {
                       var input = document.getElementById("manualGrade_" + studentIndex);
                       if (!input) return;
                       var val = input.value.trim();
-                      
-                      var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
-                      if (!p.manualGrades) p.manualGrades = {};
-                      
-                      if (val) p.manualGrades[formattedDate] = val;
-                      else delete p.manualGrades[formattedDate];
-
-                      promises.push(window.API.saveStudent(s.email, s.name, s.group, JSON.stringify(p)));
+                      var feedbackInput = document.getElementById("manualFeedback_" + studentIndex);
+                      if (!val) return;
+                      var numericGrade = Number(val);
+                      if ([2,3,4,5].indexOf(numericGrade) < 0) throw new Error("Для каждого заполненного поля укажите оценку от 2 до 5.");
+                      promises.push(window.API.saveManualGrade({
+                          email:s.email,
+                          courseId:window.state.activeCourseId,
+                          testTitle:"Оценка за занятие",
+                          date:dateInput,
+                          grade:numericGrade,
+                          feedback:feedbackInput ? feedbackInput.value : ""
+                      }));
                   });
 
                   Promise.all(promises).then(() => {
