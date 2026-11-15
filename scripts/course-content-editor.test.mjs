@@ -190,7 +190,7 @@ test("custom test grading reads the protected answer key from Sheets, not the br
  assert.match(launch, /const questions = Array\.isArray\(record\.payload\.questions\)/);
  assert.match(launch, /questions:questions,optionMaps:optionMaps/);
  assert.match(launch, /customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, "test"\)/);
- assert.match(submit, /const raw = cache\.get\("customTestAttempt:" \+ attemptId\)/);
+ assert.match(submit, /raw = cache\.get\("customTestAttempt:" \+ attemptId\)/);
  assert.match(submit, /scoreBuiltInQuestion_\(question \|\| \{\}, canonicalAnswers\[index\]\)/);
  assert.doesNotMatch(submit, /data\.questions/);
  assert.match(submit, /LockService\.getScriptLock\(\)/);
