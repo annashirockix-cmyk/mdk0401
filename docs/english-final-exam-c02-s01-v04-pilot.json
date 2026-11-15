@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 4",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. What is the session about?",
+      "audioText": "The college is holding an information session about progression routes next Thursday at three. Students can learn about advanced certificates, apprenticeships and university programmes. The session will take place in the library seminar room. Bring your questions about entry requirements and course length. A short guide will be available at the door, and the presentation slides will be shared afterwards.",
+      "options": [
+        "Progression and training routes",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Where will it take place?",
+      "audioText": "The college is holding an information session about progression routes next Thursday at three. Students can learn about advanced certificates, apprenticeships and university programmes. The session will take place in the library seminar room. Bring your questions about entry requirements and course length. A short guide will be available at the door, and the presentation slides will be shared afterwards.",
+      "options": [
+        "On Friday",
+        "In the library seminar room",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r01",
+      "type": "single_choice",
+      "prompt": "Leila wants to continue studying after college. She compares an apprenticeship with a full-time university course. The apprenticeship includes paid workplace training, while the university course offers more time for academic study. Leila is interested in both options, so she checks the entry requirements and speaks to a careers adviser before making a decision. Reading 1. What is one feature of the apprenticeship?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "Paid workplace training",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r02",
+      "type": "single_choice",
+      "prompt": "Why does Leila speak to an adviser?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "To help her make an informed decision"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct modal: 'Applicants ___ check the entry requirements before applying.'",
+      "options": [
+        "should",
+        "should to",
+        "are",
+        "would to"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO useful points to compare when choosing a course.",
+      "options": [
+        "Entry requirements",
+        "The colour of the website",
+        "Course length",
+        "An unrelated social media post"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A person who gives advice about education and careers is an adviser or ___.'",
+      "acceptedAnswers": [
+        "counsellor",
+        "career adviser"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_f01",
+      "type": "single_choice",
+      "prompt": "You need details about an apprenticeship. What should you ask?",
+      "options": [
+        "Could you explain how the workplace training is organised?",
+        "Tell me everything immediately.",
+        "I do not care about the details.",
+        "Choose a course for my friend."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_o01",
+      "type": "ordering",
+      "prompt": "Identify your goals; Compare the available routes; Check entry requirements; Discuss the options with an adviser",
+      "options": [
+        "Discuss the options with an adviser",
+        "Compare the available routes",
+        "Identify your goals",
+        "Check entry requirements"
+      ],
+      "correctOrder": [
+        "Identify your goals",
+        "Compare the available routes",
+        "Check entry requirements",
+        "Discuss the options with an adviser"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words comparing two possible routes after college. Explain one advantage of each and say which route you would prefer.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v4_audio",
+    "readingPassageId": "c2s1v4_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
