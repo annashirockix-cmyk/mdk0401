@@ -91,9 +91,10 @@ test("five authored Basic English final-exam pilots match the protected runtime 
   const pilot3 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v03-pilot.json"),"utf8"));
   const pilot4 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v04-pilot.json"),"utf8"));
   const pilot5 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v05-pilot.json"),"utf8"));
+  const pilot6 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v06-pilot.json"),"utf8"));
   const source = extractFunction("validateEnglishFinalVariantPayload_");
   const validate = new Function(source + "; return validateEnglishFinalVariantPayload_;")();
-  const pilots=[pilot1,pilot2,pilot3,pilot4,pilot5];
+  const pilots=[pilot1,pilot2,pilot3,pilot4,pilot5,pilot6];
   pilots.forEach((pilot,index)=>{
     assert.equal(pilot.examId,"english_final_c1_s1");
     assert.equal(pilot.courseNo,1);
