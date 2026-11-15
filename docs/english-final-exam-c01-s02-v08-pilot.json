@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 08",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v08_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When is the project update due?",
+      "audioText": "Please remember that the engineering group must send its project update by Thursday at five. Use the college email account and include the project name in the subject line. Attach the latest drawing as a PDF file. Do not send large video files. If you need to share a video, upload it to the class folder and add the link to your message.",
+      "options": [
+        "Thursday at five",
+        "Wednesday morning",
+        "Friday at noon",
+        "Monday afternoon"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v08_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. How should students share a large video?",
+      "audioText": "Please remember that the engineering group must send its project update by Thursday at five. Use the college email account and include the project name in the subject line. Attach the latest drawing as a PDF file. Do not send large video files. If you need to share a video, upload it to the class folder and add the link to your message.",
+      "options": [
+        "Attach it to every email",
+        "Upload it to the class folder and share a link",
+        "Send it by post",
+        "Print every frame"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v08_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Lena writes to her tutor because she cannot open an assignment file. She uses a clear subject line and explains which file she tried to open. She includes a screenshot of the error message but does not attach unrelated documents. Before sending the email, she checks the tutor's address and reads the message again for spelling mistakes. What does Lena include in her email?",
+      "options": [
+        "Her personal password",
+        "A video of her classroom",
+        "A screenshot of the error",
+        "An empty attachment"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v08_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does she check before sending it?",
+      "options": [
+        "The weather forecast",
+        "Her timetable for next year",
+        "The tutor's home address",
+        "The tutor's address and spelling"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v08_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'Please ___ the latest drawing to your email.'",
+      "options": [
+        "attach",
+        "attached",
+        "attaches",
+        "attaching"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v08_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO good email practices for college communication.",
+      "options": [
+        "Use a clear subject line.",
+        "Check the recipient's address.",
+        "Send your password to the group.",
+        "Attach every file you have."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v08_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A short line that tells the reader what an email is about is its ___ line.'",
+      "acceptedAnswers": [
+        "subject"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v08_f01",
+      "type": "single_choice",
+      "prompt": "You are sending a file but it is too large. What is a suitable solution?",
+      "options": [
+        "Send it ten times.",
+        "Upload it to the shared class folder and send the link.",
+        "Delete the recipient.",
+        "Change the tutor's email address."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v08_o01",
+      "type": "ordering",
+      "prompt": "Write a clear subject line; Check the recipient's address; Attach the correct file or add a shared link; Read the message and send it",
+      "options": [
+        "Read the message and send it",
+        "Attach the correct file or add a shared link",
+        "Check the recipient's address",
+        "Write a clear subject line"
+      ],
+      "correctOrder": [
+        "Write a clear subject line",
+        "Check the recipient's address",
+        "Attach the correct file or add a shared link",
+        "Read the message and send it"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v08_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words describing how to send a clear and polite email to a college tutor. Include a subject line, a relevant attachment and one thing you should check before sending.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v08_audio",
+    "readingPassageId": "c1s2v08_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
