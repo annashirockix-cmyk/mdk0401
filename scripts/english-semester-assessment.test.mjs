@@ -103,6 +103,14 @@ test("the first authored Basic English final-exam pilot matches the protected ru
     assert.ok(pilot.tasks.some(task=>task.audioText));
     assert.deepEqual(validate(pilot,"C1-S1-V0"+(index+1)),{taskCount:10,maxScore:20,durationMinutes:90});
   });
+  pilots.forEach(pilot=>{
+    const distribution={A:0,B:0,C:0,D:0};
+    pilot.tasks.forEach(task=>{
+      if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;
+      if(task.type==="multiple_choice")task.correctIndices.forEach(index=>distribution["ABCD"[index]]++);
+    });
+    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
+  });
   for(let a=0;a<pilots.length;a++)for(let b=a+1;b<pilots.length;b++){
     const prompts=new Set(pilots[a].tasks.map(task=>task.prompt.trim().toLowerCase()));
     assert.equal(pilots[b].tasks.some(task=>prompts.has(task.prompt.trim().toLowerCase())),false);
