@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c3_s2",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 3, Semester 2 — Pilot Variant 10",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the weekly schedule lesson take place?",
+      "audioText": "The production planning tutor will discuss a weekly schedule on Wednesday at eleven. Students should bring the sample order list and the capacity table. The class will identify planned start dates, expected completion dates and the departments involved. The tutor will also explain how to report a delay so that the schedule can be reviewed.",
+      "options": [
+        "On Wednesday at eleven",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which table should students bring?",
+      "audioText": "The production planning tutor will discuss a weekly schedule on Wednesday at eleven. Students should bring the sample order list and the capacity table. The class will identify planned start dates, expected completion dates and the departments involved. The tutor will also explain how to report a delay so that the schedule can be reviewed.",
+      "options": [
+        "On Friday",
+        "The capacity table",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v10_r01",
+      "type": "single_choice",
+      "prompt": "A production planner noticed that one component order was likely to be delayed because a required material had not arrived. The planner updated the schedule and informed the relevant departments. The message included the order reference, the expected delay and the next review date. This allowed the team to discuss alternatives without relying on an outdated schedule. Reading 1. Why was the component order likely to be delayed?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "A required material had not arrived",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s2v10_r02",
+      "type": "single_choice",
+      "prompt": "What information did the planner include in the message?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "The order reference, expected delay and next review date"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s2v10_g01",
+      "type": "single_choice",
+      "prompt": "The updated schedule ___ to the relevant departments.",
+      "options": [
+        "was sent",
+        "sent",
+        "is send",
+        "were sending"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO details that make a production delay report useful.",
+      "options": [
+        "An unrelated personal complaint",
+        "A guess without supporting information",
+        "Order reference",
+        "Expected delay and review date"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v10_v01",
+      "type": "short_text",
+      "prompt": "The amount of work or output that a department can handle is its ___.",
+      "acceptedAnswers": [
+        "capacity",
+        "production capacity"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v10_f01",
+      "type": "single_choice",
+      "prompt": "You expect a delay in a component order. What should you tell the planning team?",
+      "options": [
+        "I will wait until the deadline has passed.",
+        "The material has not arrived; the order reference and expected delay are included in my update.",
+        "The schedule is wrong, but I have no details.",
+        "I will change the dates without informing anyone."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v10_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of production planning communication in a logical order.",
+      "options": [
+        "Update the schedule information",
+        "Identify the affected order",
+        "Inform the relevant departments and review the plan",
+        "Confirm the reason for the delay"
+      ],
+      "correctOrder": [
+        "Identify the affected order",
+        "Confirm the reason for the delay",
+        "Update the schedule information",
+        "Inform the relevant departments and review the plan"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v10_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how to communicate a production delay to a planning team. Include the order reference, reason and next action.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s2v10_audio",
+    "readingPassageId": "c3s2v10_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
