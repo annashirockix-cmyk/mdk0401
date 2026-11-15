@@ -118,11 +118,11 @@
 - C. “You know nothing.”
 - D. “I don't care what you say.”
 
-**99.** The word *reliable* in the text is closest in meaning to:
-- A. expensive
-- B. difficult
-- C. dependable
-- D. unusual
+**99.** The word *effective* in the text is closest in meaning to:
+- A. unsuccessful
+- B. useful and producing the intended result
+- C. difficult to understand
+- D. happening immediately
 
 **100.** We checked the details twice ___ avoid making a mistake.
 - A. so that
@@ -152,7 +152,7 @@
 | 96 | C | Third conditional: “If + past perfect, would have + past participle”. |
 | 97 | B | Future passive is “will be + past participle”. |
 | 98 | A | This phrase acknowledges the other view before expressing disagreement politely. |
-| 99 | C | “Reliable” means dependable or trustworthy. |
+| 99 | B | “Effective” means successful in producing the intended result. |
 | 100 | B | “In order to” introduces the purpose of checking the details. |
 
 ## Review checklist
