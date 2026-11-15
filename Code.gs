@@ -3111,8 +3111,7 @@ function sanitizeEnglishFinalExamTask_(value) {
   if (!value || typeof value !== "object") return value;
   const clean = {};
   Object.keys(value).forEach(function(key) {
-    if (/(^|_)(answer|answers|correct|solution|explanation|rationale|rubric|markscheme|marking|grading|answerkey|key)(_|$)/i.test(key) ||
-        /^(correctAnswer|correctAnswers|answerKey|solutions|teacherNotes)$/i.test(key)) return;
+    if (/(answer|correct|solution|explanation|rationale|rubric|markscheme|marking|grading|teacher|key)/i.test(key)) return;
     clean[key] = sanitizeEnglishFinalExamTask_(value[key]);
   });
   return clean;
