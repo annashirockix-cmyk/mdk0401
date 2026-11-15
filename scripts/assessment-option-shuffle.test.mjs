@@ -38,6 +38,19 @@ const scoreBuiltIn = new Function("sameAnswer_", extract(code, "scoreBuiltInQues
   new Function(extract(code, "sameAnswer_") + "; return sameAnswer_;")()
 );
 
+test("server scorer handles multi-select, numeric, order, matching and true-false answers", () => {
+  assert.equal(scoreBuiltIn({type:"multi",options:["A","B","C","D"],correct:[0,2]},[2,0]),true);
+  assert.equal(scoreBuiltIn({type:"multi",options:["A","B","C","D"],correct:[0,2]},[0]),false);
+  assert.equal(scoreBuiltIn({type:"numeric",answer:"12,5",tolerance:0.01},"12.504"),true);
+  assert.equal(scoreBuiltIn({type:"numeric",answer:12.5,tolerance:0.01},"12.7"),false);
+  assert.equal(scoreBuiltIn({type:"order",items:["cut","drill","finish"],correctOrder:["cut","drill","finish"]},["cut","drill","finish"]),true);
+  assert.equal(scoreBuiltIn({type:"order",items:["cut","drill","finish"],correctOrder:["cut","drill","finish"]},["drill","cut","finish"]),false);
+  assert.equal(scoreBuiltIn({type:"match",pairs:[{left:"A",right:"east"},{left:"B",right:"west"}]},["east","west"]),true);
+  assert.equal(scoreBuiltIn({type:"match",pairs:[{left:"A",right:"east"},{left:"B",right:"west"}]},["west","east"]),false);
+  assert.equal(scoreBuiltIn({type:"tf",correct:true,options:["Верно","Неверно"]},0),true);
+  assert.equal(scoreBuiltIn({type:"tf",correct:false,options:["Верно","Неверно"]},0),false);
+});
+
 test("custom test scoring accepts both numeric keys and legacy option-text keys", () => {
   assert.match(extract(code,"submitCustomTest_"),/scoreBuiltInQuestion_\(question \|\| \{\}, canonicalAnswers\[index\]\)/);
   const question = {type:"mc",options:["North","South","East","West"],correct:"East"};
