@@ -120,6 +120,7 @@ function handleRequest_(e) {
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
       case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
+      case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
       case "submitenglishvprexam": result = submitEnglishVprExam_(data); break;
       case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_(data); break;
@@ -3026,19 +3027,6 @@ function getEnglishSemesterTests_(data) {
         }).length;
         const attemptNo = prior + 1;
         safeTest.attemptNo = attemptNo;
-        const testKey = "english_semester_" + track + "_" + String(safeTest.id || "");
-        const attemptKey = englishSemesterAttemptCacheKey_(user.email, testKey, attemptNo);
-        const attemptCache = CacheService.getScriptCache();
-        let attempt = null;
-        const cachedAttempt = attemptCache.get(attemptKey);
-        if (cachedAttempt) {
-          try { attempt = JSON.parse(cachedAttempt); } catch (e) { attempt = null; }
-        }
-        if (!attempt || !attempt.attemptId || !Number(attempt.startedAt)) {
-          attempt = {attemptId:Utilities.getUuid().replace(/-/g, ""), startedAt:Date.now()};
-          attemptCache.put(attemptKey, JSON.stringify(attempt), 21600);
-        }
-        safeTest.attemptId = attempt.attemptId;
         safeTest.questions.forEach(function(question, questionIndex) {
           const originalOptions = question.options.slice();
           const order = englishSemesterOptionOrder_(user.email, safeTest.id, attemptNo, questionIndex, originalOptions.length);
@@ -3056,6 +3044,67 @@ function englishSemesterAttemptCacheKey_(email, testKey, attemptNo) {
   const raw = String(email || "").toLowerCase() + "|" + String(testKey || "") + "|" + String(attemptNo || "");
   const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, raw);
   return "englishSemesterAttempt:" + Utilities.base64EncodeWebSafe(digest).replace(/=+$/g, "");
+}
+
+/**
+ * Создаёт серверную попытку в момент нажатия «Открыть контрольную»,
+ * а не при загрузке каталога. Повторный запрос возвращает ту же активную попытку.
+ */
+function startEnglishSemesterTest_(data) {
+  const user = auth_(data), track = String(data.track || "").toLowerCase();
+  const testId = String(data.testId || "").trim();
+  if (user.role !== "student" || ["basic", "technical"].indexOf(track) < 0 || !testId) {
+    throw new Error("Нет доступа к запуску семестровой контрольной.");
+  }
+  const courseId = track === "basic" ? "ENB" : "ENT";
+  if (!hasCourseAccess_(user, courseId) && !hasCourseAccess_(user, "EN")) {
+    throw new Error("Эта дисциплина не назначена вашему аккаунту.");
+  }
+  const sh = englishSemesterBank_(), values = sh.getDataRange().getValues(), map = headerMap_(sh);
+  let tests = null;
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][map.Track] || "") === track &&
+        String(values[i][map.Active] || "").toUpperCase() === "TRUE") {
+      tests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
+      break;
+    }
+  }
+  const test = (tests || []).filter(function(item) { return String(item.id || "") === testId; })[0];
+  if (!test || !Array.isArray(test.questions) || test.questions.length !== 20) {
+    throw new Error("Контрольная не найдена или имеет неверный формат.");
+  }
+  const testKey = "english_semester_" + track + "_" + testId;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const rows = resultAttemptRows_();
+    const prior = rows.filter(function(row) {
+      return email_(row[0]) === user.email && String(row[3] || "") === testKey &&
+        sameCourseId_(row[12] || courseId, courseId);
+    }).length;
+    const raw = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + testKey);
+    const limit = raw === "" ? 1 : 1 + Math.max(0, Number(raw) || 0);
+    if (prior >= limit) throw new Error("Контрольная уже завершена. Для повторного прохождения обратитесь к преподавателю.");
+    const attemptNo = prior + 1;
+    if (Number(data.attemptNo) !== attemptNo || !Number.isInteger(Number(data.attemptNo))) {
+      throw new Error("Номер попытки изменился. Обновите список контрольных.");
+    }
+    const attemptKey = englishSemesterAttemptCacheKey_(user.email, testKey, attemptNo);
+    const cache = CacheService.getScriptCache();
+    let attempt = null;
+    const rawAttempt = cache.get(attemptKey);
+    if (rawAttempt) {
+      try { attempt = JSON.parse(rawAttempt); } catch (e) { attempt = null; }
+    }
+    if (!attempt || !attempt.attemptId || !Number(attempt.startedAt)) {
+      attempt = {attemptId:Utilities.getUuid().replace(/-/g, ""), startedAt:Date.now()};
+      cache.put(attemptKey, JSON.stringify(attempt), 21600);
+    }
+    return {success:true, attemptId:attempt.attemptId, attemptNo:attemptNo,
+      startedAt:attempt.startedAt, timeLimit:Math.max(1, Number(test.time) || 45) * 60};
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 /**
