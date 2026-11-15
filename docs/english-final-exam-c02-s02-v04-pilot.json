@@ -105,8 +105,8 @@
       "type": "single_choice",
       "prompt": "You receive a suspicious message asking for your login details. What should you do?",
       "options": [
-        "Do not follow the link; report the message through the official channel.",
         "Reply with your password to check the sender.",
+        "Do not follow the link; report the message through the official channel.",
         "Forward it to all your classmates.",
         "Download every attachment."
       ],
