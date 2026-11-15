@@ -78,7 +78,7 @@
     }
     app.appendChild(panel);
   }
-  function startExam(exam, key, panel, courseId, track) {
+  function startExam(exam, key, panel, courseId, track, attemptId) {
     courseId = courseId || courseForTrack(exam.track);
     var student = window.state && window.state.student;
     if (student && window.API && window.API.getTestAttemptStatus && window._englishVprGate !== key) {
@@ -89,13 +89,30 @@
           return;
         }
         window._englishVprGate = key;
-        startExam(exam, key, panel, courseId, track);
+        startExam(exam, key, panel, courseId, track, attemptId);
         window._englishVprGate = "";
       }).catch(function () { panel.textContent = "Не удалось проверить доступ. Обновите страницу и попробуйте ещё раз."; });
       return;
     }
+    if (!attemptId) {
+      if (!window.API || !window.API.startEnglishVprExam) {
+        panel.textContent = "Сервер запуска экзамена недоступен. Обратитесь к преподавателю.";
+        return;
+      }
+      panel.innerHTML = "<p>Запускаем экзамен и фиксируем время начала…</p>";
+      window.API.startEnglishVprExam(track).then(function(started) {
+        if (!started || started.success !== true || !started.attemptId || !started.exam) {
+          throw new Error(started && started.error || "Сервер не выдал вариант экзамена.");
+        }
+        startExam(started.exam, key, panel, courseId, track, started.attemptId);
+      }).catch(function(error) {
+        panel.textContent = "Не удалось запустить экзамен: " + (error.message || error);
+      });
+      return;
+    }
+    exam = exam || {};
     if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
-    var seconds = exam.time * 60, finished = false;
+    var seconds = Math.max(1, Number(exam.time) || 90) * 60, finished = false;
     panel.innerHTML = "";
     var timer = el("div", "exam-timer", "90:00");
     timer.style.cssText = "position:sticky;top:8px;z-index:3;padding:12px;text-align:center;font-size:24px;font-weight:800;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--accent)";
