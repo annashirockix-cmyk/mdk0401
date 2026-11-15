@@ -91,7 +91,7 @@ test("student English final-exam UI starts persistent course/semester attempts a
   assert.match(ui, /multiple_choice/);
   assert.match(ui, /short_text/);
   assert.match(ui, /Итоговые экзамены по курсам/);
-  assert.match(ui, /resume/i);
+  assert.match(ui, /attempt\.responses\|\|\{\}/);
 });
 
 test("teacher dashboard exposes a written-exam review panel and submits explicit per-task grades", () => {
