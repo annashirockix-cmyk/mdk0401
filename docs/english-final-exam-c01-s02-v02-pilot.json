@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 02",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v02_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When does the centre close on Wednesday?",
+      "audioText": "The student support centre is open from nine until four on weekdays. On Wednesday it closes at two for staff training. Students can ask about travel cards, financial advice and course documents. Please book an appointment online before visiting. If you only need a form, you can collect it from the reception desk without an appointment.",
+      "options": [
+        "At two",
+        "At noon",
+        "At four",
+        "At five"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v02_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What can students collect without an appointment?",
+      "audioText": "The student support centre is open from nine until four on weekdays. On Wednesday it closes at two for staff training. Students can ask about travel cards, financial advice and course documents. Please book an appointment online before visiting. If you only need a form, you can collect it from the reception desk without an appointment.",
+      "options": [
+        "A library book",
+        "A form",
+        "A travel card",
+        "A course certificate"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v02_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Tom wants to borrow a laptop for a college project. He visits the learning support desk and completes a short form. The assistant asks for his student card and explains that the laptop must be returned by Friday afternoon. Tom checks the condition of the laptop before leaving and signs the equipment record. What does Tom need to borrow?",
+      "options": [
+        "A projector",
+        "A camera",
+        "A laptop",
+        "A textbook"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v02_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does Tom do before leaving?",
+      "options": [
+        "He pays a fine",
+        "He changes his timetable",
+        "He calls his teacher",
+        "He checks the laptop and signs the record"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v02_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'The support centre ___ at nine every weekday.'",
+      "options": [
+        "opens",
+        "opening",
+        "open",
+        "is open yesterday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v02_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO things you should do when borrowing college equipment.",
+      "options": [
+        "Complete the required form.",
+        "Take it without telling anyone.",
+        "Check its condition.",
+        "Keep it after the return date."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v02_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A planned meeting with a member of staff is an ___.'",
+      "acceptedAnswers": [
+        "appointment"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v02_f01",
+      "type": "single_choice",
+      "prompt": "You need to change an appointment. What is a polite request?",
+      "options": [
+        "Change it now.",
+        "Could I change my appointment to Thursday, please?",
+        "You made a mistake.",
+        "I don't come."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v02_o01",
+      "type": "ordering",
+      "prompt": "Show your student card; Complete the borrowing form; Check the laptop condition; Sign the equipment record",
+      "options": [
+        "Sign the equipment record",
+        "Check the laptop condition",
+        "Complete the borrowing form",
+        "Show your student card"
+      ],
+      "correctOrder": [
+        "Show your student card",
+        "Complete the borrowing form",
+        "Check the laptop condition",
+        "Sign the equipment record"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v02_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words explaining how to borrow equipment or use a college service. Include the documents you may need, the staff member you should contact and one responsibility.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v02_audio",
+    "readingPassageId": "c1s2v02_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
