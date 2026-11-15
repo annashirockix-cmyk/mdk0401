@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 04",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v04_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When does the swimming pool open on Sunday?",
+      "audioText": "The community sports centre has changed its weekend timetable. The swimming pool opens at eight on Saturday and at nine on Sunday. The gym is closed on Sunday morning for maintenance but opens at one in the afternoon. Members can book a class using the centre's website. Please bring your membership card when you arrive.",
+      "options": [
+        "At nine",
+        "At eight",
+        "At one",
+        "At ten"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v04_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Why is the gym closed on Sunday morning?",
+      "audioText": "The community sports centre has changed its weekend timetable. The swimming pool opens at eight on Saturday and at nine on Sunday. The gym is closed on Sunday morning for maintenance but opens at one in the afternoon. Members can book a class using the centre's website. Please bring your membership card when you arrive.",
+      "options": [
+        "A sports competition",
+        "Maintenance",
+        "A staff meeting",
+        "A public holiday"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v04_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Ben visits the town information office because he wants to find a place to print his college project. The assistant gives him a map and marks a copy shop near the bus station. Ben asks whether the shop accepts card payments. The assistant is not sure, so she writes the shop's telephone number on the map. What service does Ben need?",
+      "options": [
+        "To repair a bicycle",
+        "To buy a train ticket",
+        "To print his project",
+        "To find a sports centre"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v04_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. Why does the assistant give him a telephone number?",
+      "options": [
+        "To book a hotel",
+        "The bus station has moved",
+        "The shop is closed forever",
+        "She is not sure about card payments"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v04_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct polite request.",
+      "options": [
+        "Can you tell me where the copy shop is, please?",
+        "Tell me where copy shop.",
+        "Where copy shop is you?",
+        "You tell where is it."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v04_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO polite expressions for asking for help.",
+      "options": [
+        "I demand an answer.",
+        "Would you mind helping me?",
+        "Could you tell me, please?",
+        "Do it for me."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v04_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A place where you can get information for visitors is an information ___.'",
+      "acceptedAnswers": [
+        "office",
+        "centre",
+        "center"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v04_f01",
+      "type": "single_choice",
+      "prompt": "You want to know if a shop accepts cards. What should you ask?",
+      "options": [
+        "You accept card yesterday?",
+        "Do you accept card payments?",
+        "I pay later.",
+        "Give card."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v04_o01",
+      "type": "ordering",
+      "prompt": "Explain what service you need; Ask the assistant for information; Check the directions on the map; Visit the shop",
+      "options": [
+        "Visit the shop",
+        "Check the directions on the map",
+        "Ask the assistant for information",
+        "Explain what service you need"
+      ],
+      "correctOrder": [
+        "Explain what service you need",
+        "Ask the assistant for information",
+        "Check the directions on the map",
+        "Visit the shop"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v04_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words describing a useful facility in your town. Explain where it is, what people can do there and how to ask for information politely.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v04_audio",
+    "readingPassageId": "c1s2v04_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
