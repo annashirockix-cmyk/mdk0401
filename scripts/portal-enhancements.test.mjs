@@ -1241,7 +1241,8 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.match(save, /editor_\(data,courseId\)/);
   assert.match(save, /hasCourseAccess_\(currentStudent,courseId\)/);
   assert.match(save, /LockService\.getScriptLock\(\)/);
-  assert.match(save, /if\(existingRow>0\)updateMappedRecord_\(sheet,existingRow,record\);else appendMappedRecord_\(sheet,record\);/);
+  assert.match(save, /if\(existingRow>0\)updateMappedRecord_\(resultSheet,existingRow,record\);/);
+  assert.match(save, /else appendMappedRecord_\(resultSheet,record\);/);
   assert.match(save, /appendAttemptAudit_/);
   assert.match(api, /saveManualGrade:function\(data\)/);
   assert.match(app, /window\.API\.getStudents\(\)/);
