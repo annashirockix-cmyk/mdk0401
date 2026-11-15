@@ -94,7 +94,12 @@
     {
       "id": "c2s2v12_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "The process of preparing for the effects of climate change is called ___.",
+      "acceptedAnswers": [
+        "adaptation",
+        "climate adaptation"
+      ]
     },
     {
       "id": "c2s2v12_f01",
