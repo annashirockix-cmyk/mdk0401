@@ -13,7 +13,8 @@ const files = [
   "docs/english-basic-semester-bank-draft-v5.md",
   "docs/english-basic-semester-bank-draft-v6.md",
   "docs/english-basic-semester-bank-draft-v7.md",
-  "docs/english-basic-semester-bank-draft-v8.md"
+  "docs/english-basic-semester-bank-draft-v8.md",
+  "docs/english-basic-semester-bank-draft-v9.md"
 ];
 
 function parseDraft(source) {
@@ -34,11 +35,11 @@ function parseDraft(source) {
   return { questions, keys };
 }
 
-test("Basic semester drafts 1–160 have four options and one valid teacher key per item", () => {
+test("Basic semester drafts 1–180 have four options and one valid teacher key per item", () => {
   const drafts = files.map((file) => parseDraft(readFileSync(path.join(root, file), "utf8")));
   const questions = drafts.flatMap((draft) => draft.questions);
-  assert.equal(questions.length, 160);
-  assert.deepEqual(questions.map((question) => question.number), Array.from({ length: 160 }, (_, i) => i + 1));
+  assert.equal(questions.length, 180);
+  assert.deepEqual(questions.map((question) => question.number), Array.from({ length: 180 }, (_, i) => i + 1));
   for (const draft of drafts) {
     assert.equal(draft.questions.length, 20);
     assert.equal(draft.keys.size, 20);
