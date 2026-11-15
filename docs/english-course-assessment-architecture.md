@@ -430,4 +430,6 @@ C2-S1 now has all 15 planned Basic English pilots (`v01`–`v15`). The set cover
 
 ## Course 2, Semester 2 — pilot authoring underway
 
+Ten of 15 Basic English pilots are drafted for C2-S2 (`v01`–`v10`). Topics cover reducing plastic waste, evaluating online information, renewable energy, responsible technology use, community transport, urban air quality, scientific claims, energy conservation, digital footprints and recycling systems. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. The protected server validator and regression test cover all ten; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys have been reviewed. Five variants remain. These are editorial-review drafts only and are not imported or released.
+
 Five of 15 Basic English pilots are drafted for C2-S2 (`v01`–`v05`), covering environmental choices, evaluating online information, renewable energy, responsible technology use and community transport. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys have been checked. These are editorial-review drafts only and are not imported or released.
