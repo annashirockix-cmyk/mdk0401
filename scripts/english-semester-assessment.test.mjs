@@ -129,35 +129,30 @@ test("fifteen authored Basic English final-exam pilots match the protected runti
   }
 });
 
-test("five authored Basic English Course 1 Semester 2 pilots match the protected runtime schema",()=>{
+test("ten authored Basic English Course 1 Semester 2 pilots match the protected runtime schema",()=>{
   const pilot1=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v01-pilot.json"),"utf8"));
   const pilot2=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v02-pilot.json"),"utf8"));
   const pilot3=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v03-pilot.json"),"utf8"));
   const pilot4=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v04-pilot.json"),"utf8"));
   const pilot5=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v05-pilot.json"),"utf8"));
+  const pilot6=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v06-pilot.json"),"utf8"));
+  const pilot7=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v07-pilot.json"),"utf8"));
+  const pilot8=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v08-pilot.json"),"utf8"));
+  const pilot9=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v09-pilot.json"),"utf8"));
+  const pilot10=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s02-v10-pilot.json"),"utf8"));
   const source=extractFunction("validateEnglishFinalVariantPayload_");
   const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
-  const pilots=[pilot1,pilot2,pilot3,pilot4,pilot5],allPrompts=[];
+  const pilots=[pilot1,pilot2,pilot3,pilot4,pilot5,pilot6,pilot7,pilot8,pilot9,pilot10],allPrompts=[];
   pilots.forEach((pilot,index)=>{
-    assert.equal(pilot.examId,"english_final_c1_s2");
-    assert.equal(pilot.courseNo,1);
-    assert.equal(pilot.track,"basic");
-    assert.equal(pilot.semester,2);
-    assert.equal(pilot.tasks.length,10);
-    assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1);
-    assert.ok(pilot.tasks.some(task=>task.audioText));
+    assert.equal(pilot.examId,"english_final_c1_s2"); assert.equal(pilot.courseNo,1); assert.equal(pilot.track,"basic"); assert.equal(pilot.semester,2);
+    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.ok(pilot.tasks.some(task=>task.audioText));
     assert.deepEqual(validate(pilot,"C1-S2-V"+String(index+1).padStart(2,"0")),{taskCount:10,maxScore:20,durationMinutes:90});
     const distribution={A:0,B:0,C:0,D:0};
-    pilot.tasks.forEach(task=>{
-      allPrompts.push(task.prompt.trim().toLowerCase());
-      if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;
-      if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);
-    });
-    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
-    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
+    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
+    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2}); assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks.find(t=>t.audioText).audioText)).size,5);
+  assert.equal(new Set(pilots.map(p=>p.tasks.find(t=>t.audioText).audioText)).size,10);
 });
 
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
