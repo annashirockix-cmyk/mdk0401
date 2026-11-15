@@ -334,7 +334,7 @@ test("English VPR Basic and Technical seed content remains track-specific", () =
       if (task.type === "gap" && task.text) result.push(String(task.text));
       if (task.type === "transform") for (const item of task.items || []) result.push(String(item[0]) + " " + String(item[1]));
     }
-    return result.map((value) => value.toLowerCase().replace(/\\s+/g, " ").trim());
+    return result.map((value) => value.toLowerCase().replace(/\s+/g, " ").trim());
   };
   const basic = new Set(stems(seeds.basic));
   const overlap = stems(seeds.technical).filter((stem) => basic.has(stem));
