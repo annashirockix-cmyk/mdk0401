@@ -768,7 +768,16 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const sheet=results_(),values=resultAttemptRows_();
-    const prior=values.filter(function(row){return email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
+    const matchingRows=values.filter(function(row){return email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);});
+    const prior=matchingRows.length;
+    // A pending written submission is immutable until the teacher reviews it.
+    // This prevents double-clicks/retries from creating duplicate journal entries.
+    if(user.role==="student" && /^(prac_|written_self_)/.test(testId) && matchingRows.length) {
+      const latest=matchingRows[matchingRows.length-1];
+      if(Number(latest[5])===0) {
+        throw new Error("Работа уже отправлена и ожидает проверки преподавателя.");
+      }
+    }
     if(assessment){
       const raw=settingValue_("testAttempts:"+email+":"+courseId+":"+testId);
       const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
