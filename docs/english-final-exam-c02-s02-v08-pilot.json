@@ -94,7 +94,12 @@
     {
       "id": "c2s2v08_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "The amount of energy used by a building is its energy ___.",
+      "acceptedAnswers": [
+        "consumption",
+        "energy consumption"
+      ]
     },
     {
       "id": "c2s2v08_f01",
