@@ -135,3 +135,15 @@ test("student-facing assessment sanitizers strip alternate answer-key field name
   assert.match(extract(code,"getCustomContent_"),/stripTestKeys_/);
   assert.match(extract(vpr,"sanitizeEnglishVprExam_"),/correctIndex\|correctOption/);
 });
+
+
+test("generic result endpoint cannot accept browser-forged assessment grades", () => {
+  const save = extract(code,"saveResult_");
+  assert.match(save,/Assessment namespaces are never accepted through the generic browser/);
+  assert.match(save,/\^test_\/\.test\(testId\)/);
+  assert.match(save,/\^__final__\/\.test\(testId\)/);
+  assert.match(save,/\^english_\/\.test\(testId\)/);
+  assert.match(save,/Встроенные тесты должны отправляться через защищённую серверную проверку/);
+  assert.match(save,/Итоговый экзамен должен отправляться через защищённую серверную проверку/);
+  assert.match(save,/Контрольные работы английского принимаются только через защищённую серверную проверку/);
+});
