@@ -19,7 +19,7 @@ if(!student){document.getElementById("spStatus").textContent="Студент н�
 var courseSet=new Set(student.courses||[]);
 var assignableCourses=(String(staff.role||"").toLowerCase()==="admin"?(student.courses||[]):(student.courses||[]).filter(function(id){return (staff.courses||[]).includes(id);}));
 var suggestedCourse=assignableCourses[0]||"";
-var results=(r.results||[]).filter(function(x){return String(x.email||"").toLowerCase()===email.toLowerCase()&&(!x.courseId||courseSet.has(x.courseId));});
+var results=(r.results||[]).filter(function(x){return String(x.email||"").toLowerCase()===email.toLowerCase()&&(!x.courseId||courseSet.has(x.courseId))&&!/^assignment_/.test(String(x.testId||""));});
 var tasks=(a.assignments||[]).filter(function(t){return courseSet.has(t.courseId)&&((t.targetType==="individual"&&String(t.targetValue||"").toLowerCase()===email.toLowerCase())||(t.targetType==="group"&&String(t.targetValue||"").trim().toLowerCase()===String(student.group||"").trim().toLowerCase()));});
 var submissions=tasks.flatMap(function(t){return (t.submissions||[]).filter(function(s){return String(s.studentEmail||"").toLowerCase()===email.toLowerCase();}).map(function(s){return Object.assign({taskTitle:t.title,topic:t.topic,courseId:t.courseId,dueAt:t.dueAt,taskId:t.id},s);});});
 var graded=results.filter(function(x){return x.grade!==""&&x.grade!==null&&x.grade!==undefined&&Number.isFinite(Number(x.grade));});
