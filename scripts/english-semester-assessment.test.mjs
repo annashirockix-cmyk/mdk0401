@@ -329,6 +329,7 @@ test("all 150 final exam variants have globally unique task IDs and prompts",()=
   const variants=slots.flatMap(([course,semester])=>Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${course}-${semester}-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8"))));
   assert.equal(variants.length,150);
   variants.forEach((variant,index)=>assert.equal(variant.tasks.length,10,`variant ${index+1} (${variant.examId}) must contain ten tasks`));
+  variants.forEach((variant,index)=>variant.tasks.forEach((task,taskIndex)=>assert.equal(typeof task.id,"string",`variant ${index+1} task ${taskIndex+1} must have a string ID`)));
   const taskIds=variants.flatMap(variant=>variant.tasks.map(task=>task.id));
   const prompts=variants.flatMap(variant=>variant.tasks.map(task=>task.prompt.trim().toLowerCase()));
   assert.equal(taskIds.length,1500);
