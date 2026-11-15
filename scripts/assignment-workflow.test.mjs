@@ -75,9 +75,10 @@ function runtime() {
   users.appendRow(["student@example.test","","Иван Иванов","ТО-21","student","","07.01",payload,"","",""]);
   users.appendRow(["other.student@example.test","","Пётр Петров","ТО-22","student","","07.01","{}","","",""]);
   users.appendRow(["legacy.english@example.test","","Анна Смирнова","АН-11","student","","EN","{}","","",""]);
+  users.appendRow(["admin@example.test","","Администратор","","admin","","","","","",""]);
 
   let uuid = 0;
-  const notifications = [];
+  const notifications = [], audit = [];
   const sandbox = {
     console,
     Utilities: { getUuid: () => "test-uuid-" + (++uuid) },
@@ -92,7 +93,8 @@ function runtime() {
     englishTeacherToken: "english.teacher@example.test",
     studentToken: "student@example.test",
     otherStudentToken: "other.student@example.test",
-    legacyEnglishToken: "legacy.english@example.test"
+    legacyEnglishToken: "legacy.english@example.test",
+    adminToken: "admin@example.test"
   };
   sandbox.users_ = () => users;
   sandbox.assignments_ = () => assignments;
@@ -125,12 +127,13 @@ function runtime() {
     return user;
   };
   sandbox.createNotification_ = (...args) => notifications.push(args);
-  return { sandbox, users, assignments, submissions, history, notifications, originalPayload: payload };
+  sandbox.appendAttemptAudit_ = record => audit.push(record);
+  return { sandbox, users, assignments, submissions, history, notifications, audit, originalPayload: payload };
 }
 
 test("group assignment workflow works before student onboarding and preserves student payload", async () => {
   const r = runtime();
-  const { sandbox: api, users, submissions, history, notifications } = r;
+  const { sandbox: api, users, submissions, history, notifications, audit } = r;
 
   const created = api.createAssignment_({
     token: "teacherToken",
@@ -183,6 +186,21 @@ test("group assignment workflow works before student onboarding and preserves st
     feedback: "Отличная работа. Последовательность команд корректна."
   });
   assert.equal(graded.success, true);
+  assert.throws(
+    () => api.gradeAssignment_({ token: "teacherToken", submissionId: second.submissionId, grade: 4, feedback: "Повторная оценка" }),
+    /только администратору/
+  );
+  assert.equal(submissions.rows[1][submissions.rows[0].indexOf("Grade")], 5,
+    "a teacher must not overwrite a reviewed assignment grade");
+  assert.equal(audit.filter(item => item.EventType === "assignment_graded").length, 1);
+  assert.throws(
+    () => api.gradeAssignment_({ token: "adminToken", submissionId: second.submissionId, grade: 4 }),
+    /только администратору/
+  );
+  const regraded = api.gradeAssignment_({ token: "adminToken", submissionId: second.submissionId, grade: 4, feedback: "Административная корректировка", regrade: true });
+  assert.equal(regraded.success, true);
+  assert.equal(submissions.rows[1][submissions.rows[0].indexOf("Grade")], 4);
+  assert.equal(audit.filter(item => item.EventType === "assignment_regraded").length, 1);
 
   const submissionReadsBeforeStudentView = submissions.getDataRangeCalls;
   const historyReadsBeforeStudentView = history.getDataRangeCalls;
