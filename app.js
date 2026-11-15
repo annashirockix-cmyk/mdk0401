@@ -403,29 +403,15 @@ window.renderStudentGradesPage = function() {
     document.getElementById("crumbs").textContent = "Мои оценки";
     app.appendChild(el('<a class="backlink" href="#/profile" style="color:var(--accent);">← Назад в профиль</a>'));
     
-    var autoGradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved" && k !== "certificate");
-    var autoRows = autoGradesList.map(k => {
-        var title = k; 
-        if(k.startsWith("test_")) title = "Тест по курсу " + k.split("_")[1];
-        if(k.startsWith("__final__")) title = "Итоговый экзамен";
-        if(k.startsWith("prac_")) title = "Практика: " + k.replace("prac_", "");
-        if(k.startsWith("written_self_")) title = "Самостоятельная работа: " + k.replace("written_self_", "");
-        var gradeData = window.state.results[k];
-        var grade = typeof gradeData === 'object' ? gradeData.grade : (typeof gradeData === 'string' ? "Сдано" : "—");
-        var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : (grade === "Сдано" ? "var(--accent)" : "var(--err)"));
-        return `<tr><td style="padding:10px; border:1px solid var(--border);">${title}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:${color}; font-size:18px;">${grade}</td></tr>`;
-    }).join("");
-
-    var manualGrades = JSON.parse(localStorage.getItem('portal_grades') || '[]');
-    var myManualGrades = manualGrades.filter(g => g.student.toLowerCase() === (window.state.student.email || '').toLowerCase());
-    var manualRows = myManualGrades.map(g => {
-        return `<tr><td style="padding:10px; border:1px solid var(--border);">${g.date}</td><td style="padding:10px; border:1px solid var(--border);">${g.subject}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:var(--ok); font-size:18px;">${g.value}</td></tr>`;
-    }).join("");
+    // Grades are displayed only from server-authoritative result records.
+    // localStorage/state.results may contain stale or browser-edited values.
+    var autoRows = "";
+    var manualRows = "";
 
     app.innerHTML += `
         <section class="hero"><h1>📊 Мои оценки</h1></section>
-        <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}<tr id="serverManualGrades"><td colspan="3" style="text-align:center;color:var(--muted)">Загрузка серверных оценок…</td></tr></tbody></table></div></div>
-        <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody id="serverAssessmentGrades">${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody></table></div></div>
+        <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody><tr id="serverManualGrades"><td colspan="3" style="text-align:center;color:var(--muted)">Загрузка серверных оценок…</td></tr></tbody></table></div></div>
+        <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody id="serverAssessmentGrades"><tr id="serverAssessmentPlaceholder"><td colspan="2" style="text-align:center;color:var(--muted)">Загрузка результатов…</td></tr></tbody></table></div></div>
         <div class="module"><h3>Задания преподавателя</h3><div id="serverAssignmentGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
         <div class="module"><h3>Лабораторные работы по метрологии</h3><div id="serverMetrologyGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
     `;
@@ -469,7 +455,7 @@ window.renderStudentGradesPage = function() {
           var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
           var title=window.escapeHtml(x.testTitle||x.testId||"Работа");
           return "<tr><td>"+title+"<div style='font-size:12px;color:var(--muted)'>"+window.escapeHtml(course)+"</div></td><td style='text-align:center;font-weight:bold'>"+grade+" <span style='font-size:12px;color:var(--muted)'>("+percent+"%)</span><div style='font-size:12px;color:var(--muted)'>Попыток: "+item.count+"</div><div style='font-size:11px;color:var(--muted)'>"+window.escapeHtml(date)+"</div></td></tr>";
-        }).join(""):'<tr><td colspan="2" style="text-align:center;color:var(--muted)">Вы еще не проходили тесты</td></tr>';
+        }).join(""):'<tr><td colspan="2" style="text-align:center;color:var(--muted)">Пока нет подтверждённых результатов</td></tr>';
       }).catch(function(e){
         console.warn("Не удалось обновить серверные оценки:",e);
       });
