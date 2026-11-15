@@ -71,6 +71,10 @@ test("server rejects missing answer keys, duplicate IDs, wrong semester order an
   assert.throws(() => validate(wrongSemester, "basic"), /курсу\/семестру/);
   const repeatedQuestion = validBank("basic"); repeatedQuestion[0].questions[1].q = repeatedQuestion[0].questions[0].q;
   assert.throws(() => validate(repeatedQuestion, "basic"), /Повторяющийся вопрос/);
+  const repeatedAcrossSemesters = validBank("basic"); repeatedAcrossSemesters[1].questions[0].q = repeatedAcrossSemesters[0].questions[0].q;
+  assert.throws(() => validate(repeatedAcrossSemesters, "basic"), /Повторяющийся вопрос/);
+  const repeatedWhitespace = validBank("basic"); repeatedWhitespace[1].questions[0].q = "  Question   1-1  ";
+  assert.throws(() => validate(repeatedWhitespace, "basic"), /Повторяющийся вопрос/);
 });
 
 test("server rejects duplicate options and track-mismatched identifiers", () => {
@@ -85,7 +89,7 @@ test("student-facing payload strips all answer-key and explanation fields", () =
   for (const key of ["correct", "answer", "correctAnswer", "explanation", "rationale", "answerIndex", "solution"]) assert.equal(Object.hasOwn(question, key), false);
 });
 
-test("unreviewed legacy seed stays out of the production page", () => {
+test("unreviewed legacy seed stays out of the production page and cloned Technical tests are withheld", () => {
   const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
   const legacy = fs.readFileSync(path.join(root, "english-assessment-data.js"), "utf8");
   assert.equal(html.includes("english-assessment-data.js"), false);
@@ -94,24 +98,25 @@ test("unreviewed legacy seed stays out of the production page", () => {
   const basic = sandbox.window.SEMESTER_TESTS.basic;
   const technical = sandbox.window.SEMESTER_TESTS.technical;
   assert.equal(basic.length, 10);
-  assert.equal(technical.length, 10);
+  assert.equal(technical.length, 0);
   assert.equal(basic.every((item) => item.questions.length === 20), true);
-  assert.equal(technical.every((item) => item.questions.length === 20), true);
   assert.equal(basic.every((item) => item.questions.every((question) => Number.isInteger(question.correct))), false);
-  assert.deepEqual(
-    technical.map((item) => item.questions),
-    basic.map((item) => item.questions),
-    "Technical is still a direct copy of Basic and must not be imported",
-  );
+  assert.doesNotMatch(legacy, /window\.SEMESTER_TESTS\.basic\.map\s*\(/);
 });
 
-test("Basic and Technical banks must not be exact copies", () => {
+test("Basic and Technical banks reject identical substantive question stems", () => {
+  const overlapSource = extractFunction("englishSemesterBankOverlap_");
+  const overlap = new Function(overlapSource + "; return englishSemesterBankOverlap_;")();
   const basic = validBank("basic");
   const technicalClone = validBank("technical");
   const distinctTechnical = validBank("technical");
-  distinctTechnical[0].questions[0].q = "Describe the purpose of a machine-tool safety interlock.";
+  distinctTechnical.forEach((item, index) => item.questions.forEach((question, q) => {
+    question.q = "Technical assessment item " + index + " number " + q + " describes a separate engineering context.";
+  }));
   assert.equal(fingerprint(basic), fingerprint(technicalClone));
-  assert.notEqual(fingerprint(basic), fingerprint(distinctTechnical));
+  assert.ok(overlap(basic, technicalClone).length > 0);
+  assert.equal(overlap(basic, distinctTechnical).length, 0);
+  assert.equal(fingerprint([{questions:[{q:"A   technical   question"}]}]), fingerprint([{questions:[{q:"A technical question"}]}]));
 });
 
 
