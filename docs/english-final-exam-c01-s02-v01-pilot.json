@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 01",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v01_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where is the language laboratory?",
+      "audioText": "Excuse me, could you tell me how to get to the language laboratory? Certainly. Go straight along this corridor and turn left at the stairs. The laboratory is opposite Room 205, next to the teachers' office. It is on the second floor. Thank you. You're welcome. The lift is just around the corner if you need it.",
+      "options": [
+        "On the second floor",
+        "On the ground floor",
+        "In the library",
+        "Near the main entrance"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v01_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What is next to the laboratory?",
+      "audioText": "Excuse me, could you tell me how to get to the language laboratory? Certainly. Go straight along this corridor and turn left at the stairs. The laboratory is opposite Room 205, next to the teachers' office. It is on the second floor. Thank you. You're welcome. The lift is just around the corner if you need it.",
+      "options": [
+        "The canteen",
+        "The teachers' office",
+        "The sports hall",
+        "The bus stop"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v01_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Mila is new at college and needs to find the medical office. She looks at the campus map near the entrance. The office is in Block A, opposite the reception desk. She walks past the library, turns right and follows the signs. When she arrives, she checks the opening hours on the door. Where is the medical office?",
+      "options": [
+        "In Block B",
+        "Behind the library",
+        "In Block A, opposite reception",
+        "Next to the canteen"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v01_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does Mila check when she arrives?",
+      "options": [
+        "The bus timetable",
+        "The room number",
+        "The class list",
+        "The opening hours"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v01_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct preposition: 'The bank is ___ the post office and the café.'",
+      "options": [
+        "between",
+        "through",
+        "during",
+        "above"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v01_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO polite ways to ask for directions.",
+      "options": [
+        "Tell me the way now.",
+        "Could you show me on the map, please?",
+        "Where is the nearest bus stop, please?",
+        "You must give directions."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v01_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'Turn left at the ___ and walk up to the second floor.'",
+      "acceptedAnswers": [
+        "stairs",
+        "staircase"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v01_f01",
+      "type": "single_choice",
+      "prompt": "You are lost in town. What should you ask?",
+      "options": [
+        "I know where it is.",
+        "Could you tell me how to get to the station, please?",
+        "You are going there now.",
+        "Why the station is?"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v01_o01",
+      "type": "ordering",
+      "prompt": "Find the place on the map; Choose the correct street; Follow the directions; Check the destination sign",
+      "options": [
+        "Check the destination sign",
+        "Follow the directions",
+        "Choose the correct street",
+        "Find the place on the map"
+      ],
+      "correctOrder": [
+        "Find the place on the map",
+        "Choose the correct street",
+        "Follow the directions",
+        "Check the destination sign"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v01_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words giving directions from your college entrance to a room or service. Use at least four direction phrases and name two places on the route.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v01_audio",
+    "readingPassageId": "c1s2v01_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
