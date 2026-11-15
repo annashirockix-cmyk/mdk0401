@@ -94,7 +94,12 @@
     {
       "id": "c2s2v06_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A measurement showing the level of pollution in the air is a pollution ___.",
+      "acceptedAnswers": [
+        "reading",
+        "measurement"
+      ]
     },
     {
       "id": "c2s2v06_f01",
