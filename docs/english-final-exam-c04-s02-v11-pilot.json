@@ -68,7 +68,7 @@
       "prompt": "Selected sensor data ___ to a monitoring platform.",
       "options": [
         "can be transferred",
-        "was transferred",
+        "can transferred",
         "transferring",
         "are transfer"
       ],
@@ -94,7 +94,7 @@
     {
       "id": "c4s2v11_v01",
       "type": "short_text",
-      "prompt": "Complete the technical term: gateway.",
+      "prompt": "A device that connects local equipment to another network or system is a ___.",
       "acceptedAnswers": [
         "gateway"
       ],
