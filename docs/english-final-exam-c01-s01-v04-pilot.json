@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Listen to Ms Brown. Where will the English lesson take place?",
       "audioText": "Hello, everyone. I'm Ms Brown, your English teacher. Tomorrow our lesson begins at ten fifteen in Room 8. Please bring your course book and a notebook. We will work in pairs for the first activity. Our lunch break is at half past twelve. If you are late, please wait outside until I invite you in.",
       "options": [
-        "Room 6",
         "Room 8",
+        "Room 6",
         "The library",
         "The language laboratory"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -29,11 +29,11 @@
       "audioText": "Hello, everyone. I'm Ms Brown, your English teacher. Tomorrow our lesson begins at ten fifteen in Room 8. Please bring your course book and a notebook. We will work in pairs for the first activity. Our lunch break is at half past twelve. If you are late, please wait outside until I invite you in.",
       "options": [
         "Enter and interrupt the teacher",
-        "Go home",
         "Wait outside until the teacher invites them in",
+        "Go home",
         "Go to the library"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "Reading 1. Read the text. Every Wednesday, Pavel meets two classmates in the library after lessons. They study English together for half an hour. One student reads a short paragraph, and the others ask questions about it. If they do not know a word, they look it up in a dictionary. Before they leave, they write down three useful expressions in a shared notebook. The group helps Pavel feel more confident when he speaks. Where does Pavel meet his classmates?",
       "options": [
-        "In the library",
         "At the bus station",
         "In the sports centre",
+        "In the library",
         "At home"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -55,11 +55,11 @@
       "prompt": "Reading 2. What do the students write in their shared notebook?",
       "options": [
         "Their lunch orders",
-        "Three useful expressions",
         "Their examination marks",
-        "The names of all teachers"
+        "The names of all teachers",
+        "Three useful expressions"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "Choose the correct possessive form: 'This is Anna. ___ notebook is on the desk.'",
       "options": [
-        "She",
         "Her",
+        "She",
         "Hers",
         "She's"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO correct sentences.",
       "options": [
-        "He doesn't speak French.",
         "They doesn't study on Friday.",
-        "My sister doesn't drive to college.",
-        "We not have a lesson today."
+        "We not have a lesson today.",
+        "He doesn't speak French.",
+        "My sister doesn't drive to college."
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
@@ -105,12 +105,12 @@
       "type": "single_choice",
       "prompt": "You do not understand the homework instruction. What should you say?",
       "options": [
-        "Could you explain the instruction, please?",
         "I no understand you yesterday.",
+        "Could you explain the instruction, please?",
         "Do my homework for me.",
         "The instruction is explain."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
