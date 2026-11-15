@@ -244,7 +244,7 @@ test("English semester submissions require a server-issued timed attempt", () =>
 });
 
 test("English VPR duration is measured from the server attempt start", () => {
-  const prepare = extract(vpr, "getEnglishVprExam_");
+  const prepare = extract(vpr, "startEnglishVprExam_");
   assert.match(prepare, /startedAt:Date\.now\(\)/);
   const submit = extract(vpr, "submitEnglishVprExam_");
   assert.match(submit, /const startedAt = Number\(attempt\.startedAt\)/);
