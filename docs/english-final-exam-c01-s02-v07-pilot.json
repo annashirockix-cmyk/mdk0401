@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO healthy everyday habits for a college student.",
       "options": [
-        "Skip every meal when busy.",
         "Replace sleep with energy drinks.",
-        "Drink water during the day.",
-        "Include fruit or vegetables in meals."
+        "Include fruit or vegetables in meals.",
+        "Skip every meal when busy.",
+        "Drink water during the day."
       ],
       "correctIndices": [
         2,
