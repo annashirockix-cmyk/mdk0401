@@ -276,6 +276,15 @@ test("manual and written grades expose feedback separately in student course res
   assert.equal(manual.feedback, "Исправьте оформление чертежа.");
   assert.equal(manual.reviewedBy, "teacher@example.test");
   assert.ok(manual.reviewedAt);
+  const savedManualAgain = api.saveManualGrade_({
+    token:"teacherToken",email:"student@example.test",courseId:"07.01",
+    testTitle:"Ручная оценка",grade:5,date:"2026-11-15",feedback:"Уточнённый комментарий."
+  });
+  assert.equal(savedManualAgain.testId, manual.testId);
+  const updatedManualView = api.getMyCourseResults_({token:"studentToken",courseId:"07.01"});
+  assert.equal(updatedManualView.results.filter(item=>item.testId===manual.testId).length,1);
+  assert.equal(updatedManualView.results.find(item=>item.testId===manual.testId).grade,5);
+  assert.equal(updatedManualView.results.find(item=>item.testId===manual.testId).feedback,"Уточнённый комментарий.");
   assert.ok(reports.includes("((x.payload||x.feedback)?"), "reports must display a comment even when the submission text is empty");
   assert.ok(studentProgress.includes('feedback:x.feedback||""'), "student timeline must include written and manual grade feedback");
 
@@ -459,6 +468,8 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /Работа проверена и зачтена\. Повторная отправка не требуется/);
   assert.match(ui, /Отправить исправленную работу/);
   assert.match(ui, /Комментарий преподавателя:/);
+  assert.match(journal, /window\.API\.saveManualGrade\(/);
+  assert.doesNotMatch(journal.slice(journal.indexOf("function renderManual"), journal.indexOf('document.getElementById("tabAuto")')), /window\.API\.saveStudent/);
   assert.match(backend, /AssignmentSubmissionHistory: \[[^\]]*"Grade"[^\]]*"Feedback"/);
   assert.match(ui, /window\.API\.gradeAssignment/);
   assert.match(ui, /Подтверждаю повторное выставление оценки/);
