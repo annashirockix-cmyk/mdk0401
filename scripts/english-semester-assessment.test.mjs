@@ -85,7 +85,7 @@ test("final exam import validates task types, private answer keys, scoring and d
   assert.match(code,/validateEnglishFinalVariantPayload_\(payload, String\(variant\.variantId\)\)/);
 });
 
-test("the first authored Basic English final-exam pilot matches the protected runtime schema", () => {
+test("five authored Basic English final-exam pilots match the protected runtime schema", () => {
   const pilot1 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v01-pilot.json"),"utf8"));
   const pilot2 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v02-pilot.json"),"utf8"));
   const pilot3 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v03-pilot.json"),"utf8"));
