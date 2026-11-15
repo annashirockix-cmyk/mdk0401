@@ -180,9 +180,10 @@ test("legacy EN students can receive and submit ENB/ENT assignments without cros
   });
   assert.equal(submitted.success, true);
   assert.equal(submitted.attempt, 1);
-  assert.throws(
-    () => api.getAssignments_({ token: "studentToken" }).assignments.find(item => item.courseId === "ENT"),
-    /./
+  assert.equal(
+    api.getAssignments_({ token: "studentToken" }).assignments.some(item => item.courseId === "ENB"),
+    false,
+    "students enrolled only in 07.01 must not see English assignments"
   );
 });
 
