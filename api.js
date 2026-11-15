@@ -103,6 +103,8 @@ window.API = {
   resumeEnglishFinalExam:function(attemptId){return fetchAPI("resumeEnglishFinalExam",{attemptId:attemptId},"POST",30000);},
   saveEnglishFinalExamResponses:function(attemptId,responses){return fetchAPI("saveEnglishFinalExamResponses",{attemptId:attemptId,responses:responses},"POST",30000);},
   submitEnglishFinalExam:function(attemptId,responses){return fetchAPI("submitEnglishFinalExam",{attemptId:attemptId,responses:responses||{}}, "POST",30000);},
+  getEnglishFinalExamReviews:function(){return fetchAPI("getEnglishFinalExamReviews",{},"POST",30000);},
+  gradeEnglishFinalExamWritten:function(attemptId,grades){return fetchAPI("gradeEnglishFinalExamWritten",{attemptId:attemptId,grades:grades},"POST",30000);},
  getEnglishSemesterTests:function(track){return fetchAPI("getEnglishSemesterTests",{track:track},"GET");},
  startEnglishSemesterTest:function(data){return fetchAPI("startEnglishSemesterTest",data||{},"POST");},
  submitEnglishSemesterTest:function(data){return fetchAPI("submitEnglishSemesterTest",data||{},"POST",120000);},
