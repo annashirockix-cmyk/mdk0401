@@ -6,7 +6,7 @@
 
 ## Questions
 
-**101.** Neither of the two explanations ___ clear enough for the new students.
+**101.** Neither explanation ___ clear enough for the new students.
 - A. were
 - B. are
 - C. was
@@ -106,17 +106,17 @@
 - C. will have completed
 - D. has completing
 
-**117.** The teacher suggested that everyone ___ the safety rules before the workshop.
+**117.** The teacher suggested that everyone should ___ the safety rules before the workshop.
 - A. reviews
 - B. review
 - C. reviewing
 - D. to review
 
-**118.** Choose the most appropriate reply to “Would you mind opening the window?”
-- A. Not at all.
-- B. Yes, I would mind it yesterday.
-- C. I don't know the window.
-- D. You are opening it.
+**118.** Choose the most appropriate reply to “Could you possibly send me the updated timetable?”
+- A. You are timetable yesterday.
+- B. Certainly. I'll email it to you this afternoon.
+- C. I have no email yesterday.
+- D. You must send it yourself.
 
 **119.** In the text, the word *outdated* is closest in meaning to:
 - A. carefully organised
@@ -134,7 +134,7 @@
 
 | No. | Key | Rationale |
 |---:|:---:|---|
-| 101 | C | “Neither” is treated as singular in this construction; the past context takes “was”. |
+| 101 | C | “Neither explanation” is singular, so it takes “was”. |
 | 102 | A | “As soon as” introduces the time when the document should be sent. |
 | 103 | B | In reported speech after “asked”, past perfect marks an action completed before the asking. |
 | 104 | D | “Allow someone to do something” takes the infinitive with “to”. |
@@ -150,8 +150,8 @@
 | 114 | C | The final sentence says basic information became easier to find. |
 | 115 | A | The passage describes a student project to improve access to event information. |
 | 116 | C | Future perfect describes completion before a specified future time. |
-| 117 | B | In a formal mandative construction after “suggested that”, the base form “review” is used. |
-| 118 | A | “Not at all” is a polite affirmative response to a request phrased with “Would you mind…?”. |
+| 117 | B | After modal “should”, use the base form “review”. |
+| 118 | B | This reply politely accepts the request and offers to send the timetable. |
 | 119 | B | “Outdated” means old or no longer current. |
 | 120 | C | “In order to” introduces the purpose of testing the page. |
 
