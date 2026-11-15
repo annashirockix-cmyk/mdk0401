@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful things to check before a journey.",
       "options": [
-        "The departure time and platform",
         "The colour of the bus driver's coat",
-        "The ticket conditions",
-        "A stranger's phone number"
+        "A stranger's phone number",
+        "The departure time and platform",
+        "The ticket conditions"
       ],
       "correctIndices": [
         2,
