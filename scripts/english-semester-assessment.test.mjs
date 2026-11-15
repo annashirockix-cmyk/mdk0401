@@ -82,6 +82,18 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(code, /case "resumeenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
 });
 
+test("final exam response autosave validates owner, attempt status, deadline and task IDs", () => {
+  const save = extractFunction("saveEnglishFinalExamResponses_");
+  assert.match(save, /auth_\(data\)/);
+  assert.match(save, /email_\(row\[m\.StudentEmail\]\)!==user\.email/);
+  assert.match(save, /in_progress/);
+  assert.match(save, /DeadlineAt/);
+  assert.match(save, /ResponsesJSON:serialized/);
+  assert.match(save, /allowed\[id\]/);
+  assert.match(save, /serialized\.length>45000/);
+  assert.match(code, /case "saveenglishfinalexamresponses": result = saveEnglishFinalExamResponses_\(data\); break;/);
+});
+
 test("final exam variant importer stores one bounded private payload per variant and activates only after staging", () => {
   const importer = extractFunction("importEnglishExamVariants_");
   assert.match(importer, /auth_\(data\)/);
