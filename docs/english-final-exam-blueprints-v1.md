@@ -125,7 +125,7 @@ Five Technical English pilot variants are drafted for C4-S1 (`v01`–`v05`), add
 
 #### Course 4, Semester 2 — pilot authoring underway
 
-Ten Technical English pilot variants are drafted for C4-S2 (`v01`–`v10`), covering communication systems, computer hardware and software, automation systems, PLC documentation, technical data reporting, network protocols, software version control, PLC input-output records, automation data logs and information security. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Five variants remain. These are editorial-review drafts, not imported or released.
+Fifteen Technical English pilot variants are now drafted for C4-S2 (`v01`–`v15`). Topics include communication systems, computer hardware and software, automation systems, PLC documentation, technical data reporting, network protocols, software version control, PLC input-output records, automation data logs, information security, industrial IoT, digital twins, predictive maintenance, aviation ground support equipment and engineering incident communication. Every form contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 prompts and 15 listening scripts are unique; every variant passes the protected payload validator and has balanced A/B/C/D answer positions. These remain editorial-review drafts and have not been imported or released.
 
 
 
