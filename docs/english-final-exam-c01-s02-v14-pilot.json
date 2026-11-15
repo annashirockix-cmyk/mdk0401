@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 14",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the placement briefing take place?",
+      "audioText": "Students starting their work placement next month must attend a briefing on Monday at two o'clock. The meeting will be in Room 18, not in the usual assembly hall. Bring your placement documents and a pen. The tutor will explain attendance rules, workplace communication and who to contact if you are ill or cannot arrive on time. Please read the information sheet before the meeting.",
+      "options": [
+        "In Room 18",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should students read before the meeting?",
+      "audioText": "Students starting their work placement next month must attend a briefing on Monday at two o'clock. The meeting will be in Room 18, not in the usual assembly hall. Bring your placement documents and a pen. The tutor will explain attendance rules, workplace communication and who to contact if you are ill or cannot arrive on time. Please read the information sheet before the meeting.",
+      "options": [
+        "On Friday",
+        "The information sheet",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r01",
+      "type": "single_choice",
+      "prompt": "Before her first work placement, Alina checked the company address and planned her journey. She saved the supervisor's telephone number and prepared a folder with her college documents. On the first day, she arrived fifteen minutes early, introduced herself to the team and asked where visitors should leave their coats. Reading 1. What did Alina do before the first day?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "She checked the address and prepared her documents",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r02",
+      "type": "single_choice",
+      "prompt": "Why did she arrive early?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "To be ready before the placement began"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct modal verb: 'You ___ inform your supervisor if you are ill.'",
+      "options": [
+        "should",
+        "would",
+        "might to",
+        "are"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO professional habits for the first day of a placement.",
+      "options": [
+        "Arrive on time",
+        "Ignore the supervisor's instructions",
+        "Introduce yourself politely",
+        "Use a colleague's password"
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A person who guides you at a workplace is your ___.'",
+      "acceptedAnswers": [
+        "supervisor",
+        "mentor"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_f01",
+      "type": "single_choice",
+      "prompt": "You may arrive late because of a transport problem. What should you do?",
+      "options": [
+        "Say nothing until tomorrow.",
+        "Contact your supervisor as soon as possible.",
+        "Ask a friend to sign in for you.",
+        "Turn off your phone."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_o01",
+      "type": "ordering",
+      "prompt": "Read the placement information; Plan the journey; Meet the workplace supervisor; Follow the first-day instructions",
+      "options": [
+        "Follow the first-day instructions",
+        "Plan the journey",
+        "Read the placement information",
+        "Meet the workplace supervisor"
+      ],
+      "correctOrder": [
+        "Read the placement information",
+        "Plan the journey",
+        "Meet the workplace supervisor",
+        "Follow the first-day instructions"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about preparing for your first day at a work placement. Include travel planning, documents, punctuality and professional communication.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v14_audio",
+    "readingPassageId": "c1s2v14_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
