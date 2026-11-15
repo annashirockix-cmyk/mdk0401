@@ -123,6 +123,8 @@ Ten Technical English pilot variants are drafted for C4-S1 (`v01`–`v10`), cove
 Five Technical English pilot variants are drafted for C4-S1 (`v01`–`v05`), addressing basic electrical circuits, electrical measurements, electronic components, energy consumption and fault description. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
 
 
-### Course 4, Semester 2 — pilot authoring underway
+#### Course 4, Semester 2 — pilot authoring underway
+
+Ten Technical English pilot variants are drafted for C4-S2 (`v01`–`v10`), covering communication systems, computer hardware and software, automation systems, PLC documentation, technical data reporting, network protocols, software version control, PLC input-output records, automation data logs and information security. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Five variants remain. These are editorial-review drafts, not imported or released.
 
 Five Technical English pilot variants are drafted for C4-S2 (`v01`–`v05`), addressing communication systems, computer hardware and software, automation systems, PLC documentation and technical data reporting. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
