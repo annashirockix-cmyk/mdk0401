@@ -153,6 +153,8 @@ Supported task types should be deliberately limited to those the current rendere
 ### 4.3 Final exams — `EnglishExamVariantsBank`
 - 10 exam definitions: one for each course and semester.
 - 15 independently assembled variants per exam: 150 total.
+- Added a server-side structural validator `validateEnglishExamVariantRegistry_`: it enforces the five course IDs (`EN_C01`–`EN_C05`), the Basic/Technical split, all ten semester slots, 15 variants per slot, globally unique variant IDs, and a non-empty blueprint reference for each variant. Regression tests cover missing slots, wrong track, wrong variant count, duplicate IDs, and missing blueprint references.
+- Boundary: this validator is not an imported exam bank or a student runtime. Actual task content, blueprint correctness, protected storage, variant assignment, and start/submit endpoints remain to be implemented and tested.
 - Each variant references a balanced set of tasks from the appropriate course-semester blueprint.
 - Store answer keys and rubrics server-side only.
 - Student API returns a sanitized variant with no correct answers, rubric internals, or hidden metadata.
