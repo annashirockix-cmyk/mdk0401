@@ -289,6 +289,7 @@ test("English VPR start is serialized and enforces the server attempt limit", ()
   assert.match(start, /resultAttemptRows_\(\)/);
   assert.match(start, /settingValue_\("testAttempts:"/);
   assert.match(start, /prior >= limit/);
+  assert.match(start, /attemptNo:prior \+ 1/);
   assert.match(start, /finally\s*\{\s*lock\.releaseLock\(\)/);
 });
 
@@ -301,6 +302,7 @@ test("English VPR attempt token is retained until the result write succeeds", ()
   assert.match(submit.slice(0, saveAt), /attemptLock\.releaseLock\(\)/);
   assert.match(submit.slice(0, saveAt), /lockedAttempt\.processing === true/);
   assert.match(submit.slice(0, saveAt), /processingAttempt\.processingAt = Date\.now/);
+  assert.match(submit.slice(0, saveAt), /savedAttempts >= Number\(lockedAttempt\.attemptNo\)/);
   assert.match(submit.slice(saveAt, cleanupAt), /catch \(saveError\)/);
   assert.match(submit.slice(saveAt, cleanupAt), /current\.processing = false/);
   assert.match(submit.slice(cleanupAt), /cache\.remove\("englishVprAttempt:" \+ attemptId\)/);
