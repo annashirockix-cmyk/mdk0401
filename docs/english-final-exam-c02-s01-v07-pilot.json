@@ -9,7 +9,7 @@
   "maxScore": 20,
   "tasks": [
     {
-      "id": "c2s1v7_l01",
+      "id": "c2s1v07_l01",
       "type": "single_choice",
       "prompt": "Listening 1. Where will students meet?",
       "audioText": "The engineering department will run a teamwork session on Thursday morning. Students will meet in Workshop 3 at nine fifteen. Each group should bring its project notes and agree on one person to record decisions. The tutor will explain how to divide tasks fairly and report progress. The session finishes at eleven thirty.",
@@ -23,7 +23,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v7_l02",
+      "id": "c2s1v07_l02",
       "type": "single_choice",
       "prompt": "Listening 2. What should each group choose?",
       "audioText": "The engineering department will run a teamwork session on Thursday morning. Students will meet in Workshop 3 at nine fifteen. Each group should bring its project notes and agree on one person to record decisions. The tutor will explain how to divide tasks fairly and report progress. The session finishes at eleven thirty.",
@@ -37,7 +37,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v7_r01",
+      "id": "c2s1v07_r01",
       "type": "single_choice",
       "prompt": "A group of students prepared a model airport lighting system for a college project. At first, two members wanted to do the same task, while nobody checked the materials list. The group made a simple plan, assigned responsibilities and held a short meeting every afternoon. They finished on time and presented the system confidently. Reading 1. What problem did the group have at first?",
       "options": [
@@ -50,7 +50,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v7_r02",
+      "id": "c2s1v07_r02",
       "type": "single_choice",
       "prompt": "How did they improve their work?",
       "options": [
@@ -63,7 +63,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v7_g01",
+      "id": "c2s1v07_g01",
       "type": "single_choice",
       "prompt": "Our team ___ the presentation when the tutor arrived.",
       "options": [
@@ -76,7 +76,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v7_m01",
+      "id": "c2s1v07_m01",
       "type": "multiple_choice",
       "prompt": "Choose TWO ways to contribute to a team project.",
       "options": [
@@ -92,7 +92,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v7_v01",
+      "id": "c2s1v07_v01",
       "type": "short_text",
       "prompt": "A person who works with you in the same team is a ___.",
       "acceptedAnswers": [
@@ -102,7 +102,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v7_f01",
+      "id": "c2s1v07_f01",
       "type": "single_choice",
       "prompt": "A teammate has not understood the task. What should you say?",
       "options": [
@@ -115,7 +115,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v7_o01",
+      "id": "c2s1v07_o01",
       "type": "ordering",
       "prompt": "Put the stages of team projects in a sensible order.",
       "options": [
@@ -133,7 +133,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v7_w01",
+      "id": "c2s1v07_w01",
       "type": "written",
       "prompt": "Write 60–80 words describing a successful team project. Explain your role, how tasks were shared and what the group achieved.",
       "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
