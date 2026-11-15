@@ -9,7 +9,7 @@
   "maxScore": 20,
   "tasks": [
     {
-      "id": "c1s2v10_l01",
+      "id": "c2s1v03_l01",
       "type": "single_choice",
       "prompt": "Listening 1. When should students arrive?",
       "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
@@ -23,7 +23,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_l02",
+      "id": "c2s1v03_l02",
       "type": "single_choice",
       "prompt": "Listening 2. How long will each mock interview last?",
       "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
@@ -37,7 +37,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_r01",
+      "id": "c2s1v03_r01",
       "type": "single_choice",
       "prompt": "During a practice interview, an employer asks Maya why she is interested in aircraft technology. She explains that she enjoys understanding how systems work and likes solving practical problems. She gives an example from a college assignment and then asks what qualities the company values in a trainee. The interviewer says her answer is clear and relevant. Reading 1. Why is Maya interested in aircraft technology?",
       "options": [
@@ -50,7 +50,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_r02",
+      "id": "c2s1v03_r02",
       "type": "single_choice",
       "prompt": "What does Maya ask the interviewer?",
       "options": [
@@ -63,7 +63,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_g01",
+      "id": "c2s1v03_g01",
       "type": "single_choice",
       "prompt": "Choose the correct indirect question: 'Could you tell me ___ the interview will last?'",
       "options": [
@@ -76,7 +76,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_m01",
+      "id": "c2s1v03_m01",
       "type": "multiple_choice",
       "prompt": "Choose TWO good interview habits.",
       "options": [
@@ -92,7 +92,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_v01",
+      "id": "c2s1v03_v01",
       "type": "short_text",
       "prompt": "Complete: 'A formal meeting where an employer asks questions is an ___.'",
       "acceptedAnswers": [
@@ -101,12 +101,12 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_f01",
+      "id": "c2s1v03_f01",
       "type": "single_choice",
       "prompt": "You do not understand an interview question. What is a polite response?",
       "options": [
-        "Could you repeat or rephrase the question, please?",
         "That is a bad question.",
+        "Could you repeat or rephrase the question, please?",
         "I will not answer.",
         "Ask somebody else."
       ],
@@ -114,7 +114,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_o01",
+      "id": "c2s1v03_o01",
       "type": "ordering",
       "prompt": "Research the company; Prepare examples; Attend the interview; Reflect on the feedback",
       "options": [
@@ -132,7 +132,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_w01",
+      "id": "c2s1v03_w01",
       "type": "written",
       "prompt": "Write 60–80 words explaining how to prepare for a job or placement interview. Include researching the organisation, preparing examples and asking a relevant question.",
       "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
