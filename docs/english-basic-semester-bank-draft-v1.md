@@ -14,15 +14,15 @@
 
 **2.** We ___ the college library last Tuesday.
 - A. visit
-- B. visited
+- B. are visiting
 - C. have visit
-- D. are visiting
+- D. visited
 
 **3.** Mark has lived in this town ___ 2022.
 - A. for
 - B. during
-- C. since
-- D. from
+- C. from
+- D. since
 
 **4.** Anna is interested ___ learning foreign languages.
 - A. on
@@ -38,15 +38,15 @@
 
 **6.** You ___ use your phone during the examination. It is not allowed.
 - A. don't have to
-- B. mustn't
+- B. may
 - C. should
-- D. may
+- D. mustn't
 
 **7.** This exercise is ___ than the one we did yesterday.
 - A. easiest
 - B. more easy
-- C. easier
-- D. the easier
+- C. the easier
+- D. easier
 
 **8.** If it ___ tomorrow, we will have the lesson in the classroom.
 - A. rain
@@ -57,8 +57,8 @@
 **9.** There isn't ___ milk in the fridge.
 - A. many
 - B. a few
-- C. much
-- D. several
+- C. several
+- D. much
 
 **10.** Choose the most polite request.
 - A. “Could you explain this word, please?”
@@ -72,15 +72,15 @@
 
 **11.** When do the students help in the library?
 - A. Every Monday morning
-- B. Every Friday afternoon
+- B. Every Saturday evening
 - C. Once a month
-- D. Every Saturday evening
+- D. Every Friday afternoon
 
 **12.** What do the volunteers help new students to do?
 - A. Choose their future profession
 - B. Find a part-time job
-- C. Find information in the library
-- D. Prepare for a sports competition
+- C. Prepare for a sports competition
+- D. Find information in the library
 
 **13.** What change has Mr Brown noticed?
 - A. The volunteers are more confident when speaking to visitors
@@ -102,15 +102,15 @@
 
 **16.** Choose the correct email opening when writing to a teacher whose name you know.
 - A. “Hey you!”
-- B. “Dear Ms Green,”
+- B. “Hi, unknown person.”
 - C. “What’s up, teacher?”
-- D. “Hi, unknown person.”
+- D. “Dear Ms Green,”
 
 **17.** We ___ our English teacher at three o’clock tomorrow; the appointment is already arranged.
 - A. meet
 - B. met
-- C. are meeting
-- D. have meet
+- C. have meet
+- D. are meeting
 
 **18.** Choose the correct word: “Please read the instructions ___ before you begin.”
 - A. careful
@@ -126,34 +126,34 @@
 
 **20.** I took an umbrella ___ the weather forecast said it might rain.
 - A. although
-- B. because
+- B. while
 - C. unless
-- D. while
+- D. because
 
 ## Teacher key and rationale
 
 | No. | Key | Rationale |
 |---:|:---:|---|
 | 1 | A | “My sister” is third-person singular; present simple takes “has”. |
-| 2 | B | “Last Tuesday” signals the past simple: “visited”. |
-| 3 | C | “Since” is used with a starting point in time. |
+| 2 | D | “Last Tuesday” signals the past simple: “visited”. |
+| 3 | D | “Since” is used with a starting point in time. |
 | 4 | D | The fixed construction is “interested in”. |
 | 5 | A | “Reliable” means able to be trusted or depended on. |
-| 6 | B | “Mustn’t” expresses prohibition. |
-| 7 | C | The comparative form of “easy” is “easier”. |
+| 6 | D | “Mustn’t” expresses prohibition. |
+| 7 | D | The comparative form of “easy” is “easier”. |
 | 8 | D | First conditional uses present simple in the if-clause. |
-| 9 | C | “Milk” is uncountable; “much” is used in a negative sentence. |
+| 9 | D | “Milk” is uncountable; “much” is used in a negative sentence. |
 | 10 | A | “Could you…please?” is a polite request. |
-| 11 | B | The text says “Every Friday afternoon”. |
-| 12 | C | The volunteers show new students where to find information. |
+| 11 | D | The text says “Every Friday afternoon”. |
+| 12 | D | The volunteers show new students where to find information. |
 | 13 | A | Mr Brown says they are becoming more confident with visitors. |
 | 14 | D | “Gain experience” means get or obtain experience. |
 | 15 | D | The final sentence says they plan to organise a book exchange. |
-| 16 | B | “Dear Ms Green,” is a suitable formal email opening when the recipient is known. |
-| 17 | C | Present continuous can describe a fixed future arrangement. |
+| 16 | D | “Dear Ms Green,” is a suitable formal email opening when the recipient is known. |
+| 17 | D | Present continuous can describe a fixed future arrangement. |
 | 18 | D | An adverb (“carefully”) modifies the verb “read”. |
 | 19 | A | Present simple questions with “your brother” use “does” + base verb. |
-| 20 | B | “Because” introduces the reason for taking an umbrella. |
+| 20 | D | “Because” introduces the reason for taking an umbrella. |
 
 ## Review checklist
 
