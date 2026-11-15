@@ -310,13 +310,26 @@
       card.innerHTML="<p>Проверяем доступ к контрольной…</p>";
       window.API.getTestAttemptStatus(course,testKey).then(function(status){
         if(!status||status.allowed===false){card.textContent="Попытка уже использована. Для повторного прохождения обратитесь к преподавателю.";return;}
-        renderSemesterAttempt(test,track,course,card);
+        beginSemesterAttempt(test,track,course,card);
       }).catch(function(error){card.textContent="Не удалось проверить попытку: "+(error.message||error);});
       return;
     }
-    renderSemesterAttempt(test,track,course,card);
+    beginSemesterAttempt(test,track,course,card);
   }
-  function renderSemesterAttempt(test,track,course,card) {
+  function beginSemesterAttempt(test,track,course,card) {
+    if(!window.API || !window.API.startEnglishSemesterTest) {
+      card.textContent="Сервер запуска контрольной недоступен. Обратитесь к преподавателю.";
+      return;
+    }
+    card.innerHTML="<p>Запускаем контрольную и фиксируем время начала…</p>";
+    window.API.startEnglishSemesterTest({track:track,testId:test.id,attemptNo:test.attemptNo}).then(function(started){
+      if(!started || started.success!==true || !started.attemptId) throw new Error(started&&started.error||"Сервер не выдал идентификатор попытки.");
+      renderSemesterAttempt(test,track,course,card,started.attemptId);
+    }).catch(function(error){
+      card.textContent="Не удалось запустить контрольную: "+(error.message||error);
+    });
+  }
+  function renderSemesterAttempt(test,track,course,card,attemptId) {
     if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
     var duration=Math.max(1,Number(test.time)||45)*60, seconds=duration, finished=false;
     card.innerHTML="";
@@ -353,7 +366,7 @@
       if(seconds>0&&!window.confirm("Отправить контрольную на проверку? После отправки изменить ответы будет нельзя."))return;
       finished=true; submit.disabled=true; submit.textContent="Проверяем на сервере…";
       if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
-      window.API.submitEnglishSemesterTest({track:track,testId:test.id,attemptNo:test.attemptNo,attemptId:test.attemptId,answers:answers,timeSpent:duration-seconds}).then(function(result){
+      window.API.submitEnglishSemesterTest({track:track,testId:test.id,attemptNo:test.attemptNo,attemptId:attemptId,answers:answers,timeSpent:duration-seconds}).then(function(result){
         if(!result||result.success!==true)throw new Error(result&&result.error||"Сервер не подтвердил отправку.");
         var key="english_semester_"+track+"_"+test.id;
         window.state.results=window.state.results||{};
