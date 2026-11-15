@@ -84,4 +84,6 @@ C1-S2 is complete at 15 of 15 authored pilot variants. Across the slot, all 150 
 
 ### Course 2, Semester 1 — pilot authoring underway
 
-Five of 15 Basic English pilots are drafted for C2-S1 (`v01`–`v05`), targeting A2–B1 career and study communication. Topics cover a college career fair, CV writing, interview preparation, comparing education routes and travel to a placement. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All 50 prompts and five listening scripts are unique; the protected payload validator accepts every form and A/B/C/D answer positions are balanced. Ten variants remain. These are editorial-review pilots, not imported or released.
+### Course 2, Semester 1 — complete pilot authoring
+
+Fifteen Basic English pilots are now authored for C2-S1 (`v01`–`v15`). Topics progress from career fairs, CVs and interviews to skills portfolios, part-time work, teamwork, digital learning, environmental choices, customer service, study visits, study-life balance, everyday problem solving, course selection and workplace communication. Every variant has ten tasks, 20 points, 90 minutes, two listening items and one written response. Regression tests validate the full set against the protected payload validator, verify variant-specific task IDs, unique prompts and audio scripts, balanced A/B/C/D key positions and functional-response keys. Editorial review is still required; these variants are not imported or released.
