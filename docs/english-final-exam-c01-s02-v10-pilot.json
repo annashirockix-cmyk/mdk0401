@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 10",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the group meet?",
+      "audioText": "Our English group is organising a visit to the airport training centre next month. We are going to meet at the college entrance at half past eight. The bus will leave at nine sharp. Please bring your student card and wear comfortable shoes. The centre has asked us to send the final list of visitors by Friday, so tell me today if you want to join.",
+      "options": [
+        "At the college entrance",
+        "At the airport gate",
+        "At the bus station",
+        "At the training centre"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. When must students say if they want to join?",
+      "audioText": "Our English group is organising a visit to the airport training centre next month. We are going to meet at the college entrance at half past eight. The bus will leave at nine sharp. Please bring your student card and wear comfortable shoes. The centre has asked us to send the final list of visitors by Friday, so tell me today if you want to join.",
+      "options": [
+        "Next month",
+        "Today",
+        "On Friday evening",
+        "After the visit"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Aisha invites her classmates to a study session before the English test. She suggests meeting in the library on Tuesday at three. Two students cannot attend at that time, so the group checks everyone's timetable and agrees to meet on Wednesday instead. Aisha sends a message with the new time and asks everyone to bring their notes. Why does the group change the meeting day?",
+      "options": [
+        "The library is closed",
+        "The test is cancelled",
+        "Two students cannot attend on Tuesday",
+        "The teacher is away"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does Aisha ask everyone to bring?",
+      "options": [
+        "A lunch menu",
+        "A sports kit",
+        "A new laptop",
+        "Their notes"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct future form: 'We ___ the airport training centre next month.'",
+      "options": [
+        "are going to visit",
+        "visit yesterday",
+        "visited",
+        "visiting"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO useful details to include in an invitation.",
+      "options": [
+        "The meeting place",
+        "The date and time",
+        "A classmate's password",
+        "An unrelated shopping list"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A message asking someone to come to an event is an ___.'",
+      "acceptedAnswers": [
+        "invitation"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_f01",
+      "type": "single_choice",
+      "prompt": "You cannot attend an invitation. What is a polite reply?",
+      "options": [
+        "No. Stop asking.",
+        "Thank you for inviting me, but I can't come on that day.",
+        "You should change it.",
+        "I don't like your plan."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_o01",
+      "type": "ordering",
+      "prompt": "Suggest a date and place; Check everyone's availability; Confirm the final arrangement; Send the invitation with details",
+      "options": [
+        "Send the invitation with details",
+        "Confirm the final arrangement",
+        "Check everyone's availability",
+        "Suggest a date and place"
+      ],
+      "correctOrder": [
+        "Suggest a date and place",
+        "Check everyone's availability",
+        "Confirm the final arrangement",
+        "Send the invitation with details"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words inviting a classmate to a study session or college event. Include the date, time, place, purpose and a polite way to ask for a reply.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v10_audio",
+    "readingPassageId": "c1s2v10_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
