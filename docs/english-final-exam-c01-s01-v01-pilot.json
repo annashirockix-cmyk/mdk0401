@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Listen to Daniel. On which days does he have English lessons?",
       "audioText": "Hello, I'm Daniel. It's my first week at college. My English lesson is on Tuesday and Thursday mornings. I usually come by bus, but today my sister is driving me because it is raining. After classes, I want to join the robotics club. The first meeting is in Room 14 on Friday at three o'clock.",
       "options": [
-        "Monday and Wednesday",
         "Tuesday and Thursday",
+        "Monday and Wednesday",
         "Wednesday and Friday",
         "Tuesday and Saturday"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -29,11 +29,11 @@
       "audioText": "Hello, I'm Daniel. It's my first week at college. My English lesson is on Tuesday and Thursday mornings. I usually come by bus, but today my sister is driving me because it is raining. After classes, I want to join the robotics club. The first meeting is in Room 14 on Friday at three o'clock.",
       "options": [
         "By bus",
-        "On foot",
         "By car with his sister",
+        "On foot",
         "By bicycle"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "Reading 1. Read the text. My name is Lena and I am a first-year college student. I study engineering basics and enjoy learning how things work. My timetable is busy, but I plan my week on Sunday evening. I keep a notebook for new English words and write a short example next to each word. I want to improve my listening because I hope to take part in an international student project next year. Why does Lena keep a notebook?",
       "options": [
-        "To record new English words and examples",
         "To draw engineering machines",
         "To write down bus times",
+        "To record new English words and examples",
         "To copy her classmates' homework"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -56,10 +56,10 @@
       "options": [
         "Speaking",
         "Writing",
-        "Listening",
-        "Reading"
+        "Reading",
+        "Listening"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "Choose the correct form: 'My classmates ___ in the English room now.'",
       "options": [
-        "is",
         "are",
+        "is",
         "am",
         "be"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO correct questions in the Present Simple.",
       "options": [
-        "Where do you study?",
         "Where you do study?",
-        "Does he speak English?",
-        "Do she speak English?"
+        "Do she speak English?",
+        "Where do you study?",
+        "Does he speak English?"
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
@@ -106,11 +106,11 @@
       "prompt": "Your teacher speaks too quickly. What is the most polite response?",
       "options": [
         "Say it again now!",
-        "I don't listen.",
         "Could you repeat that, please?",
+        "I don't listen.",
         "You are speaking bad."
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
