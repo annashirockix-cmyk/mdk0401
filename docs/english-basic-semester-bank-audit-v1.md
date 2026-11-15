@@ -1,7 +1,7 @@
 # Basic English semester-bank audit v1
 
 Date: 2026-11-15  
-Scope: legacy Basic semester seed, independent Basic authoring drafts v1–v3, and the protected import validator.
+Scope: legacy Basic semester seed, independent Basic authoring drafts v1–v10, practical Basic seed, Basic VPR source text, and protected import validator.
 
 ## Legacy seed findings
 
@@ -31,7 +31,7 @@ Scope: legacy Basic semester seed, independent Basic authoring drafts v1–v3, a
 - Draft v2: questions 21–40.
 - Draft v3: questions 41–60.
 - Draft v4: questions 61–80.
-- Draft v5: questions 81–200.
+- Draft v5: questions 81–100.
 - Draft v6: questions 101–120.
 - Draft v7: questions 121–140.
 - Draft v8: questions 141–160.
@@ -40,6 +40,34 @@ Scope: legacy Basic semester seed, independent Basic authoring drafts v1–v3, a
 - Each draft contains four answer options per question and a separate teacher key with rationale.
 - The drafts are original authoring material, not yet checked against the exact Belova edition or the approved work programme. They are not imported or student-visible.
 - Structural checks across all 200 questions found no repeated question stems, missing keys, missing key options, or incorrect option counts.
+
+## Content review findings (editorial pass)
+
+The following items were revised after checking for more than one plausible answer or avoidable repetition:
+
+| Question | Finding | Revision |
+|---:|---|---|
+| 47 | Reported-speech context did not make the intended backshift explicit. | Clarified that the task asks for the standard backshifted report of a statement made yesterday. |
+| 64 | Neither…nor agreement can vary in usage. | Replaced the construction with the unambiguous compound subject “Tom and his friends”. |
+| 101 | “Neither of the two…” can attract singular or plural agreement in some usage. | Simplified to “Neither explanation…”. |
+| 117 | The mandative subjunctive after “suggested that” varies by dialect/register. | Recast with “should” so the tested form is unambiguous. |
+| 118 | Repeated the same “Would you mind…?” function as Q39. | Replaced with a polite request about sending a timetable and a matching response. |
+| 124 | “This week” alone did not prove that the time period was unfinished. | Added “It is only Wednesday”. |
+| 142 | Duration leading up to a past event needed a clearer time anchor. | Added explicit 10:00 and 10:20 reference times. |
+| 163 | Past perfect continuous needed a clearer continuing-duration context. | Added “for two weeks” and “was still taking it”. |
+| 164 | Repeated the handwashing example used in Q44. | Replaced with a workshop helmet instruction. |
+| 180 | Neither…nor agreement was potentially dialect-sensitive. | Replaced with a plural compound subject. |
+
+## Cross-source comparison
+
+- Exact normalized question-stem comparison against the 27 existing Basic practice items found no exact matches.
+- Exact normalized text comparison against the Basic VPR source strings found no exact matches.
+- This is only an exact-string screen. It does not establish that all passages, topics, grammar targets, or distractors are semantically distinct; a human reviewer should still check content overlap.
+- The existing Basic VPR remains unchanged.
+
+## Answer-position balance
+
+After shuffling answer options while preserving the intended correct answer, the 200-item draft has this key distribution: A — 50, B — 49, C — 50, D — 51. The test now checks that each letter remains between 49 and 51.
 
 ## Safety and release gates
 
@@ -51,4 +79,4 @@ Scope: legacy Basic semester seed, independent Basic authoring drafts v1–v3, a
 
 ## Limitation
 
-This is a structural audit of source files and draft consistency. It is not a certification of CEFR level, textbook alignment, factual currency, or methodological suitability.
+This is a source and editorial review, not an independent second-methodologist sign-off. It is not a certification of CEFR level, textbook alignment, factual currency, or methodological suitability.
