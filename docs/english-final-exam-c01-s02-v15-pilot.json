@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 15",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. What is the presentation about?",
+      "audioText": "Our team is preparing a presentation about safe use of digital equipment. We have divided the work into four sections. I am responsible for the opening slide and the glossary. Please upload your slides to the shared folder by Friday evening. Use the same font size for headings and check that every image has a short caption. We will practise the presentation together on Monday.",
+      "options": [
+        "Safe use of digital equipment",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. When will the team practise together?",
+      "audioText": "Our team is preparing a presentation about safe use of digital equipment. We have divided the work into four sections. I am responsible for the opening slide and the glossary. Please upload your slides to the shared folder by Friday evening. Use the same font size for headings and check that every image has a short caption. We will practise the presentation together on Monday.",
+      "options": [
+        "On Friday",
+        "On Monday",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r01",
+      "type": "single_choice",
+      "prompt": "The students created a presentation about sensors used in modern machines. They agreed on a simple structure and selected two diagrams from their course materials. Before sharing the file, they checked that the diagrams were readable and that every slide had a clear heading. During rehearsal, they shortened one section because it contained too much text. Reading 1. What topic did the presentation cover?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "Sensors used in modern machines",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r02",
+      "type": "single_choice",
+      "prompt": "Why did the students shorten one section?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "It contained too much text"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct reported instruction: 'The tutor asked us ___ the file carefully.'",
+      "options": [
+        "to check",
+        "checking",
+        "check",
+        "checked"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO ways to make a digital presentation easier to follow.",
+      "options": [
+        "Use clear headings",
+        "Put a full page of text on every slide",
+        "Choose readable diagrams",
+        "Use many unrelated animations"
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A picture or diagram label that explains an image is a ___.'",
+      "acceptedAnswers": [
+        "caption"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_f01",
+      "type": "single_choice",
+      "prompt": "A teammate has not uploaded their slides. What is a polite message?",
+      "options": [
+        "You are always late.",
+        "Could you upload your slides when you have a moment, please?",
+        "I will delete your work.",
+        "Do not take part."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_o01",
+      "type": "ordering",
+      "prompt": "Agree the presentation topic; Divide the sections; Prepare and upload slides; Rehearse the presentation",
+      "options": [
+        "Rehearse the presentation",
+        "Divide the sections",
+        "Agree the presentation topic",
+        "Prepare and upload slides"
+      ],
+      "correctOrder": [
+        "Agree the presentation topic",
+        "Divide the sections",
+        "Prepare and upload slides",
+        "Rehearse the presentation"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words describing how to prepare a short team presentation. Include dividing responsibilities, choosing visuals, checking slides and rehearsing.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v15_audio",
+    "readingPassageId": "c1s2v15_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
