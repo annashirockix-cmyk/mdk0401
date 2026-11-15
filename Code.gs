@@ -2882,6 +2882,7 @@ function validateEnglishSemesterTests_(tests, track) {
   }
   const prefix = normalizedTrack === "basic" ? "b_" : "t_";
   const seenIds = {};
+  const seenQuestions = {};
   let questionCount = 0;
   tests.forEach(function(test, index) {
     const expectedYear = Math.floor(index / 2) + 1;
@@ -2901,7 +2902,7 @@ function validateEnglishSemesterTests_(tests, track) {
       if (!q || !questionText || !Array.isArray(q.options) || q.options.length < 2) {
         throw new Error("Некорректный вопрос " + (qi + 1) + " в контрольной №" + (index + 1) + ".");
       }
-      const questionKey = questionText.toLowerCase().replace(/\\s+/g, " ");
+      const questionKey = questionText.toLowerCase().replace(/\s+/g, " ").trim();
       if (seenQuestions[questionKey]) {
         throw new Error("Повторяющийся вопрос " + (qi + 1) + " в контрольной №" + (index + 1) + ".");
       }
@@ -2928,7 +2929,7 @@ function englishSemesterBankFingerprint_(tests) {
       semester: Number(test.semester),
       questions: (test.questions || []).map(function(question) {
         return {
-          q: String(question.q || "").trim().toLowerCase().replace(/\\s+/g, " "),
+          q: String(question.q || "").trim().toLowerCase().replace(/\s+/g, " "),
           options: (question.options || []).map(function(option) {
             return String(option == null ? "" : option).trim().toLowerCase();
           })
@@ -2936,6 +2937,24 @@ function englishSemesterBankFingerprint_(tests) {
       })
     };
   }));
+}
+
+function englishSemesterBankOverlap_(leftTests, rightTests) {
+  const known = {};
+  (leftTests || []).forEach(function(test) {
+    (test.questions || []).forEach(function(question) {
+      const stem = String(question.q || "").toLowerCase().replace(/\s+/g, " ").trim();
+      if (stem.split(" ").length >= 6) known[stem] = true;
+    });
+  });
+  const overlaps = [];
+  (rightTests || []).forEach(function(test) {
+    (test.questions || []).forEach(function(question) {
+      const stem = String(question.q || "").toLowerCase().replace(/\s+/g, " ").trim();
+      if (stem.split(" ").length >= 6 && known[stem]) overlaps.push(stem);
+    });
+  });
+  return overlaps;
 }
 
 function importEnglishSemesterTests_(data) {
@@ -2962,6 +2981,10 @@ function importEnglishSemesterTests_(data) {
       const otherTests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
       if (englishSemesterBankFingerprint_(tests) === englishSemesterBankFingerprint_(otherTests)) {
         throw new Error("Наборы Basic и Technical совпадают. Для Technical требуется самостоятельный комплект вопросов.");
+      }
+      const overlaps = englishSemesterBankOverlap_(tests, otherTests);
+      if (overlaps.length) {
+        throw new Error("В наборах Basic и Technical обнаружены одинаковые содержательные вопросы (" + overlaps.length + "). Уберите повторы до импорта.");
       }
     }
     let rowNo = 0;
