@@ -1287,7 +1287,15 @@ function getMyCourseResults_(data) {
     Object.keys(manual).forEach(function(date){
       const value=manual[date];if(value===undefined||value===null||String(value).trim()==="")return;
       const id="manual_"+String(date);
-      if(list.some(function(x){return x.testId===id;}))return;
+      const parts=String(date).split(".");
+      const isoDate=parts.length===3?(parts[2].length===2?"20"+parts[2]:parts[2])+"-"+parts[1]+"-"+parts[0]:"";
+      // Once a legacy date-based mark has been migrated to Results, do not
+      // show the same mark a second time beside its authoritative course row.
+      if(list.some(function(x){
+        if(x.testId===id)return true;
+        return isoDate&&String(x.testId||"").indexOf("manual_")===0&&
+          String(x.finishedAt||"").slice(0,10)===isoDate&&String(x.testTitle||"")==="Оценка за занятие";
+      }))return;
       const numeric=Number(value);
       list.push({testId:id,testTitle:"Оценка преподавателя",grade:String(value),score:isFinite(numeric)?numeric:0,maxScore:5,percent:isFinite(numeric)?numeric*20:0,timeSpent:0,finishedAt:String(date),courseId:"",manual:true});
     });
