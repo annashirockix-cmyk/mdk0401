@@ -481,6 +481,9 @@ test("final exam response autosave validates owner, attempt status, deadline and
 test("final exam variant importer stores one bounded private payload per variant and activates only after staging", () => {
   const importer = extractFunction("importEnglishExamVariants_");
   assert.match(importer, /auth_\(data\)/);
+  assert.match(importer, /actor\.role !== "admin"/);
+  assert.match(importer, /payload\.sourceNotes\.status !== "approved_for_import"/);
+  assert.match(importer, /approvedBy:actor\.email/);
   assert.match(importer, /validateEnglishExamVariantRegistry_\(exams\)/);
   assert.match(importer, /variant\.variantJSON/);
   assert.match(importer, /variantJSON\.length > 45000/);
@@ -488,6 +491,8 @@ test("final exam variant importer stores one bounded private payload per variant
   assert.match(importer, /Active:"FALSE"/);
   assert.ok(importer.indexOf('setValues(matrix)') < importer.indexOf('setValues(matrix.map(function() { return ["TRUE"]; }))'));
   assert.match(importer, /LockService\.getScriptLock\(\)/);
+  assert.match(importer, /previousActive/);
+  assert.match(importer, /rollbackError/);
   assert.match(code, /case "importenglishexamvariants": result = importEnglishExamVariants_\(data\); break;/);
 });
 
