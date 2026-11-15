@@ -702,6 +702,16 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
   const courseId = String(data.courseId || "");
   if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
   const testId = String(data.testId || "test");
+  // Written submissions are ungraded until a teacher reviews them.
+  // Never trust a grade/score/percent supplied by a student for these IDs.
+  if (user.role === "student" && /^(prac_|written_self_)/.test(testId)) {
+    const submittedGrade = Number(data.grade == null || data.grade === "" ? 0 : data.grade);
+    const submittedScore = Number(data.score == null || data.score === "" ? 0 : data.score);
+    const submittedPercent = Number(data.percent == null || data.percent === "" ? 0 : data.percent);
+    if (submittedGrade !== 0 || submittedScore !== 0 || submittedPercent !== 0) {
+      throw new Error("Письменная работа принимается без оценки. Оценку выставляет преподаватель после проверки.");
+    }
+  }
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
   // Assessment namespaces are never accepted through the generic browser
   // result endpoint. They must use their dedicated server-issued attempt flows.
@@ -833,7 +843,7 @@ function gradeWrittenResult_(data) {
   if(teacher.role!=="teacher"&&teacher.role!=="admin") throw new Error("Проверять письменные работы может только преподаватель.");
   const studentEmail=email_(data.email),courseId=String(data.courseId||""),testId=String(data.testId||"");
   const grade=Number(data.grade),feedback=String(data.feedback||"").slice(0,4000);
-  if(!studentEmail||!courseId||!testId||!/^(prac_|self_)/.test(testId)) throw new Error("Не выбрана письменная работа.");
+  if(!studentEmail||!courseId||!testId||!/^(prac_|self_|written_self_)/.test(testId)) throw new Error("Не выбрана письменная работа.");
   if(!isFinite(grade)||grade<2||grade>5) throw new Error("Оценка должна быть от 2 до 5.");
   const student=userByEmail_(studentEmail);
   if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
