@@ -252,7 +252,7 @@ test("fifteen authored Technical English C4-S1 pilots match the protected runtim
     assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
     assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
     const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could you|I have noticed|Hand it in|rated voltage|rating is unclear|indicator did not light|full model references|Could we check the cable|Could we compare their data sheets|Could you explain the contact|problem appears intermittently|Could we confirm the signal|Record the mismatch/i);
+    assert.match(functional.options[functional.correctIndex],/Could you|I have noticed|Hand it in|rated voltage|Check its printed code|rating is unclear|indicator did not light|full model references|Could we check the cable|Could we compare their data sheets|Could you explain the contact|problem appears intermittently|Could we confirm the signal|Record the mismatch/i);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
