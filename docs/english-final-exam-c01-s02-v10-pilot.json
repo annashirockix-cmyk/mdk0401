@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful details to include in an invitation.",
       "options": [
-        "The date and time",
         "An unrelated shopping list",
-        "The meeting place",
-        "A classmate's password"
+        "A classmate's password",
+        "The date and time",
+        "The meeting place"
       ],
       "correctIndices": [
         2,
