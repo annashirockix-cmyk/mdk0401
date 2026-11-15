@@ -25,7 +25,7 @@
     {
       "id": "c5s1v09_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which records should students bring?",
+      "prompt": "Listening 2. Which defect-history documents are required for the reliability exercise?",
       "audioText": "The reliability engineering lecturer will discuss repeat defects on Thursday at ten thirty. Students should bring the sample defect history and equipment-status summary. The session will compare recurring observations and explain why engineers should check operating context before identifying a trend. Students will use a fictional component history.",
       "options": [
         "On Friday",
