@@ -42,7 +42,7 @@ const HEADERS = {
   AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "Status"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
-  AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"],
+  AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt", "PreviousGrade", "PreviousFeedback", "Feedback"],
   QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"],
   QuestionBankBackup: ["BackupId", "CourseId", "BankId", "RowJSON", "BackedUpAt", "BackedUpBy"],
   EnglishVPRBank: ["Track", "ExamJSON", "Active", "UpdatedAt", "UpdatedBy"],
@@ -228,7 +228,7 @@ function notifications_() { return ensureSheet_("Notifications"); }
 function proctorEvents_() { return ensureSheet_("ProctorEvents"); }
 function attemptAudit_() { return ensureSheet_("AttemptAudit"); }
 function activityLog_() { return ensureSheet_("ActivityLog"); }
-function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString()]); }
+function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString(),record.PreviousGrade===undefined?"":record.PreviousGrade,record.PreviousFeedback||"",record.Feedback||""]); }
 
 function proctorPenalty_(studentEmail,courseId,testId,attemptNo) {
   const sh=proctorEvents_(),lastRow=sh.getLastRow();
@@ -918,13 +918,13 @@ function gradeWrittenResult_(data) {
       if(email_(rows[i][0])===studentEmail&&String(rows[i][3]||"")===testId&&sameCourseId_(rows[i][12]||courseId,courseId)){rowIndex=i+1;break;}
     }
     if(rowIndex<0) throw new Error("Отправленная работа не найдена.");
-    const currentRow=rows[rowIndex-1], currentGrade=Number(currentRow[5])||0;
+    const currentRow=rows[rowIndex-1], currentGrade=Number(currentRow[5])||0, currentFeedback=String(currentRow[16]||"");
     const isRegrade=currentGrade>=2&&currentGrade<=5;
     if(isRegrade&&!(teacher.role==="admin"&&data.regrade===true)) {
       throw new Error("Работа уже проверена. Повторное выставление оценки доступно только администратору с явным подтверждением.");
     }
     updateMappedRecord_(sh,rowIndex,{Grade:grade,Percent:grade*20,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:new Date().toISOString()});
-    appendAttemptAudit_({EventType:isRegrade?"written_regraded":"written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(currentRow[4]||testId),Grade:grade,Percent:grade*20});
+    appendAttemptAudit_({EventType:isRegrade?"written_regraded":"written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(currentRow[4]||testId),Grade:grade,Percent:grade*20,PreviousGrade:isRegrade?currentGrade:"",PreviousFeedback:isRegrade?currentFeedback:"",Feedback:feedback});
   } finally {lock.releaseLock();}
   createNotification_(studentEmail,"grade","Письменная работа проверена","По работе «"+testId+"» выставлена оценка: "+grade+"/5."+(feedback?" Комментарий преподавателя добавлен.":""),courseId,testId);
   return {success:true,grade:grade};
