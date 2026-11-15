@@ -9,6 +9,7 @@ const journal = readFileSync(new URL("../journal.js", import.meta.url), "utf8");
 const api = readFileSync(new URL("../api.js", import.meta.url), "utf8");
 const serviceWorker = readFileSync(new URL("../service-worker.js", import.meta.url), "utf8");
 const studentProgress = readFileSync(new URL("../student-progress.js", import.meta.url), "utf8");
+const reports = readFileSync(new URL("../reports.js", import.meta.url), "utf8");
 
 function extractFunction(source, name) {
   const start = source.indexOf("function " + name + "(");
@@ -275,6 +276,8 @@ test("manual and written grades expose feedback separately in student course res
   assert.equal(manual.feedback, "Исправьте оформление чертежа.");
   assert.equal(manual.reviewedBy, "teacher@example.test");
   assert.ok(manual.reviewedAt);
+  assert.ok(reports.includes("((x.payload||x.feedback)?"), "reports must display a comment even when the submission text is empty");
+  assert.ok(studentProgress.includes('feedback:x.feedback||""'), "student timeline must include written and manual grade feedback");
 
   results.appendRow([
     "student@example.test", "Иван Иванов", "ТО-21", "prac_demo", "Письменная работа",
