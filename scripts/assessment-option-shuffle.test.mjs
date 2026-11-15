@@ -157,6 +157,39 @@ test("built-in and final exams keep answer keys server-side and remap submitted 
   assert.doesNotMatch(finalSubmit,/TimeSpent:Math\.max\(0,Math\.min\(5400,Number\(data\.timeSpent\)/);
 });
 
+test("English final-exam variants shuffle options per attempt and restore canonical scoring keys", () => {
+  const shuffle = new Function(extract(code,"shuffleEnglishFinalExamTasks_")+"; return shuffleEnglishFinalExamTasks_;")();
+  const display = new Function(extract(code,"englishFinalExamDisplayTasks_")+"; return englishFinalExamDisplayTasks_;")();
+  const canonical = new Function(extract(code,"englishFinalExamCanonicalOptionIndex_")+"; return englishFinalExamCanonicalOptionIndex_;")();
+  const deterministicMath=Object.create(Math); deterministicMath.random=()=>0;
+  const tasks=[
+    {id:"single",type:"single_choice",options:["A","B","C","D"],correctIndex:2},
+    {id:"multi",type:"multiple_choice",options:["W","X","Y","Z"],correctIndices:[0,2]},
+    {id:"order",type:"ordering",options:["Step one","Step two","Step three"],correctOrder:["Step one","Step two","Step three"]}
+  ];
+  const originalRandom=Math.random;
+  let assigned;
+  try { assigned=new Function("Math",extract(code,"shuffleEnglishFinalExamTasks_")+"; return shuffleEnglishFinalExamTasks_;")(deterministicMath)(tasks); }
+  finally { Math.random=originalRandom; }
+  assert.deepEqual(assigned.optionMaps.single,[1,2,3,0]);
+  assert.deepEqual(assigned.tasks[0].options,["B","C","D","A"]);
+  assert.deepEqual(assigned.tasks[1].options,["X","Y","Z","W"]);
+  assert.deepEqual(assigned.tasks[2].options,["Step two","Step three","Step one"]);
+  const snapshot={tasks,optionMaps:assigned.optionMaps};
+  const resumed=display(snapshot.tasks,snapshot.optionMaps);
+  assert.deepEqual(resumed,assigned.tasks,"resume must preserve the exact option order");
+  assert.equal(canonical(snapshot,"single",1),2,"display choice maps back to the original correct option");
+  assert.deepEqual([3,1].map(index=>canonical(snapshot,"multi",index)).sort((a,b)=>a-b),[0,2]);
+  assert.equal(canonical(snapshot,"single",99),-1,"out-of-range display indices are rejected");
+  assert.equal(canonical({tasks},"single",2),2,"legacy attempts without a map retain their original indices");
+  assert.match(extract(code,"startEnglishFinalExam_"),/optionMaps:randomized\.optionMaps/);
+  assert.match(extract(code,"startEnglishFinalExam_"),/sanitizeEnglishFinalExamTask_\(randomized\.tasks\)/);
+  assert.match(extract(code,"resumeEnglishFinalExam_"),/englishFinalExamDisplayTasks_\(snapshot\.tasks\|\|\[\],snapshot\.optionMaps\|\|\{\}\)/);
+  const submit=extract(code,"submitEnglishFinalExam_");
+  assert.match(submit,/englishFinalExamCanonicalOptionIndex_\(snapshot,id,answer\)/);
+  assert.match(submit,/answer\.map\(function\(v\)\{return englishFinalExamCanonicalOptionIndex_\(snapshot,id,v\);\}\)/);
+});
+ 
 test("VPR requires the server-issued attempt token for submission", () => {
   assert.match(extract(vpr,"startEnglishVprExam_"), /attemptId:attemptId/);
   assert.match(extract(vpr,"submitEnglishVprExam_"),/data\.attemptId/);
