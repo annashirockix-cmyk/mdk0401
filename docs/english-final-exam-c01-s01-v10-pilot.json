@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 10",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the induction take place?",
+      "audioText": "Good morning, everyone. The workshop induction will take place in Room 14 on Thursday at ten. Please bring your student card and wear safety shoes. The instructor will explain the emergency exits and show you where to find the first-aid kit. Do not use any machine until you have completed the induction. If you cannot attend, contact the workshop office before Wednesday afternoon.",
+      "options": [
+        "In Room 14",
+        "In the library",
+        "In the main hall",
+        "In the computer room"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What must students do before using a machine?",
+      "audioText": "Good morning, everyone. The workshop induction will take place in Room 14 on Thursday at ten. Please bring your student card and wear safety shoes. The instructor will explain the emergency exits and show you where to find the first-aid kit. Do not use any machine until you have completed the induction. If you cannot attend, contact the workshop office before Wednesday afternoon.",
+      "options": [
+        "Borrow a tool",
+        "Complete the induction",
+        "Pass a maths test",
+        "Clean the classroom"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v10_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Leo is preparing for his first workshop lesson. He checks the timetable and notices that the group must wear safety shoes. He puts his notebook and student card in his bag. At the workshop door, he waits for the instructor, who explains the safety signs and the location of the emergency stop button. Leo asks a question when he does not understand an instruction. What does Leo put in his bag?",
+      "options": [
+        "A safety helmet and a camera",
+        "A laptop and a ruler",
+        "His notebook and student card",
+        "A toolbox and a manual"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v10_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. When does Leo ask a question?",
+      "options": [
+        "Before checking the timetable",
+        "When an instruction is unclear",
+        "After leaving the workshop",
+        "Only at the end of the course"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s1v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'Students ___ wear safety shoes in the workshop.'",
+      "options": [
+        "must",
+        "must to",
+        "must wearing",
+        "musts"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO correct workshop instructions.",
+      "options": [
+        "You must to wait here.",
+        "Don't touch the machine.",
+        "Wear your safety shoes.",
+        "You not use this tool."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v10_v01",
+      "type": "short_text",
+      "prompt": "Complete with one word: 'A person who teaches or shows you how to do a job is an ___.'",
+      "acceptedAnswers": [
+        "instructor",
+        "trainer",
+        "teacher"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v10_f01",
+      "type": "single_choice",
+      "prompt": "You have not understood a safety instruction. What is the best reply?",
+      "options": [
+        "I don't care about it.",
+        "Could you explain that instruction again, please?",
+        "I explained you yesterday.",
+        "Give me another machine."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v10_o01",
+      "type": "ordering",
+      "prompt": "Put the steps for entering a workshop in a sensible order.",
+      "options": [
+        "Listen to the instructor's safety briefing",
+        "Check the required protective equipment",
+        "Enter the workshop with permission",
+        "Begin the assigned task"
+      ],
+      "correctOrder": [
+        "Listen to the instructor's safety briefing",
+        "Check the required protective equipment",
+        "Enter the workshop with permission",
+        "Begin the assigned task"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about preparing for a safe workshop lesson. Mention two items you need, one rule you must follow and what you should do if an instruction is unclear.",
+      "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v10_audio",
+    "readingPassageId": "c1s1v10_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
