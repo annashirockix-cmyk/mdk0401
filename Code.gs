@@ -1821,8 +1821,24 @@ function builtInQuestions_(courseId, bankIds) {
   });
   return out;
 }
+function sanitizeAssessmentQuestionForStudent_(question) {
+  const safe = JSON.parse(JSON.stringify(question && typeof question === "object" ? question : {}));
+  const privateKey = /^(?:correct|answer|expected|accepted|solution|explanation|rationale|grading|rubric|answerkey|key|iscorrect|feedback)(?:$|[_-])/i;
+  function clean(value) {
+    if (!value || typeof value !== "object") return;
+    if (Array.isArray(value)) { value.forEach(clean); return; }
+    Object.keys(value).forEach(function(key) {
+      const normalized = String(key).replace(/[\\s-]/g, "_");
+      if (privateKey.test(normalized)) delete value[key];
+      else clean(value[key]);
+    });
+  }
+  clean(safe);
+  return safe;
+}
+
 function safeBuiltInQuestion_(entry, optionMaps) {
-  const q=Object.assign({},entry.question||{}),type=String(q.type||"mc").toLowerCase();
+  const q=sanitizeAssessmentQuestionForStudent_(entry.question),type=String(q.type||"mc").toLowerCase();
   ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder","answerIndex","correctIndex","correctOption","rationale","isCorrect"].forEach(function(k){delete q[k];});
   if((type==="mc"||type==="single"||type==="single_select"||type==="choice"||type==="multi"||type==="multiple"||type==="multiple_choice"||type==="tf"||type==="true_false")&&Array.isArray(q.options)&&q.options.length>1){
     const order=shuffledServer_(q.options.map(function(_,i){return i;}));
@@ -1992,7 +2008,7 @@ function finalQuestionType_(question) {
   return "mc";
 }
 function safeFinalExamQuestion_(entry,index,optionMaps) {
-  const q=Object.assign({},entry.question||{}),type=finalQuestionType_(q);
+  const q=sanitizeAssessmentQuestionForStudent_(entry.question),type=finalQuestionType_(q);
   q.type=type;
   ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder","answerIndex","correctIndex","correctOption","rationale","isCorrect"].forEach(function(k){delete q[k];});
   if(type==="order")q.items=shuffledServer_(q.items||[]);
@@ -2138,7 +2154,7 @@ function getCustomTest_(data) {
   const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   if (!questions.length) throw new Error("В тесте пока нет вопросов.");
   const optionMaps = {}, safeQuestions = questions.map(function(question, index) {
-    const safe = JSON.parse(JSON.stringify(question || {}));
+    const safe = sanitizeAssessmentQuestionForStudent_(question || {});
     const options = Array.isArray(safe.options) ? safe.options.slice() : [];
     if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
     const order = shuffledServer_(options.map(function(_, i) { return i; }));
