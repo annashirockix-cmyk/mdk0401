@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 05",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v05_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. What did the technology group demonstrate?",
+      "audioText": "Last Friday our college held an open day for school students. The technology group demonstrated a small robot, and the electrical group showed a safe training circuit. Visitors asked many questions and took information leaflets. The event started at ten and finished at two. Our class helped visitors find the laboratories and the library.",
+      "options": [
+        "A small robot",
+        "A digital camera",
+        "A new bus",
+        "A model aircraft"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v05_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What did the class help visitors find?",
+      "audioText": "Last Friday our college held an open day for school students. The technology group demonstrated a small robot, and the electrical group showed a safe training circuit. Visitors asked many questions and took information leaflets. The event started at ten and finished at two. Our class helped visitors find the laboratories and the library.",
+      "options": [
+        "The canteen and gym",
+        "The laboratories and library",
+        "The train station",
+        "The town centre"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v05_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Last month, Pavel joined a college photography club. At the first meeting, the members discussed how to take clear pictures in different light. Pavel borrowed a camera from the club and practised in the college garden. He selected his best photographs and showed them at the next meeting. The other members gave him useful advice. What did the members discuss?",
+      "options": [
+        "How to repair a computer",
+        "How to write a report",
+        "How to take clear photographs",
+        "How to organise a trip"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v05_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What did Pavel do at the next meeting?",
+      "options": [
+        "He sold the camera",
+        "He joined another club",
+        "He missed the meeting",
+        "He showed his best photographs"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v05_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct Past Simple form: 'The open day ___ at ten last Friday.'",
+      "options": [
+        "began",
+        "begins",
+        "begin",
+        "beginning"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v05_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO correct sentences about completed past events.",
+      "options": [
+        "The visitors asked many questions.",
+        "The event finish at two yesterday.",
+        "Our class helped the visitors.",
+        "Pavel join the club last month."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v05_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'An event where a college introduces itself to visitors is an open ___.'",
+      "acceptedAnswers": [
+        "day"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v05_f01",
+      "type": "single_choice",
+      "prompt": "A visitor asks where the library is. What is a helpful reply?",
+      "options": [
+        "I don't know and I don't care.",
+        "The library is next to the main hall. I can show you.",
+        "You should find it.",
+        "Why are you here?"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v05_o01",
+      "type": "ordering",
+      "prompt": "Welcome the visitors; Show them the information area; Guide them to the laboratories; Answer their questions",
+      "options": [
+        "Answer their questions",
+        "Guide them to the laboratories",
+        "Show them the information area",
+        "Welcome the visitors"
+      ],
+      "correctOrder": [
+        "Welcome the visitors",
+        "Show them the information area",
+        "Guide them to the laboratories",
+        "Answer their questions"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v05_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about a college event you attended or would like to attend. Say when it took place, what happened and what visitors or students learned.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v05_audio",
+    "readingPassageId": "c1s2v05_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
