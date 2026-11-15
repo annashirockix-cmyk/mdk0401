@@ -78,8 +78,8 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(resume, /DeadlineAt/);
   assert.match(resume, /sanitizeEnglishFinalExamTask_\(snapshot\.tasks\|\|\[\]\)/);
   assert.match(sanitizeTask, /answer|correct|solution|rubric|grading/i);
-  assert.match(code, /case "starenglishfinalexam": result = startEnglishFinalExam_\(data\); break;/);
-  assert.match(code, /case "resumenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
+  assert.match(code, /case "startenglishfinalexam": result = startEnglishFinalExam_\(data\); break;/);
+  assert.match(code, /case "resumeenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
 });
 
 test("final exam variant importer stores one bounded private payload per variant and activates only after staging", () => {
