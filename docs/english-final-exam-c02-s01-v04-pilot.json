@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful points to compare when choosing a course.",
       "options": [
-        "Entry requirements",
         "The colour of the website",
-        "Course length",
-        "An unrelated social media post"
+        "An unrelated social media post",
+        "Entry requirements",
+        "Course length"
       ],
       "correctIndices": [
         2,
