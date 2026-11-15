@@ -72,7 +72,7 @@ test("server rejects ten-per-track legacy layout and wrong course-year mapping",
   assert.throws(() => validate(tooFewTechnical, "technical"), /ровно 6/);
   const wrongTechnicalYear = validBank("technical");
   wrongTechnicalYear[0].year = 1;
-  assert.throws(() => validate(wrongTechnicalYear, "technical"), /курсу\\/семестру/);
+  assert.throws(() => validate(wrongTechnicalYear, "technical"), (error) => error.message.includes("курсу/семестру"));
 });
 
 test("server rejects missing answer keys, duplicate IDs, wrong semester order and repeated questions", () => {
