@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "Reading 1. Read the text. Last month, Irina helped at the college open day. She welcomed visitors at the entrance and showed them where to find the workshops. She also gave out maps and answered simple questions about the timetable. Irina was tired at the end of the day, but she enjoyed meeting new people. Next year, she wants to help organise the event. What did Irina give to visitors?",
       "options": [
-        "Maps",
         "Notebooks",
         "Bus tickets",
+        "Maps",
         "Certificates"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -55,11 +55,11 @@
       "prompt": "Reading 2. What does Irina want to do next year?",
       "options": [
         "Study at another college",
-        "Help organise the open day",
         "Work in the sports hall",
-        "Write a new timetable"
+        "Write a new timetable",
+        "Help organise the open day"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "Choose the correct Past Simple form: 'Yesterday our group ___ a short presentation.'",
       "options": [
+        "prepared",
         "prepare",
         "prepares",
-        "prepared",
         "preparing"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Select TWO grammatically correct questions in the Past Simple.",
       "options": [
-        "Did you visit the workshop?",
         "Did she helped at the open day?",
-        "Where did they meet?",
-        "Where they did meet?"
+        "Where they did meet?",
+        "Did you visit the workshop?",
+        "Where did they meet?"
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
