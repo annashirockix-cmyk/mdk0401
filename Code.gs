@@ -3115,7 +3115,7 @@ function sanitizeEnglishFinalExamTask_(value) {
   if (!value || typeof value !== "object") return value;
   const clean = {};
   Object.keys(value).forEach(function(key) {
-    if (/^(answer|answers|correct|correctAnswer|correctIndex|correctIndices|solution|explanation|rationale|rubric|markscheme|marking|grading|teacherNotes|answerKey|key|acceptedAnswers|correctOrder)$/i.test(key)) return;
+    if (/^(answer|answers|answerText|answerIndex|answerIndices|answerKey|acceptedAnswers|expectedAnswer|expectedAnswers|modelAnswer|correct|correctAnswer|correctOption|correctOptions|correctIndex|correctIndices|correctOrder|solution|solutionText|explanation|rationale|rubric|markscheme|marking|grading|teacher|teacherNotes|teacherKey|key|keyAnswer|keyPoints)$/i.test(key)) return;
     clean[key] = sanitizeEnglishFinalExamTask_(value[key]);
   });
   return clean;
