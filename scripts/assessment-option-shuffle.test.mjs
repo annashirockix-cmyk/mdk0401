@@ -265,3 +265,18 @@ test("English VPR server timer starts only when the student launches the exam", 
   assert.match(client, /startExam\(started\.exam, key, panel, courseId, track, started\.attemptId\)/);
   assert.match(fs.readFileSync(path.join(root, "api.js"), "utf8"), /startEnglishVprExam:function/);
 });
+
+
+test("reopening an active English assessment preserves the original server start time", () => {
+  const vprStart = extract(vpr, "startEnglishVprExam_");
+  assert.match(vprStart, /englishVprAttemptCacheKey_/);
+  assert.match(vprStart, /activeAttempt\.startedAt/);
+  assert.match(vprStart, /activeAttempt\.displayExam/);
+  const vprSubmit = extract(vpr, "submitEnglishVprExam_");
+  assert.match(vprSubmit, /lockedAttempt\.stableKey/);
+  const semesterStart = extract(code, "startEnglishSemesterTest_");
+  assert.match(semesterStart, /attemptCacheKey|englishSemesterAttemptCacheKey_/);
+  const client = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
+  assert.match(client, /durationSeconds - Math\.floor\(Math\.max\(0, Date\.now\(\) - Number\(startedAt\)\) \/ 1000\)/);
+  assert.match(client, /duration-Math\.floor\(Math\.max\(0,Date\.now\(\)-Number\(startedAt\)\)\/1000\)/);
+});
