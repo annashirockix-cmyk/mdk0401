@@ -169,6 +169,28 @@ test("fifteen authored Basic English Course 2 Semester 1 pilots match the protec
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
 });
 
+test("five authored Basic English Course 2 Semester 2 pilots match the protected runtime schema",()=>{
+  const pilots=Array.from({length:5},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c02-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
+  const source=extractFunction("validateEnglishFinalVariantPayload_");
+  const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
+  const allPrompts=[];
+  pilots.forEach((pilot,index)=>{
+    const variant=String(index+1).padStart(2,"0");
+    assert.equal(pilot.examId,"english_final_c2_s2"); assert.equal(pilot.courseNo,2); assert.equal(pilot.track,"basic"); assert.equal(pilot.semester,2);
+    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
+    assert.deepEqual(validate(pilot,"C2-S2-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
+    assert.ok(pilot.tasks.every(task=>task.id.startsWith("c2s2v"+variant+"_")));
+    const distribution={A:0,B:0,C:0,D:0};
+    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
+    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
+    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
+    const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
+    assert.match(functional.options[functional.correctIndex],/I would like|I used this source|That is not quite|Do not follow/i);
+  });
+  assert.equal(new Set(allPrompts).size,allPrompts.length);
+  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,5);
+});
+
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
   const start = extractFunction("startEnglishFinalExam_");
   const resume = extractFunction("resumeEnglishFinalExam_");
