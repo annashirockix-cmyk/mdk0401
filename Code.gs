@@ -716,17 +716,17 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
   if (user.role === "student" && /^english_/.test(testId)) {
     throw new Error("Контрольные работы английского принимаются только через защищённую серверную проверку.");
   }
-  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\\d+$/.test(testId)||/^english_/.test(testId));
+  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId)||/^english_/.test(testId));
   if (user.role === "student" && /^__final__/.test(testId)) {
     throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
   }
   if (user.role === "student" && /^test_/.test(testId)) {
     throw new Error("Встроенные тесты должны отправляться через защищённую серверную проверку.");
   }
-  if (user.role === "student" && /^self_.+_\\d+$/.test(testId)) {
-    const topicId=testId.replace(/^self_(.+)_\\d+$/,"$1");
-    const resolved=resolvedBuiltInBankIds_(courseId,[testId,"topic_"+topicId]);
-    if(builtInQuestions_(courseId,resolved).length)throw new Error("Встроенные тесты должны отправляться через защищённую серверную проверку.");
+  // All numbered self-work test IDs are assessment attempts, even before
+  // their bank is imported. Written answers use the separate written_self_ namespace.
+  if (user.role === "student" && /^self_.+_\d+$/.test(testId)) {
+    throw new Error("Самостоятельные тесты должны отправляться через защищённую серверную проверку.");
   }
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
@@ -744,7 +744,7 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
     const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=assessment?gradeFromPercent_(percent):rawGrade,score=maxScore?Math.round(maxScore*percent)/100:Math.max(0,rawScore);
     appendMappedRecord_(sheet,{Email:email,Name:String(data.name||user.name),Group:String(data.group||user.group),TestId:testId,TestTitle:title,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attempts,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:String(data.payload||"").slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:title,AttemptNo:attempts,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent});
-    if(user.role==="student" && /^(prac_|self_)/.test(testId) && String(data.payload||"").trim()) {
+    if(user.role==="student" && /^(prac_|self_|written_self_)/.test(testId) && String(data.payload||"").trim()) {
       notifyCourseStaff_(courseId,"written_submission","Новая письменная работа на проверку",
         user.name+" ("+user.group+") отправил(а) письменную работу: "+title+". Откройте журнал результатов по дисциплине для проверки.",testId);
     }
