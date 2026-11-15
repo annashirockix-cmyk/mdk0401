@@ -846,7 +846,7 @@ function saveTeacherResult_(data) {
     for(let i=values.length-1;i>=1;i--){
       if(email_(values[i][0])===student.email&&String(values[i][3]||"")===testId&&sameCourseId_(values[i][12]||courseId,courseId)){existingRow=i+1;break;}
     }
-    const record={Email:student.email,Name:student.name,Group:student.group,TestId:testId,TestTitle:title+" ("+date+")",Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,Attempts:1,FinishedAt:now,CourseId:courseId,Submission:submission};
+    const record={Email:student.email,Name:student.name,Group:student.group,TestId:testId,TestTitle:title+" ("+date+")",Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,Attempts:1,FinishedAt:now,CourseId:courseId,Submission:submission,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:now};
     if(existingRow>0)updateMappedRecord_(sheet,existingRow,record);else appendMappedRecord_(sheet,record);
     appendAttemptAudit_({EventType:"teacher_grade_entered",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20});
   } finally {lock.releaseLock();}
@@ -882,7 +882,8 @@ function saveManualGrade_(data) {
       Email:currentStudent.email,Name:currentStudent.name,Group:currentStudent.group,
       TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,
       TimeSpent:0,Attempts:1,FinishedAt:finishedAt,CourseId:courseId,
-      Submission:feedback
+      Submission:"",
+      Feedback:feedback,ReviewedBy:authorizedTeacher.email,ReviewedAt:new Date().toISOString()
     });
     appendAttemptAudit_({EventType:"manual_grade_entered",ActorEmail:authorizedTeacher.email,StudentEmail:currentStudent.email,StudentName:currentStudent.name,Group:currentStudent.group,CourseId:courseId,TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20});
   } finally {lock.releaseLock();}
@@ -1248,10 +1249,11 @@ function saveGCodeProgress_(data) {
 }
 function getMyCourseResults_(data) {
   const user=auth_(data),email=email_(user.email),requestedCourse=String(data.courseId||"");
-  const list=results_().getDataRange().getValues().slice(1).filter(function(r){
+  const resultSheet=results_(),resultMap=headerMap_(resultSheet);
+  const list=resultSheet.getDataRange().getValues().slice(1).filter(function(r){
     return r[0]&&email_(r[0])===email&&(!requestedCourse||sameCourseId_(r[12],requestedCourse));
   }).map(function(r){
-    return {testId:String(r[3]||""),testTitle:String(r[4]||r[3]||""),grade:r[5]===""||r[5]===null?"":Number(r[5])||0,score:Number(r[6])||0,maxScore:Number(r[7])||0,percent:Number(r[8])||0,timeSpent:Number(r[9])||0,finishedAt:String(r[11]||""),courseId:normalizeCourseId_(r[12]),payload:String(r[13]||"")};
+    return {testId:String(r[3]||""),testTitle:String(r[4]||r[3]||""),grade:r[5]===""||r[5]===null?"":Number(r[5])||0,score:Number(r[6])||0,maxScore:Number(r[7])||0,percent:Number(r[8])||0,timeSpent:Number(r[9])||0,finishedAt:String(r[11]||""),courseId:normalizeCourseId_(r[12]),payload:String(r[resultMap.Submission===undefined?13:resultMap.Submission]||""),feedback:String(resultMap.Feedback===undefined?"":r[resultMap.Feedback]||""),reviewedBy:String(resultMap.ReviewedBy===undefined?"":r[resultMap.ReviewedBy]||""),reviewedAt:String(resultMap.ReviewedAt===undefined?"":r[resultMap.ReviewedAt]||"")};
   });
   // auth_ already resolved this student's row; reuse its payload instead of downloading the full Users sheet again.
   let payload={};try{payload=JSON.parse(user.payload||"{}");}catch(e){}
