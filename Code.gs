@@ -1505,7 +1505,18 @@ function gradeAssignment_(data) {
     if (isRegrade && !(actor.role === "admin" && data.regrade === true)) {
       throw new Error("Работа уже проверена. Повторное выставление оценки доступно только администратору с явным подтверждением.");
     }
-    updateMappedRecord_(sh, i + 2, {Status:"reviewed",Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:new Date().toISOString()});
+    const reviewedAt=new Date().toISOString();
+    updateMappedRecord_(sh, i + 2, {Status:"reviewed",Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:reviewedAt});
+    if(isRegrade){
+      const history=assignmentSubmissionHistory_(),historyRows=history.getDataRange().getValues(),historyMap=headerMap_(history);
+      let latestHistoryRow=-1,latestAttempt=-1;
+      historyRows.slice(1).forEach(function(historyRow,index){
+        if(String(historyRow[historyMap.SubmissionId]||"")!==id)return;
+        const attempt=Number(historyRow[historyMap.AttemptNo])||1;
+        if(attempt>latestAttempt){latestAttempt=attempt;latestHistoryRow=index+2;}
+      });
+      if(latestHistoryRow>0)updateMappedRecord_(history,latestHistoryRow,{Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:reviewedAt,Status:"reviewed"});
+    }
     appendAttemptAudit_({EventType:isRegrade?"assignment_regraded":"assignment_graded",ActorEmail:teacher.email,StudentEmail:email_(row[m.StudentEmail]),StudentName:String(row[m.StudentName] || ""),Group:String(row[m.Group] || ""),CourseId:courseId,TestId:"assignment_"+aid,TestTitle:"Задание: "+String(a[ah.Title] || ""),Grade:grade,Percent:grade*20});
     const retryNeeded=grade<=2;
     createNotification_(String(row[m.StudentEmail] || ""),retryNeeded?"assignment_retry":"grade",
