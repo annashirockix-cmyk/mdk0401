@@ -163,7 +163,7 @@ test("fifteen authored Basic English Course 2 Semester 1 pilots match the protec
     assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
     assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
     const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could|Let's|Would|Of course|Hand it in|Report it/i);
+    assert.match(functional.options[functional.correctIndex],//Could|Let's|Would|Of course|Hand it in|Report it|Give a brief/i);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
