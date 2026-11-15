@@ -1183,6 +1183,17 @@ function getPublicSubjectRatings_(data) {
       ]);
     });
   });
+  // Assignment submissions are stored separately from Results. Include reviewed
+  // assignments here so public subject averages match the student's course summary
+  // and the teacher journal instead of silently omitting manually graded work.
+  assignmentResultRecords_().forEach(function (x) {
+    if (x.grade === "" || x.grade === null || x.grade === undefined) return;
+    rows.push([
+      x.email, x.name, x.group, x.testId, x.testTitle, x.grade,
+      x.score, x.maxScore, x.percent, x.timeSpent, x.attempts,
+      x.finishedAt, x.courseId
+    ]);
+  });
   const latest = {};
   rows.forEach(function (r) {
     const email = email_(r[0]), courseId = String(r[12] || "");
