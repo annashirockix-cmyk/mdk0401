@@ -11,7 +11,7 @@
     {
       "id": "c3s2v06_l01",
       "type": "single_choice",
-      "prompt": "Listening 1. When will the briefing begin?",
+      "prompt": "Listening 1. What is the scheduled start time for the machining safety briefing?",
       "audioText": "The workshop safety coordinator will give a briefing on Thursday at eight fifty. Students should wait in the marked classroom area until the instructor begins. The briefing will review warning signs, restricted zones and the procedure for reporting damaged equipment. Students should bring their induction cards, and questions can be asked at the end of the session.",
       "options": [
         "At eight fifty on Thursday",
