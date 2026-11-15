@@ -126,6 +126,7 @@ function handleRequest_(e) {
       case "startenglishfinalexam": result = startEnglishFinalExam_(data); break;
       case "resumeenglishfinalexam": result = resumeEnglishFinalExam_(data); break;
       case "saveenglishfinalexamresponses": result = saveEnglishFinalExamResponses_(data); break;
+      case "submitenglishfinalexam": result = submitEnglishFinalExam_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
@@ -3112,7 +3113,7 @@ function sanitizeEnglishFinalExamTask_(value) {
   if (!value || typeof value !== "object") return value;
   const clean = {};
   Object.keys(value).forEach(function(key) {
-    if (/(answer|correct|solution|explanation|rationale|rubric|markscheme|marking|grading|teacher|key)/i.test(key)) return;
+    if (/^(answer|answers|correct|correctAnswer|correctIndex|correctIndices|solution|explanation|rationale|rubric|markscheme|marking|grading|teacherNotes|answerKey|key|acceptedAnswers|correctOrder)$/i.test(key)) return;
     clean[key] = sanitizeEnglishFinalExamTask_(value[key]);
   });
   return clean;
@@ -3258,6 +3259,96 @@ function saveEnglishFinalExamResponses_(data) {
     updateMappedRecord_(sheet,found.row,{ResponsesJSON:serialized,UpdatedAt:now});
     SpreadsheetApp.flush();
     return {success:true,attemptId:attemptId,savedAt:now,responseCount:Object.keys(responses).length};
+  } finally { lock.releaseLock(); }
+}
+
+
+/**
+ * Submit an English final exam. Objective answers are graded only against the
+ * private server snapshot. Free-response items are retained for teacher review.
+ *
+ * Supported task types:
+ * single_choice: correctIndex (number), response number
+ * multiple_choice: correctIndices (number[]), response number[]
+ * ordering: correctOrder (array), response array
+ * short_text: acceptedAnswers (string[]), response string (normalized exact match)
+ * written: response string, manual teacher review
+ */
+function submitEnglishFinalExam_(data) {
+  const user=auth_(data), attemptId=String(data.attemptId||"").trim();
+  if(user.role!=="student" || !attemptId) throw new Error("Нет доступа к отправке итогового экзамена.");
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet=ensureSheet_("EnglishExamAttempts"), found=englishFinalAttemptRow_(sheet,attemptId);
+    if(!found) throw new Error("Попытка экзамена не найдена.");
+    const row=found.values,m=found.map;
+    if(email_(row[m.StudentEmail])!==user.email) throw new Error("Эта попытка не принадлежит текущему аккаунту.");
+    if(String(row[m.Status])!=="in_progress") {
+      if(String(row[m.Status])==="submitted" || String(row[m.Status])==="pending_review") {
+        return {success:true,alreadySubmitted:true,result:JSON.parse(String(row[m.ResultJSON]||"{}"))};
+      }
+      throw new Error("Эта попытка уже закрыта.");
+    }
+    const now=Date.now(), deadline=new Date(row[m.DeadlineAt]).getTime();
+    if(now>deadline) {
+      updateMappedRecord_(sheet,found.row,{Status:"expired",UpdatedAt:new Date(now).toISOString()});
+      throw new Error("Время итогового экзамена истекло.");
+    }
+    const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}")), tasks=snapshot.tasks||[];
+    let responses={};
+    try { responses=JSON.parse(String(row[m.ResponsesJSON]||"{}")); } catch(e) { throw new Error("Не удалось прочитать сохранённые ответы."); }
+    if(data.responses && typeof data.responses==="object" && !Array.isArray(data.responses)) {
+      Object.keys(data.responses).forEach(function(id){responses[id]=data.responses[id];});
+    }
+    const taskIds={}, review=[];
+    let score=0,maxScore=0;
+    function norm(v){return String(v==null?"":v).trim().toLowerCase().replace(/\s+/g," ");}
+    tasks.forEach(function(task,index) {
+      const id=String(task.id||task.questionId||index);
+      if(taskIds[id]) throw new Error("В варианте обнаружены повторяющиеся ID заданий.");
+      taskIds[id]=true;
+      const type=String(task.type||task.taskType||"single_choice").toLowerCase();
+      const answer=responses[id];
+      const points=Math.max(0,Number(task.points)||1);
+      if(type==="written" || type==="writing" || type==="essay" || type==="free_response") {
+        maxScore+=points;
+        review.push({taskId:id,points:points,response:String(answer==null?"":answer).slice(0,10000)});
+        return;
+      }
+      maxScore+=points;
+      let correct=false;
+      if(type==="single_choice") {
+        correct=Number.isInteger(answer) && Number.isInteger(Number(task.correctIndex)) && answer===Number(task.correctIndex);
+      } else if(type==="multiple_choice") {
+        const expected=task.correctIndices;
+        correct=Array.isArray(answer)&&Array.isArray(expected)&&answer.length===expected.length&&
+          answer.every(function(v){return Number.isInteger(v);})&&
+          answer.slice().sort(function(a,b){return a-b;}).every(function(v,i){return v===expected.map(Number).sort(function(a,b){return a-b;})[i];});
+      } else if(type==="ordering") {
+        correct=Array.isArray(answer)&&Array.isArray(task.correctOrder)&&answer.length===task.correctOrder.length&&
+          answer.every(function(v,i){return String(v)===String(task.correctOrder[i]);});
+      } else if(type==="short_text") {
+        correct=Array.isArray(task.acceptedAnswers)&&task.acceptedAnswers.some(function(v){return norm(v)===norm(answer);});
+      } else {
+        throw new Error("Неподдерживаемый тип задания '"+type+"' (ID "+id+"). Отправка остановлена, оценка не выставлена.");
+      }
+      if(correct) score+=points;
+    });
+    Object.keys(responses).forEach(function(id){if(!taskIds[id]) throw new Error("Ответ содержит неизвестное задание: "+id);});
+    const manualMax=review.reduce(function(sum,item){return sum+item.points;},0);
+    const result={objectiveScore:score,objectiveMax:maxScore-manualMax,totalMax:maxScore,
+      manualReview:review.length>0,manualItems:review.map(function(item){return {taskId:item.taskId,points:item.points};}),
+      status:review.length?"pending_review":"graded",percent:review.length?null:(maxScore?Math.round(score/maxScore*100):0)};
+    const status=review.length?"pending_review":"submitted";
+    const timestamp=new Date().toISOString();
+    updateMappedRecord_(sheet,found.row,{ResponsesJSON:JSON.stringify(responses),ResultJSON:JSON.stringify(result),
+      Status:status,SubmittedAt:timestamp,UpdatedAt:timestamp});
+    SpreadsheetApp.flush();
+    appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,
+      StudentName:user.name,Group:user.group,CourseId:String(row[m.CourseId]),TestId:String(row[m.ExamId]),
+      TestTitle:"Итоговый экзамен",Score:score,MaxScore:maxScore});
+    return {success:true,attemptId:attemptId,status:status,result:result};
   } finally { lock.releaseLock(); }
 }
 
