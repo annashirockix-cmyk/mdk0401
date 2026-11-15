@@ -254,6 +254,26 @@ test("reviewed assignments are included in public subject averages", () => {
   assert.ok(student, "the student's course rating should be returned");
   assert.equal(student.averageGrade, 4);
   assert.equal(student.completed, 1);
+
+  const zeroAssignment = api.createAssignment_({
+    token: "teacherToken", courseId: "07.01", targetType: "group",
+    targetValue: "ТО-21", title: "Работа с нулевой оценкой",
+    instructions: "Проверка корректного учёта оценки 0."
+  });
+  const zeroSubmission = api.submitAssignment_({
+    token: "studentToken", assignmentId: zeroAssignment.id, answer: "Ответ"
+  });
+  api.gradeAssignment_({
+    token: "teacherToken", submissionId: zeroSubmission.submissionId,
+    grade: 0, feedback: "Работа не выполнена."
+  });
+  const zeroPublic = api.getPublicSubjectRatings_({ token: "studentToken" });
+  const zeroStudent = zeroPublic.ratings["07.01"].find(item => item.name === "Иван Иванов");
+  assert.equal(zeroStudent.averageGrade, 2, "a reviewed zero must count alongside the earlier grade 4");
+  assert.equal(zeroStudent.completed, 2, "a reviewed zero is a completed, graded assignment");
+  const zeroSummary = api.getMyCourseResults_({ token: "studentToken", courseId: "07.01" }).summary;
+  assert.equal(zeroSummary.graded, 2);
+  assert.equal(zeroSummary.averageGrade, 2);
 });
 
 test("manual and written grades expose feedback separately in student course results", () => {
