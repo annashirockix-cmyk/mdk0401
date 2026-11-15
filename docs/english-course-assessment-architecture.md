@@ -153,8 +153,10 @@ Supported task types should be deliberately limited to those the current rendere
 ### 4.3 Final exams — `EnglishExamVariantsBank`
 - 10 exam definitions: one for each course and semester.
 - 15 independently assembled variants per exam: 150 total.
-- Added a server-side structural validator `validateEnglishExamVariantRegistry_`: it enforces five logical course numbers (1–5), maps Courses 1–2 to the portal's real `ENB` discipline ID and Courses 3–5 to `ENT`, checks the Basic/Technical split, all ten semester slots, 15 variants per slot, globally unique variant IDs, and a non-empty blueprint reference for each variant. The logical slot key remains `EN_C0n` in the validator only; it is not a portal discipline ID. Regression tests cover missing slots, wrong track, wrong portal discipline ID, wrong variant count, duplicate IDs, and missing blueprint references.
-- Boundary: this validator is not an imported exam bank or a student runtime. Actual task content, blueprint correctness, protected storage, variant assignment, and start/submit endpoints remain to be implemented and tested.
+- The registry validator `validateEnglishExamVariantRegistry_` enforces five logical course numbers (1–5), maps Courses 1–2 to `ENB` and Courses 3–5 to `ENT`, checks all ten semester slots, 15 variants per slot, globally unique IDs and blueprint references.
+- The payload validator `validateEnglishFinalVariantPayload_` now checks duration, 10–60 tasks, supported task types, unique IDs/prompts, option/key bounds, written rubrics and the sum of task points against `maxScore`. Import rejects malformed payloads before staging any bank rows. Regression tests include malformed schemas and a real authored pilot.
+- One authored pilot now exists at `docs/english-final-exam-c01-s01-v01-pilot.json` (Course 1, Semester 1): 10 tasks, listening script, reading, grammar, vocabulary, functional communication, ordering and one teacher-reviewed writing task. It is a pilot for editorial review, not a complete 15-variant slot and not imported.
+- Boundary: the 150-variant bank is still incomplete. Nine other slot blueprints are provisional and the remaining 149 variants still need authoring, duplication checks, teacher/subject review and protected import. The persistent runtime is implemented, but no final-exam variants have been imported into the live Sheets bank.
 - Each variant references a balanced set of tasks from the appropriate course-semester blueprint.
 
 #### Persistent storage and attempt lifecycle (implementation contract)
