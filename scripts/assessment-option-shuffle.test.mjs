@@ -157,6 +157,11 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(save,/Письменная работа принимается без оценки/);
   assert.match(save,/Результат студента должен отправляться через защищённый маршрут проверки/);
   assert.match(save,/serverVerifiedEnglishVpr !== true/);
+  assert.match(code,/function isTrustedLegacyGrade_\\(record\\) \\{\\s*return false;/);
+  assert.match(code,/safeStudentProgressResults_\\(savedPayload\\.results\\)/);
+  assert.match(code,/record\\.grade != null \\|\\| record\\.score != null \\|\\| record\\.percent != null/);
+  assert.match(app,/Grades are displayed only from server-authoritative result records/);
+  assert.doesNotMatch(app,/localStorage\\.getItem\\('portal_grades'\\)/);
   const gradeWritten = extract(code,"gradeWrittenResult_");
   assert.match(gradeWritten,/\^\(prac_\|self_\|written_self_\)/);
   assert.match(gradeWritten,/Проверять письменные работы может только преподаватель/);
