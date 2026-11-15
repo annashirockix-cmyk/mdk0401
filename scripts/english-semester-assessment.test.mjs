@@ -279,8 +279,8 @@ test("five authored Technical English Course 4 Semester 2 pilots match the prote
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,5);
 });
 
-test("ten authored Technical English Course 4 Semester 2 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:10},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c04-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
+test("fifteen authored Technical English Course 4 Semester 2 pilots match the protected runtime schema",()=>{
+  const pilots=Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c04-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
   const source=extractFunction("validateEnglishFinalVariantPayload_");
   const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
   const allPrompts=[];
@@ -298,7 +298,7 @@ test("ten authored Technical English Course 4 Semester 2 pilots match the protec
     assert.match(functional.options[functional.correctIndex],/Could you identify|Let's use the correct term|sensor provides input|Could we check the input|This may be one possible|Could we confirm the exact|I can provide the version|Could we check the address|Could we add the correct unit|I cannot share credentials/i);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,10);
+  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
 });
 
 test("five authored Technical English Course 5 Semester 1 pilots match the protected runtime schema",()=>{
