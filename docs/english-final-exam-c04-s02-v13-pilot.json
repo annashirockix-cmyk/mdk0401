@@ -94,7 +94,7 @@
     {
       "id": "c4s2v13_v01",
       "type": "short_text",
-      "prompt": "Complete the technical term: monitoring.",
+      "prompt": "The process of observing equipment condition over time is condition ___.",
       "acceptedAnswers": [
         "monitoring"
       ],
