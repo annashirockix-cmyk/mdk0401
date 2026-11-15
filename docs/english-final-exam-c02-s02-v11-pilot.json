@@ -25,7 +25,7 @@
     {
       "id": "c2s2v11_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. What should students read beforehand?",
+      "prompt": "Listening 2. Which preparatory material is mentioned for students?",
       "audioText": "The college economics club is organising a discussion about responsible consumer choices. It will take place in the seminar room on Wednesday at one thirty. A guest speaker will explain product labels, repair services and the environmental cost of packaging. Students should read the short case study on the club page before the discussion.",
       "options": [
         "On Friday",
