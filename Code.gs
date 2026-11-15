@@ -703,20 +703,29 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
   if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
   const testId = String(data.testId || "test");
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
-  // English VPR and semester tests have dedicated server-side graders. A browser
-  // must never be able to create a trusted-looking result by calling saveResult.
+  // Assessment namespaces are never accepted through the generic browser
+  // result endpoint. They must use their dedicated server-issued attempt flows.
+  // Do not make this conditional on a bank currently existing: otherwise a
+  // forged request could create a trusted-looking grade before import.
   if (user.role === "student" && /^english_vpr_/.test(testId) && serverVerifiedEnglishVpr !== true) {
     throw new Error("Результат английского ВПР принимается только через серверную проверку ответов.");
   }
   if (user.role === "student" && /^english_semester_/.test(testId)) {
     throw new Error("Результат семестровой контрольной принимается только через серверную проверку ответов.");
   }
-  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId)||/^english_/.test(testId));
-  if(user.role==="student"&&/^__final__/.test(testId))throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
-  if(user.role==="student"&&(testId.indexOf("test_")===0||/^self_.+_\d+$/.test(testId))){
-    const topicId=testId.indexOf("test_")===0?testId.slice(5):testId.replace(/^self_(.+)_\d+$/,"$1");
-    const ids=testId.indexOf("test_")===0?["topic_"+topicId,"hard_"+topicId]:[testId,"topic_"+topicId];
-    const resolved=resolvedBuiltInBankIds_(courseId,ids);
+  if (user.role === "student" && /^english_/.test(testId)) {
+    throw new Error("Контрольные работы английского принимаются только через защищённую серверную проверку.");
+  }
+  const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\\d+$/.test(testId)||/^english_/.test(testId));
+  if (user.role === "student" && /^__final__/.test(testId)) {
+    throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
+  }
+  if (user.role === "student" && /^test_/.test(testId)) {
+    throw new Error("Встроенные тесты должны отправляться через защищённую серверную проверку.");
+  }
+  if (user.role === "student" && /^self_.+_\\d+$/.test(testId)) {
+    const topicId=testId.replace(/^self_(.+)_\\d+$/,"$1");
+    const resolved=resolvedBuiltInBankIds_(courseId,[testId,"topic_"+topicId]);
     if(builtInQuestions_(courseId,resolved).length)throw new Error("Встроенные тесты должны отправляться через защищённую серверную проверку.");
   }
   const lock=LockService.getScriptLock();lock.waitLock(10000);
