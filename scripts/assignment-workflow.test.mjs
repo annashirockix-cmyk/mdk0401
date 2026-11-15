@@ -421,6 +421,7 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(api, /getAssignments\s*:/);
   assert.match(api, /submitAssignment\s*:/);
   assert.match(api, /gradeAssignment\s*:/);
+  assert.ok(studentProgress.includes('&&!/^assignment_/.test(String(x.testId||""))'), "assignment grades must be counted from submission history only, not twice from getResults and getAssignments");
   assert.match(serviceWorker, /portal-cache-v\d+/);
   assert.match(serviceWorker, /\.\/teacher-tasks\.js/);
 });
