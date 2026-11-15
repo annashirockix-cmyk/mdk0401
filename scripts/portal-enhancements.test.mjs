@@ -229,7 +229,7 @@ test("custom course materials normalize spreadsheet date-coerced course IDs", ()
   assert.match(server, /const courseId = normalizeCourseId_\(row\[1\] \|\| ""\);/);
   assert.match(server, /sameCourseId_\(rows\[i\]\[1\], courseId\)/);
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
-  assert.match(server, /courseId: normalizeCourseId_\(row\[1\] \|\| ""\), topicId:/);
+  assert.match(server, /id: String\(row\[0\]\), mdkId: courseId, courseId: courseId,/);
   assert.match(server, /courseId:normalizeCourseId_\(row\[1\]\|\|""\),topicId:/);
   assert.match(server, /editor_\(data, courseId\)/);
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
@@ -245,7 +245,7 @@ test("teacher-created materials have individual server-side visibility switches"
   assert.match(server, /contentAccess:/);
   assert.match(server, /function getCustomContentAccess_\(/);
   assert.match(server, /function setCustomContentAccess_\(/);
-  assert.match(server, /if \(!customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, record\.type\)\) throw new Error\("Этот тест закрыт преподавателем\."/);
+  assert.match(server, /if \(!customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, "test"\)\) throw new Error\("Этот тест закрыт преподавателем\."/);
   assert.match(server, /if \(!customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, record\.type\)\) throw new Error\("Эта игра закрыта преподавателем\."/);
   assert.match(api, /getCustomContentAccess:function/);
   assert.match(api, /setCustomContentAccess:function/);
@@ -855,15 +855,15 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.doesNotMatch(engine, /window\.ENGLISH_VPR_EXAMS/);
   assert.match(bank, /const exam = seeds\[track\]/);
   assert.match(html, /api\.js\?v=\d+/);
-  assert.match(html, /english-vpr-engine\.js\?v=22/);
+  assert.match(html, /english-vpr-engine\.js\?v=23/);
 });
 
 
 test("English VPR grades numbered choices correctly and renders per-gap option lists", () => {
   const server = read("EnglishVPR-Sheets.gs");
   const engine = read("english-vpr-engine.js");
-  assert.match(server, /Number\(ans\[i\]\)===Number\(item\[1\]\)/);
-  assert.doesNotMatch(server, /Number\(ans\[i\]\)===Number\(item\[1\]\)\+1/);
+  assert.match(server, /if\(selected===Number\(item\[1\]\)\)objective\+\+/);
+  assert.match(server, /selected=order\[selected-1\]\+1/);
   assert.match(engine, /\(\(task\.itemOptions && task\.itemOptions\[i\]\) \|\| task\.options \|\| \[\]\)\.map/);
   assert.match(engine, /Десять кратких ответов в задании 7/);
 });
@@ -894,7 +894,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=22"));
+  assert.ok(html.includes("english-vpr-engine.js?v=23"));
   assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
@@ -950,7 +950,7 @@ test("server builds 45-question advanced non-English exams with protected answer
     ,Utilities:{getUuid:()=>"exam-test"}
     ,CacheService:{getScriptCache:()=>({put:(key,value)=>{sandbox.cached=JSON.parse(value);}})}
   };
-  vm.runInNewContext(server.slice(start,end)+";this.getFinalExam_=getFinalExam_;",sandbox,{timeout:1000});
+  vm.runInNewContext(extractFunction(server, "sanitizeAssessmentQuestionForStudent_")+"\n"+server.slice(start,end)+";this.getFinalExam_=getFinalExam_;",sandbox,{timeout:1000});
   const result=sandbox.getFinalExam_({courseId:"07.01"});
   assert.equal(result.questions.length,45);
   assert.equal(sandbox.cached.questions.length,45);
@@ -978,7 +978,8 @@ test("semester tests are student-visible and scored only by the protected server
   assert.match(server, /case "submitenglishsemestertest": result = submitEnglishSemesterTest_\(data\); break;/);
   assert.match(server, /function submitEnglishSemesterTest_\(data\)/);
   assert.match(server, /question\.correct/);
-  assert.ok(server.includes("Number.isInteger(answer) && answer === correct"));
+  assert.ok(server.includes("return Number.isInteger(order[answer]) ? order[answer] : -1;"));
+  assert.ok(server.includes("canonicalAnswers[index] === Number(question.correct)"));
   assert.match(server, /english_semester_/);
   assert.match(server, /Submission:JSON\.stringify\(\{answers:answers\}\)/);
 });
