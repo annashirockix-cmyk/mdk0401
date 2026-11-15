@@ -1091,7 +1091,8 @@ function getResults_(data) {
   const user=auth_(data);
   if(user.role!=="admin"&&user.role!=="teacher")throw new Error("Недостаточно прав.");
   let list=results_().getDataRange().getValues().slice(1).filter(function(r){return !!r[0];}).map(function(r){
-    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:String(r[13]||"")};
+    const submission=String(r[13]||""),feedbackMatch=submission.match(/\\n\\nКомментарий преподавателя:([\\s\\S]*)$/);
+    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:feedbackMatch?String(feedbackMatch[1]||"").trim():""};
   });
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
