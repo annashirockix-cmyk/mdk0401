@@ -106,8 +106,8 @@
       "type": "single_choice",
       "prompt": "You are writing to the canteen manager with a suggestion. Which opening is most appropriate?",
       "options": [
-        "I would like to suggest introducing a reusable-container discount.",
         "I demand that you change everything immediately.",
+        "I would like to suggest introducing a reusable-container discount.",
         "Your current system is terrible.",
         "I do not care what you decide."
       ],
