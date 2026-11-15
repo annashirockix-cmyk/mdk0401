@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO factors to consider when selecting an optional course.",
       "options": [
-        "Whether it fits your timetable",
-        "Whether it supports your learning goals",
         "Whether a friend dislikes it",
-        "The colour of the course website"
+        "The colour of the course website",
+        "Whether it fits your timetable",
+        "Whether it supports your learning goals"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -106,12 +106,12 @@
       "type": "single_choice",
       "prompt": "You need more information before choosing a course. What should you ask?",
       "options": [
-        "Could you explain what topics the course covers?",
         "I choose without reading anything.",
+        "Could you explain what topics the course covers?",
         "Send me somebody else's results.",
         "You must decide for me."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
