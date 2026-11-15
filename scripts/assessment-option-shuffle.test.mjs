@@ -66,7 +66,7 @@ test("custom test scoring accepts both numeric keys and legacy option-text keys"
 
 test("generic protected question-bank engine shuffles options and keeps a server mapping", () => {
   const safe = new Function("shuffledServer_", "sanitizeAssessmentQuestionForStudent_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer, sanitizeQuestion);
-  const entry = {bankId:"bank",questionId:"q1",question:{type:"mc",q:"Question",options:["red","blue","green","black"],correct:2}};
+  const entry = {bankId:"bank",questionId:"q1",questionIndex:0,question:{type:"mc",q:"Question",options:["red","blue","green","black"],correct:2}};
   const maps = {};
   const result = safe(entry,maps);
   const displayed = result.question.options;
@@ -134,12 +134,12 @@ test("built-in and final exams keep answer keys server-side and remap submitted 
   assert.match(extract(code,"safeBuiltInQuestion_"),/optionMaps/);
   assert.match(extract(code,"submitBuiltInTest_"),/canonicalAnswers/);
   const builtInSubmit = extract(code,"submitBuiltInTest_");
-  assert.match(builtInSubmit,/lockedAttemptRaw=cache\\.get\\("builtInAttempt:"\\+attemptId\\)/);
-  assert.match(builtInSubmit,/cache\\.remove\\("builtInAttempt:"\\+attemptId\\)/);
-  assert.match(code,/function builtInScoringSnapshot_\\(question\\)/);
+  assert.match(builtInSubmit, /lockedAttemptRaw=cache\.get\("builtInAttempt:"\+attemptId\)/);
+  assert.match(builtInSubmit, /cache\.remove\("builtInAttempt:"\+attemptId\)/);
+  assert.match(code, /function builtInScoringSnapshot_\(question\)/);
   assert.match(code,/builtInScoringSnapshot_\\(entry\\.question\\)/);
   assert.match(code,/\["type","correct","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"\]/);
-  assert.match(builtInSubmit,/Array\\.isArray\\(attempt\\.questions\\)\\?attempt\\.questions:\\[\\]/);
+  assert.match(builtInSubmit, /Array\.isArray\(attempt\.questions\)\?attempt\.questions:\[\]/);
   assert.doesNotMatch(builtInSubmit,/const entries=builtInQuestions_\\(courseId,resolvedIds\\)/);
   const customSubmit = extract(code,"submitCustomTest_");
   assert.match(customSubmit,/lockedAttemptRaw = cache\\.get\\("customTestAttempt:" \\+ attemptId\\)/);
@@ -158,7 +158,7 @@ test("built-in and final exams keep answer keys server-side and remap submitted 
 });
 
 test("VPR requires the server-issued attempt token for submission", () => {
-  assert.match(extract(vpr,"getEnglishVprExam_"),/englishVprAttempt:/);
+  assert.match(extract(vpr,"startEnglishVprExam_"), /attemptId:attemptId/);
   assert.match(extract(vpr,"submitEnglishVprExam_"),/data\.attemptId/);
   assert.match(extract(vpr,"submitEnglishVprExam_"),/attempt\.email !== user\.email/);
   assert.match(fs.readFileSync(path.join(root,"english-vpr-engine.js"),"utf8"),/attemptId:attemptId/);
@@ -261,7 +261,7 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(save,/Письменная работа принимается без оценки/);
   assert.match(save,/Результат студента должен отправляться через защищённый маршрут проверки/);
   assert.match(save,/serverVerifiedEnglishVpr !== true/);
-  assert.match(code,/function isTrustedLegacyGrade_\\(record\\) \\{\\s*return false;/);
+  assert.match(code, /function isTrustedLegacyGrade_\(record\) \{\s*return false;/);
   assert.match(code,/safeStudentProgressResults_\\(savedPayload\\.results\\)/);
   assert.match(code,/record\\.grade != null \\|\\| record\\.score != null \\|\\| record\\.percent != null/);
   assert.match(app,/Grades are displayed only from server-authoritative result records/);
@@ -320,7 +320,7 @@ test("English semester submissions require a server-issued timed attempt", () =>
 
 test("English VPR duration is measured from the server attempt start", () => {
   const prepare = extract(vpr, "startEnglishVprExam_");
-  assert.match(prepare, /startedAt:Date\.now\(\)/);
+  assert.match(prepare, /const startedAt = Date\.now\(\)/);
   const submit = extract(vpr, "submitEnglishVprExam_");
   assert.match(submit, /const startedAt = Number\(attempt\.startedAt\)/);
   assert.match(submit, /Date\.now\(\) - startedAt/);
@@ -332,7 +332,7 @@ test("English VPR server timer starts only when the student launches the exam", 
   const get = extract(vpr, "getEnglishVprExam_");
   assert.doesNotMatch(get, /englishVprAttempt:/);
   const start = extract(vpr, "startEnglishVprExam_");
-  assert.match(start, /startedAt:Date\.now\(\)/);
+  assert.match(start, /const startedAt = Date\.now\(\)/);
   assert.match(start, /englishVprPrepareAttempt_\(source\)/);
   assert.match(code, /case "startenglishvprexam": result = startEnglishVprExam_\(data\); break;/);
   const client = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
@@ -348,7 +348,7 @@ test("reopening an active English assessment preserves the original server start
   assert.match(vprStart, /activeAttempt\.startedAt/);
   assert.match(vprStart, /activeAttempt\.displayExam/);
   const vprSubmit = extract(vpr, "submitEnglishVprExam_");
-  assert.match(vprSubmit, /lockedAttempt\.stableKey/);
+  assert.match(vprSubmit, /finalAttempt\.stableKey/);
   const semesterStart = extract(code, "startEnglishSemesterTest_");
   assert.match(semesterStart, /attemptCacheKey|englishSemesterAttemptCacheKey_/);
   const client = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
@@ -371,7 +371,7 @@ test("English VPR start is serialized and enforces the server attempt limit", ()
 
 test("English VPR attempt token is retained until the result write succeeds", () => {
   const submit = extract(vpr, "submitEnglishVprExam_");
-  const saveAt = submit.indexOf("const result=saveResult_");
+  const saveAt = submit.indexOf("result=saveResult_");
   const cleanupAt = submit.indexOf("const cleanupLock = LockService.getScriptLock()");
   assert.ok(saveAt >= 0 && cleanupAt > saveAt, "cleanup must happen after server result persistence");
   assert.match(submit.slice(0, saveAt), /attemptLock\.releaseLock\(\)/);
