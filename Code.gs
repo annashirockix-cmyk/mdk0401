@@ -705,17 +705,27 @@ function getStudents_(data) {
   const students = values.slice(1).filter(function (row) {
     if (!row[map.Email]) return false;
     // Администратору нужны все записи, включая преподавателей, для управления доступом.
-    // Преподаватель получает только список обучающихся.
+    // Преподаватель получает только обучающихся, имеющих хотя бы одну общую дисциплину.
     return user.role === "admin" || String(row[map.Role]).toLowerCase() === "student";
   }).map(function (row) {
+    const enrolled = String(row[map.Courses] || "").split(",").map(function(id){ return id.trim(); }).filter(Boolean);
+    const visibleCourses = enrolled.filter(function(id) {
+      return user.role === "admin" || hasCourseAccess_(user,id) ||
+        (id === "EN" && (hasCourseAccess_(user,"ENB") || hasCourseAccess_(user,"ENT")));
+    });
+    let payload = {};
+    try { payload = JSON.parse(row[map.Payload] || "{}"); } catch(e) {}
     return {
       email: row[map.Email],
       name: row[map.Name],
       group: row[map.Group],
       role: row[map.Role],
-      courses: String(row[map.Courses] || "").split(",").map(function(id){ return id.trim(); }).filter(function(id){ return user.role === "admin" || hasCourseAccess_(user,id) || (id === "EN" && (hasCourseAccess_(user,"ENB") || hasCourseAccess_(user,"ENT"))); }),
-      payload: (function(){ let p={}; try{p=JSON.parse(row[map.Payload]||"{}");}catch(e){} if(user.role==="admin") return String(row[map.Payload]||""); return JSON.stringify({manualGrades:p.manualGrades||{},xp:Number(p.xp)||0,avatar:p.avatar||null,avatarEmoji:p.avatarEmoji||null,avatarEffect:p.avatarEffect||null}); })()
+      courses: visibleCourses,
+      payload: user.role === "admin" ? String(row[map.Payload] || "") :
+        JSON.stringify({manualGrades:payload.manualGrades||{},xp:Number(payload.xp)||0,avatar:payload.avatar||null,avatarEmoji:payload.avatarEmoji||null,avatarEffect:payload.avatarEffect||null})
     };
+  }).filter(function(student) {
+    return user.role === "admin" || student.courses.length > 0;
   });
   return { success: true, students: students };
 }
