@@ -280,3 +280,14 @@ test("reopening an active English assessment preserves the original server start
   assert.match(client, /durationSeconds - Math\.floor\(Math\.max\(0, Date\.now\(\) - Number\(startedAt\)\) \/ 1000\)/);
   assert.match(client, /duration-Math\.floor\(Math\.max\(0,Date\.now\(\)-Number\(startedAt\)\)\/1000\)/);
 });
+
+
+test("English VPR start is serialized and enforces the server attempt limit", () => {
+  const start = extract(vpr, "startEnglishVprExam_");
+  assert.match(start, /LockService\.getScriptLock\(\)/);
+  assert.match(start, /lock\.waitLock\(10000\)/);
+  assert.match(start, /resultAttemptRows_\(\)/);
+  assert.match(start, /settingValue_\("testAttempts:"/);
+  assert.match(start, /prior >= limit/);
+  assert.match(start, /finally\s*\{\s*lock\.releaseLock\(\)/);
+});
