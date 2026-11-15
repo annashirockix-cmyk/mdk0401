@@ -42,7 +42,7 @@
 - C. for
 - D. during
 
-**107.** Choose the correct sentence.
+**107.** Select the grammatically correct statement about traffic levels in a village.
 - A. There is fewer traffic in the village.
 - B. There are less traffic in the village.
 - C. There is less traffic in the village.
