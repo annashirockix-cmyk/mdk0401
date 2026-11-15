@@ -207,12 +207,34 @@ function getEnglishVprExam_(data) {
     if (String(values[i][map.Track]||"") !== track || String(values[i][map.Active]||"").toUpperCase() !== "TRUE") continue;
     const source = JSON.parse(String(values[i][map.ExamJSON]||"{}"));
     validateEnglishVprExam_(track, source);
-    if (user.role !== "student") return {success:true,track:track,exam:sanitizeEnglishVprExam_(source)};
-    const attemptId = Utilities.getUuid().replace(/-/g, "");
+    return {success:true,track:track,exam:sanitizeEnglishVprExam_(source)};
+  }
+  return {success:false,error:"Экзамен ещё не импортирован преподавателем."};
+}
+
+/**
+ * Выдаёт персональный серверный вариант ВПР и запускает таймер только
+ * после нажатия студентом кнопки «Начать экзамен».
+ */
+function startEnglishVprExam_(data) {
+  const user = auth_(data), track = String(data.track || "").toLowerCase();
+  if (user.role !== "student" || ["basic", "technical"].indexOf(track) < 0) {
+    throw new Error("Нет доступа к запуску экзамена.");
+  }
+  const courseId = track === "basic" ? "ENB" : "ENT";
+  if (!hasCourseAccess_(user, courseId) && !hasCourseAccess_(user, "EN")) {
+    throw new Error("Эта дисциплина не назначена вашему аккаунту.");
+  }
+  const sh = englishVprBank_(), values = sh.getDataRange().getValues(), map = headerMap_(sh);
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][map.Track] || "") !== track || String(values[i][map.Active] || "").toUpperCase() !== "TRUE") continue;
+    const source = JSON.parse(String(values[i][map.ExamJSON] || "{}"));
+    validateEnglishVprExam_(track, source);
     const prepared = englishVprPrepareAttempt_(source);
+    const attemptId = Utilities.getUuid().replace(/-/g, "");
     CacheService.getScriptCache().put("englishVprAttempt:" + attemptId, JSON.stringify({
-      email:user.email, track:track, courseId:courseId, exam:source, optionMaps:prepared.optionMaps,
-      startedAt:Date.now()
+      email:user.email, track:track, courseId:courseId, exam:source,
+      optionMaps:prepared.optionMaps, startedAt:Date.now()
     }), 7200);
     return {success:true,track:track,attemptId:attemptId,exam:sanitizeEnglishVprExam_(prepared.exam)};
   }
