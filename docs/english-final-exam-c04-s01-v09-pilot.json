@@ -25,7 +25,7 @@
     {
       "id": "c4s1v09_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which document should students bring?",
+      "prompt": "Listening 2. What specification document is needed for the power-supply lesson?",
       "audioText": "The power supply documentation class will take place on Thursday at twelve fifteen in the electronics room. Students should bring a copy of the sample specification sheet. The instructor will identify the input range, output rating and connector information. The class will compare two documents and discuss why the model reference must be checked before information is used.",
       "options": [
         "On Friday",
