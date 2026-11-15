@@ -113,10 +113,10 @@
 - D. to review
 
 **118.** Choose the most appropriate reply to “Could you possibly send me the updated timetable?”
-- A. You are timetable yesterday.
+- A. Certainly. I sent it tomorrow afternoon.
 - B. Certainly. I'll email it to you this afternoon.
-- C. I have no email yesterday.
-- D. You must send it yourself.
+- C. Certainly. I'll emailing it this afternoon.
+- D. Certainly. I'll email to you it this afternoon.
 
 **119.** In the text, the word *outdated* is closest in meaning to:
 - A. carefully organised
