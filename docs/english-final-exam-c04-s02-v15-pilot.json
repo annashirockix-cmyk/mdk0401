@@ -11,7 +11,7 @@
     {
       "id": "c4s2v15_l01",
       "type": "single_choice",
-      "prompt": "Listening 1. When does the session begin?",
+      "prompt": "Listening 1. When does the incident-reporting session start?",
       "audioText": "The safety and engineering tutor will review incident communication on Friday at ten fifteen. Students should bring the incident-report template. The lesson will distinguish an observation, an immediate action and a later investigation finding.",
       "options": [
         "At ten fifteen on Friday",
@@ -25,7 +25,7 @@
     {
       "id": "c4s2v15_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which material should students bring?",
+      "prompt": "Listening 2. Which reporting template is required?",
       "audioText": "The safety and engineering tutor will review incident communication on Friday at ten fifteen. Students should bring the incident-report template. The lesson will distinguish an observation, an immediate action and a later investigation finding.",
       "options": [
         "A personal notebook",
@@ -78,12 +78,12 @@
     {
       "id": "c4s2v15_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details relevant to engineering incident communication.",
+      "prompt": "Which TWO details belong in an initial engineering incident report?",
       "options": [
         "An unrelated appointment",
         "A personal preference",
-        "The relevant technical component or evidence",
-        "The relevant procedure or documentation"
+        "Observed event and location",
+        "Immediate action taken"
       ],
       "correctIndices": [
         2,
@@ -103,7 +103,7 @@
     {
       "id": "c4s2v15_f01",
       "type": "single_choice",
-      "prompt": "Choose the most appropriate professional response.",
+      "prompt": "The cause has not yet What should you say?",
       "options": [
         "I will guess and continue.",
         "The cause has not yet been established; the observation and immediate action are recorded below.",
