@@ -81,9 +81,9 @@
       "prompt": "Choose TWO polite expressions for asking for help.",
       "options": [
         "I demand an answer.",
+        "Do it for me.",
         "Would you mind helping me?",
-        "Could you tell me, please?",
-        "Do it for me."
+        "Could you tell me, please?"
       ],
       "correctIndices": [
         2,
