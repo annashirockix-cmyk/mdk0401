@@ -791,6 +791,9 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
       if(Number(latest[5])===0) {
         throw new Error("Работа уже отправлена и ожидает проверки преподавателя.");
       }
+      if(Number(latest[5])>2) {
+        throw new Error("Работа уже проверена и зачтена. Повторная отправка не требуется.");
+      }
     }
     if(assessment){
       const raw=settingValue_("testAttempts:"+email+":"+courseId+":"+testId);
@@ -1406,6 +1409,12 @@ function submitAssignment_(data) {
     const i = v.slice(1).findIndex(function(r){ return String(r[m.AssignmentId]) === id && email_(r[m.StudentEmail]) === student.email; });
     const now = new Date().toISOString();
     const submissionId = i >= 0 ? String(v[i+1][m.Id]) : Utilities.getUuid();
+    if (i >= 0 && String(v[i+1][m.Status] || "") === "reviewed") {
+      const previousGrade = Number(v[i+1][m.Grade]);
+      if (!isFinite(previousGrade) || previousGrade > 2) {
+        throw new Error("Работа уже проверена и зачтена. Повторная отправка не требуется.");
+      }
+    }
     const hist = assignmentSubmissionHistory_(), hv = hist.getDataRange().getValues(), hm = headerMap_(hist);
     const saved = hv.slice(1).filter(function(r){ return String(r[hm.SubmissionId] || "") === submissionId; });
     let attempt = saved.length + 1;
