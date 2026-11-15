@@ -2986,15 +2986,17 @@ function validateEnglishExamVariantRegistry_(exams) {
   const seenSlots = {}, seenVariants = {};
   let variantCount = 0;
   exams.forEach(function(exam) {
-    const match = /^EN_C0([1-5])$/.exec(String(exam && exam.courseId || ""));
-    const courseNo = match ? Number(match[1]) : 0;
+    const courseNo = Number(exam && exam.courseNo);
     const semester = Number(exam && exam.semester);
     const expectedTrack = courseNo >= 3 ? "technical" : "basic";
-    const slotKey = String(exam && exam.courseId || "") + "_S" + semester;
-    if (!courseNo || (semester !== 1 && semester !== 2) ||
+    const expectedCourseId = courseNo >= 3 ? "ENT" : "ENB";
+    const slotKey = "EN_C0" + courseNo + "_S" + semester;
+    if (courseNo < 1 || courseNo > 5 || Math.floor(courseNo) !== courseNo ||
+        (semester !== 1 && semester !== 2) ||
+        String(exam.courseId || "").toUpperCase() !== expectedCourseId ||
         String(exam.track || "").toLowerCase() !== expectedTrack ||
         seenSlots[slotKey] || !Array.isArray(exam.variants) || exam.variants.length !== 15) {
-      throw new Error("Каждый курс и семестр должен иметь одну запись с правильным направлением и ровно 15 вариантами.");
+      throw new Error("Каждый курс и семестр должен иметь одну запись с действующим ID дисциплины, правильным направлением и ровно 15 вариантами.");
     }
     seenSlots[slotKey] = true;
     exam.variants.forEach(function(variant) {
