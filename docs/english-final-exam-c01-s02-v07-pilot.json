@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 07",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v07_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the new menu start?",
+      "audioText": "The college canteen is introducing a new lunch menu next week. Students can choose a vegetable soup, a chicken wrap or a bean salad. The vegetarian option is marked with a green symbol. Water is available free of charge, and fruit can be bought near the till. Please tell the canteen staff about any food allergies before you order.",
+      "options": [
+        "Next week",
+        "Next month",
+        "Tomorrow",
+        "Today"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v07_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should students tell the staff before ordering?",
+      "audioText": "The college canteen is introducing a new lunch menu next week. Students can choose a vegetable soup, a chicken wrap or a bean salad. The vegetarian option is marked with a green symbol. Water is available free of charge, and fruit can be bought near the till. Please tell the canteen staff about any food allergies before you order.",
+      "options": [
+        "Their favourite subject",
+        "Any food allergies",
+        "Their home address",
+        "Their exam results"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v07_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Dima has a busy timetable and sometimes forgets to have lunch. His teacher suggests preparing a simple meal the night before. Dima starts bringing a sandwich, fruit and a bottle of water to college. He says he feels more energetic in afternoon lessons. He still buys a hot meal at the canteen when he has enough time between classes. What does Dima prepare the night before?",
+      "options": [
+        "A new timetable",
+        "A sports uniform",
+        "A simple meal",
+        "A project presentation"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v07_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. How does he feel after changing his routine?",
+      "options": [
+        "Less interested in lessons",
+        "More tired",
+        "Always hungry",
+        "More energetic"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v07_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct quantifier: 'There isn't ___ water left in the bottle.'",
+      "options": [
+        "much",
+        "a few",
+        "many",
+        "several"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v07_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO healthy everyday habits for a college student.",
+      "options": [
+        "Skip every meal when busy.",
+        "Replace sleep with energy drinks.",
+        "Drink water during the day.",
+        "Include fruit or vegetables in meals."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v07_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A reaction to a food that can make someone ill is a food ___.'",
+      "acceptedAnswers": [
+        "allergy"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v07_f01",
+      "type": "single_choice",
+      "prompt": "You have a food allergy. What should you say in the canteen?",
+      "options": [
+        "This food is always bad.",
+        "Could you tell me whether this dish contains nuts? I have an allergy.",
+        "I eat everything.",
+        "Give me the green one."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v07_o01",
+      "type": "ordering",
+      "prompt": "Check the menu and allergy information; Choose a suitable meal; Tell the staff about an allergy; Collect the meal and drink",
+      "options": [
+        "Collect the meal and drink",
+        "Tell the staff about an allergy",
+        "Choose a suitable meal",
+        "Check the menu and allergy information"
+      ],
+      "correctOrder": [
+        "Check the menu and allergy information",
+        "Choose a suitable meal",
+        "Tell the staff about an allergy",
+        "Collect the meal and drink"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v07_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about healthy choices during a busy college day. Mention meals, drinking water and how to check food information if you have an allergy.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v07_audio",
+    "readingPassageId": "c1s2v07_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
