@@ -123,6 +123,8 @@ function handleRequest_(e) {
       case "startenglishvprexam": result = startEnglishVprExam_(data); break;
       case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
       case "importenglishexamvariants": result = importEnglishExamVariants_(data); break;
+      case "starenglishfinalexam": result = startEnglishFinalExam_(data); break;
+      case "resumenglishfinalexam": result = resumeEnglishFinalExam_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
@@ -3100,6 +3102,121 @@ function importEnglishExamVariants_(data) {
   } finally {
     lock.releaseLock();
   }
+}
+
+
+/** Remove server-only grading material before any exam task reaches the browser. */
+function sanitizeEnglishFinalExamTask_(value) {
+  if (Array.isArray(value)) return value.map(sanitizeEnglishFinalExamTask_);
+  if (!value || typeof value !== "object") return value;
+  const clean = {};
+  Object.keys(value).forEach(function(key) {
+    if (/(^|_)(answer|answers|correct|solution|explanation|rationale|rubric|markscheme|marking|grading|answerkey|key)(_|$)/i.test(key) ||
+        /^(correctAnswer|correctAnswers|answerKey|solutions|teacherNotes)$/i.test(key)) return;
+    clean[key] = sanitizeEnglishFinalExamTask_(value[key]);
+  });
+  return clean;
+}
+
+function englishFinalAttemptRow_(sheet, attemptId) {
+  const last = sheet.getLastRow();
+  if (last < 2) return null;
+  const map = headerMap_(sheet);
+  const idCol = map.AttemptId + 1;
+  const found = sheet.getRange(2, idCol, last - 1, 1).createTextFinder(String(attemptId))
+    .matchEntireCell(true).findNext();
+  if (!found) return null;
+  return {row:found.getRow(), values:sheet.getRange(found.getRow(),1,1,sheet.getLastColumn()).getValues()[0], map:map};
+}
+
+/**
+ * Assign and persist a final exam before returning sanitized tasks.
+ * Repeated start requests for the same student/course/semester resume the existing attempt.
+ */
+function startEnglishFinalExam_(data) {
+  const user = auth_(data);
+  const courseNo = Number(data.courseNo), semester = Number(data.semester);
+  if (user.role !== "student" || !Number.isInteger(courseNo) || courseNo < 1 || courseNo > 5 ||
+      (semester !== 1 && semester !== 2)) throw new Error("Нет доступа к итоговому экзамену.");
+  const courseId = courseNo <= 2 ? "ENB" : "ENT";
+  if (!hasCourseAccess_(user, courseId) && !hasCourseAccess_(user, "EN")) {
+    throw new Error("Эта дисциплина не назначена вашему аккаунту.");
+  }
+  const examId = "english_final_c" + courseNo + "_s" + semester;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const attempts = ensureSheet_("EnglishExamAttempts"), am = headerMap_(attempts);
+    const last = attempts.getLastRow();
+    if (last > 1) {
+      const rows = attempts.getRange(2,1,last-1,attempts.getLastColumn()).getValues();
+      for (let i=0;i<rows.length;i++) {
+        if (email_(rows[i][am.StudentEmail]) === user.email &&
+            String(rows[i][am.ExamId]) === examId &&
+            String(rows[i][am.Status]) === "in_progress") {
+          const deadline = new Date(rows[i][am.DeadlineAt]).getTime();
+          if (deadline > Date.now()) {
+            const snapshot = JSON.parse(String(rows[i][am.AttemptJSON] || "{}"));
+            return {success:true,attemptId:String(rows[i][am.AttemptId]),examId:examId,
+              variantId:String(rows[i][am.VariantId]),startedAt:rows[i][am.StartedAt],
+              deadlineAt:rows[i][am.DeadlineAt],tasks:sanitizeEnglishFinalExamTask_(snapshot.tasks || [])};
+          }
+          updateMappedRecord_(attempts,i+2,{Status:"expired",UpdatedAt:new Date().toISOString()});
+        }
+      }
+    }
+    const bank=ensureSheet_("EnglishExamVariantsBank"), bm=headerMap_(bank), bankLast=bank.getLastRow();
+    if (bankLast < 2) throw new Error("Итоговые экзаменационные варианты ещё не импортированы.");
+    const bankRows=bank.getRange(2,1,bankLast-1,bank.getLastColumn()).getValues().filter(function(row) {
+      return String(row[bm.ExamId])===examId && String(row[bm.Active]).toUpperCase()==="TRUE";
+    });
+    if (!bankRows.length) throw new Error("Для этого курса и семестра нет активных вариантов.");
+    const chosen=bankRows[Math.floor(Math.random()*bankRows.length)];
+    let variant;
+    try { variant=JSON.parse(String(chosen[bm.VariantJSON]||"{}")); }
+    catch(e) { throw new Error("Не удалось прочитать сохранённый вариант экзамена."); }
+    const tasks=variant.tasks || variant.questions;
+    if (!Array.isArray(tasks) || !tasks.length) throw new Error("Вариант не содержит массива tasks или questions.");
+    const duration=Math.max(15,Math.min(240,Number(variant.time || variant.durationMinutes) || 120));
+    const now=new Date(), deadline=new Date(now.getTime()+duration*60000), attemptId=Utilities.getUuid().replace(/-/g,"");
+    const privateSnapshot={tasks:tasks,variantMeta:{title:String(variant.title||"Итоговый экзамен"),durationMinutes:duration}};
+    appendMappedRecord_(attempts,{
+      AttemptId:attemptId,StudentEmail:user.email,StudentName:user.name,Group:user.group,
+      CourseId:courseId,ExamId:examId,VariantId:String(chosen[bm.VariantId]),Status:"in_progress",
+      StartedAt:now.toISOString(),DeadlineAt:deadline.toISOString(),SubmittedAt:"",
+      AttemptJSON:JSON.stringify(privateSnapshot),ResponsesJSON:"",ResultJSON:"",UpdatedAt:now.toISOString()
+    });
+    SpreadsheetApp.flush();
+    appendAttemptAudit_({EventType:"final_exam_assigned",ActorEmail:user.email,StudentEmail:user.email,
+      StudentName:user.name,Group:user.group,CourseId:courseId,TestId:examId,TestTitle:privateSnapshot.variantMeta.title});
+    return {success:true,attemptId:attemptId,examId:examId,variantId:String(chosen[bm.VariantId]),
+      startedAt:now.toISOString(),deadlineAt:deadline.toISOString(),
+      tasks:sanitizeEnglishFinalExamTask_(tasks)};
+  } finally { lock.releaseLock(); }
+}
+
+/** Resume is bound to the authenticated student; answer keys remain server-side. */
+function resumeEnglishFinalExam_(data) {
+  const user=auth_(data), attemptId=String(data.attemptId||"").trim();
+  if (user.role!=="student" || !attemptId) throw new Error("Не удалось восстановить попытку экзамена.");
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet=ensureSheet_("EnglishExamAttempts"), found=englishFinalAttemptRow_(sheet,attemptId);
+    if (!found) throw new Error("Попытка экзамена не найдена.");
+    const row=found.values,m=found.map;
+    if (email_(row[m.StudentEmail])!==user.email) throw new Error("Эта попытка не принадлежит текущему аккаунту.");
+    if (String(row[m.Status])!=="in_progress") throw new Error("Эта попытка уже завершена или закрыта.");
+    if (new Date(row[m.DeadlineAt]).getTime()<=Date.now()) {
+      updateMappedRecord_(sheet,found.row,{Status:"expired",UpdatedAt:new Date().toISOString()});
+      throw new Error("Время итогового экзамена истекло.");
+    }
+    const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}"));
+    return {success:true,attemptId:attemptId,examId:String(row[m.ExamId]),variantId:String(row[m.VariantId]),
+      startedAt:row[m.StartedAt],deadlineAt:row[m.DeadlineAt],
+      tasks:sanitizeEnglishFinalExamTask_(snapshot.tasks||[]),
+      responses:(function(){try{return JSON.parse(String(row[m.ResponsesJSON]||"{}"));}catch(e){return {};}})()};
+  } finally { lock.releaseLock(); }
 }
 
 function englishSemesterBank_() { return ensureSheet_("EnglishSemesterBank"); }
