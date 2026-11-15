@@ -230,7 +230,7 @@ test("custom course materials normalize spreadsheet date-coerced course IDs", ()
   assert.match(server, /sameCourseId_\(rows\[i\]\[1\], courseId\)/);
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
   assert.match(server, /id: String\(row\[0\]\), mdkId: courseId, courseId: courseId,/);
-  assert.match(server, /courseId:normalizeCourseId_\(row\[1\]\|\|""\),topicId:/);
+  assert.match(server, /courseId: courseId, topicId: String\(row\[2\] \|\| ""\), type: String\(row\[3\] \|\| ""\)/);
   assert.match(server, /editor_\(data, courseId\)/);
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
 });
