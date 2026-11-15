@@ -114,6 +114,8 @@ Ten Technical English pilot variants are drafted for C3-S2 (`v01`–`v10`), cove
 Five Technical English pilot variants are drafted for C3-S2 (`v01`–`v05`), addressing machine-tool components, CNC programme structure, machining operations, cutting-tool identification and workholding concepts. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
 
 
-### Course 4, Semester 1 — pilot authoring underway
+#### Course 4, Semester 1 — pilot authoring underway
+
+Ten Technical English pilot variants are drafted for C4-S1 (`v01`–`v10`), covering basic electrical circuits, electrical measurements, electronic components, energy consumption, fault description, transformer basics, equipment warning information, troubleshooting reports, power-supply documentation and cable identification. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Five variants remain. These are editorial-review drafts, not imported or released.
 
 Five Technical English pilot variants are drafted for C4-S1 (`v01`–`v05`), addressing basic electrical circuits, electrical measurements, electronic components, energy consumption and fault description. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
