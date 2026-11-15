@@ -1,0 +1,2286 @@
+{
+  "courseNo": 3,
+  "semester": 2,
+  "courseId": "ENT",
+  "track": "technical",
+  "variants": [
+    {
+      "variantId": "EN-C3-S2-V01",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 1",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v01_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the introduction take place?",
+            "audioText": "The machine tools department will introduce the main parts of a training lathe on Wednesday at nine. Students should meet in the theory classroom first, where the instructor will show a labelled diagram. The group will then observe the machine from the designated viewing area. No machine operation is planned during this introductory session.",
+            "options": [
+              "On Wednesday at nine",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v01_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Where will students meet first?",
+            "audioText": "The machine tools department will introduce the main parts of a training lathe on Wednesday at nine. Students should meet in the theory classroom first, where the instructor will show a labelled diagram. The group will then observe the machine from the designated viewing area. No machine operation is planned during this introductory session.",
+            "options": [
+              "On Friday",
+              "In the theory classroom",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v01_r01",
+            "type": "single_choice",
+            "prompt": "A conventional lathe rotates a workpiece while a cutting tool removes material. The main components include the bed, headstock, tailstock and carriage. Each part has a different function, and the machine type determines the available operations. Before discussing a machine, students should use the correct component names and refer to the manufacturer's documentation for model-specific details. Reading 1. What rotates during a conventional turning operation?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "The workpiece",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v01_r02",
+            "type": "single_choice",
+            "prompt": "Where should students look for model-specific information?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "The manufacturer's documentation"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v01_g01",
+            "type": "single_choice",
+            "prompt": "The workpiece ___ by the spindle during a turning operation.",
+            "options": [
+              "is rotated",
+              "rotates by the spindle",
+              "is rotating yesterday",
+              "are rotated"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v01_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO parts commonly found on a conventional lathe.",
+            "options": [
+              "Aircraft cabin",
+              "Solar panel",
+              "Headstock",
+              "Carriage"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v01_v01",
+            "type": "short_text",
+            "prompt": "The part of a lathe that supports and carries the cutting tool is the ___.",
+            "acceptedAnswers": [
+              "carriage"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v01_f01",
+            "type": "single_choice",
+            "prompt": "You are unsure which component is shown on a diagram. What should you ask?",
+            "options": [
+              "I will call it any name.",
+              "Could you identify this component on the labelled diagram, please?",
+              "The component names are not important.",
+              "I will guess from its colour."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v01_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of machine tool overview in a logical order.",
+            "options": [
+              "Match each component with its function",
+              "Identify the machine type",
+              "Check model-specific information in the documentation",
+              "Locate the main components on the diagram"
+            ],
+            "correctOrder": [
+              "Identify the machine type",
+              "Locate the main components on the diagram",
+              "Match each component with its function",
+              "Check model-specific information in the documentation"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v01_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words describing the main parts of a conventional lathe and explaining the function of two components.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v01_audio",
+          "readingPassageId": "c3s2v01_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V02",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 2",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v02_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the class study the sample programme?",
+            "audioText": "The CNC theory class will study the structure of a sample programme on Friday at eleven. Students will use a printed extract and identify programme numbers, block numbers and common address letters. The instructor will explain the difference between a rapid positioning command and a linear feed command. The class will not run the programme on a machine.",
+            "options": [
+              "On Friday at eleven",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v02_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which two command types will be compared?",
+            "audioText": "The CNC theory class will study the structure of a sample programme on Friday at eleven. Students will use a printed extract and identify programme numbers, block numbers and common address letters. The instructor will explain the difference between a rapid positioning command and a linear feed command. The class will not run the programme on a machine.",
+            "options": [
+              "On Friday",
+              "A rapid positioning command and a linear feed command",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v02_r01",
+            "type": "single_choice",
+            "prompt": "A CNC programme is organised into blocks of information. Each block may contain a sequence number and words that describe a command or a value. In a basic example, G00 is associated with rapid positioning, while G01 describes linear interpolation at a programmed feed. The meaning of a complete programme depends on the controller, machine configuration and other instructions, so students should use the approved documentation for the specific equipment. Reading 1. How is a CNC programme organised?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Into blocks of information",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v02_r02",
+            "type": "single_choice",
+            "prompt": "Why should students consult equipment-specific documentation?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "Because meaning depends on the controller and machine configuration"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v02_g01",
+            "type": "single_choice",
+            "prompt": "The sample programme ___ in blocks of information.",
+            "options": [
+              "is organised",
+              "organise",
+              "organising",
+              "are organised"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v02_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO statements that describe the sample CNC commands correctly.",
+            "options": [
+              "G00 always means a cutting feed",
+              "G01 is a material grade",
+              "G00 is associated with rapid positioning",
+              "G01 describes linear interpolation"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v02_v01",
+            "type": "short_text",
+            "prompt": "A single line or unit of information in a CNC programme is a ___.",
+            "acceptedAnswers": [
+              "block",
+              "programme block",
+              "program block"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v02_f01",
+            "type": "single_choice",
+            "prompt": "A classmate says G00 and G01 have the same purpose. What is a suitable reply?",
+            "options": [
+              "Yes, they always mean exactly the same thing.",
+              "They have different roles in the sample; let's check the programme reference.",
+              "The codes are unimportant.",
+              "I will change the code without checking."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v02_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of CNC programme structure in a logical order.",
+            "options": [
+              "Check the meaning in the approved reference",
+              "Read the programme header and context",
+              "Explain the sequence at a conceptual level",
+              "Identify the command in each block"
+            ],
+            "correctOrder": [
+              "Read the programme header and context",
+              "Identify the command in each block",
+              "Check the meaning in the approved reference",
+              "Explain the sequence at a conceptual level"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v02_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining how a CNC programme is organised into blocks. Describe the general difference between G00 and G01 without giving machine-specific operating instructions.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v02_audio",
+          "readingPassageId": "c3s2v02_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V03",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 3",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v03_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the comparison lesson begin?",
+            "audioText": "The manufacturing tutor will compare turning, milling and drilling in a theory lesson on Tuesday at ten thirty. Students should bring the process chart from the previous class. The tutor will focus on the type of movement and the feature produced by each process. Practical demonstrations will be scheduled separately after the workshop equipment has been checked.",
+            "options": [
+              "At ten thirty on Tuesday",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v03_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which machining reference material is needed for the session?",
+            "audioText": "The manufacturing tutor will compare turning, milling and drilling in a theory lesson on Tuesday at ten thirty. Students should bring the process chart from the previous class. The tutor will focus on the type of movement and the feature produced by each process. Practical demonstrations will be scheduled separately after the workshop equipment has been checked.",
+            "options": [
+              "On Friday",
+              "The process chart from the previous class",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v03_r01",
+            "type": "single_choice",
+            "prompt": "Turning is commonly used to produce cylindrical surfaces, while milling can create flat surfaces, slots and more complex profiles. Drilling produces a round hole using a rotating drill. The correct process depends on the component drawing, material and required geometry. A process plan usually lists the main stages and the equipment category, but detailed settings must be taken from approved process documentation. Reading 1. Which operation is commonly used to produce a cylindrical surface?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Turning",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v03_r02",
+            "type": "single_choice",
+            "prompt": "What information helps determine the correct process?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "The drawing, material and required geometry"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v03_g01",
+            "type": "single_choice",
+            "prompt": "Slots and flat surfaces ___ by milling in many applications.",
+            "options": [
+              "can be produced",
+              "can producing",
+              "is produced",
+              "produces"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v03_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO machining operations and their typical results.",
+            "options": [
+              "Milling — passenger announcements",
+              "Drilling — flat external faces",
+              "Turning — cylindrical surfaces",
+              "Drilling — round holes"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v03_v01",
+            "type": "short_text",
+            "prompt": "The machining operation commonly used to produce a round hole is ___.",
+            "acceptedAnswers": [
+              "drilling"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v03_f01",
+            "type": "single_choice",
+            "prompt": "A drawing shows a cylindrical outside surface. Which question is most useful?",
+            "options": [
+              "I will choose any process.",
+              "Would turning be an appropriate process for this geometry?",
+              "The geometry does not matter.",
+              "I will ignore the drawing."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v03_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of machining operations in a logical order.",
+            "options": [
+              "Compare suitable process types",
+              "Study the component drawing",
+              "Check the approved process plan",
+              "Identify the required geometry"
+            ],
+            "correctOrder": [
+              "Study the component drawing",
+              "Identify the required geometry",
+              "Compare suitable process types",
+              "Check the approved process plan"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v03_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words comparing turning, milling and drilling. Describe the typical result of each operation and explain why the drawing matters.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v03_audio",
+          "readingPassageId": "c3s2v03_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V04",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 4",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v04_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the presentation take place?",
+            "audioText": "The tooling specialist will give a presentation about cutting tool identification on Thursday at one. It will take place in the manufacturing classroom. Students will compare tool names, insert shapes and material descriptions using photographs and catalogues. The specialist will also explain why a tool must be selected according to the approved process information rather than appearance alone.",
+            "options": [
+              "On Thursday at one",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v04_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. What materials will students use to compare tools?",
+            "audioText": "The tooling specialist will give a presentation about cutting tool identification on Thursday at one. It will take place in the manufacturing classroom. Students will compare tool names, insert shapes and material descriptions using photographs and catalogues. The specialist will also explain why a tool must be selected according to the approved process information rather than appearance alone.",
+            "options": [
+              "On Friday",
+              "Photographs and catalogues",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v04_r01",
+            "type": "single_choice",
+            "prompt": "A cutting tool catalogue provides information about tool geometry, compatible inserts and recommended applications. A technician should identify the tool holder and insert type before consulting the relevant product information. Two inserts may look similar but have different specifications. The catalogue reference and manufacturer's notes help users distinguish them and select the correct item for the documented process. Reading 1. What information can a cutting tool catalogue provide?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Tool geometry, compatible inserts and recommended applications",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v04_r02",
+            "type": "single_choice",
+            "prompt": "How can users distinguish similar-looking inserts?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "By checking the catalogue reference and manufacturer's notes"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v04_g01",
+            "type": "single_choice",
+            "prompt": "The correct insert ___ by checking its catalogue reference.",
+            "options": [
+              "can be identified",
+              "identify",
+              "is identifying yesterday",
+              "can identifying"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v04_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO sources of information for identifying a cutting tool.",
+            "options": [
+              "The colour of the storage cabinet",
+              "A personal social media post",
+              "Tool holder identification",
+              "Manufacturer's catalogue"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v04_v01",
+            "type": "short_text",
+            "prompt": "The replaceable cutting part fitted to some tool holders is an ___.",
+            "acceptedAnswers": [
+              "insert",
+              "cutting insert"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v04_f01",
+            "type": "single_choice",
+            "prompt": "Two inserts look similar. What should you say?",
+            "options": [
+              "They look alike, so they must be interchangeable.",
+              "Let's compare their catalogue references and specifications.",
+              "Choose either one without checking.",
+              "The manufacturer's notes are unnecessary."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v04_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of cutting tools in a logical order.",
+            "options": [
+              "Check the manufacturer's catalogue",
+              "Identify the tool holder",
+              "Confirm suitability for the documented process",
+              "Read the insert designation"
+            ],
+            "correctOrder": [
+              "Identify the tool holder",
+              "Read the insert designation",
+              "Check the manufacturer's catalogue",
+              "Confirm suitability for the documented process"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v04_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining why cutting tools should be identified by their designation and catalogue information rather than appearance alone.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v04_audio",
+          "readingPassageId": "c3s2v04_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V05",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 5",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v05_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the session take place?",
+            "audioText": "The quality tutor will discuss workholding terminology during a classroom session on Monday at two. Students should bring the illustrated glossary and the sample component drawing. The session will compare general types of fixtures and explain how the drawing helps identify the surfaces that need to be inspected. No practical setup activity is included in this lesson.",
+            "options": [
+              "On Monday at two",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v05_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which two machining documents are required for the workholding exercise?",
+            "audioText": "The quality tutor will discuss workholding terminology during a classroom session on Monday at two. Students should bring the illustrated glossary and the sample component drawing. The session will compare general types of fixtures and explain how the drawing helps identify the surfaces that need to be inspected. No practical setup activity is included in this lesson.",
+            "options": [
+              "On Friday",
+              "The illustrated glossary and sample component drawing",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v05_r01",
+            "type": "single_choice",
+            "prompt": "Workholding equipment is used to locate and support a workpiece during a manufacturing process. The choice depends on the component shape, the operation and the process documentation. A quality record may identify the datum surfaces used for measurement. Clear communication about the workpiece reference and inspection points helps different team members interpret the record consistently. Reading 1. What is the purpose of workholding equipment?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "To locate and support a workpiece",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v05_r02",
+            "type": "single_choice",
+            "prompt": "What may a quality record identify?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "The datum surfaces used for measurement"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v05_g01",
+            "type": "single_choice",
+            "prompt": "The workpiece ___ by suitable workholding equipment during the process.",
+            "options": [
+              "is supported",
+              "support",
+              "supporting",
+              "are support"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v05_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO details that may be important in a workholding or inspection discussion.",
+            "options": [
+              "The colour of the operator's notebook",
+              "A nearby café menu",
+              "Component shape",
+              "Datum or reference surfaces"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v05_v01",
+            "type": "short_text",
+            "prompt": "A reference surface or feature used as a basis for measurement is a ___.",
+            "acceptedAnswers": [
+              "datum",
+              "datum surface",
+              "datum feature"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v05_f01",
+            "type": "single_choice",
+            "prompt": "A datum surface is not clear on the drawing. What should you ask?",
+            "options": [
+              "I will choose a surface without checking.",
+              "Could you confirm which datum surface is used for this inspection?",
+              "The reference surface is not important.",
+              "I will change the inspection record myself."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v05_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of workholding and quality in a logical order.",
+            "options": [
+              "Check the documented workholding concept",
+              "Review the component drawing",
+              "Record inspection references clearly",
+              "Identify the relevant reference surfaces"
+            ],
+            "correctOrder": [
+              "Review the component drawing",
+              "Identify the relevant reference surfaces",
+              "Check the documented workholding concept",
+              "Record inspection references clearly"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v05_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining why workholding and datum references matter in manufacturing and inspection communication.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v05_audio",
+          "readingPassageId": "c3s2v05_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V06",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 6",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v06_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. What is the scheduled start time for the machining safety briefing?",
+            "audioText": "The workshop safety coordinator will give a briefing on Thursday at eight fifty. Students should wait in the marked classroom area until the instructor begins. The briefing will review warning signs, restricted zones and the procedure for reporting damaged equipment. Students should bring their induction cards, and questions can be asked at the end of the session.",
+            "options": [
+              "At eight fifty on Thursday",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v06_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which cards should students bring?",
+            "audioText": "The workshop safety coordinator will give a briefing on Thursday at eight fifty. Students should wait in the marked classroom area until the instructor begins. The briefing will review warning signs, restricted zones and the procedure for reporting damaged equipment. Students should bring their induction cards, and questions can be asked at the end of the session.",
+            "options": [
+              "On Friday",
+              "Their induction cards",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v06_r01",
+            "type": "single_choice",
+            "prompt": "A student noticed that a warning label on a training machine was partly damaged. The student did not try to replace it. Instead, the issue was reported to the instructor, who arranged for the label to be checked and replaced through the department's normal process. The machine remained identified as requiring attention until the issue was resolved. Reading 1. What did the student do about the damaged label?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Reported it to the instructor",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v06_r02",
+            "type": "single_choice",
+            "prompt": "How was the machine identified while the issue remained unresolved?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "As requiring attention"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v06_g01",
+            "type": "single_choice",
+            "prompt": "The damaged label ___ to the instructor.",
+            "options": [
+              "was reported",
+              "reported yesterday by student",
+              "is report",
+              "were reporting"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v06_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO examples of useful workshop safety communication.",
+            "options": [
+              "Ignore a restricted-area notice",
+              "Remove labels without permission",
+              "Report damaged equipment",
+              "Follow warning signs and local instructions"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v06_v01",
+            "type": "short_text",
+            "prompt": "A sign or label that alerts people to a possible danger is a safety ___.",
+            "acceptedAnswers": [
+              "warning",
+              "warning sign",
+              "warning label"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v06_f01",
+            "type": "single_choice",
+            "prompt": "You see a damaged warning label. What should you say?",
+            "options": [
+              "I will remove it and write a new one.",
+              "I have noticed a damaged warning label. Could you check it, please?",
+              "It is probably fine, so I will ignore it.",
+              "I will cover it with another sticker."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v06_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of machining safety communication in a logical order.",
+            "options": [
+              "Wait for the authorised check",
+              "Notice the damaged label",
+              "Confirm that the issue has been resolved",
+              "Keep the issue visible and report it"
+            ],
+            "correctOrder": [
+              "Notice the damaged label",
+              "Keep the issue visible and report it",
+              "Wait for the authorised check",
+              "Confirm that the issue has been resolved"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v06_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining why clear safety communication matters in a workshop. Give two examples of information that should be reported.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v06_audio",
+          "readingPassageId": "c3s2v06_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V07",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 7",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v07_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the process planning class take place?",
+            "audioText": "The manufacturing planning class will review a sample process sheet on Monday at ten. Students should bring the component drawing and the operation list. The instructor will explain how a process sheet connects the required geometry with the sequence of manufacturing stages. Detailed machine settings will not be discussed in this classroom exercise.",
+            "options": [
+              "On Monday at ten",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v07_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which documents are needed for the process-planning class?",
+            "audioText": "The manufacturing planning class will review a sample process sheet on Monday at ten. Students should bring the component drawing and the operation list. The instructor will explain how a process sheet connects the required geometry with the sequence of manufacturing stages. Detailed machine settings will not be discussed in this classroom exercise.",
+            "options": [
+              "On Friday",
+              "The component drawing and operation list",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v07_r01",
+            "type": "single_choice",
+            "prompt": "A process plan describes the main stages required to produce a component. It may identify the operation, the equipment category and the inspection point. The sequence should reflect the component's design and the requirements in the approved documentation. A clear plan also helps the production team understand which stage has been completed and what needs to happen next. Reading 1. What may a process plan identify?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "The operation, equipment category and inspection point",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v07_r02",
+            "type": "single_choice",
+            "prompt": "Why is the sequence important?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "It reflects the design and helps the team follow the stages"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v07_g01",
+            "type": "single_choice",
+            "prompt": "The inspection point ___ in the process plan.",
+            "options": [
+              "is identified",
+              "identify",
+              "identifying",
+              "are identify"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v07_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO items that may appear in a process plan.",
+            "options": [
+              "A personal playlist",
+              "A list of unrelated holidays",
+              "Operation description",
+              "Inspection point"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v07_v01",
+            "type": "short_text",
+            "prompt": "A planned series of manufacturing stages is a process ___.",
+            "acceptedAnswers": [
+              "plan",
+              "process plan"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v07_f01",
+            "type": "single_choice",
+            "prompt": "A process stage is missing from the plan. What should you ask?",
+            "options": [
+              "I will add a stage without checking.",
+              "Could we review the sequence against the component drawing?",
+              "The sequence does not matter.",
+              "I will remove the inspection stage."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v07_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of process planning in a logical order.",
+            "options": [
+              "Arrange the stages in a logical sequence",
+              "Review the component drawing",
+              "Add relevant inspection points",
+              "Identify the required operations"
+            ],
+            "correctOrder": [
+              "Review the component drawing",
+              "Identify the required operations",
+              "Arrange the stages in a logical sequence",
+              "Add relevant inspection points"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v07_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining how a process plan helps a manufacturing team organise work and communicate progress.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v07_audio",
+          "readingPassageId": "c3s2v07_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V08",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 8",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v08_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the terminology workshop take place?",
+            "audioText": "The quality department is running a terminology workshop on Tuesday at one thirty in Room 15. Students will review the terms defect, non-conformity, inspection and corrective action. A short glossary will be provided. The instructor asks students to bring one example from a previous classroom exercise where a result did not meet a stated requirement.",
+            "options": [
+              "On Tuesday at one thirty",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v08_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which glossary item will be provided?",
+            "audioText": "The quality department is running a terminology workshop on Tuesday at one thirty in Room 15. Students will review the terms defect, non-conformity, inspection and corrective action. A short glossary will be provided. The instructor asks students to bring one example from a previous classroom exercise where a result did not meet a stated requirement.",
+            "options": [
+              "On Friday",
+              "A short glossary",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v08_r01",
+            "type": "single_choice",
+            "prompt": "A non-conformity is a failure to meet a specified requirement. It may relate to a dimension, material, document or process. A clear report identifies the requirement, describes the observed result and provides relevant evidence. The responsible person can then review the issue and decide what action is appropriate. A non-conformity should not be hidden by changing the original inspection data. Reading 1. What does a non-conformity mean?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "A failure to meet a specified requirement",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v08_r02",
+            "type": "single_choice",
+            "prompt": "What should a clear report describe?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "The requirement, observed result and relevant evidence"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v08_g01",
+            "type": "single_choice",
+            "prompt": "The original inspection data must not ___ without an authorised correction.",
+            "options": [
+              "be changed",
+              "changed",
+              "changing",
+              "be changing yesterday"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v08_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO details that help describe a non-conformity.",
+            "options": [
+              "An unrelated personal opinion",
+              "A guess about who is responsible",
+              "The requirement that was not met",
+              "The observed result and evidence"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v08_v01",
+            "type": "short_text",
+            "prompt": "A failure to meet a specified requirement is a non-___.",
+            "acceptedAnswers": [
+              "conformity",
+              "non-conformity"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v08_f01",
+            "type": "single_choice",
+            "prompt": "You need to report a non-conformity. Which sentence is appropriate?",
+            "options": [
+              "The result is wrong, but I will not explain why.",
+              "The measured value is outside the specified limit; I have recorded the evidence for review.",
+              "I changed the result so it looks correct.",
+              "Someone must be blamed immediately."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v08_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of quality terminology in a logical order.",
+            "options": [
+              "Compare the result with the requirement",
+              "Identify the specified requirement",
+              "Report the non-conformity with evidence",
+              "Record the observed result"
+            ],
+            "correctOrder": [
+              "Identify the specified requirement",
+              "Record the observed result",
+              "Compare the result with the requirement",
+              "Report the non-conformity with evidence"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v08_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining how to report a non-conformity clearly and why original inspection data must remain accurate.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v08_audio",
+          "readingPassageId": "c3s2v08_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V09",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 9",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v09_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. Where will the documentation session take place?",
+            "audioText": "The CNC documentation session will take place on Friday at nine forty in the computer classroom. Students will review a sample programme sheet, a machine manual extract and a revision record. The instructor will explain why the programme version and equipment reference should be recorded together. The lesson is based on reading documents, not operating machinery.",
+            "options": [
+              "In the computer classroom",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v09_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which record will students review?",
+            "audioText": "The CNC documentation session will take place on Friday at nine forty in the computer classroom. Students will review a sample programme sheet, a machine manual extract and a revision record. The instructor will explain why the programme version and equipment reference should be recorded together. The lesson is based on reading documents, not operating machinery.",
+            "options": [
+              "On Friday",
+              "A revision record",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v09_r01",
+            "type": "single_choice",
+            "prompt": "A CNC programme document should be linked to the correct machine and approved revision. If a programme is updated, the revision record explains what changed and when the update was made. This information helps staff avoid confusing an old copy with the current approved version. Students should read the programme in context and use the relevant machine documentation for explanations of controller-specific functions. Reading 1. What does a revision record explain?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "What changed and when the update was made",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v09_r02",
+            "type": "single_choice",
+            "prompt": "Why should the programme be linked to the correct machine?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "To avoid confusing versions and account for controller-specific functions"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v09_g01",
+            "type": "single_choice",
+            "prompt": "The programme version ___ in the revision record.",
+            "options": [
+              "is listed",
+              "list",
+              "listing",
+              "are listed"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v09_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO details that support controlled CNC documentation.",
+            "options": [
+              "A personal nickname for the machine",
+              "An unrelated classroom timetable",
+              "Programme revision",
+              "Machine or controller reference"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v09_v01",
+            "type": "short_text",
+            "prompt": "A recorded change to a document or programme is a ___.",
+            "acceptedAnswers": [
+              "revision",
+              "update"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v09_f01",
+            "type": "single_choice",
+            "prompt": "You find two copies of a programme with different revision numbers. What should you do?",
+            "options": [
+              "Use the newest-looking file without checking.",
+              "Check the approved revision record and machine reference before relying on a copy.",
+              "Delete both copies.",
+              "Combine the two files."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v09_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of CNC documentation in a logical order.",
+            "options": [
+              "Review the revision record",
+              "Identify the machine and controller reference",
+              "Use the approved documentation for interpretation",
+              "Check the programme revision"
+            ],
+            "correctOrder": [
+              "Identify the machine and controller reference",
+              "Check the programme revision",
+              "Review the revision record",
+              "Use the approved documentation for interpretation"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v09_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining why CNC programme documents need clear revision and machine references. Do not include machine-specific operating instructions.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v09_audio",
+          "readingPassageId": "c3s2v09_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V10",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 10",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v10_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the weekly schedule lesson take place?",
+            "audioText": "The production planning tutor will discuss a weekly schedule on Wednesday at eleven. Students should bring the sample order list and the capacity table. The class will identify planned start dates, expected completion dates and the departments involved. The tutor will also explain how to report a delay so that the schedule can be reviewed.",
+            "options": [
+              "On Wednesday at eleven",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v10_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which table should students bring?",
+            "audioText": "The production planning tutor will discuss a weekly schedule on Wednesday at eleven. Students should bring the sample order list and the capacity table. The class will identify planned start dates, expected completion dates and the departments involved. The tutor will also explain how to report a delay so that the schedule can be reviewed.",
+            "options": [
+              "On Friday",
+              "The capacity table",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v10_r01",
+            "type": "single_choice",
+            "prompt": "A production planner noticed that one component order was likely to be delayed because a required material had not arrived. The planner updated the schedule and informed the relevant departments. The message included the order reference, the expected delay and the next review date. This allowed the team to discuss alternatives without relying on an outdated schedule. Reading 1. Why was the component order likely to be delayed?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "A required material had not arrived",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v10_r02",
+            "type": "single_choice",
+            "prompt": "What information did the planner include in the message?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "The order reference, expected delay and next review date"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v10_g01",
+            "type": "single_choice",
+            "prompt": "The updated schedule ___ to the relevant departments.",
+            "options": [
+              "was sent",
+              "sent",
+              "is send",
+              "were sending"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v10_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO details that make a production delay report useful.",
+            "options": [
+              "An unrelated personal complaint",
+              "A guess without supporting information",
+              "Order reference",
+              "Expected delay and review date"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v10_v01",
+            "type": "short_text",
+            "prompt": "The amount of work or output that a department can handle is its ___.",
+            "acceptedAnswers": [
+              "capacity",
+              "production capacity"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v10_f01",
+            "type": "single_choice",
+            "prompt": "You expect a delay in a component order. What should you tell the planning team?",
+            "options": [
+              "I will wait until the deadline has passed.",
+              "The material has not arrived; the order reference and expected delay are included in my update.",
+              "The schedule is wrong, but I have no details.",
+              "I will change the dates without informing anyone."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v10_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of production planning communication in a logical order.",
+            "options": [
+              "Update the schedule information",
+              "Identify the affected order",
+              "Inform the relevant departments and review the plan",
+              "Confirm the reason for the delay"
+            ],
+            "correctOrder": [
+              "Identify the affected order",
+              "Confirm the reason for the delay",
+              "Update the schedule information",
+              "Inform the relevant departments and review the plan"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v10_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining how to communicate a production delay to a planning team. Include the order reference, reason and next action.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v10_audio",
+          "readingPassageId": "c3s2v10_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V11",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 11",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v11_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the revision-symbol lesson take place?",
+            "audioText": "The drawing office will review revision symbols on Thursday at ten fifteen. Students should meet in the design classroom and bring the assembly drawing from the course folder. The tutor will explain how revision letters, change notes and issue dates help readers identify the current drawing. Students will compare two printed versions and list the visible changes.",
+            "options": [
+              "On Thursday at ten fifteen",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v11_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which drawing should students bring?",
+            "audioText": "The drawing office will review revision symbols on Thursday at ten fifteen. Students should meet in the design classroom and bring the assembly drawing from the course folder. The tutor will explain how revision letters, change notes and issue dates help readers identify the current drawing. Students will compare two printed versions and list the visible changes.",
+            "options": [
+              "On Friday",
+              "The assembly drawing from the course folder",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v11_r01",
+            "type": "single_choice",
+            "prompt": "A revised engineering drawing may include a new revision identifier, an updated issue date and a description of the changes. A reader should check these details before using dimensions or component references. If two copies appear different, the document register can help establish which version is current and approved. Old copies should be clearly identified to prevent accidental use. Reading 1. Which details may identify a revised drawing?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Revision identifier, issue date and description of changes",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v11_r02",
+            "type": "single_choice",
+            "prompt": "Where can a reader check which version is current?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "In the document register"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v11_g01",
+            "type": "single_choice",
+            "prompt": "The latest drawing revision ___ in the document register.",
+            "options": [
+              "is identified",
+              "identify",
+              "identifying",
+              "are identified"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v11_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO details that help identify a controlled drawing revision.",
+            "options": [
+              "The colour of the drawing folder",
+              "The name of an unrelated website",
+              "Revision identifier",
+              "Issue date"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v11_v01",
+            "type": "short_text",
+            "prompt": "A short description of changes made to a drawing is a revision ___.",
+            "acceptedAnswers": [
+              "note",
+              "change note"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v11_f01",
+            "type": "single_choice",
+            "prompt": "Two drawing copies show different revision letters. What should you ask?",
+            "options": [
+              "I will use the one with more dimensions.",
+              "Could we check the document register to confirm the current approved revision?",
+              "The revision letter does not matter.",
+              "I will combine both drawings."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v11_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of technical drawing revisions in a logical order.",
+            "options": [
+              "Review the change note",
+              "Identify the drawing number",
+              "Confirm the current approved copy in the register",
+              "Check the revision identifier and issue date"
+            ],
+            "correctOrder": [
+              "Identify the drawing number",
+              "Check the revision identifier and issue date",
+              "Review the change note",
+              "Confirm the current approved copy in the register"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v11_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining how revision identifiers, issue dates and change notes help control technical drawings.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v11_audio",
+          "readingPassageId": "c3s2v11_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V12",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 12",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v12_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the programme review take place?",
+            "audioText": "The CNC theory tutor will review a sample programme on Monday at one. Students should bring the printed programme extract and the controller glossary. The class will identify programme blocks, axis words and feed information. The tutor will explain why a code should be interpreted in the context of the controller and the complete programme.",
+            "options": [
+              "On Monday at one",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v12_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which terminology resource should students use for the drawing-revision activity?",
+            "audioText": "The CNC theory tutor will review a sample programme on Monday at one. Students should bring the printed programme extract and the controller glossary. The class will identify programme blocks, axis words and feed information. The tutor will explain why a code should be interpreted in the context of the controller and the complete programme.",
+            "options": [
+              "On Friday",
+              "The controller glossary",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v12_r01",
+            "type": "single_choice",
+            "prompt": "A CNC programme may contain words that identify axes, positions, feed information and machine functions. The meaning of a code can depend on the controller and the modal state established by earlier blocks. For this reason, a single line should not always be interpreted in isolation. Students should use the approved controller reference and consider the surrounding programme context. Reading 1. Why should a programme line not always be interpreted in isolation?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Because its meaning may depend on earlier blocks and the controller state",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v12_r02",
+            "type": "single_choice",
+            "prompt": "Which reference should students use?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "The approved controller reference"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v12_g01",
+            "type": "single_choice",
+            "prompt": "The command ___ in the context of the complete programme.",
+            "options": [
+              "should be interpreted",
+              "should interpret",
+              "interpreting",
+              "are interpreted"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v12_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO items that may affect the interpretation of a CNC programme block.",
+            "options": [
+              "The colour of the machine enclosure",
+              "An unrelated workshop timetable",
+              "Controller type",
+              "Earlier modal commands"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v12_v01",
+            "type": "short_text",
+            "prompt": "A command whose effect can remain active in later programme blocks is described as ___.",
+            "acceptedAnswers": [
+              "modal"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v12_f01",
+            "type": "single_choice",
+            "prompt": "A code is unfamiliar in a programme extract. What should you do?",
+            "options": [
+              "Guess its meaning from the letter.",
+              "Check the approved reference for the specific controller and read the surrounding blocks.",
+              "Replace it with a familiar code.",
+              "Ignore the code."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v12_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of CNC programme interpretation in a logical order.",
+            "options": [
+              "Check earlier commands and modal information",
+              "Identify the controller and programme context",
+              "Confirm the meaning in the controller reference",
+              "Locate the relevant block"
+            ],
+            "correctOrder": [
+              "Identify the controller and programme context",
+              "Locate the relevant block",
+              "Check earlier commands and modal information",
+              "Confirm the meaning in the controller reference"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v12_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining why CNC programme blocks should be interpreted in context and with reference to the correct controller documentation.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v12_audio",
+          "readingPassageId": "c3s2v12_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V13",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 13",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v13_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the toolpath lesson begin?",
+            "audioText": "The manufacturing lecturer will introduce toolpath terminology on Wednesday at nine thirty. Students should meet in the CNC theory room and bring the illustrated toolpath sheet. The lesson will compare a straight-line path with a curved path and identify the difference between the programmed geometry and the actual machine movement. The class will use diagrams only.",
+            "options": [
+              "At nine thirty on Wednesday",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v13_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which process-capability data sheet should students bring?",
+            "audioText": "The manufacturing lecturer will introduce toolpath terminology on Wednesday at nine thirty. Students should meet in the CNC theory room and bring the illustrated toolpath sheet. The lesson will compare a straight-line path with a curved path and identify the difference between the programmed geometry and the actual machine movement. The class will use diagrams only.",
+            "options": [
+              "On Friday",
+              "The illustrated toolpath sheet",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v13_r01",
+            "type": "single_choice",
+            "prompt": "A toolpath describes the route followed by a cutting tool relative to a workpiece. In a simple example, a linear path connects two points with a straight movement, while a circular path follows an arc. The programmed path is interpreted by the controller, and the resulting movement depends on the machine configuration and settings. A drawing helps students visualise the geometry without operating equipment. Reading 1. What does a toolpath describe?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "The route followed by a cutting tool relative to a workpiece",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v13_r02",
+            "type": "single_choice",
+            "prompt": "What can affect the resulting machine movement?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "The machine configuration and settings"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v13_g01",
+            "type": "single_choice",
+            "prompt": "The programmed path ___ by the controller.",
+            "options": [
+              "is interpreted",
+              "interpret",
+              "is interpreting",
+              "are interpreted"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v13_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO types of toolpath geometry.",
+            "options": [
+              "Revision letter",
+              "Material certificate",
+              "Linear path",
+              "Circular path"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v13_v01",
+            "type": "short_text",
+            "prompt": "A curved part of a circular toolpath is an ___.",
+            "acceptedAnswers": [
+              "arc"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v13_f01",
+            "type": "single_choice",
+            "prompt": "A toolpath diagram is unclear. What should you ask?",
+            "options": [
+              "I will assume the route is correct.",
+              "Could you explain how the programmed geometry is represented in this diagram?",
+              "The path does not matter.",
+              "I will change the programme."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v13_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of toolpath concepts in a logical order.",
+            "options": [
+              "Relate the path to the component drawing",
+              "Identify the start and end points",
+              "Describe the intended route using correct terms",
+              "Recognise the path geometry"
+            ],
+            "correctOrder": [
+              "Identify the start and end points",
+              "Recognise the path geometry",
+              "Relate the path to the component drawing",
+              "Describe the intended route using correct terms"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v13_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining what a toolpath represents. Compare linear and circular path geometry at a conceptual level.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v13_audio",
+          "readingPassageId": "c3s2v13_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V14",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 14",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v14_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the process-capability lesson take place?",
+            "audioText": "The quality engineering tutor will discuss process capability on Friday at eleven. Students should bring the sample measurement table and the process glossary. The lesson will explain how variation in a process is compared with specification limits. The tutor will emphasise that a capability result depends on reliable data and appropriate assumptions.",
+            "options": [
+              "On Friday at eleven",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v14_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which glossary is required for the process-capability lesson?",
+            "audioText": "The quality engineering tutor will discuss process capability on Friday at eleven. Students should bring the sample measurement table and the process glossary. The lesson will explain how variation in a process is compared with specification limits. The tutor will emphasise that a capability result depends on reliable data and appropriate assumptions.",
+            "options": [
+              "On Friday",
+              "The process glossary",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v14_r01",
+            "type": "single_choice",
+            "prompt": "Process capability compares the variation of a process with the limits specified for a product feature. A capability index is meaningful only when the data are suitable and the process assumptions have been considered. A report should identify the measurement method, sample period and specification limits. It should not present a capability figure without explaining the context in which it was calculated. Reading 1. What does process capability compare?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Process variation with the specified product limits",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v14_r02",
+            "type": "single_choice",
+            "prompt": "Which context should a capability report identify?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "Measurement method, sample period and specification limits"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v14_g01",
+            "type": "single_choice",
+            "prompt": "The capability result ___ with its measurement context.",
+            "options": [
+              "should be reported",
+              "should report",
+              "reporting",
+              "are report"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v14_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO details that support interpretation of a process-capability result.",
+            "options": [
+              "The colour of the measurement table",
+              "An unrelated staff rota",
+              "Specification limits",
+              "Measurement method and sample period"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v14_v01",
+            "type": "short_text",
+            "prompt": "The amount by which values differ from one another is process ___.",
+            "acceptedAnswers": [
+              "variation"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v14_f01",
+            "type": "single_choice",
+            "prompt": "A capability index is presented without a sample period. What should you ask?",
+            "options": [
+              "The sample period is not relevant.",
+              "Could you add the sample period and measurement method so the result can be interpreted?",
+              "The index is always valid.",
+              "I will remove the specification limits."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v14_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of process capability in a logical order.",
+            "options": [
+              "Review the sample data and period",
+              "Identify the product feature and specification limits",
+              "Report the result with its context and assumptions",
+              "Confirm the measurement method"
+            ],
+            "correctOrder": [
+              "Identify the product feature and specification limits",
+              "Confirm the measurement method",
+              "Review the sample data and period",
+              "Report the result with its context and assumptions"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v14_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words explaining what process capability compares and why a report must include measurement context and assumptions.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v14_audio",
+          "readingPassageId": "c3s2v14_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C3-S2-V15",
+      "blueprintId": "english_final_c3_s2_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c3_s2",
+        "courseNo": 3,
+        "track": "technical",
+        "semester": 2,
+        "title": "Technical English — Course 3, Semester 2 — Pilot Variant 15",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c3s2v15_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the problem-solving exercise take place?",
+            "audioText": "The engineering tutor will run a problem-solving case study on Tuesday at ten forty-five. Students should bring the issue description and the evidence table from the course folder. The exercise will ask groups to define the problem, separate known facts from assumptions and propose what additional information is needed. The final recommendation must be linked to the evidence.",
+            "options": [
+              "On Tuesday at ten forty-five",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v15_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which source materials are needed for the technical problem-solving exercise?",
+            "audioText": "The engineering tutor will run a problem-solving case study on Tuesday at ten forty-five. Students should bring the issue description and the evidence table from the course folder. The exercise will ask groups to define the problem, separate known facts from assumptions and propose what additional information is needed. The final recommendation must be linked to the evidence.",
+            "options": [
+              "On Friday",
+              "The evidence table from the course folder",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v15_r01",
+            "type": "single_choice",
+            "prompt": "A technical problem-solving report begins with a precise description of the issue. The team then gathers relevant records and identifies what is known, what is assumed and what remains uncertain. Possible solutions can be compared against technical requirements, cost and available resources. A recommendation should explain its reasoning and identify any risk or limitation that still needs review. Reading 1. What should the team identify after gathering records?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "What is known, assumed and still uncertain",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c3s2v15_r02",
+            "type": "single_choice",
+            "prompt": "What should a recommendation explain?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "Its reasoning and any remaining risk or limitation"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c3s2v15_g01",
+            "type": "single_choice",
+            "prompt": "The proposed solution ___ against the technical requirements.",
+            "options": [
+              "should be evaluated",
+              "should evaluate",
+              "evaluating",
+              "are evaluated"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c3s2v15_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO features of a sound technical recommendation.",
+            "options": [
+              "An unsupported personal preference",
+              "A conclusion that ignores requirements",
+              "A clear link to evidence",
+              "Consideration of risks or limitations"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v15_v01",
+            "type": "short_text",
+            "prompt": "A possible solution suggested for consideration is a ___.",
+            "acceptedAnswers": [
+              "proposal",
+              "recommendation"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v15_f01",
+            "type": "single_choice",
+            "prompt": "A proposed solution has not been compared with the requirements. What should you ask?",
+            "options": [
+              "We can choose it because it sounds simple.",
+              "Could we evaluate the proposal against the technical requirements before recommending it?",
+              "The requirements can be ignored.",
+              "I will approve it without review."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c3s2v15_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of technical problem-solving in a logical order.",
+            "options": [
+              "Compare possible solutions with requirements",
+              "Define the problem clearly",
+              "Make a reasoned recommendation and state limitations",
+              "Gather and classify the evidence"
+            ],
+            "correctOrder": [
+              "Define the problem clearly",
+              "Gather and classify the evidence",
+              "Compare possible solutions with requirements",
+              "Make a reasoned recommendation and state limitations"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c3s2v15_w01",
+            "type": "written",
+            "prompt": "Write 80–100 words describing a structured technical problem-solving approach. Explain how evidence, requirements and limitations should influence a recommendation.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c3s2v15_audio",
+          "readingPassageId": "c3s2v15_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    }
+  ]
+}
