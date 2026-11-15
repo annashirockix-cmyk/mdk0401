@@ -377,6 +377,8 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /window\.API\.submitAssignment/);
   assert.match(ui, /Работа проверена и зачтена\. Повторная отправка не требуется/);
   assert.match(ui, /Отправить исправленную работу/);
+  assert.match(ui, /Комментарий преподавателя:/);
+  assert.match(backend, /AssignmentSubmissionHistory: \[[^\]]*"Grade"[^\]]*"Feedback"/);
   assert.match(ui, /window\.API\.gradeAssignment/);
   assert.match(ui, /Подтверждаю повторное выставление оценки/);
   assert.match(ui, /actor\.role==="admin"/);
