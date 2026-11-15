@@ -426,3 +426,8 @@ C1-S2 authoring is complete: 15 of 15 Basic English pilots are present. All 150 
 ### Course 2, Semester 1 — complete pilot authoring
 
 C2-S1 now has all 15 planned Basic English pilots (`v01`–`v15`). The set covers career fairs, CVs, interviews, education routes, skills portfolios, part-time work, teamwork, digital learning, environmental choices, customer service, study visits, study-life balance, everyday problem solving, course selection and workplace communication. Each form has ten tasks, 20 points, 90 minutes, two listening items and one teacher-reviewed written response. Regression tests validate all 15 against the protected runtime schema, require unique task IDs and prompts, check unique listening scripts, enforce balanced A/B/C/D answer positions and inspect functional-response keys. The first five forms were corrected during review to repair task IDs and an incorrect functional key; all remain editorial-review drafts and have not been imported or released.
+
+
+## Course 2, Semester 2 — pilot authoring underway
+
+Five of 15 Basic English pilots are drafted for C2-S2 (`v01`–`v05`), covering environmental choices, evaluating online information, renewable energy, responsible technology use and community transport. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected server payload validator; prompts and listening scripts are unique, answer positions are balanced A/B/C/D, and functional-response keys have been checked. These are editorial-review drafts only and are not imported or released.
