@@ -212,6 +212,12 @@ function getEnglishVprExam_(data) {
   return {success:false,error:"Экзамен ещё не импортирован преподавателем."};
 }
 
+function englishVprAttemptCacheKey_(email, track, examId) {
+  const raw = String(email || "").toLowerCase() + "|" + String(track || "") + "|" + String(examId || "");
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, raw);
+  return "englishVprActive:" + Utilities.base64EncodeWebSafe(digest).replace(/=+$/g, "");
+}
+
 /**
  * Выдаёт персональный серверный вариант ВПР и запускает таймер только
  * после нажатия студентом кнопки «Начать экзамен».
@@ -231,12 +237,31 @@ function startEnglishVprExam_(data) {
     const source = JSON.parse(String(values[i][map.ExamJSON] || "{}"));
     validateEnglishVprExam_(track, source);
     const prepared = englishVprPrepareAttempt_(source);
+    const cache = CacheService.getScriptCache();
+    const activeKey = englishVprAttemptCacheKey_(user.email, track, source.id);
+    const activeId = cache.get(activeKey);
+    if (activeId) {
+      const activeRaw = cache.get("englishVprAttempt:" + activeId);
+      if (activeRaw) {
+        const activeAttempt = JSON.parse(activeRaw);
+        if (activeAttempt.email === user.email && activeAttempt.track === track &&
+            String(activeAttempt.exam && activeAttempt.exam.id || "") === String(source.id || "") &&
+            activeAttempt.displayExam) {
+          return {success:true,track:track,attemptId:activeId,startedAt:activeAttempt.startedAt,
+            exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
+        }
+      }
+      cache.remove(activeKey);
+    }
     const attemptId = Utilities.getUuid().replace(/-/g, "");
-    CacheService.getScriptCache().put("englishVprAttempt:" + attemptId, JSON.stringify({
-      email:user.email, track:track, courseId:courseId, exam:source,
-      optionMaps:prepared.optionMaps, startedAt:Date.now()
+    const startedAt = Date.now();
+    cache.put("englishVprAttempt:" + attemptId, JSON.stringify({
+      email:user.email, track:track, courseId:courseId, exam:source, displayExam:prepared.exam,
+      optionMaps:prepared.optionMaps, startedAt:startedAt, stableKey:activeKey
     }), 7200);
-    return {success:true,track:track,attemptId:attemptId,exam:sanitizeEnglishVprExam_(prepared.exam)};
+    cache.put(activeKey, attemptId, 7200);
+    return {success:true,track:track,attemptId:attemptId,startedAt:startedAt,
+      exam:sanitizeEnglishVprExam_(prepared.exam)};
   }
   return {success:false,error:"Экзамен ещё не импортирован преподавателем."};
 }
@@ -317,6 +342,7 @@ function submitEnglishVprExam_(data) {
     const lockedAttempt = JSON.parse(lockedRaw);
     if (lockedAttempt.email !== user.email || lockedAttempt.track !== track || lockedAttempt.courseId !== courseId || String(lockedAttempt.exam && lockedAttempt.exam.id || "") !== String(exam.id || "")) throw new Error("Данные серверной попытки изменились. Начните экзамен заново.");
     cache.remove("englishVprAttempt:" + attemptId);
+    if (lockedAttempt.stableKey) cache.remove(String(lockedAttempt.stableKey));
   } finally { attemptLock.releaseLock(); }
   const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Math.min(Math.max(0,Math.floor((Date.now()-startedAt)/1000)),Math.max(1,Number(exam.time)||90)*60),payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
   if (written.length) {
