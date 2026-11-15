@@ -205,7 +205,7 @@ window.renderJournalPage = function() {
                   var key=String(r.email||"").toLowerCase()+"|"+String(r.finishedAt||"").slice(0,10);
                   manualByStudent[key]=r;
               });
-              var students = d.students.filter(s => String(s.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (s.courses || []).includes(window.state.activeCourseId)));
+              var students = d.students.filter(s => String(s.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (s.courses || []).includes(window.state.activeCourseId) || ((window.state.activeCourseId === "ENB" || window.state.activeCourseId === "ENT") && (s.courses || []).includes("EN"))));
               if (groupFilter !== "all") {
                   students = students.filter(s => s.group === groupFilter);
               }
@@ -223,7 +223,10 @@ window.renderJournalPage = function() {
 
               students.forEach((s, studentIndex) => {
                   var savedRecord=manualByStudent[String(s.email||"").toLowerCase()+"|"+dateInput]||null;
-                  var currentVal=savedRecord&&savedRecord.grade!==undefined&&savedRecord.grade!==null?String(savedRecord.grade):"";
+                  var legacyPayload={};try{legacyPayload=JSON.parse(s.payload||"{}");}catch(e){}
+                  var legacyDate=formattedDate;
+                  var legacyValue=legacyPayload.manualGrades&&legacyPayload.manualGrades[legacyDate];
+                  var currentVal=savedRecord&&savedRecord.grade!==undefined&&savedRecord.grade!==null?String(savedRecord.grade):(legacyValue===undefined||legacyValue===null?"":String(legacyValue));
                   var currentFeedback=savedRecord&&savedRecord.feedback?String(savedRecord.feedback):"";
                   var inputId = "manualGrade_" + studentIndex;
                   var feedbackId = "manualFeedback_" + studentIndex;
