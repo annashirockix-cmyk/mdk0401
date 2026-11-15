@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO things to confirm before an international study visit.",
       "options": [
-        "Travel dates and required documents",
-        "Accommodation arrangements",
         "A classmate's social media password",
-        "Unrelated shopping offers"
+        "Unrelated shopping offers",
+        "Travel dates and required documents",
+        "Accommodation arrangements"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -105,12 +105,12 @@
       "type": "single_choice",
       "prompt": "You need clarification about a travel document. What is a polite request?",
       "options": [
-        "Could you confirm which document I need, please?",
         "Tell me now. I do not care why.",
+        "Could you confirm which document I need, please?",
         "I will ignore the requirement.",
         "You have to do my application."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
