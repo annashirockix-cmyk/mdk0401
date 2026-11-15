@@ -2961,12 +2961,10 @@ function importEnglishSemesterTests_(data) {
 
 function sanitizeEnglishSemesterTests_(tests) {
   return (tests || []).map(function(test) {
-    const safe = JSON.parse(JSON.stringify(test));
-    safe.questions = (safe.questions || []).map(function(question) {
-      return {
-        q: String(question && question.q || ""),
-        options: Array.isArray(question && question.options) ? question.options.slice() : []
-      };
+    const safe = sanitizeAssessmentQuestionForStudent_(test);
+    safe.questions = (test.questions || []).map(function(question) {
+      const cleanQuestion = sanitizeAssessmentQuestionForStudent_(question);
+      return {q:String(cleanQuestion && cleanQuestion.q || ""),options:Array.isArray(cleanQuestion && cleanQuestion.options)?cleanQuestion.options.slice():[]};
     });
     return safe;
   });
