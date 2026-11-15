@@ -94,7 +94,12 @@
     {
       "id": "c3s1v04_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A formal introduction that explains local rules and safety arrangements is an ___.",
+      "acceptedAnswers": [
+        "induction",
+        "orientation"
+      ]
     },
     {
       "id": "c3s1v04_f01",
