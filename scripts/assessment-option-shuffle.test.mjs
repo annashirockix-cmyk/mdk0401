@@ -115,7 +115,14 @@ test("built-in and final exams keep answer keys server-side and remap submitted 
   assert.match(customSubmit,/lockedAttemptRaw = cache\\.get\\("customTestAttempt:" \\+ attemptId\\)/);
   assert.match(customSubmit,/cache\\.remove\\("customTestAttempt:" \\+ attemptId\\)/);
   assert.match(extract(code,"safeFinalExamQuestion_"),/optionMaps/);
-  assert.match(extract(code,"submitFinalExam_"),/optionMaps/);
+  const finalGet = extract(code,"getFinalExam_");
+  const finalSubmit = extract(code,"submitFinalExam_");
+  assert.match(finalSubmit,/optionMaps/);
+  assert.match(finalGet,/startedAt:Date\.now\(\)/);
+  assert.match(finalGet,/durationSeconds:60\*60/);
+  assert.match(finalSubmit,/elapsedSeconds>Number\(exam\.durationSeconds\)\+300/);
+  assert.match(finalSubmit,/TimeSpent:Math\.min\(elapsedSeconds,Number\(exam\.durationSeconds\)\)/);
+  assert.doesNotMatch(finalSubmit,/TimeSpent:Math\.max\(0,Math\.min\(5400,Number\(data\.timeSpent\)/);
 });
 
 test("VPR requires the server-issued attempt token for submission", () => {
