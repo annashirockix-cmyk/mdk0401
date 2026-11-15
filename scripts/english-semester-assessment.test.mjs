@@ -45,6 +45,13 @@ test("persistent final-exam tables have explicit private attempt and variant col
 const registrySource = extractFunction("validateEnglishExamVariantRegistry_");
 const validateRegistry = new Function(registrySource + "; return validateEnglishExamVariantRegistry_;")();
 
+function validFinalVariantPayload() {
+  return {title:"English final assessment",time:90,maxScore:10,tasks:Array.from({length:10},(_,i)=>({
+    id:"task_"+(i+1),type:"single_choice",prompt:"Choose the correct form in context "+(i+1)+".",
+    options:["works","work","working","worked"],correctIndex:0,points:1
+  }))};
+}
+
 function validExamRegistry() {
   return Array.from({length:10}, (_, slot) => {
     const courseNo = Math.floor(slot / 2) + 1;
@@ -55,11 +62,28 @@ function validExamRegistry() {
       semester,
       variants:Array.from({length:15}, (_, variant) => ({
         variantId:"EN_C0" + courseNo + "_S" + semester + "_V" + String(variant + 1).padStart(2,"0"),
-        blueprintId:"BP_C0" + courseNo + "_S" + semester
+        blueprintId:"BP_C0" + courseNo + "_S" + semester,
+        variantJSON:validFinalVariantPayload()
       }))
     };
   });
 }
+
+test("final exam import validates task types, private answer keys, scoring and duration before activation", () => {
+  const source = extractFunction("validateEnglishFinalVariantPayload_");
+  const validate = new Function(source + "; return validateEnglishFinalVariantPayload_;")();
+  const good = validFinalVariantPayload();
+  assert.deepEqual(validate(good,"V01"),{taskCount:10,maxScore:10,durationMinutes:90});
+  const noKey = structuredClone(good); delete noKey.tasks[0].correctIndex;
+  assert.throws(()=>validate(noKey,"NO_KEY"),/correctIndex/);
+  const badType = structuredClone(good); badType.tasks[0].type="drag_drop";
+  assert.throws(()=>validate(badType,"BAD_TYPE"),/неподдерживаемый тип/);
+  const badScore = structuredClone(good); badScore.maxScore=40;
+  assert.throws(()=>validate(badScore,"BAD_SCORE"),/maxScore/);
+  const repeated = structuredClone(good); repeated.tasks[1].prompt=repeated.tasks[0].prompt;
+  assert.throws(()=>validate(repeated,"DUPLICATE"),/повторяется формулировка/);
+  assert.match(code,/validateEnglishFinalVariantPayload_\(payload, String\(variant\.variantId\)\)/);
+});
 
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
   const start = extractFunction("startEnglishFinalExam_");
