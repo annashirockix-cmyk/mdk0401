@@ -153,7 +153,7 @@
 | 177 | A | “Adjective + enough + to-infinitive” expresses sufficient ability or suitability. |
 | 178 | A | This is a clear and helpful response that directly answers a request for directions. |
 | 179 | C | “Essential” means necessary or very important. |
-| 180 | D | With “neither…nor”, the verb agrees with the nearer plural subject “students”. |
+| 180 | D | The compound subject “the teacher and the students” is plural, so the past form is “were”. |
 
 ## Review checklist
 
