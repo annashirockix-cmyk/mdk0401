@@ -120,6 +120,8 @@ test("built-in and final exams keep answer keys server-side and remap submitted 
   assert.match(finalSubmit,/optionMaps/);
   assert.match(finalGet,/startedAt:Date\.now\(\)/);
   assert.match(finalGet,/durationSeconds:60\*60/);
+  const finalUi = fs.readFileSync(path.join(root,"final.js"),"utf8");
+  assert.match(finalUi,/FINAL_EXAM_TIME\s*=\s*60\s*\*\s*60/,"client countdown and server timer must both use 60 minutes");
   assert.match(finalSubmit,/elapsedSeconds>Number\(exam\.durationSeconds\)\+300/);
   assert.match(finalSubmit,/TimeSpent:Math\.min\(elapsedSeconds,Number\(exam\.durationSeconds\)\)/);
   assert.doesNotMatch(finalSubmit,/TimeSpent:Math\.max\(0,Math\.min\(5400,Number\(data\.timeSpent\)/);
