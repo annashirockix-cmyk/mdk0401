@@ -11,7 +11,7 @@
     {
       "id": "c4s2v11_l01",
       "type": "single_choice",
-      "prompt": "Listening 1. When does the session begin?",
+      "prompt": "Listening 1. At what time does the industrial IoT lesson start?",
       "audioText": "The industrial systems tutor will discuss connected production equipment on Tuesday at ten thirty. Students should bring the network architecture diagram. The lesson will trace sensor data through a gateway to a monitoring platform and explain why device identity and approved network settings matter.",
       "options": [
         "At ten thirty on Tuesday",
@@ -25,7 +25,7 @@
     {
       "id": "c4s2v11_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which material should students bring?",
+      "prompt": "Listening 2. Which network document is required for the session?",
       "audioText": "The industrial systems tutor will discuss connected production equipment on Tuesday at ten thirty. Students should bring the network architecture diagram. The lesson will trace sensor data through a gateway to a monitoring platform and explain why device identity and approved network settings matter.",
       "options": [
         "A personal notebook",
@@ -78,12 +78,12 @@
     {
       "id": "c4s2v11_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details relevant to industrial IoT systems.",
+      "prompt": "A connected sensor has been added to the production network. Which information should be verified?",
       "options": [
         "An unrelated appointment",
         "A personal preference",
-        "The relevant technical component or evidence",
-        "The relevant procedure or documentation"
+        "Device identity and approved communication settings",
+        "Sensor readings and gateway destination"
       ],
       "correctIndices": [
         2,
@@ -103,10 +103,10 @@
     {
       "id": "c4s2v11_f01",
       "type": "single_choice",
-      "prompt": "Choose the most appropriate professional response.",
+      "prompt": "Check the device register and What should you say?",
       "options": [
         "I will guess and continue.",
-        "Could we verify its device identity and approved network settings first?",
+        "Check the device register and authorised network configuration before enabling data transfer.",
         "The detail is not important.",
         "I will copy an unrelated record."
       ],
