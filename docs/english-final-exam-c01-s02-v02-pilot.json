@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO things you should do when borrowing college equipment.",
       "options": [
-        "Complete the required form.",
         "Take it without telling anyone.",
-        "Check its condition.",
-        "Keep it after the return date."
+        "Keep it after the return date.",
+        "Complete the required form.",
+        "Check its condition."
       ],
       "correctIndices": [
         2,
