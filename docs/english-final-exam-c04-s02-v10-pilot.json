@@ -25,7 +25,7 @@
     {
       "id": "c4s2v10_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which glossary should students bring?",
+      "prompt": "Listening 2. Which course resource should students bring to the security lesson?",
       "audioText": "The control systems tutor will discuss information security principles on Tuesday at two. Students should meet in the project classroom and bring the security glossary. The lesson will cover account access, approved software updates and reporting unusual activity. It will focus on responsible documentation and will not include practical access to live control systems.",
       "options": [
         "On Friday",
