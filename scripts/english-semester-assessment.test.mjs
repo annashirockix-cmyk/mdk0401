@@ -359,6 +359,32 @@ test("fifteen authored Technical English Course 5 Semester 1 pilots match the pr
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
 });
 
+test("combined 150-variant editorial pilot registry matches all ten slots and remains blocked from import", () => {
+  const bundle=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-registry-v1-pilot.json"),"utf8"));
+  assert.equal(bundle.status,"pilot_for_editorial_review");
+  assert.equal(bundle.exams.length,10);
+  const registrySource=extractFunction("validateEnglishExamVariantRegistry_");
+  const validateRegistry=new Function(registrySource+"; return validateEnglishExamVariantRegistry_;")();
+  assert.deepEqual(validateRegistry(bundle.exams),{examCount:10,variantCount:150,basicSlots:4,technicalSlots:6});
+  const payloadSource=extractFunction("validateEnglishFinalVariantPayload_");
+  const validatePayload=new Function(payloadSource+"; return validateEnglishFinalVariantPayload_;")();
+  let count=0; const ids=[];
+  bundle.exams.forEach(exam=>{
+    assert.equal(exam.variants.length,15);
+    exam.variants.forEach(variant=>{
+      count++;
+      assert.equal(variant.variantJSON.sourceNotes.status,"pilot_for_editorial_review");
+      assert.deepEqual(validatePayload(variant.variantJSON,variant.variantId),{taskCount:10,maxScore:20,durationMinutes:90});
+      variant.variantJSON.tasks.forEach(task=>ids.push(task.id));
+    });
+  });
+  assert.equal(count,150);
+  assert.equal(new Set(ids).size,1500);
+  const importer=extractFunction("importEnglishExamVariants_");
+  assert.match(importer,/actor\.role !== "admin"/);
+  assert.match(importer,/payload\.sourceNotes\.status !== "approved_for_import"/);
+});
+ 
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
   const start = extractFunction("startEnglishFinalExam_");
   const resume = extractFunction("resumeEnglishFinalExam_");
