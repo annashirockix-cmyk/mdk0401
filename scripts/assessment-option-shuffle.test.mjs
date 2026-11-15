@@ -187,11 +187,14 @@ test("English exam imports validate bounded durations and stored elapsed time ca
   const semesterValidator = extract(code, "validateEnglishSemesterTests_");
   assert.match(semesterValidator,/duration < 1 \|\| duration > 180/);
   const semesterSubmit = extract(code, "submitEnglishSemesterTest_");
-  assert.match(semesterSubmit,/Math\.min\(Math\.max\(0, Number\(data\.timeSpent\) \|\| 0\), Math\.max\(1, Number\(test\.time\) \|\| 45\) \* 60\)/);
+  assert.match(semesterSubmit,/TimeSpent:Math\.min\(elapsedSeconds,allowedSeconds\)/);
+  assert.doesNotMatch(semesterSubmit,/Number\(data\.timeSpent\)/);
   const vprValidator = extract(vpr, "validateEnglishVprExam_");
   assert.match(vprValidator,/duration < 1 \|\| duration > 180/);
   const vprSubmit = extract(vpr, "submitEnglishVprExam_");
-  assert.match(vprSubmit,/Math\.min\(Math\.max\(0,Number\(data\.timeSpent\) \|\| 0\),Math\.max\(1,Number\(exam\.time\) \|\| 90\)\*60\)/);
+  assert.match(vprSubmit,/const elapsedSeconds = startedAt \? Math\.max\(0, Math\.floor\(\(Date\.now\(\) - startedAt\) \/ 1000\)\) : 0/);
+  assert.match(vprSubmit,/timeSpent:Math\.min\(elapsedSeconds,allowedSeconds\)/);
+  assert.doesNotMatch(vprSubmit,/Number\(data\.timeSpent\)/);
 });
 
 test("VPR and semester student payloads use recursive answer-key sanitization and one-time token consumption", () => {
