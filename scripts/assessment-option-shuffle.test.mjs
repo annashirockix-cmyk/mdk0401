@@ -272,6 +272,11 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(gradeWritten,/isRegrade&&!\(teacher\.role==="admin"&&data\.regrade===true\)/);
   assert.match(gradeWritten,/written_regraded/);
   assert.match(gradeWritten,/Feedback:feedback,ReviewedBy:teacher\.email,ReviewedAt:new Date\(\)\.toISOString\(\)/);
+  const gradeAssignment = extract(code,"gradeAssignment_");
+  assert.match(gradeAssignment,/isRegrade && !\(actor\.role === "admin" && data\.regrade === true\)/);
+  assert.match(gradeAssignment,/assignment_regraded/);
+  assert.match(gradeAssignment,/assignment_graded/);
+  assert.match(gradeAssignment,/lock\.waitLock\(10000\)/);
   const getResults = extract(code,"getResults_");
   assert.match(getResults,/feedbackMatch=submission\.match/);
   assert.match(getResults,/storedFeedback=resultMap\.Feedback/);
