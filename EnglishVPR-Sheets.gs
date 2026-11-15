@@ -352,13 +352,41 @@ function submitEnglishVprExam_(data) {
   const testId=String(exam.id||("english_vpr_"+track+"_2026"));
   const attemptLock = LockService.getScriptLock();
   attemptLock.waitLock(10000);
+  let processingAttempt = null;
   try {
     const lockedRaw = cache.get("englishVprAttempt:" + attemptId);
     if (!lockedRaw) throw new Error("Эта попытка уже отправлена или истекла.");
     const lockedAttempt = JSON.parse(lockedRaw);
     if (lockedAttempt.email !== user.email || lockedAttempt.track !== track || lockedAttempt.courseId !== courseId || String(lockedAttempt.exam && lockedAttempt.exam.id || "") !== String(exam.id || "")) throw new Error("Данные серверной попытки изменились. Начните экзамен заново.");
+    const processingAt = Number(lockedAttempt.processingAt) || 0;
+    if (lockedAttempt.processing === true && processingAt && Date.now() - processingAt < 60000) {
+      throw new Error("Ответы уже отправляются на проверку. Дождитесь результата.");
+    }
+    processingAttempt = lockedAttempt;
+    processingAttempt.processing = true;
+    processingAttempt.processingAt = Date.now();
+    cache.put("englishVprAttempt:" + attemptId, JSON.stringify(processingAttempt), 7200);
   } finally { attemptLock.releaseLock(); }
-  const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Math.min(Math.max(0,Math.floor((Date.now()-startedAt)/1000)),Math.max(1,Number(exam.time)||90)*60),payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
+  let result;
+  try {
+    result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Math.min(Math.max(0,Math.floor((Date.now()-startedAt)/1000)),Math.max(1,Number(exam.time)||90)*60),payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
+  } catch (saveError) {
+    const restoreLock = LockService.getScriptLock();
+    restoreLock.waitLock(10000);
+    try {
+      const currentRaw = cache.get("englishVprAttempt:" + attemptId);
+      if (currentRaw) {
+        const current = JSON.parse(currentRaw);
+        if (current.email === user.email && current.processing === true &&
+            Number(current.processingAt) === Number(processingAttempt.processingAt)) {
+          current.processing = false;
+          delete current.processingAt;
+          cache.put("englishVprAttempt:" + attemptId, JSON.stringify(current), 7200);
+        }
+      }
+    } finally { restoreLock.releaseLock(); }
+    throw saveError;
+  }
   const cleanupLock = LockService.getScriptLock();
   cleanupLock.waitLock(10000);
   try {
