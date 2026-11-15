@@ -61,6 +61,19 @@ function validExamRegistry() {
   });
 }
 
+test("final exam variant importer stores one bounded private payload per variant and activates only after staging", () => {
+  const importer = extractFunction("importEnglishExamVariants_");
+  assert.match(importer, /auth_\(data\)/);
+  assert.match(importer, /validateEnglishExamVariantRegistry_\(exams\)/);
+  assert.match(importer, /variant\.variantJSON/);
+  assert.match(importer, /variantJSON\.length > 45000/);
+  assert.match(importer, /setValues\(matrix\)/);
+  assert.match(importer, /Active:"FALSE"/);
+  assert.ok(importer.indexOf('setValues(matrix)') < importer.indexOf('setValues(matrix.map(function() { return ["TRUE"]; }))'));
+  assert.match(importer, /LockService\.getScriptLock\(\)/);
+  assert.match(code, /case "importenglishexamvariants": result = importEnglishExamVariants_\(data\); break;/);
+});
+
 test("final exam registry requires all ten course-semester slots and 150 unique variants", () => {
   assert.deepEqual(validateRegistry(validExamRegistry()), {examCount:10,variantCount:150,basicSlots:4,technicalSlots:6});
 });
