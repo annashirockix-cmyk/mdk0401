@@ -25,7 +25,7 @@
     {
       "id": "c5s1v02_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which sheet should students bring?",
+      "prompt": "Listening 2. Which inspection-results sheet is needed for the class?",
       "audioText": "The quality instructor will discuss inspection findings on Thursday at ten thirty. Students should bring the sample inspection sheet and meet in the maintenance classroom. The lesson will compare observed condition, acceptance criteria and recorded evidence. The instructor will explain why a report should distinguish an observation from a conclusion about the cause.",
       "options": [
         "On Friday",
