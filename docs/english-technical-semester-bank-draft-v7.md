@@ -22,11 +22,11 @@
 - C. across
 - D. about
 
-**124.** A drawing note says “Do not scale the drawing.” What does this mean?
-- A. Do not determine dimensions by measuring the drawing image; use stated dimensions
-- B. Enlarge the drawing until all dimensions are visible
-- C. Convert every dimension into a different unit
-- D. Remove the scale information from the title block
+**124.** A component is shown on a drawing at a scale of 1:2. How does the drawing size compare with the real component?
+- A. The drawing is half the size of the real component
+- B. The drawing is twice the size of the real component
+- C. The drawing and the real component are the same size
+- D. The scale means that the component has two separate dimensions
 
 **125.** Choose the most appropriate phrase for a formal request.
 - A. “Give latest paper now.”
@@ -131,7 +131,7 @@
 | 121 | A | Singular subject “report” takes “describes”. |
 | 122 | A | “Out of specification” means outside stated acceptance limits or requirements. |
 | 123 | D | The natural collocation is “notify someone about” a change. |
-| 124 | A | Dimensions should be taken from stated values, not estimated from the printed or displayed image. |
+| 124 | A | A scale of 1:2 means one unit on the drawing represents two units on the real component, so the drawing is half-size. |
 | 125 | B | This is a polite, grammatically correct formal request. |
 | 126 | B | A purchase requisition requests authorization to obtain specified goods or services. |
 | 127 | B | With the nearer plural subject “notes”, the verb is plural: “specify”. Check the chosen grammar reference's notional/agreement guidance for neither…nor. |
