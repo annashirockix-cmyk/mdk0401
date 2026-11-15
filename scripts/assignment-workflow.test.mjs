@@ -199,6 +199,23 @@ test("legacy EN students can receive and submit ENB/ENT assignments without cros
   );
 });
 
+test("assignment resubmission is allowed after a grade of 2 but not after acceptance", () => {
+  const { sandbox: api } = runtime();
+  const created = api.createAssignment_({
+    token: "teacherToken",
+    courseId: "07.01",
+    targetType: "group",
+    targetValue: "ТО-21",
+    title: "Повторная работа",
+    instructions: "Исправьте программу."
+  });
+  const first = api.submitAssignment_({ token: "studentToken", assignmentId: created.id, answer: "Первая версия" });
+  api.gradeAssignment_({ token: "teacherToken", submissionId: first.submissionId, grade: 2, feedback: "Нужна доработка." });
+  const retry = api.submitAssignment_({ token: "studentToken", assignmentId: created.id, answer: "Исправленная версия" });
+  assert.equal(retry.attempt, 2);
+  assert.equal(api.getAssignments_({ token: "studentToken" }).assignments[0].submission.status, "submitted");
+});
+
 test("group assignment workflow works before student onboarding and preserves student payload", async () => {
   const r = runtime();
   const { sandbox: api, users, submissions, history, notifications, audit } = r;
@@ -269,6 +286,10 @@ test("group assignment workflow works before student onboarding and preserves st
   assert.equal(regraded.success, true);
   assert.equal(submissions.rows[1][submissions.rows[0].indexOf("Grade")], 4);
   assert.equal(audit.filter(item => item.EventType === "assignment_regraded").length, 1);
+  assert.throws(
+    () => api.submitAssignment_({ token: "studentToken", assignmentId: created.id, answer: "Попытка после зачёта" }),
+    /уже проверена и зачтена/
+  );
 
   const submissionReadsBeforeStudentView = submissions.getDataRangeCalls;
   const historyReadsBeforeStudentView = history.getDataRangeCalls;
