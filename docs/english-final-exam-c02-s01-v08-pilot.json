@@ -9,7 +9,7 @@
   "maxScore": 20,
   "tasks": [
     {
-      "id": "c2s1v8_l01",
+      "id": "c2s1v08_l01",
       "type": "single_choice",
       "prompt": "Listening 1. When will the platform be unavailable?",
       "audioText": "The college learning platform will be unavailable for maintenance on Saturday from eight until ten in the morning. Students should download any materials they need before Friday evening. Submitted work will remain saved, but online quizzes cannot be opened during the maintenance period. If the service is still unavailable after ten, contact the IT help desk.",
@@ -23,7 +23,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v8_l02",
+      "id": "c2s1v08_l02",
       "type": "single_choice",
       "prompt": "Listening 2. What should students do before Friday evening?",
       "audioText": "The college learning platform will be unavailable for maintenance on Saturday from eight until ten in the morning. Students should download any materials they need before Friday evening. Submitted work will remain saved, but online quizzes cannot be opened during the maintenance period. If the service is still unavailable after ten, contact the IT help desk.",
@@ -37,7 +37,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v8_r01",
+      "id": "c2s1v08_r01",
       "type": "single_choice",
       "prompt": "Artem uses a digital folder to organise notes from his electronics course. He names each file with the subject and date, then stores diagrams separately from written summaries. Before a test, he searches the folder for key terms and checks that the latest version of each document is available. This system helps him avoid losing important information. Reading 1. How does Artem organise his files?",
       "options": [
@@ -50,7 +50,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v8_r02",
+      "id": "c2s1v08_r02",
       "type": "single_choice",
       "prompt": "Why does he check document versions?",
       "options": [
@@ -63,7 +63,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v8_g01",
+      "id": "c2s1v08_g01",
       "type": "single_choice",
       "prompt": "You ___ save your work before closing the programme.",
       "options": [
@@ -76,7 +76,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v8_m01",
+      "id": "c2s1v08_m01",
       "type": "multiple_choice",
       "prompt": "Choose TWO safe digital study practices.",
       "options": [
@@ -92,7 +92,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v8_v01",
+      "id": "c2s1v08_v01",
       "type": "short_text",
       "prompt": "A copy of a file kept in case the original is lost is a ___.",
       "acceptedAnswers": [
@@ -101,7 +101,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v8_f01",
+      "id": "c2s1v08_f01",
       "type": "single_choice",
       "prompt": "You cannot open a course file. What should you write to the IT desk?",
       "options": [
@@ -114,7 +114,7 @@
       "points": 1
     },
     {
-      "id": "c2s1v8_o01",
+      "id": "c2s1v08_o01",
       "type": "ordering",
       "prompt": "Put the stages of digital learning in a sensible order.",
       "options": [
@@ -132,7 +132,7 @@
       "points": 2
     },
     {
-      "id": "c2s1v8_w01",
+      "id": "c2s1v08_w01",
       "type": "written",
       "prompt": "Write 60–80 words explaining how you organise digital study materials and protect important files.",
       "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
