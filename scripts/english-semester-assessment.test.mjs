@@ -301,8 +301,8 @@ test("fifteen authored Technical English Course 4 Semester 2 pilots match the pr
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
 });
 
-test("five authored Technical English Course 5 Semester 1 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:5},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c05-s01-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
+test("ten authored Technical English Course 5 Semester 1 pilots match the protected runtime schema",()=>{
+  const pilots=Array.from({length:10},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c05-s01-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
   const source=extractFunction("validateEnglishFinalVariantPayload_");
   const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
   const allPrompts=[];
@@ -317,10 +317,10 @@ test("five authored Technical English Course 5 Semester 1 pilots match the prote
     assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
     assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
     const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could we confirm the correct task|observed condition differs|separate the hypothesis|Could the documentation team|Check the document register/i);
+    assert.match(functional.options[functional.correctIndex],/Could we confirm the correct task|observed condition differs|separate the hypothesis|Could the documentation team|Check the document register|The task remains open|Could we compare the operating conditions/i);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,5);
+  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,10);
 });
 
 test("five authored Technical English Course 5 Semester 2 pilots match the protected runtime schema",()=>{
