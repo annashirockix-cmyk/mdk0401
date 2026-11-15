@@ -1429,7 +1429,13 @@ function gradeAssignment_(data) {
     const courseId = String(a[ah.CourseId] || "");
     const teacher = editor_(data, courseId);
     const feedback = String(data.feedback || "").slice(0,4000);
+    const currentGrade = row[m.Grade] === "" || row[m.Grade] == null ? null : Number(row[m.Grade]);
+    const isRegrade = currentGrade !== null && isFinite(currentGrade) && currentGrade >= 0 && currentGrade <= 5 && String(row[m.Status] || "") === "reviewed";
+    if (isRegrade && !(actor.role === "admin" && data.regrade === true)) {
+      throw new Error("Работа уже проверена. Повторное выставление оценки доступно только администратору с явным подтверждением.");
+    }
     updateMappedRecord_(sh, i + 2, {Status:"reviewed",Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:new Date().toISOString()});
+    appendAttemptAudit_({EventType:isRegrade?"assignment_regraded":"assignment_graded",ActorEmail:teacher.email,StudentEmail:email_(row[m.StudentEmail]),StudentName:String(row[m.StudentName] || ""),Group:String(row[m.Group] || ""),CourseId:courseId,TestId:"assignment_"+aid,TestTitle:"Задание: "+String(a[ah.Title] || ""),Grade:grade,Percent:grade*20});
     const retryNeeded=grade<=2;
     createNotification_(String(row[m.StudentEmail] || ""),retryNeeded?"assignment_retry":"grade",
       retryNeeded?"Работу нужно доработать":"Работа проверена",
