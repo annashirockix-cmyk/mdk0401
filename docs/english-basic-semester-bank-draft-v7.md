@@ -42,7 +42,7 @@
 - C. fewer
 - D. fewest
 
-**127.** Choose the correct sentence.
+**127.** Which sentence correctly describes an action that started in the past and continues now?
 - A. She has worked here since three years.
 - B. She works here for 2023.
 - C. She is working here since 2023.
