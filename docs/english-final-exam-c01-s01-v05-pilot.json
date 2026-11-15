@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 05",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v05_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to Nina's message. What time does the student club meeting start?",
+      "audioText": "Hi, Nina. The student club meeting is after the last lesson today. It starts at four o'clock in the art room, next to the college canteen. We are planning a welcome event for new students. Please bring your ideas, but you do not need to prepare a presentation. The meeting will finish at half past four.",
+      "options": [
+        "At 3:30",
+        "At 4:00",
+        "At 4:30",
+        "At 5:00"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v05_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Where is the art room?",
+      "audioText": "Hi, Nina. The student club meeting is after the last lesson today. It starts at four o'clock in the art room, next to the college canteen. We are planning a welcome event for new students. Please bring your ideas, but you do not need to prepare a presentation. The meeting will finish at half past four.",
+      "options": [
+        "Opposite the library",
+        "Next to the college canteen",
+        "On the third floor",
+        "Near the sports centre"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v05_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. On Mondays, Timur goes to the college sports centre after his classes. He usually plays table tennis with a friend, but this week the sports hall is closed for repairs. Timur is going to the swimming pool instead. He checks the opening times on the college website before he leaves. He enjoys sport because it helps him relax after a busy day. What does Timur usually do at the sports centre?",
+      "options": [
+        "He plays table tennis",
+        "He studies mathematics",
+        "He meets his English teacher",
+        "He repairs sports equipment"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v05_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. Why does Timur enjoy sport?",
+      "options": [
+        "It helps him relax",
+        "It makes his lessons shorter",
+        "It gives him more homework",
+        "It helps him repair the sports hall"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v05_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct preposition: 'Our English classroom is ___ the library and the computer room.'",
+      "options": [
+        "between",
+        "under",
+        "through",
+        "during"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v05_g02",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO sentences that correctly describe regular habits.",
+      "options": [
+        "Nina usually arrives before nine.",
+        "Timur go to the sports centre on Mondays.",
+        "We often practise English after class.",
+        "He never are late for lessons."
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v05_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'A group of students who meet to do an activity together can be called a ___.'",
+      "acceptedAnswers": [
+        "club"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v05_f01",
+      "type": "single_choice",
+      "prompt": "You want to know how to get to the college canteen. Which question is correct and polite?",
+      "options": [
+        "How I get canteen?",
+        "Could you tell me how to get to the canteen?",
+        "Where canteen yesterday?",
+        "You show me canteen now!"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v05_o01",
+      "type": "ordering",
+      "prompt": "Put the steps for planning a student club event in a sensible order.",
+      "options": [
+        "Invite students to the event",
+        "Choose the date and place",
+        "Discuss ideas with the club members",
+        "Prepare the room"
+      ],
+      "correctOrder": [
+        "Discuss ideas with the club members",
+        "Choose the date and place",
+        "Prepare the room",
+        "Invite students to the event"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v05_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about an activity you enjoy after classes. Say where and when you do it, who you do it with and why it is useful or enjoyable for you.",
+      "rubric": "8 points total: all parts of the task addressed (0–2); clear basic sentence structure and grammar (0–2); relevant activity and place vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v05_audio",
+    "readingPassageId": "c1s1v05_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
