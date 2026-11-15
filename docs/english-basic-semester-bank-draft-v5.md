@@ -48,7 +48,7 @@
 - C. since
 - D. by
 
-**88.** Choose the correct sentence.
+**88.** Which sentence correctly uses the verb “suggest” before an activity?
 - A. She suggested to take a taxi.
 - B. She suggested take a taxi.
 - C. She suggested that taking a taxi.
