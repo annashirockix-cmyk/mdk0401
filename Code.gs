@@ -1927,6 +1927,15 @@ function submitBuiltInTest_(data) {
   },0);
   const rawPercent=Math.round(rawScore/entries.length*100),lock=LockService.getScriptLock();lock.waitLock(10000);
   try{
+    // Re-read the one-time token under the result lock. Parallel requests may
+    // both have read it before either request acquired this lock.
+    const lockedAttemptRaw=cache.get("builtInAttempt:"+attemptId);
+    if(!lockedAttemptRaw)throw new Error("Эта попытка уже отправлена или истекла. Начните тест заново.");
+    const lockedAttempt=JSON.parse(lockedAttemptRaw);
+    if(lockedAttempt.email!==user.email||lockedAttempt.courseId!==courseId||lockedAttempt.testId!==testId||
+       JSON.stringify(lockedAttempt.bankIds)!==JSON.stringify(resolvedIds)) {
+      throw new Error("Идентификатор попытки недействителен. Начните тест заново.");
+    }
     const sh=results_(),rows=resultAttemptRows_();
     const prior=rows.filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
@@ -2164,6 +2173,13 @@ function submitCustomTest_(data) {
   const lock = LockService.getScriptLock(); lock.waitLock(10000);
   let attemptNo = 0, finalPercent = percent, finalGrade = gradeFromPercent_(percent), finalScore = score;
   try {
+    // Re-read the one-time token under the result lock to prevent parallel replay.
+    const lockedAttemptRaw = cache.get("customTestAttempt:" + attemptId);
+    if (!lockedAttemptRaw) throw new Error("Эта попытка уже отправлена или истекла. Откройте тест заново.");
+    const lockedAttempt = JSON.parse(lockedAttemptRaw);
+    if (lockedAttempt.email !== user.email || lockedAttempt.courseId !== courseId || lockedAttempt.testId !== id) {
+      throw new Error("Идентификатор попытки недействителен. Откройте тест заново.");
+    }
     const resultSheet = results_(), rows = resultAttemptRows_();
     const prior = rows.filter(function(row) {
       return email_(row[0]) === user.email && String(row[3]) === attemptKey && sameCourseId_(row[12] || courseId, courseId);
@@ -2184,8 +2200,9 @@ function submitCustomTest_(data) {
       PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount
     });
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:attemptKey,TestTitle:attempt.title||id,AttemptNo:attemptNo,Grade:finalGrade,Score:score,MaxScore:questions.length,Percent:finalPercent});
+    // Consume before releasing the lock; a waiting duplicate re-reads null.
+    cache.remove("customTestAttempt:" + attemptId);
   } finally { lock.releaseLock(); }
-  cache.remove("customTestAttempt:" + attemptId);
   const finalPolicy = proctorPenalty_(user.email, courseId, attemptKey, attemptNo);
   finalPercent = Math.max(0, percent - finalPolicy.penaltyPoints);
   finalGrade = gradeFromPercent_(finalPercent);
