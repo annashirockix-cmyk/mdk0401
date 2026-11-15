@@ -67,7 +67,7 @@ The following items were revised after checking for more than one plausible answ
 
 ## Answer-position balance
 
-After shuffling answer options while preserving the intended correct answer, the 200-item draft has this key distribution: A — 50, B — 49, C — 50, D — 51. The test now checks that each letter remains between 49 and 51.
+After shuffling answer options while preserving the intended correct answer, the 200-item draft has this key distribution: A — 49, B — 50, C — 50, D — 51. The test now checks that each letter remains between 49 and 51.
 
 ## Safety and release gates
 
