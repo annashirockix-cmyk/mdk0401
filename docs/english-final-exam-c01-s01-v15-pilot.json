@@ -81,9 +81,9 @@
       "prompt": "Choose TWO safe actions in an electrical laboratory.",
       "options": [
         "Change a connection while the supply is on.",
+        "Use damaged leads.",
         "Follow the circuit diagram.",
-        "Switch off the supply before changing connections.",
-        "Use damaged leads."
+        "Switch off the supply before changing connections."
       ],
       "correctIndices": [
         2,
