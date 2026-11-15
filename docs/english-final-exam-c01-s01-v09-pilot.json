@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Listen to the computer room notice. Why will the computer room be unavailable on Wednesday morning?",
       "audioText": "Hello, Alex. This is the notice for the college computer room. It will be unavailable on Wednesday morning from nine until eleven because technicians are installing new software. Students can use the computers in the library during this time. Please save your work and log out before leaving the room on Tuesday. The computer room will reopen at eleven thirty.",
       "options": [
-        "Students are taking an exam",
         "Technicians are installing new software",
+        "Students are taking an exam",
         "The room is being painted",
         "The teacher is holding a meeting"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -28,12 +28,12 @@
       "prompt": "Listening 2. Where can students use computers during the maintenance?",
       "audioText": "Hello, Alex. This is the notice for the college computer room. It will be unavailable on Wednesday morning from nine until eleven because technicians are installing new software. Students can use the computers in the library during this time. Please save your work and log out before leaving the room on Tuesday. The computer room will reopen at eleven thirty.",
       "options": [
-        "In the library",
         "In the workshop",
+        "In the library",
         "In the main office",
         "At home only"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -42,11 +42,11 @@
       "prompt": "Reading 1. Read the text. Amina is learning to use a digital measuring tool in her technology class. First, her teacher demonstrates how to switch it on and select the correct unit. Amina then measures several metal parts and writes the results in a table. She checks each measurement twice to avoid mistakes. When she finishes, she cleans the tool and returns it to its case. Why does Amina check each measurement twice?",
       "options": [
         "To finish the lesson early",
-        "To avoid mistakes",
         "To change the measuring unit",
+        "To avoid mistakes",
         "To help another teacher"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -56,10 +56,10 @@
       "options": [
         "She leaves it on the table",
         "She gives it to another student",
-        "She cleans it and returns it to its case",
-        "She puts it in the workshop cupboard without cleaning"
+        "She puts it in the workshop cupboard without cleaning",
+        "She cleans it and returns it to its case"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "Choose the correct comparative form: 'This digital measuring tool is ___ than the old one.'",
       "options": [
-        "accurate",
         "more accurate",
+        "accurate",
         "most accurate",
         "the accurate"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO instructions that use the imperative correctly.",
       "options": [
-        "Select the correct unit.",
         "You selecting the correct unit.",
-        "Check the result twice.",
-        "Checks the result twice."
+        "Checks the result twice.",
+        "Select the correct unit.",
+        "Check the result twice."
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
@@ -107,12 +107,12 @@
       "type": "single_choice",
       "prompt": "You need to use a digital measuring tool but have not been shown how. What should you say?",
       "options": [
-        "Could you show me how to use this tool, please?",
         "I use it any way.",
+        "Could you show me how to use this tool, please?",
         "You must give me this now.",
         "Why is this tool here yesterday?"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
