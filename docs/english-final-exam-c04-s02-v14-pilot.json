@@ -11,7 +11,7 @@
     {
       "id": "c4s2v14_l01",
       "type": "single_choice",
-      "prompt": "Listening 1. When does the session begin?",
+      "prompt": "Listening 1. What time does the ground support equipment lesson begin?",
       "audioText": "The aviation technology lecturer will introduce ground support equipment documentation on Wednesday at twelve. Students should bring the equipment checklist and service-status form. The lesson will show how technicians identify a unit, record its condition and communicate availability.",
       "options": [
         "At twelve on Wednesday",
@@ -25,7 +25,7 @@
     {
       "id": "c4s2v14_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which material should students bring?",
+      "prompt": "Listening 2. Which status documents should students bring?",
       "audioText": "The aviation technology lecturer will introduce ground support equipment documentation on Wednesday at twelve. Students should bring the equipment checklist and service-status form. The lesson will show how technicians identify a unit, record its condition and communicate availability.",
       "options": [
         "A personal notebook",
@@ -78,12 +78,12 @@
     {
       "id": "c4s2v14_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details relevant to aviation ground support equipment.",
+      "prompt": "Which TWO details should be clear in a ground support equipment status record?",
       "options": [
         "An unrelated appointment",
         "A personal preference",
-        "The relevant technical component or evidence",
-        "The relevant procedure or documentation"
+        "Equipment identification",
+        "Current service status"
       ],
       "correctIndices": [
         2,
@@ -103,7 +103,7 @@
     {
       "id": "c4s2v14_f01",
       "type": "single_choice",
-      "prompt": "Choose the most appropriate professional response.",
+      "prompt": "Could we confirm the unit's What is the best response?",
       "options": [
         "I will guess and continue.",
         "Could we confirm the unit's service status with the responsible team before use?",
