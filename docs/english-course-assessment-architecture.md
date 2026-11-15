@@ -16,6 +16,17 @@ Target: 10 course-semester exams × 15 variants = 150 variants.
 
 Do not infer the semester-to-topic allocation from the current Unit numbering. The repository does not currently contain an authoritative five-course/two-semester curriculum map. Until the approved curriculum is attached or located, topic allocation below is provisional and must not be published as a confirmed syllabus.
 
+## 2. Semester assessment structure
+
+The semester-assessment importer follows the same five-year split as the course map:
+
+- Basic English: Courses 1–2, four semester controls total (Course 1 S1/S2; Course 2 S1/S2).
+- Technical English: Courses 3–5, six semester controls total (Course 3 S1/S2; Course 4 S1/S2; Course 5 S1/S2).
+- Each approved semester control contains 20 questions: 80 Basic questions and 120 Technical questions are required for the ten core semester controls.
+- The 200-item Basic and 200-item Technical authoring pools are larger than the core requirement. Remaining questions are reserve material for alternate forms, practice and future replacement; they must not be silently treated as additional semesters.
+- The server validates the track-specific count and course-year mapping. Basic IDs use `b_sem1`–`b_sem4`; Technical IDs use `t_sem1`–`t_sem6`. Correct-answer keys remain server-side.
+- The exact allocation of questions to semesters remains provisional until the approved work programme and textbook edition are checked. A passing structural test does not approve pedagogical placement.
+
 ## 2. Five-year lecture target and provisional map
 
 A separate working map is maintained in `docs/english-five-year-120-lecture-map-v1.md`.
