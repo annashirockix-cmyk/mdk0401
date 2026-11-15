@@ -227,6 +227,31 @@ test("assignment resubmission is allowed after a grade of 2 but not after accept
   assert.equal(afterRetry.history[0].status, "reviewed");
 });
 
+test("administrator regrading updates the latest attempt history snapshot", () => {
+  const { sandbox: api } = runtime();
+  const created = api.createAssignment_({
+    token: "teacherToken", courseId: "07.01", targetType: "group",
+    targetValue: "ТО-21", title: "Работа для проверки переоценки",
+    instructions: "Выполните задание."
+  });
+  const submitted = api.submitAssignment_({
+    token: "studentToken", assignmentId: created.id, answer: "Первоначальный ответ"
+  });
+  api.gradeAssignment_({
+    token: "teacherToken", submissionId: submitted.submissionId,
+    grade: 3, feedback: "Первоначальный комментарий."
+  });
+  api.gradeAssignment_({
+    token: "adminToken", submissionId: submitted.submissionId,
+    grade: 5, feedback: "Оценка пересмотрена.", regrade: true
+  });
+  const studentView = api.getAssignments_({ token: "studentToken" });
+  const history = studentView.assignments[0].submission.history;
+  assert.equal(history.length, 1);
+  assert.equal(history[0].grade, 5);
+  assert.equal(history[0].feedback, "Оценка пересмотрена.");
+  assert.equal(history[0].status, "reviewed");
+});
 test("reviewed assignments are included in public subject averages", () => {
   const { sandbox: api } = runtime();
   const created = api.createAssignment_({
