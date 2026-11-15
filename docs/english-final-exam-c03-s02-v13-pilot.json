@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c3_s2",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 3, Semester 2 — Pilot Variant 13",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s2v13_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the toolpath lesson begin?",
+      "audioText": "The manufacturing lecturer will introduce toolpath terminology on Wednesday at nine thirty. Students should meet in the CNC theory room and bring the illustrated toolpath sheet. The lesson will compare a straight-line path with a curved path and identify the difference between the programmed geometry and the actual machine movement. The class will use diagrams only.",
+      "options": [
+        "At nine thirty on Wednesday",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v13_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which sheet should students bring?",
+      "audioText": "The manufacturing lecturer will introduce toolpath terminology on Wednesday at nine thirty. Students should meet in the CNC theory room and bring the illustrated toolpath sheet. The lesson will compare a straight-line path with a curved path and identify the difference between the programmed geometry and the actual machine movement. The class will use diagrams only.",
+      "options": [
+        "On Friday",
+        "The illustrated toolpath sheet",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v13_r01",
+      "type": "single_choice",
+      "prompt": "A toolpath describes the route followed by a cutting tool relative to a workpiece. In a simple example, a linear path connects two points with a straight movement, while a circular path follows an arc. The programmed path is interpreted by the controller, and the resulting movement depends on the machine configuration and settings. A drawing helps students visualise the geometry without operating equipment. Reading 1. What does a toolpath describe?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "The route followed by a cutting tool relative to a workpiece",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s2v13_r02",
+      "type": "single_choice",
+      "prompt": "What can affect the resulting machine movement?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "The machine configuration and settings"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s2v13_g01",
+      "type": "single_choice",
+      "prompt": "The programmed path ___ by the controller.",
+      "options": [
+        "is interpreted",
+        "interpret",
+        "is interpreting",
+        "are interpreted"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v13_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO types of toolpath geometry.",
+      "options": [
+        "Revision letter",
+        "Material certificate",
+        "Linear path",
+        "Circular path"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v13_v01",
+      "type": "short_text",
+      "prompt": "A curved part of a circular toolpath is an ___.",
+      "acceptedAnswers": [
+        "arc"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v13_f01",
+      "type": "single_choice",
+      "prompt": "A toolpath diagram is unclear. What should you ask?",
+      "options": [
+        "I will assume the route is correct.",
+        "Could you explain how the programmed geometry is represented in this diagram?",
+        "The path does not matter.",
+        "I will change the programme."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v13_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of toolpath concepts in a logical order.",
+      "options": [
+        "Relate the path to the component drawing",
+        "Identify the start and end points",
+        "Describe the intended route using correct terms",
+        "Recognise the path geometry"
+      ],
+      "correctOrder": [
+        "Identify the start and end points",
+        "Recognise the path geometry",
+        "Relate the path to the component drawing",
+        "Describe the intended route using correct terms"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v13_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining what a toolpath represents. Compare linear and circular path geometry at a conceptual level.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s2v13_audio",
+    "readingPassageId": "c3s2v13_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
