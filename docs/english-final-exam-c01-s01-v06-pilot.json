@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Listen to the information desk announcement. What time does the desk open?",
       "audioText": "Hello, Mark. This is a reminder about the college information desk. It opens at eight thirty and closes at four thirty. If you need a student card, bring a photo and your passport. The desk is in the main building, opposite the staircase. On Fridays it closes at three o'clock.",
       "options": [
-        "At 8:00",
         "At 8:30",
+        "At 8:00",
         "At 9:00",
         "At 9:30"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -28,12 +28,12 @@
       "prompt": "Listening 2. What must a student bring to get a student card?",
       "audioText": "Hello, Mark. This is a reminder about the college information desk. It opens at eight thirty and closes at four thirty. If you need a student card, bring a photo and your passport. The desk is in the main building, opposite the staircase. On Fridays it closes at three o'clock.",
       "options": [
-        "A photo and a passport",
         "A course book and a notebook",
+        "A photo and a passport",
         "A bus ticket and a map",
         "A letter from a classmate"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -42,11 +42,11 @@
       "prompt": "Reading 1. Read the text. Sofia studies English with a small group from her course. They meet in an empty classroom on Tuesday afternoons. Each student prepares three questions about the text they read at home. During the meeting, they take turns asking and answering the questions. Sofia likes this method because everyone speaks and nobody has to work alone. When does Sofia's group meet?",
       "options": [
         "On Monday mornings",
-        "On Tuesday afternoons",
         "On Friday evenings",
+        "On Tuesday afternoons",
         "At weekends"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -56,10 +56,10 @@
       "options": [
         "Only one student speaks",
         "Nobody needs to read a text",
-        "Everyone speaks and works with others",
-        "The meetings are always online"
+        "The meetings are always online",
+        "Everyone speaks and works with others"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "Choose the correct form: 'There ___ an information desk in the main building.'",
       "options": [
+        "is",
         "are",
         "am",
-        "is",
         "be"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Select the TWO correct sentences about college routines.",
       "options": [
-        "The library closes at six.",
         "Our lessons starts at nine.",
-        "I usually check my timetable on Sunday.",
-        "She don't need a student card."
+        "She don't need a student card.",
+        "The library closes at six.",
+        "I usually check my timetable on Sunday."
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
