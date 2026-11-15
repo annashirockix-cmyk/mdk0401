@@ -47,6 +47,8 @@ const HEADERS = {
   QuestionBankBackup: ["BackupId", "CourseId", "BankId", "RowJSON", "BackedUpAt", "BackedUpBy"],
   EnglishVPRBank: ["Track", "ExamJSON", "Active", "UpdatedAt", "UpdatedBy"],
   EnglishSemesterBank: ["Track", "TestsJSON", "Active", "UpdatedAt", "UpdatedBy"],
+  EnglishExamVariantsBank: ["ExamId", "CourseNo", "CourseId", "Track", "Semester", "VariantId", "BlueprintId", "VariantJSON", "Active", "UpdatedAt", "UpdatedBy"],
+  EnglishExamAttempts: ["AttemptId", "StudentEmail", "StudentName", "Group", "CourseId", "ExamId", "VariantId", "Status", "StartedAt", "DeadlineAt", "SubmittedAt", "AttemptJSON", "ResponsesJSON", "ResultJSON", "UpdatedAt"],
   ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt", "EventType", "Details"]
 };
 
@@ -267,10 +269,10 @@ function notifyProctorSanction_(student,courseId,testId,attemptNo,violationNo,pe
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "ActivityLog"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
-  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications, ProctorEvents, AttemptAudit, QuestionBank, ActivityLog.";
+  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications, ProctorEvents, AttemptAudit, QuestionBank, EnglishExamVariantsBank, EnglishExamAttempts, ActivityLog.";
 }
 
 /* ---------- Common helpers and authentication ---------- */
