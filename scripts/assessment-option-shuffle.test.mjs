@@ -184,7 +184,7 @@ test("VPR and semester student payloads use recursive answer-key sanitization an
 });
 
 test("student-facing assessment sanitizers strip alternate answer-key field names", () => {
-  const safeBuiltIn = new Function("shuffledServer_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer);
+  const safeBuiltIn = new Function("shuffledServer_", "sanitizeAssessmentQuestionForStudent_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer, sanitizeQuestion);
   const privateFields = {
     type:"mc",q:"Question",options:["a","b","c","d"],correct:1,correctIndex:1,
     correctOption:"b",answerIndex:1,expectedAnswer:"b",acceptedAnswers:["b"],
