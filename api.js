@@ -98,6 +98,7 @@ window.API = {
  getEnglishVprExam:function(track){return fetchAPI("getEnglishVprExam",{track:track},"GET");},
  startEnglishVprExam:function(track){return fetchAPI("startEnglishVprExam",{track:track},"POST");},
  importEnglishSemesterTests:function(track,tests){return fetchAPI("importEnglishSemesterTests",{track:track,tests:tests},"POST",120000);},
+ importEnglishExamVariants:function(exams){return fetchAPI("importEnglishExamVariants",{exams:exams},"POST",120000);},
  getEnglishSemesterTests:function(track){return fetchAPI("getEnglishSemesterTests",{track:track},"GET");},
  startEnglishSemesterTest:function(data){return fetchAPI("startEnglishSemesterTest",data||{},"POST");},
  submitEnglishSemesterTest:function(data){return fetchAPI("submitEnglishSemesterTest",data||{},"POST",120000);},
