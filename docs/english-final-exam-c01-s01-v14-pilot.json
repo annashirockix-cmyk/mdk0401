@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO professional behaviours during work placement.",
       "options": [
-        "Ask when a procedure is unclear.",
         "Hide a mistake from the supervisor.",
-        "Keep an accurate record of tasks.",
-        "Ignore instructions."
+        "Ignore instructions.",
+        "Ask when a procedure is unclear.",
+        "Keep an accurate record of tasks."
       ],
       "correctIndices": [
         2,
