@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 13",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v13_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the bus leave from?",
+      "audioText": "The aviation workshop visit is planned for Monday morning. The college bus leaves from the main entrance at eight fifteen, so please arrive ten minutes earlier. Bring your student card and a notebook. Visitors must stay with their guide and follow all safety signs. You may take photographs only in the areas marked by the instructor. The group will return to college before lunchtime.",
+      "options": [
+        "The main entrance",
+        "The sports centre",
+        "The railway station",
+        "The aviation workshop"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v13_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. When should students arrive?",
+      "audioText": "The aviation workshop visit is planned for Monday morning. The college bus leaves from the main entrance at eight fifteen, so please arrive ten minutes earlier. Bring your student card and a notebook. Visitors must stay with their guide and follow all safety signs. You may take photographs only in the areas marked by the instructor. The group will return to college before lunchtime.",
+      "options": [
+        "After lunchtime",
+        "At eight fifteen exactly",
+        "At eight thirty",
+        "At eight oh five"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v13_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. During a visit to an aircraft maintenance hangar, students observe engineers checking an aircraft component. The guide explains that every part has an identification number. Engineers compare this number with the maintenance record before starting work. Students stand behind the marked line and listen carefully. They are not allowed to touch tools or equipment during the demonstration. Why do engineers check the identification number?",
+      "options": [
+        "To find the nearest exit",
+        "To choose a uniform",
+        "To match the part with its maintenance record",
+        "To calculate the aircraft speed"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v13_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What are students not allowed to do?",
+      "options": [
+        "Listen to the guide",
+        "Stand behind the line",
+        "Ask questions",
+        "Touch tools or equipment"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s1v13_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct passive form: 'The component ___ before the inspection.'",
+      "options": [
+        "is identified",
+        "is identify",
+        "identified is",
+        "identifying"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v13_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO rules for a supervised hangar visit.",
+      "options": [
+        "Stay with the guide.",
+        "Touch a component to examine it.",
+        "Follow the safety signs.",
+        "Walk into a restricted area."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v13_v01",
+      "type": "short_text",
+      "prompt": "Complete with one word: 'A written record of maintenance work is a maintenance ___.'",
+      "acceptedAnswers": [
+        "record",
+        "log"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v13_f01",
+      "type": "single_choice",
+      "prompt": "You want to take a photograph but are unsure if it is allowed. What should you ask?",
+      "options": [
+        "I take it now, yes?",
+        "Is photography allowed in this area?",
+        "I took it yesterday.",
+        "Why are photographs forbidden always?"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v13_o01",
+      "type": "ordering",
+      "prompt": "Put the visit actions in the correct order.",
+      "options": [
+        "Listen to the safety briefing",
+        "Arrive at the college entrance",
+        "Observe the demonstration with the guide",
+        "Return to the bus at the agreed time"
+      ],
+      "correctOrder": [
+        "Listen to the safety briefing",
+        "Arrive at the college entrance",
+        "Observe the demonstration with the guide",
+        "Return to the bus at the agreed time"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v13_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about how students should behave during a visit to an aviation workshop. Include preparation, safety rules and one reason for following the guide's instructions.",
+      "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v13_audio",
+    "readingPassageId": "c1s1v13_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
