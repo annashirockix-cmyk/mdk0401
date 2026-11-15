@@ -226,16 +226,21 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
 test("English semester submissions require a server-issued timed attempt", () => {
   assert.match(extract(code, "englishSemesterAttemptCacheKey_"), /SHA_256/);
   const get = extract(code, "getEnglishSemesterTests_");
-  assert.match(get, /englishSemesterAttemptCacheKey_/);
-  assert.match(get, /startedAt:Date\.now\(\)/);
-  assert.match(get, /safeTest\.attemptId = attempt\.attemptId/);
+  assert.doesNotMatch(get, /startedAt:Date\.now\(\)/);
+  const start = extract(code, "startEnglishSemesterTest_");
+  assert.match(start, /englishSemesterAttemptCacheKey_/);
+  assert.match(start, /startedAt:Date\.now\(\)/);
+  assert.match(start, /data\.attemptNo/);
   const submit = extract(code, "submitEnglishSemesterTest_");
   assert.match(submit, /data\.attemptId/);
   assert.match(submit, /serverAttempt\.attemptId !== attemptId/);
   assert.match(submit, /elapsedSeconds > allowedSeconds \+ 300/);
   assert.match(submit, /TimeSpent:Math\.min\(elapsedSeconds, allowedSeconds\)/);
   assert.match(submit, /attemptCache\.remove\(attemptKey\)/);
-  assert.match(fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8"), /attemptNo:test\.attemptNo,attemptId:test\.attemptId/);
+  const client = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
+  assert.match(client, /API\.startEnglishSemesterTest/);
+  assert.match(client, /attemptNo:test\.attemptNo,attemptId:attemptId/);
+  assert.match(fs.readFileSync(path.join(root, "api.js"), "utf8"), /startEnglishSemesterTest:function/);
 });
 
 test("English VPR duration is measured from the server attempt start", () => {
