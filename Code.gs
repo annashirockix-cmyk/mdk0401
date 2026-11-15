@@ -3192,6 +3192,10 @@ function shuffleEnglishFinalExamTasks_(tasks) {
         const j = Math.floor(Math.random() * (i + 1));
         const tmp = order[i]; order[i] = order[j]; order[j] = tmp;
       }
+      // A question with multiple options must not accidentally retain its source order.
+      if (order.length > 1 && order.every(function(value, position) { return value === position; })) {
+        const first = order[0]; order[0] = order[1]; order[1] = first;
+      }
       optionMaps[id] = order;
       copy.options = order.map(function(originalIndex) { return task.options[originalIndex]; });
     }
