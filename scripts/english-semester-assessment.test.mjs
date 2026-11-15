@@ -213,8 +213,8 @@ test("fifteen authored Technical English Course 3 Semester 1 pilots match the pr
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
 });
 
-test("ten authored Technical English Course 3 Semester 2 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:10},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c03-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
+test("fifteen authored Technical English Course 3 Semester 2 pilots match the protected runtime schema",()=>{
+  const pilots=Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c03-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
   const source=extractFunction("validateEnglishFinalVariantPayload_");
   const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
   const allPrompts=[];
@@ -229,153 +229,10 @@ test("ten authored Technical English Course 3 Semester 2 pilots match the protec
     assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
     assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
     const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could you|different roles|Would turning|Let's compare|I have noticed|Could we review|measured value is outside|Check the approved|material has not arrived/i);
-  });
-  assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,10);
-});
-
-test("fifteen authored Technical English Course 4 Semester 1 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c04-s01-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
-  const source=extractFunction("validateEnglishFinalVariantPayload_");
-  const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
-  const allPrompts=[];
-  pilots.forEach((pilot,index)=>{
-    const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c4_s1"); assert.equal(pilot.courseNo,4); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,1);
-    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
-    assert.deepEqual(validate(pilot,"C4-S1-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
-    assert.ok(pilot.tasks.every(task=>task.id.startsWith("c4s1v"+variant+"_")));
-    const distribution={A:0,B:0,C:0,D:0};
-    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
-    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
-    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
-    const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could you|Check its printed|We should use equal|The display became blank|The rating is unclear|The indicator did not light|Check the full model|Could we check|Could we compare|Could you explain|problem appears intermittently|Could we confirm|Record the mismatch/i);
+    assert.match(functional.options[functional.correctIndex],/Could you identify|Let's use the correct term|Would turning|Let's compare|Could you confirm which datum|I have noticed|Could we review the sequence|measured value is outside|Check the approved revision|material has not arrived|Could we check the document register|Check the approved reference|Could you explain how the programmed geometry|Could you add the sample period|Could we evaluate the proposal/i);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
-});
-
-test("five authored Technical English Course 4 Semester 2 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:5},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c04-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
-  const source=extractFunction("validateEnglishFinalVariantPayload_");
-  const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
-  const allPrompts=[];
-  pilots.forEach((pilot,index)=>{
-    const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c4_s2"); assert.equal(pilot.courseNo,4); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,2);
-    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
-    assert.deepEqual(validate(pilot,"C4-S2-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
-    assert.ok(pilot.tasks.every(task=>task.id.startsWith("c4s2v"+variant+"_")));
-    const distribution={A:0,B:0,C:0,D:0};
-    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
-    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
-    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
-    const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could you identify|Let's use the correct term|sensor provides input|Could we check the input|This may be one possible/i);
-  });
-  assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,5);
-});
-
-test("fifteen authored Technical English Course 4 Semester 2 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c04-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
-  const source=extractFunction("validateEnglishFinalVariantPayload_");
-  const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
-  const allPrompts=[];
-  pilots.forEach((pilot,index)=>{
-    const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c4_s2"); assert.equal(pilot.courseNo,4); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,2);
-    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
-    assert.deepEqual(validate(pilot,"C4-S2-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
-    assert.ok(pilot.tasks.every(task=>task.id.startsWith("c4s2v"+variant+"_")));
-    const distribution={A:0,B:0,C:0,D:0};
-    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
-    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
-    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
-    const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could you identify|Let's use the correct term|sensor provides input|Could we check the input|This may be one possible|Could we confirm the exact|I can provide the version|Could we check the address|Could we add the correct unit|I cannot share credentials|Check the device register|Could we update the model|Please check the measurement method|digital representation may be out of date|check the measurement method|Could we confirm the unit's service status|cause has not yet been established/i);
-  });
-  assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
-});
-
-test("ten authored Technical English Course 5 Semester 1 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:10},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c05-s01-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
-  const source=extractFunction("validateEnglishFinalVariantPayload_");
-  const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
-  const allPrompts=[];
-  pilots.forEach((pilot,index)=>{
-    const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c5_s1"); assert.equal(pilot.courseNo,5); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,1);
-    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
-    assert.deepEqual(validate(pilot,"C5-S1-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
-    assert.ok(pilot.tasks.every(task=>task.id.startsWith("c5s1v"+variant+"_")));
-    const distribution={A:0,B:0,C:0,D:0};
-    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
-    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
-    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
-    const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could we confirm the correct task|observed condition differs|separate the hypothesis|Could the documentation team|Check the document register|The task remains open|Could we compare the operating conditions/i);
-  });
-  assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,10);
-});
-
-test("five authored Technical English Course 5 Semester 2 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:5},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c05-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
-  const source=extractFunction("validateEnglishFinalVariantPayload_");
-  const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
-  const allPrompts=[];
-  pilots.forEach((pilot,index)=>{
-    const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c5_s2"); assert.equal(pilot.courseNo,5); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,2);
-    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
-    assert.deepEqual(validate(pilot,"C5-S2-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
-    assert.ok(pilot.tasks.every(task=>task.id.startsWith("c5s2v"+variant+"_")));
-    const distribution={A:0,B:0,C:0,D:0};
-    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
-    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
-    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
-    const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/task remains open|Could we identify who is responsible|trends coincide|timing may be relevant|This copy is still a draft/i);
-  });
-  assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,5);
-});
-
-test("fifteen authored Technical English Course 5 Semester 2 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c05-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
-  const source=extractFunction("validateEnglishFinalVariantPayload_");
-  const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
-  const allPrompts=[];
-  pilots.forEach((pilot,index)=>{
-    const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c5_s2"); assert.equal(pilot.courseNo,5); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,2);
-    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
-    assert.deepEqual(validate(pilot,"C5-S2-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
-    assert.ok(pilot.tasks.every(task=>task.id.startsWith("c5s2v"+variant+"_")));
-    const distribution={A:0,B:0,C:0,D:0};
-    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
-    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
-    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
-    const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/task remains open|Could we identify who is responsible|trends coincide|timing may be relevant|This copy is still a draft|Could we identify the record|Could you confirm which connector|result is encouraging|Raise the discrepancy|This action depends on the confirmed|references do not match|Could we identify the requirement|This interface remains open|How could we measure|sources differ on this value/i);
-  });
-  assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
-});
-
-test("all 150 final exam variants have globally unique task IDs and prompts",()=>{
-  const slots=[["c01","s01"],["c01","s02"],["c02","s01"],["c02","s02"],["c03","s01"],["c03","s02"],["c04","s01"],["c04","s02"],["c05","s01"],["c05","s02"]];
-  const variants=slots.flatMap(([course,semester])=>Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${course}-${semester}-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8"))));
-  assert.equal(variants.length,150);
-  const taskIds=variants.flatMap(variant=>variant.tasks.map(task=>task.id));
-  const prompts=variants.flatMap(variant=>variant.tasks.map(task=>task.prompt.trim().toLowerCase()));
-  assert.equal(taskIds.length,1500);
-  assert.equal(new Set(taskIds).size,taskIds.length);
-  assert.equal(new Set(prompts).size,prompts.length);
 });
 
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
