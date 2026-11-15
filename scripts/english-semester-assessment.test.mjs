@@ -82,6 +82,18 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(code, /case "resumeenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
 });
 
+test("student English final-exam UI starts persistent course/semester attempts and autosaves responses", () => {
+  const ui = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
+  assert.match(ui, /startEnglishFinalExam\(courseNo,semester\)/);
+  assert.match(ui, /saveEnglishFinalExamResponses\(attempt\.attemptId,payload\)/);
+  assert.match(ui, /submitEnglishFinalExam\(attempt\.attemptId,responses\)/);
+  assert.match(ui, /deadlineAt/);
+  assert.match(ui, /multiple_choice/);
+  assert.match(ui, /short_text/);
+  assert.match(ui, /Итоговые экзамены по курсам/);
+  assert.match(ui, /resume/i);
+});
+
 test("teacher dashboard exposes a written-exam review panel and submits explicit per-task grades", () => {
   const dashboard = fs.readFileSync(path.join(root, "teacher-dashboard.js"), "utf8");
   assert.match(dashboard, /efReviewRefresh/);
