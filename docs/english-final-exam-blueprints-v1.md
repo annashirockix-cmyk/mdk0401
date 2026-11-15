@@ -135,7 +135,9 @@ Fifteen Technical English pilot variants are now drafted for C4-S2 (`v01`–`v15
 Five Technical English pilot variants are drafted for C5-S1 (`v01`–`v05`), addressing maintenance planning, inspection findings, diagnostic evidence, technical manual applicability and revision control. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
 
 
-### Course 5, Semester 2 — pilot authoring underway
+#### Course 5, Semester 2 — complete pilot authoring
+
+Fifteen Technical English pilot variants are now drafted for C5-S2 (`v01`–`v15`). Topics include maintenance handover, risk communication, integrated reporting, fault analysis, controlled document release, evidence-based replacement decisions, supplier clarification, quality improvement, aviation maintenance records, cross-disciplinary handover, discrepancy analysis, quality audits, system integration, improvement proposals and multi-source technical summaries. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 prompts and 15 listening scripts are unique; all variants pass the protected payload validator and have balanced A/B/C/D answer positions. The set remains subject to editorial review and has not been imported or released.
 
 Five Technical English pilot variants are drafted for C5-S2 (`v01`–`v05`), addressing maintenance handover, risk communication, integrated technical reporting, fault analysis and controlled document release. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
 
