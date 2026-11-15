@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO actions that can reduce waste at college.",
       "options": [
-        "Repair equipment when appropriate",
-        "Use reusable containers",
         "Throw working items away",
-        "Print every document twice"
+        "Print every document twice",
+        "Repair equipment when appropriate",
+        "Use reusable containers"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -105,12 +105,12 @@
       "type": "single_choice",
       "prompt": "You notice a damaged cable in a classroom. What should you do?",
       "options": [
-        "Report it to a member of staff and keep others away.",
         "Try to repair it while it is connected.",
+        "Report it to a member of staff and keep others away.",
         "Hide it in a drawer.",
         "Let another student use it."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
