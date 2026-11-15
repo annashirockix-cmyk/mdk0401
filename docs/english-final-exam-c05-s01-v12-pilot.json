@@ -25,7 +25,7 @@
     {
       "id": "c5s1v12_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which two documents should students bring?",
+      "prompt": "Listening 2. Which two maintenance records are required for the aircraft task review?",
       "audioText": "The configuration management tutor will review equipment identification on Monday at ten thirty. Students should bring the configuration list and the model-reference sheet. The lesson will compare model designation, serial number and installed option codes. The tutor will explain why the equipment identity must be clear before technical data are selected.",
       "options": [
         "On Friday",
