@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 13",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the research workshop be held?",
+      "audioText": "The college library is running a short workshop on finding reliable information. It starts at eleven on Thursday in the computer room. Students should bring their college login details and a notebook. The librarian will demonstrate how to search the catalogue and check the publication date of a source. There are twelve places, so register at the library desk before Tuesday.",
+      "options": [
+        "In the computer room",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. How can students reserve a place?",
+      "audioText": "The college library is running a short workshop on finding reliable information. It starts at eleven on Thursday in the computer room. Students should bring their college login details and a notebook. The librarian will demonstrate how to search the catalogue and check the publication date of a source. There are twelve places, so register at the library desk before Tuesday.",
+      "options": [
+        "On Friday",
+        "Register at the library desk",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r01",
+      "type": "single_choice",
+      "prompt": "For her technology assignment, Eva found several websites about battery recycling. She compared the information and checked who had published each page. One article had no author or date, so she did not use it. She chose a report from a university website and wrote down the title and publication date for her references. Reading 1. Why did Eva reject one article?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "It had no author or date",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r02",
+      "type": "single_choice",
+      "prompt": "Which source did she select?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "A report from a university website"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct question form: '___ you checked the publication date?'",
+      "options": [
+        "Have",
+        "Has",
+        "Did",
+        "Are"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO signs that an online source may be reliable.",
+      "options": [
+        "A named author or organisation",
+        "A page with no date or source",
+        "A clear publication date",
+        "A headline with no supporting information"
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A list of books and sources used in a project is a ___.'",
+      "acceptedAnswers": [
+        "bibliography",
+        "reference list"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_f01",
+      "type": "single_choice",
+      "prompt": "You cannot find a book in the catalogue. What should you ask?",
+      "options": [
+        "Could you help me search for this title, please?",
+        "The catalogue is useless.",
+        "Find it yourself.",
+        "I do not need the book."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_o01",
+      "type": "ordering",
+      "prompt": "Define the research question; Search the library catalogue; Check the source details; Record the reference",
+      "options": [
+        "Record the reference",
+        "Search the library catalogue",
+        "Define the research question",
+        "Check the source details"
+      ],
+      "correctOrder": [
+        "Define the research question",
+        "Search the library catalogue",
+        "Check the source details",
+        "Record the reference"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words explaining how to find and use reliable information for a college assignment. Mention the author or organisation, publication date and recording a reference.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v13_audio",
+    "readingPassageId": "c1s2v13_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
