@@ -156,6 +156,26 @@ Supported task types should be deliberately limited to those the current rendere
 - Added a server-side structural validator `validateEnglishExamVariantRegistry_`: it enforces five logical course numbers (1–5), maps Courses 1–2 to the portal's real `ENB` discipline ID and Courses 3–5 to `ENT`, checks the Basic/Technical split, all ten semester slots, 15 variants per slot, globally unique variant IDs, and a non-empty blueprint reference for each variant. The logical slot key remains `EN_C0n` in the validator only; it is not a portal discipline ID. Regression tests cover missing slots, wrong track, wrong portal discipline ID, wrong variant count, duplicate IDs, and missing blueprint references.
 - Boundary: this validator is not an imported exam bank or a student runtime. Actual task content, blueprint correctness, protected storage, variant assignment, and start/submit endpoints remain to be implemented and tested.
 - Each variant references a balanced set of tasks from the appropriate course-semester blueprint.
+
+#### Persistent storage and attempt lifecycle (implementation contract)
+
+Do not reuse the short-lived `CacheService` attempt records used by the existing VPR and semester-control flows as the source of truth for the 150 final-exam variants. A cache entry may be used as a performance layer, but a started final exam must remain recoverable after cache eviction or a script restart.
+
+Use separate protected Sheets tables:
+- `EnglishExamVariantsBank`: one row per variant, with `ExamId`, `CourseNo`, `CourseId`, `Track`, `Semester`, `VariantId`, `BlueprintId`, `VariantJSON`, `Active`, `UpdatedAt`, `UpdatedBy`. One row per variant avoids putting an entire 15-variant exam into a single Google Sheets cell.
+- `EnglishExamAttempts`: one row per attempt, with `AttemptId`, `StudentEmail`, `CourseId`, `ExamId`, `VariantId`, `Status`, `StartedAt`, `DeadlineAt`, `SubmittedAt`, `AttemptJSON`, `ResultJSON`, `UpdatedAt`. `AttemptJSON` is server-only and contains the immutable assigned-task snapshot, private answer data, option-order maps, and attempt metadata. Keep student responses and final result separate from the sanitized exam payload.
+- If the serialized attempt snapshot approaches the Google Sheets per-cell text limit, normalize it into a child table keyed by `AttemptId` and task index; do not truncate JSON.
+
+Required lifecycle:
+1. Under a script lock, validate the student's role and course access, check the allowed-attempt policy, and atomically reuse an existing in-progress attempt or assign one of the 15 variants. Persist the assignment before returning any tasks.
+2. Return only a sanitized task snapshot. Never include answer keys, rubrics, grading hints, blueprint internals, or option-order maps in student responses.
+3. On resume, load the persisted attempt by `AttemptId` and verify the authenticated student's email, course, exam, status, and deadline. Do not silently assign a different variant after refresh.
+4. On submit, lock and re-read the attempt, reject duplicate or late submissions, validate every task/answer shape, restore canonical option indices server-side, and grade from the private snapshot rather than from client-supplied scores.
+5. Persist the result and mark the attempt submitted in the same locked operation. Make submission idempotent: a retry returns the saved result and cannot create a second gradebook row.
+6. Write an audit event for assignment, resume, submission, timeout, teacher override, and manual regrade. Teacher overrides must be role-checked and recorded.
+7. Keep diagnostic, semester-control, VPR, and final-exam result namespaces distinct; do not alter the existing 2026 VPR banks.
+
+Acceptance tests must cover simultaneous starts for the same student/slot, refresh/resume after cache loss, cross-account attempt-ID rejection, tampered course/exam IDs, expired deadline, duplicate submission, option-order restoration, answer-key isolation, and exactly-once result persistence.
 - Store answer keys and rubrics server-side only.
 - Student API returns a sanitized variant with no correct answers, rubric internals, or hidden metadata.
 - Variant selection must be recorded server-side to prevent changing variants by refreshing the page.
