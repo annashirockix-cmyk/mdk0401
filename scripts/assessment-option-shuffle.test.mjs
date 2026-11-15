@@ -279,7 +279,9 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(journal,/API\.gradeWrittenResult/);
   assert.match(journal,/written_self_/);
   assert.match(journal,/Письменная работа проверена/);
-  assert.match(journal,/Number\(record\.grade\)>=2&&Number\(record\.grade\)<=5/);
+  assert.match(journal,/Number\(record\.grade\)>=2\s*&&\s*Number\(record\.grade\)<=5/);
+  assert.match(journal,/hasOwnProperty\.call\(resultIndex\[rec\.email\], rec\.testId\)/,
+    "newest-first results must not be overwritten by older attempts");
 
 });
 
