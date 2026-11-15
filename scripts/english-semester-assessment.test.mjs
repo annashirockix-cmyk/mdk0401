@@ -93,7 +93,8 @@ test("server rejects missing answer keys, duplicate IDs, wrong semester order an
 test("server rejects duplicate options and track-mismatched identifiers", () => {
   const duplicateOptions = validBank("technical"); duplicateOptions[0].questions[0].options[2] = "A";
   assert.throws(() => validate(duplicateOptions, "technical"), /повторяющиеся варианты/);
-  assert.throws(() => validate(validBank("basic"), "technical"), /уникальным ID/);
+  const wrongTrackIds = validBank("technical"); wrongTrackIds[0].id = "b_sem1";
+  assert.throws(() => validate(wrongTrackIds, "technical"), /уникальным ID/);
 });
 
 test("student-facing payload strips all answer-key and explanation fields", () => {
@@ -131,10 +132,10 @@ test("Basic and Technical banks reject identical substantive question stems", ()
   distinctTechnical.forEach((item, index) => item.questions.forEach((question, q) => {
     question.q = "Technical assessment item " + index + " number " + q + " describes a separate engineering context.";
   }));
-  assert.equal(fingerprint(basic), fingerprint(technicalClone));
+  assert.notEqual(fingerprint(basic), fingerprint(technicalClone), "course-year metadata remains part of the bank fingerprint");
   assert.ok(overlap(basic, technicalClone).length > 0);
   assert.equal(overlap(basic, distinctTechnical).length, 0);
-  assert.equal(fingerprint([{questions:[{q:"A   technical   question"}]}]), fingerprint([{questions:[{q:"A technical question"}]}]));
+  assert.equal(fingerprint([{year:3,semester:1,questions:[{q:"A   technical   question"}]}]), fingerprint([{year:3,semester:1,questions:[{q:"A technical question"}]}]));
 });
 
 
