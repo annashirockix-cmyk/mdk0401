@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 02",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v02_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to Emma. What time does the first lesson start?",
+      "audioText": "Good morning. This is Emma from Group A. Our first lesson starts at nine in Room 12, not Room 21. Please bring your English notebook and the college map. At eleven, we have a short break. After lunch, our group will visit the language laboratory. The laboratory is on the second floor, next to the computer room.",
+      "options": [
+        "At eight o'clock",
+        "At half past eight",
+        "At nine o'clock",
+        "At eleven o'clock"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v02_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Where is the language laboratory?",
+      "audioText": "Good morning. This is Emma from Group A. Our first lesson starts at nine in Room 12, not Room 21. Please bring your English notebook and the college map. At eleven, we have a short break. After lunch, our group will visit the language laboratory. The laboratory is on the second floor, next to the computer room.",
+      "options": [
+        "On the first floor",
+        "On the second floor, next to the computer room",
+        "Near the main entrance",
+        "On the third floor"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v02_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Alex has a simple plan for learning English. He studies for fifteen minutes every evening. First, he reads a short text and underlines unfamiliar words. Then he checks the meaning in a dictionary and writes one example sentence. Twice a week, he listens to a short recording and writes down the main idea. He does not try to learn twenty new words at once because he wants to remember them well. How often does Alex study English?",
+      "options": [
+        "Every evening",
+        "Only at weekends",
+        "Twice a month",
+        "Every morning"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v02_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. Why doesn't Alex learn twenty new words at once?",
+      "options": [
+        "He has no dictionary",
+        "He wants to remember the words well",
+        "He dislikes reading",
+        "The recordings are too long"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v02_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct sentence.",
+      "options": [
+        "She have two English lessons a week.",
+        "She has two English lessons a week.",
+        "She having two English lessons a week.",
+        "She is have two English lessons a week."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v02_g02",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO correct sentences.",
+      "options": [
+        "There is a computer in the room.",
+        "There are a map on the wall.",
+        "Our teacher speaks clearly.",
+        "My friends goes to college by bus."
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v02_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'Students use a ___ to carry books, notebooks and pens to college.'",
+      "acceptedAnswers": [
+        "bag",
+        "schoolbag",
+        "backpack"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v02_f01",
+      "type": "single_choice",
+      "prompt": "You cannot find Room 12. What is the best question to ask a college employee?",
+      "options": [
+        "Where Room 12?",
+        "Tell Room 12 now.",
+        "Could you tell me where Room 12 is, please?",
+        "You know Room 12 yesterday?"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v02_o01",
+      "type": "ordering",
+      "prompt": "Put the steps of a simple classroom activity in the most logical order.",
+      "options": [
+        "Write the date in your notebook",
+        "Listen to the teacher's instructions",
+        "Complete the exercise",
+        "Open your notebook"
+      ],
+      "correctOrder": [
+        "Open your notebook",
+        "Write the date in your notebook",
+        "Listen to the teacher's instructions",
+        "Complete the exercise"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v02_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about a typical college day. Mention when your lessons start, two subjects or activities, how you travel to college and one thing you do to practise English.",
+      "rubric": "8 points total: all requested content included (0–2); clear sentence structure and basic grammar (0–2); appropriate everyday and study vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v02_audio",
+    "readingPassageId": "c1s1v02_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
