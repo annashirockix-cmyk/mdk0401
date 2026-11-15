@@ -94,7 +94,11 @@
     {
       "id": "c2s2v14_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A person who offers time to help others without payment is a ___.",
+      "acceptedAnswers": [
+        "volunteer"
+      ]
     },
     {
       "id": "c2s2v14_f01",
