@@ -25,7 +25,7 @@
     {
       "id": "c5s1v03_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which worksheet should students bring?",
+      "prompt": "Listening 2. Which quality-inspection worksheet is required for the diagnostic exercise?",
       "audioText": "The maintenance engineering lecturer will introduce diagnostic evidence on Monday at one fifteen. Students should bring the case-study worksheet and meet in Room 12. The class will compare symptoms, records and possible explanations. The lecturer will emphasise that a likely cause should not be treated as confirmed until appropriate evidence has been reviewed.",
       "options": [
         "On Friday",
