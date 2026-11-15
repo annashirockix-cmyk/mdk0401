@@ -109,6 +109,9 @@ test("Basic and Technical banks reject identical substantive question stems", ()
   const overlap = new Function(overlapSource + "; return englishSemesterBankOverlap_;")();
   const basic = validBank("basic");
   const technicalClone = validBank("technical");
+  const sharedStem = "Describe the purpose of a machine-tool safety interlock.";
+  basic[0].questions[0].q = sharedStem;
+  technicalClone[0].questions[0].q = sharedStem;
   const distinctTechnical = validBank("technical");
   distinctTechnical.forEach((item, index) => item.questions.forEach((question, q) => {
     question.q = "Technical assessment item " + index + " number " + q + " describes a separate engineering context.";
