@@ -141,7 +141,7 @@ function sanitizeEnglishVprExam_(exam) {
     });
   }
   stripPrivateFields(safe);
-  return safe;
+  return typeof sanitizeAssessmentQuestionForStudent_ === "function" ? sanitizeAssessmentQuestionForStudent_(safe) : safe;
 }
 
 function englishVprPrepareAttempt_(source) {
@@ -280,8 +280,16 @@ function submitEnglishVprExam_(data) {
   const maxScore=maxObjective+written.length;
   const percent=maxObjective?Math.round(objective/maxObjective*100):0;
   const testId=String(exam.id||("english_vpr_"+track+"_2026"));
+  const attemptLock = LockService.getScriptLock();
+  attemptLock.waitLock(10000);
+  try {
+    const lockedRaw = cache.get("englishVprAttempt:" + attemptId);
+    if (!lockedRaw) throw new Error("Эта попытка уже отправлена или истекла.");
+    const lockedAttempt = JSON.parse(lockedRaw);
+    if (lockedAttempt.email !== user.email || lockedAttempt.track !== track || lockedAttempt.courseId !== courseId || String(lockedAttempt.exam && lockedAttempt.exam.id || "") !== String(exam.id || "")) throw new Error("Данные серверной попытки изменились. Начните экзамен заново.");
+    cache.remove("englishVprAttempt:" + attemptId);
+  } finally { attemptLock.releaseLock(); }
   const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Number(data.timeSpent)||0,payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
-  cache.remove("englishVprAttempt:" + attemptId);
   if (written.length) {
     notifyCourseStaff_(courseId,"written_submission","Письменная часть английского ВПР ожидает проверки",
       user.name+" ("+user.group+") отправил(а) письменную часть экзамена "+String(exam.title||track)+". Откройте журнал результатов по дисциплине "+courseId+" для проверки ответов.",testId);
