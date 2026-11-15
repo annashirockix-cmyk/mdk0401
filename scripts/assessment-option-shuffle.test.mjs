@@ -91,6 +91,12 @@ test("custom teacher-created tests require server-issued shuffled attempts", () 
 test("built-in and final exams keep answer keys server-side and remap submitted positions", () => {
   assert.match(extract(code,"safeBuiltInQuestion_"),/optionMaps/);
   assert.match(extract(code,"submitBuiltInTest_"),/canonicalAnswers/);
+  const builtInSubmit = extract(code,"submitBuiltInTest_");
+  assert.match(builtInSubmit,/lockedAttemptRaw=cache\\.get\\("builtInAttempt:"\\+attemptId\\)/);
+  assert.match(builtInSubmit,/cache\\.remove\\("builtInAttempt:"\\+attemptId\\)/);
+  const customSubmit = extract(code,"submitCustomTest_");
+  assert.match(customSubmit,/lockedAttemptRaw = cache\\.get\\("customTestAttempt:" \\+ attemptId\\)/);
+  assert.match(customSubmit,/cache\\.remove\\("customTestAttempt:" \\+ attemptId\\)/);
   assert.match(extract(code,"safeFinalExamQuestion_"),/optionMaps/);
   assert.match(extract(code,"submitFinalExam_"),/optionMaps/);
 });
