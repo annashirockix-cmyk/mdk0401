@@ -127,6 +127,8 @@ function handleRequest_(e) {
       case "resumeenglishfinalexam": result = resumeEnglishFinalExam_(data); break;
       case "saveenglishfinalexamresponses": result = saveEnglishFinalExamResponses_(data); break;
       case "submitenglishfinalexam": result = submitEnglishFinalExam_(data); break;
+      case "getenglishfinalexamreviews": result = getEnglishFinalExamReviews_(data); break;
+      case "gradeenglishfinalexamwritten": result = gradeEnglishFinalExamWritten_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
@@ -3350,6 +3352,77 @@ function submitEnglishFinalExam_(data) {
       TestTitle:"Итоговый экзамен",Score:score,MaxScore:maxScore});
     return {success:true,attemptId:attemptId,status:status,result:result};
   } finally { lock.releaseLock(); }
+}
+
+
+/** List pending written parts for the authenticated teacher's assigned courses. */
+function getEnglishFinalExamReviews_(data) {
+  const teacher=auth_(data);
+  if(teacher.role!=="admin" && teacher.role!=="teacher") throw new Error("Просмотр письменных экзаменационных работ доступен преподавателю.");
+  const sheet=ensureSheet_("EnglishExamAttempts"), last=sheet.getLastRow();
+  if(last<2) return {success:true,items:[]};
+  const map=headerMap_(sheet), rows=sheet.getRange(2,1,last-1,sheet.getLastColumn()).getValues(), items=[];
+  rows.forEach(function(row,index) {
+    if(String(row[map.Status])!=="pending_review") return;
+    const courseId=String(row[map.CourseId]||"");
+    if(teacher.role!=="admin" && !hasCourseAccess_(teacher,courseId)) return;
+    let snapshot={},responses={},result={};
+    try {snapshot=JSON.parse(String(row[map.AttemptJSON]||"{}"));} catch(e) {return;}
+    try {responses=JSON.parse(String(row[map.ResponsesJSON]||"{}"));} catch(e) {responses={};}
+    try {result=JSON.parse(String(row[map.ResultJSON]||"{}"));} catch(e) {result={};}
+    const manualIds=(result.manualItems||[]).map(function(item){return String(item.taskId);});
+    const tasks=(snapshot.tasks||[]).filter(function(task,i){return manualIds.indexOf(String(task.id||task.questionId||i))!==-1;});
+    items.push({attemptId:String(row[map.AttemptId]),studentEmail:String(row[map.StudentEmail]),
+      studentName:String(row[map.StudentName]||""),group:String(row[map.Group]||""),courseId:courseId,
+      examId:String(row[map.ExamId]),variantId:String(row[map.VariantId]),submittedAt:row[map.SubmittedAt],
+      tasks:tasks.map(function(task,i){const id=String(task.id||task.questionId||i);return {id:id,prompt:task.prompt||task.question||task.q||"",type:task.type||task.taskType||"written",points:Number(task.points)||1,rubric:task.rubric||task.criteria||""};}),
+      responses:responses,result:{objectiveScore:Number(result.objectiveScore)||0,objectiveMax:Number(result.objectiveMax)||0,totalMax:Number(result.totalMax)||0}});
+  });
+  return {success:true,items:items};
+}
+
+/** Grade written tasks once; final grade is calculated by the server. */
+function gradeEnglishFinalExamWritten_(data) {
+  const teacher=auth_(data), attemptId=String(data.attemptId||"").trim(), grades=data.grades;
+  if((teacher.role!=="admin"&&teacher.role!=="teacher")||!attemptId||!grades||typeof grades!=="object"||Array.isArray(grades)) {
+    throw new Error("Некорректные данные проверки письменной части.");
+  }
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const sheet=ensureSheet_("EnglishExamAttempts"),found=englishFinalAttemptRow_(sheet,attemptId);
+    if(!found) throw new Error("Экзаменационная попытка не найдена.");
+    const row=found.values,m=found.map,courseId=String(row[m.CourseId]||"");
+    if(teacher.role!=="admin"&&!hasCourseAccess_(teacher,courseId)) throw new Error("Нет доступа к проверке этой дисциплины.");
+    if(String(row[m.Status])!=="pending_review") throw new Error("Эта работа уже проверена или не ожидает проверки.");
+    const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}")),result=JSON.parse(String(row[m.ResultJSON]||"{}"));
+    const manualItems=result.manualItems||[],known={};
+    manualItems.forEach(function(item){known[String(item.taskId)]=Number(item.points)||0;});
+    const gradeIds=Object.keys(grades);
+    if(gradeIds.length!==manualItems.length||gradeIds.some(function(id){return known[id]===undefined;})) {
+      throw new Error("Нужно выставить баллы по каждому письменному заданию этой работы.");
+    }
+    let manualScore=0;
+    const details={};
+    gradeIds.forEach(function(id) {
+      const entry=grades[id],score=Number(entry&&typeof entry==="object"?entry.score:entry);
+      if(!Number.isFinite(score)||score<0||score>known[id]) throw new Error("Недопустимое количество баллов за задание "+id+".");
+      manualScore+=score;
+      details[id]={score:score,feedback:String(entry&&entry.feedback||"").slice(0,3000)};
+    });
+    const objectiveScore=Number(result.objectiveScore)||0,totalMax=Number(result.totalMax)||0;
+    const totalScore=objectiveScore+manualScore,percent=totalMax?Math.round(totalScore/totalMax*100):0;
+    const finalResult={objectiveScore:objectiveScore,objectiveMax:Number(result.objectiveMax)||0,
+      manualScore:manualScore,manualMax:manualItems.reduce(function(sum,item){return sum+(Number(item.points)||0);},0),
+      totalScore:totalScore,totalMax:totalMax,percent:percent,grade:gradeFromPercent_(percent),
+      manualReview:false,manualGrades:details,status:"graded",gradedAt:new Date().toISOString(),gradedBy:teacher.email};
+    const timestamp=new Date().toISOString();
+    updateMappedRecord_(sheet,found.row,{Status:"submitted",ResultJSON:JSON.stringify(finalResult),UpdatedAt:timestamp});
+    SpreadsheetApp.flush();
+    appendAttemptAudit_({EventType:"final_exam_written_graded",ActorEmail:teacher.email,StudentEmail:String(row[m.StudentEmail]),
+      StudentName:String(row[m.StudentName]||""),Group:String(row[m.Group]||""),CourseId:courseId,
+      TestId:String(row[m.ExamId]),TestTitle:"Итоговый экзамен",Score:totalScore,MaxScore:totalMax,Grade:finalResult.grade});
+    return {success:true,attemptId:attemptId,result:finalResult};
+  } finally {lock.releaseLock();}
 }
 
 function englishSemesterBank_() { return ensureSheet_("EnglishSemesterBank"); }
