@@ -160,6 +160,18 @@ test("general English enrollment grants both tracks consistently in server acces
   assert.match(journal, /\(courseId === "ENB" \|\| courseId === "ENT"\).*includes\("EN"\)/);
 });
 
+test("teacher student directory is restricted to assigned disciplines", () => {
+  const { sandbox: api } = runtime();
+  const mechanical = api.getStudents_({ token: "teacherToken" }).students;
+  const english = api.getStudents_({ token: "englishTeacherToken" }).students;
+  assert.equal(mechanical.some(student => student.email === "legacy.english@example.test"), false,
+    "a 07.01 teacher must not receive unrelated English student records");
+  assert.equal(english.some(student => student.email === "legacy.english@example.test"), true,
+    "an ENB teacher must see a student with legacy general EN enrollment");
+  assert.equal(english.some(student => student.email === "student@example.test"), false,
+    "an English teacher must not receive unrelated 07.01 student records");
+});
+
 test("legacy EN students can receive and submit ENB/ENT assignments without cross-track access", () => {
   const { sandbox: api } = runtime();
   const created = api.createAssignment_({
