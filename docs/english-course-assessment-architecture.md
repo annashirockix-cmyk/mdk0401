@@ -166,6 +166,8 @@ Use separate protected Sheets tables:
 - `EnglishExamAttempts`: one row per attempt, with `AttemptId`, `StudentEmail`, `CourseId`, `ExamId`, `VariantId`, `Status`, `StartedAt`, `DeadlineAt`, `SubmittedAt`, `AttemptJSON`, `ResultJSON`, `UpdatedAt`. `AttemptJSON` is server-only and contains the immutable assigned-task snapshot, private answer data, option-order maps, and attempt metadata. Keep student responses and final result separate from the sanitized exam payload.
 - If the serialized attempt snapshot approaches the Google Sheets per-cell text limit, normalize it into a child table keyed by `AttemptId` and task index; do not truncate JSON.
 
+Storage schema is now declared in `Code.gs` and both sheets are included in `setupPortal()`. This creates or extends headers without deleting existing rows. It does not yet enable exam imports or student attempts; those endpoints must be implemented and tested before deployment.
+
 Required lifecycle:
 1. Under a script lock, validate the student's role and course access, check the allowed-attempt policy, and atomically reuse an existing in-progress attempt or assign one of the 15 variants. Persist the assignment before returning any tasks.
 2. Return only a sanitized task snapshot. Never include answer keys, rubrics, grading hints, blueprint internals, or option-order maps in student responses.
