@@ -876,15 +876,23 @@ function saveManualGrade_(data) {
     const authorizedTeacher=editor_(data,courseId);
     const currentStudent=userByEmail_(studentEmail);
     if(!currentStudent||currentStudent.role!=="student"||!hasCourseAccess_(currentStudent,courseId)) throw new Error("Студент больше не обучается по выбранной дисциплине.");
-    testId="manual_"+Utilities.getUuid();
+    // One manual grade per student/course/date/title: editing it updates the same
+    // authoritative Results row instead of inflating the student's average.
+    testId="manual_"+Utilities.base64EncodeWebSafe(courseId+"|"+currentStudent.email+"|"+date+"|"+title).replace(/=+$/,"").slice(0,100);
     const finishedAt=new Date(date+"T12:00:00.000Z").toISOString();
-    appendMappedRecord_(results_(),{
+    const resultSheet=results_(),resultRows=resultSheet.getDataRange().getValues();
+    let existingRow=-1;
+    for(let i=resultRows.length-1;i>=1;i--){
+      if(email_(resultRows[i][0])===currentStudent.email&&String(resultRows[i][3]||"")===testId&&sameCourseId_(resultRows[i][12]||courseId,courseId)){existingRow=i+1;break;}
+    }
+    const record={
       Email:currentStudent.email,Name:currentStudent.name,Group:currentStudent.group,
       TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,
       TimeSpent:0,Attempts:1,FinishedAt:finishedAt,CourseId:courseId,
-      Submission:"",
-      Feedback:feedback,ReviewedBy:authorizedTeacher.email,ReviewedAt:new Date().toISOString()
-    });
+      Submission:"",Feedback:feedback,ReviewedBy:authorizedTeacher.email,ReviewedAt:new Date().toISOString()
+    };
+    if(existingRow>0)updateMappedRecord_(resultSheet,existingRow,record);
+    else appendMappedRecord_(resultSheet,record);
     appendAttemptAudit_({EventType:"manual_grade_entered",ActorEmail:authorizedTeacher.email,StudentEmail:currentStudent.email,StudentName:currentStudent.name,Group:currentStudent.group,CourseId:courseId,TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20});
   } finally {lock.releaseLock();}
   createNotification_(student.email,"grade","Новая оценка","Преподаватель выставил оценку "+grade+"/5 за работу «"+title+"».",courseId,testId);
