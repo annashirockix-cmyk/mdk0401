@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Listen to Nina's message. What time does the student club meeting start?",
       "audioText": "Hi, Nina. The student club meeting is after the last lesson today. It starts at four o'clock in the art room, next to the college canteen. We are planning a welcome event for new students. Please bring your ideas, but you do not need to prepare a presentation. The meeting will finish at half past four.",
       "options": [
-        "At 3:30",
         "At 4:00",
+        "At 3:30",
         "At 4:30",
         "At 5:00"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "Reading 1. Read the text. On Mondays, Timur goes to the college sports centre after his classes. He usually plays table tennis with a friend, but this week the sports hall is closed for repairs. Timur is going to the swimming pool instead. He checks the opening times on the college website before he leaves. He enjoys sport because it helps him relax after a busy day. What does Timur usually do at the sports centre?",
       "options": [
-        "He plays table tennis",
         "He studies mathematics",
         "He meets his English teacher",
+        "He plays table tennis",
         "He repairs sports equipment"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Reading 2. Why does Timur enjoy sport?",
       "options": [
-        "It helps him relax",
         "It makes his lessons shorter",
         "It gives him more homework",
-        "It helps him repair the sports hall"
+        "It helps him repair the sports hall",
+        "It helps him relax"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO sentences that correctly describe regular habits.",
       "options": [
-        "Nina usually arrives before nine.",
         "Timur go to the sports centre on Mondays.",
-        "We often practise English after class.",
-        "He never are late for lessons."
+        "He never are late for lessons.",
+        "Nina usually arrives before nine.",
+        "We often practise English after class."
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
