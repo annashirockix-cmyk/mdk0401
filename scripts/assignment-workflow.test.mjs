@@ -88,6 +88,7 @@ function runtime() {
   const assignments = makeSheet(["Id","CourseId","Title","Topic","Level","WorkType","DueAt","TargetType","TargetValue","Instructions","Criteria","CreatedBy","CreatedAt","Status","LegacyNote"]);
   const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote"]);
   const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","LegacyNote"]);
+  const results = makeSheet(["Email","Name","Group","TestId","TestTitle","Grade","Score","MaxScore","Percent","TimeSpent","Attempts","FinishedAt","CourseId","Submission","PenaltyPoints","ViolationCount","Feedback","ReviewedBy","ReviewedAt"]);
   users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01,EN","","","",""]);
   users.appendRow(["other.teacher@example.test","","Другой преподаватель","","teacher","","MAT","","","",""]);
   users.appendRow(["english.teacher@example.test","","Преподаватель английского","","teacher","","ENB","","","",""]);
@@ -120,6 +121,9 @@ function runtime() {
   sandbox.assignments_ = () => assignments;
   sandbox.assignmentSubmissions_ = () => submissions;
   sandbox.assignmentSubmissionHistory_ = () => history;
+  sandbox.results_ = () => results;
+  sandbox.protectedQuestionBankMap_ = () => ({});
+  sandbox.isProtectedAssessment_ = () => false;
   sandbox.auth_ = data => {
     const email = tokenUsers[data && data.token];
     if (!email) throw new Error("Требуется авторизация.");
@@ -143,7 +147,7 @@ function runtime() {
   };
   sandbox.createNotification_ = (...args) => notifications.push(args);
   sandbox.appendAttemptAudit_ = record => audit.push(record);
-  return { sandbox, users, assignments, submissions, history, notifications, audit, originalPayload: payload };
+  return { sandbox, users, assignments, submissions, history, results, notifications, audit, originalPayload: payload };
 }
 
 test("general English enrollment grants both tracks consistently in server access and journal", () => {
@@ -218,6 +222,35 @@ test("assignment resubmission is allowed after a grade of 2 but not after accept
   assert.equal(afterRetry.history[0].grade, 2);
   assert.match(afterRetry.history[0].feedback, /Нужна доработка/);
   assert.equal(afterRetry.history[0].status, "reviewed");
+});
+
+test("reviewed assignments are included in public subject averages", () => {
+  const { sandbox: api } = runtime();
+  const created = api.createAssignment_({
+    token: "teacherToken",
+    courseId: "07.01",
+    targetType: "group",
+    targetValue: "ТО-21",
+    title: "Оценочная практическая работа",
+    instructions: "Выполните задание."
+  });
+  const submitted = api.submitAssignment_({
+    token: "studentToken",
+    assignmentId: created.id,
+    answer: "Выполненная работа"
+  });
+  api.gradeAssignment_({
+    token: "teacherToken",
+    submissionId: submitted.submissionId,
+    grade: 4,
+    feedback: "Верно."
+  });
+
+  const response = api.getPublicSubjectRatings_({ token: "studentToken" });
+  const student = response.ratings["07.01"].find(item => item.name === "Иван Иванов");
+  assert.ok(student, "the student's course rating should be returned");
+  assert.equal(student.averageGrade, 4);
+  assert.equal(student.completed, 1);
 });
 
 test("group assignment workflow works before student onboarding and preserves student payload", async () => {
