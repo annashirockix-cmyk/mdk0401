@@ -24,7 +24,7 @@
 - C. whose
 - D. who
 
-**64.** Neither Tom nor his friends ___ available after classes today.
+**64.** Tom and his friends ___ available after classes today.
 - A. is
 - B. was
 - C. has
@@ -137,7 +137,7 @@
 | 61 | B | “Yet” is commonly used in negative present perfect sentences. |
 | 62 | C | “Ask someone to do something” takes the infinitive with “to”. |
 | 63 | A | “Where” introduces a relative clause referring to a place. |
-| 64 | D | With “neither…nor”, the verb agrees with the nearer plural subject “friends”. |
+| 64 | D | The compound subject “Tom and his friends” takes a plural verb. |
 | 65 | B | The adverb “easily” describes how the instructions could be understood. |
 | 66 | C | “For” introduces a duration of time. |
 | 67 | A | Present simple passive: “is + past participle”. |
