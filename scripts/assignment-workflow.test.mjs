@@ -16,12 +16,12 @@ function extractFunction(source, name) {
   let depth = 0, quote = "", escaped = false, line = false, block = false;
   for (let i = open; i < source.length; i++) {
     const c = source[i], next = source[i + 1];
-    if (line) { if (c === "\\n") line = false; continue; }
+    if (line) { if (c === "\n") line = false; continue; }
     if (block) { if (c === "*" && next === "/") { block = false; i++; } continue; }
-    if (quote) { if (escaped) escaped = false; else if (c === "\\\\") escaped = true; else if (c === quote) quote = ""; continue; }
+    if (quote) { if (escaped) escaped = false; else if (c === "\\") escaped = true; else if (c === quote) quote = ""; continue; }
     if (c === "/" && next === "/") { line = true; i++; continue; }
     if (c === "/" && next === "*") { block = true; i++; continue; }
-    if ("'\\"\`".includes(c)) { quote = c; continue; }
+    if (c === String.fromCharCode(39) || c === String.fromCharCode(34) || c === String.fromCharCode(96)) { quote = c; continue; }
     if (c === "{") depth++;
     if (c === "}" && --depth === 0) return source.slice(start, i + 1);
   }
