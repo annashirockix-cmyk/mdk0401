@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 5",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the coach leave from?",
+      "audioText": "The college placement team has arranged a visit to an aviation training centre on Monday 18 May. The coach leaves from the north entrance at seven forty-five, so students should arrive by seven thirty. The journey takes about fifty minutes. Bring your student card and lunch. If you cannot attend, contact the placement office before Friday afternoon.",
+      "options": [
+        "From the north entrance",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What time should students arrive?",
+      "audioText": "The college placement team has arranged a visit to an aviation training centre on Monday 18 May. The coach leaves from the north entrance at seven forty-five, so students should arrive by seven thirty. The journey takes about fifty minutes. Bring your student card and lunch. If you cannot attend, contact the placement office before Friday afternoon.",
+      "options": [
+        "On Friday",
+        "By seven thirty",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r01",
+      "type": "single_choice",
+      "prompt": "Before starting his placement, Roman planned his daily journey. He checked two bus routes and found that one was faster but required a change at the central station. The other took ten minutes longer but went directly to the industrial area. Roman chose the direct route because it was more reliable during the morning rush hour. Reading 1. Why did Roman choose the direct route?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "It was more reliable in the morning",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r02",
+      "type": "single_choice",
+      "prompt": "What did he compare?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "Two bus routes"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct conditional: 'If the bus is delayed, I ___ the placement office.'",
+      "options": [
+        "will contact",
+        "contacted yesterday",
+        "am contact",
+        "would contacted"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO details to check before travelling to a placement.",
+      "options": [
+        "Departure time and location",
+        "A colleague's private account",
+        "The journey duration",
+        "Unrelated entertainment news"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A regular journey between home and work or college is a ___.'",
+      "acceptedAnswers": [
+        "commute"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_f01",
+      "type": "single_choice",
+      "prompt": "Your bus is cancelled and you may arrive late. What should you do?",
+      "options": [
+        "Contact the placement supervisor and explain the delay.",
+        "Wait until the end of the day.",
+        "Ask another student to hide your absence.",
+        "Ignore all messages."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_o01",
+      "type": "ordering",
+      "prompt": "Check the placement address; Compare travel options; Plan the departure time; Save the route information",
+      "options": [
+        "Save the route information",
+        "Compare travel options",
+        "Check the placement address",
+        "Plan the departure time"
+      ],
+      "correctOrder": [
+        "Check the placement address",
+        "Compare travel options",
+        "Plan the departure time",
+        "Save the route information"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about planning a journey to a work placement. Compare two travel options and explain how you would respond to a delay.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v5_audio",
+    "readingPassageId": "c2s1v5_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
