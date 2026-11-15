@@ -417,3 +417,5 @@ The first slot now has 15 authored Basic English pilot variants (`docs/english-f
 ### Course 1, Semester 2 — partial authoring status
 
 Five of the 15 planned C1-S2 Basic English final-exam pilots are drafted (`v01`–`v05`). They cover directions, college services, travel, town facilities and past college events. All five pass the protected runtime payload validator; the 50 task prompts and five listening scripts are unique, and each variant has balanced A/B/C/D key positions. Ten variants remain for this semester. These are editorial-review drafts only, not imported or released to students.
+
+C1-S2 authoring has reached ten of 15 planned Basic English pilots. The 100 task prompts and ten listening scripts are unique, and each form has ten tasks, 20 points, 90 minutes and balanced A/B/C/D answer positions. Five variants remain. The pilots are not imported into the protected Google Sheet or released to students.
