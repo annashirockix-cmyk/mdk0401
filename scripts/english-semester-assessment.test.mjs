@@ -41,7 +41,7 @@ function validExamRegistry() {
     const courseNo = Math.floor(slot / 2) + 1;
     const semester = slot % 2 + 1;
     return {
-      courseId:"EN_C0" + courseNo,
+      courseNo, courseId:courseNo >= 3 ? "ENT" : "ENB",
       track:courseNo >= 3 ? "technical" : "basic",
       semester,
       variants:Array.from({length:15}, (_, variant) => ({
@@ -65,6 +65,8 @@ test("final exam registry rejects missing slots, wrong tracks, wrong variant cou
   assert.throws(()=>validateRegistry(shortVariants), /ровно 15/);
   const duplicate=validExamRegistry(); duplicate[1].variants[0].variantId=duplicate[0].variants[0].variantId;
   assert.throws(()=>validateRegistry(duplicate), /уникальный ID/);
+  const wrongPortalId=validExamRegistry(); wrongPortalId[0].courseId="EN";
+  assert.throws(()=>validateRegistry(wrongPortalId), /действующим ID дисциплины/);
   const missingBlueprint=validExamRegistry(); missingBlueprint[0].variants[0].blueprintId="";
   assert.throws(()=>validateRegistry(missingBlueprint), /ссылку на blueprint/);
 });
