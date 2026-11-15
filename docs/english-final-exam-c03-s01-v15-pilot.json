@@ -25,7 +25,7 @@
     {
       "id": "c3s1v15_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Where should students meet?",
+      "prompt": "Listening 2. Which room is named as the meeting point for the briefing?",
       "audioText": "The quality manager will explain component traceability during a briefing on Monday at two fifteen. Students should meet in the quality office training room. The briefing will show how part numbers, batch records and inspection documents are linked. A sample traceability form will be provided, and students will complete a short matching exercise in pairs.",
       "options": [
         "On Friday",
