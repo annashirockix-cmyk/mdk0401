@@ -94,7 +94,12 @@
     {
       "id": "c2s2v13_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A visual display of numerical information is a ___.",
+      "acceptedAnswers": [
+        "chart",
+        "graph"
+      ]
     },
     {
       "id": "c2s2v13_f01",
