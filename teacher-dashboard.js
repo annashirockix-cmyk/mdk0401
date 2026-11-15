@@ -3,7 +3,7 @@ window.renderTeacherDashboard=function(){
 const app=document.getElementById("app"),crumb=document.getElementById("crumbs"),staff=window.state.staff;
 if(!app)return;if(crumb)crumb.textContent="Панель преподавателя";
 if(!staff||!["teacher","admin"].includes(String(staff.role).toLowerCase())){app.innerHTML='<section class="module">⛔ Доступ только преподавателю.</section>';return;}
-app.innerHTML='<div class="teacher-dashboard"><div class="td-head"><div><a href="#/">← На главную</a><h1>Панель преподавателя</h1><p>Сводка по заданиям, группам и результатам</p></div><div class="td-head-actions"><a class="btn" href="#/teaching-controls">🔐 Управление доступом и попытками</a> <button class="btn ghost" id="efReviewRefresh">✍️ Письменные экзамены</button> <button class="btn ghost" id="tdRefresh">↻ Обновить</button></div></div><section class="module" id="efReviewPanel" hidden><h2>Письменные ответы на проверку</h2><p id="efReviewStatus">Нажмите «Обновить», чтобы загрузить работы.</p><div id="efReviewItems"></div></section><p id="tdStatus">Загрузка…</p><div id="tdContent"></div></div>';
+app.innerHTML='<div class="teacher-dashboard"><div class="td-head"><div><a href="#/">← На главную</a><h1>Панель преподавателя</h1><p>Сводка по заданиям, группам и результатам</p></div><div class="td-head-actions"><a class="btn" href="#/teaching-controls">🔐 Управление доступом и попытками</a> <button class="btn ghost" id="efReviewRefresh">✍️ Письменные экзамены</button> <button class="btn ghost" id="efVariantImportOpen">📥 Импорт итоговых экзаменов</button> <button class="btn ghost" id="tdRefresh">↻ Обновить</button></div></div><section class="module" id="efVariantImportPanel" hidden><h2>Импорт итоговых экзаменов по английскому</h2><p>Загрузите JSON-реестр из 10 курсовых/семестровых комплектов и 150 полностью подготовленных вариантов. Импорт активирует новый реестр. Неполный или некорректный пакет сервер отклонит без запуска экзаменов.</p><label>Файл JSON <input id="efVariantImportFile" type="file" accept=".json,application/json"></label><button class="btn" id="efVariantImportRun" type="button" disabled>Проверить и импортировать 150 вариантов</button><p id="efVariantImportStatus" aria-live="polite"></p></section><section class="module" id="efReviewPanel" hidden><h2>Письменные ответы на проверку</h2><p id="efReviewStatus">Нажмите «Обновить», чтобы загрузить работы.</p><div id="efReviewItems"></div></section><p id="tdStatus">Загрузка…</p><div id="tdContent"></div></div>';
 const E=v=>window.escapeHtml(String(v==null?"":v));
 const courses={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","MET":"Метрология","OT":"Охрана труда","PFI":"ПФИ"};
 function load(){
@@ -114,6 +114,33 @@ const csv="\uFEFF"+lines.map(row=>row.map(quote).join(";")).join("\r\n"),url=URL
 };
 renderMatrix();
 }).catch(e=>{const status=document.getElementById("tdStatus");if(status&&status.isConnected)status.textContent="Ошибка загрузки: "+(e&&e.message?e.message:String(e));else console.warn("[TeacherDashboard] Ошибка после закрытия панели:",e);});
+}
+
+
+const importPanel=document.getElementById("efVariantImportPanel");
+const importOpen=document.getElementById("efVariantImportOpen");
+const importFile=document.getElementById("efVariantImportFile");
+const importRun=document.getElementById("efVariantImportRun");
+const importStatus=document.getElementById("efVariantImportStatus");
+if(staff.role!=="admin"&&importOpen)importOpen.hidden=true;
+if(importOpen)importOpen.onclick=function(){importPanel.hidden=!importPanel.hidden;};
+if(importFile&&importRun){
+ importFile.onchange=function(){importRun.disabled=!(importFile.files&&importFile.files.length);if(importStatus)importStatus.textContent="";};
+ importRun.onclick=async function(){
+  const file=importFile.files&&importFile.files[0];if(!file)return;
+  importRun.disabled=true;importStatus.textContent="Читаем и проверяем пакет…";
+  try{
+   const parsed=JSON.parse(await file.text()),exams=Array.isArray(parsed)?parsed:parsed.exams;
+   if(!Array.isArray(exams)||exams.length!==10)throw Error("Файл должен содержать массив exams из 10 комплектов.");
+   const count=exams.reduce((sum,exam)=>sum+(Array.isArray(exam.variants)?exam.variants.length:0),0);
+   if(count!==150)throw Error("В пакете найдено "+count+" вариантов вместо 150. Импорт не выполнен.");
+   if(!window.confirm("Импортировать полный реестр из 150 вариантов? Текущая активная версия будет заменена."))return;
+   const result=await window.API.importEnglishExamVariants(exams);
+   if(!result||result.success!==true)throw Error(result&&result.error||"Сервер не подтвердил импорт.");
+   importStatus.textContent="Готово: импортировано и активировано "+result.activeVariants+" вариантов для "+result.examCount+" курсовых/семестровых комплектов.";
+  }catch(error){importStatus.textContent="Импорт не выполнен: "+(error.message||String(error));}
+  finally{importRun.disabled=!(importFile.files&&importFile.files.length);}
+ };
 }
 
 const reviewButton=document.getElementById("efReviewRefresh");
