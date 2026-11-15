@@ -42,7 +42,7 @@
 - C. since
 - D. from
 
-**47.** Choose the correct reported sentence: “I am tired,” Kate said.
+**47.** Choose the standard backshifted reported form of Kate's statement made yesterday: “I am tired.”
 - A. Kate said that she is tired.
 - B. Kate said that I was tired.
 - C. Kate said that she had tired.
