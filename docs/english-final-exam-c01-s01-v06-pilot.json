@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 06",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v06_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to the information desk announcement. What time does the desk open?",
+      "audioText": "Hello, Mark. This is a reminder about the college information desk. It opens at eight thirty and closes at four thirty. If you need a student card, bring a photo and your passport. The desk is in the main building, opposite the staircase. On Fridays it closes at three o'clock.",
+      "options": [
+        "At 8:00",
+        "At 8:30",
+        "At 9:00",
+        "At 9:30"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v06_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What must a student bring to get a student card?",
+      "audioText": "Hello, Mark. This is a reminder about the college information desk. It opens at eight thirty and closes at four thirty. If you need a student card, bring a photo and your passport. The desk is in the main building, opposite the staircase. On Fridays it closes at three o'clock.",
+      "options": [
+        "A photo and a passport",
+        "A course book and a notebook",
+        "A bus ticket and a map",
+        "A letter from a classmate"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v06_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Sofia studies English with a small group from her course. They meet in an empty classroom on Tuesday afternoons. Each student prepares three questions about the text they read at home. During the meeting, they take turns asking and answering the questions. Sofia likes this method because everyone speaks and nobody has to work alone. When does Sofia's group meet?",
+      "options": [
+        "On Monday mornings",
+        "On Tuesday afternoons",
+        "On Friday evenings",
+        "At weekends"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v06_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. Why does Sofia like the group method?",
+      "options": [
+        "Only one student speaks",
+        "Nobody needs to read a text",
+        "Everyone speaks and works with others",
+        "The meetings are always online"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v06_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'There ___ an information desk in the main building.'",
+      "options": [
+        "are",
+        "am",
+        "is",
+        "be"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v06_g02",
+      "type": "multiple_choice",
+      "prompt": "Select the TWO correct sentences about college routines.",
+      "options": [
+        "The library closes at six.",
+        "Our lessons starts at nine.",
+        "I usually check my timetable on Sunday.",
+        "She don't need a student card."
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v06_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'A small photograph of a person that is used on an identity document is a ___.'",
+      "acceptedAnswers": [
+        "photo",
+        "photograph"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v06_f01",
+      "type": "single_choice",
+      "prompt": "You need information about a student card. Which opening is polite?",
+      "options": [
+        "Give me information!",
+        "Excuse me, could you help me with a student card, please?",
+        "You must tell card.",
+        "I want you help yesterday."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v06_o01",
+      "type": "ordering",
+      "prompt": "Put the steps for asking for help at the college information desk in the correct order.",
+      "options": [
+        "Explain what information you need",
+        "Greet the employee politely",
+        "Listen to the answer",
+        "Thank the employee"
+      ],
+      "correctOrder": [
+        "Greet the employee politely",
+        "Explain what information you need",
+        "Listen to the answer",
+        "Thank the employee"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v06_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words describing how you work with other students. Say when or where you study together, what you do during the meeting and how group work helps you learn.",
+      "rubric": "8 points total: all requested details included (0–2); clear basic sentence structure and grammar (0–2); suitable study and communication vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v06_audio",
+    "readingPassageId": "c1s1v06_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
