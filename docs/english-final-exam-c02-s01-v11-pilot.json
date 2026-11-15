@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 11",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v11_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the briefing begin?",
+      "audioText": "The international exchange office has arranged an online briefing about a study visit to Hamburg. It will begin at half past two on Friday and last forty minutes. Students should test their microphone before joining and use their full names on the meeting screen. A recording and a list of useful links will be sent to registered participants.",
+      "options": [
+        "At half past two on Friday",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v11_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should students check before joining?",
+      "audioText": "The international exchange office has arranged an online briefing about a study visit to Hamburg. It will begin at half past two on Friday and last forty minutes. Students should test their microphone before joining and use their full names on the meeting screen. A recording and a list of useful links will be sent to registered participants.",
+      "options": [
+        "On Friday",
+        "Their microphone",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v11_r01",
+      "type": "single_choice",
+      "prompt": "Before a study visit, Daria compared the programme with her current course. She checked the dates, accommodation arrangements and the documents required for travel. She also asked whether the host college could provide safety information in English. After receiving the answers, she discussed the plan with her tutor and completed the application. Reading 1. What did Daria compare with her course?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "The study visit programme",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v11_r02",
+      "type": "single_choice",
+      "prompt": "Why did she contact the host college?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "To ask for safety information in English"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v11_g01",
+      "type": "single_choice",
+      "prompt": "By the time the briefing starts, I ___ my microphone.",
+      "options": [
+        "will have tested",
+        "test yesterday",
+        "am test",
+        "have testing"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v11_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO things to confirm before an international study visit.",
+      "options": [
+        "Travel dates and required documents",
+        "Accommodation arrangements",
+        "A classmate's social media password",
+        "Unrelated shopping offers"
+      ],
+      "correctIndices": [
+        0,
+        1
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v11_v01",
+      "type": "short_text",
+      "prompt": "A person or organisation that welcomes a visiting student is a ___.",
+      "acceptedAnswers": [
+        "host"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v11_f01",
+      "type": "single_choice",
+      "prompt": "You need clarification about a travel document. What is a polite request?",
+      "options": [
+        "Could you confirm which document I need, please?",
+        "Tell me now. I do not care why.",
+        "I will ignore the requirement.",
+        "You have to do my application."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v11_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of planning a study visit in a sensible order.",
+      "options": [
+        "Ask the host about unclear details",
+        "Read the visit information",
+        "Confirm the plan with your tutor",
+        "Check dates and documents"
+      ],
+      "correctOrder": [
+        "Read the visit information",
+        "Check dates and documents",
+        "Ask the host about unclear details",
+        "Confirm the plan with your tutor"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v11_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words asking a host college for information before a study visit. Ask about dates, accommodation and one practical requirement.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v11_audio",
+    "readingPassageId": "c2s1v11_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
