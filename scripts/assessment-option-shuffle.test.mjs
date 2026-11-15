@@ -175,6 +175,10 @@ test("English final-exam variants shuffle options per attempt and restore canoni
   assert.deepEqual(assigned.tasks[0].options,["B","C","D","A"]);
   assert.deepEqual(assigned.tasks[1].options,["X","Y","Z","W"]);
   assert.deepEqual(assigned.tasks[2].options,["Step two","Step three","Step one"]);
+  const identityMath=Object.create(Math); identityMath.random=()=>0.999999;
+  const identityShuffle=new Function("Math",extract(code,"shuffleEnglishFinalExamTasks_")+"; return shuffleEnglishFinalExamTasks_;")(identityMath);
+  const forcedChange=identityShuffle([{id:"identity",options:["A","B","C"]}]);
+  assert.notDeepEqual(forcedChange.optionMaps.identity,[0,1,2],"a multi-option question must never retain its source order");
   const snapshot={tasks,optionMaps:assigned.optionMaps};
   const resumed=display(snapshot.tasks,snapshot.optionMaps);
   assert.deepEqual(resumed,assigned.tasks,"resume must preserve the exact option order");
