@@ -25,7 +25,7 @@
     {
       "id": "c3s2v07_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which two documents should students bring?",
+      "prompt": "Listening 2. Which documents are needed for the process-planning class?",
       "audioText": "The manufacturing planning class will review a sample process sheet on Monday at ten. Students should bring the component drawing and the operation list. The instructor will explain how a process sheet connects the required geometry with the sequence of manufacturing stages. Detailed machine settings will not be discussed in this classroom exercise.",
       "options": [
         "On Friday",
