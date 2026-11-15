@@ -12,7 +12,7 @@ Scope: `english-assessment-data.js`, the ten Technical draft batches, and the pr
 5. The existing topic-level practice checks in `data-english-basic.js` and `data-english-technical.js` contain 27 Basic and 72 Technical questions respectively. Structural comparison found no exact duplicate stems within either set or between the two tracks. These lesson checks are separate from the legacy semester bank and are not a substitute for semester assessments.
 6. The protected Basic and Technical VPR seed exams have distinct track IDs and track labels. A comparison of their comparable prompts/passages found no exact overlap; both pass the current VPR structure validator.
 7. A separate Technical authoring pool exists in `docs/english-technical-semester-bank-draft-v1.md` through `v10.md`: 200 questions, 20 per batch, four options per question, teacher-key rows, and balanced key positions (50 each for A/B/C/D). A structural parse found no duplicate substantive stems in that draft pool.
-6. The Technical draft documents explicitly require subject-specialist and English-methodologist review. They are not approved for student release or protected-bank import.
+8. The Technical draft documents explicitly require subject-specialist and English-methodologist review. They are not approved for student release or protected-bank import.
 
 ## Containment change
 
