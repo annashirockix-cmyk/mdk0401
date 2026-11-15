@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 2",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When does the CV workshop begin?",
+      "audioText": "The careers office is offering a CV workshop on Friday afternoon. It begins at one thirty in Room 24. Bring a draft CV saved on a USB drive or in your college cloud folder. The adviser will show students how to describe practical skills and organise education details. There will also be time to ask individual questions. Places are limited, so book online before Thursday.",
+      "options": [
+        "At one thirty on Friday",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should students bring?",
+      "audioText": "The careers office is offering a CV workshop on Friday afternoon. It begins at one thirty in Room 24. Bring a draft CV saved on a USB drive or in your college cloud folder. The adviser will show students how to describe practical skills and organise education details. There will also be time to ask individual questions. Places are limited, so book online before Thursday.",
+      "options": [
+        "On Friday",
+        "A draft CV",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r01",
+      "type": "single_choice",
+      "prompt": "Nikita is applying for a summer placement in an electronics workshop. In his CV, he describes a college project in which he assembled a training circuit and recorded test results. He lists teamwork, careful measurement and basic computer skills. His tutor suggests replacing the phrase 'I am good at everything' with specific examples that an employer can understand. Reading 1. What project does Nikita describe?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "A training circuit project",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_r02",
+      "type": "single_choice",
+      "prompt": "What does the tutor recommend changing?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "A general claim into specific examples"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct comparative: 'This version of my CV is ___ than the first one.'",
+      "options": [
+        "clearer",
+        "clearest",
+        "more clear than",
+        "clearly"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO strong ways to describe a skill in a CV.",
+      "options": [
+        "Give a relevant example",
+        "Use a vague claim without evidence",
+        "Name a task you completed",
+        "Copy another person's CV"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A short period of practical work in a company is a work ___.'",
+      "acceptedAnswers": [
+        "placement",
+        "internship"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_f01",
+      "type": "single_choice",
+      "prompt": "A careers adviser asks you to explain a skill. What should you do?",
+      "options": [
+        "Give a brief example of when you used it.",
+        "Say that you have every skill.",
+        "Change the subject.",
+        "Read your whole CV aloud."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v10_o01",
+      "type": "ordering",
+      "prompt": "Choose the role; List relevant experience; Write clear skill examples; Check the CV for errors",
+      "options": [
+        "Check the CV for errors",
+        "List relevant experience",
+        "Choose the role",
+        "Write clear skill examples"
+      ],
+      "correctOrder": [
+        "Choose the role",
+        "List relevant experience",
+        "Write clear skill examples",
+        "Check the CV for errors"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words describing three skills you could include in a CV. Give a short example of how you developed or used each skill.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v2_audio",
+    "readingPassageId": "c2s1v2_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
