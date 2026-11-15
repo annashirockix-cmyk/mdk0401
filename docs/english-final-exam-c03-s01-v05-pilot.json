@@ -94,7 +94,11 @@
     {
       "id": "c3s1v05_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A difference between the recorded information and the actual delivery is a ___.",
+      "acceptedAnswers": [
+        "discrepancy"
+      ]
     },
     {
       "id": "c3s1v05_f01",
