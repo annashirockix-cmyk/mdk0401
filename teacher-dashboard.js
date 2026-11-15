@@ -3,7 +3,7 @@ window.renderTeacherDashboard=function(){
 const app=document.getElementById("app"),crumb=document.getElementById("crumbs"),staff=window.state.staff;
 if(!app)return;if(crumb)crumb.textContent="Панель преподавателя";
 if(!staff||!["teacher","admin"].includes(String(staff.role).toLowerCase())){app.innerHTML='<section class="module">⛔ Доступ только преподавателю.</section>';return;}
-app.innerHTML='<div class="teacher-dashboard"><div class="td-head"><div><a href="#/">← На главную</a><h1>Панель преподавателя</h1><p>Сводка по заданиям, группам и результатам</p></div><div class="td-head-actions"><a class="btn" href="#/teaching-controls">🔐 Управление доступом и попытками</a> <button class="btn ghost" id="tdRefresh">↻ Обновить</button></div></div><p id="tdStatus">Загрузка…</p><div id="tdContent"></div></div>';
+app.innerHTML='<div class="teacher-dashboard"><div class="td-head"><div><a href="#/">← На главную</a><h1>Панель преподавателя</h1><p>Сводка по заданиям, группам и результатам</p></div><div class="td-head-actions"><a class="btn" href="#/teaching-controls">🔐 Управление доступом и попытками</a> <button class="btn ghost" id="efReviewRefresh">✍️ Письменные экзамены</button> <button class="btn ghost" id="tdRefresh">↻ Обновить</button></div></div><section class="module" id="efReviewPanel" hidden><h2>Письменные ответы на проверку</h2><p id="efReviewStatus">Нажмите «Обновить», чтобы загрузить работы.</p><div id="efReviewItems"></div></section><p id="tdStatus">Загрузка…</p><div id="tdContent"></div></div>';
 const E=v=>window.escapeHtml(String(v==null?"":v));
 const courses={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","MET":"Метрология","OT":"Охрана труда","PFI":"ПФИ"};
 function load(){
@@ -115,5 +115,30 @@ const csv="\uFEFF"+lines.map(row=>row.map(quote).join(";")).join("\r\n"),url=URL
 renderMatrix();
 }).catch(e=>{const status=document.getElementById("tdStatus");if(status&&status.isConnected)status.textContent="Ошибка загрузки: "+(e&&e.message?e.message:String(e));else console.warn("[TeacherDashboard] Ошибка после закрытия панели:",e);});
 }
+
+const reviewButton=document.getElementById("efReviewRefresh");
+if(reviewButton)reviewButton.onclick=async function(){
+ const panel=document.getElementById("efReviewPanel"),status=document.getElementById("efReviewStatus"),list=document.getElementById("efReviewItems");
+ panel.hidden=false;status.textContent="Загружаем письменные работы…";list.innerHTML="";
+ try{
+  const response=await window.API.getEnglishFinalExamReviews();
+  if(!response||!response.success)throw Error(response&&response.error||"Не удалось загрузить работы");
+  const items=response.items||[];
+  status.textContent=items.length?"Работ ожидают проверки: "+items.length:"Непроверенных письменных работ нет.";
+  list.innerHTML=items.map(item=>'<article class="module ef-review-item" data-attempt="'+E(item.attemptId)+'"><h3>'+E(item.studentName||item.studentEmail)+' · '+E(item.group||"Без группы")+'</h3><p>'+E(item.examId)+' · вариант '+E(item.variantId)+' · отправлено '+E(item.submittedAt||"")+'</p>'+
+   (item.tasks||[]).map(task=>'<div class="ef-review-task" data-task="'+E(task.id)+'"><h4>'+E(task.prompt||"Письменное задание")+'</h4><p><b>Ответ студента:</b><br>'+E(item.responses&&item.responses[task.id]||"Ответ не сохранён").replace(/\n/g,"<br>")+'</p><p>Максимум: '+E(task.points)+' балл(ов)</p>'+(task.rubric?'<p><b>Критерии:</b> '+E(task.rubric)+'</p>':'')+'<label>Баллы <input class="ef-review-score" type="number" min="0" max="'+E(task.points)+'" step="0.5" value="0"></label><label>Комментарий <textarea class="ef-review-feedback" rows="2"></textarea></label></div>').join("")+
+   '<button class="btn ef-review-submit" type="button">Сохранить оценку</button><p class="ef-review-result" aria-live="polite"></p></article>').join("");
+  list.querySelectorAll(".ef-review-submit").forEach(button=>button.onclick=async function(){
+   const card=button.closest(".ef-review-item"),grades={};
+   card.querySelectorAll(".ef-review-task").forEach(task=>{
+    const id=task.getAttribute("data-task");
+    grades[id]={score:Number(task.querySelector(".ef-review-score").value),feedback:task.querySelector(".ef-review-feedback").value};
+   });
+   const out=card.querySelector(".ef-review-result");button.disabled=true;out.textContent="Сохраняем…";
+   try{const saved=await window.API.gradeEnglishFinalExamWritten(card.getAttribute("data-attempt"),grades);if(!saved||!saved.success)throw Error(saved&&saved.error||"Не удалось сохранить оценку");out.textContent="Проверка сохранена. Итоговая оценка: "+saved.result.grade+" ("+saved.result.totalScore+"/"+saved.result.totalMax+").";card.querySelectorAll("input,textarea").forEach(x=>x.disabled=true);button.remove();}
+   catch(error){out.textContent=error.message||String(error);button.disabled=false;}
+  });
+ }catch(error){status.textContent="Ошибка: "+(error.message||String(error));}
+};
 const refreshBtn=document.getElementById("tdRefresh");if(refreshBtn)refreshBtn.onclick=load;load();
 };
