@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO good interview habits.",
       "options": [
-        "Listen carefully to each question",
         "Interrupt before the question ends",
-        "Give relevant examples",
-        "Invent experience you do not have"
+        "Invent experience you do not have",
+        "Listen carefully to each question",
+        "Give relevant examples"
       ],
       "correctIndices": [
         2,
