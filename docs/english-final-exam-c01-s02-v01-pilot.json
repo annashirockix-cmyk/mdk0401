@@ -81,9 +81,9 @@
       "prompt": "Choose TWO polite ways to ask for directions.",
       "options": [
         "Tell me the way now.",
+        "You must give directions.",
         "Could you show me on the map, please?",
-        "Where is the nearest bus stop, please?",
-        "You must give directions."
+        "Where is the nearest bus stop, please?"
       ],
       "correctIndices": [
         2,
