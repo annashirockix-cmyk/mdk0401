@@ -94,7 +94,11 @@
     {
       "id": "c3s1v03_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A list of components used in an assembly is a parts ___.",
+      "acceptedAnswers": [
+        "list"
+      ]
     },
     {
       "id": "c3s1v03_f01",
