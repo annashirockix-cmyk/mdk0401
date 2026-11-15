@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Listen to Emma. What time does the first lesson start?",
       "audioText": "Good morning. This is Emma from Group A. Our first lesson starts at nine in Room 12, not Room 21. Please bring your English notebook and the college map. At eleven, we have a short break. After lunch, our group will visit the language laboratory. The laboratory is on the second floor, next to the computer room.",
       "options": [
+        "At nine o'clock",
         "At eight o'clock",
         "At half past eight",
-        "At nine o'clock",
         "At eleven o'clock"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "Reading 1. Read the text. Alex has a simple plan for learning English. He studies for fifteen minutes every evening. First, he reads a short text and underlines unfamiliar words. Then he checks the meaning in a dictionary and writes one example sentence. Twice a week, he listens to a short recording and writes down the main idea. He does not try to learn twenty new words at once because he wants to remember them well. How often does Alex study English?",
       "options": [
-        "Every evening",
         "Only at weekends",
         "Twice a month",
+        "Every evening",
         "Every morning"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -55,11 +55,11 @@
       "prompt": "Reading 2. Why doesn't Alex learn twenty new words at once?",
       "options": [
         "He has no dictionary",
-        "He wants to remember the words well",
         "He dislikes reading",
-        "The recordings are too long"
+        "The recordings are too long",
+        "He wants to remember the words well"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "Choose the correct sentence.",
       "options": [
-        "She have two English lessons a week.",
         "She has two English lessons a week.",
+        "She have two English lessons a week.",
         "She having two English lessons a week.",
         "She is have two English lessons a week."
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO correct sentences.",
       "options": [
-        "There is a computer in the room.",
         "There are a map on the wall.",
-        "Our teacher speaks clearly.",
-        "My friends goes to college by bus."
+        "My friends goes to college by bus.",
+        "There is a computer in the room.",
+        "Our teacher speaks clearly."
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
@@ -108,11 +108,11 @@
       "prompt": "You cannot find Room 12. What is the best question to ask a college employee?",
       "options": [
         "Where Room 12?",
-        "Tell Room 12 now.",
         "Could you tell me where Room 12 is, please?",
+        "Tell Room 12 now.",
         "You know Room 12 yesterday?"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
