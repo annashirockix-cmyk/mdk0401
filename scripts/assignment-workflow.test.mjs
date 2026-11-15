@@ -307,6 +307,8 @@ test("manual and written grades expose feedback separately in student course res
   assert.equal(updatedManualView.results.find(item=>item.testId===manual.testId).feedback,"Уточнённый комментарий.");
   assert.ok(reports.includes("((x.payload||x.feedback)?"), "reports must display a comment even when the submission text is empty");
   assert.ok(studentProgress.includes('feedback:x.feedback||""'), "student timeline must include written and manual grade feedback");
+  assert.ok(studentProgress.includes('grade:h.grade!==undefined&&h.grade!==null&&h.grade!==""?h.grade:(latest?x.grade:null)'), "student timeline must retain grades from earlier reviewed attempts");
+  assert.ok(studentProgress.includes('feedback:h.feedback||(latest?x.feedback:"")'), "student timeline must retain teacher feedback from earlier attempts");
 
   results.appendRow([
     "student@example.test", "Иван Иванов", "ТО-21", "prac_demo", "Письменная работа",
