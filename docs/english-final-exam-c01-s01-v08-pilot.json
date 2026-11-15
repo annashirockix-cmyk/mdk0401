@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Listen to the library announcement. Why will the library close early on Thursday?",
       "audioText": "Good morning, everyone. The college library will close early this Thursday because staff are checking the computer system. It will close at two o'clock instead of six. Students can return books using the box beside the main entrance. If you need to use a computer, please visit the study room in Building B. The library will open at its usual time on Friday.",
       "options": [
-        "There is a staff meeting",
         "The computer system is being checked",
+        "There is a staff meeting",
         "The building needs painting",
         "A new book exhibition is opening"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -29,11 +29,11 @@
       "audioText": "Good morning, everyone. The college library will close early this Thursday because staff are checking the computer system. It will close at two o'clock instead of six. Students can return books using the box beside the main entrance. If you need to use a computer, please visit the study room in Building B. The library will open at its usual time on Friday.",
       "options": [
         "At the reception desk",
-        "In the study room",
         "In the box beside the main entrance",
+        "In the study room",
         "At Building B"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -42,11 +42,11 @@
       "prompt": "Reading 1. Read the text. Dmitri is doing a short work-placement programme at a local engineering company. On his first day, his supervisor showed him the workshop and explained the safety rules. Dmitri must wear safety glasses and protective shoes in the production area. He keeps a small notebook to record new technical words and instructions. At the end of each week, he discusses his progress with the supervisor. What does Dmitri use to record new words and instructions?",
       "options": [
         "A tablet",
-        "A small notebook",
         "A wall chart",
+        "A small notebook",
         "A voice recorder"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -55,11 +55,11 @@
       "prompt": "Reading 2. When does Dmitri discuss his progress with the supervisor?",
       "options": [
         "Every morning",
-        "At the end of each week",
         "Before his first day",
-        "Only when there is a problem"
+        "Only when there is a problem",
+        "At the end of each week"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO instructions that are grammatically correct.",
       "options": [
-        "Please switch off the machine.",
         "You must to wear protective shoes.",
-        "Don't touch the moving parts.",
-        "Not open the safety guard."
+        "Not open the safety guard.",
+        "Please switch off the machine.",
+        "Don't touch the moving parts."
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
