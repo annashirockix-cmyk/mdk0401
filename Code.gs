@@ -3377,7 +3377,8 @@ function upsertEnglishFinalExamJournal_(attemptRow, attemptMap, result, reviewer
     TimeSpent:Number.isFinite(started)&&Number.isFinite(finished)?Math.max(0,Math.round((finished-started)/1000)):0,
     Attempts:1,FinishedAt:attemptRow[attemptMap.SubmittedAt]||now,CourseId:courseId,
     Submission:"Итоговый экзамен · вариант "+String(attemptRow[attemptMap.VariantId]||""),
-    Feedback:"",ReviewedBy:reviewerEmail||"",ReviewedAt:reviewerEmail?now:""};
+    Feedback:Object.keys(result.manualGrades||{}).map(function(id){const item=result.manualGrades[id]||{};return "Задание "+id+": "+String(item.feedback||"");}).filter(Boolean).join("\n").slice(0,4000),
+    ReviewedBy:reviewerEmail||"",ReviewedAt:reviewerEmail?now:""};
   const sh=results_(),last=sh.getLastRow();
   if(last>1){
     const rows=sh.getRange(2,1,last-1,sh.getLastColumn()).getValues();
