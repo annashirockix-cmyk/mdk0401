@@ -409,3 +409,7 @@ Regression tests cover valid banks, missing keys, duplicate IDs/questions/option
 - В CI добавлен `scripts/assessment-option-shuffle.test.mjs`: проверки общего банка, ВПР choice/match/gap, семестровых попыток, пользовательских тестов, итоговых экзаменов и локальных тренировочных страниц.
 
 Оставшийся аудит: отдельно проверить все нестандартные интерактивные задания, игры и старые автономные HTML/JS-модули, которые могут оценивать ответы вне перечисленных общих движков. До завершения этого аудита нельзя заявлять, что буквально каждый автономный виджет портала уже использует единый механизм.
+
+## Final-exam content authoring status — Course 1, Semester 1
+
+The first slot now has 15 authored Basic English pilot variants (`docs/english-final-exam-c01-s01-v01-pilot.json` through `v15`). Each form has 10 tasks, 20 points, 90 minutes, browser-readable listening scripts and one teacher-reviewed written response. The regression test validates all 15 against the protected runtime schema, checks unique task prompts and listening scripts across variants, and enforces a balanced A/B/C/D answer-key distribution. All 15 remain marked `pilot_for_editorial_review`; this is not a formal pedagogical sign-off and the forms have not been imported into the protected Google Sheet. Nine of the ten course/semester slots remain to be authored.
