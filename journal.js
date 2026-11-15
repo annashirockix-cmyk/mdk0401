@@ -47,7 +47,7 @@ window.renderJournalPage = function() {
           if (!rd || !rd.success) throw new Error(rd && rd.error || 'Не удалось загрузить результаты.');
           var students = d.students.filter(st => String(st.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (st.courses || []).includes(courseId)));
           var resultIndex = {};
-          (rd.results || []).forEach(rec => { if (!resultIndex[rec.email]) resultIndex[rec.email] = {}; resultIndex[rec.email][rec.testId] = rec; });
+          (rd.results || []).forEach(rec => { if (!resultIndex[rec.email]) resultIndex[rec.email] = {}; if (!Object.prototype.hasOwnProperty.call(resultIndex[rec.email], rec.testId)) resultIndex[rec.email][rec.testId] = rec; });
           var knownWorkIds = new Set(works.map(w => w.id));
           (rd.results || []).forEach(rec => { if (rec.courseId === courseId && rec.testId && !knownWorkIds.has(rec.testId)) { works.push({id:rec.testId,title:rec.testTitle||rec.testId,type:"custom"}); knownWorkIds.add(rec.testId); } });
           CURRENT_STUDENTS_CACHE = students;
