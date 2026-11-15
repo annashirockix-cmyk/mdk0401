@@ -39,6 +39,7 @@ const scoreBuiltIn = new Function("sameAnswer_", extract(code, "scoreBuiltInQues
 );
 
 test("custom test scoring accepts both numeric keys and legacy option-text keys", () => {
+  assert.match(extract(code,"submitCustomTest_"),/scoreBuiltInQuestion_\(question \|\| \{\}, canonicalAnswers\[index\]\)/);
   const question = {type:"mc",options:["North","South","East","West"],correct:"East"};
   const order = [2,0,3,1];
   const displayed = order.map(index => question.options[index]);
