@@ -53,7 +53,8 @@ function makeSheet(headers) {
                 }
               }
               return found;
-            }
+            },
+            findNext() { return this.findAll()[0] || null; }
           };
         },
         getValues() {
@@ -91,7 +92,7 @@ function runtime() {
   const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote"]);
   const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","LegacyNote"]);
   const results = makeSheet(["Email","Name","Group","TestId","TestTitle","Grade","Score","MaxScore","Percent","TimeSpent","Attempts","FinishedAt","CourseId","Submission","PenaltyPoints","ViolationCount","Feedback","ReviewedBy","ReviewedAt"]);
-  users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01,EN","","","",""]);
+  users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01","","","",""]);
   users.appendRow(["other.teacher@example.test","","Другой преподаватель","","teacher","","MAT","","","",""]);
   users.appendRow(["english.teacher@example.test","","Преподаватель английского","","teacher","","ENB","","","",""]);
   const payload = JSON.stringify({ xp: 135, manualGrades: { "07.01": 4 }, avatar: "gear", custom: { keep: true } });
@@ -470,10 +471,11 @@ test("group assignment workflow works before student onboarding and preserves st
   assert.equal(afterGrade.answer, "Исправленная версия");
   // Уведомление о назначении студенту, два уведомления преподавателю
   // (первая отправка и пересдача), первоначальная оценка и административная корректировка.
-  assert.equal(notifications.length, 5);
-  assert.deepEqual(notifications.map(item => item[1]), ["assignment","submission","submission","grade","grade"]);
+  assert.equal(notifications.length, 7);
+  assert.deepEqual(notifications.map(item => item[1]), ["assignment","submission","submission","submission","submission","grade","grade"]);
   assert.equal(notifications.filter(item => item[0] === "student@example.test").length, 3);
   assert.equal(notifications.filter(item => item[0] === "teacher@example.test").length, 2);
+  assert.equal(notifications.filter(item => item[0] === "admin@example.test").length, 2);
   const unchangedStudentRow = users.rows.find(row => row[0] === "student@example.test");
   assert.equal(unchangedStudentRow[7], r.originalPayload);
 });
@@ -542,7 +544,7 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /Комментарий преподавателя:/);
   assert.match(journal, /window\.API\.saveManualGrade\(/);
   assert.match(journal, /window\.API\.getResults\(\{courseId:window\.state\.activeCourseId\}\)/);
-  assert.match(journal, /manualByStudent\[String\(s\.email\|\|""\)\.toLowerCase\(\)\+"\|"+dateInput\]/);
+  assert.match(journal, /manualByStudent\[String\(s\.email\|\|""\)\.toLowerCase\(\)\+"\|"\+dateInput\]/);
   assert.match(journal, /escapeHtml\(currentFeedback\)/);
   assert.doesNotMatch(journal.slice(journal.indexOf("function renderManual"), journal.indexOf('document.getElementById("tabAuto")')), /window\.API\.saveStudent/);
   assert.match(backend, /AssignmentSubmissionHistory: \[[^\]]*"Grade"[^\]]*"Feedback"/);
