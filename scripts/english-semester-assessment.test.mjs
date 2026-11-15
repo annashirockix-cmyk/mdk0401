@@ -146,6 +146,24 @@ test("fifteen authored Basic English Course 1 Semester 2 pilots match the protec
   assert.equal(new Set(pilots.map(p=>p.tasks.find(t=>t.audioText).audioText)).size,15);
 });
 
+
+test("five authored Basic English Course 2 Semester 1 pilots match the protected runtime schema",()=>{
+  const pilots=Array.from({length:5},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c02-s01-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
+  const source=extractFunction("validateEnglishFinalVariantPayload_");
+  const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
+  const allPrompts=[];
+  pilots.forEach((pilot,index)=>{
+    assert.equal(pilot.examId,"english_final_c2_s1"); assert.equal(pilot.courseNo,2); assert.equal(pilot.track,"basic"); assert.equal(pilot.semester,1);
+    assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
+    assert.deepEqual(validate(pilot,"C2-S1-V"+String(index+1).padStart(2,"0")),{taskCount:10,maxScore:20,durationMinutes:90});
+    const distribution={A:0,B:0,C:0,D:0};
+    pilot.tasks.forEach(task=>{allPrompts.push(task.prompt.trim().toLowerCase());if(task.type==="single_choice")distribution["ABCD"[task.correctIndex]]++;if(task.type==="multiple_choice")task.correctIndices.forEach(i=>distribution["ABCD"[i]]++);});
+    assert.deepEqual(distribution,{A:2,B:2,C:2,D:2}); assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
+  });
+  assert.equal(new Set(allPrompts).size,allPrompts.length);
+  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,5);
+});
+
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
   const start = extractFunction("startEnglishFinalExam_");
   const resume = extractFunction("resumeEnglishFinalExam_");
