@@ -82,6 +82,15 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(code, /case "resumeenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
 });
 
+test("teacher dashboard exposes a written-exam review panel and submits explicit per-task grades", () => {
+  const dashboard = fs.readFileSync(path.join(root, "teacher-dashboard.js"), "utf8");
+  assert.match(dashboard, /efReviewRefresh/);
+  assert.match(dashboard, /getEnglishFinalExamReviews/);
+  assert.match(dashboard, /gradeEnglishFinalExamWritten/);
+  assert.match(dashboard, /Укажите баллы за каждое письменное задание/);
+  assert.match(dashboard, /ef-review-feedback/);
+});
+
 test("teacher review queue filters by assigned course and exposes written responses", () => {
   const list = extractFunction("getEnglishFinalExamReviews_");
   assert.match(list, /teacher\.role!=="admin" && teacher\.role!=="teacher"/);
