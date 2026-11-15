@@ -283,6 +283,9 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /window\.API\.createAssignment/);
   assert.match(ui, /window\.API\.submitAssignment/);
   assert.match(ui, /window\.API\.gradeAssignment/);
+  assert.match(ui, /Подтверждаю повторное выставление оценки/);
+  assert.match(ui, /actor\.role==="admin"/);
+  assert.match(api, /regrade:regrade===true/);
   assert.match(api, /createAssignment\s*:/);
   assert.match(api, /getAssignments\s*:/);
   assert.match(api, /submitAssignment\s*:/);
