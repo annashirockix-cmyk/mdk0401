@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 03",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v03_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. How will the group travel?",
+      "audioText": "The college group is travelling to the science museum by train on Saturday. The train leaves Central Station at ten twenty. Please meet the teacher outside the ticket office at ten. Buy a return ticket before boarding and keep it until the end of the journey. The museum is a ten-minute walk from the station.",
+      "options": [
+        "By train",
+        "By bus",
+        "By taxi",
+        "By coach"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v03_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Where should students meet the teacher?",
+      "audioText": "The college group is travelling to the science museum by train on Saturday. The train leaves Central Station at ten twenty. Please meet the teacher outside the ticket office at ten. Buy a return ticket before boarding and keep it until the end of the journey. The museum is a ten-minute walk from the station.",
+      "options": [
+        "At the museum entrance",
+        "Outside the ticket office",
+        "At the bus stop",
+        "On the train"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v03_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Olga is planning a journey to visit her cousin. She compares two bus services online. The first bus is cheaper but takes three hours. The second costs more and arrives forty minutes earlier. Olga chooses the second service because she has a meeting in the afternoon. She downloads the ticket to her phone and checks the departure platform. Why does Olga choose the second bus?",
+      "options": [
+        "It is the cheapest",
+        "It has more seats",
+        "It arrives earlier",
+        "It leaves at night"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v03_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does she check before travelling?",
+      "options": [
+        "The weather forecast",
+        "The museum hours",
+        "Her cousin's address",
+        "The departure platform"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v03_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct comparative: 'The train is usually ___ than the bus on this route.'",
+      "options": [
+        "faster",
+        "fastest",
+        "fast",
+        "more fast"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v03_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO useful things to check before a journey.",
+      "options": [
+        "The departure time and platform",
+        "The colour of the bus driver's coat",
+        "The ticket conditions",
+        "A stranger's phone number"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v03_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A ticket for a journey to a place and back is a ___ ticket.'",
+      "acceptedAnswers": [
+        "return",
+        "round-trip"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v03_f01",
+      "type": "single_choice",
+      "prompt": "Your train is delayed. What should you ask at the information desk?",
+      "options": [
+        "Why you do this?",
+        "Could you tell me the expected departure time, please?",
+        "Where is my cousin?",
+        "Give me a new train."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v03_o01",
+      "type": "ordering",
+      "prompt": "Check the timetable; Buy the correct ticket; Go to the departure platform; Board the train when it arrives",
+      "options": [
+        "Board the train when it arrives",
+        "Go to the departure platform",
+        "Buy the correct ticket",
+        "Check the timetable"
+      ],
+      "correctOrder": [
+        "Check the timetable",
+        "Buy the correct ticket",
+        "Go to the departure platform",
+        "Board the train when it arrives"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v03_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about planning a journey by public transport. Compare two options and explain which one you would choose and why.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v03_audio",
+    "readingPassageId": "c1s2v03_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
