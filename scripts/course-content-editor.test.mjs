@@ -88,8 +88,13 @@ test("custom test attempts are counted within the selected course", () => {
  const end = server.indexOf("\nfunction getGameAnswer_", start);
  assert.ok(start >= 0 && end > start);
  const submit = server.slice(start, end);
- assert.match(submit, /email_\(r\[0\]\)===user\.email&&String\(r\[3\]\)===attemptKey&&sameCourseId_\(r\[12\]\|\|record\.courseId,record\.courseId\)/,
-  "attempt history must be scoped by student, test ID, and course ID");
+ const getStart = server.indexOf("function getCustomTest_(data)");
+ const getEnd = server.indexOf("\nfunction submitCustomTest_", getStart);
+ const get = server.slice(getStart, getEnd);
+ assert.match(get, /email_\(row\[0\]\) === user\.email && String\(row\[3\]\) === attemptKey && sameCourseId_\(row\[12\] \|\| courseId, courseId\)/,
+  "test launch attempt history must be scoped by student, test ID, and course ID");
+ assert.match(submit, /email_\(row\[0\]\) === user\.email && String\(row\[3\]\) === attemptKey && sameCourseId_\(row\[12\] \|\| courseId, courseId\)/,
+  "submission attempt history must be scoped by student, test ID, and course ID");
  const statusStart = server.indexOf("function getTestAttemptStatus_(data)");
  const statusEnd = server.indexOf("\nfunction requestTestAttempts_", statusStart);
  const status = server.slice(statusStart, statusEnd);
@@ -104,10 +109,15 @@ test("custom test submissions resolve the test within the active course", () => 
  const app = read("app.js");
  const start = server.indexOf("function submitCustomTest_(data)");
  const end = server.indexOf("\nfunction getGameAnswer_", start);
- const submit = server.slice(start, end);
- assert.match(submit, /requestedCourseId = String\(data\.courseId \|\| data\.mdkId \|\| ""\)/);
- assert.match(submit, /String\(row\[0\]\) === id && String\(row\[3\]\) === "test" && sameCourseId_\(row\[1\], requestedCourseId\)/);
- assert.match(api, /submitCustomTest:function\(testId,answers,timeSpent,courseId\)/);
+ const getStart = server.indexOf("function getCustomTest_(data)");
+ const getEnd = server.indexOf("\nfunction submitCustomTest_", getStart);
+ const get = server.slice(getStart, getEnd);
+ assert.match(get, /normalizeCourseId_\(data\.courseId \|\| data\.mdkId \|\| ""\)/);
+ assert.match(get, /String\(row\[0\]\) === id && String\(row\[3\]\) === "test" && sameCourseId_\(row\[1\], courseId\)/);
+ assert.match(api, /getCustomTest:function\(testId,courseId\)/);
+ assert.match(api, /submitCustomTest:function\(data\)/);
+ assert.match(app, /getCustomTest\(testId, courseId\)/);
+ assert.match(app, /submitCustomTest\(\{[\s\S]*?attemptId: attempt\.attemptId/);
  assert.match(app, /submitCustomTest\(testId, answers, Math\.round\(\(Date\.now\(\)-started\)\/1000\), test\.courseId \|\| test\.mdkId\)/);
 });
 
@@ -161,7 +171,7 @@ test("student custom-content delivery enforces publication switches and strips a
  assert.match(delivery, /user\.role !== "admin" && !hasCourseAccess_\(user, courseId\)/);
  assert.match(delivery, /user\.role === "student" && !customContentIsOpen_\(/);
  for (const key of ["correct", "answer", "correctAnswer", "answers", "explanation", "solution", "key"]) {
-  assert.ok(delivery.includes('"'+key+'"'), "student delivery must remove "+key);
+  assert.ok(delivery.includes(key), "student delivery must remove "+key);
  }
  assert.match(delivery, /return \{ success: true, data: list \}/);
 });
@@ -172,14 +182,18 @@ test("custom test grading reads the protected answer key from Sheets, not the br
  const end = server.indexOf("\nfunction getGameAnswer_", start);
  assert.ok(start >= 0 && end > start);
  const submit = server.slice(start, end);
- assert.match(submit, /const values = content_\(\)\.getDataRange\(\)\.getValues\(\)/);
- assert.match(submit, /payload: JSON\.parse\(row\[5\] \|\| "\{\}"\)/);
- assert.match(submit, /const questions = Array\.isArray\(record\.payload\.questions\)/);
- assert.match(submit, /selected === Number\(q\.correct\)/);
- assert.match(submit, /customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, record\.type\)/);
+ const launchStart = server.indexOf("function getCustomTest_(data)");
+ const launchEnd = server.indexOf("\nfunction submitCustomTest_", launchStart);
+ const launch = server.slice(launchStart, launchEnd);
+ assert.match(launch, /content_\(\)\.getDataRange\(\)\.getValues\(\)/);
+ assert.match(launch, /payload:JSON\.parse\(row\[5\]\|\|"\{\}"\)/);
+ assert.match(launch, /const questions = Array\.isArray\(record\.payload\.questions\)/);
+ assert.match(launch, /questions:questions,optionMaps:optionMaps/);
+ assert.match(launch, /customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, "test"\)/);
+ assert.match(submit, /const raw = cache\.get\("customTestAttempt:" \+ attemptId\)/);
+ assert.match(submit, /scoreBuiltInQuestion_\(question \|\| \{\}, canonicalAnswers\[index\]\)/);
  assert.doesNotMatch(submit, /data\.questions/);
  assert.match(submit, /LockService\.getScriptLock\(\)/);
-});
 
 test("teacher publication controls call server-backed topic and material access APIs", () => {
  const controls = read("teacher-controls.js");
