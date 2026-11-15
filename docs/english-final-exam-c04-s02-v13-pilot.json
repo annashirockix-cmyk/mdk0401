@@ -11,7 +11,7 @@
     {
       "id": "c4s2v13_l01",
       "type": "single_choice",
-      "prompt": "Listening 1. When does the session begin?",
+      "prompt": "Listening 1. On which day is condition monitoring discussed?",
       "audioText": "The maintenance engineering tutor will discuss condition monitoring on Monday at eleven. Students should bring the sample vibration-trend chart. The lesson will explain how repeated measurements reveal equipment trends and why unusual readings must be checked.",
       "options": [
         "On Monday at eleven",
@@ -25,7 +25,7 @@
     {
       "id": "c4s2v13_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which material should students bring?",
+      "prompt": "Listening 2. Which trend chart should students bring?",
       "audioText": "The maintenance engineering tutor will discuss condition monitoring on Monday at eleven. Students should bring the sample vibration-trend chart. The lesson will explain how repeated measurements reveal equipment trends and why unusual readings must be checked.",
       "options": [
         "A personal notebook",
@@ -78,12 +78,12 @@
     {
       "id": "c4s2v13_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details relevant to predictive maintenance data.",
+      "prompt": "Which TWO data types can be used to monitor equipment condition?",
       "options": [
         "An unrelated appointment",
         "A personal preference",
-        "The relevant technical component or evidence",
-        "The relevant procedure or documentation"
+        "Vibration measurements",
+        "Temperature readings"
       ],
       "correctIndices": [
         2,
@@ -103,10 +103,10 @@
     {
       "id": "c4s2v13_f01",
       "type": "single_choice",
-      "prompt": "Choose the most appropriate professional response.",
+      "prompt": "Please check the measurement method What should you say?",
       "options": [
         "I will guess and continue.",
-        "Check the measurement method and compare the result with other evidence.",
+        "Please check the measurement method and compare the value with other evidence before deciding.",
         "The detail is not important.",
         "I will copy an unrelated record."
       ],
