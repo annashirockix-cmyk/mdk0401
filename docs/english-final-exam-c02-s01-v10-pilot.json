@@ -11,7 +11,7 @@
     {
       "id": "c2s1v10_l01",
       "type": "single_choice",
-      "prompt": "Listening 1. How will the group travel?",
+      "prompt": "Listening 1. What transport arrangement has the group chosen for the visit?",
       "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
       "options": [
         "By minibus",
