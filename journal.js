@@ -93,6 +93,50 @@ window.renderJournalPage = function() {
                   var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : (grade === "—" ? "var(--muted)" : "var(--err)"));
                   td.innerHTML = `<b style="color:${color}; font-size:16px;">${grade}</b>`;
                   if (record && (record.payload || record.feedback || record.assignmentStatus)) { var details=document.createElement("details");details.style="font-size:11px;margin-top:4px;text-align:left";var summary=document.createElement("summary");summary.textContent=record.assignmentStatus==="reviewed"?"Ответ и проверка":(record.assignmentStatus?"Ответ · на проверке":"Ответ");details.appendChild(summary);if(record.payload){var answer=document.createElement("div");answer.textContent=record.payload;answer.style="white-space:pre-wrap;max-width:220px;overflow-wrap:anywhere;padding:5px";details.appendChild(answer);}if(record.feedback){var feedback=document.createElement("div");feedback.textContent="Комментарий: "+record.feedback;feedback.style="white-space:pre-wrap;padding:5px;color:var(--accent)";details.appendChild(feedback);}td.appendChild(details); }
+                  if (record && record.payload && /^(prac_|written_self_)/.test(String(record.testId || w.id))) {
+                      var review = document.createElement("div");
+                      review.style = "display:grid;gap:5px;margin-top:6px;text-align:left;min-width:150px;";
+                      var gradeLabel = document.createElement("label");
+                      gradeLabel.textContent = "Оценка преподавателя";
+                      gradeLabel.style = "font-size:11px;";
+                      var gradeSelect = document.createElement("select");
+                      gradeSelect.className = "self-input";
+                      gradeSelect.style = "margin:0;padding:5px;font-size:12px;";
+                      gradeSelect.innerHTML = '<option value="">Оценка…</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>';
+                      if ([2,3,4,5].indexOf(Number(record.grade)) >= 0) gradeSelect.value = String(Number(record.grade));
+                      var feedbackInput = document.createElement("textarea");
+                      feedbackInput.className = "self-input";
+                      feedbackInput.rows = 2;
+                      feedbackInput.placeholder = "Комментарий (необязательно)";
+                      feedbackInput.style = "margin:0;font-size:11px;";
+                      var gradeButton = document.createElement("button");
+                      gradeButton.className = "btn";
+                      gradeButton.type = "button";
+                      gradeButton.textContent = "Проверить";
+                      gradeButton.style = "padding:6px;font-size:11px;";
+                      gradeButton.onclick = function() {
+                          var selectedGrade = Number(gradeSelect.value);
+                          if ([2,3,4,5].indexOf(selectedGrade) < 0) { window.showToast("Выберите оценку от 2 до 5.", "err"); return; }
+                          gradeButton.disabled = true;
+                          gradeButton.textContent = "Сохранение…";
+                          window.API.gradeWrittenResult(s.email, courseId, String(record.testId || w.id), selectedGrade, feedbackInput.value)
+                              .then(function(result) {
+                                  if (!result || !result.success) throw new Error(result && result.error || "Не удалось сохранить оценку.");
+                                  window.showToast("Письменная работа проверена.", "ok");
+                                  renderAuto();
+                              })
+                              .catch(function(error) {
+                                  gradeButton.disabled = false;
+                                  gradeButton.textContent = "Повторить";
+                                  window.showToast(error.message || "Ошибка проверки.", "err");
+                              });
+                      };
+                      review.appendChild(gradeLabel);
+                      review.appendChild(gradeSelect);
+                      review.appendChild(feedbackInput);
+                      review.appendChild(gradeButton);
+                      td.appendChild(review);
+                  }
                   tr.appendChild(td);
               });
 
