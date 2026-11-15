@@ -74,7 +74,7 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(start, /AttemptJSON:JSON\.stringify\(privateSnapshot\)/);
   assert.match(start, /sanitizeEnglishFinalExamTask_\(tasks\)/);
   assert.match(resume, /email_\(row\[m\.StudentEmail\]\)!==user\.email/);
-  assert.match(resume, /Status\)\!=="in_progress"/);
+  assert.match(resume, /row\[m\.Status\]\)!=="in_progress"/);
   assert.match(resume, /DeadlineAt/);
   assert.match(resume, /sanitizeEnglishFinalExamTask_\(snapshot\.tasks\|\|\[\]\)/);
   assert.match(sanitizeTask, /answer|correct|solution|rubric|grading/i);
