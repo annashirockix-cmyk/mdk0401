@@ -9,7 +9,7 @@
   "maxScore": 20,
   "tasks": [
     {
-      "id": "c1s2v10_l01",
+      "id": "c1s2v15_l01",
       "type": "single_choice",
       "prompt": "Listening 1. What is the presentation about?",
       "audioText": "Our team is preparing a presentation about safe use of digital equipment. We have divided the work into four sections. I am responsible for the opening slide and the glossary. Please upload your slides to the shared folder by Friday evening. Use the same font size for headings and check that every image has a short caption. We will practise the presentation together on Monday.",
@@ -23,7 +23,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_l02",
+      "id": "c1s2v15_l02",
       "type": "single_choice",
       "prompt": "Listening 2. When will the team practise together?",
       "audioText": "Our team is preparing a presentation about safe use of digital equipment. We have divided the work into four sections. I am responsible for the opening slide and the glossary. Please upload your slides to the shared folder by Friday evening. Use the same font size for headings and check that every image has a short caption. We will practise the presentation together on Monday.",
@@ -37,7 +37,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_r01",
+      "id": "c1s2v15_r01",
       "type": "single_choice",
       "prompt": "The students created a presentation about sensors used in modern machines. They agreed on a simple structure and selected two diagrams from their course materials. Before sharing the file, they checked that the diagrams were readable and that every slide had a clear heading. During rehearsal, they shortened one section because it contained too much text. Reading 1. What topic did the presentation cover?",
       "options": [
@@ -50,7 +50,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_r02",
+      "id": "c1s2v15_r02",
       "type": "single_choice",
       "prompt": "Why did the students shorten one section?",
       "options": [
@@ -63,7 +63,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_g01",
+      "id": "c1s2v15_g01",
       "type": "single_choice",
       "prompt": "Choose the correct reported instruction: 'The tutor asked us ___ the file carefully.'",
       "options": [
@@ -76,7 +76,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_m01",
+      "id": "c1s2v15_m01",
       "type": "multiple_choice",
       "prompt": "Choose TWO ways to make a digital presentation easier to follow.",
       "options": [
@@ -92,7 +92,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_v01",
+      "id": "c1s2v15_v01",
       "type": "short_text",
       "prompt": "Complete: 'A picture or diagram label that explains an image is a ___.'",
       "acceptedAnswers": [
@@ -101,7 +101,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_f01",
+      "id": "c1s2v15_f01",
       "type": "single_choice",
       "prompt": "A teammate has not uploaded their slides. What is a polite message?",
       "options": [
@@ -114,7 +114,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_o01",
+      "id": "c1s2v15_o01",
       "type": "ordering",
       "prompt": "Agree the presentation topic; Divide the sections; Prepare and upload slides; Rehearse the presentation",
       "options": [
@@ -132,7 +132,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_w01",
+      "id": "c1s2v15_w01",
       "type": "written",
       "prompt": "Write 60–80 words describing how to prepare a short team presentation. Include dividing responsibilities, choosing visuals, checking slides and rehearsing.",
       "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
