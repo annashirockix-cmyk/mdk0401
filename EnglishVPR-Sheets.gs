@@ -318,7 +318,9 @@ function submitEnglishVprExam_(data) {
   const exam = attempt.exam;
   validateEnglishVprExam_(track, exam);
   const startedAt = Number(attempt.startedAt);
-  if (!startedAt || Date.now() - startedAt > (Math.max(1, Number(exam.time) || 90) * 60 + 300) * 1000) {
+  const elapsedSeconds = startedAt ? Math.max(0, Math.floor((Date.now() - startedAt) / 1000)) : 0;
+  const allowedSeconds = Math.max(1, Number(exam.time) || 90) * 60;
+  if (!startedAt || elapsedSeconds > allowedSeconds + 300) {
     throw new Error("Время экзамена истекло. Обратитесь к преподавателю.");
   }
   const submitted=Array.isArray(data.answers)?data.answers:[];
@@ -376,7 +378,7 @@ function submitEnglishVprExam_(data) {
   } finally { attemptLock.releaseLock(); }
   let result;
   try {
-    result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Math.min(Math.max(0,Math.floor((Date.now()-startedAt)/1000)),Math.max(1,Number(exam.time)||90)*60),payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
+    result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Math.min(elapsedSeconds,allowedSeconds),payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
   } catch (saveError) {
     const restoreLock = LockService.getScriptLock();
     restoreLock.waitLock(10000);
