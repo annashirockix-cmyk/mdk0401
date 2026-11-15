@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO strong ways to describe a skill in a CV.",
       "options": [
-        "Give a relevant example",
         "Use a vague claim without evidence",
-        "Name a task you completed",
-        "Copy another person's CV"
+        "Copy another person's CV",
+        "Give a relevant example",
+        "Name a task you completed"
       ],
       "correctIndices": [
         2,
