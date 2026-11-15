@@ -86,16 +86,22 @@ test("final exam import validates task types, private answer keys, scoring and d
 });
 
 test("the first authored Basic English final-exam pilot matches the protected runtime schema", () => {
-  const pilot = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v01-pilot.json"),"utf8"));
+  const pilot1 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v01-pilot.json"),"utf8"));
+  const pilot2 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v02-pilot.json"),"utf8"));
   const source = extractFunction("validateEnglishFinalVariantPayload_");
   const validate = new Function(source + "; return validateEnglishFinalVariantPayload_;")();
-  assert.equal(pilot.examId,"english_final_c1_s1");
-  assert.equal(pilot.courseNo,1);
-  assert.equal(pilot.track,"basic");
-  assert.equal(pilot.tasks.length,10);
-  assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1);
-  assert.ok(pilot.tasks.some(task=>task.audioText));
-  assert.deepEqual(validate(pilot,"C1-S1-V01"),{taskCount:10,maxScore:20,durationMinutes:90});
+  for (const [pilot,id] of [[pilot1,"C1-S1-V01"],[pilot2,"C1-S1-V02"]]) {
+    assert.equal(pilot.examId,"english_final_c1_s1");
+    assert.equal(pilot.courseNo,1);
+    assert.equal(pilot.track,"basic");
+    assert.equal(pilot.tasks.length,10);
+    assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1);
+    assert.ok(pilot.tasks.some(task=>task.audioText));
+    assert.deepEqual(validate(pilot,id),{taskCount:10,maxScore:20,durationMinutes:90});
+  }
+  const prompts1=new Set(pilot1.tasks.map(task=>task.prompt.trim().toLowerCase()));
+  assert.equal(pilot2.tasks.some(task=>prompts1.has(task.prompt.trim().toLowerCase())),false);
+  assert.notEqual(pilot1.tasks.find(task=>task.audioText).audioText,pilot2.tasks.find(task=>task.audioText).audioText);
 });
 
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
