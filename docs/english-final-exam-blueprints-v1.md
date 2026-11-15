@@ -114,7 +114,9 @@ Ten Technical English pilot variants are drafted for C3-S2 (`v01`–`v10`), cove
 Five Technical English pilot variants are drafted for C3-S2 (`v01`–`v05`), addressing machine-tool components, CNC programme structure, machining operations, cutting-tool identification and workholding concepts. Each contains ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Ten variants remain. These are editorial-review drafts, not imported or released.
 
 
-#### Course 4, Semester 1 — pilot authoring underway
+##### Course 4, Semester 1 — complete pilot authoring
+
+Fifteen Technical English pilot variants are now drafted for C4-S1 (`v01`–`v15`). Topics include basic electrical circuits, electrical measurements, electronic components, energy consumption, fault description, transformers, equipment warning information, troubleshooting reports, power-supply documentation, cable identification, sensors, relay concepts, fault categories, signal descriptions and documentation review. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 prompts and 15 listening scripts are unique; all variants pass the protected payload validator and have balanced A/B/C/D answer positions. The set remains subject to editorial review and has not been imported or released.
 
 Ten Technical English pilot variants are drafted for C4-S1 (`v01`–`v10`), covering basic electrical circuits, electrical measurements, electronic components, energy consumption, fault description, transformer basics, equipment warning information, troubleshooting reports, power-supply documentation and cable identification. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Five variants remain. These are editorial-review drafts, not imported or released.
 
