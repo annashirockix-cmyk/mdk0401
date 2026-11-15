@@ -102,6 +102,7 @@ window.API = {
   startEnglishFinalExam:function(courseNo,semester){return fetchAPI("startEnglishFinalExam",{courseNo:courseNo,semester:semester},"POST",30000);},
   resumeEnglishFinalExam:function(attemptId){return fetchAPI("resumeEnglishFinalExam",{attemptId:attemptId},"POST",30000);},
   saveEnglishFinalExamResponses:function(attemptId,responses){return fetchAPI("saveEnglishFinalExamResponses",{attemptId:attemptId,responses:responses},"POST",30000);},
+  submitEnglishFinalExam:function(attemptId,responses){return fetchAPI("submitEnglishFinalExam",{attemptId:attemptId,responses:responses||{}}, "POST",30000);},
  getEnglishSemesterTests:function(track){return fetchAPI("getEnglishSemesterTests",{track:track},"GET");},
  startEnglishSemesterTest:function(data){return fetchAPI("startEnglishSemesterTest",data||{},"POST");},
  submitEnglishSemesterTest:function(data){return fetchAPI("submitEnglishSemesterTest",data||{},"POST",120000);},
