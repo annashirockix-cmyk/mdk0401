@@ -45,7 +45,7 @@ window.renderJournalPage = function() {
           if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { contentWrap.innerHTML = "<div class='module'>Студентов пока нет.</div>"; return; }
 
           if (!rd || !rd.success) throw new Error(rd && rd.error || 'Не удалось загрузить результаты.');
-          var students = d.students.filter(st => String(st.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (st.courses || []).includes(courseId)));
+          var students = d.students.filter(st => String(st.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (st.courses || []).includes(courseId) || ((courseId === "ENB" || courseId === "ENT") && (st.courses || []).includes("EN"))));
           var resultIndex = {};
           (rd.results || []).forEach(rec => { if (!resultIndex[rec.email]) resultIndex[rec.email] = {}; if (!Object.prototype.hasOwnProperty.call(resultIndex[rec.email], rec.testId)) resultIndex[rec.email][rec.testId] = rec; });
           var knownWorkIds = new Set(works.map(w => w.id));
