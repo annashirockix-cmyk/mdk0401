@@ -105,8 +105,8 @@
       "type": "single_choice",
       "prompt": "You need to explain why you used a source. Which sentence is suitable?",
       "options": [
-        "I used this source because it provides recent data and identifies its research method.",
         "I copied it because the title looked interesting.",
+        "I used this source because it provides recent data and identifies its research method.",
         "I did not check where the information came from.",
         "Everyone says it is true."
       ],
