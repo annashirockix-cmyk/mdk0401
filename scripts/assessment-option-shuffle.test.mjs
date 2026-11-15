@@ -34,6 +34,22 @@ const sanitizeQuestion = new Function(extract(code, "sanitizeAssessmentQuestionF
 const prepareVpr = new Function("shuffledServer_", extract(vpr, "englishVprPrepareAttempt_") + "; return englishVprPrepareAttempt_;")(shuffleServer);
 const semesterOrder = new Function(extract(code, "englishSemesterOptionOrder_") + "; return englishSemesterOptionOrder_;")();
 
+const scoreBuiltIn = new Function("sameAnswer_", extract(code, "scoreBuiltInQuestion_") + "; return scoreBuiltInQuestion_;")(
+  new Function(extract(code, "sameAnswer_") + "; return sameAnswer_;")()
+);
+
+test("custom test scoring accepts both numeric keys and legacy option-text keys", () => {
+  const question = {type:"mc",options:["North","South","East","West"],correct:"East"};
+  const order = [2,0,3,1];
+  const displayed = order.map(index => question.options[index]);
+  const selectedDisplayedIndex = displayed.indexOf("East");
+  const canonicalIndex = order[selectedDisplayedIndex];
+  assert.equal(scoreBuiltIn(question,canonicalIndex),true);
+  assert.equal(scoreBuiltIn({...question,correct:2},canonicalIndex),true);
+  assert.equal(scoreBuiltIn(question,order.indexOf(1)),false);
+});
+
+
 test("generic protected question-bank engine shuffles options and keeps a server mapping", () => {
   const safe = new Function("shuffledServer_", "sanitizeAssessmentQuestionForStudent_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer, sanitizeQuestion);
   const entry = {bankId:"bank",questionId:"q1",question:{type:"mc",q:"Question",options:["red","blue","green","black"],correct:2}};
