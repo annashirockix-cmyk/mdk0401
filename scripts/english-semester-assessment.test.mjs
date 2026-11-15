@@ -345,8 +345,8 @@ test("five authored Technical English Course 5 Semester 2 pilots match the prote
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,5);
 });
 
-test("ten authored Technical English Course 5 Semester 2 pilots match the protected runtime schema",()=>{
-  const pilots=Array.from({length:10},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c05-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
+test("fifteen authored Technical English Course 5 Semester 2 pilots match the protected runtime schema",()=>{
+  const pilots=Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-c05-s02-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8")));
   const source=extractFunction("validateEnglishFinalVariantPayload_");
   const validate=new Function(source+"; return validateEnglishFinalVariantPayload_;")();
   const allPrompts=[];
@@ -361,10 +361,10 @@ test("ten authored Technical English Course 5 Semester 2 pilots match the protec
     assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
     assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
     const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/task remains open|Could we identify who is responsible|trends coincide|timing may be relevant|This copy is still a draft|Could we identify the record|Could you confirm which connector|result is encouraging|Raise the discrepancy|This action depends on the confirmed/i);
+    assert.match(functional.options[functional.correctIndex],/task remains open|Could we identify who is responsible|trends coincide|timing may be relevant|This copy is still a draft|Could we identify the record|Could you confirm which connector|result is encouraging|Raise the discrepancy|This action depends on the confirmed|references do not match|Could we identify the requirement|This interface remains open|How could we measure|sources differ on this value/i);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
-  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,10);
+  assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
 });
 
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
