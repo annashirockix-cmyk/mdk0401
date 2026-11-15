@@ -123,8 +123,8 @@ function handleRequest_(e) {
       case "startenglishvprexam": result = startEnglishVprExam_(data); break;
       case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
       case "importenglishexamvariants": result = importEnglishExamVariants_(data); break;
-      case "starenglishfinalexam": result = startEnglishFinalExam_(data); break;
-      case "resumenglishfinalexam": result = resumeEnglishFinalExam_(data); break;
+      case "startenglishfinalexam": result = startEnglishFinalExam_(data); break;
+      case "resumeenglishfinalexam": result = resumeEnglishFinalExam_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
