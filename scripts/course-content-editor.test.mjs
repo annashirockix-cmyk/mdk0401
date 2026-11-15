@@ -195,6 +195,8 @@ test("custom test grading reads the protected answer key from Sheets, not the br
  assert.doesNotMatch(submit, /data\.questions/);
  assert.match(submit, /LockService\.getScriptLock\(\)/);
 
+});
+
 test("teacher publication controls call server-backed topic and material access APIs", () => {
  const controls = read("teacher-controls.js");
  const api = read("api.js");
