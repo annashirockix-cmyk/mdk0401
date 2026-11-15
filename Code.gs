@@ -3177,6 +3177,51 @@ function sanitizeEnglishFinalExamTask_(value) {
   return clean;
 }
 
+/**
+ * Shuffle visible options once per assigned final-exam attempt. The stored map is
+ * display-index -> canonical-index and remains private in AttemptJSON.
+ */
+function shuffleEnglishFinalExamTasks_(tasks) {
+  const optionMaps = {};
+  const displayTasks = tasks.map(function(task, index) {
+    const copy = JSON.parse(JSON.stringify(task));
+    const id = String(copy.id || copy.questionId || index);
+    if (Array.isArray(copy.options)) {
+      const order = copy.options.map(function(_, optionIndex) { return optionIndex; });
+      for (let i = order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+      }
+      optionMaps[id] = order;
+      copy.options = order.map(function(originalIndex) { return task.options[originalIndex]; });
+    }
+    return copy;
+  });
+  return {tasks:displayTasks, optionMaps:optionMaps};
+}
+
+/** Rebuild the same visible option order when an in-progress attempt is resumed. */
+function englishFinalExamDisplayTasks_(tasks, optionMaps) {
+  return tasks.map(function(task, index) {
+    const copy = JSON.parse(JSON.stringify(task));
+    const id = String(copy.id || copy.questionId || index);
+    const map = optionMaps && optionMaps[id];
+    if (Array.isArray(copy.options) && Array.isArray(map) && map.length === copy.options.length) {
+      copy.options = map.map(function(originalIndex) { return task.options[Number(originalIndex)]; });
+    }
+    return copy;
+  });
+}
+
+/** Convert a student-facing shuffled option index back to its protected source index. */
+function englishFinalExamCanonicalOptionIndex_(snapshot, taskId, displayIndex) {
+  if (!Number.isInteger(displayIndex) || displayIndex < 0) return -1;
+  const map = snapshot && snapshot.optionMaps && snapshot.optionMaps[taskId];
+  if (!Array.isArray(map)) return displayIndex; // backward compatibility for older attempts
+  const canonical = Number(map[displayIndex]);
+  return Number.isInteger(canonical) && canonical >= 0 ? canonical : -1;
+}
+
 function englishFinalAttemptRow_(sheet, attemptId) {
   const last = sheet.getLastRow();
   if (last < 2) return null;
@@ -3216,9 +3261,10 @@ function startEnglishFinalExam_(data) {
           const deadline = new Date(rows[i][am.DeadlineAt]).getTime();
           if (deadline > Date.now()) {
             const snapshot = JSON.parse(String(rows[i][am.AttemptJSON] || "{}"));
+            const displayTasks = englishFinalExamDisplayTasks_(snapshot.tasks || [], snapshot.optionMaps || {});
             return {success:true,attemptId:String(rows[i][am.AttemptId]),examId:examId,
               variantId:String(rows[i][am.VariantId]),startedAt:rows[i][am.StartedAt],
-              deadlineAt:rows[i][am.DeadlineAt],responses:(function(){try{return JSON.parse(String(rows[i][am.ResponsesJSON]||"{}"));}catch(e){return {};}})(),tasks:sanitizeEnglishFinalExamTask_(snapshot.tasks || [])};
+              deadlineAt:rows[i][am.DeadlineAt],responses:(function(){try{return JSON.parse(String(rows[i][am.ResponsesJSON]||"{}"));}catch(e){return {};}})(),tasks:sanitizeEnglishFinalExamTask_(displayTasks)};
           }
           updateMappedRecord_(attempts,i+2,{Status:"expired",UpdatedAt:new Date().toISOString()});
         }
@@ -3238,7 +3284,8 @@ function startEnglishFinalExam_(data) {
     if (!Array.isArray(tasks) || !tasks.length) throw new Error("Вариант не содержит массива tasks или questions.");
     const duration=Math.max(15,Math.min(240,Number(variant.time || variant.durationMinutes) || 120));
     const now=new Date(), deadline=new Date(now.getTime()+duration*60000), attemptId=Utilities.getUuid().replace(/-/g,"");
-    const privateSnapshot={tasks:tasks,variantMeta:{title:String(variant.title||"Итоговый экзамен"),durationMinutes:duration}};
+    const randomized=shuffleEnglishFinalExamTasks_(tasks);
+    const privateSnapshot={tasks:tasks,optionMaps:randomized.optionMaps,variantMeta:{title:String(variant.title||"Итоговый экзамен"),durationMinutes:duration}};
     appendMappedRecord_(attempts,{
       AttemptId:attemptId,StudentEmail:user.email,StudentName:user.name,Group:user.group,
       CourseId:courseId,ExamId:examId,VariantId:String(chosen[bm.VariantId]),Status:"in_progress",
@@ -3250,7 +3297,7 @@ function startEnglishFinalExam_(data) {
       StudentName:user.name,Group:user.group,CourseId:courseId,TestId:examId,TestTitle:privateSnapshot.variantMeta.title});
     return {success:true,attemptId:attemptId,examId:examId,variantId:String(chosen[bm.VariantId]),
       startedAt:now.toISOString(),deadlineAt:deadline.toISOString(),
-      tasks:sanitizeEnglishFinalExamTask_(tasks)};
+      tasks:sanitizeEnglishFinalExamTask_(randomized.tasks)};
   } finally { lock.releaseLock(); }
 }
 
@@ -3273,7 +3320,7 @@ function resumeEnglishFinalExam_(data) {
     const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}"));
     return {success:true,attemptId:attemptId,examId:String(row[m.ExamId]),variantId:String(row[m.VariantId]),
       startedAt:row[m.StartedAt],deadlineAt:row[m.DeadlineAt],
-      tasks:sanitizeEnglishFinalExamTask_(snapshot.tasks||[]),
+      tasks:sanitizeEnglishFinalExamTask_(englishFinalExamDisplayTasks_(snapshot.tasks||[],snapshot.optionMaps||{})),
       responses:(function(){try{return JSON.parse(String(row[m.ResponsesJSON]||"{}"));}catch(e){return {};}})()};
   } finally { lock.releaseLock(); }
 }
@@ -3379,12 +3426,14 @@ function submitEnglishFinalExam_(data) {
       maxScore+=points;
       let correct=false;
       if(type==="single_choice") {
-        correct=Number.isInteger(answer) && Number.isInteger(Number(task.correctIndex)) && answer===Number(task.correctIndex);
+        const canonicalAnswer=englishFinalExamCanonicalOptionIndex_(snapshot,id,answer);
+        correct=canonicalAnswer>=0 && Number.isInteger(Number(task.correctIndex)) && canonicalAnswer===Number(task.correctIndex);
       } else if(type==="multiple_choice") {
         const expected=task.correctIndices;
+        const canonicalAnswers=Array.isArray(answer)?answer.map(function(v){return englishFinalExamCanonicalOptionIndex_(snapshot,id,v);}):[];
         correct=Array.isArray(answer)&&Array.isArray(expected)&&answer.length===expected.length&&
-          answer.every(function(v){return Number.isInteger(v);})&&
-          answer.slice().sort(function(a,b){return a-b;}).every(function(v,i){return v===expected.map(Number).sort(function(a,b){return a-b;})[i];});
+          canonicalAnswers.every(function(v){return Number.isInteger(v)&&v>=0;})&&
+          canonicalAnswers.slice().sort(function(a,b){return a-b;}).every(function(v,i){return v===expected.map(Number).sort(function(a,b){return a-b;})[i];});
       } else if(type==="ordering") {
         correct=Array.isArray(answer)&&Array.isArray(task.correctOrder)&&answer.length===task.correctOrder.length&&
           answer.every(function(v,i){return String(v)===String(task.correctOrder[i]);});
