@@ -94,7 +94,12 @@
     {
       "id": "c3s1v02_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A number or code that identifies the current version of a drawing is a revision ___.",
+      "acceptedAnswers": [
+        "number",
+        "revision number"
+      ]
     },
     {
       "id": "c3s1v02_f01",
