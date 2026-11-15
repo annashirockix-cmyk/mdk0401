@@ -107,8 +107,8 @@
       "type": "single_choice",
       "prompt": "You want to comment on the proposal politely. Which sentence is best?",
       "options": [
-        "I would like to support the proposal, provided that the crossings are made safe.",
         "This plan is stupid and nobody should discuss it.",
+        "I would like to support the proposal, provided that the crossings are made safe.",
         "I have no evidence, but the council is wrong.",
         "Build it exactly where I say."
       ],
