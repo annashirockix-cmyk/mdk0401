@@ -52,11 +52,11 @@
 - C. 4.6 mm/s
 - D. 0.6 mm/s
 
-**149.** What does *obsolete* mean when it describes a technical document?
-- A. Newly approved
-- B. Ready for translation
-- C. No longer current or recommended for use
-- D. Missing a page number only
+**149.** What is a *controlled copy* of a technical document?
+- A. An unofficial photograph of a page
+- B. A document distributed without revision information
+- C. A copy whose issue and revision status are managed by the document-control process
+- D. A personal draft that has not been checked
 
 **150.** Choose the correct completion: “The test results should be retained ___ future reference.”
 - A. since
@@ -136,7 +136,7 @@
 | 146 | D | A non-conformance report documents a failure to meet requirements. |
 | 147 | B | “Display” is singular; past continuous describes the reported intermittent behaviour. |
 | 148 | D | 2.6 − 2.0 = 0.6 mm/s. |
-| 149 | C | An obsolete document is outdated and should not be treated as current. |
+| 149 | C | A controlled copy is managed so that its issue and revision status can be identified and maintained. |
 | 150 | C | The fixed phrase is “for future reference”. |
 | 151 | C | It explicitly limits the scope of the reported findings. |
 | 152 | A | A nominal value is a designated reference value; actual values may vary within applicable conditions and tolerances. |
