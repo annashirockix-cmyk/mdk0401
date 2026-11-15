@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 08",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v08_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to the library announcement. Why will the library close early on Thursday?",
+      "audioText": "Good morning, everyone. The college library will close early this Thursday because staff are checking the computer system. It will close at two o'clock instead of six. Students can return books using the box beside the main entrance. If you need to use a computer, please visit the study room in Building B. The library will open at its usual time on Friday.",
+      "options": [
+        "There is a staff meeting",
+        "The computer system is being checked",
+        "The building needs painting",
+        "A new book exhibition is opening"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v08_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Where can students return books after the library closes?",
+      "audioText": "Good morning, everyone. The college library will close early this Thursday because staff are checking the computer system. It will close at two o'clock instead of six. Students can return books using the box beside the main entrance. If you need to use a computer, please visit the study room in Building B. The library will open at its usual time on Friday.",
+      "options": [
+        "At the reception desk",
+        "In the study room",
+        "In the box beside the main entrance",
+        "At Building B"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v08_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Dmitri is doing a short work-placement programme at a local engineering company. On his first day, his supervisor showed him the workshop and explained the safety rules. Dmitri must wear safety glasses and protective shoes in the production area. He keeps a small notebook to record new technical words and instructions. At the end of each week, he discusses his progress with the supervisor. What does Dmitri use to record new words and instructions?",
+      "options": [
+        "A tablet",
+        "A small notebook",
+        "A wall chart",
+        "A voice recorder"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v08_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. When does Dmitri discuss his progress with the supervisor?",
+      "options": [
+        "Every morning",
+        "At the end of each week",
+        "Before his first day",
+        "Only when there is a problem"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v08_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct modal verb: 'You ___ wear safety glasses in the production area.'",
+      "options": [
+        "must",
+        "might to",
+        "can to",
+        "are"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v08_g02",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO instructions that are grammatically correct.",
+      "options": [
+        "Please switch off the machine.",
+        "You must to wear protective shoes.",
+        "Don't touch the moving parts.",
+        "Not open the safety guard."
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v08_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'A person who manages and guides a trainee at work is a ___.'",
+      "acceptedAnswers": [
+        "supervisor"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v08_f01",
+      "type": "single_choice",
+      "prompt": "You do not understand a safety instruction. What is the best response?",
+      "options": [
+        "I don't care about it.",
+        "Could you explain that instruction again, please?",
+        "I will do something different.",
+        "You are speaking too much."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v08_o01",
+      "type": "ordering",
+      "prompt": "Put these actions for starting a safe workshop task in a sensible order.",
+      "options": [
+        "Begin the task",
+        "Read the work instructions",
+        "Put on the required protective equipment",
+        "Check that the work area is safe"
+      ],
+      "correctOrder": [
+        "Read the work instructions",
+        "Put on the required protective equipment",
+        "Check that the work area is safe",
+        "Begin the task"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v08_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about safety rules at a workshop, laboratory or other place of study. Describe two important rules, explain why they matter and say what protective equipment may be needed.",
+      "rubric": "8 points total: two relevant rules and explanations (0–2); understandable sentence structure and grammar (0–2); suitable safety vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v08_audio",
+    "readingPassageId": "c1s1v08_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
