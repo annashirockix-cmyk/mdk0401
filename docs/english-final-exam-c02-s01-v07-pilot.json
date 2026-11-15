@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO ways to contribute to a team project.",
       "options": [
-        "Listen to other ideas",
-        "Keep useful progress notes",
         "Hide problems from the group",
-        "Change the plan without telling anyone"
+        "Change the plan without telling anyone",
+        "Listen to other ideas",
+        "Keep useful progress notes"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -106,12 +106,12 @@
       "type": "single_choice",
       "prompt": "A teammate has not understood the task. What should you say?",
       "options": [
-        "Let's go through the instructions together.",
         "You should know this already.",
+        "Let's go through the instructions together.",
         "I refuse to explain anything.",
         "Do it without asking."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
