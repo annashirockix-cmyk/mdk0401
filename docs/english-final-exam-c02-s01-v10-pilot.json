@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 10",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. How will the group travel?",
+      "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
+      "options": [
+        "By minibus",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What must students wear?",
+      "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
+      "options": [
+        "On Friday",
+        "Their college identification badges",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v10_r01",
+      "type": "single_choice",
+      "prompt": "A passenger asked an information assistant why a flight departure had changed. The assistant checked the airport display, explained that the new time was shown on the screen and directed the passenger to the airline desk for further details. She spoke calmly and repeated the information when the passenger asked her to clarify it. Reading 1. What information did the assistant check?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "The airport display",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v10_r02",
+      "type": "single_choice",
+      "prompt": "How did she respond to the passenger's request?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "She repeated and clarified the information calmly"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v10_g01",
+      "type": "single_choice",
+      "prompt": "The assistant asked the passenger ___ wait near the information desk.",
+      "options": [
+        "to",
+        "for",
+        "that",
+        "at"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO qualities important in customer service.",
+      "options": [
+        "Clear communication",
+        "Patience",
+        "Ignoring questions",
+        "Making promises you cannot keep"
+      ],
+      "correctIndices": [
+        0,
+        1
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v10_v01",
+      "type": "short_text",
+      "prompt": "A person who travels by plane, bus or train is a ___.",
+      "acceptedAnswers": [
+        "passenger",
+        "traveller",
+        "traveler"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v10_f01",
+      "type": "single_choice",
+      "prompt": "A passenger asks you to repeat an announcement. What should you say?",
+      "options": [
+        "Of course. I will explain it again more slowly.",
+        "You should have listened.",
+        "Ask somebody else.",
+        "I do not repeat information."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v10_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of customer service in a sensible order.",
+      "options": [
+        "Give a clear explanation",
+        "Listen to the customer's question",
+        "Ask whether further help is needed",
+        "Check the relevant information"
+      ],
+      "correctOrder": [
+        "Listen to the customer's question",
+        "Check the relevant information",
+        "Give a clear explanation",
+        "Ask whether further help is needed"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v10_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words describing how to help a visitor who needs information at an airport or college reception.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v10_audio",
+    "readingPassageId": "c2s1v10_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
