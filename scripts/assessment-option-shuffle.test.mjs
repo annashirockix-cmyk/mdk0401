@@ -145,6 +145,21 @@ test("all server assessment renderers recursively strip private answer metadata 
   assert.match(extract(code,"getCustomTest_"),/sanitizeAssessmentQuestionForStudent_/);
 });
 
+test("VPR and semester student payloads use recursive answer-key sanitization and one-time token consumption", () => {
+  const vprSanitizer = extract(vpr, "sanitizeEnglishVprExam_");
+  assert.match(vprSanitizer,/sanitizeAssessmentQuestionForStudent_/);
+  const vprSubmit = extract(vpr, "submitEnglishVprExam_");
+  assert.match(vprSubmit,/attemptLock\.waitLock/);
+  assert.match(vprSubmit,/lockedRaw = cache\.get\("englishVprAttempt:" \+ attemptId\)/);
+  assert.match(vprSubmit,/cache\.remove\("englishVprAttempt:" \+ attemptId\)/);
+  const semesterSanitizer = extract(code, "sanitizeEnglishSemesterTests_");
+  assert.match(semesterSanitizer,/sanitizeAssessmentQuestionForStudent_\(test\)/);
+  assert.match(semesterSanitizer,/sanitizeAssessmentQuestionForStudent_\(question\)/);
+  const semesterSubmit = extract(code, "submitEnglishSemesterTest_");
+  assert.match(semesterSubmit,/lock\.waitLock/);
+  assert.match(semesterSubmit,/appendMappedRecord_/);
+});
+
 test("student-facing assessment sanitizers strip alternate answer-key field names", () => {
   const safeBuiltIn = new Function("shuffledServer_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer);
   const privateFields = {
