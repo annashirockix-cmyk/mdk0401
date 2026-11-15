@@ -229,7 +229,7 @@ test("fifteen authored Technical English Course 3 Semester 2 pilots match the pr
     assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
     assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
     const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could you identify|Let's use the correct term|Would turning|Let's compare|Could you confirm which datum|I have noticed|Could we review the sequence|measured value is outside|Check the approved revision|material has not arrived|Could we check the document register|Check the approved reference|Could you explain how the programmed geometry|Could you add the sample period|Could we evaluate the proposal/i);
+    assert.match(functional.options[functional.correctIndex],/Could you identify|Let's use the correct term|different roles in the sample|Would turning|Let's compare|Could you confirm which datum|I have noticed|Could we review the sequence|measured value is outside|Check the approved revision|material has not arrived|Could we check the document register|Check the approved reference|Could you explain how the programmed geometry|Could you add the sample period|Could we evaluate the proposal/i);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
