@@ -98,7 +98,9 @@ Ten Basic English pilot variants are drafted for C2-S2 (`v01`–`v10`). Topics i
 Five Basic English pilot variants are drafted for C2-S2 (`v01`–`v05`). Topics include reducing plastic waste, evaluating online information, renewable energy, responsible technology use and community transport. Each form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All five pass the protected payload validator; prompts and listening scripts are unique, answer positions are balanced and functional-response keys have been checked. Ten variants remain. These are editorial-review drafts, not imported or released.
 
 
-#### Course 3, Semester 1 — pilot authoring underway
+##### Course 3, Semester 1 — complete pilot authoring
+
+Fifteen Technical English pilot variants are now drafted for C3-S1 (`v01`–`v15`). Topics include material properties, technical dimensions, drawing interpretation, workshop orientation, component records, aviation-industry roles, tolerances, technical labels, inspection reports, measurement tools, technical email, material certificates, technical notices and component traceability. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 prompts and 15 listening scripts are unique; all variants pass the protected payload validator and have balanced A/B/C/D answer positions. The set remains subject to editorial review and has not been imported or released.
 
 Ten Technical English pilot variants are drafted for C3-S1 (`v01`–`v10`), covering material properties, technical dimensions, drawing interpretation, workshop orientation, component records, aviation component identification, tolerances, technical labels, inspection reports and measurement tools. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All ten pass the protected payload validator, with unique prompts and listening scripts, balanced answer positions and functional-response keys checked. Five variants remain. These are editorial-review drafts, not imported or released.
 
