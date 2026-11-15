@@ -30,11 +30,12 @@ function extract(source, name) {
 }
 
 const shuffleServer = new Function(extract(code, "shuffledServer_") + "; return shuffledServer_;")();
+const sanitizeQuestion = new Function(extract(code, "sanitizeAssessmentQuestionForStudent_") + "; return sanitizeAssessmentQuestionForStudent_;")();
 const prepareVpr = new Function("shuffledServer_", extract(vpr, "englishVprPrepareAttempt_") + "; return englishVprPrepareAttempt_;")(shuffleServer);
 const semesterOrder = new Function(extract(code, "englishSemesterOptionOrder_") + "; return englishSemesterOptionOrder_;")();
 
 test("generic protected question-bank engine shuffles options and keeps a server mapping", () => {
-  const safe = new Function("shuffledServer_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer);
+  const safe = new Function("shuffledServer_", "sanitizeAssessmentQuestionForStudent_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer, sanitizeQuestion);
   const entry = {bankId:"bank",questionId:"q1",question:{type:"mc",q:"Question",options:["red","blue","green","black"],correct:2}};
   const maps = {};
   const result = safe(entry,maps);
@@ -43,6 +44,17 @@ test("generic protected question-bank engine shuffles options and keeps a server
   assert.equal(displayed.length,4);
   assert.deepEqual([...order].sort(),[0,1,2,3]);
   assert.equal(displayed[order.indexOf(2)],"green");
+  assert.equal(Object.hasOwn(result.question,"correct"),false);
+});
+
+
+test("protected true-false questions create and shuffle default options before delivery", () => {
+  const safe = new Function("shuffledServer_", "sanitizeAssessmentQuestionForStudent_", extract(code, "safeBuiltInQuestion_") + "; return safeBuiltInQuestion_;")(shuffleServer, sanitizeQuestion);
+  const maps = {};
+  const result = safe({bankId:"bank",questionId:"tf1",questionIndex:3,question:{type:"tf",q:"Statement",correct:true}},maps);
+  assert.deepEqual([...result.question.options].sort(),["Верно","Неверно"]);
+  assert.deepEqual(maps["3"].slice().sort(),[0,1]);
+  assert.notDeepEqual(maps["3"],[0,1],"default true-false options must not retain a fixed order");
   assert.equal(Object.hasOwn(result.question,"correct"),false);
 });
 
