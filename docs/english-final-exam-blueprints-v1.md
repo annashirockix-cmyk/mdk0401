@@ -134,7 +134,7 @@ Fifteen Technical English pilot variants are now drafted for C4-S2 (`v01`–`v15
 
 ### Course 5, Semester 1 — pilot authoring underway
 
-Ten Technical English pilot variants are now drafted for C5-S1 (`v01`–`v10`), covering maintenance planning, inspection findings, diagnostic evidence, technical manual applicability, revision control, aircraft task applicability, maintenance shift handover, non-conformance reporting, reliability analysis and technical publication revision control. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All 100 prompts and ten listening scripts are unique; every variant passes the protected payload validator and has balanced A/B/C/D answer positions. Five variants remain. These are editorial-review drafts, not imported or released.
+All 15 Technical English pilot variants are now drafted for C5-S1 (`v01`–`v15`). Topics cover maintenance planning, inspection findings, diagnostic evidence, technical manual applicability, revision control, aircraft task applicability, maintenance shift handover, non-conformance reporting, reliability analysis, technical publication revision control, task prioritisation, component traceability, maintenance human factors, special tooling control and airworthiness directive records. Every form has ten tasks, 20 points, 90 minutes, two listening items and one written response. All 150 prompts and 15 listening scripts are unique; every variant passes the protected payload validator and has balanced A/B/C/D answer positions. These remain editorial-review drafts and have not been imported or released.
 
 
 #### Course 5, Semester 2 — complete pilot authoring
