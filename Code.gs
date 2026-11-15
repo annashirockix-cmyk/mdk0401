@@ -1858,7 +1858,7 @@ function getBuiltInTest_(data) {
   }
   const attemptId=Utilities.getUuid().replace(/-/g,""),optionMaps={};
   const questions=entries.map(function(entry){return safeBuiltInQuestion_(entry,optionMaps);});
-  CacheService.getScriptCache().put("builtInAttempt:"+attemptId,JSON.stringify({email:user.email,courseId:courseId,testId:testId,bankIds:resolvedIds,optionMaps:optionMaps}),3600);
+  CacheService.getScriptCache().put("builtInAttempt:"+attemptId,JSON.stringify({email:user.email,courseId:courseId,testId:testId,bankIds:resolvedIds,questions:entries.map(function(entry){return {bankId:entry.bankId,question:JSON.parse(JSON.stringify(entry.question))};}),optionMaps:optionMaps}),3600);
   return {success:true,courseId:courseId,testId:testId,bankIds:resolvedIds,attemptId:attemptId,questions:questions};
 }
 
@@ -1910,8 +1910,8 @@ function submitBuiltInTest_(data) {
   if(attempt.email!==user.email||attempt.courseId!==courseId||attempt.testId!==testId)throw new Error("Попытка не принадлежит этой учётной записи или тесту.");
   const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds);
   if(JSON.stringify(attempt.bankIds)!==JSON.stringify(resolvedIds))throw new Error("Состав банка изменился. Обновите страницу и начните тест заново.");
-  const entries=builtInQuestions_(courseId,resolvedIds);
-  if(!entries.length)throw new Error("Серверный банк не найден. Обратитесь к преподавателю.");
+  const entries=Array.isArray(attempt.questions)?attempt.questions:[];
+  if(!entries.length||entries.some(function(entry){return !entry||!entry.question||resolvedIds.indexOf(String(entry.bankId||""))<0;}))throw new Error("Снимок экзаменационного варианта повреждён. Начните попытку заново.");
   if(answers.length!==entries.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
   const canonicalAnswers=entries.map(function(entry,index){
     const order=attempt.optionMaps&&attempt.optionMaps[String(index)];
@@ -1933,7 +1933,8 @@ function submitBuiltInTest_(data) {
     if(!lockedAttemptRaw)throw new Error("Эта попытка уже отправлена или истекла. Начните тест заново.");
     const lockedAttempt=JSON.parse(lockedAttemptRaw);
     if(lockedAttempt.email!==user.email||lockedAttempt.courseId!==courseId||lockedAttempt.testId!==testId||
-       JSON.stringify(lockedAttempt.bankIds)!==JSON.stringify(resolvedIds)) {
+       JSON.stringify(lockedAttempt.bankIds)!==JSON.stringify(resolvedIds)||!Array.isArray(lockedAttempt.questions)||
+       lockedAttempt.questions.length!==entries.length) {
       throw new Error("Идентификатор попытки недействителен. Начните тест заново.");
     }
     const sh=results_(),rows=resultAttemptRows_();
