@@ -335,7 +335,8 @@ test("all 150 final exam variants have globally unique task IDs and prompts",()=
   assert.equal(taskIds.length,1500);
   const duplicateTaskIds=taskIds.filter((id,index)=>taskIds.indexOf(id)!==index);
   assert.equal(new Set(taskIds).size,taskIds.length,`duplicate task IDs: ${[...new Set(duplicateTaskIds)].join(", ")}`);
-  assert.equal(new Set(prompts).size,prompts.length);
+  const duplicatePrompts=prompts.filter((prompt,index)=>prompts.indexOf(prompt)!==index);
+  assert.equal(new Set(prompts).size,prompts.length,`duplicate prompts: ${[...new Set(duplicatePrompts)].join(" || ")}`);
 });
 
 test("fifteen authored Technical English Course 5 Semester 1 pilots match the protected runtime schema",()=>{
