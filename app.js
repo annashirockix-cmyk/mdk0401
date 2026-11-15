@@ -409,6 +409,7 @@ window.renderStudentGradesPage = function() {
         if(k.startsWith("test_")) title = "Тест по курсу " + k.split("_")[1];
         if(k.startsWith("__final__")) title = "Итоговый экзамен";
         if(k.startsWith("prac_")) title = "Практика: " + k.replace("prac_", "");
+        if(k.startsWith("written_self_")) title = "Самостоятельная работа: " + k.replace("written_self_", "");
         var gradeData = window.state.results[k];
         var grade = typeof gradeData === 'object' ? gradeData.grade : (typeof gradeData === 'string' ? "Сдано" : "—");
         var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : (grade === "Сдано" ? "var(--accent)" : "var(--err)"));
