@@ -58,6 +58,8 @@ The following items were revised after checking for more than one plausible answ
 | 164 | Repeated the handwashing example used in Q44. | Replaced with a workshop helmet instruction. |
 | 99 | Repeated the vocabulary target “reliable” from Q5. | Replaced it with “effective” from the reading passage. |
 | 180 | Neither…nor agreement was potentially dialect-sensitive. | Replaced with a plural compound subject. |
+| 178 | Repeated the same “Would you mind opening the window?” request-response situation as Q39. | Replaced with a request for directions to a submission desk and a matching response. |
+
 
 ## Cross-source comparison
 
