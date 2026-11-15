@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO qualities important in customer service.",
       "options": [
-        "Clear communication",
-        "Patience",
         "Ignoring questions",
-        "Making promises you cannot keep"
+        "Making promises you cannot keep",
+        "Clear communication",
+        "Patience"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -107,12 +107,12 @@
       "type": "single_choice",
       "prompt": "A passenger asks you to repeat an announcement. What should you say?",
       "options": [
-        "Of course. I will explain it again more slowly.",
         "You should have listened.",
+        "Of course. I will explain it again more slowly.",
         "Ask somebody else.",
         "I do not repeat information."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
