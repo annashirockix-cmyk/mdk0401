@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO good email practices for college communication.",
       "options": [
-        "Use a clear subject line.",
         "Check the recipient's address.",
-        "Send your password to the group.",
-        "Attach every file you have."
+        "Attach every file you have.",
+        "Use a clear subject line.",
+        "Send your password to the group."
       ],
       "correctIndices": [
         2,
