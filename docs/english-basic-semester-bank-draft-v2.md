@@ -14,9 +14,9 @@
 
 **22.** There are ___ students in the laboratory today than yesterday.
 - A. less
-- B. fewer
+- B. fewest
 - C. little
-- D. fewest
+- D. fewer
 
 **23.** I ___ my homework before I watched the film.
 - A. finish
@@ -38,9 +38,9 @@
 
 **26.** The bus was late, ___ we arrived at college after the first lesson started.
 - A. because
-- B. so
+- B. unless
 - C. but
-- D. unless
+- D. so
 
 **27.** Choose the correct sentence.
 - A. She don't like noisy places.
@@ -62,9 +62,9 @@
 
 **30.** The museum was ___ interesting that we stayed there for three hours.
 - A. such
-- B. so
+- B. enough
 - C. too
-- D. enough
+- D. so
 
 ### Read the text and answer Questions 31–35.
 
@@ -89,8 +89,8 @@
 - D. Once a year
 
 **34.** What did the other club members do for Daniel?
-- A. They bought him a new camera.
-- B. They gave him advice and invited him to help with an exhibition.
+- A. They gave him advice and invited him to help with an exhibition.
+- B. They bought him a new camera.
 - C. They asked him to stop taking photographs.
 - D. They organised his journey home.
 
@@ -135,19 +135,19 @@
 | No. | Key | Rationale |
 |---:|:---:|---|
 | 21 | C | Days of the week take the preposition “on”. |
-| 22 | B | “Students” is countable; “fewer” is used for a smaller number. |
+| 22 | D | “Students” is countable; “fewer” is used for a smaller number. |
 | 23 | D | The earlier past action takes the past perfect. |
 | 24 | A | “Should” gives advice. |
 | 25 | C | “Enjoy” is followed by a gerund. |
-| 26 | B | “So” introduces the result of the bus being late. |
+| 26 | D | “So” introduces the result of the bus being late. |
 | 27 | D | Third-person singular negative: “doesn't” + base verb. |
 | 28 | A | Present perfect uses the past participle “been”. |
 | 29 | C | “Where” asks about a place. |
-| 30 | B | The structure is “so + adjective + that”. |
+| 30 | D | The structure is “so + adjective + that”. |
 | 31 | D | The text says he found it difficult to make friends in the new city. |
 | 32 | A | His tutor suggested joining a college club. |
 | 33 | C | The club meets twice a month. |
-| 34 | B | They gave advice and invited him to help prepare an exhibition. |
+| 34 | A | They gave advice and invited him to help prepare an exhibition. |
 | 35 | D | The final sentence says he feels more comfortable and has made friends. |
 | 36 | A | “Going to” is used for a prediction based on present evidence. |
 | 37 | C | Second conditional: “If + past simple, would + infinitive”. |
