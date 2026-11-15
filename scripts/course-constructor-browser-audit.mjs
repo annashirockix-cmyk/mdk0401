@@ -233,6 +233,11 @@ try {
     window.state.student = { role: "student", courses: ["07.01"] };
     const topicId = document.getElementById("fcTopic").value;
     window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (url, options) => {
+      if (String(url).includes("action=getTopicAccess")) return new Response(JSON.stringify({ success: true, open: true }), { status: 200, headers: { "Content-Type": "application/json" } });
+      return originalFetch(url, options);
+    };
     Object.defineProperty(window, "API", { configurable: true, writable: true, value: Object.assign({}, window.API, { getTopicAccess: async () => ({ success: true, open: true }) }) });
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
