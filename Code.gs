@@ -29,7 +29,7 @@ const CFG = {
 
 const HEADERS = {
   Users: ["Email", "PasswordHash", "Name", "Group", "Role", "UpdatedAt", "Courses", "Payload", "PasswordSalt", "LoginChangedAt", "PasswordChangedAt"],
-  Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId", "Submission", "PenaltyPoints", "ViolationCount"],
+  Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId", "Submission", "PenaltyPoints", "ViolationCount", "Feedback", "ReviewedBy", "ReviewedAt"],
   CourseContent: ["Id", "CourseId", "TopicId", "Type", "Title", "Payload", "UpdatedBy", "UpdatedAt"],
   Schedule: ["Schedule"],
   Invites: ["Code", "Courses", "CreatedBy", "CreatedAt", "ExpiresAt", "MaxUses", "Uses", "Active"],
@@ -897,10 +897,7 @@ function gradeWrittenResult_(data) {
     if(isRegrade&&!(teacher.role==="admin"&&data.regrade===true)) {
       throw new Error("Работа уже проверена. Повторное выставление оценки доступно только администратору с явным подтверждением.");
     }
-    const previousSubmission=String(currentRow[13]||"");
-    const answerOnly=previousSubmission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,"").slice(0,8000);
-    const savedSubmission=(answerOnly+(feedback?"\\n\\nКомментарий преподавателя: "+feedback:"")).slice(0,10000);
-    updateMappedRecord_(sh,rowIndex,{Grade:grade,Percent:grade*20,Submission:savedSubmission});
+    updateMappedRecord_(sh,rowIndex,{Grade:grade,Percent:grade*20,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:new Date().toISOString()});
     appendAttemptAudit_({EventType:isRegrade?"written_regraded":"written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(currentRow[4]||testId),Grade:grade,Percent:grade*20});
   } finally {lock.releaseLock();}
   createNotification_(studentEmail,"grade","Письменная работа проверена","По работе «"+testId+"» выставлена оценка: "+grade+"/5."+(feedback?" Комментарий преподавателя добавлен.":""),courseId,testId);
@@ -1090,9 +1087,13 @@ function assignmentResultRecords_(emailFilter) {
 function getResults_(data) {
   const user=auth_(data);
   if(user.role!=="admin"&&user.role!=="teacher")throw new Error("Недостаточно прав.");
-  let list=results_().getDataRange().getValues().slice(1).filter(function(r){return !!r[0];}).map(function(r){
-    const submission=String(r[13]||""),feedbackMatch=submission.match(/\\n\\nКомментарий преподавателя:([\\s\\S]*)$/);
-    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:feedbackMatch?String(feedbackMatch[1]||"").trim():""};
+  const resultsSheet=results_(),resultMap=headerMap_(resultsSheet);
+  let list=resultsSheet.getDataRange().getValues().slice(1).filter(function(r){return !!r[0];}).map(function(r){
+    const submission=String(r[resultMap.Submission]===undefined?r[13]||"":r[resultMap.Submission]||"");
+    const feedbackMatch=submission.match(/\\n\\nКомментарий преподавателя:([\\s\\S]*)$/);
+    const storedFeedback=resultMap.Feedback===undefined?"":String(r[resultMap.Feedback]||"");
+    const legacyFeedback=Number(r[5])>=2&&feedbackMatch?String(feedbackMatch[1]||"").trim():"";
+    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:storedFeedback||legacyFeedback};
   });
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
