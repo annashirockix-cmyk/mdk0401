@@ -68,6 +68,14 @@ The following items were revised after checking for more than one plausible answ
 - This is only an exact-string screen. It does not establish that all passages, topics, grammar targets, or distractors are semantically distinct; a human reviewer should still check content overlap.
 - The existing Basic VPR remains unchanged.
 
+## Basic–Technical cross-track and Technical internal overlap review (2026-11-15)
+
+- Compared the 200 Basic question stems with the 200 Technical question stems using the two Technical draft formats (numbered heading format for Questions 1–60 and bold numbered format for Questions 61–200).
+- Two cross-track matches use the generic instruction stem “Choose the correct sentence.” They are not duplicate tasks: Basic Q27 tests present-simple agreement (“She doesn't like…”); Technical Q91 tests the present-perfect passive (“The equipment has been tested…”), and Technical Q103 tests “each” with singular agreement (“Each component has…”).
+- A substantive repeat was found within Technical English: Q84 and Q124 both tested the drawing note “Do not scale”. Technical Q124 has now been replaced with a scale-reading question (1:2 means the drawing is half the real component size); its teacher key and rationale were updated.
+- This is a stem-and-task review, not a full semantic proof that no topic, passage, vocabulary item or grammar target overlaps. Some shared language structures across Basic and Technical are intentional; the Technical track must still prioritise professional contexts and progression.
+- The two “Choose the correct sentence” matches are not evidence of identical answer options or identical tested content. No cross-track item was merged or deleted.
+
 ## Answer-position balance
 
 After shuffling answer options while preserving the intended correct answer, the 200-item draft has this key distribution: A — 49, B — 51, C — 49, D — 51. The test now checks that each letter remains between 49 and 51.
