@@ -242,9 +242,6 @@ try {
     window.API.getTopicAccess = async () => ({ success: true, open: true });
     window.API.getTestAttemptStatus = async () => ({ allowed: true, used: 0, limit: 1 });
     window.API.requestTestAttempts = async () => ({ success: true });
-    const access = await window.API.getTopicAccess(window.state.activeCourseId, topicId);
-    const attempts = await window.API.getTestAttemptStatus(window.state.activeCourseId, "test_" + topicId);
-    if (!access.open || !attempts.allowed) throw new Error("Student access mocks did not resolve");
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
   await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
