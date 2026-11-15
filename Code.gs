@@ -702,6 +702,9 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
   const courseId = String(data.courseId || "");
   if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
   const testId = String(data.testId || "test");
+  if (user.role === "student" && serverVerifiedEnglishVpr !== true && !/^(prac_|written_self_)/.test(testId)) {
+    throw new Error("Результат студента должен отправляться через защищённый маршрут проверки или как письменный ответ без оценки.");
+  }
   // Written submissions are ungraded until a teacher reviews them.
   // Never trust a grade/score/percent supplied by a student for these IDs.
   if (user.role === "student" && /^(prac_|written_self_)/.test(testId)) {
