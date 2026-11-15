@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 09",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v09_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. How much does the dictionary cost before the discount?",
+      "audioText": "At the college bookshop, the new technical dictionary costs eighteen euros. Students with a valid college card receive a ten percent discount. The shop accepts cash and bank cards. If you buy the wrong edition, you can exchange it within fourteen days, but you must bring the receipt and keep the book in good condition.",
+      "options": [
+        "Eighteen euros",
+        "Fourteen euros",
+        "Twenty euros",
+        "Eight euros"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v09_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What must a student bring to exchange a book?",
+      "audioText": "At the college bookshop, the new technical dictionary costs eighteen euros. Students with a valid college card receive a ten percent discount. The shop accepts cash and bank cards. If you buy the wrong edition, you can exchange it within fourteen days, but you must bring the receipt and keep the book in good condition.",
+      "options": [
+        "A student timetable",
+        "The receipt",
+        "A library card",
+        "A letter from a teacher"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v09_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Maks buys a pair of safety glasses for his workshop class. At home, he notices that the frame is damaged. He returns to the shop the next day with the receipt and the original packaging. The assistant checks the item and offers an exchange. Maks chooses another pair and checks the frame before leaving the shop. Why does Maks return to the shop?",
+      "options": [
+        "The glasses are too expensive",
+        "He lost his student card",
+        "The frame is damaged",
+        "The shop is closing"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v09_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does he do before leaving with the new pair?",
+      "options": [
+        "He changes his course",
+        "He throws away the receipt",
+        "He buys a textbook",
+        "He checks the frame"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v09_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct comparative: 'This pair is ___ than the damaged one.'",
+      "options": [
+        "better",
+        "best",
+        "more good",
+        "good"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v09_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO useful things to do when returning a faulty product.",
+      "options": [
+        "Hide the damage from the assistant.",
+        "Leave the item without speaking to anyone.",
+        "Keep the receipt.",
+        "Explain the problem clearly."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v09_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A paper or digital proof that you paid for something is a ___.'",
+      "acceptedAnswers": [
+        "receipt"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v09_f01",
+      "type": "single_choice",
+      "prompt": "You want to exchange a damaged item. What should you say?",
+      "options": [
+        "You broke it.",
+        "Could I exchange this item? The frame is damaged and I have the receipt.",
+        "I want another now.",
+        "I don't need to explain."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v09_o01",
+      "type": "ordering",
+      "prompt": "Check the item after purchase; Keep the receipt and packaging; Explain the fault to the assistant; Choose or receive a replacement",
+      "options": [
+        "Choose or receive a replacement",
+        "Explain the fault to the assistant",
+        "Keep the receipt and packaging",
+        "Check the item after purchase"
+      ],
+      "correctOrder": [
+        "Check the item after purchase",
+        "Keep the receipt and packaging",
+        "Explain the fault to the assistant",
+        "Choose or receive a replacement"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v09_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about buying a useful item for college. Explain how to compare prices, check the product and what to do if it is faulty.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v09_audio",
+    "readingPassageId": "c1s2v09_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
