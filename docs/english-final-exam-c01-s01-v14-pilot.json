@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 14",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v14_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Who should the student ask for at reception?",
+      "audioText": "Hello, this is Mr Green from the engineering company. We are expecting you for your work placement on Wednesday at half past eight. Please report to reception and ask for Ms Patel. Wear smart work clothes and bring your college placement form. Your supervisor will show you the work area and explain your daily tasks. If you are delayed, telephone reception before your arrival time.",
+      "options": [
+        "Mr Green",
+        "Ms Patel",
+        "The college director",
+        "The bus driver"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v14_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should the student do if delayed?",
+      "audioText": "Hello, this is Mr Green from the engineering company. We are expecting you for your work placement on Wednesday at half past eight. Please report to reception and ask for Ms Patel. Wear smart work clothes and bring your college placement form. Your supervisor will show you the work area and explain your daily tasks. If you are delayed, telephone reception before your arrival time.",
+      "options": [
+        "Wait until the next day",
+        "Send no message",
+        "Telephone reception",
+        "Ask another student to call"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v14_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. During her work placement, Eva keeps a daily log. At the end of each shift, she records the tasks she completed and the equipment she used. When she is unsure about a procedure, she asks her supervisor before continuing. On Friday, she reviews the log and writes down two skills she wants to practise next week. When does Eva update her daily log?",
+      "options": [
+        "Only on Friday",
+        "Before each shift",
+        "At the end of each shift",
+        "Once a month"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v14_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does Eva do when she is unsure about a procedure?",
+      "options": [
+        "She changes the procedure",
+        "She guesses",
+        "She stops attending",
+        "She asks her supervisor"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s1v14_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'Eva ___ her log after every shift.'",
+      "options": [
+        "completes",
+        "completing",
+        "complete",
+        "completed tomorrow"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v14_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO professional behaviours during work placement.",
+      "options": [
+        "Ask when a procedure is unclear.",
+        "Hide a mistake from the supervisor.",
+        "Keep an accurate record of tasks.",
+        "Ignore instructions."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v14_v01",
+      "type": "short_text",
+      "prompt": "Complete with one word: 'A person who supervises your work is your ___.'",
+      "acceptedAnswers": [
+        "supervisor",
+        "manager",
+        "mentor"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v14_f01",
+      "type": "single_choice",
+      "prompt": "You need to report a delay. What is the most appropriate message?",
+      "options": [
+        "I late. Bye.",
+        "I am sorry, I am delayed and expect to arrive at 9:00.",
+        "Why do you need me?",
+        "I will not come, perhaps."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v14_o01",
+      "type": "ordering",
+      "prompt": "Put the work-placement routine in the correct order.",
+      "options": [
+        "Review the tasks completed",
+        "Report to reception",
+        "Receive the supervisor's instructions",
+        "Record the work in the daily log"
+      ],
+      "correctOrder": [
+        "Review the tasks completed",
+        "Report to reception",
+        "Receive the supervisor's instructions",
+        "Record the work in the daily log"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v14_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about a successful first day of work placement. Describe how to arrive prepared, communicate with a supervisor and record completed tasks.",
+      "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v14_audio",
+    "readingPassageId": "c1s1v14_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
