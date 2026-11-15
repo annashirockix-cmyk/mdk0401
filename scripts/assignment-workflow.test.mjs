@@ -134,11 +134,6 @@ function runtime() {
       courses: String(row[map.Courses] || "")
     };
   };
-  sandbox.hasCourseAccess_ = (user, courseId) => {
-    if (user.role === "admin") return true;
-    const courses = String(user.courses || "").split(",").map(value => value.trim());
-    return courses.includes(courseId) || (["ENB","ENT"].includes(courseId) && courses.includes("EN"));
-  };
   sandbox.editor_ = (data, courseId) => {
     const user = sandbox.auth_(data);
     if (user.role !== "admin" && !(user.role === "teacher" && sandbox.hasCourseAccess_(user, courseId))) {
@@ -163,6 +158,32 @@ test("general English enrollment grants both tracks consistently in server acces
   assert.equal(access(basicOnlyStudent, "ENT"), false,
     "a student enrolled only in Basic English must not gain Technical English access");
   assert.match(journal, /\(courseId === "ENB" \|\| courseId === "ENT"\).*includes\("EN"\)/);
+});
+
+test("legacy EN students can receive and submit ENB/ENT assignments without cross-track access", () => {
+  const { sandbox: api } = runtime();
+  const created = api.createAssignment_({
+    token: "englishTeacherToken",
+    courseId: "ENB",
+    targetType: "individual",
+    targetValue: "legacy.english@example.test",
+    title: "Basic English assignment",
+    instructions: "Write a short technical introduction."
+  });
+  assert.equal(created.success, true);
+  const visible = api.getAssignments_({ token: "legacyEnglishToken" });
+  assert.equal(visible.assignments.length, 1);
+  const submitted = api.submitAssignment_({
+    token: "legacyEnglishToken",
+    assignmentId: created.id,
+    answer: "I study technical English."
+  });
+  assert.equal(submitted.success, true);
+  assert.equal(submitted.attempt, 1);
+  assert.throws(
+    () => api.getAssignments_({ token: "studentToken" }).assignments.find(item => item.courseId === "ENT"),
+    /./
+  );
 });
 
 test("group assignment workflow works before student onboarding and preserves student payload", async () => {
