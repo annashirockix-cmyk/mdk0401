@@ -3288,7 +3288,9 @@ function submitEnglishFinalExam_(data) {
     if(email_(row[m.StudentEmail])!==user.email) throw new Error("Эта попытка не принадлежит текущему аккаунту.");
     if(String(row[m.Status])!=="in_progress") {
       if(String(row[m.Status])==="submitted" || String(row[m.Status])==="pending_review") {
-        return {success:true,alreadySubmitted:true,result:JSON.parse(String(row[m.ResultJSON]||"{}"))};
+        const priorResult=JSON.parse(String(row[m.ResultJSON]||"{}"));
+        if(String(row[m.Status])==="submitted" && priorResult.status==="graded") upsertEnglishFinalExamJournal_(row,m,priorResult,priorResult.gradedBy||"");
+        return {success:true,alreadySubmitted:true,result:priorResult};
       }
       throw new Error("Эта попытка уже закрыта.");
     }
@@ -3347,6 +3349,7 @@ function submitEnglishFinalExam_(data) {
     updateMappedRecord_(sheet,found.row,{ResponsesJSON:JSON.stringify(responses),ResultJSON:JSON.stringify(result),
       Status:status,SubmittedAt:timestamp,UpdatedAt:timestamp});
     SpreadsheetApp.flush();
+    if(status==="submitted") upsertEnglishFinalExamJournal_(row,m,result,"");
     appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,
       StudentName:user.name,Group:user.group,CourseId:String(row[m.CourseId]),TestId:String(row[m.ExamId]),
       TestTitle:"Итоговый экзамен",Score:score,MaxScore:maxScore});
@@ -3354,6 +3357,36 @@ function submitEnglishFinalExam_(data) {
   } finally { lock.releaseLock(); }
 }
 
+
+
+/** Idempotently publish a completed English final exam into the common student Results journal. */
+function upsertEnglishFinalExamJournal_(attemptRow, attemptMap, result, reviewerEmail) {
+  const email=email_(attemptRow[attemptMap.StudentEmail]),courseId=String(attemptRow[attemptMap.CourseId]||"");
+  const testId=String(attemptRow[attemptMap.ExamId]||"");
+  const courseNo=(testId.match(/_c(\d+)_s/)||[])[1]||"";
+  const semester=(testId.match(/_s(\d+)$/)||[])[1]||"";
+  const title="Итоговый экзамен по английскому · курс "+courseNo+", семестр "+semester;
+  const score=Number(result.totalScore==null?result.objectiveScore:result.totalScore)||0;
+  const maxScore=Number(result.totalMax==null?result.objectiveMax:result.totalMax)||0;
+  const percent=maxScore?Math.max(0,Math.min(100,Math.round(score/maxScore*100))):0;
+  const grade=gradeFromPercent_(percent),now=new Date().toISOString();
+  const started=new Date(attemptRow[attemptMap.StartedAt]).getTime();
+  const finished=new Date(attemptRow[attemptMap.SubmittedAt]||now).getTime();
+  const record={Email:email,Name:String(attemptRow[attemptMap.StudentName]||""),Group:String(attemptRow[attemptMap.Group]||""),
+    TestId:testId,TestTitle:title,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent,
+    TimeSpent:Number.isFinite(started)&&Number.isFinite(finished)?Math.max(0,Math.round((finished-started)/1000)):0,
+    Attempts:1,FinishedAt:attemptRow[attemptMap.SubmittedAt]||now,CourseId:courseId,
+    Submission:"Итоговый экзамен · вариант "+String(attemptRow[attemptMap.VariantId]||""),
+    Feedback:"",ReviewedBy:reviewerEmail||"",ReviewedAt:reviewerEmail?now:""};
+  const sh=results_(),last=sh.getLastRow();
+  if(last>1){
+    const rows=sh.getRange(2,1,last-1,sh.getLastColumn()).getValues();
+    let existing=-1;
+    rows.forEach(function(row,index){if(email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId))existing=index+2;});
+    if(existing>0){updateMappedRecord_(sh,existing,record);return;}
+  }
+  appendMappedRecord_(sh,record);
+}
 
 /** List pending written parts for the authenticated teacher's assigned courses. */
 function getEnglishFinalExamReviews_(data) {
@@ -3393,6 +3426,11 @@ function gradeEnglishFinalExamWritten_(data) {
     if(!found) throw new Error("Экзаменационная попытка не найдена.");
     const row=found.values,m=found.map,courseId=String(row[m.CourseId]||"");
     if(teacher.role!=="admin"&&!hasCourseAccess_(teacher,courseId)) throw new Error("Нет доступа к проверке этой дисциплины.");
+    if(String(row[m.Status])==="submitted") {
+      const already=JSON.parse(String(row[m.ResultJSON]||"{}"));
+      if(already.status==="graded" && already.manualGrades){upsertEnglishFinalExamJournal_(row,m,already,already.gradedBy||teacher.email);return {success:true,attemptId:attemptId,result:already,alreadyGraded:true};}
+      throw new Error("Эта работа уже проверена или не ожидает проверки.");
+    }
     if(String(row[m.Status])!=="pending_review") throw new Error("Эта работа уже проверена или не ожидает проверки.");
     const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}")),result=JSON.parse(String(row[m.ResultJSON]||"{}"));
     const manualItems=result.manualItems||[],known={};
@@ -3418,6 +3456,7 @@ function gradeEnglishFinalExamWritten_(data) {
     const timestamp=new Date().toISOString();
     updateMappedRecord_(sheet,found.row,{Status:"submitted",ResultJSON:JSON.stringify(finalResult),UpdatedAt:timestamp});
     SpreadsheetApp.flush();
+    upsertEnglishFinalExamJournal_(row,m,finalResult,teacher.email);
     appendAttemptAudit_({EventType:"final_exam_written_graded",ActorEmail:teacher.email,StudentEmail:String(row[m.StudentEmail]),
       StudentName:String(row[m.StudentName]||""),Group:String(row[m.Group]||""),CourseId:courseId,
       TestId:String(row[m.ExamId]),TestTitle:"Итоговый экзамен",Score:totalScore,MaxScore:totalMax,Grade:finalResult.grade});
