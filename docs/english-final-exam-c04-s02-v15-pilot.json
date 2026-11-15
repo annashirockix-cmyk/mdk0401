@@ -94,7 +94,7 @@
     {
       "id": "c4s2v15_v01",
       "type": "short_text",
-      "prompt": "Complete the technical term: report.",
+      "prompt": "A formal written account of an event is an incident ___.",
       "acceptedAnswers": [
         "report"
       ],
