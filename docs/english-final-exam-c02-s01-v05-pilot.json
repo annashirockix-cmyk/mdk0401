@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful items for a skills portfolio.",
       "options": [
-        "Evidence of a completed project",
-        "A short description of your contribution",
         "A classmate's private contact details",
-        "An unrelated personal password"
+        "An unrelated personal password",
+        "Evidence of a completed project",
+        "A short description of your contribution"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -106,12 +106,12 @@
       "type": "single_choice",
       "prompt": "You are sending a portfolio link to an employer. What is an appropriate message?",
       "options": [
-        "Please find the link to my portfolio. It includes examples of my college work.",
         "Open this now. I will not explain anything.",
+        "Please find the link to my portfolio. It includes examples of my college work.",
         "Here is somebody else's private folder.",
         "The link may not work, but I did not check it."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
