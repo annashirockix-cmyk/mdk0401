@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO signs that an online source may be reliable.",
       "options": [
-        "A named author or organisation",
         "A page with no date or source",
-        "A clear publication date",
-        "A headline with no supporting information"
+        "A headline with no supporting information",
+        "A named author or organisation",
+        "A clear publication date"
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
@@ -106,12 +106,12 @@
       "type": "single_choice",
       "prompt": "You cannot find a book in the catalogue. What should you ask?",
       "options": [
-        "Could you help me search for this title, please?",
         "The catalogue is useless.",
+        "Could you help me search for this title, please?",
         "Find it yourself.",
         "I do not need the book."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
