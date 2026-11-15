@@ -1828,7 +1828,7 @@ function sanitizeAssessmentQuestionForStudent_(question) {
     if (!value || typeof value !== "object") return;
     if (Array.isArray(value)) { value.forEach(clean); return; }
     Object.keys(value).forEach(function(key) {
-      const normalized = String(key).replace(/[\\s-]/g, "_");
+      const normalized = String(key).replace(/[\\s-]/g, "").toLowerCase();
       if (privateKey.test(normalized)) delete value[key];
       else clean(value[key]);
     });
