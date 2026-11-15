@@ -75,3 +75,7 @@ The server now validates the structure of each imported variant payload before w
 ## Authored pilot progress — Course 1, Semester 1
 
 Fifteen distinct Basic English pilot variants are now authored for C1-S1 (`v01`–`v15`). Each contains ten tasks (two listening, two reading, grammar, multiple choice, short text, functional communication, ordering and one written response), totals 20 points and has a 90-minute limit. Across the set, task prompts and listening scripts are distinct; objective answer positions are balanced A/B/C/D at two keyed positions each per variant. These are editorial-review pilots, not approved or imported exam forms. The remaining nine course/semester slots still need their own 15 variants each.
+
+### Course 1, Semester 2 — pilot authoring underway
+
+Five distinct Basic English pilot variants are drafted for C1-S2 (`v01`–`v05`). The topics cover campus directions and facilities, student services and equipment loans, public transport, town information services and college events. Each has ten tasks, 20 points, 90 minutes, browser-readable listening and one written response. The five pilots pass the protected payload validator; all 50 prompts and five listening scripts are unique, and answer positions are balanced. Ten additional variants are still required to complete this slot. These drafts remain for editorial review.
