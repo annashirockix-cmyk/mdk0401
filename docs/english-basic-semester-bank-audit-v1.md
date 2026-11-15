@@ -70,6 +70,12 @@ The following items were revised after checking for more than one plausible answ
 
 After shuffling answer options while preserving the intended correct answer, the 200-item draft has this key distribution: A — 49, B — 51, C — 49, D — 51. The test now checks that each letter remains between 49 and 51.
 
+## Course-semester allocation gate
+
+The five-course architecture defines ten semester slots overall: four Basic slots (Courses 1–2) and six Technical slots (Courses 3–5). The ten Basic markdown files are drafting batches, not ten approved semester mappings. The 200 Basic items remain a question pool until an approved course/semester blueprint and the exact Belova edition are available. Do not import all 200 as ten Basic semester tests by filename order.
+
+A Library search for an approved English work programme and the exact Belova textbook edition did not surface a matching source. This search result is not proof that the documents do not exist; it means semester mapping and textbook alignment remain unverified.
+
 ## Safety and release gates
 
 1. Do not use the old 200-item client seed as the server bank.
