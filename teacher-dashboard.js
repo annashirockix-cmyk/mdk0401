@@ -126,7 +126,7 @@ if(reviewButton)reviewButton.onclick=async function(){
   const items=response.items||[];
   status.textContent=items.length?"Работ ожидают проверки: "+items.length:"Непроверенных письменных работ нет.";
   list.innerHTML=items.map(item=>'<article class="module ef-review-item" data-attempt="'+E(item.attemptId)+'"><h3>'+E(item.studentName||item.studentEmail)+' · '+E(item.group||"Без группы")+'</h3><p>'+E(item.examId)+' · вариант '+E(item.variantId)+' · отправлено '+E(item.submittedAt||"")+'</p>'+
-   (item.tasks||[]).map(task=>'<div class="ef-review-task" data-task="'+E(task.id)+'"><h4>'+E(task.prompt||"Письменное задание")+'</h4><p><b>Ответ студента:</b><br>'+E(item.responses&&item.responses[task.id]||"Ответ не сохранён").replace(/\n/g,"<br>")+'</p><p>Максимум: '+E(task.points)+' балл(ов)</p>'+(task.rubric?'<p><b>Критерии:</b> '+E(task.rubric)+'</p>':'')+'<label>Баллы <input class="ef-review-score" type="number" min="0" max="'+E(task.points)+'" step="0.5" value="0"></label><label>Комментарий <textarea class="ef-review-feedback" rows="2"></textarea></label></div>').join("")+
+   (item.tasks||[]).map(task=>'<div class="ef-review-task" data-task="'+E(task.id)+'"><h4>'+E(task.prompt||"Письменное задание")+'</h4><p><b>Ответ студента:</b><br>'+E(item.responses&&item.responses[task.id]||"Ответ не сохранён").replace(/\n/g,"<br>")+'</p><p>Максимум: '+E(task.points)+' балл(ов)</p>'+(task.rubric?'<p><b>Критерии:</b> '+E(task.rubric)+'</p>':'')+'<label>Баллы <input class="ef-review-score" type="number" min="0" max="'+E(task.points)+'" step="0.5" value="" required></label><label>Комментарий <textarea class="ef-review-feedback" rows="2"></textarea></label></div>').join("")+
    '<button class="btn ef-review-submit" type="button">Сохранить оценку</button><p class="ef-review-result" aria-live="polite"></p></article>').join("");
   list.querySelectorAll(".ef-review-submit").forEach(button=>button.onclick=async function(){
    const card=button.closest(".ef-review-item"),grades={};
@@ -134,7 +134,7 @@ if(reviewButton)reviewButton.onclick=async function(){
     const id=task.getAttribute("data-task");
     grades[id]={score:Number(task.querySelector(".ef-review-score").value),feedback:task.querySelector(".ef-review-feedback").value};
    });
-   const out=card.querySelector(".ef-review-result");button.disabled=true;out.textContent="Сохраняем…";
+   const out=card.querySelector(".ef-review-result");if(Array.from(card.querySelectorAll(".ef-review-score")).some(input=>input.value.trim()==="")){out.textContent="Укажите баллы за каждое письменное задание.";return;}button.disabled=true;out.textContent="Сохраняем…";
    try{const saved=await window.API.gradeEnglishFinalExamWritten(card.getAttribute("data-attempt"),grades);if(!saved||!saved.success)throw Error(saved&&saved.error||"Не удалось сохранить оценку");out.textContent="Проверка сохранена. Итоговая оценка: "+saved.result.grade+" ("+saved.result.totalScore+"/"+saved.result.totalMax+").";card.querySelectorAll("input,textarea").forEach(x=>x.disabled=true);button.remove();}
    catch(error){out.textContent=error.message||String(error);button.disabled=false;}
   });
