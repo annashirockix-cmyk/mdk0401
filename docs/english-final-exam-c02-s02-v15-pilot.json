@@ -94,7 +94,12 @@
     {
       "id": "c2s2v15_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A series of actions or instructions for completing a task is a ___.",
+      "acceptedAnswers": [
+        "procedure",
+        "process"
+      ]
     },
     {
       "id": "c2s2v15_f01",
