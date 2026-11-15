@@ -251,15 +251,12 @@
   window.FINAL_EXAMS.basic = [];
 
   /* ============================================================
-     TECHNICAL COURSE — те же 10 семестровых и 5 итоговых,
-     но с упором на техническую лексику. (Структурно дублирует basic.)
+     TECHNICAL COURSE — legacy tests are intentionally withheld.
+     The former implementation copied all 200 Basic questions verbatim.
+     The independent 200-item Technical draft pool is kept in docs and
+     must pass subject/methodology review before server-bank import.
      ============================================================ */
-  window.SEMESTER_TESTS.technical = window.SEMESTER_TESTS.basic.map(t => ({
-    ...t,
-    id: "t_" + t.id,
-    title: t.title.replace("Контрольная работа", "Контрольная работа (Technical)"),
-    subtitle: t.subtitle.replace("Unit", "Technical · Unit")
-  }));
+  window.SEMESTER_TESTS.technical = [];
 
   window.FINAL_EXAMS.technical = [];
 
