@@ -81,9 +81,9 @@
       "prompt": "Choose TWO sensible actions when plans change because of weather.",
       "options": [
         "Ignore the new schedule.",
+        "Continue an outdoor event during dangerous weather.",
         "Check messages from the organisers.",
-        "Take suitable clothing.",
-        "Continue an outdoor event during dangerous weather."
+        "Take suitable clothing."
       ],
       "correctIndices": [
         2,
