@@ -9,7 +9,7 @@
   "maxScore": 20,
   "tasks": [
     {
-      "id": "c1s2v10_l01",
+      "id": "c1s2v12_l01",
       "type": "single_choice",
       "prompt": "Listening 1. Where will the exhibition take place?",
       "audioText": "The student project exhibition will take place in the main hall next Tuesday. Each group should arrive by half past eight to prepare its display. The exhibition opens to visitors at ten. Please put your project title and group number on the table. A technician will be available near the entrance if you need help connecting a computer or a screen.",
@@ -23,7 +23,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_l02",
+      "id": "c1s2v12_l02",
       "type": "single_choice",
       "prompt": "Listening 2. When should groups arrive?",
       "audioText": "The student project exhibition will take place in the main hall next Tuesday. Each group should arrive by half past eight to prepare its display. The exhibition opens to visitors at ten. Please put your project title and group number on the table. A technician will be available near the entrance if you need help connecting a computer or a screen.",
@@ -37,7 +37,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_r01",
+      "id": "c1s2v12_r01",
       "type": "single_choice",
       "prompt": "A group of engineering students prepared a display about renewable energy. They used a small model to show how a wind turbine can produce electricity. Before the exhibition, they tested the model, checked the labels and divided the speaking roles. During the event, one student explained the model while another answered visitors' questions. Reading 1. What did the model demonstrate?",
       "options": [
@@ -50,7 +50,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_r02",
+      "id": "c1s2v12_r02",
       "type": "single_choice",
       "prompt": "How did the students prepare for the event?",
       "options": [
@@ -63,7 +63,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_g01",
+      "id": "c1s2v12_g01",
       "type": "single_choice",
       "prompt": "Choose the correct passive form: 'The project labels ___ before the exhibition.'",
       "options": [
@@ -76,7 +76,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_m01",
+      "id": "c1s2v12_m01",
       "type": "multiple_choice",
       "prompt": "Choose TWO details that make a project display clear for visitors.",
       "options": [
@@ -92,7 +92,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_v01",
+      "id": "c1s2v12_v01",
       "type": "short_text",
       "prompt": "Complete: 'A person who visits an exhibition is a ___.'",
       "acceptedAnswers": [
@@ -101,7 +101,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_f01",
+      "id": "c1s2v12_f01",
       "type": "single_choice",
       "prompt": "A visitor asks you to explain your model. What is a helpful opening?",
       "options": [
@@ -114,7 +114,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_o01",
+      "id": "c1s2v12_o01",
       "type": "ordering",
       "prompt": "Prepare the display materials; Test the model; Arrange the labels; Explain the project to visitors",
       "options": [
@@ -132,7 +132,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_w01",
+      "id": "c1s2v12_w01",
       "type": "written",
       "prompt": "Write 60–80 words introducing a college project for an exhibition. Describe its purpose, the materials or equipment used and what visitors can learn.",
       "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
