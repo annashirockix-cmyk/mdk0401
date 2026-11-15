@@ -3371,11 +3371,11 @@ function getEnglishFinalExamReviews_(data) {
     try {responses=JSON.parse(String(row[map.ResponsesJSON]||"{}"));} catch(e) {responses={};}
     try {result=JSON.parse(String(row[map.ResultJSON]||"{}"));} catch(e) {result={};}
     const manualIds=(result.manualItems||[]).map(function(item){return String(item.taskId);});
-    const tasks=(snapshot.tasks||[]).filter(function(task,i){return manualIds.indexOf(String(task.id||task.questionId||i))!==-1;});
+    const tasks=[];(snapshot.tasks||[]).forEach(function(task,i){if(manualIds.indexOf(String(task.id||task.questionId||i))!==-1)tasks.push({task:task,index:i});});
     items.push({attemptId:String(row[map.AttemptId]),studentEmail:String(row[map.StudentEmail]),
       studentName:String(row[map.StudentName]||""),group:String(row[map.Group]||""),courseId:courseId,
       examId:String(row[map.ExamId]),variantId:String(row[map.VariantId]),submittedAt:row[map.SubmittedAt],
-      tasks:tasks.map(function(task,i){const id=String(task.id||task.questionId||i);return {id:id,prompt:task.prompt||task.question||task.q||"",type:task.type||task.taskType||"written",points:Number(task.points)||1,rubric:task.rubric||task.criteria||""};}),
+      tasks:tasks.map(function(entry){const task=entry.task,id=String(task.id||task.questionId||entry.index);return {id:id,prompt:task.prompt||task.question||task.q||task.text||"",type:task.type||task.taskType||"written",points:Number(task.points)||1,rubric:task.rubric||task.criteria||""};}),
       responses:responses,result:{objectiveScore:Number(result.objectiveScore)||0,objectiveMax:Number(result.objectiveMax)||0,totalMax:Number(result.totalMax)||0}});
   });
   return {success:true,items:items};
