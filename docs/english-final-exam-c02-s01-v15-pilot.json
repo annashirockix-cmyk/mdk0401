@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 15",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v15_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When is the placement briefing?",
+      "audioText": "The college placement coordinator will hold a briefing for students starting work experience next month. The meeting is on Thursday at ten in Lecture Room 5. Students should bring the contact details of their workplace supervisor and a copy of the placement agreement. The coordinator will explain attendance rules and how to report an absence.",
+      "options": [
+        "On Thursday at ten",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v15_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which document should students bring?",
+      "audioText": "The college placement coordinator will hold a briefing for students starting work experience next month. The meeting is on Thursday at ten in Lecture Room 5. Students should bring the contact details of their workplace supervisor and a copy of the placement agreement. The coordinator will explain attendance rules and how to report an absence.",
+      "options": [
+        "On Friday",
+        "A copy of the placement agreement",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v15_r01",
+      "type": "single_choice",
+      "prompt": "During her first week at a manufacturing company, Alina received instructions from her supervisor about recording completed tasks. She wrote down unfamiliar terms and asked for clarification when a step was not clear. At the end of each day, she checked her notes and prepared a short progress update. Her supervisor said that her reports were useful and easy to follow. Reading 1. What did Alina do when an instruction was unclear?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "She asked for clarification",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v15_r02",
+      "type": "single_choice",
+      "prompt": "What did she prepare at the end of each day?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "A short progress update"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v15_g01",
+      "type": "single_choice",
+      "prompt": "The supervisor asked us ___ the completed checklist before leaving.",
+      "options": [
+        "to submit",
+        "submitting yesterday",
+        "submit to",
+        "submitted"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v15_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO features of a useful workplace progress update.",
+      "options": [
+        "Clear information about completed tasks",
+        "A note about any problem that needs attention",
+        "Unrelated personal comments",
+        "Unconfirmed guesses presented as facts"
+      ],
+      "correctIndices": [
+        0,
+        1
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v15_v01",
+      "type": "short_text",
+      "prompt": "A person who guides and checks a trainee's work is a ___.",
+      "acceptedAnswers": [
+        "supervisor",
+        "mentor"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v15_f01",
+      "type": "single_choice",
+      "prompt": "You do not understand a workplace instruction. What should you say?",
+      "options": [
+        "Could you show me that step once more, please?",
+        "I will guess what to do.",
+        "I will ignore the instruction.",
+        "You explained it badly."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v15_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of professional communication in a sensible order.",
+      "options": [
+        "Complete the assigned task",
+        "Listen to the supervisor's instructions",
+        "Record and report the result",
+        "Ask about any unclear point"
+      ],
+      "correctOrder": [
+        "Listen to the supervisor's instructions",
+        "Ask about any unclear point",
+        "Complete the assigned task",
+        "Record and report the result"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v15_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words introducing yourself to a workplace supervisor. Mention your course, what you hope to learn and how you will communicate about your progress.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v15_audio",
+    "readingPassageId": "c2s1v15_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
