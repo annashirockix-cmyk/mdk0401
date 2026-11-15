@@ -2875,10 +2875,12 @@ function validateEnglishSemesterTests_(tests, track) {
   tests.forEach(function(test, index) {
     const expectedYear = Math.floor(index / 2) + 1;
     const expectedSemester = index % 2 + 1;
+    const duration = Number(test && test.time == null ? 45 : test && test.time);
     if (!test || !test.id || String(test.id).indexOf(prefix) !== 0 ||
         seenIds[String(test.id)] || Number(test.year) !== expectedYear ||
         Number(test.semester) !== expectedSemester ||
-        !Array.isArray(test.questions) || test.questions.length !== 20) {
+        !Array.isArray(test.questions) || test.questions.length !== 20 ||
+        !Number.isInteger(duration) || duration < 1 || duration > 180) {
       throw new Error("Контрольная №" + (index + 1) + " должна соответствовать своему курсу/семестру и содержать ровно 20 вопросов с уникальным ID.");
     }
     seenIds[String(test.id)] = true;
@@ -3106,7 +3108,7 @@ function submitEnglishSemesterTest_(data) {
     appendMappedRecord_(results, {
       Email:user.email, Name:user.name, Group:user.group, TestId:testKey, TestTitle:title,
       Grade:grade, Score:score, MaxScore:test.questions.length, Percent:percent,
-      TimeSpent:Math.max(0, Number(data.timeSpent) || 0), Attempts:attemptNo,
+      TimeSpent:Math.min(Math.max(0, Number(data.timeSpent) || 0), Math.max(1, Number(test.time) || 45) * 60), Attempts:attemptNo,
       FinishedAt:new Date().toISOString(), CourseId:courseId,
       Submission:JSON.stringify({answers:canonicalAnswers}).slice(0,10000),
       PenaltyPoints:policy.penaltyPoints, ViolationCount:policy.violationCount
