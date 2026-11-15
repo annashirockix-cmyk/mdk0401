@@ -94,7 +94,7 @@
     {
       "id": "c4s2v12_v01",
       "type": "short_text",
-      "prompt": "Complete the technical term: twin.",
+      "prompt": "A computer-based representation of a physical asset is a digital ___.",
       "acceptedAnswers": [
         "twin"
       ],
