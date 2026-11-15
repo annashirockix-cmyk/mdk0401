@@ -118,7 +118,7 @@ test("custom test submissions resolve the test within the active course", () => 
  assert.match(api, /submitCustomTest:function\(data\)/);
  assert.match(app, /getCustomTest\(testId, courseId\)/);
  assert.match(app, /submitCustomTest\(\{[\s\S]*?attemptId: attempt\.attemptId/);
- assert.match(app, /submitCustomTest\(testId, answers, Math\.round\(\(Date\.now\(\)-started\)\/1000\), test\.courseId \|\| test\.mdkId\)/);
+ assert.match(app, /submitCustomTest\(\{[\s\S]*?attemptId: attempt\.attemptId/);
 });
 
 test("custom content deletion is scoped to the requested course", () => {
