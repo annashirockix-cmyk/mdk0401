@@ -25,7 +25,7 @@
     {
       "id": "c2s2v13_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. What should students bring?",
+      "prompt": "Listening 2. Which classroom materials are needed for the session?",
       "audioText": "The mathematics and science departments are holding a joint session on presenting research data. It will begin at eleven on Monday in the computer laboratory. Students will practise choosing suitable chart types and describing trends without exaggerating results. They should bring a small table of figures from a recent class project.",
       "options": [
         "On Friday",
