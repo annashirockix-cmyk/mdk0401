@@ -243,7 +243,7 @@ test("fifteen authored Technical English C4-S1 pilots match the protected runtim
   const allPrompts=[];
   pilots.forEach((pilot,index)=>{
     const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c4s_s1"); assert.equal(pilot.courseNo,4); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,1);
+    assert.equal(pilot.examId,"english_final_c4_s1"); assert.equal(pilot.courseNo,4); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,1);
     assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
     assert.deepEqual(validate(pilot,"C4-S1-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
     assert.ok(pilot.tasks.every(task=>task.id.startsWith("c4s1v"+variant+"_")));
@@ -265,7 +265,7 @@ test("fifteen authored Technical English C4-S2 pilots match the protected runtim
   const allPrompts=[];
   pilots.forEach((pilot,index)=>{
     const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c4s_s2"); assert.equal(pilot.courseNo,4); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,2);
+    assert.equal(pilot.examId,"english_final_c4_s2"); assert.equal(pilot.courseNo,4); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,2);
     assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
     assert.deepEqual(validate(pilot,"C4-S2-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
     assert.ok(pilot.tasks.every(task=>task.id.startsWith("c4s2v"+variant+"_")));
@@ -287,7 +287,7 @@ test("fifteen authored Technical English C5-S1 pilots match the protected runtim
   const allPrompts=[];
   pilots.forEach((pilot,index)=>{
     const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c5s_s1"); assert.equal(pilot.courseNo,5); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,1);
+    assert.equal(pilot.examId,"english_final_c5_s1"); assert.equal(pilot.courseNo,5); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,1);
     assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
     assert.deepEqual(validate(pilot,"C5-S1-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
     assert.ok(pilot.tasks.every(task=>task.id.startsWith("c5s1v"+variant+"_")));
@@ -309,7 +309,7 @@ test("fifteen authored Technical English C5-S2 pilots match the protected runtim
   const allPrompts=[];
   pilots.forEach((pilot,index)=>{
     const variant=String(index+1).padStart(2,"0");
-    assert.equal(pilot.examId,"english_final_c5s_s2"); assert.equal(pilot.courseNo,5); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,2);
+    assert.equal(pilot.examId,"english_final_c5_s2"); assert.equal(pilot.courseNo,5); assert.equal(pilot.track,"technical"); assert.equal(pilot.semester,2);
     assert.equal(pilot.tasks.length,10); assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1); assert.equal(pilot.tasks.filter(task=>task.audioText).length,2);
     assert.deepEqual(validate(pilot,"C5-S2-V"+variant),{taskCount:10,maxScore:20,durationMinutes:90});
     assert.ok(pilot.tasks.every(task=>task.id.startsWith("c5s2v"+variant+"_")));
