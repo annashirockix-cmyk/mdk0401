@@ -136,7 +136,8 @@ function runtime() {
       name: String(row[map.Name] || ""),
       group: String(row[map.Group] || ""),
       role: String(row[map.Role] || "student"),
-      courses: String(row[map.Courses] || "")
+      courses: String(row[map.Courses] || ""),
+      payload: String(row[map.Payload] || "{}")
     };
   };
   sandbox.editor_ = (data, courseId) => {
@@ -252,6 +253,49 @@ test("reviewed assignments are included in public subject averages", () => {
   assert.ok(student, "the student's course rating should be returned");
   assert.equal(student.averageGrade, 4);
   assert.equal(student.completed, 1);
+});
+
+test("manual and written grades expose feedback separately in student course results", () => {
+  const { sandbox: api, results } = runtime();
+
+  api.saveManualGrade_({
+    token: "teacherToken",
+    email: "student@example.test",
+    courseId: "07.01",
+    testTitle: "Ручная оценка",
+    grade: 4,
+    date: "2026-11-15",
+    feedback: "Исправьте оформление чертежа."
+  });
+  const manualView = api.getMyCourseResults_({ token: "studentToken", courseId: "07.01" });
+  const manual = manualView.results.find(item => item.testTitle === "Ручная оценка");
+  assert.ok(manual);
+  assert.equal(manual.grade, 4);
+  assert.equal(manual.payload, "");
+  assert.equal(manual.feedback, "Исправьте оформление чертежа.");
+  assert.equal(manual.reviewedBy, "teacher@example.test");
+  assert.ok(manual.reviewedAt);
+
+  results.appendRow([
+    "student@example.test", "Иван Иванов", "ТО-21", "prac_demo", "Письменная работа",
+    0, 0, 5, 0, 0, 1, "2026-11-14T10:00:00.000Z", "07.01",
+    "Ответ студента", 0, 0, "", "", ""
+  ]);
+  api.gradeWrittenResult_({
+    token: "teacherToken",
+    email: "student@example.test",
+    courseId: "07.01",
+    testId: "prac_demo",
+    grade: 5,
+    feedback: "Отличное решение."
+  });
+  const writtenView = api.getMyCourseResults_({ token: "studentToken", courseId: "07.01" });
+  const written = writtenView.results.find(item => item.testId === "prac_demo");
+  assert.ok(written);
+  assert.equal(written.payload, "Ответ студента");
+  assert.equal(written.feedback, "Отличное решение.");
+  assert.equal(written.reviewedBy, "teacher@example.test");
+  assert.ok(written.reviewedAt);
 });
 
 test("group assignment workflow works before student onboarding and preserves student payload", async () => {
