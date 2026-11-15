@@ -210,14 +210,14 @@ test("group assignment workflow works before student onboarding and preserves st
   assert.equal(history.getDataRangeCalls, historyReadsBeforeStudentView,
     "student view must not load every student's attempt history");
   assert.equal(afterGrade.status, "reviewed");
-  assert.equal(Number(afterGrade.grade), 5);
-  assert.match(afterGrade.feedback, /Отличная работа/);
+  assert.equal(Number(afterGrade.grade), 4);
+  assert.match(afterGrade.feedback, /Административная корректировка/);
   assert.equal(afterGrade.answer, "Исправленная версия");
   // Уведомление о назначении студенту, два уведомления преподавателю
-  // (первая отправка и пересдача) и уведомление студенту о результате проверки.
-  assert.equal(notifications.length, 4);
-  assert.deepEqual(notifications.map(item => item[1]), ["assignment","submission","submission","grade"]);
-  assert.equal(notifications.filter(item => item[0] === "student@example.test").length, 2);
+  // (первая отправка и пересдача), первоначальная оценка и административная корректировка.
+  assert.equal(notifications.length, 5);
+  assert.deepEqual(notifications.map(item => item[1]), ["assignment","submission","submission","grade","grade"]);
+  assert.equal(notifications.filter(item => item[0] === "student@example.test").length, 3);
   assert.equal(notifications.filter(item => item[0] === "teacher@example.test").length, 2);
   const unchangedStudentRow = users.rows.find(row => row[0] === "student@example.test");
   assert.equal(unchangedStudentRow[7], r.originalPayload);
