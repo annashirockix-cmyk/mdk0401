@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO correct sentences about completed past events.",
       "options": [
-        "The visitors asked many questions.",
         "The event finish at two yesterday.",
-        "Our class helped the visitors.",
-        "Pavel join the club last month."
+        "Pavel join the club last month.",
+        "The visitors asked many questions.",
+        "Our class helped the visitors."
       ],
       "correctIndices": [
         2,
