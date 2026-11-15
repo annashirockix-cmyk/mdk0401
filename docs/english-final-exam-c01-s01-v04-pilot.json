@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 04",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v04_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to Ms Brown. Where will the English lesson take place?",
+      "audioText": "Hello, everyone. I'm Ms Brown, your English teacher. Tomorrow our lesson begins at ten fifteen in Room 8. Please bring your course book and a notebook. We will work in pairs for the first activity. Our lunch break is at half past twelve. If you are late, please wait outside until I invite you in.",
+      "options": [
+        "Room 6",
+        "Room 8",
+        "The library",
+        "The language laboratory"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v04_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should students do if they are late?",
+      "audioText": "Hello, everyone. I'm Ms Brown, your English teacher. Tomorrow our lesson begins at ten fifteen in Room 8. Please bring your course book and a notebook. We will work in pairs for the first activity. Our lunch break is at half past twelve. If you are late, please wait outside until I invite you in.",
+      "options": [
+        "Enter and interrupt the teacher",
+        "Go home",
+        "Wait outside until the teacher invites them in",
+        "Go to the library"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v04_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Every Wednesday, Pavel meets two classmates in the library after lessons. They study English together for half an hour. One student reads a short paragraph, and the others ask questions about it. If they do not know a word, they look it up in a dictionary. Before they leave, they write down three useful expressions in a shared notebook. The group helps Pavel feel more confident when he speaks. Where does Pavel meet his classmates?",
+      "options": [
+        "In the library",
+        "At the bus station",
+        "In the sports centre",
+        "At home"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v04_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What do the students write in their shared notebook?",
+      "options": [
+        "Their lunch orders",
+        "Three useful expressions",
+        "Their examination marks",
+        "The names of all teachers"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v04_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct possessive form: 'This is Anna. ___ notebook is on the desk.'",
+      "options": [
+        "She",
+        "Her",
+        "Hers",
+        "She's"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v04_g02",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO correct sentences.",
+      "options": [
+        "He doesn't speak French.",
+        "They doesn't study on Friday.",
+        "My sister doesn't drive to college.",
+        "We not have a lesson today."
+      ],
+      "correctIndices": [
+        0,
+        2
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v04_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'You use a ___ to find the meaning of an unfamiliar word.'",
+      "acceptedAnswers": [
+        "dictionary"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v04_f01",
+      "type": "single_choice",
+      "prompt": "You do not understand the homework instruction. What should you say?",
+      "options": [
+        "Could you explain the instruction, please?",
+        "I no understand you yesterday.",
+        "Do my homework for me.",
+        "The instruction is explain."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v04_o01",
+      "type": "ordering",
+      "prompt": "Put these actions in a sensible order before an English lesson begins.",
+      "options": [
+        "Open the course book at the correct page",
+        "Enter the classroom",
+        "Take out a notebook and a pen",
+        "Listen to the teacher's first instruction"
+      ],
+      "correctOrder": [
+        "Enter the classroom",
+        "Take out a notebook and a pen",
+        "Open the course book at the correct page",
+        "Listen to the teacher's first instruction"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v04_w01",
+      "type": "written",
+      "prompt": "Write a short email of 60–80 words to a new classmate. Introduce yourself, say when you have English lessons, mention what you bring to class and suggest when you can study together.",
+      "rubric": "8 points total: all requested information and a suitable email purpose (0–2); clear basic sentence structure and grammar (0–2); appropriate study and time vocabulary (0–2); greeting/closing, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v04_audio",
+    "readingPassageId": "c1s1v04_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
