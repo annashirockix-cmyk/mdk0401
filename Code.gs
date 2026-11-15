@@ -3162,7 +3162,7 @@ function startEnglishFinalExam_(data) {
             const snapshot = JSON.parse(String(rows[i][am.AttemptJSON] || "{}"));
             return {success:true,attemptId:String(rows[i][am.AttemptId]),examId:examId,
               variantId:String(rows[i][am.VariantId]),startedAt:rows[i][am.StartedAt],
-              deadlineAt:rows[i][am.DeadlineAt],tasks:sanitizeEnglishFinalExamTask_(snapshot.tasks || [])};
+              deadlineAt:rows[i][am.DeadlineAt],responses:(function(){try{return JSON.parse(String(rows[i][am.ResponsesJSON]||"{}"));}catch(e){return {};}})(),tasks:sanitizeEnglishFinalExamTask_(snapshot.tasks || [])};
           }
           updateMappedRecord_(attempts,i+2,{Status:"expired",UpdatedAt:new Date().toISOString()});
         }
