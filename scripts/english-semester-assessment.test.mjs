@@ -119,6 +119,8 @@ test("completed English final exams are upserted into the common Results journal
   assert.match(publish, /Grade:grade/);
   assert.match(publish, /Score:score/);
   assert.match(publish, /MaxScore:maxScore/);
+  assert.match(publish, /result\.manualGrades/);
+  assert.match(publish, /Feedback:/);
   assert.match(publish, /updateMappedRecord_\(sh,existing,record\)/);
   assert.match(code, /if\(status==="submitted"\) upsertEnglishFinalExamJournal_/);
   assert.match(code, /upsertEnglishFinalExamJournal_\(row,m,finalResult,teacher\.email\)/);
