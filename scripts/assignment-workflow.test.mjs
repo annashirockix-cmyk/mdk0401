@@ -252,6 +252,31 @@ test("administrator regrading updates the latest attempt history snapshot", () =
   assert.equal(history[0].feedback, "Оценка пересмотрена.");
   assert.equal(history[0].status, "reviewed");
 });
+test("administrator regrading a written result preserves previous grade and feedback in audit", () => {
+  const { sandbox: api, results, audit } = runtime();
+  results.appendRow([
+    "student@example.test", "Иван Иванов", "ТО-21", "prac_unit1",
+    "Практическая письменная работа", "", "", "", "", 0, 1,
+    "2026-11-15T10:00:00.000Z", "07.01", "Ответ студента", 0, 0,
+    "", "", ""
+  ]);
+  const first = api.gradeWrittenResult_({
+    token: "teacherToken", email: "student@example.test", courseId: "07.01",
+    testId: "prac_unit1", grade: 3, feedback: "Первичная проверка."
+  });
+  assert.equal(first.success, true);
+  const regraded = api.gradeWrittenResult_({
+    token: "adminToken", email: "student@example.test", courseId: "07.01",
+    testId: "prac_unit1", grade: 5, feedback: "После пересмотра.", regrade: true
+  });
+  assert.equal(regraded.success, true);
+  const event = audit.find(item => item.EventType === "written_regraded");
+  assert.equal(event.PreviousGrade, 3);
+  assert.equal(event.PreviousFeedback, "Первичная проверка.");
+  assert.equal(event.Grade, 5);
+  assert.equal(event.Feedback, "После пересмотра.");
+});
+
 test("reviewed assignments are included in public subject averages", () => {
   const { sandbox: api } = runtime();
   const created = api.createAssignment_({
