@@ -1195,8 +1195,10 @@ function getPublicSubjectRatings_(data) {
   // Assignment submissions are stored separately from Results. Include reviewed
   // assignments here so public subject averages match the student's course summary
   // and the teacher journal instead of silently omitting manually graded work.
+  const reviewedAssignmentKeys = Object.create(null);
   assignmentResultRecords_().forEach(function (x) {
     if (x.grade === "" || x.grade === null || x.grade === undefined) return;
+    reviewedAssignmentKeys[JSON.stringify([x.email, x.courseId, x.testId])] = true;
     rows.push([
       x.email, x.name, x.group, x.testId, x.testTitle, x.grade,
       x.score, x.maxScore, x.percent, x.timeSpent, x.attempts,
@@ -1219,7 +1221,8 @@ function getPublicSubjectRatings_(data) {
       name: String(r[1] || "Обучающийся"), group: String(r[2] || ""), gradeSum: 0, percentSum: 0, completed: 0
     };
     const st = grouped[courseId][studentKey], grade = Number(r[5]) || 0;
-    if (grade > 0) { st.gradeSum += grade; st.percentSum += Number(r[8]) || 0; st.completed += 1; }
+    const assignmentKey = JSON.stringify([email_(r[0]), courseId, testId]);
+    if (grade > 0 || reviewedAssignmentKeys[assignmentKey]) { st.gradeSum += grade; st.percentSum += Number(r[8]) || 0; st.completed += 1; }
   });
   const ratings = {};
   Object.keys(grouped).forEach(function (courseId) {
@@ -1315,7 +1318,7 @@ function getMyCourseResults_(data) {
     if(!previous||String(x.finishedAt||"")>=String(previous.finishedAt||""))latestByAssessment[key]=x;
   });
   const latestResults=Object.keys(latestByAssessment).map(function(key){return latestByAssessment[key];});
-  const graded=latestResults.filter(function(x){return x.grade!==""&&x.grade!==null&&Number(x.grade)>0;});
+  const graded=latestResults.filter(function(x){return x.grade!==""&&x.grade!==null&&Number.isFinite(Number(x.grade))&&(Number(x.grade)>0||x.assignmentStatus==="reviewed");});
   const averageGrade=graded.length?Math.round(graded.reduce(function(n,x){return n+Number(x.grade||0);},0)/graded.length*100)/100:0;
   const averagePercent=graded.length?Math.round(graded.reduce(function(n,x){return n+Number(x.percent||0);},0)/graded.length):0;
   return {success:true,results:list,summary:{completed:latestResults.length,graded:graded.length,averageGrade:averageGrade,averagePercent:averagePercent}};
