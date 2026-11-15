@@ -2061,7 +2061,7 @@ function getFinalExam_(data) {
   selected=shuffledServer_(selected.concat(rest.slice(0,Math.max(0,target-selected.length))));
   if(selected.length!==target)throw new Error("Не удалось сформировать полный вариант из 45 уникальных заданий.");
   const optionMaps={},examId=Utilities.getUuid(),safeQuestions=selected.map(function(entry,index){return safeFinalExamQuestion_(entry,index,optionMaps);});
-  CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,questions:selected.map(function(e){return e.question;}),optionMaps:optionMaps}),7200);
+  CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,startedAt:Date.now(),durationSeconds:60*60,questions:selected.map(function(e){return e.question;}),optionMaps:optionMaps}),7200);
   return {success:true,examId:examId,questions:safeQuestions};
 }
 function scoreFinalAnswer_(q,answer) {
@@ -2114,6 +2114,9 @@ function submitFinalExam_(data) {
     if(!raw)throw new Error("Время экзамена истекло или экзамен уже отправлен. Начните попытку заново.");
     const exam=JSON.parse(raw);
     if(exam.email!==user.email||exam.courseId!==courseId)throw new Error("Экзамен не принадлежит этой учётной записи.");
+    if(!Number(exam.startedAt)||!Number(exam.durationSeconds))throw new Error("У серверной попытки отсутствуют данные таймера. Начните экзамен заново.");
+    const elapsedSeconds=Math.max(0,Math.floor((Date.now()-Number(exam.startedAt))/1000));
+    if(elapsedSeconds>Number(exam.durationSeconds)+300){cache.remove(cacheKey);throw new Error("Время экзамена истекло. Обратитесь к преподавателю.");}
     if(!Array.isArray(exam.questions)||!exam.questions.length)throw new Error("Экзаменационный вариант повреждён. Начните попытку заново.");
     const answers=Array.isArray(data.answers)?data.answers:[];
     if(answers.length!==exam.questions.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
@@ -2133,7 +2136,7 @@ function submitFinalExam_(data) {
     if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
     const writtenSubmission="";
-    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Math.min(5400,Number(data.timeSpent)||0)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:writtenSubmission.slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.min(elapsedSeconds,Number(exam.durationSeconds)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:writtenSubmission.slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,AttemptNo:attemptNo,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted});
     cache.remove(cacheKey);
     return {success:true,score:Math.round(points*100)/100,maxScore:max,rawPercent:pct,percent:adjusted,grade:grade,penaltyPoints:policy.penaltyPoints,attempts:attemptNo};
