@@ -390,6 +390,8 @@ test("student cannot create duplicate pending written submissions", () => {
   assert.match(save, /const matchingRows=values\.filter/);
   assert.match(save, /Number\(latest\[5\]\)===0/);
   assert.match(save, /Работа уже отправлена и ожидает проверки преподавателя/);
+  assert.match(save, /Number\(latest\[5\]\)>2/);
+  assert.match(save, /Работа уже проверена и зачтена/);
   assert.match(save, /matchingRows\.length\s*\)/);
 });
 
