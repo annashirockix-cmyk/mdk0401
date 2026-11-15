@@ -25,7 +25,7 @@
     {
       "id": "c5s2v11_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which two records should students bring?",
+      "prompt": "Listening 2. Which records are required for the discrepancy case?",
       "audioText": "The maintenance review tutor will present a discrepancy case on Thursday at ten. Students should bring the component record and the inspection extract. The case includes a difference between the recorded part reference and the label on the training item. Students will identify the information that must be checked before the record is corrected.",
       "options": [
         "On Friday",
