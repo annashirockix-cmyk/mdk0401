@@ -25,7 +25,7 @@
     {
       "id": "c4s1v10_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which chart should students bring?",
+      "prompt": "Listening 2. Which reference material is needed for cable identification?",
       "audioText": "The electronics department will hold a cable identification lesson on Monday at ten thirty. Students should bring the cable reference chart and meet in the component classroom. The tutor will compare cable labels, conductor identification and connector descriptions. The lesson will use disconnected training samples and photographs.",
       "options": [
         "On Friday",
