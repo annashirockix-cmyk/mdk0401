@@ -161,7 +161,7 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(gradeWritten,/\^\(prac_\|self_\|written_self_\)/);
   assert.match(gradeWritten,/Проверять письменные работы может только преподаватель/);
   const journal = fs.readFileSync(path.join(root, "journal.js"), "utf8");
-  assert.match(journal,/API\\.gradeWrittenResult/);
+  assert.match(journal,/API\.gradeWrittenResult/);
   assert.match(journal,/written_self_/);
   assert.match(journal,/Письменная работа проверена/);
 
