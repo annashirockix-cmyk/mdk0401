@@ -2976,19 +2976,22 @@ function saveSchedule_(data) {
 function englishSemesterBank_() { return ensureSheet_("EnglishSemesterBank"); }
 
 function validateEnglishSemesterTests_(tests, track) {
-  if (!Array.isArray(tests) || tests.length !== 10) {
-    throw new Error("Для каждого направления требуется ровно 10 семестровых контрольных.");
-  }
   const normalizedTrack = String(track || "").toLowerCase();
   if (["basic", "technical"].indexOf(normalizedTrack) < 0) {
     throw new Error("Не указано направление семестровых контрольных.");
   }
+  const expectedCount = normalizedTrack === "basic" ? 4 : 6;
+  if (!Array.isArray(tests) || tests.length !== expectedCount) {
+    throw new Error("Для направления " + (normalizedTrack === "basic" ? "Basic" : "Technical") +
+      " требуется ровно " + expectedCount + " семестровых контрольных.");
+  }
   const prefix = normalizedTrack === "basic" ? "b_" : "t_";
+  const firstYear = normalizedTrack === "basic" ? 1 : 3;
   const seenIds = {};
   const seenQuestions = {};
   let questionCount = 0;
   tests.forEach(function(test, index) {
-    const expectedYear = Math.floor(index / 2) + 1;
+    const expectedYear = firstYear + Math.floor(index / 2);
     const expectedSemester = index % 2 + 1;
     const duration = Number(test && test.time == null ? 45 : test && test.time);
     if (!test || !test.id || String(test.id).indexOf(prefix) !== 0 ||
