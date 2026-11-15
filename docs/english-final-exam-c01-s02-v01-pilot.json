@@ -78,7 +78,7 @@
     {
       "id": "c1s2v01_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO polite ways to ask for directions.",
+      "prompt": "Choose TWO polite ways to ask for directions around a college or town.",
       "options": [
         "Tell me the way now.",
         "You must give directions.",
