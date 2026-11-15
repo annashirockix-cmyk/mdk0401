@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 15",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v15_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the session take place?",
+      "audioText": "The electrical laboratory session starts at one o'clock in Lab 3. Before the lesson, check that your worksheet is complete and put your bag under the bench. The instructor will demonstrate how to connect the low-voltage training circuit. Do not connect the power supply until the instructor checks your circuit. At the end, switch off the supply and return all leads to the labelled box.",
+      "options": [
+        "In Lab 3",
+        "In Room 14",
+        "In the library",
+        "In the main office"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v15_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. When may students connect the power supply?",
+      "audioText": "The electrical laboratory session starts at one o'clock in Lab 3. Before the lesson, check that your worksheet is complete and put your bag under the bench. The instructor will demonstrate how to connect the low-voltage training circuit. Do not connect the power supply until the instructor checks your circuit. At the end, switch off the supply and return all leads to the labelled box.",
+      "options": [
+        "As soon as they enter",
+        "After the instructor checks the circuit",
+        "Before reading the worksheet",
+        "After leaving the lab"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v15_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Sam is learning about a simple electrical circuit. The instructor gives the group a battery, connecting leads and a small lamp. Sam follows the diagram and checks that each connection is secure. The lamp does not light, so he switches off the supply and checks the connections again. He finds that one lead is loose and fixes it before asking the instructor to check the circuit. Why does Sam check the connections again?",
+      "options": [
+        "He wants to finish first",
+        "The battery is missing",
+        "The lamp does not light",
+        "The instructor has left"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v15_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What does Sam do before checking the circuit?",
+      "options": [
+        "He adds another battery",
+        "He touches the lamp",
+        "He removes the diagram",
+        "He switches off the supply"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s1v15_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct instruction: '___ the power supply before changing a connection.'",
+      "options": [
+        "Switch off",
+        "Switching off",
+        "Switched off",
+        "To switching off"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v15_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO safe actions in an electrical laboratory.",
+      "options": [
+        "Change a connection while the supply is on.",
+        "Follow the circuit diagram.",
+        "Switch off the supply before changing connections.",
+        "Use damaged leads."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v15_v01",
+      "type": "short_text",
+      "prompt": "Complete with one word: 'A wire used to connect components in a circuit is a connecting ___.'",
+      "acceptedAnswers": [
+        "lead",
+        "wire"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v15_f01",
+      "type": "single_choice",
+      "prompt": "You notice a damaged lead. What should you tell the instructor?",
+      "options": [
+        "It works well, I think.",
+        "This lead is damaged. Should I replace it?",
+        "I will use it carefully.",
+        "Can I take it home?"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v15_o01",
+      "type": "ordering",
+      "prompt": "Put the circuit-checking steps in the correct order.",
+      "options": [
+        "Ask the instructor to check the circuit",
+        "Follow the diagram to connect components",
+        "Switch off the supply before making changes",
+        "Check that the connections are secure"
+      ],
+      "correctOrder": [
+        "Ask the instructor to check the circuit",
+        "Follow the diagram to connect components",
+        "Switch off the supply before making changes",
+        "Check that the connections are secure"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v15_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words explaining how to work safely with a low-voltage training circuit. Include checking the diagram, switching off the supply and reporting damaged equipment.",
+      "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v15_audio",
+    "readingPassageId": "c1s1v15_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
