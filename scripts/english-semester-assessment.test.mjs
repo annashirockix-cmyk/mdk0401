@@ -150,10 +150,14 @@ test("final exam submission grades objective tasks on the server and routes writ
   assert.match(code, /case "submitenglishfinalexam": result = submitEnglishFinalExam_\(data\); break;/);
 });
 
-test("final exam sanitization removes exact answer-key fields without deleting unrelated key-named fields", () => {
+test("final exam sanitization removes exact grading fields but preserves legitimate technical vocabulary", () => {
   const source = extractFunction("sanitizeEnglishFinalExamTask_");
-  assert.match(source, /\^\(answer\|answers\|correct/);
-  assert.doesNotMatch(source, /\(answer\|correct\|solution\|explanation\|rationale\|rubric\|markscheme\|marking\|grading\|teacher\|key\)\/i/);
+  const sanitize = new Function(source + "; return sanitizeEnglishFinalExamTask_;")();
+  const safe = sanitize({prompt:"Explain the keyboard layout.", keyboard:"QWERTY", keyTerm:"spindle", correctOption:2, expectedAnswer:"M03", modelAnswer:"M03", teacherNotes:"private", correctOrder:[1,2]});
+  assert.equal(safe.prompt,"Explain the keyboard layout.");
+  assert.equal(safe.keyboard,"QWERTY");
+  assert.equal(safe.keyTerm,"spindle");
+  for (const key of ["correctOption","expectedAnswer","modelAnswer","teacherNotes","correctOrder"]) assert.equal(Object.hasOwn(safe,key),false);
 });
 
 test("final exam response autosave validates owner, attempt status, deadline and task IDs", () => {
