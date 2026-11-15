@@ -288,7 +288,7 @@ window.saveSelfAnswer = function(code) {
     if (window.state.student && window.API) {
         window.API.saveResult({
             email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
-            testId: `self_${code}`, testTitle: "Самостоятельная: " + code, grade: 0, payload: val
+            testId: `written_self_${code}`, testTitle: "Самостоятельная: " + code, grade: 0, payload: val
         }).then(() => window.showToast("Ответ отправлен преподавателю!", "ok")).catch(() => window.showToast("Ошибка отправки", "err"));
     }
 };
