@@ -423,4 +423,6 @@ C1-S2 authoring is complete: 15 of 15 Basic English pilots are present. All 150 
 
 ### Course 2, Semester 1 — partial final-exam authoring
 
-Five of 15 Basic English pilots are now present (`docs/english-final-exam-c02-s01-v01-pilot.json` through `v05`). They address career fairs, CVs, interviews, progression routes and placement travel. All five pass the server payload validator; the 50 prompts and five listening scripts are unique and the answer keys are balanced. Ten variants remain. These files are editorial pilots only and are not imported into the protected bank.
+### Course 2, Semester 1 — complete pilot authoring
+
+C2-S1 now has all 15 planned Basic English pilots (`v01`–`v15`). The set covers career fairs, CVs, interviews, education routes, skills portfolios, part-time work, teamwork, digital learning, environmental choices, customer service, study visits, study-life balance, everyday problem solving, course selection and workplace communication. Each form has ten tasks, 20 points, 90 minutes, two listening items and one teacher-reviewed written response. Regression tests validate all 15 against the protected runtime schema, require unique task IDs and prompts, check unique listening scripts, enforce balanced A/B/C/D answer positions and inspect functional-response keys. The first five forms were corrected during review to repair task IDs and an incorrect functional key; all remain editorial-review drafts and have not been imported or released.
