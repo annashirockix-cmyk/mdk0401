@@ -271,9 +271,11 @@ test("generic result endpoint cannot accept browser-forged assessment grades", (
   assert.match(gradeWritten,/Проверять письменные работы может только преподаватель/);
   assert.match(gradeWritten,/isRegrade&&!\(teacher\.role==="admin"&&data\.regrade===true\)/);
   assert.match(gradeWritten,/written_regraded/);
-  assert.match(gradeWritten,/answerOnly=previousSubmission\.replace/);
+  assert.match(gradeWritten,/Feedback:feedback,ReviewedBy:teacher\.email,ReviewedAt:new Date\(\)\.toISOString\(\)/);
   const getResults = extract(code,"getResults_");
   assert.match(getResults,/feedbackMatch=submission\.match/);
+  assert.match(getResults,/storedFeedback=resultMap\.Feedback/);
+  assert.match(code,/Feedback\", \"ReviewedBy\", \"ReviewedAt\"/);
   assert.match(getResults,/payload:submission\.replace/);
   const journal = fs.readFileSync(path.join(root, "journal.js"), "utf8");
   assert.match(journal,/API\.gradeWrittenResult/);
