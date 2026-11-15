@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO ways to make a digital presentation easier to follow.",
       "options": [
-        "Use clear headings",
         "Put a full page of text on every slide",
-        "Choose readable diagrams",
-        "Use many unrelated animations"
+        "Use many unrelated animations",
+        "Use clear headings",
+        "Choose readable diagrams"
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
