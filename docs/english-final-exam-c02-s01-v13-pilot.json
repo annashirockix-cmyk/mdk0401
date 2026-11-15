@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful steps when reporting a lost item.",
       "options": [
-        "Describe the item accurately",
-        "Give the place and approximate time it was lost",
         "Guess who took it",
-        "Post another person's private details online"
+        "Post another person's private details online",
+        "Describe the item accurately",
+        "Give the place and approximate time it was lost"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -106,12 +106,12 @@
       "type": "single_choice",
       "prompt": "You have found a phone in a classroom. What should you do?",
       "options": [
-        "Hand it in to reception or a member of staff.",
         "Keep it until somebody asks.",
+        "Hand it in to reception or a member of staff.",
         "Look through its private messages.",
         "Leave it outside the building."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
