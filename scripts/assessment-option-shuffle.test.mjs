@@ -300,7 +300,7 @@ test("English VPR attempt token is retained until the result write succeeds", ()
   assert.ok(saveAt >= 0 && cleanupAt > saveAt, "cleanup must happen after server result persistence");
   assert.match(submit.slice(0, saveAt), /attemptLock\.releaseLock\(\)/);
   assert.match(submit.slice(0, saveAt), /lockedAttempt\.processing === true/);
-  assert.match(submit.slice(0, saveAt), /processingAt:Date\.now\(\)/);
+  assert.match(submit.slice(0, saveAt), /processingAttempt\.processingAt = Date\.now/);
   assert.match(submit.slice(saveAt, cleanupAt), /catch \(saveError\)/);
   assert.match(submit.slice(saveAt, cleanupAt), /current\.processing = false/);
   assert.match(submit.slice(cleanupAt), /cache\.remove\("englishVprAttempt:" \+ attemptId\)/);
