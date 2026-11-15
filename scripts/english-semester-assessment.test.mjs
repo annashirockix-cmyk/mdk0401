@@ -295,7 +295,7 @@ test("fifteen authored Technical English Course 4 Semester 2 pilots match the pr
     assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
     assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
     const functional=pilot.tasks.find(task=>task.id.endsWith("_f01"));
-    assert.match(functional.options[functional.correctIndex],/Could you identify|Let's use the correct term|sensor provides input|Could we check the input|This may be one possible|Could we confirm the exact|I can provide the version|Could we check the address|Could we add the correct unit|I cannot share credentials|Could we verify its device identity|digital representation may be out of date|check the measurement method|Could we confirm the unit's service status|cause has not yet been established/i);
+    assert.match(functional.options[functional.correctIndex],/Could you identify|Let's use the correct term|sensor provides input|Could we check the input|This may be one possible|Could we confirm the exact|I can provide the version|Could we check the address|Could we add the correct unit|I cannot share credentials|Check the device register|Could we update the model|Please check the measurement method|digital representation may be out of date|check the measurement method|Could we confirm the unit's service status|cause has not yet been established/i);
   });
   assert.equal(new Set(allPrompts).size,allPrompts.length);
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
