@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 12",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v12_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When must the project be finished?",
+      "audioText": "Hi, team. We need to finish the model bridge project by next Tuesday. Maria will prepare the materials list, and Dan will draw the first design. I will check the measurements and write the short report. Let's meet in the design room at two o'clock tomorrow to compare our work. If you have a problem with your part, please tell the group early so we can help.",
+      "options": [
+        "At the end of the month",
+        "By tomorrow morning",
+        "By next Tuesday",
+        "Next Friday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v12_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What will the speaker do?",
+      "audioText": "Hi, team. We need to finish the model bridge project by next Tuesday. Maria will prepare the materials list, and Dan will draw the first design. I will check the measurements and write the short report. Let's meet in the design room at two o'clock tomorrow to compare our work. If you have a problem with your part, please tell the group early so we can help.",
+      "options": [
+        "Prepare the materials list",
+        "Check measurements and write the report",
+        "Buy the materials",
+        "Draw the first design"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v12_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. A group of students is designing a small bridge for a college project. They agree on three tasks and write each task next to a student's name. During the first meeting, they discover that two measurements are missing. Instead of guessing, they check the drawing and ask their teacher for advice. They update the project plan and set a new time to review the design. How does the group organise its work?",
+      "options": [
+        "They wait for the teacher to do it",
+        "They assign tasks to named students",
+        "Everyone does the same task",
+        "They work without a plan"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v12_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. What do the students do about missing measurements?",
+      "options": [
+        "They estimate them",
+        "They leave them out",
+        "They check the drawing and ask for advice",
+        "They cancel the project"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s1v12_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'If we finish early, we ___ the design again.'",
+      "options": [
+        "will check",
+        "checking",
+        "checks",
+        "checked"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v12_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO good ways to work in a project team.",
+      "options": [
+        "Tell the group about a problem early.",
+        "Keep important changes secret.",
+        "Agree on tasks and deadlines.",
+        "Ignore the project plan."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v12_v01",
+      "type": "short_text",
+      "prompt": "Complete with one word: 'The final date for completing a task is the ___.'",
+      "acceptedAnswers": [
+        "deadline"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v12_f01",
+      "type": "single_choice",
+      "prompt": "You cannot finish your task on time. What should you say?",
+      "options": [
+        "It is not my problem.",
+        "I have a problem with the deadline. Can we discuss the plan?",
+        "I will say nothing.",
+        "You must finish my work."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v12_o01",
+      "type": "ordering",
+      "prompt": "Put the project stages in the correct order.",
+      "options": [
+        "Review the finished design",
+        "Agree on the project goal",
+        "Assign tasks and deadlines",
+        "Prepare and check the work"
+      ],
+      "correctOrder": [
+        "Review the finished design",
+        "Agree on the project goal",
+        "Assign tasks and deadlines",
+        "Prepare and check the work"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v12_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about working on a college team project. Explain how tasks are shared, how the group communicates and what members should do if a deadline is at risk.",
+      "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v12_audio",
+    "readingPassageId": "c1s1v12_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
