@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO details to check before travelling to a placement.",
       "options": [
-        "Departure time and location",
         "A colleague's private account",
-        "The journey duration",
-        "Unrelated entertainment news"
+        "Unrelated entertainment news",
+        "Departure time and location",
+        "The journey duration"
       ],
       "correctIndices": [
         2,
