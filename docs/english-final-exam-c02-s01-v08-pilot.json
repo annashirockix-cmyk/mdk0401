@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO safe digital study practices.",
       "options": [
-        "Use a clear file name",
-        "Keep a backup copy",
         "Share your login details",
-        "Open unknown attachments"
+        "Open unknown attachments",
+        "Use a clear file name",
+        "Keep a backup copy"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -105,12 +105,12 @@
       "type": "single_choice",
       "prompt": "You cannot open a course file. What should you write to the IT desk?",
       "options": [
-        "Could you help me access the course file, please?",
         "Your system is useless.",
+        "Could you help me access the course file, please?",
         "Fix it immediately or else.",
         "I will send my password."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
