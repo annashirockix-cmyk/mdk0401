@@ -106,8 +106,8 @@
       "type": "single_choice",
       "prompt": "A classmate claims solar panels produce the same amount of energy every day. What is a suitable response?",
       "options": [
-        "You never understand anything.",
         "That is not quite correct; output can change with sunlight and weather.",
+        "You never understand anything.",
         "I refuse to discuss energy.",
         "All energy systems work in exactly the same way."
       ],
