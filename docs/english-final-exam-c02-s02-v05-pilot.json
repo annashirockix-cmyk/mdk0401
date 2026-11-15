@@ -94,7 +94,13 @@
     {
       "id": "c2s2v05_v01",
       "type": "short_text",
-      "points": 2
+      "points": 2,
+      "prompt": "A planned system for moving people around a town is a transport ___.",
+      "acceptedAnswers": [
+        "network",
+        "transport network",
+        "system"
+      ]
     },
     {
       "id": "c2s2v05_f01",
