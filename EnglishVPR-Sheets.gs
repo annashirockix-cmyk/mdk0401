@@ -90,6 +90,8 @@ function validateEnglishVprExam_(track, exam) {
       return !Array.isArray(item) || !Array.isArray(item[3]) || !item[3].length;
     })) throw new Error("В задании 6 отсутствуют допустимые варианты ответов.");
   });
+  const duration = Number(exam.time);
+  if (!Number.isInteger(duration) || duration < 1 || duration > 180) throw new Error("Продолжительность ВПР должна составлять от 1 до 180 минут.");
   if (Number(exam.maxScore) !== 40) throw new Error("Максимальный балл экзамена должен быть равен 40.");
   return true;
 }
@@ -289,7 +291,7 @@ function submitEnglishVprExam_(data) {
     if (lockedAttempt.email !== user.email || lockedAttempt.track !== track || lockedAttempt.courseId !== courseId || String(lockedAttempt.exam && lockedAttempt.exam.id || "") !== String(exam.id || "")) throw new Error("Данные серверной попытки изменились. Начните экзамен заново.");
     cache.remove("englishVprAttempt:" + attemptId);
   } finally { attemptLock.releaseLock(); }
-  const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Number(data.timeSpent)||0,payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
+  const result=saveResult_({token:data.token,email:user.email,name:user.name,group:user.group,courseId:courseId,testId:testId,testTitle:String(exam.title||"English VPR")+" (письменная часть ожидает проверки)",grade:written.length?0:gradeFromPercent_(percent),score:objective,maxScore:maxObjective,percent:percent,timeSpent:Math.min(Math.max(0,Number(data.timeSpent)||0),Math.max(1,Number(exam.time)||90)*60),payload:JSON.stringify({status:written.length?"pending_teacher_review":"checked",writtenAnswers:written}),finishedAt:new Date().toISOString()}, true);
   if (written.length) {
     notifyCourseStaff_(courseId,"written_submission","Письменная часть английского ВПР ожидает проверки",
       user.name+" ("+user.group+") отправил(а) письменную часть экзамена "+String(exam.title||track)+". Откройте журнал результатов по дисциплине "+courseId+" для проверки ответов.",testId);
