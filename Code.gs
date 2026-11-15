@@ -840,7 +840,7 @@ function saveTeacherResult_(data) {
   if(!/^metrology_[A-Za-z0-9_-]{1,120}$/.test(testId)) throw new Error("Некорректный идентификатор лабораторной работы.");
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
-    const now=new Date().toISOString(),submission="Лабораторная работа: "+title+"; дата: "+date+(feedback?"\nКомментарий преподавателя: "+feedback:"");
+    const now=new Date().toISOString(),submission="Лабораторная работа: "+title+"; дата: "+date;
     const sheet=results_(),values=sheet.getDataRange().getValues();
     let existingRow=-1;
     for(let i=values.length-1;i>=1;i--){
