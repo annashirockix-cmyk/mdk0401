@@ -1221,6 +1221,7 @@ function getPublicSubjectRatings_(data) {
       name: String(r[1] || "Обучающийся"), group: String(r[2] || ""), gradeSum: 0, percentSum: 0, completed: 0
     };
     const st = grouped[courseId][studentKey], grade = Number(r[5]) || 0;
+    const testId = String(r[3] || "");
     const assignmentKey = JSON.stringify([email_(r[0]), courseId, testId]);
     if (grade > 0 || reviewedAssignmentKeys[assignmentKey]) { st.gradeSum += grade; st.percentSum += Number(r[8]) || 0; st.completed += 1; }
   });
