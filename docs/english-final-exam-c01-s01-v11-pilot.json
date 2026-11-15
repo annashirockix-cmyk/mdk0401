@@ -105,7 +105,7 @@
     {
       "id": "c1s1v11_f01",
       "type": "single_choice",
-      "prompt": "You cannot find a book in the catalogue. What should you ask?",
+      "prompt": "A technical manual is not listed in the library catalogue. Which polite question should you ask the librarian?",
       "options": [
         "Why do you hide the books?",
         "Could you help me locate this book, please?",
