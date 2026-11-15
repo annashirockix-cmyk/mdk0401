@@ -1823,7 +1823,7 @@ function builtInQuestions_(courseId, bankIds) {
 }
 function sanitizeAssessmentQuestionForStudent_(question) {
   const safe = JSON.parse(JSON.stringify(question && typeof question === "object" ? question : {}));
-  const privateKey = /^(?:correct|answer|expected|accepted|solution|explanation|rationale|grading|rubric|answerkey|key|iscorrect|feedback)/i;
+  const privateKey = /^(?:correct|answer|expected|accepted|solution|explanation|rationale|grading|rubric|key|iscorrect|feedback)/i;
   function clean(value) {
     if (!value || typeof value !== "object") return;
     if (Array.isArray(value)) { value.forEach(clean); return; }
