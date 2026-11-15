@@ -1,0 +1,2284 @@
+{
+  "courseNo": 2,
+  "semester": 1,
+  "courseId": "ENB",
+  "track": "basic",
+  "variants": [
+    {
+      "variantId": "EN-C2-S1-V01",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 1",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v01_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. Where will the career fair take place?",
+            "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
+            "options": [
+              "In the conference room",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v01_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. What should students prepare?",
+            "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
+            "options": [
+              "On Friday",
+              "Two questions about training",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v01_r01",
+            "type": "single_choice",
+            "prompt": "A careers adviser helped Sam compare three training opportunities. One company offered a short placement close to college, another offered a longer placement with travel costs, and the third provided online training. Sam chose the first option because he wanted to gain practical experience while continuing his college course. He checked the dates with his tutor before replying. Reading 1. Which opportunity did Sam choose?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "A short placement close to college",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v01_r02",
+            "type": "single_choice",
+            "prompt": "Why did he check the dates with his tutor?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "To make sure they fitted his college course"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v01_g01",
+            "type": "single_choice",
+            "prompt": "Choose the correct future form: 'I think our group ___ the project by Friday.'",
+            "options": [
+              "will finish",
+              "finishes yesterday",
+              "is finish",
+              "finished tomorrow"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v01_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO useful details to include in a short CV.",
+            "options": [
+              "A friend's private password",
+              "Unrelated personal opinions",
+              "Relevant skills",
+              "Education and training"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v01_v01",
+            "type": "short_text",
+            "prompt": "Complete: 'A document that summarises your education and work experience is a ___.'",
+            "acceptedAnswers": [
+              "CV",
+              "curriculum vitae"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v01_f01",
+            "type": "single_choice",
+            "prompt": "You want to ask an employer about training. What is a suitable question?",
+            "options": [
+              "Give me a job now.",
+              "Could you tell me what training new employees receive?",
+              "I do not need any information.",
+              "You must choose for me."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v01_o01",
+            "type": "ordering",
+            "prompt": "Identify your skills; Prepare a short CV; Ask about the role; Send a polite follow-up message",
+            "options": [
+              "Send a polite follow-up message",
+              "Prepare a short CV",
+              "Identify your skills",
+              "Ask about the role"
+            ],
+            "correctOrder": [
+              "Identify your skills",
+              "Prepare a short CV",
+              "Ask about the role",
+              "Send a polite follow-up message"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v01_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words introducing yourself to a potential employer at a college career fair. Mention your course, two relevant skills and the kind of placement you are looking for.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v1_audio",
+          "readingPassageId": "c2s1v1_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V02",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 2",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v02_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When does the CV workshop begin?",
+            "audioText": "The careers office is offering a CV workshop on Friday afternoon. It begins at one thirty in Room 24. Bring a draft CV saved on a USB drive or in your college cloud folder. The adviser will show students how to describe practical skills and organise education details. There will also be time to ask individual questions. Places are limited, so book online before Thursday.",
+            "options": [
+              "At one thirty on Friday",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v02_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which document should students bring to the CV workshop?",
+            "audioText": "The careers office is offering a CV workshop on Friday afternoon. It begins at one thirty in Room 24. Bring a draft CV saved on a USB drive or in your college cloud folder. The adviser will show students how to describe practical skills and organise education details. There will also be time to ask individual questions. Places are limited, so book online before Thursday.",
+            "options": [
+              "On Friday",
+              "A draft CV",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v02_r01",
+            "type": "single_choice",
+            "prompt": "Nikita is applying for a summer placement in an electronics workshop. In his CV, he describes a college project in which he assembled a training circuit and recorded test results. He lists teamwork, careful measurement and basic computer skills. His tutor suggests replacing the phrase 'I am good at everything' with specific examples that an employer can understand. Reading 1. What project does Nikita describe?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "A training circuit project",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v02_r02",
+            "type": "single_choice",
+            "prompt": "What does the tutor recommend changing?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "A general claim into specific examples"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v02_g01",
+            "type": "single_choice",
+            "prompt": "Choose the correct comparative: 'This version of my CV is ___ than the first one.'",
+            "options": [
+              "clearer",
+              "clearest",
+              "more clear than",
+              "clearly"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v02_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO strong ways to describe a skill in a CV.",
+            "options": [
+              "Use a vague claim without evidence",
+              "Copy another person's CV",
+              "Give a relevant example",
+              "Name a task you completed"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v02_v01",
+            "type": "short_text",
+            "prompt": "Complete: 'A short period of practical work in a company is a work ___.'",
+            "acceptedAnswers": [
+              "placement",
+              "internship"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v02_f01",
+            "type": "single_choice",
+            "prompt": "A careers adviser asks you to explain a skill. What should you do?",
+            "options": [
+              "Say that you have every skill.",
+              "Give a brief example of when you used it.",
+              "Change the subject.",
+              "Read your whole CV aloud."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v02_o01",
+            "type": "ordering",
+            "prompt": "Choose the role; List relevant experience; Write clear skill examples; Check the CV for errors",
+            "options": [
+              "Check the CV for errors",
+              "List relevant experience",
+              "Choose the role",
+              "Write clear skill examples"
+            ],
+            "correctOrder": [
+              "Choose the role",
+              "List relevant experience",
+              "Write clear skill examples",
+              "Check the CV for errors"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v02_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words describing three skills you could include in a CV. Give a short example of how you developed or used each skill.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v2_audio",
+          "readingPassageId": "c2s1v2_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V03",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 3",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v03_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When should students arrive?",
+            "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
+            "options": [
+              "Fifteen minutes before the appointment",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v03_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. How long will each mock interview last?",
+            "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
+            "options": [
+              "On Friday",
+              "About ten minutes",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v03_r01",
+            "type": "single_choice",
+            "prompt": "During a practice interview, an employer asks Maya why she is interested in aircraft technology. She explains that she enjoys understanding how systems work and likes solving practical problems. She gives an example from a college assignment and then asks what qualities the company values in a trainee. The interviewer says her answer is clear and relevant. Reading 1. Why is Maya interested in aircraft technology?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "She enjoys systems and practical problem-solving",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v03_r02",
+            "type": "single_choice",
+            "prompt": "What does Maya ask the interviewer?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "Which qualities the company values in a trainee"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v03_g01",
+            "type": "single_choice",
+            "prompt": "Choose the correct indirect question: 'Could you tell me ___ the interview will last?'",
+            "options": [
+              "how long",
+              "how long does",
+              "how long will",
+              "how long is"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v03_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO good interview habits.",
+            "options": [
+              "Interrupt before the question ends",
+              "Invent experience you do not have",
+              "Listen carefully to each question",
+              "Give relevant examples"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v03_v01",
+            "type": "short_text",
+            "prompt": "Complete: 'A formal meeting where an employer asks questions is an ___.'",
+            "acceptedAnswers": [
+              "interview"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v03_f01",
+            "type": "single_choice",
+            "prompt": "You do not understand an interview question. What is a polite response?",
+            "options": [
+              "That is a bad question.",
+              "Could you repeat or rephrase the question, please?",
+              "I will not answer.",
+              "Ask somebody else."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v03_o01",
+            "type": "ordering",
+            "prompt": "Research the company; Prepare examples; Attend the interview; Reflect on the feedback",
+            "options": [
+              "Reflect on the feedback",
+              "Prepare examples",
+              "Research the company",
+              "Attend the interview"
+            ],
+            "correctOrder": [
+              "Research the company",
+              "Prepare examples",
+              "Attend the interview",
+              "Reflect on the feedback"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v03_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words explaining how to prepare for a job or placement interview. Include researching the organisation, preparing examples and asking a relevant question.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v3_audio",
+          "readingPassageId": "c2s1v3_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V04",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 4",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v04_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. What is the session about?",
+            "audioText": "The college is holding an information session about progression routes next Thursday at three. Students can learn about advanced certificates, apprenticeships and university programmes. The session will take place in the library seminar room. Bring your questions about entry requirements and course length. A short guide will be available at the door, and the presentation slides will be shared afterwards.",
+            "options": [
+              "Progression and training routes",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v04_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Where will it take place?",
+            "audioText": "The college is holding an information session about progression routes next Thursday at three. Students can learn about advanced certificates, apprenticeships and university programmes. The session will take place in the library seminar room. Bring your questions about entry requirements and course length. A short guide will be available at the door, and the presentation slides will be shared afterwards.",
+            "options": [
+              "On Friday",
+              "In the library seminar room",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v04_r01",
+            "type": "single_choice",
+            "prompt": "Leila wants to continue studying after college. She compares an apprenticeship with a full-time university course. The apprenticeship includes paid workplace training, while the university course offers more time for academic study. Leila is interested in both options, so she checks the entry requirements and speaks to a careers adviser before making a decision. Reading 1. What is one feature of the apprenticeship?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Paid workplace training",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v04_r02",
+            "type": "single_choice",
+            "prompt": "Why does Leila speak to an adviser?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "To help her make an informed decision"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v04_g01",
+            "type": "single_choice",
+            "prompt": "Choose the correct modal: 'Applicants ___ check the entry requirements before applying.'",
+            "options": [
+              "should",
+              "should to",
+              "are",
+              "would to"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v04_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO useful points to compare when choosing a course.",
+            "options": [
+              "The colour of the website",
+              "An unrelated social media post",
+              "Entry requirements",
+              "Course length"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v04_v01",
+            "type": "short_text",
+            "prompt": "Complete: 'A person who gives advice about education and careers is an adviser or ___.'",
+            "acceptedAnswers": [
+              "counsellor",
+              "career adviser"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v04_f01",
+            "type": "single_choice",
+            "prompt": "You need details about an apprenticeship. What should you ask?",
+            "options": [
+              "Tell me everything immediately.",
+              "Could you explain how the workplace training is organised?",
+              "I do not care about the details.",
+              "Choose a course for my friend."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v04_o01",
+            "type": "ordering",
+            "prompt": "Identify your goals; Compare the available routes; Check entry requirements; Discuss the options with an adviser",
+            "options": [
+              "Discuss the options with an adviser",
+              "Compare the available routes",
+              "Identify your goals",
+              "Check entry requirements"
+            ],
+            "correctOrder": [
+              "Identify your goals",
+              "Compare the available routes",
+              "Check entry requirements",
+              "Discuss the options with an adviser"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v04_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words comparing two possible routes after college. Explain one advantage of each and say which route you would prefer.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v4_audio",
+          "readingPassageId": "c2s1v4_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V05",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 5",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v05_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the portfolio session take place?",
+            "audioText": "The careers adviser is introducing a digital skills portfolio on Wednesday at eleven in the media room. Students can add examples of college projects, certificates and practical activities. Each file should include a short description of the student's role. The adviser will demonstrate how to share the portfolio safely with an employer. Bring one example of your completed work.",
+            "options": [
+              "On Wednesday at eleven",
+              "On Friday afternoon",
+              "Next Monday",
+              "After the examination period"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v05_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which example should each student bring to the portfolio session?",
+            "audioText": "The careers adviser is introducing a digital skills portfolio on Wednesday at eleven in the media room. Students can add examples of college projects, certificates and practical activities. Each file should include a short description of the student's role. The adviser will demonstrate how to share the portfolio safely with an employer. Bring one example of your completed work.",
+            "options": [
+              "A printed timetable",
+              "An example of completed work",
+              "A passport",
+              "A library book"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v05_r01",
+            "type": "single_choice",
+            "prompt": "After completing a college project, Denis created a skills portfolio. He included a photograph of the finished model, a short description of the steps he had completed and feedback from his tutor. He did not upload personal information about other students. Before sending the link to an employer, he checked that the files opened correctly and that the sharing settings were limited to people who needed access. Reading 1. What did Denis include in his portfolio?",
+            "options": [
+              "A list of unrelated websites",
+              "Other students' private details",
+              "A project photograph, description and tutor feedback",
+              "A copy of his passport"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v05_r02",
+            "type": "single_choice",
+            "prompt": "Why did Denis check the sharing settings?",
+            "options": [
+              "To make the files larger",
+              "To remove his project description",
+              "To change the college timetable",
+              "To limit access to people who needed the files"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v05_g01",
+            "type": "single_choice",
+            "prompt": "Choose the correct form: 'I have ___ my portfolio before the application deadline.'",
+            "options": [
+              "updated",
+              "update yesterday",
+              "updating last week",
+              "updates"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v05_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO useful items for a skills portfolio.",
+            "options": [
+              "A classmate's private contact details",
+              "An unrelated personal password",
+              "Evidence of a completed project",
+              "A short description of your contribution"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v05_v01",
+            "type": "short_text",
+            "prompt": "A collection of examples that demonstrates your abilities is a ___.",
+            "acceptedAnswers": [
+              "portfolio",
+              "skills portfolio"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v05_f01",
+            "type": "single_choice",
+            "prompt": "You are sending a portfolio link to an employer. What is an appropriate message?",
+            "options": [
+              "Open this now. I will not explain anything.",
+              "Please find the link to my portfolio. It includes examples of my college work.",
+              "Here is somebody else's private folder.",
+              "The link may not work, but I did not check it."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v05_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of preparing a skills portfolio in a sensible order.",
+            "options": [
+              "Check the sharing settings",
+              "Choose relevant examples",
+              "Write a short description of each example",
+              "Test the link before sending it"
+            ],
+            "correctOrder": [
+              "Choose relevant examples",
+              "Write a short description of each example",
+              "Check the sharing settings",
+              "Test the link before sending it"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v05_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words introducing a skills portfolio to a potential employer. Mention two examples of your work and explain what they demonstrate.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v5_audio",
+          "readingPassageId": "c2s1v5_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V06",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 6",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v06_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. Where will the meeting take place?",
+            "audioText": "The student employment office is holding a short meeting about part-time jobs on Tuesday at four in Room 18. Local employers will explain weekend shifts and workplace expectations. Bring your timetable so the adviser can check that working hours do not conflict with lessons. Students who want an individual appointment should book at the reception desk before Monday.",
+            "options": [
+              "In Room 18",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v06_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. What information should students take to the employment meeting?",
+            "audioText": "The student employment office is holding a short meeting about part-time jobs on Tuesday at four in Room 18. Local employers will explain weekend shifts and workplace expectations. Bring your timetable so the adviser can check that working hours do not conflict with lessons. Students who want an individual appointment should book at the reception desk before Monday.",
+            "options": [
+              "On Friday",
+              "A copy of their timetable",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v06_r01",
+            "type": "single_choice",
+            "prompt": "Ella is considering a weekend job at an aircraft museum. The position involves welcoming visitors and helping them find exhibition areas. She has volunteered at the college open day, where she answered questions and worked with a team. Before applying, she checks the bus timetable because the museum opens early on Saturdays. Reading 1. Where does Ella want to work?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "At an aircraft museum",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v06_r02",
+            "type": "single_choice",
+            "prompt": "What experience could help her in this job?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "Volunteering at the college open day"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v06_g01",
+            "type": "single_choice",
+            "prompt": "If I ___ enough time, I will attend the employer meeting.",
+            "options": [
+              "have",
+              "had yesterday",
+              "am have",
+              "has"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v06_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO professional habits that help a new employee.",
+            "options": [
+              "Asking when a task is unclear",
+              "Sharing private passwords",
+              "Arriving on time",
+              "Ignoring instructions"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v06_v01",
+            "type": "short_text",
+            "prompt": "A person who works for a company is an ___.",
+            "acceptedAnswers": [
+              "employee"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v06_f01",
+            "type": "single_choice",
+            "prompt": "You need to change an interview appointment. What is the most appropriate message?",
+            "options": [
+              "Change it. I am busy.",
+              "Could we arrange another time for the interview, please?",
+              "I will not come. Goodbye.",
+              "You must wait for me."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v06_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of part-time work in a sensible order.",
+            "options": [
+              "Prepare examples of your skills",
+              "Read the job description",
+              "Send the application",
+              "Check your timetable"
+            ],
+            "correctOrder": [
+              "Read the job description",
+              "Check your timetable",
+              "Prepare examples of your skills",
+              "Send the application"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v06_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words applying for a part-time job. Explain your availability and describe two skills that would help you.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v6_audio",
+          "readingPassageId": "c2s1v6_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V07",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 7",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v07_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. Where will students meet?",
+            "audioText": "The engineering department will run a teamwork session on Thursday morning. Students will meet in Workshop 3 at nine fifteen. Each group should bring its project notes and agree on one person to record decisions. The tutor will explain how to divide tasks fairly and report progress. The session finishes at eleven thirty.",
+            "options": [
+              "In Workshop 3",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v07_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. What should each group choose?",
+            "audioText": "The engineering department will run a teamwork session on Thursday morning. Students will meet in Workshop 3 at nine fifteen. Each group should bring its project notes and agree on one person to record decisions. The tutor will explain how to divide tasks fairly and report progress. The session finishes at eleven thirty.",
+            "options": [
+              "On Friday",
+              "One person to record decisions",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v07_r01",
+            "type": "single_choice",
+            "prompt": "A group of students prepared a model airport lighting system for a college project. At first, two members wanted to do the same task, while nobody checked the materials list. The group made a simple plan, assigned responsibilities and held a short meeting every afternoon. They finished on time and presented the system confidently. Reading 1. What problem did the group have at first?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "Two members wanted the same task and the materials list was unchecked",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v07_r02",
+            "type": "single_choice",
+            "prompt": "How did they improve their work?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "They made a plan, assigned roles and met regularly"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v07_g01",
+            "type": "single_choice",
+            "prompt": "Our team ___ the presentation when the tutor arrived.",
+            "options": [
+              "was preparing",
+              "prepare tomorrow",
+              "has prepare",
+              "is prepared yesterday"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v07_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO ways to contribute to a team project.",
+            "options": [
+              "Hide problems from the group",
+              "Change the plan without telling anyone",
+              "Listen to other ideas",
+              "Keep useful progress notes"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v07_v01",
+            "type": "short_text",
+            "prompt": "A person who works with you in the same team is a ___.",
+            "acceptedAnswers": [
+              "teammate",
+              "team member"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v07_f01",
+            "type": "single_choice",
+            "prompt": "A teammate has not understood the task. What should you say?",
+            "options": [
+              "You should know this already.",
+              "Let's go through the instructions together.",
+              "I refuse to explain anything.",
+              "Do it without asking."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v07_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of team projects in a sensible order.",
+            "options": [
+              "Complete and check each part",
+              "Agree on the project goal",
+              "Present the results",
+              "Divide the responsibilities"
+            ],
+            "correctOrder": [
+              "Agree on the project goal",
+              "Divide the responsibilities",
+              "Complete and check each part",
+              "Present the results"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v07_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words describing a successful team project. Explain your role, how tasks were shared and what the group achieved.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v7_audio",
+          "readingPassageId": "c2s1v7_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V08",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 8",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v08_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the platform be unavailable?",
+            "audioText": "The college learning platform will be unavailable for maintenance on Saturday from eight until ten in the morning. Students should download any materials they need before Friday evening. Submitted work will remain saved, but online quizzes cannot be opened during the maintenance period. If the service is still unavailable after ten, contact the IT help desk.",
+            "options": [
+              "On Saturday from eight to ten",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v08_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. What should students do before Friday evening?",
+            "audioText": "The college learning platform will be unavailable for maintenance on Saturday from eight until ten in the morning. Students should download any materials they need before Friday evening. Submitted work will remain saved, but online quizzes cannot be opened during the maintenance period. If the service is still unavailable after ten, contact the IT help desk.",
+            "options": [
+              "On Friday",
+              "Download the materials they need",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v08_r01",
+            "type": "single_choice",
+            "prompt": "Artem uses a digital folder to organise notes from his electronics course. He names each file with the subject and date, then stores diagrams separately from written summaries. Before a test, he searches the folder for key terms and checks that the latest version of each document is available. This system helps him avoid losing important information. Reading 1. How does Artem organise his files?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "He labels files by subject and date and separates diagrams from summaries",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v08_r02",
+            "type": "single_choice",
+            "prompt": "Why does he check document versions?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "To make sure he uses the latest document"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v08_g01",
+            "type": "single_choice",
+            "prompt": "You ___ save your work before closing the programme.",
+            "options": [
+              "should",
+              "should to",
+              "mustn't to",
+              "are"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v08_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO safe digital study practices.",
+            "options": [
+              "Share your login details",
+              "Open unknown attachments",
+              "Use a clear file name",
+              "Keep a backup copy"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v08_v01",
+            "type": "short_text",
+            "prompt": "A copy of a file kept in case the original is lost is a ___.",
+            "acceptedAnswers": [
+              "backup"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v08_f01",
+            "type": "single_choice",
+            "prompt": "You cannot open a course file. What should you write to the IT desk?",
+            "options": [
+              "Your system is useless.",
+              "Could you help me access the course file, please?",
+              "Fix it immediately or else.",
+              "I will send my password."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v08_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of digital learning in a sensible order.",
+            "options": [
+              "Check its date and version",
+              "Open the course folder",
+              "Save a working copy",
+              "Find the required document"
+            ],
+            "correctOrder": [
+              "Open the course folder",
+              "Find the required document",
+              "Check its date and version",
+              "Save a working copy"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v08_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words explaining how you organise digital study materials and protect important files.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v8_audio",
+          "readingPassageId": "c2s1v8_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V09",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 9",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v09_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the event take place?",
+            "audioText": "The college environmental team is organising a repair and reuse day next Wednesday. Students can bring small electrical items that are safe to inspect, clean containers and unwanted books. The event starts at ten in the technology hall. Please do not bring damaged batteries or equipment with exposed wires. Volunteers should register online by Tuesday.",
+            "options": [
+              "Next Wednesday",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v09_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which items should students not bring?",
+            "audioText": "The college environmental team is organising a repair and reuse day next Wednesday. Students can bring small electrical items that are safe to inspect, clean containers and unwanted books. The event starts at ten in the technology hall. Please do not bring damaged batteries or equipment with exposed wires. Volunteers should register online by Tuesday.",
+            "options": [
+              "On Friday",
+              "Damaged batteries or equipment with exposed wires",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v09_r01",
+            "type": "single_choice",
+            "prompt": "The college canteen introduced reusable cups to reduce waste. Students pay a small deposit when they borrow a cup and receive it back when they return the cup to the collection point. At first, some students forgot to return them. Clear signs and reminders near the exits helped the system work better, and the amount of disposable cup waste fell. Reading 1. How does the reusable cup system work?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "They pay a deposit and get it back when they return the cup",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v09_r02",
+            "type": "single_choice",
+            "prompt": "What helped students remember to return cups?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "Signs and reminders near the exits"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v09_g01",
+            "type": "single_choice",
+            "prompt": "If more students ___ reusable cups, the college will produce less waste.",
+            "options": [
+              "use",
+              "used yesterday",
+              "uses now",
+              "will used"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v09_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO actions that can reduce waste at college.",
+            "options": [
+              "Throw working items away",
+              "Print every document twice",
+              "Repair equipment when appropriate",
+              "Use reusable containers"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v09_v01",
+            "type": "short_text",
+            "prompt": "Using an item again instead of throwing it away is to ___.",
+            "acceptedAnswers": [
+              "reuse"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v09_f01",
+            "type": "single_choice",
+            "prompt": "You notice a damaged cable in a classroom. What should you do?",
+            "options": [
+              "Try to repair it while it is connected.",
+              "Report it to a member of staff and keep others away.",
+              "Hide it in a drawer.",
+              "Let another student use it."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v09_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of environmental choices in a sensible order.",
+            "options": [
+              "Clean or repair it if appropriate",
+              "Identify an item that can be reused",
+              "Use it again or pass it on",
+              "Check that it is safe and suitable"
+            ],
+            "correctOrder": [
+              "Identify an item that can be reused",
+              "Check that it is safe and suitable",
+              "Clean or repair it if appropriate",
+              "Use it again or pass it on"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v09_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words suggesting two practical ways your college could reduce waste. Explain why they would help.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v9_audio",
+          "readingPassageId": "c2s1v9_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V10",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 10",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v10_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. What transport arrangement has the group chosen for the visit?",
+            "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
+            "options": [
+              "By minibus",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v10_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. What must students wear?",
+            "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
+            "options": [
+              "On Friday",
+              "Their college identification badges",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v10_r01",
+            "type": "single_choice",
+            "prompt": "A passenger asked an information assistant why a flight departure had changed. The assistant checked the airport display, explained that the new time was shown on the screen and directed the passenger to the airline desk for further details. She spoke calmly and repeated the information when the passenger asked her to clarify it. Reading 1. What information did the assistant check?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "The airport display",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v10_r02",
+            "type": "single_choice",
+            "prompt": "How did she respond to the passenger's request?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "She repeated and clarified the information calmly"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v10_g01",
+            "type": "single_choice",
+            "prompt": "The assistant asked the passenger ___ wait near the information desk.",
+            "options": [
+              "to",
+              "for",
+              "that",
+              "at"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v10_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO qualities important in customer service.",
+            "options": [
+              "Ignoring questions",
+              "Making promises you cannot keep",
+              "Clear communication",
+              "Patience"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v10_v01",
+            "type": "short_text",
+            "prompt": "A person who travels by plane, bus or train is a ___.",
+            "acceptedAnswers": [
+              "passenger",
+              "traveller",
+              "traveler"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v10_f01",
+            "type": "single_choice",
+            "prompt": "A passenger asks you to repeat an announcement. What should you say?",
+            "options": [
+              "You should have listened.",
+              "Of course. I will explain it again more slowly.",
+              "Ask somebody else.",
+              "I do not repeat information."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v10_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of customer service in a sensible order.",
+            "options": [
+              "Give a clear explanation",
+              "Listen to the customer's question",
+              "Ask whether further help is needed",
+              "Check the relevant information"
+            ],
+            "correctOrder": [
+              "Listen to the customer's question",
+              "Check the relevant information",
+              "Give a clear explanation",
+              "Ask whether further help is needed"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v10_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words describing how to help a visitor who needs information at an airport or college reception.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v10_audio",
+          "readingPassageId": "c2s1v10_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V11",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 11",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v11_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When will the briefing begin?",
+            "audioText": "The international exchange office has arranged an online briefing about a study visit to Hamburg. It will begin at half past two on Friday and last forty minutes. Students should test their microphone before joining and use their full names on the meeting screen. A recording and a list of useful links will be sent to registered participants.",
+            "options": [
+              "At half past two on Friday",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v11_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. What should students check before joining?",
+            "audioText": "The international exchange office has arranged an online briefing about a study visit to Hamburg. It will begin at half past two on Friday and last forty minutes. Students should test their microphone before joining and use their full names on the meeting screen. A recording and a list of useful links will be sent to registered participants.",
+            "options": [
+              "On Friday",
+              "Their microphone",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v11_r01",
+            "type": "single_choice",
+            "prompt": "Before a study visit, Daria compared the programme with her current course. She checked the dates, accommodation arrangements and the documents required for travel. She also asked whether the host college could provide safety information in English. After receiving the answers, she discussed the plan with her tutor and completed the application. Reading 1. What did Daria compare with her course?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "The study visit programme",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v11_r02",
+            "type": "single_choice",
+            "prompt": "Why did she contact the host college?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "To ask for safety information in English"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v11_g01",
+            "type": "single_choice",
+            "prompt": "By the time the briefing starts, I ___ my microphone.",
+            "options": [
+              "will have tested",
+              "test yesterday",
+              "am test",
+              "have testing"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v11_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO things to confirm before an international study visit.",
+            "options": [
+              "A classmate's social media password",
+              "Unrelated shopping offers",
+              "Travel dates and required documents",
+              "Accommodation arrangements"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v11_v01",
+            "type": "short_text",
+            "prompt": "A person or organisation that welcomes a visiting student is a ___.",
+            "acceptedAnswers": [
+              "host"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v11_f01",
+            "type": "single_choice",
+            "prompt": "You need clarification about a travel document. What is a polite request?",
+            "options": [
+              "Tell me now. I do not care why.",
+              "Could you confirm which document I need, please?",
+              "I will ignore the requirement.",
+              "You have to do my application."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v11_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of planning a study visit in a sensible order.",
+            "options": [
+              "Ask the host about unclear details",
+              "Read the visit information",
+              "Confirm the plan with your tutor",
+              "Check dates and documents"
+            ],
+            "correctOrder": [
+              "Read the visit information",
+              "Check dates and documents",
+              "Ask the host about unclear details",
+              "Confirm the plan with your tutor"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v11_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words asking a host college for information before a study visit. Ask about dates, accommodation and one practical requirement.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v11_audio",
+          "readingPassageId": "c2s1v11_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V12",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 12",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v12_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. Where is the workshop?",
+            "audioText": "The student support centre is running a workshop on managing study time and rest. It takes place in Room 12 on Tuesday at one o'clock. The session will cover planning revision, taking regular breaks and finding support when workloads become difficult. Students do not need to bring books, but they should bring a weekly timetable.",
+            "options": [
+              "In Room 12",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v12_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which timetable should participants bring to the support workshop?",
+            "audioText": "The student support centre is running a workshop on managing study time and rest. It takes place in Room 12 on Tuesday at one o'clock. The session will cover planning revision, taking regular breaks and finding support when workloads become difficult. Students do not need to bring books, but they should bring a weekly timetable.",
+            "options": [
+              "On Friday",
+              "A weekly timetable",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v12_r01",
+            "type": "single_choice",
+            "prompt": "During the examination period, Pavel tried to study late every night. He found it difficult to concentrate in morning lessons. His tutor suggested making a realistic weekly plan and taking short breaks between study sessions. Pavel also started preparing his materials the evening before. After two weeks, he felt more organised and participated more actively in class. Reading 1. What problem did Pavel experience?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "He found it difficult to concentrate in morning lessons",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v12_r02",
+            "type": "single_choice",
+            "prompt": "What changes did he make?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "He planned his week, took breaks and prepared materials in advance"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v12_g01",
+            "type": "single_choice",
+            "prompt": "You look tired. You ___ take a short break before continuing.",
+            "options": [
+              "should",
+              "should to",
+              "mustn't",
+              "are"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v12_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO habits that support effective study.",
+            "options": [
+              "Skip sleep to revise longer",
+              "Ignore every deadline",
+              "Plan realistic study sessions",
+              "Take regular short breaks"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v12_v01",
+            "type": "short_text",
+            "prompt": "A short period when you stop working to rest is a ___.",
+            "acceptedAnswers": [
+              "break",
+              "rest"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v12_f01",
+            "type": "single_choice",
+            "prompt": "A classmate says they are overwhelmed by deadlines. What is a supportive response?",
+            "options": [
+              "That is not my problem.",
+              "Would it help to make a list and speak to the tutor?",
+              "Just stop attending lessons.",
+              "You should finish everything tonight."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v12_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of health and study balance in a sensible order.",
+            "options": [
+              "Work with short planned breaks",
+              "List the tasks and deadlines",
+              "Review progress and adjust the plan",
+              "Choose realistic study periods"
+            ],
+            "correctOrder": [
+              "List the tasks and deadlines",
+              "Choose realistic study periods",
+              "Work with short planned breaks",
+              "Review progress and adjust the plan"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v12_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words giving a classmate advice on balancing study, rest and deadlines. Include two practical suggestions.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v12_audio",
+          "readingPassageId": "c2s1v12_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V13",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 13",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v13_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. Where should students complete the form?",
+            "audioText": "The college reception has changed its procedure for reporting lost property. Students should complete a short form at the front desk and describe the item clearly. Valuable items are kept in a locked cabinet. The office is open from eight thirty until four thirty on weekdays. Students will be contacted if an item matching their description is found.",
+            "options": [
+              "At the front desk",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v13_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. How are valuable items kept?",
+            "audioText": "The college reception has changed its procedure for reporting lost property. Students should complete a short form at the front desk and describe the item clearly. Valuable items are kept in a locked cabinet. The office is open from eight thirty until four thirty on weekdays. Students will be contacted if an item matching their description is found.",
+            "options": [
+              "On Friday",
+              "In a locked cabinet",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v13_r01",
+            "type": "single_choice",
+            "prompt": "When Irina could not find her student card, she checked the places she had visited that morning. She then reported the loss at reception and completed the required form. The receptionist explained how to request a replacement card and reminded her to keep the confirmation email. Irina received the new card two days later. Reading 1. What did Irina do before reporting the loss?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "She checked the places she had visited",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v13_r02",
+            "type": "single_choice",
+            "prompt": "What did the receptionist explain?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "How to request a replacement card"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v13_g01",
+            "type": "single_choice",
+            "prompt": "If you ___ your student card, report it to reception.",
+            "options": [
+              "lose",
+              "lost yesterday",
+              "will lose tomorrow",
+              "loses"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v13_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO useful steps when reporting a lost item.",
+            "options": [
+              "Guess who took it",
+              "Post another person's private details online",
+              "Describe the item accurately",
+              "Give the place and approximate time it was lost"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v13_v01",
+            "type": "short_text",
+            "prompt": "A formal request for a replacement document is an ___.",
+            "acceptedAnswers": [
+              "application",
+              "request"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v13_f01",
+            "type": "single_choice",
+            "prompt": "You have found a phone in a classroom. What should you do?",
+            "options": [
+              "Keep it until somebody asks.",
+              "Hand it in to reception or a member of staff.",
+              "Look through its private messages.",
+              "Leave it outside the building."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v13_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of solving everyday problems in a sensible order.",
+            "options": [
+              "Complete the required details",
+              "Check where you last had the item",
+              "Follow the instructions for a replacement",
+              "Report the loss to the correct office"
+            ],
+            "correctOrder": [
+              "Check where you last had the item",
+              "Report the loss to the correct office",
+              "Complete the required details",
+              "Follow the instructions for a replacement"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v13_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words explaining how you would report a lost college item and what information you would provide.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v13_audio",
+          "readingPassageId": "c2s1v13_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V14",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 14",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v14_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When do the presentation skills lessons take place?",
+            "audioText": "The college is offering students a choice of two optional short courses next term. The first course focuses on presentation skills and meets on Mondays. The second introduces basic project management and meets on Wednesdays. Both courses have the same number of lessons. Students should read the descriptions and submit their preference by the end of the month.",
+            "options": [
+              "On Mondays",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v14_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. When should students submit their preference?",
+            "audioText": "The college is offering students a choice of two optional short courses next term. The first course focuses on presentation skills and meets on Mondays. The second introduces basic project management and meets on Wednesdays. Both courses have the same number of lessons. Students should read the descriptions and submit their preference by the end of the month.",
+            "options": [
+              "On Friday",
+              "By the end of the month",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v14_r01",
+            "type": "single_choice",
+            "prompt": "Maksim wanted to improve his communication skills, but he was also interested in learning how to organise projects. He compared the course descriptions and checked his timetable. The project management course fitted his schedule better, while presentation skills were already included in another college activity. He chose project management and saved the course confirmation. Reading 1. Which course did Maksim choose?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "The project management course",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v14_r02",
+            "type": "single_choice",
+            "prompt": "Why did he make that choice?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "It fitted his schedule and presentation skills were covered elsewhere"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v14_g01",
+            "type": "single_choice",
+            "prompt": "This course is ___ than the one I attended last term.",
+            "options": [
+              "more practical",
+              "most practical",
+              "practicaler",
+              "the more practical"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v14_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO factors to consider when selecting an optional course.",
+            "options": [
+              "Whether a friend dislikes it",
+              "The colour of the course website",
+              "Whether it fits your timetable",
+              "Whether it supports your learning goals"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v14_v01",
+            "type": "short_text",
+            "prompt": "A decision made after comparing possibilities is a ___.",
+            "acceptedAnswers": [
+              "choice",
+              "decision"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v14_f01",
+            "type": "single_choice",
+            "prompt": "You need more information before choosing a course. What should you ask?",
+            "options": [
+              "I choose without reading anything.",
+              "Could you explain what topics the course covers?",
+              "Send me somebody else's results.",
+              "You must decide for me."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v14_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of making decisions in a sensible order.",
+            "options": [
+              "Check the timetable and requirements",
+              "Identify what you want to learn",
+              "Submit your chosen option",
+              "Read the available course descriptions"
+            ],
+            "correctOrder": [
+              "Identify what you want to learn",
+              "Read the available course descriptions",
+              "Check the timetable and requirements",
+              "Submit your chosen option"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v14_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words comparing two optional courses. Explain which one you would choose and give two reasons.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v14_audio",
+          "readingPassageId": "c2s1v14_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    },
+    {
+      "variantId": "EN-C2-S1-V15",
+      "blueprintId": "english_final_c2_s1_blueprint_v1",
+      "variantJSON": {
+        "examId": "english_final_c2_s1",
+        "courseNo": 2,
+        "track": "basic",
+        "semester": 1,
+        "title": "Basic English — Course 2, Semester 1 — Pilot Variant 15",
+        "durationMinutes": 90,
+        "time": 90,
+        "maxScore": 20,
+        "tasks": [
+          {
+            "id": "c2s1v15_l01",
+            "type": "single_choice",
+            "prompt": "Listening 1. When is the placement briefing?",
+            "audioText": "The college placement coordinator will hold a briefing for students starting work experience next month. The meeting is on Thursday at ten in Lecture Room 5. Students should bring the contact details of their workplace supervisor and a copy of the placement agreement. The coordinator will explain attendance rules and how to report an absence.",
+            "options": [
+              "On Thursday at ten",
+              "At the college library",
+              "At the town centre",
+              "At the bus station"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v15_l02",
+            "type": "single_choice",
+            "prompt": "Listening 2. Which technical reference is required for the maintenance-planning meeting?",
+            "audioText": "The college placement coordinator will hold a briefing for students starting work experience next month. The meeting is on Thursday at ten in Lecture Room 5. Students should bring the contact details of their workplace supervisor and a copy of the placement agreement. The coordinator will explain attendance rules and how to report an absence.",
+            "options": [
+              "On Friday",
+              "A copy of the placement agreement",
+              "Next month",
+              "After the event"
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v15_r01",
+            "type": "single_choice",
+            "prompt": "During her first week at a manufacturing company, Alina received instructions from her supervisor about recording completed tasks. She wrote down unfamiliar terms and asked for clarification when a step was not clear. At the end of each day, she checked her notes and prepared a short progress update. Her supervisor said that her reports were useful and easy to follow. Reading 1. What did Alina do when an instruction was unclear?",
+            "options": [
+              "To borrow a laptop",
+              "To meet a relative",
+              "She asked for clarification",
+              "To buy a ticket"
+            ],
+            "correctIndex": 2,
+            "points": 1
+          },
+          {
+            "id": "c2s1v15_r02",
+            "type": "single_choice",
+            "prompt": "What did she prepare at the end of each day?",
+            "options": [
+              "At the sports centre",
+              "In the computer room",
+              "At the bus station",
+              "A short progress update"
+            ],
+            "correctIndex": 3,
+            "points": 1
+          },
+          {
+            "id": "c2s1v15_g01",
+            "type": "single_choice",
+            "prompt": "The supervisor asked us ___ the completed checklist before leaving.",
+            "options": [
+              "to submit",
+              "submitting yesterday",
+              "submit to",
+              "submitted"
+            ],
+            "correctIndex": 0,
+            "points": 1
+          },
+          {
+            "id": "c2s1v15_m01",
+            "type": "multiple_choice",
+            "prompt": "Choose TWO features of a useful workplace progress update.",
+            "options": [
+              "Unrelated personal comments",
+              "Unconfirmed guesses presented as facts",
+              "Clear information about completed tasks",
+              "A note about any problem that needs attention"
+            ],
+            "correctIndices": [
+              2,
+              3
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v15_v01",
+            "type": "short_text",
+            "prompt": "A person who guides and checks a trainee's work is a ___.",
+            "acceptedAnswers": [
+              "supervisor",
+              "mentor"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v15_f01",
+            "type": "single_choice",
+            "prompt": "You do not understand a workplace instruction. What should you say?",
+            "options": [
+              "I will guess what to do.",
+              "Could you show me that step once more, please?",
+              "I will ignore the instruction.",
+              "You explained it badly."
+            ],
+            "correctIndex": 1,
+            "points": 1
+          },
+          {
+            "id": "c2s1v15_o01",
+            "type": "ordering",
+            "prompt": "Put the stages of professional communication in a sensible order.",
+            "options": [
+              "Complete the assigned task",
+              "Listen to the supervisor's instructions",
+              "Record and report the result",
+              "Ask about any unclear point"
+            ],
+            "correctOrder": [
+              "Listen to the supervisor's instructions",
+              "Ask about any unclear point",
+              "Complete the assigned task",
+              "Record and report the result"
+            ],
+            "points": 2
+          },
+          {
+            "id": "c2s1v15_w01",
+            "type": "written",
+            "prompt": "Write 60–80 words introducing yourself to a workplace supervisor. Mention your course, what you hope to learn and how you will communicate about your progress.",
+            "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+            "points": 8
+          }
+        ],
+        "sourceNotes": {
+          "listeningScriptId": "c2s1v15_audio",
+          "readingPassageId": "c2s1v15_reading",
+          "status": "pilot_for_editorial_review"
+        }
+      }
+    }
+  ]
+}
