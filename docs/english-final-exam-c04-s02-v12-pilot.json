@@ -11,7 +11,7 @@
     {
       "id": "c4s2v12_l01",
       "type": "single_choice",
-      "prompt": "Listening 1. When does the session begin?",
+      "prompt": "Listening 1. When is the digital twin session scheduled?",
       "audioText": "The engineering software lecturer will explain digital twin terminology on Thursday at nine forty-five. Students should bring the lifecycle diagram. The session will compare a physical asset with its digital representation and discuss how operating data supports monitoring.",
       "options": [
         "At nine forty-five on Thursday",
@@ -25,7 +25,7 @@
     {
       "id": "c4s2v12_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which material should students bring?",
+      "prompt": "Listening 2. Which lifecycle diagram is needed?",
       "audioText": "The engineering software lecturer will explain digital twin terminology on Thursday at nine forty-five. Students should bring the lifecycle diagram. The session will compare a physical asset with its digital representation and discuss how operating data supports monitoring.",
       "options": [
         "A personal notebook",
@@ -78,12 +78,12 @@
     {
       "id": "c4s2v12_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details relevant to digital twin concepts.",
+      "prompt": "A digital twin is being reviewed. Which TWO information sources may improve its accuracy?",
       "options": [
         "An unrelated appointment",
         "A personal preference",
-        "The relevant technical component or evidence",
-        "The relevant procedure or documentation"
+        "Operating measurements",
+        "Maintenance history"
       ],
       "correctIndices": [
         2,
@@ -103,10 +103,10 @@
     {
       "id": "c4s2v12_f01",
       "type": "single_choice",
-      "prompt": "Choose the most appropriate professional response.",
+      "prompt": "Could we update the model What is the best response?",
       "options": [
         "I will guess and continue.",
-        "The digital representation may be out of date; could we update its maintenance information?",
+        "Could we update the model with the latest verified maintenance information?",
         "The detail is not important.",
         "I will copy an unrelated record."
       ],
