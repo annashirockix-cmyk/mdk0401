@@ -51,7 +51,12 @@ try {
         return { success: true };
       },
       getTopicAccess: async () => ({ open: true }),
-      getTestAttemptStatus: async () => ({ allowed: true, used: 0, limit: 1 })
+      getTestAttemptStatus: async () => ({ allowed: true, used: 0, limit: 1 }),
+      getCustomTest: async testId => ({
+        success: true, attemptId: "audit-custom-attempt-" + String(testId),
+        questions: [{ q: "Какой вариант правильный?", options: ["Неверно", "Верно", "Не подходит", "Нет ответа"] }]
+      }),
+      submitCustomTest: async () => ({ success: true, score: 1, maxScore: 1, percent: 100, grade: 5 })
     };
     // Reproduce an admin request finishing after a student has signed in.
     // The late admin response must not overwrite the student's role-filtered list.
