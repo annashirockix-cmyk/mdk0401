@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 6",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v6_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the meeting take place?",
+      "audioText": "The student employment office is holding a short meeting about part-time jobs on Tuesday at four in Room 18. Local employers will explain weekend shifts and workplace expectations. Bring your timetable so the adviser can check that working hours do not conflict with lessons. Students who want an individual appointment should book at the reception desk before Monday.",
+      "options": [
+        "In Room 18",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v6_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should students bring?",
+      "audioText": "The student employment office is holding a short meeting about part-time jobs on Tuesday at four in Room 18. Local employers will explain weekend shifts and workplace expectations. Bring your timetable so the adviser can check that working hours do not conflict with lessons. Students who want an individual appointment should book at the reception desk before Monday.",
+      "options": [
+        "On Friday",
+        "A copy of their timetable",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v6_r01",
+      "type": "single_choice",
+      "prompt": "Ella is considering a weekend job at an aircraft museum. The position involves welcoming visitors and helping them find exhibition areas. She has volunteered at the college open day, where she answered questions and worked with a team. Before applying, she checks the bus timetable because the museum opens early on Saturdays. Reading 1. Where does Ella want to work?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "At an aircraft museum",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v6_r02",
+      "type": "single_choice",
+      "prompt": "What experience could help her in this job?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "Volunteering at the college open day"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v6_g01",
+      "type": "single_choice",
+      "prompt": "If I ___ enough time, I will attend the employer meeting.",
+      "options": [
+        "have",
+        "had yesterday",
+        "am have",
+        "has"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v6_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO professional habits that help a new employee.",
+      "options": [
+        "Arriving on time",
+        "Ignoring instructions",
+        "Asking when a task is unclear",
+        "Sharing private passwords"
+      ],
+      "correctIndices": [
+        0,
+        1
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v6_v01",
+      "type": "short_text",
+      "prompt": "A person who works for a company is an ___.",
+      "acceptedAnswers": [
+        "employee"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v6_f01",
+      "type": "single_choice",
+      "prompt": "You need to change an interview appointment. What is the most appropriate message?",
+      "options": [
+        "Could we arrange another time for the interview, please?",
+        "Change it. I am busy.",
+        "I will not come. Goodbye.",
+        "You must wait for me."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v6_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of part-time work in a sensible order.",
+      "options": [
+        "Prepare examples of your skills",
+        "Read the job description",
+        "Send the application",
+        "Check your timetable"
+      ],
+      "correctOrder": [
+        "Read the job description",
+        "Check your timetable",
+        "Prepare examples of your skills",
+        "Send the application"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v6_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words applying for a part-time job. Explain your availability and describe two skills that would help you.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v6_audio",
+    "readingPassageId": "c2s1v6_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
