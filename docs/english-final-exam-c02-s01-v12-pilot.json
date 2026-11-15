@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO habits that support effective study.",
       "options": [
-        "Plan realistic study sessions",
-        "Take regular short breaks",
         "Skip sleep to revise longer",
-        "Ignore every deadline"
+        "Ignore every deadline",
+        "Plan realistic study sessions",
+        "Take regular short breaks"
       ],
       "correctIndices": [
-        0,
-        1
+        2,
+        3
       ],
       "points": 2
     },
@@ -106,12 +106,12 @@
       "type": "single_choice",
       "prompt": "A classmate says they are overwhelmed by deadlines. What is a supportive response?",
       "options": [
-        "Would it help to make a list and speak to the tutor?",
         "That is not my problem.",
+        "Would it help to make a list and speak to the tutor?",
         "Just stop attending lessons.",
         "You should finish everything tonight."
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
