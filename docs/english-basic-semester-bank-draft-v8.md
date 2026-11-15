@@ -12,7 +12,7 @@
 - C. costing
 - D. does cost
 
-**142.** We ___ for the train for twenty minutes when the announcement was made.
+**142.** At 10:20, the announcement was made. We ___ for the train since 10:00.
 - A. waited
 - B. have waited
 - C. had been waiting
