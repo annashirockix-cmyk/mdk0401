@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 1",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v01_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the maintenance-planning lesson begin?",
+      "audioText": "The aviation maintenance tutor will introduce maintenance planning records on Tuesday at nine. Students should meet in the documentation classroom and bring the sample work package. The lesson will identify task references, planned dates and required documentation. Students will discuss how a clear plan helps teams coordinate work, but no maintenance activity will be carried out.",
+      "options": [
+        "At nine on Tuesday",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which document should students bring?",
+      "audioText": "The aviation maintenance tutor will introduce maintenance planning records on Tuesday at nine. Students should meet in the documentation classroom and bring the sample work package. The lesson will identify task references, planned dates and required documentation. Students will discuss how a clear plan helps teams coordinate work, but no maintenance activity will be carried out.",
+      "options": [
+        "On Friday",
+        "The sample work package",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_r01",
+      "type": "single_choice",
+      "prompt": "A maintenance plan groups tasks that must be completed during a scheduled maintenance visit. It may identify the task reference, responsible team, expected duration and required documents. Planners also consider access to parts and specialist support. A clear plan does not replace the approved maintenance data; it helps the organisation coordinate work and record its progress. Reading 1. What may a maintenance plan identify?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "Task reference, responsible team, expected duration and required documents",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_r02",
+      "type": "single_choice",
+      "prompt": "What does a clear plan help the organisation do?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "Coordinate work and record progress"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_g01",
+      "type": "single_choice",
+      "prompt": "The task references ___ in the maintenance plan.",
+      "options": [
+        "are listed",
+        "lists",
+        "is listing",
+        "list yesterday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO details that support maintenance planning.",
+      "options": [
+        "A personal holiday plan",
+        "An unrelated product advert",
+        "Task reference",
+        "Required documentation"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v01_v01",
+      "type": "short_text",
+      "prompt": "A collection of documents and task information for a maintenance visit is a work ___.",
+      "acceptedAnswers": [
+        "package",
+        "work package"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v01_f01",
+      "type": "single_choice",
+      "prompt": "A task reference is missing from a work package. What should you ask?",
+      "options": [
+        "I will invent a reference number.",
+        "Could we confirm the correct task reference in the approved maintenance documentation?",
+        "The reference is not needed.",
+        "I will copy a number from another aircraft."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of maintenance planning in a logical order.",
+      "options": [
+        "Coordinate people and resources",
+        "Review the maintenance requirements",
+        "Record progress and outstanding items",
+        "Identify the task references and documents"
+      ],
+      "correctOrder": [
+        "Review the maintenance requirements",
+        "Identify the task references and documents",
+        "Coordinate people and resources",
+        "Record progress and outstanding items"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v01_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how a maintenance plan helps an aviation team coordinate tasks, documents and resources.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate maintenance vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v01_audio",
+    "readingPassageId": "c5s1v01_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
