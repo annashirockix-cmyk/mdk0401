@@ -855,7 +855,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.doesNotMatch(engine, /window\.ENGLISH_VPR_EXAMS/);
   assert.match(bank, /const exam = seeds\[track\]/);
   assert.match(html, /api\.js\?v=\d+/);
-  assert.match(html, /english-vpr-engine\.js\?v=23/);
+  assert.match(html, /english-vpr-engine\.js\?v=24/);
 });
 
 
