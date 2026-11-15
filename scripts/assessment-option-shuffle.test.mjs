@@ -317,3 +317,26 @@ test("student cannot create duplicate pending written submissions", () => {
   assert.match(save, /Работа уже отправлена и ожидает проверки преподавателя/);
   assert.match(save, /matchingRows\.length\s*\)/);
 });
+
+
+test("English VPR Basic and Technical seed content remains track-specific", () => {
+  const seeds = new Function(vpr + "; return englishVprSeedExams_();")();
+  const validateVpr = new Function(extract(vpr, "validateEnglishVprExam_") + "; return validateEnglishVprExam_;")();
+  assert.equal(validateVpr("basic", seeds.basic), true);
+  assert.equal(validateVpr("technical", seeds.technical), true);
+  assert.equal(seeds.basic.track, "basic");
+  assert.equal(seeds.technical.track, "technical");
+  const stems = (exam) => {
+    const result = [];
+    for (const task of exam.tasks) {
+      if (task.type === "choice") for (const item of task.items || []) result.push(String(item[0]));
+      if (task.type === "match") for (const item of task.items || []) result.push(String(item[1]));
+      if (task.type === "gap" && task.text) result.push(String(task.text));
+      if (task.type === "transform") for (const item of task.items || []) result.push(String(item[0]) + " " + String(item[1]));
+    }
+    return result.map((value) => value.toLowerCase().replace(/\\s+/g, " ").trim());
+  };
+  const basic = new Set(stems(seeds.basic));
+  const overlap = stems(seeds.technical).filter((stem) => basic.has(stem));
+  assert.deepEqual(overlap, [], "Basic and Technical VPR prompts/passages must remain distinct");
+});
