@@ -413,3 +413,7 @@ Regression tests cover valid banks, missing keys, duplicate IDs/questions/option
 ## Final-exam content authoring status — Course 1, Semester 1
 
 The first slot now has 15 authored Basic English pilot variants (`docs/english-final-exam-c01-s01-v01-pilot.json` through `v15`). Each form has 10 tasks, 20 points, 90 minutes, browser-readable listening scripts and one teacher-reviewed written response. The regression test validates all 15 against the protected runtime schema, checks unique task prompts and listening scripts across variants, and enforces a balanced A/B/C/D answer-key distribution. All 15 remain marked `pilot_for_editorial_review`; this is not a formal pedagogical sign-off and the forms have not been imported into the protected Google Sheet. Nine of the ten course/semester slots remain to be authored.
+
+### Course 1, Semester 2 — partial authoring status
+
+Five of the 15 planned C1-S2 Basic English final-exam pilots are drafted (`v01`–`v05`). They cover directions, college services, travel, town facilities and past college events. All five pass the protected runtime payload validator; the 50 task prompts and five listening scripts are unique, and each variant has balanced A/B/C/D key positions. Ten variants remain for this semester. These are editorial-review drafts only, not imported or released to students.
