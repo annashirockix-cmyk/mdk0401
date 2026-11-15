@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO useful things to do when returning a faulty product.",
       "options": [
-        "Hide the damage from the assistant.",
         "Leave the item without speaking to anyone.",
-        "Keep the receipt.",
-        "Explain the problem clearly."
+        "Explain the problem clearly.",
+        "Hide the damage from the assistant.",
+        "Keep the receipt."
       ],
       "correctIndices": [
         2,
