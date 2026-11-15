@@ -892,8 +892,16 @@ function gradeWrittenResult_(data) {
       if(email_(rows[i][0])===studentEmail&&String(rows[i][3]||"")===testId&&sameCourseId_(rows[i][12]||courseId,courseId)){rowIndex=i+1;break;}
     }
     if(rowIndex<0) throw new Error("Отправленная работа не найдена.");
-    updateMappedRecord_(sh,rowIndex,{Grade:grade,Percent:grade*20,Submission:(String(rows[rowIndex-1][13]||"")+(feedback?"\n\nКомментарий преподавателя: "+feedback:"")).slice(0,10000)});
-    appendAttemptAudit_({EventType:"written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(rows[rowIndex-1][4]||testId),Grade:grade,Percent:grade*20});
+    const currentRow=rows[rowIndex-1], currentGrade=Number(currentRow[5])||0;
+    const isRegrade=currentGrade>=2&&currentGrade<=5;
+    if(isRegrade&&!(teacher.role==="admin"&&data.regrade===true)) {
+      throw new Error("Работа уже проверена. Повторное выставление оценки доступно только администратору с явным подтверждением.");
+    }
+    const previousSubmission=String(currentRow[13]||"");
+    const answerOnly=previousSubmission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,"").slice(0,8000);
+    const savedSubmission=(answerOnly+(feedback?"\\n\\nКомментарий преподавателя: "+feedback:"")).slice(0,10000);
+    updateMappedRecord_(sh,rowIndex,{Grade:grade,Percent:grade*20,Submission:savedSubmission});
+    appendAttemptAudit_({EventType:isRegrade?"written_regraded":"written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(currentRow[4]||testId),Grade:grade,Percent:grade*20});
   } finally {lock.releaseLock();}
   createNotification_(studentEmail,"grade","Письменная работа проверена","По работе «"+testId+"» выставлена оценка: "+grade+"/5."+(feedback?" Комментарий преподавателя добавлен.":""),courseId,testId);
   return {success:true,grade:grade};
