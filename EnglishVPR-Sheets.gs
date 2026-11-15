@@ -236,32 +236,48 @@ function startEnglishVprExam_(data) {
     if (String(values[i][map.Track] || "") !== track || String(values[i][map.Active] || "").toUpperCase() !== "TRUE") continue;
     const source = JSON.parse(String(values[i][map.ExamJSON] || "{}"));
     validateEnglishVprExam_(track, source);
-    const prepared = englishVprPrepareAttempt_(source);
-    const cache = CacheService.getScriptCache();
-    const activeKey = englishVprAttemptCacheKey_(user.email, track, source.id);
-    const activeId = cache.get(activeKey);
-    if (activeId) {
-      const activeRaw = cache.get("englishVprAttempt:" + activeId);
-      if (activeRaw) {
-        const activeAttempt = JSON.parse(activeRaw);
-        if (activeAttempt.email === user.email && activeAttempt.track === track &&
-            String(activeAttempt.exam && activeAttempt.exam.id || "") === String(source.id || "") &&
-            activeAttempt.displayExam) {
-          return {success:true,track:track,attemptId:activeId,startedAt:activeAttempt.startedAt,
-            exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try {
+      const testId = String(source.id || ("english_vpr_" + track + "_2026"));
+      const testKey = testId;
+      const prior = resultAttemptRows_().filter(function(row) {
+        return email_(row[0]) === user.email && String(row[3] || "") === testKey &&
+          sameCourseId_(row[12] || courseId, courseId);
+      }).length;
+      const rawLimit = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + testKey);
+      const limit = rawLimit === "" ? 1 : 1 + Math.max(0, Number(rawLimit) || 0);
+      if (prior >= limit) throw new Error("Экзамен уже завершён. Для повторной попытки обратитесь к преподавателю.");
+      const prepared = englishVprPrepareAttempt_(source);
+      const cache = CacheService.getScriptCache();
+      const activeKey = englishVprAttemptCacheKey_(user.email, track, source.id);
+      const activeId = cache.get(activeKey);
+      if (activeId) {
+        const activeRaw = cache.get("englishVprAttempt:" + activeId);
+        if (activeRaw) {
+          let activeAttempt = null;
+          try { activeAttempt = JSON.parse(activeRaw); } catch (e) { activeAttempt = null; }
+          if (activeAttempt && activeAttempt.email === user.email && activeAttempt.track === track &&
+              String(activeAttempt.exam && activeAttempt.exam.id || "") === String(source.id || "") &&
+              activeAttempt.displayExam && Number(activeAttempt.startedAt)) {
+            return {success:true,track:track,attemptId:activeId,startedAt:activeAttempt.startedAt,
+              exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
+          }
         }
+        cache.remove(activeKey);
       }
-      cache.remove(activeKey);
+      const attemptId = Utilities.getUuid().replace(/-/g, "");
+      const startedAt = Date.now();
+      cache.put("englishVprAttempt:" + attemptId, JSON.stringify({
+        email:user.email, track:track, courseId:courseId, exam:source, displayExam:prepared.exam,
+        optionMaps:prepared.optionMaps, startedAt:startedAt, stableKey:activeKey
+      }), 7200);
+      cache.put(activeKey, attemptId, 7200);
+      return {success:true,track:track,attemptId:attemptId,startedAt:startedAt,
+        exam:sanitizeEnglishVprExam_(prepared.exam)};
+    } finally {
+      lock.releaseLock();
     }
-    const attemptId = Utilities.getUuid().replace(/-/g, "");
-    const startedAt = Date.now();
-    cache.put("englishVprAttempt:" + attemptId, JSON.stringify({
-      email:user.email, track:track, courseId:courseId, exam:source, displayExam:prepared.exam,
-      optionMaps:prepared.optionMaps, startedAt:startedAt, stableKey:activeKey
-    }), 7200);
-    cache.put(activeKey, attemptId, 7200);
-    return {success:true,track:track,attemptId:attemptId,startedAt:startedAt,
-      exam:sanitizeEnglishVprExam_(prepared.exam)};
   }
   return {success:false,error:"Экзамен ещё не импортирован преподавателем."};
 }
