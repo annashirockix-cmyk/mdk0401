@@ -88,20 +88,24 @@ test("final exam import validates task types, private answer keys, scoring and d
 test("the first authored Basic English final-exam pilot matches the protected runtime schema", () => {
   const pilot1 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v01-pilot.json"),"utf8"));
   const pilot2 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v02-pilot.json"),"utf8"));
+  const pilot3 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v03-pilot.json"),"utf8"));
   const source = extractFunction("validateEnglishFinalVariantPayload_");
   const validate = new Function(source + "; return validateEnglishFinalVariantPayload_;")();
-  for (const [pilot,id] of [[pilot1,"C1-S1-V01"],[pilot2,"C1-S1-V02"]]) {
+  const pilots=[pilot1,pilot2,pilot3];
+  pilots.forEach((pilot,index)=>{
     assert.equal(pilot.examId,"english_final_c1_s1");
     assert.equal(pilot.courseNo,1);
     assert.equal(pilot.track,"basic");
     assert.equal(pilot.tasks.length,10);
     assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1);
     assert.ok(pilot.tasks.some(task=>task.audioText));
-    assert.deepEqual(validate(pilot,id),{taskCount:10,maxScore:20,durationMinutes:90});
+    assert.deepEqual(validate(pilot,"C1-S1-V0"+(index+1)),{taskCount:10,maxScore:20,durationMinutes:90});
+  });
+  for(let a=0;a<pilots.length;a++)for(let b=a+1;b<pilots.length;b++){
+    const prompts=new Set(pilots[a].tasks.map(task=>task.prompt.trim().toLowerCase()));
+    assert.equal(pilots[b].tasks.some(task=>prompts.has(task.prompt.trim().toLowerCase())),false);
+    assert.notEqual(pilots[a].tasks.find(task=>task.audioText).audioText,pilots[b].tasks.find(task=>task.audioText).audioText);
   }
-  const prompts1=new Set(pilot1.tasks.map(task=>task.prompt.trim().toLowerCase()));
-  assert.equal(pilot2.tasks.some(task=>prompts1.has(task.prompt.trim().toLowerCase())),false);
-  assert.notEqual(pilot1.tasks.find(task=>task.audioText).audioText,pilot2.tasks.find(task=>task.audioText).audioText);
 });
 
 test("final exam start and resume persist attempts and bind them to the authenticated student", () => {
