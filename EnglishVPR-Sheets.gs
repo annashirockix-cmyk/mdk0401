@@ -260,8 +260,8 @@ function startEnglishVprExam_(data) {
           if (activeAttempt && activeAttempt.email === user.email && activeAttempt.track === track &&
               String(activeAttempt.exam && activeAttempt.exam.id || "") === String(source.id || "") &&
               activeAttempt.displayExam && Number(activeAttempt.startedAt)) {
-            return {success:true,track:track,attemptId:activeId,startedAt:activeAttempt.startedAt,
-              exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
+            return {success:true,track:track,attemptId:activeId,attemptNo:activeAttempt.attemptNo,
+              startedAt:activeAttempt.startedAt,exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
           }
         }
         cache.remove(activeKey);
@@ -270,7 +270,7 @@ function startEnglishVprExam_(data) {
       const startedAt = Date.now();
       cache.put("englishVprAttempt:" + attemptId, JSON.stringify({
         email:user.email, track:track, courseId:courseId, exam:source, displayExam:prepared.exam,
-        optionMaps:prepared.optionMaps, startedAt:startedAt, stableKey:activeKey
+        optionMaps:prepared.optionMaps, attemptNo:prior + 1, startedAt:startedAt, stableKey:activeKey
       }), 7200);
       cache.put(activeKey, attemptId, 7200);
       return {success:true,track:track,attemptId:attemptId,startedAt:startedAt,
@@ -358,6 +358,13 @@ function submitEnglishVprExam_(data) {
     if (!lockedRaw) throw new Error("Эта попытка уже отправлена или истекла.");
     const lockedAttempt = JSON.parse(lockedRaw);
     if (lockedAttempt.email !== user.email || lockedAttempt.track !== track || lockedAttempt.courseId !== courseId || String(lockedAttempt.exam && lockedAttempt.exam.id || "") !== String(exam.id || "")) throw new Error("Данные серверной попытки изменились. Начните экзамен заново.");
+    const savedAttempts = resultAttemptRows_().filter(function(row) {
+      return email_(row[0]) === user.email && String(row[3] || "") === testId &&
+        sameCourseId_(row[12] || courseId, courseId);
+    }).length;
+    if (!Number(lockedAttempt.attemptNo) || savedAttempts >= Number(lockedAttempt.attemptNo)) {
+      throw new Error("Результат этой попытки уже сохранён. Повторная отправка запрещена.");
+    }
     const processingAt = Number(lockedAttempt.processingAt) || 0;
     if (lockedAttempt.processing === true && processingAt && Date.now() - processingAt < 60000) {
       throw new Error("Ответы уже отправляются на проверку. Дождитесь результата.");
