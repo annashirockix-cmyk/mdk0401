@@ -85,7 +85,7 @@ test("final exam import validates task types, private answer keys, scoring and d
   assert.match(code,/validateEnglishFinalVariantPayload_\(payload, String\(variant\.variantId\)\)/);
 });
 
-test("five authored Basic English final-exam pilots match the protected runtime schema", () => {
+test("fifteen authored Basic English final-exam pilots match the protected runtime schema", () => {
   const pilot1 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v01-pilot.json"),"utf8"));
   const pilot2 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v02-pilot.json"),"utf8"));
   const pilot3 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v03-pilot.json"),"utf8"));
@@ -95,9 +95,15 @@ test("five authored Basic English final-exam pilots match the protected runtime 
   const pilot7 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v07-pilot.json"),"utf8"));
   const pilot8 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v08-pilot.json"),"utf8"));
   const pilot9 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v09-pilot.json"),"utf8"));
+  const pilot10 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v10-pilot.json"),"utf8"));
+  const pilot11 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v11-pilot.json"),"utf8"));
+  const pilot12 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v12-pilot.json"),"utf8"));
+  const pilot13 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v13-pilot.json"),"utf8"));
+  const pilot14 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v14-pilot.json"),"utf8"));
+  const pilot15 = JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c01-s01-v15-pilot.json"),"utf8"));
   const source = extractFunction("validateEnglishFinalVariantPayload_");
   const validate = new Function(source + "; return validateEnglishFinalVariantPayload_;")();
-  const pilots=[pilot1,pilot2,pilot3,pilot4,pilot5,pilot6,pilot7,pilot8,pilot9];
+  const pilots=[pilot1,pilot2,pilot3,pilot4,pilot5,pilot6,pilot7,pilot8,pilot9,pilot10,pilot11,pilot12,pilot13,pilot14,pilot15];
   pilots.forEach((pilot,index)=>{
     assert.equal(pilot.examId,"english_final_c1_s1");
     assert.equal(pilot.courseNo,1);
@@ -105,7 +111,7 @@ test("five authored Basic English final-exam pilots match the protected runtime 
     assert.equal(pilot.tasks.length,10);
     assert.equal(pilot.tasks.filter(task=>task.type==="written").length,1);
     assert.ok(pilot.tasks.some(task=>task.audioText));
-    assert.deepEqual(validate(pilot,"C1-S1-V0"+(index+1)),{taskCount:10,maxScore:20,durationMinutes:90});
+    assert.deepEqual(validate(pilot,"C1-S1-V"+String(index+1).padStart(2,"0")),{taskCount:10,maxScore:20,durationMinutes:90});
   });
   pilots.forEach(pilot=>{
     const distribution={A:0,B:0,C:0,D:0};
@@ -114,6 +120,7 @@ test("five authored Basic English final-exam pilots match the protected runtime 
       if(task.type==="multiple_choice")task.correctIndices.forEach(index=>distribution["ABCD"[index]]++);
     });
     assert.deepEqual(distribution,{A:2,B:2,C:2,D:2});
+    assert.deepEqual(pilot.tasks.find(task=>task.type==="multiple_choice").correctIndices,[2,3]);
   });
   for(let a=0;a<pilots.length;a++)for(let b=a+1;b<pilots.length;b++){
     const prompts=new Set(pilots[a].tasks.map(task=>task.prompt.trim().toLowerCase()));
