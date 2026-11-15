@@ -9,7 +9,7 @@
   "maxScore": 20,
   "tasks": [
     {
-      "id": "c1s2v10_l01",
+      "id": "c2s1v01_l01",
       "type": "single_choice",
       "prompt": "Listening 1. Where will the career fair take place?",
       "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
@@ -23,7 +23,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_l02",
+      "id": "c2s1v01_l02",
       "type": "single_choice",
       "prompt": "Listening 2. What should students prepare?",
       "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
@@ -37,7 +37,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_r01",
+      "id": "c2s1v01_r01",
       "type": "single_choice",
       "prompt": "A careers adviser helped Sam compare three training opportunities. One company offered a short placement close to college, another offered a longer placement with travel costs, and the third provided online training. Sam chose the first option because he wanted to gain practical experience while continuing his college course. He checked the dates with his tutor before replying. Reading 1. Which opportunity did Sam choose?",
       "options": [
@@ -50,7 +50,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_r02",
+      "id": "c2s1v01_r02",
       "type": "single_choice",
       "prompt": "Why did he check the dates with his tutor?",
       "options": [
@@ -63,7 +63,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_g01",
+      "id": "c2s1v01_g01",
       "type": "single_choice",
       "prompt": "Choose the correct future form: 'I think our group ___ the project by Friday.'",
       "options": [
@@ -76,7 +76,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_m01",
+      "id": "c2s1v01_m01",
       "type": "multiple_choice",
       "prompt": "Choose TWO useful details to include in a short CV.",
       "options": [
@@ -92,7 +92,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_v01",
+      "id": "c2s1v01_v01",
       "type": "short_text",
       "prompt": "Complete: 'A document that summarises your education and work experience is a ___.'",
       "acceptedAnswers": [
@@ -102,12 +102,12 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_f01",
+      "id": "c2s1v01_f01",
       "type": "single_choice",
       "prompt": "You want to ask an employer about training. What is a suitable question?",
       "options": [
-        "Could you tell me what training new employees receive?",
         "Give me a job now.",
+        "Could you tell me what training new employees receive?",
         "I do not need any information.",
         "You must choose for me."
       ],
@@ -115,7 +115,7 @@
       "points": 1
     },
     {
-      "id": "c1s2v10_o01",
+      "id": "c2s1v01_o01",
       "type": "ordering",
       "prompt": "Identify your skills; Prepare a short CV; Ask about the role; Send a polite follow-up message",
       "options": [
@@ -133,7 +133,7 @@
       "points": 2
     },
     {
-      "id": "c1s2v10_w01",
+      "id": "c2s1v01_w01",
       "type": "written",
       "prompt": "Write 60–80 words introducing yourself to a potential employer at a college career fair. Mention your course, two relevant skills and the kind of placement you are looking for.",
       "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
