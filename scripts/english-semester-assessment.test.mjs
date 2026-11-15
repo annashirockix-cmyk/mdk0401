@@ -106,7 +106,9 @@ test("unreviewed legacy seed stays out of the production page and cloned Technic
 
 test("Basic and Technical banks reject identical substantive question stems", () => {
   const overlapSource = extractFunction("englishSemesterBankOverlap_");
+  const importer = extractFunction("importEnglishSemesterTests_");
   const overlap = new Function(overlapSource + "; return englishSemesterBankOverlap_;")();
+  assert.match(importer, /englishSemesterBankOverlap_\(tests, otherTests\)/);
   const basic = validBank("basic");
   const technicalClone = validBank("technical");
   const sharedStem = "Describe the purpose of a machine-tool safety interlock.";
