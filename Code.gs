@@ -122,6 +122,7 @@ function handleRequest_(e) {
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
       case "startenglishvprexam": result = startEnglishVprExam_(data); break;
       case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
+      case "importenglishexamvariants": result = importEnglishExamVariants_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
       case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
@@ -3022,6 +3023,83 @@ function validateEnglishExamVariantRegistry_(exams) {
     }
   }
   return {examCount:10, variantCount:variantCount, basicSlots:4, technicalSlots:6};
+}
+
+
+/**
+ * Импортирует полный реестр итоговых экзаменов в отдельные строки.
+ * Каждая запись варианта хранится независимо; импорт не активирует неполный реестр.
+ */
+function importEnglishExamVariants_(data) {
+  const actor = auth_(data);
+  if (actor.role !== "admin" && actor.role !== "teacher") {
+    throw new Error("Импорт итоговых экзаменов доступен только преподавателю.");
+  }
+  const exams = data.exams;
+  const summary = validateEnglishExamVariantRegistry_(exams);
+  const records = [];
+  exams.forEach(function(exam) {
+    exam.variants.forEach(function(variant) {
+      const payload = variant.variantJSON;
+      if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+        throw new Error("Для варианта " + variant.variantId + " требуется объект variantJSON с содержимым экзамена.");
+      }
+      const variantJSON = JSON.stringify(payload);
+      if (!variantJSON || variantJSON.length > 45000) {
+        throw new Error("Содержимое варианта " + variant.variantId + " пустое или превышает безопасный лимит 45 000 символов.");
+      }
+      records.push({
+        ExamId:"english_final_c" + Number(exam.courseNo) + "_s" + Number(exam.semester),
+        CourseNo:Number(exam.courseNo),
+        CourseId:String(exam.courseId).toUpperCase(),
+        Track:String(exam.track).toLowerCase(),
+        Semester:Number(exam.semester),
+        VariantId:String(variant.variantId).trim(),
+        BlueprintId:String(variant.blueprintId).trim(),
+        VariantJSON:variantJSON,
+        Active:"FALSE",
+        UpdatedAt:new Date().toISOString(),
+        UpdatedBy:actor.email
+      });
+    });
+  });
+  if (actor.role === "teacher") {
+    const hasBasic = records.some(function(r) { return r.CourseId === "ENB"; });
+    const hasTechnical = records.some(function(r) { return r.CourseId === "ENT"; });
+    if ((hasBasic && !hasCourseAccess_(actor, "ENB") && !hasCourseAccess_(actor, "EN")) ||
+        (hasTechnical && !hasCourseAccess_(actor, "ENT") && !hasCourseAccess_(actor, "EN"))) {
+      throw new Error("Нет доступа ко всем направлениям, включённым в реестр итоговых экзаменов.");
+    }
+  }
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sh = ensureSheet_("EnglishExamVariantsBank");
+    const headers = HEADERS.EnglishExamVariantsBank;
+    const oldLastRow = sh.getLastRow();
+    const startRow = oldLastRow + 1;
+    const matrix = records.map(function(record) {
+      return headers.map(function(header) { return record[header] == null ? "" : record[header]; });
+    });
+    if (matrix.length) sh.getRange(startRow, 1, matrix.length, headers.length).setValues(matrix);
+    SpreadsheetApp.flush();
+    // Сначала подготовить все новые строки неактивными; только затем переключить активную версию.
+    if (oldLastRow >= 2) {
+      const map = headerMap_(sh);
+      const activeCol = map.Active + 1;
+      const activeValues = sh.getRange(2, activeCol, oldLastRow - 1, 1).getValues();
+      for (let i = 0; i < activeValues.length; i++) activeValues[i][0] = "FALSE";
+      sh.getRange(2, activeCol, activeValues.length, 1).setValues(activeValues);
+    }
+    sh.getRange(startRow, headers.indexOf("Active") + 1, matrix.length, 1)
+      .setValues(matrix.map(function() { return ["TRUE"]; }));
+    SpreadsheetApp.flush();
+    return {success:true, examCount:summary.examCount, variantCount:summary.variantCount,
+      basicSlots:summary.basicSlots, technicalSlots:summary.technicalSlots,
+      activeVariants:records.length, updatedAt:new Date().toISOString()};
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function englishSemesterBank_() { return ensureSheet_("EnglishSemesterBank"); }
