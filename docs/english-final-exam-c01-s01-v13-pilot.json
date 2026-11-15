@@ -80,10 +80,10 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO rules for a supervised hangar visit.",
       "options": [
-        "Stay with the guide.",
         "Touch a component to examine it.",
-        "Follow the safety signs.",
-        "Walk into a restricted area."
+        "Walk into a restricted area.",
+        "Stay with the guide.",
+        "Follow the safety signs."
       ],
       "correctIndices": [
         2,
