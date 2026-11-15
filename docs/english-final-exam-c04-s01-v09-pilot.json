@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c4_s1",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 4, Semester 1 — Pilot Variant 9",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s1v09_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the documentation class take place?",
+      "audioText": "The power supply documentation class will take place on Thursday at twelve fifteen in the electronics room. Students should bring a copy of the sample specification sheet. The instructor will identify the input range, output rating and connector information. The class will compare two documents and discuss why the model reference must be checked before information is used.",
+      "options": [
+        "On Thursday at twelve fifteen",
+        "At the college library",
+        "At the town centre",
+        "At the bus station"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s1v09_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which document should students bring?",
+      "audioText": "The power supply documentation class will take place on Thursday at twelve fifteen in the electronics room. Students should bring a copy of the sample specification sheet. The instructor will identify the input range, output rating and connector information. The class will compare two documents and discuss why the model reference must be checked before information is used.",
+      "options": [
+        "On Friday",
+        "The sample specification sheet",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s1v09_r01",
+      "type": "single_choice",
+      "prompt": "A power supply specification sheet lists important information about the device, including input conditions, output ratings and connector details. A student compared two similar models and noticed that their output ratings were different. The student checked the full model references before recording the information. This prevented the specifications from being mixed between the two devices. Reading 1. Which details may be listed on a power supply specification sheet?",
+      "options": [
+        "To borrow a laptop",
+        "To meet a relative",
+        "Input conditions, output ratings and connector details",
+        "To buy a ticket"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s1v09_r02",
+      "type": "single_choice",
+      "prompt": "Why did the student check the full model references?",
+      "options": [
+        "At the sports centre",
+        "In the computer room",
+        "At the bus station",
+        "To avoid mixing specifications from two similar models"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s1v09_g01",
+      "type": "single_choice",
+      "prompt": "The output ratings ___ on the specification sheet.",
+      "options": [
+        "are listed",
+        "lists",
+        "is listing",
+        "listed tomorrow"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s1v09_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO details commonly found on a power supply specification sheet.",
+      "options": [
+        "The operator's favourite music",
+        "A nearby bus timetable",
+        "Input conditions",
+        "Output ratings"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v09_v01",
+      "type": "short_text",
+      "prompt": "A document that lists the technical characteristics of a product is a specification ___.",
+      "acceptedAnswers": [
+        "sheet",
+        "specification sheet"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v09_f01",
+      "type": "single_choice",
+      "prompt": "Two similar power supplies have different ratings. What should you do?",
+      "options": [
+        "Use the same data for both models.",
+        "Check the full model references before recording the specifications.",
+        "Choose the higher rating for both.",
+        "Ignore the model number."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s1v09_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of power supply documentation in a logical order.",
+      "options": [
+        "Check output ratings and connector details",
+        "Identify the exact model",
+        "Record the specifications with the model reference",
+        "Locate the input information"
+      ],
+      "correctOrder": [
+        "Identify the exact model",
+        "Locate the input information",
+        "Check output ratings and connector details",
+        "Record the specifications with the model reference"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v09_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why a power supply specification sheet should be checked before information is recorded or compared.",
+      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate electrical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s1v09_audio",
+    "readingPassageId": "c4s1v09_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
