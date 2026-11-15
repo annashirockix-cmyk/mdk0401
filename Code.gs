@@ -2896,7 +2896,6 @@ function validateEnglishSemesterTests_(tests, track) {
       throw new Error("Контрольная №" + (index + 1) + " должна соответствовать своему курсу/семестру и содержать ровно 20 вопросов с уникальным ID.");
     }
     seenIds[String(test.id)] = true;
-    const seenQuestions = {};
     test.questions.forEach(function(q, qi) {
       const questionText = String(q && q.q || "").trim();
       if (!q || !questionText || !Array.isArray(q.options) || q.options.length < 2) {
