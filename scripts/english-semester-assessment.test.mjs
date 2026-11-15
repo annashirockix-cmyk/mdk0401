@@ -112,6 +112,18 @@ test("teacher review queue filters by assigned course and exposes written respon
   assert.match(code, /case "getenglishfinalexamreviews": result = getEnglishFinalExamReviews_\(data\); break;/);
 });
 
+test("completed English final exams are upserted into the common Results journal", () => {
+  const publish = extractFunction("upsertEnglishFinalExamJournal_");
+  assert.match(publish, /results_\(\)/);
+  assert.match(publish, /TestId:testId/);
+  assert.match(publish, /Grade:grade/);
+  assert.match(publish, /Score:score/);
+  assert.match(publish, /MaxScore:maxScore/);
+  assert.match(publish, /updateMappedRecord_\(sh,existing,record\)/);
+  assert.match(code, /if\(status==="submitted"\) upsertEnglishFinalExamJournal_/);
+  assert.match(code, /upsertEnglishFinalExamJournal_\(row,m,finalResult,teacher\.email\)/);
+});
+
 test("written grading validates teacher scope and per-task score bounds before finalizing", () => {
   const grade = extractFunction("gradeEnglishFinalExamWritten_");
   assert.match(grade, /hasCourseAccess_\(teacher,courseId\)/);
