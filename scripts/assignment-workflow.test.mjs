@@ -5,8 +5,28 @@ import vm from "node:vm";
 
 const backend = readFileSync(new URL("../Code.gs", import.meta.url), "utf8");
 const ui = readFileSync(new URL("../teacher-tasks.js", import.meta.url), "utf8");
+const journal = readFileSync(new URL("../journal.js", import.meta.url), "utf8");
 const api = readFileSync(new URL("../api.js", import.meta.url), "utf8");
 const serviceWorker = readFileSync(new URL("../service-worker.js", import.meta.url), "utf8");
+
+function extractFunction(source, name) {
+  const start = source.indexOf("function " + name + "(");
+  assert.notEqual(start, -1, "missing function " + name);
+  const open = source.indexOf("{", start);
+  let depth = 0, quote = "", escaped = false, line = false, block = false;
+  for (let i = open; i < source.length; i++) {
+    const c = source[i], next = source[i + 1];
+    if (line) { if (c === "\\n") line = false; continue; }
+    if (block) { if (c === "*" && next === "/") { block = false; i++; } continue; }
+    if (quote) { if (escaped) escaped = false; else if (c === "\\\\") escaped = true; else if (c === quote) quote = ""; continue; }
+    if (c === "/" && next === "/") { line = true; i++; continue; }
+    if (c === "/" && next === "*") { block = true; i++; continue; }
+    if ("'\\"\`".includes(c)) { quote = c; continue; }
+    if (c === "{") depth++;
+    if (c === "}" && --depth === 0) return source.slice(start, i + 1);
+  }
+  throw new Error("unterminated function " + name);
+}
 
 function makeSheet(headers) {
   const rows = [headers.slice()];
@@ -130,6 +150,20 @@ function runtime() {
   sandbox.appendAttemptAudit_ = record => audit.push(record);
   return { sandbox, users, assignments, submissions, history, notifications, audit, originalPayload: payload };
 }
+
+test("general English enrollment grants both tracks consistently in server access and journal", () => {
+  const access = new Function(extractFunction(backend, "hasCourseAccess_") + "; return hasCourseAccess_;")();
+  const legacyStudent = { role: "student", courses: "EN" };
+  const legacyTeacher = { role: "teacher", courses: "EN" };
+  const basicOnlyStudent = { role: "student", courses: "ENB" };
+  assert.equal(access(legacyStudent, "ENB"), true);
+  assert.equal(access(legacyStudent, "ENT"), true);
+  assert.equal(access(legacyTeacher, "ENB"), true);
+  assert.equal(access(legacyTeacher, "ENT"), true);
+  assert.equal(access(basicOnlyStudent, "ENT"), false,
+    "a student enrolled only in Basic English must not gain Technical English access");
+  assert.match(journal, /\(courseId === "ENB" \|\| courseId === "ENT"\).*includes\("EN"\)/);
+});
 
 test("group assignment workflow works before student onboarding and preserves student payload", async () => {
   const r = runtime();
