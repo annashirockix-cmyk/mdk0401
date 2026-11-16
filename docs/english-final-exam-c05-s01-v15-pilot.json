@@ -136,7 +136,7 @@
       "id": "c5s1v15_w01",
       "type": "written",
       "prompt": "Write 100–120 words explaining how to evaluate supplier quality fairly. Include delivery performance, product conformity and the importance of using suitable evidence.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Delivery performance — 2: identifies relevant, measurable delivery evidence such as timeliness and completeness; 1: partial; 0: absent. (2) Product conformity — 2: explains checking products against agreed specifications and acceptance requirements; 1: partial; 0: absent. (3) Fair evidence-based evaluation — 2: uses suitable records, comparable criteria and balanced conclusions rather than unsupported opinions; 1: partial; 0: absent or biased. (4) English — 2: coherent response and accurate supplier-quality vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
