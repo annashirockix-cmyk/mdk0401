@@ -58,3 +58,18 @@
 - C5-S1 V01–V15: corrected passage/key mismatches in reading tasks across all 15 variants. The correct response is now in the keyed position, while the A/B/C/D distribution remains unchanged. Regression checks verify both reading answers for all 15 variants and source/registry parity.
 - Re-audit after corrections: 150 variants; 1,500 tasks; expected task-type totals (900 single-choice, 150 multiple-choice, 150 short-text, 150 ordering, 150 written); zero duplicate options; zero known generic reading distractors; all 150 variants retain single-choice key-position distribution 2/2/1/1.
 - The registry remains `pilot_for_editorial_review`. These are content corrections and automated structural checks, not external methodologist approval or curriculum sign-off.
+
+
+## Актуальное состояние после полного структурного аудита — 2026-11-16 (последнее обновление)
+
+- Проверен полный набор из 150 вариантов / 1 500 заданий. В каждом варианте: 6 single-choice, 1 multiple-choice, 1 short-text, 1 ordering и 1 written task.
+- Во всех вариантах распределение ключей single-choice сохранено как 2/2/1/1 по позициям A/B/C/D; исправления не ухудшили баланс.
+- Все 300 заданий Reading 1/2 повторно проверены на точные дубликаты вариантов и известные нерелевантные шаблонные distractors: обнаружено 0 заданий с повторяющимися опциями и 0 заданий с известными generic distractors.
+- Исправлены passage/key mismatches C5-S1 V01–V15. Ключи теперь указывают на ответ, подтверждаемый соответствующим текстом; регрессионный тест проверяет оба reading задания во всех 15 вариантах.
+- C1-S2 V11–V15 проверены повторно: отвлекающие варианты относятся к теме текста; индивидуальные JSON и combined registry согласованы.
+- Автоматический тест полного реестра проверяет 150 исходных JSON против variantJSON общего реестра, уникальность ID, состав заданий, индексы ключей, допустимость ordering permutations, наличие short-text answers и письменных рубрик, а также отсутствие дубликатов опций.
+- Исправлена ошибка в шаблоне регулярного выражения теста идентификатора варианта; тест теперь действительно проверяет формат EN-Cx-Sy-Vnn.
+- Последний PR HEAD: 356079c9a8a2673e3a7ec60b966b10c04588dd37. GitHub Actions run 43952263443: SUCCESS, все 25 шагов завершились успешно.
+- Более ранний run 43952208724 завершился неуспешно на промежуточном состоянии, когда source JSON и combined registry ещё не были синхронизированы. Ошибка выявила расхождение C5-S1 V14; после синхронизации source/registry и уточнения тестов актуальный HEAD прошёл полный CI.
+- Эти результаты закрывают структурные проверки и известные точечные дефекты, но не заменяют методическую экспертизу всего содержания. Не подтверждены соответствие утверждённой программе и точному изданию Белова, корректность всех технических утверждений и CEFR-уровней.
+- PR #125 остаётся Draft. Нет независимого review approval. Защищённые VPR-банки не изменялись; тестовый или production import, Apps Script deploy, merge не выполнялись.
