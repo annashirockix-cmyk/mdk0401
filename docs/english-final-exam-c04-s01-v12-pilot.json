@@ -25,7 +25,7 @@
     {
       "id": "c4s1v12_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which maintenance note is required for the electrical systems session?",
+      "prompt": "Which document should students bring for the relay-symbol lesson?",
       "audioText": "The electrical theory class will review relay symbols on Thursday at ten. Students should bring the circuit diagram from the previous lesson. The instructor will explain the general difference between a relay coil and its contacts and show how the symbol is used in a diagram. Students will not connect or test any electrical equipment.",
       "options": [
         "The maintenance task card from the previous lesson",
