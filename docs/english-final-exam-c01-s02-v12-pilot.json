@@ -15,9 +15,9 @@
       "audioText": "The student project exhibition will take place in the main hall next Tuesday. Each group should arrive by half past eight to prepare its display. The exhibition opens to visitors at ten. Please put your project title and group number on the table. A technician will be available near the entrance if you need help connecting a computer or a screen.",
       "options": [
         "In the main hall",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "In the lecture theatre",
+        "In the project laboratory",
+        "In the entrance foyer"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A group of engineering students prepared a display about renewable energy. They used a small model to show how a wind turbine can produce electricity. Before the exhibition, they tested the model, checked the labels and divided the speaking roles. During the event, one student explained the model while another answered visitors' questions. Reading 1. What did the model demonstrate?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "How solar panels store energy",
+        "How electricity reaches homes",
         "How a wind turbine can produce electricity",
-        "To buy a ticket"
+        "How batteries are recycled"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "How did the students prepare for the event?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "They printed visitor tickets",
+        "They borrowed a projector",
+        "They changed the exhibition date",
         "They tested the model and divided the speaking roles"
       ],
       "correctIndex": 3,
