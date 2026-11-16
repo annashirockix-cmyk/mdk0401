@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A conclusion that is supported by available information is described as evidence-___.",
       "acceptedAnswers": [
-        "based",
-        "evidence-based"
+        "based"
       ],
       "points": 2
     },
