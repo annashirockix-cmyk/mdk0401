@@ -775,3 +775,18 @@ V08 task 2 спрашивает о двух документах, но оба д
 Качество distractors: V03–V10 task 1 часто предлагают места (library / town centre / bus station) как ответы на вопросы о времени; task 2 часто предлагает даты/время (“On Friday / Next month / After the event”) в вопросах о документе. В V11–V15 distractors семантически ближе, но часть вариантов (“personal notebook / laboratory coat / printed timetable”) всё ещё слишком очевидна. Нужно создавать альтернативы из того же тематического класса.
 
 V05 task 2 просит материалы во множественном числе, а два документа даны одной составной опцией single-choice. Это можно оставить как выбор пары, но prompt должен прямо спрашивать “Which pair of materials…?”. Остальные проверенные ключи C4-S2 V01–V15 соответствуют аудиоскриптам. Проверены только listening tasks 1–2.
+
+
+### Targeted listening-key review — C5-S1 V01–V15
+
+Проверены 30 listening items (tasks 1–2) по аудиоскриптам и ключам.
+
+Подтверждённые несоответствия:
+- V03 task 2: prompt спрашивает “Which quality-inspection worksheet…?”, но аудио говорит о diagnostic evidence и case-study worksheet. Ключ соответствует аудио, вопрос — нет.
+- V13 task 2: prompt спрашивает “Which reliability-analysis summary…?”, но аудио описывает short technical briefings и one-page status summary. Ключ “A one-page status summary” соответствует аудио, но вопрос не соответствует теме.
+
+Качество distractors: в V02–V15 повторяется шаблон, при котором вопросы о времени получают варианты-места, а вопросы о документах — “On Friday / Next month / After the event”. Они не являются правдоподобными ответами того же класса. Требуется редактура distractors для всего набора.
+
+В V06, V07, V08, V09, V10 и V12 prompt формулирует вопрос о нескольких записях/документах, а ключ представлен одной составной опцией, содержащей пару. Как и в других слотах, это можно реализовать как single-choice выбора пары, но вопрос должен явно спрашивать “Which pair of records/documents…?”; иначе следует использовать multiple-choice с двумя ключами.
+
+Остальные проверенные ключи C5-S1 V01–V15 соответствуют аудиоскриптам. Проверены только listening tasks 1–2.
