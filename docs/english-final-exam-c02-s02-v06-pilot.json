@@ -15,9 +15,9 @@
       "audioText": "The town environment office is inviting students to a public talk about air quality. It will be held at the science centre on Thursday at four fifteen. A researcher will explain how traffic, heating and weather can affect pollution levels. Students who want to ask a question should send it to the organiser by Wednesday lunchtime.",
       "options": [
         "At the science centre",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At the town hall",
+        "At the science centre",
+        "At the college lecture theatre"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A group of students measured air quality near three busy roads and one park. They recorded the results at the same time on several weekdays to make the comparison fair. The readings were usually higher beside the roads, but wind direction affected some results. The students explained that their small study could show a local pattern, not prove that traffic was the only cause of pollution. Reading 1. Why did students take readings at the same time?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "To avoid measuring during rush hour",
         "To make the comparison fair",
-        "To buy a ticket"
+        "To make the comparison fair",
+        "To collect readings only when the weather was clear"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What limitation did they identify?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Their equipment could not measure traffic levels",
+        "Their study showed a local pattern but could not prove traffic was the only cause",
+        "They had measured only one road",
         "Their study showed a local pattern but could not prove traffic was the only cause"
       ],
       "correctIndex": 3,
