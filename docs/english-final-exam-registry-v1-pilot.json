@@ -18453,8 +18453,8 @@
                 "prompt": "An inspection finding should describe what was observed and identify the relevant acceptance criterion. If a measurement is outside the stated limit, the report should include the actual value, unit and component reference. The inspector should avoid suggesting a cause unless the available evidence supports it. A clear finding allows the responsible person to review the issue and determine the next action. Reading 1. What should an inspection finding describe?",
                 "options": [
                   "The inspector's opinion and a suggested repair",
-                  "What was observed and the relevant acceptance criterion",
                   "The name of the person who ordered the component",
+                  "What was observed and the relevant acceptance criterion",
                   "The expected result without the actual observation"
                 ],
                 "correctIndex": 2,
@@ -18617,9 +18617,9 @@
                 "prompt": "How should a report distinguish facts from hypotheses?",
                 "options": [
                   "It should present every hypothesis as a confirmed fact",
-                  "It should identify confirmed facts separately from possible explanations",
+                  "It should treat the first explanation as the final conclusion",
                   "It should omit possible explanations from the record",
-                  "It should treat the first explanation as the final conclusion"
+                  "It should identify confirmed facts separately from possible explanations"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -18755,9 +18755,9 @@
                 "type": "single_choice",
                 "prompt": "A technical manual contains information for a defined product, model or configuration. Before using a procedure or reference, a reader should check the document identifier, applicability information and revision status. Similar models may have different components or requirements. If the manual does not clearly apply, the user should ask the responsible documentation or engineering team for confirmation. Reading 1. What should a reader check before using a manual reference?",
                 "options": [
-                  "Document identifier, applicability information and revision status",
-                  "Supplier address, purchase price and delivery date",
                   "Training location, lesson time and group number",
+                  "Supplier address, purchase price and delivery date",
+                  "Document identifier, applicability information and revision status",
                   "Technician name, shift preference and annual leave"
                 ],
                 "correctIndex": 2,
@@ -18770,8 +18770,8 @@
                 "options": [
                   "Because similar models always use identical components",
                   "Because the revision date is the only difference between models",
-                  "Because models may have different components or requirements",
-                  "Because a manual can be used for any model in the same product family"
+                  "Because a manual can be used for any model in the same product family",
+                  "Because models may have different components or requirements"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -18907,9 +18907,9 @@
                 "type": "single_choice",
                 "prompt": "Revision control helps users identify the current approved version of a technical document. A document register may record its identifier, revision, issue date and approval status. When a new revision is released, the organisation should manage obsolete copies so that they are not mistaken for current information. A clear change history also helps reviewers understand what has been updated. Reading 1. What information may a document register contain?",
                 "options": [
-                  "Document identifier, revision, issue date and approval status",
-                  "Supplier name, delivery date, invoice number and price",
                   "Room number, course title, lesson date and student group",
+                  "Supplier name, delivery date, invoice number and price",
+                  "Document identifier, revision, issue date and approval status",
                   "Author name, file size, print date and storage location"
                 ],
                 "correctIndex": 2,
@@ -18921,9 +18921,9 @@
                 "prompt": "Why should obsolete copies be managed?",
                 "options": [
                   "To make it easier to print older copies",
-                  "To prevent them from being mistaken for current information",
+                  "To allow users to select whichever version is easiest to read",
                   "To avoid recording the document revision",
-                  "To allow users to select whichever version is easiest to read"
+                  "To prevent them from being mistaken for current information"
                 ],
                 "correctIndex": 3,
                 "points": 1
