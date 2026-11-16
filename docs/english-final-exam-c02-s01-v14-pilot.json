@@ -15,9 +15,9 @@
       "audioText": "The college is offering students a choice of two optional short courses next term. The first course focuses on presentation skills and meets on Mondays. The second introduces basic project management and meets on Wednesdays. Both courses have the same number of lessons. Students should read the descriptions and submit their preference by the end of the month.",
       "options": [
         "On Mondays",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesdays",
+        "On Wednesdays",
+        "On Mondays"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Maksim wanted to improve his communication skills, but he was also interested in learning how to organise projects. He compared the course descriptions and checked his timetable. The project management course fitted his schedule better, while presentation skills were already included in another college activity. He chose project management and saved the course confirmation. Reading 1. Which course did Maksim choose?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The presentation skills course",
+        "The basic computer course",
         "The project management course",
-        "To buy a ticket"
+        "The project management course"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why did he make that choice?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "It was the shortest course available",
+        "It fitted his schedule and presentation skills were covered elsewhere",
+        "It was recommended by a classmate",
         "It fitted his schedule and presentation skills were covered elsewhere"
       ],
       "correctIndex": 3,
