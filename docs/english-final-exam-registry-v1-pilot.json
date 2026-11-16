@@ -7030,9 +7030,9 @@
                 "audioText": "The college library is holding a workshop on checking information found online. It will take place in the digital study room on Tuesday at two. Students will practise checking the author, publication date and supporting evidence. They should bring a laptop if they have one, but a limited number of college devices will be available to borrow.",
                 "options": [
                   "In the digital study room",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "In the main lecture theatre",
+                  "In the language laboratory",
+                  "In the engineering workshop"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -7043,12 +7043,12 @@
                 "prompt": "Listening 2. What will students practise checking?",
                 "audioText": "The college library is holding a workshop on checking information found online. It will take place in the digital study room on Tuesday at two. Students will practise checking the author, publication date and supporting evidence. They should bring a laptop if they have one, but a limited number of college devices will be available to borrow.",
                 "options": [
-                  "On Friday",
                   "The author, publication date and supporting evidence",
-                  "Next month",
-                  "After the event"
+                  "The equipment serial number and model",
+                  "The room booking and lesson timetable",
+                  "The student's attendance record"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -7056,12 +7056,12 @@
                 "type": "single_choice",
                 "prompt": "When a student researched renewable energy, the first website she found made a strong claim but did not identify its author or provide links to evidence. She compared the information with a government report and a university article. The sources agreed on the general trend but used different figures because they covered different years. She included the dates and explained the difference in her assignment. Reading 1. Why did the student question the first website?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "It was published too recently to assess",
                   "It had no named author or supporting evidence",
-                  "To buy a ticket"
+                  "It used technical language",
+                  "It disagreed with every other source"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -7069,9 +7069,9 @@
                 "type": "single_choice",
                 "prompt": "Why were the figures different in the other sources?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "They used different measurement units",
+                  "One source included estimates",
+                  "They were collected by different research teams",
                   "The sources covered different years"
                 ],
                 "correctIndex": 3,
@@ -11597,9 +11597,9 @@
                 "audioText": "The CNC theory class will study the structure of a sample programme on Friday at eleven. Students will use a printed extract and identify programme numbers, block numbers and common address letters. The instructor will explain the difference between a rapid positioning command and a linear feed command. The class will not run the programme on a machine.",
                 "options": [
                   "On Friday at eleven",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "On Tuesday at ten",
+                  "On Wednesday at eleven",
+                  "On Friday at two"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -11610,12 +11610,12 @@
                 "prompt": "Listening 2. Which two command types will be compared?",
                 "audioText": "The CNC theory class will study the structure of a sample programme on Friday at eleven. Students will use a printed extract and identify programme numbers, block numbers and common address letters. The instructor will explain the difference between a rapid positioning command and a linear feed command. The class will not run the programme on a machine.",
                 "options": [
-                  "On Friday",
                   "A rapid positioning command and a linear feed command",
-                  "Next month",
-                  "After the event"
+                  "Two tool-offset commands",
+                  "A spindle command and a coolant command",
+                  "A coordinate setting and a feed-rate value"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -11623,12 +11623,12 @@
                 "type": "single_choice",
                 "prompt": "A CNC programme is organised into blocks of information. Each block may contain a sequence number and words that describe a command or a value. In a basic example, G00 is associated with rapid positioning, while G01 describes linear interpolation at a programmed feed. The meaning of a complete programme depends on the controller, machine configuration and other instructions, so students should use the approved documentation for the specific equipment. Reading 1. How is a CNC programme organised?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Into separate tool catalogues",
                   "Into blocks of information",
-                  "To buy a ticket"
+                  "Into one unlabelled paragraph",
+                  "Into drawings without sequence"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -11636,9 +11636,9 @@
                 "type": "single_choice",
                 "prompt": "Why should students consult equipment-specific documentation?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "Because every controller uses identical settings",
+                  "Because a programme can be run without checking",
+                  "Because the codes never depend on machine configuration",
                   "Because meaning depends on the controller and machine configuration"
                 ],
                 "correctIndex": 3,
@@ -16167,9 +16167,9 @@
                 "audioText": "The computer systems class will compare hardware and software on Monday at eleven. Students should bring the component glossary and meet in the digital laboratory. The instructor will review the roles of the processor, memory, storage and operating system. A short matching activity will use diagrams and product descriptions.",
                 "options": [
                   "On Monday at eleven",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "On Tuesday at ten",
+                  "On Wednesday at eleven",
+                  "On Monday at two"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -16180,12 +16180,12 @@
                 "prompt": "Listening 2. Which reference list is required for the computer-systems class?",
                 "audioText": "The computer systems class will compare hardware and software on Monday at eleven. Students should bring the component glossary and meet in the digital laboratory. The instructor will review the roles of the processor, memory, storage and operating system. A short matching activity will use diagrams and product descriptions.",
                 "options": [
-                  "On Friday",
                   "The component glossary",
-                  "Next month",
-                  "After the event"
+                  "The safety checklist",
+                  "The maintenance schedule",
+                  "The circuit-symbol worksheet"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -16193,12 +16193,12 @@
                 "type": "single_choice",
                 "prompt": "A computer system uses hardware and software to process information. The processor performs instructions, memory holds data that is currently in use, and storage keeps files for later access. The operating system manages resources and provides services for applications. These components have different roles, so a technical description should avoid using the terms as if they were interchangeable. Reading 1. What is the role of the operating system?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "It stores files for later access",
                   "It manages resources and provides services for applications",
-                  "To buy a ticket"
+                  "It performs every calculation in the processor",
+                  "It connects the computer to the power supply"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -16206,9 +16206,9 @@
                 "type": "single_choice",
                 "prompt": "Why should a technical description distinguish component roles?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "Because all components perform the same function",
+                  "Because software is always a type of hardware",
+                  "Because technical terms have no fixed meaning",
                   "Because hardware and software components perform different functions"
                 ],
                 "correctIndex": 3,
@@ -20733,9 +20733,9 @@
                 "audioText": "The engineering safety lecturer will discuss risk communication on Monday at ten fifteen. Students should bring the risk-register example and meet in the seminar room. The session will focus on describing hazards, existing controls and remaining concerns. The lecturer will explain why risk information should be specific, current and understandable to the people who need it.",
                 "options": [
                   "At ten fifteen on Monday",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "At nine on Tuesday",
+                  "At eleven on Monday",
+                  "At ten fifteen on Thursday"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -20746,10 +20746,10 @@
                 "prompt": "Listening 2. Which example should students bring?",
                 "audioText": "The engineering safety lecturer will discuss risk communication on Monday at ten fifteen. Students should bring the risk-register example and meet in the seminar room. The session will focus on describing hazards, existing controls and remaining concerns. The lecturer will explain why risk information should be specific, current and understandable to the people who need it.",
                 "options": [
-                  "On Friday",
+                  "The inspection checklist",
                   "The risk-register example",
-                  "Next month",
-                  "After the event"
+                  "The maintenance schedule",
+                  "The component glossary"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -20759,12 +20759,12 @@
                 "type": "single_choice",
                 "prompt": "A risk record should describe a hazard, the possible consequence and the controls that are already in place. It should also identify any remaining concern and the person or team responsible for review. A risk rating is only meaningful when the method and assumptions are clear. If conditions change, the record should be reviewed rather than treated as permanently valid. Reading 1. What should a risk record describe?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Only the name of the hazard",
                   "The hazard, possible consequence, existing controls and remaining concern",
-                  "To buy a ticket"
+                  "The personal opinions of the maintenance team",
+                  "The cost of every component in the system"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -20772,9 +20772,9 @@
                 "type": "single_choice",
                 "prompt": "When should a risk record be reviewed?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "At the end of every calendar month only",
+                  "When a new student joins the course",
+                  "When the report is printed",
                   "When conditions change"
                 ],
                 "correctIndex": 3,
