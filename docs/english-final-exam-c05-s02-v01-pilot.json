@@ -15,9 +15,9 @@
       "audioText": "The maintenance team will practise a shift handover briefing on Wednesday at seven forty-five. Students should meet in the planning room and bring the sample task-status board. The briefing will cover completed work, outstanding tasks, parts awaiting confirmation and issues that require follow-up. The tutor will assess whether the information is concise and unambiguous.",
       "options": [
         "At seven forty-five on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight fifteen on Tuesday",
+        "At seven forty-five on Thursday",
+        "At nine on Wednesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which board should students bring?",
       "audioText": "The maintenance team will practise a shift handover briefing on Wednesday at seven forty-five. Students should meet in the planning room and bring the sample task-status board. The briefing will cover completed work, outstanding tasks, parts awaiting confirmation and issues that require follow-up. The tutor will assess whether the information is concise and unambiguous.",
       "options": [
-        "On Friday",
+        "The inspection checklist",
         "The sample task-status board",
-        "Next month",
-        "After the event"
+        "The risk register",
+        "The maintenance schedule"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A useful handover summarises the status of work at the end of a shift. It identifies completed tasks, outstanding items, relevant references and any issue that requires attention. Unconfirmed information should be clearly labelled as such. The incoming team should be able to distinguish between work that has been completed, work that remains open and decisions that still require approval. Reading 1. What should a useful handover identify?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Only the names of the team members",
         "Completed tasks, outstanding items, references and issues requiring attention",
-        "To buy a ticket"
+        "The cost of the next maintenance visit",
+        "The personal opinions of the outgoing team"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Why should unconfirmed information be labelled?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "So the incoming team can distinguish facts from information still awaiting confirmation"
+        "So the incoming team can distinguish facts from information still awaiting confirmation",
+        "So that the report can be made longer",
+        "Because all information must be treated as final",
+        "To avoid recording who supplied the information"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "points": 1
     },
     {
