@@ -195,7 +195,10 @@ window.renderTeacherControlsPage=function(){
      if(topic.test&&topic.test.length)built.push({id:"test_"+topic.id,title:"Тест · "+(topic.code||"")+" "+(topic.title||topic.id)});
      (topic.selfWork||[]).forEach((w,i)=>{const k="self_"+topic.id+"_"+i;if(window.EXTRA_TESTS&&window.EXTRA_TESTS[k]&&window.EXTRA_TESTS[k].questions)built.push({id:k,title:"Самостоятельный тест · "+(w.title||k)});});
    }));
-   built.push({id:"__final__"+cid,title:"Итоговый экзамен · "+cid});
+   const finalCourseNumbers=cid==="ENB"?[1,2]:cid==="ENT"?[3,4,5]:[1,2,3,4,5];
+   finalCourseNumbers.forEach(function(courseNo){[1,2].forEach(function(semester){
+     built.push({id:"english_final_c"+courseNo+"_s"+semester,title:"Итоговый экзамен · курс "+courseNo+", семестр "+semester});
+   });});
    const all=tests.concat(built);
    testSel.innerHTML='<option value="">— Выберите тест —</option>'+all.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
    loadAttemptRequests();
