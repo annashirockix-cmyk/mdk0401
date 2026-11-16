@@ -3874,6 +3874,18 @@ function startEnglishSemesterTest_(data) {
     if (rawAttempt) {
       try { attempt = JSON.parse(rawAttempt); } catch (e) { attempt = null; }
     }
+    if (attempt && attempt.status === "expired") {
+      throw new Error("Время контрольной истекло. Обратитесь к преподавателю для новой попытки.");
+    }
+    if (attempt && Number(attempt.startedAt)) {
+      const elapsed = Math.max(0, Math.floor((Date.now() - Number(attempt.startedAt)) / 1000));
+      const allowed = Math.max(1, Number(test.time) || 45) * 60;
+      if (elapsed > allowed + 300) {
+        attempt.status = "expired";
+        cache.put(attemptKey, JSON.stringify(attempt), 21600);
+        throw new Error("Время контрольной истекло. Обратитесь к преподавателю для новой попытки.");
+      }
+    }
     if (!attempt || !attempt.attemptId || !Number(attempt.startedAt)) {
       attempt = {attemptId:Utilities.getUuid().replace(/-/g, ""), startedAt:Date.now()};
       cache.put(attemptKey, JSON.stringify(attempt), 21600);
@@ -3950,7 +3962,8 @@ function submitEnglishSemesterTest_(data) {
     const elapsedSeconds = Math.max(0, Math.floor((Date.now() - Number(serverAttempt.startedAt)) / 1000));
     const allowedSeconds = Math.max(1, Number(test.time) || 45) * 60;
     if (elapsedSeconds > allowedSeconds + 300) {
-      attemptCache.remove(attemptKey);
+      serverAttempt.status = "expired";
+      attemptCache.put(attemptKey, JSON.stringify(serverAttempt), 21600);
       throw new Error("Время контрольной истекло. Обратитесь к преподавателю для новой попытки.");
     }
     const canonicalAnswers = answers.map(function(answer, index) {
