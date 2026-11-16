@@ -48,3 +48,13 @@
 - GitHub Actions run `43948534307`: **success**, all 25 steps passed, including the English runtime regression suite and real-browser English final-exam audit.
 - The answer-position balance regression caught an intermediate imbalance when corrected answer indices were first changed. The correction was refined by moving the correct option text into the existing balanced key position; source files and combined registry were synchronized, and the latest full CI passed.
 - PR remains Draft. Content approval, official curriculum/textbook alignment, full editorial review, protected-bank comparison and controlled test/production import gates remain open.
+
+
+## Full pilot-source synchronization and option-quality remediation — 2026-11-16
+
+- Rebuilt the combined registry's `variantJSON` entries from all 150 individual source JSON files (the GitHub PR file patches were used as the authoritative branch snapshots). The full-source parity regression now checks all 150 files rather than a handful of examples.
+- The complete registry audit identified 64 tasks with duplicate answer options, concentrated in C2-S1 and C2-S2. Replaced the duplicate choices with distinct, context-related distractors in both individual source files and the combined registry.
+- The audit also found generic unrelated reading distractors repeated across 85 variants in the combined registry. The individual source files contained authored, topic-matched alternatives; those source variants have now been synchronized into the registry. No generic fallback distractors remain in the Reading 1/2 tasks.
+- C5-S1 V01–V15: corrected passage/key mismatches in reading tasks across all 15 variants. The correct response is now in the keyed position, while the A/B/C/D distribution remains unchanged. Regression checks verify both reading answers for all 15 variants and source/registry parity.
+- Re-audit after corrections: 150 variants; 1,500 tasks; expected task-type totals (900 single-choice, 150 multiple-choice, 150 short-text, 150 ordering, 150 written); zero duplicate options; zero known generic reading distractors; all 150 variants retain single-choice key-position distribution 2/2/1/1.
+- The registry remains `pilot_for_editorial_review`. These are content corrections and automated structural checks, not external methodologist approval or curriculum sign-off.
