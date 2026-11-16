@@ -449,3 +449,20 @@ Short-text completion defects caused by duplicated fixed prefixes:
 The other reviewed short-text alternatives were generally contextually defensible. The ordering sequences in the other eight files were coherent on this structural review. Written tasks all include word limits and 8-point rubrics; this pass did not establish CEFR calibration or alignment with approved learning outcomes.
 
 No pilot JSON was modified. No protected question banks, Google Sheets, Apps Script, imports or deployment were touched.
+
+
+## V07 full-slot audit (all 10 course/semester slots)
+
+All ten V07 files were inspected (100 tasks total). Each contains 10 tasks. The first-eight positional key signature is unchanged: 0, 1, 2, 3, 0, [2,3], short-text, 1. The 20 listening keys in the reviewed files match their audioText, except for one prompt/audio mismatch:
+- C4-S2 task 2 asks which equipment-information record is required for a label review, but the audio is about software version records and asks students to bring a sample change log. The keyed answer (“The sample change log”) is supported by the audio; rewrite the stem to match the software-version lesson.
+
+Ordering-prompt/content defects:
+- C1-S2 task 9 uses a semicolon-separated list of actions as the prompt instead of an instruction to put them in order.
+- C3-S2 task 9 includes “Arrange the stages in a logical sequence” as one of the sortable options. This is an instruction/meta-action, not a process stage; replace it with a genuine process step or remove/rebuild the item.
+The other eight ordering sequences reviewed were coherent.
+
+Short-text acceptance defects:
+- C4-S2 task 7 begins “...a change ___” but accepts both “log” and “change log”; the latter creates “change change log”. Remove the redundant full phrase.
+- C4-S1 task 7 asks for an equipment's “rated ___” but accepts “voltage”, “current” and “rating”. Voltage and current are different possible ratings; without a specified nameplate field the item is ambiguous, and “rating” does not complete the intended concept precisely. Specify the target (e.g. rated voltage) and narrow the accepted answer.
+
+Other reviewed short-text alternatives were contextually plausible. All ten written tasks have word limits and 8-point rubrics; CEFR calibration and mapping to approved learning outcomes were not assessed in this pass. No pilot JSON was changed; no protected banks, imports, Google Sheets, Apps Script or deployment were touched.
