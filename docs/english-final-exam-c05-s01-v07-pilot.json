@@ -15,9 +15,9 @@
       "audioText": "The maintenance operations tutor will discuss shift handover on Friday at nine fifteen. Students should bring the open-task list and the sample technical log extract. The lesson will focus on incomplete work, equipment status and clear responsibility for the next shift. Students will compare a brief note with a complete handover record.",
       "options": [
         "At nine fifteen on Friday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight fifteen on Friday",
+        "At nine fifteen on Thursday",
+        "At ten fifteen on Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which two records should students bring?",
       "audioText": "The maintenance operations tutor will discuss shift handover on Friday at nine fifteen. Students should bring the open-task list and the sample technical log extract. The lesson will focus on incomplete work, equipment status and clear responsibility for the next shift. Students will compare a brief note with a complete handover record.",
       "options": [
-        "On Friday",
+        "The completed-task list and work order",
         "The open-task list and technical log extract",
-        "Next month",
-        "After the event"
+        "The defect report and parts request",
+        "The shift roster and training record"
       ],
       "correctIndex": 1,
       "points": 1

@@ -15,9 +15,9 @@
       "audioText": "The engineering review panel will meet on Tuesday at eleven to consider a component replacement proposal. Students observing the meeting should bring the summary sheet and the inspection extract. The panel will compare the recorded condition, supplier information and expected service life. Any recommendation must identify the evidence used and note information that is still missing.",
       "options": [
         "On Tuesday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at ten",
+        "On Wednesday at eleven",
+        "On Tuesday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which two documents should observers bring?",
       "audioText": "The engineering review panel will meet on Tuesday at eleven to consider a component replacement proposal. Students observing the meeting should bring the summary sheet and the inspection extract. The panel will compare the recorded condition, supplier information and expected service life. Any recommendation must identify the evidence used and note information that is still missing.",
       "options": [
-        "On Friday",
+        "The supplier specification and parts catalogue",
         "The summary sheet and inspection extract",
-        "Next month",
-        "After the event"
+        "The maintenance log and defect history",
+        "The release checklist and revision register"
       ],
       "correctIndex": 1,
       "points": 1

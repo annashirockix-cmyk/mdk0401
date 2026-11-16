@@ -15,9 +15,9 @@
       "audioText": "The systems integration coordinator will hold a handover review on Wednesday at one thirty. Mechanical, electrical and software teams should bring their interface lists and latest status reports. The meeting will identify unresolved interfaces, document dependencies and actions that need joint approval. The coordinator will record each action with an owner and a due date.",
       "options": [
         "On Wednesday at one thirty",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Wednesday at twelve thirty",
+        "On Thursday at one thirty",
+        "On Wednesday at two thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which documents should the teams bring?",
       "audioText": "The systems integration coordinator will hold a handover review on Wednesday at one thirty. Mechanical, electrical and software teams should bring their interface lists and latest status reports. The meeting will identify unresolved interfaces, document dependencies and actions that need joint approval. The coordinator will record each action with an owner and a due date.",
       "options": [
-        "On Friday",
+        "Configuration registers and risk assessments",
         "Interface lists and latest status reports",
-        "Next month",
-        "After the event"
+        "Task cards and inspection reports",
+        "Design drawings and supplier quotations"
       ],
       "correctIndex": 1,
       "points": 1

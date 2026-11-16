@@ -15,9 +15,9 @@
       "audioText": "The reliability engineering lecturer will discuss repeat defects on Thursday at ten thirty. Students should bring the sample defect history and equipment-status summary. The session will compare recurring observations and explain why engineers should check operating context before identifying a trend. Students will use a fictional component history.",
       "options": [
         "At ten thirty on Thursday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine thirty on Thursday",
+        "At ten thirty on Friday",
+        "At eleven thirty on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which defect-history documents are required for the reliability exercise?",
       "audioText": "The reliability engineering lecturer will discuss repeat defects on Thursday at ten thirty. Students should bring the sample defect history and equipment-status summary. The session will compare recurring observations and explain why engineers should check operating context before identifying a trend. Students will use a fictional component history.",
       "options": [
-        "On Friday",
+        "The reliability trend chart and maintenance schedule",
         "The defect history and equipment-status summary",
-        "Next month",
-        "After the event"
+        "The inspection checklist and work order",
+        "The parts catalogue and service bulletin"
       ],
       "correctIndex": 1,
       "points": 1

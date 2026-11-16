@@ -15,9 +15,9 @@
       "audioText": "The quality improvement group will present its findings on Monday at two fifteen in the conference room. Students should bring the process chart and the sample defect summary. The presentation will compare the number of reported defects before and after a process change. The group will also explain why the figures alone do not prove that the change caused the improvement.",
       "options": [
         "On Monday at two fifteen",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Monday at one fifteen",
+        "On Tuesday at two fifteen",
+        "On Monday at three fifteen"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which condition-monitoring summary is required for the risk review?",
       "audioText": "The quality improvement group will present its findings on Monday at two fifteen in the conference room. Students should bring the process chart and the sample defect summary. The presentation will compare the number of reported defects before and after a process change. The group will also explain why the figures alone do not prove that the change caused the improvement.",
       "options": [
-        "On Friday",
-        "The sample defect summary",
-        "Next month",
-        "After the event"
+        "The quality checklist and audit report",
+        "The process chart and sample defect summary",
+        "The maintenance log and work order",
+        "The supplier scorecard and delivery history"
       ],
       "correctIndex": 1,
       "points": 1

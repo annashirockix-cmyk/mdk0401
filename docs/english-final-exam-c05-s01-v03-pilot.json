@@ -15,9 +15,9 @@
       "audioText": "The maintenance engineering lecturer will introduce diagnostic evidence on Monday at one fifteen. Students should bring the case-study worksheet and meet in Room 12. The class will compare symptoms, records and possible explanations. The lecturer will emphasise that a likely cause should not be treated as confirmed until appropriate evidence has been reviewed.",
       "options": [
         "At one fifteen on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At twelve fifteen on Monday",
+        "At one fifteen on Tuesday",
+        "At two fifteen on Monday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which quality-inspection worksheet is required for the diagnostic exercise?",
       "audioText": "The maintenance engineering lecturer will introduce diagnostic evidence on Monday at one fifteen. Students should bring the case-study worksheet and meet in Room 12. The class will compare symptoms, records and possible explanations. The lecturer will emphasise that a likely cause should not be treated as confirmed until appropriate evidence has been reviewed.",
       "options": [
-        "On Friday",
+        "The diagnostic checklist",
         "The case-study worksheet",
-        "Next month",
-        "After the event"
+        "The maintenance-history extract",
+        "The inspection measurement sheet"
       ],
       "correctIndex": 1,
       "points": 1

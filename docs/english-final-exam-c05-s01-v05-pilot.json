@@ -15,9 +15,9 @@
       "audioText": "The engineering documentation manager will explain revision control on Friday at nine forty-five. Students should meet in the project room and bring the sample document register. The briefing will show how revision letters, dates and approval status are recorded. Students will compare two versions and identify which one is marked as current and approved.",
       "options": [
         "At nine forty-five on Friday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine fifteen on Friday",
+        "At nine forty-five on Thursday",
+        "At ten forty-five on Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which register should students bring?",
       "audioText": "The engineering documentation manager will explain revision control on Friday at nine forty-five. Students should meet in the project room and bring the sample document register. The briefing will show how revision letters, dates and approval status are recorded. Students will compare two versions and identify which one is marked as current and approved.",
       "options": [
-        "On Friday",
+        "The revision-history sheet",
         "The sample document register",
-        "Next month",
-        "After the event"
+        "The approval checklist",
+        "The controlled-document index"
       ],
       "correctIndex": 1,
       "points": 1

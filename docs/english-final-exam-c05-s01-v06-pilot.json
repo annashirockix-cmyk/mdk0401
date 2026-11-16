@@ -15,9 +15,9 @@
       "audioText": "The aircraft maintenance instructor will review document applicability on Wednesday at ten. Students should bring the sample aircraft identification record and maintenance task card. The lesson will explain why the aircraft model and serial number must be checked before a task reference is selected. Students will work with controlled training copies only.",
       "options": [
         "At ten on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine on Wednesday",
+        "At ten on Thursday",
+        "At eleven on Wednesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which records should students bring?",
       "audioText": "The aircraft maintenance instructor will review document applicability on Wednesday at ten. Students should bring the sample aircraft identification record and maintenance task card. The lesson will explain why the aircraft model and serial number must be checked before a task reference is selected. Students will work with controlled training copies only.",
       "options": [
-        "On Friday",
+        "The component history and inspection report",
         "The aircraft identification record and maintenance task card",
-        "Next month",
-        "After the event"
+        "The aircraft journey log and release note",
+        "The parts catalogue and wiring diagram"
       ],
       "correctIndex": 1,
       "points": 1

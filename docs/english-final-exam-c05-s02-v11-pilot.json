@@ -15,9 +15,9 @@
       "audioText": "The maintenance review tutor will present a discrepancy case on Thursday at ten. Students should bring the component record and the inspection extract. The case includes a difference between the recorded part reference and the label on the training item. Students will identify the information that must be checked before the record is corrected.",
       "options": [
         "On Thursday at ten",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at nine",
+        "On Friday at ten",
+        "On Thursday at eleven"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which records are required for the discrepancy case?",
       "audioText": "The maintenance review tutor will present a discrepancy case on Thursday at ten. Students should bring the component record and the inspection extract. The case includes a difference between the recorded part reference and the label on the training item. Students will identify the information that must be checked before the record is corrected.",
       "options": [
-        "On Friday",
+        "The parts catalogue and delivery note",
         "The component record and inspection extract",
-        "Next month",
-        "After the event"
+        "The task card and maintenance schedule",
+        "The supplier specification and audit report"
       ],
       "correctIndex": 1,
       "points": 1

@@ -15,9 +15,9 @@
       "audioText": "The technical documentation tutor will review manual structure on Wednesday at eleven. Students should bring the sample maintenance manual and meet in the library training room. The session will identify applicability information, task references and revision details. The tutor will explain why users must confirm that a document applies to the equipment and configuration being discussed.",
       "options": [
         "At eleven on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At ten on Wednesday",
+        "At eleven on Thursday",
+        "At twelve on Wednesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which manual should students bring?",
       "audioText": "The technical documentation tutor will review manual structure on Wednesday at eleven. Students should bring the sample maintenance manual and meet in the library training room. The session will identify applicability information, task references and revision details. The tutor will explain why users must confirm that a document applies to the equipment and configuration being discussed.",
       "options": [
-        "On Friday",
+        "The technical logbook",
         "The sample maintenance manual",
-        "Next month",
-        "After the event"
+        "The maintenance task card",
+        "The component parts catalogue"
       ],
       "correctIndex": 1,
       "points": 1

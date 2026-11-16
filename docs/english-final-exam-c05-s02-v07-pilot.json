@@ -15,9 +15,9 @@
       "audioText": "The procurement engineer will demonstrate a technical clarification email on Thursday at nine thirty. Students should bring the supplier specification and the component drawing. The demonstration will show how to state a part reference, describe a discrepancy and ask a precise question. The instructor will also explain why attachments should be named clearly and referenced in the message.",
       "options": [
         "On Thursday at nine thirty",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at eight thirty",
+        "On Friday at nine thirty",
+        "On Thursday at ten thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which drawing and supplier document are needed for the clarification email?",
       "audioText": "The procurement engineer will demonstrate a technical clarification email on Thursday at nine thirty. Students should bring the supplier specification and the component drawing. The demonstration will show how to state a part reference, describe a discrepancy and ask a precise question. The instructor will also explain why attachments should be named clearly and referenced in the message.",
       "options": [
-        "On Friday",
+        "The purchase order and delivery note",
         "The supplier specification and component drawing",
-        "Next month",
-        "After the event"
+        "The inspection report and work order",
+        "The parts catalogue and maintenance schedule"
       ],
       "correctIndex": 1,
       "points": 1

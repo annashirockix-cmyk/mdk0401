@@ -15,9 +15,9 @@
       "audioText": "The supplier quality tutor will compare two supplier evaluation summaries on Tuesday at one thirty. Students should bring the sample delivery history and the quality scorecard. The review will consider delivery performance, documented non-conformities and response time. Students will be asked to distinguish measured performance from general opinion about a supplier.",
       "options": [
         "At one thirty on Tuesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At twelve thirty on Tuesday",
+        "At one thirty on Wednesday",
+        "At two thirty on Tuesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which scorecard should students bring?",
       "audioText": "The supplier quality tutor will compare two supplier evaluation summaries on Tuesday at one thirty. Students should bring the sample delivery history and the quality scorecard. The review will consider delivery performance, documented non-conformities and response time. Students will be asked to distinguish measured performance from general opinion about a supplier.",
       "options": [
-        "On Friday",
-        "The quality scorecard",
-        "Next month",
-        "After the event"
+        "The supplier specification and purchase order",
+        "The sample delivery history and quality scorecard",
+        "The inspection checklist and corrective-action log",
+        "The parts catalogue and maintenance schedule"
       ],
       "correctIndex": 1,
       "points": 1

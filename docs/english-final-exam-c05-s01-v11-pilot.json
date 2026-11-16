@@ -15,9 +15,9 @@
       "audioText": "The quality engineering tutor will review non-conformance reports on Thursday at one. Students should bring the sample report and the relevant specification extract. The class will identify the requirement, the observed result and the evidence needed for review. The tutor will explain why a report should describe the issue precisely without assigning blame.",
       "options": [
         "At one on Thursday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At twelve on Thursday",
+        "At one on Friday",
+        "At two on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which extract should students bring?",
       "audioText": "The quality engineering tutor will review non-conformance reports on Thursday at one. Students should bring the sample report and the relevant specification extract. The class will identify the requirement, the observed result and the evidence needed for review. The tutor will explain why a report should describe the issue precisely without assigning blame.",
       "options": [
-        "On Friday",
-        "The relevant specification extract",
-        "Next month",
-        "After the event"
+        "The inspection checklist and measurement record",
+        "The sample report and specification extract",
+        "The audit plan and non-conformance log",
+        "The maintenance history and component list"
       ],
       "correctIndex": 1,
       "points": 1

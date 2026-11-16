@@ -15,9 +15,9 @@
       "audioText": "The project coordinator will hold an integrated handover meeting on Friday at one. Representatives from mechanical, electrical and quality teams should bring their latest status summaries. The meeting will identify interface issues, outstanding evidence and actions that depend on more than one team. Each action should have an owner and a target review date.",
       "options": [
         "On Friday at one",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at twelve",
+        "On Thursday at one",
+        "On Friday at two"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which teams should bring status summaries?",
       "audioText": "The project coordinator will hold an integrated handover meeting on Friday at one. Representatives from mechanical, electrical and quality teams should bring their latest status summaries. The meeting will identify interface issues, outstanding evidence and actions that depend on more than one team. Each action should have an owner and a target review date.",
       "options": [
-        "On Friday",
-        "Mechanical, electrical and quality teams",
-        "Next month",
-        "After the event"
+        "The interface register and action log",
+        "The latest status summaries from the mechanical, electrical and quality teams",
+        "The inspection checklist and release record",
+        "The work package and supplier schedule"
       ],
       "correctIndex": 1,
       "points": 1

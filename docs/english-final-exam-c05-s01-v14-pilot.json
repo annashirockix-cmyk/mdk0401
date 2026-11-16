@@ -15,9 +15,9 @@
       "audioText": "The aviation documentation tutor will review service information on Friday at ten fifteen. Students should bring the sample service notice and the aircraft applicability list. The session will identify the affected model range, issue date and required review action. The tutor will explain why a notice should not be assumed to apply to every aircraft of a similar type.",
       "options": [
         "At ten fifteen on Friday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine fifteen on Friday",
+        "At ten fifteen on Thursday",
+        "At eleven fifteen on Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which list should students bring?",
       "audioText": "The aviation documentation tutor will review service information on Friday at ten fifteen. Students should bring the sample service notice and the aircraft applicability list. The session will identify the affected model range, issue date and required review action. The tutor will explain why a notice should not be assumed to apply to every aircraft of a similar type.",
       "options": [
-        "On Friday",
-        "The aircraft applicability list",
-        "Next month",
-        "After the event"
+        "The maintenance task card and component history",
+        "The sample service notice and aircraft applicability list",
+        "The revision register and release checklist",
+        "The inspection report and defect log"
       ],
       "correctIndex": 1,
       "points": 1

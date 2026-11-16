@@ -15,9 +15,9 @@
       "audioText": "The engineering manager will review improvement proposals on Friday at eleven. Students should bring a one-page proposal and a short evidence summary. Each proposal should describe the current issue, the suggested change, expected benefits and possible limitations. The manager will ask how success could be measured and who would be responsible for reviewing the results.",
       "options": [
         "On Friday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at ten",
+        "On Thursday at eleven",
+        "On Friday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which proposal materials should students bring?",
       "audioText": "The engineering manager will review improvement proposals on Friday at eleven. Students should bring a one-page proposal and a short evidence summary. Each proposal should describe the current issue, the suggested change, expected benefits and possible limitations. The manager will ask how success could be measured and who would be responsible for reviewing the results.",
       "options": [
-        "On Friday",
-        "A one-page proposal and evidence summary",
-        "Next month",
-        "After the event"
+        "The project schedule and budget forecast",
+        "A one-page proposal and short evidence summary",
+        "The quality manual and inspection checklist",
+        "The maintenance record and supplier contract"
       ],
       "correctIndex": 1,
       "points": 1

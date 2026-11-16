@@ -15,9 +15,9 @@
       "audioText": "The technical communications lecturer will run a source-summary exercise on Tuesday at twelve. Students should bring the maintenance extract, inspection table and supplier note from the course folder. The exercise will require a short summary that combines the sources without repeating them word for word. Students should identify any difference between the documents and state what still needs confirmation.",
       "options": [
         "On Tuesday at twelve",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at eleven",
+        "On Wednesday at twelve",
+        "On Tuesday at one"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which three sources should students bring?",
       "audioText": "The technical communications lecturer will run a source-summary exercise on Tuesday at twelve. Students should bring the maintenance extract, inspection table and supplier note from the course folder. The exercise will require a short summary that combines the sources without repeating them word for word. Students should identify any difference between the documents and state what still needs confirmation.",
       "options": [
-        "On Friday",
+        "The work order, revision register and audit report",
         "The maintenance extract, inspection table and supplier note",
-        "Next month",
-        "After the event"
+        "The defect log, risk register and service bulletin",
+        "The task card, component history and quality checklist"
       ],
       "correctIndex": 1,
       "points": 1

@@ -15,9 +15,9 @@
       "audioText": "The quality assurance tutor will introduce non-conformance reports on Tuesday at one. Students should bring the sample inspection result and corrective-action form. The lesson will distinguish a requirement, an observed deviation and the action proposed to address it. Students will practise writing factual descriptions without assigning blame.",
       "options": [
         "At one on Tuesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At twelve on Tuesday",
+        "At one on Wednesday",
+        "At two on Tuesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which two forms should students bring?",
       "audioText": "The quality assurance tutor will introduce non-conformance reports on Tuesday at one. Students should bring the sample inspection result and corrective-action form. The lesson will distinguish a requirement, an observed deviation and the action proposed to address it. Students will practise writing factual descriptions without assigning blame.",
       "options": [
-        "On Friday",
+        "The non-conformance report and audit checklist",
         "The inspection result and corrective-action form",
-        "Next month",
-        "After the event"
+        "The process chart and training record",
+        "The supplier evaluation and delivery log"
       ],
       "correctIndex": 1,
       "points": 1

@@ -14,10 +14,10 @@
       "prompt": "Listening 1. When will the audit session begin?",
       "audioText": "The quality auditor will explain evidence sampling on Monday at nine thirty. Students should meet in the quality office and bring the audit checklist. The session will compare document samples, interview notes and process observations. The auditor will explain why a finding must refer to a requirement and identify the evidence that supports it.",
       "options": [
-        "At nine thirty on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Monday at nine thirty",
+        "On Monday at eight thirty",
+        "On Tuesday at nine thirty",
+        "On Monday at ten thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which audit tool should students bring?",
       "audioText": "The quality auditor will explain evidence sampling on Monday at nine thirty. Students should meet in the quality office and bring the audit checklist. The session will compare document samples, interview notes and process observations. The auditor will explain why a finding must refer to a requirement and identify the evidence that supports it.",
       "options": [
-        "On Friday",
+        "The sampling plan and audit report",
         "The audit checklist",
-        "Next month",
-        "After the event"
+        "The process map and action log",
+        "The quality manual and non-conformance form"
       ],
       "correctIndex": 1,
       "points": 1

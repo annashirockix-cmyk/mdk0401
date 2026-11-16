@@ -15,9 +15,9 @@
       "audioText": "The engineering analysis class will review a case involving an intermittent equipment indication on Tuesday at nine. Students should bring the event log and the maintenance history extract. The tutor will ask groups to build a timeline, identify what is confirmed and list possible explanations that still require evidence. The class will not diagnose live equipment.",
       "options": [
         "On Tuesday at nine",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at eight",
+        "On Wednesday at nine",
+        "On Tuesday at ten"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which two maintenance records should be reviewed during the handover?",
       "audioText": "The engineering analysis class will review a case involving an intermittent equipment indication on Tuesday at nine. Students should bring the event log and the maintenance history extract. The tutor will ask groups to build a timeline, identify what is confirmed and list possible explanations that still require evidence. The class will not diagnose live equipment.",
       "options": [
-        "On Friday",
+        "The inspection checklist and defect report",
         "The event log and maintenance history extract",
-        "Next month",
-        "After the event"
+        "The task card and parts catalogue",
+        "The equipment-status sheet and risk register"
       ],
       "correctIndex": 1,
       "points": 1

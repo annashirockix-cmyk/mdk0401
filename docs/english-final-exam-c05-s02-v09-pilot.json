@@ -15,9 +15,9 @@
       "audioText": "The aviation documentation tutor will review a sample maintenance record on Wednesday at ten. Students should bring the task card and the component history extract. The class will identify the aircraft or component reference, task status and supporting document references. The tutor will explain how accurate records support continuity between maintenance teams.",
       "options": [
         "On Wednesday at ten",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Wednesday at nine",
+        "On Thursday at ten",
+        "On Wednesday at eleven"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which history document should students bring?",
       "audioText": "The aviation documentation tutor will review a sample maintenance record on Wednesday at ten. Students should bring the task card and the component history extract. The class will identify the aircraft or component reference, task status and supporting document references. The tutor will explain how accurate records support continuity between maintenance teams.",
       "options": [
-        "On Friday",
-        "The component history extract",
-        "Next month",
-        "After the event"
+        "The aircraft identification record and parts catalogue",
+        "The task card and component history extract",
+        "The maintenance schedule and defect report",
+        "The inspection checklist and release certificate"
       ],
       "correctIndex": 1,
       "points": 1

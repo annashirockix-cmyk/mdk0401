@@ -15,9 +15,9 @@
       "audioText": "The configuration management tutor will review equipment identification on Monday at ten thirty. Students should bring the configuration list and the model-reference sheet. The lesson will compare model designation, serial number and installed option codes. The tutor will explain why the equipment identity must be clear before technical data are selected.",
       "options": [
         "At ten thirty on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine thirty on Monday",
+        "At ten thirty on Tuesday",
+        "At eleven thirty on Monday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which two maintenance records are required for the aircraft task review?",
       "audioText": "The configuration management tutor will review equipment identification on Monday at ten thirty. Students should bring the configuration list and the model-reference sheet. The lesson will compare model designation, serial number and installed option codes. The tutor will explain why the equipment identity must be clear before technical data are selected.",
       "options": [
-        "On Friday",
+        "The serial-number register and equipment-status report",
         "The configuration list and model-reference sheet",
-        "Next month",
-        "After the event"
+        "The parts catalogue and service bulletin",
+        "The inspection checklist and task card"
       ],
       "correctIndex": 1,
       "points": 1

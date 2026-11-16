@@ -15,9 +15,9 @@
       "audioText": "The maintenance communications tutor will assess short technical briefings on Wednesday at nine. Students should bring a one-page status summary and the supporting reference list. Each briefing should state the current position, outstanding action and any uncertainty. The tutor will assess whether the speaker uses precise terms and makes the next step clear to the audience.",
       "options": [
         "At nine on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight on Wednesday",
+        "At nine on Thursday",
+        "At ten on Wednesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which reliability-analysis summary should students bring?",
       "audioText": "The maintenance communications tutor will assess short technical briefings on Wednesday at nine. Students should bring a one-page status summary and the supporting reference list. Each briefing should state the current position, outstanding action and any uncertainty. The tutor will assess whether the speaker uses precise terms and makes the next step clear to the audience.",
       "options": [
-        "On Friday",
-        "A one-page status summary",
-        "Next month",
-        "After the event"
+        "The full maintenance manual and revision history",
+        "The one-page status summary and supporting reference list",
+        "The technical drawing and parts list",
+        "The work order and inspection checklist"
       ],
       "correctIndex": 1,
       "points": 1

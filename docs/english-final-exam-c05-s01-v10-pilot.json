@@ -15,9 +15,9 @@
       "audioText": "The technical publications tutor will review revision control on Monday at twelve fifteen. Students should bring the document register and sample maintenance instruction. The lesson will identify revision numbers, issue dates and approval status. Students will practise checking whether a copy is current before using it in a controlled task.",
       "options": [
         "At twelve fifteen on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eleven fifteen on Monday",
+        "At twelve fifteen on Tuesday",
+        "At one fifteen on Monday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which documents should students bring?",
       "audioText": "The technical publications tutor will review revision control on Monday at twelve fifteen. Students should bring the document register and sample maintenance instruction. The lesson will identify revision numbers, issue dates and approval status. Students will practise checking whether a copy is current before using it in a controlled task.",
       "options": [
-        "On Friday",
+        "The revision-history sheet and approval record",
         "The document register and maintenance instruction",
-        "Next month",
-        "After the event"
+        "The task card and inspection report",
+        "The parts catalogue and configuration list"
       ],
       "correctIndex": 1,
       "points": 1

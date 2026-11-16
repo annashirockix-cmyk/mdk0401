@@ -15,9 +15,9 @@
       "audioText": "The documentation manager will explain controlled release of maintenance documents on Friday at eleven. Students should meet in the technical library and bring the sample release checklist. The session will review document applicability, approval status, revision identification and distribution. The manager will emphasise that a draft should not be confused with an approved release.",
       "options": [
         "On Friday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at ten",
+        "On Thursday at eleven",
+        "On Friday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which checklist should students bring?",
       "audioText": "The documentation manager will explain controlled release of maintenance documents on Friday at eleven. Students should meet in the technical library and bring the sample release checklist. The session will review document applicability, approval status, revision identification and distribution. The manager will emphasise that a draft should not be confused with an approved release.",
       "options": [
-        "On Friday",
+        "The revision register and approval record",
         "The sample release checklist",
-        "Next month",
-        "After the event"
+        "The task card and applicability list",
+        "The distribution log and maintenance instruction"
       ],
       "correctIndex": 1,
       "points": 1

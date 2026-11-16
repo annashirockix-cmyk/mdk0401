@@ -15,9 +15,9 @@
       "audioText": "The technical writing tutor will review an integrated report on Thursday at one. Students should bring the sample inspection record and trend chart. The class will combine a measured result with a short explanation of its context and limitations. The tutor will ask students to distinguish evidence from interpretation and to reference each source clearly.",
       "options": [
         "On Thursday at one",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at twelve",
+        "On Friday at one",
+        "On Thursday at two"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which two records are needed for the maintenance handover exercise?",
       "audioText": "The technical writing tutor will review an integrated report on Thursday at one. Students should bring the sample inspection record and trend chart. The class will combine a measured result with a short explanation of its context and limitations. The tutor will ask students to distinguish evidence from interpretation and to reference each source clearly.",
       "options": [
-        "On Friday",
+        "The defect history and maintenance log",
         "The sample inspection record and trend chart",
-        "Next month",
-        "After the event"
+        "The quality checklist and audit report",
+        "The process chart and risk register"
       ],
       "correctIndex": 1,
       "points": 1

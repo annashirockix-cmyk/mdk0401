@@ -15,9 +15,9 @@
       "audioText": "The quality instructor will discuss inspection findings on Thursday at ten thirty. Students should bring the sample inspection sheet and meet in the maintenance classroom. The lesson will compare observed condition, acceptance criteria and recorded evidence. The instructor will explain why a report should distinguish an observation from a conclusion about the cause.",
       "options": [
         "On Thursday at ten thirty",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at nine thirty",
+        "On Friday at ten thirty",
+        "On Thursday at eleven thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which inspection-results sheet is needed for the class?",
       "audioText": "The quality instructor will discuss inspection findings on Thursday at ten thirty. Students should bring the sample inspection sheet and meet in the maintenance classroom. The lesson will compare observed condition, acceptance criteria and recorded evidence. The instructor will explain why a report should distinguish an observation from a conclusion about the cause.",
       "options": [
-        "On Friday",
+        "The dimensional-measurement record",
         "The sample inspection sheet",
-        "Next month",
-        "After the event"
+        "The maintenance task card",
+        "The component parts list"
       ],
       "correctIndex": 1,
       "points": 1
