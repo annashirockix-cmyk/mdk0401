@@ -105,7 +105,7 @@
       "type": "single_choice",
       "prompt": "A fault has been reported, but its cause has not been confirmed. How should the report describe it?",
       "options": [
-        "Describe the observed condition and actions taken, and state that the cause is still under investigation.",
+        "The cause has not yet been established; record the observed condition and actions taken, and state that the investigation is continuing.",
         "Record the suspected cause as confirmed so the report can be closed.",
         "Leave the cause field blank and omit the unresolved fault from the handover.",
         "Copy the cause from an earlier report if the symptoms look similar."
