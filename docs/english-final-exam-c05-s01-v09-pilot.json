@@ -78,10 +78,10 @@
     {
       "id": "c5s1v09_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO sources useful in reliability analysis.",
+      "prompt": "Choose TWO evidence sources that help explain recurring equipment defects.",
       "options": [
-        "A technician's favourite sport",
-        "An unrelated office location",
+        "Equipment purchase price",
+        "An unverified operator estimate",
         "Operating conditions",
         "Maintenance history"
       ],
