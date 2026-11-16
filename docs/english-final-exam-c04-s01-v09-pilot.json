@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A power supply specification sheet lists important information about the device, including input conditions, output ratings and connector details. A student compared two similar models and noticed that their output ratings were different. The student checked the full model references before recording the information. This prevented the specifications from being mixed between the two devices. Reading 1. Which details may be listed on a power supply specification sheet?",
       "options": [
-        "Input conditions, output ratings and connector details",
-        "Equipment colour, storage location and serial-number format",
         "Supplier address, delivery date and purchase order",
+        "Equipment colour, storage location and serial-number format",
+        "Input conditions, output ratings and connector details",
         "Operator name, shift time and maintenance history"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why did the student check the full model references?",
       "options": [
         "To confirm the purchase price of each device",
-        "To avoid mixing specifications from two similar models",
+        "To replace the need to check connector details",
         "To identify which device was delivered first",
-        "To replace the need to check connector details"
+        "To avoid mixing specifications from two similar models"
       ],
       "correctIndex": 3,
       "points": 1
