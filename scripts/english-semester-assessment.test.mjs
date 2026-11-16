@@ -673,6 +673,16 @@ test("server rejects duplicate options and track-mismatched identifiers", () => 
   assert.throws(() => validate(wrongTrackIds, "technical"), /уникальным ID/);
 });
 
+test("teacher semester-import UI requires the real four-Basic/six-Technical schema", () => {
+  const ui=fs.readFileSync(path.join(root,"english-vpr-engine.js"),"utf8");
+  assert.match(ui,/expectedTests=\{basic:4,technical:6\}/);
+  assert.match(ui,/expectedQuestions=\{basic:80,technical:120\}/);
+  assert.match(ui,/semesterReady=Array\.isArray\(source\.basic\)&&source\.basic\.length===expectedTests\.basic/);
+  assert.match(ui,/Array\.isArray\(source\.technical\)&&source\.technical\.length===expectedTests\.technical/);
+  assert.match(ui,/Импорт семестровых контрольных временно закрыт/);
+  assert.doesNotMatch(ui,/10 контрольных Basic и 10 контрольных Technical/);
+});
+
 test("student-facing semester catalogue is allowlisted and never exposes teacher metadata", () => {
   const safe = sanitize([{
     id:"b_sem1", title:"Контрольная работа №1", subtitle:"1 курс, 1 семестр",
