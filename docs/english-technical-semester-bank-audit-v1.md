@@ -65,3 +65,16 @@ These edits retain the four-option format and the existing answer-key positions.
 ## 6. Current boundary
 
 This is a 200-item authoring pool, not yet ten approved semester assessments. No Basic semester bank has been authored from this work, and no new semester questions have been imported or published to students.
+
+
+## 4B. Basic–Technical exact-stem screen (2026-11-16)
+
+A second structural screen parsed all 200 Basic and all 200 Technical draft questions, including the two different Technical markdown formats used in Questions 1–60 and 61–200.
+
+- 400 question stems were recovered across the two tracks.
+- No exact normalized stem collision was found within either pool or between Basic and Technical.
+- Every recovered question had a corresponding teacher-key row. This supplements, but does not replace, the individual structural checks above.
+- This is an exact-stem screen only. It cannot rule out semantic overlap, repeated grammar targets, shared vocabulary, similar distractors, or overlap with protected VPR variants in Google Sheets.
+- The existing Technical near-duplicate corrections (BOM, root-cause analysis, obsolete documentation) remain in place. A full semantic comparison against the protected VPR variants still requires access to the current protected bank contents and a task-by-task review.
+
+The five-year map and final-exam blueprint files exist in the repository, but both explicitly remain provisional pending the approved work programme, semester hours and exact Belova textbook edition. No authoritative curriculum file was found in the repository tree during this pass.
