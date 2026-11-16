@@ -1205,3 +1205,14 @@ The previously recorded task-8 defects were corrected in the individual pilot JS
 
 The eleven individual pilot files were updated and committed. This is a targeted correction of the task-8 findings only; it does not approve the remaining tasks or rubrics in these variants. The combined 150-variant registry was synchronized with these eleven changes; all eleven task-8 records were compared against their individual pilot files and matched. The full 150-variant editorial review remains a release gate. No protected bank, Google Sheet or Apps Script was changed.
 
+## Targeted remediation — ordering tasks (2026-11-16)
+
+The ordering-task findings from the C1-S1, C1-S2 and C2-S1 sample audit were addressed in the individual pilot files and synchronized to the combined registry:
+
+- **C1-S1 V11–V14:** corrected the keyed sequence so topic selection and source checking precede report writing; project goals and task allocation precede preparation and design review; arrival precedes the safety briefing and guided visit; and reception/supervisor instructions precede work review and daily logging.
+- **C1-S1 V15:** replaced the unsafe, internally contradictory circuit sequence with a communication/reporting scenario for a supervised low-voltage training session. It assesses stopping and alerting the instructor, describing the observation, waiting for direction and recording the event. It gives no wiring or repair procedure.
+- **C1-S2 V01–V15:** rewrote all fifteen prompts as explicit ordering instructions. V07 now requires the learner to tell staff about an allergy and verify allergen information before choosing a suitable meal. V11 now states that the coordinator has confirmed the volunteer task before the safety briefing and activity.
+- **C2-S1 V01–V04:** rewrote the four career/job-application prompts as explicit ordering instructions; their existing step sequences were retained.
+
+The 24 individual pilot records were updated. Their corresponding task-9 records were synchronized into the combined 150-variant registry. The previously identified C1-S1 V08/V09 specialist-review flags remain open; this remediation does not approve operational safety or measurement sequences. No protected bank, Google Sheet or Apps Script was changed.
+
