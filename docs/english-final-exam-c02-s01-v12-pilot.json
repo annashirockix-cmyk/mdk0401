@@ -15,9 +15,9 @@
       "audioText": "The student support centre is running a workshop on managing study time and rest. It takes place in Room 12 on Tuesday at one o'clock. The session will cover planning revision, taking regular breaks and finding support when workloads become difficult. Students do not need to bring books, but they should bring a weekly timetable.",
       "options": [
         "In Room 12",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "In Room 10",
+        "In the library seminar room",
+        "In the IT laboratory"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "During the examination period, Pavel tried to study late every night. He found it difficult to concentrate in morning lessons. His tutor suggested making a realistic weekly plan and taking short breaks between study sessions. Pavel also started preparing his materials the evening before. After two weeks, he felt more organised and participated more actively in class. Reading 1. What problem did Pavel experience?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "He felt tired during afternoon lessons",
+        "He could not find his study materials",
         "He found it difficult to concentrate in morning lessons",
-        "To buy a ticket"
+        "He found it difficult to concentrate in morning lessons"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What changes did he make?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "He studied later every night",
+        "He stopped attending morning lessons",
+        "He planned his week, took breaks and prepared materials in advance",
         "He planned his week, took breaks and prepared materials in advance"
       ],
       "correctIndex": 3,
