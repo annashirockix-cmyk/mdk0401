@@ -888,3 +888,12 @@ V01–V10 используют преимущественно правдопод
 Проверены 30 reading items (tasks 3–4) во всех 15 вариантах. Все 30 ключей соответствуют passage; явных ошибок correctIndex не выявлено.
 
 В V02–V15 почти повсеместно в task 3 используются посторонние варианты “To borrow a laptop / To meet a relative / To buy a ticket”, а в task 4 — “At the sports centre / In the computer room / At the bus station”. Они не соответствуют тематике текстов о трудоустройстве, учёбе, цифровых материалах, аэропортах и профессиональной коммуникации. V01 в целом имеет более правдоподобные distractors. Требуется заменить шаблонные варианты V02–V15 на сопоставимые по смыслу и грамматической форме, не меняя проверенные ключи.
+
+
+### Targeted reading-key review — C2-S2 V01–V15
+
+Проверены 30 reading items (tasks 3–4) во всех 15 вариантах. Все 30 ключей соответствуют текстам; явных ошибок correctIndex не выявлено.
+
+V01–V02 имеют в целом тематически сопоставимые distractors. В V03–V15 task 3 систематически включает нерелевантные варианты “To borrow a laptop / To meet a relative / To buy a ticket”, а task 4 — “At the sports centre / In the computer room / At the bus station”. Это резко снижает сложность угадывания и не позволяет достоверно оценить понимание текстов о renewable energy, cyber safety, transport, environmental monitoring, audits, recycling и digital systems.
+
+Рекомендуется заменить повторяющиеся отвлекающие ответы на правдоподобные варианты из той же тематической категории, сохранив подтверждённые ключи. В рамках этой проверки пилотные JSON не изменялись.
