@@ -15,9 +15,9 @@
       "audioText": "The media studies tutor has moved the digital citizenship workshop to Room 26. It will start at nine forty-five on Tuesday. Students should review their public profile settings before the session and bring one example of an online post they would like to discuss. The workshop will include a short activity on how information can remain available after it is deleted.",
       "options": [
         "Room 26",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Room 16",
+        "Room 24",
+        "Room 26"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Before applying for a summer placement, Oleg reviewed the information visible on his public social media profile. He removed an old post that included a private timetable and changed the audience settings on several photographs. He also checked that his professional email address was suitable for applications. He understood that deleting a post could not guarantee that every copy had disappeared. Reading 1. What information did Oleg remove?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "A photograph showing his home address",
         "An old post containing a private timetable",
-        "To buy a ticket"
+        "An old post containing a private timetable",
+        "A comment about a college event"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What did he understand about deleting a post?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Deleting a post removes every copy immediately",
+        "Deleting a post does not guarantee that every copy has disappeared",
+        "Only friends can save a copy of a post",
         "Deleting a post does not guarantee that every copy has disappeared"
       ],
       "correctIndex": 3,
