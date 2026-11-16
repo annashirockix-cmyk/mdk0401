@@ -135,7 +135,7 @@
       "id": "c5s2v14_w01",
       "type": "written",
       "prompt": "Write 100–120 words proposing a technical process improvement. Include evidence of the current issue, a suggested change, a limitation and a way to measure success.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Current issue and evidence — 2: describes the process issue with relevant baseline evidence; 1: partial; 0: absent. (2) Proposed change — 2: presents a practical change linked to the evidence; 1: partial; 0: unsupported or vague. (3) Limitation and success measure — 2: identifies a limitation and a measurable indicator for reviewing effectiveness; 1: mentions one; 0: neither. (4) English — 2: coherent proposal and accurate process-improvement vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
