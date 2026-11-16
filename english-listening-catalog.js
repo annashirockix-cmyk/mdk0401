@@ -4679,7 +4679,7 @@
       ])
   );
 
-  // Sort all 75 active new-lesson activities by course, semester and lesson.
+  // Sort all 120 active legacy and new-lesson activities by course, semester and lesson.
   activities.sort(function (a, b) {
     var x = a.id.match(/en-c(\d+)-s(\d+)-l(\d+)/);
     var y = b.id.match(/en-c(\d+)-s(\d+)-l(\d+)/);
