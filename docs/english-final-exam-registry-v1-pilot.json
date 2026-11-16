@@ -20702,7 +20702,7 @@
                 "id": "c5s2v01_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words for a maintenance handover. Summarise completed work, outstanding tasks and one issue that needs confirmation.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Handover content — 2: accurately summarises completed work, outstanding tasks and the issue requiring confirmation; 1: covers two elements; 0: incomplete or inaccurate. (2) Status and follow-up — 2: identifies task status, next action and responsible role without implying unapproved completion; 1: partial; 0: absent. (3) Record integrity — 2: explains that relevant controlled records and required sign-off must remain current; 1: partial; 0: absent or incorrect. (4) English — 2: concise, logically organised handover language and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -20853,7 +20853,7 @@
                 "id": "c5s2v02_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words explaining how to communicate a technical risk clearly. Include a hazard, consequence, control and review responsibility.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Hazard and consequence — 2: identifies a specific hazard and a plausible consequence; 1: identifies only one clearly; 0: absent or inaccurate. (2) Control — 2: describes a relevant control at an appropriate level without inventing an unauthorised procedure; 1: vague or partial; 0: absent/unsafe. (3) Review responsibility — 2: identifies who reviews the control and when or under what trigger; 1: partial; 0: absent. (4) English — 2: clear risk communication and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -21005,7 +21005,7 @@
                 "id": "c5s2v03_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words explaining how to combine inspection findings and trend data in a technical report without overstating conclusions.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Inspection evidence — 2: accurately summarises relevant findings and their source; 1: partial; 0: absent. (2) Trend data — 2: explains how comparable trend data adds context; 1: partial; 0: absent or misinterpreted. (3) Limits and conclusions — 2: distinguishes evidence from inference and states limitations without overstating certainty; 1: partial; 0: unsupported conclusion. (4) English — 2: coherent technical-report language and accurate inspection/reliability vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -21157,7 +21157,7 @@
                 "id": "c5s2v04_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words summarising an intermittent fault investigation. Separate the timeline, confirmed facts, possible explanations and evidence still needed.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Timeline — 2: presents events in a clear, factual sequence; 1: partial; 0: absent or confused. (2) Confirmed facts — 2: separates verified observations from assumptions; 1: partial; 0: conflates them. (3) Possible explanations and evidence — 2: labels explanations as hypotheses and identifies evidence still needed; 1: mentions one; 0: presents an unverified cause as fact. (4) English — 2: clear chronology and accurate fault-investigation vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -21310,7 +21310,7 @@
                 "id": "c5s2v05_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words explaining the controls required before a maintenance document is released. Include applicability, revision, approval and distribution.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Applicability — 2: explains checking model/configuration and intended use; 1: partial; 0: absent. (2) Revision and approval — 2: explains verification of current revision, review and approval status; 1: partial; 0: absent. (3) Distribution control — 2: explains controlled release, access to the current version and prevention of obsolete copies; 1: partial; 0: absent. (4) English — 2: clear sequence and accurate document-control vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -21461,7 +21461,7 @@
                 "id": "c5s2v06_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words comparing two replacement options. Explain how cost, compatibility, service life and evidence should influence the recommendation.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Cost and service life — 2: compares total/relevant cost and expected service life using stated evidence; 1: partial; 0: absent. (2) Compatibility — 2: explains fit with the required system/configuration and applicable specification; 1: partial; 0: absent. (3) Evidence-based recommendation — 2: weighs the criteria, identifies uncertainty and gives a justified recommendation; 1: partial; 0: unsupported choice. (4) English — 2: clear comparative language and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -21613,7 +21613,7 @@
                 "id": "c5s2v07_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words as a formal technical email asking a supplier to clarify a discrepancy between a specification and a drawing.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Email purpose and reference — 2: clearly identifies the discrepancy and references the relevant specification/drawing; 1: partial; 0: absent. (2) Evidence and clarification — 2: describes the conflicting information factually and asks a focused question; 1: partial; 0: unclear or accusatory. (3) Professional communication — 2: uses an appropriate subject, greeting, concise request and courteous close; 1: partly appropriate; 0: unsuitable. (4) English — 2: accurate technical and email vocabulary with clear sentences; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -21765,7 +21765,7 @@
                 "id": "c5s2v08_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words summarising a quality-improvement project. Describe the change, the measured result and one limitation when interpreting the outcome.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Change — 2: describes the improvement clearly and links it to the identified process; 1: partial; 0: absent. (2) Measured result — 2: reports relevant before/after or other measured evidence accurately; 1: partial; 0: absent or unsupported. (3) Limitation — 2: identifies a meaningful limitation or factor affecting interpretation; 1: vague; 0: absent or overclaims causation. (4) English — 2: clear summary and accurate quality-improvement vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -21916,7 +21916,7 @@
                 "id": "c5s2v09_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words explaining how maintenance records support continuity, traceability and clear task status between teams.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Record content — 2: explains how records capture completed work, current status and outstanding actions; 1: partial; 0: absent. (2) Continuity — 2: explains how consistent entries support the next team and avoid gaps or duplication; 1: partial; 0: absent. (3) Traceability — 2: identifies dates, references, responsible persons and links to controlled records as relevant; 1: partial; 0: absent. (4) English — 2: clear explanation and accurate maintenance-record vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -22068,7 +22068,7 @@
                 "id": "c5s2v10_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words summarising a cross-disciplinary handover. Explain one dependency between teams and how it should be tracked.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Dependency — 2: identifies a specific dependency between teams and why it matters; 1: partial; 0: absent. (2) Handover content — 2: identifies the information/status that must pass between teams; 1: partial; 0: absent. (3) Tracking — 2: proposes a clear owner, status record and follow-up point without assuming completion; 1: partial; 0: absent. (4) English — 2: coherent cross-disciplinary communication and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -22220,7 +22220,7 @@
                 "id": "c5s2v11_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words summarising how to investigate a discrepancy between a component label and its record. Include evidence, confirmation and controlled correction.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Evidence — 2: explains comparing the component label with the relevant controlled record and preserving the observed details; 1: partial; 0: absent. (2) Confirmation — 2: identifies an appropriate source/role for confirming the discrepancy; 1: partial; 0: absent. (3) Controlled correction — 2: explains that any correction must be authorised, traceable and recorded, not silently altered; 1: partial; 0: absent or incorrect. (4) English — 2: clear sequence and accurate traceability vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -22371,7 +22371,7 @@
                 "id": "c5s2v12_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words explaining how an audit finding should connect a requirement with objective evidence.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Requirement — 2: identifies the applicable requirement or criterion; 1: partial; 0: absent. (2) Objective evidence — 2: describes specific, verifiable evidence and its source; 1: partial; 0: absent. (3) Finding statement — 2: clearly links the evidence to the requirement and avoids unsupported conclusions; 1: partial; 0: no clear link or speculative. (4) English — 2: concise audit language and accurate quality vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -22522,7 +22522,7 @@
                 "id": "c5s2v13_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words summarising how mechanical, electrical and software teams should manage an unresolved interface during system integration.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Interface issue — 2: identifies the unresolved interface and the relevant mechanical/electrical/software boundaries; 1: partial; 0: absent. (2) Coordination — 2: explains joint review, information exchange and agreed ownership; 1: partial; 0: absent. (3) Control of uncertainty — 2: explains documenting assumptions/open points and not treating the interface as resolved before evidence/approval; 1: partial; 0: absent or incorrect. (4) English — 2: clear cross-disciplinary technical language; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -22673,7 +22673,7 @@
                 "id": "c5s2v14_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words proposing a technical process improvement. Include evidence of the current issue, a suggested change, a limitation and a way to measure success.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Current issue and evidence — 2: describes the process issue with relevant baseline evidence; 1: partial; 0: absent. (2) Proposed change — 2: presents a practical change linked to the evidence; 1: partial; 0: unsupported or vague. (3) Limitation and success measure — 2: identifies a limitation and a measurable indicator for reviewing effectiveness; 1: mentions one; 0: neither. (4) English — 2: coherent proposal and accurate process-improvement vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
@@ -22825,7 +22825,7 @@
                 "id": "c5s2v15_w01",
                 "type": "written",
                 "prompt": "Write 100–120 words explaining how to prepare a reliable summary from several technical documents. Include source references, conflicting information and unresolved details.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total. Score each criterion 0–2: (1) Source references — 2: identifies the documents and relevant revisions/sections sufficiently to trace claims; 1: partial; 0: absent. (2) Reconciliation — 2: compares sources and clearly reports conflicts rather than silently choosing one; 1: partial; 0: absent. (3) Unresolved details — 2: explicitly identifies missing/uncertain information and avoids unsupported conclusions; 1: partial; 0: absent or overclaims. (4) English — 2: clear synthesis and accurate technical-documentation vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
                 "points": 8
               }
             ],
