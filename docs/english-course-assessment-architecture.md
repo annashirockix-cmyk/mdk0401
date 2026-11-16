@@ -26,6 +26,7 @@ The semester-assessment importer follows the same five-year split as the course 
 - The 200-item Basic and 200-item Technical authoring pools are larger than the core requirement. Remaining questions are reserve material for alternate forms, practice and future replacement; they must not be silently treated as additional semesters.
 - The server validates the track-specific count and course-year mapping. Basic IDs use `b_sem1`–`b_sem4`; Technical IDs use `t_sem1`–`t_sem6`. Correct-answer keys remain server-side.
 - The exact allocation of questions to semesters remains provisional until the approved work programme and textbook edition are checked. A passing structural test does not approve pedagogical placement.
+- Current release boundary: the legacy client seed still contains ten Basic tests with missing answer keys, while the Technical seed is intentionally empty. Neither is a valid 4-Basic/6-Technical import package. The teacher UI now withholds the semester-import control unless it receives exactly four Basic tests (80 questions) and six Technical tests (120 questions); the 200-item Basic and Technical authoring pools remain drafts until mapped and reviewed.
 
 ## 2. Five-year lecture target and provisional map
 
