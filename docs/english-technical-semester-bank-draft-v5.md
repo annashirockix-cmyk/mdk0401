@@ -64,7 +64,7 @@
 - C. Consumption remained unchanged
 - D. Consumption doubled
 
-**91.** Choose the correct sentence.
+**91.** Which sentence correctly reports that the equipment has undergone two tests since the repair?
 - A. “The equipment have tested twice since repair.”
 - B. “The equipment has been tested twice since the repair.”
 - C. “The equipment was test twice since the repair.”
