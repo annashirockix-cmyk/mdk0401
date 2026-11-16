@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A programmable logic controller uses a programme to process input information and control outputs. Its documentation may include an input-output list, a description of programme sections and the controller model. Address formats can vary between systems. For that reason, students should use the documentation for the specific controller rather than assume that every PLC uses identical address conventions. Reading 1. What may PLC documentation include?",
       "options": [
-        "An input-output list, programme-section description and controller model",
-        "A supplier address, delivery date and purchase order",
         "An operator roster, training record and shift plan",
+        "A supplier address, delivery date and purchase order",
+        "An input-output list, programme-section description and controller model",
         "A machine parts list, material grade and inspection date"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why should students check the specific controller model?",
       "options": [
         "Because all PLCs use identical address conventions",
-        "Because address formats can vary between systems",
+        "Because the programme section is unrelated to the controller",
         "Because the controller model determines the machine colour",
-        "Because the programme section is unrelated to the controller"
+        "Because address formats can vary between systems"
       ],
       "correctIndex": 3,
       "points": 1
