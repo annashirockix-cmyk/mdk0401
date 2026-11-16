@@ -106,12 +106,12 @@
       "type": "single_choice",
       "prompt": "You find a printed instruction with an old revision number. What should you do?",
       "options": [
-        "I will guess and continue.",
-        "Check the document register for the current approved version before using it.",
-        "The detail is not important.",
-        "I will copy an unrelated record."
+        "Check the document register for the current approved revision before using the instruction.",
+        "Use the printed copy if its title matches the task card.",
+        "Compare the revision number with the previous shift's notes and use whichever is newer.",
+        "Ask a colleague whether the instruction was used recently."
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
