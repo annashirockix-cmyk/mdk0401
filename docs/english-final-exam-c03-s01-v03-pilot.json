@@ -78,10 +78,10 @@
     {
       "id": "c3s1v03_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO elements commonly found in an assembly drawing package.",
+      "prompt": "Choose TWO document elements that identify the parts and the controlled issue of an assembly drawing package.",
       "options": [
-        "A personal shopping list",
-        "A weather forecast",
+        "Purchase order number",
+        "Planned maintenance interval",
         "A parts list",
         "A drawing revision identifier"
       ],
