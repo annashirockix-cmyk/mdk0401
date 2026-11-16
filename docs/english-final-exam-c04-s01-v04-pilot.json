@@ -78,10 +78,10 @@
     {
       "id": "c4s1v04_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details needed to compare energy consumption fairly.",
+      "prompt": "Choose TWO operating data needed to compare energy consumption fairly.",
       "options": [
-        "The colour of the device",
-        "The number of labels on the casing",
+        "Equipment serial number",
+        "Installation date",
         "Power rating",
         "Operating time"
       ],
