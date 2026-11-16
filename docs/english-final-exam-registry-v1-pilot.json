@@ -4594,9 +4594,9 @@
                 "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
                 "options": [
                   "In the conference room",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "Near the main entrance",
+                  "In the careers office",
+                  "In the engineering workshop"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -4607,12 +4607,12 @@
                 "prompt": "Listening 2. Which two things should students prepare for the career fair?",
                 "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
                 "options": [
-                  "A short CV and two questions about training opportunities",
                   "A completed engineering project and a passport",
+                  "A short CV and two questions about training opportunities",
                   "A list of examination results and a reference letter",
                   "A visitor badge and a company contract"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -4635,10 +4635,10 @@
                 "options": [
                   "To compare the companies' products",
                   "To ask for a different placement",
-                  "To make sure the dates fitted his college course",
-                  "To arrange online training"
+                  "To arrange online training",
+                  "To make sure the dates fitted his college course"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -6905,11 +6905,11 @@
                 "prompt": "A local college introduced a reusable container scheme after a survey showed that most lunchtime waste came from disposable packaging. The canteen now offers a small discount to students who bring their own containers. Staff also placed clear signs near the serving area. After one term, the amount of disposable packaging had fallen, although the college plans to collect more data before deciding whether to expand the scheme. Reading 1. What encouraged the college to introduce the scheme?",
                 "options": [
                   "A new college rule required reusable containers",
-                  "A survey showed disposable packaging caused most lunchtime waste",
                   "A local company offered free bottles",
+                  "A survey showed disposable packaging caused most lunchtime waste",
                   "Students asked for longer lunch breaks"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -6919,10 +6919,10 @@
                 "options": [
                   "To check whether the discount is popular",
                   "To compare the canteen's opening hours",
-                  "To make a better-informed decision about expanding the scheme",
-                  "To decide which reusable bottle to purchase"
+                  "To decide which reusable bottle to purchase",
+                  "To make a better-informed decision about expanding the scheme"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -7043,12 +7043,12 @@
                 "prompt": "Listening 2. What will students practise checking?",
                 "audioText": "The college library is holding a workshop on checking information found online. It will take place in the digital study room on Tuesday at two. Students will practise checking the author, publication date and supporting evidence. They should bring a laptop if they have one, but a limited number of college devices will be available to borrow.",
                 "options": [
-                  "The author, publication date and supporting evidence",
                   "The equipment serial number and model",
+                  "The author, publication date and supporting evidence",
                   "The room booking and lesson timetable",
                   "The student's attendance record"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -7057,11 +7057,11 @@
                 "prompt": "When a student researched renewable energy, the first website she found made a strong claim but did not identify its author or provide links to evidence. She compared the information with a government report and a university article. The sources agreed on the general trend but used different figures because they covered different years. She included the dates and explained the difference in her assignment. Reading 1. Why did the student question the first website?",
                 "options": [
                   "It was published too recently to assess",
-                  "It had no named author or supporting evidence",
                   "It used technical language",
+                  "It had no named author or supporting evidence",
                   "It disagreed with every other source"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -9188,11 +9188,11 @@
                 "prompt": "An engineering student compared aluminium and steel for a lightweight support bracket. Aluminium has a lower density, so a component made from it may weigh less. Steel is generally stronger in many common grades, but the exact choice depends on the load, environment and design requirements. The student recorded the material grade and checked the drawing before writing a recommendation. Reading 1. Why did the student consider aluminium?",
                 "options": [
                   "Because aluminium is always stronger than steel",
-                  "Because it has a lower density and may produce a lighter component",
                   "Because it requires no design checks",
+                  "Because it has a lower density and may produce a lighter component",
                   "Because it is suitable for every load and environment"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -11610,12 +11610,12 @@
                 "prompt": "Listening 2. Which two command types will be compared?",
                 "audioText": "The CNC theory class will study the structure of a sample programme on Friday at eleven. Students will use a printed extract and identify programme numbers, block numbers and common address letters. The instructor will explain the difference between a rapid positioning command and a linear feed command. The class will not run the programme on a machine.",
                 "options": [
-                  "A rapid positioning command and a linear feed command",
                   "Two tool-offset commands",
+                  "A rapid positioning command and a linear feed command",
                   "A spindle command and a coolant command",
                   "A coordinate setting and a feed-rate value"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -11624,11 +11624,11 @@
                 "prompt": "A CNC programme is organised into blocks of information. Each block may contain a sequence number and words that describe a command or a value. In a basic example, G00 is associated with rapid positioning, while G01 describes linear interpolation at a programmed feed. The meaning of a complete programme depends on the controller, machine configuration and other instructions, so students should use the approved documentation for the specific equipment. Reading 1. How is a CNC programme organised?",
                 "options": [
                   "Into separate tool catalogues",
-                  "Into blocks of information",
                   "Into one unlabelled paragraph",
+                  "Into blocks of information",
                   "Into drawings without sequence"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -13746,11 +13746,11 @@
                 "audioText": "The electrical engineering tutor will introduce circuit diagrams on Tuesday at ten. Students should meet in the electronics classroom and bring the circuit-symbol worksheet. The lesson will cover a simple series circuit, a parallel circuit and the symbols used for common components. No electrical equipment will be connected during this theory session.",
                 "options": [
                   "The component glossary",
-                  "The safety checklist",
                   "The circuit-symbol worksheet",
+                  "The safety checklist",
                   "The maintenance record"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -13759,11 +13759,11 @@
                 "prompt": "A series circuit has one main path for current, so the same current passes through each component in that path. In a parallel circuit, current can divide between branches. The voltage across parallel branches is the same in an ideal circuit. A student compared two diagrams and labelled the power source, switch and resistors before describing the difference between the circuit types. Reading 1. How many main paths does a simple series circuit have?",
                 "options": [
                   "Two separate paths",
-                  "One main path",
                   "Three independent branches",
+                  "One main path",
                   "No path for current"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -13771,12 +13771,12 @@
                 "type": "single_choice",
                 "prompt": "Which components did the student label?",
                 "options": [
-                  "The power source, switch and resistors",
                   "The battery, motor and display",
                   "The processor, memory and storage",
-                  "The transmitter, channel and receiver"
+                  "The transmitter, channel and receiver",
+                  "The power source, switch and resistors"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -16043,11 +16043,11 @@
                 "prompt": "A basic communication system transfers information from a source to a destination. A transmitter prepares a signal, a channel carries it and a receiver processes the incoming signal. The system may also include noise or interference that affects the quality of communication. A block diagram helps engineers describe the main functions without showing every internal circuit detail. Reading 1. What does a channel do in a basic communication system?",
                 "options": [
                   "It stores the information permanently",
-                  "It carries the signal",
                   "It generates the original message",
+                  "It carries the signal",
                   "It removes all interference"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -16057,10 +16057,10 @@
                 "options": [
                   "It lists every internal circuit component",
                   "It gives the exact physical dimensions",
-                  "It describes the main functions without showing every internal circuit detail",
-                  "It replaces the need for technical documentation"
+                  "It replaces the need for technical documentation",
+                  "It describes the main functions without showing every internal circuit detail"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -16180,12 +16180,12 @@
                 "prompt": "Listening 2. Which reference list is required for the computer-systems class?",
                 "audioText": "The computer systems class will compare hardware and software on Monday at eleven. Students should bring the component glossary and meet in the digital laboratory. The instructor will review the roles of the processor, memory, storage and operating system. A short matching activity will use diagrams and product descriptions.",
                 "options": [
-                  "The component glossary",
                   "The safety checklist",
+                  "The component glossary",
                   "The maintenance schedule",
                   "The circuit-symbol worksheet"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -16194,11 +16194,11 @@
                 "prompt": "A computer system uses hardware and software to process information. The processor performs instructions, memory holds data that is currently in use, and storage keeps files for later access. The operating system manages resources and provides services for applications. These components have different roles, so a technical description should avoid using the terms as if they were interchangeable. Reading 1. What is the role of the operating system?",
                 "options": [
                   "It stores files for later access",
-                  "It manages resources and provides services for applications",
                   "It performs every calculation in the processor",
+                  "It manages resources and provides services for applications",
                   "It connects the computer to the power supply"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -20608,11 +20608,11 @@
                 "prompt": "A useful handover summarises the status of work at the end of a shift. It identifies completed tasks, outstanding items, relevant references and any issue that requires attention. Unconfirmed information should be clearly labelled as such. The incoming team should be able to distinguish between work that has been completed, work that remains open and decisions that still require approval. Reading 1. What should a useful handover identify?",
                 "options": [
                   "Only the names of the team members",
-                  "Completed tasks, outstanding items, references and issues requiring attention",
                   "The cost of the next maintenance visit",
+                  "Completed tasks, outstanding items, references and issues requiring attention",
                   "The personal opinions of the outgoing team"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -20620,12 +20620,12 @@
                 "type": "single_choice",
                 "prompt": "Why should unconfirmed information be labelled?",
                 "options": [
-                  "So the incoming team can distinguish facts from information still awaiting confirmation",
                   "So that the report can be made longer",
                   "Because all information must be treated as final",
-                  "To avoid recording who supplied the information"
+                  "To avoid recording who supplied the information",
+                  "So the incoming team can distinguish facts from information still awaiting confirmation"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -20760,11 +20760,11 @@
                 "prompt": "A risk record should describe a hazard, the possible consequence and the controls that are already in place. It should also identify any remaining concern and the person or team responsible for review. A risk rating is only meaningful when the method and assumptions are clear. If conditions change, the record should be reviewed rather than treated as permanently valid. Reading 1. What should a risk record describe?",
                 "options": [
                   "Only the name of the hazard",
-                  "The hazard, possible consequence, existing controls and remaining concern",
                   "The personal opinions of the maintenance team",
+                  "The hazard, possible consequence, existing controls and remaining concern",
                   "The cost of every component in the system"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
