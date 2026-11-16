@@ -361,3 +361,70 @@ C3-S2 task 7 accepts “proposal” and “recommendation” as interchangeable 
 Weak wrong-category distractors remain in four of five files, especially in reading tasks with unrelated activities or locations. Written tasks include word limits and 8-point rubrics; CEFR calibration and official learning-outcome alignment remain unverified.
 
 This is a second representative V15 sample, not a complete V15 audit. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+## Consolidated defect register and remediation order (2026-11-16)
+
+This register consolidates only defects explicitly observed in the representative samples recorded above and in the V04–V11 reviews. It is not a declaration that all 150 variants have been fully audited. Where an exact JSON task ID was not preserved in the review notes, the course/semester/variant slot and task number are given instead of guessing an ID.
+
+### P0 — safety and incorrect answer keys
+
+| Variant / task | Confirmed finding | Required action |
+|---|---|---|
+| V14, C1-S1, task 1 | Audio names Ms Patel for reception; answer key points to Mr Green. | Set the key to the Ms Patel option; re-run key/audio validation. |
+| V14, C1-S1, task 2 | Audio instructs a delayed student to telephone reception; key points to “Send no message”. | Set the key to “Telephone reception”; re-run key/audio validation. |
+| V15, C1-S1, task 9 | Keyed circuit-work sequence is unsafe/incoherent: instructor check precedes component connection/checking, while power-off is placed last. | Rewrite the task against an explicitly defined safe workflow and lab procedure; subject-matter review required before release. |
+| V11, C1-S1, task 9 | Report-writing sequence begins with writing before topic selection and source work. | Correct the sequence to topic → sources → report → source list, or rewrite the task if another process is intended. |
+
+### P1 — malformed prompts and prompt/audio mismatches
+
+| Variant / task | Confirmed finding | Required action |
+|---|---|---|
+| V12, C3-S2, task 2 | Prompt asks for a resource for a drawing-revision activity; audio describes CNC programme review and controller glossary. | Align the prompt with the audio or replace the audio and choices as a complete item. |
+| V12, C4-S1, task 2 | Prompt asks for a maintenance note; audio asks students to bring a circuit diagram from the previous lesson. | Align the prompt with the audio. |
+| V13, C4-S2, task 8 | Prompt contains unrelated/concatenated text: “Check the device register and What should you say?” | Rewrite as one complete situational question. |
+| V13, C5-S1, task 2 | Prompt refers to reliability analysis; audio describes a technical briefing and one-page status summary. | Rewrite the prompt to match the actual source-summary exercise. |
+| V14, C4-S2, task 8 | Truncated/concatenated prompt: “Could we confirm the unit's What is the best response?” | Rewrite as a complete situational prompt. |
+| V15, C4-S2, task 8 | Truncated/concatenated prompt: “The cause has not yet What should you say?” | Restore the missing situation and question; verify that the answer options fit. |
+| V15, C2-S1, task 2 | Prompt asks for a technical reference at a maintenance-planning meeting, while audio is a work-placement briefing. The keyed placement-agreement answer is in the audio, but the stem belongs to another context. | Rewrite the stem to ask what students must bring to the placement briefing. |
+| V11, C4-S2, task 8 | Prompt contains malformed wording: “Check the device register and What should you say?” | Rewrite as a complete, contextually consistent question. |
+| V14, C1-S2, task 9 | Prompt field contains a semicolon-separated list of stages rather than an ordering instruction. | Replace with a clear imperative such as “Put the stages … in the correct order.” |
+| V15, C1-S2, task 9 | Prompt field is a semicolon-separated list of stages rather than an ordering instruction. | Replace with a clear ordering instruction. |
+
+### P2 — ordering, vocabulary acceptance and answer ambiguity
+
+| Variant / task | Confirmed finding | Required action |
+|---|---|---|
+| V14, C1-S1, task 9 | Sequence reviews completed tasks before arrival and supervisor instructions. | Rewrite to reflect arrival → instructions → work → review/record. |
+| V08, C3-S2, short-text task | Accepts both “conformity” and “non-conformity” after the fixed prefix “non-”, producing “non-non-conformity” for one answer. | Remove the prefixed duplicate and test rendered completion. |
+| V09, C2-S2, short-text task | “digital footprint” is accepted after the fixed prefix “digital”, producing a duplicated word. | Remove the redundant full phrase or rewrite the stem. |
+| V09, C4-S2, short-text task | “data log” is accepted after the fixed prefix “data”, producing a duplicated word. | Remove the redundant full phrase or rewrite the stem. |
+| V09, C3-S1, short-text task | “defect” is accepted alongside “non-conformity”; these are not always equivalent. | Narrow the definition or remove the non-equivalent answer. |
+| V10, C5-S2, short-text task | “dependency” and “dependent item” are accepted as equivalents although their meanings differ. | Define the target term precisely and accept only defensible equivalents. |
+| V11, C1-S1, short-text task | “reference” is accepted in a phrase requiring a plural list of sources; singular form is awkward. | Adjust accepted forms or the sentence frame. |
+| V12, C4-S1, task 7 | Definition of a device that opens/closes a circuit accepts “switch” and “relay”; “switch” is too broad if relay is the intended term. | Narrow the definition or explicitly test the broader category. |
+| V13, C2-S2, short-text task | “procedure” and “process” are accepted for a series of actions/instructions; not always interchangeable. | Clarify the intended concept and accepted answer set. |
+| V15, C4-S1, task 7 | “revision record” accepted after the fixed prefix “revision”, creating “revision revision record”. | Remove the redundant accepted answer or change the stem. |
+| V15, C3-S2, task 7 | “proposal” and “recommendation” treated as interchangeable. | Tighten the definition or accept only the intended term. |
+| V15, C5-S2, task 7 | “summary” and “synthesis” treated as interchangeable. | Clarify the intended technical-writing concept. |
+
+### P3 — distractor quality and assessment validity
+
+- Weak wrong-category distractors were observed repeatedly in V05–V15 samples, commonly three unrelated places or activities beside one plausible answer. This makes several reading/listening questions solvable by eliminating absurd choices rather than demonstrating comprehension.
+- Replace these with distractors from the same semantic category, plausible confusions, details mentioned elsewhere in the text/audio, or common learner errors. Each distractor must remain unambiguously incorrect.
+- Written tasks in reviewed samples generally have word limits and 8-point rubrics. Their structural presence is confirmed; CEFR calibration, construct validity and mapping to approved learning outcomes are not yet established.
+- Across reviewed samples V04–V15, the first eight objective/short-text slots repeatedly show the same positional key signature: single-choice indices 0, 1, 2, 3, 0; multiple-choice indices [2,3]; short-text; single-choice index 1. This is evidence of authored positional regularity in the inspected files, not proof that runtime answer shuffling is broken. The delivery engine must be tested independently across courses, subjects, units, attempts and reloads, with displayed options and scoring verified together.
+
+### Recommended remediation sequence
+
+1. **Freeze release/import of affected pilot variants** until P0 safety and key defects are corrected and independently checked.
+2. Correct all P0 answer keys and safety-sensitive ordering tasks; add automated tests that compare keyed answers with the source text/audio where feasible, plus mandatory subject review for safety sequences.
+3. Repair P1 malformed prompts and prompt/audio mismatches; add schema/content lint rules for incomplete stems, duplicated phrases and semicolon-only ordering prompts.
+4. Repair P2 accepted-answer sets and test completed sentence rendering, not just raw answer strings.
+5. Replace weak distractors and review written rubrics against CEFR descriptors and the approved programme outcomes.
+6. Run a separate runtime shuffle regression suite. Do not infer shuffle failure from static source ordering alone.
+7. Only after these checks, update pilot JSON in a separately reviewed change and rerun the complete validation suite.
+
+### Coverage and confidence
+
+The register is a consolidated list of known findings, not an exhaustive inventory of all 150 pilot variants. V05–V06 were checked across all 20 files; V07–V15 were sampled rather than exhaustively audited (with additional disjoint samples for V14 and V15); V04 findings are based on the earlier recorded review. Some V08–V11 exact task identifiers were not retained in the notes and are intentionally represented by slot/task description rather than fabricated IDs. No pilot JSON, protected question bank, Google Sheet, Apps Script, import endpoint or deployment was modified by this register.
