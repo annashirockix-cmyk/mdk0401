@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "The defect history ___ before a reliability trend is reported.",
       "options": [
-        "should be reviewed",
         "should reviewing",
+        "should be reviewed",
         "review",
         "are reviewed"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
