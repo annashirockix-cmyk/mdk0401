@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A planned series of manufacturing stages is a process ___.",
       "acceptedAnswers": [
-        "plan",
-        "process plan"
+        "plan"
       ],
       "points": 2
     },
