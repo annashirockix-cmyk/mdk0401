@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "The transfer of work information between teams at the end of a shift is a shift ___.",
       "acceptedAnswers": [
-        "handover",
-        "shift handover"
+        "handover"
       ],
       "points": 2
     },
