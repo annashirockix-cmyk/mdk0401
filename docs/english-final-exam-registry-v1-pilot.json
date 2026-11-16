@@ -19662,9 +19662,9 @@
                 "type": "single_choice",
                 "prompt": "Controlled technical publications must be identifiable by their document number, revision and issue status. A document register helps users locate the current approved version. Printed or downloaded copies may become outdated after a revision is released, so users should check the status before relying on them. Obsolete copies should be managed according to the organisation's document-control procedure. Reading 1. What details identify a controlled publication?",
                 "options": [
-                  "Document number, revision and issue status",
-                  "Supplier address, purchase price and delivery time",
                   "Equipment colour, storage location and shift number",
+                  "Supplier address, purchase price and delivery time",
+                  "Document number, revision and issue status",
                   "Author name, file size and print date"
                 ],
                 "correctIndex": 2,
@@ -19676,9 +19676,9 @@
                 "prompt": "Why should users check a copy before relying on it?",
                 "options": [
                   "Because a printed copy is always more reliable than a digital copy",
-                  "Because printed or downloaded copies may become outdated",
+                  "Because users should rely on the first copy they receive",
                   "Because the revision number is not part of document control",
-                  "Because users should rely on the first copy they receive"
+                  "Because printed or downloaded copies may become outdated"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -19813,9 +19813,9 @@
                 "type": "single_choice",
                 "prompt": "A non-conformance report records a failure to meet a stated requirement. It should identify the affected item, the requirement, the observed condition and supporting evidence. The report may also identify immediate containment or a proposed review action, but the cause should not be stated as confirmed unless the investigation supports it. Clear reporting helps the responsible team decide what to examine next. Reading 1. Which information should a non-conformance report identify?",
                 "options": [
-                  "Affected item, requirement, observed condition and supporting evidence",
-                  "Staff name, annual leave, shift preference and training date",
                   "Supplier address, purchase value, invoice and delivery time",
+                  "Staff name, annual leave, shift preference and training date",
+                  "Affected item, requirement, observed condition and supporting evidence",
                   "Equipment colour, storage location, room number and group"
                 ],
                 "correctIndex": 2,
@@ -19828,8 +19828,8 @@
                 "options": [
                   "As soon as a possible cause has been suggested",
                   "When the reporting form has been completed",
-                  "Only when the investigation supports it",
-                  "When the same symptom has appeared on another item"
+                  "When the same symptom has appeared on another item",
+                  "Only when the investigation supports it"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -19965,8 +19965,8 @@
                 "prompt": "Configuration identification describes the specific model and installed options of an item of equipment. A model designation alone may not show every difference between individual units. Serial numbers and option records can provide additional detail. Technical information should be selected only after the relevant configuration has been established, particularly when similar models have different installed equipment. Reading 1. Why may a model designation alone be insufficient?",
                 "options": [
                   "Because the model designation is always incorrect",
-                  "It may not show all differences between individual units",
                   "Because serial numbers are used only for delivery records",
+                  "It may not show all differences between individual units",
                   "Because installed options are identical across all models"
                 ],
                 "correctIndex": 2,
@@ -19979,8 +19979,8 @@
                 "options": [
                   "Select a manual using the model name alone",
                   "Use the information from the nearest available unit",
-                  "The relevant configuration should be established",
-                  "Assume that all installed options match the standard model"
+                  "Assume that all installed options match the standard model",
+                  "The relevant configuration should be established"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -20116,8 +20116,8 @@
                 "prompt": "A technical briefing is intended to communicate essential information efficiently. It should begin with the purpose, then present the current status and relevant evidence. Outstanding actions and decisions required should be stated clearly. Technical terms should be used consistently, and any uncertainty should be identified rather than hidden. A concise structure helps the audience understand what is known and what must happen next. Reading 1. What should a briefing present after its purpose?",
                 "options": [
                   "The purchase cost and supplier delivery date",
-                  "The current status and relevant evidence",
                   "The full maintenance history of every component",
+                  "The current status and relevant evidence",
                   "The names and job titles of all people in the organisation"
                 ],
                 "correctIndex": 2,
@@ -20128,10 +20128,10 @@
                 "type": "single_choice",
                 "prompt": "Why should uncertainty be identified?",
                 "options": [
-                  "So the audience can distinguish known information from unresolved matters",
+                  "So the audience does not need to review supporting evidence",
                   "So the briefing can avoid mentioning outstanding actions",
                   "So uncertain information can be presented as confirmed",
-                  "So the audience does not need to review supporting evidence"
+                  "So the audience can distinguish known information from unresolved matters"
                 ],
                 "correctIndex": 3,
                 "points": 1
