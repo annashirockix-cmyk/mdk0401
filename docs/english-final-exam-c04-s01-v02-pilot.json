@@ -42,8 +42,8 @@
       "prompt": "An electrical measurement record should include the measured value, the unit and enough context to identify the test point. Voltage is measured in volts, current in amperes and resistance in ohms. A technician should also record the instrument identification when the procedure requires it. Writing a number without a unit can make a result unclear or misleading. Reading 1. Which unit is used for resistance?",
       "options": [
         "Volts",
-        "Ohms",
         "Amperes",
+        "Ohms",
         "Watts"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why should a measurement include its unit?",
       "options": [
         "To calculate the instrument's power consumption",
-        "To make the result clear and avoid misunderstanding",
+        "To replace the need for a test-point reference",
         "To identify the person who took the measurement",
-        "To replace the need for a test-point reference"
+        "To make the result clear and avoid misunderstanding"
       ],
       "correctIndex": 3,
       "points": 1
