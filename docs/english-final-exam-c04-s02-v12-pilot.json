@@ -106,7 +106,7 @@
       "prompt": "Before applying a model update, what should the team confirm?",
       "options": [
         "Apply the newest model file immediately and check compatibility afterwards.",
-        "Confirm the approved model version and verify its source data before applying the update.",
+        "Could we update the model using the approved version and verified source data?",
         "Use the model from a similar unit because the equipment family is the same.",
         "Update the displayed model name and leave the configuration record unchanged."
       ],
