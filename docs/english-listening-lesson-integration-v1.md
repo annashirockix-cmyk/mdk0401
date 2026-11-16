@@ -163,15 +163,19 @@ The catalogue now contains 96 unique practice activities across eight complete s
 All Course 2 activities include browser-readable English scripts and four multiple-choice comprehension questions with practice feedback. The catalogue remains practice-only: client-side answer keys, no gradebook writes, no exam attempts. Course 1 remains outstanding. Direct embedding in every lesson and real-browser playback testing remain separate tasks.
 
 
-## Corrected implementation status — 75 of 120 lesson activities
+## Corrected implementation status — all 120 lesson activities authored
 
-A source-level and runtime read-back on 2026-11-16 corrected the earlier planned-coverage statement above. The active `EnglishListeningCatalogue` currently contains **75** playable practice activities, not 120. These 75 activities correspond to the 75 new lesson IDs in the five-year map and have browser-readable scripts and practice questions.
+A source-level and runtime read-back on 2026-11-16 found that the active catalogue initially contained only the 75 new-lesson activities. The 45 pre-existing Basic/Technical source lectures (16 Basic + 29 Technical) had no listening scripts in their source data. This gap has now been addressed by adding 45 separate practice activities with stable IDs that match the existing lecture-to-listening mapping in `app.js`.
 
-The 45 pre-existing Basic/Technical source lectures (16 Basic + 29 Technical) do not contain listening scripts in `data-english-basic.js` or `data-english-technical.js`, and they do not yet have active catalogue activities. The earlier statement that all 45 source lectures had been mapped to playable activities was not supported by the current runtime and is superseded by this correction.
+The catalogue now contains **120 unique active activities**:
+- 45 activities for the pre-existing source lectures, preserving their original lecture content and codes;
+- 75 activities for the new five-year lesson IDs.
+
+An automated regression test now checks all 120 IDs, unique coverage, script presence, at least three comprehension questions per activity, valid answer indices and practice explanations. The catalogue remains practice-only: answer keys are client-side, no grades or attempts are saved, and these activities are not protected exams.
 
 Remaining listening work:
-- author 45 additional practice activities for the 45 pre-existing lectures, preserving their original content and IDs;
-- connect all 120 activities to their corresponding lecture pages and the Listening Lab;
-- test speech synthesis, pause/resume/repeat, transcript reveal and responsive layout in real browsers and on mobile devices.
+- verify every activity's subject accuracy and answer quality during editorial review;
+- test speech synthesis, pause/resume/repeat, transcript reveal and responsive layout in real browsers and on mobile devices;
+- confirm all 120 activities appear inside the correct lecture pages and the standalone Listening Lab after the full page loads.
 
-All 75 current activities remain practice-only: answer keys are client-side, no grades or attempts are saved, and they are not protected exams. The separate assessment engine must continue to handle graded listening tasks and server-side checking.
+The separate assessment engine must continue to handle graded listening tasks and server-side checking.
