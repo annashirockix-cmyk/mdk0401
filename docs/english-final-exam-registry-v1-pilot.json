@@ -17775,7 +17775,7 @@
                 "prompt": "Before applying a model update, what should the team confirm?",
                 "options": [
                   "Apply the newest model file immediately and check compatibility afterwards.",
-                  "Confirm the approved model version and verify its source data before applying the update.",
+                  "Could we update the model using the approved version and verified source data?",
                   "Use the model from a similar unit because the equipment family is the same.",
                   "Update the displayed model name and leave the configuration record unchanged."
                 ],
@@ -19144,9 +19144,9 @@
               {
                 "id": "c5s1v06_f01",
                 "type": "single_choice",
-                "prompt": "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
+                "prompt": "The task card may refer to a different aircraft configuration. What should you ask?",
                 "options": [
-                  "Could we confirm task applicability against the aircraft identification and approved publications?",
+                  "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
                   "Could we use the task card for a similar model and confirm the details later?",
                   "Could we compare the aircraft colour and registration only?",
                   "Could we follow the previous shift's decision without checking applicability?"
