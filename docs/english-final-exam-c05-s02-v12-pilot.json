@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An audit finding should be linked to a defined requirement. The auditor records the evidence observed, identifies the relevant document or process and explains how the evidence relates to the requirement. A finding should not be based only on an opinion. If the evidence is incomplete, the auditor may request additional information before reaching a conclusion. Reading 1. What should an audit finding be linked to?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "An auditor's personal opinion",
+        "A previous audit result",
         "A defined requirement",
-        "To buy a ticket"
+        "A team preference"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should happen if the evidence is incomplete?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Additional information should be requested before reaching a conclusion"
+        "The finding should be closed as compliant",
+        "The requirement should be changed to match the evidence",
+        "Additional information should be requested before reaching a conclusion",
+        "The previous audit result should be accepted without review"
       ],
       "correctIndex": 3,
       "points": 1
