@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "An engineering incident report records facts in a clear sequence. It may include time and location, people or equipment involved, the observed event and immediate action. A later investigation may identify causes, but these should not be presented as established facts before the investigation is complete. Reports should follow the approved process and protect confidential information. Reading 1. What information may an incident report include?",
       "options": [
-        "Time, location, people or equipment involved, observed event and immediate action",
-        "Only the name of the person who submitted the report",
         "Purchase price, supplier address and delivery date",
+        "Only the name of the person who submitted the report",
+        "Time, location, people or equipment involved, observed event and immediate action",
         "A final diagnosis even when the investigation is incomplete"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "How should findings from an incomplete investigation be described?",
       "options": [
         "They should be presented as confirmed conclusions",
-        "They should not be presented as established facts",
+        "They should replace the original observations",
         "They should be removed from the report",
-        "They should replace the original observations"
+        "They should not be presented as established facts"
       ],
       "correctIndex": 3,
       "points": 1
