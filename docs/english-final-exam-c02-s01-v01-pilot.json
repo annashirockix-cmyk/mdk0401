@@ -15,9 +15,9 @@
       "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
       "options": [
         "In the conference room",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Near the main entrance",
+        "In the careers office",
+        "In the engineering workshop"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,12 +28,12 @@
       "prompt": "Listening 2. Which two things should students prepare for the career fair?",
       "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
       "options": [
-        "A short CV and two questions about training opportunities",
         "A completed engineering project and a passport",
+        "A short CV and two questions about training opportunities",
         "A list of examination results and a reference letter",
         "A visitor badge and a company contract"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -56,10 +56,10 @@
       "options": [
         "To compare the companies' products",
         "To ask for a different placement",
-        "To make sure the dates fitted his college course",
-        "To arrange online training"
+        "To arrange online training",
+        "To make sure the dates fitted his college course"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
