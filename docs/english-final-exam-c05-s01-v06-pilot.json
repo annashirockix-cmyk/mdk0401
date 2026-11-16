@@ -103,9 +103,9 @@
     {
       "id": "c5s1v06_f01",
       "type": "single_choice",
-      "prompt": "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
+      "prompt": "The task card may refer to a different aircraft configuration. What should you ask?",
       "options": [
-        "Could we confirm task applicability against the aircraft identification and approved publications?",
+        "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
         "Could we use the task card for a similar model and confirm the details later?",
         "Could we compare the aircraft colour and registration only?",
         "Could we follow the previous shift's decision without checking applicability?"
