@@ -15,9 +15,9 @@
       "audioText": "The student council is collecting ideas for a volunteering week in April. A planning meeting will take place in the student common room on Tuesday at twelve. Suggested activities include helping at a community garden, supporting a book collection and organising a repair café. Students should send one idea with a short explanation before the meeting.",
       "options": [
         "On Tuesday at twelve",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Monday at twelve",
+        "On Tuesday at one",
+        "On Tuesday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A group of students organised a repair café where local residents could bring small household items. Volunteers helped visitors identify simple problems and find repair information. The students did not attempt repairs that required specialist equipment or training. Instead, they explained where professional help was available. The event attracted many visitors and encouraged people to consider repairing items before replacing them. Reading 1. What did volunteers do when a repair needed specialist skills?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "They repaired every item themselves",
+        "They asked visitors to buy replacement products",
         "They explained where professional help was available",
-        "To buy a ticket"
+        "They explained where professional help was available"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What wider effect did the event aim to encourage?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Encouraging residents to buy new household items",
+        "Encouraging people to repair items before replacing them",
+        "Encouraging visitors to donate electrical equipment",
         "Encouraging people to repair items before replacing them"
       ],
       "correctIndex": 3,
