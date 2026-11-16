@@ -9281,7 +9281,7 @@
                 "id": "c3s1v01_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words recommending a material for a simple support bracket. Compare two properties and explain why the drawing and service conditions matter.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two relevant material properties are compared (0–2); the recommendation is linked to the drawing requirements and stated service conditions (0–2); the explanation is logically organised with understandable grammar (0–2); material/property vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -9433,7 +9433,7 @@
                 "id": "c3s1v02_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining how to read and record dimensions from a technical drawing. Mention units, revision control and one possible source of error.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains how to read and record dimensions, including units (0–2); it addresses checking the drawing revision and identifies one plausible source of measurement/reading error (0–2); instructions are clear with understandable grammar (0–2); dimension/revision vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -9584,7 +9584,7 @@
                 "id": "c3s1v03_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words describing how an assembly drawing and parts list help a technician identify components.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the roles of the assembly drawing and parts list are explained (0–2); the response explains how references/item numbers help identify the required component (0–2); ideas are logically connected with understandable grammar (0–2); drawing/parts terminology, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -9736,7 +9736,7 @@
                 "id": "c3s1v04_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words describing why workshop induction is important. Include two examples of information students should learn.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two relevant induction topics are identified (0–2); the response explains how they help students understand safe conduct and workshop expectations (0–2); the explanation is clearly organised with understandable grammar (0–2); induction/workshop vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -9887,7 +9887,7 @@
                 "id": "c3s1v05_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining how accurate component records help a workshop or stores department. Include part numbers, quantities and discrepancy reporting.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: part numbers and quantities are described as essential record details (0–2); the response explains how a discrepancy should be reported and why accurate records matter (0–2); the process is logically explained with understandable grammar (0–2); stores/inventory/traceability vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -10039,7 +10039,7 @@
                 "id": "c3s1v06_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining how a trainee can identify an unfamiliar component using a diagram and an illustrated parts catalogue.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains how to use a diagram and illustrated parts catalogue to identify an unfamiliar component (0–2); it includes checking references/item numbers and confirming the identification rather than relying on appearance alone (0–2); the explanation is clear with understandable grammar (0–2); component-identification/catalogue vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -10192,7 +10192,7 @@
                 "id": "c3s1v07_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining the purpose of dimensional tolerances. Use a simple example and describe what an inspector should record.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: dimensional tolerance is explained accurately in general terms and illustrated with a relevant simple example (0–2); the response explains what the inspector should record, including the measured result and relevant requirement/context (0–2); the explanation is logically organised with understandable grammar (0–2); inspection/dimension vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -10345,7 +10345,7 @@
                 "id": "c3s1v08_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words describing how technical labels and symbols help people identify equipment and understand important information.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains how labels/symbols help identify equipment and communicate important information (0–2); it refers to checking the relevant legend/key or approved information rather than guessing an unfamiliar symbol (0–2); ideas are clearly connected with understandable grammar (0–2); label/symbol/equipment vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -10498,7 +10498,7 @@
                 "id": "c3s1v09_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining what makes an inspection report clear and useful. Include component identification, measured values and reporting of a non-conformity.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: component identification and measured values are included in the inspection report (0–2); the non-conformity is described against a stated requirement using factual evidence, without changing original results (0–2); the report structure is clear with understandable grammar (0–2); inspection/non-conformity vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -10649,7 +10649,7 @@
                 "id": "c3s1v10_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining how to choose a measuring tool for a component. Include the feature, required accuracy and recording of results.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the feature to be measured and required accuracy are identified (0–2); the response explains how tool suitability is considered and how results/units are recorded (0–2); the explanation is logically organised with understandable grammar (0–2); measurement/tool vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -10800,7 +10800,7 @@
                 "id": "c3s1v11_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words describing two roles in an aviation maintenance organisation and explaining why they need to communicate accurately.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two relevant aviation-maintenance roles are identified and their responsibilities are distinguished (0–2); the response explains why accurate communication or handover matters between them (0–2); ideas are logically organised with understandable grammar (0–2); maintenance-role/communication vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -10952,7 +10952,7 @@
                 "id": "c3s1v12_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words as a technical email reporting a difference between a component and its drawing. Include the reference, evidence and a polite request.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the email identifies the component/drawing reference and describes the observed difference (0–2); it cites evidence and makes a clear, polite request for review or clarification without instructing an unauthorised alteration (0–2); the email has a professional structure and understandable grammar (0–2); drawing/inspection vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -11104,7 +11104,7 @@
                 "id": "c3s1v13_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining why material certificates are checked during incoming inspection. Mention grade, batch identification and document clarity.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains why a material certificate is checked and addresses grade and batch identification (0–2); it explains why the document must be clear and match the relevant purchasing/specification records (0–2); the explanation is clearly organised with understandable grammar (0–2); material/inspection/document vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -11256,7 +11256,7 @@
                 "id": "c3s1v14_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words for a technical notice announcing a change of classroom. Include the time, the affected group and the action students should take.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the notice clearly states the new time, affected group and required student action (0–2); the information is concise, easy to locate and formatted as an appropriate notice (0–2); grammar and sentence structure are clear (0–2); date/time/location vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -11407,7 +11407,7 @@
                 "id": "c3s1v15_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining how part numbers, batch records and inspection documents support component traceability.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: part numbers, batch records and inspection documents are all addressed (0–2); the response explains how these records link a component to its identity and inspection history and support later retrieval (0–2); the explanation is logically organised with understandable grammar (0–2); traceability/record-control vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
