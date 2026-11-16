@@ -78,10 +78,10 @@
     {
       "id": "c3s1v01_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO properties that may be relevant when selecting a material for a bracket.",
+      "prompt": "A bracket must carry a mechanical load while keeping its mass low. Choose TWO material properties relevant to this requirement.",
       "options": [
-        "The colour of the workshop door",
-        "The technician's favourite tool",
+        "Electrical conductivity",
+        "Thermal expansion coefficient",
         "Density",
         "Strength"
       ],
