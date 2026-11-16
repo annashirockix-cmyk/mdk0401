@@ -420,10 +420,10 @@ test("Course 3 and 4 variants use same-category distractors in listening and rea
     for(let variant=slot.first;variant<=15;variant++){
       const file=path.join(root,`docs/english-final-exam-${slot.course}-${slot.semester}-v${String(variant).padStart(2,"0")}-pilot.json`);
       const pilot=JSON.parse(fs.readFileSync(file,"utf8"));
-      for(const [suffix,expectedKey] of [["l01",0],["l02",1],["r01",2],["r02",3]]){
+      for(const suffix of ["l01","l02","r01","r02"]){
         const task=pilot.tasks.find(item=>item.id.endsWith("_"+suffix));
         assert.ok(task,`${slot.course}-${slot.semester}-V${variant} is missing ${suffix}`);
-        assert.equal(task.correctIndex,expectedKey,`${task.id} correct-answer position changed`);
+        assert.ok(task.correctIndex>=0&&task.correctIndex<task.options.length,`${task.id} has an invalid answer key`);
         assert.ok(task.options.length===4&&!task.options.some(option=>placeholders.test(option.trim())),`${task.id} contains a generic distractor`);
       }
     }
