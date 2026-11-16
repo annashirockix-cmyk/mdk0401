@@ -342,6 +342,26 @@ test("fifteen authored Technical English C5-S2 pilots match the protected runtim
   assert.equal(new Set(pilots.map(p=>p.tasks[0].audioText)).size,15);
 });
 
+test("first pilot variants use plausible same-category listening and reading distractors",()=>{
+  const files=[
+    "c02-s01","c02-s02","c03-s01","c03-s02","c04-s01","c04-s02","c05-s01","c05-s02"
+  ];
+  const placeholders=/^(At the college library|At the town centre|At the bus station|To borrow a laptop|To meet a relative|To buy a ticket|At the sports centre|In the computer room|On Friday|Next month|After the event)$/i;
+  files.forEach(slot=>{
+    const pilot=JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${slot}-v01-pilot.json`),"utf8"));
+    ["l01","l02","r01","r02"].forEach(suffix=>{
+      const task=pilot.tasks.find(item=>item.id.endsWith("_"+suffix));
+      assert.ok(task,`${slot} is missing ${suffix}`);
+      assert.ok(Array.isArray(task.options)&&task.options.length===4);
+      assert.ok(!task.options.some(option=>placeholders.test(option.trim())),`${task.id} still has generic distractors: ${task.options.join(" | ")}`);
+    });
+  });
+  const career=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c02-s01-v01-pilot.json"),"utf8"));
+  const prep=career.tasks.find(task=>task.id==="c2s1v01_l02");
+  assert.match(prep.prompt,/Which two things should students prepare/);
+  assert.match(prep.options[prep.correctIndex],/short CV and two questions/);
+});
+
 test("all 150 final exam variants have globally unique task IDs and prompts",()=>{
   const slots=[["c01","s01"],["c01","s02"],["c02","s01"],["c02","s02"],["c03","s01"],["c03","s02"],["c04","s01"],["c04","s02"],["c05","s01"],["c05","s02"]];
   const variants=slots.flatMap(([course,semester])=>Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${course}-${semester}-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8"))));
