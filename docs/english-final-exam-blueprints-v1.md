@@ -146,3 +146,25 @@ V04 also repeats the distractor defects recorded for V03: several listening and 
 **Required correction before any pilot can be considered release-ready:** break the fixed positional sequence by reordering options independently per item; update every corresponding correctIndex/correctIndices field; validate the resulting key against the item content; and run a bank-wide distribution check. Distractors must be rewritten as plausible same-category alternatives. Do not merely rotate the same answer sequence between variants.
 
 The V04 JSON files were not modified. Their status remains pilot_for_editorial_review, and they must not be imported or published before correction and independent key verification.
+
+
+## Editorial sample review — V05/V06 repeated answer template and distractors (2026-11-16)
+
+The V05 and V06 JSON files were inspected across all ten course-semester slots (20 variants total). Both batches reproduce the same answer-position sequence in every slot for the first eight objective tasks:
+
+- Listening 1: index 0.
+- Listening 2: index 1.
+- Reading 1: index 2.
+- Reading 2: index 3.
+- Grammar single-choice: index 0.
+- Multiple-choice: indices 2 and 3.
+- Short-text: no option index.
+- Functional-language single-choice: index 1.
+
+Thus, the fixed V04 pattern is not isolated: it persists unchanged in all 10 V05 files and all 10 V06 files. In V05, the answer choices themselves are also repeatedly arranged so the correct options occupy those same positions. This is a cross-slot leakage risk and a sign that these forms are not independent variants in their current form.
+
+The V05 sample also contains recurring wrong-category distractors in listening and reading, especially in later Basic and Technical slots. Examples include location options in questions asking for a time or a document, and unrelated activities such as borrowing a laptop or buying a ticket in technical comprehension questions. These options are not plausible same-category alternatives.
+
+**Required action:** treat V04–V06 as a bank-wide authoring defect, not three isolated variants. Before release, independently author/revise each task's distractors, shuffle each task's options using a stable key-remapping routine, and validate single-choice, multiple-choice and ordering keys against the resulting option arrays. A mere rotation of the same template is insufficient. Add regression tests that reject identical positional signatures repeated across all ten slots and check distributions at both variant and bank level.
+
+The V05/V06 pilot JSON files were not changed. All remain pilot materials; no import or student release is authorised by this audit.
