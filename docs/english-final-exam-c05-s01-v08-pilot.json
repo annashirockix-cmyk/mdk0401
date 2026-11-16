@@ -107,7 +107,7 @@
       "type": "single_choice",
       "prompt": "An inspection result differs from the specified requirement. What should you record?",
       "options": [
-        "Record the observed condition, measured result and specified requirement for review.",
+        "The observed condition differs from the specified requirement; record the measured result and supporting evidence for review.",
         "Record that the item passed because the difference is probably minor.",
         "Change the recorded result to match the requirement after repeating the entry.",
         "Leave out the result until the next inspection confirms it."
