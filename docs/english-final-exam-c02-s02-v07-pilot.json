@@ -17,7 +17,7 @@
         "On Monday at three",
         "On Tuesday at three",
         "On Monday at four",
-        "On Monday at three"
+        "On Tuesday at four"
       ],
       "correctIndex": 0,
       "points": 1
@@ -43,7 +43,7 @@
       "options": [
         "A list of product ingredients",
         "A reference to a scientific study",
-        "A reference to a scientific study",
+        "A photograph showing the product label",
         "A link to a shopping website"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "A photograph is always reliable evidence",
         "An image alone is not evidence and broad claims need reliable research",
         "Only personal experience is needed to support a claim",
-        "An image alone is not evidence and broad claims need reliable research"
+        "A personal recommendation is enough to support broad claims"
       ],
       "correctIndex": 3,
       "points": 1
