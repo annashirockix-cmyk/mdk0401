@@ -107,12 +107,12 @@
       "type": "single_choice",
       "prompt": "An inspection result differs from the specified requirement. What should you record?",
       "options": [
-        "I will guess and continue.",
-        "The observed condition differs from the specified requirement; the evidence is recorded for review.",
-        "The detail is not important.",
-        "I will copy an unrelated record."
+        "Record the observed condition, measured result and specified requirement for review.",
+        "Record that the item passed because the difference is probably minor.",
+        "Change the recorded result to match the requirement after repeating the entry.",
+        "Leave out the result until the next inspection confirms it."
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
