@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A trainee reported that an indicator lamp did not light when the training board was examined. The report identified the board reference and described the observation. It also stated that the supply status had not yet been confirmed. The trainee avoided claiming that the lamp itself was defective because the available information was not enough to identify the cause. Reading 1. What did the trainee observe?",
       "options": [
-        "The indicator lamp did not light",
-        "The indicator lamp remained on continuously",
         "The display showed an incorrect unit",
+        "The indicator lamp remained on continuously",
+        "The indicator lamp did not light",
         "The connector became unusually warm"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why did the trainee avoid naming the lamp as defective?",
       "options": [
         "The lamp had already been replaced",
-        "There was not enough information to identify the cause",
+        "The indicator had been tested under every condition",
         "The circuit diagram confirmed a lamp failure",
-        "The indicator had been tested under every condition"
+        "There was not enough information to identify the cause"
       ],
       "correctIndex": 3,
       "points": 1
