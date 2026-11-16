@@ -68,9 +68,11 @@ For Technical English, use authentic-feeling but self-contained contexts from av
 
 ## Current implementation boundary
 
-Fifteen distinct pilot variants now exist for Course 1, Semester 1 (`v01`–`v15`). Each contains 10 tasks, two listening items, reading comprehension, objective language tasks, ordering and a teacher-reviewed writing task. Regression tests compare all prompts and listening scripts for exact repeats and require a balanced key distribution (two correct answer positions at A, B, C and D per variant). They are editorial pilots, not formally approved and not imported.
+The authoring package now contains **150 pilot variants across all ten course-semester slots** (15 per slot), with 10 tasks, 20 points and a 90-minute limit per variant. Each variant includes two listening questions, reading comprehension, objective language tasks, ordering and one written response with a teacher-only rubric.
 
-The server now validates the structure of each imported variant payload before writing it to EnglishExamVariantsBank. That validation prevents unsupported task types, missing answer keys, duplicate task IDs/prompts, invalid options, missing written rubrics, invalid duration and inconsistent maximum scores. It does not create the 150 variants or certify their academic quality. Until all release gates pass, the final-exam bank must remain unimported and the existing VPR/semester banks must remain untouched.
+Automated checks cover the combined 150-variant registry, all 1,500 task IDs and prompts, payload schema, answer-key validity, score totals, balanced objective answer positions and the requirement that every variant remain marked `pilot_for_editorial_review`. The package is structurally complete; this does not certify subject accuracy, CEFR level, curriculum alignment or formal assessment suitability.
+
+The server validates each payload before import, and deliberately rejects pilot status. The package remains outside the protected Google Sheets bank and is not student-visible. Subject-matter/editorial review, formal approval, controlled administrator import and post-import acceptance testing are still required. Existing VPR and semester banks remain untouched.
 
 ## Authored pilot progress — all ten slots drafted
 
