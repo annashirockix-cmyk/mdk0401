@@ -118,16 +118,16 @@
       "type": "ordering",
       "prompt": "Put the project stages in the correct order.",
       "options": [
-        "Review the finished design",
         "Agree on the project goal",
         "Assign tasks and deadlines",
-        "Prepare and check the work"
+        "Prepare and check the work",
+        "Review the finished design"
       ],
       "correctOrder": [
-        "Review the finished design",
         "Agree on the project goal",
         "Assign tasks and deadlines",
-        "Prepare and check the work"
+        "Prepare and check the work",
+        "Review the finished design"
       ],
       "points": 2
     },
