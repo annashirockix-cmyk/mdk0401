@@ -15,9 +15,9 @@
       "audioText": "The CNC theory class will study the structure of a sample programme on Friday at eleven. Students will use a printed extract and identify programme numbers, block numbers and common address letters. The instructor will explain the difference between a rapid positioning command and a linear feed command. The class will not run the programme on a machine.",
       "options": [
         "On Friday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at ten",
+        "On Wednesday at eleven",
+        "On Friday at two"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,12 +28,12 @@
       "prompt": "Listening 2. Which two command types will be compared?",
       "audioText": "The CNC theory class will study the structure of a sample programme on Friday at eleven. Students will use a printed extract and identify programme numbers, block numbers and common address letters. The instructor will explain the difference between a rapid positioning command and a linear feed command. The class will not run the programme on a machine.",
       "options": [
-        "On Friday",
         "A rapid positioning command and a linear feed command",
-        "Next month",
-        "After the event"
+        "Two tool-offset commands",
+        "A spindle command and a coolant command",
+        "A coordinate setting and a feed-rate value"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A CNC programme is organised into blocks of information. Each block may contain a sequence number and words that describe a command or a value. In a basic example, G00 is associated with rapid positioning, while G01 describes linear interpolation at a programmed feed. The meaning of a complete programme depends on the controller, machine configuration and other instructions, so students should use the approved documentation for the specific equipment. Reading 1. How is a CNC programme organised?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Into separate tool catalogues",
         "Into blocks of information",
-        "To buy a ticket"
+        "Into one unlabelled paragraph",
+        "Into drawings without sequence"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why should students consult equipment-specific documentation?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Because every controller uses identical settings",
+        "Because a programme can be run without checking",
+        "Because the codes never depend on machine configuration",
         "Because meaning depends on the controller and machine configuration"
       ],
       "correctIndex": 3,
