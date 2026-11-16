@@ -485,3 +485,21 @@ Short-text completion defects:
 The remaining reviewed ordering sequences and short-text completions were structurally coherent. The two-option multiple-choice keys inspected were valid and supported by their options; however, several distractor sets remain conspicuously weak or implausible, consistent with the cross-version P3 finding. Written tasks have explicit word limits and 8-point rubrics; CEFR calibration and approved learning-outcome alignment were not established by this audit.
 
 No pilot JSON was modified. No protected question banks, Google Sheets, Apps Script, imports or deployment were touched.
+
+
+## V09 full-slot audit (all 10 course/semester slots)
+
+All ten V09 files were inspected (100 tasks total). Each contains 10 tasks. The recurring first-eight answer-position signature remains 0, 1, 2, 3, 0, [2,3], short-text, 1. All 20 listening keys reviewed match the stated audio facts.
+
+Malformed ordering prompt:
+- C1-S2 task 9 uses four semicolon-separated actions as the prompt instead of asking the learner to put them in order. Its options and correctOrder are coherent; rewrite the prompt as a direct instruction.
+
+Short-text completion defects:
+- C2-S2 task 7 begins “...a digital ___” but accepts “digital footprint”, duplicating the fixed word “digital”. Keep “footprint” or change the stem.
+- C4-S2 task 7 begins “...a data ___” but accepts “data log”, duplicating the fixed word “data”. Keep “log” or change the stem.
+- C4-S1 task 7 begins “...a specification ___” but accepts “specification sheet”, duplicating “specification”. Keep “sheet” or change the stem.
+- C3-S1 task 7 accepts “defect” as an alternative to “non-conformity”. These terms are related but not interchangeable in every quality-management context; narrow the accepted answer or explicitly define the intended scope.
+
+The other reviewed short-text completions and ordering sequences were structurally coherent. The two-answer multiple-choice keys inspected were valid and supported by the options. However, several distractors are implausible or from unrelated categories, consistent with the cross-version P3 finding. Written tasks have word limits and 8-point rubrics; CEFR calibration and mapping to approved learning outcomes were not assessed.
+
+No pilot JSON was modified. No protected question banks, Google Sheets, Apps Script, imports or deployment were touched.
