@@ -981,6 +981,9 @@ test("semester shuffled options are bound to the server attempt and expired atte
 test("teacher dashboard exposes the English written-exam review workflow and safely renders submitted content", () => {
   const dashboard = fs.readFileSync(path.join(root, "teacher-dashboard.js"), "utf8");
   const api = fs.readFileSync(path.join(root, "api.js"), "utf8");
+  const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const studentEngine = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
   assert.match(dashboard, /id="efReviewRefresh"/);
   assert.match(dashboard, /id="efReviewPanel"/);
   assert.match(dashboard, /window\.API\.getEnglishFinalExamReviews\(\)/);
@@ -991,4 +994,7 @@ test("teacher dashboard exposes the English written-exam review workflow and saf
   assert.match(dashboard, /E\(task\.rubric\)/);
   assert.match(api, /getEnglishFinalExamReviews:function\(\)\{return fetchAPI\("getEnglishFinalExamReviews",\{\},"POST"/);
   assert.match(api, /gradeEnglishFinalExamWritten:function\(attemptId,grades\)\{return fetchAPI\("gradeEnglishFinalExamWritten"/);
+  assert.match(html, /teacher-dashboard\.js/);
+  assert.match(app, /renderTeacherDashboard\(\)/);
+  assert.match(studentEngine, /Итоговая оценка появится после проверки письменных заданий\./);
 });
