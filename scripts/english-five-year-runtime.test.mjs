@@ -81,7 +81,7 @@ test("all 75 new lecture IDs are in the five-year map and have browser listening
 test("all 120 existing and new lessons have usable listening activities", () => {
   const window = loadEnglishRuntime();
   const newLessonIds = [
-    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\\d{2}-s\\d{2}-l\\d{2}/g)),
+    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\d{2}-s\d{2}-l\d{2}/g)),
   ];
   const legacySlots = [[1,1,3],[1,2,3],[2,1,3],[2,2,7],[3,1,5],[3,2,5],[4,1,9],[4,2,8],[5,1,2]];
   const legacyIds = legacySlots.flatMap(([course, semester, count]) =>
