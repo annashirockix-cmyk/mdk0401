@@ -15,9 +15,9 @@
       "audioText": "The college environmental team is organising a repair and reuse day next Wednesday. Students can bring small electrical items that are safe to inspect, clean containers and unwanted books. The event starts at ten in the technology hall. Please do not bring damaged batteries or equipment with exposed wires. Volunteers should register online by Tuesday.",
       "options": [
         "Next Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Next Monday",
+        "Next Tuesday",
+        "Next Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "The college canteen introduced reusable cups to reduce waste. Students pay a small deposit when they borrow a cup and receive it back when they return the cup to the collection point. At first, some students forgot to return them. Clear signs and reminders near the exits helped the system work better, and the amount of disposable cup waste fell. Reading 1. How does the reusable cup system work?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "They pay the full price and keep the cup",
+        "They borrow a cup without paying a deposit",
         "They pay a deposit and get it back when they return the cup",
-        "To buy a ticket"
+        "They pay a deposit and get it back when they return the cup"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What helped students remember to return cups?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "A discount at the till",
+        "A message sent to students' phones",
+        "Signs and reminders near the exits",
         "Signs and reminders near the exits"
       ],
       "correctIndex": 3,
