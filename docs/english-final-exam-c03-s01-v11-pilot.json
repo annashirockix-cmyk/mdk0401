@@ -15,9 +15,9 @@
       "audioText": "The college aviation department is organising an industry overview on Thursday at ten. A guest speaker from an aircraft maintenance organisation will describe the roles of technicians, planners and stores staff. The talk will take place in Lecture Room 1. Students should prepare one question about the skills needed for an entry-level role.",
       "options": [
         "At ten on Thursday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine on Thursday",
+        "At ten on Friday",
+        "At eleven on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which preparation material is required before the technical lesson?",
       "audioText": "The college aviation department is organising an industry overview on Thursday at ten. A guest speaker from an aircraft maintenance organisation will describe the roles of technicians, planners and stores staff. The talk will take place in Lecture Room 1. Students should prepare one question about the skills needed for an entry-level role.",
       "options": [
-        "On Friday",
+        "One question about salary expectations",
         "One question about entry-level skills",
-        "Next month",
-        "After the event"
+        "One question about preferred working hours",
+        "One question about the company's annual turnover"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Aircraft maintenance organisations employ people with different responsibilities. Technicians inspect and maintain components, planners coordinate work and documentation, and stores staff manage parts and records. These roles depend on accurate communication because a component's identity and status must be clear to everyone involved. New employees usually receive role-specific training before taking on assigned duties. Reading 1. What do planners coordinate?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Work and documentation",
-        "To buy a ticket"
+        "Staff leave and training preferences",
+        "Equipment and material deliveries",
+        "Budgets and supplier contracts"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why is accurate communication important?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "So that component identity and status are clear to everyone"
+        "So that reports can be shorter",
+        "So that component identity and status are clear to everyone",
+        "So that the next team can avoid checking records",
+        "So that only the outgoing team understands the status"
       ],
       "correctIndex": 3,
       "points": 1

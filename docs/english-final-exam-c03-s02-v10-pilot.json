@@ -15,9 +15,9 @@
       "audioText": "The production planning tutor will discuss a weekly schedule on Wednesday at eleven. Students should bring the sample order list and the capacity table. The class will identify planned start dates, expected completion dates and the departments involved. The tutor will also explain how to report a delay so that the schedule can be reviewed.",
       "options": [
         "On Wednesday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Wednesday at ten",
+        "On Thursday at eleven",
+        "On Wednesday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which table should students bring?",
       "audioText": "The production planning tutor will discuss a weekly schedule on Wednesday at eleven. Students should bring the sample order list and the capacity table. The class will identify planned start dates, expected completion dates and the departments involved. The tutor will also explain how to report a delay so that the schedule can be reviewed.",
       "options": [
-        "On Friday",
+        "The maintenance schedule",
         "The capacity table",
-        "Next month",
-        "After the event"
+        "The inspection checklist",
+        "The supplier register"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A production planner noticed that one component order was likely to be delayed because a required material had not arrived. The planner updated the schedule and informed the relevant departments. The message included the order reference, the expected delay and the next review date. This allowed the team to discuss alternatives without relying on an outdated schedule. Reading 1. Why was the component order likely to be delayed?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "A required material had not arrived",
-        "To buy a ticket"
+        "The machine operator was absent",
+        "The inspection report had not been printed",
+        "The supplier had changed the delivery address"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What information did the planner include in the message?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The order reference, expected delay and next review date"
+        "The order reference, expected delay and next review date",
+        "The operator's name, shift and annual leave dates",
+        "The machine model, serial number and service date",
+        "The supplier's address, payment terms and invoice number"
       ],
       "correctIndex": 3,
       "points": 1

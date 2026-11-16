@@ -15,9 +15,9 @@
       "audioText": "The electrical maintenance tutor will review fault-description vocabulary on Friday at ten thirty. Students should meet in the classroom next to the laboratory and bring the sample maintenance report. The lesson will compare the terms intermittent, damaged, loose and unavailable. Students will practise describing an observation without guessing its cause.",
       "options": [
         "At ten thirty on Friday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine thirty on Friday",
+        "At ten thirty on Thursday",
+        "At eleven thirty on Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which template is required for the fault-description class?",
       "audioText": "The electrical maintenance tutor will review fault-description vocabulary on Friday at ten thirty. Students should meet in the classroom next to the laboratory and bring the sample maintenance report. The lesson will compare the terms intermittent, damaged, loose and unavailable. Students will practise describing an observation without guessing its cause.",
       "options": [
-        "On Friday",
+        "The sample inspection checklist",
         "The sample maintenance report",
-        "Next month",
-        "After the event"
+        "The equipment-status sheet",
+        "The supplier delivery record"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A maintenance note stated that a display sometimes became blank during normal use. The technician recorded when the problem occurred and described the visible behaviour. The note did not claim that a particular component had failed because further checks were required. This distinction helped the next technician understand what had been observed and what still needed investigation. Reading 1. What behaviour did the technician record?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "The display sometimes became blank",
-        "To buy a ticket"
+        "The display remained blank throughout the test",
+        "The display showed an incorrect unit",
+        "The display changed colour during operation"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did the note avoid naming a failed component?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Further checks were needed before the cause could be confirmed"
+        "The technician had already replaced the component",
+        "Further checks were needed before the cause could be confirmed",
+        "The lamp had been tested only once",
+        "The maintenance record contained no date"
       ],
       "correctIndex": 3,
       "points": 1

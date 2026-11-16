@@ -15,9 +15,9 @@
       "audioText": "The PLC documentation workshop will take place on Tuesday at one fifteen in the control systems room. Students should bring the sample input-output table. The instructor will explain how input and output addresses are listed and why the controller model should be included in the document. The exercise will use a printed example only.",
       "options": [
         "On Tuesday at one fifteen",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at twelve fifteen",
+        "On Wednesday at one fifteen",
+        "On Tuesday at two fifteen"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which PLC address table is required for the documentation workshop?",
       "audioText": "The PLC documentation workshop will take place on Tuesday at one fifteen in the control systems room. Students should bring the sample input-output table. The instructor will explain how input and output addresses are listed and why the controller model should be included in the document. The exercise will use a printed example only.",
       "options": [
-        "On Friday",
+        "The PLC maintenance log",
         "The sample input-output table",
-        "Next month",
-        "After the event"
+        "The controller installation guide",
+        "The electrical safety checklist"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A programmable logic controller uses a programme to process input information and control outputs. Its documentation may include an input-output list, a description of programme sections and the controller model. Address formats can vary between systems. For that reason, students should use the documentation for the specific controller rather than assume that every PLC uses identical address conventions. Reading 1. What may PLC documentation include?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "An input-output list, programme-section description and controller model",
-        "To buy a ticket"
+        "A supplier address, delivery date and purchase order",
+        "An operator roster, training record and shift plan",
+        "A machine parts list, material grade and inspection date"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why should students check the specific controller model?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Because address formats can vary between systems"
+        "Because all PLCs use identical address conventions",
+        "Because address formats can vary between systems",
+        "Because the controller model determines the machine colour",
+        "Because the programme section is unrelated to the controller"
       ],
       "correctIndex": 3,
       "points": 1

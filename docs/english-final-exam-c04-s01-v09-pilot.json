@@ -15,9 +15,9 @@
       "audioText": "The power supply documentation class will take place on Thursday at twelve fifteen in the electronics room. Students should bring a copy of the sample specification sheet. The instructor will identify the input range, output rating and connector information. The class will compare two documents and discuss why the model reference must be checked before information is used.",
       "options": [
         "On Thursday at twelve fifteen",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at eleven fifteen",
+        "On Friday at twelve fifteen",
+        "On Thursday at one fifteen"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What specification document is needed for the power-supply lesson?",
       "audioText": "The power supply documentation class will take place on Thursday at twelve fifteen in the electronics room. Students should bring a copy of the sample specification sheet. The instructor will identify the input range, output rating and connector information. The class will compare two documents and discuss why the model reference must be checked before information is used.",
       "options": [
-        "On Friday",
+        "The sample maintenance manual",
         "The sample specification sheet",
-        "Next month",
-        "After the event"
+        "The equipment identification label",
+        "The inspection checklist"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A power supply specification sheet lists important information about the device, including input conditions, output ratings and connector details. A student compared two similar models and noticed that their output ratings were different. The student checked the full model references before recording the information. This prevented the specifications from being mixed between the two devices. Reading 1. Which details may be listed on a power supply specification sheet?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Input conditions, output ratings and connector details",
-        "To buy a ticket"
+        "Equipment colour, storage location and serial-number format",
+        "Supplier address, delivery date and purchase order",
+        "Operator name, shift time and maintenance history"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did the student check the full model references?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To avoid mixing specifications from two similar models"
+        "To confirm the purchase price of each device",
+        "To avoid mixing specifications from two similar models",
+        "To identify which device was delivered first",
+        "To replace the need to check connector details"
       ],
       "correctIndex": 3,
       "points": 1

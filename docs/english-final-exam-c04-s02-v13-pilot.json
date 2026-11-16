@@ -15,9 +15,9 @@
       "audioText": "The maintenance engineering tutor will discuss condition monitoring on Monday at eleven. Students should bring the sample vibration-trend chart. The lesson will explain how repeated measurements reveal equipment trends and why unusual readings must be checked.",
       "options": [
         "On Monday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Monday at ten",
+        "On Tuesday at eleven",
+        "On Monday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which trend chart should students bring?",
       "audioText": "The maintenance engineering tutor will discuss condition monitoring on Monday at eleven. Students should bring the sample vibration-trend chart. The lesson will explain how repeated measurements reveal equipment trends and why unusual readings must be checked.",
       "options": [
-        "A personal notebook",
+        "The sample maintenance trend chart",
         "The sample vibration-trend chart",
-        "A laboratory coat",
-        "A printed timetable"
+        "The equipment inventory sheet",
+        "The calibration certificate"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Predictive maintenance uses condition information to estimate when equipment may require attention. Repeated vibration or temperature measurements can reveal a developing trend. A single unusual value may result from measurement error or changing operating conditions, so it should be checked against the method and other evidence. Decisions should follow the approved procedure. Reading 1. What can repeated measurements reveal?",
       "options": [
-        "To borrow a laptop",
         "A developing trend in equipment condition",
-        "To meet a relative",
-        "To buy a ticket"
+        "The exact cause of every equipment fault",
+        "The purchase price of a replacement component",
+        "The name of the person who recorded the value"
       ],
       "correctIndex": 1,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why should one unusual value be checked?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "It may result from measurement error or changing operating conditions"
+        "It may result from measurement error or changing operating conditions",
+        "It always confirms an equipment failure",
+        "It proves that the sensor has been installed incorrectly",
+        "It means the equipment must be replaced immediately"
       ],
       "correctIndex": 3,
       "points": 1

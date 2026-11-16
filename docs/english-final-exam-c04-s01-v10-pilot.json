@@ -15,9 +15,9 @@
       "audioText": "The electronics department will hold a cable identification lesson on Monday at ten thirty. Students should bring the cable reference chart and meet in the component classroom. The tutor will compare cable labels, conductor identification and connector descriptions. The lesson will use disconnected training samples and photographs.",
       "options": [
         "At ten thirty on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine thirty on Monday",
+        "At ten thirty on Tuesday",
+        "At eleven thirty on Monday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which reference material is needed for cable identification?",
       "audioText": "The electronics department will hold a cable identification lesson on Monday at ten thirty. Students should bring the cable reference chart and meet in the component classroom. The tutor will compare cable labels, conductor identification and connector descriptions. The lesson will use disconnected training samples and photographs.",
       "options": [
-        "On Friday",
+        "The wiring diagram",
         "The cable reference chart",
-        "Next month",
-        "After the event"
+        "The maintenance log",
+        "The component inspection checklist"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A cable record should identify the cable type, reference and relevant connector information. In a training exercise, a student compared the printed label with the reference chart and checked the connector description. The student recorded the details before adding the cable to the classroom inventory. If the label is unclear, the item should remain identified as needing confirmation. Reading 1. Which details should a cable record identify?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Cable type, reference and connector information",
-        "To buy a ticket"
+        "Supplier name, delivery date and purchase price",
+        "Equipment colour, storage location and shift number",
+        "Operator name, training date and inspection result"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should happen if the label is unclear?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The item should be marked as needing confirmation"
+        "The item should be used while the label is checked",
+        "The item should be marked as needing confirmation",
+        "The label should be replaced with an estimated value",
+        "The reference should be copied from a similar cable"
       ],
       "correctIndex": 3,
       "points": 1

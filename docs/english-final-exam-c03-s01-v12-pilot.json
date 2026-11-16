@@ -15,9 +15,9 @@
       "audioText": "The engineering office has introduced a standard format for technical emails. The template includes a clear subject line, the component reference and a short description of the issue. Students will practise using it on Tuesday at eleven in the computer room. They should bring the sample drawing from the previous lesson.",
       "options": [
         "On Tuesday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at ten",
+        "On Wednesday at eleven",
+        "On Tuesday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which document should they bring?",
       "audioText": "The engineering office has introduced a standard format for technical emails. The template includes a clear subject line, the component reference and a short description of the issue. Students will practise using it on Tuesday at eleven in the computer room. They should bring the sample drawing from the previous lesson.",
       "options": [
-        "On Friday",
+        "The revision register from the previous lesson",
         "The sample drawing from the previous lesson",
-        "Next month",
-        "After the event"
+        "The parts catalogue from the previous lesson",
+        "The maintenance checklist from the previous lesson"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A trainee sent an email about a component that did not match the drawing. The subject line included the part number, and the message described the difference between the drawing and the received item. The trainee attached a photograph and asked the supervisor to confirm the next step. The email avoided blaming anyone and focused on the information needed to resolve the issue. Reading 1. What did the subject line include?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The serial number",
         "The part number",
-        "To buy a ticket"
+        "The delivery date",
+        "The supplier name"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How did the trainee keep the message professional?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "By describing the issue and asking for confirmation without blaming anyone"
+        "By describing the issue and asking for confirmation without blaming anyone",
+        "By stating that the supplier made a mistake",
+        "By demanding an immediate replacement without evidence",
+        "By omitting the discrepancy from the message"
       ],
       "correctIndex": 3,
       "points": 1

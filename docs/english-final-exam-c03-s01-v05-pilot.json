@@ -15,9 +15,9 @@
       "audioText": "The stores department is introducing a new component record form next week. The form includes the part number, description, quantity received and date of inspection. Students practising stores documentation should collect a sample from the instructor on Wednesday. The exercise will use training components only and will not involve live stock.",
       "options": [
         "Next week",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "This week",
+        "In two weeks",
+        "Next month"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which detail is included on the form?",
       "audioText": "The stores department is introducing a new component record form next week. The form includes the part number, description, quantity received and date of inspection. Students practising stores documentation should collect a sample from the instructor on Wednesday. The exercise will use training components only and will not involve live stock.",
       "options": [
-        "On Friday",
+        "The serial number",
         "The part number",
-        "Next month",
-        "After the event"
+        "The delivery date",
+        "The storage location"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A stores assistant received a delivery of bearings for a training project. She checked the part numbers against the purchase list and counted the packages before signing the delivery note. One box had a damaged label, so she recorded the problem and asked the supervisor to confirm the contents. The assistant did not add the box to the available stock until the details were checked. Reading 1. What did the assistant compare with the purchase list?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The delivery dates",
         "The part numbers",
-        "To buy a ticket"
+        "The quantities in each box",
+        "The supplier names"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did she delay adding one box to stock?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Because the label was damaged and the contents needed confirmation"
+        "Because the box arrived after the scheduled delivery",
+        "Because the label was damaged and the contents needed confirmation",
+        "Because the purchase list contained no prices",
+        "Because there was not enough storage space"
       ],
       "correctIndex": 3,
       "points": 1

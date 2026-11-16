@@ -15,9 +15,9 @@
       "audioText": "The production department has issued a notice that the demonstration area will be closed on Wednesday morning for a scheduled inspection. Students should use the alternative classroom listed on the course noticeboard. The afternoon session will continue as planned. Anyone who needs access to stored project materials should contact the instructor before Tuesday at three.",
       "options": [
         "For a scheduled inspection",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "For equipment calibration",
+        "For a staff briefing",
+        "For a material delivery"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Where should students find the alternative classroom?",
       "audioText": "The production department has issued a notice that the demonstration area will be closed on Wednesday morning for a scheduled inspection. Students should use the alternative classroom listed on the course noticeboard. The afternoon session will continue as planned. Anyone who needs access to stored project materials should contact the instructor before Tuesday at three.",
       "options": [
-        "On Friday",
+        "On the workshop door",
+        "In the maintenance log",
         "On the course noticeboard",
-        "Next month",
-        "After the event"
+        "In the stores register"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A technical notice should make important information easy to find. It normally states what has changed, when the change applies and who is affected. A clear notice also gives any action that readers need to take and identifies a contact person for questions. Long background explanations can make urgent details difficult to notice, so supporting information should be organised separately. Reading 1. Which information should a technical notice include?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The document author, file size and print date",
         "What changed, when it applies, who is affected and what action is needed",
-        "To buy a ticket"
+        "The supplier price, delivery date and invoice number",
+        "The full history of every earlier revision"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why should urgent details be easy to find?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "So that readers can understand important information quickly"
+        "So that readers can avoid checking the source",
+        "So that readers can understand important information quickly",
+        "So that the notice can contain fewer technical details",
+        "So that urgent information can be placed at the end"
       ],
       "correctIndex": 3,
       "points": 1

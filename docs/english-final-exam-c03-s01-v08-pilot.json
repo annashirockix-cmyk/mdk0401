@@ -15,9 +15,9 @@
       "audioText": "The electrical workshop will hold a short session on technical labels next Tuesday at two. Students will review common warning symbols, unit abbreviations and equipment identification plates. The instructor will provide a reference sheet at the start. Students should not remove labels from any training equipment during the exercise.",
       "options": [
         "Next Tuesday at two",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Next Tuesday at one",
+        "Next Wednesday at two",
+        "Next Tuesday at three"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What will the instructor provide?",
       "audioText": "The electrical workshop will hold a short session on technical labels next Tuesday at two. Students will review common warning symbols, unit abbreviations and equipment identification plates. The instructor will provide a reference sheet at the start. Students should not remove labels from any training equipment during the exercise.",
       "options": [
-        "On Friday",
+        "A parts catalogue",
         "A reference sheet",
-        "Next month",
-        "After the event"
+        "A safety checklist",
+        "A dimension-conversion table"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An equipment identification plate usually contains information such as the model, serial number and rated values. A technician copied the details into an inspection record and checked the units carefully. The technician also noted a warning symbol near the connector. If a label is damaged or unreadable, the information should be confirmed through the approved documentation rather than guessed. Reading 1. Which details may appear on an identification plate?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "The model, serial number and rated values",
-        "To buy a ticket"
+        "The drawing revision, inspection date and operator name",
+        "The supplier address, delivery date and purchase order",
+        "The component colour, storage location and batch quantity"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should happen if a label is unreadable?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The information should be confirmed using approved documentation"
+        "The information should be guessed from a similar item",
+        "The information should be confirmed using approved documentation",
+        "A colleague should choose the most likely value",
+        "The nearest readable label should be copied"
       ],
       "correctIndex": 3,
       "points": 1

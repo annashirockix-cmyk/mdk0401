@@ -15,9 +15,9 @@
       "audioText": "The electronics tutor will introduce sensor terminology on Tuesday at nine fifteen. Students should meet in the instrumentation classroom and bring the illustrated sensor chart. The lesson will compare temperature, light and proximity sensors and explain what each type detects. The class will use diagrams and recorded examples rather than live equipment.",
       "options": [
         "At nine fifteen on Tuesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight fifteen on Tuesday",
+        "At nine fifteen on Wednesday",
+        "At ten fifteen on Tuesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which reference chart should students use for the sensor exercise?",
       "audioText": "The electronics tutor will introduce sensor terminology on Tuesday at nine fifteen. Students should meet in the instrumentation classroom and bring the illustrated sensor chart. The lesson will compare temperature, light and proximity sensors and explain what each type detects. The class will use diagrams and recorded examples rather than live equipment.",
       "options": [
-        "On Friday",
+        "The wiring diagram",
         "The illustrated sensor chart",
-        "Next month",
-        "After the event"
+        "The equipment catalogue",
+        "The maintenance schedule"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A temperature sensor provides information about temperature changes in a system. A light sensor responds to the level of light, while a proximity sensor can detect the presence of an object without direct contact. The output and operating range depend on the sensor model. A technician should check the data sheet before interpreting a signal or comparing different sensors. Reading 1. What can a proximity sensor detect?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "The presence of an object without direct contact",
-        "To buy a ticket"
+        "The temperature of an object through direct contact",
+        "The distance travelled by a moving component",
+        "The electrical power supplied to a motor"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Where should a technician check the operating range?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "In the sensor data sheet"
+        "In the workshop timetable",
+        "In the sensor data sheet",
+        "In the equipment purchase order",
+        "In the shift handover note"
       ],
       "correctIndex": 3,
       "points": 1

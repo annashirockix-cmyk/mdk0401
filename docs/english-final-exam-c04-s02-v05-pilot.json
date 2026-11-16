@@ -15,9 +15,9 @@
       "audioText": "The systems engineering tutor will review a technical data report on Friday at ten. Students should bring the sample table and the report template. The session will focus on units, data sources and clear descriptions of trends. Students will practise writing a short summary that distinguishes measured results from possible explanations.",
       "options": [
         "On Friday at ten",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at nine",
+        "On Thursday at ten",
+        "On Friday at eleven"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which sample project-report materials are needed for the data-summary exercise?",
       "audioText": "The systems engineering tutor will review a technical data report on Friday at ten. Students should bring the sample table and the report template. The session will focus on units, data sources and clear descriptions of trends. Students will practise writing a short summary that distinguishes measured results from possible explanations.",
       "options": [
-        "On Friday",
+        "The sample inspection checklist and parts list",
         "The sample table and report template",
-        "Next month",
-        "After the event"
+        "The maintenance schedule and risk register",
+        "The supplier specification and drawing"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A technical report should explain where its data came from and what the figures represent. A table needs clear headings and units, while a summary should describe the main trend without overstating it. If a possible cause has not been tested, it should be presented as a suggestion rather than a confirmed fact. This helps readers understand both the results and their limitations. Reading 1. What should clear table headings include?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Units and information about what the figures represent",
-        "To buy a ticket"
+        "The author name and the document file size",
+        "The equipment colour and storage location",
+        "The supplier price and delivery date"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How should an untested possible cause be presented?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "As a suggestion rather than a confirmed fact"
+        "As a confirmed fact",
+        "As a suggestion rather than a confirmed fact",
+        "As a final diagnosis",
+        "As an approved corrective action"
       ],
       "correctIndex": 3,
       "points": 1

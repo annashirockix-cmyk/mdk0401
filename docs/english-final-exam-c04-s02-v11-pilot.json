@@ -15,9 +15,9 @@
       "audioText": "The industrial systems tutor will discuss connected production equipment on Tuesday at ten thirty. Students should bring the network architecture diagram. The lesson will trace sensor data through a gateway to a monitoring platform and explain why device identity and approved network settings matter.",
       "options": [
         "At ten thirty on Tuesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine thirty on Tuesday",
+        "At ten thirty on Wednesday",
+        "At eleven thirty on Tuesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which network document is required for the session?",
       "audioText": "The industrial systems tutor will discuss connected production equipment on Tuesday at ten thirty. Students should bring the network architecture diagram. The lesson will trace sensor data through a gateway to a monitoring platform and explain why device identity and approved network settings matter.",
       "options": [
-        "A personal notebook",
+        "The system block diagram",
         "The network architecture diagram",
-        "A laboratory coat",
-        "A printed timetable"
+        "The sensor data sheet",
+        "The industrial safety checklist"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An industrial Internet of Things system connects sensors, equipment and software services. A sensor sends readings to a gateway, which transfers selected information to another system. Device identity, communication settings and access controls are important because connected equipment can affect production processes. A system diagram helps engineers understand the data path and devices involved. Reading 1. What may a gateway do?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Transfer sensor information to another system",
-        "To buy a ticket"
+        "Store all sensor readings permanently",
+        "Replace the controller in every network",
+        "Measure the physical distance between devices"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why do device identity and access controls matter?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Connected equipment can affect production processes"
+        "Connected equipment can affect production processes",
+        "Network diagrams always contain confidential data",
+        "Device names determine the price of equipment",
+        "Access controls replace the need for maintenance records"
       ],
       "correctIndex": 3,
       "points": 1

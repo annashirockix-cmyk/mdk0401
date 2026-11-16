@@ -15,9 +15,9 @@
       "audioText": "The instrumentation lecturer will discuss analogue and digital signals on Wednesday at one fifteen. Students should meet in Room 21 and bring the signal glossary. The lesson will compare a continuously varying signal with a signal represented by distinct states or values. Example diagrams will be provided for annotation during the session.",
       "options": [
         "At one fifteen on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At twelve fifteen on Wednesday",
+        "At one fifteen on Thursday",
+        "At two fifteen on Wednesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which instrumentation vocabulary resource should students bring?",
       "audioText": "The instrumentation lecturer will discuss analogue and digital signals on Wednesday at one fifteen. Students should meet in Room 21 and bring the signal glossary. The lesson will compare a continuously varying signal with a signal represented by distinct states or values. Example diagrams will be provided for annotation during the session.",
       "options": [
-        "On Friday",
+        "The electrical safety manual",
         "The signal glossary",
-        "Next month",
-        "After the event"
+        "The wiring-diagram reference",
+        "The sensor data sheet"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An analogue signal can vary continuously over a range, while a digital signal is represented by distinct levels or values. A sensor system may convert a physical measurement into a signal that another device can process. The signal format, range and interface depend on the equipment design. A technical description should identify the relevant signal type and refer to the system documentation. Reading 1. How is a digital signal represented?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "By a continuously varying value",
         "By distinct levels or values",
-        "To buy a ticket"
+        "By a change in resistance only",
+        "By a mechanical movement"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should a technical description identify?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The relevant signal type"
+        "The equipment location and operator name",
+        "The relevant signal type",
+        "The supplier and purchase order",
+        "The drawing issue date"
       ],
       "correctIndex": 3,
       "points": 1

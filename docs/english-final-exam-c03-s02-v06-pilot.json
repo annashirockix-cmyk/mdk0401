@@ -15,9 +15,9 @@
       "audioText": "The workshop safety coordinator will give a briefing on Thursday at eight fifty. Students should wait in the marked classroom area until the instructor begins. The briefing will review warning signs, restricted zones and the procedure for reporting damaged equipment. Students should bring their induction cards, and questions can be asked at the end of the session.",
       "options": [
         "At eight fifty on Thursday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At seven fifty on Thursday",
+        "At eight fifty on Friday",
+        "At nine fifty on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which cards should students bring?",
       "audioText": "The workshop safety coordinator will give a briefing on Thursday at eight fifty. Students should wait in the marked classroom area until the instructor begins. The briefing will review warning signs, restricted zones and the procedure for reporting damaged equipment. Students should bring their induction cards, and questions can be asked at the end of the session.",
       "options": [
-        "On Friday",
+        "The machine logbooks",
         "Their induction cards",
-        "Next month",
-        "After the event"
+        "The drawing pack",
+        "The maintenance checklist"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A student noticed that a warning label on a training machine was partly damaged. The student did not try to replace it. Instead, the issue was reported to the instructor, who arranged for the label to be checked and replaced through the department's normal process. The machine remained identified as requiring attention until the issue was resolved. Reading 1. What did the student do about the damaged label?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Continued using the machine",
         "Reported it to the instructor",
-        "To buy a ticket"
+        "Replaced the label without approval",
+        "Removed the warning and restarted the task"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How was the machine identified while the issue remained unresolved?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "As requiring attention"
+        "As ready for production",
+        "As available for use",
+        "As requiring attention",
+        "As awaiting delivery"
       ],
       "correctIndex": 3,
       "points": 1

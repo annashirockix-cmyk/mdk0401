@@ -15,9 +15,9 @@
       "audioText": "The drawing office has updated the worksheet for dimension reading. Students should collect a copy from Room 8 before the lesson on Thursday. The instructor will explain the difference between overall dimensions and hole spacing. A short practice task will follow, and students may use the metric conversion table provided on the last page.",
       "options": [
         "From Room 8",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "From Room 6",
+        "From Room 10",
+        "From Room 12"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What two types of dimensions will be explained?",
       "audioText": "The drawing office has updated the worksheet for dimension reading. Students should collect a copy from Room 8 before the lesson on Thursday. The instructor will explain the difference between overall dimensions and hole spacing. A short practice task will follow, and students may use the metric conversion table provided on the last page.",
       "options": [
-        "On Friday",
+        "Overall length and material thickness",
         "Overall dimensions and hole spacing",
-        "Next month",
-        "After the event"
+        "Hole diameter and thread pitch",
+        "Surface finish and tolerance class"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A technician checked a component drawing before preparing an inspection record. The overall length was shown as 120 millimetres, while the width was 45 millimetres. Two holes were positioned at equal distances from the centre line. The technician recorded the measurements in the same units as the drawing and noted that the drawing revision number had to be included in the report. Reading 1. What was the overall length?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "115 millimetres",
+        "125 millimetres",
         "120 millimetres",
-        "To buy a ticket"
+        "130 millimetres"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did the technician record the revision number?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To identify the exact version of the drawing"
+        "To confirm the material grade",
+        "To record the inspection date",
+        "To identify the exact version of the drawing",
+        "To identify the technician who measured the component"
       ],
       "correctIndex": 3,
       "points": 1

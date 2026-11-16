@@ -15,9 +15,9 @@
       "audioText": "The drawing office will review revision symbols on Thursday at ten fifteen. Students should meet in the design classroom and bring the assembly drawing from the course folder. The tutor will explain how revision letters, change notes and issue dates help readers identify the current drawing. Students will compare two printed versions and list the visible changes.",
       "options": [
         "On Thursday at ten fifteen",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at nine fifteen",
+        "On Friday at ten fifteen",
+        "On Thursday at eleven fifteen"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which drawing should students bring?",
       "audioText": "The drawing office will review revision symbols on Thursday at ten fifteen. Students should meet in the design classroom and bring the assembly drawing from the course folder. The tutor will explain how revision letters, change notes and issue dates help readers identify the current drawing. Students will compare two printed versions and list the visible changes.",
       "options": [
-        "On Friday",
+        "The process chart from the course folder",
         "The assembly drawing from the course folder",
-        "Next month",
-        "After the event"
+        "The maintenance schedule from the course folder",
+        "The inspection checklist from the course folder"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A revised engineering drawing may include a new revision identifier, an updated issue date and a description of the changes. A reader should check these details before using dimensions or component references. If two copies appear different, the document register can help establish which version is current and approved. Old copies should be clearly identified to prevent accidental use. Reading 1. Which details may identify a revised drawing?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The material grade, batch quantity and supplier address",
         "Revision identifier, issue date and description of changes",
-        "To buy a ticket"
+        "The component weight, storage location and purchase price",
+        "The operator name, shift date and inspection result"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Where can a reader check which version is current?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "In the document register"
+        "In the training timetable",
+        "In the document register",
+        "In the supplier catalogue",
+        "In the workshop noticeboard"
       ],
       "correctIndex": 3,
       "points": 1

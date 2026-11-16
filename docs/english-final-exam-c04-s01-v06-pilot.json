@@ -15,9 +15,9 @@
       "audioText": "The electrical systems lecturer will introduce transformer terminology on Friday at nine. Students should meet in the power systems classroom and bring the labelled diagram from the course folder. The lesson will compare primary and secondary windings and explain the purpose of a transformer at a general level. No practical electrical work is planned.",
       "options": [
         "At nine on Friday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight on Friday",
+        "At nine on Thursday",
+        "At ten on Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which diagram should students bring?",
       "audioText": "The electrical systems lecturer will introduce transformer terminology on Friday at nine. Students should meet in the power systems classroom and bring the labelled diagram from the course folder. The lesson will compare primary and secondary windings and explain the purpose of a transformer at a general level. No practical electrical work is planned.",
       "options": [
-        "On Friday",
+        "The circuit diagram from the course folder",
         "The labelled diagram from the course folder",
-        "Next month",
-        "After the event"
+        "The maintenance checklist from the course folder",
+        "The component catalogue from the course folder"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A transformer transfers electrical energy between circuits through electromagnetic induction. It commonly has a primary winding and a secondary winding around a magnetic core. The relationship between the number of turns in the windings affects the voltage ratio in an ideal transformer. Actual equipment also has losses and ratings that must be taken from its nameplate and technical documentation. Reading 1. What is the general purpose of a transformer?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "To measure voltage within a circuit",
         "To transfer electrical energy between circuits",
-        "To buy a ticket"
+        "To store electrical energy in a battery",
+        "To convert alternating current into direct current"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Where should users find equipment ratings?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "On the nameplate and in technical documentation"
+        "In the workshop timetable",
+        "On the nameplate and in technical documentation",
+        "In the supplier's delivery note",
+        "In the operator's shift record"
       ],
       "correctIndex": 3,
       "points": 1

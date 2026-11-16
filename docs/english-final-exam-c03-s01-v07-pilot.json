@@ -15,9 +15,9 @@
       "audioText": "The manufacturing tutor will introduce the topic of dimensional tolerances on Friday at one fifteen. The class will meet in the metrology room and use printed examples only. Students should bring a calculator and the worksheet on limits and fits. The tutor will explain why a permitted variation must be read together with the nominal dimension.",
       "options": [
         "On Friday at one fifteen",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at twelve fifteen",
+        "On Thursday at one fifteen",
+        "On Friday at two fifteen"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What worksheet should students bring?",
       "audioText": "The manufacturing tutor will introduce the topic of dimensional tolerances on Friday at one fifteen. The class will meet in the metrology room and use printed examples only. Students should bring a calculator and the worksheet on limits and fits. The tutor will explain why a permitted variation must be read together with the nominal dimension.",
       "options": [
-        "On Friday",
+        "The worksheet on surface finish",
         "The worksheet on limits and fits",
-        "Next month",
-        "After the event"
+        "The worksheet on drawing symbols",
+        "The worksheet on measurement units"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A drawing gives a nominal diameter of 20 millimetres with a permitted variation. This means the actual measured diameter may differ slightly from the nominal value but must remain within the specified limits. A trainee recorded the nominal dimension and both limits in an inspection table. The trainee did not replace the specified values with an average measurement. Reading 1. What does the permitted variation describe?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The actual measured value recorded during inspection",
         "The allowed difference from the nominal dimension within specified limits",
-        "To buy a ticket"
+        "The nominal dimension shown on the drawing",
+        "The difference between two components of the same type"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Which values did the trainee record?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "The measured value and its unit",
+        "The nominal dimension and the measured value",
+        "The tolerance class and drawing revision",
         "The nominal dimension and both limits"
       ],
       "correctIndex": 3,

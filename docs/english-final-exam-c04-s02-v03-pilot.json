@@ -15,9 +15,9 @@
       "audioText": "The automation tutor will introduce sensors and actuators on Thursday at nine thirty. Students should bring the system block diagram and meet in the automation classroom. The lesson will explain how a sensor provides information and how an actuator produces a physical response. Students will analyse a simplified diagram rather than operate equipment.",
       "options": [
         "At nine thirty on Thursday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight thirty on Thursday",
+        "At nine thirty on Friday",
+        "At ten thirty on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which block diagram should students use for the automation lesson?",
       "audioText": "The automation tutor will introduce sensors and actuators on Thursday at nine thirty. Students should bring the system block diagram and meet in the automation classroom. The lesson will explain how a sensor provides information and how an actuator produces a physical response. Students will analyse a simplified diagram rather than operate equipment.",
       "options": [
-        "On Friday",
+        "The sensor data sheet",
         "The system block diagram",
-        "Next month",
-        "After the event"
+        "The PLC address list",
+        "The maintenance task card"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An automated system may use a sensor to detect a condition and send information to a controller. The controller processes the input according to its programme and may send an output signal to an actuator. The actuator then produces an action, such as movement or switching. The exact arrangement depends on the system design and should be described using the correct equipment documentation. Reading 1. What does a controller do with sensor information?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "It records the output from an actuator",
         "It processes the input according to its programme",
-        "To buy a ticket"
+        "It supplies power directly to the sensor",
+        "It stores every measurement without processing"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What does an actuator produce?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "An action such as movement or switching"
+        "A measurement value",
+        "An action such as movement or switching",
+        "A document reference",
+        "A warning label"
       ],
       "correctIndex": 3,
       "points": 1

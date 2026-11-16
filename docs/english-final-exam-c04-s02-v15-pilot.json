@@ -15,9 +15,9 @@
       "audioText": "The safety and engineering tutor will review incident communication on Friday at ten fifteen. Students should bring the incident-report template. The lesson will distinguish an observation, an immediate action and a later investigation finding.",
       "options": [
         "At ten fifteen on Friday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine fifteen on Friday",
+        "At ten fifteen on Thursday",
+        "At eleven fifteen on Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which reporting template is required?",
       "audioText": "The safety and engineering tutor will review incident communication on Friday at ten fifteen. Students should bring the incident-report template. The lesson will distinguish an observation, an immediate action and a later investigation finding.",
       "options": [
-        "A personal notebook",
+        "The equipment checklist",
         "The incident-report template",
-        "A laboratory coat",
-        "A printed timetable"
+        "The network architecture diagram",
+        "The supplier evaluation form"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An engineering incident report records facts in a clear sequence. It may include time and location, people or equipment involved, the observed event and immediate action. A later investigation may identify causes, but these should not be presented as established facts before the investigation is complete. Reports should follow the approved process and protect confidential information. Reading 1. What information may an incident report include?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Time, location, people or equipment involved, observed event and immediate action",
-        "To buy a ticket"
+        "Only the name of the person who submitted the report",
+        "Purchase price, supplier address and delivery date",
+        "A final diagnosis even when the investigation is incomplete"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How should findings from an incomplete investigation be described?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "They should not be presented as established facts"
+        "They should be presented as confirmed conclusions",
+        "They should not be presented as established facts",
+        "They should be removed from the report",
+        "They should replace the original observations"
       ],
       "correctIndex": 3,
       "points": 1

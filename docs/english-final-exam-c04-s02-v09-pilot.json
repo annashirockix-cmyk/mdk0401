@@ -15,9 +15,9 @@
       "audioText": "The automation laboratory will demonstrate a sample data log on Friday at eleven. Students should bring the trend-chart worksheet. The instructor will show how a timestamp, measured value and equipment reference help describe a recorded event. The class will discuss how missing units or unclear time information can make a trend difficult to interpret.",
       "options": [
         "On Friday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at ten",
+        "On Thursday at eleven",
+        "On Friday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which worksheet should students bring?",
       "audioText": "The automation laboratory will demonstrate a sample data log on Friday at eleven. Students should bring the trend-chart worksheet. The instructor will show how a timestamp, measured value and equipment reference help describe a recorded event. The class will discuss how missing units or unclear time information can make a trend difficult to interpret.",
       "options": [
-        "On Friday",
+        "The sensor glossary",
         "The trend-chart worksheet",
-        "Next month",
-        "After the event"
+        "The maintenance task card",
+        "The network address table"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A data log stores observations over time. A useful record includes a timestamp, the measured value, its unit and the equipment or sensor reference. When data are displayed as a trend, the time scale and axis labels help readers understand changes. Missing units or unclear timestamps can lead to incorrect conclusions, even when the recorded numbers are accurate. Reading 1. Which details should a useful data log include?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Timestamp, measured value, unit and equipment or sensor reference",
-        "To buy a ticket"
+        "Operator name, shift date, training group and room number",
+        "Supplier address, order quantity, delivery date and price",
+        "Machine colour, storage location, programme revision and tool number"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How do time scales and axis labels help readers?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "They help readers understand changes over time"
+        "They show the equipment purchase price",
+        "They help readers understand changes over time",
+        "They replace the need to identify units",
+        "They explain the supplier's delivery schedule"
       ],
       "correctIndex": 3,
       "points": 1

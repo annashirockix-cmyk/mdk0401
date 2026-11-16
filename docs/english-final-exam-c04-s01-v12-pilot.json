@@ -15,9 +15,9 @@
       "audioText": "The electrical theory class will review relay symbols on Thursday at ten. Students should bring the circuit diagram from the previous lesson. The instructor will explain the general difference between a relay coil and its contacts and show how the symbol is used in a diagram. Students will not connect or test any electrical equipment.",
       "options": [
         "On Thursday at ten",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at nine",
+        "On Friday at ten",
+        "On Thursday at eleven"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which maintenance note is required for the electrical systems session?",
       "audioText": "The electrical theory class will review relay symbols on Thursday at ten. Students should bring the circuit diagram from the previous lesson. The instructor will explain the general difference between a relay coil and its contacts and show how the symbol is used in a diagram. Students will not connect or test any electrical equipment.",
       "options": [
-        "On Friday",
+        "The maintenance task card from the previous lesson",
         "The circuit diagram from the previous lesson",
-        "Next month",
-        "After the event"
+        "The parts catalogue from the previous lesson",
+        "The inspection checklist from the previous lesson"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A relay is an electrically controlled switching device. In a simplified diagram, the coil and contacts are shown as separate parts. When the coil is energised, the contact state may change according to the relay design. The exact contact arrangement and ratings must be checked in the manufacturer's documentation. A circuit diagram helps readers understand how the relay is represented within a larger system. Reading 1. What kind of device is a relay?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "A manually operated control switch",
         "An electrically controlled switching device",
-        "To buy a ticket"
+        "A device that measures current continuously",
+        "A component that stores electrical energy"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Where should users check the contact arrangement and ratings?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "In the manufacturer's documentation"
+        "In the workshop inventory",
+        "In the manufacturer's documentation",
+        "In the student attendance record",
+        "In the general safety notice"
       ],
       "correctIndex": 3,
       "points": 1

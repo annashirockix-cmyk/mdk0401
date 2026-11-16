@@ -15,9 +15,9 @@
       "audioText": "The software systems class will review version records on Monday at one. Students should bring the sample change log and meet in the computer laboratory. The instructor will explain how a version number, release date and change summary help users identify the correct software edition. Students will compare two example records.",
       "options": [
         "On Monday at one",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Monday at twelve",
+        "On Tuesday at one",
+        "On Monday at two"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which equipment information record is required for the label review?",
       "audioText": "The software systems class will review version records on Monday at one. Students should bring the sample change log and meet in the computer laboratory. The instructor will explain how a version number, release date and change summary help users identify the correct software edition. Students will compare two example records.",
       "options": [
-        "On Friday",
+        "The equipment identification label",
         "The sample change log",
-        "Next month",
-        "After the event"
+        "The maintenance instruction",
+        "The supplier delivery record"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A change log records updates made to a software product. It may list the version number, release date and a summary of changes or corrections. When a user reports a problem, the support team may ask which version is installed. This information helps the team compare the report with known issues and decide whether an update is relevant. Reading 1. What may a change log include?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Version number, release date and a summary of changes",
-        "To buy a ticket"
+        "Machine serial number, operator name and shift date",
+        "Supplier address, purchase price and order quantity",
+        "Equipment colour, storage location and maintenance cost"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why might support staff ask for the installed version?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To compare the problem with known issues and relevant updates"
+        "To compare the problem with known issues and relevant updates",
+        "To identify the person who purchased the equipment",
+        "To calculate the machine's operating speed",
+        "To replace the need for a technical support record"
       ],
       "correctIndex": 3,
       "points": 1

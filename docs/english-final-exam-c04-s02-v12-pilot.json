@@ -15,9 +15,9 @@
       "audioText": "The engineering software lecturer will explain digital twin terminology on Thursday at nine forty-five. Students should bring the lifecycle diagram. The session will compare a physical asset with its digital representation and discuss how operating data supports monitoring.",
       "options": [
         "At nine forty-five on Thursday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight forty-five on Thursday",
+        "At nine forty-five on Friday",
+        "At ten forty-five on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which lifecycle diagram is needed?",
       "audioText": "The engineering software lecturer will explain digital twin terminology on Thursday at nine forty-five. Students should bring the lifecycle diagram. The session will compare a physical asset with its digital representation and discuss how operating data supports monitoring.",
       "options": [
-        "A personal notebook",
+        "The system block diagram",
         "The lifecycle diagram",
-        "A laboratory coat",
-        "A printed timetable"
+        "The equipment risk register",
+        "The sensor calibration table"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A digital twin is a digital representation of a physical asset or process linked to relevant information about its real-world counterpart. Depending on the application, it may use design data, operating measurements and maintenance history. Its usefulness depends on data quality and model accuracy. A digital model should not be assumed to reflect every real-world condition automatically. Reading 1. What information may support a digital twin?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Design data, operating measurements and maintenance history",
-        "To buy a ticket"
+        "Supplier invoices, delivery dates and purchase orders",
+        "Operator schedules, training records and attendance lists",
+        "Equipment colours, storage locations and parts prices"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What affects its usefulness?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Data quality and model accuracy"
+        "The number of pages in the model report",
+        "Data quality and model accuracy",
+        "The presentation format and slide design",
+        "The number of people who use the equipment"
       ],
       "correctIndex": 3,
       "points": 1

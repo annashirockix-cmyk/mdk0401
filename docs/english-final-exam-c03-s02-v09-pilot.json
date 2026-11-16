@@ -15,9 +15,9 @@
       "audioText": "The CNC documentation session will take place on Friday at nine forty in the computer classroom. Students will review a sample programme sheet, a machine manual extract and a revision record. The instructor will explain why the programme version and equipment reference should be recorded together. The lesson is based on reading documents, not operating machinery.",
       "options": [
         "In the computer classroom",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "In the drawing office",
+        "In the maintenance workshop",
+        "In the quality meeting room"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which record will students review?",
       "audioText": "The CNC documentation session will take place on Friday at nine forty in the computer classroom. Students will review a sample programme sheet, a machine manual extract and a revision record. The instructor will explain why the programme version and equipment reference should be recorded together. The lesson is based on reading documents, not operating machinery.",
       "options": [
-        "On Friday",
+        "A maintenance log",
         "A revision record",
-        "Next month",
-        "After the event"
+        "A parts list",
+        "An inspection checklist"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A CNC programme document should be linked to the correct machine and approved revision. If a programme is updated, the revision record explains what changed and when the update was made. This information helps staff avoid confusing an old copy with the current approved version. Students should read the programme in context and use the relevant machine documentation for explanations of controller-specific functions. Reading 1. What does a revision record explain?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "What changed and when the update was made",
-        "To buy a ticket"
+        "Who approved the purchase and when it was delivered",
+        "Which operator used the machine and on what shift",
+        "How many components were stored in the workshop"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why should the programme be linked to the correct machine?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To avoid confusing versions and account for controller-specific functions"
+        "To reduce the number of programme lines",
+        "To avoid confusing versions and account for controller-specific functions",
+        "To replace the machine's operating instructions",
+        "To identify the supplier of the controller"
       ],
       "correctIndex": 3,
       "points": 1

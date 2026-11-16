@@ -15,9 +15,9 @@
       "audioText": "The quality engineering tutor will discuss process capability on Friday at eleven. Students should bring the sample measurement table and the process glossary. The lesson will explain how variation in a process is compared with specification limits. The tutor will emphasise that a capability result depends on reliable data and appropriate assumptions.",
       "options": [
         "On Friday at eleven",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at ten",
+        "On Thursday at eleven",
+        "On Friday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which glossary is required for the process-capability lesson?",
       "audioText": "The quality engineering tutor will discuss process capability on Friday at eleven. Students should bring the sample measurement table and the process glossary. The lesson will explain how variation in a process is compared with specification limits. The tutor will emphasise that a capability result depends on reliable data and appropriate assumptions.",
       "options": [
-        "On Friday",
+        "The maintenance glossary",
         "The process glossary",
-        "Next month",
-        "After the event"
+        "The component identification sheet",
+        "The machine inspection checklist"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Process capability compares the variation of a process with the limits specified for a product feature. A capability index is meaningful only when the data are suitable and the process assumptions have been considered. A report should identify the measurement method, sample period and specification limits. It should not present a capability figure without explaining the context in which it was calculated. Reading 1. What does process capability compare?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The nominal dimension with the actual measured value",
         "Process variation with the specified product limits",
-        "To buy a ticket"
+        "The machine output with the operator's working hours",
+        "The supplier's delivery performance with the order quantity"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Which context should a capability report identify?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Measurement method, sample period and specification limits"
+        "Machine model, operator name and production quantity",
+        "Measurement method, sample period and specification limits",
+        "Supplier address, delivery date and invoice reference",
+        "Material colour, storage location and batch number"
       ],
       "correctIndex": 3,
       "points": 1

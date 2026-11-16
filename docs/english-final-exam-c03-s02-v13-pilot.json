@@ -15,9 +15,9 @@
       "audioText": "The manufacturing lecturer will introduce toolpath terminology on Wednesday at nine thirty. Students should meet in the CNC theory room and bring the illustrated toolpath sheet. The lesson will compare a straight-line path with a curved path and identify the difference between the programmed geometry and the actual machine movement. The class will use diagrams only.",
       "options": [
         "At nine thirty on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight thirty on Wednesday",
+        "At nine thirty on Thursday",
+        "At ten thirty on Wednesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which process-capability data sheet should students bring?",
       "audioText": "The manufacturing lecturer will introduce toolpath terminology on Wednesday at nine thirty. Students should meet in the CNC theory room and bring the illustrated toolpath sheet. The lesson will compare a straight-line path with a curved path and identify the difference between the programmed geometry and the actual machine movement. The class will use diagrams only.",
       "options": [
-        "On Friday",
+        "The process-capability worksheet",
         "The illustrated toolpath sheet",
-        "Next month",
-        "After the event"
+        "The machine safety card",
+        "The inspection record"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A toolpath describes the route followed by a cutting tool relative to a workpiece. In a simple example, a linear path connects two points with a straight movement, while a circular path follows an arc. The programmed path is interpreted by the controller, and the resulting movement depends on the machine configuration and settings. A drawing helps students visualise the geometry without operating equipment. Reading 1. What does a toolpath describe?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "The route followed by a cutting tool relative to a workpiece",
-        "To buy a ticket"
+        "The order in which finished parts are stored",
+        "The distance between two machine reference points",
+        "The sequence of inspection stages in a quality report"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What can affect the resulting machine movement?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The machine configuration and settings"
+        "The material colour and batch number",
+        "The machine configuration and settings",
+        "The operator's shift and training record",
+        "The supplier's delivery date and order quantity"
       ],
       "correctIndex": 3,
       "points": 1

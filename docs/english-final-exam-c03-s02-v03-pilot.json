@@ -15,9 +15,9 @@
       "audioText": "The manufacturing tutor will compare turning, milling and drilling in a theory lesson on Tuesday at ten thirty. Students should bring the process chart from the previous class. The tutor will focus on the type of movement and the feature produced by each process. Practical demonstrations will be scheduled separately after the workshop equipment has been checked.",
       "options": [
         "At ten thirty on Tuesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine thirty on Tuesday",
+        "At ten thirty on Wednesday",
+        "At eleven thirty on Tuesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which machining reference material is needed for the session?",
       "audioText": "The manufacturing tutor will compare turning, milling and drilling in a theory lesson on Tuesday at ten thirty. Students should bring the process chart from the previous class. The tutor will focus on the type of movement and the feature produced by each process. Practical demonstrations will be scheduled separately after the workshop equipment has been checked.",
       "options": [
-        "On Friday",
+        "The component drawing from the previous class",
         "The process chart from the previous class",
-        "Next month",
-        "After the event"
+        "The machine manual from the previous class",
+        "The safety checklist from the previous class"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Turning is commonly used to produce cylindrical surfaces, while milling can create flat surfaces, slots and more complex profiles. Drilling produces a round hole using a rotating drill. The correct process depends on the component drawing, material and required geometry. A process plan usually lists the main stages and the equipment category, but detailed settings must be taken from approved process documentation. Reading 1. Which operation is commonly used to produce a cylindrical surface?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Milling",
         "Turning",
-        "To buy a ticket"
+        "Drilling",
+        "Grinding"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What information helps determine the correct process?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The drawing, material and required geometry"
+        "The machine availability, operator shift and delivery date",
+        "The drawing, material and required geometry",
+        "The cutting-tool brand, lubricant and batch number",
+        "The component colour, storage location and supplier"
       ],
       "correctIndex": 3,
       "points": 1

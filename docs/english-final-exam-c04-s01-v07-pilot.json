@@ -15,9 +15,9 @@
       "audioText": "The electrical workshop tutor will review warning labels and equipment information on Tuesday at ten forty-five. Students should bring the safety-symbol reference sheet. The session will explain how warning text, symbols and equipment ratings help users recognise important information. Students will work with photographs and sample documents only.",
       "options": [
         "On Tuesday at ten forty-five",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at nine forty-five",
+        "On Wednesday at ten forty-five",
+        "On Tuesday at eleven forty-five"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which safety-symbol reference sheet is required for the warning-label lesson?",
       "audioText": "The electrical workshop tutor will review warning labels and equipment information on Tuesday at ten forty-five. Students should bring the safety-symbol reference sheet. The session will explain how warning text, symbols and equipment ratings help users recognise important information. Students will work with photographs and sample documents only.",
       "options": [
-        "On Friday",
+        "The equipment-identification manual",
         "The safety-symbol reference sheet",
-        "Next month",
-        "After the event"
+        "The electrical measurement table",
+        "The maintenance task register"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An equipment label may show a voltage rating, current rating, model number and warning symbols. A technician records the information before preparing a report. If a label is damaged, the missing details should be confirmed using approved documentation. Guessing a rating can create confusion and may lead to an incorrect record, so unclear information should be reported for checking. Reading 1. Which details may appear on an equipment label?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Voltage and current ratings, model number and warning symbols",
-        "To buy a ticket"
+        "Supplier name, delivery date, purchase price and invoice number",
+        "Equipment colour, storage location, operator name and shift",
+        "Drawing revision, inspection date, batch quantity and room number"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should happen when a label is damaged?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Missing details should be confirmed through approved documentation"
+        "Missing details should be estimated from a similar item",
+        "Missing details should be confirmed through approved documentation",
+        "The damaged label should be copied from another unit",
+        "The equipment should be used before the label is replaced"
       ],
       "correctIndex": 3,
       "points": 1

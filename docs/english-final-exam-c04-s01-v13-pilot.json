@@ -15,9 +15,9 @@
       "audioText": "The maintenance lecturer will compare common electrical fault descriptions on Monday at eleven thirty. Students should bring the fault-category worksheet. The lesson will distinguish open circuit, short circuit and intermittent fault as descriptive terms. Students will analyse written examples and identify what information is still needed before a cause can be confirmed.",
       "options": [
         "At eleven thirty on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At ten thirty on Monday",
+        "At eleven thirty on Tuesday",
+        "At twelve thirty on Monday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which worksheet is required for the fault-category lesson?",
       "audioText": "The maintenance lecturer will compare common electrical fault descriptions on Monday at eleven thirty. Students should bring the fault-category worksheet. The lesson will distinguish open circuit, short circuit and intermittent fault as descriptive terms. Students will analyse written examples and identify what information is still needed before a cause can be confirmed.",
       "options": [
-        "On Friday",
+        "The electrical safety checklist",
         "The fault-category worksheet",
-        "Next month",
-        "After the event"
+        "The circuit symbol glossary",
+        "The measurement conversion table"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An open circuit describes a break in a path where continuity is not present. A short circuit describes an unintended low-resistance connection between points. An intermittent fault occurs irregularly and may be difficult to reproduce. These terms describe different conditions, but a report should still record the evidence and test context rather than state a cause without confirmation. Reading 1. What does an open circuit describe?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "A short circuit between two conductors",
         "A break in a path where continuity is not present",
-        "To buy a ticket"
+        "A normal path with low resistance",
+        "A change in the supply voltage"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why should a report include test context?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To record evidence and avoid an unsupported conclusion"
+        "To identify the person who performed the test",
+        "To record evidence and avoid an unsupported conclusion",
+        "To confirm that every component has failed",
+        "To remove the need for a measurement record"
       ],
       "correctIndex": 3,
       "points": 1

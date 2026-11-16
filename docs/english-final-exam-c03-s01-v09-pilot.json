@@ -15,9 +15,9 @@
       "audioText": "The quality department is demonstrating its new inspection report template on Thursday at eleven thirty. The demonstration will take place in Meeting Room B. Students will see how to record the component ID, inspection date, measured values and any non-conforming result. A sample report will be uploaded to the course folder after the session.",
       "options": [
         "On Thursday at eleven thirty",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at ten thirty",
+        "On Friday at eleven thirty",
+        "On Thursday at twelve thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which room will be used?",
       "audioText": "The quality department is demonstrating its new inspection report template on Thursday at eleven thirty. The demonstration will take place in Meeting Room B. Students will see how to record the component ID, inspection date, measured values and any non-conforming result. A sample report will be uploaded to the course folder after the session.",
       "options": [
-        "On Friday",
+        "Meeting Room A",
         "Meeting Room B",
-        "Next month",
-        "After the event"
+        "Meeting Room C",
+        "Training Room 2"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "After checking a batch of training components, a quality assistant prepared an inspection report. Most measurements were within the specified limits, but one item did not meet the drawing requirement. The assistant recorded the actual value, identified the component and described the issue clearly. The report was then sent to the supervisor for review before the batch status was updated. Reading 1. What did the assistant do when one item did not meet the requirement?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Estimated the value and updated the batch status",
         "Recorded the actual value, identified the component and described the issue",
-        "To buy a ticket"
+        "Changed the result to match the requirement",
+        "Waited until the next batch before recording the issue"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Who received the report for review?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The supervisor"
+        "The quality manager",
+        "The supervisor",
+        "The stores coordinator",
+        "The design engineer"
       ],
       "correctIndex": 3,
       "points": 1

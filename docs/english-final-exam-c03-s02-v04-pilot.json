@@ -15,9 +15,9 @@
       "audioText": "The tooling specialist will give a presentation about cutting tool identification on Thursday at one. It will take place in the manufacturing classroom. Students will compare tool names, insert shapes and material descriptions using photographs and catalogues. The specialist will also explain why a tool must be selected according to the approved process information rather than appearance alone.",
       "options": [
         "On Thursday at one",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at twelve",
+        "On Friday at one",
+        "On Thursday at two"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What materials will students use to compare tools?",
       "audioText": "The tooling specialist will give a presentation about cutting tool identification on Thursday at one. It will take place in the manufacturing classroom. Students will compare tool names, insert shapes and material descriptions using photographs and catalogues. The specialist will also explain why a tool must be selected according to the approved process information rather than appearance alone.",
       "options": [
-        "On Friday",
+        "The process chart and tool list",
         "Photographs and catalogues",
-        "Next month",
-        "After the event"
+        "The sample workpiece and setup sheet",
+        "The safety instructions and machine manual"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A cutting tool catalogue provides information about tool geometry, compatible inserts and recommended applications. A technician should identify the tool holder and insert type before consulting the relevant product information. Two inserts may look similar but have different specifications. The catalogue reference and manufacturer's notes help users distinguish them and select the correct item for the documented process. Reading 1. What information can a cutting tool catalogue provide?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Tool length, holder type and machine serial number",
         "Tool geometry, compatible inserts and recommended applications",
-        "To buy a ticket"
+        "Cutting speed, feed rate and coolant settings",
+        "Insert colour, package size and delivery date"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How can users distinguish similar-looking inserts?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "By checking the catalogue reference and manufacturer's notes"
+        "By checking the catalogue reference and manufacturer's notes",
+        "By comparing the insert colour with another tool",
+        "By asking a colleague to identify it from memory",
+        "By selecting the insert with the closest package description"
       ],
       "correctIndex": 3,
       "points": 1

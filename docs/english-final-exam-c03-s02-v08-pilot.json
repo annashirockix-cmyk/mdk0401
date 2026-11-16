@@ -15,9 +15,9 @@
       "audioText": "The quality department is running a terminology workshop on Tuesday at one thirty in Room 15. Students will review the terms defect, non-conformity, inspection and corrective action. A short glossary will be provided. The instructor asks students to bring one example from a previous classroom exercise where a result did not meet a stated requirement.",
       "options": [
         "On Tuesday at one thirty",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at twelve thirty",
+        "On Wednesday at one thirty",
+        "On Tuesday at two thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which glossary item will be provided?",
       "audioText": "The quality department is running a terminology workshop on Tuesday at one thirty in Room 15. Students will review the terms defect, non-conformity, inspection and corrective action. A short glossary will be provided. The instructor asks students to bring one example from a previous classroom exercise where a result did not meet a stated requirement.",
       "options": [
-        "On Friday",
+        "A machine manual",
         "A short glossary",
-        "Next month",
-        "After the event"
+        "A parts catalogue",
+        "A safety notice"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A non-conformity is a failure to meet a specified requirement. It may relate to a dimension, material, document or process. A clear report identifies the requirement, describes the observed result and provides relevant evidence. The responsible person can then review the issue and decide what action is appropriate. A non-conformity should not be hidden by changing the original inspection data. Reading 1. What does a non-conformity mean?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "A failure to meet a specified requirement",
-        "To buy a ticket"
+        "A delay in the planned production schedule",
+        "A recommendation to replace a component",
+        "A difference between two informal opinions"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should a clear report describe?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The requirement, observed result and relevant evidence"
+        "The equipment model, serial number and purchase date",
+        "The requirement, observed result and relevant evidence",
+        "The supplier name, delivery date and order value",
+        "The operator name, shift time and training record"
       ],
       "correctIndex": 3,
       "points": 1

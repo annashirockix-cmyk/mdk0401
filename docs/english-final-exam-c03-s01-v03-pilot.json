@@ -15,9 +15,9 @@
       "audioText": "The engineering tutor has scheduled a drawing interpretation session for Friday at ten in the design classroom. Students should bring a pencil, ruler and the printed assembly drawing from the previous lesson. The group will identify the main views and discuss how hidden features are represented. The tutor will provide a glossary of common drawing terms.",
       "options": [
         "In the design classroom",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "In the drawing office",
+        "In the CAD laboratory",
+        "In the assembly workshop"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which document should students bring?",
       "audioText": "The engineering tutor has scheduled a drawing interpretation session for Friday at ten in the design classroom. Students should bring a pencil, ruler and the printed assembly drawing from the previous lesson. The group will identify the main views and discuss how hidden features are represented. The tutor will provide a glossary of common drawing terms.",
       "options": [
-        "On Friday",
+        "The parts catalogue",
         "The printed assembly drawing",
-        "Next month",
-        "After the event"
+        "The maintenance task card",
+        "The revision register"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An assembly drawing shows how several parts fit together. A parts list identifies each component by a reference number and gives its description and quantity. Before ordering replacement parts, a technician checks the drawing revision and compares the reference numbers with the maintenance record. This reduces the risk of selecting a similar-looking but incorrect component. Reading 1. What information does the parts list provide?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The material and finish of each part",
         "A component description and quantity for each part",
-        "To buy a ticket"
+        "The supplier and purchase price for each part",
+        "The revision date and author of each drawing"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why does the technician compare reference numbers?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To avoid selecting a similar-looking but incorrect component"
+        "To confirm the material grade",
+        "To avoid selecting a similar-looking but incorrect component",
+        "To record the delivery date",
+        "To identify the person who prepared the drawing"
       ],
       "correctIndex": 3,
       "points": 1

@@ -15,9 +15,9 @@
       "audioText": "The computer networks tutor will introduce network protocol terminology on Thursday at ten. Students should bring the network glossary and meet in Room 18. The lesson will compare the roles of addressing, routing and error checking in data communication. The tutor will use a simplified network diagram and a short glossary exercise.",
       "options": [
         "At ten on Thursday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine on Thursday",
+        "At ten on Friday",
+        "At eleven on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which glossary is required for the network lesson?",
       "audioText": "The computer networks tutor will introduce network protocol terminology on Thursday at ten. Students should bring the network glossary and meet in Room 18. The lesson will compare the roles of addressing, routing and error checking in data communication. The tutor will use a simplified network diagram and a short glossary exercise.",
       "options": [
-        "On Friday",
+        "The network address register",
         "The network glossary",
-        "Next month",
-        "After the event"
+        "The cable installation guide",
+        "The system maintenance schedule"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A network protocol defines rules that allow devices to exchange information. Different protocols may support addressing, routing, error detection or application-level communication. A network diagram can show how devices are connected, but it does not describe every detail of the protocol. Engineers should identify the relevant standard and consult current technical documentation when describing system behaviour. Reading 1. What does a network protocol define?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Rules that allow devices to exchange information",
-        "To buy a ticket"
+        "A diagram showing where devices are physically installed",
+        "A list of passwords used by network users",
+        "A record of the equipment purchase date"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why is a network diagram not enough to describe every protocol detail?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Because it shows connections but not every detail of protocol behaviour"
+        "Because it shows every protocol message in detail",
+        "Because it shows connections but not every detail of protocol behaviour",
+        "Because it contains no information about connected devices",
+        "Because it replaces the need for technical documentation"
       ],
       "correctIndex": 3,
       "points": 1

@@ -15,9 +15,9 @@
       "audioText": "The manufacturing planning class will review a sample process sheet on Monday at ten. Students should bring the component drawing and the operation list. The instructor will explain how a process sheet connects the required geometry with the sequence of manufacturing stages. Detailed machine settings will not be discussed in this classroom exercise.",
       "options": [
         "On Monday at ten",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Monday at nine",
+        "On Tuesday at ten",
+        "On Monday at eleven"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which documents are needed for the process-planning class?",
       "audioText": "The manufacturing planning class will review a sample process sheet on Monday at ten. Students should bring the component drawing and the operation list. The instructor will explain how a process sheet connects the required geometry with the sequence of manufacturing stages. Detailed machine settings will not be discussed in this classroom exercise.",
       "options": [
-        "On Friday",
+        "The process chart and risk assessment",
         "The component drawing and operation list",
-        "Next month",
-        "After the event"
+        "The maintenance manual and calibration record",
+        "The material certificate and parts catalogue"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A process plan describes the main stages required to produce a component. It may identify the operation, the equipment category and the inspection point. The sequence should reflect the component's design and the requirements in the approved documentation. A clear plan also helps the production team understand which stage has been completed and what needs to happen next. Reading 1. What may a process plan identify?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The supplier, batch number and purchase price",
         "The operation, equipment category and inspection point",
-        "To buy a ticket"
+        "The operator, shift pattern and delivery date",
+        "The material colour, storage area and order quantity"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why is the sequence important?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "It reflects the design and helps the team follow the stages"
+        "It reduces the cost of every operation",
+        "It reflects the design and helps the team follow the stages",
+        "It identifies the supplier's preferred equipment",
+        "It removes the need to check the component drawing"
       ],
       "correctIndex": 3,
       "points": 1

@@ -15,9 +15,9 @@
       "audioText": "The CNC theory tutor will review a sample programme on Monday at one. Students should bring the printed programme extract and the controller glossary. The class will identify programme blocks, axis words and feed information. The tutor will explain why a code should be interpreted in the context of the controller and the complete programme.",
       "options": [
         "On Monday at one",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Monday at twelve",
+        "On Tuesday at one",
+        "On Monday at two"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which terminology resource should students use for the drawing-revision activity?",
       "audioText": "The CNC theory tutor will review a sample programme on Monday at one. Students should bring the printed programme extract and the controller glossary. The class will identify programme blocks, axis words and feed information. The tutor will explain why a code should be interpreted in the context of the controller and the complete programme.",
       "options": [
-        "On Friday",
+        "The machine setup manual",
         "The controller glossary",
-        "Next month",
-        "After the event"
+        "The parts catalogue",
+        "The inspection worksheet"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A CNC programme may contain words that identify axes, positions, feed information and machine functions. The meaning of a code can depend on the controller and the modal state established by earlier blocks. For this reason, a single line should not always be interpreted in isolation. Students should use the approved controller reference and consider the surrounding programme context. Reading 1. Why should a programme line not always be interpreted in isolation?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Because each line always has the same meaning",
         "Because its meaning may depend on earlier blocks and the controller state",
-        "To buy a ticket"
+        "Because programme lines should be read without context",
+        "Because the drawing revision replaces the programme"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Which reference should students use?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The approved controller reference"
+        "The general workshop safety guide",
+        "The approved controller reference",
+        "The supplier's product catalogue",
+        "The previous student's programme notes"
       ],
       "correctIndex": 3,
       "points": 1

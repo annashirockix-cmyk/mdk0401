@@ -15,9 +15,9 @@
       "audioText": "The control systems instructor will review a sample PLC input-output table on Wednesday at nine forty-five. Students should bring the controller reference sheet and meet in the automation room. The class will identify the difference between a physical input, a programme variable and an output reference. The exercise will use a printed table only.",
       "options": [
         "At nine forty-five on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight forty-five on Wednesday",
+        "At nine forty-five on Thursday",
+        "At ten forty-five on Wednesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which safety-symbol reference material should students bring?",
       "audioText": "The control systems instructor will review a sample PLC input-output table on Wednesday at nine forty-five. Students should bring the controller reference sheet and meet in the automation room. The class will identify the difference between a physical input, a programme variable and an output reference. The exercise will use a printed table only.",
       "options": [
-        "On Friday",
+        "The network architecture diagram",
         "The controller reference sheet",
-        "Next month",
-        "After the event"
+        "The sensor calibration record",
+        "The equipment maintenance schedule"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A PLC input-output table links field devices with the controller's documented addresses. The table may include a device description, signal type and address. A programme variable can use a separate symbolic name to make the logic easier to understand. The relationship between physical addresses and programme names should be documented clearly so that maintenance staff can interpret the system information. Reading 1. What information may appear in a PLC input-output table?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Device description, signal type and address",
-        "To buy a ticket"
+        "Supplier name, delivery date and purchase order",
+        "Machine model, operator name and shift number",
+        "Component material, drawing revision and batch number"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why are symbolic names useful?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "They make programme logic easier to understand"
+        "They reduce the number of input signals",
+        "They make programme logic easier to understand",
+        "They replace the need for a controller model",
+        "They identify the supplier of each device"
       ],
       "correctIndex": 3,
       "points": 1

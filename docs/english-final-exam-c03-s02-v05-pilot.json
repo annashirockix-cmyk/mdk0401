@@ -15,9 +15,9 @@
       "audioText": "The quality tutor will discuss workholding terminology during a classroom session on Monday at two. Students should bring the illustrated glossary and the sample component drawing. The session will compare general types of fixtures and explain how the drawing helps identify the surfaces that need to be inspected. No practical setup activity is included in this lesson.",
       "options": [
         "On Monday at two",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Monday at one",
+        "On Tuesday at two",
+        "On Monday at three"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which two machining documents are required for the workholding exercise?",
       "audioText": "The quality tutor will discuss workholding terminology during a classroom session on Monday at two. Students should bring the illustrated glossary and the sample component drawing. The session will compare general types of fixtures and explain how the drawing helps identify the surfaces that need to be inspected. No practical setup activity is included in this lesson.",
       "options": [
-        "On Friday",
+        "The component drawing and tool catalogue",
         "The illustrated glossary and sample component drawing",
-        "Next month",
-        "After the event"
+        "The process chart and inspection sheet",
+        "The machine manual and maintenance log"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Workholding equipment is used to locate and support a workpiece during a manufacturing process. The choice depends on the component shape, the operation and the process documentation. A quality record may identify the datum surfaces used for measurement. Clear communication about the workpiece reference and inspection points helps different team members interpret the record consistently. Reading 1. What is the purpose of workholding equipment?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "To measure the cutting speed",
         "To locate and support a workpiece",
-        "To buy a ticket"
+        "To remove chips from the cutting area",
+        "To hold the cutting tool in the spindle"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What may a quality record identify?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The datum surfaces used for measurement"
+        "The material grade and batch number",
+        "The datum surfaces used for measurement",
+        "The tool offset and programme revision",
+        "The cutting force and spindle speed"
       ],
       "correctIndex": 3,
       "points": 1

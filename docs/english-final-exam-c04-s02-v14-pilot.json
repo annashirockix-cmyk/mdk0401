@@ -15,9 +15,9 @@
       "audioText": "The aviation technology lecturer will introduce ground support equipment documentation on Wednesday at twelve. Students should bring the equipment checklist and service-status form. The lesson will show how technicians identify a unit, record its condition and communicate availability.",
       "options": [
         "At twelve on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eleven on Wednesday",
+        "At twelve on Thursday",
+        "At one on Wednesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which status documents should students bring?",
       "audioText": "The aviation technology lecturer will introduce ground support equipment documentation on Wednesday at twelve. Students should bring the equipment checklist and service-status form. The lesson will show how technicians identify a unit, record its condition and communicate availability.",
       "options": [
-        "A personal notebook",
+        "The maintenance history and risk form",
         "The equipment checklist and service-status form",
-        "A laboratory coat",
-        "A printed timetable"
+        "The supplier specification and parts list",
+        "The incident report and inspection chart"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Ground support equipment includes vehicles and systems used to service an aircraft on the ground. Before use, equipment status and inspection information must be checked under local procedures. A service-status record identifies the unit and states whether it is available, restricted or out of service. Clear wording helps prevent use when status is uncertain. Reading 1. What should a service-status record identify?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "The equipment unit",
-        "To buy a ticket"
+        "The operator's training record",
+        "The supplier's delivery address",
+        "The room where the form was completed"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why is clear status wording important?",
       "options": [
-        "At the sports centre",
+        "To make the report shorter",
         "To prevent use when its status is uncertain",
-        "In the computer room",
-        "At the bus station"
+        "To avoid recording who checked the equipment",
+        "To replace the need for a status update"
       ],
       "correctIndex": 1,
       "points": 1

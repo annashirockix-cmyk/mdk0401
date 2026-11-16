@@ -15,9 +15,9 @@
       "audioText": "The energy systems lecturer will discuss electrical energy use on Wednesday at twelve. The session will take place in the main lecture room. Students should read the short note about kilowatt-hours before attending. The lecturer will explain how power and operating time are related and will compare two example energy records.",
       "options": [
         "On Wednesday at twelve",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Wednesday at eleven",
+        "On Thursday at twelve",
+        "On Wednesday at one"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should students read before attending?",
       "audioText": "The energy systems lecturer will discuss electrical energy use on Wednesday at twelve. The session will take place in the main lecture room. Students should read the short note about kilowatt-hours before attending. The lecturer will explain how power and operating time are related and will compare two example energy records.",
       "options": [
-        "On Friday",
+        "The power-rating sheet",
         "The note about kilowatt-hours",
-        "Next month",
-        "After the event"
+        "The energy-conversion table",
+        "The sample electricity bill"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Electrical energy consumption depends on the power of a device and the time it operates. A device with a higher power rating may use more energy in the same period, although actual consumption also depends on its operating conditions. Energy records often use kilowatt-hours. A student compared two devices and made sure that the measurement periods were equal before drawing a conclusion. Reading 1. What two factors affect energy consumption?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The device's voltage and current",
         "The device's power and operating time",
-        "To buy a ticket"
+        "The device's size and weight",
+        "The device's temperature and production date"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did the student use equal measurement periods?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To make the comparison fair"
+        "To reduce the time needed for the exercise",
+        "To make the comparison fair",
+        "To avoid recording the measurement units",
+        "To make the higher value appear more significant"
       ],
       "correctIndex": 3,
       "points": 1

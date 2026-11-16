@@ -15,9 +15,9 @@
       "audioText": "The electrical documentation review will take place on Friday at twelve in the project room. Students should bring the circuit diagram, component list and latest revision record. The instructor will ask each group to check that the references match across the documents. Any unclear item should be listed for confirmation rather than corrected without approval.",
       "options": [
         "On Friday at twelve",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at eleven",
+        "On Thursday at twelve",
+        "On Friday at one"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which record should students bring?",
       "audioText": "The electrical documentation review will take place on Friday at twelve in the project room. Students should bring the circuit diagram, component list and latest revision record. The instructor will ask each group to check that the references match across the documents. Any unclear item should be listed for confirmation rather than corrected without approval.",
       "options": [
-        "On Friday",
+        "The latest maintenance instruction",
         "The latest revision record",
-        "Next month",
-        "After the event"
+        "The component parts list",
+        "The inspection measurement sheet"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A project folder contained a circuit diagram, a component list and an inspection record. During review, a student noticed that one component reference was different in the diagram and the list. The student recorded the mismatch and informed the project tutor. The documents were checked against the approved revision before the list was updated. This maintained a clear record of the change. Reading 1. What mismatch did the student notice?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "A drawing revision differed between two documents",
         "A component reference differed between the diagram and list",
-        "To buy a ticket"
+        "The supplier address differed from the invoice",
+        "The inspection date differed from the work order"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What was checked before the list was updated?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The documents were checked against the approved revision"
+        "The equipment serial number was checked against the supplier list",
+        "The documents were checked against the approved revision",
+        "The component colour was compared with the parts catalogue",
+        "The operator's shift record was checked before the list was updated"
       ],
       "correctIndex": 3,
       "points": 1

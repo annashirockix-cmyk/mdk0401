@@ -15,9 +15,9 @@
       "audioText": "The materials technician will demonstrate how to check incoming material certificates on Friday at nine. The session will be held in the inspection area, using sample documents only. Students will learn where to find the material grade, batch number and certificate date. They should not remove any original records from the department.",
       "options": [
         "On Friday at nine",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Friday at eight",
+        "On Thursday at nine",
+        "On Friday at ten"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which details will students learn to locate?",
       "audioText": "The materials technician will demonstrate how to check incoming material certificates on Friday at nine. The session will be held in the inspection area, using sample documents only. Students will learn where to find the material grade, batch number and certificate date. They should not remove any original records from the department.",
       "options": [
-        "On Friday",
+        "The supplier name, purchase order and delivery date",
         "The material grade, batch number and certificate date",
-        "Next month",
-        "After the event"
+        "The component weight, storage location and order quantity",
+        "The drawing revision, inspection time and operator name"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A delivery of metal stock arrived with a certificate from the supplier. The inspector compared the material grade and batch number on the certificate with the delivery label. The values matched, but the certificate date was difficult to read. The inspector requested a clearer copy before completing the incoming inspection record. The material was kept identified while the document was being checked. Reading 1. Which details did the inspector compare?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "The material grade and batch number",
-        "To buy a ticket"
+        "The certificate date and supplier address",
+        "The delivery quantity and purchase cost",
+        "The inspection date and equipment reference"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why was a clearer copy requested?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Because the certificate date was difficult to read"
+        "Because the material grade was missing",
+        "Because the batch number did not match",
+        "Because the certificate date was difficult to read",
+        "Because the supplier address was not included"
       ],
       "correctIndex": 3,
       "points": 1

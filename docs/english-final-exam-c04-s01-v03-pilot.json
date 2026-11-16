@@ -15,9 +15,9 @@
       "audioText": "The electronics department will hold a component identification workshop on Monday at nine forty-five. Students should bring the illustrated component chart from the course folder. The instructor will compare resistors, capacitors, diodes and transistors, focusing on their symbols and general functions. The workshop will use photographs and unpowered training boards.",
       "options": [
         "At nine forty-five on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At eight forty-five on Monday",
+        "At nine forty-five on Tuesday",
+        "At ten forty-five on Monday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which chart should students bring?",
       "audioText": "The electronics department will hold a component identification workshop on Monday at nine forty-five. Students should bring the illustrated component chart from the course folder. The instructor will compare resistors, capacitors, diodes and transistors, focusing on their symbols and general functions. The workshop will use photographs and unpowered training boards.",
       "options": [
-        "On Friday",
+        "The wiring diagram",
         "The illustrated component chart",
-        "Next month",
-        "After the event"
+        "The parts list",
+        "The circuit-symbol sheet"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A capacitor stores electrical energy in an electric field and can be used in several types of electronic circuit. A diode is designed to conduct mainly in one direction, while a transistor can be used for switching or amplification. Component appearance alone is not enough for identification; the printed code, circuit symbol and component documentation should also be checked. Reading 1. What can a capacitor do?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Limit current in a circuit",
         "Store electrical energy in an electric field",
-        "To buy a ticket"
+        "Allow current to pass in one direction",
+        "Create a magnetic field around a coil"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why is appearance alone insufficient for identification?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Because the printed code, symbol and documentation should also be checked"
+        "Because similar components always have identical functions",
+        "Because the printed code, symbol and documentation should also be checked",
+        "Because component colour is the only reliable identifier",
+        "Because the packaging may show a different delivery date"
       ],
       "correctIndex": 3,
       "points": 1

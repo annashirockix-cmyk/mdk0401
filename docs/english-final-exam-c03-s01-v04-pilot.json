@@ -15,9 +15,9 @@
       "audioText": "New students will receive a workshop orientation on Monday at eight forty-five. Please wait at the marked reception point until the instructor collects the group. The briefing will explain the workshop layout, emergency exits and local reporting arrangements. Students must follow the instructor's directions and must not enter restricted areas without permission.",
       "options": [
         "At eight forty-five on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine fifteen on Monday",
+        "At eight forty-five on Tuesday",
+        "At nine on Monday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Where should they wait?",
       "audioText": "New students will receive a workshop orientation on Monday at eight forty-five. Please wait at the marked reception point until the instructor collects the group. The briefing will explain the workshop layout, emergency exits and local reporting arrangements. Students must follow the instructor's directions and must not enter restricted areas without permission.",
       "options": [
-        "On Friday",
+        "At the workshop entrance",
         "At the marked reception point",
-        "Next month",
-        "After the event"
+        "In the drawing office",
+        "Outside the stores department"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "During a workshop induction, students learned where to find the first-aid point and how to report a damaged tool. The instructor explained that a warning label must remain visible and that equipment should not be used if its condition is uncertain. Students were also shown the designated walkways and reminded to ask before entering a restricted work area. Reading 1. What should students do if a tool is damaged?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Use it at a lower speed",
+        "Put it back in the tool cabinet",
         "Report it to the appropriate person",
-        "To buy a ticket"
+        "Discard it without recording the issue"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why must warning labels remain visible?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "So that users can see the relevant warning"
+        "So that users can identify the tool owner",
+        "So that users can see the relevant warning",
+        "So that the equipment looks organised",
+        "So that the labels match the inventory colour"
       ],
       "correctIndex": 3,
       "points": 1

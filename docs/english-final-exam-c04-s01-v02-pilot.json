@@ -15,9 +15,9 @@
       "audioText": "The metrology instructor will demonstrate how to read a digital multimeter display on Thursday at one fifteen. Students will work with printed examples and identify the unit shown for each measurement. The instructor will explain the difference between voltage, current and resistance. The class will not involve live circuit testing.",
       "options": [
         "On Thursday at one fifteen",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Thursday at twelve fifteen",
+        "On Friday at one fifteen",
+        "On Thursday at two fifteen"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What will students identify on the display?",
       "audioText": "The metrology instructor will demonstrate how to read a digital multimeter display on Thursday at one fifteen. Students will work with printed examples and identify the unit shown for each measurement. The instructor will explain the difference between voltage, current and resistance. The class will not involve live circuit testing.",
       "options": [
-        "On Friday",
+        "The voltage and current values",
         "The unit shown for each measurement",
-        "Next month",
-        "After the event"
+        "The instrument model and serial number",
+        "The measurement date and test location"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An electrical measurement record should include the measured value, the unit and enough context to identify the test point. Voltage is measured in volts, current in amperes and resistance in ohms. A technician should also record the instrument identification when the procedure requires it. Writing a number without a unit can make a result unclear or misleading. Reading 1. Which unit is used for resistance?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Volts",
         "Ohms",
-        "To buy a ticket"
+        "Amperes",
+        "Watts"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why should a measurement include its unit?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To make the result clear and avoid misunderstanding"
+        "To calculate the instrument's power consumption",
+        "To make the result clear and avoid misunderstanding",
+        "To identify the person who took the measurement",
+        "To replace the need for a test-point reference"
       ],
       "correctIndex": 3,
       "points": 1

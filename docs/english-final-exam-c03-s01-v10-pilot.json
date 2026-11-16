@@ -15,9 +15,9 @@
       "audioText": "Students in the metrology class will compare measuring tools on Monday at nine. The session will begin with a demonstration of a steel rule, vernier calliper and micrometer. Students should bring their measurement notebooks. The instructor will explain that the appropriate tool depends on the feature being measured and the required accuracy.",
       "options": [
         "A steel rule, vernier calliper and micrometer",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "A steel rule, angle gauge and dial indicator",
+        "A tape measure, engineer's square and feeler gauge",
+        "A protractor, gauge blocks and thread-pitch gauge"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should students bring?",
       "audioText": "Students in the metrology class will compare measuring tools on Monday at nine. The session will begin with a demonstration of a steel rule, vernier calliper and micrometer. Students should bring their measurement notebooks. The instructor will explain that the appropriate tool depends on the feature being measured and the required accuracy.",
       "options": [
-        "On Friday",
+        "The drawing printouts",
         "Their measurement notebooks",
-        "Next month",
-        "After the event"
+        "A calculator and conversion table",
+        "The instrument calibration record"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A trainee needed to measure the outside diameter of a small cylindrical part. The steel rule was not suitable because its scale did not provide the required level of detail. The trainee selected a vernier calliper and checked that the instrument was clean and in good condition. The measured value was recorded with the correct unit and the tool used was named in the inspection note. Reading 1. Why was the steel rule unsuitable?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Its scale was too long for the component",
         "Its scale did not provide the required level of detail",
-        "To buy a ticket"
+        "Its readings could not be converted into millimetres",
+        "It was designed only for measuring angles"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What did the trainee record in the inspection note?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The measured value, correct unit and tool used"
+        "The measured value, correct unit and tool used",
+        "The date, room number and name of the instructor",
+        "The tool identification without the measured value",
+        "The nominal dimension without the recorded result"
       ],
       "correctIndex": 3,
       "points": 1

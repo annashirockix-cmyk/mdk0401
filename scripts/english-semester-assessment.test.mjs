@@ -408,6 +408,28 @@ test("all Course 5 listening items use same-category distractors and script-supp
   }
 });
 
+test("Course 3 and 4 variants use same-category distractors in listening and reading tasks",()=>{
+  const placeholders=/^(At the college library|At the town centre|At the bus station|To borrow a laptop|To meet a relative|To buy a ticket|At the sports centre|In the computer room|On Friday|Next month|After the event)$/i;
+  const slots=[
+    {course:"c03",semester:"s01",first:2},
+    {course:"c03",semester:"s02",first:3},
+    {course:"c04",semester:"s01",first:2},
+    {course:"c04",semester:"s02",first:3}
+  ];
+  for(const slot of slots){
+    for(let variant=slot.first;variant<=15;variant++){
+      const file=path.join(root,`docs/english-final-exam-${slot.course}-${slot.semester}-v${String(variant).padStart(2,"0")}-pilot.json`);
+      const pilot=JSON.parse(fs.readFileSync(file,"utf8"));
+      for(const [suffix,expectedKey] of [["l01",0],["l02",1],["r01",2],["r02",3]]){
+        const task=pilot.tasks.find(item=>item.id.endsWith("_"+suffix));
+        assert.ok(task,`${slot.course}-${slot.semester}-V${variant} is missing ${suffix}`);
+        assert.equal(task.correctIndex,expectedKey,`${task.id} correct-answer position changed`);
+        assert.ok(task.options.length===4&&!task.options.some(option=>placeholders.test(option.trim())),`${task.id} contains a generic distractor`);
+      }
+    }
+  }
+});
+
 test("all 150 final exam variants have globally unique task IDs and prompts",()=>{
   const slots=[["c01","s01"],["c01","s02"],["c02","s01"],["c02","s02"],["c03","s01"],["c03","s02"],["c04","s01"],["c04","s02"],["c05","s01"],["c05","s02"]];
   const variants=slots.flatMap(([course,semester])=>Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${course}-${semester}-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8"))));
