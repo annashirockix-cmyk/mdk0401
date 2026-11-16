@@ -78,10 +78,10 @@
     {
       "id": "c4s2v12_m01",
       "type": "multiple_choice",
-      "prompt": "A digital twin is being reviewed. Which TWO information sources may improve its accuracy?",
+      "prompt": "Which TWO operational sources can be used to update a digital twin's representation of an asset?",
       "options": [
-        "An unrelated appointment",
-        "A personal preference",
+        "Supplier warranty period",
+        "Planned replacement date",
         "Operating measurements",
         "Maintenance history"
       ],
