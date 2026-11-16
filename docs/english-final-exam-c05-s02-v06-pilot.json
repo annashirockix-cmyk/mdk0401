@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A replacement proposal compared two component options. Option A had a lower purchase cost, while Option B had a longer stated service life and a clearer maintenance record. The review team also considered delivery time and compatibility with the existing assembly. It did not select an option based on price alone; the recommendation explained how each factor affected the decision. Reading 1. Which advantage did Option B have?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "A lower purchase cost and shorter stated service life",
+        "A faster delivery date and a lower purchase cost",
         "A longer stated service life and clearer maintenance record",
-        "To buy a ticket"
+        "A newer manufacturing date and a larger stock quantity"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did the team avoid deciding on purchase price alone?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Because delivery time, compatibility and other factors also affected the decision"
+        "Because the purchase price was the only verified factor",
+        "Because delivery time, compatibility and other factors also affected the decision",
+        "Because the two options had identical service histories",
+        "Because the maintenance record was not relevant to the assembly"
       ],
       "correctIndex": 3,
       "points": 1
