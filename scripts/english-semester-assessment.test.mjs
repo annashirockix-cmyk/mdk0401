@@ -624,10 +624,18 @@ test("server rejects duplicate options and track-mismatched identifiers", () => 
   assert.throws(() => validate(wrongTrackIds, "technical"), /уникальным ID/);
 });
 
-test("student-facing payload strips all answer-key and explanation fields", () => {
-  const safe = sanitize([{ questions: [{ q: "Q", options: ["A", "B"], correct: 1, answer: "B", correctAnswer: "B", explanation: "key", rationale: "key", answerIndex: 1, solution: "hidden" }] }]);
-  const question = safe[0].questions[0];
-  for (const key of ["correct", "answer", "correctAnswer", "explanation", "rationale", "answerIndex", "solution"]) assert.equal(Object.hasOwn(question, key), false);
+test("student-facing semester catalogue is allowlisted and never exposes teacher metadata", () => {
+  const safe = sanitize([{
+    id:"b_sem1", title:"Контрольная работа №1", subtitle:"1 курс, 1 семестр",
+    year:1, semester:1, time:45,
+    answerKey:"private", modelAnswer:"private", teacherNotes:"private",
+    privateRubric:"private", explanation:"private", customMetadata:{secret:"private"},
+    questions:[{q:"Q",options:["A","B"],correct:1,answer:"B",correctAnswer:"B",modelAnswer:"private",teacherNotes:"private",explanation:"key"}]
+  }]);
+  assert.deepEqual(Object.keys(safe[0]).sort(), ["id","title","subtitle","year","semester","time","questions"].sort());
+  assert.deepEqual(safe[0].questions[0], {q:"Q",options:["A","B"]});
+  assert.equal(safe[0].id,"b_sem1");
+  assert.equal(safe[0].attemptNo,undefined,"attempt number is assigned from server-side result history");
 });
 
 test("unreviewed legacy seed stays out of the production page and cloned Technical tests are withheld", () => {
