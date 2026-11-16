@@ -437,6 +437,10 @@ test("student English final-exam UI starts persistent course/semester attempts a
   assert.match(ui, /short_text/);
   assert.match(ui, /Итоговые экзамены по курсам/);
   assert.match(ui, /attempt\.responses\|\|\{\}/);
+  assert.match(ui, /input\.addEventListener\("input",function\(\)\{responses\[id\]=input\.value;queueSave\(\);\}\)/);
+  assert.match(ui, /area\.addEventListener\("input",function\(\)\{responses\[id\]=area\.value;queueSave\(\);\}\)/);
+  assert.match(ui, /window\.setTimeout\(function\(\)\{saveTimer=null;saveNow\(\);\},500\)/);
+  assert.match(ui, /if\(saveTimer\)\{window\.clearTimeout\(saveTimer\);saveTimer=null;\}saveNow\(true\);saveQueue\.then/);
 });
 
 test("teacher dashboard exposes a written-exam review panel and submits explicit per-task grades", () => {
