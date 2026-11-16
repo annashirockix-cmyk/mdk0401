@@ -97,8 +97,7 @@
       "prompt": "A result that does not meet a specified requirement is a ___.",
       "acceptedAnswers": [
         "non-conformity",
-        "nonconformity",
-        "defect"
+        "nonconformity"
       ],
       "points": 2
     },
