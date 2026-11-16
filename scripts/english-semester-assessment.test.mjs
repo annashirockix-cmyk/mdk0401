@@ -726,8 +726,11 @@ test("teacher-granted extra attempts release only expired semester tokens", () =
   assert.equal(cacheValues.has("attempt-key"),true,"an active attempt and its timer must remain intact");
   cacheValues.set("attempt-key", JSON.stringify({attemptId:"expired",startedAt:now-3_000_000,status:"expired"}));
   assert.equal(helper("student@example.test","ENB","english_semester_basic_b_sem1"),true);
-  assert.equal(cacheValues.has("attempt-key"),false,"an expired attempt is released after the teacher grants retries");
-  assert.deepEqual(removed,["attempt-key"]);
+  assert.equal(cacheValues.has("attempt-key"),false,"an explicitly expired attempt is released after the teacher grants retries");
+  cacheValues.set("attempt-key", JSON.stringify({attemptId:"timed-out",startedAt:now-3_060_000}));
+  assert.equal(helper("student@example.test","ENB","english_semester_basic_b_sem1"),true);
+  assert.equal(cacheValues.has("attempt-key"),false,"an attempt past its time limit and grace period is released even if submit was never called");
+  assert.deepEqual(removed,["attempt-key","attempt-key"]);
   assert.match(grantSource,/extra > 0 \?\s*clearExpiredEnglishSemesterAttemptForGrant_/);
   assert.match(grantSource,/ExpiredSemesterAttemptReset:expiredSemesterAttemptReset/);
 });
