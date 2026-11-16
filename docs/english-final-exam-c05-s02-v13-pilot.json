@@ -46,7 +46,7 @@
         "The final sensor reference",
         "The inspection schedule"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "To approve the draft interface without checking its references",
         "To release the design baseline before the teams exchange information"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {

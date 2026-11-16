@@ -46,7 +46,7 @@
         "Supplier address, purchase value, invoice and delivery time",
         "Equipment colour, storage location, room number and group"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "Only when the investigation supports it",
         "When the same symptom has appeared on another item"
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "points": 1
     },
     {

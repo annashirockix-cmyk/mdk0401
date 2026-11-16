@@ -46,7 +46,7 @@
         "Proof that all similar symptoms have one cause",
         "Evidence that operating conditions never change"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "Similar symptoms do not always have the same cause",
         "Because one record is sufficient to approve a maintenance change"
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "points": 1
     },
     {

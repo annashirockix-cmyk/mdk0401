@@ -46,7 +46,7 @@
         "Confirmation of the inspection plan",
         "Confirmation of the project budget"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "So the coordinator could remove the inspection plan from the project",
         "So the mechanical team could approve the software interface alone"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "points": 1
     },
     {

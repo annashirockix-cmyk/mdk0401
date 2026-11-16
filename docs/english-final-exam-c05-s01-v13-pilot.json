@@ -46,7 +46,7 @@
         "The full maintenance history of every component",
         "The names and job titles of all people in the organisation"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "So uncertain information can be presented as confirmed",
         "So the audience does not need to review supporting evidence"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "points": 1
     },
     {

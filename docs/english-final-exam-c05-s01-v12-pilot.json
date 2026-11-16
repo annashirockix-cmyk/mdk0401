@@ -46,7 +46,7 @@
         "Because serial numbers are used only for delivery records",
         "Because installed options are identical across all models"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "The relevant configuration should be established",
         "Assume that all installed options match the standard model"
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "points": 1
     },
     {

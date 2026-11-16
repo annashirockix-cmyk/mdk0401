@@ -46,7 +46,7 @@
         "A staff rota showing shift preferences",
         "A maintenance forecast showing expected workload"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "A replacement of the inspection equipment",
         "Cancellation of the next sample audit"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "points": 1
     },
     {

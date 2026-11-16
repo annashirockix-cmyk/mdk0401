@@ -46,7 +46,7 @@
         "Purchase forecast, staff rota and equipment booking",
         "Previous audit report, meeting minutes and annual plan"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "The label was known to be incorrect",
         "The reviewer had completed the annual audit"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "points": 1
     },
     {

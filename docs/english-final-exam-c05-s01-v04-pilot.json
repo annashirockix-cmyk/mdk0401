@@ -46,7 +46,7 @@
         "Training location, lesson time and group number",
         "Technician name, shift preference and annual leave"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "Because models may have different components or requirements",
         "Because a manual can be used for any model in the same product family"
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "points": 1
     },
     {

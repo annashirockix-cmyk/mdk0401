@@ -59,7 +59,7 @@
         "It should omit possible explanations from the record",
         "It should treat the first explanation as the final conclusion"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {

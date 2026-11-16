@@ -46,7 +46,7 @@
         "Supplier contact details, purchase price and delivery date",
         "Staff rota, annual leave dates and shift preference"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "So the task can be marked complete without further evidence",
         "So the next team can assume the task was not started"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "points": 1
     },
     {

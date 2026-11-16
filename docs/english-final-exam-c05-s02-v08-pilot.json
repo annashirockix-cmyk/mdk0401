@@ -46,7 +46,7 @@
         "A different supplier for inspection materials",
         "A revised shift timetable"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "Because the inspection sample was too small to record",
         "Because the previous checklist had been approved recently"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {

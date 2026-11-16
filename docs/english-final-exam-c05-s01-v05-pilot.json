@@ -46,7 +46,7 @@
         "Room number, course title, lesson date and student group",
         "Author name, file size, print date and storage location"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "To avoid recording the document revision",
         "To allow users to select whichever version is easiest to read"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {

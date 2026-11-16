@@ -46,7 +46,7 @@
         "Equipment colour, storage location and shift number",
         "Author name, file size and print date"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "Because the revision number is not part of document control",
         "Because users should rely on the first copy they receive"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {

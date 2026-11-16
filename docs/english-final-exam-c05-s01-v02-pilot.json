@@ -46,7 +46,7 @@
         "The name of the person who ordered the component",
         "The expected result without the actual observation"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
