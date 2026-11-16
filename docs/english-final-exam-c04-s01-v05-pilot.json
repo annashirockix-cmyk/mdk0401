@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A maintenance note stated that a display sometimes became blank during normal use. The technician recorded when the problem occurred and described the visible behaviour. The note did not claim that a particular component had failed because further checks were required. This distinction helped the next technician understand what had been observed and what still needed investigation. Reading 1. What behaviour did the technician record?",
       "options": [
-        "The display sometimes became blank",
-        "The display remained blank throughout the test",
         "The display showed an incorrect unit",
+        "The display remained blank throughout the test",
+        "The display sometimes became blank",
         "The display changed colour during operation"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why did the note avoid naming a failed component?",
       "options": [
         "The technician had already replaced the component",
-        "Further checks were needed before the cause could be confirmed",
+        "The maintenance record contained no date",
         "The lamp had been tested only once",
-        "The maintenance record contained no date"
+        "Further checks were needed before the cause could be confirmed"
       ],
       "correctIndex": 3,
       "points": 1
