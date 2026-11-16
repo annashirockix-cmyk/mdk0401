@@ -427,6 +427,51 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(code, /case "resumeenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
 });
 
+test("final exam attempt limits count persisted attempts and honor teacher-granted retries", () => {
+  const source=extractFunction("getTestAttemptStatus_");
+  const statusFn=new Function(
+    "auth_","hasCourseAccess_","editor_","email_","userByEmail_","settingValue_",
+    "sameCourseId_","ensureSheet_","headerMap_","resultAttemptRows_",
+    source+"; return getTestAttemptStatus_;"
+  )(
+    () => ({role:"student",email:"student@example.test"}),
+    () => true,
+    () => ({}),
+    value => String(value||"").toLowerCase(),
+    () => null,
+    () => "1",
+    (a,b) => a===b,
+    () => ({
+      getLastRow:() => 3,
+      getLastColumn:() => 15,
+      getRange:() => ({getValues:() => [
+        ["attempt-1","student@example.test","","","","english_final_c1_s1","v01","submitted"],
+        ["attempt-2","student@example.test","","","","english_final_c1_s1","v02","expired"]
+      ]})
+    }),
+    () => ({StudentEmail:1,ExamId:5}),
+    () => []
+  );
+  const status=statusFn({courseId:"ENB",testId:"english_final_c1_s1"});
+  assert.equal(status.used,2);
+  assert.equal(status.limit,2);
+  assert.equal(status.remaining,0);
+  assert.equal(status.allowed,false);
+
+  const start=extractFunction("startEnglishFinalExam_");
+  assert.match(start,/usedAttempts\+\+/);
+  assert.match(start,/settingValue_\("testAttempts:"\+user\.email\+":"\+courseId\+":"\+examId\)/);
+  assert.match(start,/if\(usedAttempts>=attemptLimit\)/);
+  assert.ok(start.indexOf("if(usedAttempts>=attemptLimit)")<start.indexOf('const bank=ensureSheet_("EnglishExamVariantsBank")'));
+
+  const controls=readFileSync(path.join(root,"teacher-controls.js"),"utf8");
+  assert.match(controls,/english_final_c/);
+  assert.doesNotMatch(controls,/__final__/);
+  const ui=readFileSync(path.join(root,"english-vpr-engine.js"),"utf8");
+  assert.match(ui,/requestTestAttempts\(courseId,testId\)/);
+  assert.match(ui,/Запросить дополнительную попытку/);
+});
+
 test("student English final-exam UI starts persistent course/semester attempts and autosaves responses", () => {
   const ui = fs.readFileSync(path.join(root, "english-vpr-engine.js"), "utf8");
   assert.match(ui, /startEnglishFinalExam\(courseNo,semester\)/);
