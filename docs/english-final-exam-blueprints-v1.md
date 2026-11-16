@@ -466,3 +466,22 @@ Short-text acceptance defects:
 - C4-S1 task 7 asks for an equipment's “rated ___” but accepts “voltage”, “current” and “rating”. Voltage and current are different possible ratings; without a specified nameplate field the item is ambiguous, and “rating” does not complete the intended concept precisely. Specify the target (e.g. rated voltage) and narrow the accepted answer.
 
 Other reviewed short-text alternatives were contextually plausible. All ten written tasks have word limits and 8-point rubrics; CEFR calibration and mapping to approved learning outcomes were not assessed in this pass. No pilot JSON was changed; no protected banks, imports, Google Sheets, Apps Script or deployment were touched.
+
+
+## V08 full-slot audit (all 10 course/semester slots)
+
+All ten V08 files were inspected (100 tasks total). Each contains 10 tasks. The recurring first-eight answer-position signature remains 0, 1, 2, 3, 0, [2,3], short-text, 1. The 20 listening keys reviewed match the audio facts, but two prompts do not match their audio:
+- C4-S2 task 2 asks for “safety-symbol reference material”, while the audio is about a PLC input-output table and says to bring the controller reference sheet. The keyed answer is supported, but the prompt is from the wrong topic.
+- C5-S2 task 2 asks for a “condition-monitoring summary” for a risk review, while the audio describes a quality-improvement presentation and requests a sample defect summary. Rewrite the prompt to match the actual context.
+
+Malformed ordering prompt:
+- C1-S2 task 9 consists of four semicolon-separated actions (“Write a clear subject line; Check the recipient's address; ...”) rather than an instruction to order them. The options and correctOrder are coherent; rewrite the prompt as a direct ordering instruction.
+
+Short-text completion defects:
+- C2-S2 task 7 begins “...its energy ___” but accepts “energy consumption”, duplicating the fixed word “energy”. Retain “consumption” or change the stem.
+- C3-S2 task 7 begins “non-___” but accepts “non-conformity”, producing “non-non-conformity”. Retain the completion “conformity” only, with any spelling variants that complete the stem correctly.
+- C5-S1 task 7 begins “non-___” but accepts “non-conformance” and “nonconformance”, both of which repeat the prefix. Retain “conformance” (and only appropriate completion variants).
+
+The remaining reviewed ordering sequences and short-text completions were structurally coherent. The two-option multiple-choice keys inspected were valid and supported by their options; however, several distractor sets remain conspicuously weak or implausible, consistent with the cross-version P3 finding. Written tasks have explicit word limits and 8-point rubrics; CEFR calibration and approved learning-outcome alignment were not established by this audit.
+
+No pilot JSON was modified. No protected question banks, Google Sheets, Apps Script, imports or deployment were touched.
