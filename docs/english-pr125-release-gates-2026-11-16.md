@@ -40,3 +40,11 @@
 ## Decision
 
 **Code/runtime CI is green; educational content approval and controlled bank release are not complete.** The PR is not production-ready solely because CI passed.
+
+
+## Final CI verification after targeted corrections
+
+- Latest code/test head: `f43affca229a009f7024d75da1cf055b56e2a95e`.
+- GitHub Actions run `43948534307`: **success**, all 25 steps passed, including the English runtime regression suite and real-browser English final-exam audit.
+- The answer-position balance regression caught an intermediate imbalance when corrected answer indices were first changed. The correction was refined by moving the correct option text into the existing balanced key position; source files and combined registry were synchronized, and the latest full CI passed.
+- PR remains Draft. Content approval, official curriculum/textbook alignment, full editorial review, protected-bank comparison and controlled test/production import gates remain open.
