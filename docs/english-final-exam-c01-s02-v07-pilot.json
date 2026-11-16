@@ -116,17 +116,17 @@
     {
       "id": "c1s2v07_o01",
       "type": "ordering",
-      "prompt": "Check the menu and allergy information; Choose a suitable meal; Tell the staff about an allergy; Collect the meal and drink",
+      "prompt": "Put the following steps for checking allergy information and choosing a meal safely in the correct order.",
       "options": [
-        "Collect the meal and drink",
-        "Tell the staff about an allergy",
-        "Choose a suitable meal",
-        "Check the menu and allergy information"
+        "Tell the staff about the allergy",
+        "Check the menu and allergen information with staff",
+        "Choose a meal confirmed as suitable",
+        "Collect the meal and drink"
       ],
       "correctOrder": [
-        "Check the menu and allergy information",
-        "Choose a suitable meal",
-        "Tell the staff about an allergy",
+        "Tell the staff about the allergy",
+        "Check the menu and allergen information with staff",
+        "Choose a meal confirmed as suitable",
         "Collect the meal and drink"
       ],
       "points": 2
