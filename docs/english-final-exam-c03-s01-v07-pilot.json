@@ -78,10 +78,10 @@
     {
       "id": "c3s1v07_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details needed to interpret a tolerance correctly.",
+      "prompt": "Choose TWO numerical elements needed to assess a component dimension against its specified tolerance.",
       "options": [
-        "The colour of the measuring bench",
-        "The date of an unrelated meeting",
+        "Surface roughness value",
+        "Measurement uncertainty",
         "Nominal dimension",
         "Upper and lower limits"
       ],
