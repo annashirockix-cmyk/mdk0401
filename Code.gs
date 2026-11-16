@@ -3193,7 +3193,11 @@ function sanitizeEnglishFinalExamTask_(value) {
   if (!value || typeof value !== "object") return value;
   const clean = {};
   Object.keys(value).forEach(function(key) {
-    if (/^(answer|answers|answerText|answerIndex|answerIndices|answerKey|acceptedAnswers|expectedAnswer|expectedAnswers|modelAnswer|correct|correctAnswer|correctOption|correctOptions|correctIndex|correctIndices|correctOrder|solution|solutionText|explanation|rationale|rubric|markscheme|marking|grading|teacher|teacherNotes|teacherKey|key|keyAnswer|keyPoints)$/i.test(key)) return;
+    // Normalize separators/case and reject whole families of private fields.
+    // This also blocks schema variants such as correctAnswers, answer_key,
+    // expected_answer and correct-index instead of relying on an exact-name list.
+    const normalized = String(key).toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (/^(answer|correct|expected|accepted|modelanswer|solution|explanation|rationale|rubric|markscheme|marking|grading|teacher|keyanswer|keypoints|iscorrect)/.test(normalized)) return;
     clean[key] = sanitizeEnglishFinalExamTask_(value[key]);
   });
   return clean;
