@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An inspection finding should describe what was observed and identify the relevant acceptance criterion. If a measurement is outside the stated limit, the report should include the actual value, unit and component reference. The inspector should avoid suggesting a cause unless the available evidence supports it. A clear finding allows the responsible person to review the issue and determine the next action. Reading 1. What should an inspection finding describe?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The inspector's opinion and a suggested repair",
         "What was observed and the relevant acceptance criterion",
-        "To buy a ticket"
+        "The name of the person who ordered the component",
+        "The expected result without the actual observation"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Which details should accompany an out-of-limit measurement?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "To identify the technician's preferred measuring tool",
+        "To show where the inspection took place",
+        "To replace the need for a component reference",
         "Actual value, unit and component reference"
       ],
       "correctIndex": 3,
