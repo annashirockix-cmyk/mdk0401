@@ -116,7 +116,7 @@
     {
       "id": "c1s2v05_o01",
       "type": "ordering",
-      "prompt": "Welcome the visitors; Show them the information area; Guide them to the laboratories; Answer their questions",
+      "prompt": "Put the following steps for welcoming visitors to the college in a logical order.",
       "options": [
         "Answer their questions",
         "Guide them to the laboratories",
