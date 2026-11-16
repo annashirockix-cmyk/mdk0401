@@ -22,7 +22,7 @@
 - C. A drawing for classroom use only
 - D. The drawing has no approved version
 
-**64.** Choose the correct passive form: “The technician ___ the damaged cable yesterday.”
+**64.** Choose the correct past simple form: “The technician ___ the damaged cable yesterday.”
 - A. replaces
 - B. replaced
 - C. was replaced
