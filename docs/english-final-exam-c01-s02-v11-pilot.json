@@ -15,9 +15,9 @@
       "audioText": "Our class is joining a community clean-up on Saturday morning. We will meet outside the college sports hall at nine fifteen. The organisers will provide gloves and rubbish bags, but please bring a bottle of water. After the activity, the group will visit the community garden. Tell the class representative by Wednesday if you can take part, because the organisers need the final number of volunteers.",
       "options": [
         "Outside the college sports hall",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Near the community garden",
+        "At the main college entrance",
+        "Beside the equipment store"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "On Thursday, Noor and her classmates visited a community garden as part of a college project. The coordinator explained how volunteers look after the plants and sort waste. Noor worked with a partner to label three new herb beds. Before leaving, the group wrote down the tasks for the next visit and agreed to bring reusable containers. Reading 1. What did Noor help to do?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Water the herb beds",
+        "Sort the recyclable waste",
         "Label three herb beds",
-        "To buy a ticket"
+        "Prepare a planting schedule"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What did the group agree before leaving?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Bring disposable gloves",
+        "Meet at the sports hall",
+        "Collect the rubbish bags",
         "Bring reusable containers"
       ],
       "correctIndex": 3,
