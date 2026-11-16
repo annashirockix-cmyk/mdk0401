@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "The observed deviation ___ in the report.",
       "options": [
-        "must be described",
         "must describing",
+        "must be described",
         "must described",
         "must be describe"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
