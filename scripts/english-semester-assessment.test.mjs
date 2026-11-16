@@ -372,6 +372,7 @@ test("first pilot variants use plausible same-category listening and reading dis
 });
 
 test("Course 5 reading answer keys follow the reviewed correct options in all 30 variants",()=>{
+  const expected={1:{},2:{}};
   for(const semester of [1,2]){
     for(let variant=1;variant<=15;variant++){
       const file=path.join(root,`docs/english-final-exam-c05-s0${semester}-v${String(variant).padStart(2,"0")}-pilot.json`);
