@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A production planner noticed that one component order was likely to be delayed because a required material had not arrived. The planner updated the schedule and informed the relevant departments. The message included the order reference, the expected delay and the next review date. This allowed the team to discuss alternatives without relying on an outdated schedule. Reading 1. Why was the component order likely to be delayed?",
       "options": [
-        "A required material had not arrived",
-        "The machine operator was absent",
         "The inspection report had not been printed",
+        "The machine operator was absent",
+        "A required material had not arrived",
         "The supplier had changed the delivery address"
       ],
       "correctIndex": 2,
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What information did the planner include in the message?",
       "options": [
-        "The order reference, expected delay and next review date",
+        "The supplier's address, payment terms and invoice number",
         "The operator's name, shift and annual leave dates",
         "The machine model, serial number and service date",
-        "The supplier's address, payment terms and invoice number"
+        "The order reference, expected delay and next review date"
       ],
       "correctIndex": 3,
       "points": 1
