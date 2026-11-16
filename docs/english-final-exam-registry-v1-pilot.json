@@ -4715,7 +4715,7 @@
                 "id": "c2s1v01_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words introducing yourself to a potential employer at a college career fair. Mention your course, two relevant skills and the kind of placement you are looking for.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the introduction identifies the course, two relevant skills and the type of placement sought (0–2); it presents a concise, suitable self-introduction for a career-fair conversation (0–2); present forms and basic grammar are understandable (0–2); employability/placement vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -4867,7 +4867,7 @@
                 "id": "c2s1v02_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words describing three skills you could include in a CV. Give a short example of how you developed or used each skill.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: three distinct skills are identified (0–2); each skill is supported by a relevant example of how it was developed or used (0–2); examples are clearly expressed with understandable grammar (0–2); CV/employability vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -5018,7 +5018,7 @@
                 "id": "c2s1v03_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words explaining how to prepare for a job or placement interview. Include researching the organisation, preparing examples and asking a relevant question.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response includes researching the organisation, preparing examples and planning a relevant question (0–2); preparation steps are presented in a sensible sequence (0–2); advice and basic grammar are clear (0–2); interview/professional vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -5170,7 +5170,7 @@
                 "id": "c2s1v04_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words comparing two possible routes after college. Explain one advantage of each and say which route you would prefer.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two realistic post-college routes are identified and one advantage of each is explained (0–2); a preferred route is clearly selected and supported by a relevant reason (0–2); comparative forms and basic grammar are understandable (0–2); education/career vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -5322,7 +5322,7 @@
                 "id": "c2s1v05_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words introducing a skills portfolio to a potential employer. Mention two examples of your work and explain what they demonstrate.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the portfolio is introduced and two examples of work are identified (0–2); the response explains what each example demonstrates about the student's skills or progress (0–2); the explanation is clearly organised with understandable grammar (0–2); portfolio/work-sample vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -5473,7 +5473,7 @@
                 "id": "c2s1v06_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words applying for a part-time job. Explain your availability and describe two skills that would help you.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the application states the applicant's availability (0–2); it describes two relevant skills and connects them to the part-time role (0–2); the tone is polite and the application is organised with understandable grammar (0–2); job-application vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -5625,7 +5625,7 @@
                 "id": "c2s1v07_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words describing a successful team project. Explain your role, how tasks were shared and what the group achieved.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the project and the student's role are identified (0–2); the response explains how tasks were shared and what the group achieved (0–2); past-tense forms and the sequence of events are understandable (0–2); teamwork/project vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -5776,7 +5776,7 @@
                 "id": "c2s1v08_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words explaining how you organise digital study materials and protect important files.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains how digital study materials are organised and named or grouped (0–2); it describes sensible protection measures such as backups, access control or careful sharing (0–2); instructions are clear with understandable grammar (0–2); digital-study vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -5927,7 +5927,7 @@
                 "id": "c2s1v09_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words suggesting two practical ways your college could reduce waste. Explain why they would help.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two practical waste-reduction actions are identified (0–2); the response explains how each action could reduce waste or its impact (0–2); suggestions are logically connected with understandable grammar (0–2); environment/waste vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -6080,7 +6080,7 @@
                 "id": "c2s1v10_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words describing how to help a visitor who needs information at an airport or college reception.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response identifies the visitor's information need and gives relevant help or directions (0–2); it includes polite clarification or checking that the visitor understands (0–2); the interaction is logically organised with understandable grammar (0–2); reception/directions vocabulary and polite expressions, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -6231,7 +6231,7 @@
                 "id": "c2s1v11_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words asking a host college for information before a study visit. Ask about dates, accommodation and one practical requirement.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the message asks about the visit dates and accommodation (0–2); it includes one clear, relevant practical requirement and gives enough context for the host college to reply (0–2); the email is polite and organised with understandable question forms/grammar (0–2); study-visit vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -6383,7 +6383,7 @@
                 "id": "c2s1v12_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words giving a classmate advice on balancing study, rest and deadlines. Include two practical suggestions.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two practical suggestions are included (0–2); the advice addresses study, rest and deadlines and explains how the suggestions help maintain balance (0–2); advice is clearly organised with understandable grammar (0–2); study/wellbeing vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -6535,7 +6535,7 @@
                 "id": "c2s1v13_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words explaining how you would report a lost college item and what information you would provide.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains where/when the item was lost and identifies the item clearly (0–2); it states whom to contact and what useful identifying information to provide (0–2); the report is concise and understandable with appropriate grammar (0–2); lost-property/reporting vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -6687,7 +6687,7 @@
                 "id": "c2s1v14_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words comparing two optional courses. Explain which one you would choose and give two reasons.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two optional courses are identified and a relevant difference is explained (0–2); one course is selected and supported by two clear reasons (0–2); comparative forms and basic grammar are understandable (0–2); course/education vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -6839,7 +6839,7 @@
                 "id": "c2s1v15_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words introducing yourself to a workplace supervisor. Mention your course, what you hope to learn and how you will communicate about your progress.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the introduction identifies the course and what the student hopes to learn (0–2); it explains how progress will be communicated to the supervisor (0–2); the tone is professional and the message is organised with understandable grammar (0–2); workplace-learning vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
