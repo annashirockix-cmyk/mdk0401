@@ -78,10 +78,10 @@
     {
       "id": "c5s1v07_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that belong in a maintenance shift handover.",
+      "prompt": "Choose TWO details that allow the next maintenance shift to continue work safely and accountably.",
       "options": [
-        "A personal opinion about the previous shift",
-        "An unrelated meal order",
+        "A technician's preferred work pattern",
+        "A general summary of completed routine tasks",
         "Open tasks and restrictions",
         "Responsibility for follow-up"
       ],
