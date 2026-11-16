@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A technical summary may combine information from several documents. The writer should identify each source, select details relevant to the question and explain how the information fits together. If two sources give different values, the difference should be reported rather than hidden. The summary should distinguish confirmed information from details that still require clarification and should avoid adding conclusions that the sources do not support. Reading 1. What should a writer do when two sources give different values?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Select the newer value without checking its source",
+        "Calculate an average and omit the original values",
         "Report the difference rather than hide it",
-        "To buy a ticket"
+        "Remove both values from the summary"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should the summary avoid adding?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Conclusions that the sources do not support"
+        "Conclusions that the sources do not support",
+        "Source references that identify the documents",
+        "Conflicting values that are clearly reported",
+        "Details that still require clarification"
       ],
       "correctIndex": 3,
       "points": 1
