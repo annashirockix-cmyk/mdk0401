@@ -105,12 +105,12 @@
       "type": "single_choice",
       "prompt": "Several records show a similar symptom. What should you do before concluding that the cause is identical?",
       "options": [
-        "I will guess and continue.",
-        "Could we compare the operating conditions and maintenance history before drawing a conclusion?",
-        "The detail is not important.",
-        "I will copy an unrelated record."
+        "Treat the symptoms as proof of the same cause and use the previous conclusion.",
+        "Replace the component that was replaced in the earlier case.",
+        "Combine the records and report one cause without checking the conditions.",
+        "Compare the operating conditions, maintenance history and available evidence before drawing a conclusion."
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
