@@ -19564,12 +19564,12 @@
                 "type": "single_choice",
                 "prompt": "The defect history ___ before a reliability trend is reported.",
                 "options": [
-                  "should reviewing",
                   "should be reviewed",
+                  "should reviewing",
                   "review",
                   "are reviewed"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
