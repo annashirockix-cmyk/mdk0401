@@ -15,9 +15,9 @@
       "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
       "options": [
         "Fifteen minutes before the appointment",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Thirty minutes before the appointment",
+        "At the exact appointment time",
+        "After the first interview"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "During a practice interview, an employer asks Maya why she is interested in aircraft technology. She explains that she enjoys understanding how systems work and likes solving practical problems. She gives an example from a college assignment and then asks what qualities the company values in a trainee. The interviewer says her answer is clear and relevant. Reading 1. Why is Maya interested in aircraft technology?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "She wants to design aircraft",
+        "She is interested mainly in travelling",
         "She enjoys systems and practical problem-solving",
-        "To buy a ticket"
+        "She enjoys systems and practical problem-solving"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What does Maya ask the interviewer?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "When the company was founded",
+        "How many hours a trainee works",
+        "Which qualities the company values in a trainee",
         "Which qualities the company values in a trainee"
       ],
       "correctIndex": 3,
