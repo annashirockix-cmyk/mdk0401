@@ -25,7 +25,7 @@
     {
       "id": "c5s2v03_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which two records are needed for the maintenance handover exercise?",
+      "prompt": "Which two documents should students bring for the integrated-report review?",
       "audioText": "The technical writing tutor will review an integrated report on Thursday at one. Students should bring the sample inspection record and trend chart. The class will combine a measured result with a short explanation of its context and limitations. The tutor will ask students to distinguish evidence from interpretation and to reference each source clearly.",
       "options": [
         "The defect history and maintenance log",
