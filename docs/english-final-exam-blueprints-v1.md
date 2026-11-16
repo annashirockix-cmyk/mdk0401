@@ -1111,3 +1111,37 @@ The remaining Task 9 ordering items were inspected in C2-S1, C2-S2, C1-S1 and C1
 **C1-S2:** V01-V15 prompts are malformed as instructions: each prompt is simply four semicolon-separated actions, without saying that the learner must put them in order. The options repeat the same actions. Rewrite every prompt as an explicit instruction (for example, “Put the steps in the correct order”) and avoid duplicating the ordered list in the prompt. V01-V10 and V12-V15 have generally plausible intended sequences, but the current presentation weakens the task construct. V11 places “Receive the safety briefing” before “Agree the volunteer task”; this may be appropriate in some supervised settings but is not a universal order, so specify when the task is agreed and who authorizes it. V07 (allergy information) should be checked to ensure that the sequence does not imply that selecting a meal before informing staff is safe for a person with an allergy; require staff confirmation of allergen suitability before the meal is selected/served.
 
 **Cross-set conclusion for this stage:** the four newly inspected sets contain clear prompt-format defects in C2-S1 V01-V04 and C1-S2 V01-V15, plus clear sequence/key errors in C1-S1 V11-V15. Safety-related sequences C1-S1 V08/V09/V15 and C1-S2 V07/V11 require qualified review and should not be treated as approved operational instructions. C2-S2 had no unequivocally incorrect key identified in this pass. No pilot JSON, answer key, protected bank, Google Sheet or Apps Script was changed.
+
+
+## Аудит аудирования: C1-S1, C1-S2, C2-S1, C2-S2 (задания 1–2)
+
+Проверены задания 1–2 и встроенные аудиотексты во всех 60 вариантах четырёх наборов (15 вариантов на набор). Сверялись формулировка вопроса, аудиотекст, варианты ответа и индекс ключа.
+
+### Подтверждённые ошибки ключей — C1-S1
+
+- V12, задание 1: аудио требует завершить проект к следующему вторнику; ключ 0 выбирает «At the end of the month». Правильный вариант — «By next Tuesday», индекс 2.
+- V13, задание 2: автобус отправляется в 08:15, прибыть нужно за десять минут до отправления. Ключ 1 («At eight fifteen exactly») неверен; правильный вариант — «At eight oh five», индекс 3.
+- V14, задание 1: в аудио студенту велено спросить на ресепшене Ms Patel. Ключ 0 («Mr Green») неверен; правильный вариант — «Ms Patel», индекс 1.
+- V14, задание 2: при задержке нужно позвонить на ресепшен. Ключ 1 («Send no message») неверен; правильный вариант — «Telephone reception», индекс 2.
+
+Остальные проверенные задания 1–2 C1-S1 (V01–V11, V15) согласуются с аудиотекстами по ключам.
+
+### Несовпадение вопроса и аудио — C2-S1
+
+- V15, задание 2: вопрос спрашивает о техническом справочнике для совещания по планированию обслуживания, тогда как аудио описывает вводный инструктаж перед практикой и просит принести копию соглашения о практике. Ключ 1 соответствует аудиотексту, но не формулировке вопроса. Требуется согласовать вопрос и аудио; простая смена ключа проблему не решит.
+
+### Качество дистракторов и формулировок
+
+- В C2-S1 V01 задание 2 спрашивает о двух вещах («Which two things»), но реализовано как один выбор пары. Это можно оставить как single-choice только при условии, что все варианты представляют сопоставимые пары; желательно явно сформулировать вопрос как выбор пары.
+- В C2-S1 и C2-S2 часто встречаются отвлекающие варианты вроде «On Friday», «Next month», «After the event» в вопросах о документах, материалах, действиях и предметах. Они не параллельны правильному ответу ни грамматически, ни по смысловой категории и делают ответ угадываемым без понимания аудио.
+- В C1-S2 V15 задание 1 правильный вариант относится к теме безопасного использования цифрового оборудования, а три других варианта — названия мест. Дистракторы тематически несопоставимы.
+- В остальных проверенных заданиях C1-S2 и C2-S2 ключи соответствуют аудиотекстам; иных однозначных ошибок ключа в этой выборке не установлено.
+
+### Рекомендации
+
+1. Исправить четыре ключа C1-S1 V12/V13/V14 и согласовать вопрос/аудио C2-S1 V15.
+2. Переработать дистракторы: все четыре варианта должны отвечать на вопрос в одной грамматической форме и принадлежать одной смысловой категории (время, место, документ, действие, причина и т. п.).
+3. Для вопросов с множественным требуемым содержанием использовать явное «Which pair/set…?» с равноценными парами либо отдельный формат множественного выбора с несколькими ключами.
+4. Не менять ключи только ради стилистического улучшения: сначала сверять их с аудиотекстом и формулировкой задания.
+
+**Граница аудита:** проверены только задания 1–2 указанных 60 вариантов. Пилотные JSON, ключи, банки, Google Sheets и Apps Script не изменялись; замечания зафиксированы в аудиторском документе.
