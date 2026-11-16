@@ -81,13 +81,16 @@ test("all 75 new lecture IDs are in the five-year map and have browser listening
 test("all 120 listening activities contain usable scripts and answerable practice questions", () => {
   const window = loadEnglishRuntime();
   const mapIds = [
-    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\d{2}-s\d{2}-l\d{2}/g)),
+    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\\d{2}-s\\d{2}-l\\d{2}/g)),
   ];
 
   assert.equal(mapIds.length, 120);
+  const missing = mapIds.filter((id) => !window.EnglishListeningCatalogue.getById(id));
+  assert.deepEqual(missing, [], `missing active listening activities: ${missing.join(", ")}`);
+  assert.equal(window.EnglishListeningCatalogue.count, 120);
+
   for (const id of mapIds) {
     const activity = window.EnglishListeningCatalogue.getById(id);
-    assert.ok(activity, `missing listening activity: ${id}`);
     assert.ok(activity.title && activity.title.trim().length >= 12, `missing title: ${id}`);
     assert.ok(activity.script && activity.script.trim().length >= 80, `listening script is too short: ${id}`);
     assert.ok(Array.isArray(activity.questions) && activity.questions.length >= 2, `not enough questions: ${id}`);
