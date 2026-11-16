@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A non-conformity is a failure to meet a specified requirement. It may relate to a dimension, material, document or process. A clear report identifies the requirement, describes the observed result and provides relevant evidence. The responsible person can then review the issue and decide what action is appropriate. A non-conformity should not be hidden by changing the original inspection data. Reading 1. What does a non-conformity mean?",
       "options": [
-        "A failure to meet a specified requirement",
-        "A delay in the planned production schedule",
         "A recommendation to replace a component",
+        "A delay in the planned production schedule",
+        "A failure to meet a specified requirement",
         "A difference between two informal opinions"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What should a clear report describe?",
       "options": [
         "The equipment model, serial number and purchase date",
-        "The requirement, observed result and relevant evidence",
+        "The operator name, shift time and training record",
         "The supplier name, delivery date and order value",
-        "The operator name, shift time and training record"
+        "The requirement, observed result and relevant evidence"
       ],
       "correctIndex": 3,
       "points": 1
