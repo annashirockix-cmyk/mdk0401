@@ -25,7 +25,7 @@
     {
       "id": "c5s2v08_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which condition-monitoring summary is required for the risk review?",
+      "prompt": "Which two documents should students bring for the quality-improvement presentation?",
       "audioText": "The quality improvement group will present its findings on Monday at two fifteen in the conference room. Students should bring the process chart and the sample defect summary. The presentation will compare the number of reported defects before and after a process change. The group will also explain why the figures alone do not prove that the change caused the improvement.",
       "options": [
         "The quality checklist and audit report",
