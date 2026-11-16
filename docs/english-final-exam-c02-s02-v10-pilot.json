@@ -15,9 +15,9 @@
       "audioText": "The college is changing the labels on its recycling bins from next week. Paper and cardboard should go into the blue containers, while clean plastic bottles should be placed in the yellow containers. Food waste must not be put into either bin. The student environment team will visit classrooms on Monday to explain the new system and answer questions.",
       "options": [
         "The yellow containers",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "The blue containers",
+        "The green containers",
+        "The yellow containers"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A college recycling trial produced mixed results because students were unsure which materials belonged in each bin. The environment team observed the bins and found that many items were placed in the wrong container. They introduced clearer labels with examples and moved the bins closer to the places where waste was produced. The next review will compare contamination levels before and after the changes. Reading 1. Why did the trial produce mixed results?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The bins were too far from the classrooms",
         "Students were unsure which materials belonged in each bin",
-        "To buy a ticket"
+        "Students were unsure which materials belonged in each bin",
+        "The collection service arrived at the wrong time"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What will the next review compare?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "The total weight of waste collected each week",
+        "The number of bins installed around the college",
+        "Contamination levels before and after the changes",
         "Contamination levels before and after the changes"
       ],
       "correctIndex": 3,
