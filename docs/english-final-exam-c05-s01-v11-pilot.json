@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A non-conformance report records a failure to meet a stated requirement. It should identify the affected item, the requirement, the observed condition and supporting evidence. The report may also identify immediate containment or a proposed review action, but the cause should not be stated as confirmed unless the investigation supports it. Clear reporting helps the responsible team decide what to examine next. Reading 1. Which information should a non-conformance report identify?",
       "options": [
-        "Affected item, requirement, observed condition and supporting evidence",
-        "Staff name, annual leave, shift preference and training date",
         "Supplier address, purchase value, invoice and delivery time",
+        "Staff name, annual leave, shift preference and training date",
+        "Affected item, requirement, observed condition and supporting evidence",
         "Equipment colour, storage location, room number and group"
       ],
       "correctIndex": 2,
@@ -56,8 +56,8 @@
       "options": [
         "As soon as a possible cause has been suggested",
         "When the reporting form has been completed",
-        "Only when the investigation supports it",
-        "When the same symptom has appeared on another item"
+        "When the same symptom has appeared on another item",
+        "Only when the investigation supports it"
       ],
       "correctIndex": 3,
       "points": 1
