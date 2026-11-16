@@ -78,10 +78,10 @@
     {
       "id": "c3s1v02_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO drawing details that help prevent manufacturing from an obsolete issue or interpreting dimensions incorrectly.",
+      "prompt": "Choose TWO drawing fields needed to interpret a dimension's measurement basis and confirm that the correct issue is being used.",
       "options": [
-        "Drawing scale",
-        "Projection method",
+        "Drawing title",
+        "Sheet size",
         "Units of measurement",
         "Drawing revision number"
       ],
