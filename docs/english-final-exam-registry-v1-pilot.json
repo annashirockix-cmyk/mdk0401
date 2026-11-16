@@ -149,7 +149,7 @@
                 "id": "c1s1v01_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words introducing yourself as a college student. Include your course, one usual weekday activity, one English-learning habit and one goal for this academic year. Use complete sentences.",
-                "rubric": "8 points total: task completion and relevant details (0–2); understandable sentence structure and basic grammar (0–2); appropriate vocabulary (0–2); spelling, punctuation and paragraph organisation (0–2). Accept minor errors that do not prevent understanding.",
+                "rubric": "8 points total: all four requested details are included (course, weekday activity, English-learning habit and academic-year goal) (0–2); details are connected in a clear, logical paragraph (0–2); basic present-tense forms and sentence structure are understandable (0–2); relevant personal/study vocabulary, spelling and punctuation are appropriate (0–2). Minor errors are acceptable if meaning remains clear.",
                 "points": 8
               }
             ],
@@ -302,7 +302,7 @@
                 "id": "c1s1v02_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about a typical college day. Mention when your lessons start, two subjects or activities, how you travel to college and one thing you do to practise English.",
-                "rubric": "8 points total: all requested content included (0–2); clear sentence structure and basic grammar (0–2); appropriate everyday and study vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response states lesson start time, at least two subjects/activities, travel to college and one English-practice activity (0–2); events are presented in a clear daily sequence (0–2); time expressions and basic present-tense grammar are used understandably (0–2); study/transport vocabulary, spelling and punctuation support clear meaning (0–2).",
                 "points": 8
               }
             ],
@@ -453,7 +453,7 @@
                 "id": "c1s1v03_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about how you learn new English words. Describe two methods you use or would like to try, when you practise and why English is useful for your studies.",
-                "rubric": "8 points total: all parts of the task addressed (0–2); clear basic sentence structure and grammar (0–2); relevant vocabulary and examples (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two vocabulary-learning methods and when the learner practises are described (0–2); the usefulness of English for the learner's studies is explained with a relevant reason or example (0–2); basic grammar and sentence links are understandable (0–2); learning-strategy vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -604,7 +604,7 @@
                 "id": "c1s1v04_w01",
                 "type": "written",
                 "prompt": "Write a short email of 60–80 words to a new classmate. Introduce yourself, say when you have English lessons, mention what you bring to class and suggest when you can study together.",
-                "rubric": "8 points total: all requested information and a suitable email purpose (0–2); clear basic sentence structure and grammar (0–2); appropriate study and time vocabulary (0–2); greeting/closing, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the email introduces the writer and includes lesson time, classroom items and a proposed study time (0–2); the message has a suitable greeting, clear purpose and appropriate closing (0–2); polite requests/suggestions and basic grammar are understandable (0–2); study/time vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -755,7 +755,7 @@
                 "id": "c1s1v05_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about an activity you enjoy after classes. Say where and when you do it, who you do it with and why it is useful or enjoyable for you.",
-                "rubric": "8 points total: all parts of the task addressed (0–2); clear basic sentence structure and grammar (0–2); relevant activity and place vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the activity, place, time, people involved and reason for enjoying it are included (0–2); details form a coherent description rather than an unrelated list (0–2); basic present-tense grammar and sentence structure are understandable (0–2); activity/place vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -907,7 +907,7 @@
                 "id": "c1s1v06_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words describing how you work with other students. Say when or where you study together, what you do during the meeting and how group work helps you learn.",
-                "rubric": "8 points total: all requested details included (0–2); clear basic sentence structure and grammar (0–2); suitable study and communication vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response identifies when/where the students work together and describes what they do during a meeting (0–2); it explains at least one concrete way group work supports learning (0–2); basic grammar and linking words make the explanation understandable (0–2); study/collaboration vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -1058,7 +1058,7 @@
                 "id": "c1s1v07_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about a college event or group project you took part in, or would like to take part in. Explain what students do, what your role is and why teamwork is useful.",
-                "rubric": "8 points total: relevant event/project details and a clear role (0–2); understandable sentence structure and basic grammar (0–2); suitable teamwork and event vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the event or project is identified and the student's role is explained (0–2); the response describes what students do and gives a relevant reason teamwork is useful (0–2); basic grammar and sentence links are understandable (0–2); event/teamwork vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -1209,7 +1209,7 @@
                 "id": "c1s1v08_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about safety rules at a workshop, laboratory or other place of study. Describe two important rules, explain why they matter and say what protective equipment may be needed.",
-                "rubric": "8 points total: two relevant rules and explanations (0–2); understandable sentence structure and grammar (0–2); suitable safety vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two relevant workshop/study-place rules are stated and their purposes are explained; required protective equipment is identified where relevant (0–2); safety information is accurate and does not recommend bypassing rules or using equipment without permission (0–2); sentences and reasons are logically organised with understandable basic grammar (0–2); safety vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -1362,7 +1362,7 @@
                 "id": "c1s1v09_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words explaining how to use a simple tool or piece of equipment safely. Describe the main steps, name one possible mistake and explain how to avoid it.",
-                "rubric": "8 points total: clear sequence of steps and safety advice (0–2); understandable sentence structure and grammar (0–2); relevant tools and measurement vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the tool/equipment is identified and the main safe-use steps, one possible mistake and its prevention are included (0–2); advice is consistent with following approved instructions and seeking the instructor's guidance when unsure, without inventing unsafe procedures (0–2); the sequence and explanation are clear with understandable grammar (0–2); relevant tool/safety vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -1515,7 +1515,7 @@
                 "id": "c1s1v10_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about preparing for a safe workshop lesson. Mention two items you need, one rule you must follow and what you should do if an instruction is unclear.",
-                "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: two necessary items and one applicable workshop rule are identified (0–2); the response explains that unclear instructions must be clarified with the instructor before proceeding (0–2); steps and reasons are presented clearly with understandable grammar (0–2); workshop/safety vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -1668,7 +1668,7 @@
                 "id": "c1s1v11_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words describing how to find and use information for a college report. Include searching a catalogue, checking facts and recording sources.",
-                "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response describes searching a catalogue, checking facts against reliable sources and recording source details (0–2); it explains why source checking or accurate references matter for a college report (0–2); the sequence and basic grammar are clear (0–2); research/report vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -1819,7 +1819,7 @@
                 "id": "c1s1v12_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about working on a college team project. Explain how tasks are shared, how the group communicates and what members should do if a deadline is at risk.",
-                "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains how tasks are shared and how group members communicate (0–2); it states what the group should do if a deadline is at risk, such as informing the team and agreeing a revised plan (0–2); ideas are logically connected with understandable grammar (0–2); project/teamwork vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -1971,7 +1971,7 @@
                 "id": "c1s1v13_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about how students should behave during a visit to an aviation workshop. Include preparation, safety rules and one reason for following the guide's instructions.",
-                "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: preparation, at least two relevant visit safety rules and the need to follow the guide's instructions are included (0–2); the response does not suggest touching, operating or entering restricted areas without permission (0–2); ideas are clearly organised with understandable grammar (0–2); visitor/workshop vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -2124,7 +2124,7 @@
                 "id": "c1s1v14_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words about a successful first day of work placement. Describe how to arrive prepared, communicate with a supervisor and record completed tasks.",
-                "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains how to arrive prepared, communicate with the supervisor and record completed tasks (0–2); these actions are placed in a sensible first-day sequence and include a relevant example of a question or update to the supervisor (0–2); grammar and sentence structure are understandable (0–2); workplace communication/log vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
@@ -2276,7 +2276,7 @@
                 "id": "c1s1v15_w01",
                 "type": "written",
                 "prompt": "Write 60–80 words explaining how to work safely with a low-voltage training circuit. Include checking the diagram, switching off the supply and reporting damaged equipment.",
-                "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response addresses checking the instructor-approved diagram, switching off the supply before any permitted changes and reporting damaged equipment (0–2); it clearly states that the activity is supervised and does not give unapproved connection/repair instructions or recommend continuing with damaged equipment (0–2); the explanation is logically organised with understandable grammar (0–2); relevant low-voltage/safety vocabulary, spelling and punctuation are appropriate (0–2).",
                 "points": 8
               }
             ],
