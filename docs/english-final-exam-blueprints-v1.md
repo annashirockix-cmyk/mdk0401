@@ -428,3 +428,24 @@ This register consolidates only defects explicitly observed in the representativ
 ### Coverage and confidence
 
 The register is a consolidated list of known findings, not an exhaustive inventory of all 150 pilot variants. V05–V06 were checked across all 20 files; V07–V15 were sampled rather than exhaustively audited (with additional disjoint samples for V14 and V15); V04 findings are based on the earlier recorded review. Some V08–V11 exact task identifiers were not retained in the notes and are intentionally represented by slot/task description rather than fabricated IDs. No pilot JSON, protected question bank, Google Sheet, Apps Script, import endpoint or deployment was modified by this register.
+
+
+## V04 full-slot audit addendum (all 10 course/semester slots)
+
+All ten V04 pilot files were inspected (100 tasks total), covering both Basic courses and all three Technical courses across both semesters. Each file has 10 tasks. The first-eight positional answer signature remains 0, 1, 2, 3, 0, [2,3], short-text, 1.
+
+The 20 listening answer keys reviewed in this pass match the facts in their respective audioText, with one prompt/audio mismatch:
+- C5-S2 task 2 asks which two records should be reviewed “during the handover”, but the audio describes a classroom fault-analysis exercise and says students should bring the event log and maintenance-history extract. The keyed answer itself is supported; rewrite the stem to refer to the class/exercise, not a handover.
+
+Malformed ordering prompts:
+- C1-S2 task 9 contains four semicolon-separated actions as the prompt instead of an instruction to order them.
+- C2-S1 task 9 has the same defect: a semicolon-separated list of stages is used as the prompt.
+In both cases, the options and correctOrder are coherent; rewrite the prompt as a clear imperative.
+
+Short-text completion defects caused by duplicated fixed prefixes:
+- C4-S1 task 7 begins “...the kilowatt-___” but accepts “kilowatt-hour” and “kwh” in addition to “hour”. The full phrase answer duplicates the prefix; “kwh” does not complete the sentence correctly. Keep only defensible completions such as “hour”, or rewrite the stem to accept the abbreviation/full term.
+- C4-S2 task 7 begins “...a programmable logic ___” but also accepts “programmable logic controller”, which duplicates the printed words. Keep “controller” or change the stem.
+
+The other reviewed short-text alternatives were generally contextually defensible. The ordering sequences in the other eight files were coherent on this structural review. Written tasks all include word limits and 8-point rubrics; this pass did not establish CEFR calibration or alignment with approved learning outcomes.
+
+No pilot JSON was modified. No protected question banks, Google Sheets, Apps Script, imports or deployment were touched.
