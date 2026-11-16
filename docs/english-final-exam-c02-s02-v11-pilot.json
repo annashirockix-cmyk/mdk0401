@@ -15,9 +15,9 @@
       "audioText": "The college economics club is organising a discussion about responsible consumer choices. It will take place in the seminar room on Wednesday at one thirty. A guest speaker will explain product labels, repair services and the environmental cost of packaging. Students should read the short case study on the club page before the discussion.",
       "options": [
         "On Wednesday at one thirty",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at one thirty",
+        "On Wednesday at two thirty",
+        "On Wednesday at one thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "When choosing a new phone, Marina compared the purchase price, repair options and expected battery life. One model was cheaper, but its battery could not be replaced easily. Another cost more and came with a longer repair guarantee. Marina chose the second model because she expected to use it for several years and wanted to avoid replacing the device too soon. Reading 1. What did Marina compare besides the purchase price?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Product colours and screen sizes",
         "Repair options and expected battery life",
-        "To buy a ticket"
+        "Repair options and expected battery life",
+        "Delivery times and payment methods"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why did she choose the more expensive model?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "It had the lowest purchase price",
+        "She expected to use it for several years and wanted easier repairs",
+        "It was the newest model available",
         "She expected to use it for several years and wanted easier repairs"
       ],
       "correctIndex": 3,
