@@ -78,10 +78,10 @@
     {
       "id": "c4s1v03_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO components commonly used in electronic circuits.",
+      "prompt": "Choose TWO semiconductor or passive components commonly used in electronic circuits.",
       "options": [
-        "Tailstock",
-        "Bearing housing",
+        "Signal frequency",
+        "Supply voltage",
         "Capacitor",
         "Transistor"
       ],
