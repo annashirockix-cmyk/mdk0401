@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A technical briefing is intended to communicate essential information efficiently. It should begin with the purpose, then present the current status and relevant evidence. Outstanding actions and decisions required should be stated clearly. Technical terms should be used consistently, and any uncertainty should be identified rather than hidden. A concise structure helps the audience understand what is known and what must happen next. Reading 1. What should a briefing present after its purpose?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The purchase cost and supplier delivery date",
         "The current status and relevant evidence",
-        "To buy a ticket"
+        "The full maintenance history of every component",
+        "The names and job titles of all people in the organisation"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why should uncertainty be identified?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "So the audience can distinguish known information from unresolved matters"
+        "So the audience can distinguish known information from unresolved matters",
+        "So the briefing can avoid mentioning outstanding actions",
+        "So uncertain information can be presented as confirmed",
+        "So the audience does not need to review supporting evidence"
       ],
       "correctIndex": 3,
       "points": 1
