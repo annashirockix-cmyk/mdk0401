@@ -1029,19 +1029,19 @@ test("corrected pilot final-exam listening keys and short-answer prompts stay sy
   const registry = JSON.parse(fs.readFileSync(path.join(root, "docs/english-final-exam-registry-v1-pilot.json"), "utf8"));
   const cases = [
     ["EN-C1-S1-V13", "c1s1v13_l02", "docs/english-final-exam-c01-s01-v13-pilot.json", task => {
-      assert.equal(task.correctIndex, 3);
+      assert.equal(task.correctIndex, 1);
       assert.match(task.audioText, /eight fifteen, so please arrive ten minutes earlier/i);
-      assert.equal(task.options[3], "At eight oh five");
+      assert.equal(task.options[1], "At eight oh five");
     }],
     ["EN-C1-S1-V14", "c1s1v14_l01", "docs/english-final-exam-c01-s01-v14-pilot.json", task => {
-      assert.equal(task.correctIndex, 1);
+      assert.equal(task.correctIndex, 0);
       assert.match(task.audioText, /ask for Ms Patel/i);
-      assert.equal(task.options[1], "Ms Patel");
+      assert.equal(task.options[0], "Ms Patel");
     }],
     ["EN-C1-S1-V14", "c1s1v14_l02", "docs/english-final-exam-c01-s01-v14-pilot.json", task => {
-      assert.equal(task.correctIndex, 2);
+      assert.equal(task.correctIndex, 1);
       assert.match(task.audioText, /telephone reception/i);
-      assert.equal(task.options[2], "Telephone reception");
+      assert.equal(task.options[1], "Telephone reception");
     }],
     ["EN-C2-S1-V15", "c2s1v15_l02", "docs/english-final-exam-c02-s01-v15-pilot.json", task => {
       assert.match(task.prompt, /document.*work-placement briefing/i);
