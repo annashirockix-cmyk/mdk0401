@@ -1133,3 +1133,39 @@ test("all 150 final-exam source files match the combined registry and pass struc
   }
   assert.deepEqual(typeTotals, { single_choice: 900, multiple_choice: 150, short_text: 150, ordering: 150, written: 150 });
 });
+
+
+test("C5-S1 reading answer keys point to passage-supported answers in all 15 variants", () => {
+  const registry = JSON.parse(fs.readFileSync(path.join(root, "docs/english-final-exam-registry-v1-pilot.json"), "utf8"));
+  const expected = {
+    1: ["The task reference, responsible team, expected duration and required documents", "Coordinate work and record progress"],
+    2: ["What was observed and the relevant acceptance criterion", "Actual value, unit and component reference"],
+    3: ["Review relevant records and compare evidence with possible explanations", "It should identify confirmed facts separately from possible explanations"],
+    4: ["Document identifier, applicability information and revision status", "Because models may have different components or requirements"],
+    5: ["Document identifier, revision, issue date and approval status", "To prevent them from being mistaken for current information"],
+    6: ["Aircraft or component identity, document reference and revision status", "Refer the issue through the authorised technical publications process"],
+    7: ["Open tasks, completed checks, equipment status and restrictions", "The technical log or required sign-off"],
+    8: ["A failure to meet a specified requirement", "The cause of the non-conformance"],
+    9: ["A recurring issue", "Similar symptoms do not always have the same cause"],
+    10: ["Document number, revision and issue status", "Because printed or downloaded copies may become outdated"],
+    11: ["Affected item, requirement, observed condition and supporting evidence", "Only when the investigation supports it"],
+    12: ["It may not show all differences between individual units", "The relevant configuration should be established"],
+    13: ["The current status and relevant evidence", "So the audience can distinguish known information from unresolved matters"],
+    14: ["Affected model range, applicability statement, issue date and referenced documents", "The responsible technical team should confirm whether it applies"],
+    15: ["Delivery reliability, product conformity and responses to reported issues", "To assess performance over time rather than rely on one event"]
+  };
+  const variants = registry.exams.flatMap(exam => exam.variants);
+  for (let n = 1; n <= 15; n++) {
+    const id = `EN-C5-S1-V${String(n).padStart(2, "0")}`;
+    const variant = variants.find(item => item.variantId === id);
+    assert.ok(variant, "C5-S1 variant exists: " + id);
+    for (const [suffix, expectedAnswer] of [["r01", expected[n][0]], ["r02", expected[n][1]]]) {
+      const task = variant.variantJSON.tasks.find(item => item.id.endsWith("_" + suffix));
+      assert.ok(task, "reading task exists: " + id + " " + suffix);
+      assert.equal(task.options[task.correctIndex], expectedAnswer, "key matches passage: " + task.id);
+      const sourcePath = `docs/english-final-exam-c05-s01-v${String(n).padStart(2, "0")}-pilot.json`;
+      const source = JSON.parse(fs.readFileSync(path.join(root, sourcePath), "utf8"));
+      assert.deepEqual(task, source.tasks.find(item => item.id === task.id), "source and registry match: " + task.id);
+    }
+  }
+});
