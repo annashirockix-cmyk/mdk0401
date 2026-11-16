@@ -78,10 +78,10 @@
     {
       "id": "c4s1v12_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO elements that may be shown in a basic relay diagram.",
+      "prompt": "Choose TWO functional elements of a relay itself.",
       "options": [
-        "A lathe carriage",
-        "A cutting insert",
+        "Fuse",
+        "Indicator lamp",
         "Coil",
         "Contacts"
       ],
