@@ -116,7 +116,7 @@
     {
       "id": "c1s2v02_o01",
       "type": "ordering",
-      "prompt": "Show your student card; Complete the borrowing form; Check the laptop condition; Sign the equipment record",
+      "prompt": "Put the following steps for borrowing college equipment in a logical order.",
       "options": [
         "Sign the equipment record",
         "Check the laptop condition",
