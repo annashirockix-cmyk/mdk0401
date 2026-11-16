@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A technical manual contains information for a defined product, model or configuration. Before using a procedure or reference, a reader should check the document identifier, applicability information and revision status. Similar models may have different components or requirements. If the manual does not clearly apply, the user should ask the responsible documentation or engineering team for confirmation. Reading 1. What should a reader check before using a manual reference?",
       "options": [
-        "Training location, lesson time and group number",
-        "Supplier address, purchase price and delivery date",
         "Document identifier, applicability information and revision status",
+        "Supplier address, purchase price and delivery date",
+        "Training location, lesson time and group number",
         "Technician name, shift preference and annual leave"
       ],
       "correctIndex": 2,
@@ -56,8 +56,8 @@
       "options": [
         "Because similar models always use identical components",
         "Because the revision date is the only difference between models",
-        "Because a manual can be used for any model in the same product family",
-        "Because models may have different components or requirements"
+        "Because models may have different components or requirements",
+        "Because a manual can be used for any model in the same product family"
       ],
       "correctIndex": 3,
       "points": 1
