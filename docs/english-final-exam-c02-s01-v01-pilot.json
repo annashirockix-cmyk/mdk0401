@@ -117,7 +117,7 @@
     {
       "id": "c2s1v01_o01",
       "type": "ordering",
-      "prompt": "Identify your skills; Prepare a short CV; Ask about the role; Send a polite follow-up message",
+      "prompt": "Put the following steps for preparing and following up on a job application in a logical order.",
       "options": [
         "Send a polite follow-up message",
         "Prepare a short CV",
