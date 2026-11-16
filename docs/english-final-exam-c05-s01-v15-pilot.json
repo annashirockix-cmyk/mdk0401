@@ -25,7 +25,7 @@
     {
       "id": "c5s1v15_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which scorecard should students bring?",
+      "prompt": "Which two documents should students bring for the supplier evaluation?",
       "audioText": "The supplier quality tutor will compare two supplier evaluation summaries on Tuesday at one thirty. Students should bring the sample delivery history and the quality scorecard. The review will consider delivery performance, documented non-conformities and response time. Students will be asked to distinguish measured performance from general opinion about a supplier.",
       "options": [
         "The supplier specification and purchase order",
