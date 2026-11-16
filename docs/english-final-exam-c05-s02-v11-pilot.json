@@ -136,7 +136,7 @@
       "id": "c5s2v11_w01",
       "type": "written",
       "prompt": "Write 100–120 words summarising how to investigate a discrepancy between a component label and its record. Include evidence, confirmation and controlled correction.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Evidence — 2: explains comparing the component label with the relevant controlled record and preserving the observed details; 1: partial; 0: absent. (2) Confirmation — 2: identifies an appropriate source/role for confirming the discrepancy; 1: partial; 0: absent. (3) Controlled correction — 2: explains that any correction must be authorised, traceable and recorded, not silently altered; 1: partial; 0: absent or incorrect. (4) English — 2: clear sequence and accurate traceability vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
