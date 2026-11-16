@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A toolpath describes the route followed by a cutting tool relative to a workpiece. In a simple example, a linear path connects two points with a straight movement, while a circular path follows an arc. The programmed path is interpreted by the controller, and the resulting movement depends on the machine configuration and settings. A drawing helps students visualise the geometry without operating equipment. Reading 1. What does a toolpath describe?",
       "options": [
-        "The route followed by a cutting tool relative to a workpiece",
-        "The order in which finished parts are stored",
         "The distance between two machine reference points",
+        "The order in which finished parts are stored",
+        "The route followed by a cutting tool relative to a workpiece",
         "The sequence of inspection stages in a quality report"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What can affect the resulting machine movement?",
       "options": [
         "The material colour and batch number",
-        "The machine configuration and settings",
+        "The supplier's delivery date and order quantity",
         "The operator's shift and training record",
-        "The supplier's delivery date and order quantity"
+        "The machine configuration and settings"
       ],
       "correctIndex": 3,
       "points": 1
