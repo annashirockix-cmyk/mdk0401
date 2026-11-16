@@ -43,7 +43,7 @@
       "options": [
         "The email contained a spelling mistake",
         "The sender's address was unusual and the link was unfamiliar",
-        "The sender's address was unusual and the link was unfamiliar",
+        "The sender used the college logo incorrectly",
         "The message included an unexpected attachment"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "That the message was a routine college notice",
         "That the message was a phishing attempt",
         "That the student's password had already been changed",
-        "That the message was a phishing attempt"
+        "The message asked the student to update her timetable."
       ],
       "correctIndex": 3,
       "points": 1
