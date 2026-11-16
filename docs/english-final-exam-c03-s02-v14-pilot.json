@@ -78,10 +78,10 @@
     {
       "id": "c3s2v14_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that support interpretation of a process-capability result.",
+      "prompt": "Choose TWO technical details required to interpret a process-capability result against the acceptance criteria.",
       "options": [
-        "The colour of the measurement table",
-        "An unrelated staff rota",
+        "Production shift name",
+        "Machine purchase price",
         "Specification limits",
         "Measurement method and sample period"
       ],
