@@ -196,3 +196,22 @@ Short-text answer validation found one concrete defect in C3-S2 V08: the prompt 
 Listening audio text and keyed options were checked in all five files. The correct options matched the audio text in the inspected items. However, weak wrong-category distractors remain in four of the five files. For example, C2-S1 Listening 2 asks what students should download, while three distractors are dates/locations; C4-S1 Listening 2 asks which documents to bring, while three distractors are generic time phrases. C1-S2 has more plausible distractors in the inspected listening items.
 
 This is a representative five-file sample, not a complete V08 audit or an audit of V09–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+## V09 representative cross-course audit (2026-11-16)
+
+Five V09 files were inspected across C1-S1, C2-S2, C3-S1, C4-S2 and C5-S1. Each contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1. The repeated answer-position template therefore remains present in the inspected V09 sample.
+
+The keyed answers in the ten inspected listening items were checked against their embedded audioText. The correct options match the audio in this sample. Ordering tasks in all five files were checked: the correctOrder values form the expected four-step sequences using the task's options; no missing or foreign ordering elements were found.
+
+Two short-text answer-set defects were identified:
+- C2-S2: the prompt ends “is a digital ___.” acceptedAnswers contains both “footprint” and “digital footprint”. Inserting the latter creates “digital digital footprint”; remove the redundant prefixed form.
+- C4-S2: the prompt ends “is a data ___.” acceptedAnswers contains both “log” and “data log”. Inserting the latter creates “data data log”; remove the redundant prefixed form.
+
+C3-S1 accepts “non-conformity”, “nonconformity” and “defect” for “A result that does not meet a specified requirement is a ___.” The first two are spelling variants; “defect” is related but not always interchangeable with the broader quality-system term “non-conformity”. Review whether the intended construct permits this broader synonym; do not silently treat the terms as universally equivalent.
+
+Weak wrong-category distractors remain in four of the five inspected files. Examples include location choices for questions asking what students should review or bring, and generic date phrases for questions asking for a document or an item. C1-S1's inspected listening choices are comparatively plausible and category-matched.
+
+Written tasks in the sample include 60–100-word prompts and explicit 8-point rubrics. This sample review did not independently validate every rubric against a CEFR level or course learning outcome; that requires a separate alignment review.
+
+This is a representative five-file sample, not a complete V09 audit or an audit of V10–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
