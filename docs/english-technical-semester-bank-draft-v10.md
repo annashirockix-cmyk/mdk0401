@@ -4,7 +4,7 @@
 
 ## Questions
 
-**181.** Choose the correct completion: “The maintenance team ___ the inspection records every Friday.”
+**181.** Choose the correct completion: “The maintenance supervisor ___ the inspection records every Friday.”
 - A. review
 - B. reviewing
 - C. have review
@@ -76,7 +76,7 @@
 - C. To replace all design reviews
 - D. To determine whether specified acceptance criteria have been met
 
-**193.** Choose the correct completion: “Neither of the two proposed dates ___ suitable for the inspection.”
+**193.** Choose the correct completion: “Each of the two proposed dates ___ suitable for the inspection.”
 - A. are
 - B. have
 - C. be
@@ -128,7 +128,7 @@
 
 | No. | Key | Rationale |
 |---:|:---:|---|
-| 181 | D | The singular collective subject “team” is treated as singular in this sentence. |
+| 181 | D | “Supervisor” is a singular countable subject and takes the third-person singular verb “reviews”. |
 | 182 | A | Shelf life is the period a material or product remains suitable under specified storage conditions. |
 | 183 | D | The natural expression is “available in the document management system”. |
 | 184 | C | Inconclusive evidence does not justify a firm conclusion. |
@@ -140,7 +140,7 @@
 | 190 | B | “Because” introduces the reason the report was returned. |
 | 191 | C | It makes a grammatically correct comparison and gives a measurable difference. |
 | 192 | D | Acceptance testing checks whether defined criteria are satisfied. |
-| 193 | D | “Neither” is singular in this construction and takes “is”. |
+| 193 | D | “Each” takes a singular verb, so the correct form is “is”. |
 | 194 | C | The record claims the installation followed applicable approved data; it does not imply exemption from future maintenance. |
 | 195 | D | Retrieve means to locate and access stored information. |
 | 196 | C | “Until” marks the condition that must occur before the issue is closed. |
