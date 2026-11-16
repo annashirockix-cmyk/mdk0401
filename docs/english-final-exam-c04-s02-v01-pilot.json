@@ -15,9 +15,9 @@
       "audioText": "The communications engineering tutor will introduce basic system diagrams on Wednesday at ten. Students should meet in the network classroom and bring the labelled diagram from the course folder. The lesson will identify a transmitter, communication channel and receiver. Students will discuss the purpose of each block using a simple example.",
       "options": [
         "At ten on Wednesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine on Thursday",
+        "At eleven on Wednesday",
+        "At ten on Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which communication-system diagram should students bring?",
       "audioText": "The communications engineering tutor will introduce basic system diagrams on Wednesday at ten. Students should meet in the network classroom and bring the labelled diagram from the course folder. The lesson will identify a transmitter, communication channel and receiver. Students will discuss the purpose of each block using a simple example.",
       "options": [
-        "On Friday",
+        "The network safety checklist",
         "The labelled diagram from the course folder",
-        "Next month",
-        "After the event"
+        "The component glossary",
+        "The maintenance schedule"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A basic communication system transfers information from a source to a destination. A transmitter prepares a signal, a channel carries it and a receiver processes the incoming signal. The system may also include noise or interference that affects the quality of communication. A block diagram helps engineers describe the main functions without showing every internal circuit detail. Reading 1. What does a channel do in a basic communication system?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "It stores the information permanently",
         "It carries the signal",
-        "To buy a ticket"
+        "It generates the original message",
+        "It removes all interference"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Why is a block diagram useful?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "It describes the main functions without showing every internal circuit detail"
+        "It lists every internal circuit component",
+        "It gives the exact physical dimensions",
+        "It describes the main functions without showing every internal circuit detail",
+        "It replaces the need for technical documentation"
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "points": 1
     },
     {
