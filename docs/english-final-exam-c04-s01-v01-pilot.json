@@ -15,9 +15,9 @@
       "audioText": "The electrical engineering tutor will introduce circuit diagrams on Tuesday at ten. Students should meet in the electronics classroom and bring the circuit-symbol worksheet. The lesson will cover a simple series circuit, a parallel circuit and the symbols used for common components. No electrical equipment will be connected during this theory session.",
       "options": [
         "At ten on Tuesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine on Wednesday",
+        "At eleven on Tuesday",
+        "At ten on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,12 +28,12 @@
       "prompt": "Listening 2. Which circuit-symbol worksheet should students use in the electronics session?",
       "audioText": "The electrical engineering tutor will introduce circuit diagrams on Tuesday at ten. Students should meet in the electronics classroom and bring the circuit-symbol worksheet. The lesson will cover a simple series circuit, a parallel circuit and the symbols used for common components. No electrical equipment will be connected during this theory session.",
       "options": [
-        "On Friday",
+        "The component glossary",
+        "The safety checklist",
         "The circuit-symbol worksheet",
-        "Next month",
-        "After the event"
+        "The maintenance record"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A series circuit has one main path for current, so the same current passes through each component in that path. In a parallel circuit, current can divide between branches. The voltage across parallel branches is the same in an ideal circuit. A student compared two diagrams and labelled the power source, switch and resistors before describing the difference between the circuit types. Reading 1. How many main paths does a simple series circuit have?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Two separate paths",
         "One main path",
-        "To buy a ticket"
+        "Three independent branches",
+        "No path for current"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Which components did the student label?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The power source, switch and resistors"
+        "The power source, switch and resistors",
+        "The battery, motor and display",
+        "The processor, memory and storage",
+        "The transmitter, channel and receiver"
       ],
-      "correctIndex": 3,
+      "correctIndex": 0,
       "points": 1
     },
     {
