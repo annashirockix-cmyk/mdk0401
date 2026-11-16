@@ -19,7 +19,7 @@
         "The college director",
         "The bus driver"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -33,7 +33,7 @@
         "Telephone reception",
         "Ask another student to call"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -128,8 +128,8 @@
       "correctOrder": [
         "Report to reception",
         "Receive the supervisor's instructions",
-        "Review the tasks completed",
-        "Record the work in the daily log"
+        "Record the work in the daily log",
+        "Review the tasks completed"
       ],
       "points": 2
     },
