@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A maintenance plan groups tasks that must be completed during a scheduled maintenance visit. It may identify the task reference, responsible team, expected duration and required documents. Planners also consider access to parts and specialist support. A clear plan does not replace the approved maintenance data; it helps the organisation coordinate work and record its progress. Reading 1. What may a maintenance plan identify?",
       "options": [
-        "The task reference, responsible team, expected duration and required documents",
         "Only the names of the technicians",
         "The cost of every tool in the workshop",
+        "The task reference, responsible team, expected duration and required documents",
         "The personal timetable of each student"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -55,11 +55,11 @@
       "prompt": "What does a clear plan help the organisation do?",
       "options": [
         "Replace approved maintenance data",
-        "Coordinate work and record progress",
         "Guarantee that no task will be delayed",
-        "Approve technical changes automatically"
+        "Approve technical changes automatically",
+        "Coordinate work and record progress"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
