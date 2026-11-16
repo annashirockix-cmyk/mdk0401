@@ -65,7 +65,7 @@ These edits retain the four-option format and the existing answer-key positions.
 
 ## 6. Current boundary
 
-This is a 200-item authoring pool, not yet ten approved semester assessments. No Basic semester bank has been authored from this work, and no new semester questions have been imported or published to students.
+This is a 200-item authoring pool, not yet ten approved semester assessments. A separate 200-item Basic authoring pool exists, but it is not mapped to the four Basic course-semester slots or approved as a semester bank. No new semester questions have been imported or published to students.
 
 
 ## 4B. Basic–Technical exact-stem screen (2026-11-16)
