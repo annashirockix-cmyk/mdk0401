@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A device used to control industrial processes according to a programme is a programmable logic ___.",
       "acceptedAnswers": [
-        "controller",
-        "programmable logic controller"
+        "controller"
       ],
       "points": 2
     },
