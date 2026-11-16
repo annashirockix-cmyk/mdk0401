@@ -440,7 +440,10 @@
             status.textContent=result.alreadyRequested?"Запрос уже отправлен. Дождитесь решения преподавателя.":"Запрос отправлен преподавателю. После разрешения можно будет начать новую попытку.";
           }).catch(function(requestError){status.textContent=requestError.message||String(requestError);request.disabled=false;});
         };
-        card.appendChild(request);card.appendChild(status);
+        var retry=el("button","btn ghost","Проверить разрешение и начать");
+        retry.type="button";
+        retry.onclick=function(){renderPersistentFinalExam(courseNo,semester,card);};
+        card.appendChild(request);card.appendChild(retry);card.appendChild(status);
       }
     });
   }
