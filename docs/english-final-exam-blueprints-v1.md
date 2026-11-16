@@ -251,3 +251,22 @@ Weak wrong-category distractors remain in four of five inspected files, especial
 Written tasks have explicit word limits and 8-point rubrics (60–120 words). This structural check does not establish CEFR or outcome alignment.
 
 This is a representative five-file sample, not a complete V11 audit or an audit of V12–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+## V12 representative cross-course audit (2026-11-16)
+
+Five V12 files were inspected across C1-S2, C2-S1, C3-S2, C4-S1 and C5-S2. Each contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1. The same answer-position template remains present in this sample.
+
+All ten inspected listening correct indices match the facts stated in their audioText, but two prompts are not aligned with the audio:
+- C3-S2 task 2 asks which resource is needed “for the drawing-revision activity”; the audio describes a CNC programme review and mentions the controller glossary, not a drawing-revision activity.
+- C4-S1 task 2 asks for a “maintenance note”; the audio says students should bring the circuit diagram from the previous lesson. The answer is inferable, but the prompt's document category is inaccurate.
+
+Ordering tasks in all five files were reviewed against their options and the described processes; no incorrect sequence was identified in this sample.
+
+C4-S1 task 7 defines “A device that opens or closes an electrical circuit under control” and accepts both “switch” and “relay”. A relay is a controlled switching device, but “switch” is broader and may be too general for the intended technical vocabulary target. Consider narrowing the definition to the relay concept or accepting a broader class intentionally.
+
+Weak wrong-category distractors persist in four of five files, particularly in reading items where unrelated actions or locations are used as choices. C1-S2 has a more plausible set in the inspected reading questions.
+
+Written tasks have explicit word limits and 8-point rubrics (60–120 words). As with prior samples, this checks structure only, not CEFR or learning-outcome alignment.
+
+This is a representative five-file sample, not a complete V12 audit or an audit of V13–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
