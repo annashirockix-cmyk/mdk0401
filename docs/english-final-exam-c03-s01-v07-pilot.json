@@ -97,8 +97,7 @@
       "prompt": "The stated basic size before a permitted variation is the nominal ___.",
       "acceptedAnswers": [
         "dimension",
-        "size",
-        "nominal dimension"
+        "size"
       ],
       "points": 2
     },
