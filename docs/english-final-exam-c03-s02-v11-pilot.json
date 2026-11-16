@@ -78,10 +78,10 @@
     {
       "id": "c3s2v11_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that help identify a controlled drawing revision.",
+      "prompt": "Choose TWO document-control fields used to establish which drawing revision was issued and when.",
       "options": [
-        "The colour of the drawing folder",
-        "The name of an unrelated website",
+        "Author's department",
+        "Drawing scale",
         "Revision identifier",
         "Issue date"
       ],
