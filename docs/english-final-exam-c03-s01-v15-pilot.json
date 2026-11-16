@@ -42,8 +42,8 @@
       "prompt": "Traceability allows an organisation to follow a component through relevant stages of receipt, storage, inspection and use. A unique part number identifies the item, while a batch number may link it to a particular production group. Inspection records provide evidence of checks that have been completed. If a problem is reported later, these records can help staff identify which items may be affected. Reading 1. What does a batch number identify?",
       "options": [
         "An individual component",
-        "A particular production group",
         "A document revision",
+        "A particular production group",
         "A supplier order"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "How can inspection records help when a problem is reported?",
       "options": [
         "They help staff calculate the production cost",
-        "They help staff identify which items may be affected",
+        "They replace the need for a component reference",
         "They show which supplier should receive the next order",
-        "They replace the need for a component reference"
+        "They help staff identify which items may be affected"
       ],
       "correctIndex": 3,
       "points": 1
