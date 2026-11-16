@@ -55,11 +55,11 @@
       "prompt": "Reading 2. When does Leo ask a question?",
       "options": [
         "Before checking the timetable",
-        "When an instruction is unclear",
+        "Only at the end of the course",
         "After leaving the workshop",
-        "Only at the end of the course"
+        "When an instruction is unclear"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -81,13 +81,13 @@
       "prompt": "Choose TWO correct workshop instructions.",
       "options": [
         "You must to wait here.",
-        "Don't touch the machine.",
+        "You not use this tool.",
         "Wear your safety shoes.",
-        "You not use this tool."
+        "Don't touch the machine."
       ],
       "correctIndices": [
-        1,
-        2
+        2,
+        3
       ],
       "points": 2
     },
