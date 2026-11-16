@@ -135,7 +135,7 @@
       "id": "c5s2v09_w01",
       "type": "written",
       "prompt": "Write 100–120 words explaining how maintenance records support continuity, traceability and clear task status between teams.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Record content — 2: explains how records capture completed work, current status and outstanding actions; 1: partial; 0: absent. (2) Continuity — 2: explains how consistent entries support the next team and avoid gaps or duplication; 1: partial; 0: absent. (3) Traceability — 2: identifies dates, references, responsible persons and links to controlled records as relevant; 1: partial; 0: absent. (4) English — 2: clear explanation and accurate maintenance-record vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
