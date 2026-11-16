@@ -42,8 +42,8 @@
       "prompt": "A drawing gives a nominal diameter of 20 millimetres with a permitted variation. This means the actual measured diameter may differ slightly from the nominal value but must remain within the specified limits. A trainee recorded the nominal dimension and both limits in an inspection table. The trainee did not replace the specified values with an average measurement. Reading 1. What does the permitted variation describe?",
       "options": [
         "The actual measured value recorded during inspection",
-        "The allowed difference from the nominal dimension within specified limits",
         "The nominal dimension shown on the drawing",
+        "The allowed difference from the nominal dimension within specified limits",
         "The difference between two components of the same type"
       ],
       "correctIndex": 2,
