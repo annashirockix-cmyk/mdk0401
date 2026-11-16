@@ -83,7 +83,7 @@ window.updateMenuVisibility = function() {
     var englishLinks=document.querySelectorAll('.english-drawer-item');
     Array.prototype.forEach.call(englishLinks,function(link){
         var href=link.getAttribute("href")||"";
-        var examOrLab=href==="#/english-tests"||href==="#/laboratory/english";
+        var examOrLab=href==="#/english-tests"||href==="#/laboratory/english"||href==="#/english-listening";
         link.style.display=(activeEnglish||(examOrLab&&hasEnglishAccess))?"flex":"none";
     });
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
