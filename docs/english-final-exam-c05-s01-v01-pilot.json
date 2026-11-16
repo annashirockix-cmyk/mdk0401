@@ -78,10 +78,10 @@
     {
       "id": "c5s1v01_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that support maintenance planning.",
+      "prompt": "Choose TWO core entries used to identify and support a planned maintenance task.",
       "options": [
-        "A personal holiday plan",
-        "An unrelated product advert",
+        "Component finish specification",
+        "Hangar bay number",
         "Task reference",
         "Required documentation"
       ],
