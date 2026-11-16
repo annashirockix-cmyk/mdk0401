@@ -42,11 +42,11 @@
       "prompt": "Predictive maintenance uses condition information to estimate when equipment may require attention. Repeated vibration or temperature measurements can reveal a developing trend. A single unusual value may result from measurement error or changing operating conditions, so it should be checked against the method and other evidence. Decisions should follow the approved procedure. Reading 1. What can repeated measurements reveal?",
       "options": [
         "To borrow a laptop",
-        "To meet a relative",
         "A developing trend in equipment condition",
+        "To meet a relative",
         "To buy a ticket"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
