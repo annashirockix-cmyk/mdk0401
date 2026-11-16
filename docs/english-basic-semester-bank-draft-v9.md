@@ -159,6 +159,6 @@
 
 - [ ] Confirm the grammar sequence against the exact Belova textbook edition and assigned semester.
 - [ ] Review Question 163: verify that the intended past reference point is sufficiently clear for the target level.
-- [ ] Independently review the neither/nor agreement in Question 180.
+- [ ] Confirm that the compound subject “the teacher and the students” is treated as plural in Question 180; the keyed form “were” matches the subject.
 - [ ] Compare reading topics with the existing Basic course and VPR material.
 - [ ] Keep teacher keys server-side after approval.
