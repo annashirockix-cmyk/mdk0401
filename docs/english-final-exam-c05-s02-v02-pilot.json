@@ -135,7 +135,7 @@
       "id": "c5s2v02_w01",
       "type": "written",
       "prompt": "Write 100–120 words explaining how to communicate a technical risk clearly. Include a hazard, consequence, control and review responsibility.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Hazard and consequence — 2: identifies a specific hazard and a plausible consequence; 1: identifies only one clearly; 0: absent or inaccurate. (2) Control — 2: describes a relevant control at an appropriate level without inventing an unauthorised procedure; 1: vague or partial; 0: absent/unsafe. (3) Review responsibility — 2: identifies who reviews the control and when or under what trigger; 1: partial; 0: absent. (4) English — 2: clear risk communication and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
