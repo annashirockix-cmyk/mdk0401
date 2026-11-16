@@ -78,10 +78,10 @@
     {
       "id": "c5s1v05_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO fields that help identify a controlled document.",
+      "prompt": "Choose TWO control indicators that show a document's version and release authorisation.",
       "options": [
-        "A personal nickname",
-        "An unrelated delivery address",
+        "File format",
+        "Page count",
         "Revision identifier",
         "Approval status"
       ],
