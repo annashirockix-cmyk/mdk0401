@@ -42,8 +42,8 @@
       "prompt": "A stores assistant received a delivery of bearings for a training project. She checked the part numbers against the purchase list and counted the packages before signing the delivery note. One box had a damaged label, so she recorded the problem and asked the supervisor to confirm the contents. The assistant did not add the box to the available stock until the details were checked. Reading 1. What did the assistant compare with the purchase list?",
       "options": [
         "The delivery dates",
-        "The part numbers",
         "The quantities in each box",
+        "The part numbers",
         "The supplier names"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why did she delay adding one box to stock?",
       "options": [
         "Because the box arrived after the scheduled delivery",
-        "Because the label was damaged and the contents needed confirmation",
+        "Because there was not enough storage space",
         "Because the purchase list contained no prices",
-        "Because there was not enough storage space"
+        "Because the label was damaged and the contents needed confirmation"
       ],
       "correctIndex": 3,
       "points": 1
