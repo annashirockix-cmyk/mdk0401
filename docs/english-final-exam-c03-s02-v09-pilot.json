@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A CNC programme document should be linked to the correct machine and approved revision. If a programme is updated, the revision record explains what changed and when the update was made. This information helps staff avoid confusing an old copy with the current approved version. Students should read the programme in context and use the relevant machine documentation for explanations of controller-specific functions. Reading 1. What does a revision record explain?",
       "options": [
-        "What changed and when the update was made",
-        "Who approved the purchase and when it was delivered",
         "Which operator used the machine and on what shift",
+        "Who approved the purchase and when it was delivered",
+        "What changed and when the update was made",
         "How many components were stored in the workshop"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why should the programme be linked to the correct machine?",
       "options": [
         "To reduce the number of programme lines",
-        "To avoid confusing versions and account for controller-specific functions",
+        "To identify the supplier of the controller",
         "To replace the machine's operating instructions",
-        "To identify the supplier of the controller"
+        "To avoid confusing versions and account for controller-specific functions"
       ],
       "correctIndex": 3,
       "points": 1
