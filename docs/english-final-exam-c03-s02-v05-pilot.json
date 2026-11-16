@@ -78,10 +78,10 @@
     {
       "id": "c3s2v05_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that may be important in a workholding or inspection discussion.",
+      "prompt": "Choose TWO geometric details that are important when planning workholding and inspection.",
       "options": [
-        "The colour of the operator's notebook",
-        "A nearby café menu",
+        "Coolant concentration",
+        "Spindle speed setting",
         "Component shape",
         "Datum or reference surfaces"
       ],
