@@ -42,11 +42,11 @@
       "prompt": "An engineering student compared aluminium and steel for a lightweight support bracket. Aluminium has a lower density, so a component made from it may weigh less. Steel is generally stronger in many common grades, but the exact choice depends on the load, environment and design requirements. The student recorded the material grade and checked the drawing before writing a recommendation. Reading 1. Why did the student consider aluminium?",
       "options": [
         "Because aluminium is always stronger than steel",
-        "Because it has a lower density and may produce a lighter component",
         "Because it requires no design checks",
+        "Because it has a lower density and may produce a lighter component",
         "Because it is suitable for every load and environment"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
