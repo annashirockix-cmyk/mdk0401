@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "Revision control helps users identify the current approved version of a technical document. A document register may record its identifier, revision, issue date and approval status. When a new revision is released, the organisation should manage obsolete copies so that they are not mistaken for current information. A clear change history also helps reviewers understand what has been updated. Reading 1. What information may a document register contain?",
       "options": [
-        "Document identifier, revision, issue date and approval status",
-        "Supplier name, delivery date, invoice number and price",
         "Room number, course title, lesson date and student group",
+        "Supplier name, delivery date, invoice number and price",
+        "Document identifier, revision, issue date and approval status",
         "Author name, file size, print date and storage location"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why should obsolete copies be managed?",
       "options": [
         "To make it easier to print older copies",
-        "To prevent them from being mistaken for current information",
+        "To allow users to select whichever version is easiest to read",
         "To avoid recording the document revision",
-        "To allow users to select whichever version is easiest to read"
+        "To prevent them from being mistaken for current information"
       ],
       "correctIndex": 3,
       "points": 1
