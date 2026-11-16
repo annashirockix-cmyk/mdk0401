@@ -116,17 +116,17 @@
     {
       "id": "c1s2v11_o01",
       "type": "ordering",
-      "prompt": "Agree the volunteer task; Receive the safety briefing; Complete the activity; Report back to the coordinator",
+      "prompt": "The coordinator has confirmed the volunteer task. Put the remaining steps in a logical order.",
       "options": [
-        "Report back to the coordinator",
-        "Agree the volunteer task",
-        "Receive the safety briefing",
-        "Complete the activity"
+        "Agree the volunteer task with the coordinator",
+        "Receive the safety briefing for that task",
+        "Complete the activity as instructed",
+        "Report back to the coordinator"
       ],
       "correctOrder": [
-        "Receive the safety briefing",
-        "Agree the volunteer task",
-        "Complete the activity",
+        "Agree the volunteer task with the coordinator",
+        "Receive the safety briefing for that task",
+        "Complete the activity as instructed",
         "Report back to the coordinator"
       ],
       "points": 2
