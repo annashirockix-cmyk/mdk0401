@@ -135,7 +135,7 @@
       "id": "c5s2v06_w01",
       "type": "written",
       "prompt": "Write 100–120 words comparing two replacement options. Explain how cost, compatibility, service life and evidence should influence the recommendation.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Cost and service life — 2: compares total/relevant cost and expected service life using stated evidence; 1: partial; 0: absent. (2) Compatibility — 2: explains fit with the required system/configuration and applicable specification; 1: partial; 0: absent. (3) Evidence-based recommendation — 2: weighs the criteria, identifies uncertainty and gives a justified recommendation; 1: partial; 0: unsupported choice. (4) English — 2: clear comparative language and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
