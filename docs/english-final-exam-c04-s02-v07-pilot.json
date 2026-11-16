@@ -78,10 +78,10 @@
     {
       "id": "c4s2v07_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that help identify a software release.",
+      "prompt": "Choose TWO release-control fields used to distinguish software editions.",
       "options": [
-        "The colour of the desktop background",
-        "The user's favourite website",
+        "Installation directory",
+        "Licence key",
         "Version number",
         "Release date"
       ],
