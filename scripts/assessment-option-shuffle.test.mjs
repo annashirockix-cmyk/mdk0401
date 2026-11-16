@@ -255,8 +255,11 @@ test("VPR and semester student payloads use recursive answer-key sanitization an
   assert.match(vprSubmit,/lockedRaw = cache\.get\("englishVprAttempt:" \+ attemptId\)/);
   assert.match(vprSubmit,/cache\.remove\("englishVprAttempt:" \+ attemptId\)/);
   const semesterSanitizer = extract(code, "sanitizeEnglishSemesterTests_");
-  assert.match(semesterSanitizer,/sanitizeAssessmentQuestionForStudent_\(test\)/);
-  assert.match(semesterSanitizer,/sanitizeAssessmentQuestionForStudent_\(question\)/);
+  assert.match(semesterSanitizer,/id:String\(test && test\.id/);
+  assert.match(semesterSanitizer,/title:String\(test && test\.title/);
+  assert.match(semesterSanitizer,/q:String\(question && question\.q/);
+  assert.match(semesterSanitizer,/options:question && Array\.isArray\(question\.options\)/);
+  assert.doesNotMatch(semesterSanitizer,/sanitizeAssessmentQuestionForStudent_/);
   const semesterSubmit = extract(code, "submitEnglishSemesterTest_");
   assert.match(semesterSubmit,/lock\.waitLock/);
   assert.match(semesterSubmit,/appendMappedRecord_/);
