@@ -78,10 +78,10 @@
     {
       "id": "c5s2v01_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO elements of a reliable maintenance handover.",
+      "prompt": "Choose TWO entries that must be carried forward to the incoming shift in a maintenance handover.",
       "options": [
-        "Unverified assumptions presented as facts",
-        "Unrelated personal comments",
+        "Tasks completed and signed off during the previous shift",
+        "Routine work planned for a later scheduled visit",
         "Outstanding task references",
         "Issues requiring follow-up"
       ],
