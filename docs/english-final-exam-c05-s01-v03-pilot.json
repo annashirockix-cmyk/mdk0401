@@ -78,10 +78,10 @@
     {
       "id": "c5s1v03_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO sources of diagnostic evidence.",
+      "prompt": "Choose TWO sources that provide direct, verifiable diagnostic evidence.",
       "options": [
-        "An unrelated social media post",
-        "A guess based only on appearance",
+        "An unverified operator recollection",
+        "An assumed cause without test evidence",
         "Relevant maintenance records",
         "Observed symptoms and test results"
       ],
