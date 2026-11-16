@@ -11,7 +11,7 @@
     {
       "id": "c1s1v15_l01",
       "type": "single_choice",
-      "prompt": "Listening 1. Which campus location is mentioned as the meeting place?",
+      "prompt": "Listening 1. Where will the electrical laboratory session take place?",
       "audioText": "The electrical laboratory session starts at one o'clock in Lab 3. Before the lesson, check that your worksheet is complete and put your bag under the bench. The instructor will demonstrate how to connect the low-voltage training circuit. Do not connect the power supply until the instructor checks your circuit. At the end, switch off the supply and return all leads to the labelled box.",
       "options": [
         "In Lab 3",
