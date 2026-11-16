@@ -25,7 +25,7 @@
     {
       "id": "c3s2v15_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which source materials are needed for the technical problem-solving exercise?",
+      "prompt": "Which item from the course folder should students bring in addition to the issue description?",
       "audioText": "The engineering tutor will run a problem-solving case study on Tuesday at ten forty-five. Students should bring the issue description and the evidence table from the course folder. The exercise will ask groups to define the problem, separate known facts from assumptions and propose what additional information is needed. The final recommendation must be linked to the evidence.",
       "options": [
         "The process chart from the course folder",
