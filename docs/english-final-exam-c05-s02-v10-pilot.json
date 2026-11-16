@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A manufacturing project involved mechanical assembly, electrical integration and quality inspection. The mechanical team had completed the housing, while the electrical team was waiting for a connector specification to be confirmed. Quality staff had prepared an inspection plan but needed the final assembly revision. The coordinator recorded these dependencies so that each team could see which action depended on information from another group. Reading 1. What was the electrical team waiting for?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Confirmation of the mounting arrangement",
         "Confirmation of a connector specification",
-        "To buy a ticket"
+        "Confirmation of the inspection plan",
+        "Confirmation of the project budget"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did the coordinator record the dependencies?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "So each team could see which action depended on information from another group"
+        "So each team could see which action depended on information from another group",
+        "So all teams could complete their tasks without further coordination",
+        "So the coordinator could remove the inspection plan from the project",
+        "So the mechanical team could approve the software interface alone"
       ],
       "correctIndex": 3,
       "points": 1
