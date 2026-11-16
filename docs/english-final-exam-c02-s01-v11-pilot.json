@@ -15,9 +15,9 @@
       "audioText": "The international exchange office has arranged an online briefing about a study visit to Hamburg. It will begin at half past two on Friday and last forty minutes. Students should test their microphone before joining and use their full names on the meeting screen. A recording and a list of useful links will be sent to registered participants.",
       "options": [
         "At half past two on Friday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At one thirty on Friday",
+        "At half past two on Thursday",
+        "At half past three on Friday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Before a study visit, Daria compared the programme with her current course. She checked the dates, accommodation arrangements and the documents required for travel. She also asked whether the host college could provide safety information in English. After receiving the answers, she discussed the plan with her tutor and completed the application. Reading 1. What did Daria compare with her course?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The host college accommodation",
+        "The travel document checklist",
         "The study visit programme",
-        "To buy a ticket"
+        "The study visit programme"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why did she contact the host college?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "To ask about accommodation arrangements",
+        "To confirm the travel dates",
+        "To ask for safety information in English",
         "To ask for safety information in English"
       ],
       "correctIndex": 3,
