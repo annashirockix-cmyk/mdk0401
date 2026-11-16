@@ -4927,7 +4927,7 @@
                   "She wants to design aircraft",
                   "She is interested mainly in travelling",
                   "She enjoys systems and practical problem-solving",
-                  "She enjoys systems and practical problem-solving"
+                  "She prefers working alone rather than in a team."
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -4940,7 +4940,7 @@
                   "When the company was founded",
                   "How many hours a trainee works",
                   "Which qualities the company values in a trainee",
-                  "Which qualities the company values in a trainee"
+                  "Which qualifications are needed before applying?"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -5051,7 +5051,7 @@
                   "Progression and training routes",
                   "Workplace safety and protective equipment",
                   "Funding options for further study",
-                  "Progression and training routes"
+                  "How to prepare for a technical interview"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -5078,7 +5078,7 @@
                   "Unpaid work experience",
                   "Full-time academic study",
                   "Paid workplace training",
-                  "Paid workplace training"
+                  "A guaranteed university place after college"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -5091,7 +5091,7 @@
                   "To obtain an apprenticeship immediately",
                   "To compare the salaries of different jobs",
                   "To help her make an informed decision",
-                  "To help her make an informed decision"
+                  "To find out whether the courses include a final examination"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -5382,7 +5382,7 @@
                   "At an airport information desk",
                   "At a railway museum",
                   "At an aircraft museum",
-                  "At an aircraft museum"
+                  "At a college careers office"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -5395,7 +5395,7 @@
                   "Helping at a school sports event",
                   "Working part-time in a café",
                   "Volunteering at the college open day",
-                  "Volunteering at the college open day"
+                  "Helping at a college careers fair"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -5533,7 +5533,7 @@
                   "Nobody had prepared the presentation slides",
                   "The group had too little time to finish",
                   "Two members wanted the same task and the materials list was unchecked",
-                  "Two members wanted the same task and the materials list was unchecked"
+                  "The group had not agreed on a presentation topic"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -5546,7 +5546,7 @@
                   "They changed the project topic and worked separately",
                   "They made a plan, assigned roles and met regularly",
                   "They asked the tutor to complete the materials list",
-                  "They made a plan, assigned roles and met regularly"
+                  "They asked the tutor to divide the work for them"
                 ],
                 "correctIndex": 3,
                 "points": 1
