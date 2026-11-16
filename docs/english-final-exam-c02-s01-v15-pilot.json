@@ -15,9 +15,9 @@
       "audioText": "The college placement coordinator will hold a briefing for students starting work experience next month. The meeting is on Thursday at ten in Lecture Room 5. Students should bring the contact details of their workplace supervisor and a copy of the placement agreement. The coordinator will explain attendance rules and how to report an absence.",
       "options": [
         "On Thursday at ten",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Wednesday at ten",
+        "On Thursday at eleven",
+        "On Thursday at ten"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "During her first week at a manufacturing company, Alina received instructions from her supervisor about recording completed tasks. She wrote down unfamiliar terms and asked for clarification when a step was not clear. At the end of each day, she checked her notes and prepared a short progress update. Her supervisor said that her reports were useful and easy to follow. Reading 1. What did Alina do when an instruction was unclear?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "She repeated the instruction to the supervisor",
+        "She checked the college handbook",
         "She asked for clarification",
-        "To buy a ticket"
+        "She asked for clarification"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What did she prepare at the end of each day?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "A list of unfamiliar technical terms",
+        "A short progress update",
+        "A weekly attendance record",
         "A short progress update"
       ],
       "correctIndex": 3,
