@@ -14,11 +14,40 @@
     return el;
   }
 
+  function prepareQuestionsForDisplay(source, randomFn) {
+    var random = typeof randomFn === "function" ? randomFn : Math.random;
+    return (Array.isArray(source) ? source : []).map(function (question) {
+      var copy = Object.assign({}, question || {});
+      var original = Array.isArray(copy.options) ? copy.options.slice() : [];
+      if (original.length > 1) {
+        var order = original.map(function (_, index) { return index; });
+        for (var i = order.length - 1; i > 0; i--) {
+          var value = Number(random());
+          if (!Number.isFinite(value)) value = 0;
+          var j = Math.max(0, Math.min(i, Math.floor(value * (i + 1))));
+          var swap = order[i]; order[i] = order[j]; order[j] = swap;
+        }
+        if (order.every(function (value, index) { return value === index; })) {
+          order.push(order.shift());
+        }
+        copy.options = order.map(function (index) { return original[index]; });
+        var answerIndex = Number(copy.answerIndex);
+        if (copy.answerIndex !== null && copy.answerIndex !== "" &&
+            Number.isInteger(answerIndex) && answerIndex >= 0 && answerIndex < original.length) {
+          copy.answerIndex = order.indexOf(answerIndex);
+        }
+      } else {
+        copy.options = original;
+      }
+      return copy;
+    });
+  }
+
   function render(container, options) {
     options = options || {};
     if (!container) throw new Error("Listening lesson container is required.");
     var script = String(options.script || "").trim();
-    var questions = Array.isArray(options.questions) ? options.questions : [];
+    var questions = prepareQuestionsForDisplay(options.questions);
     var mode = options.mode === "assessment" ? "assessment" : "practice";
     if (!script) throw new Error("Listening script is required.");
     if (!questions.length) throw new Error("At least one listening question is required.");
@@ -158,5 +187,5 @@
     };
   }
 
-  window.EnglishListeningLesson = { render: render };
+  window.EnglishListeningLesson = { render: render, prepareQuestionsForDisplay: prepareQuestionsForDisplay };
 })();
