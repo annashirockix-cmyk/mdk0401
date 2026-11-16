@@ -854,3 +854,10 @@ V03, V04, V06, V07, V11, V13, V14 и V15 task 2 формулируют запр�
 **Общий дефект distractors:** в C5-S1 V02–V15 и C5-S2 V03–V15 в заданиях task 3 повторяются “To borrow a laptop / To meet a relative / To buy a ticket”, а в task 4 — “At the sports centre / In the computer room / At the bus station”. Для технических вопросов эти ответы не относятся к предметной области. Это делает задания угадываемыми без чтения. В C5-S2 V02 и ряде ранних вариантов отвлекающие ответы тематически ближе, но также требуют проверки на правдоподобность и параллельность.
 
 Рекомендация для всех C5 reading items: заменить эти шаблонные distractors на варианты того же семантического класса, что и ключ (альтернативные записи/документы, функции, причины, действия или технические параметры), не меняя проверенные правильные ответы. В рамках этой проверки содержимое пилотных JSON не изменялось.
+
+
+### Targeted reading-key review — C3-S1 V01–V15
+
+Проверены 30 reading items (tasks 3–4). Все 30 ключей соответствуют passage; явной ошибки correctIndex не выявлено. Темы охватывают материалы, чертежи, parts lists, workshop safety, incoming inspection, illustrated parts catalogues, tolerances, identification plates, quality reports, measuring instruments, maintenance roles, professional email, material certificates, technical notices и traceability.
+
+В V02–V15 task 3 повторяются три нерелевантных distractors “To borrow a laptop / To meet a relative / To buy a ticket”; в task 4 — “At the sports centre / In the computer room / At the bus station”. Они не соответствуют ни технической тематике, ни грамматической форме ключа. В V01 альтернативы в основном предметно близкие и правдоподобные. Требуется заменить шаблонные distractors в V02–V15 на технически сопоставимые варианты; правильные ключи по проверенным заданиям сохраняются.
