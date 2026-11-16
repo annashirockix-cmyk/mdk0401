@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A supplier evaluation may consider delivery reliability, product conformity and the effectiveness of responses to reported issues. A single late delivery does not necessarily describe long-term performance, so the review should use an appropriate period and clear measures. The report should explain the data source and any limitation, rather than relying on informal comments or an unsupported overall rating. Reading 1. Which factors may be considered in a supplier evaluation?",
       "options": [
-        "Delivery reliability, product conformity and responses to reported issues",
-        "Supplier popularity, office location and advertising budget",
         "Personal opinions, informal comments and one recent conversation",
+        "Supplier popularity, office location and advertising budget",
+        "Delivery reliability, product conformity and responses to reported issues",
         "Purchase price alone, without delivery or quality information"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -55,11 +55,11 @@
       "prompt": "Why should the review use an appropriate period?",
       "options": [
         "To make one late delivery represent the supplier's whole history",
-        "To assess performance over time rather than rely on one event",
+        "To replace measured results with informal comments",
         "To avoid comparing delivery and conformity data",
-        "To replace measured results with informal comments"
+        "To assess performance over time rather than rely on one event"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {

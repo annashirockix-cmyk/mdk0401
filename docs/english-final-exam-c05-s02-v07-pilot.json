@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Why did the message include the drawing revision?",
       "options": [
-        "To identify the exact drawing version being discussed",
+        "To show when the connector was manufactured",
         "To identify the supplier's delivery address",
         "To confirm the purchase order payment date",
-        "To show when the connector was manufactured"
+        "To identify the exact drawing version being discussed"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "points": 1
     },
     {

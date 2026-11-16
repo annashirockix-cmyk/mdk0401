@@ -55,11 +55,11 @@
       "prompt": "Why did the team avoid deciding on purchase price alone?",
       "options": [
         "Because the purchase price was the only verified factor",
-        "Because delivery time, compatibility and other factors also affected the decision",
+        "Because the maintenance record was not relevant to the assembly",
         "Because the two options had identical service histories",
-        "Because the maintenance record was not relevant to the assembly"
+        "Because delivery time, compatibility and other factors also affected the decision"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {

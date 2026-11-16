@@ -55,11 +55,11 @@
       "prompt": "How should a report distinguish facts from hypotheses?",
       "options": [
         "It should present every hypothesis as a confirmed fact",
-        "It should identify confirmed facts separately from possible explanations",
+        "It should treat the first explanation as the final conclusion",
         "It should omit possible explanations from the record",
-        "It should treat the first explanation as the final conclusion"
+        "It should identify confirmed facts separately from possible explanations"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {

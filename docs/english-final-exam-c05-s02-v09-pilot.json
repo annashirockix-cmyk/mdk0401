@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A maintenance record should make it possible to identify the relevant aircraft or component, the task performed and the supporting documentation. Entries should be clear, dated and attributable to the authorised person or process. If a task remains incomplete, its status should be recorded accurately. This allows the next team to understand what has been done and what still requires action. Reading 1. Which information helps identify a maintenance record?",
       "options": [
-        "Aircraft or component reference, task performed and supporting documentation",
-        "Name of the training room, lesson time and group number",
         "Supplier contact details, purchase price and delivery date",
+        "Name of the training room, lesson time and group number",
+        "Aircraft or component reference, task performed and supporting documentation",
         "Staff rota, annual leave dates and shift preference"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Why should an incomplete task be recorded accurately?",
       "options": [
-        "So the next team understands what remains to be done",
+        "So the next team can assume the task was not started",
         "So the previous team can remove the original record",
         "So the task can be marked complete without further evidence",
-        "So the next team can assume the task was not started"
+        "So the next team understands what remains to be done"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "points": 1
     },
     {

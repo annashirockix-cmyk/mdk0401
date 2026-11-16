@@ -56,10 +56,10 @@
       "options": [
         "The finding should be closed as compliant",
         "The requirement should be changed to match the evidence",
-        "Additional information should be requested before reaching a conclusion",
-        "The previous audit result should be accepted without review"
+        "The previous audit result should be accepted without review",
+        "Additional information should be requested before reaching a conclusion"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {

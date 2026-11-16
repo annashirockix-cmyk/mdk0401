@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "What should the summary avoid adding?",
       "options": [
-        "Conclusions that the sources do not support",
+        "Details that still require clarification",
         "Source references that identify the documents",
         "Conflicting values that are clearly reported",
-        "Details that still require clarification"
+        "Conclusions that the sources do not support"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "points": 1
     },
     {

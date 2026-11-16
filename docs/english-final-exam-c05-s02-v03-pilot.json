@@ -56,10 +56,10 @@
       "options": [
         "That all sources are equally reliable",
         "That one trend predicts every future event",
-        "That correlation proves causation",
-        "That a report must include every available measurement"
+        "That a report must include every available measurement",
+        "That correlation proves causation"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {

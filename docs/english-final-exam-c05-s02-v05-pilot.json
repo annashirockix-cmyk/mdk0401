@@ -56,10 +56,10 @@
       "options": [
         "Approved for immediate use before review",
         "Obsolete and withdrawn from the document register",
-        "Clearly identified as a draft until approval is complete",
-        "Distributed without a revision identifier"
+        "Distributed without a revision identifier",
+        "Clearly identified as a draft until approval is complete"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
