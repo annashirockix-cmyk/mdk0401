@@ -78,10 +78,10 @@
     {
       "id": "c4s1v07_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that may appear on an electrical equipment label.",
+      "prompt": "Choose TWO electrical identification or rating fields commonly found on equipment labels.",
       "options": [
-        "A student's home address",
-        "A café opening time",
+        "Maintenance interval",
+        "Inspection due date",
         "Voltage rating",
         "Model number"
       ],
