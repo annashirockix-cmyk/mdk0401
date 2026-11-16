@@ -42,8 +42,8 @@
       "prompt": "A trainee sent an email about a component that did not match the drawing. The subject line included the part number, and the message described the difference between the drawing and the received item. The trainee attached a photograph and asked the supervisor to confirm the next step. The email avoided blaming anyone and focused on the information needed to resolve the issue. Reading 1. What did the subject line include?",
       "options": [
         "The serial number",
-        "The part number",
         "The delivery date",
+        "The part number",
         "The supplier name"
       ],
       "correctIndex": 2,
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How did the trainee keep the message professional?",
       "options": [
-        "By describing the issue and asking for confirmation without blaming anyone",
+        "By omitting the discrepancy from the message",
         "By stating that the supplier made a mistake",
         "By demanding an immediate replacement without evidence",
-        "By omitting the discrepancy from the message"
+        "By describing the issue and asking for confirmation without blaming anyone"
       ],
       "correctIndex": 3,
       "points": 1
