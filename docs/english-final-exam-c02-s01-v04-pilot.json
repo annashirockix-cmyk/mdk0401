@@ -15,9 +15,9 @@
       "audioText": "The college is holding an information session about progression routes next Thursday at three. Students can learn about advanced certificates, apprenticeships and university programmes. The session will take place in the library seminar room. Bring your questions about entry requirements and course length. A short guide will be available at the door, and the presentation slides will be shared afterwards.",
       "options": [
         "Progression and training routes",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Workplace safety and protective equipment",
+        "Funding options for further study",
+        "Progression and training routes"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Leila wants to continue studying after college. She compares an apprenticeship with a full-time university course. The apprenticeship includes paid workplace training, while the university course offers more time for academic study. Leila is interested in both options, so she checks the entry requirements and speaks to a careers adviser before making a decision. Reading 1. What is one feature of the apprenticeship?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Unpaid work experience",
+        "Full-time academic study",
         "Paid workplace training",
-        "To buy a ticket"
+        "Paid workplace training"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why does Leila speak to an adviser?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "To obtain an apprenticeship immediately",
+        "To compare the salaries of different jobs",
+        "To help her make an informed decision",
         "To help her make an informed decision"
       ],
       "correctIndex": 3,
