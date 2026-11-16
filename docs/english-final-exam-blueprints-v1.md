@@ -503,3 +503,20 @@ Short-text completion defects:
 The other reviewed short-text completions and ordering sequences were structurally coherent. The two-answer multiple-choice keys inspected were valid and supported by the options. However, several distractors are implausible or from unrelated categories, consistent with the cross-version P3 finding. Written tasks have word limits and 8-point rubrics; CEFR calibration and mapping to approved learning outcomes were not assessed.
 
 No pilot JSON was modified. No protected question banks, Google Sheets, Apps Script, imports or deployment were touched.
+
+
+## V10 full-slot audit (all 10 course/semester slots)
+
+All ten V10 files were inspected (100 tasks total). Each contains 10 tasks. The recurring first-eight answer-position signature remains 0, 1, 2, 3, 0, [2,3], short-text, 1. All 20 listening keys reviewed match the stated audio facts.
+
+Malformed ordering prompt:
+- C1-S2 task 9 consists of a semicolon-separated list of actions rather than an instruction to order them. The options and correctOrder are coherent; rewrite the prompt as a direct instruction.
+
+Short-text completion and equivalence defects:
+- C4-S2 task 7 begins “...an audit ___” but accepts “audit trail”, duplicating the fixed word “audit”. Keep “trail” or change the stem.
+- C5-S1 task 7 begins “...a document ___” but accepts “document register”, duplicating the fixed word “document”. Keep “register” or change the stem.
+- C5-S2 task 7 accepts “dependency” and “dependent item” as alternatives. These are related but not equivalent grammatical/technical forms in this sentence; narrow the accepted answer to “dependency” or explicitly rewrite the stem to support the alternative.
+
+The other reviewed short-text alternatives were contextually defensible. The two-answer multiple-choice keys inspected were valid and supported by their options. Written tasks have explicit word limits and 8-point rubrics; CEFR calibration and approved learning-outcome mapping were not assessed.
+
+No pilot JSON was modified. No protected question banks, Google Sheets, Apps Script, imports or deployment were touched.
