@@ -25,7 +25,7 @@
     {
       "id": "c3s2v09_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which record will students review?",
+      "prompt": "Which type of record is specifically mentioned alongside the programme sheet and machine manual extract?",
       "audioText": "The CNC documentation session will take place on Friday at nine forty in the computer classroom. Students will review a sample programme sheet, a machine manual extract and a revision record. The instructor will explain why the programme version and equipment reference should be recorded together. The lesson is based on reading documents, not operating machinery.",
       "options": [
         "A maintenance log",
