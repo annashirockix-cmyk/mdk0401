@@ -25,7 +25,7 @@
     {
       "id": "c3s1v11_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which preparation material is required before the technical lesson?",
+      "prompt": "Listening 2. What should students prepare before the talk?",
       "audioText": "The college aviation department is organising an industry overview on Thursday at ten. A guest speaker from an aircraft maintenance organisation will describe the roles of technicians, planners and stores staff. The talk will take place in Lecture Room 1. Students should prepare one question about the skills needed for an entry-level role.",
       "options": [
         "One question about salary expectations",
