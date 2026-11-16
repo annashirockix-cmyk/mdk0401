@@ -136,7 +136,7 @@
       "id": "c5s2v01_w01",
       "type": "written",
       "prompt": "Write 100–120 words for a maintenance handover. Summarise completed work, outstanding tasks and one issue that needs confirmation.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Handover content — 2: accurately summarises completed work, outstanding tasks and the issue requiring confirmation; 1: covers two elements; 0: incomplete or inaccurate. (2) Status and follow-up — 2: identifies task status, next action and responsible role without implying unapproved completion; 1: partial; 0: absent. (3) Record integrity — 2: explains that relevant controlled records and required sign-off must remain current; 1: partial; 0: absent or incorrect. (4) English — 2: concise, logically organised handover language and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
