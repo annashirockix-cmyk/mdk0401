@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "An equipment identification plate usually contains information such as the model, serial number and rated values. A technician copied the details into an inspection record and checked the units carefully. The technician also noted a warning symbol near the connector. If a label is damaged or unreadable, the information should be confirmed through the approved documentation rather than guessed. Reading 1. Which details may appear on an identification plate?",
       "options": [
-        "The model, serial number and rated values",
-        "The drawing revision, inspection date and operator name",
         "The supplier address, delivery date and purchase order",
+        "The drawing revision, inspection date and operator name",
+        "The model, serial number and rated values",
         "The component colour, storage location and batch quantity"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What should happen if a label is unreadable?",
       "options": [
         "The information should be guessed from a similar item",
-        "The information should be confirmed using approved documentation",
+        "The nearest readable label should be copied",
         "A colleague should choose the most likely value",
-        "The nearest readable label should be copied"
+        "The information should be confirmed using approved documentation"
       ],
       "correctIndex": 3,
       "points": 1
