@@ -42,11 +42,11 @@
       "prompt": "Reading 1. Read the text. Leo is preparing for his first workshop lesson. He checks the timetable and notices that the group must wear safety shoes. He puts his notebook and student card in his bag. At the workshop door, he waits for the instructor, who explains the safety signs and the location of the emergency stop button. Leo asks a question when he does not understand an instruction. What does Leo put in his bag?",
       "options": [
         "A safety helmet and a camera",
-        "A laptop and a ruler",
         "His notebook and student card",
+        "A laptop and a ruler",
         "A toolbox and a manual"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
