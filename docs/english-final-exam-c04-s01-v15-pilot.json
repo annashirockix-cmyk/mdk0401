@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A controlled record showing the current version of a document is a revision ___.",
       "acceptedAnswers": [
-        "record",
-        "revision record"
+        "record"
       ],
       "points": 2
     },
