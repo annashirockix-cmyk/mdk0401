@@ -16,7 +16,7 @@
 - C. The time required to write a job title
 - D. The period when a machine is switched off for lunch
 
-**103.** Choose the correct sentence.
+**103.** Which sentence correctly uses “each” with a singular count noun and verb?
 - A. “Each components have a unique identification number.”
 - B. “Each component has a unique identification number.”
 - C. “Each component have unique identification number.”
