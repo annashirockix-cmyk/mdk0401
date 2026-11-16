@@ -44,7 +44,7 @@
         "He sorts files only by file size",
         "He saves diagrams and summaries in one document",
         "He labels files by subject and date and separates diagrams from summaries",
-        "He labels files by subject and date and separates diagrams from summaries"
+        "He organises files by the date they were downloaded."
       ],
       "correctIndex": 2,
       "points": 1
@@ -57,7 +57,7 @@
         "To free space on his computer",
         "To share every document with classmates",
         "To make sure he uses the latest document",
-        "To make sure he uses the latest document"
+        "To make it easier to delete old course notes."
       ],
       "correctIndex": 3,
       "points": 1
