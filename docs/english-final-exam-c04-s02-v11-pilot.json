@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "Selected sensor data ___ to a monitoring platform.",
       "options": [
-        "can be transferred",
         "can transferred",
+        "can be transferred",
         "transferring",
         "are transfer"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
