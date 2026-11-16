@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A list used to identify and track controlled documents is a document ___.",
       "acceptedAnswers": [
-        "register",
-        "document register"
+        "register"
       ],
       "points": 2
     },
