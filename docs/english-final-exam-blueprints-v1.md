@@ -327,3 +327,20 @@ Short-text answers are mostly defensible, but C2-S2 accepts both “procedure”
 Written tasks have word limits and 8-point rubrics. CEFR calibration and mapping to official learning outcomes have not been checked.
 
 This is a representative five-file sample, not a complete V15 audit. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+### V14 additional sample check (C1-S1, C2-S2, C3-S1, C4-S2, C5-S1)
+
+A second, disjoint V14 sample was checked after the first five-file review above. All five files contain 10 tasks and repeat the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1.
+
+Two incorrect listening keys were found in C1-S1:
+- Task 1 asks whom the student should ask for at reception. The audio names Ms Patel, but the key points to Mr Green. The correct option is the second option (index 1).
+- Task 2 asks what to do if delayed. The audio says to telephone reception, but the key points to “Send no message”. The correct option is “Telephone reception” (index 2).
+
+C1-S1 task 9 also has an incoherent order: it starts with reviewing completed tasks before reporting to reception and receiving the supervisor's instructions. The sequence should be rewritten to represent the actual work-placement timeline, including completing work before reviewing and recording it.
+
+C4-S2 task 8 has a malformed stem: “Could we confirm the unit's What is the best response?” It must be rewritten as a complete situational prompt.
+
+All reviewed listening keys in C2-S2, C3-S1, C4-S2 and C5-S1 otherwise match their audioText. The other four ordering tasks were coherent. Weak wrong-category distractors remain in the reviewed set, especially in reading tasks with unrelated places or activities. Short-text targets and written rubrics were structurally present; CEFR calibration and official learning-outcome alignment were not assessed.
+
+This is a second representative sample, not a complete V14 audit. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
