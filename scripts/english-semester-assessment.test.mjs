@@ -410,7 +410,8 @@ test("all Course 5 listening items use same-category distractors and script-supp
 });
 
 test("Course 3 and 4 variants use same-category distractors in listening and reading tasks",()=>{
-  const placeholders=/^(At the college library|At the town centre|At the bus station|To borrow a laptop|To meet a relative|To buy a ticket|At the sports centre|In the computer room|On Friday|Next month|After the event)$/i;
+  const placeholders=/^(At the college library|At the town centre|At the bus station|To borrow a laptop|To meet a relative|To buy a ticket|At the sports centre|In the computer room)$/i;
+  const wrongTimeOptions=/^(On Friday|Next month|After the event)$/i;
   const slots=[
     {course:"c03",semester:"s01",first:2},
     {course:"c03",semester:"s02",first:3},
