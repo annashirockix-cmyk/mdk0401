@@ -25,7 +25,7 @@
     {
       "id": "c5s1v13_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which reliability-analysis summary should students bring?",
+      "prompt": "Which materials should students bring for the technical briefing assessment?",
       "audioText": "The maintenance communications tutor will assess short technical briefings on Wednesday at nine. Students should bring a one-page status summary and the supporting reference list. Each briefing should state the current position, outstanding action and any uncertainty. The tutor will assess whether the speaker uses precise terms and makes the next step clear to the audience.",
       "options": [
         "The full maintenance manual and revision history",
