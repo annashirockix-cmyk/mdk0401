@@ -440,16 +440,21 @@
     card.appendChild(saveStatus);
     var form=el("form","english-final-persistent-form notranslate");form.setAttribute("translate","no");
     form.addEventListener("submit",function(e){e.preventDefault();});
-    var saveQueue=Promise.resolve();
+    var saveQueue=Promise.resolve(),saveTimer=null;
     function taskId(task,index){return String(task.id||task.questionId||index);}
     function optionText(option){return typeof option==="object"&&option!==null?String(option.text||option.label||option.value||""):String(option);}
-    function saveNow(){
-      if(finished)return;
+    function saveNow(force){
+      if(finished&&!force)return saveQueue;
       var payload=JSON.parse(JSON.stringify(responses));
       saveQueue=saveQueue.then(function(){return window.API.saveEnglishFinalExamResponses(attempt.attemptId,payload);}).then(function(result){
         if(!result||result.success!==true)throw new Error(result&&result.error||"Сервер не подтвердил сохранение.");
         saveStatus.textContent="Сохранено на сервере · "+new Date(result.savedAt||Date.now()).toLocaleTimeString();
       }).catch(function(error){saveStatus.textContent="Ошибка автосохранения: "+(error.message||error);});
+      return saveQueue;
+    }
+    function queueSave(){
+      if(saveTimer)window.clearTimeout(saveTimer);
+      saveTimer=window.setTimeout(function(){saveTimer=null;saveNow();},500);
     }
     tasks.forEach(function(task,index){
       var id=taskId(task,index),type=String(task.type||task.taskType||"single_choice").toLowerCase();
@@ -489,10 +494,10 @@
         });block.appendChild(orderBox);
       }else if(type==="short_text"||type==="short-text"){
         var input=el("input");input.type="text";input.style.width="100%";input.value=String(responses[id]||"");
-        input.addEventListener("change",function(){responses[id]=input.value;saveNow();});block.appendChild(input);
+        input.addEventListener("input",function(){responses[id]=input.value;queueSave();});block.appendChild(input);
       }else if(type==="written"||type==="writing"||type==="essay"||type==="free_response"){
         var area=el("textarea");area.rows=6;area.style.width="100%";area.value=String(responses[id]||"");area.placeholder="Введите развёрнутый ответ…";
-        area.addEventListener("change",function(){responses[id]=area.value;saveNow();});block.appendChild(area);
+        area.addEventListener("input",function(){responses[id]=area.value;queueSave();});block.appendChild(area);
       }else{
         block.appendChild(el("p","museum-muted","Тип задания пока не поддерживается интерфейсом: "+type+". Сообщите преподавателю."));
       }
@@ -505,6 +510,8 @@
       if(!auto&&!window.confirm("Отправить итоговый экзамен? После отправки изменить ответы будет нельзя."))return;
       finished=true;submit.disabled=true;submit.textContent="Сохраняем и проверяем…";
       if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
+      if(saveTimer){window.clearTimeout(saveTimer);saveTimer=null;}
+      saveNow(true);
       saveQueue.then(function(){return window.API.submitEnglishFinalExam(attempt.attemptId,responses);}).then(function(result){
         if(!result||result.success!==true)throw new Error(result&&result.error||"Сервер не подтвердил отправку.");
         card.innerHTML="";
