@@ -17,7 +17,7 @@
         "The yellow containers",
         "The blue containers",
         "The green containers",
-        "The yellow containers"
+        "The grey containers"
       ],
       "correctIndex": 0,
       "points": 1
@@ -43,7 +43,7 @@
       "options": [
         "The bins were too far from the classrooms",
         "Students were unsure which materials belonged in each bin",
-        "Students were unsure which materials belonged in each bin",
+        "The signs did not explain how to sort plastic",
         "The collection service arrived at the wrong time"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "The total weight of waste collected each week",
         "The number of bins installed around the college",
         "Contamination levels before and after the changes",
-        "Contamination levels before and after the changes"
+        "The total amount of plastic collected over the year"
       ],
       "correctIndex": 3,
       "points": 1
