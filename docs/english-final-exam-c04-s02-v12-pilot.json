@@ -103,12 +103,12 @@
     {
       "id": "c4s2v12_f01",
       "type": "single_choice",
-      "prompt": "Could we update the model What is the best response?",
+      "prompt": "Before applying a model update, what should the team confirm?",
       "options": [
-        "I will guess and continue.",
-        "Could we update the model with the latest verified maintenance information?",
-        "The detail is not important.",
-        "I will copy an unrelated record."
+        "Apply the newest model file immediately and check compatibility afterwards.",
+        "Confirm the approved model version and verify its source data before applying the update.",
+        "Use the model from a similar unit because the equipment family is the same.",
+        "Update the displayed model name and leave the configuration record unchanged."
       ],
       "correctIndex": 1,
       "points": 1
