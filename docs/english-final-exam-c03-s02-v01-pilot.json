@@ -78,10 +78,10 @@
     {
       "id": "c3s2v01_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO parts commonly found on a conventional lathe.",
+      "prompt": "Choose TWO lathe components responsible for housing the spindle and moving the cutting tool along the workpiece.",
       "options": [
-        "Aircraft cabin",
-        "Solar panel",
+        "Coolant pump",
+        "Chip tray",
         "Headstock",
         "Carriage"
       ],
