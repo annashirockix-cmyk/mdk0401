@@ -44,7 +44,7 @@
         "He felt tired during afternoon lessons",
         "He could not find his study materials",
         "He found it difficult to concentrate in morning lessons",
-        "He found it difficult to concentrate in morning lessons"
+        "He missed the morning bus on several days."
       ],
       "correctIndex": 2,
       "points": 1
@@ -57,7 +57,7 @@
         "He studied later every night",
         "He stopped attending morning lessons",
         "He planned his week, took breaks and prepared materials in advance",
-        "He planned his week, took breaks and prepared materials in advance"
+        "He stopped taking breaks during study sessions."
       ],
       "correctIndex": 3,
       "points": 1
