@@ -78,10 +78,10 @@
     {
       "id": "c3s1v05_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that help identify a component in a stores record.",
+      "prompt": "Choose TWO fields that identify a component itself in a stores record.",
       "options": [
-        "The delivery driver's favourite film",
-        "The colour of the office curtains",
+        "Supplier delivery date",
+        "Storage-bin location",
         "Part number",
         "Component description"
       ],
