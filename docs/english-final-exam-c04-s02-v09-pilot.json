@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A record that stores observations together with their time is a data ___.",
       "acceptedAnswers": [
-        "log",
-        "data log"
+        "log"
       ],
       "points": 2
     },
