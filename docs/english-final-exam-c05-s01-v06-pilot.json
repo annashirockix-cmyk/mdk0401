@@ -78,10 +78,10 @@
     {
       "id": "c5s1v06_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO checks needed before using a maintenance task card.",
+      "prompt": "Choose TWO checks that establish whether a maintenance task card applies to the item and is current.",
       "options": [
-        "A personal travel preference",
-        "An unrelated supplier advert",
+        "Publication language",
+        "File format",
         "Aircraft or component identity",
         "Document revision status"
       ],
