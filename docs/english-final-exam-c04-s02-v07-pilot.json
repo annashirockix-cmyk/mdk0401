@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A record of changes made between software releases is a change ___.",
       "acceptedAnswers": [
-        "log",
-        "change log"
+        "log"
       ],
       "points": 2
     },
