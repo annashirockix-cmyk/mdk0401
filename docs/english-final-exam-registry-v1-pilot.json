@@ -5685,7 +5685,7 @@
                   "He sorts files only by file size",
                   "He saves diagrams and summaries in one document",
                   "He labels files by subject and date and separates diagrams from summaries",
-                  "He labels files by subject and date and separates diagrams from summaries"
+                  "He organises files by the date they were downloaded."
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -5698,7 +5698,7 @@
                   "To free space on his computer",
                   "To share every document with classmates",
                   "To make sure he uses the latest document",
-                  "To make sure he uses the latest document"
+                  "To make it easier to delete old course notes."
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -5836,7 +5836,7 @@
                   "They pay the full price and keep the cup",
                   "They borrow a cup without paying a deposit",
                   "They pay a deposit and get it back when they return the cup",
-                  "They pay a deposit and get it back when they return the cup"
+                  "Students pay a deposit but keep it when they return the cup."
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -5849,7 +5849,7 @@
                   "A discount at the till",
                   "A message sent to students' phones",
                   "Signs and reminders near the exits",
-                  "Signs and reminders near the exits"
+                  "A prize draw for students who return their cups."
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -5960,7 +5960,7 @@
                   "By minibus",
                   "By coach",
                   "By public bus",
-                  "By minibus"
+                  "By train"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -5987,7 +5987,7 @@
                   "The passenger's boarding pass",
                   "The airline's staff timetable",
                   "The airport display",
-                  "The airport display"
+                  "The airline's website"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -6000,7 +6000,7 @@
                   "She sent the passenger to the check-in desk without an explanation",
                   "She asked another assistant to answer the question",
                   "She repeated and clarified the information calmly",
-                  "She repeated and clarified the information calmly"
+                  "She asked the passenger to wait until the flight arrived."
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -6140,7 +6140,7 @@
                   "The host college accommodation",
                   "The travel document checklist",
                   "The study visit programme",
-                  "The study visit programme"
+                  "The host college's examination timetable"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -6153,7 +6153,7 @@
                   "To ask about accommodation arrangements",
                   "To confirm the travel dates",
                   "To ask for safety information in English",
-                  "To ask for safety information in English"
+                  "To confirm whether the visit was optional"
                 ],
                 "correctIndex": 3,
                 "points": 1
