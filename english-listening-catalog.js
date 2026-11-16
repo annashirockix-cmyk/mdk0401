@@ -4341,6 +4341,131 @@
 
   ];
 
+
+  // Listening practice for the 16 pre-existing Basic English source lectures.
+  function legacyActivity(id, title, script, questions) {
+    return {
+      id: id, title: title, level: "A1–B1", script: script,
+      questions: questions.map(function (q) {
+        return { prompt: q[0], options: q[1], answerIndex: q[2], explanation: q[3] };
+      })
+    };
+  }
+  activities.push(
+    legacyActivity("en-c01-s01-l01", "Course 1 · Semester 1 · Phonetics and Pronunciation",
+      "Teacher: Today we will practise two English vowel sounds. Listen to ship and sheep. The first word has a short vowel, and the second has a long vowel. Student: So the spelling is similar, but the sound changes the meaning. Teacher: Exactly. Listen again: sit, seat; live, leave. Repeat slowly, then use each word in a short sentence. Clear pronunciation helps a listener understand the message.",
+      [
+        ["Which pair does the teacher use first?", ["ship and sheep", "cat and dog", "book and desk", "pen and pencil"], 0, "The teacher begins with ship and sheep."],
+        ["What changes between the two words?", ["The first consonant", "The vowel sound", "The number of syllables", "The word order"], 1, "The lesson focuses on the vowel sound."],
+        ["What should students do after listening?", ["Translate every sentence", "Write a long essay", "Repeat and make short sentences", "Stop practising"], 2, "The teacher asks students to repeat and use the words."]
+      ]),
+    legacyActivity("en-c01-s01-l02", "Course 1 · Semester 1 · Grammar: Pronouns, Verbs and Modals",
+      "Mia is a new student. She says, I study at a technical college. My group is friendly, and we help each other. Our teacher says that every student can ask questions. We must bring our notebooks, but we do not have to finish every exercise in class. If a student is absent, he or she should ask a classmate for the notes. These small words help us show who acts and what is possible or necessary.",
+      [
+        ["Which pronoun refers to Mia?", ["They", "She", "We", "It"], 1, "She refers to Mia."],
+        ["What must students bring?", ["Their notebooks", "A passport", "A camera", "A sports kit"], 0, "The text says students must bring notebooks."],
+        ["What should an absent student do?", ["Ignore the lesson", "Leave the college", "Ask a classmate for notes", "Repeat the whole course"], 2, "The advice is to ask a classmate for the notes."]
+      ]),
+    legacyActivity("en-c01-s01-l03", "Course 1 · Semester 1 · Reading: Speak about Yourself",
+      "Hello, my name is Alex. I am seventeen and I am a first-year college student. I live with my family in a small town. I enjoy computers and practical projects because I like solving problems. At college I study general subjects and learn professional skills. In my free time I play football and listen to music. I would like to become a skilled technician and continue learning after graduation.",
+      [
+        ["What year is Alex in?", ["The first year", "The second year", "The third year", "The final year"], 0, "Alex says he is a first-year student."],
+        ["What does Alex enjoy?", ["Cooking", "Computers and practical projects", "Painting houses", "Collecting stamps"], 1, "He enjoys computers and practical projects."],
+        ["What is Alex's goal?", ["To leave college", "To become a professional athlete", "To become a skilled technician", "To move abroad immediately"], 2, "Alex wants to become a skilled technician."]
+      ]),
+    legacyActivity("en-c01-s02-l01", "Course 1 · Semester 2 · Word Formation and Definitions",
+      "A teacher writes the word develop on the board. The class makes new words: development, developer and developing. The teacher explains that a suffix can change a word's grammatical role. Students then play a definition chain. One student says a word, and another gives a simple explanation. For example, a mechanic is a person who repairs machines. The activity helps students recognise word families and explain vocabulary in English.",
+      [
+        ["Which word is a noun formed from develop?", ["Developing", "Development", "Developed", "Develop"], 1, "Development is the noun form."],
+        ["What does a mechanic do?", ["Repairs machines", "Writes novels", "Sells tickets", "Teaches music"], 0, "The definition says a mechanic repairs machines."],
+        ["What can a suffix change?", ["The weather", "The speaker's age", "A word's grammatical role", "The number of pages"], 2, "The teacher explains how suffixes change word roles."]
+      ]),
+    legacyActivity("en-c01-s02-l02", "Course 1 · Semester 2 · Reading: Nizhnekamsk",
+      "Nizhnekamsk is a city in the Republic of Tatarstan. It is known for its industrial enterprises, green areas and cultural life. The city has schools, colleges, sports facilities and places for families to relax. Many residents work in industry or services. Visitors can learn about local history and walk in parks. A city is more than its factories: transport, education, culture and the environment all influence everyday life.",
+      [
+        ["Where is Nizhnekamsk?", ["In the Republic of Tatarstan", "In the Arctic", "On an island", "In another country"], 0, "The text places the city in Tatarstan."],
+        ["What is the city known for?", ["Only beaches", "Industrial enterprises and green areas", "Ancient castles only", "Desert landscapes"], 1, "Both industry and green areas are mentioned."],
+        ["What else influences city life besides factories?", ["Only the weather", "Nothing", "Transport, education, culture and environment", "Only tourism"], 2, "The final sentence lists these factors."]
+      ]),
+    legacyActivity("en-c01-s02-l03", "Course 1 · Semester 2 · Reading: A Machine Should Work",
+      "A machine should work safely and reliably. Before a shift, an operator checks the work area and reads the instructions. If a machine makes an unusual noise, the operator should stop and report the problem according to the local procedure. Regular maintenance helps prevent failures. A clean workplace and correct tools also matter. The purpose of a check is not to guess that everything is fine, but to notice evidence and communicate it clearly.",
+      [
+        ["What should an operator do before a shift?", ["Check the work area and read instructions", "Change every machine part", "Ignore the workplace", "Switch off all lights"], 0, "The text describes these pre-shift checks."],
+        ["What should happen if a machine makes an unusual noise?", ["The operator should continue", "The operator should stop and report it", "The operator should hide the sound", "The operator should guess the cause"], 1, "The safe response is to stop and report."],
+        ["What is the purpose of a check?", ["To prove the machine is new", "To avoid communication", "To notice evidence and report it", "To replace maintenance"], 2, "The final sentence explains the purpose."]
+      ]),
+    legacyActivity("en-c02-s01-l01", "Course 2 · Semester 1 · Participles, Gerunds and Infinitives",
+      "Nina enjoys reading technical articles because they help her learn new words. She wants to improve her English, so she has decided to practise every day. Her teacher suggests keeping a vocabulary notebook and using new phrases in conversation. Nina is interested in learning how machines work, and she hopes to visit a production workshop. She knows that learning takes time, but she is ready to continue.",
+      [
+        ["What does Nina enjoy doing?", ["Reading technical articles", "Watching football", "Driving a bus", "Cooking dinner"], 0, "The text says she enjoys reading."],
+        ["What has Nina decided to do?", ["Stop studying", "Practise every day", "Change colleges", "Avoid new words"], 1, "She has decided to practise every day."],
+        ["What does her teacher suggest?", ["Buying a new phone", "Skipping lessons", "Keeping a vocabulary notebook", "Learning without examples"], 2, "The teacher suggests keeping a vocabulary notebook."]
+      ]),
+    legacyActivity("en-c02-s01-l02", "Course 2 · Semester 1 · Reading: Tatarstan",
+      "Tatarstan is a republic in the Russian Federation, situated in the Volga region. Kazan is its capital and an important educational, cultural and industrial centre. The republic has a rich history and a diverse cultural heritage. Modern transport connects its cities and towns. Industry, agriculture, science and education all contribute to regional development. Students can learn about the region by reading maps, local news and historical descriptions.",
+      [
+        ["What is the capital of Tatarstan?", ["Nizhnekamsk", "Kazan", "Moscow", "Samara"], 1, "Kazan is named as the capital."],
+        ["Where is Tatarstan situated?", ["In the Volga region", "On the Pacific coast", "In the mountains of the south", "On an island"], 0, "The text places it in the Volga region."],
+        ["What contributes to regional development?", ["Only tourism", "Only sport", "Industry, agriculture, science and education", "Only transport"], 2, "The text lists four areas."]
+      ]),
+    legacyActivity("en-c02-s01-l03", "Course 2 · Semester 1 · Reading: Dealing with People",
+      "Good communication helps people work together. When a colleague explains a problem, listen without interrupting. Ask a clear question if something is not understood. In a disagreement, describe the facts and explain your point politely. Do not blame another person before checking the information. At the end of a conversation, repeat the agreed action and its deadline. These habits are useful in college, at work and in everyday life.",
+      [
+        ["What should you do when a colleague explains a problem?", ["Interrupt immediately", "Listen without interrupting", "Change the subject", "Leave the room"], 1, "The advice is to listen first."],
+        ["How should you act in a disagreement?", ["Blame someone", "Raise your voice", "Describe facts and speak politely", "Ignore all information"], 2, "The text recommends facts and polite language."],
+        ["What should you confirm at the end?", ["The agreed action and deadline", "The colleague's home address", "The weather forecast", "A new timetable for everyone"], 0, "The final sentence says to repeat the action and deadline."]
+      ]),
+    legacyActivity("en-c02-s02-l01", "Course 2 · Semester 2 · Grammar: Conditionals and Reported Speech",
+      "The teacher gives two examples. If water reaches zero degrees Celsius, it freezes. This sentence describes a general fact. Then she reports a student's words: Tom said, I need more time. In reported speech, the sentence becomes Tom said that he needed more time. Students compare the original and reported statements and notice how the tense can change when we report what someone said earlier.",
+      [
+        ["Which sentence describes a general fact?", ["If water reaches zero degrees, it freezes", "If water reached zero, it would freeze yesterday", "Water said it freezes", "If water will freeze, it froze"], 0, "The first conditional example is a general fact."],
+        ["How is Tom's statement reported?", ["Tom said he needs more time", "Tom said that he needed more time", "Tom says he need time", "Tom told that more time"], 1, "The reported form uses needed."],
+        ["What do students compare?", ["Two cities", "Different machines", "Original and reported statements", "Two weather reports"], 2, "The teacher asks them to compare the two forms."]
+      ]),
+    legacyActivity("en-c02-s02-l02", "Course 2 · Semester 2 · Reading: Environmental Protection",
+      "A college can reduce its environmental impact through everyday actions. Students can sort paper, plastic and metal for recycling. Staff can switch off lights in empty rooms and report leaking taps. A workshop can collect used materials according to its safety rules. These actions do not solve every environmental problem, but they reduce waste and encourage responsible habits. Good environmental practice depends on clear information and cooperation.",
+      [
+        ["What can students sort for recycling?", ["Paper, plastic and metal", "Food only", "Tools and machines", "Glass doors"], 0, "The text names paper, plastic and metal."],
+        ["What should staff report?", ["New furniture", "Leaking taps", "A finished lesson", "A sunny day"], 1, "Leaking taps should be reported."],
+        ["What does good environmental practice depend on?", ["One person's opinion", "Expensive equipment only", "Clear information and cooperation", "Ignoring local rules"], 2, "The final sentence gives both factors."]
+      ]),
+    legacyActivity("en-c02-s02-l03", "Course 2 · Semester 2 · Reading: The Speed Limit",
+      "Speed limits are set to reduce the risk of road accidents. A safe driver observes road signs, adjusts speed to weather and traffic, and leaves enough distance from the vehicle ahead. A legal speed limit is not always a safe target in every condition. Rain, ice, poor visibility and heavy traffic may require a lower speed. Drivers should plan ahead rather than make sudden decisions.",
+      [
+        ["Why are speed limits set?", ["To reduce accident risk", "To make journeys longer", "To remove road signs", "To increase fuel use"], 0, "The first sentence states the purpose."],
+        ["What may require a lower speed?", ["A clear road", "Rain or poor visibility", "An empty car park", "A green traffic light only"], 1, "The text lists weather and visibility conditions."],
+        ["What should drivers do?", ["Make sudden decisions", "Ignore traffic", "Plan ahead", "Follow the vehicle too closely"], 2, "The final sentence advises planning ahead."]
+      ]),
+    legacyActivity("en-c02-s02-l04", "Course 2 · Semester 2 · Reading: The History of Physics",
+      "Physics developed through observation, experiments and mathematical ideas. Early thinkers studied motion, light and the structure of matter. Later scientists used careful measurements to test explanations. Galileo investigated falling bodies and motion, while Newton described important laws of motion and gravitation. Scientific knowledge changes when new evidence appears. The history of physics shows how questions, experiments and discussion help people understand the natural world.",
+      [
+        ["How did physics develop?", ["Through observation, experiments and mathematical ideas", "Through guesses only", "Without measurements", "By avoiding questions"], 0, "The opening sentence gives the main idea."],
+        ["What did Galileo investigate?", ["Electric motors", "Falling bodies and motion", "Computer networks", "Mobile phones"], 1, "Galileo is linked with falling bodies and motion."],
+        ["What can change scientific knowledge?", ["A new timetable", "A different uniform", "New evidence", "A louder voice"], 2, "The text says knowledge changes when evidence appears."]
+      ]),
+    legacyActivity("en-c02-s02-l05", "Course 2 · Semester 2 · Reading: The Revolution in Physics",
+      "At the beginning of the twentieth century, new theories changed the way scientists described nature. Relativity changed ideas about space, time and gravity. Quantum theory helped explain the behaviour of matter and energy at very small scales. These theories did not make classical physics useless; they showed where older models work well and where new models are needed. Scientific progress often means improving explanations, not simply rejecting everything that came before.",
+      [
+        ["What did relativity change?", ["Ideas about space, time and gravity", "The spelling of scientific words", "The length of a school day", "The design of roads"], 0, "The text lists space, time and gravity."],
+        ["What does quantum theory help explain?", ["Large sports events", "Matter and energy at very small scales", "The history of cities", "Road traffic"], 1, "Quantum theory concerns very small scales."],
+        ["Does new physics make classical physics useless?", ["Yes, in every situation", "Only for schools", "No, older models still work in suitable areas", "The text does not mention it"], 2, "The passage says older models remain useful within limits."]
+      ]),
+    legacyActivity("en-c02-s02-l06", "Course 2 · Semester 2 · Reading: Automation",
+      "Automation uses control systems to perform tasks with less direct human action. A simple system may include a sensor, a controller and an actuator. The sensor detects a condition, the controller processes the signal, and the actuator carries out an action. People still plan, monitor and maintain automated equipment. Understanding the whole system is important because a fault in one component can affect the process.",
+      [
+        ["What does a sensor do?", ["Detects a condition", "Prints a report", "Repairs a motor", "Stores a uniform"], 0, "The sensor detects a condition."],
+        ["What does the controller do?", ["Paints the machine", "Processes the signal", "Moves the building", "Replaces the operator"], 1, "The controller processes the signal."],
+        ["Why is it important to understand the whole system?", ["It removes all maintenance", "It makes sensors unnecessary", "A fault in one component can affect the process", "People no longer need training"], 2, "The final sentence explains the system-level effect."]
+      ]),
+    legacyActivity("en-c02-s02-l07", "Course 2 · Semester 2 · Reading: Environmental Pollution",
+      "Air, water and soil pollution can affect people, wildlife and industry. Pollution may come from transport, production, waste and careless use of resources. Monitoring helps identify where a problem occurs and whether conditions are changing. A report should describe observations, dates and locations clearly. It should not claim a cause without evidence. Prevention, responsible waste handling and effective regulation can reduce environmental risks.",
+      [
+        ["Which areas can pollution affect?", ["Air, water and soil", "Only buildings", "Only computers", "Only roads"], 0, "The first sentence names air, water and soil."],
+        ["What should a report describe?", ["Personal guesses", "Observations, dates and locations", "Unrelated opinions", "Only the final conclusion"], 1, "The text lists the information needed in a report."],
+        ["What can reduce environmental risks?", ["Hiding measurements", "Ignoring waste", "Prevention and responsible waste handling", "Making unsupported claims"], 2, "The final sentence gives examples of risk reduction."]
+      ])
+  );
+
   // Sort all 75 active new-lesson activities by course, semester and lesson.
   activities.sort(function (a, b) {
     var x = a.id.match(/en-c(\d+)-s(\d+)-l(\d+)/);
