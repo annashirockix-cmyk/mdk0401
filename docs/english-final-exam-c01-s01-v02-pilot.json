@@ -137,7 +137,7 @@
       "id": "c1s1v02_w01",
       "type": "written",
       "prompt": "Write 60–80 words about a typical college day. Mention when your lessons start, two subjects or activities, how you travel to college and one thing you do to practise English.",
-      "rubric": "8 points total: all requested content included (0–2); clear sentence structure and basic grammar (0–2); appropriate everyday and study vocabulary (0–2); spelling, punctuation and organisation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total: the response states lesson start time, at least two subjects/activities, travel to college and one English-practice activity (0–2); events are presented in a clear daily sequence (0–2); time expressions and basic present-tense grammar are used understandably (0–2); study/transport vocabulary, spelling and punctuation support clear meaning (0–2).",
       "points": 8
     }
   ],
