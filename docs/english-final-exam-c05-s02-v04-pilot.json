@@ -78,10 +78,10 @@
     {
       "id": "c5s2v04_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO records that may support fault analysis.",
+      "prompt": "Choose TWO records that provide direct evidence for investigating a recurring equipment fault.",
       "options": [
-        "An unrelated shopping receipt",
-        "A personal opinion without evidence",
+        "Supplier payment terms",
+        "Production target for the next shift",
         "Event log",
         "Maintenance history"
       ],
