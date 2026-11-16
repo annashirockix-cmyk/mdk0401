@@ -78,10 +78,10 @@
     {
       "id": "c5s1v02_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that strengthen an inspection finding.",
+      "prompt": "Choose TWO evidence-based details that strengthen an inspection finding.",
       "options": [
-        "An unsupported guess about the cause",
-        "An unrelated personal comment",
+        "An assumed cause without test evidence",
+        "A technician's opinion without a supporting record",
         "A component reference",
         "Measured value with its unit"
       ],
