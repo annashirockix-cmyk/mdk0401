@@ -78,10 +78,10 @@
     {
       "id": "c3s1v02_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that should be checked when reading a technical drawing.",
+      "prompt": "Choose TWO drawing details that help prevent manufacturing from an obsolete issue or interpreting dimensions incorrectly.",
       "options": [
-        "The colour of the paper clip",
-        "The name of an unrelated website",
+        "Drawing scale",
+        "Projection method",
         "Units of measurement",
         "Drawing revision number"
       ],
