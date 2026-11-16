@@ -696,6 +696,42 @@ test("shuffled display indices map back to the protected original answer key", (
 });
 
 
+test("teacher-granted extra attempts release only expired semester tokens", () => {
+  const helperSource = extractFunction("clearExpiredEnglishSemesterAttemptForGrant_");
+  const grantSource = extractFunction("grantTestAttempts_");
+  const cacheValues = new Map();
+  const removed = [];
+  const cache = {
+    get: (key) => cacheValues.get(key) || null,
+    remove: (key) => { removed.push(key); cacheValues.delete(key); }
+  };
+  let now = 2_000_000_000_000;
+  const fakeDate = { now: () => now };
+  const helper = new Function(
+    "englishSemesterBank_", "headerMap_", "resultAttemptRows_", "email_",
+    "sameCourseId_", "englishSemesterAttemptCacheKey_", "CacheService", "Date",
+    helperSource + "; return clearExpiredEnglishSemesterAttemptForGrant_;"
+  )(
+    () => ({getDataRange:() => ({getValues:() => [["Track","Active","TestsJSON"],["basic","TRUE",JSON.stringify([{id:"b_sem1",time:45}])]]})}),
+    () => ({Track:0,Active:1,TestsJSON:2}),
+    () => [],
+    (value) => String(value || "").toLowerCase(),
+    (a,b) => a === b,
+    () => "attempt-key",
+    {getScriptCache:() => cache},
+    fakeDate
+  );
+  cacheValues.set("attempt-key", JSON.stringify({attemptId:"active",startedAt:now-60_000}));
+  assert.equal(helper("student@example.test","ENB","english_semester_basic_b_sem1"),false);
+  assert.equal(cacheValues.has("attempt-key"),true,"an active attempt and its timer must remain intact");
+  cacheValues.set("attempt-key", JSON.stringify({attemptId:"expired",startedAt:now-3_000_000,status:"expired"}));
+  assert.equal(helper("student@example.test","ENB","english_semester_basic_b_sem1"),true);
+  assert.equal(cacheValues.has("attempt-key"),false,"an expired attempt is released after the teacher grants retries");
+  assert.deepEqual(removed,["attempt-key"]);
+  assert.match(grantSource,/extra > 0 \?\s*clearExpiredEnglishSemesterAttemptForGrant_/);
+  assert.match(grantSource,/ExpiredSemesterAttemptReset:expiredSemesterAttemptReset/);
+});
+
 test("semester shuffled options are bound to the server attempt and expired attempts cannot restart", () => {
   const get = extractFunction("getEnglishSemesterTests_");
   const start = extractFunction("startEnglishSemesterTest_");
