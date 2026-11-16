@@ -7361,7 +7361,7 @@
                 "options": [
                   "The email contained a spelling mistake",
                   "The sender's address was unusual and the link was unfamiliar",
-                  "The sender's address was unusual and the link was unfamiliar",
+                  "The sender used the college logo incorrectly",
                   "The message included an unexpected attachment"
                 ],
                 "correctIndex": 2,
@@ -7375,7 +7375,7 @@
                   "That the message was a routine college notice",
                   "That the message was a phishing attempt",
                   "That the student's password had already been changed",
-                  "That the message was a phishing attempt"
+                  "The message asked the student to update her timetable."
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -7485,7 +7485,7 @@
                 "options": [
                   "At the civic centre",
                   "At the science centre",
-                  "At the civic centre",
+                  "At the town library",
                   "At the college sports hall"
                 ],
                 "correctIndex": 0,
@@ -7512,7 +7512,7 @@
                 "options": [
                   "Parking near the college was expensive",
                   "The bus timetable did not match lesson times",
-                  "The bus timetable did not match lesson times",
+                  "The college car park was closed during the survey",
                   "Students were required to carry large equipment"
                 ],
                 "correctIndex": 2,
@@ -7526,7 +7526,7 @@
                   "A public vote must be held first",
                   "The cycle route must be built immediately",
                   "Safety assessments must be completed",
-                  "Safety assessments must be completed"
+                  "The cycle route had already been approved"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -7638,7 +7638,7 @@
                 "options": [
                   "At the science centre",
                   "At the town hall",
-                  "At the science centre",
+                  "At the college sports hall",
                   "At the college lecture theatre"
                 ],
                 "correctIndex": 0,
@@ -7665,7 +7665,7 @@
                 "options": [
                   "To avoid measuring during rush hour",
                   "To make the comparison fair",
-                  "To make the comparison fair",
+                  "To measure only during the evening rush",
                   "To collect readings only when the weather was clear"
                 ],
                 "correctIndex": 2,
@@ -7679,7 +7679,7 @@
                   "Their equipment could not measure traffic levels",
                   "Their study showed a local pattern but could not prove traffic was the only cause",
                   "They had measured only one road",
-                  "Their study showed a local pattern but could not prove traffic was the only cause"
+                  "The results proved traffic was the only cause"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -7791,7 +7791,7 @@
                   "On Monday at three",
                   "On Tuesday at three",
                   "On Monday at four",
-                  "On Monday at three"
+                  "On Tuesday at four"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -7817,7 +7817,7 @@
                 "options": [
                   "A list of product ingredients",
                   "A reference to a scientific study",
-                  "A reference to a scientific study",
+                  "A photograph showing the product label",
                   "A link to a shopping website"
                 ],
                 "correctIndex": 2,
@@ -7831,7 +7831,7 @@
                   "A photograph is always reliable evidence",
                   "An image alone is not evidence and broad claims need reliable research",
                   "Only personal experience is needed to support a claim",
-                  "An image alone is not evidence and broad claims need reliable research"
+                  "A personal recommendation is enough to support broad claims"
                 ],
                 "correctIndex": 3,
                 "points": 1
