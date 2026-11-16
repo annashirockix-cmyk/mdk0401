@@ -102,6 +102,13 @@ jobs:
           path: artifacts/certificate/
           if-no-files-found: ignore
           retention-days: 7
+      - name: Run real-browser English final-exam audit
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/english-exam-audit-server.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/english-final-exam-browser-audit.mjs
       - name: Check inline scripts in HTML
         run: |
           python - <<'PY'
