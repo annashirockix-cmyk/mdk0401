@@ -78,10 +78,10 @@
     {
       "id": "c3s2v03_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO machining operations and their typical results.",
+      "prompt": "Choose TWO machining operations paired with their typical results.",
       "options": [
-        "Milling — passenger announcements",
-        "Drilling — flat external faces",
+        "Turning — flat internal holes",
+        "Drilling — external cylindrical surfaces",
         "Turning — cylindrical surfaces",
         "Drilling — round holes"
       ],
