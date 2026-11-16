@@ -454,7 +454,9 @@ window.renderStudentGradesPage = function() {
           var percent=Number(x.percent)||0;
           var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
           var title=window.escapeHtml(x.testTitle||x.testId||"Работа");
-          return "<tr><td>"+title+"<div style='font-size:12px;color:var(--muted)'>"+window.escapeHtml(course)+"</div></td><td style='text-align:center;font-weight:bold'>"+grade+" <span style='font-size:12px;color:var(--muted)'>("+percent+"%)</span><div style='font-size:12px;color:var(--muted)'>Попыток: "+item.count+"</div><div style='font-size:11px;color:var(--muted)'>"+window.escapeHtml(date)+"</div></td></tr>";
+          var reviewInfo=x.reviewedAt?"<div style='font-size:11px;color:var(--muted)'>Проверено преподавателем"+(x.reviewedBy?" · "+window.escapeHtml(x.reviewedBy):"")+"</div>":"";
+          var reviewFeedback=x.feedback?"<div style='font-size:12px;white-space:pre-wrap;text-align:left'>Комментарий: "+window.escapeHtml(x.feedback)+"</div>":"";
+          return "<tr><td>"+title+"<div style='font-size:12px;color:var(--muted)'>"+window.escapeHtml(course)+"</div></td><td style='text-align:center;font-weight:bold'>"+grade+" <span style='font-size:12px;color:var(--muted)'>("+percent+"%)</span><div style='font-size:12px;color:var(--muted)'>Попыток: "+item.count+"</div><div style='font-size:11px;color:var(--muted)'>"+window.escapeHtml(date)+"</div>"+reviewInfo+reviewFeedback+"</td></tr>";
         }).join(""):'<tr><td colspan="2" style="text-align:center;color:var(--muted)">Пока нет подтверждённых результатов</td></tr>';
       }).catch(function(e){
         console.warn("Не удалось обновить серверные оценки:",e);
