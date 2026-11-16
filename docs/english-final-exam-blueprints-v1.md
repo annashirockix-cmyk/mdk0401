@@ -1216,3 +1216,7 @@ The ordering-task findings from the C1-S1, C1-S2 and C2-S1 sample audit were add
 
 The 24 individual pilot records were updated. Their corresponding task-9 records were synchronized into the combined 150-variant registry. The previously identified C1-S1 V08/V09 specialist-review flags remain open; this remediation does not approve operational safety or measurement sequences. No protected bank, Google Sheet or Apps Script was changed.
 
+### Answer-position regression correction — C5-S1 V06/V08/V09/V10
+
+The first CI run after task-8 remediation detected that the new correct-option indices changed the required per-variant A/B/C/D balance in four C5-S1 variants. The intended answer text was preserved; in each affected variant, one grammar item's options were reordered and its key index updated so the complete objective-key distribution returned to A=2, B=2, C=2, D=2. The same four task-5 records were synchronized in the combined registry. This correction addresses the automated regression; it does not certify the grammatical distractors as editorially approved.
+
