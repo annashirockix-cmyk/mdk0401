@@ -6291,7 +6291,7 @@
                   "He felt tired during afternoon lessons",
                   "He could not find his study materials",
                   "He found it difficult to concentrate in morning lessons",
-                  "He found it difficult to concentrate in morning lessons"
+                  "He missed the morning bus on several days."
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -6304,7 +6304,7 @@
                   "He studied later every night",
                   "He stopped attending morning lessons",
                   "He planned his week, took breaks and prepared materials in advance",
-                  "He planned his week, took breaks and prepared materials in advance"
+                  "He stopped taking breaks during study sessions."
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -6416,7 +6416,7 @@
                   "At the front desk",
                   "At the student support office",
                   "In the security office",
-                  "At the front desk"
+                  "At the library reception"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -6443,7 +6443,7 @@
                   "She asked the tutor to search for it",
                   "She requested a new card immediately",
                   "She checked the places she had visited",
-                  "She checked the places she had visited"
+                  "She asked the tutor to issue a temporary card."
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -6456,7 +6456,7 @@
                   "How to block the college account",
                   "Where to collect lost property",
                   "How to request a replacement card",
-                  "How to request a replacement card"
+                  "How to report an absence."
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -6568,7 +6568,7 @@
                   "On Mondays",
                   "On Tuesdays",
                   "On Wednesdays",
-                  "On Mondays"
+                  "On Fridays"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -6595,7 +6595,7 @@
                   "The presentation skills course",
                   "The basic computer course",
                   "The project management course",
-                  "The project management course"
+                  "The aircraft technology course"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -6608,7 +6608,7 @@
                   "It was the shortest course available",
                   "It fitted his schedule and presentation skills were covered elsewhere",
                   "It was recommended by a classmate",
-                  "It fitted his schedule and presentation skills were covered elsewhere"
+                  "It was taught by a tutor she already knew."
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -6720,7 +6720,7 @@
                   "On Thursday at ten",
                   "On Wednesday at ten",
                   "On Thursday at eleven",
-                  "On Thursday at ten"
+                  "On Friday at ten"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -6747,7 +6747,7 @@
                   "She repeated the instruction to the supervisor",
                   "She checked the college handbook",
                   "She asked for clarification",
-                  "She asked for clarification"
+                  "She waited for the supervisor to repeat the instruction."
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -6758,7 +6758,7 @@
                 "prompt": "What did she prepare at the end of each day?",
                 "options": [
                   "A list of unfamiliar technical terms",
-                  "A short progress update",
+                  "A list of tasks for the next day",
                   "A weekly attendance record",
                   "A short progress update"
                 ],
