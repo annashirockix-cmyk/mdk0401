@@ -372,6 +372,29 @@ test("first pilot variants use plausible same-category listening and reading dis
   assert.match(prep.options[prep.correctIndex],/short CV and two questions/);
 });
 
+test("Courses 1 and 2 have contextual distractors and valid keys in all 60 variants",()=>{
+  const generic=/^(At the college library|At the town centre|At the bus station|To borrow a laptop|To meet a relative|To buy a ticket|At the sports centre|In the computer room)$/i;
+  for(const course of ["c01","c02"]){
+    for(const semester of ["s01","s02"]){
+      for(let variant=1;variant<=15;variant++){
+        const file=path.join(root,`docs/english-final-exam-${course}-${semester}-v${String(variant).padStart(2,"0")}-pilot.json`);
+        const pilot=JSON.parse(fs.readFileSync(file,"utf8"));
+        assert.equal(pilot.tasks.length,10,`${course}-${semester}-v${variant} must contain ten tasks`);
+        assert.equal(pilot.tasks.reduce((sum,task)=>sum+Number(task.points||0),0),20,`${course}-${semester}-v${variant} must total 20 points`);
+        for(const suffix of ["l01","l02","r01","r02"]){
+          const task=pilot.tasks.find(item=>item.id.endsWith("_"+suffix));
+          assert.ok(task,`${course}-${semester}-v${variant} is missing ${suffix}`);
+          assert.ok(Array.isArray(task.options)&&task.options.length===4,`${task.id} must have four options`);
+          assert.ok(Number.isInteger(task.correctIndex)&&task.correctIndex>=0&&task.correctIndex<task.options.length,`${task.id} has an invalid answer key`);
+          task.options.forEach((option,index)=>{
+            if(index!==task.correctIndex)assert.ok(!generic.test(option.trim()),`${task.id} retains a generic distractor: ${option}`);
+          });
+        }
+      }
+    }
+  }
+});
+
 test("Course 5 reading answer keys follow the reviewed correct options in all 30 variants",()=>{
   const expected={1:{},2:{}};
   for(const semester of [1,2]){
