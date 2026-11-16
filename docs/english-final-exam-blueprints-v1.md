@@ -270,3 +270,24 @@ Weak wrong-category distractors persist in four of five files, particularly in r
 Written tasks have explicit word limits and 8-point rubrics (60–120 words). As with prior samples, this checks structure only, not CEFR or learning-outcome alignment.
 
 This is a representative five-file sample, not a complete V12 audit or an audit of V13–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+## V13 representative cross-course audit (2026-11-16)
+
+Five V13 files were inspected across C1-S1, C2-S2, C3-S1, C4-S2 and C5-S1. Each contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1.
+
+A critical listening key error was found in C1-S1 task 2. The audio says the bus leaves at 08:15 and asks students to arrive ten minutes earlier (08:05). The prompt asks when students should arrive, but the keyed option is “At eight fifteen exactly” (index 1). The correct answer is “At eight oh five” (index 3). This is a substantive answer-key error, not merely a weak distractor.
+
+A logical ordering defect was found in C1-S1 task 9. Its correctOrder places “Listen to the safety briefing” before “Arrive at the college entrance”. Arrival should precede the safety briefing, followed by the guided observation and return to the bus. The sequence key therefore needs correction.
+
+A malformed prompt was found in C4-S2 task 8: “Please check the measurement method What should you say?” The initial imperative is stray text and makes the question unclear.
+
+A prompt/audio mismatch was found in C5-S1 task 2. It asks which “reliability-analysis summary” students should bring, while the audio calls it a “one-page status summary” and describes technical briefing assessment, not a reliability-analysis exercise. The keyed answer is present in the audio, but the prompt's topic label is inaccurate.
+
+The other eight inspected listening answers match their audioText. Ordering tasks in C1-S2, C2-S2, C3-S1, C4-S2 and C5-S1 were reviewed; no additional sequence-key defect was found in those items.
+
+Short-text answers reviewed include “batch/lot” for a group of material produced or processed together; both are acceptable in this context. Weak wrong-category distractors remain in four of five files, especially unrelated activities in reading comprehension choices. C1-S1 reading distractors are comparatively plausible.
+
+Written tasks have explicit word limits and 8-point rubrics (60–120 words); CEFR and learning-outcome alignment remains unverified.
+
+This is a representative five-file sample, not a complete V13 audit or an audit of V14–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
