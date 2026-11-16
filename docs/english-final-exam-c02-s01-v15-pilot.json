@@ -17,7 +17,7 @@
         "On Thursday at ten",
         "On Wednesday at ten",
         "On Thursday at eleven",
-        "On Thursday at ten"
+        "On Friday at ten"
       ],
       "correctIndex": 0,
       "points": 1
@@ -44,7 +44,7 @@
         "She repeated the instruction to the supervisor",
         "She checked the college handbook",
         "She asked for clarification",
-        "She asked for clarification"
+        "She waited for the supervisor to repeat the instruction."
       ],
       "correctIndex": 2,
       "points": 1
@@ -55,7 +55,7 @@
       "prompt": "What did she prepare at the end of each day?",
       "options": [
         "A list of unfamiliar technical terms",
-        "A short progress update",
+        "A list of tasks for the next day",
         "A weekly attendance record",
         "A short progress update"
       ],
