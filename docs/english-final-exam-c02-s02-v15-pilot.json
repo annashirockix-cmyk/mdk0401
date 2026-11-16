@@ -17,7 +17,7 @@
         "Next Monday at eight in the morning",
         "Next Tuesday at eight in the morning",
         "Next Monday at nine in the morning",
-        "Next Monday at eight in the morning"
+        "Next Monday at nine thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -43,7 +43,7 @@
       "options": [
         "They removed technical terms from the guide",
         "They added screenshots and clear steps",
-        "They added screenshots and clear steps",
+        "They replaced the written instructions with a checklist",
         "They replaced the guide with a video"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "More students cancelled their room bookings",
         "Fewer booking errors were reported",
         "The college stopped reviewing feedback",
-        "Fewer booking errors were reported"
+        "More booking errors were reported"
       ],
       "correctIndex": 3,
       "points": 1
