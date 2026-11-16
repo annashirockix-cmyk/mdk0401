@@ -17,7 +17,7 @@
         "In Room 14",
         "In the library",
         "In the main hall",
-        "In the computer room"
+        "In the engineering drawing office"
       ],
       "correctIndex": 0,
       "points": 1
@@ -59,7 +59,7 @@
         "After leaving the workshop",
         "Only at the end of the course"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -86,8 +86,8 @@
         "You not use this tool."
       ],
       "correctIndices": [
-        2,
-        3
+        1,
+        2
       ],
       "points": 2
     },
