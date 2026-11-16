@@ -136,7 +136,7 @@
       "id": "c5s1v13_w01",
       "type": "written",
       "prompt": "Write 100–120 words describing how to deliver a concise technical briefing. Include purpose, status, evidence, outstanding action and uncertainty.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Purpose and status — 2: opens with the briefing purpose and current status; 1: partial; 0: absent. (2) Evidence — 2: supports statements with relevant facts or records; 1: limited evidence; 0: unsupported claims. (3) Actions and uncertainty — 2: identifies outstanding action/responsibility and clearly states what is not yet known; 1: mentions some; 0: absent or presents uncertainty as fact. (4) English — 2: concise, well-organised briefing language and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
