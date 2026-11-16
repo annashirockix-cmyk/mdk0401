@@ -386,6 +386,28 @@ test("Course 5 reading answer keys follow the reviewed correct options in all 30
   }
 });
 
+test("all Course 5 listening items use same-category distractors and script-supported answer text",()=>{
+  const placeholders=/^(At the college library|At the town centre|At the bus station|On Friday|Next month|After the event)$/i;
+  for(const semester of [1,2]){
+    for(let variant=1;variant<=15;variant++){
+      const file=path.join(root,`docs/english-final-exam-c05-s0${semester}-v${String(variant).padStart(2,"0")}-pilot.json`);
+      const pilot=JSON.parse(fs.readFileSync(file,"utf8"));
+      for(const suffix of ["l01","l02"]){
+        const task=pilot.tasks.find(item=>item.id.endsWith("_"+suffix));
+        assert.ok(task, `C5-S${semester}-V${variant} is missing ${suffix}`);
+        assert.ok(task.audioText&&task.audioText.length>0,`${task.id} is missing its listening script`);
+        assert.ok(task.options.length===4&&!task.options.some(option=>placeholders.test(option.trim())),`${task.id} has a generic or wrong-category distractor`);
+        assert.ok(task.correctIndex>=0&&task.correctIndex<task.options.length,`${task.id} has an invalid answer key`);
+        const answerTokens=task.options[task.correctIndex].toLowerCase().match(/[a-z0-9]+(?:-[a-z0-9]+)*/g)||[];
+        const script=task.audioText.toLowerCase();
+        answerTokens.filter(token=>!["the","a","an","and","at","on","of","for","from","to"].includes(token)).forEach(token=>{
+          assert.ok(script.includes(token),`${task.id} answer token "${token}" is absent from its script`);
+        });
+      }
+    }
+  }
+});
+
 test("all 150 final exam variants have globally unique task IDs and prompts",()=>{
   const slots=[["c01","s01"],["c01","s02"],["c02","s01"],["c02","s02"],["c03","s01"],["c03","s02"],["c04","s01"],["c04","s02"],["c05","s01"],["c05","s02"]];
   const variants=slots.flatMap(([course,semester])=>Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${course}-${semester}-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8"))));
