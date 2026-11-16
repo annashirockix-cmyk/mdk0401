@@ -42,6 +42,24 @@ test("persistent final-exam tables have explicit private attempt and variant col
   assert.match(setup, /"EnglishExamAttempts"/);
 });
 
+test("student-facing final exam sanitizer removes answer-key field families recursively", () => {
+  const source = extractFunction("sanitizeEnglishFinalExamTask_");
+  const sanitize = new Function(source + "; return sanitizeEnglishFinalExamTask_;")();
+  const input = {
+    id: "task_1", prompt: "Choose the correct answer",
+    correctIndex: 2, correctAnswers: [1, 2], correct_index: 0,
+    answer_key: "secret", expected_answer: "secret", modelAnswer: "secret",
+    options: ["A", "B"],
+    rubric: "private rubric",
+    nested: [{ answerText: "secret", explanation: "private", responsePrompt: "visible" }]
+  };
+  assert.deepEqual(sanitize(input), {
+    id: "task_1", prompt: "Choose the correct answer",
+    options: ["A", "B"],
+    nested: [{ responsePrompt: "visible" }]
+  });
+});
+
 const registrySource = extractFunction("validateEnglishExamVariantRegistry_");
 const validateRegistry = new Function(registrySource + "; return validateEnglishExamVariantRegistry_;")();
 
