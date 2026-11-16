@@ -81,7 +81,7 @@ test("all 75 new lecture IDs are in the five-year map and have browser listening
 test("all 120 listening activities contain usable scripts and answerable practice questions", () => {
   const window = loadEnglishRuntime();
   const mapIds = [
-    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\\d{2}-s\\d{2}-l\\d{2}/g)),
+    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\d{2}-s\d{2}-l\d{2}/g)),
   ];
 
   assert.equal(mapIds.length, 120);
