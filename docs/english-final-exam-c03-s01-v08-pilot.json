@@ -78,10 +78,10 @@
     {
       "id": "c3s1v08_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details commonly found on an equipment identification plate.",
+      "prompt": "Choose TWO fields that uniquely identify a specific item of equipment.",
       "options": [
-        "The operator's favourite subject",
-        "A list of nearby cafés",
+        "Rated operating temperature",
+        "Manufacturer's address",
         "Model designation",
         "Serial number"
       ],
