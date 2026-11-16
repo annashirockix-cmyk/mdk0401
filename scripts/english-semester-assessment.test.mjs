@@ -346,7 +346,8 @@ test("first pilot variants use plausible same-category listening and reading dis
   const files=[
     "c02-s01","c02-s02","c03-s01","c03-s02","c04-s01","c04-s02","c05-s01","c05-s02"
   ];
-  const placeholders=/^(At the college library|At the town centre|At the bus station|To borrow a laptop|To meet a relative|To buy a ticket|At the sports centre|In the computer room|On Friday|Next month|After the event)$/i;
+  const placeholders=/^(At the college library|At the town centre|At the bus station|To borrow a laptop|To meet a relative|To buy a ticket|At the sports centre|In the computer room)$/i;
+  const wrongTimeOptions=/^(On Friday|Next month|After the event)$/i;
   files.forEach(slot=>{
     const pilot=JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${slot}-v01-pilot.json`),"utf8"));
     ["l01","l02","r01","r02"].forEach(suffix=>{
@@ -425,6 +426,7 @@ test("Course 3 and 4 variants use same-category distractors in listening and rea
         assert.ok(task,`${slot.course}-${slot.semester}-V${variant} is missing ${suffix}`);
         assert.ok(task.correctIndex>=0&&task.correctIndex<task.options.length,`${task.id} has an invalid answer key`);
         assert.ok(task.options.length===4&&!task.options.some(option=>placeholders.test(option.trim())),`${task.id} contains a generic distractor`);
+        if(suffix==="l02")assert.ok(!task.options.some(option=>wrongTimeOptions.test(option.trim())),`${task.id} contains a wrong-category time distractor`);
       }
     }
   }
