@@ -112,3 +112,17 @@ Examples requiring revision:
 The C1 and C2 V02 samples reviewed had more relevant distractors in their multiple-choice tasks; this is a sample observation, not blanket approval of those variants. The remaining V02 samples also require review of the complete task set, including grammar, short-text accepted answers, ordering keys, listening comprehension and written rubrics.
 
 **Action required before release:** revise weak distractors so they test realistic misconceptions within the same semantic category; then recheck the correct-index arrays after editing. Do not import or publish the affected variants until this editorial pass and the wider 150-variant review are complete. No pilot JSON or protected bank was changed in this audit step.
+
+
+## Editorial sample review — V03 option plausibility and key-position pattern (2026-11-16)
+
+The ten V03 pilot JSON files (one per course-semester slot) were inspected. All ten contain ten tasks and the expected task families, but the review found a repeated distractor-quality issue:
+
+- Several listening items use generic location/time distractors that do not answer the question type (for example, a question asking when an event starts offers locations such as a college library, town centre or bus station).
+- Several reading-comprehension items use generic distractors unrelated to the passage or question (for example, a question about why a technical procedure is needed offers “borrow a laptop”, “meet a relative” and “buy a ticket”).
+- This is visible in multiple slots, including C2-S1, C2-S2 and several Technical English slots. Such distractors do not test comprehension and make elimination trivial.
+- In the ten inspected V03 files, the first listening item has its keyed answer at option index 0 and the second listening item at index 1 in every slot. This is not evidence of incorrect keys, but it is a repeated positional pattern that can become predictable across a large bank.
+
+**Required editorial correction:** rewrite distractors to be plausible answers of the same semantic type as the stem (times against times, locations against locations, documents against documents, technical functions against technical functions). Then redistribute correct options across positions without changing the intended answer. Run automated checks for answer-position balance per variant and across the full pool, and manually verify each key after shuffling.
+
+The V03 pilot JSON files were not edited in this review step. They remain pilot_for_editorial_review; do not import or publish until the distractors and key-position patterns are corrected and rechecked. This finding is a sample-based editorial audit, not approval or rejection of every task in each file.
