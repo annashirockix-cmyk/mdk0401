@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "The immediate action ___ in the incident report.",
       "options": [
-        "should be recorded",
         "was transferred",
+        "should be recorded",
         "transferring",
         "are transfer"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
