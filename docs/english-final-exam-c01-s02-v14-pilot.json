@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should students read before the meeting?",
       "audioText": "Students starting their work placement next month must attend a briefing on Monday at two o'clock. The meeting will be in Room 18, not in the usual assembly hall. Bring your placement documents and a pen. The tutor will explain attendance rules, workplace communication and who to contact if you are ill or cannot arrive on time. Please read the information sheet before the meeting.",
       "options": [
-        "On Friday",
+        "The placement documents",
         "The information sheet",
-        "Next month",
-        "After the event"
+        "The college timetable",
+        "The attendance form"
       ],
       "correctIndex": 1,
       "points": 1
