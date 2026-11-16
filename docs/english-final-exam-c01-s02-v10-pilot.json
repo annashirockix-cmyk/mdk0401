@@ -116,7 +116,7 @@
     {
       "id": "c1s2v10_o01",
       "type": "ordering",
-      "prompt": "Suggest a date and place; Check everyone's availability; Confirm the final arrangement; Send the invitation with details",
+      "prompt": "Put the following steps for arranging a group meeting in a logical order.",
       "options": [
         "Send the invitation with details",
         "Confirm the final arrangement",
