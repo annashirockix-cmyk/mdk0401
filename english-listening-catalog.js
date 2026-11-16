@@ -4466,6 +4466,81 @@
       ])
   );
 
+
+  // Listening practice for the 10 pre-existing Course 3 Technical English lectures.
+  activities.push(
+    legacyActivity("en-c03-s01-l01", "Course 3 · Semester 1 · Materials in Mechanical Engineering",
+      "A materials engineer explains that engineers choose materials by comparing their properties and the conditions of use. Steel is strong and widely used in structures. Aluminium alloys are lighter, so they can be useful when weight matters. Polymers may provide insulation, while ceramics can resist heat but may be brittle. No material is best for every task. The engineer checks specifications and records before making a recommendation.",
+      [
+        ["Why do engineers compare material properties?", ["To choose a suitable material for its use", "To make every part from steel", "To avoid specifications", "To change the colour of a part"], 0, "Material choice depends on properties and conditions of use."],
+        ["Why may aluminium alloys be useful?", ["They are always transparent", "They have low weight", "They cannot be shaped", "They are made of wood"], 1, "The script identifies low weight as an advantage."],
+        ["What should an engineer check?", ["Only the price tag", "A colleague's opinion", "Specifications and records", "The weather forecast"], 2, "The engineer checks specifications and records."]
+      ]),
+    legacyActivity("en-c03-s01-l02", "Course 3 · Semester 1 · Metal Processes: Casting, Drawing and Forging",
+      "A manufacturing teacher describes three metal-forming processes. In casting, molten metal is poured into a mould and allowed to solidify. In drawing, a metal rod or wire is pulled through a die to reduce its diameter. In forging, force changes the shape of heated or cold metal. Each process has different equipment, limits and applications. A process sheet helps a team understand which operation is planned and what information must be recorded.",
+      [
+        ["What happens during casting?", ["Metal is poured into a mould", "A wire is pulled through a die", "A part is painted", "A drawing is printed"], 0, "Casting uses molten metal and a mould."],
+        ["What is drawing used for in this text?", ["To join two plates", "To reduce the diameter of rod or wire", "To measure temperature", "To polish a surface"], 1, "Drawing pulls material through a die."],
+        ["What helps a team understand planned operations?", ["A travel ticket", "A personal diary", "A process sheet", "A weather chart"], 2, "The process sheet records the planned operation."]
+      ]),
+    legacyActivity("en-c03-s01-l03", "Course 3 · Semester 1 · Metal Processes: Rolling, Extrusion and Sheet Forming",
+      "The instructor compares three manufacturing methods. Rolling passes metal between rotating rolls to reduce thickness or change its profile. Extrusion pushes material through a shaped opening called a die. Sheet forming changes flat metal into a required shape by bending or pressing. The selected method depends on the component design, material and production volume. Students read a process description and identify which method is being discussed.",
+      [
+        ["What do rotating rolls do?", ["Reduce thickness or change a profile", "Measure electrical current", "Join software files", "Clean a workshop"], 0, "Rolling uses rolls to change thickness or profile."],
+        ["What is a die in extrusion?", ["A safety helmet", "A shaped opening for the material", "A measuring clock", "A type of motor"], 1, "The material is pushed through a shaped opening."],
+        ["What can influence the selected method?", ["The operator's favourite colour", "The day of the week", "Design, material and production volume", "The length of a lunch break"], 2, "The script lists design, material and volume."]
+      ]),
+    legacyActivity("en-c03-s01-l04", "Course 3 · Semester 1 · Technical Drawing and Tools",
+      "A technician receives a technical drawing before a component is made. The drawing shows the shape, dimensions and important features of the part. A title block may identify the drawing number, revision and material. Lines, symbols and views communicate information that would be difficult to describe in a paragraph. The technician checks that the drawing revision matches the job documentation and asks for clarification when a dimension is unclear.",
+      [
+        ["What information does a technical drawing show?", ["Shape, dimensions and important features", "Only the worker's name", "The factory timetable", "A list of holidays"], 0, "The drawing communicates shape, dimensions and features."],
+        ["What may the title block identify?", ["The lunch menu", "Drawing number, revision and material", "The weather", "The machine operator's address"], 1, "The title block contains document identification."],
+        ["What should happen when a dimension is unclear?", ["Guess the value", "Ignore the drawing", "Ask for clarification", "Change the revision number"], 2, "The technician should ask for clarification."]
+      ]),
+    legacyActivity("en-c03-s01-l05", "Course 3 · Semester 1 · CAD/CAM Systems",
+      "A design team uses computer-aided design to create and modify a digital model. Computer-aided manufacturing uses digital information to support production planning and machine operations. CAD and CAM can exchange data, but the team must still check units, revisions and model details. A digital model is useful only when the correct version is used. Before a file is shared, the sender confirms its name, revision and intended purpose.",
+      [
+        ["What is CAD used for?", ["Creating and modifying a digital design", "Measuring noise", "Repairing a road", "Printing student cards"], 0, "CAD supports digital design."],
+        ["What does CAM support?", ["Only drawing pictures", "Production planning and machine operations", "Language translation only", "Office cleaning"], 1, "CAM supports manufacturing."],
+        ["What should a team check before sharing a file?", ["The sender's favourite software", "The colour of the screen", "Name, revision and purpose", "The room temperature"], 2, "The script names these three checks."]
+      ]),
+    legacyActivity("en-c03-s02-l01", "Course 3 · Semester 2 · Turning, Shaping and Drilling",
+      "A workshop instructor explains three machine-tool operations. Turning rotates the workpiece while a cutting tool removes material. Drilling uses a rotating drill to make a hole. Shaping moves a cutting tool back and forth across a workpiece. The machines and cutting conditions differ, but every operation requires suitable planning, correct documentation and attention to safety. Students compare process descriptions and identify the movement of the tool or workpiece.",
+      [
+        ["What rotates during turning?", ["The workpiece", "The classroom", "The measuring table", "The drawing"], 0, "Turning rotates the workpiece."],
+        ["Which operation makes a hole with a drill?", ["Shaping", "Drilling", "Casting", "Rolling"], 1, "Drilling makes a hole."],
+        ["What do all operations require?", ["Guesswork", "No documentation", "Planning and attention to safety", "The same machine"], 2, "The instructor stresses planning, documentation and safety."]
+      ]),
+    legacyActivity("en-c03-s02-l02", "Course 3 · Semester 2 · Milling, Grinding, Pressing and Band Sawing",
+      "A production team uses different machines for different tasks. Milling removes material with a rotating multi-edge cutter. Grinding uses an abrasive wheel to improve a surface or achieve a dimension. A press applies force to form or cut material, while a band saw uses a continuous toothed blade to cut stock. The team checks the job sheet and the condition of the equipment before work begins. Each process has its own risks and controls.",
+      [
+        ["Which process uses a rotating multi-edge cutter?", ["Milling", "Grinding", "Pressing", "Band sawing"], 0, "Milling uses a rotating cutter."],
+        ["What does grinding use?", ["A plastic ruler", "An abrasive wheel", "A paper label", "A welding torch"], 1, "Grinding uses an abrasive wheel."],
+        ["What should the team check before work?", ["Only the clock", "The colour of the floor", "The job sheet and equipment condition", "A social media message"], 2, "The script names both checks."]
+      ]),
+    legacyActivity("en-c03-s02-l03", "Course 3 · Semester 2 · Computer Numerical Control (CNC)",
+      "A CNC machine follows a program to control movements and machining functions. The program contains blocks of instructions, coordinates and codes. A programmer checks the intended sequence and verifies the program using the approved process before production. The operator also checks the setup information and job documentation. A code example in a lesson helps students read technical English; it is not permission to run a real machine.",
+      [
+        ["What controls the CNC machine?", ["A program", "A paper timetable", "A mobile phone call", "A hand-drawn map"], 0, "The machine follows a program."],
+        ["What can a program contain?", ["Only names", "Blocks, coordinates and codes", "Only photographs", "A list of holidays"], 1, "The script lists blocks, coordinates and codes."],
+        ["What is the purpose of a lesson code example?", ["To authorise machine operation", "To replace the operator", "To help students read technical English", "To remove safety checks"], 2, "It is a language-learning example only."]
+      ]),
+    legacyActivity("en-c03-s02-l04", "Course 3 · Semester 2 · Health and Safety Regulations",
+      "A safety coordinator explains that workplace rules help protect people, equipment and the environment. Employees must know the instructions that apply to their area and use the required protective equipment. A hazard should be reported through the established channel. If a worker is unsure whether a task is safe or authorised, the worker must stop and ask a supervisor. Training, clear signs and accurate records support a safer workplace.",
+      [
+        ["What do workplace safety rules protect?", ["People, equipment and the environment", "Only company logos", "Only finished products", "Only office furniture"], 0, "The coordinator names these three areas."],
+        ["How should a hazard be reported?", ["Through the established channel", "Only to a friend", "On an unrelated website", "It should not be reported"], 0, "The script says to use the established channel."],
+        ["What should a worker do when unsure about safety or authorisation?", ["Continue quickly", "Stop and ask a supervisor", "Hide the problem", "Change the instructions"], 1, "The worker must stop and ask."]
+      ]),
+    legacyActivity("en-c03-s02-l05", "Course 3 · Semester 2 · Safety Rules and Equipment",
+      "During a workshop briefing, the instructor reviews common protective equipment. Safety glasses protect the eyes from specified hazards, and hearing protection reduces exposure to noise. Safety footwear helps protect feet in the work area. Equipment must be suitable for the task and kept in good condition. Students should read local instructions and never use protective equipment as a substitute for safe procedures or proper training.",
+      [
+        ["What do safety glasses protect?", ["The eyes", "The ears", "The hands", "The feet"], 0, "Safety glasses protect the eyes."],
+        ["What can hearing protection reduce?", ["Dust on a drawing", "Exposure to noise", "The weight of a tool", "The size of a room"], 1, "Hearing protection reduces noise exposure."],
+        ["What is protective equipment not a substitute for?", ["A timetable", "A vocabulary list", "Safe procedures and training", "A drawing number"], 2, "The final sentence makes this clear."]
+      ])
+  );
+
   // Sort all 75 active new-lesson activities by course, semester and lesson.
   activities.sort(function (a, b) {
     var x = a.id.match(/en-c(\d+)-s(\d+)-l(\d+)/);
