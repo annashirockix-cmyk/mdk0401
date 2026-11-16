@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A catalogue code that identifies one specific component is its part ___.",
       "acceptedAnswers": [
-        "number",
-        "part number"
+        "number"
       ],
       "points": 2
     },
