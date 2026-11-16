@@ -78,10 +78,10 @@
     {
       "id": "c4s2v09_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that improve the quality of an automation data log.",
+      "prompt": "Choose TWO fields essential to interpret a recorded numeric measurement in an automation data log.",
       "options": [
-        "An unrelated personal comment",
-        "A chart with no axis labels",
+        "Operator initials",
+        "Equipment location",
         "Timestamp",
         "Unit of measurement"
       ],
