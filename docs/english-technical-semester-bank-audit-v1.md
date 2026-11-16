@@ -32,16 +32,17 @@ The 200-item draft pool intentionally shares the broad vocational domain (engine
 
 ## 4. Subject-review flags
 
-The following items need particular attention during expert review:
+The following items were re-opened against the current ten draft files on 2026-11-16. This is an editorial consistency check, not expert or curriculum approval:
 
-- Q48: Z-axis conventions depend on the machine and coordinate convention; confirm the local teaching reference.
-- Q62: electrical isolation wording is a vocabulary interpretation item, not a work instruction.
-- Q74: “shall” as a mandatory requirement depends on the applicable standard/document convention.
-- Q77: agreement with “neither…nor” can vary by construction and style reference.
-- Q127: same neither…nor agreement issue; review against the selected grammar reference.
-- Q133 and Q156: singular/plural treatment of “data” must follow the course style guide.
-- Q144 and Q173: make sure the examples remain reading-comprehension items, not operational instructions.
-- Q194: aviation maintenance wording must be checked against the approved programme and specialist terminology.
+- Q48: the stem says “typically” and the keyed option is the spindle/tool axis. Keep the machine- and coordinate-convention caveat; confirm it against the equipment and teaching reference used by the college.
+- Q62: the keyed meaning of “to isolate a circuit” is to disconnect it from its energy source. It is a vocabulary interpretation item, not a work instruction; have the electrical subject specialist confirm the wording.
+- Q74: “shall” is keyed as a mandatory requirement in a technical specification. The convention depends on the applicable standard/document, so retain this as a terminology review point.
+- Q77: the keyed form is “has received”. Both coordinated subjects (“operator” and “supervisor”) are singular; the nearest-subject agreement rule also yields the singular form. Confirm the explanation against the course grammar reference.
+- Q127: the current stem is “The drawing and the accompanying notes ___ the revised connector type”; the key is “specify” (B), correctly agreeing with the plural compound subject. The earlier audit note incorrectly described this item as a “neither…nor” construction and is withdrawn.
+- Q133 and Q156: the current keys are “were collected” (B) and “are available” (A). Both items consistently treat “data” as plural; the earlier singular/plural consistency flag is resolved for these two items. Confirm that plural “data” matches the course style guide.
+- Q144: the keyed value, 7.5 bar, is below the stated maximum of 8 bar. This is a reading-comprehension calculation, not an operating recommendation.
+- Q173: the key “until” completes a sentence describing an equipment-status condition. Keep it framed as a language-comprehension item, not as an independent maintenance instruction.
+- Q194: the phrase “approved data” is aviation-maintenance terminology. A qualified aviation subject specialist must confirm its interpretation and alignment with the approved programme before release.
 
 ## 5. Remaining release gates## 4A. Editorial near-duplicate review (2026-11-15)
 
