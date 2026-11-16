@@ -42,8 +42,8 @@
       "prompt": "An analogue signal can vary continuously over a range, while a digital signal is represented by distinct levels or values. A sensor system may convert a physical measurement into a signal that another device can process. The signal format, range and interface depend on the equipment design. A technical description should identify the relevant signal type and refer to the system documentation. Reading 1. How is a digital signal represented?",
       "options": [
         "By a continuously varying value",
-        "By distinct levels or values",
         "By a change in resistance only",
+        "By distinct levels or values",
         "By a mechanical movement"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What should a technical description identify?",
       "options": [
         "The equipment location and operator name",
-        "The relevant signal type",
+        "The drawing issue date",
         "The supplier and purchase order",
-        "The drawing issue date"
+        "The relevant signal type"
       ],
       "correctIndex": 3,
       "points": 1
