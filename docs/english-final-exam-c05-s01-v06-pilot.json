@@ -105,12 +105,12 @@
       "type": "single_choice",
       "prompt": "The task card may refer to a different aircraft configuration. What should you ask?",
       "options": [
-        "I will guess and continue.",
-        "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
-        "The detail is not important.",
-        "I will copy an unrelated record."
+        "Could we confirm task applicability against the aircraft identification and approved publications?",
+        "Could we use the task card for a similar model and confirm the details later?",
+        "Could we compare the aircraft colour and registration only?",
+        "Could we follow the previous shift's decision without checking applicability?"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
