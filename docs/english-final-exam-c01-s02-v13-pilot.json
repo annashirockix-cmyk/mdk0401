@@ -15,9 +15,9 @@
       "audioText": "The college library is running a short workshop on finding reliable information. It starts at eleven on Thursday in the computer room. Students should bring their college login details and a notebook. The librarian will demonstrate how to search the catalogue and check the publication date of a source. There are twelve places, so register at the library desk before Tuesday.",
       "options": [
         "In the computer room",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At the library desk",
+        "In the IT laboratory",
+        "In the main lecture room"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "For her technology assignment, Eva found several websites about battery recycling. She compared the information and checked who had published each page. One article had no author or date, so she did not use it. She chose a report from a university website and wrote down the title and publication date for her references. Reading 1. Why did Eva reject one article?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "It contained incorrect battery information",
+        "It advertised a product",
         "It had no author or date",
-        "To buy a ticket"
+        "It repeated information from another page"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Which source did she select?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "A manufacturer's product page",
+        "A social media post",
+        "An online discussion forum",
         "A report from a university website"
       ],
       "correctIndex": 3,
