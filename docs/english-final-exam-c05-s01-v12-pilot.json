@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Configuration identification describes the specific model and installed options of an item of equipment. A model designation alone may not show every difference between individual units. Serial numbers and option records can provide additional detail. Technical information should be selected only after the relevant configuration has been established, particularly when similar models have different installed equipment. Reading 1. Why may a model designation alone be insufficient?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Because the model designation is always incorrect",
         "It may not show all differences between individual units",
-        "To buy a ticket"
+        "Because serial numbers are used only for delivery records",
+        "Because installed options are identical across all models"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should happen before technical information is selected?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The relevant configuration should be established"
+        "Select a manual using the model name alone",
+        "Use the information from the nearest available unit",
+        "The relevant configuration should be established",
+        "Assume that all installed options match the standard model"
       ],
       "correctIndex": 3,
       "points": 1
