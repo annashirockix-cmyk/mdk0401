@@ -42,8 +42,8 @@
       "prompt": "An inspection finding should describe what was observed and identify the relevant acceptance criterion. If a measurement is outside the stated limit, the report should include the actual value, unit and component reference. The inspector should avoid suggesting a cause unless the available evidence supports it. A clear finding allows the responsible person to review the issue and determine the next action. Reading 1. What should an inspection finding describe?",
       "options": [
         "The inspector's opinion and a suggested repair",
-        "The name of the person who ordered the component",
         "What was observed and the relevant acceptance criterion",
+        "The name of the person who ordered the component",
         "The expected result without the actual observation"
       ],
       "correctIndex": 2,
