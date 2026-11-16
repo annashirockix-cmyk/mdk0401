@@ -897,3 +897,40 @@ V01–V10 используют преимущественно правдопод
 V01–V02 имеют в целом тематически сопоставимые distractors. В V03–V15 task 3 систематически включает нерелевантные варианты “To borrow a laptop / To meet a relative / To buy a ticket”, а task 4 — “At the sports centre / In the computer room / At the bus station”. Это резко снижает сложность угадывания и не позволяет достоверно оценить понимание текстов о renewable energy, cyber safety, transport, environmental monitoring, audits, recycling и digital systems.
 
 Рекомендуется заменить повторяющиеся отвлекающие ответы на правдоподобные варианты из той же тематической категории, сохранив подтверждённые ключи. В рамках этой проверки пилотные JSON не изменялись.
+
+
+### Cross-slot short-text answer audit — task 7 (V01–V15)
+
+Проведена проверка prompt и acceptedAnswers для task 7 в десяти слотах, 150 заданий.
+
+Подтверждены повторяющиеся дефекты:
+- **C1-S1 V11:** prompt “a list of ___” принимает “reference” (единственное число), тогда как ожидаемое значение — plural “sources/references”; singular form грамматически не подходит в данном контексте.
+- **C2-S2 V08:** prompt “The amount of energy used by a building is its energy ___” принимает и “consumption”, и полную фразу “energy consumption”; вторая форма дублирует уже напечатанную часть prompt.
+- **C2-S2 V09:** “a digital ___” принимает “digital footprint” — повторяет слово digital из prompt.
+- **C3-S1 V02:** “a revision ___” принимает “revision number”; повторяется слово revision.
+- **C3-S1 V06:** “its part ___” принимает “part number”; повторяется part.
+- **C3-S1 V12:** “the subject ___” принимает “subject line”; повторяется subject.
+- **C3-S2 V08:** “a non-___” принимает “non-conformity”; повторяется приставка non-.
+- **C4-S1 V04:** “kilowatt-___” принимает “kilowatt-hour”; повторяется уже напечатанное kilowatt-.
+- **C4-S1 V09:** “a specification ___” принимает “specification sheet”; повторяется specification.
+- **C4-S1 V11:** “a data ___” принимает “data sheet”; повторяется data.
+- **C4-S1 V15:** “a revision ___” принимает “revision record”; повторяется revision.
+- **C4-S2 V02:** “a storage ___” принимает “storage device”; повторяется storage.
+- **C4-S2 V04:** “programmable logic ___” принимает “programmable logic controller”; повторяется вся часть prompt.
+- **C4-S2 V07:** “a change ___” принимает “change log”; повторяется change.
+- **C4-S2 V09:** “a data ___” принимает “data log”; повторяется data.
+- **C4-S2 V10:** “an audit ___” принимает “audit trail”; повторяется audit.
+- **C5-S1 V01:** “a work ___” принимает “work package”; повторяется work.
+- **C5-S1 V02:** “an acceptance ___” принимает “criteria” (plural), хотя prompt требует singular noun.
+- **C5-S1 V08:** “non-___” принимает “non-conformance”; повторяется non-.
+- **C5-S1 V10:** “a document ___” принимает “document register”; повторяется document.
+- **C5-S2 V10:** принимает “dependency” и “dependent item” как эквивалентные, хотя это разные грамматические формы и значения.
+- **C5-S2 V15:** принимает “summary” и “synthesis” как взаимозаменяемые; в данном prompt это не гарантированные синонимы.
+
+Дополнительные случаи, уже зафиксированные в пофайловых аудитах: C1-S1 V05 “a work ___” → “work package”; C1-S1 V11 reference singular; C2-S2 V08/V09; C3-S1 V02/V06/V12; C3-S2 V08; C4-S1 V04/V09/V11/V15; C4-S2 V02/V04/V07/V09/V10; C5-S1 V01/V02/V08/V10.
+
+#### Правило исправления
+
+Для всех short-text заданий: acceptedAnswers должны содержать только ответ, который вставляется в пропуск, без повторения слов/частей, уже присутствующих в prompt. Варианты ответа должны совпадать по части речи, числу и смыслу с грамматической конструкцией. Полные фразы нельзя принимать как эквивалент отдельного пропущенного слова. Неоднозначные пары (например, dependency/dependent item; summary/synthesis) следует разделять или переписывать prompt.
+
+Пилотные JSON на этом этапе не менялись.
