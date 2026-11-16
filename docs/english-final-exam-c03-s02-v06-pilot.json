@@ -78,10 +78,10 @@
     {
       "id": "c3s2v06_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO examples of useful workshop safety communication.",
+      "prompt": "Choose TWO actions that demonstrate correct response to workshop safety information.",
       "options": [
-        "Ignore a restricted-area notice",
-        "Remove labels without permission",
+        "Continue work after a warning without checking the hazard",
+        "Treat a verbal instruction as permission to ignore a posted restriction",
         "Report damaged equipment",
         "Follow warning signs and local instructions"
       ],
