@@ -116,7 +116,7 @@
     {
       "id": "c1s2v08_o01",
       "type": "ordering",
-      "prompt": "Write a clear subject line; Check the recipient's address; Attach the correct file or add a shared link; Read the message and send it",
+      "prompt": "Put the following steps for sending an email with an attachment in a logical order.",
       "options": [
         "Read the message and send it",
         "Attach the correct file or add a shared link",
