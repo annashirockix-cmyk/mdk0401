@@ -344,3 +344,20 @@ C4-S2 task 8 has a malformed stem: “Could we confirm the unit's What is the be
 All reviewed listening keys in C2-S2, C3-S1, C4-S2 and C5-S1 otherwise match their audioText. The other four ordering tasks were coherent. Weak wrong-category distractors remain in the reviewed set, especially in reading tasks with unrelated places or activities. Short-text targets and written rubrics were structurally present; CEFR calibration and official learning-outcome alignment were not assessed.
 
 This is a second representative sample, not a complete V14 audit. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+### V15 additional sample check (C1-S2, C2-S1, C3-S2, C4-S1, C5-S2)
+
+A second, disjoint V15 sample was checked. Each file contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1. All ten listening answer keys in this sample match the facts stated in their audioText.
+
+C2-S1 task 2 has a prompt/audio mismatch: the question asks which technical reference is required for a maintenance-planning meeting, but the audio is about a college work-placement briefing and asks students to bring workplace-supervisor contact details and a placement agreement. The keyed option “A copy of the placement agreement” is supported by the audio, but the stem belongs to a different context and must be rewritten.
+
+C1-S2 task 9 contains a malformed ordering prompt: it is a semicolon-separated list of stages (“Agree the presentation topic; Divide the sections; Prepare and upload slides; Rehearse the presentation”) rather than an instruction to order them. The option set and correctOrder are coherent; rewrite the prompt as a clear imperative.
+
+C4-S1 task 7 is awkwardly constructed: “A controlled record showing the current version of a document is a revision ___.” It accepts “record” and “revision record”; the latter produces the redundant phrase “revision revision record”. Remove the redundant accepted answer or rewrite the stem.
+
+C3-S2 task 7 accepts “proposal” and “recommendation” as interchangeable answers. They overlap, but a proposal is a suggested plan/solution while a recommendation is advice about the preferred option; tighten the definition or accept only the intended term. C5-S2 similarly accepts “summary” and “synthesis”; related concepts, but not exact equivalents in all technical-writing contexts.
+
+Weak wrong-category distractors remain in four of five files, especially in reading tasks with unrelated activities or locations. Written tasks include word limits and 8-point rubrics; CEFR calibration and official learning-outcome alignment remain unverified.
+
+This is a second representative V15 sample, not a complete V15 audit. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
