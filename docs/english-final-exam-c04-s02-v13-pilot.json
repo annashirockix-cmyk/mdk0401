@@ -103,14 +103,14 @@
     {
       "id": "c4s2v13_f01",
       "type": "single_choice",
-      "prompt": "Please check the measurement method What should you say?",
+      "prompt": "A recorded measurement differs from the expected range. What should be verified before interpreting it?",
       "options": [
-        "I will guess and continue.",
-        "Please check the measurement method and compare the value with other evidence before deciding.",
-        "The detail is not important.",
-        "I will copy an unrelated record."
+        "Repeat the measurement with the same setup and accept it if the result is consistent.",
+        "Compare the number with the expected range before checking the measurement method.",
+        "Verify the measurement method, instrument status and supporting evidence before interpreting the value.",
+        "Change the recorded value to the nearest expected figure and note the difference."
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
