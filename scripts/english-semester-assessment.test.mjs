@@ -1013,3 +1013,13 @@ test("teacher-graded English final-exam results are returned to the owning stude
   assert.match(publish, /ReviewedAt:reviewerEmail\?now/);
   assert.match(code, /case "getmycourseresults": result = getMyCourseResults_\(data\); break;/);
 });
+
+
+test("student assessment history displays teacher feedback and reviewer identity for graded final exams", () => {
+  const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
+  assert.match(app, /var reviewInfo=x\.reviewedAt/);
+  assert.match(app, /window\.escapeHtml\(x\.reviewedBy\)/);
+  assert.match(app, /var reviewFeedback=x\.feedback/);
+  assert.match(app, /window\.escapeHtml\(x\.feedback\)/);
+  assert.match(app, /Комментарий:/);
+});
