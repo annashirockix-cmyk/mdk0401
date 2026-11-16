@@ -168,3 +168,18 @@ The V05 sample also contains recurring wrong-category distractors in listening a
 **Required action:** treat V04–V06 as a bank-wide authoring defect, not three isolated variants. Before release, independently author/revise each task's distractors, shuffle each task's options using a stable key-remapping routine, and validate single-choice, multiple-choice and ordering keys against the resulting option arrays. A mere rotation of the same template is insufficient. Add regression tests that reject identical positional signatures repeated across all ten slots and check distributions at both variant and bank level.
 
 The V05/V06 pilot JSON files were not changed. All remain pilot materials; no import or student release is authorised by this audit.
+
+
+## V07 representative cross-course audit (2026-11-16)
+
+Five V07 files were inspected across representative slots: C1-S1, C2-S2, C3-S1, C4-S2 and C5-S1. All five contain 10 tasks and repeat the same first-eight positional key signature seen in V04–V06: 0, 1, 2, 3, 0, [2,3], short-text, 1. The examples cover Basic English, scientific literacy, dimensional tolerances, software version control and maintenance shift handover.
+
+The sample confirms that the fixed answer-position template extends into V07 and across both general-English and technical-professional content. The listening and reading distractor sets also continue to contain wrong-category options. Examples:
+- C2-S2 Listening 1 asks when a demonstration takes place, but three of four choices are locations or unrelated time phrases.
+- C3-S1 Reading 1 asks what permitted dimensional variation describes, but three choices are unrelated actions.
+- C4-S2 Listening 2 asks which equipment information record is required, but three choices are generic dates/locations.
+- C5-S1 Reading 1 asks what a shift handover should identify, but three choices are unrelated actions.
+
+This five-file sample is not a full V07–V15 audit and does not establish the status of every remaining variant. It is sufficient, however, to show that the same authoring pattern is still present in V07. Continue with a complete file-by-file audit before release; do not infer that later variants are clean or defective without inspection.
+
+No pilot JSON was changed. The findings are editorial only; no protected bank, import, Apps Script, or deployment was touched.
