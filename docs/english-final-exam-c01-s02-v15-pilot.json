@@ -15,9 +15,9 @@
       "audioText": "Our team is preparing a presentation about safe use of digital equipment. We have divided the work into four sections. I am responsible for the opening slide and the glossary. Please upload your slides to the shared folder by Friday evening. Use the same font size for headings and check that every image has a short caption. We will practise the presentation together on Monday.",
       "options": [
         "Safe use of digital equipment",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Preparing slides for a college event",
+        "Using presentation software",
+        "Choosing images for a report"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "The students created a presentation about sensors used in modern machines. They agreed on a simple structure and selected two diagrams from their course materials. Before sharing the file, they checked that the diagrams were readable and that every slide had a clear heading. During rehearsal, they shortened one section because it contained too much text. Reading 1. What topic did the presentation cover?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Safety rules for workshop tools",
+        "Energy-saving systems in college buildings",
         "Sensors used in modern machines",
-        "To buy a ticket"
+        "Maintenance of computer equipment"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why did the students shorten one section?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "It repeated the same diagram",
+        "It used an unfamiliar font",
+        "It included too many references",
         "It contained too much text"
       ],
       "correctIndex": 3,
