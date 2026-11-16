@@ -15,9 +15,9 @@
       "audioText": "The facilities team will switch off heating in the old laboratory during the spring break while maintenance is carried out. Students who need access to stored equipment should contact the technician before Friday. The team is also testing motion sensors in two corridors. Feedback about lighting levels can be sent through the maintenance form on the college portal.",
       "options": [
         "Because maintenance is being carried out",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Because the laboratory is being repainted",
+        "Because new computers are being installed",
+        "Because maintenance is being carried out"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An energy audit at a college found that several computer rooms remained fully lit after the last lesson. The facilities team introduced a simple closing checklist and asked the final group to check lights and equipment. The audit also recommended replacing older lamps with more efficient models. After a month, electricity use had decreased, although the team planned to compare figures over a longer period. Reading 1. What problem did the audit identify?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The laboratory heating was left on overnight",
         "Computer rooms stayed fully lit after the last lesson",
-        "To buy a ticket"
+        "Computer rooms stayed fully lit after the last lesson",
+        "Students left windows open during lessons"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What did the team introduce?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "A timetable for switching off computers",
+        "A closing checklist for the final group",
+        "A new system for booking laboratories",
         "A closing checklist for the final group"
       ],
       "correctIndex": 3,
