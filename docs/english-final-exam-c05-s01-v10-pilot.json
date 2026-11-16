@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "The current approved version ___ in the document register.",
       "options": [
-        "is identified",
         "identify",
+        "is identified",
         "identifying",
         "are identify"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
