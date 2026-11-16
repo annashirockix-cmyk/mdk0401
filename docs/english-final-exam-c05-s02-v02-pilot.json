@@ -15,9 +15,9 @@
       "audioText": "The engineering safety lecturer will discuss risk communication on Monday at ten fifteen. Students should bring the risk-register example and meet in the seminar room. The session will focus on describing hazards, existing controls and remaining concerns. The lecturer will explain why risk information should be specific, current and understandable to the people who need it.",
       "options": [
         "At ten fifteen on Monday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine on Tuesday",
+        "At eleven on Monday",
+        "At ten fifteen on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which example should students bring?",
       "audioText": "The engineering safety lecturer will discuss risk communication on Monday at ten fifteen. Students should bring the risk-register example and meet in the seminar room. The session will focus on describing hazards, existing controls and remaining concerns. The lecturer will explain why risk information should be specific, current and understandable to the people who need it.",
       "options": [
-        "On Friday",
+        "The inspection checklist",
         "The risk-register example",
-        "Next month",
-        "After the event"
+        "The maintenance schedule",
+        "The component glossary"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A risk record should describe a hazard, the possible consequence and the controls that are already in place. It should also identify any remaining concern and the person or team responsible for review. A risk rating is only meaningful when the method and assumptions are clear. If conditions change, the record should be reviewed rather than treated as permanently valid. Reading 1. What should a risk record describe?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Only the name of the hazard",
         "The hazard, possible consequence, existing controls and remaining concern",
-        "To buy a ticket"
+        "The personal opinions of the maintenance team",
+        "The cost of every component in the system"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "When should a risk record be reviewed?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "At the end of every calendar month only",
+        "When a new student joins the course",
+        "When the report is printed",
         "When conditions change"
       ],
       "correctIndex": 3,
