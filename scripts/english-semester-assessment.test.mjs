@@ -464,10 +464,10 @@ test("final exam attempt limits count persisted attempts and honor teacher-grant
   assert.match(start,/if\(usedAttempts>=attemptLimit\)/);
   assert.ok(start.indexOf("if(usedAttempts>=attemptLimit)")<start.indexOf('const bank=ensureSheet_("EnglishExamVariantsBank")'));
 
-  const controls=readFileSync(path.join(root,"teacher-controls.js"),"utf8");
+  const controls=fs.readFileSync(path.join(root,"teacher-controls.js"),"utf8");
   assert.match(controls,/english_final_c/);
   assert.doesNotMatch(controls,/__final__/);
-  const ui=readFileSync(path.join(root,"english-vpr-engine.js"),"utf8");
+  const ui=fs.readFileSync(path.join(root,"english-vpr-engine.js"),"utf8");
   assert.match(ui,/requestTestAttempts\(courseId,testId\)/);
   assert.match(ui,/Запросить дополнительную попытку/);
 });
@@ -485,7 +485,7 @@ test("student English final-exam UI starts persistent course/semester attempts a
   assert.match(ui, /input\.addEventListener\("input",function\(\)\{responses\[id\]=input\.value;queueSave\(\);\}\)/);
   assert.match(ui, /area\.addEventListener\("input",function\(\)\{responses\[id\]=area\.value;queueSave\(\);\}\)/);
   assert.match(ui, /window\.setTimeout\(function\(\)\{saveTimer=null;saveNow\(\);\},500\)/);
-  assert.match(ui, /if\(saveTimer\)\{window\.clearTimeout\(saveTimer\);saveTimer=null;\}saveNow\(true\);saveQueue\.then/);
+  assert.match(ui, /if\\(saveTimer\\)\\{window\\.clearTimeout\\(saveTimer\\);saveTimer=null;\\}\\s*saveNow\\(true\\);\\s*saveQueue\\.then/);
 });
 
 test("teacher dashboard exposes a written-exam review panel and submits explicit per-task grades", () => {
