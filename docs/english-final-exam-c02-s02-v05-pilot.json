@@ -15,9 +15,9 @@
       "audioText": "The town council is asking residents to comment on a proposed cycle route between the railway station and the college area. An information meeting will take place at the civic centre next Monday at six in the evening. Maps will be available at the entrance. Residents can also submit comments online until the end of the following week.",
       "options": [
         "At the civic centre",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At the science centre",
+        "At the civic centre",
+        "At the college sports hall"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A town transport survey found that many college students travelled by car because the bus service did not match lesson times. The council is considering a cycle route and a revised bus timetable. Some residents support the cycle route because it could reduce traffic near the college, while others are concerned about road crossings. The council says that safety assessments will be completed before a final decision is made. Reading 1. Why did some students travel by car?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Parking near the college was expensive",
         "The bus timetable did not match lesson times",
-        "To buy a ticket"
+        "The bus timetable did not match lesson times",
+        "Students were required to carry large equipment"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What must happen before the council makes a final decision?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "A public vote must be held first",
+        "The cycle route must be built immediately",
+        "Safety assessments must be completed",
         "Safety assessments must be completed"
       ],
       "correctIndex": 3,
