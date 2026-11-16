@@ -78,10 +78,10 @@
     {
       "id": "c4s2v14_m01",
       "type": "multiple_choice",
-      "prompt": "Which TWO details should be clear in a ground support equipment status record?",
+      "prompt": "Which TWO fields identify a ground support unit and indicate whether it is available for use?",
       "options": [
-        "An unrelated appointment",
-        "A personal preference",
+        "Scheduled inspection date",
+        "Assigned technician",
         "Equipment identification",
         "Current service status"
       ],
