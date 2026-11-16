@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A workshop team introduced a revised inspection checklist after repeated recording errors. The number of incomplete records fell during the following month. The team considered this a positive result, but it also noted that staff had received additional training at the same time. The report recommended collecting more data before attributing the improvement to the checklist alone. Reading 1. What change did the workshop team introduce?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "A revised inspection checklist",
-        "To buy a ticket"
+        "A new measuring instrument",
+        "A different supplier for inspection materials",
+        "A revised shift timetable"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did the report avoid attributing the result to the checklist alone?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Because staff also received additional training"
+        "Because the checklist was not used by every employee",
+        "Because staff also received additional training",
+        "Because the inspection sample was too small to record",
+        "Because the previous checklist had been approved recently"
       ],
       "correctIndex": 3,
       "points": 1
