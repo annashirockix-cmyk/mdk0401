@@ -1081,3 +1081,18 @@ V01–V02 имеют в целом тематически сопоставимы
 **Рекомендация:** критерий лексики должен соответствовать жанру (техническая терминология для технического отчёта, уместная профессиональная/нейтральная лексика для notice/email). В заданиях с явными ограничениями добавить критерий соблюдения prompt и безопасности. Для каждого задания определить конкретные обязательные смысловые пункты и дескрипторы 0/1/2; общий каркас рубрики можно сохранить.
 
 Пилотные JSON, банки вопросов, Google Sheets и Apps Script не изменялись.
+
+
+## Written-task rubric audit — C1/C2 completion (2026-11-16)
+
+The remaining 60 written Task 10 prompts were inspected in C1-S1, C1-S2, C2-S1 and C2-S2 (15 variants per slot). Together with the previously inspected C3-S1, C3-S2, C4-S1, C4-S2, C5-S1 and C5-S2 sets, this completes the prompt/rubric audit of all 150 written Task 10 variants.
+
+**C2-S1 (15/15) and C2-S2 (15/15):** every variant uses the same generic 8-point rubric with four 0–2 criteria. The prompts range from CV/interview preparation and teamwork to online-source reliability, environmental proposals, scientific claims, air-quality investigation and research-data presentation. The rubric does not define task-specific required content, evidence quality, accuracy of claims, treatment of limitations or source reliability. This is a rubric-design weakness; it does not by itself establish that any individual response key or prompt is incorrect.
+
+**C1-S1 (15/15):** variants 8, 9 and 15 address workshop/laboratory safety, safe equipment use and a low-voltage training circuit. Their generic criteria do not explicitly assess safety-critical correctness or whether the response avoids unsafe advice. Variant 9 also specifies “tools and measurement vocabulary” although the prompt asks about safely using a simple tool or piece of equipment; the vocabulary criterion should be aligned with the actual task. Variants 11–15 likewise cover research, teamwork, aviation-workshop visits, placement and electrical safety but retain generic criteria that do not identify required elements or factual/safety constraints.
+
+**C1-S2 (15/15):** all variants use the same generic 8-point rubric despite covering directions, borrowing equipment, transport, public services, events, weather, food/allergies, email, consumer rights, volunteering, exhibitions, source evaluation, work placement and presentations. The rubric does not explicitly assess task-specific accuracy (for example, allergy-information checks, reporting a faulty product, reliable referencing, or required email/presentation components).
+
+**Cross-set conclusion:** the 150 written tasks have now all been inspected for prompt/rubric alignment. The recurring 2+2+2+2 rubric is too broad to ensure consistent marking across materially different tasks. A revised rubric should retain a clear point ceiling but define task-specific content requirements and observable 0/1/2 descriptors; add technical/factual accuracy and safety/evidence criteria where relevant; align vocabulary criteria to the prompt; and state how word-count deviations affect scoring. Language accuracy should remain distinct from subject-matter correctness. Safety-critical or specialist technical criteria require review by an appropriately qualified subject-matter expert.
+
+This audit records findings only. No pilot JSON, answer key, protected bank, Google Sheet or Apps Script was changed. All 150 variants remain pilot materials pending editorial and subject-matter review, formal approval and controlled acceptance testing.
