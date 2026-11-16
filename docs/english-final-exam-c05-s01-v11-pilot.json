@@ -135,7 +135,7 @@
       "id": "c5s1v11_w01",
       "type": "written",
       "prompt": "Write 100–120 words explaining how to prepare a non-conformance report. Include the requirement, observed condition, evidence and the distinction between a finding and its cause.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Report content — 2: identifies the requirement, observed condition and relevant evidence; 1: includes some; 0: absent. (2) Finding versus cause — 2: clearly distinguishes the observed non-conformance from a cause that may remain unconfirmed; 1: partial; 0: conflates them. (3) Objectivity and structure — 2: proposes factual, traceable wording without unsupported assumptions; 1: partly objective; 0: speculative or unclear. (4) English — 2: precise technical vocabulary and coherent 100–120-word response; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
