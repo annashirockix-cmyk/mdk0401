@@ -17,7 +17,7 @@
         "By minibus",
         "By coach",
         "By public bus",
-        "By minibus"
+        "By train"
       ],
       "correctIndex": 0,
       "points": 1
@@ -44,7 +44,7 @@
         "The passenger's boarding pass",
         "The airline's staff timetable",
         "The airport display",
-        "The airport display"
+        "The airline's website"
       ],
       "correctIndex": 2,
       "points": 1
@@ -57,7 +57,7 @@
         "She sent the passenger to the check-in desk without an explanation",
         "She asked another assistant to answer the question",
         "She repeated and clarified the information calmly",
-        "She repeated and clarified the information calmly"
+        "She asked the passenger to wait until the flight arrived."
       ],
       "correctIndex": 3,
       "points": 1
