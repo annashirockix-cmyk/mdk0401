@@ -42,8 +42,8 @@
       "prompt": "A technical problem-solving report begins with a precise description of the issue. The team then gathers relevant records and identifies what is known, what is assumed and what remains uncertain. Possible solutions can be compared against technical requirements, cost and available resources. A recommendation should explain its reasoning and identify any risk or limitation that still needs review. Reading 1. What should the team identify after gathering records?",
       "options": [
         "Which operation should be completed first",
-        "What is known, assumed and still uncertain",
         "Which supplier offers the lowest price",
+        "What is known, assumed and still uncertain",
         "How many components should be ordered"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What should a recommendation explain?",
       "options": [
         "Its estimated cost and delivery date",
-        "Its reasoning and any remaining risk or limitation",
+        "A list of unrelated production targets",
         "The name of the person who suggested it",
-        "A list of unrelated production targets"
+        "Its reasoning and any remaining risk or limitation"
       ],
       "correctIndex": 3,
       "points": 1
