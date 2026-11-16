@@ -78,10 +78,10 @@
     {
       "id": "c4s2v01_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO blocks commonly shown in a basic communication-system diagram.",
+      "prompt": "Choose TWO end blocks in a basic communication-system model, excluding the transmission medium.",
       "options": [
-        "Tailstock",
-        "Cutting insert",
+        "Communication channel",
+        "Noise source",
         "Transmitter",
         "Receiver"
       ],
