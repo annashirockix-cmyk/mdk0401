@@ -56,8 +56,8 @@
       "options": [
         "To confirm the material grade",
         "To record the inspection date",
-        "To identify the exact version of the drawing",
-        "To identify the technician who measured the component"
+        "To identify the technician who measured the component",
+        "To identify the exact version of the drawing"
       ],
       "correctIndex": 3,
       "points": 1
