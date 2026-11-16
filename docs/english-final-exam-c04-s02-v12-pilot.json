@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A digital twin is a digital representation of a physical asset or process linked to relevant information about its real-world counterpart. Depending on the application, it may use design data, operating measurements and maintenance history. Its usefulness depends on data quality and model accuracy. A digital model should not be assumed to reflect every real-world condition automatically. Reading 1. What information may support a digital twin?",
       "options": [
-        "Design data, operating measurements and maintenance history",
-        "Supplier invoices, delivery dates and purchase orders",
         "Operator schedules, training records and attendance lists",
+        "Supplier invoices, delivery dates and purchase orders",
+        "Design data, operating measurements and maintenance history",
         "Equipment colours, storage locations and parts prices"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What affects its usefulness?",
       "options": [
         "The number of pages in the model report",
-        "Data quality and model accuracy",
+        "The number of people who use the equipment",
         "The presentation format and slide design",
-        "The number of people who use the equipment"
+        "Data quality and model accuracy"
       ],
       "correctIndex": 3,
       "points": 1
