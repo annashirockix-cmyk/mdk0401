@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Before a maintenance document is released, its applicability and revision should be checked and the required approval recorded. The distribution process should make the current version available to the intended users and prevent obsolete copies from being used. A draft may contain useful information, but it should remain clearly identified as a draft until the approval process is complete. Reading 1. What should be checked before a maintenance document is released?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Staff availability, meeting time and distribution list",
+        "Equipment location, storage label and serial number",
         "Applicability, revision and required approval",
-        "To buy a ticket"
+        "Supplier price, delivery date and payment terms"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How should a draft be identified?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Clearly identified as a draft until approval is complete"
+        "Approved for immediate use before review",
+        "Obsolete and withdrawn from the document register",
+        "Clearly identified as a draft until approval is complete",
+        "Distributed without a revision identifier"
       ],
       "correctIndex": 3,
       "points": 1
