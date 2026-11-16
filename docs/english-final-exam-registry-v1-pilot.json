@@ -1420,11 +1420,11 @@
                 "prompt": "Reading 1. Read the text. Leo is preparing for his first workshop lesson. He checks the timetable and notices that the group must wear safety shoes. He puts his notebook and student card in his bag. At the workshop door, he waits for the instructor, who explains the safety signs and the location of the emergency stop button. Leo asks a question when he does not understand an instruction. What does Leo put in his bag?",
                 "options": [
                   "A safety helmet and a camera",
-                  "A laptop and a ruler",
                   "His notebook and student card",
+                  "A laptop and a ruler",
                   "A toolbox and a manual"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -17585,12 +17585,12 @@
                 "type": "single_choice",
                 "prompt": "Selected sensor data ___ to a monitoring platform.",
                 "options": [
-                  "can be transferred",
                   "can transferred",
+                  "can be transferred",
                   "transferring",
                   "are transfer"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -17862,11 +17862,11 @@
                 "prompt": "Predictive maintenance uses condition information to estimate when equipment may require attention. Repeated vibration or temperature measurements can reveal a developing trend. A single unusual value may result from measurement error or changing operating conditions, so it should be checked against the method and other evidence. Decisions should follow the approved procedure. Reading 1. What can repeated measurements reveal?",
                 "options": [
                   "To borrow a laptop",
-                  "To meet a relative",
                   "A developing trend in equipment condition",
+                  "To meet a relative",
                   "To buy a ticket"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -18026,11 +18026,11 @@
                 "prompt": "Why is clear status wording important?",
                 "options": [
                   "At the sports centre",
+                  "To prevent use when its status is uncertain",
                   "In the computer room",
-                  "At the bus station",
-                  "To prevent use when its status is uncertain"
+                  "At the bus station"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -18189,12 +18189,12 @@
                 "type": "single_choice",
                 "prompt": "The immediate action ___ in the incident report.",
                 "options": [
-                  "should be recorded",
                   "was transferred",
+                  "should be recorded",
                   "transferring",
                   "are transfer"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -19144,7 +19144,7 @@
               {
                 "id": "c5s1v06_f01",
                 "type": "single_choice",
-                "prompt": "The task card may refer to a different aircraft configuration. What should you ask?",
+                "prompt": "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
                 "options": [
                   "Could we confirm task applicability against the aircraft identification and approved publications?",
                   "Could we use the task card for a similar model and confirm the details later?",
