@@ -119,14 +119,14 @@
       "type": "ordering",
       "prompt": "Put the visit actions in the correct order.",
       "options": [
-        "Listen to the safety briefing",
         "Arrive at the college entrance",
+        "Listen to the safety briefing",
         "Observe the demonstration with the guide",
         "Return to the bus at the agreed time"
       ],
       "correctOrder": [
-        "Listen to the safety briefing",
         "Arrive at the college entrance",
+        "Listen to the safety briefing",
         "Observe the demonstration with the guide",
         "Return to the bus at the agreed time"
       ],
