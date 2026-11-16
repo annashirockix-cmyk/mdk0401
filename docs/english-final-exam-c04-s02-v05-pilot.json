@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A technical report should explain where its data came from and what the figures represent. A table needs clear headings and units, while a summary should describe the main trend without overstating it. If a possible cause has not been tested, it should be presented as a suggestion rather than a confirmed fact. This helps readers understand both the results and their limitations. Reading 1. What should clear table headings include?",
       "options": [
-        "Units and information about what the figures represent",
-        "The author name and the document file size",
         "The equipment colour and storage location",
+        "The author name and the document file size",
+        "Units and information about what the figures represent",
         "The supplier price and delivery date"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "How should an untested possible cause be presented?",
       "options": [
         "As a confirmed fact",
-        "As a suggestion rather than a confirmed fact",
+        "As an approved corrective action",
         "As a final diagnosis",
-        "As an approved corrective action"
+        "As a suggestion rather than a confirmed fact"
       ],
       "correctIndex": 3,
       "points": 1
