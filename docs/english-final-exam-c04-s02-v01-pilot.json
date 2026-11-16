@@ -42,11 +42,11 @@
       "prompt": "A basic communication system transfers information from a source to a destination. A transmitter prepares a signal, a channel carries it and a receiver processes the incoming signal. The system may also include noise or interference that affects the quality of communication. A block diagram helps engineers describe the main functions without showing every internal circuit detail. Reading 1. What does a channel do in a basic communication system?",
       "options": [
         "It stores the information permanently",
-        "It carries the signal",
         "It generates the original message",
+        "It carries the signal",
         "It removes all interference"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -56,10 +56,10 @@
       "options": [
         "It lists every internal circuit component",
         "It gives the exact physical dimensions",
-        "It describes the main functions without showing every internal circuit detail",
-        "It replaces the need for technical documentation"
+        "It replaces the need for technical documentation",
+        "It describes the main functions without showing every internal circuit detail"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
