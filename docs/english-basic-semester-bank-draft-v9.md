@@ -27,8 +27,8 @@
 **164.** All visitors must ___ a safety helmet before entering the workshop.
 - A. washing
 - B. washed
-- C. to wash
-- D. wash
+- C. to wear
+- D. wear
 
 **165.** There isn't ___ sugar left, so we need to buy some.
 - A. many
