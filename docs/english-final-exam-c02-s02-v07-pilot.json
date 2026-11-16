@@ -15,9 +15,9 @@
       "audioText": "The science library has added a new guide to evaluating scientific claims. Students can attend a demonstration on Monday at three in the reading room. The librarian will show how to distinguish a research result from an opinion and how to find the original study. A printed checklist will be available, and the guide can also be downloaded from the library website.",
       "options": [
         "On Monday at three",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at three",
+        "On Monday at four",
+        "On Monday at three"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A social media post claimed that a common household product could prevent every seasonal illness. It included a photograph but no reference to a scientific study. A student searched for the claim and found that health organisations did not support it. She wrote a short note explaining that an image alone was not evidence and that broad claims require reliable research. Reading 1. What was missing from the social media post?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "A list of product ingredients",
         "A reference to a scientific study",
-        "To buy a ticket"
+        "A reference to a scientific study",
+        "A link to a shopping website"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What did the student explain in her note?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "A photograph is always reliable evidence",
+        "An image alone is not evidence and broad claims need reliable research",
+        "Only personal experience is needed to support a claim",
         "An image alone is not evidence and broad claims need reliable research"
       ],
       "correctIndex": 3,
