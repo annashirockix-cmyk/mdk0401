@@ -78,10 +78,10 @@
     {
       "id": "c3s1v06_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that help identify an aviation component accurately.",
+      "prompt": "Choose TWO identifiers used to distinguish an aviation component from similar parts.",
       "options": [
-        "The colour of the storage shelf",
-        "The name of an unrelated passenger",
+        "Storage-bin location",
+        "Supplier delivery batch date",
         "Full part number",
         "Reference number and catalogue description"
       ],
