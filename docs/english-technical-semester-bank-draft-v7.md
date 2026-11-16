@@ -40,7 +40,7 @@
 - C. To list the dimensions of a manufactured component
 - D. To document the transfer of a shift
 
-**127.** Complete the sentence: “Neither the drawing nor the accompanying notes ___ the revised connector type.”
+**127.** Complete the sentence: “The drawing and the accompanying notes ___ the revised connector type.”
 - A. specifies
 - B. specify
 - C. specifying
@@ -134,7 +134,7 @@
 | 124 | A | A scale of 1:2 means one unit on the drawing represents two units on the real component, so the drawing is half-size. |
 | 125 | B | This is a polite, grammatically correct formal request. |
 | 126 | B | A purchase requisition requests authorization to obtain specified goods or services. |
-| 127 | B | With the nearer plural subject “notes”, the verb is plural: “specify”. Check the chosen grammar reference's notional/agreement guidance for neither…nor. |
+| 127 | B | The compound subject “the drawing and the accompanying notes” is plural, so it takes “specify”. |
 | 128 | D | The statement gives the sequence: inspection completed, record signed, unit returned to service. |
 | 129 | D | “Feasible” means capable of being done or put into practice; “practical” is the closest option. |
 | 130 | C | “Because” introduces the reason for postponement. |
