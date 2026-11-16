@@ -733,6 +733,8 @@ test("teacher-granted extra attempts release only expired semester tokens", () =
   assert.deepEqual(removed,["attempt-key","attempt-key"]);
   assert.match(grantSource,/extra > 0 \?\s*clearExpiredEnglishSemesterAttemptForGrant_/);
   assert.match(grantSource,/ExpiredSemesterAttemptReset:expiredSemesterAttemptReset/);
+  assert.ok(grantSource.indexOf("clearExpiredEnglishSemesterAttemptForGrant_") < grantSource.indexOf("writeSetting_"),
+    "the expired-token check must succeed before the extra-attempt grant is persisted");
 });
 
 test("semester shuffled options are bound to the server attempt and expired attempts cannot restart", () => {
