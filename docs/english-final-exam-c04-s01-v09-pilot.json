@@ -78,10 +78,10 @@
     {
       "id": "c4s1v09_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details commonly found on a power supply specification sheet.",
+      "prompt": "Choose TWO electrical performance details normally stated on a power supply specification sheet.",
       "options": [
-        "The operator's favourite music",
-        "A nearby bus timetable",
+        "Equipment serial number",
+        "Enclosure colour",
         "Input conditions",
         "Output ratings"
       ],
