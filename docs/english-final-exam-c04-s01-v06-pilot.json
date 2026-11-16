@@ -78,10 +78,10 @@
     {
       "id": "c4s1v06_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO parts commonly identified in a basic transformer diagram.",
+      "prompt": "Choose TWO windings identified in a basic transformer diagram.",
       "options": [
-        "Tailstock",
-        "Cutting insert",
+        "Magnetic core",
+        "Terminal connections",
         "Primary winding",
         "Secondary winding"
       ],
