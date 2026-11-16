@@ -15,9 +15,9 @@
       "audioText": "The college is introducing a new online booking system for practical rooms. The system will open to students next Monday at eight in the morning. Before booking, students must check the room's equipment list and ask their tutor to approve the session. A short guide is available in the student portal, and technical support will be available during the first week.",
       "options": [
         "Next Monday at eight in the morning",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Next Tuesday at eight in the morning",
+        "Next Monday at nine in the morning",
+        "Next Monday at eight in the morning"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "When the college introduced an online booking system, some students were unsure how to reserve specialist rooms. The support team collected questions and updated the guide with screenshots and clear steps. Tutors also demonstrated the process during lessons. After the first month, fewer booking errors were reported, although the college continued to review feedback and make small improvements. Reading 1. How did the support team improve the guide?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "They removed technical terms from the guide",
         "They added screenshots and clear steps",
-        "To buy a ticket"
+        "They added screenshots and clear steps",
+        "They replaced the guide with a video"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What changed after the first month?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "More students cancelled their room bookings",
+        "Fewer booking errors were reported",
+        "The college stopped reviewing feedback",
         "Fewer booking errors were reported"
       ],
       "correctIndex": 3,
