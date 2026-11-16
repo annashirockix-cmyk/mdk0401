@@ -1076,3 +1076,60 @@ test("corrected pilot final-exam listening keys and short-answer prompts stay sy
   ]);
   assert.equal(registry.status, "pilot_for_editorial_review", "editorial corrections do not approve the pilot for import");
 });
+
+
+test("all 150 final-exam source files match the combined registry and pass structural/key-balance checks", () => {
+  const registry = JSON.parse(fs.readFileSync(path.join(root, "docs/english-final-exam-registry-v1-pilot.json"), "utf8"));
+  assert.equal(registry.status, "pilot_for_editorial_review");
+  assert.equal(registry.exams.length, 10);
+  const variants = registry.exams.flatMap(exam => exam.variants);
+  assert.equal(variants.length, 150);
+  const variantIds = new Set();
+  const taskIds = new Set();
+  const typeTotals = { single_choice: 0, multiple_choice: 0, short_text: 0, ordering: 0, written: 0 };
+
+  for (const variant of variants) {
+    assert.ok(!variantIds.has(variant.variantId), "unique variant ID: " + variant.variantId);
+    variantIds.add(variant.variantId);
+    const match = variant.variantId.match(/^EN-C([1-5])-S([1-2])-V(\\d{2})$/);
+    assert.ok(match, "well-formed variant ID: " + variant.variantId);
+    const sourcePath = `docs/english-final-exam-c0${match[1]}-s0${match[2]}-v${match[3]}-pilot.json`;
+    const source = JSON.parse(fs.readFileSync(path.join(root, sourcePath), "utf8"));
+    assert.deepEqual(variant.variantJSON, source, "complete source/registry parity: " + variant.variantId);
+
+    const tasks = variant.variantJSON.tasks;
+    assert.equal(tasks.length, 10, "ten tasks per variant: " + variant.variantId);
+    const counts = [0, 0, 0, 0];
+    const byType = { single_choice: 0, multiple_choice: 0, short_text: 0, ordering: 0, written: 0 };
+    for (const task of tasks) {
+      assert.ok(!taskIds.has(task.id), "globally unique task ID: " + task.id);
+      taskIds.add(task.id);
+      assert.ok(Object.hasOwn(typeTotals, task.type), "supported task type: " + task.id);
+      typeTotals[task.type]++;
+      byType[task.type]++;
+      if (task.type === "single_choice") {
+        assert.ok(Array.isArray(task.options) && task.options.length === 4, "four single-choice options: " + task.id);
+        assert.ok(Number.isInteger(task.correctIndex) && task.correctIndex >= 0 && task.correctIndex < 4, "valid single-choice key: " + task.id);
+        counts[task.correctIndex]++;
+      } else if (task.type === "multiple_choice") {
+        assert.ok(Array.isArray(task.options) && task.options.length === 4, "four multiple-choice options: " + task.id);
+        assert.ok(Array.isArray(task.correctIndices) && task.correctIndices.length === 2, "exactly two multiple-choice keys: " + task.id);
+        assert.equal(new Set(task.correctIndices).size, 2, "distinct multiple-choice keys: " + task.id);
+        assert.ok(task.correctIndices.every(index => Number.isInteger(index) && index >= 0 && index < 4), "valid multiple-choice indices: " + task.id);
+      } else if (task.type === "short_text") {
+        assert.ok(Array.isArray(task.acceptedAnswers) && task.acceptedAnswers.length > 0, "accepted short-text answer: " + task.id);
+      } else if (task.type === "ordering") {
+        assert.ok(Array.isArray(task.options) && task.options.length >= 3, "ordering options: " + task.id);
+        assert.ok(Array.isArray(task.correctOrder) && task.correctOrder.length === task.options.length, "complete ordering key: " + task.id);
+        assert.equal(new Set(task.correctOrder).size, task.options.length, "unique ordering key items: " + task.id);
+        assert.deepEqual([...task.correctOrder].sort(), [...task.options].sort(), "ordering key is a permutation of options: " + task.id);
+      } else if (task.type === "written") {
+        assert.equal(task.points, 8, "written task has eight points: " + task.id);
+        assert.ok(typeof task.rubric === "string" && task.rubric.length > 80, "written task has a substantive rubric: " + task.id);
+      }
+    }
+    assert.deepEqual(byType, { single_choice: 6, multiple_choice: 1, short_text: 1, ordering: 1, written: 1 }, "expected task composition: " + variant.variantId);
+    assert.deepEqual(counts, [2, 2, 1, 1], "balanced single-choice key positions: " + variant.variantId);
+  }
+  assert.deepEqual(typeTotals, { single_choice: 900, multiple_choice: 150, short_text: 150, ordering: 150, written: 150 });
+});
