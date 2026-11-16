@@ -39,6 +39,12 @@ A balanced paper should sample listening, reading, vocabulary in context, gramma
 
 For Technical English, use authentic-feeling but self-contained contexts from aviation, materials, technical drawing, machine tools/CNC, electrical systems, electronics, automation, maintenance, inspection and safety. Assess English comprehension and communication, not specialist calculations or unapproved operating instructions.
 
+## Editorial pass — first variants in eight slots (2026-11-16)
+
+The first variant in C2-S1, C2-S2, C3-S1, C3-S2, C4-S1, C4-S2, C5-S1 and C5-S2 was revised after a sample review found distractors unrelated to the question category (for example, a place or a date offered as an answer to a question about a document or duration). The affected listening and reading choices were replaced with plausible same-category alternatives. In C2-S1 Listening 2, the prompt was also narrowed to ask for both preparation requirements, because the source passage names both a short CV and two questions about training.
+
+A regression test now checks these eight first variants for the identified generic distractor patterns. This is a targeted correction, not evidence that all 150 variants have received full editorial approval. The remaining 142 variants still require a complete content review, including answer validity, distractor plausibility, level, semantic repetition and alignment with the approved curriculum. The combined pilot registry should be regenerated from the corrected individual JSON files before any approval/import step.
+
 ## Variant authoring rules
 
 1. Each slot has 15 variants with globally unique IDs: EN_C0n_Sn_V01 through V15.
