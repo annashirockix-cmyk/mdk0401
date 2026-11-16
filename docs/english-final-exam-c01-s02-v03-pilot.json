@@ -117,7 +117,7 @@
     {
       "id": "c1s2v03_o01",
       "type": "ordering",
-      "prompt": "Check the timetable; Buy the correct ticket; Go to the departure platform; Board the train when it arrives",
+      "prompt": "Put the following steps for preparing for a train journey in a logical order.",
       "options": [
         "Board the train when it arrives",
         "Go to the departure platform",
