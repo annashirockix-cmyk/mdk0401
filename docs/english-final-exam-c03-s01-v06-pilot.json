@@ -42,8 +42,8 @@
       "prompt": "A trainee was asked to identify three components from a training aircraft diagram. She used the reference numbers to locate each item in the illustrated parts catalogue. The catalogue included a description and a drawing for each component. When two items looked similar, she checked the full part number rather than relying on appearance alone. Reading 1. What did the trainee use to locate each item?",
       "options": [
         "The component colours in the photograph",
-        "The reference numbers in the diagram",
         "The storage locations in the workshop",
+        "The reference numbers in the diagram",
         "The supplier names in the parts list"
       ],
       "correctIndex": 2,
@@ -56,8 +56,8 @@
       "options": [
         "She compared the component colours",
         "She measured the overall length",
-        "She checked the full part number",
-        "She compared the storage labels"
+        "She compared the storage labels",
+        "She checked the full part number"
       ],
       "correctIndex": 3,
       "points": 1
