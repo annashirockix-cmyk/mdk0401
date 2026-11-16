@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A task or result that depends on another task is a ___.",
       "acceptedAnswers": [
-        "dependency",
-        "dependent item"
+        "dependency"
       ],
       "points": 2
     },
