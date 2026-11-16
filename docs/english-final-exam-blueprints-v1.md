@@ -1235,3 +1235,7 @@ All 15 written-task rubrics in C1-S1 were rewritten to define task-specific cont
 
 Each rubric retains an 8-point ceiling with four 0–2 criteria. Language accuracy is assessed separately from factual/safety correctness. The 15 individual records and their registry entries were updated; this is a first completed rubric group, not approval of the remaining 135 written tasks or the full exam set. No protected bank, Google Sheet or Apps Script was changed.
 
+## Written-task rubric remediation — C1-S2 V01–V15 (2026-11-16)
+
+All 15 written-task rubrics in C1-S2 were rewritten and synchronized into the combined registry. The criteria now explicitly assess the requested route/directions, equipment borrowing, transport comparison, town service, event report, weather contingency, allergy-aware food choice, tutor email, consumer complaint, invitation, volunteering, exhibition project, source evaluation, work-placement preparation and team presentation. V07 specifically requires staff confirmation of allergen suitability; V09 distinguishes checking an item from reporting a fault; V13 assesses source reliability and reference recording. Each rubric retains four 0–2 criteria (8 points total), separating content, task-specific communication, language and vocabulary/mechanics. All 15 individual rubric records match the registry. This completes two of the ten written-rubric groups; the remaining 120 written tasks still require the same review. No protected bank, Google Sheet or Apps Script was changed.
+
