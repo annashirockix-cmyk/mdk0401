@@ -1727,11 +1727,13 @@ function grantTestAttempts_(data) {
     teacher=editor_(data,courseId);
     student=userByEmail_(studentEmail);
     if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
-    writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email,true);
-    // A teacher-granted extra attempt also releases an expired semester token.
+    // Release an expired semester token before persisting the grant. If the
+    // protected bank/cache cannot be checked, fail closed instead of reporting
+    // a successful grant while leaving the student blocked by a stale token.
     // Never clear an active attempt: granting retries must not reset its timer.
     const expiredSemesterAttemptReset = extra > 0 ?
       clearExpiredEnglishSemesterAttemptForGrant_(studentEmail, courseId, testId) : false;
+    writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email,true);
     appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra,ExpiredSemesterAttemptReset:expiredSemesterAttemptReset});
     resolveAttemptRequestNotifications_(studentEmail,courseId,testId);
     CacheService.getScriptCache().remove("attempt_request:"+studentEmail+":"+courseId+":"+testId.slice(0,120));
