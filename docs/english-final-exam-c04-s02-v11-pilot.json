@@ -103,14 +103,14 @@
     {
       "id": "c4s2v11_f01",
       "type": "single_choice",
-      "prompt": "Check the device register and What should you say?",
+      "prompt": "Before enabling data transfer, which records should be checked?",
       "options": [
-        "I will guess and continue.",
-        "Check the device register and authorised network configuration before enabling data transfer.",
-        "The detail is not important.",
-        "I will copy an unrelated record."
+        "Check the device register and approved network configuration before enabling data transfer.",
+        "Use the newest configuration file in the shared folder without checking its revision.",
+        "Confirm that display settings match the previous training session.",
+        "Check only the user access list; review device and network records later."
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
