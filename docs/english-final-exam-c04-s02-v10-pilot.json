@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "Control systems documentation should identify approved software versions and the roles permitted to access system information. Unusual activity should be reported through the organisation's approved process. Staff should not share account credentials or install unapproved software. Clear records help a technical team understand what changed and which authorised person or process was involved. Reading 1. What should control systems documentation identify?",
       "options": [
-        "Approved software versions and permitted access roles",
-        "Supplier delivery dates and purchase-order values",
         "Machine colour, location and operator shift",
+        "Supplier delivery dates and purchase-order values",
+        "Approved software versions and permitted access roles",
         "Sensor measurements and inspection intervals"
       ],
       "correctIndex": 2,
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why should unusual activity be reported?",
       "options": [
-        "So the technical team can understand what changed and who or what process was involved",
+        "So the equipment can be replaced immediately",
         "So the incident can be closed without reviewing the evidence",
         "So the system can continue without recording the event",
-        "So the equipment can be replaced immediately"
+        "So the technical team can understand what changed and who or what process was involved"
       ],
       "correctIndex": 3,
       "points": 1
