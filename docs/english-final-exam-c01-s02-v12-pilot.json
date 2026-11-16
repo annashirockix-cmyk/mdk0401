@@ -116,7 +116,7 @@
     {
       "id": "c1s2v12_o01",
       "type": "ordering",
-      "prompt": "Prepare the display materials; Test the model; Arrange the labels; Explain the project to visitors",
+      "prompt": "Put the following steps for preparing a project display in a logical order.",
       "options": [
         "Explain the project to visitors",
         "Test the model",
