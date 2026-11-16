@@ -94,9 +94,8 @@
     {
       "id": "c4s1v12_v01",
       "type": "short_text",
-      "prompt": "A device that opens or closes an electrical circuit under control is a ___.",
+      "prompt": "An electromechanical switching device whose coil operates one or more contacts is a ___.",
       "acceptedAnswers": [
-        "switch",
         "relay"
       ],
       "points": 2
