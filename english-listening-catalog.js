@@ -4541,6 +4541,144 @@
       ])
   );
 
+
+  // Listening practice for the remaining 19 pre-existing Technical English lectures.
+  activities.push(
+    legacyActivity("en-c04-s01-l01", "Course 4 · Semester 1 · Atoms, Conductors, Semiconductors and Insulators",
+      "An electronics teacher explains that all materials are made of atoms. Materials behave differently when an electric field is applied. Copper and aluminium are good conductors because electric charge can move through them easily. Rubber and many plastics are insulators. Silicon is a semiconductor: its electrical behaviour can be controlled, which makes it important in electronic devices. The class compares these material groups and their common uses.",
+      [
+        ["Which materials are good conductors?", ["Copper and aluminium", "Rubber and glass", "Wood and paper", "Ceramic and plastic"], 0, "Copper and aluminium are named as conductors."],
+        ["What is a common use of an insulator?", ["To increase current without limit", "To resist unwanted current flow", "To store sound", "To measure distance"], 1, "Insulators resist current flow."],
+        ["Why is silicon important?", ["It is always a liquid", "It is used only in buildings", "Its electrical behaviour can be controlled", "It cannot be used in devices"], 2, "The teacher describes silicon as a controllable semiconductor."]
+      ]),
+    legacyActivity("en-c04-s01-l02", "Course 4 · Semester 1 · Types of Current and Units",
+      "A student asks about the difference between direct current and alternating current. The teacher explains that direct current flows in one direction, while alternating current changes direction periodically. Electric current is measured in amperes, voltage in volts and resistance in ohms. These units describe different properties, so they should not be mixed. When reading a technical table, students must check the quantity, unit and measurement conditions.",
+      [
+        ["How does direct current flow?", ["In one direction", "In two directions at the same time", "Only through air", "Without charge"], 0, "Direct current flows in one direction."],
+        ["What is measured in amperes?", ["Voltage", "Electric current", "Resistance", "Temperature"], 1, "The ampere is the unit of current."],
+        ["What should students check in a technical table?", ["Only the font", "Only the page number", "Quantity, unit and conditions", "The author's favourite colour"], 2, "The final sentence lists all three."]
+      ]),
+    legacyActivity("en-c04-s01-l03", "Course 4 · Semester 1 · Circuit Components",
+      "A basic electrical circuit may contain a power source, conductors, a load and a control device. A battery can provide electrical energy. Wires connect the components, a lamp uses electrical energy to produce light, and a switch opens or closes the circuit. A fuse is a protective component designed to interrupt excessive current under specified conditions. Students identify each component by its name and function in a simple diagram.",
+      [
+        ["What can provide electrical energy?", ["A battery", "A ruler", "A notebook", "A label"], 0, "A battery is the power source in the example."],
+        ["What does a switch do?", ["Measures mass", "Opens or closes a circuit", "Stores a drawing", "Changes the wire material"], 1, "A switch controls circuit continuity."],
+        ["What is the purpose of a fuse?", ["To increase voltage", "To produce light", "To interrupt excessive current under specified conditions", "To measure resistance"], 2, "The script describes the protective function of a fuse."]
+      ]),
+    legacyActivity("en-c04-s01-l04", "Course 4 · Semester 1 · Series and Parallel Circuits",
+      "The instructor compares series and parallel circuits. In a simple series circuit, components share one path for current. If that path is interrupted, the circuit stops operating. In a parallel circuit, components are connected on separate branches. A problem in one branch may not stop the other branches from operating. Students look at two diagrams and describe the number of paths and the effect of an open connection.",
+      [
+        ["How many paths does a simple series circuit have?", ["One", "Two separate branches", "No path", "Four independent sources"], 0, "A series circuit has one path."],
+        ["What is a feature of a parallel circuit?", ["All components share one path", "Components are connected on separate branches", "It has no power source", "It cannot contain a switch"], 1, "Parallel components are on separate branches."],
+        ["What may happen if one parallel branch is interrupted?", ["Every branch must always stop", "The power source disappears", "Other branches may continue operating", "The circuit becomes a series circuit"], 2, "The script says other branches may continue."]
+      ]),
+    legacyActivity("en-c04-s01-l05", "Course 4 · Semester 1 · Conventional Power Plants",
+      "A conventional power station converts energy into electricity. In a thermal power plant, fuel heats water and produces steam. The steam turns a turbine, and the turbine drives a generator. Different plants use different fuels and technologies, and each has environmental and operational considerations. Engineers monitor performance, emissions and equipment condition. Students learn the vocabulary of energy conversion without treating the classroom description as an operating procedure.",
+      [
+        ["What does steam turn in the example?", ["A turbine", "A battery", "A switch", "A computer mouse"], 0, "Steam turns the turbine."],
+        ["What does the turbine drive?", ["A water filter", "A generator", "A mobile phone", "A measuring ruler"], 1, "The turbine drives a generator."],
+        ["What may engineers monitor?", ["Only the building colour", "Only visitor numbers", "Performance, emissions and equipment condition", "The lunch menu"], 2, "The script lists these monitoring areas."]
+      ]),
+    legacyActivity("en-c04-s01-l06", "Course 4 · Semester 1 · Alternative Power Sources",
+      "A college group prepares a presentation about renewable energy. Solar panels convert sunlight into electrical energy. Wind turbines use moving air to drive a generator. Hydropower uses moving or falling water. These sources can reduce dependence on fossil fuels, although their output may depend on weather, location and storage. The students compare advantages and limitations and avoid claiming that one source is suitable for every place.",
+      [
+        ["What do solar panels convert?", ["Sunlight into electrical energy", "Wind into sound", "Water into metal", "Heat into paper"], 0, "Solar panels convert sunlight into electricity."],
+        ["What drives a wind turbine?", ["A battery", "Moving air", "A water pipe", "A computer program"], 1, "Wind provides the movement."],
+        ["What can influence renewable energy output?", ["The colour of the building", "The number of chairs", "Weather, location and storage", "The spelling of a report"], 2, "The script names these factors."]
+      ]),
+    legacyActivity("en-c04-s01-l07", "Course 4 · Semester 1 · Main Inventions in Electronics",
+      "A history lecturer describes how electronic technology developed. The vacuum tube made early electronic amplification possible, but it was relatively large and used significant power. The transistor was smaller, more reliable and suitable for mass production. Integrated circuits placed many electronic components on a small chip. These developments helped make computers, communication devices and control systems more compact and powerful.",
+      [
+        ["What made early electronic amplification possible?", ["The vacuum tube", "The optical mouse", "The USB cable", "The solar panel"], 0, "The vacuum tube is identified as an early device."],
+        ["What advantage did the transistor offer?", ["It was larger and heavier", "It was smaller and more reliable", "It needed no materials", "It replaced every sensor"], 1, "The script lists smaller size and reliability."],
+        ["What do integrated circuits place on a chip?", ["Only one wire", "A mechanical gearbox", "Many electronic components", "A paper drawing"], 2, "An integrated circuit contains many components on a chip."]
+      ]),
+    legacyActivity("en-c04-s01-l08", "Course 4 · Semester 1 · Electronic Circuits",
+      "An electronic circuit processes electrical signals. Resistors limit or control current in a circuit, capacitors store electrical charge, and diodes allow current to flow mainly in one direction. Transistors can switch or amplify signals. A circuit diagram uses symbols to show how components are connected. Before discussing a circuit, students identify the symbols and read the labels carefully. The diagram is a representation, not a photograph of the physical board.",
+      [
+        ["What can a resistor do?", ["Limit or control current", "Store a large file", "Measure distance", "Produce wind"], 0, "The script describes the resistor's role."],
+        ["What does a capacitor store?", ["Sound", "Electrical charge", "Compressed air", "Paper records"], 1, "A capacitor stores electrical charge."],
+        ["What does a circuit diagram show?", ["The weather", "The size of the classroom", "How components are connected", "The operator's timetable"], 2, "Symbols show component connections."]
+      ]),
+    legacyActivity("en-c04-s01-l09", "Course 4 · Semester 1 · Mobile Phones and Wireless Communication",
+      "A mobile phone is a portable communication device. It uses radio signals to exchange information with a nearby base station. The network connects calls and data services through a wider system. A phone also contains a processor, memory, sensors and a battery. Signal quality may depend on distance, obstacles and network conditions. Students discuss how a message travels and why a weak signal can interrupt communication.",
+      [
+        ["How does a mobile phone exchange information?", ["Using radio signals", "Using a paper form", "Using a water pipe", "Using a mechanical belt"], 0, "The phone uses radio signals."],
+        ["What connects calls and data services?", ["A workshop tool", "The network", "A drawing board", "A loudspeaker only"], 1, "The network connects services."],
+        ["What may affect signal quality?", ["The phone case colour only", "The user's handwriting", "Distance, obstacles and network conditions", "The size of a notebook"], 2, "These factors are named in the script."]
+      ]),
+    legacyActivity("en-c04-s02-l01", "Course 4 · Semester 2 · Means of Transmission",
+      "Communication systems transmit information from one point to another. Copper cables carry electrical signals, optical fibres carry light signals, and wireless systems use electromagnetic waves. Each medium has advantages and limitations in terms of distance, bandwidth, interference and installation. Engineers select a medium for the system requirements. When a signal is weak or delayed, technicians record the conditions and describe the observed problem accurately.",
+      [
+        ["What do optical fibres carry?", ["Light signals", "Mechanical force", "Fuel", "Compressed water"], 0, "Optical fibres carry light signals."],
+        ["What do wireless systems use?", ["Wooden rods", "Electromagnetic waves", "Paper labels", "Moving gears"], 1, "Wireless communication uses electromagnetic waves."],
+        ["What should technicians record when a signal is weak?", ["Only an opinion", "A guessed cause", "Conditions and observed problem", "A new device name"], 2, "The script asks for accurate records."]
+      ]),
+    legacyActivity("en-c04-s02-l02", "Course 4 · Semester 2 · Networks and Topologies",
+      "A computer network connects devices so that they can exchange data and share resources. In a star topology, devices connect to a central switch. In a bus topology, devices share a main communication line. A ring topology connects devices in a closed path. Each design has different strengths and failure points. Students read a network diagram and explain which devices communicate through the central switch.",
+      [
+        ["Where do devices connect in a star topology?", ["To a central switch", "To a single ring only", "To a printer directly", "To no shared point"], 0, "A star topology uses a central connection point."],
+        ["What do devices share in a bus topology?", ["A battery", "A main communication line", "A keyboard", "A storage cabinet"], 1, "The bus topology uses a main line."],
+        ["What should students use to understand the network?", ["A weather report", "A safety helmet", "A network diagram", "A shopping list"], 2, "The class reads a network diagram."]
+      ]),
+    legacyActivity("en-c04-s02-l03", "Course 4 · Semester 2 · Hardware and Software",
+      "A computer system includes hardware and software. Hardware means the physical components, such as the processor, memory, keyboard and display. Software is the set of programs and instructions that tell the computer what to do. The operating system manages resources and provides a platform for applications. A computer may have powerful hardware, but it still needs suitable software to perform a useful task.",
+      [
+        ["What is hardware?", ["Physical computer components", "A list of passwords", "A set of instructions only", "A type of network"], 0, "Hardware refers to physical components."],
+        ["What is software?", ["The computer case", "Programs and instructions", "The power cable", "The screen surface"], 1, "Software consists of programs and instructions."],
+        ["What does an operating system manage?", ["The classroom", "The weather", "Computer resources", "The user's timetable"], 2, "The operating system manages resources."]
+      ]),
+    legacyActivity("en-c04-s02-l04", "Course 4 · Semester 2 · USB Flash Drives and Types of Computers",
+      "A USB flash drive is a small portable storage device. It can transfer files between compatible computers, but users should protect important data and follow the organisation's security rules. Computers also differ by size and purpose. Desktop computers are designed for a fixed workplace, laptops are portable, and servers provide services or resources to other devices. The best choice depends on the task, performance needs and security requirements.",
+      [
+        ["What is a USB flash drive used for?", ["Portable file storage and transfer", "Measuring voltage", "Cutting metal", "Producing electricity"], 0, "The device stores and transfers files."],
+        ["What is a laptop designed to provide?", ["A fixed location only", "Portability", "A power station", "A network cable"], 1, "Laptops are portable computers."],
+        ["What should users consider when transferring files?", ["Only the device colour", "The length of a desk", "Data protection and security rules", "The number of windows"], 2, "The script emphasises data protection."]
+      ]),
+    legacyActivity("en-c04-s02-l05", "Course 4 · Semester 2 · The Internet",
+      "The internet is a global network of connected networks. It supports services such as websites, email, file transfer and online communication. A web browser requests information from a server and displays the response. Users should check the source of information, protect personal data and be careful with unexpected links or attachments. A reliable digital report identifies its sources and distinguishes verified information from opinion.",
+      [
+        ["What is the internet?", ["A global network of networks", "A single computer", "A type of printer", "A mobile battery"], 0, "The opening sentence defines the internet."],
+        ["What does a web browser do?", ["Repairs a server", "Requests and displays information", "Measures current", "Creates a metal part"], 1, "The browser requests information and displays the response."],
+        ["What should users do with online information?", ["Trust every message", "Share every password", "Check sources and protect personal data", "Open every attachment"], 2, "The script gives these safe practices."]
+      ]),
+    legacyActivity("en-c04-s02-l06", "Course 4 · Semester 2 · Automation and Robotics",
+      "An automated production cell may include a controller, sensors, actuators and a robot. The controller follows a program and receives information from sensors. Actuators create movement or perform an action. A robot can repeat a programmed task with consistent timing, but the work area still needs risk assessment, guarding and trained supervision. Students describe the flow of information and distinguish automatic operation from the human responsibility for safe work.",
+      [
+        ["What does a controller follow?", ["A program", "A handwritten shopping list", "A weather forecast", "A road map"], 0, "The controller follows a program."],
+        ["What do actuators do?", ["Create movement or perform an action", "Write reports", "Store paper", "Measure language level"], 1, "Actuators create movement or action."],
+        ["What remains necessary around robots?", ["No supervision", "Removing all guards", "Risk assessment and trained supervision", "Ignoring the work area"], 2, "The script stresses risk assessment and supervision."]
+      ]),
+    legacyActivity("en-c04-s02-l07", "Course 4 · Semester 2 · Sensors",
+      "A sensor detects a physical condition and converts it into a signal that a system can use. A temperature sensor measures temperature, a pressure sensor responds to pressure, and a proximity sensor detects the presence of an object. The controller interprets the signal according to the system design. A sensor reading should be considered together with its unit, range and operating conditions. A value without context may be misleading.",
+      [
+        ["What does a sensor detect?", ["A physical condition", "A written paragraph", "A person's opinion", "A timetable"], 0, "A sensor detects a physical condition."],
+        ["Which sensor responds to pressure?", ["A temperature sensor", "A pressure sensor", "A light switch", "A keyboard"], 1, "The pressure sensor is designed for pressure."],
+        ["What should be considered with a sensor reading?", ["Only the screen colour", "Only the date", "Unit, range and conditions", "The operator's favourite tool"], 2, "These details give the reading context."]
+      ]),
+    legacyActivity("en-c04-s02-l08", "Course 4 · Semester 2 · The Optical Mouse",
+      "An optical mouse is an input device that detects movement across a surface. A light source illuminates the surface, and a small sensor captures images many times each second. The device compares these images to estimate movement and sends information to the computer. The pointer then moves on the screen. The example shows how a sensor, a processor and software work together in an everyday device.",
+      [
+        ["What type of device is an optical mouse?", ["An input device", "A power generator", "A storage server", "A measuring instrument for voltage"], 0, "The mouse is an input device."],
+        ["What does the sensor capture?", ["Sound recordings", "Images of the surface", "Temperature charts", "Printed labels"], 1, "The sensor captures images of the surface."],
+        ["What does the example demonstrate?", ["Only mechanical force", "A type of fuel", "A sensor, processor and software working together", "A network without devices"], 2, "The final sentence summarises the system."]
+      ]),
+    legacyActivity("en-c05-s01-l01", "Course 5 · Semester 1 · Types of Maintenance",
+      "A maintenance planner explains three common approaches. Preventive maintenance is scheduled to reduce the likelihood of failure. Corrective maintenance takes place after a fault has been identified. Condition-based maintenance uses information about the equipment's state to help decide when action is needed. The correct approach depends on the equipment, risks, approved requirements and available evidence. A maintenance record should show what was observed and what action was authorised.",
+      [
+        ["When is preventive maintenance scheduled?", ["Before a failure, to reduce its likelihood", "Only after a complete breakdown", "Without a plan", "Only when equipment is sold"], 0, "Preventive maintenance is scheduled in advance."],
+        ["What triggers corrective maintenance?", ["A new timetable", "An identified fault", "A change of uniform", "A training certificate"], 1, "Corrective maintenance follows an identified fault."],
+        ["What should a maintenance record show?", ["Personal guesses", "Only the final cost", "Observations and authorised action", "Unrelated comments"], 2, "The script specifies observations and authorised action."]
+      ]),
+    legacyActivity("en-c05-s01-l02", "Course 5 · Semester 1 · Automotive Maintenance",
+      "A vehicle maintenance technician reviews a service record. The record lists the vehicle identification, date, mileage and work completed. The technician checks the service schedule and notes any reported symptoms. If a warning light appears, the driver should describe when it occurred and whether the vehicle behaved differently. The technician uses the approved diagnostic process and records the findings. Clear communication helps separate the customer's observation from the confirmed cause.",
+      [
+        ["What information may appear in a service record?", ["Vehicle identification, date, mileage and work completed", "Only the driver's favourite route", "A list of holidays", "The colour of the workshop"], 0, "The script lists these record details."],
+        ["What should a driver describe about a warning light?", ["Only its colour", "When it appeared and any change in vehicle behaviour", "The mechanic's name", "The price of fuel"], 1, "The driver should describe the time and symptoms."],
+        ["Why is clear communication important?", ["It removes the need for records", "It confirms every guess", "It separates observations from confirmed causes", "It replaces diagnosis"], 2, "The final sentence explains the distinction."]
+      ])
+  );
+
   // Sort all 75 active new-lesson activities by course, semester and lesson.
   activities.sort(function (a, b) {
     var x = a.id.match(/en-c(\d+)-s(\d+)-l(\d+)/);
