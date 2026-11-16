@@ -44,7 +44,7 @@
         "The centre wants to avoid paying for maintenance",
         "Solar panels produce more energy at night",
         "Solar output varies and is lower in the evening or when sunlight is limited",
-        "Solar output varies and is lower in the evening or when sunlight is limited"
+        "The centre's energy demand rises during peak use"
       ],
       "correctIndex": 2,
       "points": 1
@@ -56,7 +56,7 @@
       "options": [
         "Installing more parking spaces",
         "Replacing all windows",
-        "Improving the building's insulation",
+        "Installing motion sensors in the corridors",
         "Improving the building's insulation"
       ],
       "correctIndex": 3,
