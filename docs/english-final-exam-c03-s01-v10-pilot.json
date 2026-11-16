@@ -42,8 +42,8 @@
       "prompt": "A trainee needed to measure the outside diameter of a small cylindrical part. The steel rule was not suitable because its scale did not provide the required level of detail. The trainee selected a vernier calliper and checked that the instrument was clean and in good condition. The measured value was recorded with the correct unit and the tool used was named in the inspection note. Reading 1. Why was the steel rule unsuitable?",
       "options": [
         "Its scale was too long for the component",
-        "Its scale did not provide the required level of detail",
         "Its readings could not be converted into millimetres",
+        "Its scale did not provide the required level of detail",
         "It was designed only for measuring angles"
       ],
       "correctIndex": 2,
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What did the trainee record in the inspection note?",
       "options": [
-        "The measured value, correct unit and tool used",
+        "The nominal dimension without the recorded result",
         "The date, room number and name of the instructor",
         "The tool identification without the measured value",
-        "The nominal dimension without the recorded result"
+        "The measured value, correct unit and tool used"
       ],
       "correctIndex": 3,
       "points": 1
