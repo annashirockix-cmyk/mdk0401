@@ -118,7 +118,7 @@
     {
       "id": "c1s2v04_o01",
       "type": "ordering",
-      "prompt": "Explain what service you need; Ask the assistant for information; Check the directions on the map; Visit the shop",
+      "prompt": "Put the following steps for requesting a service at a shop in a logical order.",
       "options": [
         "Visit the shop",
         "Check the directions on the map",
