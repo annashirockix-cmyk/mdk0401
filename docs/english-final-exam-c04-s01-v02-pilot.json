@@ -78,10 +78,10 @@
     {
       "id": "c4s1v02_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that should appear in a clear electrical measurement record.",
+      "prompt": "Choose TWO fields needed to interpret a recorded electrical measurement.",
       "options": [
-        "The colour of the instrument case",
-        "An unrelated appointment time",
+        "Instrument purchase price",
+        "Supplier contact name",
         "Measured value and unit",
         "Test point or measurement context"
       ],
