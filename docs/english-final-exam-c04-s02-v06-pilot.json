@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A network protocol defines rules that allow devices to exchange information. Different protocols may support addressing, routing, error detection or application-level communication. A network diagram can show how devices are connected, but it does not describe every detail of the protocol. Engineers should identify the relevant standard and consult current technical documentation when describing system behaviour. Reading 1. What does a network protocol define?",
       "options": [
-        "Rules that allow devices to exchange information",
-        "A diagram showing where devices are physically installed",
         "A list of passwords used by network users",
+        "A diagram showing where devices are physically installed",
+        "Rules that allow devices to exchange information",
         "A record of the equipment purchase date"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why is a network diagram not enough to describe every protocol detail?",
       "options": [
         "Because it shows every protocol message in detail",
-        "Because it shows connections but not every detail of protocol behaviour",
+        "Because it replaces the need for technical documentation",
         "Because it contains no information about connected devices",
-        "Because it replaces the need for technical documentation"
+        "Because it shows connections but not every detail of protocol behaviour"
       ],
       "correctIndex": 3,
       "points": 1
