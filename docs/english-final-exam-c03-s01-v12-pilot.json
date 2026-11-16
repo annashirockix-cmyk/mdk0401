@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A short line that tells the reader what an email is about is the subject ___.",
       "acceptedAnswers": [
-        "line",
-        "subject line"
+        "line"
       ],
       "points": 2
     },
