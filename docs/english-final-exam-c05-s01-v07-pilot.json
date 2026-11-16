@@ -106,10 +106,10 @@
       "type": "single_choice",
       "prompt": "A task remains incomplete at the end of the shift. What should the handover say?",
       "options": [
-        "I will guess and continue.",
+        "The task is finished; no further details are needed.",
         "The task remains open; the outstanding action and responsible team are identified in the handover.",
-        "The detail is not important.",
-        "I will copy an unrelated record."
+        "The next shift can decide what was left incomplete.",
+        "The task is complete if most of the work has been done."
       ],
       "correctIndex": 1,
       "points": 1
