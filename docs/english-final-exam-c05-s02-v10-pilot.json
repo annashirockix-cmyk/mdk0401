@@ -25,7 +25,7 @@
     {
       "id": "c5s2v10_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which teams should bring status summaries?",
+      "prompt": "Which teams' status summaries should representatives bring to the meeting?",
       "audioText": "The project coordinator will hold an integrated handover meeting on Friday at one. Representatives from mechanical, electrical and quality teams should bring their latest status summaries. The meeting will identify interface issues, outstanding evidence and actions that depend on more than one team. Each action should have an owner and a target review date.",
       "options": [
         "The interface register and action log",
