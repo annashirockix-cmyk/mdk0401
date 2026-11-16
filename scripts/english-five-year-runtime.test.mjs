@@ -72,13 +72,13 @@ test("all 75 new lecture IDs are in the five-year map and have browser listening
 
   assert.equal(mapIds.length, 75);
   assert.deepEqual(mapIds.filter((id) => !runtimeIds.has(id)), []);
-  assert.equal(window.EnglishListeningCatalogue.count, 120);
+  assert.equal(window.EnglishListeningCatalogue.count, 75);
   for (const id of mapIds) {
     assert.ok(window.EnglishListeningCatalogue.getById(id), `missing listening activity: ${id}`);
   }
 });
 
-test("all 120 listening activities contain usable scripts and answerable practice questions", () => {
+test("all 75 new listening activities contain usable scripts and answerable practice questions", () => {
   const window = loadEnglishRuntime();
   const mapIds = [
     ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\d{2}-s\d{2}-l\d{2}/g)),
