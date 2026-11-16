@@ -120,15 +120,15 @@
       "type": "ordering",
       "prompt": "Put the research steps in the correct order.",
       "options": [
-        "Write the report in your own words",
         "Choose a suitable topic",
         "Find and check reliable sources",
+        "Write the report in your own words",
         "List the sources used"
       ],
       "correctOrder": [
-        "Write the report in your own words",
         "Choose a suitable topic",
         "Find and check reliable sources",
+        "Write the report in your own words",
         "List the sources used"
       ],
       "points": 2
