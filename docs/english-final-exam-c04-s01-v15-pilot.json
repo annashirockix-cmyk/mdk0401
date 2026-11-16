@@ -42,8 +42,8 @@
       "prompt": "A project folder contained a circuit diagram, a component list and an inspection record. During review, a student noticed that one component reference was different in the diagram and the list. The student recorded the mismatch and informed the project tutor. The documents were checked against the approved revision before the list was updated. This maintained a clear record of the change. Reading 1. What mismatch did the student notice?",
       "options": [
         "A drawing revision differed between two documents",
-        "A component reference differed between the diagram and list",
         "The supplier address differed from the invoice",
+        "A component reference differed between the diagram and list",
         "The inspection date differed from the work order"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What was checked before the list was updated?",
       "options": [
         "The equipment serial number was checked against the supplier list",
-        "The documents were checked against the approved revision",
+        "The operator's shift record was checked before the list was updated",
         "The component colour was compared with the parts catalogue",
-        "The operator's shift record was checked before the list was updated"
+        "The documents were checked against the approved revision"
       ],
       "correctIndex": 3,
       "points": 1
