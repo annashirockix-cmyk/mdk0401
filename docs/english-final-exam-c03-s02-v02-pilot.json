@@ -28,12 +28,12 @@
       "prompt": "Listening 2. Which two command types will be compared?",
       "audioText": "The CNC theory class will study the structure of a sample programme on Friday at eleven. Students will use a printed extract and identify programme numbers, block numbers and common address letters. The instructor will explain the difference between a rapid positioning command and a linear feed command. The class will not run the programme on a machine.",
       "options": [
-        "A rapid positioning command and a linear feed command",
         "Two tool-offset commands",
+        "A rapid positioning command and a linear feed command",
         "A spindle command and a coolant command",
         "A coordinate setting and a feed-rate value"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -42,11 +42,11 @@
       "prompt": "A CNC programme is organised into blocks of information. Each block may contain a sequence number and words that describe a command or a value. In a basic example, G00 is associated with rapid positioning, while G01 describes linear interpolation at a programmed feed. The meaning of a complete programme depends on the controller, machine configuration and other instructions, so students should use the approved documentation for the specific equipment. Reading 1. How is a CNC programme organised?",
       "options": [
         "Into separate tool catalogues",
-        "Into blocks of information",
         "Into one unlabelled paragraph",
+        "Into blocks of information",
         "Into drawings without sequence"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
