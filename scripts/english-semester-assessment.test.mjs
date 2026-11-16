@@ -518,6 +518,58 @@ test("final exam start and resume persist attempts and bind them to the authenti
   assert.match(code, /case "resumeenglishfinalexam": result = resumeEnglishFinalExam_\(data\); break;/);
 });
 
+test("final-exam options shuffle and map back correctly across all 150 course variants",()=>{
+  const shuffleSource=extractFunction("shuffleEnglishFinalExamTasks_");
+  const displaySource=extractFunction("englishFinalExamDisplayTasks_");
+  const canonicalSource=extractFunction("englishFinalExamCanonicalOptionIndex_");
+  const shuffle=new Function(shuffleSource+"; return shuffleEnglishFinalExamTasks_;")();
+  const display=new Function(displaySource+"; return englishFinalExamDisplayTasks_;")();
+  const canonical=new Function(canonicalSource+"; return englishFinalExamCanonicalOptionIndex_;")();
+  const slots=[["c01","s01"],["c01","s02"],["c02","s01"],["c02","s02"],["c03","s01"],["c03","s02"],["c04","s01"],["c04","s02"],["c05","s01"],["c05","s02"]];
+  const originalRandom=Math.random;
+  let variantCount=0,optionTaskCount=0,changedOrderCount=0,gradedTaskCount=0,orderingTaskCount=0;
+  Math.random=()=>0.5;
+  try{
+    for(const [course,semester] of slots){
+      for(let variant=1;variant<=15;variant++){
+        const file=path.join(root,`docs/english-final-exam-${course}-${semester}-v${String(variant).padStart(2,"0")}-pilot.json`);
+        const pilot=JSON.parse(fs.readFileSync(file,"utf8"));
+        const randomized=shuffle(pilot.tasks);
+        const resumed=display(pilot.tasks,randomized.optionMaps);
+        variantCount++;
+        randomized.tasks.forEach((shown,index)=>{
+          const original=pilot.tasks[index];
+          const id=String(original.id||original.questionId||index);
+          if(!Array.isArray(original.options)||original.options.length<2)return;
+          optionTaskCount++;
+          const map=randomized.optionMaps[id];
+          assert.ok(Array.isArray(map),`${id} has no private option map`);
+          assert.deepEqual([...map].sort((a,b)=>a-b),original.options.map((_,i)=>i),`${id} map must contain every original option once`);
+          assert.deepEqual(shown.options,map.map(i=>original.options[i]),`${id} displayed options do not follow the map`);
+          assert.deepEqual(resumed[index].options,shown.options,`${id} option order must survive resume`);
+          if(shown.options.some((option,i)=>option!==original.options[i]))changedOrderCount++;
+          if(original.type==="single_choice"||original.type==="multiple_choice"){
+            gradedTaskCount++;
+            const correct=original.type==="single_choice"?[original.correctIndex]:original.correctIndices;
+            correct.forEach(originalIndex=>{
+              const displayIndex=map.indexOf(originalIndex);
+              assert.notEqual(displayIndex,-1,`${id} correct option is missing from the display map`);
+              assert.equal(canonical({optionMaps:randomized.optionMaps},id,displayIndex),originalIndex,`${id} shuffled answer must map back to its protected key`);
+            });
+          }
+          if(original.type==="ordering"){
+            orderingTaskCount++;
+            assert.deepEqual(shown.correctOrder,original.correctOrder,`${id} ordering key must remain canonical`);
+          }
+        });
+      }
+    }
+  }finally{Math.random=originalRandom;}
+  assert.equal(variantCount,150);
+  assert.ok(optionTaskCount>0&&changedOrderCount>0);
+  assert.ok(gradedTaskCount>0&&orderingTaskCount>0);
+});
+
 test("final exam attempt limits count persisted attempts and honor teacher-granted retries", () => {
   const source=extractFunction("getTestAttemptStatus_");
   const statusFn=new Function(
