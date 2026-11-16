@@ -15,9 +15,9 @@
       "audioText": "The college sustainability group has started a project to reduce single-use plastic. A water refill station has been installed beside the main canteen, and students can collect a reusable bottle from the student office on Thursday. The group will compare the amount of plastic waste before and after the project. Volunteers should record observations for two weeks.",
       "options": [
         "Beside the main canteen",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "Beside the student office",
+        "Outside the sports hall",
+        "Near the main entrance"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. How long should volunteers record observations?",
       "audioText": "The college sustainability group has started a project to reduce single-use plastic. A water refill station has been installed beside the main canteen, and students can collect a reusable bottle from the student office on Thursday. The group will compare the amount of plastic waste before and after the project. Volunteers should record observations for two weeks.",
       "options": [
-        "On Friday",
+        "For one week",
         "For two weeks",
-        "Next month",
-        "After the event"
+        "For three weeks",
+        "For one month"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A local college introduced a reusable container scheme after a survey showed that most lunchtime waste came from disposable packaging. The canteen now offers a small discount to students who bring their own containers. Staff also placed clear signs near the serving area. After one term, the amount of disposable packaging had fallen, although the college plans to collect more data before deciding whether to expand the scheme. Reading 1. What encouraged the college to introduce the scheme?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
-        "A survey showed that disposable packaging caused most lunchtime waste",
-        "To buy a ticket"
+        "A new college rule required reusable containers",
+        "A survey showed disposable packaging caused most lunchtime waste",
+        "A local company offered free bottles",
+        "Students asked for longer lunch breaks"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Why will the college collect more data?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To make a better-informed decision about expanding the scheme"
+        "To check whether the discount is popular",
+        "To compare the canteen's opening hours",
+        "To make a better-informed decision about expanding the scheme",
+        "To decide which reusable bottle to purchase"
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "points": 1
     },
     {
