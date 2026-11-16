@@ -15,9 +15,9 @@
       "audioText": "The technology department will host a talk about renewable energy systems on Friday morning. The speaker will compare solar panels and wind turbines and explain why output changes with weather conditions. The talk begins at ten fifteen in Lecture Room 2. Students should read the short introduction on the college platform before attending.",
       "options": [
         "At ten fifteen",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At nine fifteen",
+        "At eleven thirty",
+        "At ten forty-five"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A small community centre installed solar panels to reduce the electricity it bought from the grid. The panels produce the most energy on bright days, so the centre still uses grid electricity in the evening and during periods of low sunlight. The project report compares monthly production with consumption rather than claiming that the building is completely energy independent. It also recommends improving insulation to reduce demand. Reading 1. Why does the centre still use grid electricity?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The centre wants to avoid paying for maintenance",
+        "Solar panels produce more energy at night",
         "Solar output varies and is lower in the evening or when sunlight is limited",
-        "To buy a ticket"
+        "Solar output varies and is lower in the evening or when sunlight is limited"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What additional improvement does the report recommend?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Installing more parking spaces",
+        "Replacing all windows",
+        "Improving the building's insulation",
         "Improving the building's insulation"
       ],
       "correctIndex": 3,
