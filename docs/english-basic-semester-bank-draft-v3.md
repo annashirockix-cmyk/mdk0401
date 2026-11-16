@@ -79,7 +79,7 @@
 **52.** Why did the guide ask visitors to stay on marked paths?
 - A. The paths were shorter.
 - B. The group had to reach a railway station.
-- C. Rare plants grew outside the marked paths.
+- C. To avoid damaging rare plants in the area.
 - D. The students were taking part in a race.
 
 **53.** What did the students collect during the trip?
@@ -145,7 +145,7 @@
 | 49 | B | The comparative form of “modern” is “more modern”. |
 | 50 | C | “Look forward to” is followed by a noun or gerund. |
 | 51 | B | The first sentence says the trip lasted two days. |
-| 52 | C | The guide explains that rare plants grow in the surrounding area. |
+| 52 | C | The text says rare plants grow in the surrounding area; staying on marked paths helps protect them. |
 | 53 | A | The group collected information for a college project. |
 | 54 | D | Heavy rain began earlier than expected. |
 | 55 | B | The final sentence says they prepared a presentation about responsible tourism. |
