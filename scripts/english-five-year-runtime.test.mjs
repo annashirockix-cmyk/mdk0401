@@ -128,3 +128,11 @@ test("runtime loads before app.js and lecture rendering resolves explicit listen
     assert.ok(serviceWorker.includes("./" + file), `service worker must precache ${file}`);
   }
 });
+
+test("English listening lab has a visible navigation entry for users with English course access", () => {
+  const html = read("index.html");
+  const app = read("app.js");
+  assert.ok(html.includes('href="#/english-listening"'), "English Listening route must be reachable from the portal menu");
+  assert.ok(app.includes('href==="#/english-listening"'), "menu visibility must include the listening route in English-access checks");
+  assert.ok(html.indexOf('english-listening-route.js') > html.indexOf('app.js'), "listening route wrapper must install after the main router exists");
+});
