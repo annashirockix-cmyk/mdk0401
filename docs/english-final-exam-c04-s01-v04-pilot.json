@@ -42,8 +42,8 @@
       "prompt": "Electrical energy consumption depends on the power of a device and the time it operates. A device with a higher power rating may use more energy in the same period, although actual consumption also depends on its operating conditions. Energy records often use kilowatt-hours. A student compared two devices and made sure that the measurement periods were equal before drawing a conclusion. Reading 1. What two factors affect energy consumption?",
       "options": [
         "The device's voltage and current",
-        "The device's power and operating time",
         "The device's size and weight",
+        "The device's power and operating time",
         "The device's temperature and production date"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why did the student use equal measurement periods?",
       "options": [
         "To reduce the time needed for the exercise",
-        "To make the comparison fair",
+        "To make the higher value appear more significant",
         "To avoid recording the measurement units",
-        "To make the higher value appear more significant"
+        "To make the comparison fair"
       ],
       "correctIndex": 3,
       "points": 1
