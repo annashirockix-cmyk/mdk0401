@@ -94,9 +94,8 @@
     {
       "id": "c5s2v15_v01",
       "type": "short_text",
-      "prompt": "A short text that brings together the main points of several sources is a ___.",
+      "prompt": "A text that combines key ideas from multiple sources into one integrated account is a ___.",
       "acceptedAnswers": [
-        "summary",
         "synthesis"
       ],
       "points": 2
