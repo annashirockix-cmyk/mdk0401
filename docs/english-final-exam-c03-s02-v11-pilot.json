@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A short description of changes made to a drawing is a revision ___.",
       "acceptedAnswers": [
-        "note",
-        "change note"
+        "note"
       ],
       "points": 2
     },
