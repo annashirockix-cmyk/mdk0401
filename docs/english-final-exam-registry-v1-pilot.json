@@ -8548,7 +8548,7 @@
                   "At the civic centre",
                   "At the town library",
                   "At the college lecture theatre",
-                  "At the civic centre"
+                  "At the civic sports centre"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -8574,7 +8574,7 @@
                 "options": [
                   "They could reduce traffic noise",
                   "They could provide shade and make the route more comfortable",
-                  "They could provide shade and make the route more comfortable",
+                  "They could reduce the distance people need to walk",
                   "They could make the road wider"
                 ],
                 "correctIndex": 2,
@@ -8588,7 +8588,7 @@
                   "To estimate the cost of new street signs",
                   "To check underground services and the space needed for roots",
                   "To choose the colour of the benches",
-                  "To check underground services and the space needed for roots"
+                  "To choose the type of pavement for the route"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -8700,7 +8700,7 @@
                   "In the computer laboratory",
                   "In the science laboratory",
                   "In the main lecture theatre",
-                  "In the computer laboratory"
+                  "In the engineering workshop"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -8726,7 +8726,7 @@
                 "options": [
                   "Because the buildings had different electricity suppliers",
                   "Because the buildings were different sizes",
-                  "Because the buildings were different sizes",
+                  "Because the buildings had different electricity tariffs",
                   "Because the buildings were used at different times"
                 ],
                 "correctIndex": 2,
@@ -8740,7 +8740,7 @@
                   "She needed to compare the number of staff",
                   "She needed to compare energy use per square metre",
                   "She needed to calculate the total floor area only",
-                  "She needed to compare energy use per square metre"
+                  "She needed to compare total energy bills only"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -8852,7 +8852,7 @@
                   "On Tuesday at twelve",
                   "On Monday at twelve",
                   "On Tuesday at one",
-                  "On Tuesday at twelve"
+                  "On Wednesday at twelve"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -8879,7 +8879,7 @@
                   "They repaired every item themselves",
                   "They asked visitors to buy replacement products",
                   "They explained where professional help was available",
-                  "They explained where professional help was available"
+                  "They directed visitors to the nearest supermarket"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -8892,7 +8892,7 @@
                   "Encouraging residents to buy new household items",
                   "Encouraging people to repair items before replacing them",
                   "Encouraging visitors to donate electrical equipment",
-                  "Encouraging people to repair items before replacing them"
+                  "Encouraging residents to learn how to repair cars"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -9003,7 +9003,7 @@
                   "Next Monday at eight in the morning",
                   "Next Tuesday at eight in the morning",
                   "Next Monday at nine in the morning",
-                  "Next Monday at eight in the morning"
+                  "Next Monday at nine thirty"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -9029,7 +9029,7 @@
                 "options": [
                   "They removed technical terms from the guide",
                   "They added screenshots and clear steps",
-                  "They added screenshots and clear steps",
+                  "They replaced the written instructions with a checklist",
                   "They replaced the guide with a video"
                 ],
                 "correctIndex": 2,
@@ -9043,7 +9043,7 @@
                   "More students cancelled their room bookings",
                   "Fewer booking errors were reported",
                   "The college stopped reviewing feedback",
-                  "Fewer booking errors were reported"
+                  "More booking errors were reported"
                 ],
                 "correctIndex": 3,
                 "points": 1
