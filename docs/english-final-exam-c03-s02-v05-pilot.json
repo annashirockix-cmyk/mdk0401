@@ -42,8 +42,8 @@
       "prompt": "Workholding equipment is used to locate and support a workpiece during a manufacturing process. The choice depends on the component shape, the operation and the process documentation. A quality record may identify the datum surfaces used for measurement. Clear communication about the workpiece reference and inspection points helps different team members interpret the record consistently. Reading 1. What is the purpose of workholding equipment?",
       "options": [
         "To measure the cutting speed",
-        "To locate and support a workpiece",
         "To remove chips from the cutting area",
+        "To locate and support a workpiece",
         "To hold the cutting tool in the spindle"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What may a quality record identify?",
       "options": [
         "The material grade and batch number",
-        "The datum surfaces used for measurement",
+        "The cutting force and spindle speed",
         "The tool offset and programme revision",
-        "The cutting force and spindle speed"
+        "The datum surfaces used for measurement"
       ],
       "correctIndex": 3,
       "points": 1
