@@ -1086,6 +1086,7 @@ test("all 150 final-exam source files match the combined registry and pass struc
   assert.equal(variants.length, 150);
   const variantIds = new Set();
   const taskIds = new Set();
+  const sourceRegistryMismatches = [];
   const typeTotals = { single_choice: 0, multiple_choice: 0, short_text: 0, ordering: 0, written: 0 };
 
   for (const variant of variants) {
@@ -1095,7 +1096,7 @@ test("all 150 final-exam source files match the combined registry and pass struc
     assert.ok(match, "well-formed variant ID: " + variant.variantId);
     const sourcePath = `docs/english-final-exam-c0${match[1]}-s0${match[2]}-v${match[3]}-pilot.json`;
     const source = JSON.parse(fs.readFileSync(path.join(root, sourcePath), "utf8"));
-    assert.deepEqual(variant.variantJSON, source, "complete source/registry parity: " + variant.variantId);
+    if (JSON.stringify(variant.variantJSON) !== JSON.stringify(source)) sourceRegistryMismatches.push(variant.variantId);
 
     const tasks = variant.variantJSON.tasks;
     assert.equal(tasks.length, 10, "ten tasks per variant: " + variant.variantId);
@@ -1109,10 +1110,12 @@ test("all 150 final-exam source files match the combined registry and pass struc
       byType[task.type]++;
       if (task.type === "single_choice") {
         assert.ok(Array.isArray(task.options) && task.options.length === 4, "four single-choice options: " + task.id);
+        assert.equal(new Set(task.options.map(option => String(option).trim().toLowerCase())).size, 4, "unique single-choice options: " + task.id);
         assert.ok(Number.isInteger(task.correctIndex) && task.correctIndex >= 0 && task.correctIndex < 4, "valid single-choice key: " + task.id);
         counts[task.correctIndex]++;
       } else if (task.type === "multiple_choice") {
         assert.ok(Array.isArray(task.options) && task.options.length === 4, "four multiple-choice options: " + task.id);
+        assert.equal(new Set(task.options.map(option => String(option).trim().toLowerCase())).size, 4, "unique multiple-choice options: " + task.id);
         assert.ok(Array.isArray(task.correctIndices) && task.correctIndices.length === 2, "exactly two multiple-choice keys: " + task.id);
         assert.equal(new Set(task.correctIndices).size, 2, "distinct multiple-choice keys: " + task.id);
         assert.ok(task.correctIndices.every(index => Number.isInteger(index) && index >= 0 && index < 4), "valid multiple-choice indices: " + task.id);
@@ -1132,6 +1135,7 @@ test("all 150 final-exam source files match the combined registry and pass struc
     assert.deepEqual(counts, [2, 2, 1, 1], "balanced single-choice key positions: " + variant.variantId);
   }
   assert.deepEqual(typeTotals, { single_choice: 900, multiple_choice: 150, short_text: 150, ordering: 150, written: 150 });
+  assert.deepEqual(sourceRegistryMismatches, [], "all individual source JSON files must match the combined registry");
 });
 
 
