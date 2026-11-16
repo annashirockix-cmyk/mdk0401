@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A failure to meet a specified requirement is a non-___.",
       "acceptedAnswers": [
-        "conformity",
-        "non-conformity"
+        "conformity"
       ],
       "points": 2
     },
