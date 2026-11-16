@@ -20910,10 +20910,10 @@
                 "type": "single_choice",
                 "prompt": "An integrated technical report may combine measurements, inspection findings and trend data. Each source should be identified so that a reader can trace where the information came from. The report should explain how the sources relate, but it must not imply that correlation proves causation. Conclusions should be proportionate to the evidence, and any limitation should be stated clearly. Reading 1. Why should each information source be identified?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "To show that all measurements were taken at the same time",
+                  "To prove that one source caused another",
                   "So readers can trace where information came from",
-                  "To buy a ticket"
+                  "To remove the need to explain limitations"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -20923,10 +20923,10 @@
                 "type": "single_choice",
                 "prompt": "What should a report avoid implying?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "That correlation proves causation"
+                  "That all sources are equally reliable",
+                  "That one trend predicts every future event",
+                  "That correlation proves causation",
+                  "That a report must include every available measurement"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -21062,10 +21062,10 @@
                 "type": "single_choice",
                 "prompt": "A fault-analysis team reviewed an intermittent indication reported on several occasions. The event log showed when the indication appeared, while the maintenance history identified earlier work on the system. The team compared the timing of events but did not assume that the earlier work caused the problem. Further evidence was required before the team could confirm a cause or recommend a corrective action. Reading 1. What did the event log show?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Which staff member approved the repair",
+                  "What replacement part was ordered",
                   "When the indication appeared",
-                  "To buy a ticket"
+                  "Why the indication occurred"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -21075,9 +21075,9 @@
                 "type": "single_choice",
                 "prompt": "Why did the team avoid linking the earlier work directly to the problem?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "Because the maintenance history was unavailable",
+                  "Because the indication was recorded only once",
+                  "Because the earlier work had already been repeated",
                   "Further evidence was required before confirming a cause"
                 ],
                 "correctIndex": 3,
@@ -21214,10 +21214,10 @@
                 "type": "single_choice",
                 "prompt": "Before a maintenance document is released, its applicability and revision should be checked and the required approval recorded. The distribution process should make the current version available to the intended users and prevent obsolete copies from being used. A draft may contain useful information, but it should remain clearly identified as a draft until the approval process is complete. Reading 1. What should be checked before a maintenance document is released?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Staff availability, meeting time and distribution list",
+                  "Equipment location, storage label and serial number",
                   "Applicability, revision and required approval",
-                  "To buy a ticket"
+                  "Supplier price, delivery date and payment terms"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -21227,10 +21227,10 @@
                 "type": "single_choice",
                 "prompt": "How should a draft be identified?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "Clearly identified as a draft until approval is complete"
+                  "Approved for immediate use before review",
+                  "Obsolete and withdrawn from the document register",
+                  "Clearly identified as a draft until approval is complete",
+                  "Distributed without a revision identifier"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -21367,10 +21367,10 @@
                 "type": "single_choice",
                 "prompt": "A replacement proposal compared two component options. Option A had a lower purchase cost, while Option B had a longer stated service life and a clearer maintenance record. The review team also considered delivery time and compatibility with the existing assembly. It did not select an option based on price alone; the recommendation explained how each factor affected the decision. Reading 1. Which advantage did Option B have?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "A lower purchase cost and shorter stated service life",
+                  "A faster delivery date and a lower purchase cost",
                   "A longer stated service life and clearer maintenance record",
-                  "To buy a ticket"
+                  "A newer manufacturing date and a larger stock quantity"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -21380,10 +21380,10 @@
                 "type": "single_choice",
                 "prompt": "Why did the team avoid deciding on purchase price alone?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "Because delivery time, compatibility and other factors also affected the decision"
+                  "Because the purchase price was the only verified factor",
+                  "Because delivery time, compatibility and other factors also affected the decision",
+                  "Because the two options had identical service histories",
+                  "Because the maintenance record was not relevant to the assembly"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -21518,10 +21518,10 @@
                 "type": "single_choice",
                 "prompt": "A procurement engineer noticed that a supplier specification listed a different connector type from the one shown on the approved drawing. The engineer sent a concise email with the part reference, the relevant drawing revision and a marked extract. The message asked the supplier to confirm the connector type before the order was processed. It did not assume that either document was incorrect. Reading 1. What discrepancy did the engineer notice?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "The drawing revision differed from the specification",
+                  "The required quantity differed between the documents",
                   "The connector type differed between the supplier specification and approved drawing",
-                  "To buy a ticket"
+                  "The delivery date differed from the project schedule"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -21531,10 +21531,10 @@
                 "type": "single_choice",
                 "prompt": "Why did the message include the drawing revision?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "To identify the exact drawing version being discussed"
+                  "To identify the exact drawing version being discussed",
+                  "To identify the supplier's delivery address",
+                  "To confirm the purchase order payment date",
+                  "To show when the connector was manufactured"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -21670,10 +21670,10 @@
                 "type": "single_choice",
                 "prompt": "A workshop team introduced a revised inspection checklist after repeated recording errors. The number of incomplete records fell during the following month. The team considered this a positive result, but it also noted that staff had received additional training at the same time. The report recommended collecting more data before attributing the improvement to the checklist alone. Reading 1. What change did the workshop team introduce?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
                   "A revised inspection checklist",
-                  "To buy a ticket"
+                  "A new measuring instrument",
+                  "A different supplier for inspection materials",
+                  "A revised shift timetable"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -21683,10 +21683,10 @@
                 "type": "single_choice",
                 "prompt": "Why did the report avoid attributing the result to the checklist alone?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "Because staff also received additional training"
+                  "Because the checklist was not used by every employee",
+                  "Because staff also received additional training",
+                  "Because the inspection sample was too small to record",
+                  "Because the previous checklist had been approved recently"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -21822,10 +21822,10 @@
                 "type": "single_choice",
                 "prompt": "A maintenance record should make it possible to identify the relevant aircraft or component, the task performed and the supporting documentation. Entries should be clear, dated and attributable to the authorised person or process. If a task remains incomplete, its status should be recorded accurately. This allows the next team to understand what has been done and what still requires action. Reading 1. Which information helps identify a maintenance record?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
                   "Aircraft or component reference, task performed and supporting documentation",
-                  "To buy a ticket"
+                  "Name of the training room, lesson time and group number",
+                  "Supplier contact details, purchase price and delivery date",
+                  "Staff rota, annual leave dates and shift preference"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -21835,10 +21835,10 @@
                 "type": "single_choice",
                 "prompt": "Why should an incomplete task be recorded accurately?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "So the next team understands what remains to be done"
+                  "So the next team understands what remains to be done",
+                  "So the previous team can remove the original record",
+                  "So the task can be marked complete without further evidence",
+                  "So the next team can assume the task was not started"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -21973,10 +21973,10 @@
                 "type": "single_choice",
                 "prompt": "A manufacturing project involved mechanical assembly, electrical integration and quality inspection. The mechanical team had completed the housing, while the electrical team was waiting for a connector specification to be confirmed. Quality staff had prepared an inspection plan but needed the final assembly revision. The coordinator recorded these dependencies so that each team could see which action depended on information from another group. Reading 1. What was the electrical team waiting for?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Confirmation of the mounting arrangement",
                   "Confirmation of a connector specification",
-                  "To buy a ticket"
+                  "Confirmation of the inspection plan",
+                  "Confirmation of the project budget"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -21986,10 +21986,10 @@
                 "type": "single_choice",
                 "prompt": "Why did the coordinator record the dependencies?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "So each team could see which action depended on information from another group"
+                  "So each team could see which action depended on information from another group",
+                  "So all teams could complete their tasks without further coordination",
+                  "So the coordinator could remove the inspection plan from the project",
+                  "So the mechanical team could approve the software interface alone"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -22125,10 +22125,10 @@
                 "type": "single_choice",
                 "prompt": "A review found that the part reference in a component record did not match the label on the training item. The reviewer compared the delivery record, inspection entry and current parts information. The difference could not be resolved from the available copy, so the reviewer recorded the discrepancy and requested confirmation from the responsible stores team. The record was not changed until the correct reference had been verified. Reading 1. Which records did the reviewer compare?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Supplier invoice, shift roster and training log",
                   "Delivery record, inspection entry and current parts information",
-                  "To buy a ticket"
+                  "Purchase forecast, staff rota and equipment booking",
+                  "Previous audit report, meeting minutes and annual plan"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -22138,10 +22138,10 @@
                 "type": "single_choice",
                 "prompt": "Why was the record not changed immediately?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "The correct reference had to be verified first"
+                  "The correct reference had to be verified first",
+                  "The stores team had already approved the new reference",
+                  "The label was known to be incorrect",
+                  "The reviewer had completed the annual audit"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -22277,10 +22277,10 @@
                 "type": "single_choice",
                 "prompt": "An audit finding should be linked to a defined requirement. The auditor records the evidence observed, identifies the relevant document or process and explains how the evidence relates to the requirement. A finding should not be based only on an opinion. If the evidence is incomplete, the auditor may request additional information before reaching a conclusion. Reading 1. What should an audit finding be linked to?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "An auditor's personal opinion",
+                  "A previous audit result",
                   "A defined requirement",
-                  "To buy a ticket"
+                  "A team preference"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -22290,10 +22290,10 @@
                 "type": "single_choice",
                 "prompt": "What should happen if the evidence is incomplete?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "Additional information should be requested before reaching a conclusion"
+                  "The finding should be closed as compliant",
+                  "The requirement should be changed to match the evidence",
+                  "Additional information should be requested before reaching a conclusion",
+                  "The previous audit result should be accepted without review"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -22428,10 +22428,10 @@
                 "type": "single_choice",
                 "prompt": "During an equipment integration project, the mechanical team confirmed the mounting arrangement, but the electrical team was waiting for the connector specification. The software team had completed a draft interface description but needed the final sensor reference. The coordinator recorded these dependencies and arranged a joint review so that the teams could confirm compatible information before the design baseline was updated. Reading 1. What information was the electrical team waiting for?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "The mounting arrangement",
                   "The connector specification",
-                  "To buy a ticket"
+                  "The final sensor reference",
+                  "The inspection schedule"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -22441,10 +22441,10 @@
                 "type": "single_choice",
                 "prompt": "Why was a joint review arranged?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "To confirm compatible information before updating the design baseline"
+                  "To assign all integration work to the software team",
+                  "To confirm compatible information before updating the design baseline",
+                  "To approve the draft interface without checking its references",
+                  "To release the design baseline before the teams exchange information"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -22579,10 +22579,10 @@
                 "type": "single_choice",
                 "prompt": "A proposal suggested changing the inspection-record template to reduce incomplete entries. The author used a sample audit to identify the most frequently missing fields and proposed adding clearer prompts. The proposal also noted that staff would need a short briefing before the new template was introduced. It recommended comparing record completeness before and after the change rather than assuming that the new format would solve every problem. Reading 1. What evidence supported the proposed change?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "A supplier complaint about delivery time",
                   "A sample audit showing frequently missing fields",
-                  "To buy a ticket"
+                  "A staff rota showing shift preferences",
+                  "A maintenance forecast showing expected workload"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -22592,10 +22592,10 @@
                 "type": "single_choice",
                 "prompt": "What additional action did the proposal identify?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "A short staff briefing before introducing the template"
+                  "A short staff briefing before introducing the template",
+                  "A change to the supplier payment schedule",
+                  "A replacement of the inspection equipment",
+                  "Cancellation of the next sample audit"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -22730,10 +22730,10 @@
                 "type": "single_choice",
                 "prompt": "A technical summary may combine information from several documents. The writer should identify each source, select details relevant to the question and explain how the information fits together. If two sources give different values, the difference should be reported rather than hidden. The summary should distinguish confirmed information from details that still require clarification and should avoid adding conclusions that the sources do not support. Reading 1. What should a writer do when two sources give different values?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Select the newer value without checking its source",
+                  "Calculate an average and omit the original values",
                   "Report the difference rather than hide it",
-                  "To buy a ticket"
+                  "Remove both values from the summary"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -22743,10 +22743,10 @@
                 "type": "single_choice",
                 "prompt": "What should the summary avoid adding?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "Conclusions that the sources do not support"
+                  "Conclusions that the sources do not support",
+                  "Source references that identify the documents",
+                  "Conflicting values that are clearly reported",
+                  "Details that still require clarification"
                 ],
                 "correctIndex": 3,
                 "points": 1
