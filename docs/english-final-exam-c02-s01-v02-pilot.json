@@ -117,7 +117,7 @@
     {
       "id": "c2s1v02_o01",
       "type": "ordering",
-      "prompt": "Choose the role; List relevant experience; Write clear skill examples; Check the CV for errors",
+      "prompt": "Put the following steps for tailoring a CV to a specific role in a logical order.",
       "options": [
         "Check the CV for errors",
         "List relevant experience",
