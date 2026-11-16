@@ -19144,7 +19144,7 @@
               {
                 "id": "c5s1v06_f01",
                 "type": "single_choice",
-                "prompt": "The task card may refer to a different aircraft configuration. What should you ask?",
+                "prompt": "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
                 "options": [
                   "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
                   "Could we use the task card for a similar model and confirm the details later?",
