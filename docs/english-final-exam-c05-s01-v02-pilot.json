@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A rule or condition used to decide whether an item is acceptable is an acceptance ___.",
       "acceptedAnswers": [
-        "criterion",
-        "criteria"
+        "criterion"
       ],
       "points": 2
     },
