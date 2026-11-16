@@ -42,8 +42,8 @@
       "prompt": "An open circuit describes a break in a path where continuity is not present. A short circuit describes an unintended low-resistance connection between points. An intermittent fault occurs irregularly and may be difficult to reproduce. These terms describe different conditions, but a report should still record the evidence and test context rather than state a cause without confirmation. Reading 1. What does an open circuit describe?",
       "options": [
         "A short circuit between two conductors",
-        "A break in a path where continuity is not present",
         "A normal path with low resistance",
+        "A break in a path where continuity is not present",
         "A change in the supply voltage"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why should a report include test context?",
       "options": [
         "To identify the person who performed the test",
-        "To record evidence and avoid an unsupported conclusion",
+        "To remove the need for a measurement record",
         "To confirm that every component has failed",
-        "To remove the need for a measurement record"
+        "To record evidence and avoid an unsupported conclusion"
       ],
       "correctIndex": 3,
       "points": 1
