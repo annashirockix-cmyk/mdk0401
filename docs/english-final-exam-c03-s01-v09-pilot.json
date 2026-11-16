@@ -42,8 +42,8 @@
       "prompt": "After checking a batch of training components, a quality assistant prepared an inspection report. Most measurements were within the specified limits, but one item did not meet the drawing requirement. The assistant recorded the actual value, identified the component and described the issue clearly. The report was then sent to the supervisor for review before the batch status was updated. Reading 1. What did the assistant do when one item did not meet the requirement?",
       "options": [
         "Estimated the value and updated the batch status",
-        "Recorded the actual value, identified the component and described the issue",
         "Changed the result to match the requirement",
+        "Recorded the actual value, identified the component and described the issue",
         "Waited until the next batch before recording the issue"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Who received the report for review?",
       "options": [
         "The quality manager",
-        "The supervisor",
+        "The design engineer",
         "The stores coordinator",
-        "The design engineer"
+        "The supervisor"
       ],
       "correctIndex": 3,
       "points": 1
