@@ -3728,12 +3728,25 @@ function importEnglishSemesterTests_(data) {
 }
 
 function sanitizeEnglishSemesterTests_(tests) {
+  // The student catalogue is an explicit public projection, not a recursive
+  // copy of teacher-authored bank metadata. Never forward unknown test fields.
   return (tests || []).map(function(test) {
-    const safe = sanitizeAssessmentQuestionForStudent_(test);
-    safe.questions = (test.questions || []).map(function(question) {
-      const cleanQuestion = sanitizeAssessmentQuestionForStudent_(question);
-      return {q:String(cleanQuestion && cleanQuestion.q || ""),options:Array.isArray(cleanQuestion && cleanQuestion.options)?cleanQuestion.options.slice():[]};
-    });
+    const safe = {
+      id:String(test && test.id || ""),
+      title:String(test && test.title || ""),
+      subtitle:String(test && test.subtitle || ""),
+      year:Number(test && test.year) || 0,
+      semester:Number(test && test.semester) || 0,
+      time:Math.max(1, Number(test && test.time) || 45),
+      questions:(test && Array.isArray(test.questions) ? test.questions : []).map(function(question) {
+        return {
+          q:String(question && question.q || ""),
+          options:question && Array.isArray(question.options) ? question.options.map(function(option) {
+            return String(option == null ? "" : option);
+          }) : []
+        };
+      })
+    };
     return safe;
   });
 }
