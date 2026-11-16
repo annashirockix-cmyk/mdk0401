@@ -15,9 +15,9 @@
       "audioText": "The machine tools department will introduce the main parts of a training lathe on Wednesday at nine. Students should meet in the theory classroom first, where the instructor will show a labelled diagram. The group will then observe the machine from the designated viewing area. No machine operation is planned during this introductory session.",
       "options": [
         "On Wednesday at nine",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at ten",
+        "On Wednesday at eleven",
+        "On Friday at nine"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Where will students meet first?",
       "audioText": "The machine tools department will introduce the main parts of a training lathe on Wednesday at nine. Students should meet in the theory classroom first, where the instructor will show a labelled diagram. The group will then observe the machine from the designated viewing area. No machine operation is planned during this introductory session.",
       "options": [
-        "On Friday",
+        "In the workshop",
         "In the theory classroom",
-        "Next month",
-        "After the event"
+        "In the machine shop",
+        "In the library"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A conventional lathe rotates a workpiece while a cutting tool removes material. The main components include the bed, headstock, tailstock and carriage. Each part has a different function, and the machine type determines the available operations. Before discussing a machine, students should use the correct component names and refer to the manufacturer's documentation for model-specific details. Reading 1. What rotates during a conventional turning operation?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The cutting tool",
+        "The headstock",
         "The workpiece",
-        "To buy a ticket"
+        "The carriage"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Where should students look for model-specific information?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "The college timetable",
+        "A general safety poster",
+        "The workshop attendance sheet",
         "The manufacturer's documentation"
       ],
       "correctIndex": 3,
