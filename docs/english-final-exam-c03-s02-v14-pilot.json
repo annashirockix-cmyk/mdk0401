@@ -42,8 +42,8 @@
       "prompt": "Process capability compares the variation of a process with the limits specified for a product feature. A capability index is meaningful only when the data are suitable and the process assumptions have been considered. A report should identify the measurement method, sample period and specification limits. It should not present a capability figure without explaining the context in which it was calculated. Reading 1. What does process capability compare?",
       "options": [
         "The nominal dimension with the actual measured value",
-        "Process variation with the specified product limits",
         "The machine output with the operator's working hours",
+        "Process variation with the specified product limits",
         "The supplier's delivery performance with the order quantity"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Which context should a capability report identify?",
       "options": [
         "Machine model, operator name and production quantity",
-        "Measurement method, sample period and specification limits",
+        "Material colour, storage location and batch number",
         "Supplier address, delivery date and invoice reference",
-        "Material colour, storage location and batch number"
+        "Measurement method, sample period and specification limits"
       ],
       "correctIndex": 3,
       "points": 1
