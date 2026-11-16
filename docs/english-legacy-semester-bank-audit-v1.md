@@ -21,7 +21,7 @@ The client-side legacy Technical array is now empty instead of cloning Basic. Ba
 ## Release gates
 
 - Review Technical draft items for terminology, difficulty, ESP balance and alignment with the approved five-year work programme.
-- Review Basic legacy repeats and create a separately keyed Basic assessment bank.
+- Keep the legacy Basic seed out of the protected bank. A separate 200-item Basic authoring pool now exists, but it must be mapped, checked against the approved programme and exact Belova edition, and independently reviewed before conversion into approved semester assessments.
 - Compare the Technical draft against the protected Technical VPR and all current practice/lesson tests.
 - Convert only approved material to the server-side schema, import to the protected sheet, read it back, verify answer-key sanitization, and run regression tests.
 
