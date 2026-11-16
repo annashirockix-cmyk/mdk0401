@@ -42,11 +42,11 @@
       "prompt": "A local college introduced a reusable container scheme after a survey showed that most lunchtime waste came from disposable packaging. The canteen now offers a small discount to students who bring their own containers. Staff also placed clear signs near the serving area. After one term, the amount of disposable packaging had fallen, although the college plans to collect more data before deciding whether to expand the scheme. Reading 1. What encouraged the college to introduce the scheme?",
       "options": [
         "A new college rule required reusable containers",
-        "A survey showed disposable packaging caused most lunchtime waste",
         "A local company offered free bottles",
+        "A survey showed disposable packaging caused most lunchtime waste",
         "Students asked for longer lunch breaks"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -56,10 +56,10 @@
       "options": [
         "To check whether the discount is popular",
         "To compare the canteen's opening hours",
-        "To make a better-informed decision about expanding the scheme",
-        "To decide which reusable bottle to purchase"
+        "To decide which reusable bottle to purchase",
+        "To make a better-informed decision about expanding the scheme"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
