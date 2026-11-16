@@ -20267,9 +20267,9 @@
                 "type": "single_choice",
                 "prompt": "A service notice may provide information about a product, system or maintenance topic. Before using it, the reader should check the affected model range, applicability statement, issue date and any referenced documents. Similar aircraft or equipment may have different configurations. If applicability is uncertain, the responsible technical team should confirm whether the notice applies to the specific item under review. Reading 1. Which details should be checked before using a service notice?",
                 "options": [
-                  "Affected model range, applicability statement, issue date and referenced documents",
-                  "Supplier price, delivery date, payment terms and invoice number",
                   "Technician name, shift rota, training date and leave record",
+                  "Supplier price, delivery date, payment terms and invoice number",
+                  "Affected model range, applicability statement, issue date and referenced documents",
                   "Equipment colour, storage location, room number and group"
                 ],
                 "correctIndex": 2,
@@ -20282,8 +20282,8 @@
                 "options": [
                   "The previous shift should confirm it from memory",
                   "The notice should be assumed to apply to all similar models",
-                  "The responsible technical team should confirm whether it applies",
-                  "The notice should be used first and checked after the task"
+                  "The notice should be used first and checked after the task",
+                  "The responsible technical team should confirm whether it applies"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -20418,9 +20418,9 @@
                 "type": "single_choice",
                 "prompt": "A supplier evaluation may consider delivery reliability, product conformity and the effectiveness of responses to reported issues. A single late delivery does not necessarily describe long-term performance, so the review should use an appropriate period and clear measures. The report should explain the data source and any limitation, rather than relying on informal comments or an unsupported overall rating. Reading 1. Which factors may be considered in a supplier evaluation?",
                 "options": [
-                  "Delivery reliability, product conformity and responses to reported issues",
-                  "Supplier popularity, office location and advertising budget",
                   "Personal opinions, informal comments and one recent conversation",
+                  "Supplier popularity, office location and advertising budget",
+                  "Delivery reliability, product conformity and responses to reported issues",
                   "Purchase price alone, without delivery or quality information"
                 ],
                 "correctIndex": 2,
@@ -20432,9 +20432,9 @@
                 "prompt": "Why should the review use an appropriate period?",
                 "options": [
                   "To make one late delivery represent the supplier's whole history",
-                  "To assess performance over time rather than rely on one event",
+                  "To replace measured results with informal comments",
                   "To avoid comparing delivery and conformity data",
-                  "To replace measured results with informal comments"
+                  "To assess performance over time rather than rely on one event"
                 ],
                 "correctIndex": 3,
                 "points": 1
