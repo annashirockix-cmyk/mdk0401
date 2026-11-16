@@ -762,3 +762,16 @@ Task 9 во всех вариантах содержит явную инстру
 V08 task 2 спрашивает о двух документах, но оба документа объединены в один составной вариант single-choice. Это технически допустимо как выбор одной пары, однако формулировку следует уточнить (“Which pair of documents…?”) или использовать настоящий multiple-choice.
 
 Остальные ключи C4-S1 V01–V15 по этим 30 заданиям согласуются с аудиоскриптами. Проверка охватывает только tasks 1–2 и не является полной экспертизой всего экзамена.
+
+
+### Targeted listening-key review — C4-S2 V01–V15
+
+Проверены 30 listening items (tasks 1–2) с сопоставлением prompt, вариантов, ключей и аудиоскриптов.
+
+Подтверждённые несоответствия контекста:
+- V07 task 2: prompt спрашивает “Which equipment information record is required for the label review?”, тогда как аудио посвящено software version records и sample change log. Ключ “The sample change log” верен по аудио, но вопрос о другой теме.
+- V08 task 2: prompt спрашивает “Which safety-symbol reference material…?”, аудио описывает PLC input-output table и controller reference sheet. Ключ совпадает с аудио, но формулировка вопроса неверна.
+
+Качество distractors: V03–V10 task 1 часто предлагают места (library / town centre / bus station) как ответы на вопросы о времени; task 2 часто предлагает даты/время (“On Friday / Next month / After the event”) в вопросах о документе. В V11–V15 distractors семантически ближе, но часть вариантов (“personal notebook / laboratory coat / printed timetable”) всё ещё слишком очевидна. Нужно создавать альтернативы из того же тематического класса.
+
+V05 task 2 просит материалы во множественном числе, а два документа даны одной составной опцией single-choice. Это можно оставить как выбор пары, но prompt должен прямо спрашивать “Which pair of materials…?”. Остальные проверенные ключи C4-S2 V01–V15 соответствуют аудиоскриптам. Проверены только listening tasks 1–2.
