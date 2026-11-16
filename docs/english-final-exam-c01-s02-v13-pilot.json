@@ -28,10 +28,10 @@
       "prompt": "Listening 2. How can students reserve a place?",
       "audioText": "The college library is running a short workshop on finding reliable information. It starts at eleven on Thursday in the computer room. Students should bring their college login details and a notebook. The librarian will demonstrate how to search the catalogue and check the publication date of a source. There are twelve places, so register at the library desk before Tuesday.",
       "options": [
-        "On Friday",
+        "Call the college office",
         "Register at the library desk",
-        "Next month",
-        "After the event"
+        "Send an email to the tutor",
+        "Ask in the computer room"
       ],
       "correctIndex": 1,
       "points": 1
