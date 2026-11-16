@@ -78,10 +78,10 @@
     {
       "id": "c3s2v04_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO sources of information for identifying a cutting tool.",
+      "prompt": "Choose TWO sources that can identify a cutting tool or its compatible holder system.",
       "options": [
-        "The colour of the storage cabinet",
-        "A personal social media post",
+        "Workpiece material certificate",
+        "Machine serial-number plate",
         "Tool holder identification",
         "Manufacturer's catalogue"
       ],
