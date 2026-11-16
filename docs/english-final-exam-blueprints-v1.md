@@ -308,3 +308,22 @@ Short-text alternatives reviewed were generally defensible in context: “superv
 Written tasks contain explicit word limits and 8-point analytic rubrics. This structural check does not establish CEFR level or alignment to the official learning outcomes.
 
 This is a representative five-file sample, not a complete V14 audit. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+## V15 representative cross-course audit (2026-11-16)
+
+Five V15 files were inspected across C1-S1, C2-S2, C3-S1, C4-S2 and C5-S1. Each contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1.
+
+A safety-critical ordering/key problem was found in C1-S1 task 9. The keyed sequence begins by asking the instructor to check the circuit before the student has connected components or checked the connections, then places switching off the supply last. That is not a coherent sequence for circuit assembly/checking and could teach an unsafe order. The item must be rewritten around an explicit safe workflow and aligned with the accompanying lab instructions; do not simply rearrange the current four phrases without clarifying whether the task concerns initial assembly, fault correction, or final inspection. The listening text itself correctly says not to connect the power supply until the instructor checks the circuit.
+
+A malformed prompt was found in C4-S2 task 8: “The cause has not yet What should you say?” The stem is truncated/concatenated and needs rewriting as a complete situational question.
+
+All ten listening keys match their audioText. The five ordering tasks were reviewed; apart from the safety/workflow defect in C1-S1, the sequences in C2-S2, C3-S1, C4-S2 and C5-S1 are coherent.
+
+Weak wrong-category distractors remain in four of five files, particularly in reading tasks where three options are unrelated activities or locations. C1-S1 has more plausible reading distractors.
+
+Short-text answers are mostly defensible, but C2-S2 accepts both “procedure” and “process” for a series of actions or instructions. These overlap but are not always interchangeable in technical usage; narrow the prompt or define the intended term. C1-S1 accepts “lead/wire” for a connecting lead, which is acceptable at this level.
+
+Written tasks have word limits and 8-point rubrics. CEFR calibration and mapping to official learning outcomes have not been checked.
+
+This is a representative five-file sample, not a complete V15 audit. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
