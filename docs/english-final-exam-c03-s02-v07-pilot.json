@@ -42,8 +42,8 @@
       "prompt": "A process plan describes the main stages required to produce a component. It may identify the operation, the equipment category and the inspection point. The sequence should reflect the component's design and the requirements in the approved documentation. A clear plan also helps the production team understand which stage has been completed and what needs to happen next. Reading 1. What may a process plan identify?",
       "options": [
         "The supplier, batch number and purchase price",
-        "The operation, equipment category and inspection point",
         "The operator, shift pattern and delivery date",
+        "The operation, equipment category and inspection point",
         "The material colour, storage area and order quantity"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why is the sequence important?",
       "options": [
         "It reduces the cost of every operation",
-        "It reflects the design and helps the team follow the stages",
+        "It removes the need to check the component drawing",
         "It identifies the supplier's preferred equipment",
-        "It removes the need to check the component drawing"
+        "It reflects the design and helps the team follow the stages"
       ],
       "correctIndex": 3,
       "points": 1
