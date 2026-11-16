@@ -42,8 +42,8 @@
       "prompt": "A transformer transfers electrical energy between circuits through electromagnetic induction. It commonly has a primary winding and a secondary winding around a magnetic core. The relationship between the number of turns in the windings affects the voltage ratio in an ideal transformer. Actual equipment also has losses and ratings that must be taken from its nameplate and technical documentation. Reading 1. What is the general purpose of a transformer?",
       "options": [
         "To measure voltage within a circuit",
-        "To transfer electrical energy between circuits",
         "To store electrical energy in a battery",
+        "To transfer electrical energy between circuits",
         "To convert alternating current into direct current"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Where should users find equipment ratings?",
       "options": [
         "In the workshop timetable",
-        "On the nameplate and in technical documentation",
+        "In the operator's shift record",
         "In the supplier's delivery note",
-        "In the operator's shift record"
+        "On the nameplate and in technical documentation"
       ],
       "correctIndex": 3,
       "points": 1
