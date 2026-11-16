@@ -116,7 +116,7 @@
     {
       "id": "c1s2v06_o01",
       "type": "ordering",
-      "prompt": "Check the updated college message; Read the weather information; Prepare suitable clothing; Follow the revised event schedule",
+      "prompt": "Put the following steps for preparing for a college event in a logical order.",
       "options": [
         "Follow the revised event schedule",
         "Prepare suitable clothing",
