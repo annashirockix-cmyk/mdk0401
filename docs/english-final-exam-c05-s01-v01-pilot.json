@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A collection of documents and task information for a maintenance visit is a work ___.",
       "acceptedAnswers": [
-        "package",
-        "work package"
+        "package"
       ],
       "points": 2
     },
