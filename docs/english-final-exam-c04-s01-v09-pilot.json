@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A document that lists the technical characteristics of a product is a specification ___.",
       "acceptedAnswers": [
-        "sheet",
-        "specification sheet"
+        "sheet"
       ],
       "points": 2
     },
