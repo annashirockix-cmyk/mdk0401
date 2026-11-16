@@ -371,6 +371,30 @@ test("first pilot variants use plausible same-category listening and reading dis
   assert.match(prep.options[prep.correctIndex],/short CV and two questions/);
 });
 
+test("Course 5 reading answer keys follow the reviewed correct options in all 30 variants",()=>{
+  const expected={
+    1:{
+      2:[1,3],3:[2,1],4:[0,2],5:[0,1],6:[0,3],7:[0,0],8:[0,3],
+      9:[1,2],10:[0,1],11:[0,2],12:[1,2],13:[1,0],14:[0,2],15:[0,1]
+    },
+    2:{
+      3:[2,2],4:[2,3],5:[2,2],6:[2,1],7:[2,0],8:[0,1],9:[0,0],
+      10:[1,0],11:[1,0],12:[2,2],13:[1,1],14:[1,0],15:[2,0]
+    }
+  };
+  for(const semester of [1,2]){
+    for(let variant=1;variant<=15;variant++){
+      const file=path.join(root,`docs/english-final-exam-c05-s0${semester}-v${String(variant).padStart(2,"0")}-pilot.json`);
+      const pilot=JSON.parse(fs.readFileSync(file,"utf8"));
+      const reading=[pilot.tasks.find(task=>task.id.endsWith("_r01")),pilot.tasks.find(task=>task.id.endsWith("_r02"))];
+      assert.ok(reading.every(Boolean),`C5-S${semester}-V${variant} is missing reading items`);
+      const expectedKeys=expected[semester][variant]||[2,3];
+      assert.deepEqual(reading.map(task=>task.correctIndex),expectedKeys,`C5-S${semester}-V${variant} reading keys`);
+      reading.forEach(task=>assert.ok(task.correctIndex>=0&&task.correctIndex<task.options.length,`${task.id} key is out of range`));
+    }
+  }
+});
+
 test("all 150 final exam variants have globally unique task IDs and prompts",()=>{
   const slots=[["c01","s01"],["c01","s02"],["c02","s01"],["c02","s02"],["c03","s01"],["c03","s02"],["c04","s01"],["c04","s02"],["c05","s01"],["c05","s02"]];
   const variants=slots.flatMap(([course,semester])=>Array.from({length:15},(_,i)=>JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${course}-${semester}-v${String(i+1).padStart(2,"0")}-pilot.json`),"utf8"))));
