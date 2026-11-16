@@ -78,10 +78,10 @@
     {
       "id": "c3s1v09_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that belong in an inspection report.",
+      "prompt": "Choose TWO factual details that allow an inspection finding to be traced to the item examined.",
       "options": [
-        "A personal opinion about the operator",
-        "An unrelated weather forecast",
+        "Inspector's general impression",
+        "Recommended replacement budget",
         "Actual measured value",
         "Component identification"
       ],
