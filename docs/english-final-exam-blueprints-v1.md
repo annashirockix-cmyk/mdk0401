@@ -98,3 +98,17 @@ The planned final-exam set is complete at the content-authoring stage: **150 var
 | C5-S2 | Technical English | 15/15 | Maintenance handover, risk, fault analysis, document control, quality audits and integrated reporting |
 
 **Editorial/release status:** these are pilot materials, not approved assessment instruments. No pilot has been imported into the protected Google Sheet or released to students. Subject-matter review, formal editorial approval, controlled import and a post-import acceptance run are still outstanding.
+
+
+## Editorial sample review — V02 distractor quality (2026-11-16)
+
+A further sample review opened the actual JSON for V02 in all ten course-semester slots. Listening scripts, task IDs and answer-key fields were present in the inspected files. The multiple-choice tasks in several files still contain distractors that are too obviously unrelated to the assessed concept, so the presence of four options and a valid key must not be treated as evidence of assessment quality.
+
+Examples requiring revision:
+- C3-S1 V02 asks which details should be checked on a technical drawing, but two distractors concern a paper-clip colour and an unrelated website.
+- C3-S2 V02 asks about CNC command meanings, but one distractor describes G01 as a material grade rather than testing a plausible command/address misconception.
+- C4-S1 V02 asks about an electrical measurement record, but two distractors concern an instrument-case colour and an unrelated appointment time.
+
+The C1 and C2 V02 samples reviewed had more relevant distractors in their multiple-choice tasks; this is a sample observation, not blanket approval of those variants. The remaining V02 samples also require review of the complete task set, including grammar, short-text accepted answers, ordering keys, listening comprehension and written rubrics.
+
+**Action required before release:** revise weak distractors so they test realistic misconceptions within the same semantic category; then recheck the correct-index arrays after editing. Do not import or publish the affected variants until this editorial pass and the wider 150-variant review are complete. No pilot JSON or protected bank was changed in this audit step.
