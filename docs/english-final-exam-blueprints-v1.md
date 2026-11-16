@@ -1263,3 +1263,13 @@ All 15 C4-S1 electrical/electronics writing rubrics were rewritten and synchroni
 
 All 15 C4-S2 systems/automation writing rubrics were rewritten and synchronized with the combined registry. Criteria now assess communication-system stages, computer-system roles, sensor/controller/actuator relationships, PLC model and I/O documentation, data summaries, protocol/version functions, software-version reporting, PLC signal references, data-log timestamps/units, control-system security, industrial-IoT data paths, digital twins, condition monitoring, ground-support equipment status records and incident reporting. Security and incident criteria explicitly discourage credential sharing, bypassing controls and presenting unconfirmed causes as facts. Each rubric retains four 0–2 criteria (8 points total). This completes eight of the ten written-rubric groups; 30 written tasks remain. No protected bank, Google Sheet or Apps Script was changed.
 
+## Written-task rubric remediation — C5-S1 V01–V15 (2026-11-16)
+
+All 15 C5-S1 aviation-maintenance written-task rubrics were rewritten and synchronized with the combined registry. The four 0–2 criteria now contain task-specific, observable descriptors:
+
+- V01–V05: maintenance planning and coordination; inspection findings and acceptance criteria; diagnostic evidence versus hypotheses; technical-manual applicability; revision control and obsolete-copy prevention.
+- V06–V10: aircraft identity/configuration and publication applicability; handover status versus formal records/sign-off; non-conformance reporting and corrective-action effectiveness; reliability evidence versus assumptions about common causes; controlled technical publications.
+- V11–V15: non-conformance report content and finding/cause distinction; model/serial/configuration checks; concise technical briefings with explicit uncertainty; service-notice applicability and confirmation; evidence-based supplier-quality evaluation.
+
+Each rubric retains four criteria (8 points total), with explicit 0/1/2 descriptors and language scoring that prioritises intelligibility and task-appropriate vocabulary. Safety-sensitive items assess checking approved data, recording facts and escalating uncertainty; they do not ask learners to perform or prescribe maintenance actions. The earlier 80–100 versus 100–120 word split is retained and should be assessed consistently against the stated prompt. This completes nine of the ten written-rubric groups; 15 written tasks remain in C5-S2. No protected bank, Google Sheet or Apps Script was changed.
+
