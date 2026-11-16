@@ -135,7 +135,7 @@
       "id": "c1s1v01_w01",
       "type": "written",
       "prompt": "Write 60–80 words introducing yourself as a college student. Include your course, one usual weekday activity, one English-learning habit and one goal for this academic year. Use complete sentences.",
-      "rubric": "8 points total: task completion and relevant details (0–2); understandable sentence structure and basic grammar (0–2); appropriate vocabulary (0–2); spelling, punctuation and paragraph organisation (0–2). Accept minor errors that do not prevent understanding.",
+      "rubric": "8 points total: all four requested details are included (course, weekday activity, English-learning habit and academic-year goal) (0–2); details are connected in a clear, logical paragraph (0–2); basic present-tense forms and sentence structure are understandable (0–2); relevant personal/study vocabulary, spelling and punctuation are appropriate (0–2). Minor errors are acceptable if meaning remains clear.",
       "points": 8
     }
   ],
