@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A diagnostic process begins with a clear description of the reported problem. The team reviews relevant records and compares the available evidence with possible explanations. If the evidence is incomplete, further checks may be required by authorised personnel. A diagnostic report should distinguish confirmed facts from hypotheses and explain why a particular conclusion is supported. Reading 1. What should the team do after describing the problem?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Close the report before reviewing the available records",
+        "Replace the component before comparing possible explanations",
         "Review relevant records and compare evidence with possible explanations",
-        "To buy a ticket"
+        "Assume the most common cause from an earlier case"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How should a report distinguish facts from hypotheses?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "It should identify confirmed facts separately from possible explanations"
+        "It should present every hypothesis as a confirmed fact",
+        "It should identify confirmed facts separately from possible explanations",
+        "It should omit possible explanations from the record",
+        "It should treat the first explanation as the final conclusion"
       ],
       "correctIndex": 3,
       "points": 1
