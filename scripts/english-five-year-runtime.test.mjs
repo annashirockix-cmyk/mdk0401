@@ -18,6 +18,7 @@ function loadEnglishRuntime() {
     "english-course.js",
     "english-five-year-runtime.js",
     "english-listening-catalog.js",
+    "english-listening-lesson.js",
   ]) {
     vm.runInContext(read(file), context, { filename: file });
   }
@@ -135,4 +136,19 @@ test("English listening lab has a visible navigation entry for users with Englis
   assert.ok(html.includes('href="#/english-listening"'), "English Listening route must be reachable from the portal menu");
   assert.ok(app.includes('href==="#/english-listening"'), "menu visibility must include the listening route in English-access checks");
   assert.ok(html.indexOf('english-listening-route.js') > html.indexOf('app.js'), "listening route wrapper must install after the main router exists");
+});
+
+test("listening practice shuffles every option set and remaps the correct answer without mutating source data", () => {
+  const window = loadEnglishRuntime();
+  const source = [
+    { prompt: "Select the correct term.", options: ["alpha", "bravo", "charlie", "delta"], answerIndex: 0, explanation: "alpha is correct" },
+    { prompt: "Select the second term.", options: ["east", "west"], answerIndex: 1 },
+  ];
+  const before = JSON.stringify(source);
+  const prepared = window.EnglishListeningLesson.prepareQuestionsForDisplay(source, () => 0);
+  assert.notDeepEqual(prepared[0].options, source[0].options);
+  assert.notDeepEqual(prepared[1].options, source[1].options);
+  assert.equal(prepared[0].options[prepared[0].answerIndex], "alpha");
+  assert.equal(prepared[1].options[prepared[1].answerIndex], "west");
+  assert.equal(JSON.stringify(source), before, "source catalogue must remain unchanged");
 });
