@@ -42,8 +42,8 @@
       "prompt": "A student noticed that a warning label on a training machine was partly damaged. The student did not try to replace it. Instead, the issue was reported to the instructor, who arranged for the label to be checked and replaced through the department's normal process. The machine remained identified as requiring attention until the issue was resolved. Reading 1. What did the student do about the damaged label?",
       "options": [
         "Continued using the machine",
-        "Reported it to the instructor",
         "Replaced the label without approval",
+        "Reported it to the instructor",
         "Removed the warning and restarted the task"
       ],
       "correctIndex": 2,
@@ -56,8 +56,8 @@
       "options": [
         "As ready for production",
         "As available for use",
-        "As requiring attention",
-        "As awaiting delivery"
+        "As awaiting delivery",
+        "As requiring attention"
       ],
       "correctIndex": 3,
       "points": 1
