@@ -1483,14 +1483,14 @@
               {
                 "id": "c1s1v10_f01",
                 "type": "single_choice",
-                "prompt": "You have not understood a safety instruction. What is the best reply?",
+                "prompt": "A machine is ready, but you cannot identify the emergency-stop control. What should you do before starting?",
                 "options": [
-                  "I don't care about it.",
-                  "Could you explain that instruction again, please?",
-                  "I explained you yesterday.",
-                  "Give me another machine."
+                  "Start slowly and look for the control while the machine is running.",
+                  "Ask a classmate to point it out after the task begins.",
+                  "Ask the instructor to show you the emergency-stop control before the machine is started.",
+                  "Use the control that looks most familiar."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -17621,14 +17621,14 @@
               {
                 "id": "c4s2v11_f01",
                 "type": "single_choice",
-                "prompt": "Check the device register and What should you say?",
+                "prompt": "Before enabling data transfer, which records should be checked?",
                 "options": [
-                  "I will guess and continue.",
-                  "Check the device register and authorised network configuration before enabling data transfer.",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Check the device register and approved network configuration before enabling data transfer.",
+                  "Use the newest configuration file in the shared folder without checking its revision.",
+                  "Confirm that display settings match the previous training session.",
+                  "Check only the user access list; review device and network records later."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -17772,12 +17772,12 @@
               {
                 "id": "c4s2v12_f01",
                 "type": "single_choice",
-                "prompt": "Could we update the model What is the best response?",
+                "prompt": "Before applying a model update, what should the team confirm?",
                 "options": [
-                  "I will guess and continue.",
-                  "Could we update the model with the latest verified maintenance information?",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Apply the newest model file immediately and check compatibility afterwards.",
+                  "Confirm the approved model version and verify its source data before applying the update.",
+                  "Use the model from a similar unit because the equipment family is the same.",
+                  "Update the displayed model name and leave the configuration record unchanged."
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -17923,14 +17923,14 @@
               {
                 "id": "c4s2v13_f01",
                 "type": "single_choice",
-                "prompt": "Please check the measurement method What should you say?",
+                "prompt": "A recorded measurement differs from the expected range. What should be verified before interpreting it?",
                 "options": [
-                  "I will guess and continue.",
-                  "Please check the measurement method and compare the value with other evidence before deciding.",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Repeat the measurement with the same setup and accept it if the result is consistent.",
+                  "Compare the number with the expected range before checking the measurement method.",
+                  "Verify the measurement method, instrument status and supporting evidence before interpreting the value.",
+                  "Change the recorded value to the nearest expected figure and note the difference."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -18074,14 +18074,14 @@
               {
                 "id": "c4s2v14_f01",
                 "type": "single_choice",
-                "prompt": "Could we confirm the unit's What is the best response?",
+                "prompt": "Before a unit is returned to service, what should be confirmed?",
                 "options": [
-                  "I will guess and continue.",
-                  "Could we confirm the unit's service status with the responsible team before use?",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Confirm its location and storage label; assume service status from the previous record.",
+                  "Check its serial number against the parts list and return it to the usual storage area.",
+                  "Ask whether it was used during the previous shift and rely on the verbal reply.",
+                  "Confirm the unit's current service status with the responsible team and check the controlled record."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -18225,14 +18225,14 @@
               {
                 "id": "c4s2v15_f01",
                 "type": "single_choice",
-                "prompt": "The cause has not yet What should you say?",
+                "prompt": "A fault has been reported, but its cause has not been confirmed. How should the report describe it?",
                 "options": [
-                  "I will guess and continue.",
-                  "The cause has not yet been established; the observation and immediate action are recorded below.",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Describe the observed condition and actions taken, and state that the cause is still under investigation.",
+                  "Record the suspected cause as confirmed so the report can be closed.",
+                  "Leave the cause field blank and omit the unresolved fault from the handover.",
+                  "Copy the cause from an earlier report if the symptoms look similar."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -19146,12 +19146,12 @@
                 "type": "single_choice",
                 "prompt": "The task card may refer to a different aircraft configuration. What should you ask?",
                 "options": [
-                  "I will guess and continue.",
-                  "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Could we confirm task applicability against the aircraft identification and approved publications?",
+                  "Could we use the task card for a similar model and confirm the details later?",
+                  "Could we compare the aircraft colour and registration only?",
+                  "Could we follow the previous shift's decision without checking applicability?"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -19298,10 +19298,10 @@
                 "type": "single_choice",
                 "prompt": "A task remains incomplete at the end of the shift. What should the handover say?",
                 "options": [
-                  "I will guess and continue.",
+                  "The task is finished; no further details are needed.",
                   "The task remains open; the outstanding action and responsible team are identified in the handover.",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "The next shift can decide what was left incomplete.",
+                  "The task is complete if most of the work has been done."
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -19451,12 +19451,12 @@
                 "type": "single_choice",
                 "prompt": "An inspection result differs from the specified requirement. What should you record?",
                 "options": [
-                  "I will guess and continue.",
-                  "The observed condition differs from the specified requirement; the evidence is recorded for review.",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Record the observed condition, measured result and specified requirement for review.",
+                  "Record that the item passed because the difference is probably minor.",
+                  "Change the recorded result to match the requirement after repeating the entry.",
+                  "Leave out the result until the next inspection confirms it."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -19602,12 +19602,12 @@
                 "type": "single_choice",
                 "prompt": "Several records show a similar symptom. What should you do before concluding that the cause is identical?",
                 "options": [
-                  "I will guess and continue.",
-                  "Could we compare the operating conditions and maintenance history before drawing a conclusion?",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Treat the symptoms as proof of the same cause and use the previous conclusion.",
+                  "Replace the component that was replaced in the earlier case.",
+                  "Combine the records and report one cause without checking the conditions.",
+                  "Compare the operating conditions, maintenance history and available evidence before drawing a conclusion."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -19754,12 +19754,12 @@
                 "type": "single_choice",
                 "prompt": "You find a printed instruction with an old revision number. What should you do?",
                 "options": [
-                  "I will guess and continue.",
-                  "Check the document register for the current approved version before using it.",
-                  "The detail is not important.",
-                  "I will copy an unrelated record."
+                  "Check the document register for the current approved revision before using the instruction.",
+                  "Use the printed copy if its title matches the task card.",
+                  "Compare the revision number with the previous shift's notes and use whichever is newer.",
+                  "Ask a colleague whether the instruction was used recently."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
