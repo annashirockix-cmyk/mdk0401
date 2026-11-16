@@ -55,9 +55,9 @@
       "prompt": "Why must warning labels remain visible?",
       "options": [
         "So that users can identify the tool owner",
-        "So that users can see the relevant warning",
+        "So that the labels match the inventory colour",
         "So that the equipment looks organised",
-        "So that the labels match the inventory colour"
+        "So that users can see the relevant warning"
       ],
       "correctIndex": 3,
       "points": 1
