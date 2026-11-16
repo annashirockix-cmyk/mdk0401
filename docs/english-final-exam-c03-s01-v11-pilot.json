@@ -78,10 +78,10 @@
     {
       "id": "c3s1v11_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO roles that may be found in an aircraft maintenance organisation.",
+      "prompt": "Choose TWO roles commonly involved in planning and carrying out aircraft maintenance.",
       "options": [
-        "Restaurant critic",
-        "Travel blogger",
+        "Quality auditor",
+        "Stores coordinator",
         "Maintenance technician",
         "Maintenance planner"
       ],
