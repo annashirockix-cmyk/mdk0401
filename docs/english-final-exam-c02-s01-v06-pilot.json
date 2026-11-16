@@ -15,9 +15,9 @@
       "audioText": "The student employment office is holding a short meeting about part-time jobs on Tuesday at four in Room 18. Local employers will explain weekend shifts and workplace expectations. Bring your timetable so the adviser can check that working hours do not conflict with lessons. Students who want an individual appointment should book at the reception desk before Monday.",
       "options": [
         "In Room 18",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "In the careers office",
+        "In the main lecture theatre",
+        "At the reception desk"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Ella is considering a weekend job at an aircraft museum. The position involves welcoming visitors and helping them find exhibition areas. She has volunteered at the college open day, where she answered questions and worked with a team. Before applying, she checks the bus timetable because the museum opens early on Saturdays. Reading 1. Where does Ella want to work?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "At an airport information desk",
+        "At a railway museum",
         "At an aircraft museum",
-        "To buy a ticket"
+        "At an aircraft museum"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What experience could help her in this job?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Helping at a school sports event",
+        "Working part-time in a café",
+        "Volunteering at the college open day",
         "Volunteering at the college open day"
       ],
       "correctIndex": 3,
