@@ -29,11 +29,11 @@
       "audioText": "The electrical engineering tutor will introduce circuit diagrams on Tuesday at ten. Students should meet in the electronics classroom and bring the circuit-symbol worksheet. The lesson will cover a simple series circuit, a parallel circuit and the symbols used for common components. No electrical equipment will be connected during this theory session.",
       "options": [
         "The component glossary",
-        "The safety checklist",
         "The circuit-symbol worksheet",
+        "The safety checklist",
         "The maintenance record"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -42,11 +42,11 @@
       "prompt": "A series circuit has one main path for current, so the same current passes through each component in that path. In a parallel circuit, current can divide between branches. The voltage across parallel branches is the same in an ideal circuit. A student compared two diagrams and labelled the power source, switch and resistors before describing the difference between the circuit types. Reading 1. How many main paths does a simple series circuit have?",
       "options": [
         "Two separate paths",
-        "One main path",
         "Three independent branches",
+        "One main path",
         "No path for current"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Which components did the student label?",
       "options": [
-        "The power source, switch and resistors",
         "The battery, motor and display",
         "The processor, memory and storage",
-        "The transmitter, channel and receiver"
+        "The transmitter, channel and receiver",
+        "The power source, switch and resistors"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "points": 1
     },
     {
