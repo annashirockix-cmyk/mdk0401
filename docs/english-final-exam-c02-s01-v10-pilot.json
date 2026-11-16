@@ -15,9 +15,9 @@
       "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
       "options": [
         "By minibus",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "By coach",
+        "By public bus",
+        "By minibus"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A passenger asked an information assistant why a flight departure had changed. The assistant checked the airport display, explained that the new time was shown on the screen and directed the passenger to the airline desk for further details. She spoke calmly and repeated the information when the passenger asked her to clarify it. Reading 1. What information did the assistant check?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The passenger's boarding pass",
+        "The airline's staff timetable",
         "The airport display",
-        "To buy a ticket"
+        "The airport display"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "How did she respond to the passenger's request?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "She sent the passenger to the check-in desk without an explanation",
+        "She asked another assistant to answer the question",
+        "She repeated and clarified the information calmly",
         "She repeated and clarified the information calmly"
       ],
       "correctIndex": 3,
