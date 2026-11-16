@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "The particular arrangement of installed equipment and options is a configuration ___.",
       "acceptedAnswers": [
-        "record",
-        "configuration record"
+        "record"
       ],
       "points": 2
     },
