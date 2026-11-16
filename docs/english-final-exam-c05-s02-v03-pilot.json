@@ -136,7 +136,7 @@
       "id": "c5s2v03_w01",
       "type": "written",
       "prompt": "Write 100–120 words explaining how to combine inspection findings and trend data in a technical report without overstating conclusions.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Inspection evidence — 2: accurately summarises relevant findings and their source; 1: partial; 0: absent. (2) Trend data — 2: explains how comparable trend data adds context; 1: partial; 0: absent or misinterpreted. (3) Limits and conclusions — 2: distinguishes evidence from inference and states limitations without overstating certainty; 1: partial; 0: unsupported conclusion. (4) English — 2: coherent technical-report language and accurate inspection/reliability vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
