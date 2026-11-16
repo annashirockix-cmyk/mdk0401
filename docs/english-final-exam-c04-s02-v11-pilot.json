@@ -78,12 +78,12 @@
     {
       "id": "c4s2v11_m01",
       "type": "multiple_choice",
-      "prompt": "A connected sensor has been added to the production network. Which information should be verified?",
+      "prompt": "Which TWO details identify a connected sensor and its authorised network connection?",
       "options": [
-        "An unrelated appointment",
-        "A personal preference",
-        "Device identity and approved communication settings",
-        "Sensor readings and gateway destination"
+        "Calibration interval",
+        "Physical mounting position",
+        "Device identity",
+        "Approved communication settings"
       ],
       "correctIndices": [
         2,
