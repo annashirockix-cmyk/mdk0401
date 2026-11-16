@@ -89,7 +89,7 @@ A Library search for an approved English work programme and the exact Belova tex
 ## Safety and release gates
 
 1. Do not use the old 200-item client seed as the server bank.
-2. Complete the independent Basic question set and have a second English methodologist review the keys and distractors.
+2. The independent 200-item Basic draft pool now exists in ten authoring batches. It still needs mapping to the four Basic course-semester slots, verification against the approved programme and exact Belova edition, and review by a second English methodologist of every key and distractor.
 3. Verify progression by course and semester against the actual five-year work programme.
 4. Compare approved items with VPR, Technical and lesson-practice banks.
 5. Import only the approved structured set through the teacher/admin route. Keep answer keys server-side and verify sanitized student responses after import.
