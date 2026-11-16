@@ -137,7 +137,7 @@
       "id": "c1s1v10_w01",
       "type": "written",
       "prompt": "Write 60–80 words about preparing for a safe workshop lesson. Mention two items you need, one rule you must follow and what you should do if an instruction is unclear.",
-      "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total: two necessary items and one applicable workshop rule are identified (0–2); the response explains that unclear instructions must be clarified with the instructor before proceeding (0–2); steps and reasons are presented clearly with understandable grammar (0–2); workshop/safety vocabulary, spelling and punctuation are appropriate (0–2).",
       "points": 8
     }
   ],
