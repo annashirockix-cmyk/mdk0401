@@ -78,10 +78,10 @@
     {
       "id": "c3s1v04_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO items normally covered in a workshop induction.",
+      "prompt": "Choose TWO safety and emergency topics normally covered in a workshop induction.",
       "options": [
-        "Personal entertainment preferences",
-        "Unrelated social media accounts",
+        "Production output targets",
+        "Individual job allocation",
         "Emergency exits",
         "Local reporting arrangements"
       ],
