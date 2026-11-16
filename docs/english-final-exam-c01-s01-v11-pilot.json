@@ -97,8 +97,7 @@
       "prompt": "Complete with one word: 'A list of books and websites used in a report is a list of ___.'",
       "acceptedAnswers": [
         "sources",
-        "references",
-        "reference"
+        "references"
       ],
       "points": 2
     },
