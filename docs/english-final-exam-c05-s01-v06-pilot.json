@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Maintenance instructions are applicable only when they match the relevant aircraft or component configuration. Before using a task card, a technician checks the aircraft or component identity, the document reference and its revision status. Similar model names do not guarantee that instructions are interchangeable. If applicability is uncertain, the issue should be referred to the authorised technical publications process. Reading 1. What should be checked before a task card is used?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "Aircraft or component identity, document reference and revision status",
-        "To buy a ticket"
+        "Aircraft colour, hangar location and shift number",
+        "Supplier contact, delivery date and purchase order value",
+        "Technician name, training record and inspection timetable"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What should happen if applicability is uncertain?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Use the procedure for a similar model and compare details later",
+        "Assume the task card applies if its title is familiar",
+        "Ask the previous shift to decide without checking the records",
         "Refer the issue through the authorised technical publications process"
       ],
       "correctIndex": 3,
