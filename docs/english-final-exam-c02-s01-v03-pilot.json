@@ -116,7 +116,7 @@
     {
       "id": "c2s1v03_o01",
       "type": "ordering",
-      "prompt": "Research the company; Prepare examples; Attend the interview; Reflect on the feedback",
+      "prompt": "Put the following steps for preparing for and reflecting on a job interview in a logical order.",
       "options": [
         "Reflect on the feedback",
         "Prepare examples",
