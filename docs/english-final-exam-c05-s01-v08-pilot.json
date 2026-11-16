@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A non-conformance is a failure to meet a specified requirement. A report should identify the requirement, describe the evidence and state how the actual result differs. The cause may require further investigation. Corrective action should address the cause rather than only the visible symptom, and its effectiveness should be reviewed. Clear records support traceability and help prevent recurrence. Reading 1. What does a non-conformance represent?",
       "options": [
-        "A recommendation to replace an item",
-        "A delay in the planned maintenance schedule",
         "A failure to meet a specified requirement",
+        "A delay in the planned maintenance schedule",
+        "A recommendation to replace an item",
         "A difference between two informal opinions"
       ],
       "correctIndex": 2,
