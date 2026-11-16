@@ -183,6 +183,7 @@ Acceptance tests must cover simultaneous starts for the same student/slot, refre
 - Store answer keys and rubrics server-side only.
 - Student API returns a sanitized variant with no correct answers, rubric internals, or hidden metadata.
 - Variant selection must be recorded server-side to prevent changing variants by refreshing the page.
+- Final exams allow one recorded attempt by default. A new start request resumes an unexpired attempt; completed or expired attempts count toward the limit. Students can request a retry, and a teacher/admin can grant extra attempts through the existing audited attempt-control workflow. The grant is scoped to the exact course-semester exam ID.
 - Preserve the separate 2026 VPR Basic and Technical exams; do not replace or refactor them as part of this work.
 
 Suggested metadata:
