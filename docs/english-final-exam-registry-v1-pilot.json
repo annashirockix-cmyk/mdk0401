@@ -1864,11 +1864,11 @@
                 "audioText": "The aviation workshop visit is planned for Monday morning. The college bus leaves from the main entrance at eight fifteen, so please arrive ten minutes earlier. Bring your student card and a notebook. Visitors must stay with their guide and follow all safety signs. You may take photographs only in the areas marked by the instructor. The group will return to college before lunchtime.",
                 "options": [
                   "After lunchtime",
-                  "At eight fifteen exactly",
+                  "At eight oh five",
                   "At eight thirty",
-                  "At eight oh five"
+                  "At eight fifteen exactly"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -2001,12 +2001,12 @@
                 "prompt": "Listening 1. Who should the student ask for at reception?",
                 "audioText": "Hello, this is Mr Green from the engineering company. We are expecting you for your work placement on Wednesday at half past eight. Please report to reception and ask for Ms Patel. Wear smart work clothes and bring your college placement form. Your supervisor will show you the work area and explain your daily tasks. If you are delayed, telephone reception before your arrival time.",
                 "options": [
-                  "Mr Green",
                   "Ms Patel",
+                  "Mr Green",
                   "The college director",
                   "The bus driver"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -2016,11 +2016,11 @@
                 "audioText": "Hello, this is Mr Green from the engineering company. We are expecting you for your work placement on Wednesday at half past eight. Please report to reception and ask for Ms Patel. Wear smart work clothes and bring your college placement form. Your supervisor will show you the work area and explain your daily tasks. If you are delayed, telephone reception before your arrival time.",
                 "options": [
                   "Wait until the next day",
-                  "Send no message",
                   "Telephone reception",
+                  "Send no message",
                   "Ask another student to call"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
