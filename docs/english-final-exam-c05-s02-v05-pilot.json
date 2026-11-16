@@ -137,7 +137,7 @@
       "id": "c5s2v05_w01",
       "type": "written",
       "prompt": "Write 100–120 words explaining the controls required before a maintenance document is released. Include applicability, revision, approval and distribution.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Applicability — 2: explains checking model/configuration and intended use; 1: partial; 0: absent. (2) Revision and approval — 2: explains verification of current revision, review and approval status; 1: partial; 0: absent. (3) Distribution control — 2: explains controlled release, access to the current version and prevention of obsolete copies; 1: partial; 0: absent. (4) English — 2: clear sequence and accurate document-control vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
