@@ -22,12 +22,8 @@
 
 - The pilot registry contains 150 variants across ten course-semester slots, 15 per slot, with 1,500 tasks total. Each variant is structurally complete and marked `pilot_for_editorial_review`; the server intentionally rejects pilot status for import.
 - The full 150-variant content review is not complete. Sample audits found recurring weak wrong-category distractors, and some answer-key or wording defects. Examples still requiring source-and-registry correction and independent key verification include:
-  - C1-S1 V13, Listening 2: the audio says arrive at 08:05; the current key points to 08:15.
-  - C1-S1 V14, Listening 1: the audio says ask for Ms Patel; the current key points to Mr Green.
-  - C1-S1 V14, Listening 2: the audio says telephone reception; the current key points to “Send no message”.
-  - C2-S1 V15, Listening 2: the prompt asks for a technical reference, while the audio is about a work-placement briefing.
-  - C3-S2 V15: “proposal” and “recommendation” are not exact equivalents for the current definition; narrow the prompt or accepted answer.
-  - C5-S2 V15: “summary” and “synthesis” are not interchangeable in every academic/technical context; clarify the target.
+  - Targeted corrections now committed and synchronized between the individual pilot JSON and combined registry: C1-S1 V13 Listening 2 (08:05 key); C1-S1 V14 Listening 1 (Ms Patel), Listening 2 (telephone reception), and the work-placement sequence; C2-S1 V15 Listening 2 (document-focused prompt and plausible document distractors); C3-S2 V15 (proposal-only definition/key); C5-S2 V15 (synthesis-only definition/key).
+  - A regression test now verifies the corrected keys, wording, source/registry equality and continued pilot-only status. The remaining 150-variant review is still required; this targeted pass is not full editorial approval.
 - Some earlier audit notes are stale because the corresponding pilot files have since been corrected (for example C4-S2 V13/V14 malformed prompts, C5-S1 V13 prompt mismatch, C1-S1 V15 safety-ordering prompt, and several V15 short-answer alternatives). Reconcile the audit narrative with the current source JSON before final sign-off.
 - The combined registry and individual pilot JSON files must be updated together. Do not correct only an individual file and leave the registry inconsistent.
 
