@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A temperature sensor provides information about temperature changes in a system. A light sensor responds to the level of light, while a proximity sensor can detect the presence of an object without direct contact. The output and operating range depend on the sensor model. A technician should check the data sheet before interpreting a signal or comparing different sensors. Reading 1. What can a proximity sensor detect?",
       "options": [
-        "The presence of an object without direct contact",
-        "The temperature of an object through direct contact",
         "The distance travelled by a moving component",
+        "The temperature of an object through direct contact",
+        "The presence of an object without direct contact",
         "The electrical power supplied to a motor"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Where should a technician check the operating range?",
       "options": [
         "In the workshop timetable",
-        "In the sensor data sheet",
+        "In the shift handover note",
         "In the equipment purchase order",
-        "In the shift handover note"
+        "In the sensor data sheet"
       ],
       "correctIndex": 3,
       "points": 1
