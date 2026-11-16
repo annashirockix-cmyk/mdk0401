@@ -78,10 +78,10 @@
     {
       "id": "c3s1v15_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO records that support component traceability.",
+      "prompt": "Choose TWO controlled records that provide evidence of a component's identity and condition.",
       "options": [
-        "A personal shopping receipt",
-        "An unrelated social media post",
+        "Supplier quotation",
+        "Stores issue note",
         "Part identification record",
         "Inspection record"
       ],
