@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A PLC input-output table links field devices with the controller's documented addresses. The table may include a device description, signal type and address. A programme variable can use a separate symbolic name to make the logic easier to understand. The relationship between physical addresses and programme names should be documented clearly so that maintenance staff can interpret the system information. Reading 1. What information may appear in a PLC input-output table?",
       "options": [
-        "Device description, signal type and address",
-        "Supplier name, delivery date and purchase order",
         "Machine model, operator name and shift number",
+        "Supplier name, delivery date and purchase order",
+        "Device description, signal type and address",
         "Component material, drawing revision and batch number"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why are symbolic names useful?",
       "options": [
         "They reduce the number of input signals",
-        "They make programme logic easier to understand",
+        "They identify the supplier of each device",
         "They replace the need for a controller model",
-        "They identify the supplier of each device"
+        "They make programme logic easier to understand"
       ],
       "correctIndex": 3,
       "points": 1
