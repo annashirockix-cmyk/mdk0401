@@ -4746,9 +4746,9 @@
                 "audioText": "The careers office is offering a CV workshop on Friday afternoon. It begins at one thirty in Room 24. Bring a draft CV saved on a USB drive or in your college cloud folder. The adviser will show students how to describe practical skills and organise education details. There will also be time to ask individual questions. Places are limited, so book online before Thursday.",
                 "options": [
                   "At one thirty on Friday",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "At two o'clock on Friday",
+                  "At one thirty on Thursday",
+                  "At three thirty on Friday"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -4772,10 +4772,10 @@
                 "type": "single_choice",
                 "prompt": "Nikita is applying for a summer placement in an electronics workshop. In his CV, he describes a college project in which he assembled a training circuit and recorded test results. He lists teamwork, careful measurement and basic computer skills. His tutor suggests replacing the phrase 'I am good at everything' with specific examples that an employer can understand. Reading 1. What project does Nikita describe?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "A solar-powered battery charger project",
+                  "A digital temperature sensor project",
                   "A training circuit project",
-                  "To buy a ticket"
+                  "A printed-circuit board layout exercise"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -4785,9 +4785,9 @@
                 "type": "single_choice",
                 "prompt": "What does the tutor recommend changing?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "A long description into bullet points",
+                  "Personal details into a skills list",
+                  "An informal phrase into a general statement",
                   "A general claim into specific examples"
                 ],
                 "correctIndex": 3,
@@ -7181,9 +7181,9 @@
                 "audioText": "The technology department will host a talk about renewable energy systems on Friday morning. The speaker will compare solar panels and wind turbines and explain why output changes with weather conditions. The talk begins at ten fifteen in Lecture Room 2. Students should read the short introduction on the college platform before attending.",
                 "options": [
                   "At ten fifteen",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "At nine fifteen",
+                  "At eleven thirty",
+                  "At ten forty-five"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -7207,10 +7207,10 @@
                 "type": "single_choice",
                 "prompt": "A small community centre installed solar panels to reduce the electricity it bought from the grid. The panels produce the most energy on bright days, so the centre still uses grid electricity in the evening and during periods of low sunlight. The project report compares monthly production with consumption rather than claiming that the building is completely energy independent. It also recommends improving insulation to reduce demand. Reading 1. Why does the centre still use grid electricity?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "The centre wants to avoid paying for maintenance",
+                  "Solar panels produce more energy at night",
                   "Solar output varies and is lower in the evening or when sunlight is limited",
-                  "To buy a ticket"
+                  "The centre's energy demand rises during peak use"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -7220,9 +7220,9 @@
                 "type": "single_choice",
                 "prompt": "What additional improvement does the report recommend?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "Installing more parking spaces",
+                  "Replacing all windows",
+                  "Installing motion sensors in the corridors",
                   "Improving the building's insulation"
                 ],
                 "correctIndex": 3,
