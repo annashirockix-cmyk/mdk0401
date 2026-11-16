@@ -117,7 +117,7 @@
     {
       "id": "c1s2v01_o01",
       "type": "ordering",
-      "prompt": "Find the place on the map; Choose the correct street; Follow the directions; Check the destination sign",
+      "prompt": "Put the following directions and navigation steps in a logical order.",
       "options": [
         "Check the destination sign",
         "Follow the directions",
