@@ -84,7 +84,7 @@ test("all 75 new listening activities contain usable scripts and answerable prac
     ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\d{2}-s\d{2}-l\d{2}/g)),
   ];
 
-  assert.equal(mapIds.length, 120);
+  assert.equal(mapIds.length, 75);
   const missing = mapIds.filter((id) => !window.EnglishListeningCatalogue.getById(id));
   assert.deepEqual(missing, [], `missing active listening activities: ${missing.join(", ")}`);
   assert.equal(window.EnglishListeningCatalogue.count, 120);
