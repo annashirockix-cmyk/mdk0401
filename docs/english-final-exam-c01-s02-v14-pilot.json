@@ -15,9 +15,9 @@
       "audioText": "Students starting their work placement next month must attend a briefing on Monday at two o'clock. The meeting will be in Room 18, not in the usual assembly hall. Bring your placement documents and a pen. The tutor will explain attendance rules, workplace communication and who to contact if you are ill or cannot arrive on time. Please read the information sheet before the meeting.",
       "options": [
         "In Room 18",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "In the assembly hall",
+        "At the placement office",
+        "In the reception area"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Before her first work placement, Alina checked the company address and planned her journey. She saved the supervisor's telephone number and prepared a folder with her college documents. On the first day, she arrived fifteen minutes early, introduced herself to the team and asked where visitors should leave their coats. Reading 1. What did Alina do before the first day?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "She contacted the supervisor",
+        "She bought a work uniform",
         "She checked the address and prepared her documents",
-        "To buy a ticket"
+        "She completed an online safety course"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why did she arrive early?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "To collect her uniform",
+        "To meet the supervisor early",
+        "To ask for a different work schedule",
         "To be ready before the placement began"
       ],
       "correctIndex": 3,
