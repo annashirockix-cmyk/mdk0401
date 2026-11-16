@@ -4604,15 +4604,15 @@
               {
                 "id": "c2s1v01_l02",
                 "type": "single_choice",
-                "prompt": "Listening 2. What should students prepare?",
+                "prompt": "Listening 2. Which two things should students prepare for the career fair?",
                 "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
                 "options": [
-                  "On Friday",
-                  "Two questions about training",
-                  "Next month",
-                  "After the event"
+                  "A short CV and two questions about training opportunities",
+                  "A completed engineering project and a passport",
+                  "A list of examination results and a reference letter",
+                  "A visitor badge and a company contract"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -4620,10 +4620,10 @@
                 "type": "single_choice",
                 "prompt": "A careers adviser helped Sam compare three training opportunities. One company offered a short placement close to college, another offered a longer placement with travel costs, and the third provided online training. Sam chose the first option because he wanted to gain practical experience while continuing his college course. He checked the dates with his tutor before replying. Reading 1. Which opportunity did Sam choose?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "A longer placement with travel costs",
+                  "Online training",
                   "A short placement close to college",
-                  "To buy a ticket"
+                  "A placement at a company abroad"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -4633,12 +4633,12 @@
                 "type": "single_choice",
                 "prompt": "Why did he check the dates with his tutor?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "To make sure they fitted his college course"
+                  "To compare the companies' products",
+                  "To ask for a different placement",
+                  "To make sure the dates fitted his college course",
+                  "To arrange online training"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -6878,9 +6878,9 @@
                 "audioText": "The college sustainability group has started a project to reduce single-use plastic. A water refill station has been installed beside the main canteen, and students can collect a reusable bottle from the student office on Thursday. The group will compare the amount of plastic waste before and after the project. Volunteers should record observations for two weeks.",
                 "options": [
                   "Beside the main canteen",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "Beside the student office",
+                  "Outside the sports hall",
+                  "Near the main entrance"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -6891,10 +6891,10 @@
                 "prompt": "Listening 2. How long should volunteers record observations?",
                 "audioText": "The college sustainability group has started a project to reduce single-use plastic. A water refill station has been installed beside the main canteen, and students can collect a reusable bottle from the student office on Thursday. The group will compare the amount of plastic waste before and after the project. Volunteers should record observations for two weeks.",
                 "options": [
-                  "On Friday",
+                  "For one week",
                   "For two weeks",
-                  "Next month",
-                  "After the event"
+                  "For three weeks",
+                  "For one month"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -6904,12 +6904,12 @@
                 "type": "single_choice",
                 "prompt": "A local college introduced a reusable container scheme after a survey showed that most lunchtime waste came from disposable packaging. The canteen now offers a small discount to students who bring their own containers. Staff also placed clear signs near the serving area. After one term, the amount of disposable packaging had fallen, although the college plans to collect more data before deciding whether to expand the scheme. Reading 1. What encouraged the college to introduce the scheme?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
-                  "A survey showed that disposable packaging caused most lunchtime waste",
-                  "To buy a ticket"
+                  "A new college rule required reusable containers",
+                  "A survey showed disposable packaging caused most lunchtime waste",
+                  "A local company offered free bottles",
+                  "Students asked for longer lunch breaks"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -6917,12 +6917,12 @@
                 "type": "single_choice",
                 "prompt": "Why will the college collect more data?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "To make a better-informed decision about expanding the scheme"
+                  "To check whether the discount is popular",
+                  "To compare the canteen's opening hours",
+                  "To make a better-informed decision about expanding the scheme",
+                  "To decide which reusable bottle to purchase"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -9161,9 +9161,9 @@
                 "audioText": "The materials laboratory will hold an introduction for new students on Tuesday at nine thirty. The technician will demonstrate how to read material labels and record basic properties. Students should meet outside Laboratory 4 and wear their college identification badges. The session will not include practical testing; that activity will be arranged later.",
                 "options": [
                   "At nine thirty on Tuesday",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "At ten on Wednesday",
+                  "At eleven on Tuesday",
+                  "At nine thirty on Thursday"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -9174,10 +9174,10 @@
                 "prompt": "Listening 2. Where should students meet?",
                 "audioText": "The materials laboratory will hold an introduction for new students on Tuesday at nine thirty. The technician will demonstrate how to read material labels and record basic properties. Students should meet outside Laboratory 4 and wear their college identification badges. The session will not include practical testing; that activity will be arranged later.",
                 "options": [
-                  "On Friday",
+                  "Inside Laboratory 4",
                   "Outside Laboratory 4",
-                  "Next month",
-                  "After the event"
+                  "Outside Laboratory 3",
+                  "In the main workshop"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -9187,12 +9187,12 @@
                 "type": "single_choice",
                 "prompt": "An engineering student compared aluminium and steel for a lightweight support bracket. Aluminium has a lower density, so a component made from it may weigh less. Steel is generally stronger in many common grades, but the exact choice depends on the load, environment and design requirements. The student recorded the material grade and checked the drawing before writing a recommendation. Reading 1. Why did the student consider aluminium?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Because aluminium is always stronger than steel",
                   "Because it has a lower density and may produce a lighter component",
-                  "To buy a ticket"
+                  "Because it requires no design checks",
+                  "Because it is suitable for every load and environment"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -9200,9 +9200,9 @@
                 "type": "single_choice",
                 "prompt": "What information did the student record?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "The expected component weight",
+                  "The workshop timetable",
+                  "The supplier's address",
                   "The material grade"
                 ],
                 "correctIndex": 3,
@@ -11446,9 +11446,9 @@
                 "audioText": "The machine tools department will introduce the main parts of a training lathe on Wednesday at nine. Students should meet in the theory classroom first, where the instructor will show a labelled diagram. The group will then observe the machine from the designated viewing area. No machine operation is planned during this introductory session.",
                 "options": [
                   "On Wednesday at nine",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "On Tuesday at ten",
+                  "On Wednesday at eleven",
+                  "On Friday at nine"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -11459,10 +11459,10 @@
                 "prompt": "Listening 2. Where will students meet first?",
                 "audioText": "The machine tools department will introduce the main parts of a training lathe on Wednesday at nine. Students should meet in the theory classroom first, where the instructor will show a labelled diagram. The group will then observe the machine from the designated viewing area. No machine operation is planned during this introductory session.",
                 "options": [
-                  "On Friday",
+                  "In the workshop",
                   "In the theory classroom",
-                  "Next month",
-                  "After the event"
+                  "In the machine shop",
+                  "In the library"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -11472,10 +11472,10 @@
                 "type": "single_choice",
                 "prompt": "A conventional lathe rotates a workpiece while a cutting tool removes material. The main components include the bed, headstock, tailstock and carriage. Each part has a different function, and the machine type determines the available operations. Before discussing a machine, students should use the correct component names and refer to the manufacturer's documentation for model-specific details. Reading 1. What rotates during a conventional turning operation?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "The cutting tool",
+                  "The headstock",
                   "The workpiece",
-                  "To buy a ticket"
+                  "The carriage"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -11485,9 +11485,9 @@
                 "type": "single_choice",
                 "prompt": "Where should students look for model-specific information?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "The college timetable",
+                  "A general safety poster",
+                  "The workshop attendance sheet",
                   "The manufacturer's documentation"
                 ],
                 "correctIndex": 3,
@@ -13732,9 +13732,9 @@
                 "audioText": "The electrical engineering tutor will introduce circuit diagrams on Tuesday at ten. Students should meet in the electronics classroom and bring the circuit-symbol worksheet. The lesson will cover a simple series circuit, a parallel circuit and the symbols used for common components. No electrical equipment will be connected during this theory session.",
                 "options": [
                   "At ten on Tuesday",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "At nine on Wednesday",
+                  "At eleven on Tuesday",
+                  "At ten on Thursday"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -13745,12 +13745,12 @@
                 "prompt": "Listening 2. Which circuit-symbol worksheet should students use in the electronics session?",
                 "audioText": "The electrical engineering tutor will introduce circuit diagrams on Tuesday at ten. Students should meet in the electronics classroom and bring the circuit-symbol worksheet. The lesson will cover a simple series circuit, a parallel circuit and the symbols used for common components. No electrical equipment will be connected during this theory session.",
                 "options": [
-                  "On Friday",
+                  "The component glossary",
+                  "The safety checklist",
                   "The circuit-symbol worksheet",
-                  "Next month",
-                  "After the event"
+                  "The maintenance record"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -13758,12 +13758,12 @@
                 "type": "single_choice",
                 "prompt": "A series circuit has one main path for current, so the same current passes through each component in that path. In a parallel circuit, current can divide between branches. The voltage across parallel branches is the same in an ideal circuit. A student compared two diagrams and labelled the power source, switch and resistors before describing the difference between the circuit types. Reading 1. How many main paths does a simple series circuit have?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Two separate paths",
                   "One main path",
-                  "To buy a ticket"
+                  "Three independent branches",
+                  "No path for current"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -13771,12 +13771,12 @@
                 "type": "single_choice",
                 "prompt": "Which components did the student label?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "The power source, switch and resistors"
+                  "The power source, switch and resistors",
+                  "The battery, motor and display",
+                  "The processor, memory and storage",
+                  "The transmitter, channel and receiver"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -16016,9 +16016,9 @@
                 "audioText": "The communications engineering tutor will introduce basic system diagrams on Wednesday at ten. Students should meet in the network classroom and bring the labelled diagram from the course folder. The lesson will identify a transmitter, communication channel and receiver. Students will discuss the purpose of each block using a simple example.",
                 "options": [
                   "At ten on Wednesday",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "At nine on Thursday",
+                  "At eleven on Wednesday",
+                  "At ten on Friday"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -16029,10 +16029,10 @@
                 "prompt": "Listening 2. Which communication-system diagram should students bring?",
                 "audioText": "The communications engineering tutor will introduce basic system diagrams on Wednesday at ten. Students should meet in the network classroom and bring the labelled diagram from the course folder. The lesson will identify a transmitter, communication channel and receiver. Students will discuss the purpose of each block using a simple example.",
                 "options": [
-                  "On Friday",
+                  "The network safety checklist",
                   "The labelled diagram from the course folder",
-                  "Next month",
-                  "After the event"
+                  "The component glossary",
+                  "The maintenance schedule"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -16042,12 +16042,12 @@
                 "type": "single_choice",
                 "prompt": "A basic communication system transfers information from a source to a destination. A transmitter prepares a signal, a channel carries it and a receiver processes the incoming signal. The system may also include noise or interference that affects the quality of communication. A block diagram helps engineers describe the main functions without showing every internal circuit detail. Reading 1. What does a channel do in a basic communication system?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "It stores the information permanently",
                   "It carries the signal",
-                  "To buy a ticket"
+                  "It generates the original message",
+                  "It removes all interference"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -16055,12 +16055,12 @@
                 "type": "single_choice",
                 "prompt": "Why is a block diagram useful?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "It describes the main functions without showing every internal circuit detail"
+                  "It lists every internal circuit component",
+                  "It gives the exact physical dimensions",
+                  "It describes the main functions without showing every internal circuit detail",
+                  "It replaces the need for technical documentation"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -18296,9 +18296,9 @@
                 "audioText": "The aviation maintenance tutor will introduce maintenance planning records on Tuesday at nine. Students should meet in the documentation classroom and bring the sample work package. The lesson will identify task references, planned dates and required documentation. Students will discuss how a clear plan helps teams coordinate work, but no maintenance activity will be carried out.",
                 "options": [
                   "At nine on Tuesday",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "At ten on Wednesday",
+                  "At nine on Thursday",
+                  "At eleven on Tuesday"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -18309,10 +18309,10 @@
                 "prompt": "Listening 2. Which sample work package is needed for the planning exercise?",
                 "audioText": "The aviation maintenance tutor will introduce maintenance planning records on Tuesday at nine. Students should meet in the documentation classroom and bring the sample work package. The lesson will identify task references, planned dates and required documentation. Students will discuss how a clear plan helps teams coordinate work, but no maintenance activity will be carried out.",
                 "options": [
-                  "On Friday",
+                  "The inspection checklist",
                   "The sample work package",
-                  "Next month",
-                  "After the event"
+                  "The parts catalogue",
+                  "The staff attendance list"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -18322,10 +18322,10 @@
                 "type": "single_choice",
                 "prompt": "A maintenance plan groups tasks that must be completed during a scheduled maintenance visit. It may identify the task reference, responsible team, expected duration and required documents. Planners also consider access to parts and specialist support. A clear plan does not replace the approved maintenance data; it helps the organisation coordinate work and record its progress. Reading 1. What may a maintenance plan identify?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
-                  "Task reference, responsible team, expected duration and required documents",
-                  "To buy a ticket"
+                  "Only the names of the technicians",
+                  "The cost of every tool in the workshop",
+                  "The task reference, responsible team, expected duration and required documents",
+                  "The personal timetable of each student"
                 ],
                 "correctIndex": 2,
                 "points": 1
@@ -18335,9 +18335,9 @@
                 "type": "single_choice",
                 "prompt": "What does a clear plan help the organisation do?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
+                  "Replace approved maintenance data",
+                  "Guarantee that no task will be delayed",
+                  "Approve technical changes automatically",
                   "Coordinate work and record progress"
                 ],
                 "correctIndex": 3,
@@ -20581,9 +20581,9 @@
                 "audioText": "The maintenance team will practise a shift handover briefing on Wednesday at seven forty-five. Students should meet in the planning room and bring the sample task-status board. The briefing will cover completed work, outstanding tasks, parts awaiting confirmation and issues that require follow-up. The tutor will assess whether the information is concise and unambiguous.",
                 "options": [
                   "At seven forty-five on Wednesday",
-                  "At the college library",
-                  "At the town centre",
-                  "At the bus station"
+                  "At eight fifteen on Tuesday",
+                  "At seven forty-five on Thursday",
+                  "At nine on Wednesday"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -20594,10 +20594,10 @@
                 "prompt": "Listening 2. Which board should students bring?",
                 "audioText": "The maintenance team will practise a shift handover briefing on Wednesday at seven forty-five. Students should meet in the planning room and bring the sample task-status board. The briefing will cover completed work, outstanding tasks, parts awaiting confirmation and issues that require follow-up. The tutor will assess whether the information is concise and unambiguous.",
                 "options": [
-                  "On Friday",
+                  "The inspection checklist",
                   "The sample task-status board",
-                  "Next month",
-                  "After the event"
+                  "The risk register",
+                  "The maintenance schedule"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -20607,12 +20607,12 @@
                 "type": "single_choice",
                 "prompt": "A useful handover summarises the status of work at the end of a shift. It identifies completed tasks, outstanding items, relevant references and any issue that requires attention. Unconfirmed information should be clearly labelled as such. The incoming team should be able to distinguish between work that has been completed, work that remains open and decisions that still require approval. Reading 1. What should a useful handover identify?",
                 "options": [
-                  "To borrow a laptop",
-                  "To meet a relative",
+                  "Only the names of the team members",
                   "Completed tasks, outstanding items, references and issues requiring attention",
-                  "To buy a ticket"
+                  "The cost of the next maintenance visit",
+                  "The personal opinions of the outgoing team"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -20620,12 +20620,12 @@
                 "type": "single_choice",
                 "prompt": "Why should unconfirmed information be labelled?",
                 "options": [
-                  "At the sports centre",
-                  "In the computer room",
-                  "At the bus station",
-                  "So the incoming team can distinguish facts from information still awaiting confirmation"
+                  "So the incoming team can distinguish facts from information still awaiting confirmation",
+                  "So that the report can be made longer",
+                  "Because all information must be treated as final",
+                  "To avoid recording who supplied the information"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 0,
                 "points": 1
               },
               {
