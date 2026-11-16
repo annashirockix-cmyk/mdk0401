@@ -135,7 +135,7 @@
       "id": "c5s1v14_w01",
       "type": "written",
       "prompt": "Write 100–120 words explaining how to review a service notice before using it. Include model range, applicability and the need for confirmation.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Applicability — 2: explains checking the service notice's model/serial range and configuration applicability; 1: partial; 0: absent. (2) Document status — 2: checks notice identifier, revision and current approval/effectivity; 1: partial; 0: absent. (3) Confirmation — 2: explains confirming applicability through the approved publication process before relying on the notice; 1: partial; 0: absent or assumes applicability from model name alone. (4) English — 2: clear logical explanation and accurate aviation technical-publication vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
