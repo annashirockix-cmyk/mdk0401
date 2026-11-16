@@ -18079,7 +18079,7 @@
                   "Confirm its location and storage label; assume service status from the previous record.",
                   "Check its serial number against the parts list and return it to the usual storage area.",
                   "Ask whether it was used during the previous shift and rely on the verbal reply.",
-                  "Could we confirm the unit's service status with the responsible team and check the controlled record."
+                  "Could we confirm the unit's service status with the responsible team and check the controlled record?"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -19144,7 +19144,7 @@
               {
                 "id": "c5s1v06_f01",
                 "type": "single_choice",
-                "prompt": "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
+                "prompt": "The task card may refer to a different aircraft configuration. What should you ask?",
                 "options": [
                   "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
                   "Could we use the task card for a similar model and confirm the details later?",
