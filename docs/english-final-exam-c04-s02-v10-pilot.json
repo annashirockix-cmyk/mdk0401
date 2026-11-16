@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "Information that proves who accessed or changed a system may form an audit ___.",
       "acceptedAnswers": [
-        "trail",
-        "audit trail"
+        "trail"
       ],
       "points": 2
     },
