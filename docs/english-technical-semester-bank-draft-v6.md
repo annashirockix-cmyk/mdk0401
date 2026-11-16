@@ -53,7 +53,7 @@
 - D. because
 
 **109.** In a technical context, *to calibrate an instrument* means:
-- A. To compare and adjust its measurement performance against a reference
+- A. To determine its measurement performance by comparison with a reference standard
 - B. To paint its outer casing
 - C. To replace its serial number
 - D. To increase its operating temperature
@@ -76,7 +76,7 @@
 - C. The permitted variation from a specified value
 - D. The name of a drawing format
 
-**113.** Complete the sentence: “If the network connection is lost, the system ___ the event in its local log.”
+**113.** Complete the sentence: “Whenever the network connection is lost, the system ___ the event in its local log.”
 - A. record
 - B. recording
 - C. records
@@ -136,7 +136,7 @@
 | 106 | A | Preventive maintenance is planned in advance to reduce failure likelihood; actual intervals depend on approved maintenance data. |
 | 107 | D | Superseded copies are outdated versions that should not remain at points of use. |
 | 108 | D | “Because” introduces the reason for improved consistency. |
-| 109 | A | Calibration compares instrument performance with a reference and may include adjustment under a defined process. |
+| 109 | A | Calibration establishes the relationship between an instrument’s readings and a reference standard; adjustment, if needed, is a separate controlled action. |
 | 110 | A | 500 − 460 = 40; actual output is 40 units below the plan. |
 | 111 | B | The sentence is grammatical and appropriate for recording a decision in meeting minutes. |
 | 112 | C | Tolerance is the allowable variation from a specified dimension or value. |
