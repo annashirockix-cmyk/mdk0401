@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A name used in a programme to represent a value or item is a ___.",
       "acceptedAnswers": [
-        "variable",
-        "symbolic variable"
+        "variable"
       ],
       "points": 2
     },
