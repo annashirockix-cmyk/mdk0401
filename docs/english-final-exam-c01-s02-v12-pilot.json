@@ -28,10 +28,10 @@
       "prompt": "Listening 2. When should groups arrive?",
       "audioText": "The student project exhibition will take place in the main hall next Tuesday. Each group should arrive by half past eight to prepare its display. The exhibition opens to visitors at ten. Please put your project title and group number on the table. A technician will be available near the entrance if you need help connecting a computer or a screen.",
       "options": [
-        "On Friday",
+        "At nine o'clock",
         "By half past eight",
-        "Next month",
-        "After the event"
+        "At ten o'clock",
+        "At half past ten"
       ],
       "correctIndex": 1,
       "points": 1
