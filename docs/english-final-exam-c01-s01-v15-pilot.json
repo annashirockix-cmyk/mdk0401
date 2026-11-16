@@ -117,18 +117,18 @@
     {
       "id": "c1s1v15_o01",
       "type": "ordering",
-      "prompt": "Put the circuit-checking steps in the correct order.",
+      "prompt": "During a supervised low-voltage training session, you notice a concern. Put the communication and reporting steps in the correct order; do not describe wiring or repair actions.",
       "options": [
-        "Ask the instructor to check the circuit",
-        "Follow the diagram to connect components",
-        "Switch off the supply before making changes",
-        "Check that the connections are secure"
+        "Stop the activity and alert the instructor",
+        "Describe what you observed",
+        "Wait for the instructor's direction",
+        "Record the event as instructed"
       ],
       "correctOrder": [
-        "Ask the instructor to check the circuit",
-        "Follow the diagram to connect components",
-        "Switch off the supply before making changes",
-        "Check that the connections are secure"
+        "Stop the activity and alert the instructor",
+        "Describe what you observed",
+        "Wait for the instructor's direction",
+        "Record the event as instructed"
       ],
       "points": 2
     },
