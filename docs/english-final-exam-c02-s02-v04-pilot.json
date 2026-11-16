@@ -15,9 +15,9 @@
       "audioText": "The college IT team is updating its guidance on protecting personal information. A short briefing will be held online on Wednesday at half past twelve. Students will learn how to create strong passwords, recognise suspicious messages and report a possible data leak. The link will be posted in the student portal on Tuesday afternoon.",
       "options": [
         "On Wednesday at half past twelve",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Tuesday at half past twelve",
+        "On Wednesday at one thirty",
+        "On Thursday at half past twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A student received an email that appeared to come from the college IT department. It asked her to confirm her password using an unfamiliar link. She noticed that the sender's address was unusual and did not open the link. Instead, she forwarded the message to the official IT support address. The team confirmed that it was a phishing attempt and reminded students never to share passwords by email. Reading 1. What made the student suspicious?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The email contained a spelling mistake",
         "The sender's address was unusual and the link was unfamiliar",
-        "To buy a ticket"
+        "The sender's address was unusual and the link was unfamiliar",
+        "The message included an unexpected attachment"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What did the IT team confirm?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "That the message was a routine college notice",
+        "That the message was a phishing attempt",
+        "That the student's password had already been changed",
         "That the message was a phishing attempt"
       ],
       "correctIndex": 3,
