@@ -841,3 +841,16 @@ V03, V04, V06, V07, V11, V13, V14 и V15 task 2 формулируют запр�
 При этом начиная с V03 в большинстве заданий повторяются нерелевантные distractors: “To borrow a laptop / To meet a relative / To buy a ticket” в вопросах о технических системах и “At the sports centre / In the computer room / At the bus station” в вопросах о документации, протоколах и производственных процессах. Эти варианты не являются правдоподобными альтернативами и позволяют отвечать без чтения.
 
 Нужна замена distractors на параллельные по грамматической форме и тематически близкие варианты, например альтернативные функции контроллера, элементы документации, причины/следствия или характеристики оборудования. Ключи в этой проверке не менялись.
+
+
+### Targeted reading-key review — C5-S1 and C5-S2 V01–V15
+
+Проверены 60 reading items (tasks 3–4) по двум слотам: C5-S1 и C5-S2, все 15 вариантов каждого слота.
+
+**C5-S1:** ключи всех 30 проверенных заданий соответствуют passage. Темы: maintenance planning, inspection findings, diagnostics, manual applicability, revision control, aircraft configuration, shift handover, non-conformance, reliability analysis, controlled publications, configuration identification, technical briefings, service notices и supplier evaluation.
+
+**C5-S2:** ключи всех 30 проверенных заданий соответствуют passage. Темы: handover, risk records, integrated reports, fault analysis, document release, replacement proposals, procurement, inspection checklists, maintenance records, manufacturing dependencies, audits, equipment integration, proposals и technical summaries.
+
+**Общий дефект distractors:** в C5-S1 V02–V15 и C5-S2 V03–V15 в заданиях task 3 повторяются “To borrow a laptop / To meet a relative / To buy a ticket”, а в task 4 — “At the sports centre / In the computer room / At the bus station”. Для технических вопросов эти ответы не относятся к предметной области. Это делает задания угадываемыми без чтения. В C5-S2 V02 и ряде ранних вариантов отвлекающие ответы тематически ближе, но также требуют проверки на правдоподобность и параллельность.
+
+Рекомендация для всех C5 reading items: заменить эти шаблонные distractors на варианты того же семантического класса, что и ключ (альтернативные записи/документы, функции, причины, действия или технические параметры), не меняя проверенные правильные ответы. В рамках этой проверки содержимое пилотных JSON не изменялось.
