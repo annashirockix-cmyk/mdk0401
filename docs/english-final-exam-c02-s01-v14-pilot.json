@@ -17,7 +17,7 @@
         "On Mondays",
         "On Tuesdays",
         "On Wednesdays",
-        "On Mondays"
+        "On Fridays"
       ],
       "correctIndex": 0,
       "points": 1
@@ -44,7 +44,7 @@
         "The presentation skills course",
         "The basic computer course",
         "The project management course",
-        "The project management course"
+        "The aircraft technology course"
       ],
       "correctIndex": 2,
       "points": 1
@@ -57,7 +57,7 @@
         "It was the shortest course available",
         "It fitted his schedule and presentation skills were covered elsewhere",
         "It was recommended by a classmate",
-        "It fitted his schedule and presentation skills were covered elsewhere"
+        "It was taught by a tutor she already knew."
       ],
       "correctIndex": 3,
       "points": 1
