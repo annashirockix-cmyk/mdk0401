@@ -25,7 +25,7 @@
     {
       "id": "c4s1v05_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which template is required for the fault-description class?",
+      "prompt": "Which document should students bring for the fault-description class?",
       "audioText": "The electrical maintenance tutor will review fault-description vocabulary on Friday at ten thirty. Students should meet in the classroom next to the laboratory and bring the sample maintenance report. The lesson will compare the terms intermittent, damaged, loose and unavailable. Students will practise describing an observation without guessing its cause.",
       "options": [
         "The sample inspection checklist",
