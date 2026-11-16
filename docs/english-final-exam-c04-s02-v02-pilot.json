@@ -28,12 +28,12 @@
       "prompt": "Listening 2. Which reference list is required for the computer-systems class?",
       "audioText": "The computer systems class will compare hardware and software on Monday at eleven. Students should bring the component glossary and meet in the digital laboratory. The instructor will review the roles of the processor, memory, storage and operating system. A short matching activity will use diagrams and product descriptions.",
       "options": [
-        "The component glossary",
         "The safety checklist",
+        "The component glossary",
         "The maintenance schedule",
         "The circuit-symbol worksheet"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -42,11 +42,11 @@
       "prompt": "A computer system uses hardware and software to process information. The processor performs instructions, memory holds data that is currently in use, and storage keeps files for later access. The operating system manages resources and provides services for applications. These components have different roles, so a technical description should avoid using the terms as if they were interchangeable. Reading 1. What is the role of the operating system?",
       "options": [
         "It stores files for later access",
-        "It manages resources and provides services for applications",
         "It performs every calculation in the processor",
+        "It manages resources and provides services for applications",
         "It connects the computer to the power supply"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
