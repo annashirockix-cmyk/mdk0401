@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A proposal suggested changing the inspection-record template to reduce incomplete entries. The author used a sample audit to identify the most frequently missing fields and proposed adding clearer prompts. The proposal also noted that staff would need a short briefing before the new template was introduced. It recommended comparing record completeness before and after the change rather than assuming that the new format would solve every problem. Reading 1. What evidence supported the proposed change?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "A supplier complaint about delivery time",
         "A sample audit showing frequently missing fields",
-        "To buy a ticket"
+        "A staff rota showing shift preferences",
+        "A maintenance forecast showing expected workload"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What additional action did the proposal identify?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "A short staff briefing before introducing the template"
+        "A short staff briefing before introducing the template",
+        "A change to the supplier payment schedule",
+        "A replacement of the inspection equipment",
+        "Cancellation of the next sample audit"
       ],
       "correctIndex": 3,
       "points": 1
