@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A change log records updates made to a software product. It may list the version number, release date and a summary of changes or corrections. When a user reports a problem, the support team may ask which version is installed. This information helps the team compare the report with known issues and decide whether an update is relevant. Reading 1. What may a change log include?",
       "options": [
-        "Version number, release date and a summary of changes",
-        "Machine serial number, operator name and shift date",
         "Supplier address, purchase price and order quantity",
+        "Machine serial number, operator name and shift date",
+        "Version number, release date and a summary of changes",
         "Equipment colour, storage location and maintenance cost"
       ],
       "correctIndex": 2,
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why might support staff ask for the installed version?",
       "options": [
-        "To compare the problem with known issues and relevant updates",
+        "To replace the need for a technical support record",
         "To identify the person who purchased the equipment",
         "To calculate the machine's operating speed",
-        "To replace the need for a technical support record"
+        "To compare the problem with known issues and relevant updates"
       ],
       "correctIndex": 3,
       "points": 1
