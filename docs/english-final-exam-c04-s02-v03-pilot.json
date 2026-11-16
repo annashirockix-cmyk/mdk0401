@@ -42,8 +42,8 @@
       "prompt": "An automated system may use a sensor to detect a condition and send information to a controller. The controller processes the input according to its programme and may send an output signal to an actuator. The actuator then produces an action, such as movement or switching. The exact arrangement depends on the system design and should be described using the correct equipment documentation. Reading 1. What does a controller do with sensor information?",
       "options": [
         "It records the output from an actuator",
-        "It processes the input according to its programme",
         "It supplies power directly to the sensor",
+        "It processes the input according to its programme",
         "It stores every measurement without processing"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What does an actuator produce?",
       "options": [
         "A measurement value",
-        "An action such as movement or switching",
+        "A warning label",
         "A document reference",
-        "A warning label"
+        "An action such as movement or switching"
       ],
       "correctIndex": 3,
       "points": 1
