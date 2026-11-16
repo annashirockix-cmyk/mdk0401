@@ -215,3 +215,22 @@ Weak wrong-category distractors remain in four of the five inspected files. Exam
 Written tasks in the sample include 60–100-word prompts and explicit 8-point rubrics. This sample review did not independently validate every rubric against a CEFR level or course learning outcome; that requires a separate alignment review.
 
 This is a representative five-file sample, not a complete V09 audit or an audit of V10–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+## V10 representative cross-course audit (2026-11-16)
+
+Five V10 files were inspected across C1-S2, C2-S1, C3-S2, C4-S1 and C5-S2. Each contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1. The repeated answer-position template therefore remains present in the inspected V10 sample.
+
+The keyed answers in all ten inspected listening items match their embedded audioText. Ordering tasks in all five files were reviewed; each correctOrder contains the four expected steps and corresponds to the task options.
+
+Weak wrong-category distractors remain in four of the five files. Examples include location choices for a question about a required reference chart, and generic dates/locations for questions asking about an item, document or group. C1-S2 has comparatively plausible, category-matched choices in the inspected listening and reading tasks. Some V10 reading questions in C2-S1, C3-S2, C4-S1 and C5-S2 also use unrelated activity distractors (for example borrowing a laptop or buying a ticket).
+
+Short-text accepted answers were reviewed:
+- C2-S1 accepts “passenger”, “traveller” and “traveler”; these are defensible lexical variants for the sentence.
+- C3-S2 accepts “capacity” and “production capacity”; both can complete the sentence in context.
+- C5-S2 accepts “dependency” and “dependent item”. The latter is not an exact synonym for the abstract noun “dependency”; review whether the intended definition is of a dependency or of a dependent item before retaining both.
+- No obvious duplicated-prefix completion defect like those found in V09 was identified in this sample.
+
+Written tasks in the sample include explicit 8-point rubrics and word limits from 60 to 120 words. This was a structural check only; rubric alignment to CEFR levels and specific course outcomes remains unverified.
+
+This is a representative five-file sample, not a complete V10 audit or an audit of V11–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
