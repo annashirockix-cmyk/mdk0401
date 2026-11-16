@@ -17,7 +17,7 @@
         "At the civic centre",
         "At the town library",
         "At the college lecture theatre",
-        "At the civic centre"
+        "At the civic sports centre"
       ],
       "correctIndex": 0,
       "points": 1
@@ -43,7 +43,7 @@
       "options": [
         "They could reduce traffic noise",
         "They could provide shade and make the route more comfortable",
-        "They could provide shade and make the route more comfortable",
+        "They could reduce the distance people need to walk",
         "They could make the road wider"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "To estimate the cost of new street signs",
         "To check underground services and the space needed for roots",
         "To choose the colour of the benches",
-        "To check underground services and the space needed for roots"
+        "To choose the type of pavement for the route"
       ],
       "correctIndex": 3,
       "points": 1
