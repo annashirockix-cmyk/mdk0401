@@ -117,7 +117,7 @@
     {
       "id": "c1s2v13_o01",
       "type": "ordering",
-      "prompt": "Define the research question; Search the library catalogue; Check the source details; Record the reference",
+      "prompt": "Put the following steps for finding and recording a research source in a logical order.",
       "options": [
         "Record the reference",
         "Search the library catalogue",
