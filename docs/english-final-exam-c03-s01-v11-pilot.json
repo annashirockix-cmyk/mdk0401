@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "Aircraft maintenance organisations employ people with different responsibilities. Technicians inspect and maintain components, planners coordinate work and documentation, and stores staff manage parts and records. These roles depend on accurate communication because a component's identity and status must be clear to everyone involved. New employees usually receive role-specific training before taking on assigned duties. Reading 1. What do planners coordinate?",
       "options": [
-        "Work and documentation",
-        "Staff leave and training preferences",
         "Equipment and material deliveries",
+        "Staff leave and training preferences",
+        "Work and documentation",
         "Budgets and supplier contracts"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why is accurate communication important?",
       "options": [
         "So that reports can be shorter",
-        "So that component identity and status are clear to everyone",
+        "So that only the outgoing team understands the status",
         "So that the next team can avoid checking records",
-        "So that only the outgoing team understands the status"
+        "So that component identity and status are clear to everyone"
       ],
       "correctIndex": 3,
       "points": 1
