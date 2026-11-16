@@ -78,10 +78,10 @@
     {
       "id": "c3s2v07_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO items that may appear in a process plan.",
+      "prompt": "Choose TWO technical entries that define the sequence and verification stages in a machining process plan.",
       "options": [
-        "A personal playlist",
-        "A list of unrelated holidays",
+        "Supplier payment terms",
+        "Operator's annual leave balance",
         "Operation description",
         "Inspection point"
       ],
