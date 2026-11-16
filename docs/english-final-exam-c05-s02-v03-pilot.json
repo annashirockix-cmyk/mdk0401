@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "An integrated technical report may combine measurements, inspection findings and trend data. Each source should be identified so that a reader can trace where the information came from. The report should explain how the sources relate, but it must not imply that correlation proves causation. Conclusions should be proportionate to the evidence, and any limitation should be stated clearly. Reading 1. Why should each information source be identified?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "To show that all measurements were taken at the same time",
+        "To prove that one source caused another",
         "So readers can trace where information came from",
-        "To buy a ticket"
+        "To remove the need to explain limitations"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What should a report avoid implying?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "That correlation proves causation"
+        "That all sources are equally reliable",
+        "That one trend predicts every future event",
+        "That correlation proves causation",
+        "That a report must include every available measurement"
       ],
       "correctIndex": 3,
       "points": 1
