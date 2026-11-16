@@ -78,10 +78,10 @@
     {
       "id": "c3s2v09_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that support controlled CNC documentation.",
+      "prompt": "Choose TWO identifiers needed to ensure that a CNC programme is matched to the correct machine setup and controlled issue.",
       "options": [
-        "A personal nickname for the machine",
-        "An unrelated classroom timetable",
+        "Workpiece colour",
+        "Operator's preferred file naming style",
         "Programme revision",
         "Machine or controller reference"
       ],
