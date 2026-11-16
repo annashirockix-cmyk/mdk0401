@@ -1868,7 +1868,7 @@
                   "At eight thirty",
                   "At eight oh five"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -2006,7 +2006,7 @@
                   "The college director",
                   "The bus driver"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -2020,7 +2020,7 @@
                   "Telephone reception",
                   "Ask another student to call"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -2115,8 +2115,8 @@
                 "correctOrder": [
                   "Report to reception",
                   "Receive the supervisor's instructions",
-                  "Review the tasks completed",
-                  "Record the work in the daily log"
+                  "Record the work in the daily log",
+                  "Review the tasks completed"
                 ],
                 "points": 2
               },
@@ -6728,13 +6728,13 @@
               {
                 "id": "c2s1v15_l02",
                 "type": "single_choice",
-                "prompt": "Listening 2. Which technical reference is required for the maintenance-planning meeting?",
+                "prompt": "Listening 2. Which document should students bring to the work-placement briefing?",
                 "audioText": "The college placement coordinator will hold a briefing for students starting work experience next month. The meeting is on Thursday at ten in Lecture Room 5. Students should bring the contact details of their workplace supervisor and a copy of the placement agreement. The coordinator will explain attendance rules and how to report an absence.",
                 "options": [
-                  "On Friday",
+                  "A weekly attendance sheet",
                   "A copy of the placement agreement",
-                  "Next month",
-                  "After the event"
+                  "A completed absence report",
+                  "A maintenance task record"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -13651,10 +13651,9 @@
               {
                 "id": "c3s2v15_v01",
                 "type": "short_text",
-                "prompt": "A possible solution suggested for consideration is a ___.",
+                "prompt": "A suggested plan or solution submitted for consideration is a ___.",
                 "acceptedAnswers": [
-                  "proposal",
-                  "recommendation"
+                  "proposal"
                 ],
                 "points": 2
               },
@@ -22783,9 +22782,8 @@
               {
                 "id": "c5s2v15_v01",
                 "type": "short_text",
-                "prompt": "A short text that brings together the main points of several sources is a ___.",
+                "prompt": "A text that combines key ideas from multiple sources into one integrated account is a ___.",
                 "acceptedAnswers": [
-                  "summary",
                   "synthesis"
                 ],
                 "points": 2
