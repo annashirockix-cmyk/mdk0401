@@ -42,8 +42,8 @@
       "prompt": "A cutting tool catalogue provides information about tool geometry, compatible inserts and recommended applications. A technician should identify the tool holder and insert type before consulting the relevant product information. Two inserts may look similar but have different specifications. The catalogue reference and manufacturer's notes help users distinguish them and select the correct item for the documented process. Reading 1. What information can a cutting tool catalogue provide?",
       "options": [
         "Tool length, holder type and machine serial number",
-        "Tool geometry, compatible inserts and recommended applications",
         "Cutting speed, feed rate and coolant settings",
+        "Tool geometry, compatible inserts and recommended applications",
         "Insert colour, package size and delivery date"
       ],
       "correctIndex": 2,
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "How can users distinguish similar-looking inserts?",
       "options": [
-        "By checking the catalogue reference and manufacturer's notes",
+        "By selecting the insert with the closest package description",
         "By comparing the insert colour with another tool",
         "By asking a colleague to identify it from memory",
-        "By selecting the insert with the closest package description"
+        "By checking the catalogue reference and manufacturer's notes"
       ],
       "correctIndex": 3,
       "points": 1
