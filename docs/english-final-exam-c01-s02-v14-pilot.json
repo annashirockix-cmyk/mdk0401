@@ -117,7 +117,7 @@
     {
       "id": "c1s2v14_o01",
       "type": "ordering",
-      "prompt": "Read the placement information; Plan the journey; Meet the workplace supervisor; Follow the first-day instructions",
+      "prompt": "Put the following steps for preparing for the first day of work placement in a logical order.",
       "options": [
         "Follow the first-day instructions",
         "Plan the journey",
