@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A maintenance shift handover transfers current work information between teams. It should identify open tasks, completed checks, equipment or aircraft status and any restrictions. The outgoing team should state what remains outstanding and who is responsible for follow-up. A handover is not a substitute for the technical log or required sign-off; it helps the next team understand the current position. Reading 1. Which information should a handover identify?",
       "options": [
-        "Supplier prices, delivery forecasts and purchase approvals",
-        "Staff leave dates, training preferences and annual objectives",
         "Open tasks, completed checks, equipment status and restrictions",
+        "Staff leave dates, training preferences and annual objectives",
+        "Supplier prices, delivery forecasts and purchase approvals",
         "Room bookings, meeting times and visitor contact details"
       ],
       "correctIndex": 2,
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "What does a handover not replace?",
       "options": [
-        "The previous shift's personal checklist",
+        "The technical log or required sign-off",
         "The equipment colour or storage location",
         "The team's informal meeting notes",
-        "The technical log or required sign-off"
+        "The previous shift's personal checklist"
       ],
       "correctIndex": 3,
       "points": 1
