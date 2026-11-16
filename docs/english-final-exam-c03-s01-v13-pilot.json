@@ -78,10 +78,10 @@
     {
       "id": "c3s1v13_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that help trace a material delivery.",
+      "prompt": "Choose TWO technical identifiers used to trace a batch of material through receipt and use.",
       "options": [
-        "The colour of the delivery vehicle",
-        "The driver's favourite sport",
+        "Supplier payment terms",
+        "Storage location code",
         "Material grade",
         "Batch number"
       ],
