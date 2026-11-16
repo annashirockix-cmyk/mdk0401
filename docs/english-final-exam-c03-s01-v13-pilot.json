@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A delivery of metal stock arrived with a certificate from the supplier. The inspector compared the material grade and batch number on the certificate with the delivery label. The values matched, but the certificate date was difficult to read. The inspector requested a clearer copy before completing the incoming inspection record. The material was kept identified while the document was being checked. Reading 1. Which details did the inspector compare?",
       "options": [
-        "The material grade and batch number",
-        "The certificate date and supplier address",
         "The delivery quantity and purchase cost",
+        "The certificate date and supplier address",
+        "The material grade and batch number",
         "The inspection date and equipment reference"
       ],
       "correctIndex": 2,
@@ -56,8 +56,8 @@
       "options": [
         "Because the material grade was missing",
         "Because the batch number did not match",
-        "Because the certificate date was difficult to read",
-        "Because the supplier address was not included"
+        "Because the supplier address was not included",
+        "Because the certificate date was difficult to read"
       ],
       "correctIndex": 3,
       "points": 1
