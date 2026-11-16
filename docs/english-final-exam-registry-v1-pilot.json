@@ -7942,7 +7942,7 @@
                   "Because maintenance is being carried out",
                   "Because the laboratory is being repainted",
                   "Because new computers are being installed",
-                  "Because maintenance is being carried out"
+                  "Because the heating system is being replaced"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -7968,7 +7968,7 @@
                 "options": [
                   "The laboratory heating was left on overnight",
                   "Computer rooms stayed fully lit after the last lesson",
-                  "Computer rooms stayed fully lit after the last lesson",
+                  "The laboratory windows were left open overnight",
                   "Students left windows open during lessons"
                 ],
                 "correctIndex": 2,
@@ -7982,7 +7982,7 @@
                   "A timetable for switching off computers",
                   "A closing checklist for the final group",
                   "A new system for booking laboratories",
-                  "A closing checklist for the final group"
+                  "A rota for cleaning the laboratory"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -8094,7 +8094,7 @@
                   "Room 26",
                   "Room 16",
                   "Room 24",
-                  "Room 26"
+                  "Room 28"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -8120,7 +8120,7 @@
                 "options": [
                   "A photograph showing his home address",
                   "An old post containing a private timetable",
-                  "An old post containing a private timetable",
+                  "A photograph showing his student card number",
                   "A comment about a college event"
                 ],
                 "correctIndex": 2,
@@ -8134,7 +8134,7 @@
                   "Deleting a post removes every copy immediately",
                   "Deleting a post does not guarantee that every copy has disappeared",
                   "Only friends can save a copy of a post",
-                  "Deleting a post does not guarantee that every copy has disappeared"
+                  "Deleting a post guarantees that no one can save it."
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -8246,7 +8246,7 @@
                   "The yellow containers",
                   "The blue containers",
                   "The green containers",
-                  "The yellow containers"
+                  "The grey containers"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -8272,7 +8272,7 @@
                 "options": [
                   "The bins were too far from the classrooms",
                   "Students were unsure which materials belonged in each bin",
-                  "Students were unsure which materials belonged in each bin",
+                  "The signs did not explain how to sort plastic",
                   "The collection service arrived at the wrong time"
                 ],
                 "correctIndex": 2,
@@ -8286,7 +8286,7 @@
                   "The total weight of waste collected each week",
                   "The number of bins installed around the college",
                   "Contamination levels before and after the changes",
-                  "Contamination levels before and after the changes"
+                  "The total amount of plastic collected over the year"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -8397,7 +8397,7 @@
                   "On Wednesday at one thirty",
                   "On Tuesday at one thirty",
                   "On Wednesday at two thirty",
-                  "On Wednesday at one thirty"
+                  "On Thursday at one thirty"
                 ],
                 "correctIndex": 0,
                 "points": 1
@@ -8423,7 +8423,7 @@
                 "options": [
                   "Product colours and screen sizes",
                   "Repair options and expected battery life",
-                  "Repair options and expected battery life",
+                  "Screen size and camera quality",
                   "Delivery times and payment methods"
                 ],
                 "correctIndex": 2,
@@ -8437,7 +8437,7 @@
                   "It had the lowest purchase price",
                   "She expected to use it for several years and wanted easier repairs",
                   "It was the newest model available",
-                  "She expected to use it for several years and wanted easier repairs"
+                  "She expected the phone to be replaced within one year"
                 ],
                 "correctIndex": 3,
                 "points": 1
