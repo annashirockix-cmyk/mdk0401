@@ -17,7 +17,7 @@
         "In the computer laboratory",
         "In the science laboratory",
         "In the main lecture theatre",
-        "In the computer laboratory"
+        "In the engineering workshop"
       ],
       "correctIndex": 0,
       "points": 1
@@ -43,7 +43,7 @@
       "options": [
         "Because the buildings had different electricity suppliers",
         "Because the buildings were different sizes",
-        "Because the buildings were different sizes",
+        "Because the buildings had different electricity tariffs",
         "Because the buildings were used at different times"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "She needed to compare the number of staff",
         "She needed to compare energy use per square metre",
         "She needed to calculate the total floor area only",
-        "She needed to compare energy use per square metre"
+        "She needed to compare total energy bills only"
       ],
       "correctIndex": 3,
       "points": 1
