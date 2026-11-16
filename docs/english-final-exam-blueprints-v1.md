@@ -830,3 +830,14 @@ V03, V04, V06, V07, V11, V13, V14 и V15 task 2 формулируют запр�
 Критический дефект distractors повторяется: начиная с V02, в заданиях task 3 встречаются варианты “To borrow a laptop / To meet a relative / To buy a ticket”, не связанные с электроникой и содержанием текста. В task 4 повторяются ответы-места “At the sports centre / In the computer room / At the bus station” даже для вопросов о единицах измерения, отчётах, технической документации и неисправностях. Эти distractors делают задания угадываемыми без чтения и не проверяют понимание.
 
 Требуется заменить их на грамматически параллельные, предметно близкие и правдоподобные альтернативы, сохраняя один однозначно подтверждаемый ключ. В рамках этой проверки ключи не изменялись.
+
+
+### Targeted reading-key review — C4-S2 V01–V15
+
+Проверены 30 reading items (tasks 3–4): passage, question, options и correctIndex.
+
+По всем 30 заданиям ключи соответствуют содержанию текстов; явной ошибки correctIndex не обнаружено. Темы охватывают communication systems, computer systems, automation, PLCs, technical reporting, network protocols, change logs, data logs, cybersecurity, IIoT, digital twins, predictive maintenance, ground-support equipment и incident reports.
+
+При этом начиная с V03 в большинстве заданий повторяются нерелевантные distractors: “To borrow a laptop / To meet a relative / To buy a ticket” в вопросах о технических системах и “At the sports centre / In the computer room / At the bus station” в вопросах о документации, протоколах и производственных процессах. Эти варианты не являются правдоподобными альтернативами и позволяют отвечать без чтения.
+
+Нужна замена distractors на параллельные по грамматической форме и тематически близкие варианты, например альтернативные функции контроллера, элементы документации, причины/следствия или характеристики оборудования. Ключи в этой проверке не менялись.
