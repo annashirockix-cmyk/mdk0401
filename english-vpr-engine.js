@@ -424,7 +424,25 @@
     window.API.startEnglishFinalExam(courseNo,semester).then(function(started){
       if(!started||started.success!==true||!started.attemptId||!Array.isArray(started.tasks)) throw new Error(started&&started.error||"Сервер не выдал экзаменационный вариант.");
       renderPersistentAttempt(started,card,courseNo,semester);
-    }).catch(function(error){card.textContent="Не удалось открыть итоговый экзамен: "+(error.message||error);});
+    }).catch(function(error){
+      var message=String(error&&error.message||error||"Не удалось открыть итоговый экзамен.");
+      card.innerHTML="";
+      card.appendChild(el("p","", "Не удалось открыть итоговый экзамен: "+message));
+      if(/лимит попыток|попыток итогового экзамена исчерпан/i.test(message)&&window.API&&window.API.requestTestAttempts){
+        var request=el("button","btn","📨 Запросить дополнительную попытку");
+        var status=el("p","museum-muted","");
+        request.type="button";
+        request.onclick=function(){
+          request.disabled=true;status.textContent="Отправляем запрос преподавателю…";
+          var courseId=Number(courseNo)<=2?"ENB":"ENT",testId="english_final_c"+courseNo+"_s"+semester;
+          window.API.requestTestAttempts(courseId,testId).then(function(result){
+            if(!result||result.success!==true)throw new Error(result&&result.error||"Не удалось отправить запрос.");
+            status.textContent=result.alreadyRequested?"Запрос уже отправлен. Дождитесь решения преподавателя.":"Запрос отправлен преподавателю. После разрешения можно будет начать новую попытку.";
+          }).catch(function(requestError){status.textContent=requestError.message||String(requestError);request.disabled=false;});
+        };
+        card.appendChild(request);card.appendChild(status);
+      }
+    });
   }
   function renderPersistentAttempt(attempt, card, courseNo, semester) {
     if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
