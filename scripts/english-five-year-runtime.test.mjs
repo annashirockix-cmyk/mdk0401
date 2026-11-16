@@ -72,7 +72,7 @@ test("all 75 new lecture IDs are in the five-year map and have browser listening
 
   assert.equal(mapIds.length, 75);
   assert.deepEqual(mapIds.filter((id) => !runtimeIds.has(id)), []);
-  assert.equal(window.EnglishListeningCatalogue.count, 75);
+  assert.equal(window.EnglishListeningCatalogue.count, 120);
   for (const id of mapIds) {
     assert.ok(window.EnglishListeningCatalogue.getById(id), `missing listening activity: ${id}`);
   }
