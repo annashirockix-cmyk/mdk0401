@@ -696,11 +696,15 @@ test("shuffled display indices map back to the protected original answer key", (
 });
 
 
-test("semester shuffled options are bound to the server-verified attempt number and canonical indices", () => {
+test("semester shuffled options are bound to the server attempt and expired attempts cannot restart", () => {
   const get = extractFunction("getEnglishSemesterTests_");
+  const start = extractFunction("startEnglishSemesterTest_");
   const submit = extractFunction("submitEnglishSemesterTest_");
   assert.match(get, /safeTest\.attemptNo = attemptNo/);
   assert.match(submit, /requestedAttemptNo !== attemptNo/);
   assert.match(submit, /englishSemesterOptionOrder_\(user\.email, testId, attemptNo, index, optionCount\)/);
   assert.match(submit, /Submission:JSON\.stringify\(\{answers:canonicalAnswers\}\)/);
+  assert.match(start, /attempt\.status === "expired"/);
+  assert.match(start, /attemptCache|cache\.put\(attemptKey, JSON\.stringify\(attempt\), 21600\)/);
+  assert.match(submit, /serverAttempt\.status = "expired"/);
 });
