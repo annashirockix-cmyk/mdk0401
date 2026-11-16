@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A fault-analysis team reviewed an intermittent indication reported on several occasions. The event log showed when the indication appeared, while the maintenance history identified earlier work on the system. The team compared the timing of events but did not assume that the earlier work caused the problem. Further evidence was required before the team could confirm a cause or recommend a corrective action. Reading 1. What did the event log show?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Which staff member approved the repair",
+        "What replacement part was ordered",
         "When the indication appeared",
-        "To buy a ticket"
+        "Why the indication occurred"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why did the team avoid linking the earlier work directly to the problem?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "Because the maintenance history was unavailable",
+        "Because the indication was recorded only once",
+        "Because the earlier work had already been repeated",
         "Further evidence was required before confirming a cause"
       ],
       "correctIndex": 3,
