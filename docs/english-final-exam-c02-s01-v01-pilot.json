@@ -25,15 +25,15 @@
     {
       "id": "c2s1v01_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. What should students prepare?",
+      "prompt": "Listening 2. Which two things should students prepare for the career fair?",
       "audioText": "The college career fair will be held in the conference room on Wednesday. Representatives from six local companies will arrive at ten. Students should bring a short CV and prepare two questions about training opportunities. The engineering employers will be near the main entrance. Please register with the careers adviser by Monday so that the organisers can prepare visitor badges.",
       "options": [
-        "On Friday",
-        "Two questions about training",
-        "Next month",
-        "After the event"
+        "A short CV and two questions about training opportunities",
+        "A completed engineering project and a passport",
+        "A list of examination results and a reference letter",
+        "A visitor badge and a company contract"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A careers adviser helped Sam compare three training opportunities. One company offered a short placement close to college, another offered a longer placement with travel costs, and the third provided online training. Sam chose the first option because he wanted to gain practical experience while continuing his college course. He checked the dates with his tutor before replying. Reading 1. Which opportunity did Sam choose?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "A longer placement with travel costs",
+        "Online training",
         "A short placement close to college",
-        "To buy a ticket"
+        "A placement at a company abroad"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Why did he check the dates with his tutor?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To make sure they fitted his college course"
+        "To compare the companies' products",
+        "To ask for a different placement",
+        "To make sure the dates fitted his college course",
+        "To arrange online training"
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "points": 1
     },
     {
