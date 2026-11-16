@@ -10,7 +10,7 @@
 - Correct-answer positions are now balanced: 50 A, 50 B, 50 C and 50 D across the pool.
 - Each individual 20-question batch contains exactly five correct answers in each position.
 - No exact duplicate substantive question stems were found by the text-normalization check. Generic prompts such as “Choose the correct sentence” are not treated as substantive stems.
-- Automated regression coverage is added in `scripts/english-technical-draft-bank.test.mjs` and included in `.github/workflows/portal-syntax.yml`. The workflow has not yet reported a run for the current PR head; do not describe CI as passing until GitHub reports it.
+- Automated regression coverage is added in `scripts/english-technical-draft-bank.test.mjs` and included in `.github/workflows/portal-syntax.yml`. GitHub Actions run #43947026282 passed on code head 745942a3c1525bf3b68ed24f4433ba7e5d332834 on 2026-11-16, including the English runtime and browser exam audits. Subsequent documentation-only commits require their own CI result.
 
 ## 2. Answer-key distribution before and after correction
 
