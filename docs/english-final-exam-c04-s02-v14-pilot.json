@@ -108,7 +108,7 @@
         "Confirm its location and storage label; assume service status from the previous record.",
         "Check its serial number against the parts list and return it to the usual storage area.",
         "Ask whether it was used during the previous shift and rely on the verbal reply.",
-        "Confirm the unit's current service status with the responsible team and check the controlled record."
+        "Could we confirm the unit's service status with the responsible team and check the controlled record?"
       ],
       "correctIndex": 3,
       "points": 1
