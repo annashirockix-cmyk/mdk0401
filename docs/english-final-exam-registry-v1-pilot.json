@@ -1651,15 +1651,15 @@
                 "type": "ordering",
                 "prompt": "Put the research steps in the correct order.",
                 "options": [
-                  "Write the report in your own words",
                   "Choose a suitable topic",
                   "Find and check reliable sources",
+                  "Write the report in your own words",
                   "List the sources used"
                 ],
                 "correctOrder": [
-                  "Write the report in your own words",
                   "Choose a suitable topic",
                   "Find and check reliable sources",
+                  "Write the report in your own words",
                   "List the sources used"
                 ],
                 "points": 2
@@ -1802,16 +1802,16 @@
                 "type": "ordering",
                 "prompt": "Put the project stages in the correct order.",
                 "options": [
-                  "Review the finished design",
                   "Agree on the project goal",
                   "Assign tasks and deadlines",
-                  "Prepare and check the work"
+                  "Prepare and check the work",
+                  "Review the finished design"
                 ],
                 "correctOrder": [
-                  "Review the finished design",
                   "Agree on the project goal",
                   "Assign tasks and deadlines",
-                  "Prepare and check the work"
+                  "Prepare and check the work",
+                  "Review the finished design"
                 ],
                 "points": 2
               },
@@ -1954,14 +1954,14 @@
                 "type": "ordering",
                 "prompt": "Put the visit actions in the correct order.",
                 "options": [
-                  "Listen to the safety briefing",
                   "Arrive at the college entrance",
+                  "Listen to the safety briefing",
                   "Observe the demonstration with the guide",
                   "Return to the bus at the agreed time"
                 ],
                 "correctOrder": [
-                  "Listen to the safety briefing",
                   "Arrive at the college entrance",
+                  "Listen to the safety briefing",
                   "Observe the demonstration with the guide",
                   "Return to the bus at the agreed time"
                 ],
@@ -2107,15 +2107,15 @@
                 "type": "ordering",
                 "prompt": "Put the work-placement routine in the correct order.",
                 "options": [
-                  "Review the tasks completed",
                   "Report to reception",
                   "Receive the supervisor's instructions",
+                  "Review the tasks completed",
                   "Record the work in the daily log"
                 ],
                 "correctOrder": [
-                  "Review the tasks completed",
                   "Report to reception",
                   "Receive the supervisor's instructions",
+                  "Review the tasks completed",
                   "Record the work in the daily log"
                 ],
                 "points": 2
@@ -2257,18 +2257,18 @@
               {
                 "id": "c1s1v15_o01",
                 "type": "ordering",
-                "prompt": "Put the circuit-checking steps in the correct order.",
+                "prompt": "During a supervised low-voltage training session, you notice a concern. Put the communication and reporting steps in the correct order; do not describe wiring or repair actions.",
                 "options": [
-                  "Ask the instructor to check the circuit",
-                  "Follow the diagram to connect components",
-                  "Switch off the supply before making changes",
-                  "Check that the connections are secure"
+                  "Stop the activity and alert the instructor",
+                  "Describe what you observed",
+                  "Wait for the instructor's direction",
+                  "Record the event as instructed"
                 ],
                 "correctOrder": [
-                  "Ask the instructor to check the circuit",
-                  "Follow the diagram to connect components",
-                  "Switch off the supply before making changes",
-                  "Check that the connections are secure"
+                  "Stop the activity and alert the instructor",
+                  "Describe what you observed",
+                  "Wait for the instructor's direction",
+                  "Record the event as instructed"
                 ],
                 "points": 2
               },
@@ -2417,7 +2417,7 @@
               {
                 "id": "c1s2v01_o01",
                 "type": "ordering",
-                "prompt": "Find the place on the map; Choose the correct street; Follow the directions; Check the destination sign",
+                "prompt": "Put the following directions and navigation steps in a logical order.",
                 "options": [
                   "Check the destination sign",
                   "Follow the directions",
@@ -2568,7 +2568,7 @@
               {
                 "id": "c1s2v02_o01",
                 "type": "ordering",
-                "prompt": "Show your student card; Complete the borrowing form; Check the laptop condition; Sign the equipment record",
+                "prompt": "Put the following steps for borrowing college equipment in a logical order.",
                 "options": [
                   "Sign the equipment record",
                   "Check the laptop condition",
@@ -2720,7 +2720,7 @@
               {
                 "id": "c1s2v03_o01",
                 "type": "ordering",
-                "prompt": "Check the timetable; Buy the correct ticket; Go to the departure platform; Board the train when it arrives",
+                "prompt": "Put the following steps for preparing for a train journey in a logical order.",
                 "options": [
                   "Board the train when it arrives",
                   "Go to the departure platform",
@@ -2873,7 +2873,7 @@
               {
                 "id": "c1s2v04_o01",
                 "type": "ordering",
-                "prompt": "Explain what service you need; Ask the assistant for information; Check the directions on the map; Visit the shop",
+                "prompt": "Put the following steps for requesting a service at a shop in a logical order.",
                 "options": [
                   "Visit the shop",
                   "Check the directions on the map",
@@ -3024,7 +3024,7 @@
               {
                 "id": "c1s2v05_o01",
                 "type": "ordering",
-                "prompt": "Welcome the visitors; Show them the information area; Guide them to the laboratories; Answer their questions",
+                "prompt": "Put the following steps for welcoming visitors to the college in a logical order.",
                 "options": [
                   "Answer their questions",
                   "Guide them to the laboratories",
@@ -3175,7 +3175,7 @@
               {
                 "id": "c1s2v06_o01",
                 "type": "ordering",
-                "prompt": "Check the updated college message; Read the weather information; Prepare suitable clothing; Follow the revised event schedule",
+                "prompt": "Put the following steps for preparing for a college event in a logical order.",
                 "options": [
                   "Follow the revised event schedule",
                   "Prepare suitable clothing",
@@ -3326,17 +3326,17 @@
               {
                 "id": "c1s2v07_o01",
                 "type": "ordering",
-                "prompt": "Check the menu and allergy information; Choose a suitable meal; Tell the staff about an allergy; Collect the meal and drink",
+                "prompt": "Put the following steps for checking allergy information and choosing a meal safely in the correct order.",
                 "options": [
-                  "Collect the meal and drink",
-                  "Tell the staff about an allergy",
-                  "Choose a suitable meal",
-                  "Check the menu and allergy information"
+                  "Tell the staff about the allergy",
+                  "Check the menu and allergen information with staff",
+                  "Choose a meal confirmed as suitable",
+                  "Collect the meal and drink"
                 ],
                 "correctOrder": [
-                  "Check the menu and allergy information",
-                  "Choose a suitable meal",
-                  "Tell the staff about an allergy",
+                  "Tell the staff about the allergy",
+                  "Check the menu and allergen information with staff",
+                  "Choose a meal confirmed as suitable",
                   "Collect the meal and drink"
                 ],
                 "points": 2
@@ -3477,7 +3477,7 @@
               {
                 "id": "c1s2v08_o01",
                 "type": "ordering",
-                "prompt": "Write a clear subject line; Check the recipient's address; Attach the correct file or add a shared link; Read the message and send it",
+                "prompt": "Put the following steps for sending an email with an attachment in a logical order.",
                 "options": [
                   "Read the message and send it",
                   "Attach the correct file or add a shared link",
@@ -3628,7 +3628,7 @@
               {
                 "id": "c1s2v09_o01",
                 "type": "ordering",
-                "prompt": "Check the item after purchase; Keep the receipt and packaging; Explain the fault to the assistant; Choose or receive a replacement",
+                "prompt": "Put the following steps for reporting a faulty purchase in a logical order.",
                 "options": [
                   "Choose or receive a replacement",
                   "Explain the fault to the assistant",
@@ -3779,7 +3779,7 @@
               {
                 "id": "c1s2v10_o01",
                 "type": "ordering",
-                "prompt": "Suggest a date and place; Check everyone's availability; Confirm the final arrangement; Send the invitation with details",
+                "prompt": "Put the following steps for arranging a group meeting in a logical order.",
                 "options": [
                   "Send the invitation with details",
                   "Confirm the final arrangement",
@@ -3930,17 +3930,17 @@
               {
                 "id": "c1s2v11_o01",
                 "type": "ordering",
-                "prompt": "Agree the volunteer task; Receive the safety briefing; Complete the activity; Report back to the coordinator",
+                "prompt": "The coordinator has confirmed the volunteer task. Put the remaining steps in a logical order.",
                 "options": [
-                  "Report back to the coordinator",
-                  "Agree the volunteer task",
-                  "Receive the safety briefing",
-                  "Complete the activity"
+                  "Agree the volunteer task with the coordinator",
+                  "Receive the safety briefing for that task",
+                  "Complete the activity as instructed",
+                  "Report back to the coordinator"
                 ],
                 "correctOrder": [
-                  "Receive the safety briefing",
-                  "Agree the volunteer task",
-                  "Complete the activity",
+                  "Agree the volunteer task with the coordinator",
+                  "Receive the safety briefing for that task",
+                  "Complete the activity as instructed",
                   "Report back to the coordinator"
                 ],
                 "points": 2
@@ -4081,7 +4081,7 @@
               {
                 "id": "c1s2v12_o01",
                 "type": "ordering",
-                "prompt": "Prepare the display materials; Test the model; Arrange the labels; Explain the project to visitors",
+                "prompt": "Put the following steps for preparing a project display in a logical order.",
                 "options": [
                   "Explain the project to visitors",
                   "Test the model",
@@ -4233,7 +4233,7 @@
               {
                 "id": "c1s2v13_o01",
                 "type": "ordering",
-                "prompt": "Define the research question; Search the library catalogue; Check the source details; Record the reference",
+                "prompt": "Put the following steps for finding and recording a research source in a logical order.",
                 "options": [
                   "Record the reference",
                   "Search the library catalogue",
@@ -4385,7 +4385,7 @@
               {
                 "id": "c1s2v14_o01",
                 "type": "ordering",
-                "prompt": "Read the placement information; Plan the journey; Meet the workplace supervisor; Follow the first-day instructions",
+                "prompt": "Put the following steps for preparing for the first day of work placement in a logical order.",
                 "options": [
                   "Follow the first-day instructions",
                   "Plan the journey",
@@ -4536,7 +4536,7 @@
               {
                 "id": "c1s2v15_o01",
                 "type": "ordering",
-                "prompt": "Agree the presentation topic; Divide the sections; Prepare and upload slides; Rehearse the presentation",
+                "prompt": "Put the following steps for preparing and delivering a group presentation in a logical order.",
                 "options": [
                   "Rehearse the presentation",
                   "Divide the sections",
@@ -4696,7 +4696,7 @@
               {
                 "id": "c2s1v01_o01",
                 "type": "ordering",
-                "prompt": "Identify your skills; Prepare a short CV; Ask about the role; Send a polite follow-up message",
+                "prompt": "Put the following steps for preparing and following up on a job application in a logical order.",
                 "options": [
                   "Send a polite follow-up message",
                   "Prepare a short CV",
@@ -4848,7 +4848,7 @@
               {
                 "id": "c2s1v02_o01",
                 "type": "ordering",
-                "prompt": "Choose the role; List relevant experience; Write clear skill examples; Check the CV for errors",
+                "prompt": "Put the following steps for tailoring a CV to a specific role in a logical order.",
                 "options": [
                   "Check the CV for errors",
                   "List relevant experience",
@@ -4999,7 +4999,7 @@
               {
                 "id": "c2s1v03_o01",
                 "type": "ordering",
-                "prompt": "Research the company; Prepare examples; Attend the interview; Reflect on the feedback",
+                "prompt": "Put the following steps for preparing for and reflecting on a job interview in a logical order.",
                 "options": [
                   "Reflect on the feedback",
                   "Prepare examples",
@@ -5151,7 +5151,7 @@
               {
                 "id": "c2s1v04_o01",
                 "type": "ordering",
-                "prompt": "Identify your goals; Compare the available routes; Check entry requirements; Discuss the options with an adviser",
+                "prompt": "Put the following steps for comparing education and career routes in a logical order.",
                 "options": [
                   "Discuss the options with an adviser",
                   "Compare the available routes",
