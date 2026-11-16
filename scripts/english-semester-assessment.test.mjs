@@ -976,3 +976,19 @@ test("semester shuffled options are bound to the server attempt and expired atte
   assert.match(start, /attemptCache|cache\.put\(attemptKey, JSON\.stringify\(attempt\), 21600\)/);
   assert.match(submit, /serverAttempt\.status = "expired"/);
 });
+
+
+test("teacher dashboard exposes the English written-exam review workflow and safely renders submitted content", () => {
+  const dashboard = fs.readFileSync(path.join(root, "teacher-dashboard.js"), "utf8");
+  const api = fs.readFileSync(path.join(root, "api.js"), "utf8");
+  assert.match(dashboard, /id="efReviewRefresh"/);
+  assert.match(dashboard, /id="efReviewPanel"/);
+  assert.match(dashboard, /window\.API\.getEnglishFinalExamReviews\(\)/);
+  assert.match(dashboard, /window\.API\.gradeEnglishFinalExamWritten\(/);
+  assert.match(dashboard, /class="ef-review-score"/);
+  assert.match(dashboard, /class="ef-review-feedback"/);
+  assert.match(dashboard, /E\(item\.responses&&item\.responses\[task\.id\]/);
+  assert.match(dashboard, /E\(task\.rubric\)/);
+  assert.match(api, /getEnglishFinalExamReviews:function\(\)\{return fetchAPI\("getEnglishFinalExamReviews",\{\},"POST"/);
+  assert.match(api, /gradeEnglishFinalExamWritten:function\(attemptId,grades\)\{return fetchAPI\("gradeEnglishFinalExamWritten"/);
+});
