@@ -107,7 +107,7 @@
       "options": [
         "Repeat the measurement with the same setup and accept it if the result is consistent.",
         "Compare the number with the expected range before checking the measurement method.",
-        "Verify the measurement method, instrument status and supporting evidence before interpreting the value.",
+        "Please check the measurement method and instrument status, then compare the value with supporting evidence.",
         "Change the recorded value to the nearest expected figure and note the difference."
       ],
       "correctIndex": 2,
