@@ -15,9 +15,9 @@
       "audioText": "The college learning platform will be unavailable for maintenance on Saturday from eight until ten in the morning. Students should download any materials they need before Friday evening. Submitted work will remain saved, but online quizzes cannot be opened during the maintenance period. If the service is still unavailable after ten, contact the IT help desk.",
       "options": [
         "On Saturday from eight to ten",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "On Saturday from ten to twelve",
+        "On Friday from eight to ten",
+        "On Sunday from eight to ten"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Artem uses a digital folder to organise notes from his electronics course. He names each file with the subject and date, then stores diagrams separately from written summaries. Before a test, he searches the folder for key terms and checks that the latest version of each document is available. This system helps him avoid losing important information. Reading 1. How does Artem organise his files?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "He sorts files only by file size",
+        "He saves diagrams and summaries in one document",
         "He labels files by subject and date and separates diagrams from summaries",
-        "To buy a ticket"
+        "He labels files by subject and date and separates diagrams from summaries"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why does he check document versions?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "To free space on his computer",
+        "To share every document with classmates",
+        "To make sure he uses the latest document",
         "To make sure he uses the latest document"
       ],
       "correctIndex": 3,
