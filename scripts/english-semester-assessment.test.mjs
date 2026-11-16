@@ -1023,3 +1023,56 @@ test("student assessment history displays teacher feedback and reviewer identity
   assert.match(app, /window\.escapeHtml\(x\.feedback\)/);
   assert.match(app, /Комментарий:/);
 });
+
+
+test("corrected pilot final-exam listening keys and short-answer prompts stay synchronized with the registry", () => {
+  const registry = JSON.parse(fs.readFileSync(path.join(root, "docs/english-final-exam-registry-v1-pilot.json"), "utf8"));
+  const cases = [
+    ["EN-C1-S1-V13", "c1s1v13_l02", "docs/english-final-exam-c01-s01-v13-pilot.json", task => {
+      assert.equal(task.correctIndex, 3);
+      assert.match(task.audioText, /eight fifteen, so please arrive ten minutes earlier/i);
+      assert.equal(task.options[3], "At eight oh five");
+    }],
+    ["EN-C1-S1-V14", "c1s1v14_l01", "docs/english-final-exam-c01-s01-v14-pilot.json", task => {
+      assert.equal(task.correctIndex, 1);
+      assert.match(task.audioText, /ask for Ms Patel/i);
+      assert.equal(task.options[1], "Ms Patel");
+    }],
+    ["EN-C1-S1-V14", "c1s1v14_l02", "docs/english-final-exam-c01-s01-v14-pilot.json", task => {
+      assert.equal(task.correctIndex, 2);
+      assert.match(task.audioText, /telephone reception/i);
+      assert.equal(task.options[2], "Telephone reception");
+    }],
+    ["EN-C2-S1-V15", "c2s1v15_l02", "docs/english-final-exam-c02-s01-v15-pilot.json", task => {
+      assert.match(task.prompt, /document.*work-placement briefing/i);
+      assert.equal(task.options[1], "A copy of the placement agreement");
+      assert.equal(task.correctIndex, 1);
+    }],
+    ["EN-C3-S2-V15", "c3s2v15_v01", "docs/english-final-exam-c03-s02-v15-pilot.json", task => {
+      assert.deepEqual(task.acceptedAnswers, ["proposal"]);
+      assert.match(task.prompt, /suggested plan or solution/i);
+    }],
+    ["EN-C5-S2-V15", "c5s2v15_v01", "docs/english-final-exam-c05-s02-v15-pilot.json", task => {
+      assert.deepEqual(task.acceptedAnswers, ["synthesis"]);
+      assert.match(task.prompt, /combines key ideas from multiple sources/i);
+    }]
+  ];
+  for (const [variantId, taskId, sourcePath, check] of cases) {
+    const variant = registry.exams.flatMap(exam => exam.variants).find(item => item.variantId === variantId);
+    assert.ok(variant, "registry variant exists: " + variantId);
+    const registryTask = variant.variantJSON.tasks.find(task => task.id === taskId);
+    const source = JSON.parse(fs.readFileSync(path.join(root, sourcePath), "utf8"));
+    const sourceTask = source.tasks.find(task => task.id === taskId);
+    assert.deepEqual(registryTask, sourceTask, "registry and source JSON stay synchronized: " + taskId);
+    check(registryTask);
+  }
+  const v14 = registry.exams.flatMap(exam => exam.variants).find(item => item.variantId === "EN-C1-S1-V14");
+  const order = v14.variantJSON.tasks.find(task => task.id === "c1s1v14_o01");
+  assert.deepEqual(order.correctOrder, [
+    "Report to reception",
+    "Receive the supervisor's instructions",
+    "Record the work in the daily log",
+    "Review the tasks completed"
+  ]);
+  assert.equal(registry.status, "pilot_for_editorial_review", "editorial corrections do not approve the pilot for import");
+});
