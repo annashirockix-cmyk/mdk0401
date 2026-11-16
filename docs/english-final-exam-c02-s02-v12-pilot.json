@@ -15,9 +15,9 @@
       "audioText": "The town planning department is inviting students to a presentation about adapting public spaces to hotter summers. The event will be held at the civic centre on Thursday at half past five. The planner will discuss shade, drinking-water points and tree planting. Visitors can submit questions on paper at the entrance or through the council website.",
       "options": [
         "At the civic centre",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At the town library",
+        "At the college lecture theatre",
+        "At the civic centre"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A neighbourhood group proposed planting more trees along a busy walking route. The trees could provide shade and help make the area more comfortable during hot weather. However, the group also needed to consider underground services and the space required for roots. After consulting residents and technical staff, the council selected several suitable locations and agreed to monitor the trees after planting. Reading 1. What benefit could the trees provide?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "They could reduce traffic noise",
         "They could provide shade and make the route more comfortable",
-        "To buy a ticket"
+        "They could provide shade and make the route more comfortable",
+        "They could make the road wider"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why did the group consult technical staff?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "To estimate the cost of new street signs",
+        "To check underground services and the space needed for roots",
+        "To choose the colour of the benches",
         "To check underground services and the space needed for roots"
       ],
       "correctIndex": 3,
