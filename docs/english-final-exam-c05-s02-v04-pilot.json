@@ -136,7 +136,7 @@
       "id": "c5s2v04_w01",
       "type": "written",
       "prompt": "Write 100–120 words summarising an intermittent fault investigation. Separate the timeline, confirmed facts, possible explanations and evidence still needed.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); precise technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Timeline — 2: presents events in a clear, factual sequence; 1: partial; 0: absent or confused. (2) Confirmed facts — 2: separates verified observations from assumptions; 1: partial; 0: conflates them. (3) Possible explanations and evidence — 2: labels explanations as hypotheses and identifies evidence still needed; 1: mentions one; 0: presents an unverified cause as fact. (4) English — 2: clear chronology and accurate fault-investigation vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
       "points": 8
     }
   ],
