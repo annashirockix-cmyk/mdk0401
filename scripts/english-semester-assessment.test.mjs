@@ -1108,6 +1108,10 @@ test("all 150 final-exam source files match the combined registry and pass struc
       assert.ok(Object.hasOwn(typeTotals, task.type), "supported task type: " + task.id);
       typeTotals[task.type]++;
       byType[task.type]++;
+      if (/_[r]0[12]$/.test(task.id)) {
+        const genericReadingDistractors = new Set(["To borrow a laptop", "To meet a relative", "To buy a ticket", "At the sports centre"]);
+        assert.ok(!(task.options || []).some(option => genericReadingDistractors.has(option)), "reading distractors must be context-specific: " + task.id);
+      }
       if (task.type === "single_choice") {
         assert.ok(Array.isArray(task.options) && task.options.length === 4, "four single-choice options: " + task.id);
         assert.equal(new Set(task.options.map(option => String(option).trim().toLowerCase())).size, 4, "unique single-choice options: " + task.id);
@@ -1123,6 +1127,7 @@ test("all 150 final-exam source files match the combined registry and pass struc
         assert.ok(Array.isArray(task.acceptedAnswers) && task.acceptedAnswers.length > 0, "accepted short-text answer: " + task.id);
       } else if (task.type === "ordering") {
         assert.ok(Array.isArray(task.options) && task.options.length >= 3, "ordering options: " + task.id);
+        assert.equal(new Set(task.options.map(option => String(option).trim().toLowerCase())).size, task.options.length, "unique ordering options: " + task.id);
         assert.ok(Array.isArray(task.correctOrder) && task.correctOrder.length === task.options.length, "complete ordering key: " + task.id);
         assert.equal(new Set(task.correctOrder).size, task.options.length, "unique ordering key items: " + task.id);
         assert.deepEqual([...task.correctOrder].sort(), [...task.options].sort(), "ordering key is a permutation of options: " + task.id);
