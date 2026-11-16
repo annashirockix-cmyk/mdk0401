@@ -861,3 +861,16 @@ V03, V04, V06, V07, V11, V13, V14 и V15 task 2 формулируют запр�
 Проверены 30 reading items (tasks 3–4). Все 30 ключей соответствуют passage; явной ошибки correctIndex не выявлено. Темы охватывают материалы, чертежи, parts lists, workshop safety, incoming inspection, illustrated parts catalogues, tolerances, identification plates, quality reports, measuring instruments, maintenance roles, professional email, material certificates, technical notices и traceability.
 
 В V02–V15 task 3 повторяются три нерелевантных distractors “To borrow a laptop / To meet a relative / To buy a ticket”; в task 4 — “At the sports centre / In the computer room / At the bus station”. Они не соответствуют ни технической тематике, ни грамматической форме ключа. В V01 альтернативы в основном предметно близкие и правдоподобные. Требуется заменить шаблонные distractors в V02–V15 на технически сопоставимые варианты; правильные ключи по проверенным заданиям сохраняются.
+
+
+### Targeted reading-key review — C1-S1 V01–V15
+
+Проверены 30 reading items (tasks 3–4) во всех 15 вариантах.
+
+Подтверждены две ошибки ключей:
+- **V11 task 4:** passage говорит, что Nadia проверяет факты и пишет отчёт своими словами. Правильный ответ — “She checks facts and writes in her own words” (index 1), но `correctIndex` указывает на “She copies every paragraph” (index 3).
+- **V12 task 3:** текст говорит, что группа распределяет три задачи между названными студентами. Правильный ответ — “They assign tasks to named students” (index 1), но ключ указывает “Everyone does the same task” (index 2).
+
+Остальные 28 ключей в проверенных reading items соответствуют текстам. Отдельно: V10 task 4 правильный ответ — “When an instruction is unclear” (index 1), но distractor “Only at the end of the course” сформулирован как заведомо неверный и не очень правдоподобный; его стоит заменить.
+
+Для V01–V10 и V12–V15 distractors в основном предметно сопоставимы и не повторяют массовый посторонний шаблон, встреченный в более поздних слотах. При редактуре необходимо исправить только подтверждённые ключи и улучшить слабые варианты, не менять содержание без проверки.
