@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A computer component that keeps files for later access is a storage ___.",
       "acceptedAnswers": [
-        "device",
-        "storage device"
+        "device"
       ],
       "points": 2
     },
