@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "An industrial Internet of Things system connects sensors, equipment and software services. A sensor sends readings to a gateway, which transfers selected information to another system. Device identity, communication settings and access controls are important because connected equipment can affect production processes. A system diagram helps engineers understand the data path and devices involved. Reading 1. What may a gateway do?",
       "options": [
-        "Transfer sensor information to another system",
-        "Store all sensor readings permanently",
         "Replace the controller in every network",
+        "Store all sensor readings permanently",
+        "Transfer sensor information to another system",
         "Measure the physical distance between devices"
       ],
       "correctIndex": 2,
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why do device identity and access controls matter?",
       "options": [
-        "Connected equipment can affect production processes",
+        "Access controls replace the need for maintenance records",
         "Network diagrams always contain confidential data",
         "Device names determine the price of equipment",
-        "Access controls replace the need for maintenance records"
+        "Connected equipment can affect production processes"
       ],
       "correctIndex": 3,
       "points": 1
