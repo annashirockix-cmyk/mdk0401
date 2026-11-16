@@ -44,7 +44,7 @@
         "The host college accommodation",
         "The travel document checklist",
         "The study visit programme",
-        "The study visit programme"
+        "The host college's examination timetable"
       ],
       "correctIndex": 2,
       "points": 1
@@ -57,7 +57,7 @@
         "To ask about accommodation arrangements",
         "To confirm the travel dates",
         "To ask for safety information in English",
-        "To ask for safety information in English"
+        "To confirm whether the visit was optional"
       ],
       "correctIndex": 3,
       "points": 1
