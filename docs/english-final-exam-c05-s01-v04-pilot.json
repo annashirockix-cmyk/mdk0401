@@ -78,10 +78,10 @@
     {
       "id": "c5s1v04_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO checks needed before using a technical manual.",
+      "prompt": "Choose TWO control checks that confirm a technical manual is suitable for the equipment and current for use.",
       "options": [
-        "The colour of the document cover",
-        "The reader's personal preference",
+        "Publication language",
+        "Page layout",
         "Applicability to the equipment",
         "Revision status"
       ],
