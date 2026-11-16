@@ -96,8 +96,7 @@
       "type": "short_text",
       "prompt": "A list that records controlled documents and their current versions is a document ___.",
       "acceptedAnswers": [
-        "register",
-        "document register"
+        "register"
       ],
       "points": 2
     },
