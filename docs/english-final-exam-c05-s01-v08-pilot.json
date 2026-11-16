@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A non-conformance is a failure to meet a specified requirement. A report should identify the requirement, describe the evidence and state how the actual result differs. The cause may require further investigation. Corrective action should address the cause rather than only the visible symptom, and its effectiveness should be reviewed. Clear records support traceability and help prevent recurrence. Reading 1. What does a non-conformance represent?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
         "A failure to meet a specified requirement",
-        "To buy a ticket"
+        "A delay in the planned maintenance schedule",
+        "A recommendation to replace an item",
+        "A difference between two informal opinions"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What should corrective action address?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "The visible symptom only",
+        "The name of the person who found the issue",
+        "An unverified assumption about the cause",
         "The cause of the non-conformance"
       ],
       "correctIndex": 3,
