@@ -17,7 +17,7 @@
         "Room 26",
         "Room 16",
         "Room 24",
-        "Room 26"
+        "Room 28"
       ],
       "correctIndex": 0,
       "points": 1
@@ -43,7 +43,7 @@
       "options": [
         "A photograph showing his home address",
         "An old post containing a private timetable",
-        "An old post containing a private timetable",
+        "A photograph showing his student card number",
         "A comment about a college event"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "Deleting a post removes every copy immediately",
         "Deleting a post does not guarantee that every copy has disappeared",
         "Only friends can save a copy of a post",
-        "Deleting a post does not guarantee that every copy has disappeared"
+        "Deleting a post guarantees that no one can save it."
       ],
       "correctIndex": 3,
       "points": 1
