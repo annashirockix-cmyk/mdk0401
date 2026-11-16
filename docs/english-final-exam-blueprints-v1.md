@@ -1283,3 +1283,18 @@ Each rubric retains four observable criteria (8 points total), distinguishes evi
 
 The unrelated place/activity distractors in tasks 3–4 of C5-S1 V02–V15 were replaced with maintenance-domain alternatives. The new options are category-matched to each question (inspection evidence, diagnostic actions, document control, aircraft applicability, handover records, non-conformance, reliability, configuration, technical briefings, service notices and supplier evaluation). Correct options remain at C for task 3 and D for task 4; answer keys and per-variant A/B/C/D balance are unchanged. All 14 modified records were synchronized into the combined registry. Together with the C5-S2 V03–V15 remediation above, the previously documented unrelated-distractor defect in both C5 reading sets is closed. Plausibility and ambiguity review remains a separate editorial gate.
 
+
+
+## Targeted answer-key and wording correction pass — 2026-11-16
+
+The following pilot defects were corrected in both the individual variant files and the combined registry:
+
+- C1-S1 V13 Listening 2: corrected the arrival-time key to 08:05 (ten minutes before the 08:15 departure).
+- C1-S1 V14 Listening 1: corrected the reception contact to Ms Patel.
+- C1-S1 V14 Listening 2: corrected the delay instruction to telephone reception.
+- C1-S1 V14 ordering: moved recording completed work before the later review of the daily log.
+- C2-S1 V15 Listening 2: aligned the prompt with the work-placement briefing and replaced unrelated date/time distractors with plausible document choices.
+- C3-S2 V15 short text: narrowed the definition and accepted answer to “proposal”.
+- C5-S2 V15 short text: narrowed the definition and accepted answer to “synthesis”.
+
+A regression test compares these individual source records with the combined registry and verifies the answer keys. The registry remains `pilot_for_editorial_review`; these corrections do not constitute expert sign-off or authorise import. A complete review of all 150 variants, including distractor plausibility and curriculum alignment, remains outstanding.
