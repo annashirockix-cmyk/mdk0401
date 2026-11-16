@@ -116,7 +116,7 @@
     {
       "id": "c1s2v09_o01",
       "type": "ordering",
-      "prompt": "Check the item after purchase; Keep the receipt and packaging; Explain the fault to the assistant; Choose or receive a replacement",
+      "prompt": "Put the following steps for reporting a faulty purchase in a logical order.",
       "options": [
         "Choose or receive a replacement",
         "Explain the fault to the assistant",
