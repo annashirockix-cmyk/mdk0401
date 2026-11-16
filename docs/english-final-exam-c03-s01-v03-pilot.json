@@ -42,8 +42,8 @@
       "prompt": "An assembly drawing shows how several parts fit together. A parts list identifies each component by a reference number and gives its description and quantity. Before ordering replacement parts, a technician checks the drawing revision and compares the reference numbers with the maintenance record. This reduces the risk of selecting a similar-looking but incorrect component. Reading 1. What information does the parts list provide?",
       "options": [
         "The material and finish of each part",
-        "A component description and quantity for each part",
         "The supplier and purchase price for each part",
+        "A component description and quantity for each part",
         "The revision date and author of each drawing"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why does the technician compare reference numbers?",
       "options": [
         "To confirm the material grade",
-        "To avoid selecting a similar-looking but incorrect component",
+        "To identify the person who prepared the drawing",
         "To record the delivery date",
-        "To identify the person who prepared the drawing"
+        "To avoid selecting a similar-looking but incorrect component"
       ],
       "correctIndex": 3,
       "points": 1
