@@ -94,11 +94,9 @@
     {
       "id": "c4s1v07_v01",
       "type": "short_text",
-      "prompt": "The stated electrical value that equipment is designed for is its rated ___.",
+      "prompt": "The nominal potential difference specified by the manufacturer for electrical equipment is its rated ___.",
       "acceptedAnswers": [
-        "voltage",
-        "current",
-        "rating"
+        "voltage"
       ],
       "points": 2
     },
