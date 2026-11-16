@@ -152,7 +152,7 @@
 ## Review checklist
 
 - [ ] Confirm that the college's engineering glossary uses the same meanings for BOM, out of specification and ambient temperature.
-- [ ] Review Q127 against the selected grammar reference and local teaching convention for neither…nor agreement.
+- [ ] Confirm that the compound subject “the drawing and the accompanying notes” is treated as plural in Q127; the keyed form “specify” matches that subject.
 - [ ] Confirm the intended singular/plural treatment of “data” in Q133 and align it with the course style guide.
 - [ ] Check aviation technical-log wording against the terminology used in the approved programme; do not treat this language item as a substitute for aviation maintenance procedures.
 - [ ] Check for overlap with VPR and the preceding 120 draft questions.
