@@ -998,3 +998,18 @@ test("teacher dashboard exposes the English written-exam review workflow and saf
   assert.match(app, /renderTeacherDashboard\(\)/);
   assert.match(studentEngine, /Итоговая оценка появится после проверки письменных заданий\./);
 });
+
+
+test("teacher-graded English final-exam results are returned to the owning student with feedback and reviewer metadata", () => {
+  const mine = extractFunction("getMyCourseResults_");
+  const publish = extractFunction("upsertEnglishFinalExamJournal_");
+  assert.match(mine, /auth_\(data\)/);
+  assert.match(mine, /email_\(r\[0\]\)===email/);
+  assert.match(mine, /feedback:String\(resultMap\.Feedback/);
+  assert.match(mine, /reviewedBy:String\(resultMap\.ReviewedBy/);
+  assert.match(mine, /reviewedAt:String\(resultMap\.ReviewedAt/);
+  assert.match(mine, /sameCourseId_\(r\[12\],requestedCourse\)/);
+  assert.match(publish, /ReviewedBy:reviewerEmail/);
+  assert.match(publish, /ReviewedAt:reviewerEmail\?now/);
+  assert.match(code, /case "getmycourseresults": result = getMyCourseResults_\(data\); break;/);
+});
