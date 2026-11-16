@@ -16,7 +16,7 @@
 - C. The time when a machine operates at full capacity
 - D. The interval between two staff meetings
 
-**83.** Complete the sentence: “The software update ___ the error message that appeared during startup.”
+**83.** Complete the sentence: “Since it was installed, the software update ___ the error message that appeared during startup.”
 - A. has resolved
 - B. have resolve
 - C. resolving
