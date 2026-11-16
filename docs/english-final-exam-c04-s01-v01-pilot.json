@@ -78,10 +78,10 @@
     {
       "id": "c4s1v01_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO components commonly shown in a basic circuit diagram.",
+      "prompt": "Choose TWO entries that are electrical components rather than electrical quantities or cable specifications.",
       "options": [
-        "Tailstock",
-        "Cutting insert",
+        "Supply voltage",
+        "Wire cross-section",
         "Resistor",
         "Switch"
       ],
