@@ -120,15 +120,15 @@
       "type": "ordering",
       "prompt": "Put the work-placement routine in the correct order.",
       "options": [
-        "Review the tasks completed",
         "Report to reception",
         "Receive the supervisor's instructions",
+        "Review the tasks completed",
         "Record the work in the daily log"
       ],
       "correctOrder": [
-        "Review the tasks completed",
         "Report to reception",
         "Receive the supervisor's instructions",
+        "Review the tasks completed",
         "Record the work in the daily log"
       ],
       "points": 2
