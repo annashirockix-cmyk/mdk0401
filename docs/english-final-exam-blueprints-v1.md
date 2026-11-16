@@ -234,3 +234,20 @@ Short-text accepted answers were reviewed:
 Written tasks in the sample include explicit 8-point rubrics and word limits from 60 to 120 words. This was a structural check only; rubric alignment to CEFR levels and specific course outcomes remains unverified.
 
 This is a representative five-file sample, not a complete V10 audit or an audit of V11–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+## V11 representative cross-course audit (2026-11-16)
+
+Five V11 files were inspected across C1-S1, C2-S2, C3-S1, C4-S2 and C5-S1. Each contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1. The repeated answer-position template remains present in this V11 sample.
+
+The ten inspected listening keys match their embedded audioText. Four ordering tasks (C2-S2, C3-S1, C4-S2 and C5-S1) were checked against the described processes and their options; their sequences are coherent. C1-S1 ordering task 9 has a substantive key error: its correctOrder starts “Write the report in your own words” before “Choose a suitable topic” and “Find and check reliable sources”. The correct sequence should be topic selection, source search/check, report writing, then source listing (with source listing integrated as the final documentation step). The current key is not a valid logical workflow.
+
+A malformed prompt was identified in C4-S2 task 8: “Check the device register and What should you say?” The leading imperative appears to be accidental text and makes the question malformed. It should be rewritten as a complete, unambiguous scenario/question before use.
+
+C1-S1 task 7 asks for “a list of ___” and accepts “sources”, “references” and “reference”. “Reference” singular is grammatically inconsistent with the plural count phrase “a list of” only if the intended blank denotes the listed items? The expected natural completion is “sources” or “references”; remove or justify the singular form to avoid accepting an awkward answer.
+
+Weak wrong-category distractors remain in four of five inspected files, especially C2-S2, C3-S1 and C5-S1 reading tasks, where unrelated activity choices appear for questions about information or technical concepts. C1-S1 distractors in the inspected reading tasks are more plausible and category-matched.
+
+Written tasks have explicit word limits and 8-point rubrics (60–120 words). This structural check does not establish CEFR or outcome alignment.
+
+This is a representative five-file sample, not a complete V11 audit or an audit of V12–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
