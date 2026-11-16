@@ -42,8 +42,8 @@
       "prompt": "Turning is commonly used to produce cylindrical surfaces, while milling can create flat surfaces, slots and more complex profiles. Drilling produces a round hole using a rotating drill. The correct process depends on the component drawing, material and required geometry. A process plan usually lists the main stages and the equipment category, but detailed settings must be taken from approved process documentation. Reading 1. Which operation is commonly used to produce a cylindrical surface?",
       "options": [
         "Milling",
-        "Turning",
         "Drilling",
+        "Turning",
         "Grinding"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What information helps determine the correct process?",
       "options": [
         "The machine availability, operator shift and delivery date",
-        "The drawing, material and required geometry",
+        "The component colour, storage location and supplier",
         "The cutting-tool brand, lubricant and batch number",
-        "The component colour, storage location and supplier"
+        "The drawing, material and required geometry"
       ],
       "correctIndex": 3,
       "points": 1
