@@ -1194,3 +1194,14 @@ The remaining Task 9 ordering items were inspected in C2-S1, C2-S2, C1-S1 and C1
 5. Убрать повторяющиеся универсальные дистракторы и обеспечить вариативность ситуаций и формулировок между вариантами.
 
 **Граница аудита:** проверено только задание 8 во всех 150 вариантах. Пилотные JSON, ключи, банки, Google Sheets и Apps Script не изменялись.
+
+## Targeted remediation — functional task 8 (2026-11-16)
+
+The previously recorded task-8 defects were corrected in the individual pilot JSON files:
+
+- **C4-S2 V11–V15:** replaced the malformed prompt fragments with complete questions about checking device/network records, verifying model updates, validating measurements, confirming unit service status and reporting an unconfirmed fault. The answer options now address the same technical decision as each prompt; the intended keys were retained with updated indices where the options were reordered.
+- **C1-S1 V10:** replaced the near-duplicate safety-instruction clarification item with a distinct scenario about identifying the emergency-stop control before a machine is started. The key now points to asking the instructor before starting.
+- **C5-S1 V06–V10:** replaced the repeated generic distractors with context-specific alternatives about task applicability, incomplete handover, inspection discrepancies, evidence-based fault comparison and document revision control. Correct options were repositioned across the five items.
+
+The eleven individual pilot files were updated and committed. This is a targeted correction of the task-8 findings only; it does not approve the remaining tasks or rubrics in these variants. The combined registry must remain synchronized with the individual files, and the full 150-variant editorial review remains a release gate. No protected bank, Google Sheet or Apps Script was changed.
+
