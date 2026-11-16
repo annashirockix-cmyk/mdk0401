@@ -356,6 +356,15 @@ test("first pilot variants use plausible same-category listening and reading dis
       assert.ok(!task.options.some(option=>placeholders.test(option.trim())),`${task.id} still has generic distractors: ${task.options.join(" | ")}`);
     });
   });
+  const secondRound=["c02-s02","c03-s02","c04-s02","c05-s02"];
+  secondRound.forEach(slot=>{
+    const pilot=JSON.parse(fs.readFileSync(path.join(root,`docs/english-final-exam-${slot}-v02-pilot.json`),"utf8"));
+    ["l01","l02","r01","r02"].forEach(suffix=>{
+      const task=pilot.tasks.find(item=>item.id.endsWith("_"+suffix));
+      assert.ok(task,`${slot} V02 is missing ${suffix}`);
+      assert.ok(!task.options.some(option=>placeholders.test(option.trim())),`${task.id} still has generic distractors: ${task.options.join(" | ")}`);
+    });
+  });
   const career=JSON.parse(fs.readFileSync(path.join(root,"docs/english-final-exam-c02-s01-v01-pilot.json"),"utf8"));
   const prep=career.tasks.find(task=>task.id==="c2s1v01_l02");
   assert.match(prep.prompt,/Which two things should students prepare/);
