@@ -934,3 +934,35 @@ V01–V02 имеют в целом тематически сопоставимы
 Для всех short-text заданий: acceptedAnswers должны содержать только ответ, который вставляется в пропуск, без повторения слов/частей, уже присутствующих в prompt. Варианты ответа должны совпадать по части речи, числу и смыслу с грамматической конструкцией. Полные фразы нельзя принимать как эквивалент отдельного пропущенного слова. Неоднозначные пары (например, dependency/dependent item; summary/synthesis) следует разделять или переписывать prompt.
 
 Пилотные JSON на этом этапе не менялись.
+
+
+## Consolidated correction queue — audit checkpoint 2026-11-16
+
+### Confirmed correction classes
+
+| Priority | Area | Confirmed issue | Scope / action |
+|---|---|---|---|
+| P0 | Reading answer key | C1-S1 V11 task 4 and V12 task 3 have incorrect correctIndex | Correct these two keys after revalidating exact JSON paths |
+| P1 | Listening | Prompt and recording refer to different technical context in the cases listed in the listening audit | Rewrite prompt or replace recording/transcript as a matched pair; do not change key based on prompt alone |
+| P1 | Listening | Multi-document / multi-item prompts are represented by one composite single-choice option | Explicitly ask for a pair/set or convert to multiple-choice with two separately keyed answers |
+| P1 | Ordering | C1-S1 V03, V11–V15 and multiple C1-S2/C2-S1 ordering prompts have incorrect, unsafe or malformed sequencing/instructions | Rebuild ordering instructions and key from the real operational procedure; electrical/mechanical safety order requires subject review |
+| P1 | Short text | acceptedAnswers repeat words already present in the gap prompt or accept full phrase instead of the missing segment | Normalize answer to the exact gap; align grammar, number and part of speech |
+| P1 | Short text | Non-equivalent answers are treated as synonyms (C5-S2 V10, V15 and other cases recorded above) | Split the accepted set or rewrite the prompt to define one unambiguous target |
+| P2 | Reading distractors | Reused off-topic distractors (laptop/relative/ticket; sports centre/computer room/bus station) | Replace with plausible, parallel alternatives in the same semantic category; retain validated keys |
+| P2 | Listening distractors | Option category mismatch (time vs place, document vs date/time) | Replace with plausible alternatives of the same answer type |
+| P2 | Reading distractors | Generic obviously false alternatives weaken assessment | Review all options for plausibility, grammatical parallelism and CEFR fit |
+| P2 | Written | Word-count/rubric/technical correctness and CEFR alignment not yet fully cross-validated | Audit each prompt and rubric against intended learning outcomes |
+
+### CI checkpoint
+
+Для PR HEAD `4c8ff4e164be2574b72999d049009b79eac269a0` workflow **Portal syntax checks** (run `43903626593`, job `133426503545`) завершился с `success`. Все 22 основных шага job завершены успешно, включая:
+- answer-key isolation;
+- five-year English runtime and listening modules;
+- English final-exam real-browser audit;
+- workbook A4/PDF, course-constructor round-trip и certificate A4 landscape audits.
+
+В логах тестовых команд `assessment-option-shuffle.test.mjs`, `english-semester-assessment.test.mjs`, `english-technical-draft-bank.test.mjs` и `english-basic-semester-draft.test.mjs` видны `# fail 0`. Это подтверждает зелёный CI для указанного HEAD, но не означает, что содержательные ошибки в пилотных JSON исправлены: данный этап по-прежнему является аудитом, а не редактурой банков.
+
+### Boundary
+
+На этом checkpoint пилотные JSON, закрытые банки вопросов, Google Sheets и Apps Script не изменялись. Исправления данных следует выполнять отдельным контролируемым пакетом с повторной проверкой всех вариантов и ключей.
