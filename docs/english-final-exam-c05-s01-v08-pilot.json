@@ -78,10 +78,10 @@
     {
       "id": "c5s1v08_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO elements of a useful non-conformance report.",
+      "prompt": "Choose TWO evidence-based elements of a useful non-conformance report.",
       "options": [
-        "An unsupported personal accusation",
-        "An unrelated schedule change",
+        "A suspected cause stated as fact",
+        "A proposed penalty for the person involved",
         "The specified requirement",
         "Evidence of the deviation"
       ],
