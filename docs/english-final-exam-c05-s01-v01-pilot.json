@@ -15,9 +15,9 @@
       "audioText": "The aviation maintenance tutor will introduce maintenance planning records on Tuesday at nine. Students should meet in the documentation classroom and bring the sample work package. The lesson will identify task references, planned dates and required documentation. Students will discuss how a clear plan helps teams coordinate work, but no maintenance activity will be carried out.",
       "options": [
         "At nine on Tuesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At ten on Wednesday",
+        "At nine on Thursday",
+        "At eleven on Tuesday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which sample work package is needed for the planning exercise?",
       "audioText": "The aviation maintenance tutor will introduce maintenance planning records on Tuesday at nine. Students should meet in the documentation classroom and bring the sample work package. The lesson will identify task references, planned dates and required documentation. Students will discuss how a clear plan helps teams coordinate work, but no maintenance activity will be carried out.",
       "options": [
-        "On Friday",
+        "The inspection checklist",
         "The sample work package",
-        "Next month",
-        "After the event"
+        "The parts catalogue",
+        "The staff attendance list"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "A maintenance plan groups tasks that must be completed during a scheduled maintenance visit. It may identify the task reference, responsible team, expected duration and required documents. Planners also consider access to parts and specialist support. A clear plan does not replace the approved maintenance data; it helps the organisation coordinate work and record its progress. Reading 1. What may a maintenance plan identify?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
-        "Task reference, responsible team, expected duration and required documents",
-        "To buy a ticket"
+        "The task reference, responsible team, expected duration and required documents",
+        "Only the names of the technicians",
+        "The cost of every tool in the workshop",
+        "The personal timetable of each student"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "What does a clear plan help the organisation do?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "Coordinate work and record progress"
+        "Replace approved maintenance data",
+        "Coordinate work and record progress",
+        "Guarantee that no task will be delayed",
+        "Approve technical changes automatically"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {
