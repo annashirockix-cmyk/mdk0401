@@ -163,19 +163,19 @@ The catalogue now contains 96 unique practice activities across eight complete s
 All Course 2 activities include browser-readable English scripts and four multiple-choice comprehension questions with practice feedback. The catalogue remains practice-only: client-side answer keys, no gradebook writes, no exam attempts. Course 1 remains outstanding. Direct embedding in every lesson and real-browser playback testing remain separate tasks.
 
 
-## Corrected implementation status — all 120 lesson activities authored
+## Verified implementation status — 120 active lesson activities
 
-A source-level and runtime read-back on 2026-11-16 found that the active catalogue initially contained only the 75 new-lesson activities. The 45 pre-existing Basic/Technical source lectures (16 Basic + 29 Technical) had no listening scripts in their source data. This gap has now been addressed by adding 45 separate practice activities with stable IDs that match the existing lecture-to-listening mapping in `app.js`.
+A runtime audit on 2026-11-16 confirmed that the active `EnglishListeningCatalogue` already contains **120 unique activities**:
+- 45 activities for the 45 pre-existing Basic/Technical source lectures (16 Basic + 29 Technical), mapped through the existing source-topic and lecture-code mapping in `app.js`;
+- 75 activities for the 75 new lesson IDs in the five-year map.
 
-The catalogue now contains **120 unique active activities**:
-- 45 activities for the pre-existing source lectures, preserving their original lecture content and codes;
-- 75 activities for the new five-year lesson IDs.
+The first static count was misleading because it counted lesson-ID strings embedded in scripts and data examples rather than only active catalogue entries. The runtime count and the new regression test are the authoritative checks. No duplicate activities were retained.
 
-An automated regression test now checks all 120 IDs, unique coverage, script presence, at least three comprehension questions per activity, valid answer indices and practice explanations. The catalogue remains practice-only: answer keys are client-side, no grades or attempts are saved, and these activities are not protected exams.
+The automated regression test checks all 120 expected IDs, unique coverage, script presence, at least three comprehension questions per activity, valid answer indices and practice explanations. The catalogue remains practice-only: answer keys are client-side, no grades or attempts are saved, and these activities are not protected exams.
 
 Remaining listening work:
-- verify every activity's subject accuracy and answer quality during editorial review;
+- complete editorial review of the scripts, terminology, questions and answer explanations;
 - test speech synthesis, pause/resume/repeat, transcript reveal and responsive layout in real browsers and on mobile devices;
-- confirm all 120 activities appear inside the correct lecture pages and the standalone Listening Lab after the full page loads.
+- verify all 120 activities appear inside the correct lecture pages and the standalone Listening Lab after the full page loads.
 
 The separate assessment engine must continue to handle graded listening tasks and server-side checking.
