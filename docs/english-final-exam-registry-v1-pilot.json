@@ -19108,12 +19108,12 @@
                 "type": "single_choice",
                 "prompt": "The document revision ___ before the task card is used.",
                 "options": [
-                  "must be checked",
                   "must checking",
+                  "must be checked",
                   "must checked",
                   "must be check"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -19411,12 +19411,12 @@
                 "type": "single_choice",
                 "prompt": "The observed deviation ___ in the report.",
                 "options": [
-                  "must be described",
                   "must describing",
+                  "must be described",
                   "must described",
                   "must be describe"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -19564,12 +19564,12 @@
                 "type": "single_choice",
                 "prompt": "The defect history ___ before a reliability trend is reported.",
                 "options": [
-                  "should be reviewed",
                   "should reviewing",
+                  "should be reviewed",
                   "review",
                   "are reviewed"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -19715,12 +19715,12 @@
                 "type": "single_choice",
                 "prompt": "The current approved version ___ in the document register.",
                 "options": [
-                  "is identified",
                   "identify",
+                  "is identified",
                   "identifying",
                   "are identify"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 1,
                 "points": 1
               },
               {
