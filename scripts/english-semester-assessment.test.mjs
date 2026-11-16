@@ -1091,7 +1091,7 @@ test("all 150 final-exam source files match the combined registry and pass struc
   for (const variant of variants) {
     assert.ok(!variantIds.has(variant.variantId), "unique variant ID: " + variant.variantId);
     variantIds.add(variant.variantId);
-    const match = variant.variantId.match(/^EN-C([1-5])-S([1-2])-V(\\d{2})$/);
+    const match = variant.variantId.match(/^EN-C([1-5])-S([1-2])-V(\d{2})$/);
     assert.ok(match, "well-formed variant ID: " + variant.variantId);
     const sourcePath = `docs/english-final-exam-c0${match[1]}-s0${match[2]}-v${match[3]}-pilot.json`;
     const source = JSON.parse(fs.readFileSync(path.join(root, sourcePath), "utf8"));
