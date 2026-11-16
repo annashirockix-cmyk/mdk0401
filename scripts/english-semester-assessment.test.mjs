@@ -470,6 +470,7 @@ test("final exam attempt limits count persisted attempts and honor teacher-grant
   const ui=fs.readFileSync(path.join(root,"english-vpr-engine.js"),"utf8");
   assert.match(ui,/requestTestAttempts\(courseId,testId\)/);
   assert.match(ui,/Запросить дополнительную попытку/);
+  assert.match(ui,/Проверить разрешение и начать/);
 });
 
 test("student English final-exam UI starts persistent course/semester attempts and autosaves responses", () => {
