@@ -55,11 +55,11 @@
       "prompt": "Why is clear status wording important?",
       "options": [
         "At the sports centre",
+        "To prevent use when its status is uncertain",
         "In the computer room",
-        "At the bus station",
-        "To prevent use when its status is uncertain"
+        "At the bus station"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {
