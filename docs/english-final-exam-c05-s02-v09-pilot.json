@@ -25,7 +25,7 @@
     {
       "id": "c5s2v09_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which history document should students bring?",
+      "prompt": "Which two records should students bring for the maintenance-record review?",
       "audioText": "The aviation documentation tutor will review a sample maintenance record on Wednesday at ten. Students should bring the task card and the component history extract. The class will identify the aircraft or component reference, task status and supporting document references. The tutor will explain how accurate records support continuity between maintenance teams.",
       "options": [
         "The aircraft identification record and parts catalogue",
