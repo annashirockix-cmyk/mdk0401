@@ -116,7 +116,7 @@
     {
       "id": "c1s2v15_o01",
       "type": "ordering",
-      "prompt": "Agree the presentation topic; Divide the sections; Prepare and upload slides; Rehearse the presentation",
+      "prompt": "Put the following steps for preparing and delivering a group presentation in a logical order.",
       "options": [
         "Rehearse the presentation",
         "Divide the sections",
