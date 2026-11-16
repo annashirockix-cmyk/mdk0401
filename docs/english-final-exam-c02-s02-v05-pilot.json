@@ -16,7 +16,7 @@
       "options": [
         "At the civic centre",
         "At the science centre",
-        "At the civic centre",
+        "At the town library",
         "At the college sports hall"
       ],
       "correctIndex": 0,
@@ -43,7 +43,7 @@
       "options": [
         "Parking near the college was expensive",
         "The bus timetable did not match lesson times",
-        "The bus timetable did not match lesson times",
+        "The college car park was closed during the survey",
         "Students were required to carry large equipment"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "A public vote must be held first",
         "The cycle route must be built immediately",
         "Safety assessments must be completed",
-        "Safety assessments must be completed"
+        "The cycle route had already been approved"
       ],
       "correctIndex": 3,
       "points": 1
