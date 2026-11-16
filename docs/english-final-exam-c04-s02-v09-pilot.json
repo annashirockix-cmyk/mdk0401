@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A data log stores observations over time. A useful record includes a timestamp, the measured value, its unit and the equipment or sensor reference. When data are displayed as a trend, the time scale and axis labels help readers understand changes. Missing units or unclear timestamps can lead to incorrect conclusions, even when the recorded numbers are accurate. Reading 1. Which details should a useful data log include?",
       "options": [
-        "Timestamp, measured value, unit and equipment or sensor reference",
-        "Operator name, shift date, training group and room number",
         "Supplier address, order quantity, delivery date and price",
+        "Operator name, shift date, training group and room number",
+        "Timestamp, measured value, unit and equipment or sensor reference",
         "Machine colour, storage location, programme revision and tool number"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "How do time scales and axis labels help readers?",
       "options": [
         "They show the equipment purchase price",
-        "They help readers understand changes over time",
+        "They explain the supplier's delivery schedule",
         "They replace the need to identify units",
-        "They explain the supplier's delivery schedule"
+        "They help readers understand changes over time"
       ],
       "correctIndex": 3,
       "points": 1
