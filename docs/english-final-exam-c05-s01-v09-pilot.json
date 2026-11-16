@@ -106,7 +106,7 @@
       "prompt": "Several records show a similar symptom. What should you do before concluding that the cause is identical?",
       "options": [
         "Treat the symptoms as proof of the same cause and use the previous conclusion.",
-        "Compare the operating conditions, maintenance history and available evidence before drawing a conclusion.",
+        "Could we compare the operating conditions, maintenance history and available evidence before drawing a conclusion?",
         "Replace the component that was replaced in the earlier case.",
         "Combine the records and report one cause without checking the conditions."
       ],
