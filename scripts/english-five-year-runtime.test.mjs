@@ -78,22 +78,32 @@ test("all 75 new lecture IDs are in the five-year map and have browser listening
   }
 });
 
-test("all 75 new listening activities contain usable scripts and answerable practice questions", () => {
+test("all 120 existing and new lessons have usable listening activities", () => {
   const window = loadEnglishRuntime();
-  const mapIds = [
-    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\d{2}-s\d{2}-l\d{2}/g)),
+  const newLessonIds = [
+    ...new Set(read("docs/english-five-year-120-lecture-map-v1.md").match(/en-c\\d{2}-s\\d{2}-l\\d{2}/g)),
   ];
+  const legacySlots = [[1,1,3],[1,2,3],[2,1,3],[2,2,7],[3,1,5],[3,2,5],[4,1,9],[4,2,8],[5,1,2]];
+  const legacyIds = legacySlots.flatMap(([course, semester, count]) =>
+    Array.from({length:count}, (_, index) =>
+      "en-c" + String(course).padStart(2,"0") + "-s" + String(semester).padStart(2,"0") + "-l" + String(index + 1).padStart(2,"0")
+    )
+  );
+  const allIds = [...legacyIds, ...newLessonIds];
 
-  assert.equal(mapIds.length, 75);
-  const missing = mapIds.filter((id) => !window.EnglishListeningCatalogue.getById(id));
-  assert.deepEqual(missing, [], `missing active listening activities: ${missing.join(", ")}`);
+  assert.equal(newLessonIds.length, 75);
+  assert.equal(legacyIds.length, 45);
+  assert.equal(allIds.length, 120);
+  assert.equal(new Set(allIds).size, 120);
   assert.equal(window.EnglishListeningCatalogue.count, 120);
+  const missing = allIds.filter((id) => !window.EnglishListeningCatalogue.getById(id));
+  assert.deepEqual(missing, [], `missing active listening activities: ${missing.join(", ")}`);
 
-  for (const id of mapIds) {
+  for (const id of allIds) {
     const activity = window.EnglishListeningCatalogue.getById(id);
     assert.ok(activity.title && activity.title.trim().length >= 12, `missing title: ${id}`);
     assert.ok(activity.script && activity.script.trim().length >= 80, `listening script is too short: ${id}`);
-    assert.ok(Array.isArray(activity.questions) && activity.questions.length >= 2, `not enough questions: ${id}`);
+    assert.ok(Array.isArray(activity.questions) && activity.questions.length >= 3, `not enough questions: ${id}`);
 
     for (const [index, question] of activity.questions.entries()) {
       assert.ok(question.prompt && question.prompt.trim(), `missing prompt: ${id} question ${index + 1}`);
