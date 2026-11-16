@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A review found that the part reference in a component record did not match the label on the training item. The reviewer compared the delivery record, inspection entry and current parts information. The difference could not be resolved from the available copy, so the reviewer recorded the discrepancy and requested confirmation from the responsible stores team. The record was not changed until the correct reference had been verified. Reading 1. Which records did the reviewer compare?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Supplier invoice, shift roster and training log",
         "Delivery record, inspection entry and current parts information",
-        "To buy a ticket"
+        "Purchase forecast, staff rota and equipment booking",
+        "Previous audit report, meeting minutes and annual plan"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why was the record not changed immediately?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "The correct reference had to be verified first"
+        "The correct reference had to be verified first",
+        "The stores team had already approved the new reference",
+        "The label was known to be incorrect",
+        "The reviewer had completed the annual audit"
       ],
       "correctIndex": 3,
       "points": 1
