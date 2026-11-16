@@ -105,14 +105,14 @@
     {
       "id": "c1s1v10_f01",
       "type": "single_choice",
-      "prompt": "You have not understood a safety instruction. What is the best reply?",
+      "prompt": "A machine is ready, but you cannot identify the emergency-stop control. What should you do before starting?",
       "options": [
-        "I don't care about it.",
-        "Could you explain that instruction again, please?",
-        "I explained you yesterday.",
-        "Give me another machine."
+        "Start slowly and look for the control while the machine is running.",
+        "Ask a classmate to point it out after the task begins.",
+        "Ask the instructor to show you the emergency-stop control before the machine is started.",
+        "Use the control that looks most familiar."
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
