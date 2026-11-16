@@ -17,7 +17,7 @@
         "At the front desk",
         "At the student support office",
         "In the security office",
-        "At the front desk"
+        "At the library reception"
       ],
       "correctIndex": 0,
       "points": 1
@@ -44,7 +44,7 @@
         "She asked the tutor to search for it",
         "She requested a new card immediately",
         "She checked the places she had visited",
-        "She checked the places she had visited"
+        "She asked the tutor to issue a temporary card."
       ],
       "correctIndex": 2,
       "points": 1
@@ -57,7 +57,7 @@
         "How to block the college account",
         "Where to collect lost property",
         "How to request a replacement card",
-        "How to request a replacement card"
+        "How to report an absence."
       ],
       "correctIndex": 3,
       "points": 1
