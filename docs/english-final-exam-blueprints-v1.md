@@ -1224,3 +1224,14 @@ The first CI run after task-8 remediation detected that the new correct-option i
 
 The next CI pass exposed the same answer-position balance constraint in C1-S1 V10 and C4-S2 V11, V13, V14 and V15 after the functional-item keys were repositioned. In each affected variant, an existing single-choice item was reordered without changing its correct answer text, restoring the required A=2, B=2, C=2, D=2 distribution. The affected records were synchronized in the combined registry and directly compared with their individual pilot files. The C5-S1 V06 prompt was also aligned with the regression test's approved task-applicability wording. The direct check confirms balanced positions in all six affected variants and matching registry records; the subsequent GitHub Actions run #2537 (commit `c558c15a901f7218efea0bcbba5422dc6a2ee590`) completed successfully, including the English assessment regression tests and real-browser A4/PDF, constructor, certificate and English final-exam audits.
 
+## Written-task rubric remediation — C1-S1 V01–V15 (2026-11-16)
+
+All 15 written-task rubrics in C1-S1 were rewritten to define task-specific content requirements and observable marking criteria, then synchronized into the combined registry:
+
+- V01–V07: criteria now match the requested personal introduction, college-day description, vocabulary-learning methods, classmate email, after-class activity, group study and college project.
+- V08–V10: safety-related criteria explicitly assess the requested rules/PPE, safe-use explanation, workshop preparation and clarification of unclear instructions. The rubric for V09 no longer requires measurement vocabulary that the prompt does not request.
+- V11–V14: criteria now assess research/source recording, teamwork and deadline communication, safe workshop-visit behaviour, and first-day work-placement communication/logging.
+- V15: criteria explicitly assess instructor-approved information, supervision, reporting damaged equipment and avoiding unapproved connection/repair instructions.
+
+Each rubric retains an 8-point ceiling with four 0–2 criteria. Language accuracy is assessed separately from factual/safety correctness. The 15 individual records and their registry entries were updated; this is a first completed rubric group, not approval of the remaining 135 written tasks or the full exam set. No protected bank, Google Sheet or Apps Script was changed.
+
