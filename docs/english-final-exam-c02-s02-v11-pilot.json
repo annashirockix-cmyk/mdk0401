@@ -17,7 +17,7 @@
         "On Wednesday at one thirty",
         "On Tuesday at one thirty",
         "On Wednesday at two thirty",
-        "On Wednesday at one thirty"
+        "On Thursday at one thirty"
       ],
       "correctIndex": 0,
       "points": 1
@@ -43,7 +43,7 @@
       "options": [
         "Product colours and screen sizes",
         "Repair options and expected battery life",
-        "Repair options and expected battery life",
+        "Screen size and camera quality",
         "Delivery times and payment methods"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "It had the lowest purchase price",
         "She expected to use it for several years and wanted easier repairs",
         "It was the newest model available",
-        "She expected to use it for several years and wanted easier repairs"
+        "She expected the phone to be replaced within one year"
       ],
       "correctIndex": 3,
       "points": 1
