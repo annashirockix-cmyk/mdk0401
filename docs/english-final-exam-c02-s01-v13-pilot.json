@@ -15,9 +15,9 @@
       "audioText": "The college reception has changed its procedure for reporting lost property. Students should complete a short form at the front desk and describe the item clearly. Valuable items are kept in a locked cabinet. The office is open from eight thirty until four thirty on weekdays. Students will be contacted if an item matching their description is found.",
       "options": [
         "At the front desk",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At the student support office",
+        "In the security office",
+        "At the front desk"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "When Irina could not find her student card, she checked the places she had visited that morning. She then reported the loss at reception and completed the required form. The receptionist explained how to request a replacement card and reminded her to keep the confirmation email. Irina received the new card two days later. Reading 1. What did Irina do before reporting the loss?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "She asked the tutor to search for it",
+        "She requested a new card immediately",
         "She checked the places she had visited",
-        "To buy a ticket"
+        "She checked the places she had visited"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What did the receptionist explain?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "How to block the college account",
+        "Where to collect lost property",
+        "How to request a replacement card",
         "How to request a replacement card"
       ],
       "correctIndex": 3,
