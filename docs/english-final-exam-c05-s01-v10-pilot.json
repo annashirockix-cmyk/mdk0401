@@ -78,10 +78,10 @@
     {
       "id": "c5s1v10_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details needed to identify a controlled technical publication.",
+      "prompt": "Choose TWO control details needed to confirm that a technical publication is the approved current issue.",
       "options": [
-        "A personal note unrelated to the publication",
-        "An old revision with no status",
+        "Document file size",
+        "Author's job title",
         "Document number and revision",
         "Current approval status"
       ],
