@@ -78,10 +78,10 @@
     {
       "id": "c4s1v15_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO documents that may be compared during an electrical project review.",
+      "prompt": "Choose TWO documents that describe an electrical design and its selected components.",
       "options": [
-        "A personal diary",
-        "A restaurant menu",
+        "Maintenance log",
+        "Supplier invoice",
         "Circuit diagram",
         "Component list"
       ],
