@@ -1646,10 +1646,23 @@ function getTestAttemptStatus_(data) {
     if(raw!=="") break;
   }
   const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
-  const acceptedIds=isCustom?[testId,baseId]:[testId,"custom_"+testId];
-  const used=resultAttemptRows_().filter(function(r){
-    return email_(r[0])===targetEmail&&acceptedIds.indexOf(String(r[3]||""))>=0&&sameCourseId_(r[12]||courseId,courseId);
-  }).length;
+  let used=0;
+  const finalExamMatch=testId.match(/^english_final_c([1-5])_s([12])$/);
+  if(finalExamMatch){
+    const finalCourseId=Number(finalExamMatch[1])<=2?"ENB":"ENT";
+    if(!sameCourseId_(courseId,finalCourseId)) throw new Error("Итоговый экзамен не относится к выбранной дисциплине.");
+    const examSheet=ensureSheet_("EnglishExamAttempts"),examMap=headerMap_(examSheet),examLast=examSheet.getLastRow();
+    if(examLast>1){
+      used=examSheet.getRange(2,1,examLast-1,examSheet.getLastColumn()).getValues().filter(function(row){
+        return email_(row[examMap.StudentEmail])===targetEmail&&String(row[examMap.ExamId]||"")===testId;
+      }).length;
+    }
+  }else{
+    const acceptedIds=isCustom?[testId,baseId]:[testId,"custom_"+testId];
+    used=resultAttemptRows_().filter(function(r){
+      return email_(r[0])===targetEmail&&acceptedIds.indexOf(String(r[3]||""))>=0&&sameCourseId_(r[12]||courseId,courseId);
+    }).length;
+  }
   return {success:true,email:targetEmail,testId:testId,used:used,limit:limit,remaining:Math.max(0,limit-used),extraAttempts:Math.max(0,limit-1),unlimited:false,allowed:used<limit};
 }
 function requestTestAttempts_(data) {
@@ -3323,12 +3336,13 @@ function startEnglishFinalExam_(data) {
   try {
     const attempts = ensureSheet_("EnglishExamAttempts"), am = headerMap_(attempts);
     const last = attempts.getLastRow();
+    let usedAttempts = 0;
     if (last > 1) {
       const rows = attempts.getRange(2,1,last-1,attempts.getLastColumn()).getValues();
       for (let i=0;i<rows.length;i++) {
-        if (email_(rows[i][am.StudentEmail]) === user.email &&
-            String(rows[i][am.ExamId]) === examId &&
-            String(rows[i][am.Status]) === "in_progress") {
+        if (email_(rows[i][am.StudentEmail]) !== user.email || String(rows[i][am.ExamId]) !== examId) continue;
+        usedAttempts++;
+        if (String(rows[i][am.Status]) === "in_progress") {
           const deadline = new Date(rows[i][am.DeadlineAt]).getTime();
           if (deadline > Date.now()) {
             const snapshot = JSON.parse(String(rows[i][am.AttemptJSON] || "{}"));
@@ -3340,6 +3354,11 @@ function startEnglishFinalExam_(data) {
           updateMappedRecord_(attempts,i+2,{Status:"expired",UpdatedAt:new Date().toISOString()});
         }
       }
+    }
+    const attemptSetting=settingValue_("testAttempts:"+user.email+":"+courseId+":"+examId);
+    const attemptLimit=1+Math.max(0,Number(attemptSetting)||0);
+    if(usedAttempts>=attemptLimit) {
+      throw new Error("Лимит попыток итогового экзамена исчерпан ("+usedAttempts+" из "+attemptLimit+"). Запросите дополнительную попытку у преподавателя.");
     }
     const bank=ensureSheet_("EnglishExamVariantsBank"), bm=headerMap_(bank), bankLast=bank.getLastRow();
     if (bankLast < 2) throw new Error("Итоговые экзаменационные варианты ещё не импортированы.");
