@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A service notice may provide information about a product, system or maintenance topic. Before using it, the reader should check the affected model range, applicability statement, issue date and any referenced documents. Similar aircraft or equipment may have different configurations. If applicability is uncertain, the responsible technical team should confirm whether the notice applies to the specific item under review. Reading 1. Which details should be checked before using a service notice?",
       "options": [
-        "Technician name, shift rota, training date and leave record",
-        "Supplier price, delivery date, payment terms and invoice number",
         "Affected model range, applicability statement, issue date and referenced documents",
+        "Supplier price, delivery date, payment terms and invoice number",
+        "Technician name, shift rota, training date and leave record",
         "Equipment colour, storage location, room number and group"
       ],
       "correctIndex": 2,
@@ -56,8 +56,8 @@
       "options": [
         "The previous shift should confirm it from memory",
         "The notice should be assumed to apply to all similar models",
-        "The notice should be used first and checked after the task",
-        "The responsible technical team should confirm whether it applies"
+        "The responsible technical team should confirm whether it applies",
+        "The notice should be used first and checked after the task"
       ],
       "correctIndex": 3,
       "points": 1
