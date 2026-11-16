@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "The document revision ___ before the task card is used.",
       "options": [
-        "must be checked",
         "must checking",
+        "must be checked",
         "must checked",
         "must be check"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
