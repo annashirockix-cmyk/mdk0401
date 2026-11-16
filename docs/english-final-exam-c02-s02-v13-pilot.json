@@ -15,9 +15,9 @@
       "audioText": "The mathematics and science departments are holding a joint session on presenting research data. It will begin at eleven on Monday in the computer laboratory. Students will practise choosing suitable chart types and describing trends without exaggerating results. They should bring a small table of figures from a recent class project.",
       "options": [
         "In the computer laboratory",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "In the science laboratory",
+        "In the main lecture theatre",
+        "In the computer laboratory"
       ],
       "correctIndex": 0,
       "points": 1
@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A student compared the monthly energy use of two college buildings. Building A used less electricity in most months, but the difference became smaller during the winter. The student included the number of rooms in each building because their sizes were not the same. She avoided saying that one building was more efficient until she could compare energy use per square metre. Reading 1. Why did the student include the number of rooms?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Because the buildings had different electricity suppliers",
         "Because the buildings were different sizes",
-        "To buy a ticket"
+        "Because the buildings were different sizes",
+        "Because the buildings were used at different times"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "Why did she avoid making an immediate conclusion about efficiency?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "She needed to compare the number of staff",
+        "She needed to compare energy use per square metre",
+        "She needed to calculate the total floor area only",
         "She needed to compare energy use per square metre"
       ],
       "correctIndex": 3,
