@@ -17,7 +17,7 @@
         "On Tuesday at twelve",
         "On Monday at twelve",
         "On Tuesday at one",
-        "On Tuesday at twelve"
+        "On Wednesday at twelve"
       ],
       "correctIndex": 0,
       "points": 1
@@ -44,7 +44,7 @@
         "They repaired every item themselves",
         "They asked visitors to buy replacement products",
         "They explained where professional help was available",
-        "They explained where professional help was available"
+        "They directed visitors to the nearest supermarket"
       ],
       "correctIndex": 2,
       "points": 1
@@ -57,7 +57,7 @@
         "Encouraging residents to buy new household items",
         "Encouraging people to repair items before replacing them",
         "Encouraging visitors to donate electrical equipment",
-        "Encouraging people to repair items before replacing them"
+        "Encouraging residents to learn how to repair cars"
       ],
       "correctIndex": 3,
       "points": 1
