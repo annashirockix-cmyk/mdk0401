@@ -42,8 +42,8 @@
       "prompt": "A relay is an electrically controlled switching device. In a simplified diagram, the coil and contacts are shown as separate parts. When the coil is energised, the contact state may change according to the relay design. The exact contact arrangement and ratings must be checked in the manufacturer's documentation. A circuit diagram helps readers understand how the relay is represented within a larger system. Reading 1. What kind of device is a relay?",
       "options": [
         "A manually operated control switch",
-        "An electrically controlled switching device",
         "A device that measures current continuously",
+        "An electrically controlled switching device",
         "A component that stores electrical energy"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Where should users check the contact arrangement and ratings?",
       "options": [
         "In the workshop inventory",
-        "In the manufacturer's documentation",
+        "In the general safety notice",
         "In the student attendance record",
-        "In the general safety notice"
+        "In the manufacturer's documentation"
       ],
       "correctIndex": 3,
       "points": 1
