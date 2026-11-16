@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "During an equipment integration project, the mechanical team confirmed the mounting arrangement, but the electrical team was waiting for the connector specification. The software team had completed a draft interface description but needed the final sensor reference. The coordinator recorded these dependencies and arranged a joint review so that the teams could confirm compatible information before the design baseline was updated. Reading 1. What information was the electrical team waiting for?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The mounting arrangement",
         "The connector specification",
-        "To buy a ticket"
+        "The final sensor reference",
+        "The inspection schedule"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why was a joint review arranged?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To confirm compatible information before updating the design baseline"
+        "To assign all integration work to the software team",
+        "To confirm compatible information before updating the design baseline",
+        "To approve the draft interface without checking its references",
+        "To release the design baseline before the teams exchange information"
       ],
       "correctIndex": 3,
       "points": 1
