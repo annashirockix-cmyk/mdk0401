@@ -291,3 +291,20 @@ Short-text answers reviewed include “batch/lot” for a group of material prod
 Written tasks have explicit word limits and 8-point rubrics (60–120 words); CEFR and learning-outcome alignment remains unverified.
 
 This is a representative five-file sample, not a complete V13 audit or an audit of V14–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
+
+
+## V14 representative cross-course audit (2026-11-16)
+
+Five V14 files were inspected across C1-S2, C2-S1, C3-S2, C4-S1 and C5-S2. Each contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1.
+
+All ten listening keys match the information in their audioText. The five ordering keys were checked and form coherent sequences; no answer-key error was identified in the reviewed ordering tasks.
+
+A malformed/contaminated task stem was found in C1-S2 task 9. The prompt field contains a semicolon-separated list of action phrases (“Read the placement information; Plan the journey; Meet the workplace supervisor; Follow the first-day instructions”) rather than a clear instruction such as “Put the stages of preparing for a work placement in the correct order.” The options and correctOrder themselves are coherent.
+
+Weak wrong-category distractors persist in four of five files, particularly in reading tasks where three choices are unrelated activities or locations rather than plausible misunderstandings of the text. C1-S2 has more contextually relevant distractors.
+
+Short-text alternatives reviewed were generally defensible in context: “supervisor/mentor” is broad but acceptable for a workplace guide; “choice/decision” both fit a decision made after comparing possibilities; “analogue/analog” are spelling variants. Technical vocabulary targets should still be checked against the intended course glossary.
+
+Written tasks contain explicit word limits and 8-point analytic rubrics. This structural check does not establish CEFR level or alignment to the official learning outcomes.
+
+This is a representative five-file sample, not a complete V14 audit. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
