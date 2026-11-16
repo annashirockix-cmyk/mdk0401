@@ -528,7 +528,7 @@ test("final-exam options shuffle and map back correctly across all 150 course va
   const slots=[["c01","s01"],["c01","s02"],["c02","s01"],["c02","s02"],["c03","s01"],["c03","s02"],["c04","s01"],["c04","s02"],["c05","s01"],["c05","s02"]];
   const originalRandom=Math.random;
   let variantCount=0,optionTaskCount=0,changedOrderCount=0,gradedTaskCount=0,orderingTaskCount=0;
-  Math.random=()=>0.5;
+  Math.random=()=>0.999;
   try{
     for(const [course,semester] of slots){
       for(let variant=1;variant<=15;variant++){
@@ -566,7 +566,8 @@ test("final-exam options shuffle and map back correctly across all 150 course va
     }
   }finally{Math.random=originalRandom;}
   assert.equal(variantCount,150);
-  assert.ok(optionTaskCount>0&&changedOrderCount>0);
+  assert.ok(optionTaskCount>0);
+  assert.equal(changedOrderCount,optionTaskCount,'every option-bearing task must receive a changed order');
   assert.ok(gradedTaskCount>0&&orderingTaskCount>0);
 });
 
