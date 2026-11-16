@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "Controlled technical publications must be identifiable by their document number, revision and issue status. A document register helps users locate the current approved version. Printed or downloaded copies may become outdated after a revision is released, so users should check the status before relying on them. Obsolete copies should be managed according to the organisation's document-control procedure. Reading 1. What details identify a controlled publication?",
       "options": [
-        "Equipment colour, storage location and shift number",
-        "Supplier address, purchase price and delivery time",
         "Document number, revision and issue status",
+        "Supplier address, purchase price and delivery time",
+        "Equipment colour, storage location and shift number",
         "Author name, file size and print date"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why should users check a copy before relying on it?",
       "options": [
         "Because a printed copy is always more reliable than a digital copy",
-        "Because users should rely on the first copy they receive",
+        "Because printed or downloaded copies may become outdated",
         "Because the revision number is not part of document control",
-        "Because printed or downloaded copies may become outdated"
+        "Because users should rely on the first copy they receive"
       ],
       "correctIndex": 3,
       "points": 1
