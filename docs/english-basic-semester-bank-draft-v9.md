@@ -136,7 +136,7 @@
 |---:|:---:|---|
 | 161 | A | “Should” gives advice; the verb after it is in the base form. |
 | 162 | B | “Since” is used with a starting point in time. |
-| 163 | C | Past perfect continuous describes an activity continuing up to a past reference point; the reported question refers to the period before the doctor asked. |
+| 163 | C | Past perfect continuous describes an activity that had continued for two weeks up to the past reference point (the appointment). |
 | 164 | D | A modal verb (“must”) is followed by the base form “wear”. |
 | 165 | B | “Sugar” is uncountable; “much” is used in a negative sentence. |
 | 166 | A | The fixed expression is “good at” + noun or gerund. |
