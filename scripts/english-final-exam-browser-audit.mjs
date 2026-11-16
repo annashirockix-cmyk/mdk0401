@@ -87,7 +87,48 @@ try {
   assert.equal(retake.retakeAllowed,true,"the retry control must re-check the server after approval");
   assert.equal(retake.starts,3,"the approved retry must start a fresh server attempt");
 
-  console.log("English final-exam browser audit passed: typed answers flush before submit; retake request and approved retry work.");
+
+
+  await page.evaluate(() => {
+    const audit = window.__englishExamAudit;
+    window.state.staff = {role:"teacher",email:"teacher@example.invalid",courses:["ENB"]};
+    audit.reviewCalls = 0;
+    audit.graded = [];
+    window.API.getStudents = () => Promise.resolve({success:true,students:[]});
+    window.API.getResults = () => Promise.resolve({success:true,results:[]});
+    window.API.getAssignments = () => Promise.resolve({success:true,assignments:[]});
+    window.API.getActivityLog = () => Promise.resolve({success:true,events:[]});
+    window.API.getEnglishFinalExamReviews = () => {
+      audit.reviewCalls++;
+      return Promise.resolve({success:true,items:[{
+        attemptId:"review-attempt-1",studentName:"<img src=x onerror=alert(1)>",studentEmail:"student@example.invalid",
+        group:"AUDIT",examId:"english_final_c1_s1",variantId:"EN-C1-S1-V01",submittedAt:"2026-11-16",
+        tasks:[{id:"audit_written",prompt:"Write a short report.",points:8,rubric:"Clarity and technical accuracy"}],
+        responses:{audit_written:"<script>window.__xss=1</script>Student answer"}
+      }]});
+    };
+    window.API.gradeEnglishFinalExamWritten = (attemptId,grades) => {
+      audit.graded.push({attemptId,grades:JSON.parse(JSON.stringify(grades))});
+      return Promise.resolve({success:true,result:{grade:5,totalScore:16,totalMax:20}});
+    };
+    window.renderTeacherDashboard();
+  });
+  await page.getByRole("button", {name:/Письменные экзамены/}).click();
+  await page.waitForSelector("#efReviewItems .ef-review-item", {timeout:15000});
+  assert.equal(await page.locator("#efReviewItems img").count(),0,"untrusted student names must be rendered as text");
+  assert.equal(await page.locator("#efReviewItems script").count(),0,"untrusted student responses must not create script elements");
+  await page.locator("#efReviewItems .ef-review-score").fill("8");
+  await page.locator("#efReviewItems .ef-review-feedback").fill("Clear and technically accurate.");
+  await page.getByRole("button", {name:"Сохранить оценку"}).click();
+  await page.getByText(/Итоговая оценка: 5/).waitFor({timeout:10000});
+  const teacherReview = await page.evaluate(() => window.__englishExamAudit);
+  assert.equal(teacherReview.reviewCalls,1,"teacher dashboard must load pending written exam reviews");
+  assert.equal(teacherReview.graded.length,1,"teacher dashboard must submit the written grade");
+  assert.equal(teacherReview.graded[0].attemptId,"review-attempt-1");
+  assert.equal(teacherReview.graded[0].grades.audit_written.score,8);
+  assert.equal(teacherReview.graded[0].grades.audit_written.feedback,"Clear and technically accurate.");
+
+  console.log("English final-exam browser audit passed: student autosave/retake and teacher written-review workflow work.");
 } finally {
   await browser.close();
 }
