@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "Reading 1. Read the text. Ben visits the town information office because he wants to find a place to print his college project. The assistant gives him a map and marks a copy shop near the bus station. Ben asks whether the shop accepts card payments. The assistant is not sure, so she writes the shop's telephone number on the map. What service does Ben need?",
       "options": [
-        "To repair a bicycle",
-        "To buy a train ticket",
+        "To photocopy a document",
+        "To bind a report",
         "To print his project",
-        "To find a sports centre"
+        "To scan a technical drawing"
       ],
       "correctIndex": 2,
       "points": 1
