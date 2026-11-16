@@ -17,7 +17,7 @@
         "Because maintenance is being carried out",
         "Because the laboratory is being repainted",
         "Because new computers are being installed",
-        "Because maintenance is being carried out"
+        "Because the heating system is being replaced"
       ],
       "correctIndex": 0,
       "points": 1
@@ -43,7 +43,7 @@
       "options": [
         "The laboratory heating was left on overnight",
         "Computer rooms stayed fully lit after the last lesson",
-        "Computer rooms stayed fully lit after the last lesson",
+        "The laboratory windows were left open overnight",
         "Students left windows open during lessons"
       ],
       "correctIndex": 2,
@@ -57,7 +57,7 @@
         "A timetable for switching off computers",
         "A closing checklist for the final group",
         "A new system for booking laboratories",
-        "A closing checklist for the final group"
+        "A rota for cleaning the laboratory"
       ],
       "correctIndex": 3,
       "points": 1
