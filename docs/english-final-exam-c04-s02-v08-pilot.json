@@ -78,10 +78,10 @@
     {
       "id": "c4s2v08_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO fields that may appear in a PLC input-output table.",
+      "prompt": "Choose TWO technical fields normally used to describe a signal in a PLC input-output table.",
       "options": [
-        "A personal telephone number",
-        "An unrelated travel booking",
+        "Technician initials",
+        "Calibration due date",
         "Device description",
         "Signal address"
       ],
