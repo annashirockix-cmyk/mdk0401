@@ -41,7 +41,7 @@
       "type": "single_choice",
       "prompt": "Reading 1. Read the text. Every Wednesday, Pavel meets two classmates in the library after lessons. They study English together for half an hour. One student reads a short paragraph, and the others ask questions about it. If they do not know a word, they look it up in a dictionary. Before they leave, they write down three useful expressions in a shared notebook. The group helps Pavel feel more confident when he speaks. Where does Pavel meet his classmates?",
       "options": [
-        "In the computer room",
+        "In the engineering project room",
         "At the student support office",
         "In the library",
         "In the study centre"
