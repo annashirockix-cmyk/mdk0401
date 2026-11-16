@@ -1680,6 +1680,41 @@ function resolveAttemptRequestNotifications_(studentEmail,courseId,testId) {
   });
 }
 
+function clearExpiredEnglishSemesterAttemptForGrant_(studentEmail, courseId, testKey) {
+  const track = courseId === "ENB" ? "basic" : courseId === "ENT" ? "technical" : "";
+  const prefix = track ? "english_semester_" + track + "_" : "";
+  if (!prefix || String(testKey || "").indexOf(prefix) !== 0) return false;
+  const testId = String(testKey).slice(prefix.length);
+  const bank = englishSemesterBank_();
+  const values = bank.getDataRange().getValues(), map = headerMap_(bank);
+  let tests = null;
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][map.Track] || "") === track &&
+        String(values[i][map.Active] || "").toUpperCase() === "TRUE") {
+      tests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
+      break;
+    }
+  }
+  const test = (tests || []).filter(function(item) { return String(item.id || "") === testId; })[0];
+  if (!test) return false;
+  const rows = resultAttemptRows_();
+  const prior = rows.filter(function(row) {
+    return email_(row[0]) === email_(studentEmail) && String(row[3] || "") === testKey &&
+      sameCourseId_(row[12] || courseId, courseId);
+  }).length;
+  const attemptKey = englishSemesterAttemptCacheKey_(studentEmail, testKey, prior + 1);
+  const cache = CacheService.getScriptCache();
+  const raw = cache.get(attemptKey);
+  if (!raw) return false;
+  let attempt;
+  try { attempt = JSON.parse(raw); } catch (e) { return false; }
+  const elapsed = Math.max(0, Math.floor((Date.now() - Number(attempt.startedAt || 0)) / 1000));
+  const allowed = Math.max(1, Number(test.time) || 45) * 60;
+  if (attempt.status !== "expired" && elapsed <= allowed + 300) return false;
+  cache.remove(attemptKey);
+  return true;
+}
+
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
   if(!courseId||!testId||!studentEmail) throw new Error("Выберите дисциплину, тест и студента.");
@@ -1693,7 +1728,11 @@ function grantTestAttempts_(data) {
     student=userByEmail_(studentEmail);
     if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
     writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email,true);
-    appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra});
+    // A teacher-granted extra attempt also releases an expired semester token.
+    // Never clear an active attempt: granting retries must not reset its timer.
+    const expiredSemesterAttemptReset = extra > 0 ?
+      clearExpiredEnglishSemesterAttemptForGrant_(studentEmail, courseId, testId) : false;
+    appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra,ExpiredSemesterAttemptReset:expiredSemesterAttemptReset});
     resolveAttemptRequestNotifications_(studentEmail,courseId,testId);
     CacheService.getScriptCache().remove("attempt_request:"+studentEmail+":"+courseId+":"+testId.slice(0,120));
   } finally {lock.releaseLock();}
