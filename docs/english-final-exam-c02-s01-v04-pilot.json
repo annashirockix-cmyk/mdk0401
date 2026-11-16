@@ -117,7 +117,7 @@
     {
       "id": "c2s1v04_o01",
       "type": "ordering",
-      "prompt": "Identify your goals; Compare the available routes; Check entry requirements; Discuss the options with an adviser",
+      "prompt": "Put the following steps for comparing education and career routes in a logical order.",
       "options": [
         "Discuss the options with an adviser",
         "Compare the available routes",
