@@ -41,10 +41,10 @@
       "type": "single_choice",
       "prompt": "A procurement engineer noticed that a supplier specification listed a different connector type from the one shown on the approved drawing. The engineer sent a concise email with the part reference, the relevant drawing revision and a marked extract. The message asked the supplier to confirm the connector type before the order was processed. It did not assume that either document was incorrect. Reading 1. What discrepancy did the engineer notice?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "The drawing revision differed from the specification",
+        "The required quantity differed between the documents",
         "The connector type differed between the supplier specification and approved drawing",
-        "To buy a ticket"
+        "The delivery date differed from the project schedule"
       ],
       "correctIndex": 2,
       "points": 1
@@ -54,10 +54,10 @@
       "type": "single_choice",
       "prompt": "Why did the message include the drawing revision?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
-        "To identify the exact drawing version being discussed"
+        "To identify the exact drawing version being discussed",
+        "To identify the supplier's delivery address",
+        "To confirm the purchase order payment date",
+        "To show when the connector was manufactured"
       ],
       "correctIndex": 3,
       "points": 1
