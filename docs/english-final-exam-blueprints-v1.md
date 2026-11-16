@@ -183,3 +183,16 @@ The sample confirms that the fixed answer-position template extends into V07 and
 This five-file sample is not a full V07–V15 audit and does not establish the status of every remaining variant. It is sufficient, however, to show that the same authoring pattern is still present in V07. Continue with a complete file-by-file audit before release; do not infer that later variants are clean or defective without inspection.
 
 No pilot JSON was changed. The findings are editorial only; no protected bank, import, Apps Script, or deployment was touched.
+
+
+## V08 representative cross-course audit (2026-11-16)
+
+Five V08 files were inspected across the five course levels/slots: C1-S2, C2-S1, C3-S2, C4-S1 and C5-S2. Each contains 10 tasks and repeats the same first-eight positional key signature: 0, 1, 2, 3, 0, [2,3], short-text, 1. This extends the observed fixed answer-position pattern through the inspected V08 sample.
+
+Ordering tasks were checked separately from positional keys. In all five inspected files, each ordering task has four unique options, four unique correctOrder entries, and the correctOrder is an exact permutation of the options. The calculated correct-order option indices are [3,2,1,0] for C1-S2 and [1,3,0,2] for C2-S1, C3-S2, C4-S1 and C5-S2. No ordering-key mismatch was found in this sample.
+
+Short-text answer validation found one concrete defect in C3-S2 V08: the prompt is “A failure to meet a specified requirement is a non-___.” Its accepted answers are conformity and non-conformity. The latter would produce the duplicated phrase “non-non-conformity” when inserted into the blank and should be removed; conformity is the appropriate accepted completion. This is a confirmed content-level answer-validation defect.
+
+Listening audio text and keyed options were checked in all five files. The correct options matched the audio text in the inspected items. However, weak wrong-category distractors remain in four of the five files. For example, C2-S1 Listening 2 asks what students should download, while three distractors are dates/locations; C4-S1 Listening 2 asks which documents to bring, while three distractors are generic time phrases. C1-S2 has more plausible distractors in the inspected listening items.
+
+This is a representative five-file sample, not a complete V08 audit or an audit of V09–V15. No pilot JSON was changed. No protected banks, imports, Apps Script, or deployment were touched.
