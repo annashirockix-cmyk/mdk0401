@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "An equipment label may show a voltage rating, current rating, model number and warning symbols. A technician records the information before preparing a report. If a label is damaged, the missing details should be confirmed using approved documentation. Guessing a rating can create confusion and may lead to an incorrect record, so unclear information should be reported for checking. Reading 1. Which details may appear on an equipment label?",
       "options": [
-        "Voltage and current ratings, model number and warning symbols",
-        "Supplier name, delivery date, purchase price and invoice number",
         "Equipment colour, storage location, operator name and shift",
+        "Supplier name, delivery date, purchase price and invoice number",
+        "Voltage and current ratings, model number and warning symbols",
         "Drawing revision, inspection date, batch quantity and room number"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What should happen when a label is damaged?",
       "options": [
         "Missing details should be estimated from a similar item",
-        "Missing details should be confirmed through approved documentation",
+        "The equipment should be used before the label is replaced",
         "The damaged label should be copied from another unit",
-        "The equipment should be used before the label is replaced"
+        "Missing details should be confirmed through approved documentation"
       ],
       "correctIndex": 3,
       "points": 1
