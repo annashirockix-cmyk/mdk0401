@@ -42,8 +42,8 @@
       "prompt": "Reliability analysis examines equipment performance over time. Repeated defect records may indicate a recurring issue, but the analyst should consider operating conditions, maintenance history and the quality of the recorded data. Similar symptoms do not always have the same cause. A trend should be supported by evidence before it is used to recommend a maintenance change. Reading 1. What may repeated defect records indicate?",
       "options": [
         "A confirmed cause for every recorded defect",
-        "A recurring issue",
         "Proof that all similar symptoms have one cause",
+        "A recurring issue",
         "Evidence that operating conditions never change"
       ],
       "correctIndex": 2,
@@ -56,8 +56,8 @@
       "options": [
         "Because all defects must have the same cause",
         "Because maintenance history is unrelated to reliability",
-        "Similar symptoms do not always have the same cause",
-        "Because one record is sufficient to approve a maintenance change"
+        "Because one record is sufficient to approve a maintenance change",
+        "Similar symptoms do not always have the same cause"
       ],
       "correctIndex": 3,
       "points": 1
