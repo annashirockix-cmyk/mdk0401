@@ -126,3 +126,23 @@ The ten V03 pilot JSON files (one per course-semester slot) were inspected. All 
 **Required editorial correction:** rewrite distractors to be plausible answers of the same semantic type as the stem (times against times, locations against locations, documents against documents, technical functions against technical functions). Then redistribute correct options across positions without changing the intended answer. Run automated checks for answer-position balance per variant and across the full pool, and manually verify each key after shuffling.
 
 The V03 pilot JSON files were not edited in this review step. They remain pilot_for_editorial_review; do not import or publish until the distractors and key-position patterns are corrected and rechecked. This finding is a sample-based editorial audit, not approval or rejection of every task in each file.
+
+
+## Editorial sample review — V04 fixed answer-position template (2026-11-16)
+
+The ten V04 pilot JSON files were inspected. A stronger positional pattern appears across all ten course-semester slots:
+
+- Listening item 1: correct answer at option index 0.
+- Listening item 2: correct answer at option index 1.
+- Reading item 1: correct answer at option index 2.
+- Reading item 2: correct answer at option index 3.
+- The grammar single-choice item: correct answer at option index 0.
+- The functional-language single-choice item: correct answer at option index 1.
+
+This repeated six-position sequence across all ten variants is a serious answer-position leakage risk. A candidate who notices the template can gain marks without demonstrating the assessed skill. It also confirms that answer-position balancing must be checked across complete variants, not only within isolated items.
+
+V04 also repeats the distractor defects recorded for V03: several listening and reading items contain options from the wrong semantic category (for example, time questions with location options, or technical comprehension questions with generic unrelated options). This is especially clear in C2-S1 through C5-S2.
+
+**Required correction before any pilot can be considered release-ready:** break the fixed positional sequence by reordering options independently per item; update every corresponding correctIndex/correctIndices field; validate the resulting key against the item content; and run a bank-wide distribution check. Distractors must be rewritten as plausible same-category alternatives. Do not merely rotate the same answer sequence between variants.
+
+The V04 JSON files were not modified. Their status remains pilot_for_editorial_review, and they must not be imported or published before correction and independent key verification.
