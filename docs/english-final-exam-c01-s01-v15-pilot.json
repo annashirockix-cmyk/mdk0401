@@ -136,7 +136,7 @@
       "id": "c1s1v15_w01",
       "type": "written",
       "prompt": "Write 60–80 words explaining how to work safely with a low-voltage training circuit. Include checking the diagram, switching off the supply and reporting damaged equipment.",
-      "rubric": "8 points total: relevant content and completion of the task (0–2); clear organisation and sequence (0–2); understandable grammar and sentence structure (0–2); appropriate vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total: the response addresses checking the instructor-approved diagram, switching off the supply before any permitted changes and reporting damaged equipment (0–2); it clearly states that the activity is supervised and does not give unapproved connection/repair instructions or recommend continuing with damaged equipment (0–2); the explanation is logically organised with understandable grammar (0–2); relevant low-voltage/safety vocabulary, spelling and punctuation are appropriate (0–2).",
       "points": 8
     }
   ],
