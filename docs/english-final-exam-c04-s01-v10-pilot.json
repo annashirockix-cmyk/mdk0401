@@ -41,9 +41,9 @@
       "type": "single_choice",
       "prompt": "A cable record should identify the cable type, reference and relevant connector information. In a training exercise, a student compared the printed label with the reference chart and checked the connector description. The student recorded the details before adding the cable to the classroom inventory. If the label is unclear, the item should remain identified as needing confirmation. Reading 1. Which details should a cable record identify?",
       "options": [
-        "Cable type, reference and connector information",
-        "Supplier name, delivery date and purchase price",
         "Equipment colour, storage location and shift number",
+        "Supplier name, delivery date and purchase price",
+        "Cable type, reference and connector information",
         "Operator name, training date and inspection result"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "What should happen if the label is unclear?",
       "options": [
         "The item should be used while the label is checked",
-        "The item should be marked as needing confirmation",
+        "The reference should be copied from a similar cable",
         "The label should be replaced with an estimated value",
-        "The reference should be copied from a similar cable"
+        "The item should be marked as needing confirmation"
       ],
       "correctIndex": 3,
       "points": 1
