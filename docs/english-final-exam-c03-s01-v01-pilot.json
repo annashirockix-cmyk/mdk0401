@@ -15,9 +15,9 @@
       "audioText": "The materials laboratory will hold an introduction for new students on Tuesday at nine thirty. The technician will demonstrate how to read material labels and record basic properties. Students should meet outside Laboratory 4 and wear their college identification badges. The session will not include practical testing; that activity will be arranged later.",
       "options": [
         "At nine thirty on Tuesday",
-        "At the college library",
-        "At the town centre",
-        "At the bus station"
+        "At ten on Wednesday",
+        "At eleven on Tuesday",
+        "At nine thirty on Thursday"
       ],
       "correctIndex": 0,
       "points": 1
@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Where should students meet?",
       "audioText": "The materials laboratory will hold an introduction for new students on Tuesday at nine thirty. The technician will demonstrate how to read material labels and record basic properties. Students should meet outside Laboratory 4 and wear their college identification badges. The session will not include practical testing; that activity will be arranged later.",
       "options": [
-        "On Friday",
+        "Inside Laboratory 4",
         "Outside Laboratory 4",
-        "Next month",
-        "After the event"
+        "Outside Laboratory 3",
+        "In the main workshop"
       ],
       "correctIndex": 1,
       "points": 1
@@ -41,12 +41,12 @@
       "type": "single_choice",
       "prompt": "An engineering student compared aluminium and steel for a lightweight support bracket. Aluminium has a lower density, so a component made from it may weigh less. Steel is generally stronger in many common grades, but the exact choice depends on the load, environment and design requirements. The student recorded the material grade and checked the drawing before writing a recommendation. Reading 1. Why did the student consider aluminium?",
       "options": [
-        "To borrow a laptop",
-        "To meet a relative",
+        "Because aluminium is always stronger than steel",
         "Because it has a lower density and may produce a lighter component",
-        "To buy a ticket"
+        "Because it requires no design checks",
+        "Because it is suitable for every load and environment"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -54,9 +54,9 @@
       "type": "single_choice",
       "prompt": "What information did the student record?",
       "options": [
-        "At the sports centre",
-        "In the computer room",
-        "At the bus station",
+        "The expected component weight",
+        "The workshop timetable",
+        "The supplier's address",
         "The material grade"
       ],
       "correctIndex": 3,
