@@ -78,10 +78,10 @@
     {
       "id": "c3s2v10_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details that make a production delay report useful.",
+      "prompt": "Choose TWO traceable details that allow a production delay to be monitored and reviewed.",
       "options": [
-        "An unrelated personal complaint",
-        "A guess without supporting information",
+        "Supplier's promotional statement",
+        "Operator's preferred shift pattern",
         "Order reference",
         "Expected delay and review date"
       ],
