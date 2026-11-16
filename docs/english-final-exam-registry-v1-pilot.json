@@ -16136,7 +16136,7 @@
                 "id": "c4s2v01_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words describing a basic communication system. Explain the roles of a transmitter, channel and receiver.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the transmitter, channel and receiver are identified (0–2); the response explains the general role of each stage in carrying information from source to destination (0–2); the description is logically organised with understandable grammar (0–2); communication-system vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -16288,7 +16288,7 @@
                 "id": "c4s2v02_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining the different roles of a processor, memory, storage and an operating system.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: processor, memory, storage and operating system are all described (0–2); the response distinguishes processing, temporary working data, retained files and system-resource management (0–2); ideas are clearly connected with understandable grammar (0–2); computer-system vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -16439,7 +16439,7 @@
                 "id": "c4s2v03_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words describing the roles of a sensor, controller and actuator in a simplified automated system.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: sensor, controller and actuator are identified (0–2); the response explains the general flow from sensing through control decision to physical action (0–2); the explanation is clearly sequenced with understandable grammar (0–2); automation-system vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -16591,7 +16591,7 @@
                 "id": "c4s2v04_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining why PLC documentation should identify the controller model and include a clear input-output list.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the need to identify the PLC controller model is explained (0–2); the response explains how a clear input-output list supports identification and documentation of connected signals (0–2); the explanation is logically organised with understandable grammar (0–2); PLC/I-O/documentation vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -16743,7 +16743,7 @@
                 "id": "c4s2v05_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining how to prepare a clear technical data summary. Mention sources, units, trends and limitations.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the summary identifies relevant source information and uses units consistently (0–2); it explains trends and at least one limitation of the data (0–2); the summary is clearly organised with understandable grammar (0–2); data/reporting vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -16894,7 +16894,7 @@
                 "id": "c4s2v06_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining why network documentation should identify the protocol and its version. Mention two functions that protocols may support.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains why the protocol and its version should be identified (0–2); it describes two relevant functions supported by the selected protocol, such as addressing, data exchange, framing, timing or error handling where applicable (0–2); ideas are logically organised with understandable grammar (0–2); network/protocol vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -17046,7 +17046,7 @@
                 "id": "c4s2v07_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining why software version information is important when reporting a technical problem.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response explains why software version information belongs in a technical problem report (0–2); it links version details to reproducibility, compatibility or troubleshooting and identifies the relevant system/software (0–2); the explanation is clear with understandable grammar (0–2); software/version-control vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -17198,7 +17198,7 @@
                 "id": "c4s2v08_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining why PLC input-output records should link device descriptions, signal addresses and symbolic names.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: device descriptions, signal addresses and symbolic names are all addressed (0–2); the response explains how linking them supports traceability and consistent interpretation of PLC inputs/outputs (0–2); the explanation is logically organised with understandable grammar (0–2); PLC/I-O documentation vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -17350,7 +17350,7 @@
                 "id": "c4s2v09_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining what information belongs in an automation data log and why timestamps and units matter.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: the response identifies relevant data-log fields such as value, source/device, timestamp and unit (0–2); it explains how timestamps and units support interpretation and comparison of records (0–2); the explanation is clear with understandable grammar (0–2); automation/data-log vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -17502,7 +17502,7 @@
                 "id": "c4s2v10_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words describing responsible information-security practices for a control-system team. Include access, approved software and reporting.",
-                "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+                "rubric": "8 points total: access control and use of approved software are addressed (0–2); the response explains how concerns/incidents should be reported and avoids unsafe practices such as sharing credentials or bypassing controls (0–2); advice is logically organised with understandable grammar (0–2); information-security/control-system vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -17653,7 +17653,7 @@
                 "id": "c4s2v11_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words describing an industrial IoT data path. Explain the roles of a sensor, gateway and monitoring platform, and mention one security consideration.",
-                "rubric": "8 points total: content and task completion (0–2); organisation and linking (0–2); grammar and sentence structure (0–2); technical vocabulary, spelling and punctuation (0–2).",
+                "rubric": "8 points total: the sensor, gateway and monitoring platform are identified in the data path (0–2); the response explains how information moves between them and includes one relevant security consideration (0–2); the explanation is logically organised with understandable grammar (0–2); industrial-IoT/network vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -17804,7 +17804,7 @@
                 "id": "c4s2v12_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining what a digital twin represents and why data quality and model updates matter.",
-                "rubric": "8 points total: content and task completion (0–2); organisation and linking (0–2); grammar and sentence structure (0–2); technical vocabulary, spelling and punctuation (0–2).",
+                "rubric": "8 points total: a digital twin is described as a digital representation linked to a physical asset/process (0–2); the response explains why data quality and controlled model updates affect accuracy and usefulness (0–2); ideas are clearly connected with understandable grammar (0–2); digital-twin/data vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -17955,7 +17955,7 @@
                 "id": "c4s2v13_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining how condition-monitoring data supports predictive maintenance. Include why trends and verification matter.",
-                "rubric": "8 points total: content and task completion (0–2); organisation and linking (0–2); grammar and sentence structure (0–2); technical vocabulary, spelling and punctuation (0–2).",
+                "rubric": "8 points total: the response explains how condition-monitoring information can support predictive maintenance (0–2); it explains why trends should be verified using measurement context and supporting evidence rather than relying on one unusual value (0–2); the explanation is clear with understandable grammar (0–2); condition-monitoring/maintenance vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -18106,7 +18106,7 @@
                 "id": "c4s2v14_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining why ground support equipment needs clear identification and service-status records.",
-                "rubric": "8 points total: content and task completion (0–2); organisation and linking (0–2); grammar and sentence structure (0–2); technical vocabulary, spelling and punctuation (0–2).",
+                "rubric": "8 points total: the response explains why ground support equipment needs clear identification (0–2); it describes how service-status records communicate availability, restrictions or out-of-service status and support safe decisions (0–2); ideas are logically organised with understandable grammar (0–2); GSE/status-record vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
@@ -18257,7 +18257,7 @@
                 "id": "c4s2v15_w01",
                 "type": "written",
                 "prompt": "Write 80–100 words explaining how to communicate an engineering incident accurately. Distinguish observed facts, immediate actions and later findings.",
-                "rubric": "8 points total: content and task completion (0–2); organisation and linking (0–2); grammar and sentence structure (0–2); technical vocabulary, spelling and punctuation (0–2).",
+                "rubric": "8 points total: the report distinguishes observed facts from immediate actions and later findings (0–2); it explains why causes should remain unconfirmed until supported by investigation evidence (0–2); the report is factual, clearly sequenced and grammatically understandable (0–2); incident-reporting vocabulary, spelling and punctuation are accurate (0–2).",
                 "points": 8
               }
             ],
