@@ -18474,8 +18474,8 @@
                 "prompt": "An inspection finding should describe what was observed and identify the relevant acceptance criterion. If a measurement is outside the stated limit, the report should include the actual value, unit and component reference. The inspector should avoid suggesting a cause unless the available evidence supports it. A clear finding allows the responsible person to review the issue and determine the next action. Reading 1. What should an inspection finding describe?",
                 "options": [
                   "The inspector's opinion and a suggested repair",
-                  "What was observed and the relevant acceptance criterion",
                   "The name of the person who ordered the component",
+                  "What was observed and the relevant acceptance criterion",
                   "The expected result without the actual observation"
                 ],
                 "correctIndex": 2,
@@ -18639,9 +18639,9 @@
                 "prompt": "How should a report distinguish facts from hypotheses?",
                 "options": [
                   "It should present every hypothesis as a confirmed fact",
-                  "It should identify confirmed facts separately from possible explanations",
+                  "It should treat the first explanation as the final conclusion",
                   "It should omit possible explanations from the record",
-                  "It should treat the first explanation as the final conclusion"
+                  "It should identify confirmed facts separately from possible explanations"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -18777,9 +18777,9 @@
                 "type": "single_choice",
                 "prompt": "A technical manual contains information for a defined product, model or configuration. Before using a procedure or reference, a reader should check the document identifier, applicability information and revision status. Similar models may have different components or requirements. If the manual does not clearly apply, the user should ask the responsible documentation or engineering team for confirmation. Reading 1. What should a reader check before using a manual reference?",
                 "options": [
-                  "Document identifier, applicability information and revision status",
-                  "Supplier address, purchase price and delivery date",
                   "Training location, lesson time and group number",
+                  "Supplier address, purchase price and delivery date",
+                  "Document identifier, applicability information and revision status",
                   "Technician name, shift preference and annual leave"
                 ],
                 "correctIndex": 2,
@@ -18792,8 +18792,8 @@
                 "options": [
                   "Because similar models always use identical components",
                   "Because the revision date is the only difference between models",
-                  "Because models may have different components or requirements",
-                  "Because a manual can be used for any model in the same product family"
+                  "Because a manual can be used for any model in the same product family",
+                  "Because models may have different components or requirements"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -18929,9 +18929,9 @@
                 "type": "single_choice",
                 "prompt": "Revision control helps users identify the current approved version of a technical document. A document register may record its identifier, revision, issue date and approval status. When a new revision is released, the organisation should manage obsolete copies so that they are not mistaken for current information. A clear change history also helps reviewers understand what has been updated. Reading 1. What information may a document register contain?",
                 "options": [
-                  "Document identifier, revision, issue date and approval status",
-                  "Supplier name, delivery date, invoice number and price",
                   "Room number, course title, lesson date and student group",
+                  "Supplier name, delivery date, invoice number and price",
+                  "Document identifier, revision, issue date and approval status",
                   "Author name, file size, print date and storage location"
                 ],
                 "correctIndex": 2,
@@ -18943,9 +18943,9 @@
                 "prompt": "Why should obsolete copies be managed?",
                 "options": [
                   "To make it easier to print older copies",
-                  "To prevent them from being mistaken for current information",
+                  "To allow users to select whichever version is easiest to read",
                   "To avoid recording the document revision",
-                  "To allow users to select whichever version is easiest to read"
+                  "To prevent them from being mistaken for current information"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -19081,9 +19081,9 @@
                 "type": "single_choice",
                 "prompt": "Maintenance instructions are applicable only when they match the relevant aircraft or component configuration. Before using a task card, a technician checks the aircraft or component identity, the document reference and its revision status. Similar model names do not guarantee that instructions are interchangeable. If applicability is uncertain, the issue should be referred to the authorised technical publications process. Reading 1. What should be checked before a task card is used?",
                 "options": [
-                  "Aircraft or component identity, document reference and revision status",
-                  "Aircraft colour, hangar location and shift number",
                   "Supplier contact, delivery date and purchase order value",
+                  "Aircraft colour, hangar location and shift number",
+                  "Aircraft or component identity, document reference and revision status",
                   "Technician name, training record and inspection timetable"
                 ],
                 "correctIndex": 2,
@@ -19232,9 +19232,9 @@
                 "type": "single_choice",
                 "prompt": "A maintenance shift handover transfers current work information between teams. It should identify open tasks, completed checks, equipment or aircraft status and any restrictions. The outgoing team should state what remains outstanding and who is responsible for follow-up. A handover is not a substitute for the technical log or required sign-off; it helps the next team understand the current position. Reading 1. Which information should a handover identify?",
                 "options": [
-                  "Open tasks, completed checks, equipment status and restrictions",
-                  "Staff leave dates, training preferences and annual objectives",
                   "Supplier prices, delivery forecasts and purchase approvals",
+                  "Staff leave dates, training preferences and annual objectives",
+                  "Open tasks, completed checks, equipment status and restrictions",
                   "Room bookings, meeting times and visitor contact details"
                 ],
                 "correctIndex": 2,
@@ -19245,10 +19245,10 @@
                 "type": "single_choice",
                 "prompt": "What does a handover not replace?",
                 "options": [
-                  "The technical log or required sign-off",
+                  "The previous shift's personal checklist",
                   "The equipment colour or storage location",
                   "The team's informal meeting notes",
-                  "The previous shift's personal checklist"
+                  "The technical log or required sign-off"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -19384,9 +19384,9 @@
                 "type": "single_choice",
                 "prompt": "A non-conformance is a failure to meet a specified requirement. A report should identify the requirement, describe the evidence and state how the actual result differs. The cause may require further investigation. Corrective action should address the cause rather than only the visible symptom, and its effectiveness should be reviewed. Clear records support traceability and help prevent recurrence. Reading 1. What does a non-conformance represent?",
                 "options": [
-                  "A failure to meet a specified requirement",
-                  "A delay in the planned maintenance schedule",
                   "A recommendation to replace an item",
+                  "A delay in the planned maintenance schedule",
+                  "A failure to meet a specified requirement",
                   "A difference between two informal opinions"
                 ],
                 "correctIndex": 2,
@@ -19538,8 +19538,8 @@
                 "prompt": "Reliability analysis examines equipment performance over time. Repeated defect records may indicate a recurring issue, but the analyst should consider operating conditions, maintenance history and the quality of the recorded data. Similar symptoms do not always have the same cause. A trend should be supported by evidence before it is used to recommend a maintenance change. Reading 1. What may repeated defect records indicate?",
                 "options": [
                   "A confirmed cause for every recorded defect",
-                  "A recurring issue",
                   "Proof that all similar symptoms have one cause",
+                  "A recurring issue",
                   "Evidence that operating conditions never change"
                 ],
                 "correctIndex": 2,
@@ -19552,8 +19552,8 @@
                 "options": [
                   "Because all defects must have the same cause",
                   "Because maintenance history is unrelated to reliability",
-                  "Similar symptoms do not always have the same cause",
-                  "Because one record is sufficient to approve a maintenance change"
+                  "Because one record is sufficient to approve a maintenance change",
+                  "Similar symptoms do not always have the same cause"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -19688,9 +19688,9 @@
                 "type": "single_choice",
                 "prompt": "Controlled technical publications must be identifiable by their document number, revision and issue status. A document register helps users locate the current approved version. Printed or downloaded copies may become outdated after a revision is released, so users should check the status before relying on them. Obsolete copies should be managed according to the organisation's document-control procedure. Reading 1. What details identify a controlled publication?",
                 "options": [
-                  "Document number, revision and issue status",
-                  "Supplier address, purchase price and delivery time",
                   "Equipment colour, storage location and shift number",
+                  "Supplier address, purchase price and delivery time",
+                  "Document number, revision and issue status",
                   "Author name, file size and print date"
                 ],
                 "correctIndex": 2,
@@ -19702,9 +19702,9 @@
                 "prompt": "Why should users check a copy before relying on it?",
                 "options": [
                   "Because a printed copy is always more reliable than a digital copy",
-                  "Because printed or downloaded copies may become outdated",
+                  "Because users should rely on the first copy they receive",
                   "Because the revision number is not part of document control",
-                  "Because users should rely on the first copy they receive"
+                  "Because printed or downloaded copies may become outdated"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -19840,9 +19840,9 @@
                 "type": "single_choice",
                 "prompt": "A non-conformance report records a failure to meet a stated requirement. It should identify the affected item, the requirement, the observed condition and supporting evidence. The report may also identify immediate containment or a proposed review action, but the cause should not be stated as confirmed unless the investigation supports it. Clear reporting helps the responsible team decide what to examine next. Reading 1. Which information should a non-conformance report identify?",
                 "options": [
-                  "Affected item, requirement, observed condition and supporting evidence",
-                  "Staff name, annual leave, shift preference and training date",
                   "Supplier address, purchase value, invoice and delivery time",
+                  "Staff name, annual leave, shift preference and training date",
+                  "Affected item, requirement, observed condition and supporting evidence",
                   "Equipment colour, storage location, room number and group"
                 ],
                 "correctIndex": 2,
@@ -19855,8 +19855,8 @@
                 "options": [
                   "As soon as a possible cause has been suggested",
                   "When the reporting form has been completed",
-                  "Only when the investigation supports it",
-                  "When the same symptom has appeared on another item"
+                  "When the same symptom has appeared on another item",
+                  "Only when the investigation supports it"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -19992,8 +19992,8 @@
                 "prompt": "Configuration identification describes the specific model and installed options of an item of equipment. A model designation alone may not show every difference between individual units. Serial numbers and option records can provide additional detail. Technical information should be selected only after the relevant configuration has been established, particularly when similar models have different installed equipment. Reading 1. Why may a model designation alone be insufficient?",
                 "options": [
                   "Because the model designation is always incorrect",
-                  "It may not show all differences between individual units",
                   "Because serial numbers are used only for delivery records",
+                  "It may not show all differences between individual units",
                   "Because installed options are identical across all models"
                 ],
                 "correctIndex": 2,
@@ -20006,8 +20006,8 @@
                 "options": [
                   "Select a manual using the model name alone",
                   "Use the information from the nearest available unit",
-                  "The relevant configuration should be established",
-                  "Assume that all installed options match the standard model"
+                  "Assume that all installed options match the standard model",
+                  "The relevant configuration should be established"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -20144,8 +20144,8 @@
                 "prompt": "A technical briefing is intended to communicate essential information efficiently. It should begin with the purpose, then present the current status and relevant evidence. Outstanding actions and decisions required should be stated clearly. Technical terms should be used consistently, and any uncertainty should be identified rather than hidden. A concise structure helps the audience understand what is known and what must happen next. Reading 1. What should a briefing present after its purpose?",
                 "options": [
                   "The purchase cost and supplier delivery date",
-                  "The current status and relevant evidence",
                   "The full maintenance history of every component",
+                  "The current status and relevant evidence",
                   "The names and job titles of all people in the organisation"
                 ],
                 "correctIndex": 2,
@@ -20156,10 +20156,10 @@
                 "type": "single_choice",
                 "prompt": "Why should uncertainty be identified?",
                 "options": [
-                  "So the audience can distinguish known information from unresolved matters",
+                  "So the audience does not need to review supporting evidence",
                   "So the briefing can avoid mentioning outstanding actions",
                   "So uncertain information can be presented as confirmed",
-                  "So the audience does not need to review supporting evidence"
+                  "So the audience can distinguish known information from unresolved matters"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -20295,9 +20295,9 @@
                 "type": "single_choice",
                 "prompt": "A service notice may provide information about a product, system or maintenance topic. Before using it, the reader should check the affected model range, applicability statement, issue date and any referenced documents. Similar aircraft or equipment may have different configurations. If applicability is uncertain, the responsible technical team should confirm whether the notice applies to the specific item under review. Reading 1. Which details should be checked before using a service notice?",
                 "options": [
-                  "Affected model range, applicability statement, issue date and referenced documents",
-                  "Supplier price, delivery date, payment terms and invoice number",
                   "Technician name, shift rota, training date and leave record",
+                  "Supplier price, delivery date, payment terms and invoice number",
+                  "Affected model range, applicability statement, issue date and referenced documents",
                   "Equipment colour, storage location, room number and group"
                 ],
                 "correctIndex": 2,
@@ -20310,8 +20310,8 @@
                 "options": [
                   "The previous shift should confirm it from memory",
                   "The notice should be assumed to apply to all similar models",
-                  "The responsible technical team should confirm whether it applies",
-                  "The notice should be used first and checked after the task"
+                  "The notice should be used first and checked after the task",
+                  "The responsible technical team should confirm whether it applies"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -20446,9 +20446,9 @@
                 "type": "single_choice",
                 "prompt": "A supplier evaluation may consider delivery reliability, product conformity and the effectiveness of responses to reported issues. A single late delivery does not necessarily describe long-term performance, so the review should use an appropriate period and clear measures. The report should explain the data source and any limitation, rather than relying on informal comments or an unsupported overall rating. Reading 1. Which factors may be considered in a supplier evaluation?",
                 "options": [
-                  "Delivery reliability, product conformity and responses to reported issues",
-                  "Supplier popularity, office location and advertising budget",
                   "Personal opinions, informal comments and one recent conversation",
+                  "Supplier popularity, office location and advertising budget",
+                  "Delivery reliability, product conformity and responses to reported issues",
                   "Purchase price alone, without delivery or quality information"
                 ],
                 "correctIndex": 2,
@@ -20460,9 +20460,9 @@
                 "prompt": "Why should the review use an appropriate period?",
                 "options": [
                   "To make one late delivery represent the supplier's whole history",
-                  "To assess performance over time rather than rely on one event",
+                  "To replace measured results with informal comments",
                   "To avoid comparing delivery and conformity data",
-                  "To replace measured results with informal comments"
+                  "To assess performance over time rather than rely on one event"
                 ],
                 "correctIndex": 3,
                 "points": 1
