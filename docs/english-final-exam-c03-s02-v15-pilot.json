@@ -94,10 +94,9 @@
     {
       "id": "c3s2v15_v01",
       "type": "short_text",
-      "prompt": "A possible solution suggested for consideration is a ___.",
+      "prompt": "A suggested plan or solution submitted for consideration is a ___.",
       "acceptedAnswers": [
-        "proposal",
-        "recommendation"
+        "proposal"
       ],
       "points": 2
     },
