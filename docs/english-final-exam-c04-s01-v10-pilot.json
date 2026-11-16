@@ -78,10 +78,10 @@
     {
       "id": "c4s1v10_m01",
       "type": "multiple_choice",
-      "prompt": "Choose TWO details useful for identifying a cable.",
+      "prompt": "Choose TWO descriptors that identify a cable and its termination.",
       "options": [
-        "The colour of the classroom wall",
-        "A student's favourite subject",
+        "Installation date",
+        "Maintenance interval",
         "Cable type",
         "Connector description"
       ],
