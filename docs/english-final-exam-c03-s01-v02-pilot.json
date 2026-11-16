@@ -97,8 +97,7 @@
       "points": 2,
       "prompt": "A number or code that identifies the current version of a drawing is a revision ___.",
       "acceptedAnswers": [
-        "number",
-        "revision number"
+        "number"
       ]
     },
     {
