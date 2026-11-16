@@ -25,13 +25,13 @@
     {
       "id": "c2s1v15_l02",
       "type": "single_choice",
-      "prompt": "Listening 2. Which technical reference is required for the maintenance-planning meeting?",
+      "prompt": "Listening 2. Which document should students bring to the work-placement briefing?",
       "audioText": "The college placement coordinator will hold a briefing for students starting work experience next month. The meeting is on Thursday at ten in Lecture Room 5. Students should bring the contact details of their workplace supervisor and a copy of the placement agreement. The coordinator will explain attendance rules and how to report an absence.",
       "options": [
-        "On Friday",
+        "A weekly attendance sheet",
         "A copy of the placement agreement",
-        "Next month",
-        "After the event"
+        "A completed absence report",
+        "A maintenance task record"
       ],
       "correctIndex": 1,
       "points": 1
