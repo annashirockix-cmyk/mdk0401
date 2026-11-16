@@ -136,7 +136,7 @@
       "id": "c3s1v06_w01",
       "type": "written",
       "prompt": "Write 80–100 words explaining how a trainee can identify an unfamiliar component using a diagram and an illustrated parts catalogue.",
-      "rubric": "8 points total: task completion and relevant content (0–2); clear organisation and logical linking (0–2); grammar and sentence structure (0–2); accurate technical vocabulary, spelling and punctuation (0–2). Minor errors are acceptable if meaning remains clear.",
+      "rubric": "8 points total: the response explains how to use a diagram and illustrated parts catalogue to identify an unfamiliar component (0–2); it includes checking references/item numbers and confirming the identification rather than relying on appearance alone (0–2); the explanation is clear with understandable grammar (0–2); component-identification/catalogue vocabulary, spelling and punctuation are accurate (0–2).",
       "points": 8
     }
   ],
