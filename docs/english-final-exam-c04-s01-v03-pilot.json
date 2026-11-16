@@ -42,8 +42,8 @@
       "prompt": "A capacitor stores electrical energy in an electric field and can be used in several types of electronic circuit. A diode is designed to conduct mainly in one direction, while a transistor can be used for switching or amplification. Component appearance alone is not enough for identification; the printed code, circuit symbol and component documentation should also be checked. Reading 1. What can a capacitor do?",
       "options": [
         "Limit current in a circuit",
-        "Store electrical energy in an electric field",
         "Allow current to pass in one direction",
+        "Store electrical energy in an electric field",
         "Create a magnetic field around a coil"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why is appearance alone insufficient for identification?",
       "options": [
         "Because similar components always have identical functions",
-        "Because the printed code, symbol and documentation should also be checked",
+        "Because the packaging may show a different delivery date",
         "Because component colour is the only reliable identifier",
-        "Because the packaging may show a different delivery date"
+        "Because the printed code, symbol and documentation should also be checked"
       ],
       "correctIndex": 3,
       "points": 1
