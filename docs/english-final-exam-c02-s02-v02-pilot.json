@@ -28,12 +28,12 @@
       "prompt": "Listening 2. What will students practise checking?",
       "audioText": "The college library is holding a workshop on checking information found online. It will take place in the digital study room on Tuesday at two. Students will practise checking the author, publication date and supporting evidence. They should bring a laptop if they have one, but a limited number of college devices will be available to borrow.",
       "options": [
-        "The author, publication date and supporting evidence",
         "The equipment serial number and model",
+        "The author, publication date and supporting evidence",
         "The room booking and lesson timetable",
         "The student's attendance record"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -42,11 +42,11 @@
       "prompt": "When a student researched renewable energy, the first website she found made a strong claim but did not identify its author or provide links to evidence. She compared the information with a government report and a university article. The sources agreed on the general trend but used different figures because they covered different years. She included the dates and explained the difference in her assignment. Reading 1. Why did the student question the first website?",
       "options": [
         "It was published too recently to assess",
-        "It had no named author or supporting evidence",
         "It used technical language",
+        "It had no named author or supporting evidence",
         "It disagreed with every other source"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
