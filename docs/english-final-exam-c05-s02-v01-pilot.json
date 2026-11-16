@@ -42,11 +42,11 @@
       "prompt": "A useful handover summarises the status of work at the end of a shift. It identifies completed tasks, outstanding items, relevant references and any issue that requires attention. Unconfirmed information should be clearly labelled as such. The incoming team should be able to distinguish between work that has been completed, work that remains open and decisions that still require approval. Reading 1. What should a useful handover identify?",
       "options": [
         "Only the names of the team members",
-        "Completed tasks, outstanding items, references and issues requiring attention",
         "The cost of the next maintenance visit",
+        "Completed tasks, outstanding items, references and issues requiring attention",
         "The personal opinions of the outgoing team"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -54,12 +54,12 @@
       "type": "single_choice",
       "prompt": "Why should unconfirmed information be labelled?",
       "options": [
-        "So the incoming team can distinguish facts from information still awaiting confirmation",
         "So that the report can be made longer",
         "Because all information must be treated as final",
-        "To avoid recording who supplied the information"
+        "To avoid recording who supplied the information",
+        "So the incoming team can distinguish facts from information still awaiting confirmation"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "points": 1
     },
     {
