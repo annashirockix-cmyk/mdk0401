@@ -508,3 +508,9 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 .drawer-item[aria-current="page"]{outline-offset:-3px}
 .drawer-item:focus-visible{position:relative;z-index:1}
 @media(max-width:600px){.drawer{width:min(360px,92vw)}.drawer-item{min-height:44px}.drawer-group>summary{min-height:46px;display:flex;align-items:center}}
+
+#crumbs{display:flex;align-items:center;gap:9px;min-height:40px;flex-wrap:wrap}
+#crumbs a{color:var(--accent);text-decoration:none;font-weight:700}
+#crumbs a:hover{text-decoration:underline}
+#crumbs [aria-current="page"]{color:var(--text);font-weight:600}
+#crumbs .crumb-separator{color:var(--muted)}
