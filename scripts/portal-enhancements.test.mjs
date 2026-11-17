@@ -879,6 +879,9 @@ test("English VPR draft autosave is authenticated, bounded, and restores only st
   assert.match(bank, /savedAnswers:Array\.isArray\(activeAttempt\.savedAnswers\)/);
   assert.match(api, /saveEnglishVprExamDraft:function/);
   assert.match(engine, /API\.saveEnglishVprExamDraft\(track,attemptId,answers\)/);
+  assert.match(engine, /function resumeTimerAfterFailedSubmit\(\)/);
+  assert.equal((engine.match(/resumeTimerAfterFailedSubmit\(\);/g) || []).length, 2, "timer resumes after both unavailable API and failed submission");
+  assert.match(engine, /!finished && seconds > 0 && !window\.englishAssessmentTimer/);
   assert.match(engine, /Восстанавливаем только ответы ученика/);
   assert.match(engine, /function collectAnswers\(\)/);
 });
