@@ -1,7 +1,7 @@
 # Technical English — Course 3, Semester 1 — Lessons 6–8
 ## Aviation industry, aircraft structure and materials
 
-**Status:** new lesson drafts for the provisional five-year course map; not yet imported into the portal.  
+**Status:** lesson drafts are appended to the portal course runtime by `english-five-year-runtime.js`; they remain provisional and are not approved as official programme content.  
 **Level:** B1–B1+ ESP bridge. Students should already have studied the Basic English sequence and the existing Technical English lessons on materials, metal processes, technical drawing and CAD/CAM.  
 **Professional groups:** technologists, programmers, electricians and machine-tool operators.  
 **Audio:** original Spotlight-style listening scripts are included as text for recording; no MP3 files or player are included.
