@@ -2835,7 +2835,7 @@
                   "I demand an answer.",
                   "Do it for me.",
                   "Would you mind helping me?",
-                  "Could you tell me, please?"
+                  "Could you tell me where the nearest bus stop is, please?"
                 ],
                 "correctIndices": [
                   2,
@@ -20614,8 +20614,8 @@
                 "type": "multiple_choice",
                 "prompt": "Choose TWO entries that must be carried forward to the incoming shift in a maintenance handover.",
                 "options": [
-                  "Tasks completed and signed off during the previous shift",
-                  "Routine work planned for a later scheduled visit",
+                  "A note about the outgoing team's lunch arrangements",
+                  "A record of the next team's preferred break times",
                   "Outstanding task references",
                   "Issues requiring follow-up"
                 ],
