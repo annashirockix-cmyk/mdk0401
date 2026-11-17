@@ -38,8 +38,8 @@ const HEADERS = {
   GameRooms: ["Code", "HostEmail", "State", "CreatedAt", "ExpiresAt", "Status"],
   GameActions: ["Id", "RoomCode", "Email", "Type", "Payload", "CreatedAt"],
   Assignments: ["Id", "CourseId", "Title", "Topic", "Level", "WorkType", "DueAt", "TargetType", "TargetValue", "Instructions", "Criteria", "CreatedBy", "CreatedAt", "Status"],
-  AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
-  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "Status"],
+  AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "Attachments"],
+  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "Status", "Attachments"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt", "PreviousGrade", "PreviousFeedback", "Feedback"],
@@ -163,6 +163,7 @@ function handleRequest_(e) {
       case "createassignment": result = createAssignment_(data); break;
       case "getassignments": result = getAssignments_(data); break;
       case "submitassignment": result = submitAssignment_(data); break;
+      case "getassignmentattachment": result = getAssignmentAttachment_(data); break;
       case "gradeassignment": result = gradeAssignment_(data); break;
       case "gradewrittenresult": result = gradeWrittenResult_(data); break;
       case "getnotifications": result = getNotifications_(data); break;
@@ -1447,6 +1448,9 @@ function getAssignments_(data) {
   const sh = assignments_(), rows = sh.getDataRange().getValues(), h = headerMap_(sh);
   const ss = assignmentSubmissions_(), m = headerMap_(ss);
   const hs = assignmentSubmissionHistory_(), hm = headerMap_(hs), list = [];
+  function parseAttachments_(value) {
+    try { const parsed=JSON.parse(String(value||"[]")); return Array.isArray(parsed)?parsed:[]; } catch(e) { return []; }
+  }
   function rowsForStudent(sheet, map) {
     const lastRow = sheet.getLastRow(), lastColumn = sheet.getLastColumn();
     if (lastColumn < 1) return [];
@@ -1465,9 +1469,9 @@ function getAssignments_(data) {
   function historyFor(submission) {
     const sid = String(submission[m.Id] || "");
     const saved = historyRows.slice(1).filter(function(x){return String(x[hm.SubmissionId]||"")===sid;})
-      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||""),grade:x[hm.Grade]===undefined||x[hm.Grade]===""?null:x[hm.Grade],feedback:String(x[hm.Feedback]||""),reviewedBy:String(x[hm.ReviewedBy]||""),reviewedAt:String(x[hm.ReviewedAt]||""),status:String(x[hm.Status]||"")};})
+      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||""),grade:x[hm.Grade]===undefined||x[hm.Grade]===""?null:x[hm.Grade],feedback:String(x[hm.Feedback]||""),reviewedBy:String(x[hm.ReviewedBy]||""),reviewedAt:String(x[hm.ReviewedAt]||""),status:String(x[hm.Status]||""),attachments:parseAttachments_(hm.Attachments===undefined?"":x[hm.Attachments])};})
       .sort(function(x,y){return x.attempt-y.attempt;});
-    return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||""),grade:submission[m.Grade]===undefined||submission[m.Grade]===""?null:submission[m.Grade],feedback:String(submission[m.Feedback]||""),reviewedBy:String(submission[m.ReviewedBy]||""),reviewedAt:String(submission[m.ReviewedAt]||""),status:String(submission[m.Status]||"")}];
+    return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||""),grade:submission[m.Grade]===undefined||submission[m.Grade]===""?null:submission[m.Grade],feedback:String(submission[m.Feedback]||""),reviewedBy:String(submission[m.ReviewedBy]||""),reviewedAt:String(submission[m.ReviewedAt]||""),status:String(submission[m.Status]||""),attachments:parseAttachments_(hm.Attachments===undefined?"":submission[hm.Attachments])}];
   }
   rows.slice(1).forEach(function(r){
     if (!r[h.Id]) return;
@@ -1483,9 +1487,9 @@ function getAssignments_(data) {
     const own=subs.slice(1).filter(function(x){return String(x[m.AssignmentId])===item.id;});
     if(user.role==="student"){
       const ownStudent=own.filter(function(x){return email_(x[m.StudentEmail])===user.email;}).sort(function(x,y){return String(y[m.SubmittedAt]).localeCompare(String(x[m.SubmittedAt]));})[0];
-      item.submission=ownStudent?{answer:String(ownStudent[m.Answer]||""),submittedAt:String(ownStudent[m.SubmittedAt]||""),status:String(ownStudent[m.Status]||"submitted"),grade:ownStudent[m.Grade]===""?null:ownStudent[m.Grade],feedback:String(ownStudent[m.Feedback]||""),attempts:historyFor(ownStudent).length,history:historyFor(ownStudent)}:null;
+      item.submission=ownStudent?{answer:String(ownStudent[m.Answer]||""),submittedAt:String(ownStudent[m.SubmittedAt]||""),status:String(ownStudent[m.Status]||"submitted"),grade:ownStudent[m.Grade]===""?null:ownStudent[m.Grade],feedback:String(ownStudent[m.Feedback]||""),attachments:parseAttachments_(m.Attachments===undefined?"":ownStudent[m.Attachments]),attempts:historyFor(ownStudent).length,history:historyFor(ownStudent)}:null;
     } else {
-      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:String(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attempts:hist.length,history:hist};});
+      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:String(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attachments:parseAttachments_(m.Attachments===undefined?"":x[m.Attachments]),attempts:hist.length,history:hist};});
     }
     list.push(item);
   });
@@ -1497,7 +1501,9 @@ function submitAssignment_(data) {
   if (student.role !== "student") throw new Error("Отправлять ответы может только обучающийся.");
   const id = String(data.assignmentId || "");
   const answer = String(data.answer || "").trim().slice(0,12000);
-  if (!id || !answer) throw new Error("Введите ответ.");
+  const incomingAttachments = Array.isArray(data.attachments) ? data.attachments : [];
+  if (incomingAttachments.length > 5) throw new Error("Можно прикрепить не более 5 файлов за одну отправку.");
+  if (!id || (!answer && !incomingAttachments.length)) throw new Error("Введите ответ или прикрепите файл/фотографию.");
   const sh = assignments_(), rows = sh.getDataRange().getValues(), h = headerMap_(sh);
   const a = rows.slice(1).find(function(r){ return String(r[h.Id]) === id; });
   if (!a) throw new Error("Задание не найдено.");
@@ -1519,6 +1525,9 @@ function submitAssignment_(data) {
     }
     const hist = assignmentSubmissionHistory_(), hv = hist.getDataRange().getValues(), hm = headerMap_(hist);
     const saved = hv.slice(1).filter(function(r){ return String(r[hm.SubmissionId] || "") === submissionId; });
+    const existingAttachments = i >= 0 && m.Attachments !== undefined ? (function(){try{const x=JSON.parse(String(v[i+1][m.Attachments]||"[]"));return Array.isArray(x)?x:[];}catch(e){return [];}})() : [];
+    const uploadedAttachments = saveAssignmentAttachments_(incomingAttachments, student, cid, id, submissionId);
+    const allAttachments = existingAttachments.concat(uploadedAttachments);
     let attempt = saved.length + 1;
     if (i >= 0) {
       const previous = v[i+1], previousAt = String(previous[m.SubmittedAt] || now);
@@ -1527,10 +1536,11 @@ function submitAssignment_(data) {
         Feedback:String(previous[m.Feedback] || ""),
         ReviewedBy:String(previous[m.ReviewedBy] || ""),
         ReviewedAt:String(previous[m.ReviewedAt] || ""),
-        Status:String(previous[m.Status] || "submitted")
+        Status:String(previous[m.Status] || "submitted"),
+        Attachments:m.Attachments===undefined?"[]":String(previous[m.Attachments]||"[]")
       };
       if (!saved.length) {
-        appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1,Grade:reviewSnapshot.Grade,Feedback:reviewSnapshot.Feedback,ReviewedBy:reviewSnapshot.ReviewedBy,ReviewedAt:reviewSnapshot.ReviewedAt,Status:reviewSnapshot.Status});
+        appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1,Grade:reviewSnapshot.Grade,Feedback:reviewSnapshot.Feedback,ReviewedBy:reviewSnapshot.ReviewedBy,ReviewedAt:reviewSnapshot.ReviewedAt,Status:reviewSnapshot.Status,Attachments:reviewSnapshot.Attachments});
         attempt = 2;
       } else {
         for (let h = hv.length - 1; h >= 1; h--) {
@@ -1541,14 +1551,64 @@ function submitAssignment_(data) {
         }
       }
     }
-    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt,Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Status:"submitted"});
-    const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
+    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt,Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Status:"submitted",Attachments:JSON.stringify(allAttachments)});
+    const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Attachments:JSON.stringify(allAttachments)};
     if (i >= 0) updateMappedRecord_(sub, i + 2, record); else appendMappedRecord_(sub, record);
     notifyCourseStaff_(cid,"submission",attempt > 1 ? "Повторная отправка задания" : "Новый ответ на задание",
       student.name + " (" + student.group + ") отправил(а) работу: " + String(a[h.Title] || "") + ". Откройте раздел «Задания и проверка работ».",id);
     return {success:true,submittedAt:now,attempt:attempt,submissionId:submissionId};
   } finally { lock.releaseLock(); }
 }
+function saveAssignmentAttachments_(attachments, student, courseId, assignmentId, submissionId) {
+  if (!attachments.length) return [];
+  const allowed = {
+    "image/jpeg":".jpg","image/png":".png","image/webp":".webp","image/gif":".gif",
+    "application/pdf":".pdf",
+    "application/msword":".doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":".docx",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":".xlsx"
+  };
+  const saved=[];
+  attachments.forEach(function(item){
+    const mime=String(item&&item.mimeType||"").toLowerCase();
+    const name=String(item&&item.name||"attachment").replace(/[\\/:*?"<>|]/g,"_").slice(0,120);
+    const encoded=String(item&&item.data||"").replace(/^data:[^;]+;base64,/i,"").replace(/\s/g,"");
+    if(!allowed[mime])throw new Error("Недопустимый тип файла: "+mime);
+    if(!encoded||encoded.length>5600000)throw new Error("Файл пустой или превышает лимит 4 МБ.");
+    const bytes=Utilities.base64Decode(encoded);
+    if(!bytes.length||bytes.length>4*1024*1024)throw new Error("Размер каждого файла не должен превышать 4 МБ.");
+    const blob=Utilities.newBlob(bytes,mime,name||("attachment"+allowed[mime]));
+    const file=DriveApp.createFile(blob);
+    saved.push({id:Utilities.getUuid(),driveFileId:file.getId(),name:name,mimeType:mime,size:bytes.length,uploadedAt:new Date().toISOString()});
+  });
+  return saved;
+}
+
+function getAssignmentAttachment_(data) {
+  const user=auth_(data),fileId=String(data.fileId||"");
+  if(!fileId)throw new Error("Не указан файл.");
+  const sh=assignmentSubmissions_(),rows=sh.getDataRange().getValues(),m=headerMap_(sh);
+  let match=null;
+  for(let i=1;i<rows.length;i++){
+    let files=[];try{files=JSON.parse(String(m.Attachments===undefined?"[]":rows[i][m.Attachments]||"[]"));}catch(e){}
+    if(!Array.isArray(files))continue;
+    const item=files.find(function(x){return String(x.id)===fileId;});
+    if(item){match={item:item,row:rows[i]};break;}
+  }
+  if(!match)throw new Error("Файл не найден.");
+  const assignmentRows=assignments_().getDataRange().getValues(),ah=headerMap_(assignments_());
+  const assignment=assignmentRows.slice(1).find(function(r){return String(r[ah.Id])===String(match.row[m.AssignmentId]);});
+  if(!assignment)throw new Error("Задание не найдено.");
+  const courseId=String(assignment[ah.CourseId]||"");
+  if(user.role==="student"){
+    if(email_(match.row[m.StudentEmail])!==user.email)throw new Error("Нет доступа к этому файлу.");
+  }else if(user.role==="teacher"||user.role==="admin"){
+    editor_(data,courseId);
+  }else throw new Error("Недостаточно прав.");
+  const blob=DriveApp.getFileById(String(match.item.driveFileId)).getBlob();
+  return {success:true,name:String(match.item.name||"attachment"),mimeType:String(match.item.mimeType||blob.getContentType()),data:Utilities.base64Encode(blob.getBytes())};
+}
+
 function gradeAssignment_(data) {
   const actor = auth_(data);
   if (actor.role !== "teacher" && actor.role !== "admin") throw new Error("Проверять ответы могут только преподаватели.");
