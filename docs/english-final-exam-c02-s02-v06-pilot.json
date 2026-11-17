@@ -42,11 +42,11 @@
       "prompt": "A group of students measured air quality near three busy roads and one park. They recorded the results at the same time on several weekdays to make the comparison fair. The readings were usually higher beside the roads, but wind direction affected some results. The students explained that their small study could show a local pattern, not prove that traffic was the only cause of pollution. Reading 1. Why did students take readings at the same time?",
       "options": [
         "To avoid measuring during rush hour",
-        "To make the comparison fair",
         "To measure only during the evening rush",
+        "To make the comparison fair",
         "To collect readings only when the weather was clear"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -107,11 +107,11 @@
       "prompt": "You are presenting the study results. Which statement is appropriately cautious?",
       "options": [
         "Our small study proves that traffic is the only cause of pollution.",
-        "Our results suggest a local pattern, but further measurements are needed.",
+        "We did not collect enough information, so no discussion is possible.",
         "The data are perfect and cannot be questioned.",
-        "We did not collect enough information, so no discussion is possible."
+        "Our results suggest a local pattern, but further measurements are needed."
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
