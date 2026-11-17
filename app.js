@@ -779,6 +779,22 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     lectureBody.style.cssText = "padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;";
                     lectureBody.innerHTML = lec.content || "";
                     details.appendChild(lectureBody);
+                    // Teacher material is rendered only in the authenticated staff view.
+                    if (window.state && window.state.staff && lec.teacherContent) {
+                        var teacherDetails = document.createElement("details");
+                        teacherDetails.className = "lec-teacher-material";
+                        teacherDetails.style.cssText = "margin:12px 20px 18px;padding:12px;border:1px dashed var(--accent);border-radius:8px;background:var(--card-soft);";
+                        var teacherSummary = document.createElement("summary");
+                        teacherSummary.textContent = "🔒 Ключи и методические материалы преподавателя";
+                        teacherSummary.style.cssText = "cursor:pointer;font-weight:700;";
+                        teacherDetails.appendChild(teacherSummary);
+                        var teacherBody = document.createElement("div");
+                        teacherBody.className = "lec-teacher-content";
+                        teacherBody.style.cssText = "margin-top:12px;line-height:1.6;";
+                        teacherBody.innerHTML = lec.teacherContent;
+                        teacherDetails.appendChild(teacherBody);
+                        details.appendChild(teacherDetails);
+                    }
 
                     var listeningId = getEmbeddedEnglishListening(lec);
                     var listening = listeningId && window.EnglishListeningCatalogue &&
