@@ -1845,6 +1845,8 @@ test("personal tutoring links are isolated per teacher and shown only to student
   assert.match(block, /role!=="student"/);
   assert.match(block, /role!=="teacher"\|\|!teacherEmail/);
   assert.match(block, /if\(!link\.visible\|\|!link\.url\)continue/);
+  assert.match(block, /legacy\.updatedBy===teacherEmail/);
+  assert.match(block, /UpdatedBy\]\)===email_\(teacherEmail\)/);
   assert.match(block, /writeSetting_\(tutoringSettingKey_\(teacher\.email\)/);
   assert.doesNotMatch(block, /settingValue_\("tutoring:"\+courseId\)/);
   const html = read("index.html");
