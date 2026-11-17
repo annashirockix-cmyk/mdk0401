@@ -572,3 +572,22 @@ test("Apps Script assignment functions do not write into Users.Payload", () => {
   assert.match(backend, /function appendMappedRecord_\(sheet, record\)/);
   assert.match(backend, /function updateMappedRecord_\(sheet, rowNumber, record\)/);
 });
+
+
+test("written assignment submissions accept private file attachments and enforce owner/staff access", () => {
+  assert.match(backend, /AssignmentSubmissions: \[[^\]]*"Attachments"/);
+  assert.match(backend, /AssignmentSubmissionHistory: \[[^\]]*"Attachments"/);
+  assert.match(backend, /function saveAssignmentAttachments_\(attachments, student, courseId, assignmentId, submissionId\)/);
+  assert.match(backend, /DriveApp\.createFile\(blob\)/);
+  assert.match(backend, /function getAssignmentAttachment_\(data\)/);
+  assert.match(backend, /email_\(match\.row\[m\.StudentEmail\]\)!==user\.email/);
+  assert.match(backend, /editor_\(data,courseId\)/);
+  assert.match(backend, /incomingAttachments\.length > 5/);
+  assert.match(backend, /bytes\.length>4\*1024\*1024/);
+  assert.match(backend, /application\/pdf/);
+  assert.match(backend, /application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document/);
+  assert.match(ui, /type="file" name="attachments" multiple/);
+  assert.match(ui, /file\.size>4\*1024\*1024/);
+  assert.match(ui, /attachmentList\(s\.attachments\)/);
+  assert.match(api, /getAssignmentAttachment\s*:/);
+});
