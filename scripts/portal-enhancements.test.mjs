@@ -1868,3 +1868,51 @@ test("personal tutoring links are isolated per teacher and shown only to student
   const app = read("app.js");
   assert.doesNotMatch(app, /menuTutoring/);
 });
+
+
+test("tutoring group and individual audiences are enforced by the server", () => {
+  const source=read("Code.gs");
+  const start=source.indexOf("function getTutoringLink_(data) {");
+  const end=source.indexOf("\nfunction saveTutoringLink_",start);
+  assert.ok(start>=0&&end>start,"getTutoringLink_ must be available");
+  const getTutoringLinkSource=source.slice(start,end);
+  const headers=["Email","PasswordHash","Name","Group","Role","UpdatedAt","Courses"];
+  const usersRows=[
+    headers,
+    ["teacher-a@example.invalid","","Преподаватель А","","teacher","","07.01"],
+    ["teacher-b@example.invalid","","Преподаватель Б","","teacher","","07.01"]
+  ];
+  const settingsRows=[
+    ["Key","Value","UpdatedAt","UpdatedBy"],
+    ["tutoring:teacher:teacher-a@example.invalid",JSON.stringify({url:"https://example.invalid/group",title:"Группа 24-ТМ",visible:true,audienceType:"group",audienceValue:"24-ТМ"}),"","teacher-a@example.invalid"],
+    ["tutoring:teacher:teacher-b@example.invalid",JSON.stringify({url:"https://example.invalid/individual",title:"Личная консультация",visible:true,audienceType:"individual",audienceValue:"student-one@example.invalid"}),"","teacher-b@example.invalid"]
+  ];
+  const makeSheet=rows=>({
+    getLastRow:()=>rows.length,
+    getRange:(row,column,rowCount,columnCount)=>({getValues:()=>rows.slice(row-1,row-1+rowCount).map(item=>item.slice(column-1,column-1+columnCount))}),
+    getDataRange:()=>({getValues:()=>rows})
+  });
+  const usersSheet=makeSheet(usersRows),settingsSheet=makeSheet(settingsRows);
+  const headerMap=sheet=>Object.fromEntries(sheet.getRange(1,1,1,sheet.getLastColumn?she et.getLastColumn():sheet.getDataRange().getValues()[0].length).getValues()[0].map((key,index)=>[key,index]));
+  const getMap=sheet=>Object.fromEntries(sheet.getDataRange().getValues()[0].map((key,index)=>[key,index]));
+  let currentUser={role:"student",email:"student-one@example.invalid",group:"24-тм",courses:"07.01"};
+  const getTutoringLink=new Function("auth_","users_","settings_","headerMap_","email_","hasCourseAccess_","tutoringSettingKey_","parseTutoringLink_","legacyTutoringLink_",getTutoringLinkSource+"; return getTutoringLink_;")(
+    ()=>currentUser,
+    ()=>usersSheet,
+    ()=>settingsSheet,
+    getMap,
+    value=>String(value||"").trim().toLowerCase(),
+    (user,course)=>String(user.courses||"").split(",").map(value=>value.trim()).includes(course),
+    email=>"tutoring:teacher:"+String(email||"").trim().toLowerCase(),
+    raw=>{let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:false,audienceType:"all",audienceValue:""};try{value=Object.assign(value,JSON.parse(raw||"{}"));}catch{}return value;},
+    ()=>({url:"",visible:false})
+  );
+  const groupResult=getTutoringLink({courseId:"07.01"});
+  assert.deepEqual(groupResult.links.map(link=>link.teacherName),["Преподаватель А"],"Only a student in the selected group should see the group link");
+  currentUser={role:"student",email:"other-student@example.invalid",group:"25-ТМ",courses:"07.01"};
+  const otherGroupResult=getTutoringLink({courseId:"07.01"});
+  assert.deepEqual(otherGroupResult.links,[],"Students outside the selected group must not receive the link");
+  currentUser={role:"student",email:"STUDENT-ONE@example.invalid",group:"25-ТМ",courses:"07.01"};
+  const individualResult=getTutoringLink({courseId:"07.01"});
+  assert.deepEqual(individualResult.links.map(link=>link.teacherName),["Преподаватель Б"],"Individual links must match the target email case-insensitively");
+});
