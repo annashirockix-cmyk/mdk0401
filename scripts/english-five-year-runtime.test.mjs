@@ -164,7 +164,7 @@ test("course 1–3 lecture students do not receive recording scripts, transcript
   assert.equal(active.length, 46, "active scope must contain exactly 46 new lessons for courses 1–3");
   for (const lecture of active) {
     const student = String(lecture.content || "");
-    assert.doesNotMatch(student, /Recording script|Transcript reveal|<strong>Key:?<\/strong>|<strong>Suggested answers:?<\/strong>/i,
+    assert.doesNotMatch(student, /Recording script|Transcript reveal|<strong>Key:?<\\/strong>|<strong>Suggested answers:?<\\/strong>|Suggested answers:|Suggested teacher key|Self-check[^<]*answers|Teacher answer key/i,
       `teacher-only listening/key material leaked into ${lecture.listeningId}`);
     assert.ok(lecture.teacherContent && lecture.teacherContent.trim(),
       `teacher material should remain available in the staff accordion: ${lecture.listeningId}`);
