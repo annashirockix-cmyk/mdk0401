@@ -1030,6 +1030,7 @@ function parseTutoringLink_(raw) {
   let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:false};
   if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
   value.url=String(value.url||"").trim();
+  if(value.url&&!/^https?:\/\//i.test(value.url)){value.url="";value.visible=false;}
   value.title=String(value.title||"Запись на дополнительные занятия").slice(0,120);
   value.description=String(value.description||"").slice(0,500);
   value.visible=value.visible===true;
