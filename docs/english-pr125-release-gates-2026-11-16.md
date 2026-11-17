@@ -126,3 +126,8 @@
 - Screened the two-key multiple-choice tasks in all 40 V01–V04 variants. The two keyed answers were contextually appropriate across the reviewed set.
 - Clarified two distractor sets: C5-S2 V01 no longer treats completed, signed-off work as a clearly wrong handover entry; C1-S2 V04 now uses a complete, context-specific polite question rather than the incomplete “Could you tell me, please?”.
 - The two correct indices remain [2, 3]. Individual source JSON and combined registry were synchronized, and a targeted regression test now checks both sets.
+
+### Ordering-task review in V01–V04 (2026-11-17)
+- Reviewed the ordering tasks in the 40 V01–V04 variants. Corrected two sequences in Course 1: C1-S1 V03 now places presenting the selected library book at the desk before showing the student card; C1-S2 V04 now checks the map before visiting the shop, then explains the request and asks the assistant for information.
+- Corrected ordering keys were synchronized to the combined registry, and targeted regression coverage verifies the expected sequences and source/registry parity.
+- The remaining ordering tasks in C1-S1/C1-S2 and C2-S1/C2-S2 were reviewed in this pass without further blocking sequence defects.
