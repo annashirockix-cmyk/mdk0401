@@ -231,20 +231,107 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("t-unit3", "Unit 3", "Machine Tools",
             [
               lec("3.1", "Turning, Shaper, Drilling", `
-                <p>The engine lathe is the most important of all the machine tools. It is used to produce external or internal cylindrical surfaces. The piece is held by the machine and is rotated while a cutting tool removes excess metal from the external diameter. Internal turning consists of enlarging and finishing a hole.</p>
-                <p>A machine tool uses a power source to modify the shape of metal components of machines. It is a sort of machine used as a tool in the making of other machines. Machine tools were powered in the Middle Ages by humans and animals, and later by the energy captured by waterwheels. After the Industrial Revolution, most machine tools were powered by steam engine and nowadays by electricity. Machine tools can be operated manually, or under automatic control. In the 1960s, computers gave more flexibility to the process. Such machines became known as computerized numerical control (CNC) machines. They could precisely repeat sequences, and could produce much more complex pieces than even the most skilled tool operators.</p>
-                <p><b>Shaper:</b> This is a metal-cutting machine used to produce or modify flat surfaces. The cutting tool moves cutting on the forward stroke, with the piece feeding automatically towards the tool during each return stroke. Shapers can be horizontal or vertical.</p>
-                <p><b>Drilling machine:</b> It is used to produce circular holes in metal with a twist drill. It also uses a variety of other cutting tools to perform the basic hole-machining operations.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится различать токарную, строгальную и сверлильную обработку, называть основные части станка и описывать назначение операции на английском языке. Занятие посвящено чтению и терминологии; оно не является инструкцией по настройке, наладке или эксплуатации станка.</p>
+<h3>1. Reading: Turning, Shaping and Drilling</h3>
+<p><b>Turning</b> is a machining process commonly performed on a lathe. The workpiece rotates while a cutting tool removes material. Turning is often used to produce cylindrical surfaces. Different operations may create external surfaces, internal bores, grooves or faces, depending on the machine, tooling and approved process plan.</p>
+<p><b>Shaping</b> is a machining process in which a single-point cutting tool moves back and forth across a workpiece to produce a flat or shaped surface. A shaper is a reciprocating machine tool. The exact motion and feed arrangement depend on the machine design.</p>
+<p><b>Drilling</b> produces a round hole using a rotating drill. Drilling machines may also support related hole-making operations with suitable tools. The required hole size, position, tolerance and finish are defined by the drawing and process documentation.</p>
+<p>Machine tools can be manually controlled, mechanically automated or controlled by a computer. CNC technology allows programmed movements to be repeated with accuracy when the programme, machine, tooling and workholding are correctly verified. The presence of CNC does not remove the need for trained personnel and safety checks.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>lathe</td><td>токарный станок</td><td>A lathe is commonly used for turning.</td></tr>
+<tr><td>workpiece</td><td>заготовка, обрабатываемая деталь</td><td>The workpiece rotates during turning.</td></tr>
+<tr><td>cutting tool</td><td>режущий инструмент</td><td>The cutting tool removes material.</td></tr>
+<tr><td>spindle</td><td>шпиндель</td><td>The spindle holds or drives a component, depending on the machine.</td></tr>
+<tr><td>carriage</td><td>суппорт</td><td>The carriage supports and moves the tool assembly on a lathe.</td></tr>
+<tr><td>shaper</td><td>строгальный станок</td><td>A shaper can produce flat surfaces.</td></tr>
+<tr><td>drill</td><td>сверло</td><td>A drill produces a round hole.</td></tr>
+<tr><td>bore</td><td>отверстие / растачивать</td><td>The bore is checked against the drawing.</td></tr>
+<tr><td>machining operation</td><td>операция механической обработки</td><td>Turning is a machining operation.</td></tr>
+</table>
+<h3>3. Language focus: describing machine functions</h3>
+<p>Используйте <i>is used to + verb</i>: <i>A lathe is used to produce cylindrical surfaces.</i> Для процесса: <i>while, during, by</i>: <i>The workpiece rotates while the tool removes material.</i> Для пассивного залога: <i>A hole is produced by drilling.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What rotates during conventional turning?</li><li>What does a cutting tool do?</li><li>What type of movement is associated with a shaper?</li><li>Which tool is used for drilling?</li><li>Why does CNC still require trained personnel?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите процесс и описание:</b> turning; shaping; drilling. Описания: a round hole is produced by a rotating drill; a rotating workpiece is machined by a cutting tool; a reciprocating tool produces a surface.</p>
+<p><b>Задание B. Выберите правильное слово:</b> 1) The (workpiece/cutting tool) rotates during conventional turning. 2) A (drill/lathe) produces a round hole. 3) A shaper uses a (reciprocating/chemical) movement.</p>
+<p><b>Задание C. Опишите разницу между turning and drilling в 4–5 предложениях.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>The workpiece.</li><li>It removes material from the workpiece.</li><li>Back-and-forth/reciprocating movement.</li><li>A drill.</li><li>Because programmes, equipment, tooling and workholding must be verified and safety procedures followed.</li><li>Turning — rotating workpiece; shaping — reciprocating tool; drilling — round hole with a rotating drill.</li><li>workpiece; drill; reciprocating.</li></ol>
+<p><b>Самостоятельная работа:</b> составьте словарную карточку для пяти деталей токарного станка и напишите 80–100 слов о назначении turning, shaping и drilling. Не включайте режимы резания или последовательность реальной наладки.</p>
+`),
               lec("3.2", "Milling, Grinding, Press, Band saw", `
-                <p><b>Milling machine:</b> This cuts flat metal surfaces. The piece is fed against a rotating cutting tool. Cutters of many shapes and sizes are available for a wide variety of milling operations. Milling machines may be manually operated, mechanically automated, or digitally automated via computer numerical control (CNC).</p>
-                <p><b>Grinding machine:</b> This removes excessive material from parts that are brought into contact with a rotating abrasive wheel. Grinding is the most accurate of all the basic machining processes, but also the most time consuming.</p>
-                <p><b>Press:</b> This is a machine tool that changes the shape of a workpiece. Historically, metal was shaped by hand using a hammer. Machine presses can be dangerous. Bi-manual controls (controls which require both hands to be on the buttons to operate) are a very good way to prevent accidents.</p>
-                <p><b>Band saw:</b> It is a power tool which uses a blade consisting of a continuous band of metal with teeth along one edge. The band usually rides on two wheels rotating in the same plane. Band saws are used for woodworking, metalworking, or for cutting a variety of other materials, and are particularly useful for cutting irregular or curved shapes. A constant flow of liquid is poured over the blade to keep it cool and preventing it from overheating.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится описывать фрезерование, шлифование, прессование и ленточное пиление, различать движение инструмента и заготовки и использовать лексику для сравнения операций. Любые реальные операции выполняются только обученным персоналом по локальным инструкциям и оценке рисков.</p>
+<h3>1. Reading: Milling, Grinding, Pressing and Band Sawing</h3>
+<p><b>Milling</b> removes material with a rotating multi-edge cutter. The workpiece and tool move relative to each other according to the machine design and selected operation. Milling can produce flat surfaces, slots, pockets and complex profiles.</p>
+<p><b>Grinding</b> uses an abrasive wheel or another abrasive tool to remove small amounts of material and improve surface quality or dimensional accuracy. Grinding requires appropriate equipment, wheel condition checks and protective measures defined by the relevant procedure.</p>
+<p>A <b>press</b> applies force to form, cut or join material, depending on the tooling and process. Press equipment can create serious hazards, including crushing and trapping points. Safeguards and operating controls must be designed, checked and used according to approved requirements; a general textbook description is not an operating instruction.</p>
+<p>A <b>band saw</b> uses a continuous toothed blade moving around wheels. It can cut metal, wood and other materials with suitable equipment and blades. The machine design, blade type, guarding and workholding determine the permitted application.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>milling machine</td><td>фрезерный станок</td><td>A milling machine uses a rotating cutter.</td></tr>
+<tr><td>cutter</td><td>фреза, режущий инструмент</td><td>The cutter has several cutting edges.</td></tr>
+<tr><td>abrasive wheel</td><td>абразивный круг</td><td>Grinding may use an abrasive wheel.</td></tr>
+<tr><td>surface finish</td><td>качество поверхности</td><td>Grinding can improve surface finish.</td></tr>
+<tr><td>press</td><td>пресс</td><td>A press applies force to a workpiece.</td></tr>
+<tr><td>guard</td><td>ограждение</td><td>A machine guard helps prevent access to hazards.</td></tr>
+<tr><td>band saw</td><td>ленточнопильный станок</td><td>A band saw uses a continuous blade.</td></tr>
+<tr><td>workholding</td><td>закрепление заготовки</td><td>Workholding must be suitable for the task.</td></tr>
+<tr><td>hazard</td><td>опасность, опасный фактор</td><td>Moving parts can present a hazard.</td></tr>
+</table>
+<h3>3. Language focus: comparing processes</h3>
+<p>Для сравнения используйте <i>whereas, while, unlike, both, however</i>: <i>Milling uses a rotating cutter, whereas grinding uses an abrasive tool. Both processes remove material; however, their purposes and results may differ.</i> Для описания назначения: <i>is designed to, is used for, can be used to</i>.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What type of cutter is used in milling?</li><li>What is one purpose of grinding?</li><li>What hazards can be associated with press equipment?</li><li>What does a band saw use?</li><li>Why are general descriptions not enough to operate a machine?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Определите операцию:</b> 1) a rotating multi-edge cutter removes material; 2) an abrasive tool improves surface quality; 3) a press applies force; 4) a continuous toothed blade cuts material.</p>
+<p><b>Задание B. Завершите предложения:</b> 1) A milling cutter has several cutting ___. 2) Grinding may improve surface ___. 3) A machine ___ helps prevent access to hazardous moving parts. 4) A band saw has a continuous ___.</p>
+<p><b>Задание C. Сравните две операции по инструменту, назначению и потенциальным опасностям. Используйте whereas и both.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>A rotating multi-edge cutter.</li><li>To remove small amounts of material and improve surface quality/accuracy.</li><li>Crushing and trapping points.</li><li>A continuous toothed blade.</li><li>Because actual equipment, guarding, material and procedure vary; trained personnel must follow approved instructions.</li><li>Milling; grinding; pressing; band sawing.</li><li>edges; finish; guard; blade.</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте сравнительную таблицу четырёх операций: tool, purpose, typical result, one hazard to be controlled. Используйте только общие учебные описания, не давайте инструкций по работе на конкретном станке.</p>
+`),
               lec("3.3", "Computer Numerical Control (CNC)", `
-                <p>Computer Numerical control (CNC) refers to the automation of machine tools in manufacturing processes. The machines are controlled by computer software which carries out a series of operations automatically. The first NC machines were built in the 1940s and 1950s. They are used to cut and shape products, such as automobile parts that need precise specifications. Parts must be carefully planned and prepared by CNC programmers. First they view the three-dimensional computer aided designed part. Then they calculate where to cut, the speed and shape and select the tools and materials. The CNC programmers translate the planned machine operations into a set of instructions. These instructions are translated into a computer aided manufacturing (CAM) program containing a set of commands for the machine. The commands are a series of numbers which explains where to cut and the position of material. The computer checks all the operations made by the machine tools.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится объяснять назначение ЧПУ, различать CAD, CAM и CNC на базовом уровне, читать учебные обозначения G-code и описывать роль проверки программы. Все фрагменты кода в этом занятии являются иллюстрациями для чтения и не предназначены для запуска на станке.</p>
+<h3>1. Reading: What Is CNC?</h3>
+<p>Computer Numerical Control (CNC) is a method of controlling machine-tool movements and functions using a computer programme. A CNC system can repeat a planned sequence of movements and support the production of components with complex shapes and controlled dimensions. The actual result depends on the machine, control system, tooling, workholding, material and verified programme.</p>
+<p>A typical digital workflow may begin with a design model. CAD software is used to create or modify the model. CAM software can help prepare manufacturing data and generate a programme for a selected machine. A qualified programmer reviews the data, and the programme must be checked using the approved process before any production use. The operator follows the applicable setup and safety documentation.</p>
+<p>CNC programmes often contain blocks of information. A block may include a sequence number, a preparatory function, coordinates, feed or spindle-related commands and comments. The exact meaning and behaviour depend on the controller and machine configuration. The same code should never be assumed to behave identically on every machine.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>computer numerical control (CNC)</td><td>числовое программное управление</td><td>CNC controls machine functions by a programme.</td></tr>
+<tr><td>machine tool</td><td>металлорежущий станок</td><td>A CNC machine tool follows verified instructions.</td></tr>
+<tr><td>programme block</td><td>кадр программы</td><td>A programme block contains coded information.</td></tr>
+<tr><td>coordinate</td><td>координата</td><td>A coordinate identifies a position.</td></tr>
+<tr><td>feed rate</td><td>подача</td><td>Feed rate is one type of programme information.</td></tr>
+<tr><td>spindle speed</td><td>частота вращения шпинделя</td><td>Spindle speed depends on the process and machine.</td></tr>
+<tr><td>controller</td><td>система ЧПУ / контроллер</td><td>The controller interprets programme instructions.</td></tr>
+<tr><td>simulation</td><td>моделирование</td><td>Simulation can help review a programme.</td></tr>
+<tr><td>verification</td><td>проверка, подтверждение</td><td>Programme verification is required before use.</td></tr>
+</table>
+<h3>3. Reading a simplified programme block</h3>
+<p>Example for language analysis only:</p>
+<pre>N10 G01 X20.0 Y5.0 F100 ; illustrative linear-move block</pre>
+<p>In a general introductory explanation, N10 is a sequence number, G01 is commonly associated with a linear interpolation command, X and Y are coordinate words, and F is commonly used for feed information. The example omits essential machine-specific context and is not a complete or safe programme. Do not enter it into a controller or use it to operate equipment.</p>
+<h3>4. Language focus: explaining code cautiously</h3>
+<p>Используйте <i>indicates, represents, is commonly used for, may contain</i>: <i>The X word indicates a coordinate value. The F word is commonly used for feed information.</i> Слово <i>commonly</i> важно: детали зависят от системы управления и настроек конкретной машины.</p>
+<h3>5. Reading comprehension</h3>
+<ol><li>What does CNC stand for?</li><li>What is the role of a CNC programme?</li><li>What may CAD and CAM contribute to the workflow?</li><li>What information can a programme block contain?</li><li>Why must the programme be checked for the specific machine?</li></ol>
+<h3>6. Практика</h3>
+<p><b>Задание A. Расшифруйте сокращения:</b> CAD, CAM, CNC.</p>
+<p><b>Задание B. Найдите элементы в учебном примере:</b> sequence number; preparatory function; coordinate words; feed word. Объясните, почему этот пример нельзя запускать на станке.</p>
+<p><b>Задание C. Расположите этапы в логическом порядке:</b> create or review a design model; prepare manufacturing data; review and verify the programme; follow approved machine documentation.</p>
+<h3>7. Самопроверка и ключ преподавателя</h3>
+<ol><li>Computer Numerical Control.</li><li>It provides coded instructions for machine movements/functions.</li><li>CAD creates/modifies a design model; CAM supports manufacturing planning and programme generation.</li><li>Sequence number, functions, coordinates, feed/spindle-related words and comments.</li><li>Controller, machine configuration and process requirements may differ.</li><li>CAD — Computer-Aided Design; CAM — Computer-Aided Manufacturing; CNC — Computer Numerical Control.</li><li>N10; G01; X20.0 and Y5.0; F100. It is incomplete and lacks machine-specific context and verification.</li><li>Design model → manufacturing data → programme review/verification → approved documentation.</li></ol>
+<p><b>Самостоятельная работа:</b> составьте мини-глоссарий из 10 терминов CNC и напишите 80–100 слов о цифровом процессе от CAD-модели до проверенной производственной программы. Не составляйте и не запускайте реальный управляющий код.</p>
+`)
             ],
             [],
             [],
@@ -584,20 +671,72 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("t-unit12", "Unit 12", "Safety",
             [
               lec("12.1", "Health and Safety Regulations", `
-                <p>Attention must be paid to safety in order to ensure a safe working practice in factories. Workers must be aware of the dangers and risks that exist all around them: two out of every three industrial accidents are caused by individual carelessness. In order to avoid or reduce accidents, both protective and precautionary measures must be followed while working.</p>
-                <p>Each country has specific regulations concerning health and safety at work. For example, The Health and Safety at Work Act 1974 is a UK Act of Parliament that establishes the fundamental rules to enforce workplace health, safety and welfare within the United Kingdom.</p>
-                <p>The objectives of the Act are: to secure the health, safety and welfare of people at work; to protect people in the work place against risks to health or safety in connection to their work activities; to control the keeping and use of dangerous substances; to control the emission of dangerous gases into the atmosphere.</p>
-                <p>The Act defines general duties of employers, employees, suppliers of goods and substances for use at work, and people who manage and maintain work premises. In particular, every employer has to ensure the health, safety and welfare at work of all the employees, visitors, the general public and clients. Employers have to ensure the absence of risk to health in connection with the use, handling or storage of items and substances, as well as provide adequate facilities for a safe working environment. It is also very important to provide employees with proper instructions and training so that they will be able to cope with any problem that may occur at work. Employees, on their part, should always behave responsibly at work and take care of themselves and other people who may be affected by their actions. Moreover, they should cooperate with employers to enable them to perform their duties or requirements under the Act.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать общие обязанности работодателя и работника в области охраны труда, различать hazard и risk, извлекать информацию из текста о правилах безопасности и использовать английские формулировки для сообщения об опасности. Конкретные правовые требования определяются законодательством страны и локальными документами организации.</p>
+<h3>1. Reading: Health and Safety at Work</h3>
+<p>Health and safety at work aims to prevent injuries and ill health. A <b>hazard</b> is something that can cause harm, such as moving machinery, electricity, chemicals, noise or a slippery floor. A <b>risk</b> describes the likelihood and possible severity of harm in a particular situation.</p>
+<p>Employers and organisations are generally responsible for providing a safe working environment, suitable equipment, information, instruction and training, and for assessing and controlling workplace risks. Workers are expected to follow approved procedures, use equipment only when trained and authorised, report hazards and cooperate with safety arrangements. The exact duties and legal wording depend on the applicable national law.</p>
+<p>The United Kingdom has the Health and Safety at Work etc. Act 1974. It is a UK law and should not be treated as the law of every country. In other countries, different laws and regulatory systems apply. A student should identify the jurisdiction and consult current official sources before making a legal statement.</p>
+<p>Risk control may include eliminating a hazard, substituting a safer method or material, using engineering controls, applying administrative procedures and providing appropriate personal protective equipment (PPE). PPE is important, but it should not be treated as the only safety measure. The required controls depend on a risk assessment and approved instructions.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>health and safety</td><td>охрана труда и безопасность</td><td>Health and safety rules protect people.</td></tr>
+<tr><td>hazard</td><td>опасный фактор</td><td>Moving parts may be a hazard.</td></tr>
+<tr><td>risk</td><td>риск</td><td>Risk depends on likelihood and severity.</td></tr>
+<tr><td>risk assessment</td><td>оценка риска</td><td>A risk assessment identifies suitable controls.</td></tr>
+<tr><td>control measure</td><td>мера контроля риска</td><td>A guard is one possible control measure.</td></tr>
+<tr><td>employer / employee</td><td>работодатель / работник</td><td>Employers and employees have safety duties.</td></tr>
+<tr><td>regulation</td><td>нормативное требование</td><td>Regulations vary between countries.</td></tr>
+<tr><td>personal protective equipment (PPE)</td><td>средства индивидуальной защиты</td><td>PPE must be suitable for the task.</td></tr>
+<tr><td>authorised</td><td>допущенный, уполномоченный</td><td>Only authorised staff may perform the task.</td></tr>
+</table>
+<h3>3. Language focus: obligation and prohibition</h3>
+<p><i>must / have to</i> выражают обязанность: <i>Workers must follow the approved procedure.</i> <i>must not / mustn't</i> выражает запрет: <i>Students must not use equipment without permission.</i> <i>should</i> часто используется для рекомендации. Для сообщения об опасности: <i>I have noticed a hazard. The guard appears to be damaged. Could you ask the responsible person to check it?</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What is the difference between a hazard and a risk?</li><li>Name three possible workplace hazards.</li><li>What are employers generally expected to provide?</li><li>What are workers expected to do?</li><li>Why must legal statements identify the country?</li><li>Why is PPE not the only safety measure?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Hazard or risk?</b> 1) exposed moving parts; 2) likelihood of a hand injury during a task; 3) a wet floor; 4) possible severity of a fall.</p>
+<p><b>Задание B. Выберите модальную форму:</b> 1) Students (must/might) follow the instructor's safety rules. 2) You (mustn't/don't have to) remove a guard. 3) You (should/can't) report a damaged cable.</p>
+<p><b>Задание C. Составьте короткое сообщение о замеченном опасном факторе: что наблюдается, где, кому сообщить и какая информация пока не подтверждена.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Hazard is a source of potential harm; risk concerns likelihood and severity.</li><li>Moving machinery, electricity, chemicals, noise, slippery floors (any three).</li><li>A safe environment, suitable equipment, information, instruction, training and risk controls.</li><li>Follow procedures, use equipment only when trained/authorised, report hazards and cooperate.</li><li>Because legal systems and duties differ by jurisdiction.</li><li>Because controls must be selected from risk assessment; PPE does not remove the hazard by itself.</li><li>Задание A: hazard; risk; hazard; risk.</li><li>must; mustn't; should.</li></ol>
+<p><b>Самостоятельная работа:</b> составьте таблицу из пяти hazards, возможного harm и одной меры контроля. Используйте учебные сценарии; не заменяйте таблицей локальную оценку риска.</p>
+`),
               lec("12.2", "Safety Rules and Equipment", `
-                <h3>SAFETY RULES</h3>
-                <p><b>MACHINERY:</b> Be sure to understand how to <i>operate</i> every machine you are going to use. Never use machinery when you are in a room alone. Use all the <i>protection</i> required in the place of work. Check that the safety devices are working. If they are not working, ask for them to be repaired immediately. Do not talk to anybody who is operating a machine. <i>Concentration</i> is important at all times. Turn off the electricity before cleaning a machine.</p>
-                <p><b>TOOLS:</b> Report any damage to the tools used at work. See that tools are correctly set.</p>
-                <p><b>DRESS:</b> Before starting work, wear protective clothing. Always wear safety glasses, <i>gloves</i> and boots when using a machine.</p>
-                <p><b>WORKSHOP:</b> Keep the workshop <i>tidy</i>, do not leave rubbish around and do not throw cigarette ends or ashes into the rubbish bin. The area around machines must be kept clear to avoid falling. Tools and protective clothing should be put away when not in use. Clean machines after use with a <i>brush</i> not with your hands.</p>
-                <p><b>ACCIDENT PROCEDURES:</b> Make sure you know where to assemble in the event of <i>fire</i> and where the emergency stop buttons are located. Check where the fire extinguishers are in your workplace and how they work, in order to be able to use them in case of fire. Do not shout or run as this can lead to panic, and inform the supervisor immediately if any accident occurs. Never administer <i>first aid</i> unless you have been trained to do so.</p>
-                <p><b>Safety equipment:</b> Safety glasses are the most important piece of safety equipment. There are many styles of these, but all share the same features, that is to say impact resistant lenses and side screens to protect against dust. Hearing protection should be worn when working with loud power tools and machinery, in order to protect you from long-term hearing loss. Hard hats are predominantly used in workplace environments such as building sites. They protect the head from injury by falling objects, impact with other objects, debris, bad weather and electric shock. A face shield must be worn when using machinery which gives off sparks or little parts. It is comfortable, can be flipped up when not needed, and will keep most of the flying chips away from your face. When working with chemicals or machinery which makes dust, it is advisable to wear a face mask, to keep these fine particles away from the face. When spraying varnish or paint, a respirator is a better choice, to protect you from any harmful effects of using these chemicals. When working, you should always wear proper clothing, like an overall. Comfortable, long-sleeved shirts and long trousers combined with good safety boots will each provide a layer of protection.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать лексику по теме средств защиты, ограждений, безопасного поведения и сообщения об инцидентах. Важно не заучивать универсальные советы вне контекста: выбор PPE и порядок действий определяются оценкой риска, документацией и инструктажем для конкретного оборудования.</p>
+<h3>1. Reading: Safety Rules and Protective Equipment</h3>
+<p>Before a workshop activity, students must receive an appropriate briefing and understand the local rules. Equipment may be used only by trained and authorised people. A person who does not understand an instruction should stop and ask the instructor for clarification rather than guess.</p>
+<p>Machine guards and other protective devices are designed to prevent access to hazardous moving parts or reduce exposure to danger. They must not be removed, bypassed or ignored. If a guard or safety device appears damaged or unavailable, the condition must be reported and the equipment must not be used until the responsible person has dealt with the issue under the approved procedure.</p>
+<p>Personal protective equipment (PPE) may include safety glasses, hearing protection, safety footwear, protective clothing, face shields or respiratory protection. The correct choice depends on the task and risk assessment. Gloves are suitable for some handling tasks but can create an entanglement hazard near rotating machinery; therefore, students must never assume that gloves are always appropriate. The local risk assessment and instructor's directions determine what is required.</p>
+<p>Good housekeeping keeps walkways clear and reduces slips, trips and falls. Tools and materials should be stored in their designated places. Cleaning, adjustment, maintenance and isolation of equipment must follow the approved procedure and be performed only by authorised personnel. In an emergency, follow the site's alarm, evacuation and reporting arrangements. Use firefighting equipment only if trained, it is safe to do so and the local emergency procedure permits it.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>machine guard</td><td>ограждение станка</td><td>A machine guard protects access to moving parts.</td></tr>
+<tr><td>safety device</td><td>защитное устройство</td><td>Report a damaged safety device.</td></tr>
+<tr><td>entanglement</td><td>затягивание / захват вращающимися частями</td><td>Loose clothing may create an entanglement hazard.</td></tr>
+<tr><td>hearing protection</td><td>защита слуха</td><td>Hearing protection is selected after risk assessment.</td></tr>
+<tr><td>face shield</td><td>защитный щиток</td><td>A face shield may protect against flying particles.</td></tr>
+<tr><td>respiratory protection</td><td>средства защиты органов дыхания</td><td>Respiratory protection depends on the exposure.</td></tr>
+<tr><td>housekeeping</td><td>поддержание порядка на рабочем месте</td><td>Good housekeeping keeps walkways clear.</td></tr>
+<tr><td>evacuation</td><td>эвакуация</td><td>Follow the evacuation route.</td></tr>
+<tr><td>incident report</td><td>сообщение об инциденте</td><td>Complete an incident report as instructed.</td></tr>
+</table>
+<h3>3. Language focus: clear safety messages</h3>
+<p>Короткие и конкретные сообщения лучше расплывчатых фраз:</p>
+<ul><li><i>The machine guard appears to be damaged.</i> — Ограждение станка, похоже, повреждено.</li><li><i>I have stopped the student activity and informed the instructor.</i> — Учебная деятельность остановлена, преподаватель уведомлён.</li><li><i>I am not authorised to inspect or repair this equipment.</i> — У меня нет допуска к осмотру или ремонту этого оборудования.</li><li><i>Could you confirm the required PPE for this task?</i> — Не могли бы вы уточнить необходимые СИЗ для этой задачи?</li></ul>
+<h3>4. Reading comprehension</h3>
+<ol><li>Who may use workshop equipment?</li><li>What should happen if a guard appears damaged?</li><li>Why are gloves not always appropriate near rotating machinery?</li><li>Who determines the required PPE?</li><li>Who may isolate or maintain equipment?</li><li>When may a person use firefighting equipment?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите корректное сообщение:</b> 1) “The guard is damaged. I will remove it.” 2) “The guard appears to be damaged. I will report it to the instructor.” 3) “The guard is not important.”</p>
+<p><b>Задание B. Соотнесите PPE и общую функцию:</b> safety glasses; hearing protection; safety footwear; respiratory protection. Варианты: reduce exposure to harmful airborne substances; protect eyes; reduce exposure to hazardous noise; protect feet from specified workplace hazards.</p>
+<p><b>Задание C. Ролевая ситуация:</b> студент замечает повреждённое ограждение. Он сообщает только наблюдаемые факты, преподаватель уточняет место и статус, третий студент записывает сообщение. Не разыгрывайте ремонт, снятие ограждения или запуск оборудования.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Trained and authorised people.</li><li>Report it; do not use the equipment until the responsible person has dealt with it under the approved procedure.</li><li>They may become caught in rotating parts.</li><li>The task-specific risk assessment and approved local instructions.</li><li>Authorised personnel only.</li><li>Only if trained, it is safe and the local emergency procedure permits it.</li><li>Задание A: вариант 2.</li><li>Safety glasses—eyes; hearing protection—noise; safety footwear—feet; respiratory protection—airborne substances.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите диалог из 8–10 реплик, в котором студент уточняет необходимые СИЗ и сообщает о замеченном дефекте защитного устройства. Используйте must, must not, should и could you.</p>
+`)
             ],
             [],
             [],
