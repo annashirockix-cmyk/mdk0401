@@ -52,11 +52,11 @@
 - C. whereas
 - D. because
 
-**109.** In a technical context, *to calibrate an instrument* means:
-- A. To determine its measurement performance by comparison with a reference standard
-- B. To paint its outer casing
-- C. To replace its serial number
-- D. To increase its operating temperature
+**109.** What does *measurement uncertainty* express?
+- A. The quantified doubt associated with a measurement result
+- B. The smallest change an instrument can display
+- C. The date when an instrument must next be calibrated
+- D. The permitted variation specified for a manufactured part
 
 **110.** A table lists planned output as 500 units and actual output as 460 units. Which statement is correct?
 - A. Actual output was 40 units below plan
@@ -136,7 +136,7 @@
 | 106 | A | Preventive maintenance is planned in advance to reduce failure likelihood; actual intervals depend on approved maintenance data. |
 | 107 | D | Superseded copies are outdated versions that should not remain at points of use. |
 | 108 | D | “Because” introduces the reason for improved consistency. |
-| 109 | A | Calibration establishes the relationship between an instrument’s readings and a reference standard; adjustment, if needed, is a separate controlled action. |
+| 109 | A | Measurement uncertainty expresses the doubt associated with a result; it is not the same as instrument resolution or a product tolerance. |
 | 110 | A | 500 − 460 = 40; actual output is 40 units below the plan. |
 | 111 | B | The sentence is grammatical and appropriate for recording a decision in meeting minutes. |
 | 112 | C | Tolerance is the allowable variation from a specified dimension or value. |
