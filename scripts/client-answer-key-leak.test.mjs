@@ -104,3 +104,24 @@ test("protected server question delivery strips answer fields before returning t
   }
   assert.match(server, /if\(user\.role!==\"student\"\|\|!courseId\|\|!testId/);
 });
+
+test("English teacher-material migration is admin-only and stores only protected companion records", () => {
+  const server = read("Code.gs");
+  assert.match(server, /case "importenglishteachermaterials": result = importEnglishTeacherMaterials_\(data\)/);
+  const start = server.indexOf("function importEnglishTeacherMaterials_(data)");
+  const end = server.indexOf("function saveCustomContent_(data)", start);
+  assert.ok(start >= 0 && end > start);
+  const importer = server.slice(start, end);
+  assert.match(importer, /const user = admin_\(data\)/);
+  assert.match(importer, /materials\.length > 50/);
+  assert.match(importer, /teacherOnly: true/);
+  assert.match(importer, /teacherContent: item\.teacherContent/);
+  assert.match(importer, /rowById\[item\.id\]/);
+  assert.match(importer, /courseId.*ENB.*ENT/s);
+  assert.match(server, /payload\.teacherOnly === true\) return/);
+  const app = read("app.js");
+  assert.match(app, /window\.migrateEnglishTeacherMaterialsToServer = async function/);
+  assert.match(app, /identity\.role.*admin/);
+  assert.match(app, /privateTeacherLectures/);
+  assert.match(app, /lecture\.teacherOnly !== true/);
+});
