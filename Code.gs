@@ -1053,7 +1053,7 @@ function getTutoringLink_(data) {
     return {success:true,link:link,links:[]};
   }
   if(user.role!=="student")throw new Error("Запись доступна только обучающимся и преподавателям.");
-  const sheet=users_(),values=sheet.getDataRange().getValues(),m=headerMap_(sheet);
+  const sheet=users_(),lastUserRow=sheet.getLastRow(),values=lastUserRow?sheet.getRange(1,1,lastUserRow,7).getValues():[],m=headerMap_(sheet);
   const settingsSheet=settings_(),settingsValues=settingsSheet.getDataRange().getValues(),sm=headerMap_(settingsSheet),settings=Object.create(null);
   for(let i=1;i<settingsValues.length;i++)settings[String(settingsValues[i][sm.Key]||"")]={value:String(settingsValues[i][sm.Value]||""),updatedBy:email_(settingsValues[i][sm.UpdatedBy])};
   const links=[];
