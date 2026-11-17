@@ -2149,9 +2149,10 @@ function scoreBuiltInQuestion_(q,answer) {
     return sameAnswer_(answer.map(String).sort(),expected.map(String).sort());
   }
   if(type==="text"||type==="short_text"){
-    if(expected===undefined||expected===null)return false;
+    const textExpected=q.correctAnswer!==undefined?q.correctAnswer:(q.extra!==undefined?q.extra:expected);
+    if(textExpected===undefined||textExpected===null)return false;
     const normalize=function(value){return String(value==null?"":value).normalize("NFKC").trim().replace(/\s+/g," ").toLocaleLowerCase("ru");};
-    return normalize(answer)===normalize(expected);
+    return normalize(answer)===normalize(textExpected);
   }
   if(type==="num"||type==="numeric"||type==="number"){
     expected=q.correctAnswer!==undefined?q.correctAnswer:(q.extra!==undefined?q.extra:expected);
