@@ -1818,6 +1818,15 @@ function getCustomContent_(data) {
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
 
+    // Teacher-only lecture notes, answer keys and recording masters must never leave the server in a student response.
+    // Built-in English lessons are migrated into CourseContent as lecture payloads; keep this guard here
+    // so a student cannot retrieve their private companion material through getCustomContent.
+    if (user.role === "student" && payload && typeof payload === "object" && !Array.isArray(payload)) {
+      ["teacherContent", "teacherNotes", "teacherKey", "answerKey", "recordingScript", "transcriptReveal", "suggestedAnswers", "markingGuide"].forEach(function (key) {
+        delete payload[key];
+      });
+    }
+
     // Student sessions receive test prompts and options only. Answer keys remain server-side.
     if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
       function stripTestKeys_(value) {
