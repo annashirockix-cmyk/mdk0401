@@ -2419,6 +2419,13 @@ function getCustomTest_(data) {
         throw new Error("В вопросе " + (index + 1) + " неверно заданы пары. Нужны минимум две пары с непустыми и уникальными частями.");
       }
     }
+    if (type === "order" || type === "ordering") {
+      const items = Array.isArray(question.items) ? question.items.map(function(value){return String(value).trim();}) : [];
+      const expected = Array.isArray(question.correctOrder) ? question.correctOrder.map(String) : items;
+      if (items.length < 2 || items.some(function(value){return !value;}) || new Set(items).size !== items.length || expected.length !== items.length || new Set(expected).size !== expected.length || expected.some(function(value){return items.indexOf(value)<0;})) {
+        throw new Error("В вопросе " + (index + 1) + " неверно задана последовательность. Укажите минимум два уникальных элемента и правильный порядок.");
+      }
+    }
   });
   const displayQuestions = hydrateTestQuestionImages_(questions);
   const optionMaps = {}, safeQuestions = displayQuestions.map(function(question, index) {
@@ -2430,6 +2437,12 @@ function getCustomTest_(data) {
       const order = shuffledServer_(options.map(function(_, i) { return i; }));
       safe.options = order.map(function(i) { return options[i]; });
       safe.pairs = pairs.map(function(pair){return {left:String(pair.left || "")};});
+      optionMaps[String(index)] = order;
+    } else if (type === "order" || type === "ordering") {
+      const items = Array.isArray(question.items) ? question.items.map(String) : [];
+      if (items.length < 2 || items.some(function(item){return !item.trim();}) || new Set(items).size !== items.length) throw new Error("В вопросе " + (index + 1) + " неверно задана последовательность.");
+      const order = shuffledServer_(items.map(function(_, i) { return i; }));
+      safe.items = order.map(function(i) { return items[i]; });
       optionMaps[String(index)] = order;
     } else {
       const options = Array.isArray(safe.options) ? safe.options.slice() : [];
@@ -2475,6 +2488,10 @@ function submitCustomTest_(data) {
       if (type === "matching" || type === "match") {
         const originalOptions = Array.isArray(question.pairs) ? question.pairs.map(function(pair){return String(pair.right || "");}) : [];
         return mapped.map(function(originalIndex){return originalOptions[originalIndex] || "";});
+      }
+      if (type === "order" || type === "ordering") {
+        const originalItems = Array.isArray(question.items) ? question.items.map(String) : [];
+        return mapped.map(function(originalIndex){return originalItems[originalIndex] || "";});
       }
       return mapped.sort(function(a,b){return a-b;});
     }
