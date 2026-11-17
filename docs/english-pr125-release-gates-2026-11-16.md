@@ -131,3 +131,7 @@
 - Reviewed the ordering tasks in the 40 V01–V04 variants. Corrected two sequences in Course 1: C1-S1 V03 now places presenting the selected library book at the desk before showing the student card; C1-S2 V04 now checks the map before visiting the shop, then explains the request and asks the assistant for information.
 - Corrected ordering keys were synchronized to the combined registry, and targeted regression coverage verifies the expected sequences and source/registry parity.
 - The remaining ordering tasks in C1-S1/C1-S2 and C2-S1/C2-S2 were reviewed in this pass without further blocking sequence defects.
+
+### Short-text answer precision in V01–V04 (2026-11-17)
+- Tightened three prompts/accepted-answer sets: C2-S1 V04 now asks for a career adviser/counsellor with both valid one-word answers; C3-S1 V02 now explicitly asks for a revision number; C4-S1 V04 now accepts only “hour” in the blank after “kilowatt-”.
+- This removes redundant or overly broad accepted forms while preserving the intended vocabulary. Source JSON and registry were synchronized, and targeted regression assertions were added.
