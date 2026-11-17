@@ -1456,7 +1456,6 @@ window.installStudentActivityCapture = window.installStudentActivityCapture || f
 };
 
 window.router = function() {
-    if (window.updatePortalNavigation) window.updatePortalNavigation();
     var hash = location.hash.slice(1) || "/"; 
     var parts = hash.split("/").filter(p => p);
     var overlay = document.getElementById("loginOverlay");
@@ -1466,6 +1465,12 @@ window.router = function() {
         return;
     }
     if (overlay) overlay.style.display = "none";
+    window._portalRouteStack = window._portalRouteStack || [];
+    if (window._portalRouteStack[window._portalRouteStack.length - 1] !== hash) {
+        window._portalRouteStack.push(hash);
+        if (window._portalRouteStack.length > 30) window._portalRouteStack.shift();
+    }
+    if (window.updatePortalNavigation) window.updatePortalNavigation();
     if (window.state.student) window.installStudentActivityCapture();
     if (window.state.student && window.API && window.API.logActivity) {
         var activityRoute = location.hash.slice(1) || "/";
@@ -1555,6 +1560,19 @@ window.updatePortalNavigation = function() {
     if (crumbs) {
         var label = current ? current.textContent.trim().replace(/\\s+/g, " ") : (route === "/" ? "Главная" : (route.indexOf("/topic/") === 0 ? "Материалы курса" : "Раздел портала"));
         crumbs.replaceChildren();
+        var routeStack = window._portalRouteStack || [];
+        if (routeStack.length > 1) {
+            var back = document.createElement("a");
+            back.href = "#portal-back";
+            back.className = "crumb-back";
+            back.textContent = "← Назад";
+            back.setAttribute("aria-label", "Вернуться на предыдущую страницу портала");
+            back.addEventListener("click", function(event) {
+                event.preventDefault();
+                if ((window._portalRouteStack || []).length > 1) history.back();
+            });
+            crumbs.appendChild(back);
+        }
         if (route !== "/") {
             var home = document.createElement("a"); home.href = "#/"; home.textContent = "Главная"; crumbs.appendChild(home);
             var separator = document.createElement("span"); separator.className = "crumb-separator"; separator.textContent = "›"; separator.setAttribute("aria-hidden", "true"); crumbs.appendChild(separator);
