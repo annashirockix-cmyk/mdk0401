@@ -111,3 +111,11 @@
 - The correct answers remain at index 1 in all four tasks. Individual source JSON files and the combined registry were synchronized; a read-back check confirmed exact option parity for all four amended task IDs.
 - This was a focused listening/distractor pass, not a complete review of every reading, grammar, multiple-choice, ordering, short-text or written task in V01–V04. V16–V20 and the full content review remain outstanding.
 - PR remains Draft; no protected bank, Google Sheets, Apps Script deployment, production import, merge or student publication was performed.
+
+
+### Reading answer-key verification in V01–V04 (2026-11-17)
+- Reviewed both reading questions and their keys in all 40 V01–V04 variants across the 10 course/semester slots.
+- Found three answer-key mismatches in Course 2: C2-S1 V03 Reading 2 (key corrected from D to C), C2-S1 V04 Reading 2 (D to C), and C2-S2 V04 Reading 2 (D to B). In each case the corrected answer is directly supported by the passage.
+- Updated the individual JSON and combined registry; source/registry equality remains enforced by the 150-variant regression test.
+- Added a targeted regression test in scripts/english-semester-assessment.test.mjs to assert the three passage-supported answers and their parity between source JSON and registry.
+- This closes the focused reading-key pass for V01–V04; it does not constitute a full expert review of every task or a CEFR/programme approval.
