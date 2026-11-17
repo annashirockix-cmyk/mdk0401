@@ -581,35 +581,131 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit6", "Unit 6", "Additional Reading",
             [
               lec("6.1", "The History of Physics", `
-                <h3>The History of Physics</h3>
-                <p>The most advanced science at present and the one which seems to give the most light on the structure of the world is physics. It is useful to have some idea of not only what the up-to-date development of physics is but also how we came to think in that way and how the whole of modern physics is connected with its history. In fact, the history of this science begins with Galileo. Galileo introduced the fundamental concepts and principles which were enough for physics until the present century. Galileo introduced the two principles that made mathematical physics possible: the law of inertia and the parallelogram law. The law of inertia, now familiar as Newton's first law of motion made it possible to calculate the motions of matter by means of the laws of dynamics alone.</p>
-                <p>Technically the principle of inertia meant that casual laws of physics should be stated in terms of acceleration, i.e. a change of velocity in amount or direction or both which was found in Newton's law of gravitation. From the law of inertia it followed that the causal laws of dynamics must be differential equations of the second order, though this form of statement could not be made until Newton and Leibniz had developed the infinitesimal calculus. The basic idea of dynamics, the equations of motion, the ideas of momentum, of inertia, of mass and of acceleration were applied by Newton to large bodies like the Earth and the Moon to explain the structure and the motion of the Universe.</p>
-                <p>From Newton to the end of the nineteenth century, the progress of physics involved no basically new principles. The first revolutionary novelty was Planck's introduction of the quantum constant \(h\) to explain the structure and behaviour of atoms in the year 1900. Another departure from Newtonian principles followed in 1905, when Einstein published his special theory of relativity, which was primarily a geometrical theory of gravitation showing that the universe is expanding.</p>
-                <p>In fact, when modern science was growing up from the time of Galileo to the time of Newton, all the sciences were very much joined together. A single man could do absolutely first-class research in pure mathematics, in physics, in chemistry and even in biology. Towards the end of that time the sciences were beginning to separate and after that they continued to separate more and more. Just at this moment we can see a great convergence of all sciences. Physics is increasingly penetrating all the other parts of science and this is evident in the names of the new hybrid subjects. We have long had physical chemistry; now we have chemical physics. A biologist cannot do without knowledge of modern physics while a physicist must know something of biology, as he may find, that a great deal of his work will be concerned with biophysics. The mathematical aspect of physics is also becoming much more evident especially now that we are having a growing symbiosis between physics and mathematics in computational physics. Our job in physics is to see things simply, to understand a great many complicated phenomena in a unified way, in terms of a few simple principles. You cannot predict what will happen in future, but you have to be ready to meet it.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать обзорный текст об истории физики, выстраивать последовательность научных идей и использовать лексику для описания исследований, открытий и доказательств. Материал даёт языковую основу и не заменяет отдельный курс истории науки.</p>
+<h3>1. Reading: From Classical Mechanics to Modern Physics</h3>
+<p>People have studied nature since ancient times. A major change in the development of physics took place in the early modern period, when researchers increasingly used experiments and mathematical descriptions to explain motion and natural phenomena. Galileo Galilei made important contributions to the study of motion and helped develop methods based on observation and experiment.</p>
+<p>Isaac Newton formulated laws of motion and the law of universal gravitation. Together with the development of calculus by Newton and Leibniz, these ideas provided powerful tools for describing the motion of objects, from falling bodies to planets. Classical mechanics remains useful for many everyday and engineering problems.</p>
+<p>At the beginning of the twentieth century, new experiments and questions led to major developments. In 1900, Max Planck introduced the quantum hypothesis in his work on thermal radiation. In 1905, Albert Einstein published his special theory of relativity, which describes space, time and motion at high speeds. His general theory of relativity, published in its final form in 1915, describes gravity in terms of the geometry of spacetime. These theories do not make classical physics useless; they extend our understanding to situations where classical models are insufficient.</p>
+<p>Modern science is interdisciplinary. Physics contributes to materials science, chemistry, electronics, medicine, computing and engineering. Researchers combine theoretical models, experiments, measurement and data analysis. A scientific explanation must be open to testing and revision when new evidence becomes available.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>research</td><td>исследование</td><td>Research requires reliable evidence.</td></tr>
+<tr><td>observation</td><td>наблюдение</td><td>The observation led to a new question.</td></tr>
+<tr><td>experiment</td><td>эксперимент</td><td>The experiment tested the hypothesis.</td></tr>
+<tr><td>motion</td><td>движение</td><td>Classical mechanics describes motion.</td></tr>
+<tr><td>gravitation</td><td>тяготение</td><td>Newton studied universal gravitation.</td></tr>
+<tr><td>quantum</td><td>квантовый</td><td>Quantum theory describes microscopic systems.</td></tr>
+<tr><td>spacetime</td><td>пространство-время</td><td>General relativity describes gravity through spacetime geometry.</td></tr>
+<tr><td>evidence</td><td>доказательства, данные</td><td>New evidence may change a model.</td></tr>
+<tr><td>interdisciplinary</td><td>междисциплинарный</td><td>Modern research is often interdisciplinary.</td></tr>
+</table>
+<h3>3. Language focus: describing historical development</h3>
+<p>Для хронологии используйте <i>first, later, in the early twentieth century, afterwards, eventually</i>. Для вклада учёного: <i>contributed to, developed, proposed, formulated, published</i>. Past Simple описывает завершённые исторические события: <i>Newton formulated the laws of motion.</i> Present Simple используется для общепринятых фактов: <i>Classical mechanics remains useful.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>Which methods became increasingly important in the development of modern physics?</li><li>What did Newton formulate?</li><li>What did Planck introduce in 1900?</li><li>What does special relativity describe?</li><li>How does general relativity describe gravity?</li><li>Why does new evidence matter?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A.</b> Соотнесите: Galileo; Newton; Planck; Einstein. Варианты: laws of motion and gravitation; important studies of motion and experimental method; quantum hypothesis; special and general relativity.</p>
+<p><b>Задание B.</b> Поставьте глаголы в Past Simple: 1) Newton (formulate) the laws of motion. 2) Planck (introduce) the quantum hypothesis. 3) Einstein (publish) his special theory in 1905.</p>
+<p><b>Задание C.</b> Составьте временную шкалу из четырёх этапов, используя first, later, in 1900, in 1905.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Observation, experiment and mathematical description.</li><li>Laws of motion and universal gravitation.</li><li>The quantum hypothesis.</li><li>Space, time and motion at high speeds.</li><li>Through the geometry of spacetime.</li><li>Scientific explanations must be tested and revised when necessary.</li><li>Соответствие: Galileo — study of motion/experimental method; Newton — laws; Planck — quantum hypothesis; Einstein — relativity.</li><li>formulated; introduced; published.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о развитии одной научной идеи. Используйте минимум пять слов из словаря и отделяйте проверенные факты от собственных оценок.</p>
+`),
               lec("6.2", "The Revolution in Physics", `
-                <h3>The Revolution in Physics</h3>
-                <p>Nineteenth-century physics was a majestic achievement of the human mind. To many who were working in science this achievement seems to be moving towards a certain completion of the picture of the operation of natural forces on the secure basis of the mechanics of Galileo and Newton. However, this picture was shattered at the very outset of the XXth century and was to be replaced by another one. The revolution in physics broke out unexpectedly. In November 1895 the general direction of world research was sharply changed by an accidental and altogether unforeseen discovery.</p>
-                <p>Konrad fon Rontgen (1845-1923), then the professor of physics had bought a new cathode-ray discharge tube with the object of studying its inner mechanism. Within a week he had found that something was happening outside the tube: something was escaping that had properties never before imagined in Nature. That something made fluorescent screen shine in the dark and could fog photographic plates through black paper. These astonishing photographs showed coins in purses and bones in the hand. He didn't know what that something was, so he called it "X-rays". This scientific discovery was a top press news all over the world. It was the subject of innumerable music-hall jokes and within a few weeks almost every physicist of repute was repeating the experiment for himself and demonstrating it to admirable audience.</p>
-                <p>The immediate value of X-rays was great, particularly to medicine, however, their importance was much greater to the whole of physics and natural knowledge, for the discovery of X-rays provided the key not only to one, but to many branches of physics. This discovery was followed by a number of unexpected discoveries like that of radioactivity in 1896, of the structure of crystals in 1912, of the neutron in 1932, of nuclear fission in 1938, and of mesons between 1936 and 1947. This revolutionary development includes great theoretical achievements of synthesis like Plank's quantum theory in 1900, Einstein's special relativity theory in 1905 and his general theory in 1916, the Rutherford-Bohr atom in 1913 and the new quantum theory in 1925.</p>
-                <p>The period from 1895 to 1916 might be called the first phase of the revolution in physics, the so-called heroic, or in a different aspect, the amateur stage of modern physics. In it new worlds were being explored, new ideas created, mainly with the technical and intellectual means of the old XIXth century science. It was still a period primarily of individual achievement: of the Curies and Rutherford, of Plank and Einstein, of the Braggs and Bohr. Physical science, particularly physics itself, still belonged to the university laboratory, it had few links with industry, apparatuses were cheap and simple, it was still in the "sealing-wax-and-string" stage.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится извлекать факты из текста об открытии рентгеновского излучения и последующих изменениях в физике, описывать научное открытие и объяснять связь между наблюдением, экспериментом и практическим применением.</p>
+<h3>1. Reading: An Unexpected Discovery</h3>
+<p>In 1895, the German physicist Wilhelm Conrad Röntgen was studying electrical discharge in a vacuum tube. He noticed that a fluorescent screen nearby began to glow even though it was not directly exposed to visible light from the tube. Further experiments showed that an unknown type of radiation could pass through some materials and produce images on photographic plates. Röntgen called it X-radiation because its nature was not yet known.</p>
+<p>X-rays soon became important in medicine because they made it possible to examine the inside of the human body without surgery. They also became a subject of scientific research. The discovery encouraged further investigations into atomic structure and radiation. In 1896, Henri Becquerel discovered natural radioactivity, and Marie and Pierre Curie later made major contributions to the study of radioactive substances.</p>
+<p>The development of physics in the twentieth century involved both experimental discoveries and new theories. Scientists studied atoms, nuclei, elementary particles and the structure of matter. New instruments and international research teams made it possible to investigate phenomena that earlier generations could not observe directly. Scientific progress often develops through a combination of unexpected observations, careful experiments, discussion and improved models.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>vacuum tube</td><td>вакуумная трубка</td><td>Röntgen studied a vacuum tube.</td></tr>
+<tr><td>fluorescent screen</td><td>флуоресцентный экран</td><td>The screen began to glow.</td></tr>
+<tr><td>radiation</td><td>излучение</td><td>X-radiation can pass through some materials.</td></tr>
+<tr><td>photographic plate</td><td>фотопластинка</td><td>The image was recorded on a photographic plate.</td></tr>
+<tr><td>radioactivity</td><td>радиоактивность</td><td>Becquerel discovered natural radioactivity.</td></tr>
+<tr><td>evidence</td><td>свидетельство, данные</td><td>Further experiments provided evidence.</td></tr>
+<tr><td>to investigate</td><td>исследовать</td><td>Scientists investigated the new radiation.</td></tr>
+<tr><td>application</td><td>применение</td><td>X-rays have medical applications.</td></tr>
+</table>
+<h3>3. Language focus: describing discoveries</h3>
+<p>Для описания открытия используйте Past Simple: <i>noticed, observed, tested, discovered, named, developed</i>. Для результата эксперимента: <i>The screen began to glow. The image was recorded on a plate.</i> Пассивный залог удобен, когда важен результат, а не исполнитель: <i>The radiation was detected.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What was Röntgen studying in 1895?</li><li>What did he notice near the tube?</li><li>Why did he use the name X-radiation?</li><li>Why were X-rays important in medicine?</li><li>Who discovered natural radioactivity in 1896?</li><li>What factors contribute to scientific progress?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите правильный глагол:</b> Röntgen (noticed / notices) a glowing screen in 1895. The new radiation (was called / called) X-radiation. Further experiments (provided / provide) evidence.</p>
+<p><b>Задание B. Расположите этапы:</b> unexpected observation; further experiment; explanation or name; practical application.</p>
+<p><b>Задание C. Обсуждение:</b> почему неожиданное наблюдение ещё не является готовым научным объяснением? Используйте evidence, experiment, result, theory.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>An electrical discharge in a vacuum tube.</li><li>A fluorescent screen nearby began to glow.</li><li>Because its nature was unknown at the time.</li><li>They made it possible to examine the inside of the body without surgery.</li><li>Henri Becquerel.</li><li>Observation, experiments, discussion, instruments and improved models.</li><li>noticed; was called; provided.</li><li>Observation → further experiment → explanation/name → application (the real history may be iterative).</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте короткую презентацию на 1–2 минуты об одном научном открытии. Укажите исходную проблему, наблюдение, проверку и практическое применение.</p>
+`),
               lec("6.3", "Automation", `
-                <h3>Automation</h3>
-                <p>We now use the term automation for specific techniques combined to operate automatically in a complete system. These techniques are possible because of electronic devices, most of which have come into use in the last thirty years. They include program, action, sensing or feedback, decision, and control elements as components of a complete system.</p>
-                <p>The program elements determine what the system does and the step-by-step manner in which it works to produce the desired result. A program is step-by-step sequence that breaks a task into its individual parts. Some steps in an industrial automation program direct other parts of the system when and how to carry out their jobs. The action elements are those which do the actual work. They may carry or convey materials to specific places at specific times or they may perform operations on the materials. The term mechanical handling device is also used for the action elements.</p>
-                <p>Perhaps the most important part of an automated system is sensing or feedback. Sensing devices automatically check on parts of the manufacturing process such as the thickness of a sheet of steel or paper. This is called feedback because the instruments return or feed back this information to the central system control.</p>
-                <p>The decision element is used to compare what is going on in the system with what should be going on, it receives information from the sensing devices and makes decisions necessary to maintain the system correctly. If some action is necessary the decision element can give instructions or commands to the system.</p>
-                <p>The control element consists of devices to carry out the commands of the decision element. There may be many kinds of devices: valves that open or close, switches that control the flow of electricity, or regulators that change the voltage in various machines; they make the necessary corrections or adjustments to keep the system in conformity with its program.</p>
-                <p>An industrial engineer working with automated system is part of a team. Many components of the system, such as the computers, are electronic devices so electronic engineers and technicians are also involved. Many of the industries in which automation has proved particularly suitable - chemicals, papermaking, metal processing - involve chemical processes, so there may be chemical engineers at work too. An industrial engineer with expertise in all these fields may become a systems engineer for automation projects thereby coordinating the activities of all the members of the team.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится описывать простую автоматизированную систему, различать датчик, контроллер и исполнительное устройство, объяснять роль обратной связи и использовать пассивный залог и лексику последовательности.</p>
+<h3>1. Reading: Elements of an Automated System</h3>
+<p>Automation combines machines, control equipment and software to perform tasks with limited continuous human intervention. In manufacturing, automation can support material handling, measurement, assembly, packaging and process monitoring. The design of a system depends on the task, required accuracy, safety requirements and operating environment.</p>
+<p>A simplified automated system has several functional elements. The programme or control logic defines the intended sequence. Sensors measure process variables such as position, temperature or pressure. A controller receives information and compares it with a target or a set of conditions. Output devices and actuators carry out commands, for example by moving a mechanism or changing a valve position. Feedback provides information about the result and may help the controller adjust the process.</p>
+<p>Automation can improve consistency and reduce exposure to repetitive or hazardous tasks. However, it does not remove the need for people. Engineers and technicians plan, test and maintain systems; operators monitor the process and follow approved procedures; specialists investigate unusual results. Automated equipment must be used only by trained and authorised personnel.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>control logic</td><td>логика управления</td><td>Control logic defines the sequence.</td></tr>
+<tr><td>process variable</td><td>технологический параметр</td><td>Temperature is a process variable.</td></tr>
+<tr><td>setpoint</td><td>заданное значение</td><td>The controller compares the value with the setpoint.</td></tr>
+<tr><td>actuator</td><td>исполнительный механизм</td><td>An actuator carries out a command.</td></tr>
+<tr><td>feedback</td><td>обратная связь</td><td>Feedback reports the result.</td></tr>
+<tr><td>consistency</td><td>стабильность, согласованность результата</td><td>Automation can improve consistency.</td></tr>
+<tr><td>authorised personnel</td><td>уполномоченный персонал</td><td>Only authorised personnel operate the equipment.</td></tr>
+</table>
+<h3>3. Language focus: passive voice and sequence</h3>
+<p>Для описания процесса используйте <i>first, then, after that, finally</i>. Пассивный залог помогает сосредоточиться на операции: <i>The value is measured by a sensor. The signal is sent to the controller. The command is carried out by an actuator.</i></p>
+<p>Сравните <i>The sensor measures the temperature</i> и <i>The temperature is measured by the sensor</i>. В первом случае важен датчик, во втором — измеряемая величина.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What does automation combine?</li><li>Name three process variables.</li><li>What does the controller compare?</li><li>What is the function of an actuator?</li><li>How can feedback be used?</li><li>Why do automated systems still require trained people?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите:</b> sensor — measures a variable; controller — compares data and issues commands; actuator — carries out a command; programme — defines the sequence.</p>
+<p><b>Задание B. Поставьте в порядок:</b> sensor measures a variable; controller compares it with a setpoint; command is sent; actuator carries out the command; feedback is received.</p>
+<p><b>Задание C. Преобразуйте в пассивный залог:</b> 1) A sensor measures the temperature. 2) The controller sends a signal. 3) An actuator carries out the command.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Machines, control equipment and software.</li><li>Position, temperature, pressure (other valid examples accepted).</li><li>The measured information with a target or required condition.</li><li>It carries out a command or produces a physical action.</li><li>It provides information about the result and may support adjustment.</li><li>People plan, monitor, test, maintain and respond to unusual conditions.</li><li>Порядок: sensor → controller → command → actuator → feedback.</li><li>The temperature is measured by a sensor. A signal is sent by the controller. The command is carried out by an actuator.</li></ol>
+<p><b>Самостоятельная работа:</b> нарисуйте блок-схему простой учебной системы и подпишите на английском programme, sensor, controller, actuator, feedback. Напишите 6–8 предложений, описывающих её работу. Не добавляйте параметры настройки реального оборудования.</p>
+`),
               lec("6.4", "Environmental Pollution", `
-                <h3>Environmental Pollution</h3>
-                <p>Once came into being from inorganic environment, the living matter has deeply altered the lifeless Earth, step by step changing the composition of the atmosphere, the sea, and the upper layers of the solid crust both on land and under the ocean. Since then, were one to find out a single object to evolution it would be the perpetuation of life. Though there are more than 100 chemical elements in the Periodic Table, only four prove to be essential for the biosphere; they are hydrogen, carbon, nitrogen and oxygen. Ecologists define the biosphere to be the part of the world where life can exist and the point of interaction of these four elements. While the elements mentioned above go wonderfully with much of the chemistry life, the definition turns out to be a little too limited, ignoring as it does, the role of sulphur and phosphorus.</p>
-                <p>Consequently, it is a fact that most of the problems of the environmental disturbance arise from the extraordinary reactivity of these six elements, with the first four actually building protein molecule, sulphur being the fastening in protein, and phosphorus supplying high-energy bond which is known to be universal fuel for biochemical work within the cells.</p>
-                <p>If the biosphere continues in running order biologically important materials must undergo cyclic changes so that after utilization they are put back at the expense of some solar energy into a form in which they can be reused. So far nature itself saw to the whole arrangement go on smoothly and all the cycles be governed by complex mechanisms that were fitted together and held the whole in balance. Yet during the few last decades the man's intervention into the natural cycling of the living matter has been going on an unprecedented scale and at an unprecedented rate. Never before has nature been treated in such a drastic and often irreversible way, with both immediate consequences and ultimate incineration, not even vaguely foreseeable. For too little do we know for certain about the way nature has been self-regulating for millions of years since life began and too many variables are involved, to be able to foresee the final aftermath of our rapid technological development on the biosphere as the home of life.</p>
-                <p>Thus, what is now recognized as a threat to our environment is caused first of all by disturbances either in natural cycles of the six essentials, or in the energy cycle of the biosphere, energy being the driving force of all life processes.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать основные термины, связанные с биосферой, загрязнением и природными циклами, извлекать главную информацию из научно-популярного текста и описывать экологическую проблему с помощью причинно-следственных связей.</p>
+<h3>1. Reading: The Biosphere and Human Impact</h3>
+<p>The biosphere is the part of the Earth where life exists. It includes living organisms and the environments in which they interact: the lower atmosphere, water and parts of the land. Life depends on the movement of matter and the flow of energy. Water, carbon, nitrogen and other elements move through natural cycles between organisms, soil, water and the atmosphere.</p>
+<p>Human activities can change these cycles. Burning fossil fuels adds carbon dioxide and other substances to the atmosphere. Agriculture can affect soil and water through fertilisers, pesticides and land-use changes. Industrial processes and transport may release pollutants if emissions are not properly controlled. Excessive waste and habitat destruction can also put pressure on ecosystems.</p>
+<p>Environmental systems are complex. The effect of a pollutant depends on its chemical properties, amount, location, exposure and the sensitivity of organisms. Scientists use measurements and long-term monitoring to understand changes. Environmental protection may include reducing emissions, treating wastewater, using resources efficiently, restoring habitats and improving waste management.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>biosphere</td><td>биосфера</td><td>The biosphere includes all regions where life exists.</td></tr>
+<tr><td>natural cycle</td><td>природный цикл</td><td>Carbon moves through a natural cycle.</td></tr>
+<tr><td>fossil fuel</td><td>ископаемое топливо</td><td>Oil and coal are fossil fuels.</td></tr>
+<tr><td>greenhouse gas</td><td>парниковый газ</td><td>Carbon dioxide is a greenhouse gas.</td></tr>
+<tr><td>habitat</td><td>среда обитания</td><td>Pollution can damage a habitat.</td></tr>
+<tr><td>exposure</td><td>воздействие, контакт</td><td>Exposure depends on dose and duration.</td></tr>
+<tr><td>monitoring</td><td>мониторинг</td><td>Long-term monitoring shows changes.</td></tr>
+<tr><td>wastewater treatment</td><td>очистка сточных вод</td><td>Wastewater treatment helps protect rivers.</td></tr>
+</table>
+<h3>3. Language focus: cause and consequence</h3>
+<p>Причина: <i>because, due to, as a result of</i>. Следствие: <i>therefore, consequently, this may lead to</i>. Важно различать установленную причинную связь и предположение: используйте <i>may, can, is associated with</i>, если данных недостаточно для категоричного вывода.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What is the biosphere?</li><li>Name three parts of the Earth included in the biosphere.</li><li>How can burning fossil fuels affect the atmosphere?</li><li>Name two ways agriculture can affect the environment.</li><li>Why does the effect of a pollutant depend on several factors?</li><li>Name three environmental protection measures.</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите термин и определение:</b> biosphere; habitat; exposure; monitoring; wastewater treatment.</p>
+<p><b>Задание B. Завершите причинно-следственные предложения:</b> 1) If wastewater is not treated, … 2) If more materials are reused, … 3) Excessive emissions may lead to …</p>
+<p><b>Задание C. Прочитайте высказывания и отметьте, где нужна осторожная формулировка:</b> “This activity always destroys every ecosystem.” / “This activity may affect local water quality, depending on the substances and their concentration.” Объясните выбор.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>The part of Earth where life exists and interacts with its environment.</li><li>Lower atmosphere, water and parts of land/soil.</li><li>It adds carbon dioxide and other substances to the atmosphere.</li><li>Fertilisers, pesticides and land-use changes can affect soil and water.</li><li>Because chemical properties, amount, location, exposure and organism sensitivity differ.</li><li>Reduce emissions, treat wastewater, use resources efficiently, restore habitats, improve waste management.</li><li>Задание C: второе утверждение научно осторожнее и учитывает условия.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о воздействии одного вида деятельности на окружающую среду. Разделите причины, возможные последствия и меры снижения воздействия. Статистику используйте только с указанием проверенного источника.</p>
+`)
             ],
             [],
             [],
