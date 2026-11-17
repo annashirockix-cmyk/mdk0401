@@ -148,8 +148,8 @@ Key words: *part number, revision, operation, inspection point, record, discrepa
 
 What is the instructor explaining?
 
-C) How to read a simplified process sheet.  
-A) How to book a flight.  
+A) How to read a simplified process sheet.  
+C) How to book a flight.  
 B) How to prepare a meal.
 
 **Second listening — details**
@@ -163,13 +163,13 @@ B) How to prepare a meal.
    A) private information about staff  
    B) a holiday schedule
 3. What should happen if a discrepancy is found?
-   A) report it to the responsible person  
-   B) choose a value independently  
+   B) report it to the responsible person  
+   A) choose a value independently  
    C) hide the record
 4. Why are records kept?
-   B) to support traceability  
+   C) to support traceability  
    A) to replace all technical requirements  
-   C) to avoid communication
+   B) to avoid communication
 
 **Recording script — reveal after listening**
 
@@ -222,7 +222,7 @@ Use the same fictional process-sheet extract provided by the teacher.
 4. Practice 1: 1 d; 2 c; 3 a; 4 e; 5 b.
 5. Practice 2: b → c → d → a (a simplified classroom order; actual sequence is document-specific).
 6. Practice 3: 1 revision; 2 workpiece; 3 non-conformity; 4 traceability.
-7. Listening: gist C; details 1 B, 2 C, 3 A, 4 B.
+7. Listening: gist A; details 1 B, 2 C, 3 B, 4 C.
 
 **Writing task:** write 100–120 words explaining why a process sheet must be clear and current.
 
@@ -361,20 +361,20 @@ C) A shopping list.
 **Second listening — details**
 
 1. What is the nominal length in the example?
-   B) 50.0 mm  
+   C) 50.0 mm  
    A) 5.0 kg  
-   C) 500 °C
+   B) 500 °C
 2. What value was recorded for item A?
-   C) 50.1 mm  
+   B) 50.1 mm  
    A) 20.0 mm  
-   B) 1.6 kg
+   C) 1.6 kg
 3. What does the instructor ask the student to check?
-   A) the applicable specification and tolerance  
+   C) the applicable specification and tolerance  
    B) the weather  
-   C) the colour of the instrument
+   A) the colour of the instrument
 4. Does the instructor accept or reject the item from the table alone?
-   B) No; more controlled information is needed.  
-   A) Yes; every difference is automatically acceptable.  
+   A) No; more controlled information is needed.  
+   B) Yes; every difference is automatically acceptable.  
    C) Yes; every difference is automatically unacceptable.
 
 **Recording script**
@@ -418,7 +418,7 @@ Students take turns reporting one row from the training table. The listener chec
 3. Why must a value include its unit?
 4. Practice 1: 1 mm; 2 kg; 3 diameter; 4 tolerance; 5 measured value.
 5. Practice 2: 1 nominal 50.0 mm, recorded 50.1 mm; 2 nominal 3.0 mm, recorded 2.9 mm; 3 A, B and C use mm (three rows); 4 the specification/tolerance is needed to interpret whether the recorded value meets the requirement.
-6. Listening: gist B; details 1 B, 2 C, 3 A, 4 B.
+6. Listening: gist B; details 1 C, 2 B, 3 C, 4 A.
 
 **Writing rubric (8):** correct item identification 2; values and units 2; distinction between nominal and measured 1; tolerance awareness 1; clarity 1; grammar 1.
 
@@ -775,28 +775,28 @@ Key words: *title block, revision, units, row, column, note, missing information
 
 What is the student learning to do?
 
-B) Read a simplified technical table carefully.  
-A) Make an online payment.  
+A) Read a simplified technical table carefully.  
+B) Make an online payment.  
 C) Prepare a sports report.
 
 **Second listening — details**
 
 1. What should the student check before reading values?
-   B) document number and revision  
+   C) document number and revision  
    A) the paper colour  
-   C) the author's favourite subject
+   B) the author's favourite subject
 2. What should be checked next?
-   C) the unit heading  
-   A) an unrelated paragraph  
+   A) the unit heading  
+   C) an unrelated paragraph  
    B) the page decoration
 3. What is missing from the training table?
-   A) material grades and tolerances  
-   B) item descriptions  
+   B) material grades and tolerances  
+   A) item descriptions  
    C) all quantities
 4. What should the student do about missing information?
-   B) ask for clarification  
+   C) ask for clarification  
    A) invent a value  
-   C) ignore the notes
+   B) ignore the notes
 
 **Recording script**
 
@@ -847,7 +847,7 @@ For each role, state one question to ask if information is missing.
 4. Reading: EDU-TR-014; A; mm; P-02; 4; no; no; because material grades, tolerances and detailed instructions are missing.
 5. Practice 1: 1 A; 2 A; 3 A; 4 A.
 6. Practice 2: 1 Support plate; 2 60 × 30 × 2; 3 2; 4 material grade, tolerance, referenced drawing and other approved process data as applicable; 5 answers vary, e.g. “Could you provide the applicable material grade and drawing revision?”
-7. Listening: gist B; details 1 B, 2 C, 3 A, 4 B.
+7. Listening: gist A; details 1 C, 2 A, 3 B, 4 C.
 
 **Integrated writing (100–120 words):** explain how to read a technical table without misinterpreting its values.
 
