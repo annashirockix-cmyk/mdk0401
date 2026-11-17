@@ -121,3 +121,8 @@
 - This closes the focused reading-key pass for V01–V04; it does not constitute a full expert review of every task or a CEFR/programme approval.
 
 - The first CI run after correcting the semantic keys (#2972 on the intermediate HEAD) correctly failed the per-variant answer-position balance check because the initial correction changed key indices without moving the options. The final correction reorders the options while keeping the valid answer at index D; read-back now confirms [2, 2, 2, 2] across the keyed single- and multiple-choice answers for each of the three variants, with source/registry parity. A CI run on the final corrected HEAD is still required.
+
+### Multiple-choice ambiguity screen in V01–V04 (2026-11-17)
+- Screened the two-key multiple-choice tasks in all 40 V01–V04 variants. The two keyed answers were contextually appropriate across the reviewed set.
+- Clarified two distractor sets: C5-S2 V01 no longer treats completed, signed-off work as a clearly wrong handover entry; C1-S2 V04 now uses a complete, context-specific polite question rather than the incomplete “Could you tell me, please?”.
+- The two correct indices remain [2, 3]. Individual source JSON and combined registry were synchronized, and a targeted regression test now checks both sets.
