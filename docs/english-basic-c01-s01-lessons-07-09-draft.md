@@ -176,7 +176,7 @@ e) выходить из дома
 - 9 May — the ninth of May;
 - 21 October — the twenty-first of October.
 
-В письменной форме формат даты зависит от страны и документа. Если возможна неоднозначность, месяц лучше писать словом.
+Годы обычно читают как числа: 1998 — nineteen ninety-eight; 2005 — two thousand and five (в британском варианте также возможно two thousand five); 2026 — twenty twenty-six в контексте года или two thousand and twenty-six как полное число. В письменной форме формат даты зависит от страны и документа. Если возможна неоднозначность, месяц лучше писать словом.
 
 ### 4. Личные данные и анкета
 
@@ -219,7 +219,7 @@ Languages: Russian, English
 **A. Напишите числа словами.**
 
 1. 14
-2.  twenty-three
+2. 23
 3. 40
 4. 58
 5. 100
@@ -252,7 +252,7 @@ Languages: Russian, English
 5. Запишите 9 May в британском формате словами.
 6. Почему в учебном задании лучше использовать вымышленные контактные данные?
 
-**Ключ преподавателя:** 1) fifteen. 2) third. 3) twenty-two. 4) дата рождения. 5) the ninth of May. 6) Для защиты персональных данных.
+**Ключ преподавателя:** задание A: fourteen; twenty-three; forty; fifty-eight; one hundred; twenty twenty-six (год) / two thousand and twenty-six (полное число). Задание B: first, second, third, fifth, eighth, twelfth, twenty-first. Задание C: the fifth of May / May fifth; the first of September / September first; the twenty-first of October / October twenty-first. Самопроверка: 1) fifteen. 2) third. 3) twenty-two. 4) дата рождения. 5) the ninth of May. 6) Для защиты персональных данных.
 
 Задание B: first, second, third, fifth, eighth, twelfth, twenty-first.
 
@@ -343,7 +343,7 @@ Languages: Russian, English
 
 **Задание B. Найдите проблему в заполнении:**
 
-Форма требует дату в формате DD/MM/YYYY. Студент написал 2026/05/04. Что нужно уточнить или исправить?
+Форма требует дату в формате DD/MM/YYYY. Студент ввёл 2026/05/04 (порядок год/месяц/день). Перепишите дату в требуемом формате: 04/05/2026. Объясните, почему исходная запись не соответствует инструкции.
 
 **Задание C. Составьте диалог из 8 реплик:** студент не понимает формат даты и спрашивает, является ли поле обязательным. Сотрудник объясняет инструкцию.
 
