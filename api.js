@@ -94,6 +94,7 @@ window.API = {
  restoreQuestionBanks:function(backupId){return fetchAPI("restoreQuestionBanks",{backupId:backupId},"POST",120000);},
  importQuestionBanks:function(banks){return fetchAPI("importQuestionBanks",{banks:banks},"POST",120000);},
  getQuestionBank:function(courseId,bankId){return fetchAPI("getQuestionBank",{courseId:courseId,bankId:bankId||""},"GET");},
+ saveQuestionBank:function(courseId,bankId,questions){return fetchAPI("saveQuestionBank",{courseId:courseId,bankId:bankId,questions:questions||[]},"POST",120000);},
  getQuestionBankStats:function(){return fetchAPI("getQuestionBankStats",{},"GET",60000);},
  getEnglishVprExam:function(track){return fetchAPI("getEnglishVprExam",{track:track},"GET");},
  startEnglishVprExam:function(track){return fetchAPI("startEnglishVprExam",{track:track},"POST");},
