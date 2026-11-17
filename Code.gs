@@ -2400,6 +2400,18 @@ function getCustomTest_(data) {
   if (prior >= 1 + Math.max(0, extra)) throw new Error("Попытки закончились. Обратитесь к преподавателю за дополнительной попыткой.");
   const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   if (!questions.length) throw new Error("В тесте пока нет вопросов.");
+  questions.forEach(function(question, index) {
+    const type = String(question && (question.type || question.kind) || "single").toLowerCase();
+    if (type === "multi" || type === "multiple" || type === "multiple_choice") {
+      const options = Array.isArray(question.options) ? question.options : [];
+      const key = Array.isArray(question.correctAnswers) ? question.correctAnswers : [];
+      if (options.length < 2 || key.length < 2 || key.some(function(value) {
+        return !Number.isInteger(Number(value)) || Number(value) < 0 || Number(value) >= options.length;
+      }) || new Set(key.map(Number)).size !== key.length) {
+        throw new Error("В вопросе " + (index + 1) + " неверно задан ключ множественного выбора. Укажите минимум два разных правильных варианта.");
+      }
+    }
+  });
   const displayQuestions = hydrateTestQuestionImages_(questions);
   const optionMaps = {}, safeQuestions = displayQuestions.map(function(question, index) {
     const safe = sanitizeAssessmentQuestionForStudent_(question || {});
