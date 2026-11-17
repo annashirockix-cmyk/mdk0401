@@ -1723,8 +1723,8 @@
                 "prompt": "Reading 1. Read the text. A group of students is designing a small bridge for a college project. They agree on three tasks and write each task next to a student's name. During the first meeting, they discover that two measurements are missing. Instead of guessing, they check the drawing and ask their teacher for advice. They update the project plan and set a new time to review the design. How does the group organise its work?",
                 "options": [
                   "They wait for the teacher to do it",
-                  "They assign tasks to named students",
                   "Everyone does the same task",
+                  "They assign tasks to named students",
                   "They work without a plan"
                 ],
                 "correctIndex": 2,
@@ -1737,8 +1737,8 @@
                 "options": [
                   "They estimate them",
                   "They leave them out",
-                  "They check the drawing and ask for advice",
-                  "They cancel the project"
+                  "They cancel the project",
+                  "They check the drawing and ask for advice"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -6300,8 +6300,8 @@
                 "options": [
                   "He studied later every night",
                   "He stopped attending morning lessons",
-                  "He planned his week, took breaks and prepared materials in advance",
-                  "He stopped taking breaks during study sessions."
+                  "He stopped taking breaks during study sessions.",
+                  "He planned his week, took breaks and prepared materials in advance"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -8570,8 +8570,8 @@
                 "prompt": "A neighbourhood group proposed planting more trees along a busy walking route. The trees could provide shade and help make the area more comfortable during hot weather. However, the group also needed to consider underground services and the space required for roots. After consulting residents and technical staff, the council selected several suitable locations and agreed to monitor the trees after planting. Reading 1. What benefit could the trees provide?",
                 "options": [
                   "They could reduce traffic noise",
-                  "They could provide shade and make the route more comfortable",
                   "They could reduce the distance people need to walk",
+                  "They could provide shade and make the route more comfortable",
                   "They could make the road wider"
                 ],
                 "correctIndex": 2,
@@ -8583,9 +8583,9 @@
                 "prompt": "Why did the group consult technical staff?",
                 "options": [
                   "To estimate the cost of new street signs",
-                  "To check underground services and the space needed for roots",
+                  "To choose the type of pavement for the route",
                   "To choose the colour of the benches",
-                  "To choose the type of pavement for the route"
+                  "To check underground services and the space needed for roots"
                 ],
                 "correctIndex": 3,
                 "points": 1
