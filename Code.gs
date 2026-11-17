@@ -1997,7 +1997,7 @@ function saveQuestionBank_(data) {
     if(!String(question.q||question.question||"").trim())throw new Error("У задания №"+(index+1)+" нет формулировки.");
     const type=String(question.type||"mc").toLowerCase();
     const hasAny=function(keys){return keys.some(function(key){return question[key]!==undefined&&question[key]!==null;});};
-    if(["mc","single","single_select","choice","multi","multiple","multiple_choice","num","numeric","number","order","ordering","match","matching","tf","true_false"].indexOf(type)<0)throw new Error("Неподдерживаемый тип задания №"+(index+1)+": "+type);
+    if(["mc","single","single_select","choice","multi","multiple","multiple_choice","num","numeric","number","order","ordering","match","matching","tf","true_false","text","short_text"].indexOf(type)<0)throw new Error("Неподдерживаемый тип задания №"+(index+1)+": "+type);
     if(["mc","single","single_select","choice"].indexOf(type)>=0){
       if(!Array.isArray(question.options)||question.options.length<2||!hasAny(["correct","correctAnswer","answer"]))throw new Error("В задании №"+(index+1)+" нужны варианты и правильный ответ.");
     }
@@ -2017,6 +2017,7 @@ function saveQuestionBank_(data) {
       }
     }
     if(["tf","true_false"].indexOf(type)>=0&&!hasAny(["correct","correctAnswer","answer"]))throw new Error("В задании «Верно/неверно» №"+(index+1)+" не указан правильный ответ.");
+    if(["text","short_text"].indexOf(type)>=0&&!hasAny(["correct","correctAnswer","answer"]))throw new Error("В текстовом задании №"+(index+1)+" не указан эталонный ответ.");
     const serialized=JSON.stringify(question);
     if(!serialized||serialized.length>30000)throw new Error("Задание №"+(index+1)+" пустое или слишком большое.");
     seen[questionId]=true;
