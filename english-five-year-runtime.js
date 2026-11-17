@@ -80,7 +80,8 @@
   if(!topic){topic={id:topicId,code:"C"+row.course+" · S"+row.semester,title:"Course "+row.course+" · Semester "+row.semester+" — "+(row.track==="basic"?"Basic English":"Technical English"),sourceTrack:row.track,lectures:[],practicals:[],selfWork:[],test:[]};section.topics.push(topic);}
   var code="C"+row.course+"."+row.semester+"."+String(row.number).padStart(2,"0");
   if(!topic.lectures.some(function(x){return x.listeningId===row.id;})){
-   var split=splitTeacherMaterial(row.markdown);\n   topic.lectures.push({code:code,title:row.title,content:markdownToHtml(split.student),teacherContent:markdownToHtml(split.teacher),listeningId:row.id,courseNumber:row.course,semesterNumber:row.semester,lessonNumber:row.number});
+   var split=splitTeacherMaterial(row.markdown);
+   topic.lectures.push({code:code,title:row.title,content:markdownToHtml(split.student),teacherContent:markdownToHtml(split.teacher),listeningId:row.id,courseNumber:row.course,semesterNumber:row.semester,lessonNumber:row.number});
   }
  });
  console.info("[English 5Y] Added 46 Basic/Technical draft lessons across courses 1–3.");
