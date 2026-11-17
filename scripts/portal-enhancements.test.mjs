@@ -958,7 +958,10 @@ test("admin role is recognized and tutoring controls live on the home screen, no
   assert.match(ui, /tutoringHomeCard/);
   assert.match(ui, /window\.API\.getTutoringLink/);
   assert.match(ui, /window\.API\.saveTutoringLink/);
-  assert.match(ui, /Показывать мою ссылку студентам/);
+  assert.match(ui, /Кому показывать ссылку/);
+  assert.match(ui, /Только выбранной группе/);
+  assert.match(ui, /Только одному студенту/);
+  assert.match(ui, /audienceType:String\(data\.get\("audienceType"\)\|\|"all"\)/);
 });
 
 
@@ -1845,6 +1848,10 @@ test("personal tutoring links are isolated per teacher and shown only to student
   assert.match(block, /role!=="student"/);
   assert.match(block, /role!=="teacher"\|\|!teacherEmail/);
   assert.match(block, /if\(!link\.visible\|\|!link\.url\)continue/);
+  assert.match(block, /audienceType==="group"/);
+  assert.match(block, /audienceType==="individual"/);
+  assert.match(block, /toLocaleLowerCase\("ru"\)/);
+  assert.match(block, /Студент с этой почтой не найден/);
   assert.match(block, /legacy\.updatedBy===teacherEmail/);
   assert.match(block, /UpdatedBy\]\)===email_\(teacherEmail\)/);
   assert.match(block, /writeSetting_\(tutoringSettingKey_\(teacher\.email\)/);
