@@ -118,11 +118,11 @@
 - C. “We see numbers and it was okay maybe.”
 - D. “The limits checked the readings yesterday by them.”
 
-**80.** An aviation maintenance record must be traceable. Which information most directly supports traceability?
-- A. A dated entry identifying the task, equipment and responsible person
-- B. An informal comment without a date
-- C. A photograph with no equipment reference
-- D. A verbal message that is not recorded
+**80.** Which detail most directly shows who made an entry in a controlled maintenance record?
+- A. The author's name or unique identifier and the date/time of the entry
+- B. The aircraft paint colour
+- C. The passenger count
+- D. The weather at the destination
 
 ## Teacher key and rationale
 
