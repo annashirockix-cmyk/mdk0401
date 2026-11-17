@@ -1832,3 +1832,19 @@ test("student assignment results query only matching submissions and history IDs
   assert.equal(records[1].payload,"Ответ 2");
   assert.equal(JSON.stringify(calls),JSON.stringify([[2,3,3,1],[2,1,1,12],[4,1,1,12],[2,3,3,1]]));
 });
+
+
+test("portal navigation provides accessible search, active route and keyboard shortcuts", () => {
+  const html=read("index.html"), app=read("app.js"), css=read("style.css");
+  assert.match(html, /id="drawerSearch"/);
+  assert.match(html, /aria-controls="drawerNavResultsList"/);
+  assert.match(html, /id="drawerSearchResults"/);
+  assert.match(html, /class="skip-link" href="#app"/);
+  assert.match(app, /window\.updatePortalNavigation/);
+  assert.match(app, /toLocaleLowerCase\("ru"\)/);
+  assert.match(app, /event\.key === "\/"/);
+  assert.match(app, /event\.key === "Escape"/);
+  assert.match(app, /aria-current/, "current route must be announced to assistive technology");
+  assert.match(css, /\.drawer-item\.is-current/);
+  assert.match(css, /\.skip-link:focus/);
+});
