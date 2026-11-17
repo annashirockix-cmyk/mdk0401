@@ -24,60 +24,138 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit1", "Unit 1", "About Myself",
             [
               lec("1.1", "Phonetics and Pronunciation", `
-                <h3>1. Основные сведения об английской фонетике</h3>
-                <p>В современном английском языке существует огромное несоответствие между написанием и произношением слов. Это связано с тем, что английская орфография не подвергалась существенным изменениям и отражает произношение, существовавшее несколько веков назад. Например: <i>through</i> [θru:] — 7 букв, 3 звука; <i>thought</i> [θɔ:t] — 7 букв, 3 звука.</p>
-                <p>Количество звуков в языке превышает число букв: 26 букв алфавита должны обозначать 44 звука. Одна и та же буква может читаться по-разному. Гласные подразделяются на долгие и краткие. Долгие произносятся примерно в полтора раза дольше, чем краткие. Английские долгие и краткие — это разные звуки, несоответствие этого правила приводит к искажению смысла слова.</p>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Буква</th><th style="border:1px solid var(--border); padding:5px;">Открытый слог</th><th style="border:1px solid var(--border); padding:5px;">Закрытый слог</th><th style="border:1px solid var(--border); padding:5px;">Гласная + r</th><th style="border:1px solid var(--border); padding:5px;">Гласная + r + гласная</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">A</td><td style="border:1px solid var(--border); padding:5px;">[ei] table</td><td style="border:1px solid var(--border); padding:5px;">[æ] bank</td><td style="border:1px solid var(--border); padding:5px;">[ɑ:] car</td><td style="border:1px solid var(--border); padding:5px;">[εə] care</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">O</td><td style="border:1px solid var(--border); padding:5px;">[əu] no</td><td style="border:1px solid var(--border); padding:5px;">[ɔ] hot</td><td style="border:1px solid var(--border); padding:5px;">[ɔ:] cord</td><td style="border:1px solid var(--border); padding:5px;">[ɔ:] more</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">I</td><td style="border:1px solid var(--border); padding:5px;">[ai] fine</td><td style="border:1px solid var(--border); padding:5px;">[i] list</td><td style="border:1px solid var(--border); padding:5px;">[ə:] circuit</td><td style="border:1px solid var(--border); padding:5px;">[aiə] Irish</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">E</td><td style="border:1px solid var(--border); padding:5px;">[i:] bee</td><td style="border:1px solid var(--border); padding:5px;">[e] get</td><td style="border:1px solid var(--border); padding:5px;">[ə:] terminal</td><td style="border:1px solid var(--border); padding:5px;">[iə] beer</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">U</td><td style="border:1px solid var(--border); padding:5px;">[ju:] mute</td><td style="border:1px solid var(--border); padding:5px;">[ʌ] cut</td><td style="border:1px solid var(--border); padding:5px;">[ə:] turn</td><td style="border:1px solid var(--border); padding:5px;">[juə] pure</td></tr>
-                </table>
-                <p><b>Правила чтения согласных:</b><br>
-                <b>s</b> — [s] в начале слова, перед согласными и после глухих; [z] после гласных и звонких согласных.<br>
-                <b>c</b> — [s] перед e, i, y; [k] в остальных случаях.<br>
-                <b>g</b> — [dʒ] перед e, i, y (кроме give, get); [g] в остальных случаях.<br>
-                <b>th</b> — [ð], [θ]. Звуки часто подменяются русскими [з], [с], [ф], что приводит к изменению смысла.</p>
-                <p>Английские согласные никогда не смягчаются (особенно перед e: let) и на конце слова никогда не оглушаются. Несоблюдение этого правила может привести к искажению смысла слова: <i>back</i> [bæk] — спина, <i>bag</i> [bæg] — сумка.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — освоить базовые особенности английского произношения и научиться пользоваться фонетической транскрипцией. После занятия студент сможет различать несколько важных пар звуков, находить ударный слог и читать знакомые слова по транскрипции.</p>
+<h3>1. Буква и звук — не одно и то же</h3>
+<p>В английском языке 26 букв, но значительно больше отдельных звуков. Одна буква может передавать разные звуки, а один звук может записываться разными буквосочетаниями. Поэтому произношение нельзя надёжно определить только по написанию: используйте словарь с транскрипцией и аудиопримером.</p>
+<p>Фонетическая запись обычно заключается в квадратные скобки [ ] или косые скобки / /. В учебных словарях встречаются оба способа. Ниже используется широкая IPA-транскрипция; произношение может немного различаться в британском и американском вариантах.</p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Слово</th><th>Транскрипция</th><th>Значение</th></tr>
+<tr><td>ship</td><td>/ʃɪp/</td><td>корабль</td></tr>
+<tr><td>sheep</td><td>/ʃiːp/</td><td>овца</td></tr>
+<tr><td>live</td><td>/lɪv/</td><td>жить</td></tr>
+<tr><td>leave</td><td>/liːv/</td><td>уходить, оставлять</td></tr>
+<tr><td>full</td><td>/fʊl/</td><td>полный</td></tr>
+<tr><td>fool</td><td>/fuːl/</td><td>глупец</td></tr>
+</table>
+<p>Долгота гласного обозначается знаком /ː/. Важно не просто тянуть звук, а сохранять правильное качество гласного: /ɪ/ и /iː/ — разные фонемы, и замена одной другой может изменить значение слова.</p>
+<h3>2. Важные гласные и согласные</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Звук</th><th>Пример</th><th>Подсказка</th></tr>
+<tr><td>/ɪ/ — /iː/</td><td>ship — sheep</td><td>Краткий /ɪ/ не превращайте в русский «и»; /iː/ произносится дольше и напряжённее.</td></tr>
+<tr><td>/ʊ/ — /uː/</td><td>full — fool</td><td>Следите и за качеством, и за длительностью.</td></tr>
+<tr><td>/æ/</td><td>cat, bag</td><td>Челюсть открыта шире, чем для русского «э».</td></tr>
+<tr><td>/ʌ/</td><td>cup, bus</td><td>Краткий центральный гласный, не заменяйте его автоматически русским «а».</td></tr>
+<tr><td>/θ/</td><td>think, three</td><td>Кончик языка слегка между зубами; голос не включается.</td></tr>
+<tr><td>/ð/</td><td>this, they</td><td>Положение языка похоже, но голос включён.</td></tr>
+<tr><td>/w/</td><td>we, work</td><td>Губы округлены; не заменяйте звук русским /в/.</td></tr>
+<tr><td>/ŋ/</td><td>sing, working</td><td>Заднеязычный носовой звук; после него не добавляйте отдельный /g/ в sing.</td></tr>
+</table>
+<h3>3. Ударение и ритм</h3>
+<p>В многосложном слове один слог обычно выделяется сильнее: <b>TA</b>ble /ˈteɪ.bəl/, a<b>BOUT</b> /əˈbaʊt/. Знак /ˈ/ передаёт основное ударение. В английской фразе смысловые слова обычно звучат заметнее, а служебные слова часто редуцируются: <i>I can DO it.</i> В нейтральном произношении can может звучать как /kən/, но под ударением — /kæn/.</p>
+<p>Интонация помогает показать тип высказывания и отношение говорящего. Вопросы с вопросительным словом часто имеют нисходящую интонацию: <i>Where do you study?</i> В простом вопросе yes/no часто встречается восходящая интонация: <i>Do you study English?</i> Это общие модели, а не жёсткие правила для каждой ситуации.</p>
+<h3>4. Практика произношения</h3>
+<p><b>Задание A.</b> Прочитайте пары вслух и объясните, какой звук различается: ship/sheep; live/leave; full/fool; thin/then; vest/west.</p>
+<p><b>Задание B.</b> Найдите ударный слог: table, about, engineer, information, laboratory. Сверьте транскрипцию со словарём.</p>
+<p><b>Задание C.</b> Прочитайте фразы, выделяя смысловое слово: I study ENGLISH. / I study English at COLLEGE. / I study English every WEEK.</p>
+<p><b>Задание D.</b> Запишите транскрипцию пяти знакомых слов по словарю и отметьте основной ударный слог.</p>
+<h3>5. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>Сколько букв в английском алфавите? — 26.</li>
+<li>Что обозначает знак /ː/? — Долготу гласного.</li>
+<li>Чем отличаются /θ/ и /ð/? — При /ð/ голосовые связки вибрируют, при /θ/ — нет.</li>
+<li>В каком слове звук /iː/: ship или sheep? — sheep.</li>
+<li>Какой звук в начале слова work? — /w/.</li>
+</ol>
+<p><b>Самостоятельная работа:</b> выберите 8 слов из текущего учебного текста, найдите их транскрипцию и аудиопроизношение в словаре, отметьте ударение и подготовьте чтение вслух. Не записывайте русскими буквами точную транскрипцию: используйте IPA и аудиообразец.</p>
+`),
               lec("1.2", "Grammar: Pronouns, Verbs, Modals", `
-                <h3>1. Personal Pronouns (Личные местоимения)</h3>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Личные (Им.)</th><th style="border:1px solid var(--border); padding:5px;">Объектные</th><th style="border:1px solid var(--border); padding:5px;">Притяжательные (простая)</th><th style="border:1px solid var(--border); padding:5px;">Притяжательные (абсолютная)</th><th style="border:1px solid var(--border); padding:5px;">Возвратные</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">I</td><td style="border:1px solid var(--border); padding:5px;">me</td><td style="border:1px solid var(--border); padding:5px;">my</td><td style="border:1px solid var(--border); padding:5px;">mine</td><td style="border:1px solid var(--border); padding:5px;">myself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">you</td><td style="border:1px solid var(--border); padding:5px;">you</td><td style="border:1px solid var(--border); padding:5px;">your</td><td style="border:1px solid var(--border); padding:5px;">yours</td><td style="border:1px solid var(--border); padding:5px;">yourself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">he</td><td style="border:1px solid var(--border); padding:5px;">him</td><td style="border:1px solid var(--border); padding:5px;">his</td><td style="border:1px solid var(--border); padding:5px;">his</td><td style="border:1px solid var(--border); padding:5px;">himself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">she</td><td style="border:1px solid var(--border); padding:5px;">her</td><td style="border:1px solid var(--border); padding:5px;">her</td><td style="border:1px solid var(--border); padding:5px;">hers</td><td style="border:1px solid var(--border); padding:5px;">herself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">it</td><td style="border:1px solid var(--border); padding:5px;">it</td><td style="border:1px solid var(--border); padding:5px;">its</td><td style="border:1px solid var(--border); padding:5px;">its</td><td style="border:1px solid var(--border); padding:5px;">itself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">we</td><td style="border:1px solid var(--border); padding:5px;">us</td><td style="border:1px solid var(--border); padding:5px;">our</td><td style="border:1px solid var(--border); padding:5px;">ours</td><td style="border:1px solid var(--border); padding:5px;">ourselves</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">they</td><td style="border:1px solid var(--border); padding:5px;">them</td><td style="border:1px solid var(--border); padding:5px;">their</td><td style="border:1px solid var(--border); padding:5px;">theirs</td><td style="border:1px solid var(--border); padding:5px;">themselves</td></tr>
-                </table>
-                <h3>2. Multifunctional verbs</h3>
-                <p><b>To be:</b> (am, is, are, was, were, will be). Смысловой (He is a student), Вспомогательный (He is reading now), Модальный (He is to study).</p>
-                <p><b>To have:</b> (have, has, had). Смысловой (I have a lot of free time), Вспомогательный (I have done my homework), Модальный (I have to work).</p>
-                <p><b>To do:</b> (do, does, did). Смысловой (I do my homework), Вспомогательный (Do you go to school?), Усилительный (I do know this man).</p>
-                <h3>3. Modal Verbs</h3>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Глагол</th><th style="border:1px solid var(--border); padding:5px;">Значение</th><th style="border:1px solid var(--border); padding:5px;">Перевод</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">can</td><td style="border:1px solid var(--border); padding:5px;">физическая возможность, способность</td><td style="border:1px solid var(--border); padding:5px;">могу, умею</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">may</td><td style="border:1px solid var(--border); padding:5px;">разрешение</td><td style="border:1px solid var(--border); padding:5px;">можно</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">must</td><td style="border:1px solid var(--border); padding:5px;">долженствование</td><td style="border:1px solid var(--border); padding:5px;">должен</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">should</td><td style="border:1px solid var(--border); padding:5px;">мягкий совет, рекомендация</td><td style="border:1px solid var(--border); padding:5px;">следует, хорошо бы</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">ought to</td><td style="border:1px solid var(--border); padding:5px;">настойчивый совет</td><td style="border:1px solid var(--border); padding:5px;">обязательно следует</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">need</td><td style="border:1px solid var(--border); padding:5px;">необходимость</td><td style="border:1px solid var(--border); padding:5px;">необходимо</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">to be to</td><td style="border:1px solid var(--border); padding:5px;">долженствование по плану</td><td style="border:1px solid var(--border); padding:5px;">должен, запланировано</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">to have to</td><td style="border:1px solid var(--border); padding:5px;">долженствование как вынужденная необходимость</td><td style="border:1px solid var(--border); padding:5px;">должен, вынужден</td></tr>
-                </table>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — научиться выбирать местоимения по их функции в предложении, различать основные значения глаголов be, have и do и использовать модальные глаголы в простых ситуациях учёбы и повседневной жизни.</p>
+<h3>1. Личные и объектные местоимения</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Подлежащее</th><th>Объектная форма</th><th>Пример</th></tr>
+<tr><td>I</td><td>me</td><td>She helps me.</td></tr><tr><td>you</td><td>you</td><td>I know you.</td></tr><tr><td>he</td><td>him</td><td>We see him.</td></tr><tr><td>she</td><td>her</td><td>They call her.</td></tr><tr><td>it</td><td>it</td><td>I use it.</td></tr><tr><td>we</td><td>us</td><td>The teacher helps us.</td></tr><tr><td>they</td><td>them</td><td>I meet them.</td></tr>
+</table>
+<p>Форма подлежащего стоит перед сказуемым: <i>They study English.</i> Объектная форма обычно стоит после глагола или предлога: <i>The teacher speaks to them.</i> Не говорите <i>Me am a student</i>: правильно <i>I am a student</i>.</p>
+<h3>2. Притяжательные и возвратные формы</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Подлежащее</th><th>Перед существительным</th><th>Самостоятельная форма</th><th>Возвратная форма</th></tr>
+<tr><td>I</td><td>my</td><td>mine</td><td>myself</td></tr><tr><td>you</td><td>your</td><td>yours</td><td>yourself</td></tr><tr><td>he</td><td>his</td><td>his</td><td>himself</td></tr><tr><td>she</td><td>her</td><td>hers</td><td>herself</td></tr><tr><td>it</td><td>its</td><td>обычно не используется отдельно</td><td>itself</td></tr><tr><td>we</td><td>our</td><td>ours</td><td>ourselves</td></tr><tr><td>they</td><td>their</td><td>theirs</td><td>themselves</td></tr>
+</table>
+<p>Сравните: <i>This is my notebook.</i> — Это моя тетрадь. <i>This notebook is mine.</i> — Эта тетрадь моя. Притяжательное местоимение перед существительным не заменяет артикль: говорим <i>my book</i>, а не <i>the my book</i>.</p>
+<h3>3. Глаголы be, have и do</h3>
+<p><b>Be</b> связывает подлежащее с характеристикой, профессией, местом или состоянием: <i>I am a student. The workshop is large. They are ready.</i> Формы настоящего времени: I am; he/she/it is; you/we/they are. Вопрос строится перестановкой: <i>Are you ready?</i> Отрицание: <i>She is not late.</i></p>
+<p><b>Have</b> выражает обладание и входит в устойчивые конструкции: <i>We have a lesson. She has a timetable. I have to study.</i> В Present Simple у he/she/it используется has. В конструкции have to выражается необходимость: <i>I have to submit the task.</i></p>
+<p><b>Do</b> — смысловой глагол в выражениях <i>do homework</i>, <i>do an exercise</i>; вспомогательный глагол для вопросов и отрицаний в Present Simple: <i>Do you study? He does not work here.</i> После does смысловой глагол остаётся в начальной форме: <i>Does she study?</i>, не <i>Does she studies?</i></p>
+<h3>4. Модальные глаголы</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Форма</th><th>Основное значение</th><th>Пример</th></tr>
+<tr><td>can / can't</td><td>умение, возможность</td><td>I can read technical texts.</td></tr>
+<tr><td>may</td><td>разрешение или вероятность</td><td>May I ask a question?</td></tr>
+<tr><td>must</td><td>сильная обязанность, правило</td><td>Students must follow the safety rules.</td></tr>
+<tr><td>have to</td><td>необходимость, часто внешнее требование</td><td>We have to wear the required PPE.</td></tr>
+<tr><td>should</td><td>совет, рекомендация</td><td>You should check the instructions.</td></tr>
+<tr><td>need to</td><td>необходимость</td><td>You need to save the file.</td></tr>
+<tr><td>mustn't</td><td>запрет</td><td>You mustn't use a damaged cable.</td></tr>
+<tr><td>don't have to</td><td>отсутствие необходимости</td><td>You don't have to print the file.</td></tr>
+</table>
+<p>Важно: <i>mustn't</i> означает «нельзя», а <i>don't have to</i> — «не обязательно». После can, may, must и should используется глагол без to: <i>She can speak English.</i> Исключение — конструкции <i>have to</i> и <i>need to</i>.</p>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите местоимение.</b> 1) The teacher helps (we/us). 2) This is (my/mine) dictionary. 3) The blue folder is (their/theirs). 4) Anna and I — (we/us) study together.</p>
+<p><b>Задание B. Исправьте ошибки.</b> 1) He are a student. 2) Does she works here? 3) This is the my book. 4) They can to read the text.</p>
+<p><b>Задание C. Выберите значение.</b> 1) You mustn't enter this area. 2) You don't have to come early. 3) You should revise the words. Объясните разницу между запретом, отсутствием необходимости и советом.</p>
+<p><b>Задание D. Составьте 6 предложений о своей учёбе: два с be, одно с have, одно с do, два с модальными глаголами.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>Объектная форма от we — us.</li><li>Перед существительным используется my; самостоятельно — mine.</li><li>Правильно: He is a student.</li><li>Правильно: Does she work here?</li><li>Правильно: This is my book.</li><li>Правильно: They can read the text.</li><li>mustn't — запрет; don't have to — нет необходимости; should — совет.</li>
+</ol>
+<p><b>Самостоятельная работа:</b> составьте личную памятку из 10 предложений о колледже, используя не менее четырёх типов местоимений, be/have/do и три модальных значения. Подчеркните местоимения и обведите модальные конструкции.</p>
+`),
               lec("1.3", "Reading: Speak about yourself", `
-                <h3>Text: About Myself</h3>
-                <p>My name is Oleg. I am 25. I was born and live in Nizhnekamsk. I am married (not married yet) and live together with my wife and a daughter (a son, with my parents, with my brother). Our flat isn’t large but comfortable (cozy, well-furnished, small, inconvenient). It is a three-room flat on the second floor of the five-storeyed house.</p>
-                <p>I do not work now but I am busy all day long. Every day I have a lot of work to do, so I have to get up very early and usually go to bed late in the evening. I must devote enough time to my studies because I am a student. I think further education will help me get a new profession (to make a career, to get a profitable job). That’s why I decided to enter Nizhnekamsk Institute of Chemical Technology. I study at the full-time department. Twice a year I have to pass the examinations some of which are rather difficult, especially because I can’t (don’t want to) afford much time to study thoroughly all year round. But I am going to work hard to get a diploma. And in two years I will become a process engineer.</p>
-                <p>When the studying hours are over, I usually go to the sport center. I do take care about my health and about my future that’s why I do not smoke and do my best to go in for sport at least twice a week.</p>
-                <p>I am used to spend my weekends with my family (my friends, alone). Sometimes we go to the countryside, play different games, cook tasty things (meat, sausages, vegetables, toasts) or simply walk. When the weather is bad we stay at home, watch TV or listen to music and chatter. Reading the English books in the original is also my hobby.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — научиться представлять себя на английском в учебной и профессиональной среде, выбирать релевантную информацию и строить связный рассказ. Личные сведения добровольны: студент может использовать вымышленный профиль и не обязан сообщать семейное положение, адрес, возраст или другие частные данные.</p>
+<h3>1. Reading: A College Student</h3>
+<p><b>Read the text.</b></p>
+<p>My name is Alex, and I am a first-year college student. I study engineering and attend English classes twice a week. My college timetable includes general subjects and practical modules. I enjoy learning how machines and technical systems work. I usually prepare for classes in the evening and make short vocabulary notes. When I do not understand an instruction, I ask the teacher to explain it. In the future, I would like to work in an engineering team and continue developing my professional skills.</p>
+<p>At weekends, I sometimes meet friends, read, listen to music or go for a walk. I also try to find time for rest. Learning a profession takes effort, but clear goals and regular practice help me make progress.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Пример</th></tr>
+<tr><td>first-year student</td><td>студент первого курса</td><td>I am a first-year student.</td></tr>
+<tr><td>timetable</td><td>расписание</td><td>My timetable changes every term.</td></tr>
+<tr><td>practical module</td><td>практический модуль</td><td>We have a practical module today.</td></tr>
+<tr><td>professional skills</td><td>профессиональные навыки</td><td>I want to develop my professional skills.</td></tr>
+<tr><td>to prepare for</td><td>готовиться к</td><td>I prepare for my English class.</td></tr>
+<tr><td>to make progress</td><td>делать успехи</td><td>Regular practice helps me make progress.</td></tr>
+<tr><td>in the future</td><td>в будущем</td><td>In the future, I would like to work in a team.</td></tr>
+</table>
+<h3>3. Language focus: a short personal introduction</h3>
+<p>Для рассказа о себе удобно использовать несколько смысловых блоков:</p>
+<ol>
+<li><b>Basic information:</b> My name is… / I am a student at…</li>
+<li><b>Studies:</b> I study… / My course includes… / I am interested in…</li>
+<li><b>Skills and interests:</b> I can… / I enjoy… / I am learning to…</li>
+<li><b>Plans:</b> I would like to… / My goal is to…</li>
+</ol>
+<p>Present Simple описывает факты и регулярные действия: <i>I study engineering. I attend classes twice a week.</i> Конструкция <i>would like to + verb</i> выражает вежливое желание или план: <i>I would like to improve my English.</i> Не используйте <i>I am used to spend</i> для значения «я обычно провожу»: скажите <i>I usually spend…</i> или <i>I am used to spending…</i> (я привык проводить…).</p>
+<h3>4. Reading comprehension</h3>
+<ol>
+<li>What does Alex study?</li><li>How often does Alex attend English classes?</li><li>When does Alex usually prepare for classes?</li><li>What does Alex do when an instruction is unclear?</li><li>Name two activities Alex sometimes does at weekends.</li><li>What would Alex like to do in the future?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. True or False.</b> 1) Alex is a first-year student. 2) Alex studies medicine. 3) Alex makes vocabulary notes. 4) Alex never asks questions. 5) Alex wants to develop professional skills.</p>
+<p><b>Задание B. Заполните пропуски:</b> 1) I ___ a college student. 2) I ___ engineering. 3) I usually ___ for classes in the evening. 4) I would like ___ improve my English.</p>
+<p><b>Задание C. Соберите рассказ из четырёх частей:</b> information about studies; interests; current skills; future plans. Используйте связки <i>also, because, usually, in the future</i>.</p>
+<p><b>Задание D. Speaking:</b> подготовьте рассказ на 60–90 секунд. Можно использовать своё имя и безопасные сведения или вымышленный профиль. Не требуется сообщать адрес, семейное положение, доход или иные частные данные.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>Alex studies engineering.</li><li>Twice a week.</li><li>In the evening.</li><li>Alex asks the teacher to explain it.</li><li>Any two: meets friends, reads, listens to music, goes for a walk.</li><li>Alex would like to work in an engineering team and develop professional skills.</li>
+<li>True / False / True / False / True.</li>
+<li>am; study; prepare; to.</li>
+</ol>
+<p><b>Критерии устного ответа (8 баллов):</b> содержание и последовательность — 0–2; уместная лексика — 0–2; грамматическая понятность — 0–2; произношение и темп, позволяющие понять сообщение, — 0–2. Акцент сам по себе не снижает оценку, если речь понятна.</p>
+<p><b>Самостоятельная работа:</b> напишите профиль на 80–100 слов по четырём блокам. Выделите пять глаголов в Present Simple и две конструкции для выражения планов.</p>
+`)
             ],
             [], // Practicals
             [], // SelfWork
