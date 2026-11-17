@@ -24,21 +24,99 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("t-unit1", "Unit 1", "Materials",
             [
               lec("1.1", "Materials in Mechanical Engineering", `
-                <p>A mechanical engineer uses different materials to build machinery or tools. A specific knowledge of materials is required, concerning qualities, properties, costs and general characteristics.</p>
-                <p>When a machine or a tool is made, the most suitable material must be chosen by considering its properties, which can be classified as mechanical, thermal, electrical and chemical. The main types of materials used in mechanical engineering are metals, polymer materials, ceramics and composite materials.</p>
-                <p>The most commonly used materials are metals, which can be divided into ferrous and non-ferrous. They can be used in their pure form or mixed with other elements. In this second case we have an alloy and it is used to improve some properties of the metals. The most commonly used ferrous metals are iron and alloys which use iron. Because iron is soft and pasty it is not suitable to be used as a structural material, so a small amount of carbon is added to it to make steel alloy.</p>
-                <p>Non-ferrous metals contain little or no iron. The most common non-ferrous metals used in mechanics are copper, zinc, tin and aluminium. Some common non-ferrous alloys are brass (formed by mixing copper and zinc), bronze (formed by mixing copper and tin) and other aluminium alloys which are used in the aircraft industry. Other examples of materials used in mechanical engineering are plastic and rubber.</p>
-                <p>PVC or polyvinyl chloride is a type of plastic and is used to insulate wires and cables. Rubber is a polymer and its best property is elasticity, as it returns to its original size and shape after deformation. Ceramic materials are good insulators: hard, resistant and strong, but brittle. Composite materials are made up of two or more materials combined to improve their mechanical properties. Concrete is reinforced with steel and is used in building engineering.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится называть основные группы материалов, описывать их свойства и объяснять, почему выбор материала зависит от назначения детали и условий эксплуатации. Материал вводит базовую лексику механики и авиационного производства без назначения конкретной марки материала для реальной детали.</p>
+<h3>1. Reading: Materials in Mechanical Engineering</h3>
+<p>Engineers select materials according to the function of a component and the conditions in which it will be used. Important properties include strength, hardness, toughness, density, corrosion resistance, thermal conductivity and electrical conductivity. No material is best for every application: a choice is always a balance of requirements, cost, manufacturing methods and service conditions.</p>
+<p>Common engineering material groups include metals, polymers, ceramics and composites. Metals are often divided into ferrous and non-ferrous groups. Ferrous metals contain iron as a main element; steels and cast irons are important examples. Steel is an iron-based alloy in which carbon and other elements influence properties. Non-ferrous metals include aluminium, copper, titanium, zinc and their alloys.</p>
+<p>Polymers include plastics and elastomers. PVC is used in some cable insulation applications, while rubber-like elastomers can deform and recover their shape. Ceramics are often hard and heat-resistant, but many are brittle. Composite materials combine two or more constituents to obtain a combination of properties; fibre-reinforced composites are used in some aircraft structures. The exact material and its suitability must be confirmed from approved specifications and engineering documentation.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>strength</td><td>прочность</td><td>The component requires sufficient strength.</td></tr>
+<tr><td>hardness</td><td>твёрдость</td><td>Hardness is one material property.</td></tr>
+<tr><td>toughness</td><td>вязкость, сопротивление разрушению</td><td>Toughness describes resistance to fracture.</td></tr>
+<tr><td>density</td><td>плотность</td><td>Aluminium alloys have relatively low density.</td></tr>
+<tr><td>corrosion resistance</td><td>коррозионная стойкость</td><td>Corrosion resistance matters in some environments.</td></tr>
+<tr><td>alloy</td><td>сплав</td><td>Steel is an iron-based alloy.</td></tr>
+<tr><td>polymer</td><td>полимер</td><td>Many plastics are polymers.</td></tr>
+<tr><td>ceramic</td><td>керамика</td><td>Some ceramics resist high temperatures.</td></tr>
+<tr><td>composite</td><td>композиционный материал</td><td>A composite combines different constituents.</td></tr>
+</table>
+<h3>3. Language focus: describing properties</h3>
+<p>Используйте <i>is/are + adjective</i>: <i>Aluminium is lightweight. Ceramics are often hard and brittle.</i> Для осторожного обобщения подходят <i>often, usually, may, can</i>. Сравнение: <i>lighter than, harder than, more corrosion-resistant than</i>. Конструкция <i>is used for</i> описывает применение: <i>PVC is used for some types of cable insulation.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What factors influence material selection?</li><li>Name four groups of engineering materials.</li><li>What is an alloy?</li><li>How are ferrous and non-ferrous metals different?</li><li>Why are composites used in some engineering applications?</li><li>Where should the final material specification be checked?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите свойство и объяснение:</b> strength; density; hardness; corrosion resistance. Варианты: resistance to surface indentation; mass per unit volume; ability to resist applied load; ability to resist chemical/environmental attack.</p>
+<p><b>Задание B. Дополните:</b> 1) Steel is an iron-based ___. 2) Plastics are examples of ___. 3) A material made from two or more constituents is a ___. 4) A material that can resist fracture has good ___.</p>
+<p><b>Задание C. Сравните два учебных материала по двум свойствам. Используйте lighter than, harder than, more flexible than и осторожные формулировки.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Function, loads, environment, manufacturing method, cost and specification requirements.</li><li>Metals, polymers, ceramics and composites.</li><li>A material made by combining an element with one or more other elements, at least one of them metallic.</li><li>Ferrous metals have iron as a main element; non-ferrous metals do not.</li><li>They can combine properties of different constituents.</li><li>In the approved specification and engineering documentation.</li><li>Задание A: hardness; density; strength; corrosion resistance.</li><li>alloy; polymers; composite; toughness.</li></ol>
+<p><b>Самостоятельная работа:</b> выберите материал из учебного текста и подготовьте карточку из 80–100 слов: material group, two properties, one possible application and one limitation. Не назначайте материал для реального авиационного компонента без спецификации.</p>
+`),
               lec("1.2", "Metal Processes: Casting, Drawing, Forging", `
-                <p><b>Casting</b> is a 6,000 year old process. It is the oldest and most well-known technique based on three fundamental steps: moulding, melting and <i>pouring</i>. First the pattern is made to form the mould. Then an empty mould is created, and finally the empty cavity is filled with molten metal which is then left to solidify into the shape. Casting materials are usually <i>metals</i> but can also be plastic, resin or various cold materials for example <i>clay</i>. Casting is usually used for making complex shapes.</p>
-                <p><b>Drawing</b> is a manufacturing process for producing wires, bars and <i>tubes</i> by pulling on material through a series of dies until it increases in length. It is divided into two types: sheet metal drawing, and wire, <i>rod</i> and tube drawing. Drawing is usually done at room temperature but it can be performed at elevated temperatures to hot work large wires, rods or hollow sections in order to reduce forces.</p>
-                <p><b>Forging</b> is the process by which metal is heated and shaped by a compressive force using a hammer or a press. It is used to produce large quantities of identical parts, such as <i>machine</i> parts in the automobile industry. Cold forging is done at a low temperature using <i>soft</i> metals and plastic. Hot forging is done at a high temperature and makes metal easier to shape without breaking. In the past, forging was done by a blacksmith using a hammer. Nowadays industrial forging is done with <i>hammers</i> powered by a machine.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится описывать литьё, волочение и ковку, называть основные этапы процессов и различать их назначение. Технологические параметры и допустимость конкретного процесса определяются производственной документацией, а не этим языковым учебным материалом.</p>
+<h3>1. Reading: Three Metal-forming Processes</h3>
+<p><b>Casting</b> produces a part by pouring or otherwise introducing molten material into a mould and allowing it to solidify. The mould cavity defines the shape. Casting can produce complex geometries, but the process requires suitable materials, mould design and quality controls. Possible defects include porosity, shrinkage cavities and incomplete filling.</p>
+<p><b>Drawing</b> is a forming process in which material is pulled through a die to reduce its cross-section or produce a required profile. Wire drawing produces wire; bar and tube drawing produce other long products. The process changes dimensions and may affect the material's properties.</p>
+<p><b>Forging</b> shapes metal through compressive forces applied by a hammer, press or other forging equipment. It can produce strong components with suitable grain flow, depending on material and process design. Forging may be carried out hot or cold; the correct method depends on the material, geometry and manufacturing requirements.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>mould</td><td>форма для литья</td><td>The molten material enters the mould.</td></tr>
+<tr><td>cavity</td><td>полость</td><td>The mould cavity defines the shape.</td></tr>
+<tr><td>to solidify</td><td>затвердевать</td><td>The material solidifies in the mould.</td></tr>
+<tr><td>die</td><td>волока / матрица (по процессу)</td><td>The material passes through a die.</td></tr>
+<tr><td>cross-section</td><td>поперечное сечение</td><td>The process changes the cross-section.</td></tr>
+<tr><td>compressive force</td><td>сжимающее усилие</td><td>Forging uses compressive force.</td></tr>
+<tr><td>hammer / press</td><td>молот / пресс</td><td>A press can apply a controlled force.</td></tr>
+<tr><td>defect</td><td>дефект</td><td>Inspection may identify a casting defect.</td></tr>
+</table>
+<h3>3. Process language</h3>
+<p>Для описания этапов используйте <i>first, next, then, after that, finally</i>. Пассивный залог часто встречается в технологическом описании: <i>The material is poured into a mould. The wire is pulled through a die. The metal is shaped by compressive force.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What defines the shape of a cast part?</li><li>What happens to material during drawing?</li><li>What type of force is used in forging?</li><li>Name one possible casting defect.</li><li>Why must process selection follow approved documentation?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Определите процесс:</b> 1) molten material enters a mould; 2) material is pulled through a die; 3) metal is shaped by compressive force.</p>
+<p><b>Задание B. Вставьте слово:</b> mould, die, solidify, compressive, defect. 1) The material must ___ before the part is removed. 2) Drawing uses a ___. 3) Forging applies a ___ force. 4) Porosity is a possible casting ___.</p>
+<p><b>Задание C. Опишите один процесс в пяти предложениях, используя пассивный залог и маркеры последовательности.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>The mould cavity.</li><li>It is pulled through a die and its cross-section is changed.</li><li>Compressive force.</li><li>Porosity, shrinkage cavity or incomplete filling.</li><li>Because material, geometry, quality and safety requirements vary.</li><li>Casting; drawing; forging.</li><li>solidify; die; compressive; defect.</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте сравнительную таблицу casting / drawing / forging: input material, basic principle, typical product form, one advantage and one limitation.</p>
+`),
               lec("1.3", "Metal Processes: Rolling, Extrusion, Sheet forming", `
-                <p><b>Rolling</b> is a metal forming <i>process</i> in which a material (metal, plastic, paper or glass) is passed through a pair of rollers. According to the <i>temperature</i> of material rolled, there is hot rolling or cold rolling.</p>
-                <p><b>Extrusion</b> is a process used to produce objects with a fixed cross-sectional profile. A material is pushed or drawn through a die of the desired cross-section. The two main <i>advantages</i> of this process are its ability to create very complex cross-sections and work materials that are brittle. The extrusion process can be done with hot or cold materials. Commonly extruded materials include metals, polymers, <i>ceramics</i>, concrete and foodstuffs. Ceramic can also be formed into shapes via extrusion. Terracotta extrusion is used to produce pipes. Many modern bricks are also manufactured using a brick extrusion process. Extrusion is also used in <i>food</i> processing. Products such as certain pastas, many breakfast cereals, French fries, dry pet food and ready-to-eat snacks are mostly manufactured by extrusion.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится описывать прокатку, экструзию и формование листового материала, сравнивать процессы и использовать лексику для объяснения формы заготовки и результата обработки.</p>
+<h3>1. Reading: Rolling, Extrusion and Sheet Forming</h3>
+<p><b>Rolling</b> is a forming process in which material passes between rotating rolls. The rolls apply pressure and change the thickness or cross-section. Hot rolling is performed above a material-specific temperature range that allows significant plastic deformation; cold rolling is performed at a lower temperature and can improve dimensional accuracy and surface finish, while also changing the material's mechanical properties.</p>
+<p><b>Extrusion</b> forces material through a die opening to produce a long product with a defined cross-section. It is used with metals and polymers and, in specialised processes, with other materials. The shape of the die determines the profile of the extruded product. Examples include rods, tubes, profiles and some plastic sections.</p>
+<p><b>Sheet forming</b> changes the shape of sheet material through operations such as bending, drawing and stamping. A punch and die may be used to form a component. The choice of process depends on material properties, thickness, geometry, required accuracy and production volume.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>roll</td><td>валок</td><td>The material passes between two rolls.</td></tr>
+<tr><td>thickness</td><td>толщина</td><td>Rolling can reduce thickness.</td></tr>
+<tr><td>extrusion</td><td>экструзия</td><td>Extrusion produces a constant profile.</td></tr>
+<tr><td>die opening</td><td>отверстие матрицы</td><td>The die opening defines the profile.</td></tr>
+<tr><td>sheet metal</td><td>листовой металл</td><td>Sheet metal can be bent or stamped.</td></tr>
+<tr><td>punch</td><td>пуансон</td><td>A punch applies force to the sheet.</td></tr>
+<tr><td>stamping</td><td>штамповка</td><td>Stamping can form repeated components.</td></tr>
+<tr><td>production volume</td><td>объём производства</td><td>Production volume influences process choice.</td></tr>
+</table>
+<h3>3. Comparing processes</h3>
+<p>Используйте <i>whereas, while, unlike, both, however</i>: <i>Rolling passes material between rolls, whereas extrusion pushes material through a die. Both processes can produce long products; however, the cross-section is formed in different ways.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What do rolls do during rolling?</li><li>What determines the profile of an extruded product?</li><li>Name two sheet-forming operations.</li><li>What factors influence process selection?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите процесс:</b> 1) material passes between rotating rolls; 2) material is forced through a die opening; 3) a sheet is shaped by a punch and die.</p>
+<p><b>Задание B. Дополните сравнение:</b> Rolling uses rolls, whereas extrusion uses a ___. Both processes change the material's ___. Sheet forming is used for working with thin or flat ___.</p>
+<p><b>Задание C. Напишите 5–6 предложений, сравнивая два процесса по принципу действия и форме готового изделия.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>They apply pressure and change thickness or cross-section.</li><li>The shape of the die opening.</li><li>Bending, drawing or stamping.</li><li>Material properties, thickness, geometry, accuracy and production volume.</li><li>Rolling; extrusion; sheet forming.</li><li>die; cross-section/shape; sheet metal.</li></ol>
+<p><b>Самостоятельная работа:</b> составьте глоссарий из 10 терминов по теме формообразования и опишите на английском один процесс, используя не менее четырёх слов из глоссария.</p>
+`)
             ],
             [], // Practicals
             [], // SelfWork
@@ -66,15 +144,68 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("t-unit2", "Unit 2", "Technical Drawing",
             [
               lec("2.1", "Technical Drawing and Tools", `
-                <p>Technical drawing, also known as drafting, is the act and discipline of composing plans. The main purpose of technical drawing is to describe or explain all the characteristics of a product, giving all the necessary information that will help a manufacturer to produce that component. The visual image should be accurate in terms of dimensions and proportions, and should provide an overall impression of what an object is or does. It is a precise task requiring a high level of skill and suitable engineering tools.</p>
-                <p>A drafter is the person who makes a drawing and who requires a wide knowledge of geometry, trigonometry and spatial comprehension, and in all cases must be precise and accurate and give great attention to detail. People who communicate with technical drawings use a visual language and technical standards that define practical symbols, perspectives and units of measurement.</p>
-                <p>What are the tools and instruments used by a drafter in manual drafting? A T-square, a protractor, a compass, rulers, and triangles. Paper is also important and can be divided into layout paper, which is thin and fragile, and cartridge paper, which is heavier and more suitable for final drawings. Pencils used in drawing are graded from H to F depending on the hardness. The final drawing is made using a technical pen, graded according to the point, which must maintain the same line width. They are used with a range of stencils to add symbols, letters and patterns to the drawing. Rubbers remove pencils or pen writing when mistakes are found. Correction fluid is used to mask text errors.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать назначение технического чертежа, распознавать основные элементы чертёжной документации и описывать инструменты для ручного черчения. Размеры, допуски и обозначения следует читать по применимому стандарту и утверждённой документации.</p>
+<h3>1. Reading: What Is a Technical Drawing?</h3>
+<p>A technical drawing communicates information about a component or assembly. It may show the shape, dimensions, material, surface requirements, tolerances, symbols and notes needed for manufacture or inspection. Unlike an artistic picture, a technical drawing follows agreed conventions so that different specialists can interpret it consistently.</p>
+<p>Drawings may include several views, sections and detail views. A title block usually identifies the drawing, part, scale, revision and other document information. Dimensions must be read with their units and relevant tolerances. A drawing should always be checked for its revision status before it is used for a task.</p>
+<p>Traditional manual drafting uses tools such as a ruler, compass, set square, protractor, drawing board and pencils of different grades. Modern technical work often uses CAD software, but the basic principles of accuracy, clear lines, correct dimensions and document control remain important.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>technical drawing</td><td>технический чертёж</td><td>The drawing describes the component.</td></tr>
+<tr><td>dimension</td><td>размер</td><td>Check the dimension and its unit.</td></tr>
+<tr><td>tolerance</td><td>допуск</td><td>The tolerance defines permitted variation.</td></tr>
+<tr><td>scale</td><td>масштаб</td><td>The scale is shown in the title block.</td></tr>
+<tr><td>section view</td><td>разрез</td><td>A section view shows internal features.</td></tr>
+<tr><td>detail view</td><td>выносной элемент</td><td>A detail view enlarges a small feature.</td></tr>
+<tr><td>title block</td><td>основная надпись</td><td>The title block identifies the drawing.</td></tr>
+<tr><td>revision</td><td>редакция документа</td><td>Use the approved revision.</td></tr>
+<tr><td>protractor</td><td>транспортир</td><td>A protractor measures an angle.</td></tr>
+</table>
+<h3>3. Language focus: describing a drawing</h3>
+<p>Для указания элементов используйте <i>shows, contains, indicates, is marked, is dimensioned</i>. Для положения: <i>above, below, next to, in the centre, on the left/right</i>. Пример: <i>The front view shows the overall shape. The hole diameter is indicated in the detail view.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What information can a technical drawing communicate?</li><li>What is the purpose of a section view?</li><li>Which information may appear in the title block?</li><li>Why should the revision status be checked?</li><li>Name four tools used in manual drafting.</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите инструмент и назначение:</b> ruler; compass; protractor; set square. Варианты: draw circles/arcs; measure or draw straight lines; measure angles; draw perpendicular or standard angles.</p>
+<p><b>Задание B. Заполните:</b> 1) A ___ view shows internal features. 2) The drawing ___ identifies its current issue. 3) A ___ defines permitted variation.</p>
+<p><b>Задание C. Опишите воображаемый простой чертёж: назовите три вида/элемента, один размер, единицу и сведения из основной надписи. Не придумывайте допуски для реальной детали.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Shape, dimensions, material, tolerances, surface requirements, symbols and notes.</li><li>It shows internal features as if the object were cut.</li><li>Drawing/part identification, scale, revision and other document data.</li><li>To avoid using obsolete or unapproved information.</li><li>Ruler, compass, set square, protractor, pencils/drawing board.</li><li>Задание A: ruler—straight lines; compass—circles/arcs; protractor—angles; set square—perpendicular/standard angles.</li><li>section; revision; tolerance.</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте описание учебного чертежа на 80–100 слов. Укажите вид, размеры, единицы, основную надпись и статус редакции.</p>
+`),
               lec("2.2", "CAD/CAM Systems", `
-                <p>Drawing <i>boards</i> and manual drawing are not always precise and rapid: <i>traditional</i> design is usually slow, especially in its revision and <i>modification</i>. For this reason manufacturing firms have replaced manual drawing with computer-aided design (CAD) to carry out functions related to design and production. This computer technology assists the designer in the <i>creation</i>, modification and analysis of a physical object. Nowadays computer <i>software</i> can easily provide a three-dimensional drawing, which allows engineering designers to see how mechanical components may fit together without making models thus saving a lot of time.</p>
-                <p>CAD is much <i>faster</i> and more accurate than manual drawing; designs can be quickly modified, reproduced and transmitted <i>electronically</i>. Computer simulated analysis of the model helps experts find problems and <i>defects</i> without building prototypes, in this way saving a lot of money and time. When the design is ready, the CAD system can generate the detailed <i>drawings</i> needed to start product manufacturing.</p>
-                <p>When CAD systems are linked to manufacturing equipment controlled by computers, they form an integrated CAD/CAM system. Computer-aided manufacturing (CAM) offers significant <i>advantages</i> over traditional approaches by controlling manufacturing equipment with computers instead of human labour. CAM converts the design of a component into computer language and it gives <i>instructions</i> to the computer regarding machine operations. Thanks to CAD/CAM systems it is possible to eliminate operator errors and <i>reduce</i> manufacturing costs.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится объяснять различие между CAD и CAM, описывать типичный цифровой процесс от модели до производственной документации и использовать лексику для обсуждения изменений, проверки и передачи данных.</p>
+<h3>1. Reading: CAD and CAM in Product Development</h3>
+<p>Computer-aided design (CAD) software helps engineers create, modify and analyse digital models and drawings. A model may represent the geometry of a part or an assembly. Depending on the software and the available data, designers can inspect dimensions, check how components fit together and prepare drawings or other technical information.</p>
+<p>Computer-aided manufacturing (CAM) uses digital product and process information to plan or support manufacturing operations. In a typical workflow, a designer prepares a model, the relevant data are reviewed, and manufacturing instructions are created for the selected equipment and process. The resulting programme and setup information must be checked by qualified personnel against approved requirements before use.</p>
+<p>CAD and CAM can be linked, but they are not the same thing. CAD focuses on design information; CAM focuses on manufacturing planning and instructions. A digital model does not automatically guarantee a correct product. Data quality, material selection, tool information, machine capability, revision control and inspection remain important. Engineers use digital systems to improve communication and reduce some errors, not to remove the need for verification.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>computer-aided design (CAD)</td><td>система автоматизированного проектирования</td><td>CAD is used to create digital models.</td></tr>
+<tr><td>computer-aided manufacturing (CAM)</td><td>автоматизированная подготовка производства</td><td>CAM supports manufacturing planning.</td></tr>
+<tr><td>digital model</td><td>цифровая модель</td><td>The digital model represents the part.</td></tr>
+<tr><td>assembly</td><td>сборка, узел</td><td>The assembly contains several components.</td></tr>
+<tr><td>workflow</td><td>рабочий процесс</td><td>The workflow includes review and approval.</td></tr>
+<tr><td>manufacturing instruction</td><td>производственная инструкция</td><td>The instruction must match the approved revision.</td></tr>
+<tr><td>revision control</td><td>контроль редакций</td><td>Revision control prevents obsolete data from being used.</td></tr>
+<tr><td>verification</td><td>проверка, подтверждение</td><td>Verification is required before release.</td></tr>
+</table>
+<h3>3. Language focus: purpose and sequence</h3>
+<p>Цель выражается через <i>is used to + verb</i>: <i>CAD is used to create digital models.</i> Последовательность: <i>first, next, after that, before, once, finally</i>. Для различения понятий используйте <i>whereas/while</i>: <i>CAD focuses on design, whereas CAM supports manufacturing planning.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What does CAD help engineers create?</li><li>What does CAM support?</li><li>Why must manufacturing instructions be checked?</li><li>Does a digital model guarantee a correct product? Explain.</li><li>What is revision control used for?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Определите CAD или CAM:</b> 1) creating a 3D model; 2) planning manufacturing operations; 3) preparing a drawing from a model; 4) creating a manufacturing programme for a selected process.</p>
+<p><b>Задание B. Дополните:</b> CAD is used to ___ digital models. CAM supports the planning of ___. Before use, manufacturing instructions must be ___ by qualified personnel.</p>
+<p><b>Задание C. Опишите рабочий процесс из пяти этапов, используя first, next, after that, before and finally.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Digital models and drawings.</li><li>Manufacturing planning and instructions.</li><li>To confirm accuracy, suitability, equipment capability and revision status.</li><li>No; data, process and inspection checks are still required.</li><li>To identify and control current document/data versions.</li><li>Задание A: CAD; CAM; CAD; CAM.</li><li>create; manufacturing operations; checked/verified.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о роли CAD/CAM в разработке детали. Обязательно включите различие CAD/CAM, последовательность этапов и необходимость проверки версии документа.</p>
+`)
             ],
             [],
             [],
