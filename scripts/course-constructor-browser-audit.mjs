@@ -145,6 +145,13 @@ try {
   assert.equal(await page.locator("#burgerBtn").getAttribute("aria-expanded"), "true", "slash shortcut must open navigation");
   await page.keyboard.press("Escape");
   assert.equal(await page.locator("#burgerBtn").getAttribute("aria-expanded"), "false", "Escape must close navigation");
+  await page.evaluate(() => { location.hash = "#/resources"; });
+  await page.waitForFunction(() => location.hash === "#/resources");
+  await page.evaluate(() => { location.hash = "#/videos"; });
+  await page.waitForFunction(() => location.hash === "#/videos");
+  assert.ok(await page.locator("#crumbs .crumb-back").isVisible(), "breadcrumb back link must appear after an in-portal transition");
+  await page.locator("#crumbs .crumb-back").click();
+  await page.waitForFunction(() => location.hash === "#/resources", null, { timeout: 5000 });
   await page.evaluate(() => window.renderCourseEditorPage());
   await page.waitForSelector("#createTopicBtn");
   // Exercise the protected exam-bank visual editor end-to-end with a mocked server API.
