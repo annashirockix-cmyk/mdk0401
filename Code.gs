@@ -2150,9 +2150,12 @@ function scoreBuiltInQuestion_(q,answer) {
   }
   if(type==="num"||type==="numeric"||type==="number"){
     if(expected===undefined||expected===null)return false;
-    const actual=Number(String(answer).replace(",", ".")),target=Number(String(expected).replace(",", "."));
-    if(!isFinite(actual)||!isFinite(target))return false;
-    const tolerance=Math.max(0,Number(q.tolerance!==undefined?q.tolerance:q.tol)||0.01);
+    const actualText=String(answer==null?"":answer).trim().replace(",", "."),targetText=String(expected).trim().replace(",", ".");
+    if(!/^[-+]?(?:\\d+\\.?\\d*|\\.\\d+)$/.test(actualText)||!/^[-+]?(?:\\d+\\.?\\d*|\\.\\d+)$/.test(targetText))return false;
+    const actual=Number(actualText),target=Number(targetText);
+    if(!Number.isFinite(actual)||!Number.isFinite(target))return false;
+    const toleranceRaw=q.tolerance!==undefined?q.tolerance:(q.tol!==undefined?q.tol:0.01),tolerance=Number(toleranceRaw);
+    if(!Number.isFinite(tolerance)||tolerance<0)return false;
     return Math.abs(actual-target)<=tolerance;
   }
   if(type==="order"||type==="ordering"){
@@ -2426,6 +2429,14 @@ function getCustomTest_(data) {
         throw new Error("В вопросе " + (index + 1) + " неверно задана последовательность. Укажите минимум два уникальных элемента и правильный порядок.");
       }
     }
+    if (type === "numeric" || type === "num" || type === "number") {
+      const expected = String(question.correctAnswer !== undefined ? question.correctAnswer : question.extra || "").trim().replace(",", ".");
+      const tolerance = Number(question.tolerance === undefined ? 0.01 : question.tolerance);
+      if (!/^[-+]?(?:\\d+\\.?\\d*|\\.\\d+)$/.test(expected) || !Number.isFinite(Number(expected)) ||
+          !Number.isFinite(tolerance) || tolerance < 0 || tolerance > 1000000000) {
+        throw new Error("В вопросе " + (index + 1) + " укажите правильное число и допустимую погрешность от 0 до 1 000 000 000.");
+      }
+    }
   });
   const displayQuestions = hydrateTestQuestionImages_(questions);
   const optionMaps = {}, safeQuestions = displayQuestions.map(function(question, index) {
@@ -2444,6 +2455,8 @@ function getCustomTest_(data) {
       const order = shuffledServer_(items.map(function(_, i) { return i; }));
       safe.items = order.map(function(i) { return items[i]; });
       optionMaps[String(index)] = order;
+    } else if (type === "numeric" || type === "num" || type === "number" || type === "text" || type === "short_text") {
+      safe.options = [];
     } else {
       const options = Array.isArray(safe.options) ? safe.options.slice() : [];
       if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
@@ -2479,6 +2492,7 @@ function submitCustomTest_(data) {
     const order = attempt.optionMaps[String(index)] || [];
     const question = questions[index] || {};
     const type = String(question.type || question.kind || "single").toLowerCase();
+    if (type === "numeric" || type === "num" || type === "number" || type === "text" || type === "short_text") return String(value == null ? "" : value).trim();
     if (Array.isArray(value)) {
       const mapped = value.map(function(item) {
         const displayed = Number(item);
