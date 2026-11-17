@@ -582,7 +582,7 @@ test("written assignment submissions accept private file attachments and enforce
   assert.match(backend, /function getAssignmentAttachment_\(data\)/);
   assert.match(backend, /email_\(match\.row\[m\.StudentEmail\]\)!==user\.email/);
   assert.match(backend, /editor_\(data,courseId\)/);
-  assert.match(backend, /incomingAttachments\\.length > 5/);
+  assert.match(backend, /incomingAttachments\.length > 5/);
   assert.match(backend, /bytes\.length>4\*1024\*1024/);
   assert.match(backend, /application\/pdf/);
   assert.match(backend, /application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document/);
