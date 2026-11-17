@@ -216,6 +216,28 @@ window.loadGlobalCustomContent = function(callback) {
             var rows = Array.isArray(res.data) ? res.data : [];
             window.customContent = window.customContent || {};
             window.customContent.topics = rows.filter(function(d) { return d.type === "topic"; });
+            // Apply saved title/code overrides to built-in topics without duplicating them.
+            Object.keys(window.MDK_DATA || {}).forEach(function(courseId){
+                var course=window.MDK_DATA[courseId];
+                (course.sections||[]).forEach(function(section){
+                    (section.topics||[]).forEach(function(topic){
+                        if(topic.__originalCode===undefined)topic.__originalCode=topic.code;
+                        if(topic.__originalTitle===undefined)topic.__originalTitle=topic.title;
+                        topic.code=topic.__originalCode;topic.title=topic.__originalTitle;
+                    });
+                });
+            });
+            window.customContent.topics.filter(function(d){return !!d.sourceTopicId;}).forEach(function(override){
+                var course=window.MDK_DATA[override.mdkId];if(!course)return;
+                (course.sections||[]).forEach(function(section){
+                    (section.topics||[]).forEach(function(topic){
+                        if(String(topic.id)===String(override.sourceTopicId)){
+                            if(override.code)topic.code=String(override.code);
+                            if(override.title)topic.title=String(override.title);
+                        }
+                    });
+                });
+            });
             window.customContent.files = rows.filter(function(d) { return d.type === "file"; });
             window.customContent.lectures = rows.filter(function(d) { return d.type === "lecture"; });
             window.customContent.tests = rows.filter(function(d) { return d.type === "test"; });
@@ -704,9 +726,14 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         return box.innerHTML;
     }
     if (topic && customTopicLectures.length) {
-        topic.lectures = (topic.lectures || []).concat(customTopicLectures.map(function (lecture) {
-            return { code: lecture.code || "Доп. лекция", title: lecture.title || "Материал преподавателя", content: safeCustomLectureHtml(lecture.content || "") };
-        }));
+        var builtInLectures=(topic.lectures||[]).map(function(base){
+            var override=customTopicLectures.find(function(item){return item.isBuiltInOverride===true&&String(item.sourceLectureCode||"")===String(base.code||"");});
+            return override?{code:base.code,title:override.title||base.title,content:safeCustomLectureHtml(override.content||"")}:base;
+        });
+        var additionalLectures=customTopicLectures.filter(function(lecture){return lecture.isBuiltInOverride!==true;}).map(function(lecture){
+            return {code:lecture.code||"Доп. лекция",title:lecture.title||"Материал преподавателя",content:safeCustomLectureHtml(lecture.content||"")};
+        });
+        topic.lectures=builtInLectures.concat(additionalLectures);
     }
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
     
