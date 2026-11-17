@@ -31,12 +31,30 @@
  }
  function splitTeacherMaterial(markdown){
   var student=String(markdown||""),teacher=[];
-  function move(match,label){teacher.push(label+"\n"+match.trim());}
-  // Move full teacher-key blocks, including Russian bold labels whose answers
-  // begin on the same line as the label.
+  function move(match,label){teacher.push(label+"\n"+String(match||"").trim());}
+  // The student page has its own listening widget. Keep the recording master
+  // and transcript/answer reveal in the authenticated teacher accordion only.
+  var recordingBlock=/(^|\n)([ \t]*(?:#{2,4}\s*)?\*\*Recording script(?:\s*[—-][^*\n]*)?\*\*[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:\*\*(?:Language focus|After listening|Transcript reveal|Teacher key|Independent work|Self-check|Speaking|Writing|Guided practice|Integrated task|Self-check and teacher key)\b|#{1,4}\s|---\s*$)|$)/gi;
+  student=student.replace(recordingBlock,function(full,prefix,body){
+   move(body,"### Listening recording master");
+   return prefix;
+  });
+  var transcriptBlock=/(^|\n)([ \t]*\*\*Transcript reveal[^\n]*\*\*[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:\*\*(?:Language focus|After listening|Teacher key|Independent work|Self-check|Speaking|Writing|Guided practice|Integrated task)\b|#{1,4}\s|---\s*$)|$)/gi;
+  student=student.replace(transcriptBlock,function(full,prefix,body){
+   move(body,"### Listening transcript and feedback");
+   return prefix;
+  });
+  // Move complete teacher-key sections, including Russian labels and inline answers.
   var keyBlock=/(^|\n)(?:#{2,4}\s*(?:Teacher key(?: and feedback)?|Review key|Answer key(?:\s+for teacher)?|Answer key\s*\/\s*assessment guidance)\s*|\*\*(?:Teacher key|Answer key(?:\s+for teacher)?|Answer key\s*\/\s*assessment guidance|Ключ преподавателя|Ответы для преподавателя):?\*\*)[ \t]*([^\n]*)\n([\s\S]*?)(?=\n(?:#{1,4}\s|\*\*Independent work\b|---\s*$)|$)/gi;
   student=student.replace(keyBlock,function(full,prefix,inlineAnswers,body){
    move((inlineAnswers||"")+"\n"+(body||""),"### Teacher answer key");
+   return prefix;
+  });
+  // Also protect compact inline keys such as **Key:** 1a, 2c and
+  // **Suggested answers:** ... which are common in the new lesson drafts.
+  var compactKey=/(^|\n)([ \t]*\*\*(?:Key|Answer key|Listening key|Teacher key|Suggested answers|Answers)\s*: ?\*\*[^^\n]*)(?=\n|$)/gi;
+  student=student.replace(compactKey,function(full,prefix,line){
+   move(line,"### Teacher answer key");
    return prefix;
   });
   // Some technical lessons use a numbered "Self-check and teacher key" block:
