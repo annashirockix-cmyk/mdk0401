@@ -119,3 +119,5 @@
 - Reordered the options so the passage-supported answer occupies the existing balanced key position D in all three variants; no answer-position distribution changed. Updated the individual JSON files and combined registry.
 - Added a targeted regression test in scripts/english-semester-assessment.test.mjs to assert the three passage-supported answers and their parity between source JSON and registry.
 - This closes the focused reading-key pass for V01–V04; it does not constitute a full expert review of every task or a CEFR/programme approval.
+
+- The first CI run after correcting the semantic keys (#2972 on the intermediate HEAD) correctly failed the per-variant answer-position balance check because the initial correction changed key indices without moving the options. The final correction reorders the options while keeping the valid answer at index D; read-back now confirms [2, 2, 2, 2] across the keyed single- and multiple-choice answers for each of the three variants, with source/registry parity. A CI run on the final corrected HEAD is still required.
