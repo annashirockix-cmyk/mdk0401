@@ -31,8 +31,8 @@ test("offline fallback requires the still-present session and clears data on log
   assert.match(app, /OfflineMaterialsCache\.clear\(logoutUser\)/);
   assert.match(app, /OfflineMaterialsCache\.clear\(expiredUser\)/);
   assert.match(app, /OfflineMaterialsCache\.clearOtherUsers/);
-  assert.match(app, /window\.customContent\.tests = \[\]/);
-  assert.match(app, /window\.customContent\.games = \[\]/);
+  assert.match(app, /\["tests", "flashcards", "games", "announcements"\]\.forEach/);
+  assert.match(app, /window\.customContent\[key\] = \[\]/);
 });
 
 test("offline helper is loaded before app logic and is precached", () => {
