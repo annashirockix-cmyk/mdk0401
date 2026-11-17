@@ -1229,7 +1229,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
   assert.match(html, /workbooks\.js\?v=[0-9]+/);
-  assert.match(html, /style\.css\?v=24/);
+  assert.match(html, /style\.css\?v=25/);
   assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
