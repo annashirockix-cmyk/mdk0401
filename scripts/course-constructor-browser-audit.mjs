@@ -116,6 +116,35 @@ try {
     window.confirm = () => true;
   });
 
+  await page.evaluate(() => window.updateMenuVisibility());
+  await page.locator("#burgerBtn").click();
+  assert.equal(await page.locator("#drawer").getAttribute("aria-hidden"), "false");
+  await page.locator("#drawerSearch").fill("Тренажёр метролога");
+  assert.ok(await page.locator('a[href="#/metrology-trainer"]').isVisible(), "navigation search must find the laboratory trainer");
+  assert.ok(await page.locator("#drawerLaboratory").evaluate(node => node.open), "search must expand the matching navigation group");
+  await page.locator("#drawerSearchClear").click();
+  await page.locator("#drawerSearch").fill("Конструктор карточек");
+  assert.ok(await page.locator("#menuFlashcardEditor").isVisible(), "teacher must find the flashcard editor");
+  await page.evaluate(() => {
+    window.state.staff = null;
+    window.state.student = { role: "student", courses: ["07.01"], email: "audit-student@example.invalid" };
+    window.updateMenuVisibility();
+  });
+  assert.equal(await page.locator("#drawerSearch").inputValue(), "", "role changes must reset filtered navigation");
+  await page.locator("#drawerSearch").fill("Конструктор карточек");
+  assert.equal(await page.locator("#menuFlashcardEditor").evaluate(node => getComputedStyle(node).display), "none", "search must not reveal teacher-only links to students");
+  assert.ok((await page.locator("#drawerSearchResults").innerText()).includes("Ничего не найдено"));
+  await page.evaluate(() => {
+    window.state.student = null;
+    window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
+    window.updateMenuVisibility();
+  });
+  await page.locator("#drawerClose").click();
+  assert.equal(await page.locator("#drawer").getAttribute("aria-hidden"), "true");
+  await page.keyboard.press("/");
+  assert.equal(await page.locator("#burgerBtn").getAttribute("aria-expanded"), "true", "slash shortcut must open navigation");
+  await page.keyboard.press("Escape");
+  assert.equal(await page.locator("#burgerBtn").getAttribute("aria-expanded"), "false", "Escape must close navigation");
   await page.evaluate(() => window.renderCourseEditorPage());
   await page.waitForSelector("#createTopicBtn");
   // Exercise the protected exam-bank visual editor end-to-end with a mocked server API.
