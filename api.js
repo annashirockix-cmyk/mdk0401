@@ -97,6 +97,7 @@ window.API = {
  getQuestionBankStats:function(){return fetchAPI("getQuestionBankStats",{},"GET",60000);},
  getEnglishVprExam:function(track){return fetchAPI("getEnglishVprExam",{track:track},"GET");},
  startEnglishVprExam:function(track){return fetchAPI("startEnglishVprExam",{track:track},"POST");},
+ saveEnglishVprExamDraft:function(track,attemptId,answers){return fetchAPI("saveEnglishVprExamDraft",{track:track,attemptId:attemptId,answers:answers},"POST",30000);},
  importEnglishSemesterTests:function(track,tests){return fetchAPI("importEnglishSemesterTests",{track:track,tests:tests},"POST",120000);},
  importEnglishExamVariants:function(exams){return fetchAPI("importEnglishExamVariants",{exams:exams},"POST",120000);},
   startEnglishFinalExam:function(courseNo,semester){return fetchAPI("startEnglishFinalExam",{courseNo:courseNo,semester:semester},"POST",30000);},
