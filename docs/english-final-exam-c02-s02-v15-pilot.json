@@ -55,9 +55,9 @@
       "prompt": "What changed after the first month?",
       "options": [
         "More students cancelled their room bookings",
-        "Fewer booking errors were reported",
+        "More booking errors were reported",
         "The college stopped reviewing feedback",
-        "More booking errors were reported"
+        "Fewer booking errors were reported"
       ],
       "correctIndex": 3,
       "points": 1
