@@ -361,7 +361,7 @@ function saveEnglishVprExamDraft_(data) {
         if (["choice","match","gap"].indexOf(task.type) >= 0) {
           const str = String(value).trim();
           if (!str) { clean[i] = ""; continue; }
-          if (!/^\\d{1,2}$/.test(str)) throw new Error("Некорректный выбор в задании.");
+          if (!/^\d{1,2}$/.test(str)) throw new Error("Некорректный выбор в задании.");
           const options = task.type === "choice" ? ((task.items[i] && task.items[i][2]) || task.options || []) :
             task.type === "match" ? (task.options || []) :
             ((task.itemOptions && task.itemOptions[i]) || task.options || []);
