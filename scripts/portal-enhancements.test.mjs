@@ -859,6 +859,27 @@ test("English VPR answer keys stay server-side and the client uses protected exa
 });
 
 
+test("English VPR draft autosave is authenticated, bounded, and restores only student answers", () => {
+  const server = read("Code.gs");
+  const bank = read("EnglishVPR-Sheets.gs");
+  const api = read("api.js");
+  const engine = read("english-vpr-engine.js");
+  assert.match(server, /case "saveenglishvprexamdraft": result = saveEnglishVprExamDraft_\(data\); break;/);
+  const save = bank.slice(bank.indexOf("function saveEnglishVprExamDraft_"), bank.indexOf("\nfunction submitEnglishVprExam_"));
+  assert.match(save, /const user = auth_\(data\)/);
+  assert.match(save, /attempt\.email !== user\.email/);
+  assert.match(save, /attempt\.track !== track/);
+  assert.match(save, /attempt\.courseId !== courseId/);
+  assert.match(save, /attempt\.processing === true/);
+  assert.match(save, /JSON\.stringify\(data\.answers \|\| \[\]\)\.length > 30000/);
+  assert.match(save, /attempt\.savedAnswers = saved/);
+  assert.match(bank, /savedAnswers:Array\.isArray\(activeAttempt\.savedAnswers\)/);
+  assert.match(api, /saveEnglishVprExamDraft:function/);
+  assert.match(engine, /API\.saveEnglishVprExamDraft\(track,attemptId,answers\)/);
+  assert.match(engine, /Восстанавливаем только ответы ученика/);
+  assert.match(engine, /function collectAnswers\(\)/);
+});
+
 test("English VPR grades numbered choices correctly and renders per-gap option lists", () => {
   const server = read("EnglishVPR-Sheets.gs");
   const engine = read("english-vpr-engine.js");
