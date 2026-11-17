@@ -364,7 +364,7 @@ There is a large table in our classroom. The table is near the window. There are
 1. The book is in the table.
 2. We have English at Monday.
 3. The lesson starts in 8:30.
-4. My classroom is between the library (если рядом только библиотека и нет второго объекта — перестройте предложение с next to).
+4. My classroom is between the library.
 
 **D. Опишите аудиторию:** составьте 6 предложений о расположении предметов, используя минимум пять разных предлогов места.
 
