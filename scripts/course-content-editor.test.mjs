@@ -322,3 +322,17 @@ test("custom ordering questions shuffle items and preserve student drag order fo
  assert.ok(server.includes('type === "order" || type === "ordering"'));
  assert.ok(server.includes("return mapped.map(function(originalIndex){return originalItems[originalIndex] || \"\";});"));
 });
+test("custom numeric questions accept decimal input, validate tolerance and score on the server", () => {
+ const app=read("app.js"),server=read("Code.gs"),editor=read("course-admin.js"),ux=read("course-editor-ux.js");
+ assert.ok(app.includes('questionType === "numeric" || questionType === "num" || questionType === "number"'));
+ assert.ok(app.includes('type="text" inputmode="decimal"'));
+ assert.ok(editor.includes("numericAnswer=meta.numericAnswer"));
+ assert.ok(editor.includes("correctAnswer:numeric?String(numericAnswer):\"\""));
+ assert.ok(editor.includes("tolerance:q.tolerance"));
+ assert.ok(ux.includes("id=\\"ceTolerance\\""));
+ assert.ok(ux.includes("Введите правильное число"));
+ assert.ok(server.includes('type === "numeric" || type === "num" || type === "number"'));
+ assert.ok(server.includes("return String(value == null ? \"\" : value).trim();"));
+ assert.ok(server.includes("Math.abs(actual-target)<=tolerance"));
+ assert.ok(server.includes("!Number.isFinite(tolerance)||tolerance<0"));
+});
