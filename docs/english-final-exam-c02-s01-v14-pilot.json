@@ -55,9 +55,9 @@
       "prompt": "Why did he make that choice?",
       "options": [
         "It was the shortest course available",
-        "It fitted his schedule and presentation skills were covered elsewhere",
+        "It was taught by a tutor he already knew.",
         "It was recommended by a classmate",
-        "It was taught by a tutor he already knew."
+        "It fitted his schedule and presentation skills were covered elsewhere"
       ],
       "correctIndex": 3,
       "points": 1
