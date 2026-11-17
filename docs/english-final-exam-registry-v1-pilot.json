@@ -5514,10 +5514,10 @@
                 "prompt": "Listening 2. What should each group choose?",
                 "audioText": "The engineering department will run a teamwork session on Thursday morning. Students will meet in Workshop 3 at nine fifteen. Each group should bring its project notes and agree on one person to record decisions. The tutor will explain how to divide tasks fairly and report progress. The session finishes at eleven thirty.",
                 "options": [
-                  "On Friday",
+                  "One person to present the group's results",
                   "One person to record decisions",
-                  "Next month",
-                  "After the event"
+                  "One person to organise the materials",
+                  "One person to keep track of the time"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -7799,10 +7799,10 @@
                 "prompt": "Listening 2. What will the librarian show students how to find?",
                 "audioText": "The science library has added a new guide to evaluating scientific claims. Students can attend a demonstration on Monday at three in the reading room. The librarian will show how to distinguish a research result from an opinion and how to find the original study. A printed checklist will be available, and the guide can also be downloaded from the library website.",
                 "options": [
-                  "On Friday",
                   "The original study",
-                  "Next month",
-                  "After the event"
+                  "A book review of the topic",
+                  "A newspaper opinion article",
+                  "A summary written by another student"
                 ],
                 "correctIndex": 1,
                 "points": 1
