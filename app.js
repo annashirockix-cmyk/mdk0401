@@ -1557,12 +1557,12 @@ function setupDrawer() {
     if (!burgerBtn || !drawer || !drawerOverlay) return;
     function closeDrawer(restoreFocus) {
         drawer.classList.remove("open"); drawerOverlay.classList.remove("open");
-        drawer.setAttribute("aria-hidden", "true"); burgerBtn.setAttribute("aria-expanded", "false");
+        drawer.setAttribute("aria-hidden", "true"); drawer.inert = true; burgerBtn.setAttribute("aria-expanded", "false");
         if (restoreFocus) burgerBtn.focus();
     }
     function openDrawer() {
         drawer.classList.add("open"); drawerOverlay.classList.add("open");
-        drawer.setAttribute("aria-hidden", "false"); burgerBtn.setAttribute("aria-expanded", "true");
+        drawer.setAttribute("aria-hidden", "false"); drawer.inert = false; burgerBtn.setAttribute("aria-expanded", "true");
         if (search) search.focus();
     }
     function applySearch() {
