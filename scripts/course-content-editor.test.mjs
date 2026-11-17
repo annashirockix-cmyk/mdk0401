@@ -75,6 +75,9 @@ test("protected exam banks use a visual question editor instead of a JSON textar
  assert.ok(editor.includes('id="examQuestionType"'));
  assert.ok(editor.includes('id="addExamQuestionBtn"'));
  assert.ok(editor.includes('id="saveExamQuestionBtn"'));
+ assert.ok(editor.includes('id="previewExamQuestionBtn"'));
+ assert.ok(editor.includes("function previewExamQuestion()"));
+ assert.ok(editor.includes("Предпросмотр не показывает правильные ответы"));
  assert.ok(editor.includes("function collectExamQuestion()"));
  assert.ok(editor.includes("q.correctAnswers=indexes"));
  assert.ok(editor.includes("q.correctOrder=extra.slice()"));
