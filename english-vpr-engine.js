@@ -289,6 +289,11 @@
     if (Array.isArray(savedAnswers) && savedAnswers.length) draftStatus.textContent = "Восстановлены ранее сохранённые ответы";
     var submit = el("button", "btn", "Завершить и отправить экзамен");
     submit.type = "button"; submit.style.cssText = "width:100%;padding:16px;font-size:17px;margin:12px 0";
+    function resumeTimerAfterFailedSubmit() {
+      if (!finished && seconds > 0 && !window.englishAssessmentTimer) {
+        window.englishAssessmentTimer = window.setInterval(tick,1000);
+      }
+    }
     submit.onclick = function () {
       if (finished) return;
       var questionnaireError = false;
@@ -310,6 +315,7 @@
       submit.disabled = true; submit.textContent = "Отправляем на сервер…";
       if (!window.API || !window.API.submitEnglishVprExam) {
         finished = false; submit.disabled = false; submit.textContent = "Завершить и отправить экзамен";
+        resumeTimerAfterFailedSubmit();
         window.alert("Серверная проверка недоступна. Ответы не отправлены; обратитесь к преподавателю.");
         return;
       }
@@ -325,6 +331,7 @@
         if (window.saveStudentData) window.saveStudentData();
       }).catch(function(err) {
         finished = false; submit.disabled = false; submit.textContent = "Завершить и отправить экзамен";
+        resumeTimerAfterFailedSubmit();
         window.alert("Не удалось отправить экзамен: "+(err.message||err)+". Ответы не засчитаны; попробуйте ещё раз.");
       });
     };
