@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v399'; // Добавлена сквозная поддержка множественного выбора в пользовательских тестах.
+const CACHE_NAME = 'portal-cache-v400'; // Добавлена поддержка заданий на восстановление последовательности.
 
 const STATIC_ASSETS = [
   './',
