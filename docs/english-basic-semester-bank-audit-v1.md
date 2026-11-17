@@ -114,3 +114,13 @@ A fresh count of the teacher-key tables in all ten current Basic draft files (20
 This corrects the earlier tally in this document (A 49, B 51, C 49, D 51), which is stale relative to the current source files. The overall pool remains balanced within the intended 49–51 range.
 
 The authoring batches are **not individually balanced exam forms**. For example, draft v1 has A 5 / B 0 / C 0 / D 15; v2 has A 6 / B 1 / C 5 / D 8. Other batches also vary. This is acceptable only while the files remain authoring batches and the approved semester banks are built from a cross-batch allocation. Do not use a single 20-question draft file as a student test or assign sequential 20-item batches directly to semester assessments. When the four Basic semester slots are finally mapped, rebalance correct-answer positions within each slot and recheck after option shuffling.
+
+
+## Semantic near-duplicate screen — 2026-11-17
+
+A focused cross-batch review identified two pairs that repeated almost the same sentence frame and target more closely than is useful for a 200-item authoring pool:
+
+- Q4 and Q121 both tested **interested in + gerund** in near-identical “learning foreign languages” contexts. Q121 has been replaced with **proud of + noun** (“The students were proud of their team's success”), retaining key position B.
+- Q29 and Q81 both asked the learner to complete almost the same indirect question about the location of the nearest bus stop. Q81 has been replaced with an indirect yes/no question about the library opening on Saturdays (“Do you know whether the library is open…”), retaining key position A.
+
+The two revised source files retain four options and their existing answer-key positions. This is a targeted remediation of two high-confidence near-duplicates, not a claim that all 200 questions have been fully semantically de-duplicated. A complete review of grammar-target frequency, reading-topic overlap, distractor reuse and cross-track/protected-bank similarity remains open.
