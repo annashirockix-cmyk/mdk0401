@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which document should students bring to the CV workshop?",
       "audioText": "The careers office is offering a CV workshop on Friday afternoon. It begins at one thirty in Room 24. Bring a draft CV saved on a USB drive or in your college cloud folder. The adviser will show students how to describe practical skills and organise education details. There will also be time to ask individual questions. Places are limited, so book online before Thursday.",
       "options": [
-        "On Friday",
+        "A completed engineering project",
         "A draft CV",
-        "Next month",
-        "After the event"
+        "A passport",
+        "A list of examination results"
       ],
       "correctIndex": 1,
       "points": 1
