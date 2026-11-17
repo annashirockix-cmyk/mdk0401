@@ -89,3 +89,25 @@
 - Latest reviewed branch HEAD at the time of this note: `e23c69d685b4826fd3335a7c2fd756646d88d283`. GitHub Actions run `44032712663` / #2943 was in progress at last check; automated English runtime and browser exam checks had passed, with Playwright/Chromium and subsequent browser audits still running.
 - Remaining work: complete the run on the final head; perform a focused answer-key/audio-text verification for the amended variants; continue the full editorial review of V01–V15, including all 150 listening scripts, reading passages, objective keys, short-text acceptance sets and written rubrics; obtain independent English-methodologist and technical subject-matter approval. The 110-variant first pass does not certify CEFR level, factual currency, programme alignment or release suitability.
 - No protected Google Sheet, active VPR bank, Apps Script deployment, production import, merge or student publication was performed.
+
+
+## Follow-up editorial pass — Technical pool and final-exam listening V01–V04 (2026-11-17)
+
+### Technical English 200-item draft pool
+- Continued the cross-batch semantic recurrence screen and corrected three repeated narrow assessment targets:
+  - Q109 now tests measurement uncertainty rather than repeating Q11's definition of instrument calibration.
+  - Q122 now tests rework rather than repeating Q78's meaning of non-conformance / out-of-specification.
+  - Q132 now tests why a superseded revision may be retained as historical evidence, rather than repeating Q19's check of the current approved revision.
+- Correct-answer positions were preserved (Q109 A, Q122 A, Q132 C), and teacher-key rationales were updated. The audit is recorded in docs/english-technical-semester-bank-audit-v1.md §4F.
+- These are authoring-draft changes only; they do not modify protected VPR data or student-facing content.
+
+### Final-exam listening prompts V01–V04
+- Reviewed the two listening prompts and their option categories in the 40 individual pilot variants V01–V04 across all 10 course/semester slots.
+- Found and corrected four distractor sets where options did not match the question's semantic category:
+  - C2-S1 V02 Listening 2: document choices replaced temporal phrases;
+  - C2-S1 V03 Listening 2: duration choices replaced unrelated time references;
+  - C2-S1 V04 Listening 2: location choices replaced temporal phrases;
+  - C2-S2 V03 Listening 2: document choices replaced temporal phrases.
+- The correct answers remain at index 1 in all four tasks. Individual source JSON files and the combined registry were synchronized; a read-back check confirmed exact option parity for all four amended task IDs.
+- This was a focused listening/distractor pass, not a complete review of every reading, grammar, multiple-choice, ordering, short-text or written task in V01–V04. V16–V20 and the full content review remain outstanding.
+- PR remains Draft; no protected bank, Google Sheets, Apps Script deployment, production import, merge or student publication was performed.
