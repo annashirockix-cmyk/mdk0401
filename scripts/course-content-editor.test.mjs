@@ -62,6 +62,8 @@ test("short text questions are rendered and scored on the server", () => {
  assert.ok(app.includes('questionType === "short_text"'));
  assert.ok(server.includes('type === "text" || type === "short_text"'));
  assert.ok(server.includes('toLocaleLowerCase("ru")'));
+ assert.ok(server.includes("const textExpected=q.correctAnswer!==undefined?q.correctAnswer"));
+ assert.ok(server.includes("normalize(answer)===normalize(textExpected)"));
 });
 
 test("flashcard constructor saves and reopens saved sets", () => {
