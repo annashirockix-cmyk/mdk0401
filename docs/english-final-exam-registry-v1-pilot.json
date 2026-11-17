@@ -4936,10 +4936,10 @@
                 "options": [
                   "When the company was founded",
                   "How many hours a trainee works",
-                  "Which qualities the company values in a trainee",
-                  "Which qualifications are needed before applying?"
+                  "Which qualifications are needed before applying?",
+                  "Which qualities the company values in a trainee"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -5087,10 +5087,10 @@
                 "options": [
                   "To obtain an apprenticeship immediately",
                   "To compare the salaries of different jobs",
-                  "To help her make an informed decision",
-                  "To find out whether the courses include a final examination"
+                  "To find out whether the courses include a final examination",
+                  "To help her make an informed decision"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -7370,11 +7370,11 @@
                 "prompt": "What did the IT team confirm?",
                 "options": [
                   "That the message was a routine college notice",
-                  "That the message was a phishing attempt",
+                  "The message asked the student to update her timetable.",
                   "That the student's password had already been changed",
-                  "The message asked the student to update her timetable."
+                  "That the message was a phishing attempt"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
