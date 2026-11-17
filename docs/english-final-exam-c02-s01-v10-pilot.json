@@ -14,12 +14,12 @@
       "prompt": "Listening 1. What transport arrangement has the group chosen for the visit?",
       "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
       "options": [
-        "By minibus",
         "By coach",
+        "By minibus",
         "By public bus",
         "By train"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -33,7 +33,7 @@
         "Their safety shoes",
         "Their notebooks"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -43,10 +43,10 @@
       "options": [
         "The passenger's boarding pass",
         "The airline's staff timetable",
-        "The airport display",
-        "The airline's website"
+        "The airline's website",
+        "The airport display"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "She repeated and clarified the information calmly",
         "She asked the passenger to wait until the flight arrived."
       ],
-      "correctIndex": 3,
+      "correctIndex": 2,
       "points": 1
     },
     {
