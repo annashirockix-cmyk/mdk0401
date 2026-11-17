@@ -2411,15 +2411,33 @@ function getCustomTest_(data) {
         throw new Error("В вопросе " + (index + 1) + " неверно задан ключ множественного выбора. Укажите минимум два разных правильных варианта.");
       }
     }
+    if (type === "matching" || type === "match") {
+      const pairs = Array.isArray(question.pairs) ? question.pairs : [];
+      const left = pairs.map(function(pair){return String(pair && pair.left || "").trim();});
+      const right = pairs.map(function(pair){return String(pair && pair.right || "").trim();});
+      if (pairs.length < 2 || left.some(function(value){return !value;}) || right.some(function(value){return !value;}) || new Set(left).size !== left.length || new Set(right).size !== right.length) {
+        throw new Error("В вопросе " + (index + 1) + " неверно заданы пары. Нужны минимум две пары с непустыми и уникальными частями.");
+      }
+    }
   });
   const displayQuestions = hydrateTestQuestionImages_(questions);
   const optionMaps = {}, safeQuestions = displayQuestions.map(function(question, index) {
     const safe = sanitizeAssessmentQuestionForStudent_(question || {});
-    const options = Array.isArray(safe.options) ? safe.options.slice() : [];
-    if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
-    const order = shuffledServer_(options.map(function(_, i) { return i; }));
-    safe.options = order.map(function(i) { return options[i]; });
-    optionMaps[String(index)] = order;
+    const type = String(safe.type || safe.kind || "single").toLowerCase();
+    if (type === "matching" || type === "match") {
+      const pairs = Array.isArray(question.pairs) ? question.pairs : [];
+      const options = pairs.map(function(pair){return String(pair.right || "");});
+      const order = shuffledServer_(options.map(function(_, i) { return i; }));
+      safe.options = order.map(function(i) { return options[i]; });
+      safe.pairs = pairs.map(function(pair){return {left:String(pair.left || "")};});
+      optionMaps[String(index)] = order;
+    } else {
+      const options = Array.isArray(safe.options) ? safe.options.slice() : [];
+      if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
+      const order = shuffledServer_(options.map(function(_, i) { return i; }));
+      safe.options = order.map(function(i) { return options[i]; });
+      optionMaps[String(index)] = order;
+    }
     ["correct","answer","correctAnswer","answers","explanation","solution","key","rationale","answerIndex","correctIndex","correctOption","expectedAnswer","acceptedAnswers","correctOrder","isCorrect","imageRef"].forEach(function(key) { delete safe[key]; });
     return safe;
   });
@@ -2446,12 +2464,19 @@ function submitCustomTest_(data) {
   if (!questions.length || answers.length !== questions.length) throw new Error("Количество ответов не совпадает с количеством вопросов.");
   const canonicalAnswers = answers.map(function(value, index) {
     const order = attempt.optionMaps[String(index)] || [];
+    const question = questions[index] || {};
+    const type = String(question.type || question.kind || "single").toLowerCase();
     if (Array.isArray(value)) {
       const mapped = value.map(function(item) {
         const displayed = Number(item);
         return Number.isInteger(displayed) && displayed >= 0 && displayed < order.length ? order[displayed] : -1;
       });
-      return mapped.every(function(item) { return item >= 0; }) && new Set(mapped).size === mapped.length ? mapped.sort(function(a,b){return a-b;}) : [];
+      if (!mapped.every(function(item) { return item >= 0; }) || new Set(mapped).size !== mapped.length) return [];
+      if (type === "matching" || type === "match") {
+        const originalOptions = Array.isArray(question.pairs) ? question.pairs.map(function(pair){return String(pair.right || "");}) : [];
+        return mapped.map(function(originalIndex){return originalOptions[originalIndex] || "";});
+      }
+      return mapped.sort(function(a,b){return a-b;});
     }
     const displayed = Number(value);
     return Number.isInteger(displayed) && displayed >= 0 && displayed < order.length ? order[displayed] : -1;
