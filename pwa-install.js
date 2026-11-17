@@ -1,3 +1,4 @@
+// Install UI only; assessment submission and account sync remain online-only.
 (function () {
   "use strict";
   var card = document.getElementById("pwaInstallCard");
