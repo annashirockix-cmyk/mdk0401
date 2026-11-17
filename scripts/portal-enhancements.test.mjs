@@ -1442,11 +1442,11 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
   const exam = (track) => ({
     id: "english_vpr_" + track + "_2026", track, time: 90, maxScore: 40,
     tasks: [
-      {type:"choice",points:5,items:Array(5).fill(["q",1])},
-      {type:"match",points:5,items:Array(5).fill(["A","text",1])},
-      {type:"gap",points:5,answers:Array(5).fill(1)},
-      {type:"gap",points:5,answers:Array(5).fill(1)},
-      {type:"gap",points:5,answers:Array(5).fill(1)},
+      {type:"choice",points:5,options:["a","b","c","d"],items:Array(5).fill(["q",1])},
+      {type:"match",points:5,options:["a","b","c","d","e","f"],items:Array(5).fill(["A","text",1])},
+      {type:"gap",points:5,options:["a","b","c","d","e","f"],answers:Array(5).fill(1)},
+      {type:"gap",points:5,options:["a","b","c","d","e","f"],answers:Array(5).fill(1)},
+      {type:"gap",points:5,itemOptions:Array(5).fill(["a","b","c"]),answers:Array(5).fill(1)},
       {type:"transform",points:5,items:Array(5).fill(["a","b","c",["answer"]])},
       {type:"questionnaire",points:10,items:Array(10).fill("Question")}
     ]
@@ -1464,6 +1464,14 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
   assert.doesNotMatch(read("service-worker.js"), /english-vpr-exams\.js/);
   const invalid = exam("basic"); invalid.tasks.pop();
   assert.throws(() => sandbox.validateEnglishVprExam_("basic", invalid), /структура экзамена/i);
+  const missingChoice = exam("basic"); delete missingChoice.tasks[0].options;
+  assert.throws(() => sandbox.validateEnglishVprExam_("basic", missingChoice), /задании 1 некорректный список/i);
+  const invalidMatch = exam("basic"); invalidMatch.tasks[1].items[0][2] = 99;
+  assert.throws(() => sandbox.validateEnglishVprExam_("basic", invalidMatch), /задании 2 некорректный ключ/i);
+  const invalidGap = exam("basic"); invalidGap.tasks[4].answers[0] = 4;
+  assert.throws(() => sandbox.validateEnglishVprExam_("basic", invalidGap), /некорректный список вариантов или ключ/i);
+  const emptyWritten = exam("basic"); emptyWritten.tasks[6].items[0] = "";
+  assert.throws(() => sandbox.validateEnglishVprExam_("basic", emptyWritten), /пустой или некорректный вопрос/i);
 });
 
 
