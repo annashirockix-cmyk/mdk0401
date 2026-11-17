@@ -130,7 +130,7 @@ test("English listening is embedded in lectures and no separate listening tab is
   assert.match(read("english-listening-tts.js"), /speechSynthesis/);
   assert.match(read("english-listening-tts.js"), /SpeechSynthesisUtterance/);
   const serviceWorker = read("service-worker.js");
-  assert.match(serviceWorker, /const CACHE_NAME = 'portal-cache-v\\d+'/);
+  assert.match(serviceWorker, /const CACHE_NAME = 'portal-cache-v\d+'/);
   for (const file of ["english-five-year-runtime.js", "english-listening-tts.js", "english-listening-lesson.js", "english-listening-catalog.js"]) {
     assert.ok(serviceWorker.includes("./" + file), `service worker must precache ${file}`);
   }
