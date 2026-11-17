@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c3_s2",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 3, Semester 2 — Pilot Variant 8",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s2v08_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the terminology workshop take place?",
+      "audioText": "The quality department is running a terminology workshop on Tuesday at one thirty in Room 15. Students will review the terms defect, non-conformity, inspection and corrective action. A short glossary will be provided. The instructor asks students to bring one example from a previous classroom exercise where a result did not meet a stated requirement.",
+      "options": [
+        "On Tuesday at one thirty",
+        "On Tuesday at twelve thirty",
+        "On Wednesday at one thirty",
+        "On Tuesday at two thirty"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v08_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which glossary item will be provided?",
+      "audioText": "The quality department is running a terminology workshop on Tuesday at one thirty in Room 15. Students will review the terms defect, non-conformity, inspection and corrective action. A short glossary will be provided. The instructor asks students to bring one example from a previous classroom exercise where a result did not meet a stated requirement.",
+      "options": [
+        "A machine manual",
+        "A short glossary",
+        "A parts catalogue",
+        "A safety notice"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v08_r01",
+      "type": "single_choice",
+      "prompt": "A non-conformity is a failure to meet a specified requirement. It may relate to a dimension, material, document or process. A clear report identifies the requirement, describes the observed result and provides relevant evidence. The responsible person can then review the issue and decide what action is appropriate. A non-conformity should not be hidden by changing the original inspection data. Reading 1. What does a non-conformity mean?",
+      "options": [
+        "A recommendation to replace a component",
+        "A delay in the planned production schedule",
+        "A failure to meet a specified requirement",
+        "A difference between two informal opinions"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s2v08_r02",
+      "type": "single_choice",
+      "prompt": "What should a clear report describe?",
+      "options": [
+        "The equipment model, serial number and purchase date",
+        "The operator name, shift time and training record",
+        "The supplier name, delivery date and order value",
+        "The requirement, observed result and relevant evidence"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s2v08_g01",
+      "type": "single_choice",
+      "prompt": "The original inspection data must not ___ without an authorised correction.",
+      "options": [
+        "be changed",
+        "changed",
+        "changing",
+        "be changing yesterday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v08_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO details that help describe a non-conformity.",
+      "options": [
+        "An unrelated personal opinion",
+        "A guess about who is responsible",
+        "The requirement that was not met",
+        "The observed result and evidence"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v08_v01",
+      "type": "short_text",
+      "prompt": "A failure to meet a specified requirement is a non-___.",
+      "acceptedAnswers": [
+        "conformity"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v08_f01",
+      "type": "single_choice",
+      "prompt": "You need to report a non-conformity. Which sentence is appropriate?",
+      "options": [
+        "The result is wrong, but I will not explain why.",
+        "The measured value is outside the specified limit; I have recorded the evidence for review.",
+        "I changed the result so it looks correct.",
+        "Someone must be blamed immediately."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v08_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of quality terminology in a logical order.",
+      "options": [
+        "Compare the result with the requirement",
+        "Identify the specified requirement",
+        "Report the non-conformity with evidence",
+        "Record the observed result"
+      ],
+      "correctOrder": [
+        "Identify the specified requirement",
+        "Record the observed result",
+        "Compare the result with the requirement",
+        "Report the non-conformity with evidence"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v08_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how to report a non-conformity clearly and why original inspection data must remain accurate.",
+      "rubric": "8 points total: the non-conformity is described against a stated requirement with relevant identification/evidence (0–2); the response explains why original inspection data must remain accurate and traceable (0–2); the report is logically organised with understandable grammar (0–2); quality/inspection vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s2v08_audio",
+    "readingPassageId": "c3s2v08_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

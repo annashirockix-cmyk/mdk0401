@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 9",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v09_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the data-log demonstration take place?",
+      "audioText": "The automation laboratory will demonstrate a sample data log on Friday at eleven. Students should bring the trend-chart worksheet. The instructor will show how a timestamp, measured value and equipment reference help describe a recorded event. The class will discuss how missing units or unclear time information can make a trend difficult to interpret.",
+      "options": [
+        "On Friday at eleven",
+        "On Friday at ten",
+        "On Thursday at eleven",
+        "On Friday at twelve"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v09_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which worksheet should students bring?",
+      "audioText": "The automation laboratory will demonstrate a sample data log on Friday at eleven. Students should bring the trend-chart worksheet. The instructor will show how a timestamp, measured value and equipment reference help describe a recorded event. The class will discuss how missing units or unclear time information can make a trend difficult to interpret.",
+      "options": [
+        "The sensor glossary",
+        "The trend-chart worksheet",
+        "The maintenance task card",
+        "The network address table"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v09_r01",
+      "type": "single_choice",
+      "prompt": "A data log stores observations over time. A useful record includes a timestamp, the measured value, its unit and the equipment or sensor reference. When data are displayed as a trend, the time scale and axis labels help readers understand changes. Missing units or unclear timestamps can lead to incorrect conclusions, even when the recorded numbers are accurate. Reading 1. Which details should a useful data log include?",
+      "options": [
+        "Supplier address, order quantity, delivery date and price",
+        "Operator name, shift date, training group and room number",
+        "Timestamp, measured value, unit and equipment or sensor reference",
+        "Machine colour, storage location, programme revision and tool number"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v09_r02",
+      "type": "single_choice",
+      "prompt": "How do time scales and axis labels help readers?",
+      "options": [
+        "They show the equipment purchase price",
+        "They explain the supplier's delivery schedule",
+        "They replace the need to identify units",
+        "They help readers understand changes over time"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v09_g01",
+      "type": "single_choice",
+      "prompt": "Each data point ___ with a timestamp and unit.",
+      "options": [
+        "is recorded",
+        "record",
+        "recording",
+        "are record"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v09_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO fields essential to interpret a recorded numeric measurement in an automation data log.",
+      "options": [
+        "Operator initials",
+        "Equipment location",
+        "Timestamp",
+        "Unit of measurement"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v09_v01",
+      "type": "short_text",
+      "prompt": "A record that stores observations together with their time is a data ___.",
+      "acceptedAnswers": [
+        "log"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v09_f01",
+      "type": "single_choice",
+      "prompt": "A trend chart has no unit on its vertical axis. What should you say?",
+      "options": [
+        "The unit is not important.",
+        "Could we add the correct unit so the measured values can be interpreted?",
+        "The chart is clear without labels.",
+        "I will assume the unit."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v09_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of automation data logs in a logical order.",
+      "options": [
+        "Include the unit and reference",
+        "Identify the equipment or sensor",
+        "Display the data with clear labels",
+        "Record the timestamp and value"
+      ],
+      "correctOrder": [
+        "Identify the equipment or sensor",
+        "Record the timestamp and value",
+        "Include the unit and reference",
+        "Display the data with clear labels"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v09_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining what information belongs in an automation data log and why timestamps and units matter.",
+      "rubric": "8 points total: the response identifies relevant data-log fields such as value, source/device, timestamp and unit (0–2); it explains how timestamps and units support interpretation and comparison of records (0–2); the explanation is clear with understandable grammar (0–2); automation/data-log vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v09_audio",
+    "readingPassageId": "c4s2v09_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

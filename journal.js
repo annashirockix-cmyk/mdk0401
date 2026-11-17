@@ -45,9 +45,9 @@ window.renderJournalPage = function() {
           if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { contentWrap.innerHTML = "<div class='module'>Студентов пока нет.</div>"; return; }
 
           if (!rd || !rd.success) throw new Error(rd && rd.error || 'Не удалось загрузить результаты.');
-          var students = d.students.filter(st => String(st.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (st.courses || []).includes(courseId)));
+          var students = d.students.filter(st => String(st.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (st.courses || []).includes(courseId) || ((courseId === "ENB" || courseId === "ENT") && (st.courses || []).includes("EN"))));
           var resultIndex = {};
-          (rd.results || []).forEach(rec => { if (!resultIndex[rec.email]) resultIndex[rec.email] = {}; resultIndex[rec.email][rec.testId] = rec; });
+          (rd.results || []).forEach(rec => { if (!resultIndex[rec.email]) resultIndex[rec.email] = {}; if (!Object.prototype.hasOwnProperty.call(resultIndex[rec.email], rec.testId)) resultIndex[rec.email][rec.testId] = rec; });
           var knownWorkIds = new Set(works.map(w => w.id));
           (rd.results || []).forEach(rec => { if (rec.courseId === courseId && rec.testId && !knownWorkIds.has(rec.testId)) { works.push({id:rec.testId,title:rec.testTitle||rec.testId,type:"custom"}); knownWorkIds.add(rec.testId); } });
           CURRENT_STUDENTS_CACHE = students;
@@ -93,6 +93,50 @@ window.renderJournalPage = function() {
                   var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : (grade === "—" ? "var(--muted)" : "var(--err)"));
                   td.innerHTML = `<b style="color:${color}; font-size:16px;">${grade}</b>`;
                   if (record && (record.payload || record.feedback || record.assignmentStatus)) { var details=document.createElement("details");details.style="font-size:11px;margin-top:4px;text-align:left";var summary=document.createElement("summary");summary.textContent=record.assignmentStatus==="reviewed"?"Ответ и проверка":(record.assignmentStatus?"Ответ · на проверке":"Ответ");details.appendChild(summary);if(record.payload){var answer=document.createElement("div");answer.textContent=record.payload;answer.style="white-space:pre-wrap;max-width:220px;overflow-wrap:anywhere;padding:5px";details.appendChild(answer);}if(record.feedback){var feedback=document.createElement("div");feedback.textContent="Комментарий: "+record.feedback;feedback.style="white-space:pre-wrap;padding:5px;color:var(--accent)";details.appendChild(feedback);}td.appendChild(details); }
+                  if (record && record.payload && /^(prac_|written_self_)/.test(String(record.testId || w.id)) && !(Number(record.grade)>=2 && Number(record.grade)<=5)) {
+                      var review = document.createElement("div");
+                      review.style = "display:grid;gap:5px;margin-top:6px;text-align:left;min-width:150px;";
+                      var gradeLabel = document.createElement("label");
+                      gradeLabel.textContent = "Оценка преподавателя";
+                      gradeLabel.style = "font-size:11px;";
+                      var gradeSelect = document.createElement("select");
+                      gradeSelect.className = "self-input";
+                      gradeSelect.style = "margin:0;padding:5px;font-size:12px;";
+                      gradeSelect.innerHTML = '<option value="">Оценка…</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>';
+                      if ([2,3,4,5].indexOf(Number(record.grade)) >= 0) gradeSelect.value = String(Number(record.grade));
+                      var feedbackInput = document.createElement("textarea");
+                      feedbackInput.className = "self-input";
+                      feedbackInput.rows = 2;
+                      feedbackInput.placeholder = "Комментарий (необязательно)";
+                      feedbackInput.style = "margin:0;font-size:11px;";
+                      var gradeButton = document.createElement("button");
+                      gradeButton.className = "btn";
+                      gradeButton.type = "button";
+                      gradeButton.textContent = "Проверить";
+                      gradeButton.style = "padding:6px;font-size:11px;";
+                      gradeButton.onclick = function() {
+                          var selectedGrade = Number(gradeSelect.value);
+                          if ([2,3,4,5].indexOf(selectedGrade) < 0) { window.showToast("Выберите оценку от 2 до 5.", "err"); return; }
+                          gradeButton.disabled = true;
+                          gradeButton.textContent = "Сохранение…";
+                          window.API.gradeWrittenResult(s.email, courseId, String(record.testId || w.id), selectedGrade, feedbackInput.value)
+                              .then(function(result) {
+                                  if (!result || !result.success) throw new Error(result && result.error || "Не удалось сохранить оценку.");
+                                  window.showToast("Письменная работа проверена.", "ok");
+                                  renderAuto();
+                              })
+                              .catch(function(error) {
+                                  gradeButton.disabled = false;
+                                  gradeButton.textContent = "Повторить";
+                                  window.showToast(error.message || "Ошибка проверки.", "err");
+                              });
+                      };
+                      review.appendChild(gradeLabel);
+                      review.appendChild(gradeSelect);
+                      review.appendChild(feedbackInput);
+                      review.appendChild(gradeButton);
+                      td.appendChild(review);
+                  }
                   tr.appendChild(td);
               });
 
@@ -149,11 +193,19 @@ window.renderJournalPage = function() {
 
           wrap.innerHTML = '<div class="skeleton" style="height:200px;"></div>';
 
-          window.API.getStudents().then(d => {
+          Promise.all([window.API.getStudents(), window.API.getResults({courseId:window.state.activeCourseId})]).then(function(pair) {
+              var d=pair[0], resultData=pair[1];
               wrap.innerHTML = "";
               if (!d || !(d.ok || d.success) || !d.students || !d.students.length) { wrap.innerHTML = "<div class='module'>Нет студентов.</div>"; return; }
+              if (!resultData || !resultData.success) throw new Error(resultData && resultData.error || "Не удалось загрузить оценки.");
 
-              var students = d.students.filter(s => String(s.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (s.courses || []).includes(window.state.activeCourseId)));
+              var manualByStudent={};
+              (resultData.results||[]).forEach(function(r){
+                  if(r.courseId!==window.state.activeCourseId||r.testTitle!=="Оценка за занятие")return;
+                  var key=String(r.email||"").toLowerCase()+"|"+String(r.finishedAt||"").slice(0,10);
+                  manualByStudent[key]=r;
+              });
+              var students = d.students.filter(s => String(s.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (s.courses || []).includes(window.state.activeCourseId) || ((window.state.activeCourseId === "ENB" || window.state.activeCourseId === "ENT") && (s.courses || []).includes("EN"))));
               if (groupFilter !== "all") {
                   students = students.filter(s => s.group === groupFilter);
               }
@@ -170,19 +222,24 @@ window.renderJournalPage = function() {
                       </tr></thead><tbody>`;
 
               students.forEach((s, studentIndex) => {
-                  var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
-                  var manualGrades = p.manualGrades || {};
-                  var currentVal = String(manualGrades[formattedDate] || "");
+                  var savedRecord=manualByStudent[String(s.email||"").toLowerCase()+"|"+dateInput]||null;
+                  var legacyPayload={};try{legacyPayload=JSON.parse(s.payload||"{}");}catch(e){}
+                  var legacyDate=formattedDate;
+                  var legacyValue=legacyPayload.manualGrades&&legacyPayload.manualGrades[legacyDate];
+                  var currentVal=savedRecord&&savedRecord.grade!==undefined&&savedRecord.grade!==null?String(savedRecord.grade):(legacyValue===undefined||legacyValue===null?"":String(legacyValue));
+                  var currentFeedback=savedRecord&&savedRecord.feedback?String(savedRecord.feedback):"";
                   var inputId = "manualGrade_" + studentIndex;
+                  var feedbackId = "manualFeedback_" + studentIndex;
                   var statusId = "manualGradeStatus_" + studentIndex;
 
                   tableHtml += `<tr>
                       <td style="padding:12px; border:1px solid var(--border);"><b>${window.escapeHtml(s.name)}</b> <span style="font-size:12px; color:var(--muted);">(${window.escapeHtml(s.group)})</span></td>
                       <td style="padding:12px; border:1px solid var(--border); text-align:center;">
-                          <input type="text" id="${inputId}" class="self-input" style="margin:0; text-align:center; font-size:18px; font-weight:bold; height:40px;" maxlength="3" placeholder="-" value="${window.escapeHtml(currentVal)}">
+                          <input type="number" min="2" max="5" step="1" id="${inputId}" class="self-input" style="margin:0; text-align:center; font-size:18px; font-weight:bold; height:40px;" placeholder="—" value="${window.escapeHtml(currentVal)}">
+                          <textarea id="${feedbackId}" class="self-input" rows="2" style="margin-top:5px;font-size:11px" placeholder="Комментарий преподавателя (необязательно)">${window.escapeHtml(currentFeedback)}</textarea>
                       </td>
                       <td style="padding:12px; border:1px solid var(--border); text-align:center;" id="${statusId}">
-                          ${currentVal ? '<span style="color:var(--ok);">Сохранено</span>' : '<span style="color:var(--muted);">Не выставлено</span>'}
+                          ${currentVal ? '<span style="color:var(--ok);">Сохранено ранее</span>' : '<span style="color:var(--muted);">Не выставлено</span>'}
                       </td>
                   </tr>`;
               });
@@ -202,14 +259,18 @@ window.renderJournalPage = function() {
                       var input = document.getElementById("manualGrade_" + studentIndex);
                       if (!input) return;
                       var val = input.value.trim();
-                      
-                      var p = {}; try { p = JSON.parse(s.payload || "{}"); } catch(e) {}
-                      if (!p.manualGrades) p.manualGrades = {};
-                      
-                      if (val) p.manualGrades[formattedDate] = val;
-                      else delete p.manualGrades[formattedDate];
-
-                      promises.push(window.API.saveStudent(s.email, s.name, s.group, JSON.stringify(p)));
+                      var feedbackInput = document.getElementById("manualFeedback_" + studentIndex);
+                      if (!val) return;
+                      var numericGrade = Number(val);
+                      if ([2,3,4,5].indexOf(numericGrade) < 0) throw new Error("Для каждого заполненного поля укажите оценку от 2 до 5.");
+                      promises.push(window.API.saveManualGrade({
+                          email:s.email,
+                          courseId:window.state.activeCourseId,
+                          testTitle:"Оценка за занятие",
+                          date:dateInput,
+                          grade:numericGrade,
+                          feedback:feedbackInput ? feedbackInput.value : ""
+                      }));
                   });
 
                   Promise.all(promises).then(() => {

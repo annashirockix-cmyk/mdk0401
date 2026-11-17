@@ -195,7 +195,10 @@ window.renderTeacherControlsPage=function(){
      if(topic.test&&topic.test.length)built.push({id:"test_"+topic.id,title:"Тест · "+(topic.code||"")+" "+(topic.title||topic.id)});
      (topic.selfWork||[]).forEach((w,i)=>{const k="self_"+topic.id+"_"+i;if(window.EXTRA_TESTS&&window.EXTRA_TESTS[k]&&window.EXTRA_TESTS[k].questions)built.push({id:k,title:"Самостоятельный тест · "+(w.title||k)});});
    }));
-   built.push({id:"__final__"+cid,title:"Итоговый экзамен · "+cid});
+   const finalCourseNumbers=cid==="ENB"?[1,2]:cid==="ENT"?[3,4,5]:[1,2,3,4,5];
+   finalCourseNumbers.forEach(function(courseNo){[1,2].forEach(function(semester){
+     built.push({id:"english_final_c"+courseNo+"_s"+semester,title:"Итоговый экзамен · курс "+courseNo+", семестр "+semester});
+   });});
    const all=tests.concat(built);
    testSel.innerHTML='<option value="">— Выберите тест —</option>'+all.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
    loadAttemptRequests();
@@ -391,6 +394,6 @@ if(originalInline)window.startInlineTest=function(topicId,selfWorkCode){
  }).catch(function(e){if(area)area.innerHTML='<div class="module">Не удалось проверить доступ к тесту: '+esc(e.message||"ошибка сервера")+'. Повторите попытку позже.</div>';});
 };
 const oldTopic=window.renderTopicPage;
-if(oldTopic)window.renderTopicPage=function(course,topic){const s=window.state||{},role=String((s.user&&s.user.role)||(s.student&&s.student.role)||"").toLowerCase();if(role!=="student"&&!s.student){return oldTopic.apply(this,arguments);}const app=document.getElementById("app");if(app)app.innerHTML='<div class="module">Проверка доступа к теме…</div>';const stamp=String(course)+":"+String(topic);window.API.getTopicAccess(course,topic).then(r=>{if(!app||!document.getElementById("app"))return;if(r&&r.open===false){app.innerHTML='<a class="backlink" href="#/">← Назад к плану</a><div class="module" style="text-align:center;padding:36px"><h2>🔒 Тема пока закрыта</h2><p>Преподаватель ещё не открыл доступ к этой теме. Попробуйте позже.</p></div>';return;}if((location.hash||"").indexOf(String(topic))>=0)oldTopic.apply(window,[course,topic]);if(window.enhanceTopicFlashcards)window.enhanceTopicFlashcards(course,topic);}).catch(()=>{if(app)app.innerHTML='<div class="module">Не удалось проверить доступ к теме. Проверьте подключение и повторите попытку.</div>';});};
+if(oldTopic)window.renderTopicPage=function(course,topic){const renderArgs=Array.prototype.slice.call(arguments);const s=window.state||{},role=String((s.user&&s.user.role)||(s.student&&s.student.role)||"").toLowerCase();if(role!=="student"&&!s.student){return oldTopic.apply(this,arguments);}const app=document.getElementById("app");if(app)app.innerHTML='<div class="module">Проверка доступа к теме…</div>';const stamp=String(course)+":"+String(topic);window.API.getTopicAccess(course,topic).then(r=>{if(!app||!document.getElementById("app"))return;if(r&&r.open===false){app.innerHTML='<a class="backlink" href="#/">← Назад к плану</a><div class="module" style="text-align:center;padding:36px"><h2>🔒 Тема пока закрыта</h2><p>Преподаватель ещё не открыл доступ к этой теме. Попробуйте позже.</p></div>';return;}if((location.hash||"").indexOf(String(topic))>=0)oldTopic.apply(window,renderArgs);if(window.enhanceTopicFlashcards)window.enhanceTopicFlashcards(course,topic);}).catch(()=>{if(app)app.innerHTML='<div class="module">Не удалось проверить доступ к теме. Проверьте подключение и повторите попытку.</div>';});};
 console.log("[teacher-controls] topic access, question bank, proctor log and tutoring controls loaded");
 })();

@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 2",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v02_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the risk-communication session take place?",
+      "audioText": "The engineering safety lecturer will discuss risk communication on Monday at ten fifteen. Students should bring the risk-register example and meet in the seminar room. The session will focus on describing hazards, existing controls and remaining concerns. The lecturer will explain why risk information should be specific, current and understandable to the people who need it.",
+      "options": [
+        "At ten fifteen on Monday",
+        "At nine on Tuesday",
+        "At eleven on Monday",
+        "At ten fifteen on Thursday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v02_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which example should students bring?",
+      "audioText": "The engineering safety lecturer will discuss risk communication on Monday at ten fifteen. Students should bring the risk-register example and meet in the seminar room. The session will focus on describing hazards, existing controls and remaining concerns. The lecturer will explain why risk information should be specific, current and understandable to the people who need it.",
+      "options": [
+        "The inspection checklist",
+        "The risk-register example",
+        "The maintenance schedule",
+        "The component glossary"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v02_r01",
+      "type": "single_choice",
+      "prompt": "A risk record should describe a hazard, the possible consequence and the controls that are already in place. It should also identify any remaining concern and the person or team responsible for review. A risk rating is only meaningful when the method and assumptions are clear. If conditions change, the record should be reviewed rather than treated as permanently valid. Reading 1. What should a risk record describe?",
+      "options": [
+        "Only the name of the hazard",
+        "The personal opinions of the maintenance team",
+        "The hazard, possible consequence, existing controls and remaining concern",
+        "The cost of every component in the system"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v02_r02",
+      "type": "single_choice",
+      "prompt": "When should a risk record be reviewed?",
+      "options": [
+        "At the end of every calendar month only",
+        "When a new student joins the course",
+        "When the report is printed",
+        "When conditions change"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v02_g01",
+      "type": "single_choice",
+      "prompt": "The risk record ___ when working conditions change.",
+      "options": [
+        "should be reviewed",
+        "should review",
+        "reviewing",
+        "are reviewed yesterday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v02_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO features of clear risk communication.",
+      "options": [
+        "A vague statement with no context",
+        "An assumption that conditions never change",
+        "A specific description of the hazard",
+        "A clear explanation of existing controls"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v02_v01",
+      "type": "short_text",
+      "prompt": "A source of potential harm or adverse effect is a ___.",
+      "acceptedAnswers": [
+        "hazard"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v02_f01",
+      "type": "single_choice",
+      "prompt": "A risk record does not explain who will review an outstanding concern. What should you ask?",
+      "options": [
+        "The responsible person is not important.",
+        "Could we identify who is responsible for reviewing the remaining concern?",
+        "The concern should be removed from the record.",
+        "I will assign a person without checking."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v02_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of risk communication in a logical order.",
+      "options": [
+        "Identify remaining concerns and responsibility",
+        "Describe the hazard and possible consequence",
+        "Review the record when conditions change",
+        "Record existing controls"
+      ],
+      "correctOrder": [
+        "Describe the hazard and possible consequence",
+        "Record existing controls",
+        "Identify remaining concerns and responsibility",
+        "Review the record when conditions change"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v02_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words explaining how to communicate a technical risk clearly. Include a hazard, consequence, control and review responsibility.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Hazard and consequence — 2: identifies a specific hazard and a plausible consequence; 1: identifies only one clearly; 0: absent or inaccurate. (2) Control — 2: describes a relevant control at an appropriate level without inventing an unauthorised procedure; 1: vague or partial; 0: absent/unsafe. (3) Review responsibility — 2: identifies who reviews the control and when or under what trigger; 1: partial; 0: absent. (4) English — 2: clear risk communication and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v02_audio",
+    "readingPassageId": "c5s2v02_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

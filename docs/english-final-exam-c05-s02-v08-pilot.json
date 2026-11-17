@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 8",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v08_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the quality presentation take place?",
+      "audioText": "The quality improvement group will present its findings on Monday at two fifteen in the conference room. Students should bring the process chart and the sample defect summary. The presentation will compare the number of reported defects before and after a process change. The group will also explain why the figures alone do not prove that the change caused the improvement.",
+      "options": [
+        "On Monday at two fifteen",
+        "On Monday at one fifteen",
+        "On Tuesday at two fifteen",
+        "On Monday at three fifteen"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v08_l02",
+      "type": "single_choice",
+      "prompt": "Which two documents should students bring for the quality-improvement presentation?",
+      "audioText": "The quality improvement group will present its findings on Monday at two fifteen in the conference room. Students should bring the process chart and the sample defect summary. The presentation will compare the number of reported defects before and after a process change. The group will also explain why the figures alone do not prove that the change caused the improvement.",
+      "options": [
+        "The quality checklist and audit report",
+        "The process chart and sample defect summary",
+        "The maintenance log and work order",
+        "The supplier scorecard and delivery history"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v08_r01",
+      "type": "single_choice",
+      "prompt": "A workshop team introduced a revised inspection checklist after repeated recording errors. The number of incomplete records fell during the following month. The team considered this a positive result, but it also noted that staff had received additional training at the same time. The report recommended collecting more data before attributing the improvement to the checklist alone. Reading 1. What change did the workshop team introduce?",
+      "options": [
+        "A different supplier for inspection materials",
+        "A new measuring instrument",
+        "A revised inspection checklist",
+        "A revised shift timetable"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v08_r02",
+      "type": "single_choice",
+      "prompt": "Why did the report avoid attributing the result to the checklist alone?",
+      "options": [
+        "Because the checklist was not used by every employee",
+        "Because the previous checklist had been approved recently",
+        "Because the inspection sample was too small to record",
+        "Because staff also received additional training"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v08_g01",
+      "type": "single_choice",
+      "prompt": "The number of incomplete records ___ during the following month.",
+      "options": [
+        "decreased",
+        "decrease",
+        "decreasing",
+        "were decrease"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v08_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO practices that strengthen a quality-improvement review.",
+      "options": [
+        "Ignore the baseline figures",
+        "Claim causation from one observation",
+        "Compare data over a suitable period",
+        "Consider other changes that may affect the result"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v08_v01",
+      "type": "short_text",
+      "prompt": "A starting measurement used for comparison is a ___.",
+      "acceptedAnswers": [
+        "baseline",
+        "baseline measurement"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v08_f01",
+      "type": "single_choice",
+      "prompt": "A manager says one improvement definitely caused the result, but another change happened at the same time. What should you say?",
+      "options": [
+        "The manager must be right.",
+        "The result is encouraging, but the additional training should also be considered before assigning a cause.",
+        "We can ignore the other change.",
+        "The data are not useful at all."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v08_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of quality improvement in a logical order.",
+      "options": [
+        "Compare results over time",
+        "Describe the initial quality problem",
+        "Review other factors before drawing a conclusion",
+        "Introduce and document the improvement"
+      ],
+      "correctOrder": [
+        "Describe the initial quality problem",
+        "Introduce and document the improvement",
+        "Compare results over time",
+        "Review other factors before drawing a conclusion"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v08_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words summarising a quality-improvement project. Describe the change, the measured result and one limitation when interpreting the outcome.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Change — 2: describes the improvement clearly and links it to the identified process; 1: partial; 0: absent. (2) Measured result — 2: reports relevant before/after or other measured evidence accurately; 1: partial; 0: absent or unsupported. (3) Limitation — 2: identifies a meaningful limitation or factor affecting interpretation; 1: vague; 0: absent or overclaims causation. (4) English — 2: clear summary and accurate quality-improvement vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v08_audio",
+    "readingPassageId": "c5s2v08_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

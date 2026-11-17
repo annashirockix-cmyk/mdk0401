@@ -140,3 +140,42 @@ A fresh read-back of the catalogue confirms 48 unique activities, with 12 lesson
 - Course 5, Semester 2 — lessons 1–12.
 
 Each activity has a script, questions, answer indices and matching feedback explanations. The earlier 40-activity count was an intermediate count and is superseded by this verified 48-activity read-back. Courses 1–3 remain outstanding. These are practice-only client-side activities, not graded or protected assessment.
+
+
+## Coverage update — 72 browser listening activities
+
+The catalogue now contains 72 unique practice activities, with all 12 lessons covered in each of six semester blocks:
+- Course 3, Semester 1 — aviation industry, aircraft structure, materials, manufacturing processes, technical drawings, CAD/CAM and specification reading.
+- Course 3, Semester 2 — machine tools, CNC, workshop safety, axes and coordinates, G-code reading, cutting tools, tolerances, measurement and shift handover.
+- Course 4, Semesters 1–2 — 24 activities.
+- Course 5, Semesters 1–2 — 24 activities.
+
+Every new Course 3 activity has a browser-readable English script and four multiple-choice comprehension questions with practice answer feedback. The catalogue is still practice-only: client-side answer keys, no gradebook writes, no exam attempts. Courses 1–2 remain outstanding. Lesson-page embedding and real-browser playback testing are still separate integration tasks.
+
+
+## Coverage update — 96 browser listening activities
+
+The catalogue now contains 96 unique practice activities across eight complete semester blocks:
+- Course 2, Semester 1 — 12 activities, from participles/gerunds/infinitives and Tatarstan reading to careers, CVs, workplace communication and reading strategies.
+- Course 2, Semester 2 — 12 activities, including conditionals, environmental protection, physics, automation, passive voice, coherent paragraphs and short presentations.
+- Courses 3–5 — 72 activities, with 12 lessons in each semester.
+
+All Course 2 activities include browser-readable English scripts and four multiple-choice comprehension questions with practice feedback. The catalogue remains practice-only: client-side answer keys, no gradebook writes, no exam attempts. Course 1 remains outstanding. Direct embedding in every lesson and real-browser playback testing remain separate tasks.
+
+
+## Verified implementation status — 120 active lesson activities
+
+A runtime audit on 2026-11-16 confirmed that the active `EnglishListeningCatalogue` already contains **120 unique activities**:
+- 45 activities for the 45 pre-existing Basic/Technical source lectures (16 Basic + 29 Technical), mapped through the existing source-topic and lecture-code mapping in `app.js`;
+- 75 activities for the 75 new lesson IDs in the five-year map.
+
+The first static count was misleading because it counted lesson-ID strings embedded in scripts and data examples rather than only active catalogue entries. The runtime count and the new regression test are the authoritative checks. No duplicate activities were retained.
+
+The automated regression test checks all 120 expected IDs, unique coverage, script presence, at least three comprehension questions per activity, valid answer indices and practice explanations. The catalogue remains practice-only: answer keys are client-side, no grades or attempts are saved, and these activities are not protected exams.
+
+Remaining listening work:
+- complete editorial review of the scripts, terminology, questions and answer explanations;
+- test speech synthesis, pause/resume/repeat, transcript reveal and responsive layout in real browsers and on mobile devices;
+- verify all 120 activities appear inside the correct lecture pages and the standalone Listening Lab after the full page loads.
+
+The separate assessment engine must continue to handle graded listening tasks and server-side checking.

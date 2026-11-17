@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 6",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v06_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the network lesson begin?",
+      "audioText": "The computer networks tutor will introduce network protocol terminology on Thursday at ten. Students should bring the network glossary and meet in Room 18. The lesson will compare the roles of addressing, routing and error checking in data communication. The tutor will use a simplified network diagram and a short glossary exercise.",
+      "options": [
+        "At ten on Thursday",
+        "At nine on Thursday",
+        "At ten on Friday",
+        "At eleven on Thursday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v06_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which glossary is required for the network lesson?",
+      "audioText": "The computer networks tutor will introduce network protocol terminology on Thursday at ten. Students should bring the network glossary and meet in Room 18. The lesson will compare the roles of addressing, routing and error checking in data communication. The tutor will use a simplified network diagram and a short glossary exercise.",
+      "options": [
+        "The network address register",
+        "The network glossary",
+        "The cable installation guide",
+        "The system maintenance schedule"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v06_r01",
+      "type": "single_choice",
+      "prompt": "A network protocol defines rules that allow devices to exchange information. Different protocols may support addressing, routing, error detection or application-level communication. A network diagram can show how devices are connected, but it does not describe every detail of the protocol. Engineers should identify the relevant standard and consult current technical documentation when describing system behaviour. Reading 1. What does a network protocol define?",
+      "options": [
+        "A list of passwords used by network users",
+        "A diagram showing where devices are physically installed",
+        "Rules that allow devices to exchange information",
+        "A record of the equipment purchase date"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v06_r02",
+      "type": "single_choice",
+      "prompt": "Why is a network diagram not enough to describe every protocol detail?",
+      "options": [
+        "Because it shows every protocol message in detail",
+        "Because it replaces the need for technical documentation",
+        "Because it contains no information about connected devices",
+        "Because it shows connections but not every detail of protocol behaviour"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v06_g01",
+      "type": "single_choice",
+      "prompt": "Network protocols ___ rules for exchanging information.",
+      "options": [
+        "define",
+        "defines",
+        "defining",
+        "is defined"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v06_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO functions associated with packet delivery and checking, rather than application-level security or data compression.",
+      "options": [
+        "Data compression",
+        "User authentication",
+        "Addressing",
+        "Error detection"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v06_v01",
+      "type": "short_text",
+      "prompt": "A set of rules for exchanging data between devices is a network ___.",
+      "acceptedAnswers": [
+        "protocol"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v06_f01",
+      "type": "single_choice",
+      "prompt": "A network report uses an unclear protocol name. What should you ask?",
+      "options": [
+        "I will leave the name out.",
+        "Could we confirm the exact protocol and version in the technical documentation?",
+        "All protocols are identical.",
+        "I will invent a standard name."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v06_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of network protocols in a logical order.",
+      "options": [
+        "Check the protocol name and version",
+        "Identify the communication task",
+        "Describe its role in the system",
+        "Find the relevant protocol reference"
+      ],
+      "correctOrder": [
+        "Identify the communication task",
+        "Find the relevant protocol reference",
+        "Check the protocol name and version",
+        "Describe its role in the system"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v06_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why network documentation should identify the protocol and its version. Mention two functions that protocols may support.",
+      "rubric": "8 points total: the response explains why the protocol and its version should be identified (0–2); it describes two relevant functions supported by the selected protocol, such as addressing, data exchange, framing, timing or error handling where applicable (0–2); ideas are logically organised with understandable grammar (0–2); network/protocol vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v06_audio",
+    "readingPassageId": "c4s2v06_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

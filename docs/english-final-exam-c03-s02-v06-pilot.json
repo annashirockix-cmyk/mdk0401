@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c3_s2",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 3, Semester 2 — Pilot Variant 6",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s2v06_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. What is the scheduled start time for the machining safety briefing?",
+      "audioText": "The workshop safety coordinator will give a briefing on Thursday at eight fifty. Students should wait in the marked classroom area until the instructor begins. The briefing will review warning signs, restricted zones and the procedure for reporting damaged equipment. Students should bring their induction cards, and questions can be asked at the end of the session.",
+      "options": [
+        "At eight fifty on Thursday",
+        "At seven fifty on Thursday",
+        "At eight fifty on Friday",
+        "At nine fifty on Thursday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v06_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which cards should students bring?",
+      "audioText": "The workshop safety coordinator will give a briefing on Thursday at eight fifty. Students should wait in the marked classroom area until the instructor begins. The briefing will review warning signs, restricted zones and the procedure for reporting damaged equipment. Students should bring their induction cards, and questions can be asked at the end of the session.",
+      "options": [
+        "The machine logbooks",
+        "Their induction cards",
+        "The drawing pack",
+        "The maintenance checklist"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v06_r01",
+      "type": "single_choice",
+      "prompt": "A student noticed that a warning label on a training machine was partly damaged. The student did not try to replace it. Instead, the issue was reported to the instructor, who arranged for the label to be checked and replaced through the department's normal process. The machine remained identified as requiring attention until the issue was resolved. Reading 1. What did the student do about the damaged label?",
+      "options": [
+        "Continued using the machine",
+        "Replaced the label without approval",
+        "Reported it to the instructor",
+        "Removed the warning and restarted the task"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s2v06_r02",
+      "type": "single_choice",
+      "prompt": "How was the machine identified while the issue remained unresolved?",
+      "options": [
+        "As ready for production",
+        "As available for use",
+        "As awaiting delivery",
+        "As requiring attention"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s2v06_g01",
+      "type": "single_choice",
+      "prompt": "The damaged label ___ to the instructor.",
+      "options": [
+        "was reported",
+        "reported yesterday by student",
+        "is report",
+        "were reporting"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v06_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO actions that demonstrate correct response to workshop safety information.",
+      "options": [
+        "Continue work after a warning without checking the hazard",
+        "Treat a verbal instruction as permission to ignore a posted restriction",
+        "Report damaged equipment",
+        "Follow warning signs and local instructions"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v06_v01",
+      "type": "short_text",
+      "prompt": "A sign or label that alerts people to a possible danger is a safety ___.",
+      "acceptedAnswers": [
+        "warning",
+        "warning sign",
+        "warning label"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v06_f01",
+      "type": "single_choice",
+      "prompt": "You see a damaged warning label. What should you say?",
+      "options": [
+        "I will remove it and write a new one.",
+        "I have noticed a damaged warning label. Could you check it, please?",
+        "It is probably fine, so I will ignore it.",
+        "I will cover it with another sticker."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v06_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of machining safety communication in a logical order.",
+      "options": [
+        "Wait for the authorised check",
+        "Notice the damaged label",
+        "Confirm that the issue has been resolved",
+        "Keep the issue visible and report it"
+      ],
+      "correctOrder": [
+        "Notice the damaged label",
+        "Keep the issue visible and report it",
+        "Wait for the authorised check",
+        "Confirm that the issue has been resolved"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v06_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why clear safety communication matters in a workshop. Give two examples of information that should be reported.",
+      "rubric": "8 points total: two examples of safety information that should be reported are identified (0–2); the response explains clear, timely reporting and alerting the responsible instructor/supervisor rather than ignoring a concern (0–2); the message is logically organised with understandable grammar (0–2); workshop/safety/reporting vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s2v06_audio",
+    "readingPassageId": "c3s2v06_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

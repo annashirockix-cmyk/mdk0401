@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 13",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v13_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where should students complete the form?",
+      "audioText": "The college reception has changed its procedure for reporting lost property. Students should complete a short form at the front desk and describe the item clearly. Valuable items are kept in a locked cabinet. The office is open from eight thirty until four thirty on weekdays. Students will be contacted if an item matching their description is found.",
+      "options": [
+        "At the front desk",
+        "At the student support office",
+        "In the security office",
+        "At the library reception"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v13_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. How are valuable items kept?",
+      "audioText": "The college reception has changed its procedure for reporting lost property. Students should complete a short form at the front desk and describe the item clearly. Valuable items are kept in a locked cabinet. The office is open from eight thirty until four thirty on weekdays. Students will be contacted if an item matching their description is found.",
+      "options": [
+        "In an open tray at reception",
+        "In a locked cabinet",
+        "In the staff office drawer",
+        "With the security desk"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v13_r01",
+      "type": "single_choice",
+      "prompt": "When Irina could not find her student card, she checked the places she had visited that morning. She then reported the loss at reception and completed the required form. The receptionist explained how to request a replacement card and reminded her to keep the confirmation email. Irina received the new card two days later. Reading 1. What did Irina do before reporting the loss?",
+      "options": [
+        "She asked the tutor to search for it",
+        "She requested a new card immediately",
+        "She checked the places she had visited",
+        "She asked the tutor to issue a temporary card."
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v13_r02",
+      "type": "single_choice",
+      "prompt": "What did the receptionist explain?",
+      "options": [
+        "How to block the college account",
+        "Where to collect lost property",
+        "How to report an absence.",
+        "How to request a replacement card"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v13_g01",
+      "type": "single_choice",
+      "prompt": "If you ___ your student card, report it to reception.",
+      "options": [
+        "lose",
+        "lost yesterday",
+        "will lose tomorrow",
+        "loses"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v13_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO useful steps when reporting a lost item.",
+      "options": [
+        "Guess who took it",
+        "Post another person's private details online",
+        "Describe the item accurately",
+        "Give the place and approximate time it was lost"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v13_v01",
+      "type": "short_text",
+      "prompt": "A formal request for a replacement document is an ___.",
+      "acceptedAnswers": [
+        "application",
+        "request"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v13_f01",
+      "type": "single_choice",
+      "prompt": "You have found a phone in a classroom. What should you do?",
+      "options": [
+        "Keep it until somebody asks.",
+        "Hand it in to reception or a member of staff.",
+        "Look through its private messages.",
+        "Leave it outside the building."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v13_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of solving everyday problems in a sensible order.",
+      "options": [
+        "Complete the required details",
+        "Check where you last had the item",
+        "Follow the instructions for a replacement",
+        "Report the loss to the correct office"
+      ],
+      "correctOrder": [
+        "Check where you last had the item",
+        "Report the loss to the correct office",
+        "Complete the required details",
+        "Follow the instructions for a replacement"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v13_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words explaining how you would report a lost college item and what information you would provide.",
+      "rubric": "8 points total: the response explains where/when the item was lost and identifies the item clearly (0–2); it states whom to contact and what useful identifying information to provide (0–2); the report is concise and understandable with appropriate grammar (0–2); lost-property/reporting vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v13_audio",
+    "readingPassageId": "c2s1v13_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

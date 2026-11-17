@@ -229,8 +229,8 @@ test("custom course materials normalize spreadsheet date-coerced course IDs", ()
   assert.match(server, /const courseId = normalizeCourseId_\(row\[1\] \|\| ""\);/);
   assert.match(server, /sameCourseId_\(rows\[i\]\[1\], courseId\)/);
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
-  assert.match(server, /courseId: normalizeCourseId_\(row\[1\] \|\| ""\), topicId:/);
-  assert.match(server, /courseId:normalizeCourseId_\(row\[1\]\|\|""\),topicId:/);
+  assert.match(server, /id: String\(row\[0\]\), mdkId: courseId, courseId: courseId,/);
+  assert.match(server, /topicId: String\(row\[2\] \|\| ""\), type: String\(row\[3\] \|\| ""\)/);
   assert.match(server, /editor_\(data, courseId\)/);
   assert.match(server, /sameCourseId_\(values\[i\]\[1\], courseId\)/);
 });
@@ -245,7 +245,7 @@ test("teacher-created materials have individual server-side visibility switches"
   assert.match(server, /contentAccess:/);
   assert.match(server, /function getCustomContentAccess_\(/);
   assert.match(server, /function setCustomContentAccess_\(/);
-  assert.match(server, /if \(!customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, record\.type\)\) throw new Error\("Этот тест закрыт преподавателем\."/);
+  assert.match(server, /if \(!customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, "test"\)\) throw new Error\("Этот тест закрыт преподавателем\."/);
   assert.match(server, /if \(!customContentIsOpen_\(record\.courseId, record\.id, record\.topicId, record\.type\)\) throw new Error\("Эта игра закрыта преподавателем\."/);
   assert.match(api, /getCustomContentAccess:function/);
   assert.match(api, /setCustomContentAccess:function/);
@@ -855,15 +855,15 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.doesNotMatch(engine, /window\.ENGLISH_VPR_EXAMS/);
   assert.match(bank, /const exam = seeds\[track\]/);
   assert.match(html, /api\.js\?v=\d+/);
-  assert.match(html, /english-vpr-engine\.js\?v=22/);
+  assert.match(html, /english-vpr-engine\.js\?v=24/);
 });
 
 
 test("English VPR grades numbered choices correctly and renders per-gap option lists", () => {
   const server = read("EnglishVPR-Sheets.gs");
   const engine = read("english-vpr-engine.js");
-  assert.match(server, /Number\(ans\[i\]\)===Number\(item\[1\]\)/);
-  assert.doesNotMatch(server, /Number\(ans\[i\]\)===Number\(item\[1\]\)\+1/);
+  assert.match(server, /if\(selected===Number\(item\[1\]\)\)objective\+\+/);
+  assert.match(server, /selected=order\[selected-1\]\+1/);
   assert.match(engine, /\(\(task\.itemOptions && task\.itemOptions\[i\]\) \|\| task\.options \|\| \[\]\)\.map/);
   assert.match(engine, /Десять кратких ответов в задании 7/);
 });
@@ -894,7 +894,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=22"));
+  assert.ok(html.includes("english-vpr-engine.js?v=24"));
   assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
@@ -950,7 +950,10 @@ test("server builds 45-question advanced non-English exams with protected answer
     ,Utilities:{getUuid:()=>"exam-test"}
     ,CacheService:{getScriptCache:()=>({put:(key,value)=>{sandbox.cached=JSON.parse(value);}})}
   };
-  vm.runInNewContext(server.slice(start,end)+";this.getFinalExam_=getFinalExam_;",sandbox,{timeout:1000});
+  const sanitizeStart = server.indexOf("function sanitizeAssessmentQuestionForStudent_");
+  const sanitizeEnd = server.indexOf("\nfunction safeBuiltInQuestion_", sanitizeStart);
+  assert.ok(sanitizeStart >= 0 && sanitizeEnd > sanitizeStart);
+  vm.runInNewContext(server.slice(sanitizeStart,sanitizeEnd)+"\n"+server.slice(start,end)+";this.getFinalExam_=getFinalExam_;",sandbox,{timeout:1000});
   const result=sandbox.getFinalExam_({courseId:"07.01"});
   assert.equal(result.questions.length,45);
   assert.equal(sandbox.cached.questions.length,45);
@@ -978,9 +981,10 @@ test("semester tests are student-visible and scored only by the protected server
   assert.match(server, /case "submitenglishsemestertest": result = submitEnglishSemesterTest_\(data\); break;/);
   assert.match(server, /function submitEnglishSemesterTest_\(data\)/);
   assert.match(server, /question\.correct/);
-  assert.ok(server.includes("Number.isInteger(answer) && answer === correct"));
+  assert.ok(server.includes("return Number.isInteger(order[answer]) ? order[answer] : -1;"));
+  assert.ok(server.includes("canonicalAnswers[index] === Number(question.correct)"));
   assert.match(server, /english_semester_/);
-  assert.match(server, /Submission:JSON\.stringify\(\{answers:answers\}\)/);
+  assert.match(server, /Submission:JSON\.stringify\(\{answers:canonicalAnswers\}\)/);
 });
 
 
@@ -1237,15 +1241,16 @@ test("teacher journal loads server results and saves grades to the shared Result
   assert.match(save, /editor_\(data,courseId\)/);
   assert.match(save, /hasCourseAccess_\(currentStudent,courseId\)/);
   assert.match(save, /LockService\.getScriptLock\(\)/);
-  assert.match(save, /appendMappedRecord_\(results_\(\)/);
+  assert.match(save, /if\(existingRow>0\)updateMappedRecord_\(resultSheet,existingRow,record\);/);
+  assert.match(save, /else appendMappedRecord_\(resultSheet,record\);/);
   assert.match(save, /appendAttemptAudit_/);
   assert.match(api, /saveManualGrade:function\(data\)/);
   assert.match(app, /window\.API\.getStudents\(\)/);
   assert.match(app, /window\.API\.getResults\(\{\}\)/);
   assert.match(app, /window\.API\.saveManualGrade\(payload\)/);
   assert.doesNotMatch(app.slice(app.indexOf("window.renderTeacherJournalPage = function()"), app.indexOf("window.renderCertificatePage = function()")), /localStorage\.setItem\(['"]portal_grades/);
-  assert.match(html, /api\.js\?v=45/);
-  assert.match(html, /app\.js\?v=54/);
+  assert.match(html, /api\.js\?v=\d+/);
+  assert.match(html, /app\.js\?v=\d+/);
   assert.match(sw, /portal-cache-v\d+/);
 });
 
@@ -1343,8 +1348,8 @@ test("English VPR written answers can be graded from the teacher journal and upd
   assert.ok(app.includes("Ответ студента:"));
   assert.ok(app.includes("window.API.gradeEnglishVprWrittenPart"));
   assert.ok(app.includes('pendingWritten?"На проверке"'));
-  assert.ok(html.includes("api.js?v=45"));
-  assert.ok(html.includes("app.js?v=54"));
+  assert.ok(/api\.js\?v=\d+/.test(html));
+  assert.ok(/app\.js\?v=\d+/.test(html));
   assert.ok(/portal-cache-v\d+/.test(sw));
 });
 
@@ -1357,7 +1362,7 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
   const sandbox = {};
   vm.runInNewContext(bank.slice(start, end) + ";this.validateEnglishVprExam_=validateEnglishVprExam_;", sandbox);
   const exam = (track) => ({
-    id: "english_vpr_" + track + "_2026", track, maxScore: 40,
+    id: "english_vpr_" + track + "_2026", track, time: 90, maxScore: 40,
     tasks: [
       {type:"choice",points:5,items:Array(5).fill(["q",1])},
       {type:"match",points:5,items:Array(5).fill(["A","text",1])},
@@ -1424,7 +1429,7 @@ test("legacy non-English written exam engine is no longer shipped or cached", ()
   const sw = read("service-worker.js");
   assert.doesNotMatch(html, /exam-engine\\.js/);
   assert.doesNotMatch(sw, /exam-engine\\.js/);
-  assert.match(sw, /portal-cache-v354/);
+  assert.match(sw, /const CACHE_NAME = 'portal-cache-v\d+'/);
   assert.doesNotMatch(read("final.js"), /writtenPrompts|textarea\\[name\\^="written"\\]/);
 });
 

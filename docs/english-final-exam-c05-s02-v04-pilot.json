@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 4",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v04_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the fault-analysis class take place?",
+      "audioText": "The engineering analysis class will review a case involving an intermittent equipment indication on Tuesday at nine. Students should bring the event log and the maintenance history extract. The tutor will ask groups to build a timeline, identify what is confirmed and list possible explanations that still require evidence. The class will not diagnose live equipment.",
+      "options": [
+        "On Tuesday at nine",
+        "On Tuesday at eight",
+        "On Wednesday at nine",
+        "On Tuesday at ten"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v04_l02",
+      "type": "single_choice",
+      "prompt": "Which two records should students bring for the fault-analysis class?",
+      "audioText": "The engineering analysis class will review a case involving an intermittent equipment indication on Tuesday at nine. Students should bring the event log and the maintenance history extract. The tutor will ask groups to build a timeline, identify what is confirmed and list possible explanations that still require evidence. The class will not diagnose live equipment.",
+      "options": [
+        "The inspection checklist and defect report",
+        "The event log and maintenance history extract",
+        "The task card and parts catalogue",
+        "The equipment-status sheet and risk register"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v04_r01",
+      "type": "single_choice",
+      "prompt": "A fault-analysis team reviewed an intermittent indication reported on several occasions. The event log showed when the indication appeared, while the maintenance history identified earlier work on the system. The team compared the timing of events but did not assume that the earlier work caused the problem. Further evidence was required before the team could confirm a cause or recommend a corrective action. Reading 1. What did the event log show?",
+      "options": [
+        "Which staff member approved the repair",
+        "What replacement part was ordered",
+        "When the indication appeared",
+        "Why the indication occurred"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v04_r02",
+      "type": "single_choice",
+      "prompt": "Why did the team avoid linking the earlier work directly to the problem?",
+      "options": [
+        "Because the maintenance history was unavailable",
+        "Because the indication was recorded only once",
+        "Because the earlier work had already been repeated",
+        "Further evidence was required before confirming a cause"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v04_g01",
+      "type": "single_choice",
+      "prompt": "The possible relationship ___ before a cause is confirmed.",
+      "options": [
+        "must be investigated",
+        "must investigate",
+        "investigating",
+        "is investigate"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v04_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO records that provide direct evidence for investigating a recurring equipment fault.",
+      "options": [
+        "Supplier payment terms",
+        "Production target for the next shift",
+        "Event log",
+        "Maintenance history"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v04_v01",
+      "type": "short_text",
+      "prompt": "A sequence of events arranged by date and time is a ___.",
+      "acceptedAnswers": [
+        "timeline",
+        "chronology"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v04_f01",
+      "type": "single_choice",
+      "prompt": "A colleague says that earlier maintenance definitely caused the fault, but evidence is incomplete. What should you say?",
+      "options": [
+        "That is certainly the cause.",
+        "The timing may be relevant, but we need further evidence before confirming a causal link.",
+        "We should remove the event log.",
+        "The conclusion does not need support."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v04_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of integrated fault analysis in a logical order.",
+      "options": [
+        "Compare the records and identify gaps",
+        "Build a timeline from the event log",
+        "State possible explanations and evidence still required",
+        "Review relevant maintenance history"
+      ],
+      "correctOrder": [
+        "Build a timeline from the event log",
+        "Review relevant maintenance history",
+        "Compare the records and identify gaps",
+        "State possible explanations and evidence still required"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v04_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words summarising an intermittent fault investigation. Separate the timeline, confirmed facts, possible explanations and evidence still needed.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Timeline — 2: presents events in a clear, factual sequence; 1: partial; 0: absent or confused. (2) Confirmed facts — 2: separates verified observations from assumptions; 1: partial; 0: conflates them. (3) Possible explanations and evidence — 2: labels explanations as hypotheses and identifies evidence still needed; 1: mentions one; 0: presents an unverified cause as fact. (4) English — 2: clear chronology and accurate fault-investigation vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v04_audio",
+    "readingPassageId": "c5s2v04_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

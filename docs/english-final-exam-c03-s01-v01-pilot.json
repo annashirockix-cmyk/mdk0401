@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c3_s1",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 3, Semester 1 — Pilot Variant 1",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s1v01_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the introduction begin?",
+      "audioText": "The materials laboratory will hold an introduction for new students on Tuesday at nine thirty. The technician will demonstrate how to read material labels and record basic properties. Students should meet outside Laboratory 4 and wear their college identification badges. The session will not include practical testing; that activity will be arranged later.",
+      "options": [
+        "At nine thirty on Tuesday",
+        "At ten on Wednesday",
+        "At eleven on Tuesday",
+        "At nine thirty on Thursday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v01_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Where should students meet?",
+      "audioText": "The materials laboratory will hold an introduction for new students on Tuesday at nine thirty. The technician will demonstrate how to read material labels and record basic properties. Students should meet outside Laboratory 4 and wear their college identification badges. The session will not include practical testing; that activity will be arranged later.",
+      "options": [
+        "Inside Laboratory 4",
+        "Outside Laboratory 4",
+        "Outside Laboratory 3",
+        "In the main workshop"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v01_r01",
+      "type": "single_choice",
+      "prompt": "An engineering student compared aluminium and steel for a lightweight support bracket. Aluminium has a lower density, so a component made from it may weigh less. Steel is generally stronger in many common grades, but the exact choice depends on the load, environment and design requirements. The student recorded the material grade and checked the drawing before writing a recommendation. Reading 1. Why did the student consider aluminium?",
+      "options": [
+        "Because aluminium is always stronger than steel",
+        "Because it requires no design checks",
+        "Because it has a lower density and may produce a lighter component",
+        "Because it is suitable for every load and environment"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s1v01_r02",
+      "type": "single_choice",
+      "prompt": "What information did the student record?",
+      "options": [
+        "The expected component weight",
+        "The workshop timetable",
+        "The supplier's address",
+        "The material grade"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s1v01_g01",
+      "type": "single_choice",
+      "prompt": "The aluminium sample is ___ than the steel sample of the same volume.",
+      "options": [
+        "lighter",
+        "lightest",
+        "more light",
+        "the lighter"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v01_m01",
+      "type": "multiple_choice",
+      "prompt": "A bracket must carry a mechanical load while keeping its mass low. Choose TWO material properties relevant to this requirement.",
+      "options": [
+        "Electrical conductivity",
+        "Thermal expansion coefficient",
+        "Density",
+        "Strength"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v01_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "The mass of a material in relation to its volume is its ___.",
+      "acceptedAnswers": [
+        "density"
+      ]
+    },
+    {
+      "id": "c3s1v01_f01",
+      "type": "single_choice",
+      "prompt": "You need to confirm the material grade shown on a drawing. What is a suitable question?",
+      "options": [
+        "I will use any material without checking.",
+        "Could you confirm the material grade specified for this part?",
+        "The drawing is probably wrong.",
+        "I do not need the specification."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v01_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of materials and properties in a logical order.",
+      "options": [
+        "Check the specified material grade",
+        "Read the component requirements",
+        "Record the selection and its reason",
+        "Compare relevant material properties"
+      ],
+      "correctOrder": [
+        "Read the component requirements",
+        "Compare relevant material properties",
+        "Check the specified material grade",
+        "Record the selection and its reason"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v01_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words recommending a material for a simple support bracket. Compare two properties and explain why the drawing and service conditions matter.",
+      "rubric": "8 points total: two relevant material properties are compared (0–2); the recommendation is linked to the drawing requirements and stated service conditions (0–2); the explanation is logically organised with understandable grammar (0–2); material/property vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s1v01_audio",
+    "readingPassageId": "c3s1v01_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

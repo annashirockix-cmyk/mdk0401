@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 5",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v05_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the portfolio session take place?",
+      "audioText": "The careers adviser is introducing a digital skills portfolio on Wednesday at eleven in the media room. Students can add examples of college projects, certificates and practical activities. Each file should include a short description of the student's role. The adviser will demonstrate how to share the portfolio safely with an employer. Bring one example of your completed work.",
+      "options": [
+        "On Wednesday at eleven",
+        "On Friday afternoon",
+        "Next Monday",
+        "After the examination period"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v05_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which example should each student bring to the portfolio session?",
+      "audioText": "The careers adviser is introducing a digital skills portfolio on Wednesday at eleven in the media room. Students can add examples of college projects, certificates and practical activities. Each file should include a short description of the student's role. The adviser will demonstrate how to share the portfolio safely with an employer. Bring one example of your completed work.",
+      "options": [
+        "A printed timetable",
+        "An example of completed work",
+        "A passport",
+        "A library book"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v05_r01",
+      "type": "single_choice",
+      "prompt": "After completing a college project, Denis created a skills portfolio. He included a photograph of the finished model, a short description of the steps he had completed and feedback from his tutor. He did not upload personal information about other students. Before sending the link to an employer, he checked that the files opened correctly and that the sharing settings were limited to people who needed access. Reading 1. What did Denis include in his portfolio?",
+      "options": [
+        "A list of unrelated websites",
+        "Other students' private details",
+        "A project photograph, description and tutor feedback",
+        "A copy of his passport"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v05_r02",
+      "type": "single_choice",
+      "prompt": "Why did Denis check the sharing settings?",
+      "options": [
+        "To make the files larger",
+        "To remove his project description",
+        "To change the college timetable",
+        "To limit access to people who needed the files"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v05_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct form: 'I have ___ my portfolio before the application deadline.'",
+      "options": [
+        "updated",
+        "update yesterday",
+        "updating last week",
+        "updates"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v05_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO useful items for a skills portfolio.",
+      "options": [
+        "A classmate's private contact details",
+        "An unrelated personal password",
+        "Evidence of a completed project",
+        "A short description of your contribution"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v05_v01",
+      "type": "short_text",
+      "prompt": "A collection of examples that demonstrates your abilities is a ___.",
+      "acceptedAnswers": [
+        "portfolio",
+        "skills portfolio"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v05_f01",
+      "type": "single_choice",
+      "prompt": "You are sending a portfolio link to an employer. What is an appropriate message?",
+      "options": [
+        "Open this now. I will not explain anything.",
+        "Please find the link to my portfolio. It includes examples of my college work.",
+        "Here is somebody else's private folder.",
+        "The link may not work, but I did not check it."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v05_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of preparing a skills portfolio in a sensible order.",
+      "options": [
+        "Check the sharing settings",
+        "Choose relevant examples",
+        "Write a short description of each example",
+        "Test the link before sending it"
+      ],
+      "correctOrder": [
+        "Choose relevant examples",
+        "Write a short description of each example",
+        "Check the sharing settings",
+        "Test the link before sending it"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v05_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words introducing a skills portfolio to a potential employer. Mention two examples of your work and explain what they demonstrate.",
+      "rubric": "8 points total: the portfolio is introduced and two examples of work are identified (0–2); the response explains what each example demonstrates about the student's skills or progress (0–2); the explanation is clearly organised with understandable grammar (0–2); portfolio/work-sample vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v5_audio",
+    "readingPassageId": "c2s1v5_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

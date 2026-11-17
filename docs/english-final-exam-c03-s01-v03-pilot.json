@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c3_s1",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 3, Semester 1 — Pilot Variant 3",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s1v03_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the session take place?",
+      "audioText": "The engineering tutor has scheduled a drawing interpretation session for Friday at ten in the design classroom. Students should bring a pencil, ruler and the printed assembly drawing from the previous lesson. The group will identify the main views and discuss how hidden features are represented. The tutor will provide a glossary of common drawing terms.",
+      "options": [
+        "In the design classroom",
+        "In the drawing office",
+        "In the CAD laboratory",
+        "In the assembly workshop"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v03_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which document should students bring?",
+      "audioText": "The engineering tutor has scheduled a drawing interpretation session for Friday at ten in the design classroom. Students should bring a pencil, ruler and the printed assembly drawing from the previous lesson. The group will identify the main views and discuss how hidden features are represented. The tutor will provide a glossary of common drawing terms.",
+      "options": [
+        "The parts catalogue",
+        "The printed assembly drawing",
+        "The maintenance task card",
+        "The revision register"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v03_r01",
+      "type": "single_choice",
+      "prompt": "An assembly drawing shows how several parts fit together. A parts list identifies each component by a reference number and gives its description and quantity. Before ordering replacement parts, a technician checks the drawing revision and compares the reference numbers with the maintenance record. This reduces the risk of selecting a similar-looking but incorrect component. Reading 1. What information does the parts list provide?",
+      "options": [
+        "The material and finish of each part",
+        "The supplier and purchase price for each part",
+        "A component description and quantity for each part",
+        "The revision date and author of each drawing"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s1v03_r02",
+      "type": "single_choice",
+      "prompt": "Why does the technician compare reference numbers?",
+      "options": [
+        "To confirm the material grade",
+        "To identify the person who prepared the drawing",
+        "To record the delivery date",
+        "To avoid selecting a similar-looking but incorrect component"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s1v03_g01",
+      "type": "single_choice",
+      "prompt": "The reference numbers ___ in the parts list.",
+      "options": [
+        "are included",
+        "includes",
+        "is include",
+        "including"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v03_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO document elements that identify the parts and the controlled issue of an assembly drawing package.",
+      "options": [
+        "Purchase order number",
+        "Planned maintenance interval",
+        "A parts list",
+        "A drawing revision identifier"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v03_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "A list of components used in an assembly is a parts ___.",
+      "acceptedAnswers": [
+        "list"
+      ]
+    },
+    {
+      "id": "c3s1v03_f01",
+      "type": "single_choice",
+      "prompt": "You are unsure which view shows a feature. What should you ask?",
+      "options": [
+        "I will choose a view at random.",
+        "Could you show me which view represents this feature?",
+        "The drawing is useless.",
+        "I will ignore the hidden lines."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v03_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of technical drawings in a logical order.",
+      "options": [
+        "Match the reference number to the parts list",
+        "Check the drawing title and revision",
+        "Confirm the component description",
+        "Locate the relevant view"
+      ],
+      "correctOrder": [
+        "Check the drawing title and revision",
+        "Locate the relevant view",
+        "Match the reference number to the parts list",
+        "Confirm the component description"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v03_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing how an assembly drawing and parts list help a technician identify components.",
+      "rubric": "8 points total: the roles of the assembly drawing and parts list are explained (0–2); the response explains how references/item numbers help identify the required component (0–2); ideas are logically connected with understandable grammar (0–2); drawing/parts terminology, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s1v03_audio",
+    "readingPassageId": "c3s1v03_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

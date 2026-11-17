@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 8",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v08_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the PLC table lesson begin?",
+      "audioText": "The control systems instructor will review a sample PLC input-output table on Wednesday at nine forty-five. Students should bring the controller reference sheet and meet in the automation room. The class will identify the difference between a physical input, a programme variable and an output reference. The exercise will use a printed table only.",
+      "options": [
+        "At nine forty-five on Wednesday",
+        "At eight forty-five on Wednesday",
+        "At nine forty-five on Thursday",
+        "At ten forty-five on Wednesday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v08_l02",
+      "type": "single_choice",
+      "prompt": "Which reference sheet should students bring for the PLC table lesson?",
+      "audioText": "The control systems instructor will review a sample PLC input-output table on Wednesday at nine forty-five. Students should bring the controller reference sheet and meet in the automation room. The class will identify the difference between a physical input, a programme variable and an output reference. The exercise will use a printed table only.",
+      "options": [
+        "The network architecture diagram",
+        "The controller reference sheet",
+        "The sensor calibration record",
+        "The equipment maintenance schedule"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v08_r01",
+      "type": "single_choice",
+      "prompt": "A PLC input-output table links field devices with the controller's documented addresses. The table may include a device description, signal type and address. A programme variable can use a separate symbolic name to make the logic easier to understand. The relationship between physical addresses and programme names should be documented clearly so that maintenance staff can interpret the system information. Reading 1. What information may appear in a PLC input-output table?",
+      "options": [
+        "Machine model, operator name and shift number",
+        "Supplier name, delivery date and purchase order",
+        "Device description, signal type and address",
+        "Component material, drawing revision and batch number"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v08_r02",
+      "type": "single_choice",
+      "prompt": "Why are symbolic names useful?",
+      "options": [
+        "They reduce the number of input signals",
+        "They identify the supplier of each device",
+        "They replace the need for a controller model",
+        "They make programme logic easier to understand"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v08_g01",
+      "type": "single_choice",
+      "prompt": "The physical address ___ in the input-output table.",
+      "options": [
+        "is recorded",
+        "record",
+        "recording",
+        "are recorded"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v08_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO technical fields normally used to describe a signal in a PLC input-output table.",
+      "options": [
+        "Technician initials",
+        "Calibration due date",
+        "Device description",
+        "Signal address"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v08_v01",
+      "type": "short_text",
+      "prompt": "A name used in a programme to represent a value or item is a ___.",
+      "acceptedAnswers": [
+        "variable"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v08_f01",
+      "type": "single_choice",
+      "prompt": "A symbolic variable is not linked clearly to a physical address. What should you ask?",
+      "options": [
+        "I will create a link from memory.",
+        "Could we check the address mapping in the approved PLC documentation?",
+        "The mapping is not necessary.",
+        "I will delete the variable."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v08_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of PLC input and output records in a logical order.",
+      "options": [
+        "Check the related symbolic variable",
+        "Identify the field device",
+        "Record the mapping clearly",
+        "Find its documented physical address"
+      ],
+      "correctOrder": [
+        "Identify the field device",
+        "Find its documented physical address",
+        "Check the related symbolic variable",
+        "Record the mapping clearly"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v08_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why PLC input-output records should link device descriptions, signal addresses and symbolic names.",
+      "rubric": "8 points total: device descriptions, signal addresses and symbolic names are all addressed (0–2); the response explains how linking them supports traceability and consistent interpretation of PLC inputs/outputs (0–2); the explanation is logically organised with understandable grammar (0–2); PLC/I-O documentation vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v08_audio",
+    "readingPassageId": "c4s2v08_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

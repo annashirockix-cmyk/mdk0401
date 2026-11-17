@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 15",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v15_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the source-summary exercise take place?",
+      "audioText": "The technical communications lecturer will run a source-summary exercise on Tuesday at twelve. Students should bring the maintenance extract, inspection table and supplier note from the course folder. The exercise will require a short summary that combines the sources without repeating them word for word. Students should identify any difference between the documents and state what still needs confirmation.",
+      "options": [
+        "On Tuesday at twelve",
+        "On Tuesday at eleven",
+        "On Wednesday at twelve",
+        "On Tuesday at one"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v15_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which three sources should students bring?",
+      "audioText": "The technical communications lecturer will run a source-summary exercise on Tuesday at twelve. Students should bring the maintenance extract, inspection table and supplier note from the course folder. The exercise will require a short summary that combines the sources without repeating them word for word. Students should identify any difference between the documents and state what still needs confirmation.",
+      "options": [
+        "The work order, revision register and audit report",
+        "The maintenance extract, inspection table and supplier note",
+        "The defect log, risk register and service bulletin",
+        "The task card, component history and quality checklist"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v15_r01",
+      "type": "single_choice",
+      "prompt": "A technical summary may combine information from several documents. The writer should identify each source, select details relevant to the question and explain how the information fits together. If two sources give different values, the difference should be reported rather than hidden. The summary should distinguish confirmed information from details that still require clarification and should avoid adding conclusions that the sources do not support. Reading 1. What should a writer do when two sources give different values?",
+      "options": [
+        "Select the newer value without checking its source",
+        "Calculate an average and omit the original values",
+        "Report the difference rather than hide it",
+        "Remove both values from the summary"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v15_r02",
+      "type": "single_choice",
+      "prompt": "What should the summary avoid adding?",
+      "options": [
+        "Details that still require clarification",
+        "Source references that identify the documents",
+        "Conflicting values that are clearly reported",
+        "Conclusions that the sources do not support"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v15_g01",
+      "type": "single_choice",
+      "prompt": "Differences between sources ___ clearly in the summary.",
+      "options": [
+        "should be reported",
+        "should report",
+        "reporting",
+        "are report"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v15_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO practices for a reliable multi-source technical summary.",
+      "options": [
+        "Combine conflicting values without explanation",
+        "Add conclusions that are not supported",
+        "Identify the source of each key detail",
+        "State unresolved differences or limitations"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v15_v01",
+      "type": "short_text",
+      "prompt": "A text that combines key ideas from multiple sources into one integrated account is a ___.",
+      "acceptedAnswers": [
+        "synthesis"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v15_f01",
+      "type": "single_choice",
+      "prompt": "Two documents give different component values. What should you write?",
+      "options": [
+        "Use the value that seems more likely.",
+        "The sources differ on this value; confirmation is required before it is treated as final.",
+        "Remove the value from both records.",
+        "Average the figures without checking."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v15_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of multi-source technical summary in a logical order.",
+      "options": [
+        "Compare the sources and note differences",
+        "Identify the question the summary must answer",
+        "Write a concise summary with limitations",
+        "Extract relevant details from each source"
+      ],
+      "correctOrder": [
+        "Identify the question the summary must answer",
+        "Extract relevant details from each source",
+        "Compare the sources and note differences",
+        "Write a concise summary with limitations"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v15_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words explaining how to prepare a reliable summary from several technical documents. Include source references, conflicting information and unresolved details.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Source references — 2: identifies the documents and relevant revisions/sections sufficiently to trace claims; 1: partial; 0: absent. (2) Reconciliation — 2: compares sources and clearly reports conflicts rather than silently choosing one; 1: partial; 0: absent. (3) Unresolved details — 2: explicitly identifies missing/uncertain information and avoids unsupported conclusions; 1: partial; 0: absent or overclaims. (4) English — 2: clear synthesis and accurate technical-documentation vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v15_audio",
+    "readingPassageId": "c5s2v15_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

@@ -1,6 +1,6 @@
 # English courses and assessment architecture
 
-Status: design specification only. This document does not change the current portal runtime, Google Sheets, Apps Script deployment, or the working Basic/Technical VPR exams.
+Status: design specification plus partial portal runtime implementation. The five-year English runtime, inline listening integration, Service Worker precache and regression checks are now updated in this PR. Google Sheets, Apps Script deployment and the working Basic/Technical VPR banks are not changed by this runtime stage.
 
 ## 1. Target course map
 
@@ -16,6 +16,18 @@ Target: 10 course-semester exams × 15 variants = 150 variants.
 
 Do not infer the semester-to-topic allocation from the current Unit numbering. The repository does not currently contain an authoritative five-course/two-semester curriculum map. Until the approved curriculum is attached or located, topic allocation below is provisional and must not be published as a confirmed syllabus.
 
+## 2. Semester assessment structure
+
+The semester-assessment importer follows the same five-year split as the course map:
+
+- Basic English: Courses 1–2, four semester controls total (Course 1 S1/S2; Course 2 S1/S2).
+- Technical English: Courses 3–5, six semester controls total (Course 3 S1/S2; Course 4 S1/S2; Course 5 S1/S2).
+- Each approved semester control contains 20 questions: 80 Basic questions and 120 Technical questions are required for the ten core semester controls.
+- The 200-item Basic and 200-item Technical authoring pools are larger than the core requirement. Remaining questions are reserve material for alternate forms, practice and future replacement; they must not be silently treated as additional semesters.
+- The server validates the track-specific count and course-year mapping. Basic IDs use `b_sem1`–`b_sem4`; Technical IDs use `t_sem1`–`t_sem6`. Correct-answer keys remain server-side.
+- The exact allocation of questions to semesters remains provisional until the approved work programme and textbook edition are checked. A passing structural test does not approve pedagogical placement.
+- Current release boundary: the legacy client seed still contains ten Basic tests with missing answer keys, while the Technical seed is intentionally empty. Neither is a valid 4-Basic/6-Technical import package. The teacher UI now withholds the semester-import control unless it receives exactly four Basic tests (80 questions) and six Technical tests (120 questions); the 200-item Basic and Technical authoring pools remain drafts until mapped and reviewed.
+
 ## 2. Five-year lecture target and provisional map
 
 A separate working map is maintained in `docs/english-five-year-120-lecture-map-v1.md`.
@@ -25,7 +37,7 @@ A separate working map is maintained in `docs/english-five-year-120-lecture-map-
 - Planned additions: 32 Basic + 43 Technical = 75 new lectures.
 - Courses 1–2 are Basic English; courses 3–5 are Technical English.
 - The allocation is provisional and must be checked against the approved English work programme, semester hours, and the exact Belova textbook edition before it is treated as an official syllabus.
-- The 75 planned lectures are not yet authored or imported. All 12 first-semester Basic English lesson drafts are in three files: `docs/english-basic-c01-s01-lessons-01-03-draft.md` contains lessons l04–l06; `docs/english-basic-c01-s01-lessons-04-06-draft.md` contains l07–l09; `docs/english-basic-c01-s01-lessons-07-09-draft.md` contains l10–l12. The filename ranges reflect drafting batches, while the lesson IDs are authoritative. The first three new semester-two lessons (l04–l06) are in `docs/english-basic-c01-s02-lessons-04-06-draft.md`. Course 2, semester 1 lessons l04–l06, l07–l09 and l10–l12 are in `docs/english-basic-c02-s01-lessons-04-06-draft.md`, `docs/english-basic-c02-s01-lessons-07-09-draft.md` and `docs/english-basic-c02-s01-lessons-10-12-draft.md` respectively. The first three new lessons for Course 1, semester 2 (l04–l06) are in `docs/english-basic-c01-s02-lessons-04-06-draft.md`. All drafts require review against the Belova textbook and approved work programme. All drafts require review against the Belova textbook and the approved work programme. The map and drafts do not change runtime or the current VPR exams.
+- All 75 new lectures have draft teaching materials and are connected to the five-year runtime in ENB/ENT, grouped by course and semester. The filename ranges in the Course 1 / Semester 1 Basic English batch files reflect drafting batches; lesson IDs in headings are authoritative. The full file-to-ID inventory is maintained in `docs/english-five-year-lesson-draft-index-v1.md`. All drafts still require review against the exact Belova textbook edition and approved work programme before formal approval or student publication.
 
 ## 3. Existing content inventory
 
@@ -97,7 +109,7 @@ Do not fill missing lectures with generic duplicated text. Keep the current lect
 
 - Course 2, semester 2 lessons 1–3 are expanded in `docs/english-basic-c02-s02-lessons-01-03-enrichment-draft.md`. The original source lessons (Basic 4.1–4.3) remain unchanged; this file adds guided practice, listening scripts, formative checks and teacher keys.
 - Course 2, semester 2 lessons 4–7 are expanded in `docs/english-basic-c02-s02-lessons-04-07-enrichment-draft.md`. The existing Basic 6.1–6.4 source lessons remain unchanged; enrichment adds guided reading, grammar, listening scripts, speaking/writing tasks and teacher keys.
-- Course 2, semester 2 new lessons 8–12 are drafted in `docs/english-basic-c02-s02-lessons-08-12-draft.md` (passive voice; coherent paragraphs; climate/resources; science and technology; opinion essay and presentation). These are draft teaching materials, not yet imported into the portal.
+- Course 2, semester 2 new lessons 8–12 are drafted in `docs/english-basic-c02-s02-lessons-08-12-draft.md` (passive voice; coherent paragraphs; climate/resources; science and technology; opinion essay and presentation). These are draft teaching materials connected to the ENB runtime; they remain subject to subject review and curriculum approval.
 
 - Course 3, semester 1 lessons 6–8 (aviation industry, aircraft structure and materials) are drafted in `docs/english-technical-c03-s01-lessons-06-08-draft.md`. The existing Technical 1.1–1.3 and 2.1–2.2 lessons remain unchanged.
 - Course 3, semester 1 lessons 9–12 are drafted in `docs/english-technical-c03-s01-lessons-09-12-draft.md` (manufacturing workflow and process sheets; dimensions and measurement; technical word formation and abbreviations; technical descriptions and specification tables). All examples and numerical values are explicitly classroom-only.
@@ -127,11 +139,14 @@ Never expose answer keys or scoring rules that reveal answers in the student pay
 
 ### 4.2 Semester checks — `EnglishSemesterBank`
 Current source: `english-assessment-data.js`.
-- There are 10 Basic source tests, one for each course-year/semester pair, each with 20 items.
-- Technical is currently created by mapping over Basic and changing IDs and labels. This is not valid Technical content.
-- The target must contain independent items for each track; do not clone Basic questions into Technical.
+
+- The five-course map contains ten course-semester slots in total: Courses 1–2 are Basic English (four slots); Courses 3–5 are Technical English (six slots).
+- The target is therefore ten semester checks overall, not ten Basic plus ten Technical checks, unless an approved work programme explicitly requires parallel assessments for a slot.
+- The legacy client seed contains ten Basic tests, but that legacy layout is not authoritative for the five-course map. Its Technical set was cloned from Basic and is not valid Technical content.
+- The new Basic authoring files `docs/english-basic-semester-bank-draft-v1.md` through `v10.md` are ten 20-item drafting batches (200 items total), **not** an approved one-file-per-semester allocation. Keep them as an editorial question pool until the approved course/semester blueprint is confirmed.
+- The independent Technical drafts are likewise a content pool; neither track's draft batches should be assigned to semester slots solely by filename order.
+- After the approved curriculum is available, curate the required Basic and Technical item sets for the ten slots, preserving independent track content and avoiding cross-track duplicates.
 - Preserve server-side storage, sanitized student payloads, attempt limits, and result persistence already provided by the existing implementation.
-- Before finalizing the number of banks, reconcile the legacy 10 Basic + 10 Technical layout with the five-course map. The correct course map has ten course-semester slots; a second parallel set must only exist if the curriculum explicitly requires two distinct track-specific checks for the same slot.
 
 Suggested item metadata: `id`, `type`, `prompt`, `options`, `correctAnswer` (server-only), `points`, `feedbackRef` (optional).
 Supported task types should be deliberately limited to those the current renderer and server grader can validate.
@@ -139,10 +154,37 @@ Supported task types should be deliberately limited to those the current rendere
 ### 4.3 Final exams — `EnglishExamVariantsBank`
 - 10 exam definitions: one for each course and semester.
 - 15 independently assembled variants per exam: 150 total.
+- The registry validator `validateEnglishExamVariantRegistry_` enforces five logical course numbers (1–5), maps Courses 1–2 to `ENB` and Courses 3–5 to `ENT`, checks all ten semester slots, 15 variants per slot, globally unique IDs and blueprint references.
+- The payload validator `validateEnglishFinalVariantPayload_` now checks duration, 10–60 tasks, supported task types, unique IDs/prompts, option/key bounds, written rubrics and the sum of task points against `maxScore`. Import rejects malformed payloads before staging any bank rows. Regression tests include malformed schemas and a real authored pilot.
+- Course 1, Semester 1 has 15 authored Basic English pilots (`v01`–`v15`); Course 1, Semester 2 also has 15 (`v01`–`v15`). Course 2, Semester 1 has five authored pilots (`v01`–`v05`) targeting A2–B1 career and study communication. Every form has 10 tasks, 20 points, 90 minutes, two listening items and one teacher-reviewed written response. Regression tests validate all 35 forms against the protected payload validator, enforce unique prompts/listening scripts within each slot and check balanced A/B/C/D answer positions. All sets remain editorial pilots and are not imported.
+- Current authoring status: all 150 final-exam pilot variants are now authored across the ten course-semester slots (15 per slot). The combined registry and all 1,500 tasks pass the automated structural, key, scoring, uniqueness and balance checks. The variants remain `pilot_for_editorial_review`; subject/editorial approval, protected import and post-import acceptance testing are still outstanding. No final-exam variant has been imported into the live Sheets bank.
 - Each variant references a balanced set of tasks from the appropriate course-semester blueprint.
+
+#### Persistent storage and attempt lifecycle (implementation contract)
+
+Do not reuse the short-lived `CacheService` attempt records used by the existing VPR and semester-control flows as the source of truth for the 150 final-exam variants. A cache entry may be used as a performance layer, but a started final exam must remain recoverable after cache eviction or a script restart.
+
+Use separate protected Sheets tables:
+- `EnglishExamVariantsBank`: one row per variant, with `ExamId`, `CourseNo`, `CourseId`, `Track`, `Semester`, `VariantId`, `BlueprintId`, `VariantJSON`, `Active`, `UpdatedAt`, `UpdatedBy`. One row per variant avoids putting an entire 15-variant exam into a single Google Sheets cell.
+- `EnglishExamAttempts`: one row per attempt, with `AttemptId`, `StudentEmail`, `CourseId`, `ExamId`, `VariantId`, `Status`, `StartedAt`, `DeadlineAt`, `SubmittedAt`, `AttemptJSON`, `ResultJSON`, `UpdatedAt`. `AttemptJSON` is server-only and contains the immutable assigned-task snapshot, private answer data, option-order maps, and attempt metadata. Keep student responses and final result separate from the sanitized exam payload.
+- If the serialized attempt snapshot approaches the Google Sheets per-cell text limit, normalize it into a child table keyed by `AttemptId` and task index; do not truncate JSON.
+
+Storage schema is now declared in `Code.gs` and both sheets are included in `setupPortal()`. This creates or extends headers without deleting existing rows. It does not yet enable exam imports or student attempts; those endpoints must be implemented and tested before deployment.
+
+Required lifecycle:
+1. Under a script lock, validate the student's role and course access, check the allowed-attempt policy, and atomically reuse an existing in-progress attempt or assign one of the 15 variants. Persist the assignment before returning any tasks.
+2. Return only a sanitized task snapshot. Never include answer keys, rubrics, grading hints, blueprint internals, or option-order maps in student responses.
+3. On resume, load the persisted attempt by `AttemptId` and verify the authenticated student's email, course, exam, status, and deadline. Do not silently assign a different variant after refresh.
+4. On submit, lock and re-read the attempt, reject duplicate or late submissions, validate every task/answer shape, restore canonical option indices server-side, and grade from the private snapshot rather than from client-supplied scores.
+5. Persist the result and mark the attempt submitted in the same locked operation. Make submission idempotent: a retry returns the saved result and cannot create a second gradebook row.
+6. Write an audit event for assignment, resume, submission, timeout, teacher override, and manual regrade. Teacher overrides must be role-checked and recorded.
+7. Keep diagnostic, semester-control, VPR, and final-exam result namespaces distinct; do not alter the existing 2026 VPR banks.
+
+Acceptance tests must cover simultaneous starts for the same student/slot, refresh/resume after cache loss, cross-account attempt-ID rejection, tampered course/exam IDs, expired deadline, duplicate submission, option-order restoration, answer-key isolation, and exactly-once result persistence.
 - Store answer keys and rubrics server-side only.
 - Student API returns a sanitized variant with no correct answers, rubric internals, or hidden metadata.
 - Variant selection must be recorded server-side to prevent changing variants by refreshing the page.
+- Final exams allow one recorded attempt by default. A new start request resumes an unexpired attempt; completed or expired attempts count toward the limit. Students can request a retry, and a teacher/admin can grant extra attempts through the existing audited attempt-control workflow. The grant is scoped to the exact course-semester exam ID.
 - Preserve the separate 2026 VPR Basic and Technical exams; do not replace or refactor them as part of this work.
 
 Suggested metadata:
@@ -203,9 +245,9 @@ Lesson listening uses browser text-to-speech by default, matching the approach a
 This is a runtime helper only. It does not automatically convert Markdown drafts into portal lessons; the lesson content schema and renderer integration remain a separate step. The working Basic and Technical VPR exams and their server-side banks are not modified.
 
 
-- Course 5, semester 2 lessons 1–4 (technical presentations; structured technical reports; professional interview/oral examination; specifications, procedures and standards) are drafted in `docs/english-technical-c05-s02-lessons-01-04-draft.md`. The package contains browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a semester checkpoint. It remains a draft and is not imported into the portal.
+- Course 5, semester 2 lessons 1–4 (technical presentations; structured technical reports; professional interview/oral examination; specifications, procedures and standards) are drafted in `docs/english-technical-c05-s02-lessons-01-04-draft.md`. The package contains browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a semester checkpoint. It is connected to the ENT runtime as draft content and is not yet formally approved.
 - Course 5, semester 2 lessons 5–8 (manufacturing process review; CNC revision communication; electrical case discussion; software test reports) are drafted in `docs/english-technical-c05-s02-lessons-05-08-draft.md`. The package contains four browser-readable listening scripts, comprehension tasks, transcript-reveal guidance, teacher keys and an integrated checkpoint. It remains a draft and is not imported into the portal.
-- Course 5, semester 2 lessons 9–12 are drafted in `docs/english-technical-c05-s02-lessons-09-12-draft.md`: aircraft component materials and inspection records; maintenance planning and reliability; integrated multi-speaker handover listening; and an evidence-based capstone presentation/report. The pack closes the 12-lesson draft semester and includes browser-readable scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a 20-point formative rubric. All identifiers and datasets are fictional. The pack is not imported into the portal and remains subject to syllabus/textbook/teaching-hours review.
+- Course 5, semester 2 lessons 9–12 are drafted in `docs/english-technical-c05-s02-lessons-09-12-draft.md`: aircraft component materials and inspection records; maintenance planning and reliability; integrated multi-speaker handover listening; and an evidence-based capstone presentation/report. The pack closes the 12-lesson draft semester and includes browser-readable scripts, comprehension tasks, transcript-reveal guidance, teacher keys and a 20-point formative rubric. All identifiers and datasets are fictional. It is connected to the ENT runtime as draft content and remains subject to syllabus/textbook/teaching-hours review.
 
 
 ## Browser listening lesson component
@@ -214,7 +256,7 @@ This is a runtime helper only. It does not automatically convert Markdown drafts
 - Practice mode checks lesson-level practice keys and reveals the transcript after answers are submitted.
 - Assessment mode rejects client-side answer keys, submits selected indices through an optional host callback and keeps the transcript hidden until the host calls `closeAssessment()` after formal closure. Server-side grading and attempt persistence remain the host assessment engine's responsibility.
 - Integration contract and usage example: `docs/english-listening-lesson-integration-v1.md`.
-- Important boundary: the component is loaded and reusable, but the Markdown lecture drafts are not yet converted to portal lesson records and no course lesson catalogue/renderer route is wired to them. This is not a claim that all drafted listening tasks are already playable inside the lecture pages. The existing VPR engine/banks are untouched.
+- Current boundary: the 75 new draft lectures are converted to runtime lecture records and the topic-page renderer mounts the matching practice listening activity by explicit `listeningId`. The listening component remains practice-only; it does not submit grades or create protected exam attempts. The existing VPR engine/banks are untouched.
 
 
 ## Browser listening lab — playable practice catalogue
@@ -266,3 +308,125 @@ All twelve lessons for Course 4, Semester 1 now have browser-listening activitie
 ### Verified catalogue coverage — 48 activities
 
 The latest catalogue read-back confirms 48 unique activities across four complete semester blocks: Course 4 Semester 1 (12), Course 4 Semester 2 (12), Course 5 Semester 1 (12), and Course 5 Semester 2 (12). All 48 have scripts, questions and matching practice feedback. Courses 1–3 still need conversion. The catalogue remains practice-only; it does not save marks or attempts and must not be used as a protected assessment bank.
+
+
+### Verified browser listening coverage — 72 activities
+
+The latest catalogue includes 72 unique activities: Course 3 (12 + 12), Course 4 (12 + 12), Course 5 (12 + 12). Course 3 Semester 1 follows the five existing Materials/Metal Processes/Technical Drawing/CAD-CAM lessons and adds seven aviation-focused lessons. Course 3 Semester 2 follows the existing machine-tool/CNC/safety topics and adds seven detailed CNC, measurement and communication lessons. Courses 1–2 remain outstanding. The listening catalogue is practice-only and does not write grades or create protected exam attempts. Direct embedding into every lesson and browser/device playback verification remain outstanding.
+
+
+### Verified browser listening coverage — 96 activities
+
+The catalogue now includes 96 unique activities: Course 2 (12 + 12), Course 3 (12 + 12), Course 4 (12 + 12), and Course 5 (12 + 12). Course 2 listening uses accessible B1–B1+ language and follows the approved project map: social and professional communication in Semester 1; science, environment and argumentation in Semester 2. Course 1 remains to be converted. All catalogue items are practice-only and do not create exam attempts or gradebook entries. Direct lesson embedding and browser/device playback checks remain outstanding.
+
+
+### Verified five-year browser listening coverage — 120 activities
+
+The listening catalogue now contains 120 unique activities across all five courses and ten semesters (12 per semester). Course 1 is A1–A2, Course 2 B1–B1+, and Courses 3–5 are Technical English/ESP at B1+–B2 with aviation and four professional pathways represented. Each activity includes a browser-readable script and comprehension questions. This completes the catalogue coverage only; direct embedding in each of the 120 lecture pages and real-browser/device verification remain outstanding. The catalogue is practice-only and does not write grades or protected assessment attempts.
+
+
+### Inline listening integration status
+
+The topic-page renderer now mounts matching listening practice inside lecture accordions. The five-year runtime preserves the 45 existing lecture objects and adds 75 new draft lecture records (48 Basic + 72 Technical total). Every new lecture has an explicit listening ID; all 75 IDs resolve in the 120-entry catalogue. Browser speech uses Speech Synthesis. Runtime and listening files are precached by `portal-cache-v355`; the runtime URL is cache-busted to `v=2`. Automated regression coverage was added, but GitHub Actions has not yet returned a run for the current PR head, so real-browser playback/layout verification remains pending.
+
+
+## Current verified implementation status — 2026-11-13
+
+- Runtime simulation from the repository sources preserves the original 45 lectures and produces 120 total lecture records: 48 Basic and 72 Technical.
+- All 75 IDs in the five-year map are present exactly once in the runtime, and each resolves to a listening activity in the 120-entry catalogue.
+- The 75 new lectures are grouped into course/semester sections. Browser listening is embedded in each lecture through the existing topic renderer and Speech Synthesis component.
+- A regression test was added at `scripts/english-five-year-runtime.test.mjs`; the CI workflow now syntax-checks the runtime/listening modules and runs that test.
+- The Service Worker precaches the runtime and listening modules and uses `portal-cache-v355`; the runtime script URL uses `v=2`.
+- This is runtime integration of draft materials, not formal curriculum approval or deployment verification. PR #125 remains open and Draft; no GitHub Actions run or status check has yet been returned for its current head.
+- Semester assessment is a separate outstanding task. The existing `english-assessment-data.js` is not loaded by `index.html`; its legacy Basic tests have 20 questions each, while Technical is currently cloned from Basic. The seed helper does not supply the `correct` indices required by server validation. Do not expose/import this client-side seed as a protected graded bank until the assessment content and server-only answer-key path are corrected.
+
+
+## Semester-assessment security gate — 2026-11-13
+
+A focused review found that the legacy `english-assessment-data.js` is intentionally **not loaded** by `index.html`. It contains ten Basic tests with 20 questions each, but all 200 questions lack `correct` answer indices. Its Technical set is a direct clone of Basic. The teacher import button is therefore not rendered; importing this file would either fail server validation or, if keys were guessed, create a misleading Technical assessment.
+
+The server validator has been strengthened before the content is rebuilt:
+- exactly ten tests in the expected year/semester order;
+- track-specific unique test IDs;
+- exactly 20 questions per test;
+- no duplicate question text or empty/duplicate options;
+- every correct-answer index must be an integer within the option range;
+- Basic and Technical imports are compared with the other active bank; an exact clone is rejected server-side;
+- student-facing sanitization uses a strict question whitelist (`q`, `options`), so answer keys, explanations and any unexpected hidden metadata cannot reach students.
+
+Regression tests cover valid banks, missing keys, duplicate IDs/questions/options, wrong semester order, track mismatch, removal of answer-key fields, and exact Basic/Technical clone detection. A separate guard asserts that the unreviewed legacy seed remains out of the production page while Basic/Technical are still cloned. The bank is **not ready for import**; do not publish it or claim that the 20 works are available to students until new Basic and genuinely distinct Technical questions have been authored, keyed, reviewed, imported and read back from the protected sheet.
+
+### Current assessment authoring batch (2026-11-13)
+
+- Added `docs/english-technical-semester-bank-draft-v1.md`: first 20 independently authored Technical English multiple-choice items, with a separate teacher key, rationales and review checklist.
+- This is an authoring draft only. It is not loaded by `index.html`, not imported to Sheets and not available to students.
+- The draft's Course 3 / Semester 1 placement is provisional pending the approved curriculum map. A second teacher must verify the technical terminology and all answer keys before conversion to the protected server bank.
+- Progress for the provisional two-track / ten-set target: 20 of 200 Technical items drafted; Basic legacy items remain unkeyed and the old Technical clone remains blocked.
+- Added `docs/english-technical-semester-bank-draft-v2.md`: second independent batch of 20 Technical English questions (electrical engineering, electronics, CAD, technical data, maintenance and documentation), with a separate teacher key and review checklist. Combined Technical draft pool: 40 items. Still review-only and not connected to the portal.
+- Added `docs/english-technical-semester-bank-draft-v3.md`: third independent batch of 20 Technical English questions (sensors, feedback control, programming logic, CNC terminology, troubleshooting, avionics and traceability), with teacher key, rationales and review checklist. Combined Technical draft pool: 60 items. This is still review-only and is not connected to the portal.
+
+- Added `docs/english-technical-semester-bank-draft-v4.md`: fourth independent batch of 20 Technical English questions (maintenance records, electrical isolation vocabulary, document revision, safety language, PLC inputs, BOM, transducers, quality non-conformance and traceability). Combined Technical draft pool: 80 items. The file includes a separate teacher key, rationales and a review checklist. It remains review-only; no import or student release is authorized.
+
+- Added `docs/english-technical-semester-bank-draft-v5.md`: fifth independent batch of 20 Technical English questions (maintenance downtime, drawing notes, software updates, process language, graph interpretation, root-cause analysis, programming logic, fault tolerance and change records). Combined Technical draft pool: 100 items. Includes a separate teacher key, rationales and review checklist. Review-only; not imported or student-facing.
+
+- Added `docs/english-technical-semester-bank-draft-v6.md`: sixth independent batch of 20 Technical English questions (lead time, contamination, preventive maintenance, document control, calibration, tolerances, troubleshooting evidence, interoperability and software defect reports). Combined Technical draft pool: 120 items. Separate teacher key, rationales and review checklist included. Review-only; not imported or student-facing.
+
+- Added `docs/english-technical-semester-bank-draft-v7.md`: seventh batch, questions 121–140, covering document revisions, BOM, drawing interpretation, technical logs, CAD layers, measurement reporting and root-cause analysis. Combined Technical draft pool: 140 items. Teacher key, rationales and review checklist included. Review-only; not imported or student-facing.
+
+- Added `docs/english-technical-semester-bank-draft-v8.md`: eighth batch, questions 141–160, covering traceability, non-conformance, technical email, data interpretation, nominal values, handover, environmental monitoring, network diagnostics and CNC file issue reporting. Combined Technical draft pool: 160 items. Teacher key, rationales and review checklist included. Review-only; not imported or student-facing.
+
+- Added `docs/english-technical-semester-bank-draft-v9.md`: ninth batch, questions 161–180, covering batch identification, fault reproduction, version control, technical queries, contingency planning, acceptance ranges, cross-functional communication, data integrity and procurement conditions. Combined Technical draft pool: 180 items. Teacher key, rationales and review checklist included. Review-only; not imported or student-facing.
+
+- Added `docs/english-technical-semester-bank-draft-v10.md`: tenth and final batch, questions 181–200, completing a 200-question Technical English draft pool. Topics include shelf life, configuration management, deviations, acceptance testing, aviation records, file retrieval, objective evidence and backward compatibility. Teacher key, rationales and review checklist included. Review-only; not imported or student-facing.
+- Technical English draft authoring milestone: 200/200 items across ten files. This is a draft pool, not yet a validated or imported semester bank; full item review, VPR overlap check, independent Basic bank authoring, and protected-sheet import/read-back remain outstanding.
+
+- Structural audit of the 200-item Technical English draft pool is recorded in `docs/english-technical-semester-bank-audit-v1.md`. The answer-position distribution was corrected to exactly 50 A / 50 B / 50 C / 50 D overall and five of each per 20-item batch. The correct option text was preserved for all 200 questions. Automated structural checks are in `scripts/english-technical-draft-bank.test.mjs` and are wired into the portal syntax workflow; CI result is pending for the current PR head.
+- Preliminary comparison with the protected Technical VPR seed confirms expected topical overlap (CNC, machining, measurement, maintenance and safety) because both target vocational ESP. It is not yet a certified semantic no-duplicates review; item-level comparison against active Sheet variants remains a release gate.
+
+- Began an independent Basic English semester-question pool in `docs/english-basic-semester-bank-draft-v1.md` (questions 1–20). It is an A2–B1-oriented draft for everyday and college communication, with reading comprehension, grammar, vocabulary and formal email language. Alignment with the exact Belova edition and approved work programme remains pending; this is not a reuse of the legacy unkeyed Basic seed.
+
+- Semester-test option randomization is now implemented in the server path: each student/test/attempt/question receives a deterministic shuffled option order; reloading the same attempt preserves that order, while a different student or attempt receives a different order. The browser receives only the shuffled option text and no answer key. On submission the server recomputes the order and maps displayed indices back to the protected original indices before scoring. Canonical original indices, not display indices, are stored in the result submission.
+- Regression tests cover stable order on reload, distinct orders across students/attempts, complete option permutations and mapping to the protected answer key. Local helper checks confirmed these invariants; GitHub Actions for the current PR head remain pending.
+- Scope note: this change applies to the protected English semester assessment flow. VPR, general question-bank tests and other portal assessment engines still need separate review and consistent option-shuffling integration before claiming that answers change position everywhere.
+
+- Basic English draft batch v2 is added in `docs/english-basic-semester-bank-draft-v2.md` (questions 21–40), with a separate reading text, grammar, everyday communication and teacher rationales. Together, Basic draft v1–v2 currently contain 40 independent items; each 20-item batch has balanced correct-answer positions.
+
+## Единый стандарт перемешивания вариантов по всему порталу
+
+Требование распространяется не только на ENB/ENT, а на любой CourseId, дисциплину, МДК, профессиональный модуль, курс и зачётную единицу.
+
+Реализованные маршруты:
+- **Защищённый QuestionBank / встроенные тесты** — общий серверный движок принимает любой CourseId; индивидуальная перестановка вариантов выполняется сервером, карта исходных индексов хранится в попытке, ключи не выдаются клиенту.
+- **Итоговые экзамены** — общий серверный движок по CourseId перемешивает варианты и сохраняет карту для проверки. Для пятигодичного English Final Exam дополнительно реализована перестановка вариантов ответа при назначении попытки: сервер хранит соответствие отображаемых и исходных индексов в закрытом `AttemptJSON`, проверяет single-choice и multiple-choice по исходным ключам, а при возобновлении возвращает тот же порядок. Для заданий с восстановлением последовательности перемешивается список элементов, но эталонная последовательность остаётся закрытой на сервере.
+- **Пользовательские тесты преподавателя** — добавлена отдельная выдача getCustomTest с серверным attemptId; браузер получает только варианты без ключей, сервер проверяет по закрытому содержимому.
+- **Письменные ответы** — практические работы используют `prac_...`, письменные самостоятельные ответы — `written_self_...`; оба формата принимаются без оценки, а оценку после проверки выставляет преподаватель через `gradeWrittenResult_`. Идентификаторы `self_<topic>_<номер>` зарезервированы для автоматически проверяемых самостоятельных тестов и запрещены в общем endpoint `saveResult_`. Студенческий общий endpoint также работает по allowlist: любые прочие идентификаторы отклоняются; исключение — ВПР, который вызывает его из серверной функции с внутренним флагом проверки.
+- **ВПР Basic/Technical** — сервер выдаёт индивидуальную попытку с перестановкой вариантов в заданиях choice, match и gap; attemptId обязателен при отправке, сервер восстанавливает исходные позиции.
+- **Семестровые контрольные Basic/Technical** — порядок привязан к номеру попытки; номер проверяется сервером при отправке, в результат записываются канонические индексы.
+- **Локальные тренировочные страницы МДК 02.01, 02.02, 04.01 и 07.01** — общий клиентский helper перемешивает варианты и одновременно переносит индекс правильного ответа. Это тренировочные/предпросмотровые сценарии, не замена серверной защите экзамена.
+
+Дополнительно:
+- Перестановка не должна менять ключ правильного ответа; для серверных экзаменов карта перестановки хранится на сервере.
+- При повторной загрузке той же попытки порядок должен оставаться согласованным с серверной проверкой; новая попытка получает новый порядок.
+- Перемешивание гарантированно не оставляет исходный порядок без изменений, если вариантов больше одного.
+- В CI добавлен `scripts/assessment-option-shuffle.test.mjs`: проверки общего банка, ВПР choice/match/gap, семестровых попыток, пользовательских тестов, итоговых экзаменов и локальных тренировочных страниц.
+
+Оставшийся аудит: отдельно проверить все нестандартные интерактивные задания, игры и старые автономные HTML/JS-модули, которые могут оценивать ответы вне перечисленных общих движков. До завершения этого аудита нельзя заявлять, что буквально каждый автономный виджет портала уже использует единый механизм.
+
+## Final-exam content authoring status — all ten slots drafted
+
+The five-year final-exam pilot bank now contains all **150 planned variants**: 10 course/semester slots × 15 variants. Each variant contains 10 tasks, 20 points, 90 minutes, two browser-readable listening tasks sharing one script, and one teacher-reviewed written response. The 1,500 task prompts and 150 listening scripts are unique across the bank. Every variant is checked against `validateEnglishFinalVariantPayload_`; regression tests also check variant-specific task IDs, answer-key balance (A/B/C/D = 2 each per variant), multiple-choice keys and functional-response keys.
+
+| Slot | Track | Variants | Main content focus |
+|---|---|---:|---|
+| C1-S1 | Basic English | 15/15 | College life, classroom communication, study routines, campus services and introductory workshop language |
+| C1-S2 | Basic English | 15/15 | Directions, transport, town services, events, weather, food, digital communication, shopping and future plans |
+| C2-S1 | Basic English | 15/15 | Career fairs, CVs, interviews, education routes, skills portfolios, part-time work, teamwork and workplace communication |
+| C2-S2 | Basic English | 15/15 | Environment, online information, renewable energy, data security, transport, research, volunteering and organisational change |
+| C3-S1 | Technical English | 15/15 | Materials, dimensions, drawings, workshop orientation, components, tolerances, inspection, measurement and technical records |
+| C3-S2 | Technical English | 15/15 | Machine tools, CNC programmes, machining, cutting tools, workholding, process planning, quality and production documentation |
+| C4-S1 | Technical English | 15/15 | Electrical circuits and measurements, electronic components, transformers, sensors, relays, faults and electrical documentation |
+| C4-S2 | Technical English | 15/15 | Communication and computer systems, automation, PLCs, networks, industrial IoT, digital twins and aviation ground-support systems |
+| C5-S1 | Technical English | 15/15 | Maintenance planning, inspection, diagnostics, technical publications, revision control, traceability, human factors and airworthiness records |
+| C5-S2 | Technical English | 15/15 | Maintenance handover, risk communication, fault analysis, controlled documents, supplier clarification, audits and integrated technical reporting |
+
+**Release boundary:** all 150 individual files are editorial-review pilots marked `pilot_for_editorial_review`. The combined review package is `docs/english-final-exam-registry-v1-pilot.json`; it contains the ten slots and 150 variants in the exact import structure, but the server deliberately rejects it until every variant is formally approved with `sourceNotes.status = approved_for_import`. Import is administrator-only and records the approving administrator and timestamp. No pilot has been imported into the protected Google Sheet, activated in the live exam bank or released to students. Subject-matter/editorial review and a post-import acceptance test remain required.

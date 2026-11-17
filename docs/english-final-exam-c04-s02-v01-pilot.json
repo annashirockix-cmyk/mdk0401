@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 1",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v01_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the system-diagram lesson begin?",
+      "audioText": "The communications engineering tutor will introduce basic system diagrams on Wednesday at ten. Students should meet in the network classroom and bring the labelled diagram from the course folder. The lesson will identify a transmitter, communication channel and receiver. Students will discuss the purpose of each block using a simple example.",
+      "options": [
+        "At ten on Wednesday",
+        "At nine on Thursday",
+        "At eleven on Wednesday",
+        "At ten on Friday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v01_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which communication-system diagram should students bring?",
+      "audioText": "The communications engineering tutor will introduce basic system diagrams on Wednesday at ten. Students should meet in the network classroom and bring the labelled diagram from the course folder. The lesson will identify a transmitter, communication channel and receiver. Students will discuss the purpose of each block using a simple example.",
+      "options": [
+        "The network safety checklist",
+        "The labelled diagram from the course folder",
+        "The component glossary",
+        "The maintenance schedule"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v01_r01",
+      "type": "single_choice",
+      "prompt": "A basic communication system transfers information from a source to a destination. A transmitter prepares a signal, a channel carries it and a receiver processes the incoming signal. The system may also include noise or interference that affects the quality of communication. A block diagram helps engineers describe the main functions without showing every internal circuit detail. Reading 1. What does a channel do in a basic communication system?",
+      "options": [
+        "It stores the information permanently",
+        "It generates the original message",
+        "It carries the signal",
+        "It removes all interference"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v01_r02",
+      "type": "single_choice",
+      "prompt": "Why is a block diagram useful?",
+      "options": [
+        "It lists every internal circuit component",
+        "It gives the exact physical dimensions",
+        "It replaces the need for technical documentation",
+        "It describes the main functions without showing every internal circuit detail"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v01_g01",
+      "type": "single_choice",
+      "prompt": "The signal ___ through the communication channel.",
+      "options": [
+        "is carried",
+        "carry",
+        "carrying",
+        "are carried"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v01_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO end blocks in a basic communication-system model, excluding the transmission medium.",
+      "options": [
+        "Communication channel",
+        "Noise source",
+        "Transmitter",
+        "Receiver"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v01_v01",
+      "type": "short_text",
+      "prompt": "A device that sends a signal into a communication system is a ___.",
+      "acceptedAnswers": [
+        "transmitter"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v01_f01",
+      "type": "single_choice",
+      "prompt": "A diagram does not show the channel clearly. What should you ask?",
+      "options": [
+        "I will guess how the signal travels.",
+        "Could you identify the communication channel on the block diagram?",
+        "The channel is not important.",
+        "I will remove the block."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v01_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of communication systems in a logical order.",
+      "options": [
+        "Follow the channel to the receiver",
+        "Identify the information source",
+        "Describe the system's main function",
+        "Locate the transmitter"
+      ],
+      "correctOrder": [
+        "Identify the information source",
+        "Locate the transmitter",
+        "Follow the channel to the receiver",
+        "Describe the system's main function"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v01_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing a basic communication system. Explain the roles of a transmitter, channel and receiver.",
+      "rubric": "8 points total: the transmitter, channel and receiver are identified (0–2); the response explains the general role of each stage in carrying information from source to destination (0–2); the description is logically organised with understandable grammar (0–2); communication-system vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v01_audio",
+    "readingPassageId": "c4s2v01_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

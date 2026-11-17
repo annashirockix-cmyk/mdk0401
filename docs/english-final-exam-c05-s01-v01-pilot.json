@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 1",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v01_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the maintenance-planning lesson begin?",
+      "audioText": "The aviation maintenance tutor will introduce maintenance planning records on Tuesday at nine. Students should meet in the documentation classroom and bring the sample work package. The lesson will identify task references, planned dates and required documentation. Students will discuss how a clear plan helps teams coordinate work, but no maintenance activity will be carried out.",
+      "options": [
+        "At nine on Tuesday",
+        "At ten on Wednesday",
+        "At nine on Thursday",
+        "At eleven on Tuesday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which sample work package is needed for the planning exercise?",
+      "audioText": "The aviation maintenance tutor will introduce maintenance planning records on Tuesday at nine. Students should meet in the documentation classroom and bring the sample work package. The lesson will identify task references, planned dates and required documentation. Students will discuss how a clear plan helps teams coordinate work, but no maintenance activity will be carried out.",
+      "options": [
+        "The inspection checklist",
+        "The sample work package",
+        "The parts catalogue",
+        "The staff attendance list"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_r01",
+      "type": "single_choice",
+      "prompt": "A maintenance plan groups tasks that must be completed during a scheduled maintenance visit. It may identify the task reference, responsible team, expected duration and required documents. Planners also consider access to parts and specialist support. A clear plan does not replace the approved maintenance data; it helps the organisation coordinate work and record its progress. Reading 1. What may a maintenance plan identify?",
+      "options": [
+        "Only the names of the technicians",
+        "The cost of every tool in the workshop",
+        "The task reference, responsible team, expected duration and required documents",
+        "The personal timetable of each student"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_r02",
+      "type": "single_choice",
+      "prompt": "What does a clear plan help the organisation do?",
+      "options": [
+        "Replace approved maintenance data",
+        "Guarantee that no task will be delayed",
+        "Approve technical changes automatically",
+        "Coordinate work and record progress"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_g01",
+      "type": "single_choice",
+      "prompt": "The task references ___ in the maintenance plan.",
+      "options": [
+        "are listed",
+        "lists",
+        "is listing",
+        "list yesterday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO core entries used to identify and support a planned maintenance task.",
+      "options": [
+        "Component finish specification",
+        "Hangar bay number",
+        "Task reference",
+        "Required documentation"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v01_v01",
+      "type": "short_text",
+      "prompt": "A collection of documents and task information for a maintenance visit is a work ___.",
+      "acceptedAnswers": [
+        "package"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v01_f01",
+      "type": "single_choice",
+      "prompt": "A task reference is missing from a work package. What should you ask?",
+      "options": [
+        "I will invent a reference number.",
+        "Could we confirm the correct task reference in the approved maintenance documentation?",
+        "The reference is not needed.",
+        "I will copy a number from another aircraft."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v01_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of maintenance planning in a logical order.",
+      "options": [
+        "Coordinate people and resources",
+        "Review the maintenance requirements",
+        "Record progress and outstanding items",
+        "Identify the task references and documents"
+      ],
+      "correctOrder": [
+        "Review the maintenance requirements",
+        "Identify the task references and documents",
+        "Coordinate people and resources",
+        "Record progress and outstanding items"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v01_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how a maintenance plan helps an aviation team coordinate tasks, documents and resources.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Plan content — 2: explains how tasks, people/roles and resources are coordinated; 1: covers some elements; 0: absent or inaccurate. (2) Documentation — 2: explains use of current work instructions, records and required approvals; 1: partial explanation; 0: absent or inaccurate. (3) Sequence and coordination — 2: clearly explains scheduling, dependencies and communication; 1: partly clear; 0: unclear. (4) English — 2: appropriate aviation-maintenance vocabulary and clear, accurate sentences; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v01_audio",
+    "readingPassageId": "c5s1v01_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s2",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 2, Semester 2 — Pilot Variant 8",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s2v08_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Why will heating be switched off in the old laboratory?",
+      "audioText": "The facilities team will switch off heating in the old laboratory during the spring break while maintenance is carried out. Students who need access to stored equipment should contact the technician before Friday. The team is also testing motion sensors in two corridors. Feedback about lighting levels can be sent through the maintenance form on the college portal.",
+      "options": [
+        "Because maintenance is being carried out",
+        "Because the laboratory is being repainted",
+        "Because new computers are being installed",
+        "Because the heating system is being replaced"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v08_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. How can students send feedback about corridor lighting?",
+      "audioText": "The facilities team will switch off heating in the old laboratory during the spring break while maintenance is carried out. Students who need access to stored equipment should contact the technician before Friday. The team is also testing motion sensors in two corridors. Feedback about lighting levels can be sent through the maintenance form on the college portal.",
+      "options": [
+        "At the next student council meeting",
+        "Through the maintenance form on the college portal",
+        "By calling the facilities team directly",
+        "In a paper feedback box near the canteen"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v08_r01",
+      "type": "single_choice",
+      "prompt": "An energy audit at a college found that several computer rooms remained fully lit after the last lesson. The facilities team introduced a simple closing checklist and asked the final group to check lights and equipment. The audit also recommended replacing older lamps with more efficient models. After a month, electricity use had decreased, although the team planned to compare figures over a longer period. Reading 1. What problem did the audit identify?",
+      "options": [
+        "The laboratory heating was left on overnight",
+        "The laboratory windows were left open overnight",
+        "Computer rooms stayed fully lit after the last lesson",
+        "Students left windows open during lessons"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s2v08_r02",
+      "type": "single_choice",
+      "prompt": "What did the team introduce?",
+      "options": [
+        "A timetable for switching off computers",
+        "A closing checklist for the final group",
+        "A new system for booking laboratories",
+        "A rota for cleaning the laboratory"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v08_g01",
+      "type": "single_choice",
+      "prompt": "The equipment should ___ before the room is locked.",
+      "options": [
+        "be switched off",
+        "switch off",
+        "be switching",
+        "switched off by students yesterday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v08_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO practical ways to reduce electricity use at college.",
+      "options": [
+        "Leave computers running overnight without a reason",
+        "Ignore maintenance problems",
+        "Switch off unused lights and equipment",
+        "Use energy-efficient lighting"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v08_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "The amount of energy used by a building is its energy ___.",
+      "acceptedAnswers": [
+        "consumption",
+        "energy consumption"
+      ]
+    },
+    {
+      "id": "c2s2v08_f01",
+      "type": "single_choice",
+      "prompt": "You are writing to the facilities team about an energy-saving idea. Which sentence is best?",
+      "options": [
+        "You must install my idea immediately.",
+        "I will change the lighting myself.",
+        "Your energy policy makes no sense.",
+        "Would it be possible to test motion sensors in another corridor?"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s2v08_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of saving energy at college in a logical order.",
+      "options": [
+        "Test the improvement and record usage",
+        "Identify where energy is being wasted",
+        "Review the results over time",
+        "Suggest a suitable improvement"
+      ],
+      "correctOrder": [
+        "Identify where energy is being wasted",
+        "Suggest a suitable improvement",
+        "Test the improvement and record usage",
+        "Review the results over time"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v08_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words proposing one way your college could save energy. Explain how it could be introduced and how its effect could be measured.",
+      "rubric": "8 points total: one practical college energy-saving measure is proposed (0–2); the response explains how it could be introduced and how its effect could be measured (0–2); the proposal is clearly sequenced with understandable grammar (0–2); energy/measurement vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s2v08_audio",
+    "readingPassageId": "c2s2v08_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

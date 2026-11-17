@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 2",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v02_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the inspection lesson take place?",
+      "audioText": "The quality instructor will discuss inspection findings on Thursday at ten thirty. Students should bring the sample inspection sheet and meet in the maintenance classroom. The lesson will compare observed condition, acceptance criteria and recorded evidence. The instructor will explain why a report should distinguish an observation from a conclusion about the cause.",
+      "options": [
+        "On Thursday at ten thirty",
+        "On Thursday at nine thirty",
+        "On Friday at ten thirty",
+        "On Thursday at eleven thirty"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v02_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which inspection-results sheet is needed for the class?",
+      "audioText": "The quality instructor will discuss inspection findings on Thursday at ten thirty. Students should bring the sample inspection sheet and meet in the maintenance classroom. The lesson will compare observed condition, acceptance criteria and recorded evidence. The instructor will explain why a report should distinguish an observation from a conclusion about the cause.",
+      "options": [
+        "The dimensional-measurement record",
+        "The sample inspection sheet",
+        "The maintenance task card",
+        "The component parts list"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v02_r01",
+      "type": "single_choice",
+      "prompt": "An inspection finding should describe what was observed and identify the relevant acceptance criterion. If a measurement is outside the stated limit, the report should include the actual value, unit and component reference. The inspector should avoid suggesting a cause unless the available evidence supports it. A clear finding allows the responsible person to review the issue and determine the next action. Reading 1. What should an inspection finding describe?",
+      "options": [
+        "The inspector's opinion and a suggested repair",
+        "The name of the person who ordered the component",
+        "What was observed and the relevant acceptance criterion",
+        "The expected result without the actual observation"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v02_r02",
+      "type": "single_choice",
+      "prompt": "Which details should accompany an out-of-limit measurement?",
+      "options": [
+        "To identify the technician's preferred measuring tool",
+        "To show where the inspection took place",
+        "To replace the need for a component reference",
+        "Actual value, unit and component reference"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v02_g01",
+      "type": "single_choice",
+      "prompt": "The actual value and unit ___ in the inspection report.",
+      "options": [
+        "must be included",
+        "must include",
+        "including",
+        "are include"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v02_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO evidence-based details that strengthen an inspection finding.",
+      "options": [
+        "An assumed cause without test evidence",
+        "A technician's opinion without a supporting record",
+        "A component reference",
+        "Measured value with its unit"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v02_v01",
+      "type": "short_text",
+      "prompt": "A rule or condition used to decide whether an item is acceptable is an acceptance ___.",
+      "acceptedAnswers": [
+        "criterion"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v02_f01",
+      "type": "single_choice",
+      "prompt": "You have observed a discrepancy but do not know its cause. What should you write?",
+      "options": [
+        "The component failed because I think so.",
+        "The observed condition differs from the acceptance criterion; the cause has not been established.",
+        "The report should omit the result.",
+        "The issue is definitely caused by the last technician."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v02_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of inspection findings in a logical order.",
+      "options": [
+        "Add measurements and supporting evidence",
+        "Identify the component and criterion",
+        "State any limitation or unconfirmed cause",
+        "Record the observed condition"
+      ],
+      "correctOrder": [
+        "Identify the component and criterion",
+        "Record the observed condition",
+        "Add measurements and supporting evidence",
+        "State any limitation or unconfirmed cause"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v02_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how to write a clear inspection finding. Include an observation, acceptance criterion and supporting evidence.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Observation — 2: states a factual, specific and measurable finding without assumptions; 1: partly specific; 0: missing or speculative. (2) Acceptance criterion — 2: identifies the relevant requirement or limit for comparison; 1: vague reference; 0: absent. (3) Evidence — 2: identifies traceable measurements, records or inspection evidence; 1: limited evidence; 0: absent or invented. (4) English — 2: clear structure and accurate inspection/quality vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v02_audio",
+    "readingPassageId": "c5s1v02_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

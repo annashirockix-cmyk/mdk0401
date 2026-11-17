@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 12",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v12_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When is the digital twin session scheduled?",
+      "audioText": "The engineering software lecturer will explain digital twin terminology on Thursday at nine forty-five. Students should bring the lifecycle diagram. The session will compare a physical asset with its digital representation and discuss how operating data supports monitoring.",
+      "options": [
+        "At nine forty-five on Thursday",
+        "At eight forty-five on Thursday",
+        "At nine forty-five on Friday",
+        "At ten forty-five on Thursday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v12_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which lifecycle diagram is needed?",
+      "audioText": "The engineering software lecturer will explain digital twin terminology on Thursday at nine forty-five. Students should bring the lifecycle diagram. The session will compare a physical asset with its digital representation and discuss how operating data supports monitoring.",
+      "options": [
+        "The system block diagram",
+        "The lifecycle diagram",
+        "The equipment risk register",
+        "The sensor calibration table"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v12_r01",
+      "type": "single_choice",
+      "prompt": "A digital twin is a digital representation of a physical asset or process linked to relevant information about its real-world counterpart. Depending on the application, it may use design data, operating measurements and maintenance history. Its usefulness depends on data quality and model accuracy. A digital model should not be assumed to reflect every real-world condition automatically. Reading 1. What information may support a digital twin?",
+      "options": [
+        "Operator schedules, training records and attendance lists",
+        "Supplier invoices, delivery dates and purchase orders",
+        "Design data, operating measurements and maintenance history",
+        "Equipment colours, storage locations and parts prices"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v12_r02",
+      "type": "single_choice",
+      "prompt": "What affects its usefulness?",
+      "options": [
+        "The number of pages in the model report",
+        "The number of people who use the equipment",
+        "The presentation format and slide design",
+        "Data quality and model accuracy"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v12_g01",
+      "type": "single_choice",
+      "prompt": "The digital representation ___ with information about the physical asset.",
+      "options": [
+        "is linked",
+        "was transferred",
+        "transferring",
+        "are transfer"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v12_m01",
+      "type": "multiple_choice",
+      "prompt": "Which TWO operational sources can be used to update a digital twin's representation of an asset?",
+      "options": [
+        "Supplier warranty period",
+        "Planned replacement date",
+        "Operating measurements",
+        "Maintenance history"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v12_v01",
+      "type": "short_text",
+      "prompt": "A computer-based representation of a physical asset is a digital ___.",
+      "acceptedAnswers": [
+        "twin"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v12_f01",
+      "type": "single_choice",
+      "prompt": "Before applying a model update, what should the team confirm?",
+      "options": [
+        "Apply the newest model file immediately and check compatibility afterwards.",
+        "Could we update the model using the approved version and verified source data?",
+        "Use the model from a similar unit because the equipment family is the same.",
+        "Update the displayed model name and leave the configuration record unchanged."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v12_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of digital twin concepts in a logical order.",
+      "options": [
+        "Check the model against current asset data",
+        "Build or update its digital representation",
+        "Collect relevant design and operating information",
+        "Identify the physical asset or process"
+      ],
+      "correctOrder": [
+        "Identify the physical asset or process",
+        "Collect relevant design and operating information",
+        "Build or update its digital representation",
+        "Check the model against current asset data"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v12_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining what a digital twin represents and why data quality and model updates matter.",
+      "rubric": "8 points total: a digital twin is described as a digital representation linked to a physical asset/process (0–2); the response explains why data quality and controlled model updates affect accuracy and usefulness (0–2); ideas are clearly connected with understandable grammar (0–2); digital-twin/data vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v12_audio",
+    "readingPassageId": "c4s2v12_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

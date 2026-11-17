@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 12",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v12_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the audit session begin?",
+      "audioText": "The quality auditor will explain evidence sampling on Monday at nine thirty. Students should meet in the quality office and bring the audit checklist. The session will compare document samples, interview notes and process observations. The auditor will explain why a finding must refer to a requirement and identify the evidence that supports it.",
+      "options": [
+        "On Monday at nine thirty",
+        "On Monday at eight thirty",
+        "On Tuesday at nine thirty",
+        "On Monday at ten thirty"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v12_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which audit tool should students bring?",
+      "audioText": "The quality auditor will explain evidence sampling on Monday at nine thirty. Students should meet in the quality office and bring the audit checklist. The session will compare document samples, interview notes and process observations. The auditor will explain why a finding must refer to a requirement and identify the evidence that supports it.",
+      "options": [
+        "The sampling plan and audit report",
+        "The audit checklist",
+        "The process map and action log",
+        "The quality manual and non-conformance form"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v12_r01",
+      "type": "single_choice",
+      "prompt": "An audit finding should be linked to a defined requirement. The auditor records the evidence observed, identifies the relevant document or process and explains how the evidence relates to the requirement. A finding should not be based only on an opinion. If the evidence is incomplete, the auditor may request additional information before reaching a conclusion. Reading 1. What should an audit finding be linked to?",
+      "options": [
+        "An auditor's personal opinion",
+        "A previous audit result",
+        "A defined requirement",
+        "A team preference"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v12_r02",
+      "type": "single_choice",
+      "prompt": "What should happen if the evidence is incomplete?",
+      "options": [
+        "The finding should be closed as compliant",
+        "The requirement should be changed to match the evidence",
+        "The previous audit result should be accepted without review",
+        "Additional information should be requested before reaching a conclusion"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v12_g01",
+      "type": "single_choice",
+      "prompt": "The audit finding ___ to a defined requirement.",
+      "options": [
+        "must be linked",
+        "must link",
+        "linking",
+        "are linked"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v12_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO forms of evidence that may support an audit finding.",
+      "options": [
+        "An unsupported personal opinion",
+        "An unrelated online comment",
+        "A controlled document sample",
+        "A recorded process observation"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v12_v01",
+      "type": "short_text",
+      "prompt": "Information that can be examined to support an audit finding is objective ___.",
+      "acceptedAnswers": [
+        "evidence"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v12_f01",
+      "type": "single_choice",
+      "prompt": "A finding is based on an opinion but has no evidence reference. What should you ask?",
+      "options": [
+        "The opinion is enough.",
+        "Could we identify the requirement and the evidence that supports this finding?",
+        "The evidence reference can be removed.",
+        "I will approve it without checking."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v12_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of quality audit evidence in a logical order.",
+      "options": [
+        "Compare the evidence with the requirement",
+        "Identify the requirement",
+        "Record a finding that is supported by evidence",
+        "Collect relevant evidence"
+      ],
+      "correctOrder": [
+        "Identify the requirement",
+        "Collect relevant evidence",
+        "Compare the evidence with the requirement",
+        "Record a finding that is supported by evidence"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v12_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words explaining how an audit finding should connect a requirement with objective evidence.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Requirement — 2: identifies the applicable requirement or criterion; 1: partial; 0: absent. (2) Objective evidence — 2: describes specific, verifiable evidence and its source; 1: partial; 0: absent. (3) Finding statement — 2: clearly links the evidence to the requirement and avoids unsupported conclusions; 1: partial; 0: no clear link or speculative. (4) English — 2: concise audit language and accurate quality vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v12_audio",
+    "readingPassageId": "c5s2v12_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

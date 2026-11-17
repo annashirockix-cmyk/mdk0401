@@ -29,7 +29,7 @@ const CFG = {
 
 const HEADERS = {
   Users: ["Email", "PasswordHash", "Name", "Group", "Role", "UpdatedAt", "Courses", "Payload", "PasswordSalt", "LoginChangedAt", "PasswordChangedAt"],
-  Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId", "Submission", "PenaltyPoints", "ViolationCount"],
+  Results: ["Email", "Name", "Group", "TestId", "TestTitle", "Grade", "Score", "MaxScore", "Percent", "TimeSpent", "Attempts", "FinishedAt", "CourseId", "Submission", "PenaltyPoints", "ViolationCount", "Feedback", "ReviewedBy", "ReviewedAt"],
   CourseContent: ["Id", "CourseId", "TopicId", "Type", "Title", "Payload", "UpdatedBy", "UpdatedAt"],
   Schedule: ["Schedule"],
   Invites: ["Code", "Courses", "CreatedBy", "CreatedAt", "ExpiresAt", "MaxUses", "Uses", "Active"],
@@ -39,14 +39,16 @@ const HEADERS = {
   GameActions: ["Id", "RoomCode", "Email", "Type", "Payload", "CreatedAt"],
   Assignments: ["Id", "CourseId", "Title", "Topic", "Level", "WorkType", "DueAt", "TargetType", "TargetValue", "Instructions", "Criteria", "CreatedBy", "CreatedAt", "Status"],
   AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
-  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo"],
+  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "Status"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
-  AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt"],
+  AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt", "PreviousGrade", "PreviousFeedback", "Feedback"],
   QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"],
   QuestionBankBackup: ["BackupId", "CourseId", "BankId", "RowJSON", "BackedUpAt", "BackedUpBy"],
   EnglishVPRBank: ["Track", "ExamJSON", "Active", "UpdatedAt", "UpdatedBy"],
   EnglishSemesterBank: ["Track", "TestsJSON", "Active", "UpdatedAt", "UpdatedBy"],
+  EnglishExamVariantsBank: ["ExamId", "CourseNo", "CourseId", "Track", "Semester", "VariantId", "BlueprintId", "VariantJSON", "Active", "UpdatedAt", "UpdatedBy"],
+  EnglishExamAttempts: ["AttemptId", "StudentEmail", "StudentName", "Group", "CourseId", "ExamId", "VariantId", "Status", "StartedAt", "DeadlineAt", "SubmittedAt", "AttemptJSON", "ResponsesJSON", "ResultJSON", "UpdatedAt"],
   ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt", "EventType", "Details"]
 };
 
@@ -109,6 +111,7 @@ function handleRequest_(e) {
       case "getactivitylog": result = getActivityLog_(data); break;
       case "gettutoringlink": result = getTutoringLink_(data); break;
       case "savetutoringlink": result = saveTutoringLink_(data); break;
+      case "getcustomtest": result = getCustomTest_(data); break;
       case "submitcustomtest": result = submitCustomTest_(data); break;
       case "backupquestionbanks": result = backupQuestionBanks_(data); break;
       case "restorequestionbanks": result = restoreQuestionBanks_(data); break;
@@ -117,8 +120,17 @@ function handleRequest_(e) {
       case "getquestionbankstats": result = getQuestionBankStats_(data); break;
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
+      case "startenglishvprexam": result = startEnglishVprExam_(data); break;
       case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
+      case "importenglishexamvariants": result = importEnglishExamVariants_(data); break;
+      case "startenglishfinalexam": result = startEnglishFinalExam_(data); break;
+      case "resumeenglishfinalexam": result = resumeEnglishFinalExam_(data); break;
+      case "saveenglishfinalexamresponses": result = saveEnglishFinalExamResponses_(data); break;
+      case "submitenglishfinalexam": result = submitEnglishFinalExam_(data); break;
+      case "getenglishfinalexamreviews": result = getEnglishFinalExamReviews_(data); break;
+      case "gradeenglishfinalexamwritten": result = gradeEnglishFinalExamWritten_(data); break;
       case "getenglishsemestertests": result = getEnglishSemesterTests_(data); break;
+      case "startenglishsemestertest": result = startEnglishSemesterTest_(data); break;
       case "submitenglishsemestertest": result = submitEnglishSemesterTest_(data); break;
       case "submitenglishvprexam": result = submitEnglishVprExam_(data); break;
       case "gradeenglishvprwrittenpart": result = gradeEnglishVprWrittenPart_(data); break;
@@ -225,7 +237,7 @@ function notifications_() { return ensureSheet_("Notifications"); }
 function proctorEvents_() { return ensureSheet_("ProctorEvents"); }
 function attemptAudit_() { return ensureSheet_("AttemptAudit"); }
 function activityLog_() { return ensureSheet_("ActivityLog"); }
-function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString()]); }
+function appendAttemptAudit_(record) { const sh=attemptAudit_();sh.appendRow([Utilities.getUuid(),record.EventType||"",record.ActorEmail||"",record.StudentEmail||"",record.StudentName||"",record.Group||"",record.CourseId||"",record.TestId||"",record.TestTitle||"",record.ExtraAttempts===undefined?"":record.ExtraAttempts,record.AttemptNo===undefined?"":record.AttemptNo,record.Grade===undefined?"":record.Grade,record.Score===undefined?"":record.Score,record.MaxScore===undefined?"":record.MaxScore,record.Percent===undefined?"":record.Percent,new Date().toISOString(),record.PreviousGrade===undefined?"":record.PreviousGrade,record.PreviousFeedback||"",record.Feedback||""]); }
 
 function proctorPenalty_(studentEmail,courseId,testId,attemptNo) {
   const sh=proctorEvents_(),lastRow=sh.getLastRow();
@@ -264,10 +276,10 @@ function notifyProctorSanction_(student,courseId,testId,attemptNo,violationNo,pe
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "ActivityLog"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
-  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications, ProctorEvents, AttemptAudit, QuestionBank, ActivityLog.";
+  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications, ProctorEvents, AttemptAudit, QuestionBank, EnglishExamVariantsBank, EnglishExamAttempts, ActivityLog.";
 }
 
 /* ---------- Common helpers and authentication ---------- */
@@ -459,9 +471,13 @@ function admin_(data) {
 function hasCourseAccess_(user, courseId) {
   if (user.role === "admin") return true;
   if (user.role !== "teacher" && user.role !== "student") return false;
-  const assigned = user.courses.split(",").map(function (id) { return id.trim(); });
-  if ((courseId === "ENB" || courseId === "ENT") && assigned.indexOf("EN") !== -1) return true;
-  return assigned.indexOf(String(courseId)) !== -1;
+  const assigned = String(user.courses || "").split(",").map(function (id) { return id.trim(); }).filter(Boolean);
+  const requested = String(courseId || "").trim();
+  // Legacy/general English enrollment grants access to both English tracks.
+  // Keep this fallback symmetric for teachers and students so ENB/ENT journals,
+  // assignments and protected assessments use the same authorization rule.
+  if ((requested === "ENB" || requested === "ENT") && assigned.indexOf("EN") !== -1) return true;
+  return assigned.indexOf(requested) !== -1;
 }
 
 function editor_(data, courseId) {
@@ -565,7 +581,7 @@ function login_(data) {
     gcodeProgress: savedPayload.gcodeProgress && typeof savedPayload.gcodeProgress === "object" ? savedPayload.gcodeProgress : null,
     xp: Number(savedPayload.xp) || 0,
     activeCourseId: String(savedPayload.activeCourseId || ""),
-    results: savedPayload.results && typeof savedPayload.results === "object" ? savedPayload.results : {},
+    results: safeStudentProgressResults_(savedPayload.results),
     unlockedAchievements: Array.isArray(savedPayload.unlockedAchievements) ? savedPayload.unlockedAchievements : [],
     avatar: savedPayload.avatar || null,
     avatarEmoji: savedPayload.avatarEmoji || null,
@@ -592,6 +608,23 @@ function login_(data) {
 }
 
 /* ---------- Student profile and test results ---------- */
+
+// Legacy profile grades are browser-writable payload data, not an authoritative
+// assessment record. Only rows in the protected Results sheet may contribute grades.
+function isTrustedLegacyGrade_(record) {
+  return false;
+}
+function safeStudentProgressResults_(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const safe = {};
+  Object.keys(value).forEach(function(key) {
+    const item = value[key];
+    if (item && typeof item === "object" && (item.grade != null || item.score != null || item.percent != null)) return;
+    safe[key] = item;
+  });
+  return safe;
+}
+
 
 function protectedQuestionBankMap_() {
   const cache=CacheService.getScriptCache(),cacheKey="protectedQuestionBankMap:v1",cached=cache.get(cacheKey);
@@ -654,7 +687,12 @@ function saveStudent_(data) {
       if (payload.results && typeof payload.results === "object" && !Array.isArray(payload.results)) {
         const bankMap=protectedQuestionBankMap_();
         Object.keys(payload.results).forEach(function(testId){
-          if(isProtectedAssessment_(testId,String(payload.results[testId]&&payload.results[testId].courseId||""),bankMap))delete payload.results[testId];
+          const record=payload.results[testId];
+          // Student profile sync may carry local completion markers, never grades or scores.
+          if (isProtectedAssessment_(testId,String(record&&record.courseId||""),bankMap) ||
+              (record && typeof record === "object" && (record.grade != null || record.score != null || record.percent != null))) {
+            delete payload.results[testId];
+          }
         });
       }
       fields.Payload = JSON.stringify(payload);
@@ -676,17 +714,27 @@ function getStudents_(data) {
   const students = values.slice(1).filter(function (row) {
     if (!row[map.Email]) return false;
     // Администратору нужны все записи, включая преподавателей, для управления доступом.
-    // Преподаватель получает только список обучающихся.
+    // Преподаватель получает только обучающихся, имеющих хотя бы одну общую дисциплину.
     return user.role === "admin" || String(row[map.Role]).toLowerCase() === "student";
   }).map(function (row) {
+    const enrolled = String(row[map.Courses] || "").split(",").map(function(id){ return id.trim(); }).filter(Boolean);
+    const visibleCourses = enrolled.filter(function(id) {
+      return user.role === "admin" || hasCourseAccess_(user,id) ||
+        (id === "EN" && (hasCourseAccess_(user,"ENB") || hasCourseAccess_(user,"ENT")));
+    });
+    let payload = {};
+    try { payload = JSON.parse(row[map.Payload] || "{}"); } catch(e) {}
     return {
       email: row[map.Email],
       name: row[map.Name],
       group: row[map.Group],
       role: row[map.Role],
-      courses: String(row[map.Courses] || "").split(",").map(function(id){ return id.trim(); }).filter(function(id){ return user.role === "admin" || hasCourseAccess_(user,id) || (id === "EN" && (hasCourseAccess_(user,"ENB") || hasCourseAccess_(user,"ENT"))); }),
-      payload: (function(){ let p={}; try{p=JSON.parse(row[map.Payload]||"{}");}catch(e){} if(user.role==="admin") return String(row[map.Payload]||""); return JSON.stringify({manualGrades:p.manualGrades||{},xp:Number(p.xp)||0,avatar:p.avatar||null,avatarEmoji:p.avatarEmoji||null,avatarEffect:p.avatarEffect||null}); })()
+      courses: visibleCourses,
+      payload: user.role === "admin" ? String(row[map.Payload] || "") :
+        JSON.stringify({manualGrades:payload.manualGrades||{},xp:Number(payload.xp)||0,avatar:payload.avatar||null,avatarEmoji:payload.avatarEmoji||null,avatarEffect:payload.avatarEffect||null})
     };
+  }).filter(function(student) {
+    return user.role === "admin" || student.courses.length > 0;
   });
   return { success: true, students: students };
 }
@@ -701,27 +749,61 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
   const courseId = String(data.courseId || "");
   if (user.role === "student" && (!courseId || !hasCourseAccess_(user,courseId))) throw new Error("У вас нет доступа к этой дисциплине.");
   const testId = String(data.testId || "test");
+  if (user.role === "student" && serverVerifiedEnglishVpr !== true && !/^(prac_|written_self_)/.test(testId)) {
+    throw new Error("Результат студента должен отправляться через защищённый маршрут проверки или как письменный ответ без оценки.");
+  }
+  // Written submissions are ungraded until a teacher reviews them.
+  // Never trust a grade/score/percent supplied by a student for these IDs.
+  if (user.role === "student" && /^(prac_|written_self_)/.test(testId)) {
+    const submittedGrade = Number(data.grade == null || data.grade === "" ? 0 : data.grade);
+    const submittedScore = Number(data.score == null || data.score === "" ? 0 : data.score);
+    const submittedPercent = Number(data.percent == null || data.percent === "" ? 0 : data.percent);
+    if (submittedGrade !== 0 || submittedScore !== 0 || submittedPercent !== 0) {
+      throw new Error("Письменная работа принимается без оценки. Оценку выставляет преподаватель после проверки.");
+    }
+  }
   if (user.role === "student" && testId.indexOf("custom_") === 0) throw new Error("Результаты дополнительных тестов принимаются только через серверную проверку.");
-  // English VPR and semester tests have dedicated server-side graders. A browser
-  // must never be able to create a trusted-looking result by calling saveResult.
+  // Assessment namespaces are never accepted through the generic browser
+  // result endpoint. They must use their dedicated server-issued attempt flows.
+  // Do not make this conditional on a bank currently existing: otherwise a
+  // forged request could create a trusted-looking grade before import.
   if (user.role === "student" && /^english_vpr_/.test(testId) && serverVerifiedEnglishVpr !== true) {
     throw new Error("Результат английского ВПР принимается только через серверную проверку ответов.");
   }
   if (user.role === "student" && /^english_semester_/.test(testId)) {
     throw new Error("Результат семестровой контрольной принимается только через серверную проверку ответов.");
   }
+  if (user.role === "student" && /^english_/.test(testId)) {
+    throw new Error("Контрольные работы английского принимаются только через защищённую серверную проверку.");
+  }
   const assessment=user.role==="student"&&(/^test_/.test(testId)||/^__final__/.test(testId)||/^self_.+_\d+$/.test(testId)||/^english_/.test(testId));
-  if(user.role==="student"&&/^__final__/.test(testId))throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
-  if(user.role==="student"&&(testId.indexOf("test_")===0||/^self_.+_\d+$/.test(testId))){
-    const topicId=testId.indexOf("test_")===0?testId.slice(5):testId.replace(/^self_(.+)_\d+$/,"$1");
-    const ids=testId.indexOf("test_")===0?["topic_"+topicId,"hard_"+topicId]:[testId,"topic_"+topicId];
-    const resolved=resolvedBuiltInBankIds_(courseId,ids);
-    if(builtInQuestions_(courseId,resolved).length)throw new Error("Встроенные тесты должны отправляться через защищённую серверную проверку.");
+  if (user.role === "student" && /^__final__/.test(testId)) {
+    throw new Error("Итоговый экзамен должен отправляться через защищённую серверную проверку.");
+  }
+  if (user.role === "student" && /^test_/.test(testId)) {
+    throw new Error("Встроенные тесты должны отправляться через защищённую серверную проверку.");
+  }
+  // All numbered self-work test IDs are assessment attempts, even before
+  // their bank is imported. Written answers use the separate written_self_ namespace.
+  if (user.role === "student" && /^self_.+_\d+$/.test(testId)) {
+    throw new Error("Самостоятельные тесты должны отправляться через защищённую серверную проверку.");
   }
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
     const sheet=results_(),values=resultAttemptRows_();
-    const prior=values.filter(function(row){return email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
+    const matchingRows=values.filter(function(row){return email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);});
+    const prior=matchingRows.length;
+    // A pending written submission is immutable until the teacher reviews it.
+    // This prevents double-clicks/retries from creating duplicate journal entries.
+    if(user.role==="student" && /^(prac_|written_self_)/.test(testId) && matchingRows.length) {
+      const latest=matchingRows[matchingRows.length-1];
+      if(Number(latest[5])===0) {
+        throw new Error("Работа уже отправлена и ожидает проверки преподавателя.");
+      }
+      if(Number(latest[5])>2) {
+        throw new Error("Работа уже проверена и зачтена. Повторная отправка не требуется.");
+      }
+    }
     if(assessment){
       const raw=settingValue_("testAttempts:"+email+":"+courseId+":"+testId);
       const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
@@ -734,7 +816,7 @@ function saveResult_(data, serverVerifiedEnglishVpr) {
     const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=assessment?gradeFromPercent_(percent):rawGrade,score=maxScore?Math.round(maxScore*percent)/100:Math.max(0,rawScore);
     appendMappedRecord_(sheet,{Email:email,Name:String(data.name||user.name),Group:String(data.group||user.group),TestId:testId,TestTitle:title,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attempts,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:String(data.payload||"").slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:title,AttemptNo:attempts,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent});
-    if(user.role==="student" && /^(prac_|self_)/.test(testId) && String(data.payload||"").trim()) {
+    if(user.role==="student" && /^(prac_|self_|written_self_)/.test(testId) && String(data.payload||"").trim()) {
       notifyCourseStaff_(courseId,"written_submission","Новая письменная работа на проверку",
         user.name+" ("+user.group+") отправил(а) письменную работу: "+title+". Откройте журнал результатов по дисциплине для проверки.",testId);
     }
@@ -767,13 +849,13 @@ function saveTeacherResult_(data) {
   if(!/^metrology_[A-Za-z0-9_-]{1,120}$/.test(testId)) throw new Error("Некорректный идентификатор лабораторной работы.");
   const lock=LockService.getScriptLock();lock.waitLock(10000);
   try {
-    const now=new Date().toISOString(),submission="Лабораторная работа: "+title+"; дата: "+date+(feedback?"\nКомментарий преподавателя: "+feedback:"");
+    const now=new Date().toISOString(),submission="Лабораторная работа: "+title+"; дата: "+date;
     const sheet=results_(),values=sheet.getDataRange().getValues();
     let existingRow=-1;
     for(let i=values.length-1;i>=1;i--){
       if(email_(values[i][0])===student.email&&String(values[i][3]||"")===testId&&sameCourseId_(values[i][12]||courseId,courseId)){existingRow=i+1;break;}
     }
-    const record={Email:student.email,Name:student.name,Group:student.group,TestId:testId,TestTitle:title+" ("+date+")",Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,Attempts:1,FinishedAt:now,CourseId:courseId,Submission:submission};
+    const record={Email:student.email,Name:student.name,Group:student.group,TestId:testId,TestTitle:title+" ("+date+")",Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,Attempts:1,FinishedAt:now,CourseId:courseId,Submission:submission,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:now};
     if(existingRow>0)updateMappedRecord_(sheet,existingRow,record);else appendMappedRecord_(sheet,record);
     appendAttemptAudit_({EventType:"teacher_grade_entered",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20});
   } finally {lock.releaseLock();}
@@ -803,14 +885,23 @@ function saveManualGrade_(data) {
     const authorizedTeacher=editor_(data,courseId);
     const currentStudent=userByEmail_(studentEmail);
     if(!currentStudent||currentStudent.role!=="student"||!hasCourseAccess_(currentStudent,courseId)) throw new Error("Студент больше не обучается по выбранной дисциплине.");
-    testId="manual_"+Utilities.getUuid();
+    // One manual grade per student/course/date/title: editing it updates the same
+    // authoritative Results row instead of inflating the student's average.
+    testId="manual_"+Utilities.base64EncodeWebSafe(courseId+"|"+currentStudent.email+"|"+date+"|"+title).replace(/=+$/,"").slice(0,100);
     const finishedAt=new Date(date+"T12:00:00.000Z").toISOString();
-    appendMappedRecord_(results_(),{
+    const resultSheet=results_(),resultRows=resultSheet.getDataRange().getValues();
+    let existingRow=-1;
+    for(let i=resultRows.length-1;i>=1;i--){
+      if(email_(resultRows[i][0])===currentStudent.email&&String(resultRows[i][3]||"")===testId&&sameCourseId_(resultRows[i][12]||courseId,courseId)){existingRow=i+1;break;}
+    }
+    const record={
       Email:currentStudent.email,Name:currentStudent.name,Group:currentStudent.group,
       TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20,
       TimeSpent:0,Attempts:1,FinishedAt:finishedAt,CourseId:courseId,
-      Submission:feedback
-    });
+      Submission:"",Feedback:feedback,ReviewedBy:authorizedTeacher.email,ReviewedAt:new Date().toISOString()
+    };
+    if(existingRow>0)updateMappedRecord_(resultSheet,existingRow,record);
+    else appendMappedRecord_(resultSheet,record);
     appendAttemptAudit_({EventType:"manual_grade_entered",ActorEmail:authorizedTeacher.email,StudentEmail:currentStudent.email,StudentName:currentStudent.name,Group:currentStudent.group,CourseId:courseId,TestId:testId,TestTitle:title,Grade:grade,Score:grade,MaxScore:5,Percent:grade*20});
   } finally {lock.releaseLock();}
   createNotification_(student.email,"grade","Новая оценка","Преподаватель выставил оценку "+grade+"/5 за работу «"+title+"».",courseId,testId);
@@ -823,7 +914,7 @@ function gradeWrittenResult_(data) {
   if(teacher.role!=="teacher"&&teacher.role!=="admin") throw new Error("Проверять письменные работы может только преподаватель.");
   const studentEmail=email_(data.email),courseId=String(data.courseId||""),testId=String(data.testId||"");
   const grade=Number(data.grade),feedback=String(data.feedback||"").slice(0,4000);
-  if(!studentEmail||!courseId||!testId||!/^(prac_|self_)/.test(testId)) throw new Error("Не выбрана письменная работа.");
+  if(!studentEmail||!courseId||!testId||!/^(prac_|self_|written_self_)/.test(testId)) throw new Error("Не выбрана письменная работа.");
   if(!isFinite(grade)||grade<2||grade>5) throw new Error("Оценка должна быть от 2 до 5.");
   const student=userByEmail_(studentEmail);
   if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
@@ -836,8 +927,13 @@ function gradeWrittenResult_(data) {
       if(email_(rows[i][0])===studentEmail&&String(rows[i][3]||"")===testId&&sameCourseId_(rows[i][12]||courseId,courseId)){rowIndex=i+1;break;}
     }
     if(rowIndex<0) throw new Error("Отправленная работа не найдена.");
-    updateMappedRecord_(sh,rowIndex,{Grade:grade,Percent:grade*20,Submission:(String(rows[rowIndex-1][13]||"")+(feedback?"\n\nКомментарий преподавателя: "+feedback:"")).slice(0,10000)});
-    appendAttemptAudit_({EventType:"written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(rows[rowIndex-1][4]||testId),Grade:grade,Percent:grade*20});
+    const currentRow=rows[rowIndex-1], currentGrade=Number(currentRow[5])||0, currentFeedback=String(currentRow[16]||"");
+    const isRegrade=currentGrade>=2&&currentGrade<=5;
+    if(isRegrade&&!(teacher.role==="admin"&&data.regrade===true)) {
+      throw new Error("Работа уже проверена. Повторное выставление оценки доступно только администратору с явным подтверждением.");
+    }
+    updateMappedRecord_(sh,rowIndex,{Grade:grade,Percent:grade*20,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:new Date().toISOString()});
+    appendAttemptAudit_({EventType:isRegrade?"written_regraded":"written_graded",ActorEmail:teacher.email,StudentEmail:studentEmail,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,TestTitle:String(currentRow[4]||testId),Grade:grade,Percent:grade*20,PreviousGrade:isRegrade?currentGrade:"",PreviousFeedback:isRegrade?currentFeedback:"",Feedback:feedback});
   } finally {lock.releaseLock();}
   createNotification_(studentEmail,"grade","Письменная работа проверена","По работе «"+testId+"» выставлена оценка: "+grade+"/5."+(feedback?" Комментарий преподавателя добавлен.":""),courseId,testId);
   return {success:true,grade:grade};
@@ -912,7 +1008,7 @@ function getActivityLog_(data) {
 function getAttemptAudit_(data) {
   const courseId=String(data.courseId||""),teacher=editor_(data,courseId),wanted=email_(data.email||""),testId=String(data.testId||"");
   const sh=attemptAudit_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
-  const rows=vals.slice(1).filter(function(r){return String(r[m.CourseId]||"")===courseId&&(!wanted||email_(r[m.StudentEmail])===wanted)&&(!testId||String(r[m.TestId]||"")===testId);}).map(function(r){return {eventType:String(r[m.EventType]||""),actorEmail:String(r[m.ActorEmail]||""),email:String(r[m.StudentEmail]||""),name:String(r[m.StudentName]||""),group:String(r[m.Group]||""),courseId:String(r[m.CourseId]||""),testId:String(r[m.TestId]||""),testTitle:String(r[m.TestTitle]||""),extraAttempts:r[m.ExtraAttempts],attemptNo:r[m.AttemptNo],grade:r[m.Grade],score:r[m.Score],maxScore:r[m.MaxScore],percent:r[m.Percent],createdAt:String(r[m.CreatedAt]||"")};});
+  const rows=vals.slice(1).filter(function(r){return String(r[m.CourseId]||"")===courseId&&(!wanted||email_(r[m.StudentEmail])===wanted)&&(!testId||String(r[m.TestId]||"")===testId);}).map(function(r){return {eventType:String(r[m.EventType]||""),actorEmail:String(r[m.ActorEmail]||""),email:String(r[m.StudentEmail]||""),name:String(r[m.StudentName]||""),group:String(r[m.Group]||""),courseId:String(r[m.CourseId]||""),testId:String(r[m.TestId]||""),testTitle:String(r[m.TestTitle]||""),extraAttempts:r[m.ExtraAttempts],attemptNo:r[m.AttemptNo],grade:r[m.Grade],score:r[m.Score],maxScore:r[m.MaxScore],percent:r[m.Percent],createdAt:String(r[m.CreatedAt]||""),previousGrade:r[m.PreviousGrade],previousFeedback:String(r[m.PreviousFeedback]||""),feedback:String(r[m.Feedback]||"")};});
   rows.sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));});
   return {success:true,events:rows.slice(0,200)};
 }
@@ -1026,8 +1122,13 @@ function assignmentResultRecords_(emailFilter) {
 function getResults_(data) {
   const user=auth_(data);
   if(user.role!=="admin"&&user.role!=="teacher")throw new Error("Недостаточно прав.");
-  let list=results_().getDataRange().getValues().slice(1).filter(function(r){return !!r[0];}).map(function(r){
-    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:String(r[13]||"")};
+  const resultsSheet=results_(),resultMap=headerMap_(resultsSheet);
+  let list=resultsSheet.getDataRange().getValues().slice(1).filter(function(r){return !!r[0];}).map(function(r){
+    const submission=String(r[resultMap.Submission]===undefined?r[13]||"":r[resultMap.Submission]||"");
+    const feedbackMatch=submission.match(/\\n\\nКомментарий преподавателя:([\\s\\S]*)$/);
+    const storedFeedback=resultMap.Feedback===undefined?"":String(r[resultMap.Feedback]||"");
+    const legacyFeedback=Number(r[5])>=2&&feedbackMatch?String(feedbackMatch[1]||"").trim():"";
+    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:storedFeedback||legacyFeedback};
   });
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
@@ -1040,7 +1141,7 @@ function getResults_(data) {
     let p={};try{p=JSON.parse(row[m.Payload]||"{}");}catch(e){}
     const rs=p.results||{};
     Object.keys(rs).forEach(function(key){
-      const rec=rs[key];if(!rec||typeof rec!=="object"||rec.grade==null)return;
+      const rec=rs[key];if(!rec||typeof rec!=="object"||rec.grade==null||!isTrustedLegacyGrade_(rec))return;
       const email=email_(row[m.Email]);
       let cid=normalizeCourseId_(rec.courseId||"");
       if(!cid){
@@ -1080,7 +1181,7 @@ function getPublicSubjectRatings_(data) {
     const legacy = payload.results || {};
     Object.keys(legacy).forEach(function (testId) {
       const rec = legacy[testId];
-      if (!rec || typeof rec !== "object" || rec.grade == null) return;
+      if (!rec || typeof rec !== "object" || rec.grade == null || !isTrustedLegacyGrade_(rec)) return;
       let courseId = String(rec.courseId || "");
       if (!courseId) {
         const matches = CFG.COURSES.filter(function (id) { return testId.indexOf(id) >= 0; });
@@ -1100,6 +1201,19 @@ function getPublicSubjectRatings_(data) {
       ]);
     });
   });
+  // Assignment submissions are stored separately from Results. Include reviewed
+  // assignments here so public subject averages match the student's course summary
+  // and the teacher journal instead of silently omitting manually graded work.
+  const reviewedAssignmentKeys = Object.create(null);
+  assignmentResultRecords_().forEach(function (x) {
+    if (x.grade === "" || x.grade === null || x.grade === undefined) return;
+    reviewedAssignmentKeys[JSON.stringify([x.email, x.courseId, x.testId])] = true;
+    rows.push([
+      x.email, x.name, x.group, x.testId, x.testTitle, x.grade,
+      x.score, x.maxScore, x.percent, x.timeSpent, x.attempts,
+      x.finishedAt, x.courseId
+    ]);
+  });
   const latest = {};
   rows.forEach(function (r) {
     const email = email_(r[0]), courseId = String(r[12] || "");
@@ -1116,7 +1230,9 @@ function getPublicSubjectRatings_(data) {
       name: String(r[1] || "Обучающийся"), group: String(r[2] || ""), gradeSum: 0, percentSum: 0, completed: 0
     };
     const st = grouped[courseId][studentKey], grade = Number(r[5]) || 0;
-    if (grade > 0) { st.gradeSum += grade; st.percentSum += Number(r[8]) || 0; st.completed += 1; }
+    const testId = String(r[3] || "");
+    const assignmentKey = JSON.stringify([email_(r[0]), courseId, testId]);
+    if (grade > 0 || reviewedAssignmentKeys[assignmentKey]) { st.gradeSum += grade; st.percentSum += Number(r[8]) || 0; st.completed += 1; }
   });
   const ratings = {};
   Object.keys(grouped).forEach(function (courseId) {
@@ -1154,16 +1270,17 @@ function saveGCodeProgress_(data) {
 }
 function getMyCourseResults_(data) {
   const user=auth_(data),email=email_(user.email),requestedCourse=String(data.courseId||"");
-  const list=results_().getDataRange().getValues().slice(1).filter(function(r){
+  const resultSheet=results_(),resultMap=headerMap_(resultSheet);
+  const list=resultSheet.getDataRange().getValues().slice(1).filter(function(r){
     return r[0]&&email_(r[0])===email&&(!requestedCourse||sameCourseId_(r[12],requestedCourse));
   }).map(function(r){
-    return {testId:String(r[3]||""),testTitle:String(r[4]||r[3]||""),grade:r[5]===""||r[5]===null?"":Number(r[5])||0,score:Number(r[6])||0,maxScore:Number(r[7])||0,percent:Number(r[8])||0,timeSpent:Number(r[9])||0,finishedAt:String(r[11]||""),courseId:normalizeCourseId_(r[12]),payload:String(r[13]||"")};
+    return {testId:String(r[3]||""),testTitle:String(r[4]||r[3]||""),grade:r[5]===""||r[5]===null?"":Number(r[5])||0,score:Number(r[6])||0,maxScore:Number(r[7])||0,percent:Number(r[8])||0,timeSpent:Number(r[9])||0,finishedAt:String(r[11]||""),courseId:normalizeCourseId_(r[12]),payload:String(r[resultMap.Submission===undefined?13:resultMap.Submission]||""),feedback:String(resultMap.Feedback===undefined?"":r[resultMap.Feedback]||""),reviewedBy:String(resultMap.ReviewedBy===undefined?"":r[resultMap.ReviewedBy]||""),reviewedAt:String(resultMap.ReviewedAt===undefined?"":r[resultMap.ReviewedAt]||"")};
   });
   // auth_ already resolved this student's row; reuse its payload instead of downloading the full Users sheet again.
   let payload={};try{payload=JSON.parse(user.payload||"{}");}catch(e){}
   const legacy=payload.results||{},protectedBanks=protectedQuestionBankMap_();
   Object.keys(legacy).forEach(function(testId){
-    const rec=legacy[testId];if(!rec||typeof rec!=="object"||rec.grade==null)return;
+    const rec=legacy[testId];if(!rec||typeof rec!=="object"||rec.grade==null||!isTrustedLegacyGrade_(rec))return;
     let courseId=normalizeCourseId_(rec.courseId||"");
     if(!courseId){
       const matches=CFG.COURSES.filter(function(id){return testId.indexOf(id)>=0;});
@@ -1183,7 +1300,15 @@ function getMyCourseResults_(data) {
     Object.keys(manual).forEach(function(date){
       const value=manual[date];if(value===undefined||value===null||String(value).trim()==="")return;
       const id="manual_"+String(date);
-      if(list.some(function(x){return x.testId===id;}))return;
+      const parts=String(date).split(".");
+      const isoDate=parts.length===3?(parts[2].length===2?"20"+parts[2]:parts[2])+"-"+parts[1]+"-"+parts[0]:"";
+      // Once a legacy date-based mark has been migrated to Results, do not
+      // show the same mark a second time beside its authoritative course row.
+      if(list.some(function(x){
+        if(x.testId===id)return true;
+        return isoDate&&String(x.testId||"").indexOf("manual_")===0&&
+          String(x.finishedAt||"").slice(0,10)===isoDate&&String(x.testTitle||"")==="Оценка за занятие";
+      }))return;
       const numeric=Number(value);
       list.push({testId:id,testTitle:"Оценка преподавателя",grade:String(value),score:isFinite(numeric)?numeric:0,maxScore:5,percent:isFinite(numeric)?numeric*20:0,timeSpent:0,finishedAt:String(date),courseId:"",manual:true});
     });
@@ -1203,7 +1328,7 @@ function getMyCourseResults_(data) {
     if(!previous||String(x.finishedAt||"")>=String(previous.finishedAt||""))latestByAssessment[key]=x;
   });
   const latestResults=Object.keys(latestByAssessment).map(function(key){return latestByAssessment[key];});
-  const graded=latestResults.filter(function(x){return x.grade!==""&&x.grade!==null&&Number(x.grade)>0;});
+  const graded=latestResults.filter(function(x){return x.grade!==""&&x.grade!==null&&Number.isFinite(Number(x.grade))&&(Number(x.grade)>0||x.assignmentStatus==="reviewed");});
   const averageGrade=graded.length?Math.round(graded.reduce(function(n,x){return n+Number(x.grade||0);},0)/graded.length*100)/100:0;
   const averagePercent=graded.length?Math.round(graded.reduce(function(n,x){return n+Number(x.percent||0);},0)/graded.length):0;
   return {success:true,results:list,summary:{completed:latestResults.length,graded:graded.length,averageGrade:averageGrade,averagePercent:averagePercent}};
@@ -1280,9 +1405,9 @@ function getAssignments_(data) {
   function historyFor(submission) {
     const sid = String(submission[m.Id] || "");
     const saved = historyRows.slice(1).filter(function(x){return String(x[hm.SubmissionId]||"")===sid;})
-      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||"")};})
+      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||""),grade:x[hm.Grade]===undefined||x[hm.Grade]===""?null:x[hm.Grade],feedback:String(x[hm.Feedback]||""),reviewedBy:String(x[hm.ReviewedBy]||""),reviewedAt:String(x[hm.ReviewedAt]||""),status:String(x[hm.Status]||"")};})
       .sort(function(x,y){return x.attempt-y.attempt;});
-    return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||"")}];
+    return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||""),grade:submission[m.Grade]===undefined||submission[m.Grade]===""?null:submission[m.Grade],feedback:String(submission[m.Feedback]||""),reviewedBy:String(submission[m.ReviewedBy]||""),reviewedAt:String(submission[m.ReviewedAt]||""),status:String(submission[m.Status]||"")}];
   }
   rows.slice(1).forEach(function(r){
     if (!r[h.Id]) return;
@@ -1326,15 +1451,37 @@ function submitAssignment_(data) {
     const i = v.slice(1).findIndex(function(r){ return String(r[m.AssignmentId]) === id && email_(r[m.StudentEmail]) === student.email; });
     const now = new Date().toISOString();
     const submissionId = i >= 0 ? String(v[i+1][m.Id]) : Utilities.getUuid();
+    if (i >= 0 && String(v[i+1][m.Status] || "") === "reviewed") {
+      const previousGrade = Number(v[i+1][m.Grade]);
+      if (!isFinite(previousGrade) || previousGrade > 2) {
+        throw new Error("Работа уже проверена и зачтена. Повторная отправка не требуется.");
+      }
+    }
     const hist = assignmentSubmissionHistory_(), hv = hist.getDataRange().getValues(), hm = headerMap_(hist);
     const saved = hv.slice(1).filter(function(r){ return String(r[hm.SubmissionId] || "") === submissionId; });
     let attempt = saved.length + 1;
-    if (i >= 0 && !saved.length) {
+    if (i >= 0) {
       const previous = v[i+1], previousAt = String(previous[m.SubmittedAt] || now);
-      appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1});
-      attempt = 2;
+      const reviewSnapshot = {
+        Grade:previous[m.Grade] === undefined ? "" : previous[m.Grade],
+        Feedback:String(previous[m.Feedback] || ""),
+        ReviewedBy:String(previous[m.ReviewedBy] || ""),
+        ReviewedAt:String(previous[m.ReviewedAt] || ""),
+        Status:String(previous[m.Status] || "submitted")
+      };
+      if (!saved.length) {
+        appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1,Grade:reviewSnapshot.Grade,Feedback:reviewSnapshot.Feedback,ReviewedBy:reviewSnapshot.ReviewedBy,ReviewedAt:reviewSnapshot.ReviewedAt,Status:reviewSnapshot.Status});
+        attempt = 2;
+      } else {
+        for (let h = hv.length - 1; h >= 1; h--) {
+          if (String(hv[h][hm.SubmissionId] || "") === submissionId) {
+            updateMappedRecord_(hist, h + 1, reviewSnapshot);
+            break;
+          }
+        }
+      }
     }
-    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt});
+    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt,Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Status:"submitted"});
     const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
     if (i >= 0) updateMappedRecord_(sub, i + 2, record); else appendMappedRecord_(sub, record);
     notifyCourseStaff_(cid,"submission",attempt > 1 ? "Повторная отправка задания" : "Новый ответ на задание",
@@ -1363,7 +1510,24 @@ function gradeAssignment_(data) {
     const courseId = String(a[ah.CourseId] || "");
     const teacher = editor_(data, courseId);
     const feedback = String(data.feedback || "").slice(0,4000);
-    updateMappedRecord_(sh, i + 2, {Status:"reviewed",Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:new Date().toISOString()});
+    const currentGrade = row[m.Grade] === "" || row[m.Grade] == null ? null : Number(row[m.Grade]);
+    const isRegrade = currentGrade !== null && isFinite(currentGrade) && currentGrade >= 0 && currentGrade <= 5 && String(row[m.Status] || "") === "reviewed";
+    if (isRegrade && !(actor.role === "admin" && data.regrade === true)) {
+      throw new Error("Работа уже проверена. Повторное выставление оценки доступно только администратору с явным подтверждением.");
+    }
+    const reviewedAt=new Date().toISOString();
+    updateMappedRecord_(sh, i + 2, {Status:"reviewed",Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:reviewedAt});
+    if(isRegrade){
+      const history=assignmentSubmissionHistory_(),historyRows=history.getDataRange().getValues(),historyMap=headerMap_(history);
+      let latestHistoryRow=-1,latestAttempt=-1;
+      historyRows.slice(1).forEach(function(historyRow,index){
+        if(String(historyRow[historyMap.SubmissionId]||"")!==id)return;
+        const attempt=Number(historyRow[historyMap.AttemptNo])||1;
+        if(attempt>latestAttempt){latestAttempt=attempt;latestHistoryRow=index+2;}
+      });
+      if(latestHistoryRow>0)updateMappedRecord_(history,latestHistoryRow,{Grade:grade,Feedback:feedback,ReviewedBy:teacher.email,ReviewedAt:reviewedAt,Status:"reviewed"});
+    }
+    appendAttemptAudit_({EventType:isRegrade?"assignment_regraded":"assignment_graded",ActorEmail:teacher.email,StudentEmail:email_(row[m.StudentEmail]),StudentName:String(row[m.StudentName] || ""),Group:String(row[m.Group] || ""),CourseId:courseId,TestId:"assignment_"+aid,TestTitle:"Задание: "+String(a[ah.Title] || ""),Grade:grade,Percent:grade*20});
     const retryNeeded=grade<=2;
     createNotification_(String(row[m.StudentEmail] || ""),retryNeeded?"assignment_retry":"grade",
       retryNeeded?"Работу нужно доработать":"Работа проверена",
@@ -1482,10 +1646,23 @@ function getTestAttemptStatus_(data) {
     if(raw!=="") break;
   }
   const limit=raw===""?1:1+Math.max(0,Number(raw)||0);
-  const acceptedIds=isCustom?[testId,baseId]:[testId,"custom_"+testId];
-  const used=resultAttemptRows_().filter(function(r){
-    return email_(r[0])===targetEmail&&acceptedIds.indexOf(String(r[3]||""))>=0&&sameCourseId_(r[12]||courseId,courseId);
-  }).length;
+  let used=0;
+  const finalExamMatch=testId.match(/^english_final_c([1-5])_s([12])$/);
+  if(finalExamMatch){
+    const finalCourseId=Number(finalExamMatch[1])<=2?"ENB":"ENT";
+    if(!sameCourseId_(courseId,finalCourseId)) throw new Error("Итоговый экзамен не относится к выбранной дисциплине.");
+    const examSheet=ensureSheet_("EnglishExamAttempts"),examMap=headerMap_(examSheet),examLast=examSheet.getLastRow();
+    if(examLast>1){
+      used=examSheet.getRange(2,1,examLast-1,examSheet.getLastColumn()).getValues().filter(function(row){
+        return email_(row[examMap.StudentEmail])===targetEmail&&String(row[examMap.ExamId]||"")===testId;
+      }).length;
+    }
+  }else{
+    const acceptedIds=isCustom?[testId,baseId]:[testId,"custom_"+testId];
+    used=resultAttemptRows_().filter(function(r){
+      return email_(r[0])===targetEmail&&acceptedIds.indexOf(String(r[3]||""))>=0&&sameCourseId_(r[12]||courseId,courseId);
+    }).length;
+  }
   return {success:true,email:targetEmail,testId:testId,used:used,limit:limit,remaining:Math.max(0,limit-used),extraAttempts:Math.max(0,limit-1),unlimited:false,allowed:used<limit};
 }
 function requestTestAttempts_(data) {
@@ -1516,6 +1693,41 @@ function resolveAttemptRequestNotifications_(studentEmail,courseId,testId) {
   });
 }
 
+function clearExpiredEnglishSemesterAttemptForGrant_(studentEmail, courseId, testKey) {
+  const track = courseId === "ENB" ? "basic" : courseId === "ENT" ? "technical" : "";
+  const prefix = track ? "english_semester_" + track + "_" : "";
+  if (!prefix || String(testKey || "").indexOf(prefix) !== 0) return false;
+  const testId = String(testKey).slice(prefix.length);
+  const bank = englishSemesterBank_();
+  const values = bank.getDataRange().getValues(), map = headerMap_(bank);
+  let tests = null;
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][map.Track] || "") === track &&
+        String(values[i][map.Active] || "").toUpperCase() === "TRUE") {
+      tests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
+      break;
+    }
+  }
+  const test = (tests || []).filter(function(item) { return String(item.id || "") === testId; })[0];
+  if (!test) return false;
+  const rows = resultAttemptRows_();
+  const prior = rows.filter(function(row) {
+    return email_(row[0]) === email_(studentEmail) && String(row[3] || "") === testKey &&
+      sameCourseId_(row[12] || courseId, courseId);
+  }).length;
+  const attemptKey = englishSemesterAttemptCacheKey_(studentEmail, testKey, prior + 1);
+  const cache = CacheService.getScriptCache();
+  const raw = cache.get(attemptKey);
+  if (!raw) return false;
+  let attempt;
+  try { attempt = JSON.parse(raw); } catch (e) { return false; }
+  const elapsed = Math.max(0, Math.floor((Date.now() - Number(attempt.startedAt || 0)) / 1000));
+  const allowed = Math.max(1, Number(test.time) || 45) * 60;
+  if (attempt.status !== "expired" && elapsed <= allowed + 300) return false;
+  cache.remove(attemptKey);
+  return true;
+}
+
 function grantTestAttempts_(data) {
   const courseId=String(data.courseId||""), testId=String(data.testId||""), studentEmail=email_(data.email);
   if(!courseId||!testId||!studentEmail) throw new Error("Выберите дисциплину, тест и студента.");
@@ -1528,8 +1740,14 @@ function grantTestAttempts_(data) {
     teacher=editor_(data,courseId);
     student=userByEmail_(studentEmail);
     if(!student||student.role!=="student"||!hasCourseAccess_(student,courseId)) throw new Error("Студент не обучается по этой дисциплине.");
+    // Release an expired semester token before persisting the grant. If the
+    // protected bank/cache cannot be checked, fail closed instead of reporting
+    // a successful grant while leaving the student blocked by a stale token.
+    // Never clear an active attempt: granting retries must not reset its timer.
+    const expiredSemesterAttemptReset = extra > 0 ?
+      clearExpiredEnglishSemesterAttemptForGrant_(studentEmail, courseId, testId) : false;
     writeSetting_("testAttempts:"+studentEmail+":"+courseId+":"+testId,String(extra),teacher.email,true);
-    appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra});
+    appendAttemptAudit_({EventType:"attempts_granted",ActorEmail:teacher.email,StudentEmail:student.email,StudentName:student.name,Group:student.group,CourseId:courseId,TestId:testId,ExtraAttempts:extra,ExpiredSemesterAttemptReset:expiredSemesterAttemptReset});
     resolveAttemptRequestNotifications_(studentEmail,courseId,testId);
     CacheService.getScriptCache().remove("attempt_request:"+studentEmail+":"+courseId+":"+testId.slice(0,120));
   } finally {lock.releaseLock();}
@@ -1601,11 +1819,15 @@ function getCustomContent_(data) {
 
     // Student sessions receive test prompts and options only. Answer keys remain server-side.
     if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
-      payload.questions = payload.questions.map(function (question) {
-        const safe = Object.assign({}, question || {});
-        ["correct", "answer", "correctAnswer", "answers", "explanation", "solution", "key"].forEach(function (key) { delete safe[key]; });
-        return safe;
-      });
+      function stripTestKeys_(value) {
+        if (!value || typeof value !== "object") return;
+        if (Array.isArray(value)) { value.forEach(stripTestKeys_); return; }
+        Object.keys(value).forEach(function(key) {
+          if (/^(correct|correctAnswer|correctIndex|correctOption|answer|answerIndex|answers|expectedAnswer|acceptedAnswers|correctOrder|key|solution|explanation|rationale|isCorrect)$/i.test(key)) delete value[key];
+          else stripTestKeys_(value[key]);
+        });
+      }
+      payload.questions.forEach(stripTestKeys_);
     }
     if (user.role === "student" && String(row[3] || "") === "game" && Array.isArray(payload.categories)) {
       payload.categories = payload.categories.map(function (category) {
@@ -1772,9 +1994,26 @@ function builtInQuestions_(courseId, bankIds) {
   });
   return out;
 }
+function sanitizeAssessmentQuestionForStudent_(question) {
+  const safe = JSON.parse(JSON.stringify(question && typeof question === "object" ? question : {}));
+  const privateKey = /^(?:correct|answer|expected|accepted|solution|explanation|rationale|grading|rubric|key|iscorrect|feedback)/i;
+  function clean(value) {
+    if (!value || typeof value !== "object") return;
+    if (Array.isArray(value)) { value.forEach(clean); return; }
+    Object.keys(value).forEach(function(key) {
+      const normalized = String(key).toLowerCase();
+      if (privateKey.test(normalized)) delete value[key];
+      else clean(value[key]);
+    });
+  }
+  clean(safe);
+  return safe;
+}
+
 function safeBuiltInQuestion_(entry, optionMaps) {
-  const q=Object.assign({},entry.question||{}),type=String(q.type||"mc").toLowerCase();
-  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
+  const q=sanitizeAssessmentQuestionForStudent_(entry.question),type=String(q.type||"mc").toLowerCase();
+  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder","answerIndex","correctIndex","correctOption","rationale","isCorrect"].forEach(function(k){delete q[k];});
+  if((type==="tf"||type==="true_false")&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
   if((type==="mc"||type==="single"||type==="single_select"||type==="choice"||type==="multi"||type==="multiple"||type==="multiple_choice"||type==="tf"||type==="true_false")&&Array.isArray(q.options)&&q.options.length>1){
     const order=shuffledServer_(q.options.map(function(_,i){return i;}));
     q.options=order.map(function(i){return q.options[i];});
@@ -1785,8 +2024,16 @@ function safeBuiltInQuestion_(entry, optionMaps) {
     const pairs=q.pairs||[],right=shuffledServer_(pairs.map(function(pair){return pair.right;}));
     q.options=right;q.pairs=pairs.map(function(pair){return {left:pair.left};});
   }
-  if((type==="tf"||type==="true_false")&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
   return {bankId:entry.bankId,questionId:entry.questionId,questionIndex:entry.questionIndex,question:q};
+}
+
+function builtInScoringSnapshot_(question) {
+  const source = question && typeof question === "object" ? question : {};
+  const snapshot = {};
+  ["type","correct","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"].forEach(function(key) {
+    if (source[key] !== undefined) snapshot[key] = JSON.parse(JSON.stringify(source[key]));
+  });
+  return snapshot;
 }
 
 function getBuiltInTest_(data) {
@@ -1809,7 +2056,7 @@ function getBuiltInTest_(data) {
   }
   const attemptId=Utilities.getUuid().replace(/-/g,""),optionMaps={};
   const questions=entries.map(function(entry){return safeBuiltInQuestion_(entry,optionMaps);});
-  CacheService.getScriptCache().put("builtInAttempt:"+attemptId,JSON.stringify({email:user.email,courseId:courseId,testId:testId,bankIds:resolvedIds,optionMaps:optionMaps}),3600);
+  CacheService.getScriptCache().put("builtInAttempt:"+attemptId,JSON.stringify({email:user.email,courseId:courseId,testId:testId,bankIds:resolvedIds,questions:entries.map(function(entry){return {bankId:entry.bankId,question:builtInScoringSnapshot_(entry.question)};}),optionMaps:optionMaps}),3600);
   return {success:true,courseId:courseId,testId:testId,bankIds:resolvedIds,attemptId:attemptId,questions:questions};
 }
 
@@ -1861,20 +2108,33 @@ function submitBuiltInTest_(data) {
   if(attempt.email!==user.email||attempt.courseId!==courseId||attempt.testId!==testId)throw new Error("Попытка не принадлежит этой учётной записи или тесту.");
   const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds);
   if(JSON.stringify(attempt.bankIds)!==JSON.stringify(resolvedIds))throw new Error("Состав банка изменился. Обновите страницу и начните тест заново.");
-  const entries=builtInQuestions_(courseId,resolvedIds);
-  if(!entries.length)throw new Error("Серверный банк не найден. Обратитесь к преподавателю.");
+  const entries=Array.isArray(attempt.questions)?attempt.questions:[];
+  if(!entries.length||entries.some(function(entry){return !entry||!entry.question||resolvedIds.indexOf(String(entry.bankId||""))<0;}))throw new Error("Снимок экзаменационного варианта повреждён. Начните попытку заново.");
   if(answers.length!==entries.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
-  const rawScore=entries.reduce(function(total,entry,index){
+  const canonicalAnswers=entries.map(function(entry,index){
     const order=attempt.optionMaps&&attempt.optionMaps[String(index)];
     let answer=answers[index];
     if(Array.isArray(order)){
-      if(Array.isArray(answer))answer=answer.map(function(value){const pos=Number(value);return Number.isInteger(pos)&&pos>=0&&pos<order.length?order[pos]:value;});
-      else{const pos=Number(answer);if(Number.isInteger(pos)&&pos>=0&&pos<order.length)answer=order[pos];}
+      if(Array.isArray(answer))answer=answer.map(function(value){const pos=Number(value);return Number.isInteger(pos)&&pos>=0&&pos<order.length?order[pos]:-1;});
+      else{const pos=Number(answer);answer=Number.isInteger(pos)&&pos>=0&&pos<order.length?order[pos]:-1;}
     }
-    return total+(scoreBuiltInQuestion_(entry.question,answer)?1:0);
+    return answer;
+  });
+  const rawScore=entries.reduce(function(total,entry,index){
+    return total+(scoreBuiltInQuestion_(entry.question,canonicalAnswers[index])?1:0);
   },0);
   const rawPercent=Math.round(rawScore/entries.length*100),lock=LockService.getScriptLock();lock.waitLock(10000);
   try{
+    // Re-read the one-time token under the result lock. Parallel requests may
+    // both have read it before either request acquired this lock.
+    const lockedAttemptRaw=cache.get("builtInAttempt:"+attemptId);
+    if(!lockedAttemptRaw)throw new Error("Эта попытка уже отправлена или истекла. Начните тест заново.");
+    const lockedAttempt=JSON.parse(lockedAttemptRaw);
+    if(lockedAttempt.email!==user.email||lockedAttempt.courseId!==courseId||lockedAttempt.testId!==testId||
+       JSON.stringify(lockedAttempt.bankIds)!==JSON.stringify(resolvedIds)||!Array.isArray(lockedAttempt.questions)||
+       lockedAttempt.questions.length!==entries.length) {
+      throw new Error("Идентификатор попытки недействителен. Начните тест заново.");
+    }
     const sh=results_(),rows=resultAttemptRows_();
     const prior=rows.filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
     const raw=settingValue_("testAttempts:"+user.email+":"+courseId+":"+testId);
@@ -1882,7 +2142,7 @@ function submitBuiltInTest_(data) {
     if(prior>=limit)throw new Error("Работа уже завершена ("+prior+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo);
     const percent=Math.max(0,rawPercent-policy.penaltyPoints),grade=gradeFromPercent_(percent),score=rawScore; // Показываем фактически верные ответы; штраф влияет на процент и оценку, но не меняет счётчик правильных ответов.
-    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:String(data.testTitle||testId),Grade:grade,Score:score,MaxScore:entries.length,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:JSON.stringify({answers:answers}).slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:String(data.testTitle||testId),Grade:grade,Score:score,MaxScore:entries.length,Percent:percent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:JSON.stringify({answers:canonicalAnswers}).slice(0,10000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:String(data.testTitle||testId),AttemptNo:attemptNo,Grade:grade,Score:score,MaxScore:entries.length,Percent:percent});
     cache.remove("builtInAttempt:"+attemptId);
     return {success:true,score:score,rawScore:rawScore,maxScore:entries.length,percent:percent,rawPercent:rawPercent,grade:grade,attempts:attemptNo,penaltyPoints:policy.penaltyPoints,violationCount:policy.violationCount};
@@ -1890,7 +2150,10 @@ function submitBuiltInTest_(data) {
 }
 
 function shuffledServer_(items) {
-  const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;
+  const a=items.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}
+  if(a.length>1&&a.every(function(value,index){return value===items[index];})){const first=a.shift();a.push(first);}
+  return a;
 }
 function allFinalExamEntries_(courseId) {
   const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),out=[],seen={};
@@ -1918,9 +2181,9 @@ function finalQuestionType_(question) {
   return "mc";
 }
 function safeFinalExamQuestion_(entry,index,optionMaps) {
-  const q=Object.assign({},entry.question||{}),type=finalQuestionType_(q);
+  const q=sanitizeAssessmentQuestionForStudent_(entry.question),type=finalQuestionType_(q);
   q.type=type;
-  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder"].forEach(function(k){delete q[k];});
+  ["correct","answer","correctAnswer","answers","explanation","solution","key","expectedAnswer","acceptedAnswers","correctOrder","answerIndex","correctIndex","correctOption","rationale","isCorrect"].forEach(function(k){delete q[k];});
   if(type==="order")q.items=shuffledServer_(q.items||[]);
   if(type==="tf"&&!Array.isArray(q.options))q.options=["Верно","Неверно"];
   if((type==="mc"||type==="multi"||type==="tf")&&Array.isArray(q.options)&&q.options.length>1){
@@ -1960,7 +2223,7 @@ function getFinalExam_(data) {
   selected=shuffledServer_(selected.concat(rest.slice(0,Math.max(0,target-selected.length))));
   if(selected.length!==target)throw new Error("Не удалось сформировать полный вариант из 45 уникальных заданий.");
   const optionMaps={},examId=Utilities.getUuid(),safeQuestions=selected.map(function(entry,index){return safeFinalExamQuestion_(entry,index,optionMaps);});
-  CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,questions:selected.map(function(e){return e.question;}),optionMaps:optionMaps}),7200);
+  CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,startedAt:Date.now(),durationSeconds:60*60,questions:selected.map(function(e){return e.question;}),optionMaps:optionMaps}),7200);
   return {success:true,examId:examId,questions:safeQuestions};
 }
 function scoreFinalAnswer_(q,answer) {
@@ -2013,6 +2276,9 @@ function submitFinalExam_(data) {
     if(!raw)throw new Error("Время экзамена истекло или экзамен уже отправлен. Начните попытку заново.");
     const exam=JSON.parse(raw);
     if(exam.email!==user.email||exam.courseId!==courseId)throw new Error("Экзамен не принадлежит этой учётной записи.");
+    if(!Number(exam.startedAt)||!Number(exam.durationSeconds))throw new Error("У серверной попытки отсутствуют данные таймера. Начните экзамен заново.");
+    const elapsedSeconds=Math.max(0,Math.floor((Date.now()-Number(exam.startedAt))/1000));
+    if(elapsedSeconds>Number(exam.durationSeconds)+300){cache.remove(cacheKey);throw new Error("Время экзамена истекло. Обратитесь к преподавателю.");}
     if(!Array.isArray(exam.questions)||!exam.questions.length)throw new Error("Экзаменационный вариант повреждён. Начните попытку заново.");
     const answers=Array.isArray(data.answers)?data.answers:[];
     if(answers.length!==exam.questions.length)throw new Error("Количество ответов не совпадает с количеством вопросов.");
@@ -2032,58 +2298,118 @@ function submitFinalExam_(data) {
     if(prior>=attemptLimit)throw new Error("Экзамен уже завершён. Повторное прохождение закрыто. Для дополнительной попытки обратитесь к преподавателю.");
     const attemptNo=prior+1,policy=proctorPenalty_(user.email,courseId,testId,attemptNo),adjusted=Math.max(0,pct-policy.penaltyPoints),grade=gradeFromPercent_(adjusted);
     const writtenSubmission="";
-    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.max(0,Math.min(5400,Number(data.timeSpent)||0)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:writtenSubmission.slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
+    appendMappedRecord_(sh,{Email:user.email,Name:user.name,Group:user.group,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted,TimeSpent:Math.min(elapsedSeconds,Number(exam.durationSeconds)),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:courseId,Submission:writtenSubmission.slice(0,25000),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
     appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:testId,TestTitle:"Итоговый экзамен "+courseId,AttemptNo:attemptNo,Grade:grade,Score:Math.round(points*100)/100,MaxScore:max,Percent:adjusted});
     cache.remove(cacheKey);
     return {success:true,score:Math.round(points*100)/100,maxScore:max,rawPercent:pct,percent:adjusted,grade:grade,penaltyPoints:policy.penaltyPoints,attempts:attemptNo};
   } finally { lock.releaseLock(); }
 }
 
+function getCustomTest_(data) {
+  const user = auth_(data);
+  if (user.role !== "student") throw new Error("Тест доступен только студенту.");
+  const id = String(data.testId || data.id || "");
+  const courseId = normalizeCourseId_(data.courseId || data.mdkId || "");
+  if (!id || !courseId || !hasCourseAccess_(user, courseId)) throw new Error("Нет доступа к тесту.");
+  const values = content_().getDataRange().getValues();
+  let record = null;
+  values.slice(1).forEach(function(row) {
+    if (String(row[0]) === id && String(row[3]) === "test" && sameCourseId_(row[1], courseId)) {
+      record = {id:id,courseId:courseId,topicId:String(row[2]||""),title:String(row[4]||""),payload:JSON.parse(row[5]||"{}")};
+    }
+  });
+  if (!record) throw new Error("Тест не найден в выбранной дисциплине.");
+  if (!customContentIsOpen_(record.courseId, record.id, record.topicId, "test")) throw new Error("Этот тест закрыт преподавателем.");
+  const attemptKey = "custom_" + id;
+  const prior = resultAttemptRows_().filter(function(row) {
+    return email_(row[0]) === user.email && String(row[3]) === attemptKey && sameCourseId_(row[12] || courseId, courseId);
+  }).length;
+  const scopedExtra = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + id);
+  const extra = Number(scopedExtra !== "" ? scopedExtra : settingValue_("testAttempts:" + user.email + ":" + id)) || 0;
+  if (prior >= 1 + Math.max(0, extra)) throw new Error("Попытки закончились. Обратитесь к преподавателю за дополнительной попыткой.");
+  const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
+  if (!questions.length) throw new Error("В тесте пока нет вопросов.");
+  const optionMaps = {}, safeQuestions = questions.map(function(question, index) {
+    const safe = sanitizeAssessmentQuestionForStudent_(question || {});
+    const options = Array.isArray(safe.options) ? safe.options.slice() : [];
+    if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
+    const order = shuffledServer_(options.map(function(_, i) { return i; }));
+    safe.options = order.map(function(i) { return options[i]; });
+    optionMaps[String(index)] = order;
+    ["correct","answer","correctAnswer","answers","explanation","solution","key","rationale","answerIndex","correctIndex","correctOption","expectedAnswer","acceptedAnswers","correctOrder","isCorrect"].forEach(function(key) { delete safe[key]; });
+    return safe;
+  });
+  const attemptId = Utilities.getUuid().replace(/-/g, "");
+  CacheService.getScriptCache().put("customTestAttempt:" + attemptId, JSON.stringify({
+    email:user.email,courseId:courseId,testId:id,title:record.title,questions:questions,optionMaps:optionMaps
+  }), 3600);
+  return {success:true,attemptId:attemptId,courseId:courseId,testId:id,title:record.title,questions:safeQuestions};
+}
+
 function submitCustomTest_(data) {
   const user = auth_(data);
   if (user.role !== "student") throw new Error("Отправлять ответы могут только студенты.");
   const id = String(data.testId || data.id || "");
-  const requestedCourseId = String(data.courseId || data.mdkId || "");
-  if (!id) throw new Error("Не указан тест.");
-  if (!requestedCourseId) throw new Error("Не указана дисциплина теста.");
-  const values = content_().getDataRange().getValues();
-  let record = null;
-  values.slice(1).forEach(function (row) {
-    if (String(row[0]) === id && String(row[3]) === "test" && sameCourseId_(row[1], requestedCourseId)) record = {
-      id: id, courseId: normalizeCourseId_(row[1] || ""), topicId: String(row[2] || ""), type: "test",
-      title: String(row[4] || ""), payload: JSON.parse(row[5] || "{}")
-    };
-  });
-  if (!record) throw new Error("Тест не найден в выбранной дисциплине.");
-  if (!hasCourseAccess_(user, record.courseId)) throw new Error("Нет доступа к этой дисциплине.");
-  if (!customContentIsOpen_(record.courseId, record.id, record.topicId, record.type)) throw new Error("Этот тест закрыт преподавателем.");
-  const attemptKey="custom_"+id;
-  const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
+  const courseId = normalizeCourseId_(data.courseId || data.mdkId || "");
+  const attemptId = String(data.attemptId || "").trim();
   const answers = Array.isArray(data.answers) ? data.answers : [];
-  if (!questions.length || answers.length !== questions.length) throw new Error("Ответьте на все вопросы теста.");
+  if (!id || !courseId || !attemptId || !hasCourseAccess_(user, courseId)) throw new Error("Нет доступа к тесту или обновите страницу.");
+  const cache = CacheService.getScriptCache(), raw = cache.get("customTestAttempt:" + attemptId);
+  if (!raw) throw new Error("Попытка тестирования истекла. Откройте тест заново.");
+  const attempt = JSON.parse(raw);
+  if (attempt.email !== user.email || attempt.courseId !== courseId || attempt.testId !== id) throw new Error("Попытка не принадлежит этой учётной записи.");
+  const questions = Array.isArray(attempt.questions) ? attempt.questions : [];
+  if (!questions.length || answers.length !== questions.length) throw new Error("Количество ответов не совпадает с количеством вопросов.");
+  const canonicalAnswers = answers.map(function(value, index) {
+    const order = attempt.optionMaps[String(index)] || [];
+    const displayed = Number(value);
+    return Number.isInteger(displayed) && displayed >= 0 && displayed < order.length ? order[displayed] : -1;
+  });
   let score = 0;
-  questions.forEach(function (q, i) {
-    const selected = Number(answers[i]);
-    if (Number.isInteger(selected) && selected === Number(q.correct)) score++;
+  questions.forEach(function(question, index) {
+    // Reuse the common server-side scorer so legacy custom questions whose
+    // correct answer is stored as option text (not only a numeric index) work.
+    if (scoreBuiltInQuestion_(question || {}, canonicalAnswers[index])) score++;
   });
   const percent = Math.round(score / questions.length * 100);
-  const grade = percent >= 90 ? 5 : percent >= 75 ? 4 : percent >= 60 ? 3 : 2;
-  const lock=LockService.getScriptLock();lock.waitLock(10000);
-  let attemptNo=0;
+  const attemptKey = "custom_" + id;
+  const lock = LockService.getScriptLock(); lock.waitLock(10000);
+  let attemptNo = 0, finalPercent = percent, finalGrade = gradeFromPercent_(percent), finalScore = score;
   try {
-    const resultSheet=results_(), resultRows=resultAttemptRows_();
-    const prior=resultRows.filter(function(r){return email_(r[0])===user.email&&String(r[3])===attemptKey&&sameCourseId_(r[12]||record.courseId,record.courseId);}).length;
-    const scopedExtra=settingValue_("testAttempts:"+user.email+":"+record.courseId+":"+id);
-    const extra=Number(scopedExtra!==""?scopedExtra:settingValue_("testAttempts:"+user.email+":"+id))||0;
-    const limit=1+Math.max(0,extra);
-    if(prior>=limit) throw new Error("Попытки закончились ("+prior+" из "+limit+"). Обратитесь к преподавателю за дополнительной попыткой.");
-    attemptNo=prior+1;
-    const policy=proctorPenalty_(user.email,record.courseId,attemptKey,attemptNo),finalPercent=Math.max(0,percent-policy.penaltyPoints),finalGrade=gradeFromPercent_(finalPercent),finalScore=Math.round(questions.length*finalPercent)/100;
-    appendMappedRecord_(resultSheet,{Email:user.email,Name:user.name,Group:user.group,TestId:attemptKey,TestTitle:record.title,Grade:finalGrade,Score:finalScore,MaxScore:questions.length,Percent:finalPercent,TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),CourseId:record.courseId,Submission:JSON.stringify({answers:answers.map(function(v){return Number(v);})}),PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount});
-    appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:record.courseId,TestId:attemptKey,TestTitle:record.title,AttemptNo:attemptNo,Grade:finalGrade,Score:finalScore,MaxScore:questions.length,Percent:finalPercent});
+    // Re-read the one-time token under the result lock to prevent parallel replay.
+    const lockedAttemptRaw = cache.get("customTestAttempt:" + attemptId);
+    if (!lockedAttemptRaw) throw new Error("Эта попытка уже отправлена или истекла. Откройте тест заново.");
+    const lockedAttempt = JSON.parse(lockedAttemptRaw);
+    if (lockedAttempt.email !== user.email || lockedAttempt.courseId !== courseId || lockedAttempt.testId !== id) {
+      throw new Error("Идентификатор попытки недействителен. Откройте тест заново.");
+    }
+    const resultSheet = results_(), rows = resultAttemptRows_();
+    const prior = rows.filter(function(row) {
+      return email_(row[0]) === user.email && String(row[3]) === attemptKey && sameCourseId_(row[12] || courseId, courseId);
+    }).length;
+    const scopedExtra = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + id);
+    const extra = Number(scopedExtra !== "" ? scopedExtra : settingValue_("testAttempts:" + user.email + ":" + id)) || 0;
+    const limit = 1 + Math.max(0, extra);
+    if (prior >= limit) throw new Error("Попытки закончились (" + prior + " из " + limit + "). Обратитесь к преподавателю за дополнительной попыткой.");
+    attemptNo = prior + 1;
+    const policy = proctorPenalty_(user.email, courseId, attemptKey, attemptNo);
+    finalPercent = Math.max(0, percent - policy.penaltyPoints);
+    finalGrade = gradeFromPercent_(finalPercent);
+    appendMappedRecord_(resultSheet, {
+      Email:user.email,Name:user.name,Group:user.group,TestId:attemptKey,TestTitle:attempt.title || id,
+      Grade:finalGrade,Score:score,MaxScore:questions.length,Percent:finalPercent,
+      TimeSpent:Math.max(0,Number(data.timeSpent)||0),Attempts:attemptNo,FinishedAt:new Date().toISOString(),
+      CourseId:courseId,Submission:JSON.stringify({answers:canonicalAnswers}).slice(0,10000),
+      PenaltyPoints:policy.penaltyPoints,ViolationCount:policy.violationCount
+    });
+    appendAttemptAudit_({EventType:"attempt_submitted",ActorEmail:user.email,StudentEmail:user.email,StudentName:user.name,Group:user.group,CourseId:courseId,TestId:attemptKey,TestTitle:attempt.title||id,AttemptNo:attemptNo,Grade:finalGrade,Score:score,MaxScore:questions.length,Percent:finalPercent});
+    // Consume before releasing the lock; a waiting duplicate re-reads null.
+    cache.remove("customTestAttempt:" + attemptId);
   } finally { lock.releaseLock(); }
-  const finalPolicy=proctorPenalty_(user.email,record.courseId,attemptKey,attemptNo),finalPercent=Math.max(0,percent-finalPolicy.penaltyPoints),finalGrade=gradeFromPercent_(finalPercent),finalScore=Math.round(questions.length*finalPercent)/100;
-  return { success: true, score: finalScore, rawScore:score, maxScore: questions.length, percent: finalPercent, rawPercent:percent, grade: finalGrade, attempts: attemptNo, penaltyPoints:finalPolicy.penaltyPoints, violationCount:finalPolicy.violationCount };
+  const finalPolicy = proctorPenalty_(user.email, courseId, attemptKey, attemptNo);
+  finalPercent = Math.max(0, percent - finalPolicy.penaltyPoints);
+  finalGrade = gradeFromPercent_(finalPercent);
+  return {success:true,score:score,maxScore:questions.length,percent:finalPercent,rawPercent:percent,grade:finalGrade,attempts:attemptNo,penaltyPoints:finalPolicy.penaltyPoints,violationCount:finalPolicy.violationCount};
 }
 
 function getGameAnswer_(data) {
@@ -2710,20 +3036,673 @@ function saveSchedule_(data) {
  * Защищённое хранилище семестровых контрольных по английскому языку.
  * Ключи ответов остаются на сервере; клиент получает только вопросы и варианты.
  */
+
+/**
+ * Structural guard for the planned five-year final-exam registry.
+ * This validates the 10 course/semester slots and 150 variant identifiers;
+ * task content and blueprint coverage require separate editorial validation.
+ */
+
+/** Validate one final-exam payload against the student renderer and server grader. */
+function validateEnglishFinalVariantPayload_(payload, variantId) {
+  const fail=function(message){throw new Error("Вариант "+variantId+": "+message);};
+  if(!payload||typeof payload!=="object"||Array.isArray(payload)) fail("ожидается объект variantJSON.");
+  const duration=Number(payload.time||payload.durationMinutes);
+  if(!Number.isInteger(duration)||duration<15||duration>240) fail("время должно составлять от 15 до 240 минут.");
+  if(!Array.isArray(payload.tasks)||payload.tasks.length<10||payload.tasks.length>60) {
+    fail("необходимо от 10 до 60 заданий в массиве tasks.");
+  }
+  const seen={},stems={};
+  let pointsTotal=0;
+  payload.tasks.forEach(function(task,index){
+    const id=String(task&&task.id||"").trim(),prompt=String(task&&task.prompt||"").trim();
+    const type=String(task&&task.type||"").toLowerCase(),points=Number(task&&task.points);
+    if(!id||seen[id]||!prompt||prompt.length>12000||!Number.isFinite(points)||points<=0||points>20) {
+      fail("задание №"+(index+1)+" имеет пустой/повторный ID, формулировку или неверный балл.");
+    }
+    seen[id]=true;
+    const stem=prompt.toLowerCase().replace(/\s+/g," ").trim();
+    if(stems[stem]) fail("повторяется формулировка задания '"+id+"'.");
+    stems[stem]=true;
+    if(["single_choice","multiple_choice","ordering","short_text","written"].indexOf(type)<0) {
+      fail("неподдерживаемый тип задания '"+type+"' (ID "+id+").");
+    }
+    if((type==="single_choice"||type==="multiple_choice"||type==="ordering")&&
+       (!Array.isArray(task.options)||task.options.length<2||task.options.length>8)) {
+      fail("задание "+id+" должно содержать от 2 до 8 вариантов/элементов.");
+    }
+    if(type==="single_choice") {
+      if(!Number.isInteger(task.correctIndex)||task.correctIndex<0||task.correctIndex>=task.options.length) fail("неверный correctIndex в задании "+id+".");
+    } else if(type==="multiple_choice") {
+      if(!Array.isArray(task.correctIndices)||!task.correctIndices.length||
+         task.correctIndices.some(function(v){return !Number.isInteger(v)||v<0||v>=task.options.length;})||
+         new Set(task.correctIndices).size!==task.correctIndices.length) fail("неверный correctIndices в задании "+id+".");
+    } else if(type==="ordering") {
+      if(!Array.isArray(task.correctOrder)||task.correctOrder.length!==task.options.length||
+         task.correctOrder.some(function(v){return task.options.map(String).indexOf(String(v))<0;})||
+         new Set(task.correctOrder.map(String)).size!==task.options.length) fail("неверный correctOrder в задании "+id+".");
+    } else if(type==="short_text") {
+      if(!Array.isArray(task.acceptedAnswers)||!task.acceptedAnswers.length||
+         task.acceptedAnswers.some(function(v){return !String(v==null?"":v).trim();})) fail("не заданы acceptedAnswers в задании "+id+".");
+    } else if(type==="written") {
+      if(!String(task.rubric||task.criteria||"").trim()) fail("для письменного задания "+id+" нужны критерии проверки.");
+    }
+    if(task.audioText!=null&&String(task.audioText).length>12000) fail("аудиотекст слишком длинный в задании "+id+".");
+    pointsTotal+=points;
+  });
+  const maxScore=Number(payload.maxScore);
+  if(!Number.isFinite(maxScore)||maxScore<=0||Math.abs(pointsTotal-maxScore)>0.001) {
+    fail("maxScore должен совпадать с суммой баллов заданий ("+pointsTotal+").");
+  }
+  return {taskCount:payload.tasks.length,maxScore:pointsTotal,durationMinutes:duration};
+}
+
+function validateEnglishExamVariantRegistry_(exams) {
+  if (!Array.isArray(exams) || exams.length !== 10) {
+    throw new Error("Реестр итоговых экзаменов должен содержать ровно 10 записей — по одной на каждый курс и семестр.");
+  }
+  const seenSlots = {}, seenVariants = {};
+  let variantCount = 0;
+  exams.forEach(function(exam) {
+    const courseNo = Number(exam && exam.courseNo);
+    const semester = Number(exam && exam.semester);
+    const expectedTrack = courseNo >= 3 ? "technical" : "basic";
+    const expectedCourseId = courseNo >= 3 ? "ENT" : "ENB";
+    const slotKey = "EN_C0" + courseNo + "_S" + semester;
+    if (courseNo < 1 || courseNo > 5 || Math.floor(courseNo) !== courseNo ||
+        (semester !== 1 && semester !== 2) ||
+        String(exam.courseId || "").toUpperCase() !== expectedCourseId ||
+        String(exam.track || "").toLowerCase() !== expectedTrack ||
+        seenSlots[slotKey] || !Array.isArray(exam.variants) || exam.variants.length !== 15) {
+      throw new Error("Каждый курс и семестр должен иметь одну запись с действующим ID дисциплины, правильным направлением и ровно 15 вариантами.");
+    }
+    seenSlots[slotKey] = true;
+    exam.variants.forEach(function(variant) {
+      const id = String(variant && variant.variantId || "").trim();
+      const blueprintId = String(variant && variant.blueprintId || "").trim();
+      if (!id || !blueprintId || seenVariants[id]) {
+        throw new Error("Каждый из 150 вариантов должен иметь уникальный ID и ссылку на blueprint.");
+      }
+      seenVariants[id] = true;
+      variantCount++;
+    });
+  });
+  if (Object.keys(seenSlots).length !== 10 || variantCount !== 150) {
+    throw new Error("Реестр должен покрывать все 10 семестров и содержать 150 уникальных вариантов.");
+  }
+  for (let courseNo = 1; courseNo <= 5; courseNo++) {
+    for (let semester = 1; semester <= 2; semester++) {
+      if (!seenSlots["EN_C0" + courseNo + "_S" + semester]) {
+        throw new Error("В реестре отсутствует курс " + courseNo + ", семестр " + semester + ".");
+      }
+    }
+  }
+  return {examCount:10, variantCount:variantCount, basicSlots:4, technicalSlots:6};
+}
+
+
+/**
+ * Импортирует полный реестр итоговых экзаменов в отдельные строки.
+ * Каждая запись варианта хранится независимо; импорт не активирует неполный реестр.
+ */
+function importEnglishExamVariants_(data) {
+  const actor = auth_(data);
+  if (actor.role !== "admin") {
+    throw new Error("Импорт итоговых экзаменов доступен только администратору после редакторского утверждения.");
+  }
+  const exams = data.exams;
+  const summary = validateEnglishExamVariantRegistry_(exams);
+  const records = [];
+  exams.forEach(function(exam) {
+    exam.variants.forEach(function(variant) {
+      const payload = variant.variantJSON;
+      if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+        throw new Error("Для варианта " + variant.variantId + " требуется объект variantJSON с содержимым экзамена.");
+      }
+      if (!payload.sourceNotes || payload.sourceNotes.status !== "approved_for_import") {
+        throw new Error("Вариант " + variant.variantId + " ещё не прошёл редакторское утверждение. Статус должен быть approved_for_import.");
+      }
+      validateEnglishFinalVariantPayload_(payload, String(variant.variantId));
+      const approvedPayload = JSON.parse(JSON.stringify(payload));
+      approvedPayload.sourceNotes = Object.assign({}, approvedPayload.sourceNotes, {
+        approvedBy:actor.email, approvedAt:new Date().toISOString()
+      });
+      const variantJSON = JSON.stringify(approvedPayload);
+      if (!variantJSON || variantJSON.length > 45000) {
+        throw new Error("Содержимое варианта " + variant.variantId + " пустое или превышает безопасный лимит 45 000 символов.");
+      }
+      records.push({
+        ExamId:"english_final_c" + Number(exam.courseNo) + "_s" + Number(exam.semester),
+        CourseNo:Number(exam.courseNo),
+        CourseId:String(exam.courseId).toUpperCase(),
+        Track:String(exam.track).toLowerCase(),
+        Semester:Number(exam.semester),
+        VariantId:String(variant.variantId).trim(),
+        BlueprintId:String(variant.blueprintId).trim(),
+        VariantJSON:variantJSON,
+        Active:"FALSE",
+        UpdatedAt:new Date().toISOString(),
+        UpdatedBy:actor.email
+      });
+    });
+  });
+  if (actor.role === "teacher") {
+    const hasBasic = records.some(function(r) { return r.CourseId === "ENB"; });
+    const hasTechnical = records.some(function(r) { return r.CourseId === "ENT"; });
+    if ((hasBasic && !hasCourseAccess_(actor, "ENB") && !hasCourseAccess_(actor, "EN")) ||
+        (hasTechnical && !hasCourseAccess_(actor, "ENT") && !hasCourseAccess_(actor, "EN"))) {
+      throw new Error("Нет доступа ко всем направлениям, включённым в реестр итоговых экзаменов.");
+    }
+  }
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sh = ensureSheet_("EnglishExamVariantsBank");
+    const headers = HEADERS.EnglishExamVariantsBank;
+    const oldLastRow = sh.getLastRow();
+    const startRow = oldLastRow + 1;
+    const matrix = records.map(function(record) {
+      return headers.map(function(header) { return record[header] == null ? "" : record[header]; });
+    });
+    if (matrix.length) sh.getRange(startRow, 1, matrix.length, headers.length).setValues(matrix);
+    SpreadsheetApp.flush();
+    // Prepare new rows inactive, then switch under the same script lock used by exam start.
+    const map = headerMap_(sh), activeCol = map.Active + 1;
+    const previousActive = oldLastRow >= 2
+      ? sh.getRange(2, activeCol, oldLastRow - 1, 1).getValues()
+      : [];
+    try {
+      sh.getRange(startRow, activeCol, matrix.length, 1)
+        .setValues(matrix.map(function() { return ["TRUE"]; }));
+      SpreadsheetApp.flush();
+      if (previousActive.length) {
+        const disabledOld = previousActive.map(function() { return ["FALSE"]; });
+        sh.getRange(2, activeCol, disabledOld.length, 1).setValues(disabledOld);
+      }
+      SpreadsheetApp.flush();
+    } catch (activationError) {
+      // Best-effort rollback prevents a failed replacement from leaving no active version.
+      try {
+        if (previousActive.length) sh.getRange(2, activeCol, previousActive.length, 1).setValues(previousActive);
+        sh.getRange(startRow, activeCol, matrix.length, 1)
+          .setValues(matrix.map(function() { return ["FALSE"]; }));
+        SpreadsheetApp.flush();
+      } catch (rollbackError) {
+        throw new Error("Не удалось переключить реестр итоговых экзаменов; автоматический откат также завершился ошибкой: " + rollbackError.message);
+      }
+      throw activationError;
+    }
+    return {success:true, examCount:summary.examCount, variantCount:summary.variantCount,
+      basicSlots:summary.basicSlots, technicalSlots:summary.technicalSlots,
+      activeVariants:records.length, updatedAt:new Date().toISOString()};
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+
+/** Remove server-only grading material before any exam task reaches the browser. */
+function sanitizeEnglishFinalExamTask_(value) {
+  if (Array.isArray(value)) return value.map(sanitizeEnglishFinalExamTask_);
+  if (!value || typeof value !== "object") return value;
+  const clean = {};
+  Object.keys(value).forEach(function(key) {
+    // Normalize separators/case and reject whole families of private fields.
+    // This also blocks schema variants such as correctAnswers, answer_key,
+    // expected_answer and correct-index instead of relying on an exact-name list.
+    const normalized = String(key).toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (/^(answer|correct|expected|accepted|modelanswer|solution|explanation|rationale|rubric|markscheme|marking|grading|teacher|keyanswer|keypoints|iscorrect)/.test(normalized)) return;
+    clean[key] = sanitizeEnglishFinalExamTask_(value[key]);
+  });
+  return clean;
+}
+
+/**
+ * Shuffle visible options once per assigned final-exam attempt. The stored map is
+ * display-index -> canonical-index and remains private in AttemptJSON.
+ */
+function shuffleEnglishFinalExamTasks_(tasks) {
+  const optionMaps = {};
+  const displayTasks = tasks.map(function(task, index) {
+    const copy = JSON.parse(JSON.stringify(task));
+    const id = String(copy.id || copy.questionId || index);
+    if (Array.isArray(copy.options)) {
+      const order = copy.options.map(function(_, optionIndex) { return optionIndex; });
+      for (let i = order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+      }
+      // A question with multiple options must not accidentally retain its source order.
+      if (order.length > 1 && order.every(function(value, position) { return value === position; })) {
+        const first = order[0]; order[0] = order[1]; order[1] = first;
+      }
+      optionMaps[id] = order;
+      copy.options = order.map(function(originalIndex) { return task.options[originalIndex]; });
+    }
+    return copy;
+  });
+  return {tasks:displayTasks, optionMaps:optionMaps};
+}
+
+/** Rebuild the same visible option order when an in-progress attempt is resumed. */
+function englishFinalExamDisplayTasks_(tasks, optionMaps) {
+  return tasks.map(function(task, index) {
+    const copy = JSON.parse(JSON.stringify(task));
+    const id = String(copy.id || copy.questionId || index);
+    const map = optionMaps && optionMaps[id];
+    if (Array.isArray(copy.options) && Array.isArray(map) && map.length === copy.options.length) {
+      copy.options = map.map(function(originalIndex) { return task.options[Number(originalIndex)]; });
+    }
+    return copy;
+  });
+}
+
+/** Convert a student-facing shuffled option index back to its protected source index. */
+function englishFinalExamCanonicalOptionIndex_(snapshot, taskId, displayIndex) {
+  if (!Number.isInteger(displayIndex) || displayIndex < 0) return -1;
+  const map = snapshot && snapshot.optionMaps && snapshot.optionMaps[taskId];
+  if (!Array.isArray(map)) return displayIndex; // backward compatibility for older attempts
+  const canonical = Number(map[displayIndex]);
+  return Number.isInteger(canonical) && canonical >= 0 ? canonical : -1;
+}
+
+function englishFinalAttemptRow_(sheet, attemptId) {
+  const last = sheet.getLastRow();
+  if (last < 2) return null;
+  const map = headerMap_(sheet);
+  const idCol = map.AttemptId + 1;
+  const found = sheet.getRange(2, idCol, last - 1, 1).createTextFinder(String(attemptId))
+    .matchEntireCell(true).findNext();
+  if (!found) return null;
+  return {row:found.getRow(), values:sheet.getRange(found.getRow(),1,1,sheet.getLastColumn()).getValues()[0], map:map};
+}
+
+/**
+ * Assign and persist a final exam before returning sanitized tasks.
+ * Repeated start requests for the same student/course/semester resume the existing attempt.
+ */
+function startEnglishFinalExam_(data) {
+  const user = auth_(data);
+  const courseNo = Number(data.courseNo), semester = Number(data.semester);
+  if (user.role !== "student" || !Number.isInteger(courseNo) || courseNo < 1 || courseNo > 5 ||
+      (semester !== 1 && semester !== 2)) throw new Error("Нет доступа к итоговому экзамену.");
+  const courseId = courseNo <= 2 ? "ENB" : "ENT";
+  if (!hasCourseAccess_(user, courseId) && !hasCourseAccess_(user, "EN")) {
+    throw new Error("Эта дисциплина не назначена вашему аккаунту.");
+  }
+  const examId = "english_final_c" + courseNo + "_s" + semester;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const attempts = ensureSheet_("EnglishExamAttempts"), am = headerMap_(attempts);
+    const last = attempts.getLastRow();
+    let usedAttempts = 0;
+    if (last > 1) {
+      const rows = attempts.getRange(2,1,last-1,attempts.getLastColumn()).getValues();
+      for (let i=0;i<rows.length;i++) {
+        if (email_(rows[i][am.StudentEmail]) !== user.email || String(rows[i][am.ExamId]) !== examId) continue;
+        usedAttempts++;
+        if (String(rows[i][am.Status]) === "in_progress") {
+          const deadline = new Date(rows[i][am.DeadlineAt]).getTime();
+          if (deadline > Date.now()) {
+            const snapshot = JSON.parse(String(rows[i][am.AttemptJSON] || "{}"));
+            const displayTasks = englishFinalExamDisplayTasks_(snapshot.tasks || [], snapshot.optionMaps || {});
+            return {success:true,attemptId:String(rows[i][am.AttemptId]),examId:examId,
+              variantId:String(rows[i][am.VariantId]),startedAt:rows[i][am.StartedAt],
+              deadlineAt:rows[i][am.DeadlineAt],responses:(function(){try{return JSON.parse(String(rows[i][am.ResponsesJSON]||"{}"));}catch(e){return {};}})(),tasks:sanitizeEnglishFinalExamTask_(displayTasks)};
+          }
+          updateMappedRecord_(attempts,i+2,{Status:"expired",UpdatedAt:new Date().toISOString()});
+        }
+      }
+    }
+    const attemptSetting=settingValue_("testAttempts:"+user.email+":"+courseId+":"+examId);
+    const attemptLimit=1+Math.max(0,Number(attemptSetting)||0);
+    if(usedAttempts>=attemptLimit) {
+      throw new Error("Лимит попыток итогового экзамена исчерпан ("+usedAttempts+" из "+attemptLimit+"). Запросите дополнительную попытку у преподавателя.");
+    }
+    const bank=ensureSheet_("EnglishExamVariantsBank"), bm=headerMap_(bank), bankLast=bank.getLastRow();
+    if (bankLast < 2) throw new Error("Итоговые экзаменационные варианты ещё не импортированы.");
+    const bankRows=bank.getRange(2,1,bankLast-1,bank.getLastColumn()).getValues().filter(function(row) {
+      return String(row[bm.ExamId])===examId && String(row[bm.Active]).toUpperCase()==="TRUE";
+    });
+    if (!bankRows.length) throw new Error("Для этого курса и семестра нет активных вариантов.");
+    const chosen=bankRows[Math.floor(Math.random()*bankRows.length)];
+    let variant;
+    try { variant=JSON.parse(String(chosen[bm.VariantJSON]||"{}")); }
+    catch(e) { throw new Error("Не удалось прочитать сохранённый вариант экзамена."); }
+    const tasks=variant.tasks || variant.questions;
+    if (!Array.isArray(tasks) || !tasks.length) throw new Error("Вариант не содержит массива tasks или questions.");
+    const duration=Math.max(15,Math.min(240,Number(variant.time || variant.durationMinutes) || 120));
+    const now=new Date(), deadline=new Date(now.getTime()+duration*60000), attemptId=Utilities.getUuid().replace(/-/g,"");
+    const randomized=shuffleEnglishFinalExamTasks_(tasks);
+    const privateSnapshot={tasks:tasks,optionMaps:randomized.optionMaps,variantMeta:{title:String(variant.title||"Итоговый экзамен"),durationMinutes:duration}};
+    appendMappedRecord_(attempts,{
+      AttemptId:attemptId,StudentEmail:user.email,StudentName:user.name,Group:user.group,
+      CourseId:courseId,ExamId:examId,VariantId:String(chosen[bm.VariantId]),Status:"in_progress",
+      StartedAt:now.toISOString(),DeadlineAt:deadline.toISOString(),SubmittedAt:"",
+      AttemptJSON:JSON.stringify(privateSnapshot),ResponsesJSON:"",ResultJSON:"",UpdatedAt:now.toISOString()
+    });
+    SpreadsheetApp.flush();
+    appendAttemptAudit_({EventType:"final_exam_assigned",ActorEmail:user.email,StudentEmail:user.email,
+      StudentName:user.name,Group:user.group,CourseId:courseId,TestId:examId,TestTitle:privateSnapshot.variantMeta.title});
+    return {success:true,attemptId:attemptId,examId:examId,variantId:String(chosen[bm.VariantId]),
+      startedAt:now.toISOString(),deadlineAt:deadline.toISOString(),
+      tasks:sanitizeEnglishFinalExamTask_(randomized.tasks)};
+  } finally { lock.releaseLock(); }
+}
+
+/** Resume is bound to the authenticated student; answer keys remain server-side. */
+function resumeEnglishFinalExam_(data) {
+  const user=auth_(data), attemptId=String(data.attemptId||"").trim();
+  if (user.role!=="student" || !attemptId) throw new Error("Не удалось восстановить попытку экзамена.");
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet=ensureSheet_("EnglishExamAttempts"), found=englishFinalAttemptRow_(sheet,attemptId);
+    if (!found) throw new Error("Попытка экзамена не найдена.");
+    const row=found.values,m=found.map;
+    if (email_(row[m.StudentEmail])!==user.email) throw new Error("Эта попытка не принадлежит текущему аккаунту.");
+    if (String(row[m.Status])!=="in_progress") throw new Error("Эта попытка уже завершена или закрыта.");
+    if (new Date(row[m.DeadlineAt]).getTime()<=Date.now()) {
+      updateMappedRecord_(sheet,found.row,{Status:"expired",UpdatedAt:new Date().toISOString()});
+      throw new Error("Время итогового экзамена истекло.");
+    }
+    const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}"));
+    return {success:true,attemptId:attemptId,examId:String(row[m.ExamId]),variantId:String(row[m.VariantId]),
+      startedAt:row[m.StartedAt],deadlineAt:row[m.DeadlineAt],
+      tasks:sanitizeEnglishFinalExamTask_(englishFinalExamDisplayTasks_(snapshot.tasks||[],snapshot.optionMaps||{})),
+      responses:(function(){try{return JSON.parse(String(row[m.ResponsesJSON]||"{}"));}catch(e){return {};}})()};
+  } finally { lock.releaseLock(); }
+}
+
+
+/**
+ * Persist student responses incrementally. The server never accepts a client score
+ * or answer key, and only the authenticated owner may update an active attempt.
+ */
+function saveEnglishFinalExamResponses_(data) {
+  const user=auth_(data), attemptId=String(data.attemptId||"").trim();
+  const responses=data.responses;
+  if(user.role!=="student" || !attemptId || !responses || typeof responses!=="object" || Array.isArray(responses)) {
+    throw new Error("Некорректные данные для сохранения ответов.");
+  }
+  const serialized=JSON.stringify(responses);
+  if(!serialized || serialized.length>45000) throw new Error("Ответы пусты или превышают допустимый размер.");
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet=ensureSheet_("EnglishExamAttempts"), found=englishFinalAttemptRow_(sheet,attemptId);
+    if(!found) throw new Error("Попытка экзамена не найдена.");
+    const row=found.values,m=found.map;
+    if(email_(row[m.StudentEmail])!==user.email) throw new Error("Эта попытка не принадлежит текущему аккаунту.");
+    if(String(row[m.Status])!=="in_progress") throw new Error("Ответы нельзя изменить: попытка уже закрыта.");
+    if(new Date(row[m.DeadlineAt]).getTime()<=Date.now()) {
+      updateMappedRecord_(sheet,found.row,{Status:"expired",UpdatedAt:new Date().toISOString()});
+      throw new Error("Время итогового экзамена истекло.");
+    }
+    const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}"));
+    const tasks=snapshot.tasks||[];
+    const allowed={};
+    tasks.forEach(function(task,index) {
+      const id=String(task.id||task.questionId||index);
+      allowed[id]=true;
+    });
+    Object.keys(responses).forEach(function(id) {
+      if(!allowed[id]) throw new Error("Получен ответ на неизвестное задание: "+id);
+    });
+    const now=new Date().toISOString();
+    updateMappedRecord_(sheet,found.row,{ResponsesJSON:serialized,UpdatedAt:now});
+    SpreadsheetApp.flush();
+    return {success:true,attemptId:attemptId,savedAt:now,responseCount:Object.keys(responses).length};
+  } finally { lock.releaseLock(); }
+}
+
+
+/**
+ * Submit an English final exam. Objective answers are graded only against the
+ * private server snapshot. Free-response items are retained for teacher review.
+ *
+ * Supported task types:
+ * single_choice: correctIndex (number), response number
+ * multiple_choice: correctIndices (number[]), response number[]
+ * ordering: correctOrder (array), response array
+ * short_text: acceptedAnswers (string[]), response string (normalized exact match)
+ * written: response string, manual teacher review
+ */
+function submitEnglishFinalExam_(data) {
+  const user=auth_(data), attemptId=String(data.attemptId||"").trim();
+  if(user.role!=="student" || !attemptId) throw new Error("Нет доступа к отправке итогового экзамена.");
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet=ensureSheet_("EnglishExamAttempts"), found=englishFinalAttemptRow_(sheet,attemptId);
+    if(!found) throw new Error("Попытка экзамена не найдена.");
+    const row=found.values,m=found.map;
+    if(email_(row[m.StudentEmail])!==user.email) throw new Error("Эта попытка не принадлежит текущему аккаунту.");
+    if(String(row[m.Status])!=="in_progress") {
+      if(String(row[m.Status])==="submitted" || String(row[m.Status])==="pending_review") {
+        const priorResult=JSON.parse(String(row[m.ResultJSON]||"{}"));
+        if(String(row[m.Status])==="submitted" && priorResult.status==="graded") upsertEnglishFinalExamJournal_(row,m,priorResult,priorResult.gradedBy||"");
+        return {success:true,alreadySubmitted:true,result:priorResult};
+      }
+      throw new Error("Эта попытка уже закрыта.");
+    }
+    const now=Date.now(), deadline=new Date(row[m.DeadlineAt]).getTime();
+    if(now>deadline) {
+      updateMappedRecord_(sheet,found.row,{Status:"expired",UpdatedAt:new Date(now).toISOString()});
+      throw new Error("Время итогового экзамена истекло.");
+    }
+    const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}")), tasks=snapshot.tasks||[];
+    let responses={};
+    try { responses=JSON.parse(String(row[m.ResponsesJSON]||"{}")); } catch(e) { throw new Error("Не удалось прочитать сохранённые ответы."); }
+    if(data.responses && typeof data.responses==="object" && !Array.isArray(data.responses)) {
+      Object.keys(data.responses).forEach(function(id){responses[id]=data.responses[id];});
+    }
+    const taskIds={}, review=[];
+    let score=0,maxScore=0;
+    function norm(v){return String(v==null?"":v).trim().toLowerCase().replace(/\s+/g," ");}
+    tasks.forEach(function(task,index) {
+      const id=String(task.id||task.questionId||index);
+      if(taskIds[id]) throw new Error("В варианте обнаружены повторяющиеся ID заданий.");
+      taskIds[id]=true;
+      const type=String(task.type||task.taskType||"single_choice").toLowerCase();
+      const answer=responses[id];
+      const points=Math.max(0,Number(task.points)||1);
+      if(type==="written" || type==="writing" || type==="essay" || type==="free_response") {
+        maxScore+=points;
+        review.push({taskId:id,points:points,response:String(answer==null?"":answer).slice(0,10000)});
+        return;
+      }
+      maxScore+=points;
+      let correct=false;
+      if(type==="single_choice") {
+        const canonicalAnswer=englishFinalExamCanonicalOptionIndex_(snapshot,id,answer);
+        correct=canonicalAnswer>=0 && Number.isInteger(Number(task.correctIndex)) && canonicalAnswer===Number(task.correctIndex);
+      } else if(type==="multiple_choice") {
+        const expected=task.correctIndices;
+        const canonicalAnswers=Array.isArray(answer)?answer.map(function(v){return englishFinalExamCanonicalOptionIndex_(snapshot,id,v);}):[];
+        correct=Array.isArray(answer)&&Array.isArray(expected)&&answer.length===expected.length&&
+          canonicalAnswers.every(function(v){return Number.isInteger(v)&&v>=0;})&&
+          canonicalAnswers.slice().sort(function(a,b){return a-b;}).every(function(v,i){return v===expected.map(Number).sort(function(a,b){return a-b;})[i];});
+      } else if(type==="ordering") {
+        correct=Array.isArray(answer)&&Array.isArray(task.correctOrder)&&answer.length===task.correctOrder.length&&
+          answer.every(function(v,i){return String(v)===String(task.correctOrder[i]);});
+      } else if(type==="short_text") {
+        correct=Array.isArray(task.acceptedAnswers)&&task.acceptedAnswers.some(function(v){return norm(v)===norm(answer);});
+      } else {
+        throw new Error("Неподдерживаемый тип задания '"+type+"' (ID "+id+"). Отправка остановлена, оценка не выставлена.");
+      }
+      if(correct) score+=points;
+    });
+    Object.keys(responses).forEach(function(id){if(!taskIds[id]) throw new Error("Ответ содержит неизвестное задание: "+id);});
+    const manualMax=review.reduce(function(sum,item){return sum+item.points;},0);
+    const result={objectiveScore:score,objectiveMax:maxScore-manualMax,totalMax:maxScore,
+      manualReview:review.length>0,manualItems:review.map(function(item){return {taskId:item.taskId,points:item.points};}),
+      status:review.length?"pending_review":"graded",percent:review.length?null:(maxScore?Math.round(score/maxScore*100):0)};
+    const status=review.length?"pending_review":"submitted";
+    const timestamp=new Date().toISOString();
+    updateMappedRecord_(sheet,found.row,{ResponsesJSON:JSON.stringify(responses),ResultJSON:JSON.stringify(result),
+      Status:status,SubmittedAt:timestamp,UpdatedAt:timestamp});
+    SpreadsheetApp.flush();
+    if(status==="submitted") upsertEnglishFinalExamJournal_(row,m,result,"");
+    appendAttemptAudit_({EventType:"final_exam_submitted",ActorEmail:user.email,StudentEmail:user.email,
+      StudentName:user.name,Group:user.group,CourseId:String(row[m.CourseId]),TestId:String(row[m.ExamId]),
+      TestTitle:"Итоговый экзамен",Score:score,MaxScore:maxScore});
+    return {success:true,attemptId:attemptId,status:status,result:result};
+  } finally { lock.releaseLock(); }
+}
+
+
+
+/** Idempotently publish a completed English final exam into the common student Results journal. */
+function upsertEnglishFinalExamJournal_(attemptRow, attemptMap, result, reviewerEmail) {
+  const email=email_(attemptRow[attemptMap.StudentEmail]),courseId=String(attemptRow[attemptMap.CourseId]||"");
+  const testId=String(attemptRow[attemptMap.ExamId]||"");
+  const courseNo=(testId.match(/_c(\d+)_s/)||[])[1]||"";
+  const semester=(testId.match(/_s(\d+)$/)||[])[1]||"";
+  const title="Итоговый экзамен по английскому · курс "+courseNo+", семестр "+semester;
+  const score=Number(result.totalScore==null?result.objectiveScore:result.totalScore)||0;
+  const maxScore=Number(result.totalMax==null?result.objectiveMax:result.totalMax)||0;
+  const percent=maxScore?Math.max(0,Math.min(100,Math.round(score/maxScore*100))):0;
+  const grade=gradeFromPercent_(percent),now=new Date().toISOString();
+  const started=new Date(attemptRow[attemptMap.StartedAt]).getTime();
+  const finished=new Date(attemptRow[attemptMap.SubmittedAt]||now).getTime();
+  const record={Email:email,Name:String(attemptRow[attemptMap.StudentName]||""),Group:String(attemptRow[attemptMap.Group]||""),
+    TestId:testId,TestTitle:title,Grade:grade,Score:score,MaxScore:maxScore,Percent:percent,
+    TimeSpent:Number.isFinite(started)&&Number.isFinite(finished)?Math.max(0,Math.round((finished-started)/1000)):0,
+    Attempts:1,FinishedAt:attemptRow[attemptMap.SubmittedAt]||now,CourseId:courseId,
+    Submission:"Итоговый экзамен · вариант "+String(attemptRow[attemptMap.VariantId]||""),
+    Feedback:Object.keys(result.manualGrades||{}).map(function(id){const item=result.manualGrades[id]||{};return "Задание "+id+": "+String(item.feedback||"");}).filter(Boolean).join("\n").slice(0,4000),
+    ReviewedBy:reviewerEmail||"",ReviewedAt:reviewerEmail?now:""};
+  const sh=results_(),last=sh.getLastRow();
+  if(last>1){
+    const rows=sh.getRange(2,1,last-1,sh.getLastColumn()).getValues();
+    let existing=-1;
+    rows.forEach(function(row,index){if(email_(row[0])===email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId))existing=index+2;});
+    if(existing>0){updateMappedRecord_(sh,existing,record);return;}
+  }
+  appendMappedRecord_(sh,record);
+}
+
+/** List pending written parts for the authenticated teacher's assigned courses. */
+function getEnglishFinalExamReviews_(data) {
+  const teacher=auth_(data);
+  if(teacher.role!=="admin" && teacher.role!=="teacher") throw new Error("Просмотр письменных экзаменационных работ доступен преподавателю.");
+  const sheet=ensureSheet_("EnglishExamAttempts"), last=sheet.getLastRow();
+  if(last<2) return {success:true,items:[]};
+  const map=headerMap_(sheet), rows=sheet.getRange(2,1,last-1,sheet.getLastColumn()).getValues(), items=[];
+  rows.forEach(function(row,index) {
+    if(String(row[map.Status])!=="pending_review") return;
+    const courseId=String(row[map.CourseId]||"");
+    if(teacher.role!=="admin" && !hasCourseAccess_(teacher,courseId)) return;
+    let snapshot={},responses={},result={};
+    try {snapshot=JSON.parse(String(row[map.AttemptJSON]||"{}"));} catch(e) {return;}
+    try {responses=JSON.parse(String(row[map.ResponsesJSON]||"{}"));} catch(e) {responses={};}
+    try {result=JSON.parse(String(row[map.ResultJSON]||"{}"));} catch(e) {result={};}
+    const manualIds=(result.manualItems||[]).map(function(item){return String(item.taskId);});
+    const tasks=[];(snapshot.tasks||[]).forEach(function(task,i){if(manualIds.indexOf(String(task.id||task.questionId||i))!==-1)tasks.push({task:task,index:i});});
+    items.push({attemptId:String(row[map.AttemptId]),studentEmail:String(row[map.StudentEmail]),
+      studentName:String(row[map.StudentName]||""),group:String(row[map.Group]||""),courseId:courseId,
+      examId:String(row[map.ExamId]),variantId:String(row[map.VariantId]),submittedAt:row[map.SubmittedAt],
+      tasks:tasks.map(function(entry){const task=entry.task,id=String(task.id||task.questionId||entry.index);return {id:id,prompt:task.prompt||task.question||task.q||task.text||"",type:task.type||task.taskType||"written",points:Number(task.points)||1,rubric:task.rubric||task.criteria||""};}),
+      responses:responses,result:{objectiveScore:Number(result.objectiveScore)||0,objectiveMax:Number(result.objectiveMax)||0,totalMax:Number(result.totalMax)||0}});
+  });
+  return {success:true,items:items};
+}
+
+/** Grade written tasks once; final grade is calculated by the server. */
+function gradeEnglishFinalExamWritten_(data) {
+  const teacher=auth_(data), attemptId=String(data.attemptId||"").trim(), grades=data.grades;
+  if((teacher.role!=="admin"&&teacher.role!=="teacher")||!attemptId||!grades||typeof grades!=="object"||Array.isArray(grades)) {
+    throw new Error("Некорректные данные проверки письменной части.");
+  }
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try {
+    const sheet=ensureSheet_("EnglishExamAttempts"),found=englishFinalAttemptRow_(sheet,attemptId);
+    if(!found) throw new Error("Экзаменационная попытка не найдена.");
+    const row=found.values,m=found.map,courseId=String(row[m.CourseId]||"");
+    if(teacher.role!=="admin"&&!hasCourseAccess_(teacher,courseId)) throw new Error("Нет доступа к проверке этой дисциплины.");
+    if(String(row[m.Status])==="submitted") {
+      const already=JSON.parse(String(row[m.ResultJSON]||"{}"));
+      if(already.status==="graded" && already.manualGrades){upsertEnglishFinalExamJournal_(row,m,already,already.gradedBy||teacher.email);return {success:true,attemptId:attemptId,result:already,alreadyGraded:true};}
+      throw new Error("Эта работа уже проверена или не ожидает проверки.");
+    }
+    if(String(row[m.Status])!=="pending_review") throw new Error("Эта работа уже проверена или не ожидает проверки.");
+    const snapshot=JSON.parse(String(row[m.AttemptJSON]||"{}")),result=JSON.parse(String(row[m.ResultJSON]||"{}"));
+    const manualItems=result.manualItems||[],known={};
+    manualItems.forEach(function(item){known[String(item.taskId)]=Number(item.points)||0;});
+    const gradeIds=Object.keys(grades);
+    if(gradeIds.length!==manualItems.length||gradeIds.some(function(id){return known[id]===undefined;})) {
+      throw new Error("Нужно выставить баллы по каждому письменному заданию этой работы.");
+    }
+    let manualScore=0;
+    const details={};
+    gradeIds.forEach(function(id) {
+      const entry=grades[id],score=Number(entry&&typeof entry==="object"?entry.score:entry);
+      if(!Number.isFinite(score)||score<0||score>known[id]) throw new Error("Недопустимое количество баллов за задание "+id+".");
+      manualScore+=score;
+      details[id]={score:score,feedback:String(entry&&entry.feedback||"").slice(0,3000)};
+    });
+    const objectiveScore=Number(result.objectiveScore)||0,totalMax=Number(result.totalMax)||0;
+    const totalScore=objectiveScore+manualScore,percent=totalMax?Math.round(totalScore/totalMax*100):0;
+    const finalResult={objectiveScore:objectiveScore,objectiveMax:Number(result.objectiveMax)||0,
+      manualScore:manualScore,manualMax:manualItems.reduce(function(sum,item){return sum+(Number(item.points)||0);},0),
+      totalScore:totalScore,totalMax:totalMax,percent:percent,grade:gradeFromPercent_(percent),
+      manualReview:false,manualGrades:details,status:"graded",gradedAt:new Date().toISOString(),gradedBy:teacher.email};
+    const timestamp=new Date().toISOString();
+    updateMappedRecord_(sheet,found.row,{Status:"submitted",ResultJSON:JSON.stringify(finalResult),UpdatedAt:timestamp});
+    SpreadsheetApp.flush();
+    upsertEnglishFinalExamJournal_(row,m,finalResult,teacher.email);
+    appendAttemptAudit_({EventType:"final_exam_written_graded",ActorEmail:teacher.email,StudentEmail:String(row[m.StudentEmail]),
+      StudentName:String(row[m.StudentName]||""),Group:String(row[m.Group]||""),CourseId:courseId,
+      TestId:String(row[m.ExamId]),TestTitle:"Итоговый экзамен",Score:totalScore,MaxScore:totalMax,Grade:finalResult.grade});
+    return {success:true,attemptId:attemptId,result:finalResult};
+  } finally {lock.releaseLock();}
+}
+
 function englishSemesterBank_() { return ensureSheet_("EnglishSemesterBank"); }
 
-function validateEnglishSemesterTests_(tests) {
-  if (!Array.isArray(tests) || tests.length !== 10) {
-    throw new Error("Для каждого направления требуется ровно 10 семестровых контрольных.");
+function validateEnglishSemesterTests_(tests, track) {
+  const normalizedTrack = String(track || "").toLowerCase();
+  if (["basic", "technical"].indexOf(normalizedTrack) < 0) {
+    throw new Error("Не указано направление семестровых контрольных.");
   }
+  const expectedCount = normalizedTrack === "basic" ? 4 : 6;
+  if (!Array.isArray(tests) || tests.length !== expectedCount) {
+    throw new Error("Для направления " + (normalizedTrack === "basic" ? "Basic" : "Technical") +
+      " требуется ровно " + expectedCount + " семестровых контрольных.");
+  }
+  const prefix = normalizedTrack === "basic" ? "b_" : "t_";
+  const firstYear = normalizedTrack === "basic" ? 1 : 3;
+  const seenIds = {};
+  const seenQuestions = {};
   let questionCount = 0;
   tests.forEach(function(test, index) {
-    if (!test || !test.id || !Array.isArray(test.questions) || test.questions.length !== 20) {
-      throw new Error("Контрольная №" + (index + 1) + " должна содержать ровно 20 вопросов.");
+    const expectedYear = firstYear + Math.floor(index / 2);
+    const expectedSemester = index % 2 + 1;
+    const duration = Number(test && test.time == null ? 45 : test && test.time);
+    if (!test || !test.id || String(test.id).indexOf(prefix) !== 0 ||
+        seenIds[String(test.id)] || Number(test.year) !== expectedYear ||
+        Number(test.semester) !== expectedSemester ||
+        !Array.isArray(test.questions) || test.questions.length !== 20 ||
+        !Number.isInteger(duration) || duration < 1 || duration > 180) {
+      throw new Error("Контрольная №" + (index + 1) + " должна соответствовать своему курсу/семестру и содержать ровно 20 вопросов с уникальным ID.");
     }
+    seenIds[String(test.id)] = true;
     test.questions.forEach(function(q, qi) {
-      if (!q || !String(q.q || "").trim() || !Array.isArray(q.options) || q.options.length < 2) {
+      const questionText = String(q && q.q || "").trim();
+      if (!q || !questionText || !Array.isArray(q.options) || q.options.length < 2) {
         throw new Error("Некорректный вопрос " + (qi + 1) + " в контрольной №" + (index + 1) + ".");
+      }
+      const questionKey = questionText.toLowerCase().replace(/\s+/g, " ").trim();
+      if (seenQuestions[questionKey]) {
+        throw new Error("Повторяющийся вопрос " + (qi + 1) + " в контрольной №" + (index + 1) + ".");
+      }
+      seenQuestions[questionKey] = true;
+      const optionKeys = q.options.map(function(option) { return String(option == null ? "" : option).trim().toLowerCase(); });
+      if (optionKeys.some(function(option) { return !option; }) ||
+          optionKeys.some(function(option, optionIndex) { return optionKeys.indexOf(option) !== optionIndex; })) {
+        throw new Error("Пустые или повторяющиеся варианты ответа в вопросе " + (qi + 1) + " контрольной №" + (index + 1) + ".");
       }
       const correct = Number(q.correct);
       if (!Number.isInteger(correct) || correct < 0 || correct >= q.options.length) {
@@ -2735,6 +3714,41 @@ function validateEnglishSemesterTests_(tests) {
   return questionCount;
 }
 
+function englishSemesterBankFingerprint_(tests) {
+  return JSON.stringify((tests || []).map(function(test) {
+    return {
+      year: Number(test.year),
+      semester: Number(test.semester),
+      questions: (test.questions || []).map(function(question) {
+        return {
+          q: String(question.q || "").trim().toLowerCase().replace(/\s+/g, " "),
+          options: (question.options || []).map(function(option) {
+            return String(option == null ? "" : option).trim().toLowerCase();
+          })
+        };
+      })
+    };
+  }));
+}
+
+function englishSemesterBankOverlap_(leftTests, rightTests) {
+  const known = {};
+  (leftTests || []).forEach(function(test) {
+    (test.questions || []).forEach(function(question) {
+      const stem = String(question.q || "").toLowerCase().replace(/\s+/g, " ").trim();
+      if (stem.split(" ").length >= 6) known[stem] = true;
+    });
+  });
+  const overlaps = [];
+  (rightTests || []).forEach(function(test) {
+    (test.questions || []).forEach(function(question) {
+      const stem = String(question.q || "").toLowerCase().replace(/\s+/g, " ").trim();
+      if (stem.split(" ").length >= 6 && known[stem]) overlaps.push(stem);
+    });
+  });
+  return overlaps;
+}
+
 function importEnglishSemesterTests_(data) {
   const actor = auth_(data);
   if (actor.role !== "admin" && actor.role !== "teacher") throw new Error("Импорт доступен только преподавателю.");
@@ -2744,13 +3758,27 @@ function importEnglishSemesterTests_(data) {
     throw new Error("Нет доступа к импорту этого направления.");
   }
   const tests = data.tests;
-  const questionCount = validateEnglishSemesterTests_(tests);
+  const questionCount = validateEnglishSemesterTests_(tests, track);
   const json = JSON.stringify(tests);
   if (json.length > 450000) throw new Error("Размер набора превышает 450 КБ.");
-  const sh = englishSemesterBank_(), lock = LockService.getScriptLock();
+  const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
+    const sh = englishSemesterBank_();
     const values = sh.getDataRange().getValues(), map = headerMap_(sh);
+    const otherTrack = track === "basic" ? "technical" : "basic";
+    for (let i = 1; i < values.length; i++) {
+      if (String(values[i][map.Track] || "") !== otherTrack ||
+          String(values[i][map.Active] || "").toUpperCase() !== "TRUE") continue;
+      const otherTests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
+      if (englishSemesterBankFingerprint_(tests) === englishSemesterBankFingerprint_(otherTests)) {
+        throw new Error("Наборы Basic и Technical совпадают. Для Technical требуется самостоятельный комплект вопросов.");
+      }
+      const overlaps = englishSemesterBankOverlap_(tests, otherTests);
+      if (overlaps.length) {
+        throw new Error("В наборах Basic и Technical обнаружены одинаковые содержательные вопросы (" + overlaps.length + "). Уберите повторы до импорта.");
+      }
+    }
     let rowNo = 0;
     for (let i = 1; i < values.length; i++) if (String(values[i][map.Track] || "") === track) { rowNo = i + 1; break; }
     const record = {Track:track, TestsJSON:json, Active:"TRUE", UpdatedAt:new Date().toISOString(), UpdatedBy:actor.email};
@@ -2760,11 +3788,56 @@ function importEnglishSemesterTests_(data) {
 }
 
 function sanitizeEnglishSemesterTests_(tests) {
+  // The student catalogue is an explicit public projection, not a recursive
+  // copy of teacher-authored bank metadata. Never forward unknown test fields.
   return (tests || []).map(function(test) {
-    const safe = JSON.parse(JSON.stringify(test));
-    (safe.questions || []).forEach(function(question) { delete question.correct; });
+    const safe = {
+      id:String(test && test.id || ""),
+      title:String(test && test.title || ""),
+      subtitle:String(test && test.subtitle || ""),
+      year:Number(test && test.year) || 0,
+      semester:Number(test && test.semester) || 0,
+      time:Math.max(1, Number(test && test.time) || 45),
+      questions:(test && Array.isArray(test.questions) ? test.questions : []).map(function(question) {
+        return {
+          q:String(question && question.q || ""),
+          options:question && Array.isArray(question.options) ? question.options.map(function(option) {
+            return String(option == null ? "" : option);
+          }) : []
+        };
+      })
+    };
     return safe;
   });
+}
+
+/**
+ * Возвращает детерминированный порядок исходных индексов вариантов ответа
+ * для конкретного студента, контрольной, попытки и вопроса.
+ * Ключ не передаётся клиенту; сервер повторно вычисляет тот же порядок при проверке.
+ */
+function englishSemesterOptionOrder_(email, testId, attemptNo, questionIndex, optionCount) {
+  const seedText = [String(email || "").toLowerCase(), String(testId || ""),
+    String(attemptNo || 1), String(questionIndex || 0)].join("|");
+  let seed = 2166136261;
+  for (let i = 0; i < seedText.length; i++) {
+    seed ^= seedText.charCodeAt(i);
+    seed = Math.imul(seed, 16777619) >>> 0;
+  }
+  if (!seed) seed = 0x6d2b79f5;
+  function nextRandom() {
+    seed ^= seed << 13; seed >>>= 0;
+    seed ^= seed >>> 17; seed >>>= 0;
+    seed ^= seed << 5; seed >>>= 0;
+    return seed / 4294967296;
+  }
+  const order = Array.from({length:Math.max(0, Number(optionCount) || 0)}, function(_, index) { return index; });
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(nextRandom() * (i + 1));
+    const value = order[i]; order[i] = order[j]; order[j] = value;
+  }
+  if (order.length > 1 && order.every(function(value, index) { return value === index; })) order.push(order.shift());
+  return order;
 }
 
 function getEnglishSemesterTests_(data) {
@@ -2781,11 +3854,108 @@ function getEnglishSemesterTests_(data) {
     if (String(values[i][map.Track] || "") !== track || String(values[i][map.Active] || "").toUpperCase() !== "TRUE") continue;
     const tests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
     const questionCount = (tests || []).reduce(function(sum, test) { return sum + ((test.questions || []).length); }, 0);
-    return {success:true, track:track, tests:sanitizeEnglishSemesterTests_(tests), testCount:tests.length, questionCount:questionCount};
+    const safeTests = sanitizeEnglishSemesterTests_(tests);
+    if (user.role === "student") {
+      const rows = resultAttemptRows_();
+      safeTests.forEach(function(safeTest) {
+        const testKey = "english_semester_" + track + "_" + String(safeTest.id || "");
+        const prior = rows.filter(function(row) {
+          return email_(row[0]) === user.email && String(row[3] || "") === testKey &&
+            sameCourseId_(row[12] || courseId, courseId);
+        }).length;
+        const attemptNo = prior + 1;
+        safeTest.attemptNo = attemptNo;
+        safeTest.questions.forEach(function(question, questionIndex) {
+          const originalOptions = question.options.slice();
+          const order = englishSemesterOptionOrder_(user.email, safeTest.id, attemptNo, questionIndex, originalOptions.length);
+          question.options = order.map(function(originalIndex) { return originalOptions[originalIndex]; });
+        });
+      });
+    }
+    return {success:true, track:track, tests:safeTests, testCount:tests.length, questionCount:questionCount};
   }
   return {success:false, error:"Семестровые контрольные ещё не импортированы преподавателем."};
 }
 
+
+function englishSemesterAttemptCacheKey_(email, testKey, attemptNo) {
+  const raw = String(email || "").toLowerCase() + "|" + String(testKey || "") + "|" + String(attemptNo || "");
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, raw);
+  return "englishSemesterAttempt:" + Utilities.base64EncodeWebSafe(digest).replace(/=+$/g, "");
+}
+
+/**
+ * Создаёт серверную попытку в момент нажатия «Открыть контрольную»,
+ * а не при загрузке каталога. Повторный запрос возвращает ту же активную попытку.
+ */
+function startEnglishSemesterTest_(data) {
+  const user = auth_(data), track = String(data.track || "").toLowerCase();
+  const testId = String(data.testId || "").trim();
+  if (user.role !== "student" || ["basic", "technical"].indexOf(track) < 0 || !testId) {
+    throw new Error("Нет доступа к запуску семестровой контрольной.");
+  }
+  const courseId = track === "basic" ? "ENB" : "ENT";
+  if (!hasCourseAccess_(user, courseId) && !hasCourseAccess_(user, "EN")) {
+    throw new Error("Эта дисциплина не назначена вашему аккаунту.");
+  }
+  const sh = englishSemesterBank_(), values = sh.getDataRange().getValues(), map = headerMap_(sh);
+  let tests = null;
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][map.Track] || "") === track &&
+        String(values[i][map.Active] || "").toUpperCase() === "TRUE") {
+      tests = JSON.parse(String(values[i][map.TestsJSON] || "[]"));
+      break;
+    }
+  }
+  const test = (tests || []).filter(function(item) { return String(item.id || "") === testId; })[0];
+  if (!test || !Array.isArray(test.questions) || test.questions.length !== 20) {
+    throw new Error("Контрольная не найдена или имеет неверный формат.");
+  }
+  const testKey = "english_semester_" + track + "_" + testId;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const rows = resultAttemptRows_();
+    const prior = rows.filter(function(row) {
+      return email_(row[0]) === user.email && String(row[3] || "") === testKey &&
+        sameCourseId_(row[12] || courseId, courseId);
+    }).length;
+    const raw = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + testKey);
+    const limit = raw === "" ? 1 : 1 + Math.max(0, Number(raw) || 0);
+    if (prior >= limit) throw new Error("Контрольная уже завершена. Для повторного прохождения обратитесь к преподавателю.");
+    const attemptNo = prior + 1;
+    if (Number(data.attemptNo) !== attemptNo || !Number.isInteger(Number(data.attemptNo))) {
+      throw new Error("Номер попытки изменился. Обновите список контрольных.");
+    }
+    const attemptKey = englishSemesterAttemptCacheKey_(user.email, testKey, attemptNo);
+    const cache = CacheService.getScriptCache();
+    let attempt = null;
+    const rawAttempt = cache.get(attemptKey);
+    if (rawAttempt) {
+      try { attempt = JSON.parse(rawAttempt); } catch (e) { attempt = null; }
+    }
+    if (attempt && attempt.status === "expired") {
+      throw new Error("Время контрольной истекло. Обратитесь к преподавателю для новой попытки.");
+    }
+    if (attempt && Number(attempt.startedAt)) {
+      const elapsed = Math.max(0, Math.floor((Date.now() - Number(attempt.startedAt)) / 1000));
+      const allowed = Math.max(1, Number(test.time) || 45) * 60;
+      if (elapsed > allowed + 300) {
+        attempt.status = "expired";
+        cache.put(attemptKey, JSON.stringify(attempt), 21600);
+        throw new Error("Время контрольной истекло. Обратитесь к преподавателю для новой попытки.");
+      }
+    }
+    if (!attempt || !attempt.attemptId || !Number(attempt.startedAt)) {
+      attempt = {attemptId:Utilities.getUuid().replace(/-/g, ""), startedAt:Date.now()};
+      cache.put(attemptKey, JSON.stringify(attempt), 21600);
+    }
+    return {success:true, attemptId:attempt.attemptId, attemptNo:attemptNo,
+      startedAt:attempt.startedAt, timeLimit:Math.max(1, Number(test.time) || 45) * 60};
+  } finally {
+    lock.releaseLock();
+  }
+}
 
 /**
  * Серверная проверка семестровой контрольной. Правильные ответы читаются
@@ -2820,11 +3990,6 @@ function submitEnglishSemesterTest_(data) {
   if (answers.length !== test.questions.length) {
     throw new Error("Количество ответов не совпадает с количеством вопросов.");
   }
-  const score = test.questions.reduce(function(total, question, index) {
-    const correct = Number(question.correct);
-    const answer = answers[index];
-    return total + (Number.isInteger(answer) && answer === correct ? 1 : 0);
-  }, 0);
   const testKey = "english_semester_" + track + "_" + testId;
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -2840,6 +4005,36 @@ function submitEnglishSemesterTest_(data) {
       throw new Error("Контрольная уже завершена. Для повторного прохождения обратитесь к преподавателю.");
     }
     const attemptNo = prior + 1;
+    const requestedAttemptNo = Number(data.attemptNo);
+    if (!Number.isInteger(requestedAttemptNo) || requestedAttemptNo !== attemptNo) {
+      throw new Error("Номер попытки изменился. Обновите список контрольных и откройте работу заново.");
+    }
+    const attemptId = String(data.attemptId || "").trim();
+    const attemptKey = englishSemesterAttemptCacheKey_(user.email, testKey, attemptNo);
+    const attemptCache = CacheService.getScriptCache();
+    const attemptRaw = attemptCache.get(attemptKey);
+    if (!attemptId || !attemptRaw) throw new Error("Серверная попытка не найдена или истекла. Обновите список контрольных.");
+    let serverAttempt;
+    try { serverAttempt = JSON.parse(attemptRaw); } catch (e) { throw new Error("Не удалось проверить серверную попытку."); }
+    if (serverAttempt.attemptId !== attemptId || !Number(serverAttempt.startedAt)) {
+      throw new Error("Эта попытка не принадлежит текущей контрольной. Откройте работу заново.");
+    }
+    const elapsedSeconds = Math.max(0, Math.floor((Date.now() - Number(serverAttempt.startedAt)) / 1000));
+    const allowedSeconds = Math.max(1, Number(test.time) || 45) * 60;
+    if (elapsedSeconds > allowedSeconds + 300) {
+      serverAttempt.status = "expired";
+      attemptCache.put(attemptKey, JSON.stringify(serverAttempt), 21600);
+      throw new Error("Время контрольной истекло. Обратитесь к преподавателю для новой попытки.");
+    }
+    const canonicalAnswers = answers.map(function(answer, index) {
+      const optionCount = (test.questions[index].options || []).length;
+      if (!Number.isInteger(answer) || answer < 0 || answer >= optionCount) return -1;
+      const order = englishSemesterOptionOrder_(user.email, testId, attemptNo, index, optionCount);
+      return Number.isInteger(order[answer]) ? order[answer] : -1;
+    });
+    const score = test.questions.reduce(function(total, question, index) {
+      return total + (canonicalAnswers[index] === Number(question.correct) ? 1 : 0);
+    }, 0);
     const policy = proctorPenalty_(user.email, courseId, testKey, attemptNo);
     const rawPercent = Math.round(score / test.questions.length * 100);
     const percent = Math.max(0, rawPercent - policy.penaltyPoints);
@@ -2848,11 +4043,12 @@ function submitEnglishSemesterTest_(data) {
     appendMappedRecord_(results, {
       Email:user.email, Name:user.name, Group:user.group, TestId:testKey, TestTitle:title,
       Grade:grade, Score:score, MaxScore:test.questions.length, Percent:percent,
-      TimeSpent:Math.max(0, Number(data.timeSpent) || 0), Attempts:attemptNo,
+      TimeSpent:Math.min(elapsedSeconds, allowedSeconds), Attempts:attemptNo,
       FinishedAt:new Date().toISOString(), CourseId:courseId,
-      Submission:JSON.stringify({answers:answers}).slice(0,10000),
+      Submission:JSON.stringify({answers:canonicalAnswers}).slice(0,10000),
       PenaltyPoints:policy.penaltyPoints, ViolationCount:policy.violationCount
     });
+    attemptCache.remove(attemptKey);
     appendAttemptAudit_({
       EventType:"attempt_submitted", ActorEmail:user.email, StudentEmail:user.email,
       StudentName:user.name, Group:user.group, CourseId:courseId, TestId:testKey,

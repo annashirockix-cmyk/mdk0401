@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c3_s2",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 3, Semester 2 — Pilot Variant 7",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s2v07_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the process planning class take place?",
+      "audioText": "The manufacturing planning class will review a sample process sheet on Monday at ten. Students should bring the component drawing and the operation list. The instructor will explain how a process sheet connects the required geometry with the sequence of manufacturing stages. Detailed machine settings will not be discussed in this classroom exercise.",
+      "options": [
+        "On Monday at ten",
+        "On Monday at nine",
+        "On Tuesday at ten",
+        "On Monday at eleven"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v07_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which documents are needed for the process-planning class?",
+      "audioText": "The manufacturing planning class will review a sample process sheet on Monday at ten. Students should bring the component drawing and the operation list. The instructor will explain how a process sheet connects the required geometry with the sequence of manufacturing stages. Detailed machine settings will not be discussed in this classroom exercise.",
+      "options": [
+        "The process chart and risk assessment",
+        "The component drawing and operation list",
+        "The maintenance manual and calibration record",
+        "The material certificate and parts catalogue"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v07_r01",
+      "type": "single_choice",
+      "prompt": "A process plan describes the main stages required to produce a component. It may identify the operation, the equipment category and the inspection point. The sequence should reflect the component's design and the requirements in the approved documentation. A clear plan also helps the production team understand which stage has been completed and what needs to happen next. Reading 1. What may a process plan identify?",
+      "options": [
+        "The supplier, batch number and purchase price",
+        "The operator, shift pattern and delivery date",
+        "The operation, equipment category and inspection point",
+        "The material colour, storage area and order quantity"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s2v07_r02",
+      "type": "single_choice",
+      "prompt": "Why is the sequence important?",
+      "options": [
+        "It reduces the cost of every operation",
+        "It removes the need to check the component drawing",
+        "It identifies the supplier's preferred equipment",
+        "It reflects the design and helps the team follow the stages"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s2v07_g01",
+      "type": "single_choice",
+      "prompt": "The inspection point ___ in the process plan.",
+      "options": [
+        "is identified",
+        "identify",
+        "identifying",
+        "are identify"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v07_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO technical entries that define the sequence and verification stages in a machining process plan.",
+      "options": [
+        "Supplier payment terms",
+        "Operator's annual leave balance",
+        "Operation description",
+        "Inspection point"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v07_v01",
+      "type": "short_text",
+      "prompt": "A planned series of manufacturing stages is a process ___.",
+      "acceptedAnswers": [
+        "plan"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v07_f01",
+      "type": "single_choice",
+      "prompt": "A process stage is missing from the plan. What should you ask?",
+      "options": [
+        "I will add a stage without checking.",
+        "Could we review the sequence against the component drawing?",
+        "The sequence does not matter.",
+        "I will remove the inspection stage."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v07_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of process planning in a logical order.",
+      "options": [
+        "Arrange the stages in a logical sequence",
+        "Review the component drawing",
+        "Add relevant inspection points",
+        "Identify the required operations"
+      ],
+      "correctOrder": [
+        "Review the component drawing",
+        "Identify the required operations",
+        "Arrange the stages in a logical sequence",
+        "Add relevant inspection points"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v07_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how a process plan helps a manufacturing team organise work and communicate progress.",
+      "rubric": "8 points total: the response explains the purpose of a process plan for organising manufacturing work (0–2); it describes how sequence, resources or inspection points help the team communicate progress (0–2); the explanation is clearly structured with understandable grammar (0–2); process-planning/production vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s2v07_audio",
+    "readingPassageId": "c3s2v07_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

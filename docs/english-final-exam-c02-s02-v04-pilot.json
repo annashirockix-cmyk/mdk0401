@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c2_s2",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 2, Semester 2 — Pilot Variant 4",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s2v04_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the online briefing be held?",
+      "audioText": "The college IT team is updating its guidance on protecting personal information. A short briefing will be held online on Wednesday at half past twelve. Students will learn how to create strong passwords, recognise suspicious messages and report a possible data leak. The link will be posted in the student portal on Tuesday afternoon.",
+      "options": [
+        "On Wednesday at half past twelve",
+        "On Tuesday at half past twelve",
+        "On Wednesday at one thirty",
+        "On Thursday at half past twelve"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v04_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. When will the link be posted?",
+      "audioText": "The college IT team is updating its guidance on protecting personal information. A short briefing will be held online on Wednesday at half past twelve. Students will learn how to create strong passwords, recognise suspicious messages and report a possible data leak. The link will be posted in the student portal on Tuesday afternoon.",
+      "options": [
+        "On Friday",
+        "On Tuesday afternoon",
+        "Next month",
+        "After the event"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v04_r01",
+      "type": "single_choice",
+      "prompt": "A student received an email that appeared to come from the college IT department. It asked her to confirm her password using an unfamiliar link. She noticed that the sender's address was unusual and did not open the link. Instead, she forwarded the message to the official IT support address. The team confirmed that it was a phishing attempt and reminded students never to share passwords by email. Reading 1. What made the student suspicious?",
+      "options": [
+        "The email contained a spelling mistake",
+        "The sender's address was unusual and the link was unfamiliar",
+        "The sender used the college logo incorrectly",
+        "The message included an unexpected attachment"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s2v04_r02",
+      "type": "single_choice",
+      "prompt": "What did the IT team confirm?",
+      "options": [
+        "That the message was a routine college notice",
+        "The message asked the student to update her timetable.",
+        "That the student's password had already been changed",
+        "That the message was a phishing attempt"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s2v04_g01",
+      "type": "single_choice",
+      "prompt": "Students were advised ___ their passwords with anyone.",
+      "options": [
+        "not to share",
+        "to not sharing",
+        "not share to",
+        "not shared"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v04_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO actions that improve account security.",
+      "options": [
+        "Send passwords in an email",
+        "Reuse one password for every account",
+        "Use a unique strong password",
+        "Enable an additional verification step"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v04_v01",
+      "type": "short_text",
+      "prompt": "A fraudulent message designed to steal personal information is a ___ attempt.",
+      "acceptedAnswers": [
+        "phishing"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v04_f01",
+      "type": "single_choice",
+      "prompt": "You receive a suspicious message asking for your login details. What should you do?",
+      "options": [
+        "Reply with your password to check the sender.",
+        "Do not follow the link; report the message through the official channel.",
+        "Forward it to all your classmates.",
+        "Download every attachment."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v04_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of responsible technology use in a logical order.",
+      "options": [
+        "Avoid the link and report the message",
+        "Notice an unexpected request",
+        "Follow the official security advice",
+        "Check the sender and message details"
+      ],
+      "correctOrder": [
+        "Notice an unexpected request",
+        "Check the sender and message details",
+        "Avoid the link and report the message",
+        "Follow the official security advice"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v04_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words advising students how to protect personal information online. Include practical steps and explain why they matter.",
+      "rubric": "8 points total: practical steps for protecting personal information are identified (0–2); the response explains why the steps matter and avoids unsafe or misleading security advice (0–2); recommendations are clearly organised with understandable grammar (0–2); privacy/digital-security vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s2v4_audio",
+    "readingPassageId": "c2s2v4_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

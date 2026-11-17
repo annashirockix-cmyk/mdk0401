@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 6",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v06_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the review panel meet?",
+      "audioText": "The engineering review panel will meet on Tuesday at eleven to consider a component replacement proposal. Students observing the meeting should bring the summary sheet and the inspection extract. The panel will compare the recorded condition, supplier information and expected service life. Any recommendation must identify the evidence used and note information that is still missing.",
+      "options": [
+        "On Tuesday at eleven",
+        "On Tuesday at ten",
+        "On Wednesday at eleven",
+        "On Tuesday at twelve"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v06_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which two documents should observers bring?",
+      "audioText": "The engineering review panel will meet on Tuesday at eleven to consider a component replacement proposal. Students observing the meeting should bring the summary sheet and the inspection extract. The panel will compare the recorded condition, supplier information and expected service life. Any recommendation must identify the evidence used and note information that is still missing.",
+      "options": [
+        "The supplier specification and parts catalogue",
+        "The summary sheet and inspection extract",
+        "The maintenance log and defect history",
+        "The release checklist and revision register"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v06_r01",
+      "type": "single_choice",
+      "prompt": "A replacement proposal compared two component options. Option A had a lower purchase cost, while Option B had a longer stated service life and a clearer maintenance record. The review team also considered delivery time and compatibility with the existing assembly. It did not select an option based on price alone; the recommendation explained how each factor affected the decision. Reading 1. Which advantage did Option B have?",
+      "options": [
+        "A lower purchase cost and shorter stated service life",
+        "A faster delivery date and a lower purchase cost",
+        "A longer stated service life and clearer maintenance record",
+        "A newer manufacturing date and a larger stock quantity"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v06_r02",
+      "type": "single_choice",
+      "prompt": "Why did the team avoid deciding on purchase price alone?",
+      "options": [
+        "Because the purchase price was the only verified factor",
+        "Because the maintenance record was not relevant to the assembly",
+        "Because the two options had identical service histories",
+        "Because delivery time, compatibility and other factors also affected the decision"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v06_g01",
+      "type": "single_choice",
+      "prompt": "The recommendation ___ by the evidence in the review.",
+      "options": [
+        "should be supported",
+        "should support",
+        "supporting",
+        "are support"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v06_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO factors, other than purchase price, that may affect a replacement decision.",
+      "options": [
+        "The colour of the supplier's logo",
+        "An unrelated personal preference",
+        "Compatibility with the assembly",
+        "Expected service life"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v06_v01",
+      "type": "short_text",
+      "prompt": "Information that supports a decision or conclusion is supporting ___.",
+      "acceptedAnswers": [
+        "evidence"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v06_f01",
+      "type": "single_choice",
+      "prompt": "A recommendation includes a claim without evidence. What should you ask?",
+      "options": [
+        "The claim sounds convincing, so keep it.",
+        "Could we identify the record or source that supports this statement?",
+        "Evidence is not needed in a technical review.",
+        "I will remove the whole report."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v06_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of evidence-based decision in a logical order.",
+      "options": [
+        "Compare cost, compatibility and service life",
+        "Define the decision to be made",
+        "State a recommendation with supporting evidence",
+        "Collect condition and supplier information"
+      ],
+      "correctOrder": [
+        "Define the decision to be made",
+        "Collect condition and supplier information",
+        "Compare cost, compatibility and service life",
+        "State a recommendation with supporting evidence"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v06_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words comparing two replacement options. Explain how cost, compatibility, service life and evidence should influence the recommendation.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Cost and service life — 2: compares total/relevant cost and expected service life using stated evidence; 1: partial; 0: absent. (2) Compatibility — 2: explains fit with the required system/configuration and applicable specification; 1: partial; 0: absent. (3) Evidence-based recommendation — 2: weighs the criteria, identifies uncertainty and gives a justified recommendation; 1: partial; 0: unsupported choice. (4) English — 2: clear comparative language and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v06_audio",
+    "readingPassageId": "c5s2v06_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

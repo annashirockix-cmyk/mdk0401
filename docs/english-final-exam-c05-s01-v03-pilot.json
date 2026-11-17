@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 3",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v03_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the diagnostic-evidence lesson begin?",
+      "audioText": "The maintenance engineering lecturer will introduce diagnostic evidence on Monday at one fifteen. Students should bring the case-study worksheet and meet in Room 12. The class will compare symptoms, records and possible explanations. The lecturer will emphasise that a likely cause should not be treated as confirmed until appropriate evidence has been reviewed.",
+      "options": [
+        "At one fifteen on Monday",
+        "At twelve fifteen on Monday",
+        "At one fifteen on Tuesday",
+        "At two fifteen on Monday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v03_l02",
+      "type": "single_choice",
+      "prompt": "Which worksheet should students bring for the diagnostic-evidence lesson?",
+      "audioText": "The maintenance engineering lecturer will introduce diagnostic evidence on Monday at one fifteen. Students should bring the case-study worksheet and meet in Room 12. The class will compare symptoms, records and possible explanations. The lecturer will emphasise that a likely cause should not be treated as confirmed until appropriate evidence has been reviewed.",
+      "options": [
+        "The diagnostic checklist",
+        "The case-study worksheet",
+        "The maintenance-history extract",
+        "The inspection measurement sheet"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v03_r01",
+      "type": "single_choice",
+      "prompt": "A diagnostic process begins with a clear description of the reported problem. The team reviews relevant records and compares the available evidence with possible explanations. If the evidence is incomplete, further checks may be required by authorised personnel. A diagnostic report should distinguish confirmed facts from hypotheses and explain why a particular conclusion is supported. Reading 1. What should the team do after describing the problem?",
+      "options": [
+        "Close the report before reviewing the available records",
+        "Replace the component before comparing possible explanations",
+        "Review relevant records and compare evidence with possible explanations",
+        "Assume the most common cause from an earlier case"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v03_r02",
+      "type": "single_choice",
+      "prompt": "How should a report distinguish facts from hypotheses?",
+      "options": [
+        "It should present every hypothesis as a confirmed fact",
+        "It should treat the first explanation as the final conclusion",
+        "It should omit possible explanations from the record",
+        "It should identify confirmed facts separately from possible explanations"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v03_g01",
+      "type": "single_choice",
+      "prompt": "The possible causes ___ before a conclusion is reached.",
+      "options": [
+        "should be reviewed",
+        "should review",
+        "reviewing",
+        "are review"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v03_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO sources that provide direct, verifiable diagnostic evidence.",
+      "options": [
+        "An unverified operator recollection",
+        "An assumed cause without test evidence",
+        "Relevant maintenance records",
+        "Observed symptoms and test results"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v03_v01",
+      "type": "short_text",
+      "prompt": "An explanation that has not yet been confirmed is a ___.",
+      "acceptedAnswers": [
+        "hypothesis",
+        "possible explanation"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v03_f01",
+      "type": "single_choice",
+      "prompt": "A colleague presents a possible cause as certain without evidence. What should you say?",
+      "options": [
+        "That must be correct because it sounds likely.",
+        "We should separate the hypothesis from confirmed evidence before reaching a conclusion.",
+        "There is no need to review records.",
+        "I will copy the conclusion into the report."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v03_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of diagnostic evidence in a logical order.",
+      "options": [
+        "Compare evidence with possible explanations",
+        "Describe the reported problem",
+        "State a supported conclusion and remaining uncertainty",
+        "Review relevant records and observations"
+      ],
+      "correctOrder": [
+        "Describe the reported problem",
+        "Review relevant records and observations",
+        "Compare evidence with possible explanations",
+        "State a supported conclusion and remaining uncertainty"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v03_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing a responsible diagnostic process. Explain how a team should separate observations, hypotheses and confirmed conclusions.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Evidence categories — 2: clearly distinguishes observations, hypotheses and confirmed conclusions; 1: distinguishes two; 0: conflates them. (2) Diagnostic reasoning — 2: explains checking evidence and considering alternative explanations; 1: partial reasoning; 0: unsupported conclusion. (3) Responsible process — 2: explains documentation, approved procedures and escalation when evidence is insufficient; 1: mentions some; 0: absent or unsafe. (4) English — 2: clear logical writing and accurate diagnostic vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v03_audio",
+    "readingPassageId": "c5s1v03_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

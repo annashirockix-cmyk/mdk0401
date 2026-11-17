@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 14",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v14_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. What time does the ground support equipment lesson begin?",
+      "audioText": "The aviation technology lecturer will introduce ground support equipment documentation on Wednesday at twelve. Students should bring the equipment checklist and service-status form. The lesson will show how technicians identify a unit, record its condition and communicate availability.",
+      "options": [
+        "At twelve on Wednesday",
+        "At eleven on Wednesday",
+        "At twelve on Thursday",
+        "At one on Wednesday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v14_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which status documents should students bring?",
+      "audioText": "The aviation technology lecturer will introduce ground support equipment documentation on Wednesday at twelve. Students should bring the equipment checklist and service-status form. The lesson will show how technicians identify a unit, record its condition and communicate availability.",
+      "options": [
+        "The maintenance history and risk form",
+        "The equipment checklist and service-status form",
+        "The supplier specification and parts list",
+        "The incident report and inspection chart"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v14_r01",
+      "type": "single_choice",
+      "prompt": "Ground support equipment includes vehicles and systems used to service an aircraft on the ground. Before use, equipment status and inspection information must be checked under local procedures. A service-status record identifies the unit and states whether it is available, restricted or out of service. Clear wording helps prevent use when status is uncertain. Reading 1. What should a service-status record identify?",
+      "options": [
+        "The equipment unit",
+        "The operator's training record",
+        "The supplier's delivery address",
+        "The room where the form was completed"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v14_r02",
+      "type": "single_choice",
+      "prompt": "Why is clear status wording important?",
+      "options": [
+        "To make the report shorter",
+        "To prevent use when its status is uncertain",
+        "To avoid recording who checked the equipment",
+        "To replace the need for a status update"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v14_g01",
+      "type": "single_choice",
+      "prompt": "The equipment status ___ before the unit is used.",
+      "options": [
+        "must be checked",
+        "was transferred",
+        "transferring",
+        "are transfer"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v14_m01",
+      "type": "multiple_choice",
+      "prompt": "Which TWO fields identify a ground support unit and indicate whether it is available for use?",
+      "options": [
+        "Scheduled inspection date",
+        "Assigned technician",
+        "Equipment identification",
+        "Current service status"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v14_v01",
+      "type": "short_text",
+      "prompt": "Equipment that is not approved for use is described as out of ___.",
+      "acceptedAnswers": [
+        "service"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v14_f01",
+      "type": "single_choice",
+      "prompt": "Before a unit is returned to service, what should be confirmed?",
+      "options": [
+        "Confirm its location and storage label; assume service status from the previous record.",
+        "Check its serial number against the parts list and return it to the usual storage area.",
+        "Ask whether it was used during the previous shift and rely on the verbal reply.",
+        "Could we confirm the unit's service status with the responsible team and check the controlled record?"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v14_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of aviation ground support equipment in a logical order.",
+      "options": [
+        "Record or communicate the confirmed status",
+        "Confirm availability with the responsible team",
+        "Review inspection and status information",
+        "Identify the equipment unit"
+      ],
+      "correctOrder": [
+        "Identify the equipment unit",
+        "Review inspection and status information",
+        "Confirm availability with the responsible team",
+        "Record or communicate the confirmed status"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v14_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why ground support equipment needs clear identification and service-status records.",
+      "rubric": "8 points total: the response explains why ground support equipment needs clear identification (0–2); it describes how service-status records communicate availability, restrictions or out-of-service status and support safe decisions (0–2); ideas are logically organised with understandable grammar (0–2); GSE/status-record vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v14_audio",
+    "readingPassageId": "c4s2v14_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

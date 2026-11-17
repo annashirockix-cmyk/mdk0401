@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 9",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v09_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the record-review lesson take place?",
+      "audioText": "The aviation documentation tutor will review a sample maintenance record on Wednesday at ten. Students should bring the task card and the component history extract. The class will identify the aircraft or component reference, task status and supporting document references. The tutor will explain how accurate records support continuity between maintenance teams.",
+      "options": [
+        "On Wednesday at ten",
+        "On Wednesday at nine",
+        "On Thursday at ten",
+        "On Wednesday at eleven"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v09_l02",
+      "type": "single_choice",
+      "prompt": "Which two records should students bring for the maintenance-record review?",
+      "audioText": "The aviation documentation tutor will review a sample maintenance record on Wednesday at ten. Students should bring the task card and the component history extract. The class will identify the aircraft or component reference, task status and supporting document references. The tutor will explain how accurate records support continuity between maintenance teams.",
+      "options": [
+        "The aircraft identification record and parts catalogue",
+        "The task card and component history extract",
+        "The maintenance schedule and defect report",
+        "The inspection checklist and release certificate"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v09_r01",
+      "type": "single_choice",
+      "prompt": "A maintenance record should make it possible to identify the relevant aircraft or component, the task performed and the supporting documentation. Entries should be clear, dated and attributable to the authorised person or process. If a task remains incomplete, its status should be recorded accurately. This allows the next team to understand what has been done and what still requires action. Reading 1. Which information helps identify a maintenance record?",
+      "options": [
+        "Supplier contact details, purchase price and delivery date",
+        "Name of the training room, lesson time and group number",
+        "Aircraft or component reference, task performed and supporting documentation",
+        "Staff rota, annual leave dates and shift preference"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v09_r02",
+      "type": "single_choice",
+      "prompt": "Why should an incomplete task be recorded accurately?",
+      "options": [
+        "So the next team can assume the task was not started",
+        "So the previous team can remove the original record",
+        "So the task can be marked complete without further evidence",
+        "So the next team understands what remains to be done"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v09_g01",
+      "type": "single_choice",
+      "prompt": "The task status ___ accurately in the maintenance record.",
+      "options": [
+        "must be recorded",
+        "must record",
+        "recording",
+        "are recorded"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v09_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO details that support maintenance-record traceability.",
+      "options": [
+        "An unrelated personal comment",
+        "An unverified assumption",
+        "Aircraft or component reference",
+        "Supporting document reference"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v09_v01",
+      "type": "short_text",
+      "prompt": "The ability to follow a component or task through documented records is ___.",
+      "acceptedAnswers": [
+        "traceability"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v09_f01",
+      "type": "single_choice",
+      "prompt": "A task is not complete, but the record shows it as finished. What should you do?",
+      "options": [
+        "Leave it because the record is already signed.",
+        "Raise the discrepancy through the approved record-correction process.",
+        "Delete the task reference.",
+        "Change the status without approval."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v09_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of aviation maintenance records in a logical order.",
+      "options": [
+        "Record the actual task status",
+        "Identify the aircraft or component",
+        "Ensure the entry is attributable and traceable",
+        "Confirm the task reference and supporting data"
+      ],
+      "correctOrder": [
+        "Identify the aircraft or component",
+        "Confirm the task reference and supporting data",
+        "Record the actual task status",
+        "Ensure the entry is attributable and traceable"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v09_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words explaining how maintenance records support continuity, traceability and clear task status between teams.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Record content — 2: explains how records capture completed work, current status and outstanding actions; 1: partial; 0: absent. (2) Continuity — 2: explains how consistent entries support the next team and avoid gaps or duplication; 1: partial; 0: absent. (3) Traceability — 2: identifies dates, references, responsible persons and links to controlled records as relevant; 1: partial; 0: absent. (4) English — 2: clear explanation and accurate maintenance-record vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v09_audio",
+    "readingPassageId": "c5s2v09_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

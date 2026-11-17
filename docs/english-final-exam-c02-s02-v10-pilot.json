@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c2_s2",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 2, Semester 2 — Pilot Variant 10",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Which containers are for clean plastic bottles?",
+      "audioText": "The college is changing the labels on its recycling bins from next week. Paper and cardboard should go into the blue containers, while clean plastic bottles should be placed in the yellow containers. Food waste must not be put into either bin. The student environment team will visit classrooms on Monday to explain the new system and answer questions.",
+      "options": [
+        "The blue containers",
+        "The yellow containers",
+        "The green containers",
+        "The grey containers"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What will the student environment team do on Monday?",
+      "audioText": "The college is changing the labels on its recycling bins from next week. Paper and cardboard should go into the blue containers, while clean plastic bottles should be placed in the yellow containers. Food waste must not be put into either bin. The student environment team will visit classrooms on Monday to explain the new system and answer questions.",
+      "options": [
+        "Visit classrooms to explain the system and answer questions",
+        "Inspect recycling bins and record contamination",
+        "Change the collection schedule",
+        "Publish the new bin labels on the college website"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v10_r01",
+      "type": "single_choice",
+      "prompt": "A college recycling trial produced mixed results because students were unsure which materials belonged in each bin. The environment team observed the bins and found that many items were placed in the wrong container. They introduced clearer labels with examples and moved the bins closer to the places where waste was produced. The next review will compare contamination levels before and after the changes. Reading 1. Why did the trial produce mixed results?",
+      "options": [
+        "The bins were too far from the classrooms",
+        "Students were unsure which materials belonged in each bin",
+        "The signs did not explain how to sort plastic",
+        "The collection service arrived at the wrong time"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v10_r02",
+      "type": "single_choice",
+      "prompt": "What will the next review compare?",
+      "options": [
+        "The total weight of waste collected each week",
+        "The number of bins installed around the college",
+        "The total amount of plastic collected over the year",
+        "Contamination levels before and after the changes"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s2v10_g01",
+      "type": "single_choice",
+      "prompt": "The new labels ___ next week.",
+      "options": [
+        "will be introduced",
+        "introduce yesterday",
+        "will introducing",
+        "are introduce"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO ways to make a recycling system easier to use.",
+      "options": [
+        "Use identical labels for every container",
+        "Mix all materials together",
+        "Use clear labels with examples",
+        "Place bins where waste is produced"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v10_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "The unwanted material mixed into a recycling container is called ___.",
+      "acceptedAnswers": [
+        "contamination"
+      ]
+    },
+    {
+      "id": "c2s2v10_f01",
+      "type": "single_choice",
+      "prompt": "A student is unsure which bin to use. What is the most helpful response?",
+      "options": [
+        "Put it anywhere; it does not matter.",
+        "Ignore the question and leave the item on the floor.",
+        "Let's check the label together and find the correct container.",
+        "Use the nearest bin without checking."
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s2v10_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of recycling systems in a logical order.",
+      "options": [
+        "Label each container clearly",
+        "Identify the types of waste produced",
+        "Review contamination and improve the system",
+        "Choose suitable containers"
+      ],
+      "correctOrder": [
+        "Identify the types of waste produced",
+        "Choose suitable containers",
+        "Label each container clearly",
+        "Review contamination and improve the system"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v10_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words suggesting how your college could improve recycling. Explain one problem, two changes and how success could be checked.",
+      "rubric": "8 points total: one recycling problem is identified (0–2); two practical changes and a way to check whether they work are described (0–2); the proposal is logically linked with understandable grammar (0–2); recycling/waste vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s2v10_audio",
+    "readingPassageId": "c2s2v10_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

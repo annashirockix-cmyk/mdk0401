@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 3",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v03_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the automation lesson begin?",
+      "audioText": "The automation tutor will introduce sensors and actuators on Thursday at nine thirty. Students should bring the system block diagram and meet in the automation classroom. The lesson will explain how a sensor provides information and how an actuator produces a physical response. Students will analyse a simplified diagram rather than operate equipment.",
+      "options": [
+        "At nine thirty on Thursday",
+        "At eight thirty on Thursday",
+        "At nine thirty on Friday",
+        "At ten thirty on Thursday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v03_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which block diagram should students use for the automation lesson?",
+      "audioText": "The automation tutor will introduce sensors and actuators on Thursday at nine thirty. Students should bring the system block diagram and meet in the automation classroom. The lesson will explain how a sensor provides information and how an actuator produces a physical response. Students will analyse a simplified diagram rather than operate equipment.",
+      "options": [
+        "The sensor data sheet",
+        "The system block diagram",
+        "The PLC address list",
+        "The maintenance task card"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v03_r01",
+      "type": "single_choice",
+      "prompt": "An automated system may use a sensor to detect a condition and send information to a controller. The controller processes the input according to its programme and may send an output signal to an actuator. The actuator then produces an action, such as movement or switching. The exact arrangement depends on the system design and should be described using the correct equipment documentation. Reading 1. What does a controller do with sensor information?",
+      "options": [
+        "It records the output from an actuator",
+        "It supplies power directly to the sensor",
+        "It processes the input according to its programme",
+        "It stores every measurement without processing"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v03_r02",
+      "type": "single_choice",
+      "prompt": "What does an actuator produce?",
+      "options": [
+        "A measurement value",
+        "A warning label",
+        "A document reference",
+        "An action such as movement or switching"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v03_g01",
+      "type": "single_choice",
+      "prompt": "The controller ___ the input according to its programme.",
+      "options": [
+        "processes",
+        "process",
+        "processing",
+        "are processed"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v03_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO components responsible for detecting an input and producing a physical output in an automated system.",
+      "options": [
+        "Controller",
+        "Power supply",
+        "Sensor",
+        "Actuator"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v03_v01",
+      "type": "short_text",
+      "prompt": "A device that produces a physical action in an automated system is an ___.",
+      "acceptedAnswers": [
+        "actuator"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v03_f01",
+      "type": "single_choice",
+      "prompt": "You are describing a simplified automation diagram. Which sentence is clearest?",
+      "options": [
+        "The sensor and actuator do exactly the same thing.",
+        "The sensor provides input information, while the actuator produces an output action.",
+        "The controller is not part of the system.",
+        "The system works without any defined inputs."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v03_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of automation systems in a logical order.",
+      "options": [
+        "Process the input",
+        "Detect a condition with a sensor",
+        "Produce an output action through an actuator",
+        "Send the input to the controller"
+      ],
+      "correctOrder": [
+        "Detect a condition with a sensor",
+        "Send the input to the controller",
+        "Process the input",
+        "Produce an output action through an actuator"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v03_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing the roles of a sensor, controller and actuator in a simplified automated system.",
+      "rubric": "8 points total: sensor, controller and actuator are identified (0–2); the response explains the general flow from sensing through control decision to physical action (0–2); the explanation is clearly sequenced with understandable grammar (0–2); automation-system vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v03_audio",
+    "readingPassageId": "c4s2v03_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

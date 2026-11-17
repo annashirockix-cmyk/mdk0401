@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 3",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v03_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the report review take place?",
+      "audioText": "The technical writing tutor will review an integrated report on Thursday at one. Students should bring the sample inspection record and trend chart. The class will combine a measured result with a short explanation of its context and limitations. The tutor will ask students to distinguish evidence from interpretation and to reference each source clearly.",
+      "options": [
+        "On Thursday at one",
+        "On Thursday at twelve",
+        "On Friday at one",
+        "On Thursday at two"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v03_l02",
+      "type": "single_choice",
+      "prompt": "Which two documents should students bring for the integrated-report review?",
+      "audioText": "The technical writing tutor will review an integrated report on Thursday at one. Students should bring the sample inspection record and trend chart. The class will combine a measured result with a short explanation of its context and limitations. The tutor will ask students to distinguish evidence from interpretation and to reference each source clearly.",
+      "options": [
+        "The defect history and maintenance log",
+        "The sample inspection record and trend chart",
+        "The quality checklist and audit report",
+        "The process chart and risk register"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v03_r01",
+      "type": "single_choice",
+      "prompt": "An integrated technical report may combine measurements, inspection findings and trend data. Each source should be identified so that a reader can trace where the information came from. The report should explain how the sources relate, but it must not imply that correlation proves causation. Conclusions should be proportionate to the evidence, and any limitation should be stated clearly. Reading 1. Why should each information source be identified?",
+      "options": [
+        "To show that all measurements were taken at the same time",
+        "To prove that one source caused another",
+        "So readers can trace where information came from",
+        "To remove the need to explain limitations"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v03_r02",
+      "type": "single_choice",
+      "prompt": "What should a report avoid implying?",
+      "options": [
+        "That all sources are equally reliable",
+        "That one trend predicts every future event",
+        "That a report must include every available measurement",
+        "That correlation proves causation"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v03_g01",
+      "type": "single_choice",
+      "prompt": "The conclusions ___ to the strength of the available evidence.",
+      "options": [
+        "should be proportionate",
+        "should proportion",
+        "proportioning",
+        "are proportion"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v03_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO qualities of an integrated technical report.",
+      "options": [
+        "Unreferenced figures",
+        "Claims that exceed the available data",
+        "Traceable information sources",
+        "Conclusions supported by evidence"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v03_v01",
+      "type": "short_text",
+      "prompt": "A conclusion that is supported by available information is described as evidence-___.",
+      "acceptedAnswers": [
+        "based"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v03_f01",
+      "type": "single_choice",
+      "prompt": "Two trends occur at the same time, but causation has not been established. What should you write?",
+      "options": [
+        "One trend definitely causes the other.",
+        "The trends coincide, but the available evidence does not establish a causal relationship.",
+        "The data prove everything.",
+        "The limitation can be omitted."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v03_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of integrated technical reporting in a logical order.",
+      "options": [
+        "Compare the information and identify limitations",
+        "Collect the relevant source records",
+        "Write conclusions that match the evidence",
+        "Check units, dates and references"
+      ],
+      "correctOrder": [
+        "Collect the relevant source records",
+        "Check units, dates and references",
+        "Compare the information and identify limitations",
+        "Write conclusions that match the evidence"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v03_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words explaining how to combine inspection findings and trend data in a technical report without overstating conclusions.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Inspection evidence — 2: accurately summarises relevant findings and their source; 1: partial; 0: absent. (2) Trend data — 2: explains how comparable trend data adds context; 1: partial; 0: absent or misinterpreted. (3) Limits and conclusions — 2: distinguishes evidence from inference and states limitations without overstating certainty; 1: partial; 0: unsupported conclusion. (4) English — 2: coherent technical-report language and accurate inspection/reliability vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v03_audio",
+    "readingPassageId": "c5s2v03_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

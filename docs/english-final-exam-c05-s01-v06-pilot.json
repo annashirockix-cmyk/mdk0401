@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 6",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v06_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the document-applicability lesson begin?",
+      "audioText": "The aircraft maintenance instructor will review document applicability on Wednesday at ten. Students should bring the sample aircraft identification record and maintenance task card. The lesson will explain why the aircraft model and serial number must be checked before a task reference is selected. Students will work with controlled training copies only.",
+      "options": [
+        "At ten on Wednesday",
+        "At nine on Wednesday",
+        "At ten on Thursday",
+        "At eleven on Wednesday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v06_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which records should students bring?",
+      "audioText": "The aircraft maintenance instructor will review document applicability on Wednesday at ten. Students should bring the sample aircraft identification record and maintenance task card. The lesson will explain why the aircraft model and serial number must be checked before a task reference is selected. Students will work with controlled training copies only.",
+      "options": [
+        "The component history and inspection report",
+        "The aircraft identification record and maintenance task card",
+        "The aircraft journey log and release note",
+        "The parts catalogue and wiring diagram"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v06_r01",
+      "type": "single_choice",
+      "prompt": "Maintenance instructions are applicable only when they match the relevant aircraft or component configuration. Before using a task card, a technician checks the aircraft or component identity, the document reference and its revision status. Similar model names do not guarantee that instructions are interchangeable. If applicability is uncertain, the issue should be referred to the authorised technical publications process. Reading 1. What should be checked before a task card is used?",
+      "options": [
+        "Supplier contact, delivery date and purchase order value",
+        "Aircraft colour, hangar location and shift number",
+        "Aircraft or component identity, document reference and revision status",
+        "Technician name, training record and inspection timetable"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v06_r02",
+      "type": "single_choice",
+      "prompt": "What should happen if applicability is uncertain?",
+      "options": [
+        "Use the procedure for a similar model and compare details later",
+        "Assume the task card applies if its title is familiar",
+        "Ask the previous shift to decide without checking the records",
+        "Refer the issue through the authorised technical publications process"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v06_g01",
+      "type": "single_choice",
+      "prompt": "The document revision ___ before the task card is used.",
+      "options": [
+        "must checking",
+        "must be checked",
+        "must checked",
+        "must be check"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v06_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO checks that establish whether a maintenance task card applies to the item and is current.",
+      "options": [
+        "Publication language",
+        "File format",
+        "Aircraft or component identity",
+        "Document revision status"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v06_v01",
+      "type": "short_text",
+      "prompt": "The condition of being relevant to a particular aircraft or component is document ___.",
+      "acceptedAnswers": [
+        "applicability"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v06_f01",
+      "type": "single_choice",
+      "prompt": "The task card may refer to a different aircraft configuration. What should you ask?",
+      "options": [
+        "Could we confirm the correct task applicability against the aircraft identification and approved publications?",
+        "Could we use the task card for a similar model and confirm the details later?",
+        "Could we compare the aircraft colour and registration only?",
+        "Could we follow the previous shift's decision without checking applicability?"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v06_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of aircraft maintenance documentation in a logical order.",
+      "options": [
+        "Confirm the revision and applicability",
+        "Identify the aircraft or component",
+        "Use the approved task information",
+        "Check the task-card reference"
+      ],
+      "correctOrder": [
+        "Identify the aircraft or component",
+        "Check the task-card reference",
+        "Confirm the revision and applicability",
+        "Use the approved task information"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v06_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why aircraft identity, configuration and document revision must be checked before maintenance instructions are used.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Aircraft identity — 2: explains checking the aircraft/component identity and relevant serial or registration details; 1: partial; 0: absent. (2) Configuration — 2: explains checking the applicable model/configuration or installed options; 1: partial; 0: absent. (3) Publication control — 2: explains verifying the applicable task and current approved revision, and seeking confirmation if uncertain; 1: partial; 0: absent or unsafe. (4) English — 2: clear writing and accurate aviation-maintenance vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v06_audio",
+    "readingPassageId": "c5s1v06_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

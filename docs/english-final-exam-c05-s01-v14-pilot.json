@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 14",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v14_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the service-information review take place?",
+      "audioText": "The aviation documentation tutor will review service information on Friday at ten fifteen. Students should bring the sample service notice and the aircraft applicability list. The session will identify the affected model range, issue date and required review action. The tutor will explain why a notice should not be assumed to apply to every aircraft of a similar type.",
+      "options": [
+        "At ten fifteen on Friday",
+        "At nine fifteen on Friday",
+        "At ten fifteen on Thursday",
+        "At eleven fifteen on Friday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v14_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which list should students bring?",
+      "audioText": "The aviation documentation tutor will review service information on Friday at ten fifteen. Students should bring the sample service notice and the aircraft applicability list. The session will identify the affected model range, issue date and required review action. The tutor will explain why a notice should not be assumed to apply to every aircraft of a similar type.",
+      "options": [
+        "The maintenance task card and component history",
+        "The sample service notice and aircraft applicability list",
+        "The revision register and release checklist",
+        "The inspection report and defect log"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v14_r01",
+      "type": "single_choice",
+      "prompt": "A service notice may provide information about a product, system or maintenance topic. Before using it, the reader should check the affected model range, applicability statement, issue date and any referenced documents. Similar aircraft or equipment may have different configurations. If applicability is uncertain, the responsible technical team should confirm whether the notice applies to the specific item under review. Reading 1. Which details should be checked before using a service notice?",
+      "options": [
+        "Technician name, shift rota, training date and leave record",
+        "Supplier price, delivery date, payment terms and invoice number",
+        "Affected model range, applicability statement, issue date and referenced documents",
+        "Equipment colour, storage location, room number and group"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v14_r02",
+      "type": "single_choice",
+      "prompt": "Which team should confirm a notice's applicability when the configuration is unclear?",
+      "options": [
+        "The previous shift should confirm it from memory",
+        "The notice should be assumed to apply to all similar models",
+        "The notice should be used first and checked after the task",
+        "The responsible technical team should confirm whether it applies"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v14_g01",
+      "type": "single_choice",
+      "prompt": "The service notice applicability ___ before the information is used.",
+      "options": [
+        "should be confirmed",
+        "should confirm",
+        "confirming",
+        "are confirmed"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v14_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO checks needed when reviewing a service notice.",
+      "options": [
+        "The colour of the notice header",
+        "An unrelated staff timetable",
+        "Affected model range",
+        "Applicability statement"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v14_v01",
+      "type": "short_text",
+      "prompt": "A statement that defines which models or items are covered by a notice is its applicability ___.",
+      "acceptedAnswers": [
+        "statement"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v14_f01",
+      "type": "single_choice",
+      "prompt": "A service notice lists several models, but the specific configuration is unclear. What should you ask?",
+      "options": [
+        "It probably applies to all models.",
+        "Could the technical team confirm whether this notice applies to the specific configuration?",
+        "The applicability statement is not important.",
+        "I will assume it applies."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v14_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of service information review in a logical order.",
+      "options": [
+        "Review applicability and referenced documents",
+        "Identify the service notice and issue date",
+        "Confirm applicability for the specific item",
+        "Check the affected model range"
+      ],
+      "correctOrder": [
+        "Identify the service notice and issue date",
+        "Check the affected model range",
+        "Review applicability and referenced documents",
+        "Confirm applicability for the specific item"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v14_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words explaining how to review a service notice before using it. Include model range, applicability and the need for confirmation.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Applicability — 2: explains checking the service notice's model/serial range and configuration applicability; 1: partial; 0: absent. (2) Document status — 2: checks notice identifier, revision and current approval/effectivity; 1: partial; 0: absent. (3) Confirmation — 2: explains confirming applicability through the approved publication process before relying on the notice; 1: partial; 0: absent or assumes applicability from model name alone. (4) English — 2: clear logical explanation and accurate aviation technical-publication vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v14_audio",
+    "readingPassageId": "c5s1v14_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

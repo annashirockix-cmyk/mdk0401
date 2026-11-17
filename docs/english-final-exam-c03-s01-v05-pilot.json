@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c3_s1",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 3, Semester 1 — Pilot Variant 5",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s1v05_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the new form be introduced?",
+      "audioText": "The stores department is introducing a new component record form next week. The form includes the part number, description, quantity received and date of inspection. Students practising stores documentation should collect a sample from the instructor on Wednesday. The exercise will use training components only and will not involve live stock.",
+      "options": [
+        "Next week",
+        "This week",
+        "In two weeks",
+        "Next month"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v05_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which detail is included on the form?",
+      "audioText": "The stores department is introducing a new component record form next week. The form includes the part number, description, quantity received and date of inspection. Students practising stores documentation should collect a sample from the instructor on Wednesday. The exercise will use training components only and will not involve live stock.",
+      "options": [
+        "The serial number",
+        "The part number",
+        "The delivery date",
+        "The storage location"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v05_r01",
+      "type": "single_choice",
+      "prompt": "A stores assistant received a delivery of bearings for a training project. She checked the part numbers against the purchase list and counted the packages before signing the delivery note. One box had a damaged label, so she recorded the problem and asked the supervisor to confirm the contents. The assistant did not add the box to the available stock until the details were checked. Reading 1. What did the assistant compare with the purchase list?",
+      "options": [
+        "The delivery dates",
+        "The quantities in each box",
+        "The part numbers",
+        "The supplier names"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s1v05_r02",
+      "type": "single_choice",
+      "prompt": "Why did she delay adding one box to stock?",
+      "options": [
+        "Because the box arrived after the scheduled delivery",
+        "Because there was not enough storage space",
+        "Because the purchase list contained no prices",
+        "Because the label was damaged and the contents needed confirmation"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s1v05_g01",
+      "type": "single_choice",
+      "prompt": "The delivery note ___ after the package count is checked.",
+      "options": [
+        "is signed",
+        "sign",
+        "is signing",
+        "signed tomorrow"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v05_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO fields that identify a component itself in a stores record.",
+      "options": [
+        "Supplier delivery date",
+        "Storage-bin location",
+        "Part number",
+        "Component description"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v05_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "A difference between the recorded information and the actual delivery is a ___.",
+      "acceptedAnswers": [
+        "discrepancy"
+      ]
+    },
+    {
+      "id": "c3s1v05_f01",
+      "type": "single_choice",
+      "prompt": "A part number on a label is unclear. What should you do?",
+      "options": [
+        "Enter the number that looks most likely.",
+        "Ask the supervisor to confirm the part number before recording it.",
+        "Ignore the label and store the item.",
+        "Change the number to match another box."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v05_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of component records in a logical order.",
+      "options": [
+        "Record any discrepancy",
+        "Compare the delivery with the purchase list",
+        "Confirm unclear details before updating stock",
+        "Check part numbers and quantities"
+      ],
+      "correctOrder": [
+        "Compare the delivery with the purchase list",
+        "Check part numbers and quantities",
+        "Record any discrepancy",
+        "Confirm unclear details before updating stock"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v05_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how accurate component records help a workshop or stores department. Include part numbers, quantities and discrepancy reporting.",
+      "rubric": "8 points total: part numbers and quantities are described as essential record details (0–2); the response explains how a discrepancy should be reported and why accurate records matter (0–2); the process is logically explained with understandable grammar (0–2); stores/inventory/traceability vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s1v05_audio",
+    "readingPassageId": "c3s1v05_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

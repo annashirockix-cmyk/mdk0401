@@ -20,12 +20,13 @@ jobs:
       - name: Check changed JavaScript modules
         run: |
           set -e
-          for file in api.js app.js portal-final.js portal-genz.js rating-subjects.js workbooks.js network-party-games.js network-detective.js coop-detective.js sprut-tp-document-examples.js certificate-supplement.js avatar-studio.js teacher-tasks.js reports.js service-worker.js teacher-controls.js shop.js laboratory.js pdf-viewer.js materials-simulator.js machining-simulator.js english-vpr-engine.js english-proficiency-lab.js; do
+          for file in api.js app.js questions-setup.js exam_0701.js exam_0401.js exam_0201.js exam_0202.js portal-final.js portal-genz.js rating-subjects.js workbooks.js network-party-games.js network-detective.js coop-detective.js sprut-tp-document-examples.js certificate-supplement.js avatar-studio.js teacher-tasks.js reports.js service-worker.js teacher-controls.js shop.js laboratory.js pdf-viewer.js materials-simulator.js machining-simulator.js english-vpr-engine.js english-proficiency-lab.js teacher-dashboard.js; do
             echo "Checking $file"
             node --check "$file"
           done
           echo "Checking Google Apps Script backend"
           node --check < Code.gs
+          node --check < EnglishVPR-Sheets.gs
           node --check scripts/gas-read-load-test.mjs
       - name: Check notification center contract
         run: node scripts/check-notification-contract.mjs
@@ -35,6 +36,17 @@ jobs:
         run: node --test scripts/portal-enhancements.test.mjs
       - name: Check client assessment answer-key isolation
         run: node --test scripts/client-answer-key-leak.test.mjs
+      - name: Check five-year English runtime and listening modules
+        run: |
+          for file in english-five-year-runtime.js english-listening-catalog.js english-listening-lesson.js english-listening-tts.js english-listening-route.js; do
+            echo "Checking $file"
+            node --check "$file"
+          done
+          node --test scripts/english-five-year-runtime.test.mjs
+          node --test scripts/english-semester-assessment.test.mjs
+          node --test scripts/english-technical-draft-bank.test.mjs
+          node --test scripts/english-basic-semester-draft.test.mjs
+          node --test scripts/assessment-option-shuffle.test.mjs
       - name: Check public assessment data syntax
         run: node --check data-0701.js && node --check data-0401.js && node --check data-0201.js && node --check data-0202.js && node --check data-mastercam.js && node --check data-sprut-tp.js && node --check data-material.js && node --check data-safety.js && node --check data-metrology.js && node --check data-extra.js && node --check data-english-basic.js && node --check data-english-technical.js && node --check english-assessment-data.js && node --check tests-extra.js && node --check course-assessment-advanced.js && node --check hard-questions.js && node --check challenge-questions.js && node --check sprut-tp-question-bank.js && node --check exam_0401.js && node --check exam_0201.js && node --check exam_0202.js
       - name: Check workbook cache and print layout
@@ -90,6 +102,13 @@ jobs:
           path: artifacts/certificate/
           if-no-files-found: ignore
           retention-days: 7
+      - name: Run real-browser English final-exam audit
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/english-exam-audit-server.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/english-final-exam-browser-audit.mjs
       - name: Check inline scripts in HTML
         run: |
           python - <<'PY'

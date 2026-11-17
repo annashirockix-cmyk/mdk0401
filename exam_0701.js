@@ -69,6 +69,7 @@ window.renderTraining_0701 = function(mdkId) {
   var extraQuestions = []; // Уже 105 вопросов, можно не добавлять
   var allQuestions = baseQuestions.concat(extraQuestions);
   var questions = shuffle0701(allQuestions);
+        if (window._shuffleQuestionOptions) questions.forEach(window._shuffleQuestionOptions);
   var idx = 0, correct = 0, answered = 0;
 
   app.innerHTML += '<section class="hero"><h1>🎯 МДК 07.01</h1><p>Вопросов для тренировки: ' + questions.length + '</p></section>';
@@ -125,6 +126,7 @@ window.renderFinal_0701 = function(mdkId) {
       }));
   }
   var allQ = baseQuestions;
+  if (window._shuffleQuestionOptions) allQ.forEach(window._shuffleQuestionOptions);
 
   app.innerHTML += '<section class="hero"><h1>📋 МДК 07.01</h1><p>Итоговый экзамен: 10 вопросов · 10 минут</p></section>';
   var box = document.createElement("div"); box.className = "module"; app.appendChild(box);

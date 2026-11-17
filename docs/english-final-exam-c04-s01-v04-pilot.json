@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s1",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 4, Semester 1 — Pilot Variant 4",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s1v04_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the energy session take place?",
+      "audioText": "The energy systems lecturer will discuss electrical energy use on Wednesday at twelve. The session will take place in the main lecture room. Students should read the short note about kilowatt-hours before attending. The lecturer will explain how power and operating time are related and will compare two example energy records.",
+      "options": [
+        "On Wednesday at twelve",
+        "On Wednesday at eleven",
+        "On Thursday at twelve",
+        "On Wednesday at one"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s1v04_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What should students read before attending?",
+      "audioText": "The energy systems lecturer will discuss electrical energy use on Wednesday at twelve. The session will take place in the main lecture room. Students should read the short note about kilowatt-hours before attending. The lecturer will explain how power and operating time are related and will compare two example energy records.",
+      "options": [
+        "The power-rating sheet",
+        "The note about kilowatt-hours",
+        "The energy-conversion table",
+        "The sample electricity bill"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s1v04_r01",
+      "type": "single_choice",
+      "prompt": "Electrical energy consumption depends on the power of a device and the time it operates. A device with a higher power rating may use more energy in the same period, although actual consumption also depends on its operating conditions. Energy records often use kilowatt-hours. A student compared two devices and made sure that the measurement periods were equal before drawing a conclusion. Reading 1. What two factors affect energy consumption?",
+      "options": [
+        "The device's voltage and current",
+        "The device's size and weight",
+        "The device's power and operating time",
+        "The device's temperature and production date"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s1v04_r02",
+      "type": "single_choice",
+      "prompt": "Why did the student use equal measurement periods?",
+      "options": [
+        "To reduce the time needed for the exercise",
+        "To make the higher value appear more significant",
+        "To avoid recording the measurement units",
+        "To make the comparison fair"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s1v04_g01",
+      "type": "single_choice",
+      "prompt": "The energy used by a device depends ___ its power and operating time.",
+      "options": [
+        "on",
+        "at",
+        "in",
+        "to"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s1v04_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO operating data needed to compare energy consumption fairly.",
+      "options": [
+        "Equipment serial number",
+        "Installation date",
+        "Power rating",
+        "Operating time"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v04_v01",
+      "type": "short_text",
+      "prompt": "A unit commonly used to record electrical energy consumption is the kilowatt-___.",
+      "acceptedAnswers": [
+        "hour"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v04_f01",
+      "type": "single_choice",
+      "prompt": "A classmate compares devices over different time periods. What should you say?",
+      "options": [
+        "The comparison is always fair.",
+        "We should use equal time periods before comparing the energy records.",
+        "The time period is irrelevant.",
+        "Choose whichever result is larger."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s1v04_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of electrical energy in a logical order.",
+      "options": [
+        "Compare energy use over equal periods",
+        "Identify the power rating",
+        "Explain the result and its limits",
+        "Record the operating period"
+      ],
+      "correctOrder": [
+        "Identify the power rating",
+        "Record the operating period",
+        "Compare energy use over equal periods",
+        "Explain the result and its limits"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v04_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how power and operating time affect electrical energy consumption. Include why fair comparisons need equal time periods.",
+      "rubric": "8 points total: the relationship between power, operating time and energy consumption is explained (0–2); the response explains why comparisons need equal or clearly stated time periods (0–2); the reasoning is logically connected with understandable grammar (0–2); power/energy vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s1v04_audio",
+    "readingPassageId": "c4s1v04_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

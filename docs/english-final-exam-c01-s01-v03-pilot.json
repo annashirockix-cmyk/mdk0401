@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s1",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 1, Semester 1 — Pilot Variant 03",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s1v03_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Listen to Noah. What time does the bus usually arrive?",
+      "audioText": "Hi, I'm Noah. I leave home at quarter past seven and walk to the bus stop. The bus usually arrives at half past seven. My first lesson begins at half past eight. I must bring my student ID card today because we are visiting the college library. The library office is on the ground floor, opposite the reception desk.",
+      "options": [
+        "At 7:30",
+        "At 7:15",
+        "At 7:45",
+        "At 8:30"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v03_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Why does Noah need his student ID card today?",
+      "audioText": "Hi, I'm Noah. I leave home at quarter past seven and walk to the bus stop. The bus usually arrives at half past seven. My first lesson begins at half past eight. I must bring my student ID card today because we are visiting the college library. The library office is on the ground floor, opposite the reception desk.",
+      "options": [
+        "He is taking an exam",
+        "He is visiting the college library",
+        "He is travelling by train",
+        "He is joining a sports club"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v03_r01",
+      "type": "single_choice",
+      "prompt": "Reading 1. Read the text. Aisha wants to learn English words more effectively. She makes small cards: the English word is on one side and its meaning is on the other. She looks at five cards on the way to college and checks them again before dinner. When she learns a new word, she writes a sentence about college life. At the end of the week, she asks a friend to test her. What does Aisha write when she learns a new word?",
+      "options": [
+        "A long story about a holiday",
+        "A list of bus numbers",
+        "A sentence about college life",
+        "A message to her teacher"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s1v03_r02",
+      "type": "single_choice",
+      "prompt": "Reading 2. When does Aisha ask a friend to test her?",
+      "options": [
+        "Every morning",
+        "Before every lesson",
+        "Only in the summer",
+        "At the end of the week"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s1v03_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct article: 'He is ___ student at our college.'",
+      "options": [
+        "a",
+        "an",
+        "the",
+        "—"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s1v03_g02",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO grammatically correct sentences.",
+      "options": [
+        "There is three books on the desk.",
+        "Do he live near the college?",
+        "There are two windows in the classroom.",
+        "My sister studies English every day."
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v03_v01",
+      "type": "short_text",
+      "prompt": "Complete the sentence with one word: 'You can ___ a book from the college library and return it later.'",
+      "acceptedAnswers": [
+        "borrow"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v03_f01",
+      "type": "single_choice",
+      "prompt": "You need to use your classmate's pen. What is the most polite request?",
+      "options": [
+        "Give pen!",
+        "Can I borrow your pen, please?",
+        "You must pen me.",
+        "I take your pen yesterday."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s1v03_o01",
+      "type": "ordering",
+      "prompt": "Put the steps of borrowing a library book in the correct order.",
+      "options": [
+        "Take the book to the library desk",
+        "Choose a book from the shelf",
+        "Show your student card",
+        "Receive the book and the return date"
+      ],
+      "correctOrder": [
+        "Choose a book from the shelf",
+        "Take the book to the library desk",
+        "Show your student card",
+        "Receive the book and the return date"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s1v03_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words about how you learn new English words. Describe two methods you use or would like to try, when you practise and why English is useful for your studies.",
+      "rubric": "8 points total: two vocabulary-learning methods and when the learner practises are described (0–2); the usefulness of English for the learner's studies is explained with a relevant reason or example (0–2); basic grammar and sentence links are understandable (0–2); learning-strategy vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s1v03_audio",
+    "readingPassageId": "c1s1v03_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

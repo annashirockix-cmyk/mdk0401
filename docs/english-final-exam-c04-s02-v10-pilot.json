@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 10",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the security lesson take place?",
+      "audioText": "The control systems tutor will discuss information security principles on Tuesday at two. Students should meet in the project classroom and bring the security glossary. The lesson will cover account access, approved software updates and reporting unusual activity. It will focus on responsible documentation and will not include practical access to live control systems.",
+      "options": [
+        "On Tuesday at two",
+        "On Tuesday at one",
+        "On Wednesday at two",
+        "On Tuesday at three"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which course resource should students bring to the security lesson?",
+      "audioText": "The control systems tutor will discuss information security principles on Tuesday at two. Students should meet in the project classroom and bring the security glossary. The lesson will cover account access, approved software updates and reporting unusual activity. It will focus on responsible documentation and will not include practical access to live control systems.",
+      "options": [
+        "The network glossary",
+        "The security glossary",
+        "The equipment inventory",
+        "The software installation guide"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v10_r01",
+      "type": "single_choice",
+      "prompt": "Control systems documentation should identify approved software versions and the roles permitted to access system information. Unusual activity should be reported through the organisation's approved process. Staff should not share account credentials or install unapproved software. Clear records help a technical team understand what changed and which authorised person or process was involved. Reading 1. What should control systems documentation identify?",
+      "options": [
+        "Machine colour, location and operator shift",
+        "Supplier delivery dates and purchase-order values",
+        "Approved software versions and permitted access roles",
+        "Sensor measurements and inspection intervals"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v10_r02",
+      "type": "single_choice",
+      "prompt": "Why should unusual activity be reported?",
+      "options": [
+        "So the equipment can be replaced immediately",
+        "So the incident can be closed without reviewing the evidence",
+        "So the system can continue without recording the event",
+        "So the technical team can understand what changed and who or what process was involved"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Unusual activity should ___ through the approved process.",
+      "options": [
+        "be reported",
+        "report",
+        "be reporting",
+        "reported yesterday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO responsible practices for control-system information security.",
+      "options": [
+        "Share account credentials",
+        "Install unapproved tools",
+        "Use approved software versions",
+        "Report unusual activity"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v10_v01",
+      "type": "short_text",
+      "prompt": "Information that proves who accessed or changed a system may form an audit ___.",
+      "acceptedAnswers": [
+        "trail"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v10_f01",
+      "type": "single_choice",
+      "prompt": "A colleague asks you to share your account password. What should you say?",
+      "options": [
+        "I will send it in a message.",
+        "I cannot share credentials; please use the approved access process.",
+        "Passwords are not important.",
+        "I will write it on a public notice."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v10_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of information security in control systems in a logical order.",
+      "options": [
+        "Record relevant changes",
+        "Check the approved access rules",
+        "Report unusual activity through the approved process",
+        "Use the authorised account and software"
+      ],
+      "correctOrder": [
+        "Check the approved access rules",
+        "Use the authorised account and software",
+        "Record relevant changes",
+        "Report unusual activity through the approved process"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v10_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing responsible information-security practices for a control-system team. Include access, approved software and reporting.",
+      "rubric": "8 points total: access control and use of approved software are addressed (0–2); the response explains how concerns/incidents should be reported and avoids unsafe practices such as sharing credentials or bypassing controls (0–2); advice is logically organised with understandable grammar (0–2); information-security/control-system vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v10_audio",
+    "readingPassageId": "c4s2v10_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

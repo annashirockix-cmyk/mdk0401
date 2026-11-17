@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c3_s1",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 3, Semester 1 — Pilot Variant 13",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s1v13_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When is the certificate session?",
+      "audioText": "The materials technician will demonstrate how to check incoming material certificates on Friday at nine. The session will be held in the inspection area, using sample documents only. Students will learn where to find the material grade, batch number and certificate date. They should not remove any original records from the department.",
+      "options": [
+        "On Friday at nine",
+        "On Friday at eight",
+        "On Thursday at nine",
+        "On Friday at ten"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v13_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which details will students learn to locate?",
+      "audioText": "The materials technician will demonstrate how to check incoming material certificates on Friday at nine. The session will be held in the inspection area, using sample documents only. Students will learn where to find the material grade, batch number and certificate date. They should not remove any original records from the department.",
+      "options": [
+        "The supplier name, purchase order and delivery date",
+        "The material grade, batch number and certificate date",
+        "The component weight, storage location and order quantity",
+        "The drawing revision, inspection time and operator name"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v13_r01",
+      "type": "single_choice",
+      "prompt": "A delivery of metal stock arrived with a certificate from the supplier. The inspector compared the material grade and batch number on the certificate with the delivery label. The values matched, but the certificate date was difficult to read. The inspector requested a clearer copy before completing the incoming inspection record. The material was kept identified while the document was being checked. Reading 1. Which details did the inspector compare?",
+      "options": [
+        "The delivery quantity and purchase cost",
+        "The certificate date and supplier address",
+        "The material grade and batch number",
+        "The inspection date and equipment reference"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s1v13_r02",
+      "type": "single_choice",
+      "prompt": "Why was a clearer copy requested?",
+      "options": [
+        "Because the material grade was missing",
+        "Because the batch number did not match",
+        "Because the supplier address was not included",
+        "Because the certificate date was difficult to read"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s1v13_g01",
+      "type": "single_choice",
+      "prompt": "The batch number must ___ with the delivery label.",
+      "options": [
+        "match",
+        "matches",
+        "matching",
+        "be match"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v13_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO technical identifiers used to trace a batch of material through receipt and use.",
+      "options": [
+        "Supplier payment terms",
+        "Storage location code",
+        "Material grade",
+        "Batch number"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v13_v01",
+      "type": "short_text",
+      "prompt": "A group of material produced or processed together is a ___.",
+      "acceptedAnswers": [
+        "batch",
+        "lot"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v13_f01",
+      "type": "single_choice",
+      "prompt": "A certificate date is unreadable. What should you say to the supplier?",
+      "options": [
+        "The certificate is useless; send anything else.",
+        "Could you provide a clearer copy showing the certificate date, please?",
+        "I will guess the date.",
+        "The date is not important."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v13_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of material inspection in a logical order.",
+      "options": [
+        "Review the certificate date",
+        "Check the delivery label",
+        "Complete the inspection record when details are clear",
+        "Compare the material grade and batch number"
+      ],
+      "correctOrder": [
+        "Check the delivery label",
+        "Compare the material grade and batch number",
+        "Review the certificate date",
+        "Complete the inspection record when details are clear"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v13_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why material certificates are checked during incoming inspection. Mention grade, batch identification and document clarity.",
+      "rubric": "8 points total: the response explains why a material certificate is checked and addresses grade and batch identification (0–2); it explains why the document must be clear and match the relevant purchasing/specification records (0–2); the explanation is clearly organised with understandable grammar (0–2); material/inspection/document vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s1v13_audio",
+    "readingPassageId": "c3s1v13_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

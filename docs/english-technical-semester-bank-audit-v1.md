@@ -1,0 +1,127 @@
+# Technical English 200-item draft pool — audit v1
+
+**Status:** structural audit completed; subject and curriculum approval outstanding. This document does not authorize student release or import into the protected Google Sheets bank.
+
+## 1. Structural audit
+
+- 200 questions are present in ten batches of 20, numbered 1–200.
+- Every question has four options (A–D) and a corresponding teacher-key row.
+- The answer text originally designated as correct was preserved for all 200 items while answer choices were reordered.
+- Correct-answer positions are now balanced: 50 A, 50 B, 50 C and 50 D across the pool.
+- Each individual 20-question batch contains exactly five correct answers in each position.
+- No exact duplicate substantive question stems were found by the text-normalization check. Generic prompts such as “Choose the correct sentence” are not treated as substantive stems.
+- Automated regression coverage is added in `scripts/english-technical-draft-bank.test.mjs` and included in `.github/workflows/portal-syntax.yml`. GitHub Actions run #43947026282 passed on code head 745942a3c1525bf3b68ed24f4433ba7e5d332834 on 2026-11-16, including the English runtime and browser exam audits. Subsequent documentation-only commits require their own CI result.
+
+## 2. Answer-key distribution before and after correction
+
+| Position | Before | After |
+|---|---:|---:|
+| A | 165 | 50 |
+| B | 31 | 50 |
+| C | 4 | 50 |
+| D | 0 | 50 |
+| **Total** | **200** | **200** |
+
+The original correct option text was checked against the newly keyed option for every question: 200/200 matched.
+
+## 3. Preliminary VPR comparison
+
+The protected Technical VPR seed in `EnglishVPR-Sheets.gs` uses an integrated seven-task format: listening dialogue, reading matching, text reconstruction, vocabulary gap-fill, word formation, grammar transformations and a written questionnaire. Its technical contexts include workshop preparation, workpieces, CNC machining, cutting tools, measuring instruments and safety vocabulary.
+
+The 200-item draft pool intentionally shares the broad vocational domain (engineering, manufacturing, CNC, measurement, maintenance, aviation and technical communication). This is not itself evidence of duplicated questions. A complete semantic item-by-item comparison against the active protected VPR bank and its variants is still outstanding; this preliminary review must not be presented as a certified no-duplicates result.
+
+## 4. Subject-review flags
+
+The following items were re-opened against the current ten draft files on 2026-11-16. This is an editorial consistency check, not expert or curriculum approval:
+
+- Q48: the stem says “typically” and the keyed option is the spindle/tool axis. Keep the machine- and coordinate-convention caveat; confirm it against the equipment and teaching reference used by the college.
+- Q62: the keyed meaning of “to isolate a circuit” is to disconnect it from its energy source. It is a vocabulary interpretation item, not a work instruction; have the electrical subject specialist confirm the wording.
+- Q74: “shall” is keyed as a mandatory requirement in a technical specification. The convention depends on the applicable standard/document, so retain this as a terminology review point.
+- Q77: the keyed form is “has received”. Both coordinated subjects (“operator” and “supervisor”) are singular; the nearest-subject agreement rule also yields the singular form. Confirm the explanation against the course grammar reference.
+- Q127: the current stem is “The drawing and the accompanying notes ___ the revised connector type”; the key is “specify” (B), correctly agreeing with the plural compound subject. The earlier audit note incorrectly described this item as a “neither…nor” construction and is withdrawn.
+- Q133 and Q156: the current keys are “were collected” (B) and “are available” (A). Both items consistently treat “data” as plural; the earlier singular/plural consistency flag is resolved for these two items. Confirm that plural “data” matches the course style guide.
+- Q144: the keyed value, 7.5 bar, is below the stated maximum of 8 bar. This is a reading-comprehension calculation, not an operating recommendation.
+- Q173: the key “until” completes a sentence describing an equipment-status condition. Keep it framed as a language-comprehension item, not as an independent maintenance instruction.
+- Q194: the phrase “approved data” is aviation-maintenance terminology. A qualified aviation subject specialist must confirm its interpretation and alignment with the approved programme before release.
+
+## 5. Remaining release gates## 4A. Editorial near-duplicate review (2026-11-15)
+
+A manual content-level pass identified three repeated concepts that were not exact duplicate stems and therefore were not caught by the normalized-stem check:
+
+- Q70 and Q126 both tested the definition/purpose of a bill of materials (BOM). Q126 has been replaced with a purchase-requisition purpose item.
+- Q92 and Q137 both tested the purpose of root-cause analysis. Q137 has been replaced with the purpose of corrective action after a non-conformity investigation.
+- Q98 and Q149 both tested the meaning of obsolete documentation. Q149 has been replaced with the meaning of a controlled copy.
+
+These edits retain the four-option format and the existing answer-key positions. They reduce repeated content but do not constitute a full semantic review of every question pair. Basic–Technical cross-track semantic comparison and protected VPR variant comparison remain outstanding.
+
+
+
+1. Complete semantic duplicate review against the active Basic and Technical VPR banks, including any variants stored in Sheets.
+2. Review difficulty, CEFR/ESP progression, distractor quality and distribution across technologists, programmers, electricians, machine operators and aviation contexts.
+3. Have an English methodologist and relevant subject specialists approve every item and key.
+4. Map the items to the approved five-year work programme and semester outcomes.
+5. Convert only approved items to the protected server-side schema; keep answer keys out of browser-delivered files.
+6. Import to the protected sheet, read the data back, verify sanitization and run the assessment regression tests before student release.
+
+## 6. Current boundary
+
+This is a 200-item authoring pool, not yet ten approved semester assessments. A separate 200-item Basic authoring pool exists, but it is not mapped to the four Basic course-semester slots or approved as a semester bank. No new semester questions have been imported or published to students.
+
+
+## 4B. Basic–Technical exact-stem screen (2026-11-16)
+
+A second structural screen parsed all 200 Basic and all 200 Technical draft questions, including the two different Technical markdown formats used in Questions 1–60 and 61–200.
+
+- 400 question stems were recovered across the two tracks.
+- No exact normalized stem collision was found within either pool or between Basic and Technical.
+- Every recovered question had a corresponding teacher-key row. This supplements, but does not replace, the individual structural checks above.
+- This is an exact-stem screen only. It cannot rule out semantic overlap, repeated grammar targets, shared vocabulary, similar distractors, or overlap with protected VPR variants in Google Sheets.
+- The existing Technical near-duplicate corrections (BOM, root-cause analysis, obsolete documentation) remain in place. A full semantic comparison against the protected VPR variants still requires access to the current protected bank contents and a task-by-task review.
+
+The five-year map and final-exam blueprint files exist in the repository, but both explicitly remain provisional pending the approved work programme, semester hours and exact Belova textbook edition. No authoritative curriculum file was found in the repository tree during this pass.
+
+
+## Clarification to electrical-safety vocabulary item Q62 — 2026-11-17
+
+- Reworded Q62 to make clear that it tests the vocabulary meaning of *to isolate a circuit*, not the steps of a complete safe-isolation procedure.
+- The keyed meaning remains “separate the circuit from its energy supply”.
+- The teacher-key rationale now explicitly states that this definition is not a substitute for the approved isolation procedure and verification by authorised personnel.
+- This wording correction reduces the risk of students treating a one-line vocabulary definition as practical electrical-safety instruction. An electrical subject specialist must still validate the term against the college's approved teaching reference before release.
+
+
+## 4C. Technical authoring-pool semantic recurrence screen — 2026-11-17
+
+A cross-batch editorial screen of the 200 Technical draft items identified two repeated narrow language targets that were not caught by exact-stem matching:
+
+- Q94 and Q143 both tested the same collocation, *compatible with*. Q143 has been rewritten to test *suitable for use* (the sentence is now about a replacement sensor and a stated temperature range); the keyed position remains A and the teacher rationale is synchronized.
+- Q123 and Q163 both tested *notify someone of* a change. Q163 has been rewritten to test the distinct phrase *ahead of schedule* in a short delivery update; the keyed position remains A and the teacher rationale is synchronized.
+
+The changes are limited to the Technical authoring drafts v8 and v9. They do not alter the final-exam pilot registry, protected VPR banks, Google Sheets, Apps Script, or student-facing portal. The remaining 200-item semantic review is still editorial and provisional: repeated broad themes (document control, non-conformity, measurement evidence, technical reporting) are intentional curriculum strands unless an individual item repeats the same assessed skill too closely. A full comparison against protected VPR variants is still outstanding.
+
+
+## 4D. Technical semantic recurrence screen — additional concept separation (2026-11-17)
+
+A further pass found two repeated concept checks across the Technical pool:
+
+- Q42 described a sensor as converting a physical quantity into a signal, while Q76 defined a transducer in essentially the same way. Q76 now tests *actuator*: a device converting a control signal or energy input into physical action. The correct option remains D; the teacher rationale has been updated.
+- Q56 and Q142 both defined *traceability*. Q142 now tests *first-pass yield*, the proportion of units meeting requirements without rework on the first pass. The correct option remains A; the teacher rationale has been updated.
+
+These are content-level edits to Technical draft v4 and v8 only. They do not affect protected banks, final-exam pilot variants, Google Sheets, Apps Script or student-facing content. Further checks are still needed for overlapping traceability applications (including Q57 and Q80), repeated document-control ideas, and protected VPR content.
+
+
+A further separation was made for Q57 and Q80, which both previously asked what information supports traceability in an aviation/technical record. Q80 now asks how to identify the author and time of a controlled record entry; Q57 remains focused on component identification and work-record details. The keyed position remains A. This separates record authorship from component traceability while retaining the technical-record context.
+
+## 4E. Basic–Technical cross-track screen — 2026-11-17
+
+A review of the 200 Basic and 200 Technical draft stems found no exact cross-track stem collision (consistent with the earlier exact-normalized-stem screen). Several general English structures intentionally recur across tracks—present perfect, past perfect, passive voice, comparatives, prepositions and polite requests—but the contexts and assessed language items differ. These are shared language foundations, not evidence that the two authoring pools are interchangeable. The Technical pool adds manufacturing, measurement, control systems, technical records and workplace ESP contexts. A final overlap check against protected VPR variants remains blocked pending authorised access to their current contents.
+
+
+## 4F. Technical semantic recurrence screen — metrology, conformity and document revisions (2026-11-17)
+
+A further cross-batch review found three pairs where the same narrow assessed distinction was repeated:
+
+- Q11 and Q109 both asked for the definition/purpose of instrument calibration. Q109 now tests *measurement uncertainty* instead; its correct option remains A and the teacher-key rationale has been updated.
+- Q78 and Q122 both tested the meaning of failure to meet specified requirements (non-conformance / out of specification). Q122 now tests *rework* in manufacturing; its correct option remains A and the rationale is synchronized.
+- Q19 and Q132 both asked students to identify or interpret the current document revision. Q132 now tests the meaning of retaining a superseded revision for historical evidence, rather than selecting the current revision. Its correct option remains C.
+
+The edits are confined to Technical draft batches v6 and v7. They do not change the protected VPR banks, final-exam pilot registry, Google Sheets, Apps Script or student-facing portal. The recurrence screen remains editorial rather than expert approval; metrology and quality-management terminology must still be checked against the programme glossary and relevant subject references.

@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c3_s1",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 3, Semester 1 — Pilot Variant 7",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s1v07_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When is the tolerances session?",
+      "audioText": "The manufacturing tutor will introduce the topic of dimensional tolerances on Friday at one fifteen. The class will meet in the metrology room and use printed examples only. Students should bring a calculator and the worksheet on limits and fits. The tutor will explain why a permitted variation must be read together with the nominal dimension.",
+      "options": [
+        "On Friday at one fifteen",
+        "On Friday at twelve fifteen",
+        "On Thursday at one fifteen",
+        "On Friday at two fifteen"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v07_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What worksheet should students bring?",
+      "audioText": "The manufacturing tutor will introduce the topic of dimensional tolerances on Friday at one fifteen. The class will meet in the metrology room and use printed examples only. Students should bring a calculator and the worksheet on limits and fits. The tutor will explain why a permitted variation must be read together with the nominal dimension.",
+      "options": [
+        "The worksheet on surface finish",
+        "The worksheet on limits and fits",
+        "The worksheet on drawing symbols",
+        "The worksheet on measurement units"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v07_r01",
+      "type": "single_choice",
+      "prompt": "A drawing gives a nominal diameter of 20 millimetres with a permitted variation. This means the actual measured diameter may differ slightly from the nominal value but must remain within the specified limits. A trainee recorded the nominal dimension and both limits in an inspection table. The trainee did not replace the specified values with an average measurement. Reading 1. What does the permitted variation describe?",
+      "options": [
+        "The actual measured value recorded during inspection",
+        "The nominal dimension shown on the drawing",
+        "The allowed difference from the nominal dimension within specified limits",
+        "The difference between two components of the same type"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s1v07_r02",
+      "type": "single_choice",
+      "prompt": "Which values did the trainee record?",
+      "options": [
+        "The measured value and its unit",
+        "The nominal dimension and the measured value",
+        "The tolerance class and drawing revision",
+        "The nominal dimension and both limits"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s1v07_g01",
+      "type": "single_choice",
+      "prompt": "The measured value must remain ___ the specified limits.",
+      "options": [
+        "within",
+        "between of",
+        "inside to",
+        "among of"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v07_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO numerical elements needed to assess a component dimension against its specified tolerance.",
+      "options": [
+        "Surface roughness value",
+        "Measurement uncertainty",
+        "Nominal dimension",
+        "Upper and lower limits"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v07_v01",
+      "type": "short_text",
+      "prompt": "The stated basic size before a permitted variation is the nominal ___.",
+      "acceptedAnswers": [
+        "dimension",
+        "size"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v07_f01",
+      "type": "single_choice",
+      "prompt": "You are unsure how to read the tolerance on a drawing. What should you ask?",
+      "options": [
+        "I will ignore the tolerance and use the nominal value only.",
+        "Could you explain how the upper and lower limits apply to this dimension?",
+        "The limits are probably optional.",
+        "I will change the drawing to make it easier."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v07_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of tolerances and fit in a logical order.",
+      "options": [
+        "Compare the measured value with the limits",
+        "Read the nominal dimension",
+        "Record the inspection result",
+        "Identify the upper and lower limits"
+      ],
+      "correctOrder": [
+        "Read the nominal dimension",
+        "Identify the upper and lower limits",
+        "Compare the measured value with the limits",
+        "Record the inspection result"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v07_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining the purpose of dimensional tolerances. Use a simple example and describe what an inspector should record.",
+      "rubric": "8 points total: dimensional tolerance is explained accurately in general terms and illustrated with a relevant simple example (0–2); the response explains what the inspector should record, including the measured result and relevant requirement/context (0–2); the explanation is logically organised with understandable grammar (0–2); inspection/dimension vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s1v07_audio",
+    "readingPassageId": "c3s1v07_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

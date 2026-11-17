@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s1",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 4, Semester 1 — Pilot Variant 12",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s1v12_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the relay lesson take place?",
+      "audioText": "The electrical theory class will review relay symbols on Thursday at ten. Students should bring the circuit diagram from the previous lesson. The instructor will explain the general difference between a relay coil and its contacts and show how the symbol is used in a diagram. Students will not connect or test any electrical equipment.",
+      "options": [
+        "On Thursday at ten",
+        "On Thursday at nine",
+        "On Friday at ten",
+        "On Thursday at eleven"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s1v12_l02",
+      "type": "single_choice",
+      "prompt": "Which document should students bring for the relay-symbol lesson?",
+      "audioText": "The electrical theory class will review relay symbols on Thursday at ten. Students should bring the circuit diagram from the previous lesson. The instructor will explain the general difference between a relay coil and its contacts and show how the symbol is used in a diagram. Students will not connect or test any electrical equipment.",
+      "options": [
+        "The maintenance task card from the previous lesson",
+        "The circuit diagram from the previous lesson",
+        "The parts catalogue from the previous lesson",
+        "The inspection checklist from the previous lesson"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s1v12_r01",
+      "type": "single_choice",
+      "prompt": "A relay is an electrically controlled switching device. In a simplified diagram, the coil and contacts are shown as separate parts. When the coil is energised, the contact state may change according to the relay design. The exact contact arrangement and ratings must be checked in the manufacturer's documentation. A circuit diagram helps readers understand how the relay is represented within a larger system. Reading 1. What kind of device is a relay?",
+      "options": [
+        "A manually operated control switch",
+        "A device that measures current continuously",
+        "An electrically controlled switching device",
+        "A component that stores electrical energy"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s1v12_r02",
+      "type": "single_choice",
+      "prompt": "Where should users check the contact arrangement and ratings?",
+      "options": [
+        "In the workshop inventory",
+        "In the general safety notice",
+        "In the student attendance record",
+        "In the manufacturer's documentation"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s1v12_g01",
+      "type": "single_choice",
+      "prompt": "The contact arrangement ___ in the manufacturer's documentation.",
+      "options": [
+        "is specified",
+        "specify",
+        "specifying",
+        "are specify"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s1v12_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO functional elements of a relay itself.",
+      "options": [
+        "Fuse",
+        "Indicator lamp",
+        "Coil",
+        "Contacts"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v12_v01",
+      "type": "short_text",
+      "prompt": "An electromechanical switching device whose coil operates one or more contacts is a ___.",
+      "acceptedAnswers": [
+        "relay"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v12_f01",
+      "type": "single_choice",
+      "prompt": "You are unsure which contacts are represented. What should you ask?",
+      "options": [
+        "I will assume they are all the same.",
+        "Could you explain the contact symbols using the relay reference?",
+        "The contact arrangement does not matter.",
+        "I will redraw the circuit from memory."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s1v12_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of relay and switching concepts in a logical order.",
+      "options": [
+        "Check the relay reference information",
+        "Identify the relay symbol",
+        "Explain the relay's role in the circuit",
+        "Locate the coil and contact representations"
+      ],
+      "correctOrder": [
+        "Identify the relay symbol",
+        "Locate the coil and contact representations",
+        "Check the relay reference information",
+        "Explain the relay's role in the circuit"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v12_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing the general purpose of a relay and explaining why its contact arrangement should be checked in documentation.",
+      "rubric": "8 points total: the general purpose of a relay is explained (0–2); the response explains why the contact arrangement must be checked in the correct documentation rather than assumed (0–2); ideas are logically connected with understandable grammar (0–2); relay/contact/electrical vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s1v12_audio",
+    "readingPassageId": "c4s1v12_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

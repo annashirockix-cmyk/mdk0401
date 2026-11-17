@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 13",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v13_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the technical briefings be assessed?",
+      "audioText": "The maintenance communications tutor will assess short technical briefings on Wednesday at nine. Students should bring a one-page status summary and the supporting reference list. Each briefing should state the current position, outstanding action and any uncertainty. The tutor will assess whether the speaker uses precise terms and makes the next step clear to the audience.",
+      "options": [
+        "At nine on Wednesday",
+        "At eight on Wednesday",
+        "At nine on Thursday",
+        "At ten on Wednesday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v13_l02",
+      "type": "single_choice",
+      "prompt": "Which materials should students bring for the technical briefing assessment?",
+      "audioText": "The maintenance communications tutor will assess short technical briefings on Wednesday at nine. Students should bring a one-page status summary and the supporting reference list. Each briefing should state the current position, outstanding action and any uncertainty. The tutor will assess whether the speaker uses precise terms and makes the next step clear to the audience.",
+      "options": [
+        "The full maintenance manual and revision history",
+        "The one-page status summary and supporting reference list",
+        "The technical drawing and parts list",
+        "The work order and inspection checklist"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v13_r01",
+      "type": "single_choice",
+      "prompt": "A technical briefing is intended to communicate essential information efficiently. It should begin with the purpose, then present the current status and relevant evidence. Outstanding actions and decisions required should be stated clearly. Technical terms should be used consistently, and any uncertainty should be identified rather than hidden. A concise structure helps the audience understand what is known and what must happen next. Reading 1. What should a briefing present after its purpose?",
+      "options": [
+        "The purchase cost and supplier delivery date",
+        "The full maintenance history of every component",
+        "The current status and relevant evidence",
+        "The names and job titles of all people in the organisation"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v13_r02",
+      "type": "single_choice",
+      "prompt": "Why should uncertainty be identified?",
+      "options": [
+        "So the audience does not need to review supporting evidence",
+        "So the briefing can avoid mentioning outstanding actions",
+        "So uncertain information can be presented as confirmed",
+        "So the audience can distinguish known information from unresolved matters"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v13_g01",
+      "type": "single_choice",
+      "prompt": "The outstanding actions ___ at the end of the briefing.",
+      "options": [
+        "should be stated",
+        "should state",
+        "stating",
+        "are state"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v13_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO features of an effective technical briefing.",
+      "options": [
+        "Unexplained abbreviations throughout",
+        "Unverified conclusions",
+        "A clear current status",
+        "Specific outstanding actions"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v13_v01",
+      "type": "short_text",
+      "prompt": "A short spoken presentation that gives essential work information is a ___.",
+      "acceptedAnswers": [
+        "briefing",
+        "technical briefing"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v13_f01",
+      "type": "single_choice",
+      "prompt": "Your briefing includes an unresolved issue. What is the best way to present it?",
+      "options": [
+        "Leave it out so the briefing sounds confident.",
+        "State what is known, what remains uncertain and who will follow up.",
+        "Present the assumption as a confirmed fact.",
+        "Avoid identifying the next action."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v13_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of technical briefing delivery in a logical order.",
+      "options": [
+        "Identify outstanding actions and uncertainty",
+        "State the purpose of the briefing",
+        "Confirm the next step and responsible person",
+        "Present the current status and evidence"
+      ],
+      "correctOrder": [
+        "State the purpose of the briefing",
+        "Present the current status and evidence",
+        "Identify outstanding actions and uncertainty",
+        "Confirm the next step and responsible person"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v13_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words describing how to deliver a concise technical briefing. Include purpose, status, evidence, outstanding action and uncertainty.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Purpose and status — 2: opens with the briefing purpose and current status; 1: partial; 0: absent. (2) Evidence — 2: supports statements with relevant facts or records; 1: limited evidence; 0: unsupported claims. (3) Actions and uncertainty — 2: identifies outstanding action/responsibility and clearly states what is not yet known; 1: mentions some; 0: absent or presents uncertainty as fact. (4) English — 2: concise, well-organised briefing language and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v13_audio",
+    "readingPassageId": "c5s1v13_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

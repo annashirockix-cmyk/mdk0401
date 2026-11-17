@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c2_s1",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 1,
+  "title": "Basic English — Course 2, Semester 1 — Pilot Variant 3",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s1v03_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When should students arrive?",
+      "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
+      "options": [
+        "Fifteen minutes before the appointment",
+        "Thirty minutes before the appointment",
+        "At the exact appointment time",
+        "After the first interview"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v03_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. How long will each mock interview last?",
+      "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
+      "options": [
+        "About five minutes",
+        "About ten minutes",
+        "About fifteen minutes",
+        "About twenty minutes"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v03_r01",
+      "type": "single_choice",
+      "prompt": "During a practice interview, an employer asks Maya why she is interested in aircraft technology. She explains that she enjoys understanding how systems work and likes solving practical problems. She gives an example from a college assignment and then asks what qualities the company values in a trainee. The interviewer says her answer is clear and relevant. Reading 1. Why is Maya interested in aircraft technology?",
+      "options": [
+        "She wants to design aircraft",
+        "She is interested mainly in travelling",
+        "She enjoys systems and practical problem-solving",
+        "She prefers working alone rather than in a team."
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s1v03_r02",
+      "type": "single_choice",
+      "prompt": "What does Maya ask the interviewer?",
+      "options": [
+        "When the company was founded",
+        "How many hours a trainee works",
+        "Which qualifications are needed before applying?",
+        "Which qualities the company values in a trainee"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s1v03_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct indirect question: 'Could you tell me ___ the interview will last?'",
+      "options": [
+        "how long",
+        "how long does",
+        "how long will",
+        "how long is"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s1v03_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO good interview habits.",
+      "options": [
+        "Interrupt before the question ends",
+        "Invent experience you do not have",
+        "Listen carefully to each question",
+        "Give relevant examples"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v03_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A formal meeting where an employer asks questions is an ___.'",
+      "acceptedAnswers": [
+        "interview"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v03_f01",
+      "type": "single_choice",
+      "prompt": "You do not understand an interview question. What is a polite response?",
+      "options": [
+        "That is a bad question.",
+        "Could you repeat or rephrase the question, please?",
+        "I will not answer.",
+        "Ask somebody else."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s1v03_o01",
+      "type": "ordering",
+      "prompt": "Put the following steps for preparing for and reflecting on a job interview in a logical order.",
+      "options": [
+        "Reflect on the feedback",
+        "Prepare examples",
+        "Research the company",
+        "Attend the interview"
+      ],
+      "correctOrder": [
+        "Research the company",
+        "Prepare examples",
+        "Attend the interview",
+        "Reflect on the feedback"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s1v03_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words explaining how to prepare for a job or placement interview. Include researching the organisation, preparing examples and asking a relevant question.",
+      "rubric": "8 points total: the response includes researching the organisation, preparing examples and planning a relevant question (0–2); preparation steps are presented in a sensible sequence (0–2); advice and basic grammar are clear (0–2); interview/professional vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s1v3_audio",
+    "readingPassageId": "c2s1v3_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

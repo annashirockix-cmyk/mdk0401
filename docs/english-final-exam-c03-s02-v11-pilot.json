@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c3_s2",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 3, Semester 2 — Pilot Variant 11",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s2v11_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the revision-symbol lesson take place?",
+      "audioText": "The drawing office will review revision symbols on Thursday at ten fifteen. Students should meet in the design classroom and bring the assembly drawing from the course folder. The tutor will explain how revision letters, change notes and issue dates help readers identify the current drawing. Students will compare two printed versions and list the visible changes.",
+      "options": [
+        "On Thursday at ten fifteen",
+        "On Thursday at nine fifteen",
+        "On Friday at ten fifteen",
+        "On Thursday at eleven fifteen"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v11_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which drawing should students bring?",
+      "audioText": "The drawing office will review revision symbols on Thursday at ten fifteen. Students should meet in the design classroom and bring the assembly drawing from the course folder. The tutor will explain how revision letters, change notes and issue dates help readers identify the current drawing. Students will compare two printed versions and list the visible changes.",
+      "options": [
+        "The process chart from the course folder",
+        "The assembly drawing from the course folder",
+        "The maintenance schedule from the course folder",
+        "The inspection checklist from the course folder"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v11_r01",
+      "type": "single_choice",
+      "prompt": "A revised engineering drawing may include a new revision identifier, an updated issue date and a description of the changes. A reader should check these details before using dimensions or component references. If two copies appear different, the document register can help establish which version is current and approved. Old copies should be clearly identified to prevent accidental use. Reading 1. Which details may identify a revised drawing?",
+      "options": [
+        "The material grade, batch quantity and supplier address",
+        "The component weight, storage location and purchase price",
+        "Revision identifier, issue date and description of changes",
+        "The operator name, shift date and inspection result"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s2v11_r02",
+      "type": "single_choice",
+      "prompt": "Where can a reader check which version is current?",
+      "options": [
+        "In the training timetable",
+        "In the workshop noticeboard",
+        "In the supplier catalogue",
+        "In the document register"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s2v11_g01",
+      "type": "single_choice",
+      "prompt": "The latest drawing revision ___ in the document register.",
+      "options": [
+        "is identified",
+        "identify",
+        "identifying",
+        "are identified"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v11_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO document-control fields used to establish which drawing revision was issued and when.",
+      "options": [
+        "Author's department",
+        "Drawing scale",
+        "Revision identifier",
+        "Issue date"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v11_v01",
+      "type": "short_text",
+      "prompt": "A short description of changes made to a drawing is a revision ___.",
+      "acceptedAnswers": [
+        "note"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v11_f01",
+      "type": "single_choice",
+      "prompt": "Two drawing copies show different revision letters. What should you ask?",
+      "options": [
+        "I will use the one with more dimensions.",
+        "Could we check the document register to confirm the current approved revision?",
+        "The revision letter does not matter.",
+        "I will combine both drawings."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v11_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of technical drawing revisions in a logical order.",
+      "options": [
+        "Review the change note",
+        "Identify the drawing number",
+        "Confirm the current approved copy in the register",
+        "Check the revision identifier and issue date"
+      ],
+      "correctOrder": [
+        "Identify the drawing number",
+        "Check the revision identifier and issue date",
+        "Review the change note",
+        "Confirm the current approved copy in the register"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v11_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how revision identifiers, issue dates and change notes help control technical drawings.",
+      "rubric": "8 points total: revision identifiers, issue dates and change notes are all addressed (0–2); the response explains how they help identify the current approved drawing and distinguish it from superseded information (0–2); ideas are clearly organised with understandable grammar (0–2); drawing/revision-control vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s2v11_audio",
+    "readingPassageId": "c3s2v11_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

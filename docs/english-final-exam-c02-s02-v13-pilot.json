@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c2_s2",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 2, Semester 2 — Pilot Variant 13",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s2v13_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the joint session take place?",
+      "audioText": "The mathematics and science departments are holding a joint session on presenting research data. It will begin at eleven on Monday in the computer laboratory. Students will practise choosing suitable chart types and describing trends without exaggerating results. They should bring a small table of figures from a recent class project.",
+      "options": [
+        "In the computer laboratory",
+        "In the science laboratory",
+        "In the main lecture theatre",
+        "In the engineering workshop"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v13_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which classroom materials are needed for the session?",
+      "audioText": "The mathematics and science departments are holding a joint session on presenting research data. It will begin at eleven on Monday in the computer laboratory. Students will practise choosing suitable chart types and describing trends without exaggerating results. They should bring a small table of figures from a recent class project.",
+      "options": [
+        "A printed poster about the research topic",
+        "A small table of figures from a recent class project",
+        "A draft paragraph from the final report",
+        "A list of questions for the guest speaker"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v13_r01",
+      "type": "single_choice",
+      "prompt": "A student compared the monthly energy use of two college buildings. Building A used less electricity in most months, but the difference became smaller during the winter. The student included the number of rooms in each building because their sizes were not the same. She avoided saying that one building was more efficient until she could compare energy use per square metre. Reading 1. Why did the student include the number of rooms?",
+      "options": [
+        "Because the buildings had different electricity suppliers",
+        "Because the buildings had different electricity tariffs",
+        "Because the buildings were different sizes",
+        "Because the buildings were used at different times"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s2v13_r02",
+      "type": "single_choice",
+      "prompt": "Why did she avoid making an immediate conclusion about efficiency?",
+      "options": [
+        "She needed to compare the number of staff",
+        "She needed to compare total energy bills only",
+        "She needed to calculate the total floor area only",
+        "She needed to compare energy use per square metre"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s2v13_g01",
+      "type": "single_choice",
+      "prompt": "The figures should be compared ___ the size of each building.",
+      "options": [
+        "taking into account",
+        "take into account",
+        "took into account",
+        "to taking account"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v13_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO practices that improve the presentation of research data.",
+      "options": [
+        "Remove figures that do not support your opinion",
+        "Use a chart without labels",
+        "Include units and relevant context",
+        "Describe trends without overstating them"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v13_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "A visual display of numerical information is a ___.",
+      "acceptedAnswers": [
+        "chart",
+        "graph"
+      ]
+    },
+    {
+      "id": "c2s2v13_f01",
+      "type": "single_choice",
+      "prompt": "A chart shows a small increase, but the difference may not be significant. What should you write?",
+      "options": [
+        "The results prove a major change.",
+        "The data show a small increase; further analysis may be needed.",
+        "The chart is useless and should be deleted.",
+        "The increase is definitely caused by one factor."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v13_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of interpreting research data in a logical order.",
+      "options": [
+        "Describe the pattern and relevant context",
+        "Check the units and source of the data",
+        "State limitations before drawing conclusions",
+        "Choose a suitable way to display the figures"
+      ],
+      "correctOrder": [
+        "Check the units and source of the data",
+        "Choose a suitable way to display the figures",
+        "Describe the pattern and relevant context",
+        "State limitations before drawing conclusions"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v13_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how to present research data clearly and avoid misleading conclusions.",
+      "rubric": "8 points total: the response explains how research data should be presented clearly, using relevant labels/context (0–2); it identifies ways to avoid misleading conclusions, such as showing units/sample size, acknowledging uncertainty and not confusing correlation with causation (0–2); explanations are logically connected with understandable grammar (0–2); research/data vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s2v13_audio",
+    "readingPassageId": "c2s2v13_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

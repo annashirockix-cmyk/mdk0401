@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s1",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 4, Semester 1 — Pilot Variant 3",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s1v03_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the component workshop begin?",
+      "audioText": "The electronics department will hold a component identification workshop on Monday at nine forty-five. Students should bring the illustrated component chart from the course folder. The instructor will compare resistors, capacitors, diodes and transistors, focusing on their symbols and general functions. The workshop will use photographs and unpowered training boards.",
+      "options": [
+        "At nine forty-five on Monday",
+        "At eight forty-five on Monday",
+        "At nine forty-five on Tuesday",
+        "At ten forty-five on Monday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s1v03_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which chart should students bring?",
+      "audioText": "The electronics department will hold a component identification workshop on Monday at nine forty-five. Students should bring the illustrated component chart from the course folder. The instructor will compare resistors, capacitors, diodes and transistors, focusing on their symbols and general functions. The workshop will use photographs and unpowered training boards.",
+      "options": [
+        "The wiring diagram",
+        "The illustrated component chart",
+        "The parts list",
+        "The circuit-symbol sheet"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s1v03_r01",
+      "type": "single_choice",
+      "prompt": "A capacitor stores electrical energy in an electric field and can be used in several types of electronic circuit. A diode is designed to conduct mainly in one direction, while a transistor can be used for switching or amplification. Component appearance alone is not enough for identification; the printed code, circuit symbol and component documentation should also be checked. Reading 1. What can a capacitor do?",
+      "options": [
+        "Limit current in a circuit",
+        "Allow current to pass in one direction",
+        "Store electrical energy in an electric field",
+        "Create a magnetic field around a coil"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s1v03_r02",
+      "type": "single_choice",
+      "prompt": "Why is appearance alone insufficient for identification?",
+      "options": [
+        "Because similar components always have identical functions",
+        "Because the packaging may show a different delivery date",
+        "Because component colour is the only reliable identifier",
+        "Because the printed code, symbol and documentation should also be checked"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s1v03_g01",
+      "type": "single_choice",
+      "prompt": "A diode is designed ___ mainly in one direction.",
+      "options": [
+        "to conduct",
+        "conducting",
+        "conducts",
+        "to conducting"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s1v03_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO semiconductor or passive components commonly used in electronic circuits.",
+      "options": [
+        "Signal frequency",
+        "Supply voltage",
+        "Capacitor",
+        "Transistor"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v03_v01",
+      "type": "short_text",
+      "prompt": "A semiconductor component that can be used for switching or amplification is a ___.",
+      "acceptedAnswers": [
+        "transistor"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v03_f01",
+      "type": "single_choice",
+      "prompt": "You cannot identify a component from its appearance. What should you do?",
+      "options": [
+        "Choose the component that looks closest.",
+        "Check its printed code and compare it with the component documentation.",
+        "Use it without identification.",
+        "Remove the label."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s1v03_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of electronic components in a logical order.",
+      "options": [
+        "Compare the code and symbol with the reference",
+        "Observe the component and its label",
+        "Record the confirmed component name",
+        "Read the printed code"
+      ],
+      "correctOrder": [
+        "Observe the component and its label",
+        "Read the printed code",
+        "Compare the code and symbol with the reference",
+        "Record the confirmed component name"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s1v03_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing the general functions of a capacitor, diode and transistor. Explain why component identification should use documentation.",
+      "rubric": "8 points total: the general functions of a capacitor, diode and transistor are described accurately (0–2); the response explains why component identification should be confirmed from documentation rather than appearance alone (0–2); the explanation is clear with understandable grammar (0–2); component/electronics vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s1v03_audio",
+    "readingPassageId": "c4s1v03_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

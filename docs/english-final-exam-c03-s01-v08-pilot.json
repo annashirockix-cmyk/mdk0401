@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c3_s1",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 3, Semester 1 — Pilot Variant 8",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s1v08_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the label session take place?",
+      "audioText": "The electrical workshop will hold a short session on technical labels next Tuesday at two. Students will review common warning symbols, unit abbreviations and equipment identification plates. The instructor will provide a reference sheet at the start. Students should not remove labels from any training equipment during the exercise.",
+      "options": [
+        "Next Tuesday at two",
+        "Next Tuesday at one",
+        "Next Wednesday at two",
+        "Next Tuesday at three"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v08_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What will the instructor provide?",
+      "audioText": "The electrical workshop will hold a short session on technical labels next Tuesday at two. Students will review common warning symbols, unit abbreviations and equipment identification plates. The instructor will provide a reference sheet at the start. Students should not remove labels from any training equipment during the exercise.",
+      "options": [
+        "A parts catalogue",
+        "A reference sheet",
+        "A safety checklist",
+        "A dimension-conversion table"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v08_r01",
+      "type": "single_choice",
+      "prompt": "An equipment identification plate usually contains information such as the model, serial number and rated values. A technician copied the details into an inspection record and checked the units carefully. The technician also noted a warning symbol near the connector. If a label is damaged or unreadable, the information should be confirmed through the approved documentation rather than guessed. Reading 1. Which details may appear on an identification plate?",
+      "options": [
+        "The supplier address, delivery date and purchase order",
+        "The drawing revision, inspection date and operator name",
+        "The model, serial number and rated values",
+        "The component colour, storage location and batch quantity"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s1v08_r02",
+      "type": "single_choice",
+      "prompt": "What should happen if a label is unreadable?",
+      "options": [
+        "The information should be guessed from a similar item",
+        "The nearest readable label should be copied",
+        "A colleague should choose the most likely value",
+        "The information should be confirmed using approved documentation"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s1v08_g01",
+      "type": "single_choice",
+      "prompt": "The serial number ___ in the inspection record.",
+      "options": [
+        "was recorded",
+        "record",
+        "recording",
+        "were record"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v08_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO fields that uniquely identify a specific item of equipment.",
+      "options": [
+        "Rated operating temperature",
+        "Manufacturer's address",
+        "Model designation",
+        "Serial number"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v08_v01",
+      "type": "short_text",
+      "prompt": "A symbol or text that indicates a possible danger is a ___.",
+      "acceptedAnswers": [
+        "warning",
+        "warning sign",
+        "warning symbol"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v08_f01",
+      "type": "single_choice",
+      "prompt": "A warning symbol is unclear. What should you do?",
+      "options": [
+        "Guess what it means and continue.",
+        "Check the approved reference sheet or ask the instructor to confirm it.",
+        "Cover the symbol with tape.",
+        "Ignore the symbol because it is small."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v08_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of technical labels and symbols in a logical order.",
+      "options": [
+        "Check units and warning symbols",
+        "Locate the identification plate",
+        "Record the information accurately",
+        "Read the model and serial details"
+      ],
+      "correctOrder": [
+        "Locate the identification plate",
+        "Read the model and serial details",
+        "Check units and warning symbols",
+        "Record the information accurately"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v08_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing how technical labels and symbols help people identify equipment and understand important information.",
+      "rubric": "8 points total: the response explains how labels/symbols help identify equipment and communicate important information (0–2); it refers to checking the relevant legend/key or approved information rather than guessing an unfamiliar symbol (0–2); ideas are clearly connected with understandable grammar (0–2); label/symbol/equipment vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s1v08_audio",
+    "readingPassageId": "c3s1v08_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

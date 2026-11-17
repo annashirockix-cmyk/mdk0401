@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 7",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v07_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the shift-handover lesson take place?",
+      "audioText": "The maintenance operations tutor will discuss shift handover on Friday at nine fifteen. Students should bring the open-task list and the sample technical log extract. The lesson will focus on incomplete work, equipment status and clear responsibility for the next shift. Students will compare a brief note with a complete handover record.",
+      "options": [
+        "At nine fifteen on Friday",
+        "At eight fifteen on Friday",
+        "At nine fifteen on Thursday",
+        "At ten fifteen on Friday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v07_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which two records should students bring?",
+      "audioText": "The maintenance operations tutor will discuss shift handover on Friday at nine fifteen. Students should bring the open-task list and the sample technical log extract. The lesson will focus on incomplete work, equipment status and clear responsibility for the next shift. Students will compare a brief note with a complete handover record.",
+      "options": [
+        "The completed-task list and work order",
+        "The open-task list and technical log extract",
+        "The defect report and parts request",
+        "The shift roster and training record"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v07_r01",
+      "type": "single_choice",
+      "prompt": "A maintenance shift handover transfers current work information between teams. It should identify open tasks, completed checks, equipment or aircraft status and any restrictions. The outgoing team should state what remains outstanding and who is responsible for follow-up. A handover is not a substitute for the technical log or required sign-off; it helps the next team understand the current position. Reading 1. Which information should a handover identify?",
+      "options": [
+        "Supplier prices, delivery forecasts and purchase approvals",
+        "Staff leave dates, training preferences and annual objectives",
+        "Open tasks, completed checks, equipment status and restrictions",
+        "Room bookings, meeting times and visitor contact details"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v07_r02",
+      "type": "single_choice",
+      "prompt": "What does a handover not replace?",
+      "options": [
+        "The previous shift's personal checklist",
+        "The equipment colour or storage location",
+        "The team's informal meeting notes",
+        "The technical log or required sign-off"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v07_g01",
+      "type": "single_choice",
+      "prompt": "Outstanding tasks ___ clearly during shift handover.",
+      "options": [
+        "should be identified",
+        "should identifying",
+        "identifies",
+        "is identify"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v07_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO details that allow the next maintenance shift to continue work safely and accountably.",
+      "options": [
+        "A technician's preferred work pattern",
+        "A general summary of completed routine tasks",
+        "Open tasks and restrictions",
+        "Responsibility for follow-up"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v07_v01",
+      "type": "short_text",
+      "prompt": "The transfer of work information between teams at the end of a shift is a shift ___.",
+      "acceptedAnswers": [
+        "handover"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v07_f01",
+      "type": "single_choice",
+      "prompt": "A task remains incomplete at the end of the shift. What should the handover say?",
+      "options": [
+        "The task is finished; no further details are needed.",
+        "The task remains open; the outstanding action and responsible team are identified in the handover.",
+        "The next shift can decide what was left incomplete.",
+        "The task is complete if most of the work has been done."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v07_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of maintenance shift handover in a logical order.",
+      "options": [
+        "Assign or confirm follow-up responsibility",
+        "Review current task status",
+        "Transfer the information to the next shift",
+        "Identify incomplete work and restrictions"
+      ],
+      "correctOrder": [
+        "Review current task status",
+        "Identify incomplete work and restrictions",
+        "Assign or confirm follow-up responsibility",
+        "Transfer the information to the next shift"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v07_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining what a maintenance shift handover should contain and why it does not replace required technical records or sign-off.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Work status — 2: identifies completed, incomplete and outstanding work accurately; 1: partial; 0: unclear. (2) Handover information — 2: includes relevant defects, restrictions, open actions and responsible follow-up; 1: includes some; 0: absent. (3) Records and accountability — 2: explains that formal technical records and required sign-off remain necessary and are not replaced by verbal handover; 1: partial; 0: absent or incorrect. (4) English — 2: concise, logically organised handover vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v07_audio",
+    "readingPassageId": "c5s1v07_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

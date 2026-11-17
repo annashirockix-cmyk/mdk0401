@@ -24,60 +24,138 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit1", "Unit 1", "About Myself",
             [
               lec("1.1", "Phonetics and Pronunciation", `
-                <h3>1. Основные сведения об английской фонетике</h3>
-                <p>В современном английском языке существует огромное несоответствие между написанием и произношением слов. Это связано с тем, что английская орфография не подвергалась существенным изменениям и отражает произношение, существовавшее несколько веков назад. Например: <i>through</i> [θru:] — 7 букв, 3 звука; <i>thought</i> [θɔ:t] — 7 букв, 3 звука.</p>
-                <p>Количество звуков в языке превышает число букв: 26 букв алфавита должны обозначать 44 звука. Одна и та же буква может читаться по-разному. Гласные подразделяются на долгие и краткие. Долгие произносятся примерно в полтора раза дольше, чем краткие. Английские долгие и краткие — это разные звуки, несоответствие этого правила приводит к искажению смысла слова.</p>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Буква</th><th style="border:1px solid var(--border); padding:5px;">Открытый слог</th><th style="border:1px solid var(--border); padding:5px;">Закрытый слог</th><th style="border:1px solid var(--border); padding:5px;">Гласная + r</th><th style="border:1px solid var(--border); padding:5px;">Гласная + r + гласная</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">A</td><td style="border:1px solid var(--border); padding:5px;">[ei] table</td><td style="border:1px solid var(--border); padding:5px;">[æ] bank</td><td style="border:1px solid var(--border); padding:5px;">[ɑ:] car</td><td style="border:1px solid var(--border); padding:5px;">[εə] care</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">O</td><td style="border:1px solid var(--border); padding:5px;">[əu] no</td><td style="border:1px solid var(--border); padding:5px;">[ɔ] hot</td><td style="border:1px solid var(--border); padding:5px;">[ɔ:] cord</td><td style="border:1px solid var(--border); padding:5px;">[ɔ:] more</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">I</td><td style="border:1px solid var(--border); padding:5px;">[ai] fine</td><td style="border:1px solid var(--border); padding:5px;">[i] list</td><td style="border:1px solid var(--border); padding:5px;">[ə:] circuit</td><td style="border:1px solid var(--border); padding:5px;">[aiə] Irish</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">E</td><td style="border:1px solid var(--border); padding:5px;">[i:] bee</td><td style="border:1px solid var(--border); padding:5px;">[e] get</td><td style="border:1px solid var(--border); padding:5px;">[ə:] terminal</td><td style="border:1px solid var(--border); padding:5px;">[iə] beer</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">U</td><td style="border:1px solid var(--border); padding:5px;">[ju:] mute</td><td style="border:1px solid var(--border); padding:5px;">[ʌ] cut</td><td style="border:1px solid var(--border); padding:5px;">[ə:] turn</td><td style="border:1px solid var(--border); padding:5px;">[juə] pure</td></tr>
-                </table>
-                <p><b>Правила чтения согласных:</b><br>
-                <b>s</b> — [s] в начале слова, перед согласными и после глухих; [z] после гласных и звонких согласных.<br>
-                <b>c</b> — [s] перед e, i, y; [k] в остальных случаях.<br>
-                <b>g</b> — [dʒ] перед e, i, y (кроме give, get); [g] в остальных случаях.<br>
-                <b>th</b> — [ð], [θ]. Звуки часто подменяются русскими [з], [с], [ф], что приводит к изменению смысла.</p>
-                <p>Английские согласные никогда не смягчаются (особенно перед e: let) и на конце слова никогда не оглушаются. Несоблюдение этого правила может привести к искажению смысла слова: <i>back</i> [bæk] — спина, <i>bag</i> [bæg] — сумка.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — освоить базовые особенности английского произношения и научиться пользоваться фонетической транскрипцией. После занятия студент сможет различать несколько важных пар звуков, находить ударный слог и читать знакомые слова по транскрипции.</p>
+<h3>1. Буква и звук — не одно и то же</h3>
+<p>В английском языке 26 букв, но значительно больше отдельных звуков. Одна буква может передавать разные звуки, а один звук может записываться разными буквосочетаниями. Поэтому произношение нельзя надёжно определить только по написанию: используйте словарь с транскрипцией и аудиопримером.</p>
+<p>Фонетическая запись обычно заключается в квадратные скобки [ ] или косые скобки / /. В учебных словарях встречаются оба способа. Ниже используется широкая IPA-транскрипция; произношение может немного различаться в британском и американском вариантах.</p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Слово</th><th>Транскрипция</th><th>Значение</th></tr>
+<tr><td>ship</td><td>/ʃɪp/</td><td>корабль</td></tr>
+<tr><td>sheep</td><td>/ʃiːp/</td><td>овца</td></tr>
+<tr><td>live</td><td>/lɪv/</td><td>жить</td></tr>
+<tr><td>leave</td><td>/liːv/</td><td>уходить, оставлять</td></tr>
+<tr><td>full</td><td>/fʊl/</td><td>полный</td></tr>
+<tr><td>fool</td><td>/fuːl/</td><td>глупец</td></tr>
+</table>
+<p>Долгота гласного обозначается знаком /ː/. Важно не просто тянуть звук, а сохранять правильное качество гласного: /ɪ/ и /iː/ — разные фонемы, и замена одной другой может изменить значение слова.</p>
+<h3>2. Важные гласные и согласные</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Звук</th><th>Пример</th><th>Подсказка</th></tr>
+<tr><td>/ɪ/ — /iː/</td><td>ship — sheep</td><td>Краткий /ɪ/ не превращайте в русский «и»; /iː/ произносится дольше и напряжённее.</td></tr>
+<tr><td>/ʊ/ — /uː/</td><td>full — fool</td><td>Следите и за качеством, и за длительностью.</td></tr>
+<tr><td>/æ/</td><td>cat, bag</td><td>Челюсть открыта шире, чем для русского «э».</td></tr>
+<tr><td>/ʌ/</td><td>cup, bus</td><td>Краткий центральный гласный, не заменяйте его автоматически русским «а».</td></tr>
+<tr><td>/θ/</td><td>think, three</td><td>Кончик языка слегка между зубами; голос не включается.</td></tr>
+<tr><td>/ð/</td><td>this, they</td><td>Положение языка похоже, но голос включён.</td></tr>
+<tr><td>/w/</td><td>we, work</td><td>Губы округлены; не заменяйте звук русским /в/.</td></tr>
+<tr><td>/ŋ/</td><td>sing, working</td><td>Заднеязычный носовой звук; после него не добавляйте отдельный /g/ в sing.</td></tr>
+</table>
+<h3>3. Ударение и ритм</h3>
+<p>В многосложном слове один слог обычно выделяется сильнее: <b>TA</b>ble /ˈteɪ.bəl/, a<b>BOUT</b> /əˈbaʊt/. Знак /ˈ/ передаёт основное ударение. В английской фразе смысловые слова обычно звучат заметнее, а служебные слова часто редуцируются: <i>I can DO it.</i> В нейтральном произношении can может звучать как /kən/, но под ударением — /kæn/.</p>
+<p>Интонация помогает показать тип высказывания и отношение говорящего. Вопросы с вопросительным словом часто имеют нисходящую интонацию: <i>Where do you study?</i> В простом вопросе yes/no часто встречается восходящая интонация: <i>Do you study English?</i> Это общие модели, а не жёсткие правила для каждой ситуации.</p>
+<h3>4. Практика произношения</h3>
+<p><b>Задание A.</b> Прочитайте пары вслух и объясните, какой звук различается: ship/sheep; live/leave; full/fool; thin/then; vest/west.</p>
+<p><b>Задание B.</b> Найдите ударный слог: table, about, engineer, information, laboratory. Сверьте транскрипцию со словарём.</p>
+<p><b>Задание C.</b> Прочитайте фразы, выделяя смысловое слово: I study ENGLISH. / I study English at COLLEGE. / I study English every WEEK.</p>
+<p><b>Задание D.</b> Запишите транскрипцию пяти знакомых слов по словарю и отметьте основной ударный слог.</p>
+<h3>5. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>Сколько букв в английском алфавите? — 26.</li>
+<li>Что обозначает знак /ː/? — Долготу гласного.</li>
+<li>Чем отличаются /θ/ и /ð/? — При /ð/ голосовые связки вибрируют, при /θ/ — нет.</li>
+<li>В каком слове звук /iː/: ship или sheep? — sheep.</li>
+<li>Какой звук в начале слова work? — /w/.</li>
+</ol>
+<p><b>Самостоятельная работа:</b> выберите 8 слов из текущего учебного текста, найдите их транскрипцию и аудиопроизношение в словаре, отметьте ударение и подготовьте чтение вслух. Не записывайте русскими буквами точную транскрипцию: используйте IPA и аудиообразец.</p>
+`),
               lec("1.2", "Grammar: Pronouns, Verbs, Modals", `
-                <h3>1. Personal Pronouns (Личные местоимения)</h3>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Личные (Им.)</th><th style="border:1px solid var(--border); padding:5px;">Объектные</th><th style="border:1px solid var(--border); padding:5px;">Притяжательные (простая)</th><th style="border:1px solid var(--border); padding:5px;">Притяжательные (абсолютная)</th><th style="border:1px solid var(--border); padding:5px;">Возвратные</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">I</td><td style="border:1px solid var(--border); padding:5px;">me</td><td style="border:1px solid var(--border); padding:5px;">my</td><td style="border:1px solid var(--border); padding:5px;">mine</td><td style="border:1px solid var(--border); padding:5px;">myself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">you</td><td style="border:1px solid var(--border); padding:5px;">you</td><td style="border:1px solid var(--border); padding:5px;">your</td><td style="border:1px solid var(--border); padding:5px;">yours</td><td style="border:1px solid var(--border); padding:5px;">yourself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">he</td><td style="border:1px solid var(--border); padding:5px;">him</td><td style="border:1px solid var(--border); padding:5px;">his</td><td style="border:1px solid var(--border); padding:5px;">his</td><td style="border:1px solid var(--border); padding:5px;">himself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">she</td><td style="border:1px solid var(--border); padding:5px;">her</td><td style="border:1px solid var(--border); padding:5px;">her</td><td style="border:1px solid var(--border); padding:5px;">hers</td><td style="border:1px solid var(--border); padding:5px;">herself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">it</td><td style="border:1px solid var(--border); padding:5px;">it</td><td style="border:1px solid var(--border); padding:5px;">its</td><td style="border:1px solid var(--border); padding:5px;">its</td><td style="border:1px solid var(--border); padding:5px;">itself</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">we</td><td style="border:1px solid var(--border); padding:5px;">us</td><td style="border:1px solid var(--border); padding:5px;">our</td><td style="border:1px solid var(--border); padding:5px;">ours</td><td style="border:1px solid var(--border); padding:5px;">ourselves</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">they</td><td style="border:1px solid var(--border); padding:5px;">them</td><td style="border:1px solid var(--border); padding:5px;">their</td><td style="border:1px solid var(--border); padding:5px;">theirs</td><td style="border:1px solid var(--border); padding:5px;">themselves</td></tr>
-                </table>
-                <h3>2. Multifunctional verbs</h3>
-                <p><b>To be:</b> (am, is, are, was, were, will be). Смысловой (He is a student), Вспомогательный (He is reading now), Модальный (He is to study).</p>
-                <p><b>To have:</b> (have, has, had). Смысловой (I have a lot of free time), Вспомогательный (I have done my homework), Модальный (I have to work).</p>
-                <p><b>To do:</b> (do, does, did). Смысловой (I do my homework), Вспомогательный (Do you go to school?), Усилительный (I do know this man).</p>
-                <h3>3. Modal Verbs</h3>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Глагол</th><th style="border:1px solid var(--border); padding:5px;">Значение</th><th style="border:1px solid var(--border); padding:5px;">Перевод</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">can</td><td style="border:1px solid var(--border); padding:5px;">физическая возможность, способность</td><td style="border:1px solid var(--border); padding:5px;">могу, умею</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">may</td><td style="border:1px solid var(--border); padding:5px;">разрешение</td><td style="border:1px solid var(--border); padding:5px;">можно</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">must</td><td style="border:1px solid var(--border); padding:5px;">долженствование</td><td style="border:1px solid var(--border); padding:5px;">должен</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">should</td><td style="border:1px solid var(--border); padding:5px;">мягкий совет, рекомендация</td><td style="border:1px solid var(--border); padding:5px;">следует, хорошо бы</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">ought to</td><td style="border:1px solid var(--border); padding:5px;">настойчивый совет</td><td style="border:1px solid var(--border); padding:5px;">обязательно следует</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">need</td><td style="border:1px solid var(--border); padding:5px;">необходимость</td><td style="border:1px solid var(--border); padding:5px;">необходимо</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">to be to</td><td style="border:1px solid var(--border); padding:5px;">долженствование по плану</td><td style="border:1px solid var(--border); padding:5px;">должен, запланировано</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">to have to</td><td style="border:1px solid var(--border); padding:5px;">долженствование как вынужденная необходимость</td><td style="border:1px solid var(--border); padding:5px;">должен, вынужден</td></tr>
-                </table>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — научиться выбирать местоимения по их функции в предложении, различать основные значения глаголов be, have и do и использовать модальные глаголы в простых ситуациях учёбы и повседневной жизни.</p>
+<h3>1. Личные и объектные местоимения</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Подлежащее</th><th>Объектная форма</th><th>Пример</th></tr>
+<tr><td>I</td><td>me</td><td>She helps me.</td></tr><tr><td>you</td><td>you</td><td>I know you.</td></tr><tr><td>he</td><td>him</td><td>We see him.</td></tr><tr><td>she</td><td>her</td><td>They call her.</td></tr><tr><td>it</td><td>it</td><td>I use it.</td></tr><tr><td>we</td><td>us</td><td>The teacher helps us.</td></tr><tr><td>they</td><td>them</td><td>I meet them.</td></tr>
+</table>
+<p>Форма подлежащего стоит перед сказуемым: <i>They study English.</i> Объектная форма обычно стоит после глагола или предлога: <i>The teacher speaks to them.</i> Не говорите <i>Me am a student</i>: правильно <i>I am a student</i>.</p>
+<h3>2. Притяжательные и возвратные формы</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Подлежащее</th><th>Перед существительным</th><th>Самостоятельная форма</th><th>Возвратная форма</th></tr>
+<tr><td>I</td><td>my</td><td>mine</td><td>myself</td></tr><tr><td>you</td><td>your</td><td>yours</td><td>yourself</td></tr><tr><td>he</td><td>his</td><td>his</td><td>himself</td></tr><tr><td>she</td><td>her</td><td>hers</td><td>herself</td></tr><tr><td>it</td><td>its</td><td>обычно не используется отдельно</td><td>itself</td></tr><tr><td>we</td><td>our</td><td>ours</td><td>ourselves</td></tr><tr><td>they</td><td>their</td><td>theirs</td><td>themselves</td></tr>
+</table>
+<p>Сравните: <i>This is my notebook.</i> — Это моя тетрадь. <i>This notebook is mine.</i> — Эта тетрадь моя. Притяжательное местоимение перед существительным не заменяет артикль: говорим <i>my book</i>, а не <i>the my book</i>.</p>
+<h3>3. Глаголы be, have и do</h3>
+<p><b>Be</b> связывает подлежащее с характеристикой, профессией, местом или состоянием: <i>I am a student. The workshop is large. They are ready.</i> Формы настоящего времени: I am; he/she/it is; you/we/they are. Вопрос строится перестановкой: <i>Are you ready?</i> Отрицание: <i>She is not late.</i></p>
+<p><b>Have</b> выражает обладание и входит в устойчивые конструкции: <i>We have a lesson. She has a timetable. I have to study.</i> В Present Simple у he/she/it используется has. В конструкции have to выражается необходимость: <i>I have to submit the task.</i></p>
+<p><b>Do</b> — смысловой глагол в выражениях <i>do homework</i>, <i>do an exercise</i>; вспомогательный глагол для вопросов и отрицаний в Present Simple: <i>Do you study? He does not work here.</i> После does смысловой глагол остаётся в начальной форме: <i>Does she study?</i>, не <i>Does she studies?</i></p>
+<h3>4. Модальные глаголы</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Форма</th><th>Основное значение</th><th>Пример</th></tr>
+<tr><td>can / can't</td><td>умение, возможность</td><td>I can read technical texts.</td></tr>
+<tr><td>may</td><td>разрешение или вероятность</td><td>May I ask a question?</td></tr>
+<tr><td>must</td><td>сильная обязанность, правило</td><td>Students must follow the safety rules.</td></tr>
+<tr><td>have to</td><td>необходимость, часто внешнее требование</td><td>We have to wear the required PPE.</td></tr>
+<tr><td>should</td><td>совет, рекомендация</td><td>You should check the instructions.</td></tr>
+<tr><td>need to</td><td>необходимость</td><td>You need to save the file.</td></tr>
+<tr><td>mustn't</td><td>запрет</td><td>You mustn't use a damaged cable.</td></tr>
+<tr><td>don't have to</td><td>отсутствие необходимости</td><td>You don't have to print the file.</td></tr>
+</table>
+<p>Важно: <i>mustn't</i> означает «нельзя», а <i>don't have to</i> — «не обязательно». После can, may, must и should используется глагол без to: <i>She can speak English.</i> Исключение — конструкции <i>have to</i> и <i>need to</i>.</p>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите местоимение.</b> 1) The teacher helps (we/us). 2) This is (my/mine) dictionary. 3) The blue folder is (their/theirs). 4) Anna and I — (we/us) study together.</p>
+<p><b>Задание B. Исправьте ошибки.</b> 1) He are a student. 2) Does she works here? 3) This is the my book. 4) They can to read the text.</p>
+<p><b>Задание C. Выберите значение.</b> 1) You mustn't enter this area. 2) You don't have to come early. 3) You should revise the words. Объясните разницу между запретом, отсутствием необходимости и советом.</p>
+<p><b>Задание D. Составьте 6 предложений о своей учёбе: два с be, одно с have, одно с do, два с модальными глаголами.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>Объектная форма от we — us.</li><li>Перед существительным используется my; самостоятельно — mine.</li><li>Правильно: He is a student.</li><li>Правильно: Does she work here?</li><li>Правильно: This is my book.</li><li>Правильно: They can read the text.</li><li>mustn't — запрет; don't have to — нет необходимости; should — совет.</li>
+</ol>
+<p><b>Самостоятельная работа:</b> составьте личную памятку из 10 предложений о колледже, используя не менее четырёх типов местоимений, be/have/do и три модальных значения. Подчеркните местоимения и обведите модальные конструкции.</p>
+`),
               lec("1.3", "Reading: Speak about yourself", `
-                <h3>Text: About Myself</h3>
-                <p>My name is Oleg. I am 25. I was born and live in Nizhnekamsk. I am married (not married yet) and live together with my wife and a daughter (a son, with my parents, with my brother). Our flat isn’t large but comfortable (cozy, well-furnished, small, inconvenient). It is a three-room flat on the second floor of the five-storeyed house.</p>
-                <p>I do not work now but I am busy all day long. Every day I have a lot of work to do, so I have to get up very early and usually go to bed late in the evening. I must devote enough time to my studies because I am a student. I think further education will help me get a new profession (to make a career, to get a profitable job). That’s why I decided to enter Nizhnekamsk Institute of Chemical Technology. I study at the full-time department. Twice a year I have to pass the examinations some of which are rather difficult, especially because I can’t (don’t want to) afford much time to study thoroughly all year round. But I am going to work hard to get a diploma. And in two years I will become a process engineer.</p>
-                <p>When the studying hours are over, I usually go to the sport center. I do take care about my health and about my future that’s why I do not smoke and do my best to go in for sport at least twice a week.</p>
-                <p>I am used to spend my weekends with my family (my friends, alone). Sometimes we go to the countryside, play different games, cook tasty things (meat, sausages, vegetables, toasts) or simply walk. When the weather is bad we stay at home, watch TV or listen to music and chatter. Reading the English books in the original is also my hobby.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — научиться представлять себя на английском в учебной и профессиональной среде, выбирать релевантную информацию и строить связный рассказ. Личные сведения добровольны: студент может использовать вымышленный профиль и не обязан сообщать семейное положение, адрес, возраст или другие частные данные.</p>
+<h3>1. Reading: A College Student</h3>
+<p><b>Read the text.</b></p>
+<p>My name is Alex, and I am a first-year college student. I study engineering and attend English classes twice a week. My college timetable includes general subjects and practical modules. I enjoy learning how machines and technical systems work. I usually prepare for classes in the evening and make short vocabulary notes. When I do not understand an instruction, I ask the teacher to explain it. In the future, I would like to work in an engineering team and continue developing my professional skills.</p>
+<p>At weekends, I sometimes meet friends, read, listen to music or go for a walk. I also try to find time for rest. Learning a profession takes effort, but clear goals and regular practice help me make progress.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Пример</th></tr>
+<tr><td>first-year student</td><td>студент первого курса</td><td>I am a first-year student.</td></tr>
+<tr><td>timetable</td><td>расписание</td><td>My timetable changes every term.</td></tr>
+<tr><td>practical module</td><td>практический модуль</td><td>We have a practical module today.</td></tr>
+<tr><td>professional skills</td><td>профессиональные навыки</td><td>I want to develop my professional skills.</td></tr>
+<tr><td>to prepare for</td><td>готовиться к</td><td>I prepare for my English class.</td></tr>
+<tr><td>to make progress</td><td>делать успехи</td><td>Regular practice helps me make progress.</td></tr>
+<tr><td>in the future</td><td>в будущем</td><td>In the future, I would like to work in a team.</td></tr>
+</table>
+<h3>3. Language focus: a short personal introduction</h3>
+<p>Для рассказа о себе удобно использовать несколько смысловых блоков:</p>
+<ol>
+<li><b>Basic information:</b> My name is… / I am a student at…</li>
+<li><b>Studies:</b> I study… / My course includes… / I am interested in…</li>
+<li><b>Skills and interests:</b> I can… / I enjoy… / I am learning to…</li>
+<li><b>Plans:</b> I would like to… / My goal is to…</li>
+</ol>
+<p>Present Simple описывает факты и регулярные действия: <i>I study engineering. I attend classes twice a week.</i> Конструкция <i>would like to + verb</i> выражает вежливое желание или план: <i>I would like to improve my English.</i> Не используйте <i>I am used to spend</i> для значения «я обычно провожу»: скажите <i>I usually spend…</i> или <i>I am used to spending…</i> (я привык проводить…).</p>
+<h3>4. Reading comprehension</h3>
+<ol>
+<li>What does Alex study?</li><li>How often does Alex attend English classes?</li><li>When does Alex usually prepare for classes?</li><li>What does Alex do when an instruction is unclear?</li><li>Name two activities Alex sometimes does at weekends.</li><li>What would Alex like to do in the future?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. True or False.</b> 1) Alex is a first-year student. 2) Alex studies medicine. 3) Alex makes vocabulary notes. 4) Alex never asks questions. 5) Alex wants to develop professional skills.</p>
+<p><b>Задание B. Заполните пропуски:</b> 1) I ___ a college student. 2) I ___ engineering. 3) I usually ___ for classes in the evening. 4) I would like ___ improve my English.</p>
+<p><b>Задание C. Соберите рассказ из четырёх частей:</b> information about studies; interests; current skills; future plans. Используйте связки <i>also, because, usually, in the future</i>.</p>
+<p><b>Задание D. Speaking:</b> подготовьте рассказ на 60–90 секунд. Можно использовать своё имя и безопасные сведения или вымышленный профиль. Не требуется сообщать адрес, семейное положение, доход или иные частные данные.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>Alex studies engineering.</li><li>Twice a week.</li><li>In the evening.</li><li>Alex asks the teacher to explain it.</li><li>Any two: meets friends, reads, listens to music, goes for a walk.</li><li>Alex would like to work in an engineering team and develop professional skills.</li>
+<li>True / False / True / False / True.</li>
+<li>am; study; prepare; to.</li>
+</ol>
+<p><b>Критерии устного ответа (8 баллов):</b> содержание и последовательность — 0–2; уместная лексика — 0–2; грамматическая понятность — 0–2; произношение и темп, позволяющие понять сообщение, — 0–2. Акцент сам по себе не снижает оценку, если речь понятна.</p>
+<p><b>Самостоятельная работа:</b> напишите профиль на 80–100 слов по четырём блокам. Выделите пять глаголов в Present Simple и две конструкции для выражения планов.</p>
+`)
             ],
             [], // Practicals
             [], // SelfWork
@@ -104,31 +182,138 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit2", "Unit 2", "Nizhnekamsk",
             [
               lec("2.1", "Grammar: Word Formation & Chain of Definitions", `
-                <h3>1. Word Formation (Словообразование)</h3>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Суффиксы существительных</th><th style="border:1px solid var(--border); padding:5px;">Суффиксы прилагательных</th><th style="border:1px solid var(--border); padding:5px;">Приставки с отрицанием</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">-er (worker), -or (insulator), -ment (development), -ness (happiness), -ity (equality), -ion (union)</td><td style="border:1px solid var(--border); padding:5px;">-able (comfortable), -al (formal), -ant (important), -ful (peaceful), -ive (effective), -ous (dangerous)</td><td style="border:1px solid var(--border); padding:5px;">un- (unimportant), in- (inaccuracy), im- (impossible), il- (illegal), ir- (irresponsible)</td></tr>
-                </table>
-                <h3>2. «Цепочка определений» (Chain of Definitions)</h3>
-                <p>В английском языке часто используются беспредложные словосочетания, состоящие из нескольких существительных. Главным словом является последнее, а все стоящие слева — определениями к нему. Перевод следует начинать с последнего слова.</p>
-                <p><i>state border</i> — государственная граница<br>
-                <i>remote control system</i> — система дистанционного управления</p>
-                <h3>3. Порядок слов в предложении</h3>
-                <p>Прямой порядок: Подлежащее → Сказуемое → Дополнение → Обстоятельство.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>На занятии изучаются основные модели словообразования и длинные именные группы. После занятия студент сможет определить часть речи по распространённым суффиксам, распознать отрицательное значение некоторых приставок, выделить главное слово в цепочке существительных и перевести словосочетание с учётом контекста.</p>
+<h3>1. Словообразование: основа, приставка и суффикс</h3>
+<p>Слово может состоять из основы и дополнительных морфем. Приставка обычно меняет значение слова, суффикс часто меняет часть речи или оттенок значения. Это полезная подсказка, но не абсолютное правило: значение незнакомого слова всегда проверяйте по контексту и словарю.</p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Модель</th><th>Примеры</th><th>Значение / функция</th></tr>
+<tr><td>-er / -or</td><td>teach → teacher; operate → operator</td><td>человек, выполняющий действие</td></tr>
+<tr><td>-ment</td><td>develop → development</td><td>процесс или результат</td></tr>
+<tr><td>-tion / -sion</td><td>inform → information; decide → decision</td><td>действие, процесс или понятие</td></tr>
+<tr><td>-ness</td><td>kind → kindness</td><td>качество или состояние</td></tr>
+<tr><td>-ity</td><td>active → activity</td><td>свойство или состояние</td></tr>
+<tr><td>-ful / -less</td><td>use → useful / useless</td><td>наличие / отсутствие признака</td></tr>
+<tr><td>-able / -ible</td><td>read → readable; access → accessible</td><td>возможность или пригодность</td></tr>
+<tr><td>un- / in- / im- / il- / ir-</td><td>clear → unclear; correct → incorrect; possible → impossible</td><td>отрицание или противоположное значение</td></tr>
+</table>
+<p>Не добавляйте приставку механически: например, не каждое слово образует отрицание с un-. Проверяйте готовую форму: <i>unusual, incorrect, impossible, illegal, irregular</i>.</p>
+<h3>2. Семейства слов</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Глагол</th><th>Существительное</th><th>Прилагательное</th><th>Пример</th></tr>
+<tr><td>educate</td><td>education</td><td>educational</td><td>education system</td></tr>
+<tr><td>employ</td><td>employment</td><td>employed</td><td>employment record</td></tr>
+<tr><td>measure</td><td>measurement</td><td>measurable</td><td>measurement result</td></tr>
+<tr><td>inform</td><td>information</td><td>informative</td><td>information source</td></tr>
+<tr><td>develop</td><td>development</td><td>developed</td><td>professional development</td></tr>
+</table>
+<p>Окончание помогает предположить часть речи: -tion/-ment часто образуют существительные, -al/-ful/-able — прилагательные, -ly — многие наречия. Но есть исключения: <i>friendly</i> — прилагательное, а не наречие.</p>
+<h3>3. Цепочки существительных (noun compounds)</h3>
+<p>В английском несколько существительных могут стоять рядом без предлога: <i>college library card</i>, <i>machine tool operator</i>, <i>student progress report</i>. Обычно последнее слово является главным, а предыдущие уточняют его. Определите главное слово, затем двигайтесь слева направо, задавая вопрос «какой? для чего? чей?». Перевод не всегда дословный: учитывайте устойчивые сочетания и контекст.</p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Сочетание</th><th>Главное слово</th><th>Возможный перевод</th></tr>
+<tr><td>college library card</td><td>card</td><td>карта читателя библиотеки колледжа</td></tr>
+<tr><td>machine tool operator</td><td>operator</td><td>оператор станка</td></tr>
+<tr><td>student progress report</td><td>report</td><td>отчёт об успеваемости студента</td></tr>
+<tr><td>computer safety rules</td><td>rules</td><td>правила безопасности при работе с компьютером</td></tr>
+</table>
+<h3>4. Порядок слов в предложении</h3>
+<p>Базовая нейтральная модель: <b>Subject + Verb + Object + Place + Time</b>: <i>Students study English in the classroom every Monday.</i> Вопросы и отрицания в Present Simple требуют do/does, если в предложении нет be или другого вспомогательного глагола: <i>Does the lesson start at nine?</i> / <i>The lesson does not start at ten.</i></p>
+<p>Прилагательное обычно стоит перед существительным: <i>a new computer</i>. Наречия частотности обычно стоят перед смысловым глаголом, но после be: <i>We usually study here.</i> / <i>She is always punctual.</i></p>
+<h3>5. Практика</h3>
+<p><b>Задание A. Определите часть речи:</b> development, useful, operator, impossible, carefully, information.</p>
+<p><b>Задание B. Образуйте слово:</b> 1) educate → noun; 2) measure → noun; 3) correct → negative adjective; 4) use → adjective meaning “can be used”; 5) employ → noun.</p>
+<p><b>Задание C. Найдите главное слово и переведите:</b> college timetable; workshop safety rules; machine tool operator; student information form.</p>
+<p><b>Задание D. Исправьте порядок слов:</b> 1) English every week students study. 2) usually is she on time. 3) Does he studies at college?</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>development — существительное; useful — прилагательное; operator — существительное; impossible — прилагательное; carefully — наречие; information — существительное.</li>
+<li>education; measurement; incorrect; usable; employment.</li>
+<li>Главные слова: timetable; rules; operator; form. Переводы: расписание колледжа; правила безопасности мастерской; оператор станка; анкета/форма с информацией о студенте.</li>
+<li>Students study English every week. She is usually on time. Does he study at college?</li>
+</ol>
+<p><b>Самостоятельная работа:</b> составьте 8 слов из семейств educate, employ, measure, inform и develop; затем разберите 5 именных цепочек из учебного текста, выделив главное слово и предложив контекстный перевод.</p>
+`),
               lec("2.2", "Reading: Nizhnekamsk", `
-                <h3>Text: The Town I Live In</h3>
-                <p>Nizhnekamsk is a young town. It is located on the left bank of the river Kama, the tributary of the Volga. It is a very nice town with new blocks of houses, wide streets, wonderful squares and parks. The architectural symbol of our town is the Mosque, a very beautiful building with four minarets.</p>
-                <p>Nizhnekamsk is a developed economic center. The biggest industrial enterprises of our town are the petrochemical and the tyre plants. A lot of useful goods produced here are exported to other republics and countries.</p>
-                <p>Nizhnekamsk is an important educational center of Tatarstan. Thousands of students receive higher education at higher schools, colleges and universities.</p>
-                <p>Nizhnekamsk is a new green town with a widely developed infrastructure. We have a railway station, a bus station, an airport, a river port. The vast forests surround the town. You can spend your days off enjoying the magnificent nature in the suburbs.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — описывать город или населённый пункт, рассказывать о его расположении, инфраструктуре и значимых местах. Студент научится извлекать основную и детальную информацию из короткого текста и задавать уточняющие вопросы о маршруте и городских объектах.</p>
+<h3>1. Reading: A City in Tatarstan</h3>
+<p><b>Read the text.</b></p>
+<p>Nizhnekamsk is a city in the Republic of Tatarstan, in the Volga region of Russia. It is situated near the Kama River and is known for its industrial enterprises, including petrochemical and tyre production. The city has residential areas, educational institutions, shops, sports facilities and public spaces. People use buses and other local transport to travel between neighbourhoods. The city is also connected with the wider region by road and rail routes.</p>
+<p>Like many industrial cities, Nizhnekamsk combines places of work and study with areas for everyday life and recreation. Residents may visit parks, cultural venues and sports centres. When describing a city, it is useful to name its location, main activities, transport links and public facilities. Specific opening hours, routes and current statistics should be checked using up-to-date local information.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>be situated / be located</td><td>располагаться</td><td>The city is situated near a river.</td></tr>
+<tr><td>industrial enterprise</td><td>промышленное предприятие</td><td>The region has several industrial enterprises.</td></tr>
+<tr><td>residential area</td><td>жилой район</td><td>There is a park in the residential area.</td></tr>
+<tr><td>public facility</td><td>общественный объект / учреждение</td><td>A library is a public facility.</td></tr>
+<tr><td>transport link</td><td>транспортное сообщение</td><td>The town has good transport links.</td></tr>
+<tr><td>recreation</td><td>отдых</td><td>The park is a place for recreation.</td></tr>
+<tr><td>neighbourhood</td><td>район, соседство</td><td>My college is in another neighbourhood.</td></tr>
+</table>
+<h3>3. Language focus: describing places</h3>
+<p>Для расположения используйте <i>in, near, on, to the north/south of</i>: <i>The city is in Tatarstan. It is near the Kama River.</i> Для наличия объектов используйте <i>there is</i> с единственным числом и неисчисляемыми существительными, <i>there are</i> — с множественным: <i>There is a railway station. There are several parks.</i></p>
+<p>Чтобы описать назначение, используйте <i>is used for</i> или <i>people go there to…</i>: <i>A sports centre is used for training. People go there to exercise.</i> Для сравнения: <i>larger than, more convenient than, less crowded than</i>.</p>
+<h3>4. Reading comprehension</h3>
+<ol>
+<li>In which republic is Nizhnekamsk situated?</li><li>Which river is mentioned?</li><li>Name two industrial activities mentioned in the text.</li><li>What kinds of public places are available in the city?</li><li>Why should current routes and opening hours be checked?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите форму:</b> 1) There (is/are) several parks. 2) The city (is/are) near the river. 3) There (is/are) a railway station.</p>
+<p><b>Задание B. Дополните предложения:</b> 1) My college is situated… 2) There are… near my home. 3) People go to the library to… 4) The main transport links are…</p>
+<p><b>Задание C. Составьте маршрут:</b> спросите, как пройти от колледжа до библиотеки или остановки. Используйте <i>Excuse me, how can I get to…? Go straight ahead. Turn left/right. It is opposite/next to…</i></p>
+<p><b>Задание D. Speaking:</b> подготовьте описание своего города или района на 8–10 предложений. Можно выбрать любой населённый пункт, а не только место проживания.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>The Republic of Tatarstan.</li><li>The Kama River.</li><li>Petrochemical and tyre production.</li><li>Educational institutions, shops, sports facilities, parks and cultural venues.</li><li>Because routes and opening hours can change.</li><li>Задание A: are; is; is.</li></ol>
+<p><b>Самостоятельная работа:</b> создайте мини-гид из 100–120 слов: location, transport, education, public facilities, recreation. Если используете конкретные сведения о городе, проверьте их по актуальному официальному источнику и укажите дату проверки.</p>
+`),
               lec("2.3", "Reading Practice: A Machine Should Work", `
-                <h3>Text: A Machine Should Work, a Man Think</h3>
-                <p>The robots of our time resemble humans very little. According to specialists, the main thing for them is not to look like people, but to do their work for them. Factories, which are equipped with automatic machine tools, transfer lines and management information systems place a lot of hope. Automation sought out areas where a robot can operate as well as a person but where people don't like to work. In other words, man has created the robot so as not to become a robot himself.</p>
-                <p>The first generation of robots appeared in the 60s and they were complex and capricious in maintenance. They could perform operations of the type "take off - put on" or "pick up - bring". They could pick up items only from definite positions determined by a rigid program. Today, to avoid errors, robots are supplied with vision (TV camera) and hearing (microphone). They can perform more complex production operations - painting, soldering, welding and assembly work. A more complex task lies ahead - to remove people completely from production areas where there are harmful fumes, excessively high or low temperatures and pressures. People should not work in conditions that are dangerous. Let the robot replace them there - and the sooner, the better.</p>
-                <p>Generally speaking a single robot by itself is hardly of any use in production. It must be coupled in design with other equipment, with a system of machines, machine tools and other devices. We must set up robotized complexes and flexible productions capable of transferring easily and quickly to an output of new goods. Flexible production system consists, as a rule, of several machine tools with numerical programmed control or of processing centers - machine tools equipped with microprocessors. An all-purpose computer controls the entire cycle, including the storage facilities. One hundred per cent automated production is no longer a dream.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — понять роль автоматизации в производстве и научиться описывать взаимодействие человека, оборудования и управляющей системы. Студент освоит лексику по теме, извлечёт основную информацию из текста и объяснит преимущества и ограничения автоматизации.</p>
+<h3>1. Reading: A Machine Should Work, a Person Should Think</h3>
+<p><b>Read the adapted text.</b></p>
+<p>Automation is the use of control systems and technology to perform tasks with limited continuous human intervention. In manufacturing, automated equipment may move materials, carry out repeated operations, collect measurements and report process information. A robot is only one possible part of an automated production system; sensors, controllers, actuators, software, machine tools and safety devices may also be involved.</p>
+<p>A simple automated system can be described through several functions. A <b>programme</b> defines the intended sequence. <b>Sensors</b> collect information about the process. A <b>controller</b> compares the available information with the required conditions and sends commands. <b>Actuators</b> or other output devices carry out the commands. A feedback signal can help the controller respond when the measured condition differs from the target.</p>
+<p>Automation can improve repeatability, productivity and working conditions, especially when tasks are repetitive or expose people to hazardous environments. However, automated systems still require planning, monitoring, maintenance by authorised personnel and clear procedures. People design processes, interpret information, respond to unexpected situations and make decisions that require judgement. The purpose is not simply to remove people from production, but to use technology responsibly and support human work.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>automation</td><td>автоматизация</td><td>Automation can improve repeatability.</td></tr>
+<tr><td>control system</td><td>система управления</td><td>The control system receives sensor data.</td></tr>
+<tr><td>sensor</td><td>датчик</td><td>A sensor measures a process variable.</td></tr>
+<tr><td>controller</td><td>контроллер, устройство управления</td><td>The controller compares the value with a target.</td></tr>
+<tr><td>actuator</td><td>исполнительный механизм</td><td>An actuator changes the system state.</td></tr>
+<tr><td>feedback</td><td>обратная связь</td><td>Feedback provides information about the result.</td></tr>
+<tr><td>repeatability</td><td>повторяемость</td><td>The process has good repeatability.</td></tr>
+<tr><td>human intervention</td><td>вмешательство человека</td><td>The system requires human intervention in unusual cases.</td></tr>
+<tr><td>hazardous environment</td><td>опасная среда</td><td>Robots may work in a hazardous environment.</td></tr>
+</table>
+<h3>3. How a basic control loop works</h3>
+<ol>
+<li>A sensor measures a process variable.</li>
+<li>The controller receives the measured value.</li>
+<li>The controller compares it with the target or setpoint.</li>
+<li>The controller sends a command to an output device.</li>
+<li>The system changes, and a new measurement may be taken.</li>
+</ol>
+<p>Это упрощённая учебная модель. Реальные системы могут иметь несколько датчиков, контроллеров, режимов и независимых защитных функций. Не используйте эту схему как инструкцию по настройке оборудования.</p>
+<h3>4. Language focus: describing processes</h3>
+<p>Для последовательности используйте <i>first, then, next, after that, finally</i>. Для описания функций — <i>is used to, is responsible for, receives, compares, sends</i>. Для пассивного залога: <i>The value is measured by a sensor. A command is sent to the actuator.</i></p>
+<p>Сравните: <i>The sensor measures the temperature.</i> (активный залог, важен исполнитель) и <i>The temperature is measured by a sensor.</i> (пассивный залог, важен объект измерения).</p>
+<h3>5. Reading comprehension</h3>
+<ol>
+<li>What is automation?</li><li>Name four elements that may be part of an automated system.</li><li>What does a sensor do?</li><li>What does the controller compare?</li><li>Name two possible benefits of automation.</li><li>Why do automated systems still need people?</li></ol>
+<h3>6. Практика</h3>
+<p><b>Задание A. Соотнесите термин и функцию:</b> sensor; controller; actuator; programme. Функции: defines a sequence; measures a condition; compares information and sends commands; carries out a command.</p>
+<p><b>Задание B. Поставьте этапы в порядок:</b> controller compares the value; sensor measures the process; actuator receives a command; a new value is measured.</p>
+<p><b>Задание C. Выберите правильную форму:</b> 1) The data (is/are) collected by sensors. 2) The controller (compare/compares) the value with a target. 3) A command (is sent/sends) to the output device.</p>
+<p><b>Задание D. Обсуждение:</b> назовите две задачи, которые целесообразно автоматизировать, и две ситуации, где необходим контроль человека. Обоснуйте мнение словами <i>because, however, therefore</i>.</p>
+<h3>7. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>Automation uses technology/control systems to perform tasks with limited continuous human intervention.</li><li>Possible answers: sensors, controllers, actuators, software, machine tools, safety devices.</li><li>A sensor collects/measures information about a condition.</li><li>The measured value with a target or required condition.</li><li>Repeatability, productivity, improved working conditions, reduced exposure to hazards.</li><li>People plan, monitor, interpret information and respond to unexpected situations.</li><li>Задание A: programme — defines a sequence; sensor — measures; controller — compares and sends commands; actuator — carries out a command.</li><li>Задание B: sensor measures → controller compares → actuator receives command → new value is measured.</li><li>Задание C: are; compares; is sent.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о простой автоматизированной системе. Назовите её назначение, два входных сигнала или измеряемых параметра, функцию контроллера и возможную роль оператора. Не описывайте настройки или запуск реального оборудования.</p>
+`)
             ],
             [],
             [],
@@ -154,31 +339,103 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit3", "Unit 3", "Tatarstan",
             [
               lec("3.1", "Grammar: Participles, Gerunds, Infinitives", `
-                <h3>1. Причастие I (Participle I)</h3>
-                <p>Образуется прибавлением -ing к глаголу (asking, being asked). Переводится как причастие с суффиксами -ущ, -ющ, -ащ, -ящ (в функции определения) или деепричастие (в функции обстоятельства).</p>
-                <p><i>the playing boy</i> — играющий мальчик<br>
-                <i>waiting for his friend</i> — ожидая своего друга</p>
-                <h3>2. Причастие II (Participle II)</h3>
-                <p>Это 3-я форма глагола (asked, produced, written). Переводится страдательным причастием с суффиксами -нн, -т (данный, законченный).</p>
-                <p><i>The results obtained depended on the methods used.</i> — Полученные результаты зависели от использованных методов.</p>
-                <h3>3. Герундий (Gerund)</h3>
-                <p>Образуется прибавлением -ing. Выражает процесс действия. Переводится деепричастием или отглагольным существительным на -ние (using — использование, reading — чтение).</p>
-                <p><i>In describing the experiment he shows all details.</i> — При описании эксперимента он показывает все подробности.</p>
-                <h3>4. Инфинитив (Infinitive)</h3>
-                <p>Неопределенная форма глагола (to ask, to read). Может выполнять роль подлежащего, дополнения, обстоятельства цели.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится распознавать формы на -ing и третью форму глагола, различать Participle I, Participle II, gerund и infinitive в типичных конструкциях, а также выбирать форму после распространённых глаголов и предлогов.</p>
+<h3>1. Participle I: форма на -ing</h3>
+<p>Participle I образуется добавлением -ing: <i>work → working; write → writing; run → running</i>. Он может описывать действие, происходящее одновременно с другим действием, или характеризовать предмет/человека:</p>
+<ul><li><i>The student reading the text is my groupmate.</i> — Студент, читающий текст, — мой одногруппник.</li><li><i>Walking to college, I listened to an English podcast.</i> — Идя в колледж, я слушал подкаст.</li></ul>
+<p>Форма -ing сама по себе не означает только настоящее время. Сравните: <i>a working machine</i> (работающая машина) и <i>Working in pairs helps students practise speaking.</i> (Работа в парах помогает студентам практиковать речь.)</p>
+<h3>2. Participle II: третья форма глагола</h3>
+<p>Participle II — третья форма глагола: правильные глаголы обычно имеют окончание -ed (<i>check — checked</i>), неправильные нужно запоминать (<i>write — written; make — made; see — seen</i>). Эта форма часто используется в пассивном залоге и как определение:</p>
+<ul><li><i>The checked documents are on the desk.</i> — Проверенные документы лежат на столе.</li><li><i>The results were obtained yesterday.</i> — Результаты были получены вчера.</li></ul>
+<h3>3. Gerund: герундий</h3>
+<p>Герундий имеет форму -ing и функционирует как существительное. Он может быть подлежащим, дополнением или частью конструкции после предлога:</p>
+<ul><li><i>Reading improves vocabulary.</i> — Чтение расширяет словарный запас.</li><li><i>She enjoys learning languages.</i> — Ей нравится изучать языки.</li><li><i>Thank you for helping me.</i> — Спасибо за помощь.</li></ul>
+<p>После предлогов обычно используется форма -ing: <i>before starting, after reading, interested in learning</i>. Не путайте герундий с Participle I: форма одинакова, но функция в предложении различается.</p>
+<h3>4. Infinitive: инфинитив</h3>
+<p>Инфинитив с to часто выражает цель или следует после определённых глаголов: <i>I want to improve my English. We use a dictionary to check a word.</i> После модальных глаголов can, must, should используется инфинитив без to: <i>Students can use the glossary.</i></p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Часто + -ing</th><th>Часто + to-infinitive</th><th>Возможны обе формы</th></tr>
+<tr><td>enjoy, avoid, finish, suggest</td><td>want, decide, hope, plan, need</td><td>like, love, start, begin</td></tr>
+</table>
+<p>Некоторые глаголы меняют значение: <i>remember doing</i> — помнить уже совершённое действие; <i>remember to do</i> — не забыть выполнить действие. <i>Stop doing</i> — прекратить действие; <i>stop to do</i> — остановиться, чтобы выполнить другое действие.</p>
+<h3>5. Практика</h3>
+<p><b>Задание A. Определите функцию формы -ing:</b> 1) Reading is useful. 2) The student reading the notice is new. 3) She enjoys reading. 4) Before leaving, close the window.</p>
+<p><b>Задание B. Выберите форму:</b> 1) We decided (to start/starting) early. 2) He avoids (to make/making) the same mistake. 3) Thank you for (to explain/explaining) the rule. 4) They can (to use/use) the dictionary.</p>
+<p><b>Задание C. Вставьте Participle II:</b> 1) The documents (check) yesterday are ready. 2) The information (write) on the board is important. 3) The results were (send) by email.</p>
+<p><b>Задание D. Составьте четыре предложения: одно с gerund в роли подлежащего, одно после предлога, одно с to-infinitive цели и одно с Participle II.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>1) gerund/подлежащее; 2) Participle I/определение; 3) gerund/дополнение после enjoy; 4) gerund после предлога before.</li><li>to start; making; explaining; use.</li><li>checked; written; sent.</li></ol>
+<p><b>Самостоятельная работа:</b> найдите в коротком английском тексте по два примера -ing и Participle II. Для каждого укажите его функцию и переведите всё предложение, а не только отдельную форму.</p>
+`),
               lec("3.2", "Reading: Tatarstan", `
-                <h3>Text: Tatarstan</h3>
-                <p>Tatarstan is situated in the middle part of the Volga basin. The territory is 70 thousand square kilometers. Tatarstan is mostly plain with hills. The climate is continental, winters are cold, summers are rather warm.</p>
-                <p>The population of the republic is about 4 million people, mostly the Tatars and the Russians. The state languages are Tatar and Russian. The flag of Tatarstan consists of three horizontal stripes: green, red and white.</p>
-                <p>Tatarstan is rich in natural resources. The main branches of industry are oil and gas extracting, motorcar constructing, chemical production. The main agricultural products are rye, wheat, and potato.</p>
-                <p>Kazan is the capital of our republic. It is historical, cultural, educational and industrial center. Other big industrial cities are Naberezhny Chelny, Nizhnekamsk, Yelabuga, Almetyevsk, and Mendeleyevsk.</p>
-                <p>The state sovereignty was proclaimed on the 30th of August 1991. It opens new prospects for international cooperation with Russia and other countries, for the development of culture, education and social security.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится извлекать географическую, культурную и экономическую информацию из обзорного текста о регионе, описывать местоположение и отрасли экономики, использовать Present Simple и сравнительные конструкции. Текст не предназначен для заучивания изменяющихся статистических показателей.</p>
+<h3>1. Reading: Tatarstan — a Region of Russia</h3>
+<p><b>Read the adapted text.</b></p>
+<p>The Republic of Tatarstan is a federal subject of the Russian Federation in the Volga region. Its capital is Kazan. The republic has a varied landscape with rivers, forests, agricultural areas and cities. Russian and Tatar are widely used in public life, and both have official status in the republic.</p>
+<p>Tatarstan has a diversified economy. Important sectors include oil production and refining, petrochemicals, mechanical engineering, vehicle manufacturing, agriculture, information technology and services. Industrial and educational centres are connected by road and rail networks. Kazan is known for its universities, cultural institutions and historical architecture, while other cities have their own industrial and educational profiles.</p>
+<p>Regional facts can change. When preparing a current report, check population figures, economic rankings and other statistics in recent official sources. In this lesson, focus on the language used to describe a region and compare its features.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>federal subject</td><td>субъект федерации</td><td>Tatarstan is a federal subject of Russia.</td></tr>
+<tr><td>capital</td><td>столица</td><td>Kazan is the capital of the republic.</td></tr>
+<tr><td>landscape</td><td>ландшафт</td><td>The region has a varied landscape.</td></tr>
+<tr><td>natural resources</td><td>природные ресурсы</td><td>Natural resources influence some industries.</td></tr>
+<tr><td>petrochemicals</td><td>нефтехимия</td><td>Petrochemicals are an important sector.</td></tr>
+<tr><td>mechanical engineering</td><td>машиностроение</td><td>Mechanical engineering requires technical skills.</td></tr>
+<tr><td>agriculture</td><td>сельское хозяйство</td><td>Agriculture is important in many regions.</td></tr>
+<tr><td>infrastructure</td><td>инфраструктура</td><td>Transport is part of regional infrastructure.</td></tr>
+</table>
+<h3>3. Language focus: location and comparison</h3>
+<p>Местоположение: <i>in the Volga region; near a river; to the east of; in the north-west of</i>. Для описания наличия объектов используйте <i>there is/there are</i>. Для сравнения: короткие прилагательные + -er (<i>larger, smaller</i>), длинные прилагательные с <i>more/less</i> (<i>more developed, less crowded</i>). После сравнительной формы часто используется <i>than</i>.</p>
+<p>Для осторожных утверждений используйте <i>one of the important sectors, is known for, includes, may be associated with</i>. Не используйте абсолютные формулировки вроде “the best” без критерия и подтверждающих данных.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>Where is Tatarstan situated?</li><li>What is its capital?</li><li>Name three sectors of its economy.</li><li>Which languages have official status in the republic?</li><li>Why should current statistics be checked in recent sources?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Заполните пропуски:</b> 1) Kazan is the ___ of Tatarstan. 2) Oil refining and petrochemicals are important ___ . 3) Roads and railways are part of the transport ___ .</p>
+<p><b>Задание B. Выберите форму:</b> 1) Kazan is (larger/more large) than a small town. 2) This region is (more diverse/diverser) in its economic activities. 3) The republic has (many/much) industrial centres.</p>
+<p><b>Задание C. Сделайте краткое сравнение двух регионов или городов по трём критериям: location, industry, education. Используйте at least two comparative forms.</p>
+<p><b>Задание D. Speaking:</b> представьте регион за 60 секунд. Назовите расположение, два экономических сектора и один культурный или образовательный объект.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>In the Volga region of Russia.</li><li>Kazan.</li><li>Any three: oil production/refining, petrochemicals, mechanical engineering, vehicle manufacturing, agriculture, IT, services.</li><li>Russian and Tatar.</li><li>Because figures and rankings change over time.</li><li>capital; sectors; infrastructure.</li><li>larger; more diverse; many.</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте текст 100–120 слов о выбранном регионе. Используйте три проверенных факта, два сравнительных предложения и пять слов из словаря. Укажите источник и дату проверки фактов.</p>
+`),
               lec("3.3", "Reading Practice: Dealing with People", `
-                <h3>Text: Dealing with People</h3>
-                <p>Dealing with people is probably the biggest problem you face, especially if you are in business. Yes, and that is also true if you are a housewife, architect or engineer. Even in such technical lines as engineering about 15 percent of one's financial success is due to one's technical knowledge and about 85 percent is due to skill in human engineering - to personality and the ability to lead people. The person who had technical knowledge plus the ability to express ideas, to assume leadership and to arouse enthusiasm among people - that person is headed for higher earning power. The survey conducted by Chicago University revealed that the health is the prime interest of adults.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать текст о профессиональном взаимодействии, выделять главную мысль и аргументы, использовать лексику для общения в команде, вежливо выражать несогласие и уточнять задачу. Утверждения о «процентах успеха» без надёжного источника не используются как научный факт.</p>
+<h3>1. Reading: Working with People</h3>
+<p><b>Read the adapted text.</b></p>
+<p>Technical knowledge is important in engineering, but successful work also depends on communication. Engineers often work in teams that include designers, technicians, operators, programmers, managers and quality specialists. Team members need to explain ideas clearly, listen to other viewpoints and share information accurately.</p>
+<p>Good communication does not mean that everyone always agrees. A team may discuss several solutions, compare evidence and identify risks before making a decision. When an instruction is unclear, a professional asks for clarification rather than guessing. When a colleague makes a mistake, it is more useful to describe the problem respectfully and focus on the next step than to blame the person.</p>
+<p>People also have different communication styles. Some prefer a short written summary; others need a diagram or a spoken explanation. A clear message identifies the topic, gives the necessary details and states what action or response is required. These skills help a team coordinate work and prevent misunderstandings.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>team member</td><td>участник команды</td><td>Each team member has a role.</td></tr>
+<tr><td>viewpoint</td><td>точка зрения</td><td>Listen to another viewpoint.</td></tr>
+<tr><td>evidence</td><td>фактические данные, доказательства</td><td>Compare the options using evidence.</td></tr>
+<tr><td>clarification</td><td>уточнение</td><td>Ask for clarification if a step is unclear.</td></tr>
+<tr><td>misunderstanding</td><td>недопонимание</td><td>A clear message can prevent misunderstanding.</td></tr>
+<tr><td>respectfully</td><td>уважительно</td><td>Disagree respectfully.</td></tr>
+<tr><td>to coordinate</td><td>координировать</td><td>Team members coordinate their tasks.</td></tr>
+</table>
+<h3>3. Functional English: professional communication</h3>
+<p>Чтобы уточнить: <i>Could you clarify the last point, please? What do you mean by…? Could you show me an example?</i></p>
+<p>Чтобы выразить мнение: <i>In my view…; I think this option may be more suitable because…</i></p>
+<p>Чтобы вежливо не согласиться: <i>I see your point, but the data suggest…; Could we consider another option?</i></p>
+<p>Чтобы подтвердить задачу: <i>Let me check that I understood correctly. You would like me to…</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>Why is communication important in engineering teams?</li><li>Name three types of specialists who may work together.</li><li>What should a person do if an instruction is unclear?</li><li>How can a team compare different solutions?</li><li>What should a clear message include?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите ситуацию и фразу:</b> попросить пример; уточнить задание; вежливо не согласиться; подтвердить понимание. Используйте четыре фразы из раздела 3.</p>
+<p><b>Задание B. Выберите наиболее профессиональный ответ:</b> 1) “That is a stupid idea.” 2) “I see your point, but could we compare the evidence first?” 3) “I will ignore your suggestion.”</p>
+<p><b>Задание C. Ролевая ситуация:</b> один студент предлагает решение учебной задачи, второй задаёт уточняющий вопрос, третий кратко подводит итог и фиксирует следующий шаг. Каждый должен использовать одну фразу для согласия или несогласия.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Because teams need to explain ideas, listen, share information and coordinate tasks.</li><li>Any three: designers, technicians, operators, programmers, managers, quality specialists.</li><li>Ask for clarification rather than guess.</li><li>Compare evidence and risks.</li><li>The topic, necessary details and required action/response.</li><li>Задание B: вариант 2.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите диалог из 10–12 реплик о распределении задач в проектной группе. Включите просьбу об уточнении, аргументированное мнение, вежливое несогласие и итоговое подтверждение договорённости.</p>
+`)
             ],
             [],
             [],
@@ -203,33 +460,102 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit4", "Unit 4", "Ecology",
             [
               lec("4.1", "Grammar: Conditionals & Reported Speech", `
-                <h3>1. Условные предложения (Conditionals)</h3>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Тип</th><th style="border:1px solid var(--border); padding:5px;">Формула</th><th style="border:1px solid var(--border); padding:5px;">Пример</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">Тип I (Реальное)</td><td style="border:1px solid var(--border); padding:5px;">If + Present Simple, will + V1</td><td style="border:1px solid var(--border); padding:5px;">If machine parts are oiled, they will not rust.</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">Тип II (Маловероятное)</td><td style="border:1px solid var(--border); padding:5px;">If + Past Simple, would + V1</td><td style="border:1px solid var(--border); padding:5px;">If I had time, I would help you.</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">Тип III (Нереальное)</td><td style="border:1px solid var(--border); padding:5px;">If + Past Perfect, would have + V3</td><td style="border:1px solid var(--border); padding:5px;">If they had checked the drawing, they would have avoided the mistake.</td></tr>
-                </table>
-                <h3>2. Согласование времен (Sequence of Tenses)</h3>
-                <p>Если сказуемое главного предложения стоит в прошедшем времени, то в придаточном время сдвигается на шаг назад (Present → Past, Past → Past Perfect, Future → Future in the Past).</p>
-                <h3>3. Косвенная речь (Reported Speech)</h3>
-                <p>При переводе вопросов в косвенную речь порядок слов становится прямым. Общие вопросы вводятся союзом <i>if</i> или <i>whether</i>, специальные — вопросительным словом.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится различать основные типы условных предложений и передавать высказывания, вопросы и инструкции в косвенной речи. Особое внимание уделяется смыслу конструкции и выбору времени, а не механическому сдвигу форм.</p>
+<h3>1. Conditionals — условные предложения</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Тип</th><th>Форма</th><th>Значение</th><th>Пример</th></tr>
+<tr><td>Zero</td><td>If + Present, Present</td><td>общий факт, закономерность</td><td>If water reaches 100°C at standard pressure, it boils.</td></tr>
+<tr><td>First</td><td>If + Present, will + V1</td><td>реальное возможное будущее</td><td>If the team checks the file, it will find the latest version.</td></tr>
+<tr><td>Second</td><td>If + Past, would + V1</td><td>воображаемая или маловероятная ситуация</td><td>If I had more time, I would revise the report.</td></tr>
+<tr><td>Third</td><td>If + Past Perfect, would have + V3</td><td>нереальное прошлое, сожаление/альтернативный результат</td><td>If they had checked the units, they would have avoided the error.</td></tr>
+</table>
+<p>В First Conditional обычно не ставят will сразу после if: <i>If it rains, we will stay inside.</i> Во Second Conditional форма <i>were</i> возможна со всеми лицами в более формальном стиле: <i>If I were the team leader…</i> В Third Conditional обе части относятся к воображаемому прошлому.</p>
+<h3>2. Reported Speech — косвенная речь</h3>
+<p>Косвенная речь передаёт содержание слов другого человека. Если вводный глагол стоит в прошедшем времени, форма часто сдвигается назад, если точка отсчёта изменилась:</p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Прямая речь</th><th>Косвенная речь</th></tr>
+<tr><td>“I am ready.”</td><td>She said (that) she was ready.</td></tr>
+<tr><td>“We checked the file.”</td><td>They said they had checked the file.</td></tr>
+<tr><td>“I will call you.”</td><td>He said he would call me.</td></tr>
+<tr><td>“I can help.”</td><td>She said she could help.</td></tr>
+</table>
+<p>Сдвиг времени не обязателен, если факт остаётся верным или говорящий сохраняет исходную точку отсчёта: <i>The teacher said that water boils at 100°C at standard pressure.</i></p>
+<h3>3. Косвенные вопросы и инструкции</h3>
+<p>В косвенном вопросе используется прямой порядок слов: <i>“Where is the lab?” → He asked where the lab was.</i> Общий вопрос вводится if/whether: <i>“Are you ready?” → She asked if we were ready.</i> Не используйте do/does/did в косвенном вопросе.</p>
+<p>Просьбы и инструкции часто передаются конструкцией <i>ask/tell + object + (not) to + verb</i>: <i>“Please check the date.” → The teacher asked us to check the date.</i> / <i>“Do not open the file.” → He told us not to open the file.</i></p>
+<h3>4. Практика</h3>
+<p><b>Задание A. Выберите тип:</b> 1) If metal gets hot, it expands. 2) If I finish early, I will call you. 3) If I knew the answer, I would tell you. 4) If they had saved the file, they would not have lost it.</p>
+<p><b>Задание B. Поставьте глагол в нужную форму:</b> 1) If the bus (be) late, we (wait) inside. 2) If I (have) a new laptop, I (install) the programme. 3) If the team (check) the drawing, it (notice) the error.</p>
+<p><b>Задание C. Передайте косвенно:</b> 1) “The results are ready,” she said. 2) “Where is the timetable?” he asked. 3) “Do not touch the equipment,” the instructor said.</p>
+<h3>5. Самопроверка и ключ преподавателя</h3>
+<ol><li>Zero; First; Second; Third.</li><li>is / will wait; had / would install; had checked / would have noticed.</li><li>She said that the results were ready. He asked where the timetable was. The instructor told us not to touch the equipment.</li></ol>
+<p><b>Самостоятельная работа:</b> придумайте по одному примеру каждого типа условного предложения на тему учёбы и безопасности; затем запишите короткий диалог из четырёх реплик и передайте две реплики в косвенной речи.</p>
+`),
               lec("4.2", "Reading: Environmental Protection", `
-                <h3>Text: Ecology</h3>
-                <p>About two hundred years ago man lived in harmony with nature because industry was not so much developed. Today the situation is quite different: the contradictions between man and nature are dramatic. The intensive development of science, industry and chemistry during the last century resulted in the global pollution of the environment.</p>
-                <p>Now many parts of the world are overcrowded. Rapid growth of population increases the pollution of the environment greatly. People living in big cities suffer from smog. Factories, electric power stations, the chemical industry and heavy industry throw out into atmosphere billions tons of dust and harmful substances. Much of this waste is carried by winds for great distances. The destruction of the ozone layer could lead our planet to a global catastrophe.</p>
-                <p>In recent years the pollution problems have received great publicity. People all over the world are worried about what is happening to the environment. Newspapers and magazines write about water, air and land pollution. The protection of nature is becoming a political program of every country. The Earth is our home that's why we must take care of it and keep it clean for ourselves and for the next generations.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать текст о воздействии человека на окружающую среду, различать причины и последствия, использовать лексику по теме экологии и формулировать предложения по снижению воздействия на окружающую среду.</p>
+<h3>1. Reading: Environmental Challenges</h3>
+<p>Human activities affect air, water, soil and ecosystems. Transport, energy production, agriculture, construction and industry can create emissions, waste and pressure on natural resources. The scale and type of impact depend on technology, local conditions, regulation and everyday choices.</p>
+<p>Air pollution may be caused by particles and gases released by vehicles, heating systems and industrial processes. Water quality can be affected by untreated wastewater, agricultural runoff and accidental releases. Waste creates additional problems when materials are not reused, recycled or safely managed. Some pollutants remain in the environment for a long time and can move through food chains.</p>
+<p>Environmental protection includes prevention, monitoring, efficient use of resources, treatment of emissions and waste, restoration of damaged areas and public information. No single measure solves every problem. Decisions should be based on reliable measurements and an understanding of possible consequences. Individuals, businesses and public authorities all have roles to play.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>emission</td><td>выброс</td><td>Vehicle emissions can affect air quality.</td></tr>
+<tr><td>particle</td><td>частица</td><td>Fine particles can remain in the air.</td></tr>
+<tr><td>wastewater</td><td>сточные воды</td><td>Wastewater must be treated appropriately.</td></tr>
+<tr><td>runoff</td><td>поверхностный сток</td><td>Agricultural runoff may carry nutrients into rivers.</td></tr>
+<tr><td>ecosystem</td><td>экосистема</td><td>An ecosystem includes living organisms and their environment.</td></tr>
+<tr><td>renewable resource</td><td>возобновляемый ресурс</td><td>Some energy sources are renewable.</td></tr>
+<tr><td>to reduce / prevent</td><td>сокращать / предотвращать</td><td>Better planning can reduce waste.</td></tr>
+<tr><td>monitoring</td><td>мониторинг, наблюдение</td><td>Monitoring helps identify changes.</td></tr>
+</table>
+<h3>3. Language focus: cause, effect and solutions</h3>
+<p>Причина: <i>because, due to, as a result of</i>. Следствие: <i>therefore, as a result, this can lead to</i>. Предложение: <i>One possible measure is…; The impact could be reduced by…</i></p>
+<p>Пассивный залог часто используется в научных и общественных текстах: <i>Wastewater is treated before discharge. Air quality is monitored by local authorities.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>Name four areas of the environment mentioned in the text.</li><li>Give two possible sources of air pollution.</li><li>How can water quality be affected?</li><li>Why can waste be a long-term problem?</li><li>Why should decisions be based on reliable measurements?</li><li>Name three groups that have a role in environmental protection.</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите причину и возможное следствие:</b> untreated wastewater; excessive material use; vehicle emissions; poor waste sorting. Используйте понятия water quality, resource use, air quality, recycling.</p>
+<p><b>Задание B. Дополните связками:</b> 1) The factory installed filters. ___, some emissions were reduced. 2) The river was polluted ___ untreated wastewater. 3) Waste should be sorted; ___, useful materials can be recovered.</p>
+<p><b>Задание C. Предложите три меры для колледжа: saving energy, reducing paper use, sorting waste, responsible transport. Для каждой объясните ожидаемый эффект.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Air, water, soil and ecosystems.</li><li>Vehicles, heating systems or industrial processes.</li><li>Untreated wastewater, agricultural runoff or accidental releases.</li><li>Some materials/pollutants remain for a long time and may affect ecosystems.</li><li>To understand the real scale and possible consequences of the impact.</li><li>Individuals, businesses and public authorities.</li><li>Задание B: As a result; due to; therefore/as a result.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о конкретной экологической проблеме. Структура: проблема → причины → последствия → две реалистичные меры. Не приводите статистику без проверенного источника.</p>
+`),
               lec("4.3", "Reading Practice: The Speed Limit", `
-                <h3>Text: The Speed Limit</h3>
-                <p>Before the World War II the speed of aircraft was far below the speed of sound. Today we have supersonic aircraft. Radio waves propagate at the velocity of light. Could we perhaps create "superlight" telegraphy to send signals at velocities greater than the velocity of light? No, that is an impossible thing to do. Since the experiment disproves the absolute nature of time, we conclude that signal transmission cannot be instantaneous. The velocity of transmission from one point of space to another can't be infinite, in other words, can't be greater than some ultimate value, the latter being called the speed limit. This speed limit concurs with the light velocity.</p>
-                <p>Indeed, according to the principles of the relativity of motion the laws of nature will be the same for all the laboratories moving relatively to each other. The affirmation that no velocity can be greater than the given limit is also the law of Nature and, therefore, the value of the speed limit should be exactly similar in different laboratories. The light velocity is known to possess the same qualities. Thus, the speed of light is not merely the speed of propagation of a natural phenomenon. It plays the important part of being the top velocity. The discovery of the existence of the top velocity in the Universe is one of the greatest triumphs of human genius and of the experimental capacity of the mankind.</p>
-                <p>In the 19th century physicists were unable to perceive that a top speed existed and that its existence could be proved. Moreover, if they had stumbled upon it by chance in their experiments, they wouldn't have been sure that it was a law of nature and not merely the effect of their limited experimental capacity.</p>
-                <p>To assume that technological development will enable us to attain velocities greater than the velocity of light is just as ridiculous as to suggest that the absence of points on the Earth's surface more than 20 thousand kilometers apart is not a geographical law, but the upshot of our limited knowledge, and to hope that some day, when geography makes further advances, we will be able to find points on the Earth that are still farther apart.</p>
-                <p>Light velocity is sure to play such an exceptional part in nature exactly because it is the top velocity for the propagation of anything. Light either outstrips all other phenomena, or, at the outside, arrives simultaneously with them.</p>
-                <p>If the Sun should split in two and form two stars, the motion of the Earth would, naturally, suffer a change as well. The 19th century physicists, who didn't know that the top velocity existed in nature, would certainly assume that the Earth changed its motion instantly after the Sun split in two. Yet it would have taken light all of eight minutes to cover the distance from the split Sun to the Earth. The change in the Earth's rotary motion would begin eight minutes after the Sun split up. Until that moment, the Earth would continue to move as if the Sun had not split. Anything that may occur with or on the Sun will not affect the Earth or its motion until eight minutes later.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать научно-популярный текст о предельной скорости передачи информации, извлекать основные положения, объяснять причинно-следственные связи и использовать лексику для описания скорости, расстояния и времени.</p>
+<h3>1. Reading: The Speed of Light as a Limit</h3>
+<p>In everyday life, speeds can be compared with the speed of a car, a train or an aircraft. In modern physics, the speed of light in a vacuum is approximately 300,000 kilometres per second. According to the theory of special relativity, this speed is a fundamental limit for the transfer of information and causal influence. An object with mass cannot be accelerated to the speed of light in a vacuum.</p>
+<p>This does not mean that every object moves at the same speed. Light travels at the same speed in a vacuum for all inertial observers, while measured distances and time intervals depend on the observer's motion. These ideas are described by special relativity. The theory is supported by many experiments and is used in modern physics and technologies such as satellite navigation, where very accurate timing is essential.</p>
+<p>The Sun is about 150 million kilometres from the Earth. Sunlight takes a little over eight minutes to reach us. If the Sun changed in a way that affected the light reaching Earth, we would not observe that change immediately; the information would travel at the speed of light. This example helps explain why physical effects cannot be treated as instantaneous over large distances.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>speed</td><td>скорость</td><td>The speed of light in a vacuum is very high.</td></tr>
+<tr><td>distance</td><td>расстояние</td><td>The distance is measured in kilometres.</td></tr>
+<tr><td>vacuum</td><td>вакуум</td><td>Light travels through a vacuum.</td></tr>
+<tr><td>to transfer information</td><td>передавать информацию</td><td>A signal transfers information.</td></tr>
+<tr><td>causal influence</td><td>причинное воздействие</td><td>Relativity limits the speed of causal influence.</td></tr>
+<tr><td>observer</td><td>наблюдатель</td><td>Different observers may measure different time intervals.</td></tr>
+<tr><td>approximately</td><td>приблизительно</td><td>The distance is approximately 150 million kilometres.</td></tr>
+<tr><td>instantaneous</td><td>мгновенный</td><td>Information is not transferred instantaneously.</td></tr>
+</table>
+<h3>3. Language focus: quantities and cautious statements</h3>
+<p>Для приблизительных величин используйте <i>about, approximately, roughly, a little over</i>. Для сравнения: <i>faster than, slower than, as fast as</i>. Для осторожных научных утверждений: <i>according to, the theory predicts, experiments support, approximately</i>.</p>
+<p>Не путайте скорость и ускорение: <i>speed</i> — быстрота движения; <i>acceleration</i> — изменение скорости по величине или направлению. Скорость обычно выражается в m/s или km/h.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What is the approximate speed of light in a vacuum?</li><li>What does special relativity identify as a fundamental limit?</li><li>Can an object with mass reach the speed of light in a vacuum?</li><li>How long does sunlight take to reach Earth?</li><li>Why is satellite navigation mentioned?</li><li>What does the word “approximately” tell the reader?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите правильное слово:</b> 1) speed / distance is measured in kilometres per second. 2) Acceleration / observer describes a change in velocity. 3) Light travels in a vacuum / timetable.</p>
+<p><b>Задание B. Передайте смысл с помощью приблизительных выражений:</b> “The distance is 150 million kilometres.” Используйте about или approximately.</p>
+<p><b>Задание C. Обсудите:</b> почему сообщение с большого расстояния нельзя получить мгновенно? Используйте слова signal, distance, speed, information.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Approximately 300,000 kilometres per second.</li><li>The speed of light in a vacuum for information transfer and causal influence.</li><li>No.</li><li>A little over eight minutes.</li><li>Because accurate timing is important in satellite navigation.</li><li>It indicates that the value is not exact.</li><li>Задание A: speed; acceleration; vacuum.</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте краткое объяснение на 80–100 слов о разнице между speed и acceleration. Включите два примера с единицами измерения и используйте приблизительные выражения.</p>
+`)
             ],
             [],
             [],
@@ -255,35 +581,131 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit6", "Unit 6", "Additional Reading",
             [
               lec("6.1", "The History of Physics", `
-                <h3>The History of Physics</h3>
-                <p>The most advanced science at present and the one which seems to give the most light on the structure of the world is physics. It is useful to have some idea of not only what the up-to-date development of physics is but also how we came to think in that way and how the whole of modern physics is connected with its history. In fact, the history of this science begins with Galileo. Galileo introduced the fundamental concepts and principles which were enough for physics until the present century. Galileo introduced the two principles that made mathematical physics possible: the law of inertia and the parallelogram law. The law of inertia, now familiar as Newton's first law of motion made it possible to calculate the motions of matter by means of the laws of dynamics alone.</p>
-                <p>Technically the principle of inertia meant that casual laws of physics should be stated in terms of acceleration, i.e. a change of velocity in amount or direction or both which was found in Newton's law of gravitation. From the law of inertia it followed that the causal laws of dynamics must be differential equations of the second order, though this form of statement could not be made until Newton and Leibniz had developed the infinitesimal calculus. The basic idea of dynamics, the equations of motion, the ideas of momentum, of inertia, of mass and of acceleration were applied by Newton to large bodies like the Earth and the Moon to explain the structure and the motion of the Universe.</p>
-                <p>From Newton to the end of the nineteenth century, the progress of physics involved no basically new principles. The first revolutionary novelty was Planck's introduction of the quantum constant \(h\) to explain the structure and behaviour of atoms in the year 1900. Another departure from Newtonian principles followed in 1905, when Einstein published his special theory of relativity, which was primarily a geometrical theory of gravitation showing that the universe is expanding.</p>
-                <p>In fact, when modern science was growing up from the time of Galileo to the time of Newton, all the sciences were very much joined together. A single man could do absolutely first-class research in pure mathematics, in physics, in chemistry and even in biology. Towards the end of that time the sciences were beginning to separate and after that they continued to separate more and more. Just at this moment we can see a great convergence of all sciences. Physics is increasingly penetrating all the other parts of science and this is evident in the names of the new hybrid subjects. We have long had physical chemistry; now we have chemical physics. A biologist cannot do without knowledge of modern physics while a physicist must know something of biology, as he may find, that a great deal of his work will be concerned with biophysics. The mathematical aspect of physics is also becoming much more evident especially now that we are having a growing symbiosis between physics and mathematics in computational physics. Our job in physics is to see things simply, to understand a great many complicated phenomena in a unified way, in terms of a few simple principles. You cannot predict what will happen in future, but you have to be ready to meet it.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать обзорный текст об истории физики, выстраивать последовательность научных идей и использовать лексику для описания исследований, открытий и доказательств. Материал даёт языковую основу и не заменяет отдельный курс истории науки.</p>
+<h3>1. Reading: From Classical Mechanics to Modern Physics</h3>
+<p>People have studied nature since ancient times. A major change in the development of physics took place in the early modern period, when researchers increasingly used experiments and mathematical descriptions to explain motion and natural phenomena. Galileo Galilei made important contributions to the study of motion and helped develop methods based on observation and experiment.</p>
+<p>Isaac Newton formulated laws of motion and the law of universal gravitation. Together with the development of calculus by Newton and Leibniz, these ideas provided powerful tools for describing the motion of objects, from falling bodies to planets. Classical mechanics remains useful for many everyday and engineering problems.</p>
+<p>At the beginning of the twentieth century, new experiments and questions led to major developments. In 1900, Max Planck introduced the quantum hypothesis in his work on thermal radiation. In 1905, Albert Einstein published his special theory of relativity, which describes space, time and motion at high speeds. His general theory of relativity, published in its final form in 1915, describes gravity in terms of the geometry of spacetime. These theories do not make classical physics useless; they extend our understanding to situations where classical models are insufficient.</p>
+<p>Modern science is interdisciplinary. Physics contributes to materials science, chemistry, electronics, medicine, computing and engineering. Researchers combine theoretical models, experiments, measurement and data analysis. A scientific explanation must be open to testing and revision when new evidence becomes available.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>research</td><td>исследование</td><td>Research requires reliable evidence.</td></tr>
+<tr><td>observation</td><td>наблюдение</td><td>The observation led to a new question.</td></tr>
+<tr><td>experiment</td><td>эксперимент</td><td>The experiment tested the hypothesis.</td></tr>
+<tr><td>motion</td><td>движение</td><td>Classical mechanics describes motion.</td></tr>
+<tr><td>gravitation</td><td>тяготение</td><td>Newton studied universal gravitation.</td></tr>
+<tr><td>quantum</td><td>квантовый</td><td>Quantum theory describes microscopic systems.</td></tr>
+<tr><td>spacetime</td><td>пространство-время</td><td>General relativity describes gravity through spacetime geometry.</td></tr>
+<tr><td>evidence</td><td>доказательства, данные</td><td>New evidence may change a model.</td></tr>
+<tr><td>interdisciplinary</td><td>междисциплинарный</td><td>Modern research is often interdisciplinary.</td></tr>
+</table>
+<h3>3. Language focus: describing historical development</h3>
+<p>Для хронологии используйте <i>first, later, in the early twentieth century, afterwards, eventually</i>. Для вклада учёного: <i>contributed to, developed, proposed, formulated, published</i>. Past Simple описывает завершённые исторические события: <i>Newton formulated the laws of motion.</i> Present Simple используется для общепринятых фактов: <i>Classical mechanics remains useful.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>Which methods became increasingly important in the development of modern physics?</li><li>What did Newton formulate?</li><li>What did Planck introduce in 1900?</li><li>What does special relativity describe?</li><li>How does general relativity describe gravity?</li><li>Why does new evidence matter?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A.</b> Соотнесите: Galileo; Newton; Planck; Einstein. Варианты: laws of motion and gravitation; important studies of motion and experimental method; quantum hypothesis; special and general relativity.</p>
+<p><b>Задание B.</b> Поставьте глаголы в Past Simple: 1) Newton (formulate) the laws of motion. 2) Planck (introduce) the quantum hypothesis. 3) Einstein (publish) his special theory in 1905.</p>
+<p><b>Задание C.</b> Составьте временную шкалу из четырёх этапов, используя first, later, in 1900, in 1905.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Observation, experiment and mathematical description.</li><li>Laws of motion and universal gravitation.</li><li>The quantum hypothesis.</li><li>Space, time and motion at high speeds.</li><li>Through the geometry of spacetime.</li><li>Scientific explanations must be tested and revised when necessary.</li><li>Соответствие: Galileo — study of motion/experimental method; Newton — laws; Planck — quantum hypothesis; Einstein — relativity.</li><li>formulated; introduced; published.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о развитии одной научной идеи. Используйте минимум пять слов из словаря и отделяйте проверенные факты от собственных оценок.</p>
+`),
               lec("6.2", "The Revolution in Physics", `
-                <h3>The Revolution in Physics</h3>
-                <p>Nineteenth-century physics was a majestic achievement of the human mind. To many who were working in science this achievement seems to be moving towards a certain completion of the picture of the operation of natural forces on the secure basis of the mechanics of Galileo and Newton. However, this picture was shattered at the very outset of the XXth century and was to be replaced by another one. The revolution in physics broke out unexpectedly. In November 1895 the general direction of world research was sharply changed by an accidental and altogether unforeseen discovery.</p>
-                <p>Konrad fon Rontgen (1845-1923), then the professor of physics had bought a new cathode-ray discharge tube with the object of studying its inner mechanism. Within a week he had found that something was happening outside the tube: something was escaping that had properties never before imagined in Nature. That something made fluorescent screen shine in the dark and could fog photographic plates through black paper. These astonishing photographs showed coins in purses and bones in the hand. He didn't know what that something was, so he called it "X-rays". This scientific discovery was a top press news all over the world. It was the subject of innumerable music-hall jokes and within a few weeks almost every physicist of repute was repeating the experiment for himself and demonstrating it to admirable audience.</p>
-                <p>The immediate value of X-rays was great, particularly to medicine, however, their importance was much greater to the whole of physics and natural knowledge, for the discovery of X-rays provided the key not only to one, but to many branches of physics. This discovery was followed by a number of unexpected discoveries like that of radioactivity in 1896, of the structure of crystals in 1912, of the neutron in 1932, of nuclear fission in 1938, and of mesons between 1936 and 1947. This revolutionary development includes great theoretical achievements of synthesis like Plank's quantum theory in 1900, Einstein's special relativity theory in 1905 and his general theory in 1916, the Rutherford-Bohr atom in 1913 and the new quantum theory in 1925.</p>
-                <p>The period from 1895 to 1916 might be called the first phase of the revolution in physics, the so-called heroic, or in a different aspect, the amateur stage of modern physics. In it new worlds were being explored, new ideas created, mainly with the technical and intellectual means of the old XIXth century science. It was still a period primarily of individual achievement: of the Curies and Rutherford, of Plank and Einstein, of the Braggs and Bohr. Physical science, particularly physics itself, still belonged to the university laboratory, it had few links with industry, apparatuses were cheap and simple, it was still in the "sealing-wax-and-string" stage.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится извлекать факты из текста об открытии рентгеновского излучения и последующих изменениях в физике, описывать научное открытие и объяснять связь между наблюдением, экспериментом и практическим применением.</p>
+<h3>1. Reading: An Unexpected Discovery</h3>
+<p>In 1895, the German physicist Wilhelm Conrad Röntgen was studying electrical discharge in a vacuum tube. He noticed that a fluorescent screen nearby began to glow even though it was not directly exposed to visible light from the tube. Further experiments showed that an unknown type of radiation could pass through some materials and produce images on photographic plates. Röntgen called it X-radiation because its nature was not yet known.</p>
+<p>X-rays soon became important in medicine because they made it possible to examine the inside of the human body without surgery. They also became a subject of scientific research. The discovery encouraged further investigations into atomic structure and radiation. In 1896, Henri Becquerel discovered natural radioactivity, and Marie and Pierre Curie later made major contributions to the study of radioactive substances.</p>
+<p>The development of physics in the twentieth century involved both experimental discoveries and new theories. Scientists studied atoms, nuclei, elementary particles and the structure of matter. New instruments and international research teams made it possible to investigate phenomena that earlier generations could not observe directly. Scientific progress often develops through a combination of unexpected observations, careful experiments, discussion and improved models.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>vacuum tube</td><td>вакуумная трубка</td><td>Röntgen studied a vacuum tube.</td></tr>
+<tr><td>fluorescent screen</td><td>флуоресцентный экран</td><td>The screen began to glow.</td></tr>
+<tr><td>radiation</td><td>излучение</td><td>X-radiation can pass through some materials.</td></tr>
+<tr><td>photographic plate</td><td>фотопластинка</td><td>The image was recorded on a photographic plate.</td></tr>
+<tr><td>radioactivity</td><td>радиоактивность</td><td>Becquerel discovered natural radioactivity.</td></tr>
+<tr><td>evidence</td><td>свидетельство, данные</td><td>Further experiments provided evidence.</td></tr>
+<tr><td>to investigate</td><td>исследовать</td><td>Scientists investigated the new radiation.</td></tr>
+<tr><td>application</td><td>применение</td><td>X-rays have medical applications.</td></tr>
+</table>
+<h3>3. Language focus: describing discoveries</h3>
+<p>Для описания открытия используйте Past Simple: <i>noticed, observed, tested, discovered, named, developed</i>. Для результата эксперимента: <i>The screen began to glow. The image was recorded on a plate.</i> Пассивный залог удобен, когда важен результат, а не исполнитель: <i>The radiation was detected.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What was Röntgen studying in 1895?</li><li>What did he notice near the tube?</li><li>Why did he use the name X-radiation?</li><li>Why were X-rays important in medicine?</li><li>Who discovered natural radioactivity in 1896?</li><li>What factors contribute to scientific progress?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите правильный глагол:</b> Röntgen (noticed / notices) a glowing screen in 1895. The new radiation (was called / called) X-radiation. Further experiments (provided / provide) evidence.</p>
+<p><b>Задание B. Расположите этапы:</b> unexpected observation; further experiment; explanation or name; practical application.</p>
+<p><b>Задание C. Обсуждение:</b> почему неожиданное наблюдение ещё не является готовым научным объяснением? Используйте evidence, experiment, result, theory.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>An electrical discharge in a vacuum tube.</li><li>A fluorescent screen nearby began to glow.</li><li>Because its nature was unknown at the time.</li><li>They made it possible to examine the inside of the body without surgery.</li><li>Henri Becquerel.</li><li>Observation, experiments, discussion, instruments and improved models.</li><li>noticed; was called; provided.</li><li>Observation → further experiment → explanation/name → application (the real history may be iterative).</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте короткую презентацию на 1–2 минуты об одном научном открытии. Укажите исходную проблему, наблюдение, проверку и практическое применение.</p>
+`),
               lec("6.3", "Automation", `
-                <h3>Automation</h3>
-                <p>We now use the term automation for specific techniques combined to operate automatically in a complete system. These techniques are possible because of electronic devices, most of which have come into use in the last thirty years. They include program, action, sensing or feedback, decision, and control elements as components of a complete system.</p>
-                <p>The program elements determine what the system does and the step-by-step manner in which it works to produce the desired result. A program is step-by-step sequence that breaks a task into its individual parts. Some steps in an industrial automation program direct other parts of the system when and how to carry out their jobs. The action elements are those which do the actual work. They may carry or convey materials to specific places at specific times or they may perform operations on the materials. The term mechanical handling device is also used for the action elements.</p>
-                <p>Perhaps the most important part of an automated system is sensing or feedback. Sensing devices automatically check on parts of the manufacturing process such as the thickness of a sheet of steel or paper. This is called feedback because the instruments return or feed back this information to the central system control.</p>
-                <p>The decision element is used to compare what is going on in the system with what should be going on, it receives information from the sensing devices and makes decisions necessary to maintain the system correctly. If some action is necessary the decision element can give instructions or commands to the system.</p>
-                <p>The control element consists of devices to carry out the commands of the decision element. There may be many kinds of devices: valves that open or close, switches that control the flow of electricity, or regulators that change the voltage in various machines; they make the necessary corrections or adjustments to keep the system in conformity with its program.</p>
-                <p>An industrial engineer working with automated system is part of a team. Many components of the system, such as the computers, are electronic devices so electronic engineers and technicians are also involved. Many of the industries in which automation has proved particularly suitable - chemicals, papermaking, metal processing - involve chemical processes, so there may be chemical engineers at work too. An industrial engineer with expertise in all these fields may become a systems engineer for automation projects thereby coordinating the activities of all the members of the team.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится описывать простую автоматизированную систему, различать датчик, контроллер и исполнительное устройство, объяснять роль обратной связи и использовать пассивный залог и лексику последовательности.</p>
+<h3>1. Reading: Elements of an Automated System</h3>
+<p>Automation combines machines, control equipment and software to perform tasks with limited continuous human intervention. In manufacturing, automation can support material handling, measurement, assembly, packaging and process monitoring. The design of a system depends on the task, required accuracy, safety requirements and operating environment.</p>
+<p>A simplified automated system has several functional elements. The programme or control logic defines the intended sequence. Sensors measure process variables such as position, temperature or pressure. A controller receives information and compares it with a target or a set of conditions. Output devices and actuators carry out commands, for example by moving a mechanism or changing a valve position. Feedback provides information about the result and may help the controller adjust the process.</p>
+<p>Automation can improve consistency and reduce exposure to repetitive or hazardous tasks. However, it does not remove the need for people. Engineers and technicians plan, test and maintain systems; operators monitor the process and follow approved procedures; specialists investigate unusual results. Automated equipment must be used only by trained and authorised personnel.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>control logic</td><td>логика управления</td><td>Control logic defines the sequence.</td></tr>
+<tr><td>process variable</td><td>технологический параметр</td><td>Temperature is a process variable.</td></tr>
+<tr><td>setpoint</td><td>заданное значение</td><td>The controller compares the value with the setpoint.</td></tr>
+<tr><td>actuator</td><td>исполнительный механизм</td><td>An actuator carries out a command.</td></tr>
+<tr><td>feedback</td><td>обратная связь</td><td>Feedback reports the result.</td></tr>
+<tr><td>consistency</td><td>стабильность, согласованность результата</td><td>Automation can improve consistency.</td></tr>
+<tr><td>authorised personnel</td><td>уполномоченный персонал</td><td>Only authorised personnel operate the equipment.</td></tr>
+</table>
+<h3>3. Language focus: passive voice and sequence</h3>
+<p>Для описания процесса используйте <i>first, then, after that, finally</i>. Пассивный залог помогает сосредоточиться на операции: <i>The value is measured by a sensor. The signal is sent to the controller. The command is carried out by an actuator.</i></p>
+<p>Сравните <i>The sensor measures the temperature</i> и <i>The temperature is measured by the sensor</i>. В первом случае важен датчик, во втором — измеряемая величина.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What does automation combine?</li><li>Name three process variables.</li><li>What does the controller compare?</li><li>What is the function of an actuator?</li><li>How can feedback be used?</li><li>Why do automated systems still require trained people?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите:</b> sensor — measures a variable; controller — compares data and issues commands; actuator — carries out a command; programme — defines the sequence.</p>
+<p><b>Задание B. Поставьте в порядок:</b> sensor measures a variable; controller compares it with a setpoint; command is sent; actuator carries out the command; feedback is received.</p>
+<p><b>Задание C. Преобразуйте в пассивный залог:</b> 1) A sensor measures the temperature. 2) The controller sends a signal. 3) An actuator carries out the command.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Machines, control equipment and software.</li><li>Position, temperature, pressure (other valid examples accepted).</li><li>The measured information with a target or required condition.</li><li>It carries out a command or produces a physical action.</li><li>It provides information about the result and may support adjustment.</li><li>People plan, monitor, test, maintain and respond to unusual conditions.</li><li>Порядок: sensor → controller → command → actuator → feedback.</li><li>The temperature is measured by a sensor. A signal is sent by the controller. The command is carried out by an actuator.</li></ol>
+<p><b>Самостоятельная работа:</b> нарисуйте блок-схему простой учебной системы и подпишите на английском programme, sensor, controller, actuator, feedback. Напишите 6–8 предложений, описывающих её работу. Не добавляйте параметры настройки реального оборудования.</p>
+`),
               lec("6.4", "Environmental Pollution", `
-                <h3>Environmental Pollution</h3>
-                <p>Once came into being from inorganic environment, the living matter has deeply altered the lifeless Earth, step by step changing the composition of the atmosphere, the sea, and the upper layers of the solid crust both on land and under the ocean. Since then, were one to find out a single object to evolution it would be the perpetuation of life. Though there are more than 100 chemical elements in the Periodic Table, only four prove to be essential for the biosphere; they are hydrogen, carbon, nitrogen and oxygen. Ecologists define the biosphere to be the part of the world where life can exist and the point of interaction of these four elements. While the elements mentioned above go wonderfully with much of the chemistry life, the definition turns out to be a little too limited, ignoring as it does, the role of sulphur and phosphorus.</p>
-                <p>Consequently, it is a fact that most of the problems of the environmental disturbance arise from the extraordinary reactivity of these six elements, with the first four actually building protein molecule, sulphur being the fastening in protein, and phosphorus supplying high-energy bond which is known to be universal fuel for biochemical work within the cells.</p>
-                <p>If the biosphere continues in running order biologically important materials must undergo cyclic changes so that after utilization they are put back at the expense of some solar energy into a form in which they can be reused. So far nature itself saw to the whole arrangement go on smoothly and all the cycles be governed by complex mechanisms that were fitted together and held the whole in balance. Yet during the few last decades the man's intervention into the natural cycling of the living matter has been going on an unprecedented scale and at an unprecedented rate. Never before has nature been treated in such a drastic and often irreversible way, with both immediate consequences and ultimate incineration, not even vaguely foreseeable. For too little do we know for certain about the way nature has been self-regulating for millions of years since life began and too many variables are involved, to be able to foresee the final aftermath of our rapid technological development on the biosphere as the home of life.</p>
-                <p>Thus, what is now recognized as a threat to our environment is caused first of all by disturbances either in natural cycles of the six essentials, or in the energy cycle of the biosphere, energy being the driving force of all life processes.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать основные термины, связанные с биосферой, загрязнением и природными циклами, извлекать главную информацию из научно-популярного текста и описывать экологическую проблему с помощью причинно-следственных связей.</p>
+<h3>1. Reading: The Biosphere and Human Impact</h3>
+<p>The biosphere is the part of the Earth where life exists. It includes living organisms and the environments in which they interact: the lower atmosphere, water and parts of the land. Life depends on the movement of matter and the flow of energy. Water, carbon, nitrogen and other elements move through natural cycles between organisms, soil, water and the atmosphere.</p>
+<p>Human activities can change these cycles. Burning fossil fuels adds carbon dioxide and other substances to the atmosphere. Agriculture can affect soil and water through fertilisers, pesticides and land-use changes. Industrial processes and transport may release pollutants if emissions are not properly controlled. Excessive waste and habitat destruction can also put pressure on ecosystems.</p>
+<p>Environmental systems are complex. The effect of a pollutant depends on its chemical properties, amount, location, exposure and the sensitivity of organisms. Scientists use measurements and long-term monitoring to understand changes. Environmental protection may include reducing emissions, treating wastewater, using resources efficiently, restoring habitats and improving waste management.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>biosphere</td><td>биосфера</td><td>The biosphere includes all regions where life exists.</td></tr>
+<tr><td>natural cycle</td><td>природный цикл</td><td>Carbon moves through a natural cycle.</td></tr>
+<tr><td>fossil fuel</td><td>ископаемое топливо</td><td>Oil and coal are fossil fuels.</td></tr>
+<tr><td>greenhouse gas</td><td>парниковый газ</td><td>Carbon dioxide is a greenhouse gas.</td></tr>
+<tr><td>habitat</td><td>среда обитания</td><td>Pollution can damage a habitat.</td></tr>
+<tr><td>exposure</td><td>воздействие, контакт</td><td>Exposure depends on dose and duration.</td></tr>
+<tr><td>monitoring</td><td>мониторинг</td><td>Long-term monitoring shows changes.</td></tr>
+<tr><td>wastewater treatment</td><td>очистка сточных вод</td><td>Wastewater treatment helps protect rivers.</td></tr>
+</table>
+<h3>3. Language focus: cause and consequence</h3>
+<p>Причина: <i>because, due to, as a result of</i>. Следствие: <i>therefore, consequently, this may lead to</i>. Важно различать установленную причинную связь и предположение: используйте <i>may, can, is associated with</i>, если данных недостаточно для категоричного вывода.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What is the biosphere?</li><li>Name three parts of the Earth included in the biosphere.</li><li>How can burning fossil fuels affect the atmosphere?</li><li>Name two ways agriculture can affect the environment.</li><li>Why does the effect of a pollutant depend on several factors?</li><li>Name three environmental protection measures.</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите термин и определение:</b> biosphere; habitat; exposure; monitoring; wastewater treatment.</p>
+<p><b>Задание B. Завершите причинно-следственные предложения:</b> 1) If wastewater is not treated, … 2) If more materials are reused, … 3) Excessive emissions may lead to …</p>
+<p><b>Задание C. Прочитайте высказывания и отметьте, где нужна осторожная формулировка:</b> “This activity always destroys every ecosystem.” / “This activity may affect local water quality, depending on the substances and their concentration.” Объясните выбор.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>The part of Earth where life exists and interacts with its environment.</li><li>Lower atmosphere, water and parts of land/soil.</li><li>It adds carbon dioxide and other substances to the atmosphere.</li><li>Fertilisers, pesticides and land-use changes can affect soil and water.</li><li>Because chemical properties, amount, location, exposure and organism sensitivity differ.</li><li>Reduce emissions, treat wastewater, use resources efficiently, restore habitats, improve waste management.</li><li>Задание C: второе утверждение научно осторожнее и учитывает условия.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о воздействии одного вида деятельности на окружающую среду. Разделите причины, возможные последствия и меры снижения воздействия. Статистику используйте только с указанием проверенного источника.</p>
+`)
             ],
             [],
             [],

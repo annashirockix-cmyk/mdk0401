@@ -109,9 +109,9 @@
   var originalEnglishHome=window.renderHomePage;
   if(originalEnglishHome)window.renderHomePage=function(){
     originalEnglishHome.apply(this,arguments);
-    if(!window.state||window.state.activeCourseId!=="EN")return;
+    if(!window.state||["EN","ENB","ENT"].indexOf(window.state.activeCourseId)<0)return;
     var app=$("app"),hero=app&&app.querySelector(".hero");if(!app||!hero)return;
-    var quick=document.createElement("section");quick.className="module";quick.innerHTML='<h2>🇬🇧 Быстрый доступ к английскому</h2><p class="museum-muted">Выберите нужный формат занятия.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="#/english-tests">🎯 Тесты и контрольные</a><a class="btn ghost" href="#/english-media">🎬 Видео и презентации</a><a class="btn ghost" href="#/english-cards">🃏 Карточки и кроссворд</a></div>';
+    var quick=document.createElement("section");quick.className="module";quick.innerHTML='<h2>🇬🇧 Быстрый доступ к английскому</h2><p class="museum-muted">Выберите нужный формат занятия.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="#/english-tests">🎯 Тесты и контрольные</a><a class="btn ghost" href="#/english-media">🎬 Видео и презентации</a><a class="btn ghost" href="#/english-cards">🃏 Карточки и кроссворд</a><a class="btn ghost" href="#/english-listening">🎧 Аудирование</a></div>';
     hero.insertAdjacentElement("afterend",quick);
   };
   window.renderEnglishMediaPage=function(lessonId){

@@ -83,7 +83,7 @@ window.updateMenuVisibility = function() {
     var englishLinks=document.querySelectorAll('.english-drawer-item');
     Array.prototype.forEach.call(englishLinks,function(link){
         var href=link.getAttribute("href")||"";
-        var examOrLab=href==="#/english-tests"||href==="#/laboratory/english";
+        var examOrLab=href==="#/english-tests"||href==="#/laboratory/english"||href==="#/english-listening";
         link.style.display=(activeEnglish||(examOrLab&&hasEnglishAccess))?"flex":"none";
     });
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
@@ -288,7 +288,7 @@ window.saveSelfAnswer = function(code) {
     if (window.state.student && window.API) {
         window.API.saveResult({
             email: window.state.student.email, name: window.state.student.name, group: window.state.student.group,
-            testId: `self_${code}`, testTitle: "Самостоятельная: " + code, grade: 0, payload: val
+            testId: `written_self_${code}`, testTitle: "Самостоятельная: " + code, grade: 0, payload: val
         }).then(() => window.showToast("Ответ отправлен преподавателю!", "ok")).catch(() => window.showToast("Ошибка отправки", "err"));
     }
 };
@@ -403,28 +403,15 @@ window.renderStudentGradesPage = function() {
     document.getElementById("crumbs").textContent = "Мои оценки";
     app.appendChild(el('<a class="backlink" href="#/profile" style="color:var(--accent);">← Назад в профиль</a>'));
     
-    var autoGradesList = Object.keys(window.state.results || {}).filter(k => !k.startsWith("topic_") && k !== "certificateApproved" && k !== "certificate");
-    var autoRows = autoGradesList.map(k => {
-        var title = k; 
-        if(k.startsWith("test_")) title = "Тест по курсу " + k.split("_")[1];
-        if(k.startsWith("__final__")) title = "Итоговый экзамен";
-        if(k.startsWith("prac_")) title = "Практика: " + k.replace("prac_", "");
-        var gradeData = window.state.results[k];
-        var grade = typeof gradeData === 'object' ? gradeData.grade : (typeof gradeData === 'string' ? "Сдано" : "—");
-        var color = grade >= 4 ? "var(--ok)" : (grade >= 3 ? "var(--gold)" : (grade === "Сдано" ? "var(--accent)" : "var(--err)"));
-        return `<tr><td style="padding:10px; border:1px solid var(--border);">${title}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:${color}; font-size:18px;">${grade}</td></tr>`;
-    }).join("");
-
-    var manualGrades = JSON.parse(localStorage.getItem('portal_grades') || '[]');
-    var myManualGrades = manualGrades.filter(g => g.student.toLowerCase() === (window.state.student.email || '').toLowerCase());
-    var manualRows = myManualGrades.map(g => {
-        return `<tr><td style="padding:10px; border:1px solid var(--border);">${g.date}</td><td style="padding:10px; border:1px solid var(--border);">${g.subject}</td><td style="padding:10px; border:1px solid var(--border); text-align:center; font-weight:bold; color:var(--ok); font-size:18px;">${g.value}</td></tr>`;
-    }).join("");
+    // Grades are displayed only from server-authoritative result records.
+    // localStorage/state.results may contain stale or browser-edited values.
+    var autoRows = "";
+    var manualRows = "";
 
     app.innerHTML += `
         <section class="hero"><h1>📊 Мои оценки</h1></section>
-        <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody>${manualRows || '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Пока нет оценок</td></tr>'}<tr id="serverManualGrades"><td colspan="3" style="text-align:center;color:var(--muted)">Загрузка серверных оценок…</td></tr></tbody></table></div></div>
-        <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody id="serverAssessmentGrades">${autoRows || '<tr><td colspan="2" style="text-align:center; color:var(--muted);">Вы еще не проходили тесты</td></tr>'}</tbody></table></div></div>
+        <div class="module"><h3>Оценки от преподавателя</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Дата</th><th>Предмет</th><th>Оценка</th></tr></thead><tbody><tr id="serverManualGrades"><td colspan="3" style="text-align:center;color:var(--muted)">Загрузка серверных оценок…</td></tr></tbody></table></div></div>
+        <div class="module"><h3>Автоматические тесты и практики</h3><div class="journal-wrap"><table class="journal-table"><thead><tr><th>Работа</th><th>Результат</th></tr></thead><tbody id="serverAssessmentGrades"><tr id="serverAssessmentPlaceholder"><td colspan="2" style="text-align:center;color:var(--muted)">Загрузка результатов…</td></tr></tbody></table></div></div>
         <div class="module"><h3>Задания преподавателя</h3><div id="serverAssignmentGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
         <div class="module"><h3>Лабораторные работы по метрологии</h3><div id="serverMetrologyGrades" style="padding:10px;color:var(--muted)">Загрузка…</div></div>
     `;
@@ -467,8 +454,10 @@ window.renderStudentGradesPage = function() {
           var percent=Number(x.percent)||0;
           var date=x.finishedAt?new Date(x.finishedAt).toLocaleString("ru-RU"):"—";
           var title=window.escapeHtml(x.testTitle||x.testId||"Работа");
-          return "<tr><td>"+title+"<div style='font-size:12px;color:var(--muted)'>"+window.escapeHtml(course)+"</div></td><td style='text-align:center;font-weight:bold'>"+grade+" <span style='font-size:12px;color:var(--muted)'>("+percent+"%)</span><div style='font-size:12px;color:var(--muted)'>Попыток: "+item.count+"</div><div style='font-size:11px;color:var(--muted)'>"+window.escapeHtml(date)+"</div></td></tr>";
-        }).join(""):'<tr><td colspan="2" style="text-align:center;color:var(--muted)">Вы еще не проходили тесты</td></tr>';
+          var reviewInfo=x.reviewedAt?"<div style='font-size:11px;color:var(--muted)'>Проверено преподавателем"+(x.reviewedBy?" · "+window.escapeHtml(x.reviewedBy):"")+"</div>":"";
+          var reviewFeedback=x.feedback?"<div style='font-size:12px;white-space:pre-wrap;text-align:left'>Комментарий: "+window.escapeHtml(x.feedback)+"</div>":"";
+          return "<tr><td>"+title+"<div style='font-size:12px;color:var(--muted)'>"+window.escapeHtml(course)+"</div></td><td style='text-align:center;font-weight:bold'>"+grade+" <span style='font-size:12px;color:var(--muted)'>("+percent+"%)</span><div style='font-size:12px;color:var(--muted)'>Попыток: "+item.count+"</div><div style='font-size:11px;color:var(--muted)'>"+window.escapeHtml(date)+"</div>"+reviewInfo+reviewFeedback+"</td></tr>";
+        }).join(""):'<tr><td colspan="2" style="text-align:center;color:var(--muted)">Пока нет подтверждённых результатов</td></tr>';
       }).catch(function(e){
         console.warn("Не удалось обновить серверные оценки:",e);
       });
@@ -721,6 +710,42 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
     }
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
     
+    function getEmbeddedEnglishListening(lecture) {
+        if (lecture && typeof lecture.listeningId === "string" && /^en-c\d{2}-s\d{2}-l\d{2}$/.test(lecture.listeningId)) return lecture.listeningId;
+        var track = topic.sourceTrack || course.sourceTrack ||
+            (courseId === "ENB" ? "basic" : (courseId === "ENT" ? "technical" : ""));
+        var map = {
+            basic: {
+                "b-unit1": [1, 1, 0],
+                "b-unit2": [1, 2, 0],
+                "b-unit3": [2, 1, 0],
+                "b-unit4": [2, 2, 0],
+                "b-unit6": [2, 2, 3]
+            },
+            technical: {
+                "t-unit1": [3, 1, 0],
+                "t-unit2": [3, 1, 3],
+                "t-unit3": [3, 2, 0],
+                "t-unit12": [3, 2, 3],
+                "t-unit4": [4, 1, 0],
+                "t-unit5": [4, 1, 2],
+                "t-unit6": [4, 1, 4],
+                "t-unit7": [4, 1, 6],
+                "t-unit8": [4, 2, 0],
+                "t-unit9": [4, 2, 2],
+                "t-unit10": [4, 2, 5],
+                "t-unit11": [5, 1, 0]
+            }
+        };
+        var route = map[track] && map[track][topic.id];
+        var match = String(lecture && lecture.code || "").match(/\.(\d+)$/);
+        if (!route || !match) return null;
+        var lessonNumber = Number(match[1]) + route[2];
+        if (!Number.isFinite(lessonNumber) || lessonNumber < 1 || lessonNumber > 12) return null;
+        var pad = String(lessonNumber).padStart(2, "0");
+        return "en-c" + String(route[0]).padStart(2, "0") + "-s" + String(route[1]).padStart(2, "0") + "-l" + pad;
+    }
+
     document.getElementById("crumbs").textContent = topic.code + " " + topic.title;
     app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
     app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
@@ -741,7 +766,44 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         if (tabName === 'lectures') {
             if (topic.lectures && topic.lectures.length) {
                 topic.lectures.forEach(lec => {
-                    contentArea.innerHTML += `<details class="lec-accordion" open style="margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;"><summary style="padding:15px; font-weight:bold; cursor:pointer;">${lec.code} ${lec.title}</summary><div class="lec-content" style="padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;">${lec.content}</div></details>`;
+                    var details = document.createElement("details");
+                    details.className = "lec-accordion";
+                    details.open = true;
+                    details.style.cssText = "margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;";
+                    var summary = document.createElement("summary");
+                    summary.style.cssText = "padding:15px; font-weight:bold; cursor:pointer;";
+                    summary.textContent = String(lec.code || "") + " " + String(lec.title || "");
+                    details.appendChild(summary);
+                    var lectureBody = document.createElement("div");
+                    lectureBody.className = "lec-content";
+                    lectureBody.style.cssText = "padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;";
+                    lectureBody.innerHTML = lec.content || "";
+                    details.appendChild(lectureBody);
+
+                    var listeningId = getEmbeddedEnglishListening(lec);
+                    var listening = listeningId && window.EnglishListeningCatalogue &&
+                        window.EnglishListeningCatalogue.getById
+                        ? window.EnglishListeningCatalogue.getById(listeningId) : null;
+                    if (listening && window.EnglishListeningLesson && window.EnglishListeningLesson.render) {
+                        var listeningSection = document.createElement("section");
+                        listeningSection.className = "english-listening-inline";
+                        listeningSection.style.cssText = "margin:16px 0 4px; padding:16px; border:1px solid var(--border); border-radius:10px; background:var(--card-soft);";
+                        var listeningTitle = document.createElement("h4");
+                        listeningTitle.textContent = "🎧 Аудирование · " + listening.title;
+                        listeningSection.appendChild(listeningTitle);
+                        var listeningMount = document.createElement("div");
+                        listeningSection.appendChild(listeningMount);
+                        details.appendChild(listeningSection);
+                        window.EnglishListeningLesson.render(listeningMount, {
+                            mode: "practice",
+                            script: listening.script,
+                            lang: "en-GB",
+                            repeatCount: 2,
+                            rate: 0.88,
+                            questions: listening.questions
+                        });
+                    }
+                    contentArea.appendChild(details);
                 });
             } else {
                 contentArea.innerHTML += "<p>Текстовых лекций нет.</p>";
@@ -803,25 +865,51 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         var test = (window.customContent.tests || []).find(function (t) { return String(t.id) === String(testId); });
         var area = document.getElementById("topicContent");
         if (!test || !area) { if (area) area.textContent = "Тест не найден."; return; }
-        area.dataset.testId="custom_"+testId;area.dataset.proctorAssessment="1";
-        var questions = test.questions || [], answers = [], index = 0, started = Date.now();
-        if (!questions.length) { area.textContent = "В тесте пока нет вопросов."; return; }
-        function draw() {
-            if (index >= questions.length) {
-                area.innerHTML = "<p>Проверяем ответы на сервере…</p>";
-                window.API.submitCustomTest(testId, answers, Math.round((Date.now()-started)/1000), test.courseId || test.mdkId).then(function (result) {
-                    if (!result || !result.success) throw new Error(result && result.error || "Не удалось проверить тест.");
-                    area.dataset.proctorAssessment="0";
-                    area.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться к тестам</button></div>';
-                }).catch(function (error) { area.textContent = error.message || "Ошибка проверки теста."; });
-                return;
-            }
-            var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>';
-            (q.options||[]).forEach(function (option,i) { html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>'; });
-            area.innerHTML = html;
-            area.querySelectorAll("[data-custom-answer]").forEach(function (button) { button.onclick = function () { answers[index] = Number(button.dataset.customAnswer); index++; draw(); }; });
+        var courseId = test.courseId || test.mdkId || (window.state && window.state.activeCourseId) || "";
+        if (!window.API || !window.API.getCustomTest || !window.API.submitCustomTest) {
+            area.textContent = "Защищённый режим тестирования недоступен. Обратитесь к преподавателю.";
+            return;
         }
-        draw();
+        area.dataset.testId = "custom_" + testId;
+        area.dataset.proctorAssessment = "1";
+        area.textContent = "Получаем индивидуальный вариант теста…";
+        try {
+            var attempt = await window.API.getCustomTest(testId, courseId);
+            if (!attempt || !attempt.success || !Array.isArray(attempt.questions) || !attempt.attemptId) {
+                throw new Error(attempt && attempt.error || "Сервер не выдал защищённую попытку.");
+            }
+            var questions = attempt.questions, answers = [], index = 0, started = Date.now();
+            if (!questions.length) throw new Error("В тесте пока нет вопросов.");
+            function draw() {
+                if (index >= questions.length) {
+                    area.innerHTML = "<p>Проверяем ответы на сервере…</p>";
+                    window.API.submitCustomTest({
+                        testId: testId, courseId: courseId, attemptId: attempt.attemptId,
+                        answers: answers, timeSpent: Math.round((Date.now() - started) / 1000)
+                    }).then(function (result) {
+                        if (!result || !result.success) throw new Error(result && result.error || "Не удалось проверить тест.");
+                        area.dataset.proctorAssessment = "0";
+                        area.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться к тестам</button></div>';
+                    }).catch(function (error) {
+                        area.dataset.proctorAssessment = "0";
+                        area.textContent = error.message || "Ошибка проверки теста.";
+                    });
+                    return;
+                }
+                var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>';
+                (q.options || []).forEach(function(option, i) {
+                    html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>';
+                });
+                area.innerHTML = html;
+                area.querySelectorAll("[data-custom-answer]").forEach(function(button) {
+                    button.onclick = function() { answers[index] = Number(button.dataset.customAnswer); index++; draw(); };
+                });
+            }
+            draw();
+        } catch (error) {
+            area.dataset.proctorAssessment = "0";
+            area.textContent = error.message || "Не удалось открыть защищённый тест.";
+        }
     };
 
     window.startInlineTest = function(topicId, selfWorkCode) {

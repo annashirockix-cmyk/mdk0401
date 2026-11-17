@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c2_s2",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 2, Semester 2 — Pilot Variant 7",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s2v07_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When is the demonstration?",
+      "audioText": "The science library has added a new guide to evaluating scientific claims. Students can attend a demonstration on Monday at three in the reading room. The librarian will show how to distinguish a research result from an opinion and how to find the original study. A printed checklist will be available, and the guide can also be downloaded from the library website.",
+      "options": [
+        "On Monday at three",
+        "On Tuesday at three",
+        "On Monday at four",
+        "On Tuesday at four"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v07_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What will the librarian show students how to find?",
+      "audioText": "The science library has added a new guide to evaluating scientific claims. Students can attend a demonstration on Monday at three in the reading room. The librarian will show how to distinguish a research result from an opinion and how to find the original study. A printed checklist will be available, and the guide can also be downloaded from the library website.",
+      "options": [
+        "The original study",
+        "A book review of the topic",
+        "A newspaper opinion article",
+        "A summary written by another student"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v07_r01",
+      "type": "single_choice",
+      "prompt": "A social media post claimed that a common household product could prevent every seasonal illness. It included a photograph but no reference to a scientific study. A student searched for the claim and found that health organisations did not support it. She wrote a short note explaining that an image alone was not evidence and that broad claims require reliable research. Reading 1. What was missing from the social media post?",
+      "options": [
+        "A list of product ingredients",
+        "A reference to a scientific study",
+        "A photograph showing the product label",
+        "A link to a shopping website"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v07_r02",
+      "type": "single_choice",
+      "prompt": "What did the student explain in her note?",
+      "options": [
+        "A photograph is always reliable evidence",
+        "An image alone is not evidence and broad claims need reliable research",
+        "Only personal experience is needed to support a claim",
+        "A personal recommendation is enough to support broad claims"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v07_g01",
+      "type": "single_choice",
+      "prompt": "The article would be more convincing if it ___ the original research.",
+      "options": [
+        "cites last year",
+        "will cite yesterday",
+        "cited",
+        "was cite"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s2v07_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO features of a well-supported scientific claim.",
+      "options": [
+        "A dramatic headline without sources",
+        "An anonymous message shared many times",
+        "A clear reference to relevant research",
+        "Evidence that can be checked"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v07_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "A statement that is presented as true and can be checked is a ___.",
+      "acceptedAnswers": [
+        "claim"
+      ]
+    },
+    {
+      "id": "c2s2v07_f01",
+      "type": "single_choice",
+      "prompt": "A friend shares an unsupported claim. What is a constructive reply?",
+      "options": [
+        "That is obviously true because many people shared it.",
+        "I will repost it before checking.",
+        "Only foolish people believe that.",
+        "Do you have a reliable source for this claim? I would like to check the evidence."
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s2v07_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of scientific claims in a logical order.",
+      "options": [
+        "Check whether the evidence supports the claim",
+        "Identify the exact claim",
+        "Summarise the conclusion with suitable caution",
+        "Find the original research or reliable review"
+      ],
+      "correctOrder": [
+        "Identify the exact claim",
+        "Find the original research or reliable review",
+        "Check whether the evidence supports the claim",
+        "Summarise the conclusion with suitable caution"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v07_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why it is important to check scientific claims before sharing them. Give two examples of useful checks.",
+      "rubric": "8 points total: the response explains why scientific claims should be checked before sharing (0–2); it gives two useful checks and distinguishes evidence from an unsupported claim (0–2); the explanation is logically organised with understandable grammar (0–2); science/source-evaluation vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s2v07_audio",
+    "readingPassageId": "c2s2v07_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 13",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v13_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. On which day is condition monitoring discussed?",
+      "audioText": "The maintenance engineering tutor will discuss condition monitoring on Monday at eleven. Students should bring the sample vibration-trend chart. The lesson will explain how repeated measurements reveal equipment trends and why unusual readings must be checked.",
+      "options": [
+        "On Monday at eleven",
+        "On Monday at ten",
+        "On Tuesday at eleven",
+        "On Monday at twelve"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v13_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which trend chart should students bring?",
+      "audioText": "The maintenance engineering tutor will discuss condition monitoring on Monday at eleven. Students should bring the sample vibration-trend chart. The lesson will explain how repeated measurements reveal equipment trends and why unusual readings must be checked.",
+      "options": [
+        "The sample maintenance trend chart",
+        "The sample vibration-trend chart",
+        "The equipment inventory sheet",
+        "The calibration certificate"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v13_r01",
+      "type": "single_choice",
+      "prompt": "Predictive maintenance uses condition information to estimate when equipment may require attention. Repeated vibration or temperature measurements can reveal a developing trend. A single unusual value may result from measurement error or changing operating conditions, so it should be checked against the method and other evidence. Decisions should follow the approved procedure. Reading 1. What can repeated measurements reveal?",
+      "options": [
+        "The exact cause of every equipment fault",
+        "A developing trend in equipment condition",
+        "The purchase price of a replacement component",
+        "The name of the person who recorded the value"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v13_r02",
+      "type": "single_choice",
+      "prompt": "Why should one unusual value be checked?",
+      "options": [
+        "It means the equipment must be replaced immediately",
+        "It always confirms an equipment failure",
+        "It proves that the sensor has been installed incorrectly",
+        "It may result from measurement error or changing operating conditions"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v13_g01",
+      "type": "single_choice",
+      "prompt": "Repeated measurements ___ a developing trend.",
+      "options": [
+        "can reveal",
+        "was transferred",
+        "transferring",
+        "are transfer"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v13_m01",
+      "type": "multiple_choice",
+      "prompt": "Which TWO measured variables can provide direct evidence of changing equipment condition?",
+      "options": [
+        "Equipment serial number",
+        "Maintenance task reference",
+        "Vibration measurements",
+        "Temperature readings"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v13_v01",
+      "type": "short_text",
+      "prompt": "The process of observing equipment condition over time is condition ___.",
+      "acceptedAnswers": [
+        "monitoring"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v13_f01",
+      "type": "single_choice",
+      "prompt": "A recorded measurement differs from the expected range. What should be verified before interpreting it?",
+      "options": [
+        "Ignore the reading and continue with the planned maintenance.",
+        "Compare the number with the expected range before checking the measurement method.",
+        "Please check the measurement method and instrument status, then compare the value with supporting evidence.",
+        "Change the recorded value to the nearest expected figure and note the difference."
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v13_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of predictive maintenance data in a logical order.",
+      "options": [
+        "Follow the approved maintenance decision process",
+        "Check unusual values against other evidence",
+        "Compare readings over time",
+        "Collect condition measurements"
+      ],
+      "correctOrder": [
+        "Collect condition measurements",
+        "Compare readings over time",
+        "Check unusual values against other evidence",
+        "Follow the approved maintenance decision process"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v13_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how condition-monitoring data supports predictive maintenance. Include why trends and verification matter.",
+      "rubric": "8 points total: the response explains how condition-monitoring information can support predictive maintenance (0–2); it explains why trends should be verified using measurement context and supporting evidence rather than relying on one unusual value (0–2); the explanation is clear with understandable grammar (0–2); condition-monitoring/maintenance vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v13_audio",
+    "readingPassageId": "c4s2v13_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

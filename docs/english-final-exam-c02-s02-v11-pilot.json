@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c2_s2",
+  "courseNo": 2,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 2, Semester 2 — Pilot Variant 11",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c2s2v11_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the discussion take place?",
+      "audioText": "The college economics club is organising a discussion about responsible consumer choices. It will take place in the seminar room on Wednesday at one thirty. A guest speaker will explain product labels, repair services and the environmental cost of packaging. Students should read the short case study on the club page before the discussion.",
+      "options": [
+        "On Wednesday at one thirty",
+        "On Tuesday at one thirty",
+        "On Wednesday at two thirty",
+        "On Thursday at one thirty"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v11_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which preparatory material is mentioned for students?",
+      "audioText": "The college economics club is organising a discussion about responsible consumer choices. It will take place in the seminar room on Wednesday at one thirty. A guest speaker will explain product labels, repair services and the environmental cost of packaging. Students should read the short case study on the club page before the discussion.",
+      "options": [
+        "The product label",
+        "The speaker's presentation slides",
+        "The short case study on the club page",
+        "The meeting minutes"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c2s2v11_r01",
+      "type": "single_choice",
+      "prompt": "When choosing a new phone, Marina compared the purchase price, repair options and expected battery life. One model was cheaper, but its battery could not be replaced easily. Another cost more and came with a longer repair guarantee. Marina chose the second model because she expected to use it for several years and wanted to avoid replacing the device too soon. Reading 1. What did Marina compare besides the purchase price?",
+      "options": [
+        "Product colours and screen sizes",
+        "Repair options and expected battery life",
+        "Screen size and camera quality",
+        "Delivery times and payment methods"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v11_r02",
+      "type": "single_choice",
+      "prompt": "Why did she choose the more expensive model?",
+      "options": [
+        "It had the lowest purchase price",
+        "She expected to use it for several years and wanted easier repairs",
+        "It was the newest model available",
+        "She expected the phone to be replaced within one year"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c2s2v11_g01",
+      "type": "single_choice",
+      "prompt": "If a product ___ for longer, fewer replacements may be needed.",
+      "options": [
+        "lasts",
+        "lasted tomorrow",
+        "will lasts",
+        "is last"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c2s2v11_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO factors that support a responsible purchase.",
+      "options": [
+        "The number of online advertisements",
+        "A celebrity's unrelated opinion",
+        "Repairability and product lifespan",
+        "Clear information about materials"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v11_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "A product designed so that parts can be fixed or replaced has good ___.",
+      "acceptedAnswers": [
+        "repairability"
+      ]
+    },
+    {
+      "id": "c2s2v11_f01",
+      "type": "single_choice",
+      "prompt": "You want to ask a shop about repairing a device. What is a suitable question?",
+      "options": [
+        "I want a new one. Do not ask me anything.",
+        "I will open the device myself.",
+        "Your products are all bad.",
+        "Could you tell me whether the battery can be replaced?"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c2s2v11_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of consumer choices in a logical order.",
+      "options": [
+        "Choose the option that meets your requirements",
+        "Identify what you need",
+        "Maintain or repair the item when possible",
+        "Compare quality, repair and cost information"
+      ],
+      "correctOrder": [
+        "Identify what you need",
+        "Compare quality, repair and cost information",
+        "Choose the option that meets your requirements",
+        "Maintain or repair the item when possible"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c2s2v11_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining what makes a purchase responsible. Discuss price, product lifespan and one environmental factor.",
+      "rubric": "8 points total: price and product lifespan are discussed as factors in a responsible purchase (0–2); one relevant environmental factor is explained and connected to the decision (0–2); the argument is logically organised with understandable grammar (0–2); consumer/sustainability vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c2s2v11_audio",
+    "readingPassageId": "c2s2v11_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

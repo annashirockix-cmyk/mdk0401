@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c3_s1",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 3, Semester 1 — Pilot Variant 2",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s1v02_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where can students collect the worksheet?",
+      "audioText": "The drawing office has updated the worksheet for dimension reading. Students should collect a copy from Room 8 before the lesson on Thursday. The instructor will explain the difference between overall dimensions and hole spacing. A short practice task will follow, and students may use the metric conversion table provided on the last page.",
+      "options": [
+        "From Room 8",
+        "From Room 6",
+        "From Room 10",
+        "From Room 12"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v02_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What two types of dimensions will be explained?",
+      "audioText": "The drawing office has updated the worksheet for dimension reading. Students should collect a copy from Room 8 before the lesson on Thursday. The instructor will explain the difference between overall dimensions and hole spacing. A short practice task will follow, and students may use the metric conversion table provided on the last page.",
+      "options": [
+        "Overall length and material thickness",
+        "Overall dimensions and hole spacing",
+        "Hole diameter and thread pitch",
+        "Surface finish and tolerance class"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v02_r01",
+      "type": "single_choice",
+      "prompt": "A technician checked a component drawing before preparing an inspection record. The overall length was shown as 120 millimetres, while the width was 45 millimetres. Two holes were positioned at equal distances from the centre line. The technician recorded the measurements in the same units as the drawing and noted that the drawing revision number had to be included in the report. Reading 1. What was the overall length?",
+      "options": [
+        "115 millimetres",
+        "125 millimetres",
+        "120 millimetres",
+        "130 millimetres"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s1v02_r02",
+      "type": "single_choice",
+      "prompt": "Why did the technician record the revision number?",
+      "options": [
+        "To confirm the material grade",
+        "To record the inspection date",
+        "To identify the technician who measured the component",
+        "To identify the exact version of the drawing"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s1v02_g01",
+      "type": "single_choice",
+      "prompt": "The width of the plate ___ as 45 millimetres on the drawing.",
+      "options": [
+        "is shown",
+        "show",
+        "showing",
+        "was show"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s1v02_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO drawing fields needed to interpret a dimension's measurement basis and confirm that the correct issue is being used.",
+      "options": [
+        "Drawing title",
+        "Sheet size",
+        "Units of measurement",
+        "Drawing revision number"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v02_v01",
+      "type": "short_text",
+      "points": 2,
+      "prompt": "A sequence number assigned to a drawing update is its revision ___.",
+      "acceptedAnswers": [
+        "number"
+      ]
+    },
+    {
+      "id": "c3s1v02_f01",
+      "type": "single_choice",
+      "prompt": "A dimension is difficult to read. What should you ask?",
+      "options": [
+        "I will guess the value and continue.",
+        "Could you help me confirm this dimension on the latest drawing?",
+        "The measurement does not matter.",
+        "I will change the drawing myself."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s1v02_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of technical dimensions in a logical order.",
+      "options": [
+        "Read the relevant dimensions",
+        "Check the drawing title and revision",
+        "Record the values accurately",
+        "Identify the units"
+      ],
+      "correctOrder": [
+        "Check the drawing title and revision",
+        "Identify the units",
+        "Read the relevant dimensions",
+        "Record the values accurately"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s1v02_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how to read and record dimensions from a technical drawing. Mention units, revision control and one possible source of error.",
+      "rubric": "8 points total: the response explains how to read and record dimensions, including units (0–2); it addresses checking the drawing revision and identifies one plausible source of measurement/reading error (0–2); instructions are clear with understandable grammar (0–2); dimension/revision vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s1v02_audio",
+    "readingPassageId": "c3s1v02_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

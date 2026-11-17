@@ -49,14 +49,14 @@
     if (!window.API || !window.API.getEnglishVprExam) { document.getElementById("englishVprLoading").textContent="Сервер экзаменов недоступен. Обратитесь к преподавателю."; return; }
     window.API.getEnglishVprExam(track).then(function(response) {
       if (!response || !response.success || !response.exam) throw new Error(response && response.error || "Экзамен не найден на сервере.");
-      renderLoadedExam(response.exam,track,course,app);
+      renderLoadedExam(response.exam,track,course,app,response.attemptId);
     }).catch(function(error) {
       var loading=document.getElementById("englishVprLoading");
       if(loading) loading.textContent="Не удалось загрузить экзамен с сервера: "+(error.message||error)+". Обратитесь к преподавателю.";
     });
     return;
   }
-  function renderLoadedExam(exam,track,course,app) {
+  function renderLoadedExam(exam,track,course,app,attemptId) {
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
     if(track!=="basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) { var b=el("button","btn ghost","Basic English"); b.type="button"; b.onclick=function(){renderPage("final-basic");}; tabs.appendChild(b); }
@@ -78,7 +78,7 @@
     }
     app.appendChild(panel);
   }
-  function startExam(exam, key, panel, courseId, track) {
+  function startExam(exam, key, panel, courseId, track, attemptId, startedAt) {
     courseId = courseId || courseForTrack(exam.track);
     var student = window.state && window.state.student;
     if (student && window.API && window.API.getTestAttemptStatus && window._englishVprGate !== key) {
@@ -89,13 +89,34 @@
           return;
         }
         window._englishVprGate = key;
-        startExam(exam, key, panel, courseId, track);
+        startExam(exam, key, panel, courseId, track, attemptId, startedAt);
         window._englishVprGate = "";
       }).catch(function () { panel.textContent = "Не удалось проверить доступ. Обновите страницу и попробуйте ещё раз."; });
       return;
     }
+    if (!attemptId) {
+      if (!window.API || !window.API.startEnglishVprExam) {
+        panel.textContent = "Сервер запуска экзамена недоступен. Обратитесь к преподавателю.";
+        return;
+      }
+      panel.innerHTML = "<p>Запускаем экзамен и фиксируем время начала…</p>";
+      window.API.startEnglishVprExam(track).then(function(started) {
+        if (!started || started.success !== true || !started.attemptId || !started.exam) {
+          throw new Error(started && started.error || "Сервер не выдал вариант экзамена.");
+        }
+        startExam(started.exam, key, panel, courseId, track, started.attemptId, started.startedAt);
+      }).catch(function(error) {
+        panel.textContent = "Не удалось запустить экзамен: " + (error.message || error);
+      });
+      return;
+    }
+    exam = exam || {};
     if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
-    var seconds = exam.time * 60, finished = false;
+    var durationSeconds = Math.max(1, Number(exam.time) || 90) * 60;
+    var seconds = Number(startedAt) > 0 ?
+      Math.max(0, durationSeconds - Math.floor(Math.max(0, Date.now() - Number(startedAt)) / 1000)) :
+      durationSeconds;
+    var finished = false;
     panel.innerHTML = "";
     var timer = el("div", "exam-timer", "90:00");
     timer.style.cssText = "position:sticky;top:8px;z-index:3;padding:12px;text-align:center;font-size:24px;font-weight:800;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--accent)";
@@ -239,7 +260,7 @@
         window.alert("Серверная проверка недоступна. Ответы не отправлены; обратитесь к преподавателю.");
         return;
       }
-      window.API.submitEnglishVprExam({track:track,answers:answers,timeSpent:elapsed}).then(function(result) {
+      window.API.submitEnglishVprExam({track:track,attemptId:attemptId,answers:answers,timeSpent:elapsed}).then(function(result) {
         if (!result || !result.success) throw new Error(result && result.error || "Сервер не подтвердил отправку.");
         finished = true;
         if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
@@ -310,15 +331,30 @@
       card.innerHTML="<p>Проверяем доступ к контрольной…</p>";
       window.API.getTestAttemptStatus(course,testKey).then(function(status){
         if(!status||status.allowed===false){card.textContent="Попытка уже использована. Для повторного прохождения обратитесь к преподавателю.";return;}
-        renderSemesterAttempt(test,track,course,card);
+        beginSemesterAttempt(test,track,course,card);
       }).catch(function(error){card.textContent="Не удалось проверить попытку: "+(error.message||error);});
       return;
     }
-    renderSemesterAttempt(test,track,course,card);
+    beginSemesterAttempt(test,track,course,card);
   }
-  function renderSemesterAttempt(test,track,course,card) {
+  function beginSemesterAttempt(test,track,course,card) {
+    if(!window.API || !window.API.startEnglishSemesterTest) {
+      card.textContent="Сервер запуска контрольной недоступен. Обратитесь к преподавателю.";
+      return;
+    }
+    card.innerHTML="<p>Запускаем контрольную и фиксируем время начала…</p>";
+    window.API.startEnglishSemesterTest({track:track,testId:test.id,attemptNo:test.attemptNo}).then(function(started){
+      if(!started || started.success!==true || !started.attemptId) throw new Error(started&&started.error||"Сервер не выдал идентификатор попытки.");
+      renderSemesterAttempt(test,track,course,card,started.attemptId,started.startedAt);
+    }).catch(function(error){
+      card.textContent="Не удалось запустить контрольную: "+(error.message||error);
+    });
+  }
+  function renderSemesterAttempt(test,track,course,card,attemptId,startedAt) {
     if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
-    var duration=Math.max(1,Number(test.time)||45)*60, seconds=duration, finished=false;
+    var duration=Math.max(1,Number(test.time)||45)*60;
+    var seconds=Number(startedAt)>0?Math.max(0,duration-Math.floor(Math.max(0,Date.now()-Number(startedAt))/1000)):duration;
+    var finished=false;
     card.innerHTML="";
     var heading=el("h2","",test.title||"Семестровая контрольная");
     card.appendChild(heading); card.appendChild(el("p","museum-muted",test.subtitle||""));
@@ -353,7 +389,7 @@
       if(seconds>0&&!window.confirm("Отправить контрольную на проверку? После отправки изменить ответы будет нельзя."))return;
       finished=true; submit.disabled=true; submit.textContent="Проверяем на сервере…";
       if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
-      window.API.submitEnglishSemesterTest({track:track,testId:test.id,answers:answers,timeSpent:duration-seconds}).then(function(result){
+      window.API.submitEnglishSemesterTest({track:track,testId:test.id,attemptNo:test.attemptNo,attemptId:attemptId,answers:answers,timeSpent:duration-seconds}).then(function(result){
         if(!result||result.success!==true)throw new Error(result&&result.error||"Сервер не подтвердил отправку.");
         var key="english_semester_"+track+"_"+test.id;
         window.state.results=window.state.results||{};
@@ -381,6 +417,142 @@
     tick(); window.englishAssessmentTimer=window.setInterval(tick,1000);
   }
 
+
+  function renderPersistentFinalExam(courseNo, semester, card) {
+    if (!window.API || !window.API.startEnglishFinalExam) { card.textContent="Сервер итоговых экзаменов недоступен."; return; }
+    card.innerHTML="<p>Получаем персональный вариант и проверяем сохранённую попытку…</p>";
+    window.API.startEnglishFinalExam(courseNo,semester).then(function(started){
+      if(!started||started.success!==true||!started.attemptId||!Array.isArray(started.tasks)) throw new Error(started&&started.error||"Сервер не выдал экзаменационный вариант.");
+      renderPersistentAttempt(started,card,courseNo,semester);
+    }).catch(function(error){
+      var message=String(error&&error.message||error||"Не удалось открыть итоговый экзамен.");
+      card.innerHTML="";
+      card.appendChild(el("p","", "Не удалось открыть итоговый экзамен: "+message));
+      if(/лимит попыток|попыток итогового экзамена исчерпан/i.test(message)&&window.API&&window.API.requestTestAttempts){
+        var request=el("button","btn","📨 Запросить дополнительную попытку");
+        var status=el("p","museum-muted","");
+        request.type="button";
+        request.onclick=function(){
+          request.disabled=true;status.textContent="Отправляем запрос преподавателю…";
+          var courseId=Number(courseNo)<=2?"ENB":"ENT",testId="english_final_c"+courseNo+"_s"+semester;
+          window.API.requestTestAttempts(courseId,testId).then(function(result){
+            if(!result||result.success!==true)throw new Error(result&&result.error||"Не удалось отправить запрос.");
+            status.textContent=result.alreadyRequested?"Запрос уже отправлен. Дождитесь решения преподавателя.":"Запрос отправлен преподавателю. После разрешения можно будет начать новую попытку.";
+          }).catch(function(requestError){status.textContent=requestError.message||String(requestError);request.disabled=false;});
+        };
+        var retry=el("button","btn ghost","Проверить разрешение и начать");
+        retry.type="button";
+        retry.onclick=function(){renderPersistentFinalExam(courseNo,semester,card);};
+        card.appendChild(request);card.appendChild(retry);card.appendChild(status);
+      }
+    });
+  }
+  function renderPersistentAttempt(attempt, card, courseNo, semester) {
+    if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
+    var tasks=attempt.tasks||[],responses=Object.assign({},attempt.responses||{}),finished=false;
+    if(!tasks.length){card.textContent="Вариант экзамена пока не содержит заданий.";return;}
+    card.innerHTML="";
+    card.appendChild(el("h2","","Итоговый экзамен · курс "+courseNo+", семестр "+semester));
+    card.appendChild(el("p","museum-muted","Вариант "+(attempt.variantId||"")+" · ответы автоматически сохраняются на сервере."));
+    var timer=el("div","exam-timer","Оставшееся время");
+    timer.style.cssText="position:sticky;top:8px;z-index:3;padding:12px;text-align:center;font-size:23px;font-weight:800;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--accent)";
+    card.appendChild(timer);
+    var saveStatus=el("p","museum-muted","Ответы ещё не изменялись.");
+    card.appendChild(saveStatus);
+    var form=el("form","english-final-persistent-form notranslate");form.setAttribute("translate","no");
+    form.addEventListener("submit",function(e){e.preventDefault();});
+    var saveQueue=Promise.resolve(),saveTimer=null;
+    function taskId(task,index){return String(task.id||task.questionId||index);}
+    function optionText(option){return typeof option==="object"&&option!==null?String(option.text||option.label||option.value||""):String(option);}
+    function saveNow(force){
+      if(finished&&!force)return saveQueue;
+      var payload=JSON.parse(JSON.stringify(responses));
+      saveQueue=saveQueue.then(function(){return window.API.saveEnglishFinalExamResponses(attempt.attemptId,payload);}).then(function(result){
+        if(!result||result.success!==true)throw new Error(result&&result.error||"Сервер не подтвердил сохранение.");
+        saveStatus.textContent="Сохранено на сервере · "+new Date(result.savedAt||Date.now()).toLocaleTimeString();
+      }).catch(function(error){saveStatus.textContent="Ошибка автосохранения: "+(error.message||error);});
+      return saveQueue;
+    }
+    function queueSave(){
+      if(saveTimer)window.clearTimeout(saveTimer);
+      saveTimer=window.setTimeout(function(){saveTimer=null;saveNow();},500);
+    }
+    tasks.forEach(function(task,index){
+      var id=taskId(task,index),type=String(task.type||task.taskType||"single_choice").toLowerCase();
+      var block=el("section","question");block.style.cssText="padding:15px;margin:14px 0;background:var(--card-soft);border:1px solid var(--border);border-radius:12px";
+      block.appendChild(el("h3","","Задание "+(index+1)));
+      block.appendChild(el("p","",task.prompt||task.question||task.q||task.text||""));
+      if(task.audioText&&("speechSynthesis" in window)){
+        var audio=el("button","btn ghost","🔊 Прослушать текст");audio.type="button";audio.onclick=function(){window.speechSynthesis.cancel();var utterance=new SpeechSynthesisUtterance(String(task.audioText));utterance.lang="en-GB";window.speechSynthesis.speak(utterance);};block.appendChild(audio);
+      }
+      var options=Array.isArray(task.options)?task.options:(Array.isArray(task.items)?task.items:[]);
+      if(type==="single_choice"||type==="single-choice"||type==="choice"){
+        options.forEach(function(option,oi){
+          var label=el("label");label.style.cssText="display:flex;gap:9px;align-items:flex-start;padding:7px 0";
+          var input=el("input");input.type="radio";input.name="ef_"+id;input.value=String(oi);input.checked=Number(responses[id])===oi;
+          input.addEventListener("change",function(){responses[id]=oi;saveNow();});
+          label.appendChild(input);label.appendChild(document.createTextNode(optionText(option)));block.appendChild(label);
+        });
+      }else if(type==="multiple_choice"||type==="multiple-choice"){
+        var selected=Array.isArray(responses[id])?responses[id].map(Number):[];
+        options.forEach(function(option,oi){
+          var label=el("label");label.style.cssText="display:flex;gap:9px;align-items:flex-start;padding:7px 0";
+          var input=el("input");input.type="checkbox";input.value=String(oi);input.checked=selected.indexOf(oi)!==-1;
+          input.addEventListener("change",function(){responses[id]=Array.from(block.querySelectorAll('input[type="checkbox"]:checked')).map(function(x){return Number(x.value);});saveNow();});
+          label.appendChild(input);label.appendChild(document.createTextNode(optionText(option)));block.appendChild(label);
+        });
+      }else if(type==="ordering"||type==="order"){
+        var orderValues=options.map(optionText),orderBox=el("div");
+        orderValues.forEach(function(value,oi){
+          var line=el("label");line.style.cssText="display:flex;gap:10px;align-items:center;padding:6px 0";
+          line.appendChild(el("span","",value));
+          var select=el("select");select.className="ef-order-position";
+          for(var pos=1;pos<=orderValues.length;pos++){var opt=el("option","",String(pos));opt.value=String(pos);select.appendChild(opt);}
+          var current=Array.isArray(responses[id])?responses[id].indexOf(value):-1;
+          if(current>=0)select.value=String(current+1);
+          select.addEventListener("change",function(){var pairs=Array.from(orderBox.querySelectorAll(".ef-order-position")).map(function(x,i){return {pos:Number(x.value),value:orderValues[i]};}).sort(function(a,b){return a.pos-b.pos;});responses[id]=pairs.map(function(x){return x.value;});saveNow();});
+          line.appendChild(select);orderBox.appendChild(line);
+        });block.appendChild(orderBox);
+      }else if(type==="short_text"||type==="short-text"){
+        var input=el("input");input.type="text";input.style.width="100%";input.value=String(responses[id]||"");
+        input.addEventListener("input",function(){responses[id]=input.value;queueSave();});block.appendChild(input);
+      }else if(type==="written"||type==="writing"||type==="essay"||type==="free_response"){
+        var area=el("textarea");area.rows=6;area.style.width="100%";area.value=String(responses[id]||"");area.placeholder="Введите развёрнутый ответ…";
+        area.addEventListener("input",function(){responses[id]=area.value;queueSave();});block.appendChild(area);
+      }else{
+        block.appendChild(el("p","museum-muted","Тип задания пока не поддерживается интерфейсом: "+type+". Сообщите преподавателю."));
+      }
+      form.appendChild(block);
+    });
+    card.appendChild(form);
+    var submit=el("button","btn","Завершить и отправить экзамен");submit.type="button";submit.style.cssText="width:100%;padding:15px";
+    function submitExam(auto){
+      if(finished)return;
+      if(!auto&&!window.confirm("Отправить итоговый экзамен? После отправки изменить ответы будет нельзя."))return;
+      finished=true;submit.disabled=true;submit.textContent="Сохраняем и проверяем…";
+      if(window.englishAssessmentTimer){clearInterval(window.englishAssessmentTimer);window.englishAssessmentTimer=null;}
+      if(saveTimer){window.clearTimeout(saveTimer);saveTimer=null;}
+      saveNow(true);
+      saveQueue.then(function(){return window.API.submitEnglishFinalExam(attempt.attemptId,responses);}).then(function(result){
+        if(!result||result.success!==true)throw new Error(result&&result.error||"Сервер не подтвердил отправку.");
+        card.innerHTML="";
+        card.appendChild(el("h2","",result.status==="pending_review"?"Экзамен отправлен на проверку":"Экзамен проверен"));
+        if(result.result&&result.result.percent!==null&&result.result.percent!==undefined)card.appendChild(el("p","","Результат: "+result.result.objectiveScore+" из "+result.result.totalMax+" · "+result.result.percent+"%."));
+        else card.appendChild(el("p","","Автоматическая часть проверена. Письменные ответы переданы преподавателю."));
+        card.appendChild(el("p","museum-muted",result.status==="pending_review"?"Итоговая оценка появится после проверки письменных заданий.":"Итоговый результат сохранён на сервере."));
+      }).catch(function(error){finished=false;submit.disabled=false;submit.textContent="Повторить отправку";saveStatus.textContent="Ошибка отправки: "+(error.message||error);});
+    }
+    submit.onclick=function(){submitExam(false);};card.appendChild(submit);
+    function tick(){
+      if(finished)return;
+      var left=Math.max(0,new Date(attempt.deadlineAt).getTime()-Date.now());
+      var seconds=Math.ceil(left/1000),minutes=Math.floor(seconds/60),rest=seconds%60;
+      timer.textContent=minutes+":"+String(rest).padStart(2,"0");
+      if(left<=0)submitExam(true);
+    }
+    tick();window.englishAssessmentTimer=window.setInterval(tick,1000);
+  }
+
   function renderChooser() {
     var app = document.getElementById("app");
     if (!app) return;
@@ -393,39 +565,53 @@
     app.innerHTML = '<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🇬🇧 Экзамен по английскому языку</h1><p>Формат ВПР СПО 2026 · 90 минут · 7 заданий · 40 баллов</p></section><section class="module"><h2>Выберите вариант экзамена</h2><p>Выберите итоговый экзамен ВПР или одну из семестровых контрольных Basic / Technical ниже.</p><div id="englishVprChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px"></div></section>';
     var choices = document.getElementById("englishVprChoices");
     if (hasStaffAccess() && window.API && window.API.importEnglishSemesterTests && window.SEMESTER_TESTS) {
-      var semesterImport = el("button","btn ghost","Перенести 20 семестровых контрольных");
-      semesterImport.type="button";
-      semesterImport.style.cssText="margin:0 0 14px;width:100%";
-      semesterImport.onclick=function(){
-        var source=window.SEMESTER_TESTS;
-        if(!source.basic || !source.technical) { window.alert("Исходные наборы Basic/Technical не загружены."); return; }
-        if(!window.confirm("Записать 10 контрольных Basic и 10 контрольных Technical (по 20 вопросов) в закрытый лист EnglishSemesterBank?")) return;
-        semesterImport.disabled=true; semesterImport.textContent="Переносим и проверяем…";
-        (async function(){
-          var report=[];
-          for(var i=0;i<2;i++){
-            var track=["basic","technical"][i], tests=source[track];
-            var saved=await window.API.importEnglishSemesterTests(track,tests);
-            if(!saved || saved.success!==true) throw new Error("Сервер не подтвердил "+track+": "+(saved&&saved.error||"нет ответа"));
-            var check=await window.API.getEnglishSemesterTests(track);
-            if(!check || check.success!==true || !Array.isArray(check.tests) || check.tests.length!==10) throw new Error("Контрольное чтение "+track+" не прошло.");
-            var total=check.tests.reduce(function(n,t){return n+(t.questions||[]).length;},0);
-            if(total!==200 || check.questionCount!==200) throw new Error(track+": ожидалось 200 вопросов, получено "+total+".");
-            if(check.tests.some(function(t){return (t.questions||[]).some(function(q){return Object.prototype.hasOwnProperty.call(q,"correct");});})) throw new Error(track+": ключ ответа обнаружен в клиентской выдаче.");
-            report.push({track:track,tests:check.tests.length,questions:total});
-          }
-          return report;
-        })().then(function(report){
-          semesterImport.textContent="20 контрольных подтверждены сервером";
-          var details=report.map(function(x){return x.track.toUpperCase()+": "+x.tests+" работ / "+x.questions+" вопросов";}).join("; ");
-          if(window.showToast) window.showToast("Семестровые контрольные записаны и проверены: "+details,"success");
-          else window.alert("Семестровые контрольные записаны и проверены: "+details);
-        }).catch(function(err){
-          semesterImport.disabled=false; semesterImport.textContent="Повторить перенос семестровых контрольных";
-          window.alert("Перенос не завершён: "+(err.message||err));
-        });
-      };
-      app.querySelector(".module").appendChild(semesterImport);
+      var source=window.SEMESTER_TESTS;
+      var expectedTests={basic:4,technical:6},expectedQuestions={basic:80,technical:120};
+      var semesterReady=Array.isArray(source.basic)&&source.basic.length===expectedTests.basic&&
+        Array.isArray(source.technical)&&source.technical.length===expectedTests.technical;
+      if(semesterReady){
+        var semesterImport = el("button","btn ghost","Перенести 10 семестровых контрольных");
+        semesterImport.type="button";
+        semesterImport.style.cssText="margin:0 0 14px;width:100%";
+        semesterImport.onclick=function(){
+          if(!window.confirm("Записать 4 контрольные Basic (80 вопросов) и 6 Technical (120 вопросов) в закрытый лист EnglishSemesterBank?")) return;
+          semesterImport.disabled=true; semesterImport.textContent="Переносим и проверяем…";
+          (async function(){
+            var report=[];
+            for(var i=0;i<2;i++){
+              var track=["basic","technical"][i],tests=source[track];
+              var saved=await window.API.importEnglishSemesterTests(track,tests);
+              if(!saved||saved.success!==true)throw new Error("Сервер не подтвердил "+track+": "+(saved&&saved.error||"нет ответа"));
+              var check=await window.API.getEnglishSemesterTests(track);
+              if(!check||check.success!==true||!Array.isArray(check.tests)||check.tests.length!==expectedTests[track]) {
+                throw new Error("Контрольное чтение "+track+" не прошло: ожидалось "+expectedTests[track]+" контрольных.");
+              }
+              var total=check.tests.reduce(function(n,t){return n+(t.questions||[]).length;},0);
+              if(total!==expectedQuestions[track]||check.questionCount!==expectedQuestions[track]) {
+                throw new Error(track+": ожидалось "+expectedQuestions[track]+" вопросов, получено "+total+".");
+              }
+              if(check.tests.some(function(t){return (t.questions||[]).some(function(q){return Object.prototype.hasOwnProperty.call(q,"correct");});})) {
+                throw new Error(track+": ключ ответа обнаружен в клиентской выдаче.");
+              }
+              report.push({track:track,tests:check.tests.length,questions:total});
+            }
+            return report;
+          })().then(function(report){
+            semesterImport.textContent="10 контрольных подтверждены сервером";
+            var details=report.map(function(x){return x.track.toUpperCase()+": "+x.tests+" работ / "+x.questions+" вопросов";}).join("; ");
+            if(window.showToast)window.showToast("Семестровые контрольные записаны и проверены: "+details,"success");
+            else window.alert("Семестровые контрольные записаны и проверены: "+details);
+          }).catch(function(err){
+            semesterImport.disabled=false;semesterImport.textContent="Повторить перенос семестровых контрольных";
+            window.alert("Перенос не завершён: "+(err.message||err));
+          });
+        };
+        app.querySelector(".module").appendChild(semesterImport);
+      }else{
+        var semesterNotice=el("p","museum-muted",
+          "Импорт семестровых контрольных временно закрыт: подготовленный источник должен содержать 4 самостоятельные работы Basic (80 вопросов) и 6 Technical (120 вопросов) с проверенными ключами. Текущий старый Basic-набор и пустой Technical-набор этому формату не соответствуют; они не будут импортированы.");
+        app.querySelector(".module").appendChild(semesterNotice);
+      }
     }
     if (hasStaffAccess() && window.API && window.API.importEnglishVprBank) {
       var migrate = el("button","btn ghost","Перенести экзамены в защищённую таблицу");
@@ -470,6 +656,20 @@
       choices.appendChild(card);
       renderSemesterTests(track, course, choices);
     });
+    if(window.state&&window.state.student&&window.API&&window.API.startEnglishFinalExam){
+      var courseNumbers=course==="ENB"?[1,2]:course==="ENT"?[3,4,5]:[1,2,3,4,5];
+      var finalSection=el("section","module");finalSection.style.marginTop="20px";
+      finalSection.appendChild(el("h2","","Итоговые экзамены по курсам"));
+      finalSection.appendChild(el("p","museum-muted","Выберите свой курс и семестр. Вариант назначается сервером, а начатая попытка восстанавливается после повторного входа."));
+      var finalGrid=el("div");finalGrid.style.cssText="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px";
+      courseNumbers.forEach(function(courseNo){[1,2].forEach(function(semester){
+        var card=el("article","question");card.style.cssText="padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--card-soft)";
+        card.appendChild(el("h3","","Курс "+courseNo+" · семестр "+semester));
+        var button=el("button","btn","Открыть итоговый экзамен");button.type="button";button.style.width="100%";
+        button.onclick=function(){renderPersistentFinalExam(courseNo,semester,card);};card.appendChild(button);finalGrid.appendChild(card);
+      });});
+      finalSection.appendChild(finalGrid);choices.parentNode.appendChild(finalSection);
+    }
   }
   window.renderEnglishVprPage = function (mode) {
     if (mode === "final-basic" || mode === "final-technical") { renderPage(mode); return; }

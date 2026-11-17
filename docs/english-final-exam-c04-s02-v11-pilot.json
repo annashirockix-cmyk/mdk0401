@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 11",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v11_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. At what time does the industrial IoT lesson start?",
+      "audioText": "The industrial systems tutor will discuss connected production equipment on Tuesday at ten thirty. Students should bring the network architecture diagram. The lesson will trace sensor data through a gateway to a monitoring platform and explain why device identity and approved network settings matter.",
+      "options": [
+        "At ten thirty on Tuesday",
+        "At nine thirty on Tuesday",
+        "At ten thirty on Wednesday",
+        "At eleven thirty on Tuesday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v11_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which network document is required for the session?",
+      "audioText": "The industrial systems tutor will discuss connected production equipment on Tuesday at ten thirty. Students should bring the network architecture diagram. The lesson will trace sensor data through a gateway to a monitoring platform and explain why device identity and approved network settings matter.",
+      "options": [
+        "The system block diagram",
+        "The network architecture diagram",
+        "The sensor data sheet",
+        "The industrial safety checklist"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v11_r01",
+      "type": "single_choice",
+      "prompt": "An industrial Internet of Things system connects sensors, equipment and software services. A sensor sends readings to a gateway, which transfers selected information to another system. Device identity, communication settings and access controls are important because connected equipment can affect production processes. A system diagram helps engineers understand the data path and devices involved. Reading 1. What may a gateway do?",
+      "options": [
+        "Replace the controller in every network",
+        "Store all sensor readings permanently",
+        "Transfer sensor information to another system",
+        "Measure the physical distance between devices"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v11_r02",
+      "type": "single_choice",
+      "prompt": "Why do device identity and access controls matter?",
+      "options": [
+        "Access controls replace the need for maintenance records",
+        "Network diagrams always contain confidential data",
+        "Device names determine the price of equipment",
+        "Connected equipment can affect production processes"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v11_g01",
+      "type": "single_choice",
+      "prompt": "Selected sensor data ___ to a monitoring platform.",
+      "options": [
+        "can transferred",
+        "can be transferred",
+        "transferring",
+        "are transfer"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v11_m01",
+      "type": "multiple_choice",
+      "prompt": "Which TWO details identify a connected sensor and its authorised network connection?",
+      "options": [
+        "Calibration interval",
+        "Physical mounting position",
+        "Device identity",
+        "Approved communication settings"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v11_v01",
+      "type": "short_text",
+      "prompt": "A device that connects local equipment to another network or system is a ___.",
+      "acceptedAnswers": [
+        "gateway"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v11_f01",
+      "type": "single_choice",
+      "prompt": "Before enabling data transfer, which records should be checked?",
+      "options": [
+        "Check the device register and approved network configuration before enabling data transfer.",
+        "Use the newest configuration file in the shared folder without checking its revision.",
+        "Confirm that display settings match the previous training session.",
+        "Check only the user access list; review device and network records later."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v11_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of industrial IoT systems in a logical order.",
+      "options": [
+        "Confirm where the data is monitored",
+        "Trace the data path through the gateway",
+        "Check its identity and approved settings",
+        "Identify the connected device"
+      ],
+      "correctOrder": [
+        "Identify the connected device",
+        "Check its identity and approved settings",
+        "Trace the data path through the gateway",
+        "Confirm where the data is monitored"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v11_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words describing an industrial IoT data path. Explain the roles of a sensor, gateway and monitoring platform, and mention one security consideration.",
+      "rubric": "8 points total: the sensor, gateway and monitoring platform are identified in the data path (0–2); the response explains how information moves between them and includes one relevant security consideration (0–2); the explanation is logically organised with understandable grammar (0–2); industrial-IoT/network vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v11_audio",
+    "readingPassageId": "c4s2v11_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

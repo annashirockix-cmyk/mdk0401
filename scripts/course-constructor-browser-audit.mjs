@@ -51,7 +51,12 @@ try {
         return { success: true };
       },
       getTopicAccess: async () => ({ open: true }),
-      getTestAttemptStatus: async () => ({ allowed: true, used: 0, limit: 1 })
+      getTestAttemptStatus: async () => ({ allowed: true, used: 0, limit: 1 }),
+      getCustomTest: async testId => ({
+        success: true, attemptId: "audit-custom-attempt-" + String(testId),
+        questions: [{ q: "Какой вариант правильный?", options: ["Неверно", "Верно", "Не подходит", "Нет ответа"] }]
+      }),
+      submitCustomTest: async () => ({ success: true, score: 1, maxScore: 1, percent: 100, grade: 5 })
     };
     // Reproduce an admin request finishing after a student has signed in.
     // The late admin response must not overwrite the student's role-filtered list.
@@ -233,6 +238,15 @@ try {
     window.state.student = { role: "student", courses: ["07.01"] };
     const topicId = document.getElementById("fcTopic").value;
     window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (url, options) => {
+      if (String(url).includes("action=getTopicAccess")) return new Response(JSON.stringify({ success: true, open: true }), { status: 200, headers: { "Content-Type": "application/json" } });
+      return originalFetch(url, options);
+    };
+    window.API = window.API || {};
+    window.API.getTopicAccess = async () => ({ success: true, open: true });
+    window.API.getTestAttemptStatus = async () => ({ allowed: true, used: 0, limit: 1 });
+    window.API.requestTestAttempts = async () => ({ success: true });
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
   await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));

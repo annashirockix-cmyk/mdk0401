@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c1_s2",
+  "courseNo": 1,
+  "track": "basic",
+  "semester": 2,
+  "title": "Basic English — Course 1, Semester 2 — Pilot Variant 12",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c1s2v12_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. Where will the exhibition take place?",
+      "audioText": "The student project exhibition will take place in the main hall next Tuesday. Each group should arrive by half past eight to prepare its display. The exhibition opens to visitors at ten. Please put your project title and group number on the table. A technician will be available near the entrance if you need help connecting a computer or a screen.",
+      "options": [
+        "In the main hall",
+        "In the lecture theatre",
+        "In the project laboratory",
+        "In the entrance foyer"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v12_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. When should groups arrive?",
+      "audioText": "The student project exhibition will take place in the main hall next Tuesday. Each group should arrive by half past eight to prepare its display. The exhibition opens to visitors at ten. Please put your project title and group number on the table. A technician will be available near the entrance if you need help connecting a computer or a screen.",
+      "options": [
+        "At nine o'clock",
+        "By half past eight",
+        "At ten o'clock",
+        "At half past ten"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v12_r01",
+      "type": "single_choice",
+      "prompt": "A group of engineering students prepared a display about renewable energy. They used a small model to show how a wind turbine can produce electricity. Before the exhibition, they tested the model, checked the labels and divided the speaking roles. During the event, one student explained the model while another answered visitors' questions. Reading 1. What did the model demonstrate?",
+      "options": [
+        "How solar panels store energy",
+        "How electricity reaches homes",
+        "How a wind turbine can produce electricity",
+        "How batteries are recycled"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c1s2v12_r02",
+      "type": "single_choice",
+      "prompt": "How did the students prepare for the event?",
+      "options": [
+        "They printed visitor tickets",
+        "They borrowed a projector",
+        "They changed the exhibition date",
+        "They tested the model and divided the speaking roles"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c1s2v12_g01",
+      "type": "single_choice",
+      "prompt": "Choose the correct passive form: 'The project labels ___ before the exhibition.'",
+      "options": [
+        "were checked",
+        "checked",
+        "was checking",
+        "are check"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c1s2v12_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO details that make a project display clear for visitors.",
+      "options": [
+        "A private login password",
+        "Unrelated decoration",
+        "A clear project title",
+        "Readable labels"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v12_v01",
+      "type": "short_text",
+      "prompt": "Complete: 'A person who visits an exhibition is a ___.'",
+      "acceptedAnswers": [
+        "visitor"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v12_f01",
+      "type": "single_choice",
+      "prompt": "A visitor asks you to explain your model. What is a helpful opening?",
+      "options": [
+        "You should already know.",
+        "Let me show you how the model works.",
+        "I will not answer.",
+        "Read something else."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c1s2v12_o01",
+      "type": "ordering",
+      "prompt": "Put the following steps for preparing a project display in a logical order.",
+      "options": [
+        "Explain the project to visitors",
+        "Test the model",
+        "Prepare the display materials",
+        "Arrange the labels"
+      ],
+      "correctOrder": [
+        "Prepare the display materials",
+        "Test the model",
+        "Arrange the labels",
+        "Explain the project to visitors"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c1s2v12_w01",
+      "type": "written",
+      "prompt": "Write 60–80 words introducing a college project for an exhibition. Describe its purpose, the materials or equipment used and what visitors can learn.",
+      "rubric": "8 points total: the project's purpose and what visitors can learn are explained (0–2); relevant materials/equipment are identified and connected to the project (0–2); the description is logically organised with understandable grammar (0–2); exhibition/project vocabulary, spelling and punctuation are appropriate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c1s2v12_audio",
+    "readingPassageId": "c1s2v12_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "examId": "english_final_c3_s2",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 3, Semester 2 — Pilot Variant 5",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s2v05_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the session take place?",
+      "audioText": "The quality tutor will discuss workholding terminology during a classroom session on Monday at two. Students should bring the illustrated glossary and the sample component drawing. The session will compare general types of fixtures and explain how the drawing helps identify the surfaces that need to be inspected. No practical setup activity is included in this lesson.",
+      "options": [
+        "On Monday at two",
+        "On Monday at one",
+        "On Tuesday at two",
+        "On Monday at three"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v05_l02",
+      "type": "single_choice",
+      "prompt": "Which two learning materials should students bring?",
+      "audioText": "The quality tutor will discuss workholding terminology during a classroom session on Monday at two. Students should bring the illustrated glossary and the sample component drawing. The session will compare general types of fixtures and explain how the drawing helps identify the surfaces that need to be inspected. No practical setup activity is included in this lesson.",
+      "options": [
+        "The component drawing and tool catalogue",
+        "The illustrated glossary and sample component drawing",
+        "The process chart and inspection sheet",
+        "The machine manual and maintenance log"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v05_r01",
+      "type": "single_choice",
+      "prompt": "Workholding equipment is used to locate and support a workpiece during a manufacturing process. The choice depends on the component shape, the operation and the process documentation. A quality record may identify the datum surfaces used for measurement. Clear communication about the workpiece reference and inspection points helps different team members interpret the record consistently. Reading 1. What is the purpose of workholding equipment?",
+      "options": [
+        "To measure the cutting speed",
+        "To remove chips from the cutting area",
+        "To locate and support a workpiece",
+        "To hold the cutting tool in the spindle"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s2v05_r02",
+      "type": "single_choice",
+      "prompt": "What may a quality record identify?",
+      "options": [
+        "The material grade and batch number",
+        "The cutting force and spindle speed",
+        "The tool offset and programme revision",
+        "The datum surfaces used for measurement"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s2v05_g01",
+      "type": "single_choice",
+      "prompt": "The workpiece ___ by suitable workholding equipment during the process.",
+      "options": [
+        "is supported",
+        "support",
+        "supporting",
+        "are support"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v05_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO geometric details that are important when planning workholding and inspection.",
+      "options": [
+        "Coolant concentration",
+        "Spindle speed setting",
+        "Component shape",
+        "Datum or reference surfaces"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v05_v01",
+      "type": "short_text",
+      "prompt": "A reference surface or feature used as a basis for measurement is a ___.",
+      "acceptedAnswers": [
+        "datum",
+        "datum surface",
+        "datum feature"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v05_f01",
+      "type": "single_choice",
+      "prompt": "A datum surface is not clear on the drawing. What should you ask?",
+      "options": [
+        "I will choose a surface without checking.",
+        "Could you confirm which datum surface is used for this inspection?",
+        "The reference surface is not important.",
+        "I will change the inspection record myself."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v05_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of workholding and quality in a logical order.",
+      "options": [
+        "Check the documented workholding concept",
+        "Review the component drawing",
+        "Record inspection references clearly",
+        "Identify the relevant reference surfaces"
+      ],
+      "correctOrder": [
+        "Review the component drawing",
+        "Identify the relevant reference surfaces",
+        "Check the documented workholding concept",
+        "Record inspection references clearly"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v05_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why workholding and datum references matter in manufacturing and inspection communication.",
+      "rubric": "8 points total: workholding and datum references are explained in general terms (0–2); the response links them to consistent manufacturing/inspection references and reliable communication (0–2); ideas are logically connected with understandable grammar (0–2); workholding/datum/inspection vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s2v05_audio",
+    "readingPassageId": "c3s2v05_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

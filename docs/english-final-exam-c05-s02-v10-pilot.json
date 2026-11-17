@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s2",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 5, Semester 2 — Pilot Variant 10",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s2v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the integrated handover meeting take place?",
+      "audioText": "The project coordinator will hold an integrated handover meeting on Friday at one. Representatives from mechanical, electrical and quality teams should bring their latest status summaries. The meeting will identify interface issues, outstanding evidence and actions that depend on more than one team. Each action should have an owner and a target review date.",
+      "options": [
+        "On Friday at one",
+        "On Friday at twelve",
+        "On Thursday at one",
+        "On Friday at two"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v10_l02",
+      "type": "single_choice",
+      "prompt": "Which teams' status summaries should representatives bring to the meeting?",
+      "audioText": "The project coordinator will hold an integrated handover meeting on Friday at one. Representatives from mechanical, electrical and quality teams should bring their latest status summaries. The meeting will identify interface issues, outstanding evidence and actions that depend on more than one team. Each action should have an owner and a target review date.",
+      "options": [
+        "The interface register and action log",
+        "The latest status summaries from the mechanical, electrical and quality teams",
+        "The inspection checklist and release record",
+        "The work package and supplier schedule"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v10_r01",
+      "type": "single_choice",
+      "prompt": "A manufacturing project involved mechanical assembly, electrical integration and quality inspection. The mechanical team had completed the housing, while the electrical team was waiting for a connector specification to be confirmed. Quality staff had prepared an inspection plan but needed the final assembly revision. The coordinator recorded these dependencies so that each team could see which action depended on information from another group. Reading 1. What was the electrical team waiting for?",
+      "options": [
+        "Confirmation of the mounting arrangement",
+        "Confirmation of the inspection plan",
+        "Confirmation of a connector specification",
+        "Confirmation of the project budget"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s2v10_r02",
+      "type": "single_choice",
+      "prompt": "Why did the coordinator record the dependencies?",
+      "options": [
+        "So the mechanical team could approve the software interface alone",
+        "So all teams could complete their tasks without further coordination",
+        "So the coordinator could remove the inspection plan from the project",
+        "So each team could see which action depended on information from another group"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s2v10_g01",
+      "type": "single_choice",
+      "prompt": "Each outstanding action ___ to an owner and a review date.",
+      "options": [
+        "should be assigned",
+        "should assign",
+        "assigning",
+        "are assign"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s2v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO features of an effective cross-disciplinary handover.",
+      "options": [
+        "Unassigned tasks with no date",
+        "Unrelated personal opinions",
+        "Named action owner",
+        "Clear dependency or required evidence"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v10_v01",
+      "type": "short_text",
+      "prompt": "A task or result that depends on another task is a ___.",
+      "acceptedAnswers": [
+        "dependency"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v10_f01",
+      "type": "single_choice",
+      "prompt": "An action depends on a document from another team. What should you say?",
+      "options": [
+        "We can ignore the dependency.",
+        "This action depends on the confirmed connector specification; could the responsible team provide its status and target date?",
+        "The other team is always responsible.",
+        "I will close the action without evidence."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s2v10_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of cross-disciplinary handover in a logical order.",
+      "options": [
+        "Assign owners and target dates",
+        "Collect each team's current status",
+        "Review outstanding actions at the next handover",
+        "Identify dependencies and missing evidence"
+      ],
+      "correctOrder": [
+        "Collect each team's current status",
+        "Identify dependencies and missing evidence",
+        "Assign owners and target dates",
+        "Review outstanding actions at the next handover"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s2v10_w01",
+      "type": "written",
+      "prompt": "Write 100–120 words summarising a cross-disciplinary handover. Explain one dependency between teams and how it should be tracked.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Dependency — 2: identifies a specific dependency between teams and why it matters; 1: partial; 0: absent. (2) Handover content — 2: identifies the information/status that must pass between teams; 1: partial; 0: absent. (3) Tracking — 2: proposes a clear owner, status record and follow-up point without assuming completion; 1: partial; 0: absent. (4) English — 2: coherent cross-disciplinary communication and accurate technical vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s2v10_audio",
+    "readingPassageId": "c5s2v10_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

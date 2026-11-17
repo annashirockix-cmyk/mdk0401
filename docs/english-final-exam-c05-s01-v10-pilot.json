@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c5_s1",
+  "courseNo": 5,
+  "track": "technical",
+  "semester": 1,
+  "title": "Technical English — Course 5, Semester 1 — Pilot Variant 10",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c5s1v10_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the revision-control lesson take place?",
+      "audioText": "The technical publications tutor will review revision control on Monday at twelve fifteen. Students should bring the document register and sample maintenance instruction. The lesson will identify revision numbers, issue dates and approval status. Students will practise checking whether a copy is current before using it in a controlled task.",
+      "options": [
+        "At twelve fifteen on Monday",
+        "At eleven fifteen on Monday",
+        "At twelve fifteen on Tuesday",
+        "At one fifteen on Monday"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v10_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which documents should students bring?",
+      "audioText": "The technical publications tutor will review revision control on Monday at twelve fifteen. Students should bring the document register and sample maintenance instruction. The lesson will identify revision numbers, issue dates and approval status. Students will practise checking whether a copy is current before using it in a controlled task.",
+      "options": [
+        "The revision-history sheet and approval record",
+        "The document register and maintenance instruction",
+        "The task card and inspection report",
+        "The parts catalogue and configuration list"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v10_r01",
+      "type": "single_choice",
+      "prompt": "Controlled technical publications must be identifiable by their document number, revision and issue status. A document register helps users locate the current approved version. Printed or downloaded copies may become outdated after a revision is released, so users should check the status before relying on them. Obsolete copies should be managed according to the organisation's document-control procedure. Reading 1. What details identify a controlled publication?",
+      "options": [
+        "Equipment colour, storage location and shift number",
+        "Supplier address, purchase price and delivery time",
+        "Document number, revision and issue status",
+        "Author name, file size and print date"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c5s1v10_r02",
+      "type": "single_choice",
+      "prompt": "Why should users check a copy before relying on it?",
+      "options": [
+        "Because a printed copy is always more reliable than a digital copy",
+        "Because users should rely on the first copy they receive",
+        "Because the revision number is not part of document control",
+        "Because printed or downloaded copies may become outdated"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c5s1v10_g01",
+      "type": "single_choice",
+      "prompt": "The current approved version ___ in the document register.",
+      "options": [
+        "identify",
+        "is identified",
+        "identifying",
+        "are identify"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c5s1v10_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO control details needed to confirm that a technical publication is the approved current issue.",
+      "options": [
+        "Document file size",
+        "Author's job title",
+        "Document number and revision",
+        "Current approval status"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v10_v01",
+      "type": "short_text",
+      "prompt": "A list used to identify and track controlled documents is a document ___.",
+      "acceptedAnswers": [
+        "register"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v10_f01",
+      "type": "single_choice",
+      "prompt": "You find a printed instruction with an old revision number. What should you do?",
+      "options": [
+        "Check the document register for the current approved revision before using the instruction.",
+        "Use the printed copy if its title matches the task card.",
+        "Compare the revision number with the previous shift's notes and use whichever is newer.",
+        "Ask a colleague whether the instruction was used recently."
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c5s1v10_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of technical publication revision control in a logical order.",
+      "options": [
+        "Confirm the current approved version in the register",
+        "Locate the document number",
+        "Use or replace the copy under document-control procedure",
+        "Check its revision and issue status"
+      ],
+      "correctOrder": [
+        "Locate the document number",
+        "Check its revision and issue status",
+        "Confirm the current approved version in the register",
+        "Use or replace the copy under document-control procedure"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c5s1v10_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining how revision control helps maintenance teams use current approved technical publications.",
+      "rubric": "8 points total. Score each criterion 0–2: (1) Document identification — 2: explains checking the correct publication identifier and applicable equipment/configuration; 1: partial; 0: absent. (2) Revision and approval — 2: explains verifying current revision, effective status and approval; 1: partial; 0: absent. (3) Controlled use — 2: explains obtaining the publication from an approved source and preventing use of obsolete copies; 1: partial; 0: absent or incorrect. (4) English — 2: clear writing and accurate document-control vocabulary; 1: errors but meaning clear; 0: meaning frequently unclear.",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c5s1v10_audio",
+    "readingPassageId": "c5s1v10_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

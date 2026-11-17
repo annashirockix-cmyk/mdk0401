@@ -1,0 +1,148 @@
+{
+  "examId": "english_final_c3_s2",
+  "courseNo": 3,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 3, Semester 2 — Pilot Variant 4",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c3s2v04_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the presentation take place?",
+      "audioText": "The tooling specialist will give a presentation about cutting tool identification on Thursday at one. It will take place in the manufacturing classroom. Students will compare tool names, insert shapes and material descriptions using photographs and catalogues. The specialist will also explain why a tool must be selected according to the approved process information rather than appearance alone.",
+      "options": [
+        "On Thursday at one",
+        "On Thursday at twelve",
+        "On Friday at one",
+        "On Thursday at two"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v04_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. What materials will students use to compare tools?",
+      "audioText": "The tooling specialist will give a presentation about cutting tool identification on Thursday at one. It will take place in the manufacturing classroom. Students will compare tool names, insert shapes and material descriptions using photographs and catalogues. The specialist will also explain why a tool must be selected according to the approved process information rather than appearance alone.",
+      "options": [
+        "The process chart and tool list",
+        "Photographs and catalogues",
+        "The sample workpiece and setup sheet",
+        "The safety instructions and machine manual"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v04_r01",
+      "type": "single_choice",
+      "prompt": "A cutting tool catalogue provides information about tool geometry, compatible inserts and recommended applications. A technician should identify the tool holder and insert type before consulting the relevant product information. Two inserts may look similar but have different specifications. The catalogue reference and manufacturer's notes help users distinguish them and select the correct item for the documented process. Reading 1. What information can a cutting tool catalogue provide?",
+      "options": [
+        "Tool length, holder type and machine serial number",
+        "Cutting speed, feed rate and coolant settings",
+        "Tool geometry, compatible inserts and recommended applications",
+        "Insert colour, package size and delivery date"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c3s2v04_r02",
+      "type": "single_choice",
+      "prompt": "How can users distinguish similar-looking inserts?",
+      "options": [
+        "By selecting the insert with the closest package description",
+        "By comparing the insert colour with another tool",
+        "By asking a colleague to identify it from memory",
+        "By checking the catalogue reference and manufacturer's notes"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c3s2v04_g01",
+      "type": "single_choice",
+      "prompt": "The correct insert ___ by checking its catalogue reference.",
+      "options": [
+        "can be identified",
+        "identify",
+        "is identifying yesterday",
+        "can identifying"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c3s2v04_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO sources that can identify a cutting tool or its compatible holder system.",
+      "options": [
+        "Workpiece material certificate",
+        "Machine serial-number plate",
+        "Tool holder identification",
+        "Manufacturer's catalogue"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v04_v01",
+      "type": "short_text",
+      "prompt": "The replaceable cutting part fitted to some tool holders is an ___.",
+      "acceptedAnswers": [
+        "insert",
+        "cutting insert"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v04_f01",
+      "type": "single_choice",
+      "prompt": "Two inserts look similar. What should you say?",
+      "options": [
+        "They look alike, so they must be interchangeable.",
+        "Let's compare their catalogue references and specifications.",
+        "Choose either one without checking.",
+        "The manufacturer's notes are unnecessary."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c3s2v04_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of cutting tools in a logical order.",
+      "options": [
+        "Check the manufacturer's catalogue",
+        "Identify the tool holder",
+        "Confirm suitability for the documented process",
+        "Read the insert designation"
+      ],
+      "correctOrder": [
+        "Identify the tool holder",
+        "Read the insert designation",
+        "Check the manufacturer's catalogue",
+        "Confirm suitability for the documented process"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c3s2v04_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining why cutting tools should be identified by their designation and catalogue information rather than appearance alone.",
+      "rubric": "8 points total: the response explains why tool designation and catalogue data are more reliable than appearance alone (0–2); it identifies relevant information to verify, such as designation, geometry or manufacturer reference (0–2); reasoning is clear with understandable grammar (0–2); cutting-tool/catalogue vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c3s2v04_audio",
+    "readingPassageId": "c3s2v04_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}

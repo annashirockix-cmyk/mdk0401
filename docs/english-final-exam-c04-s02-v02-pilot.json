@@ -1,0 +1,147 @@
+{
+  "examId": "english_final_c4_s2",
+  "courseNo": 4,
+  "track": "technical",
+  "semester": 2,
+  "title": "Technical English — Course 4, Semester 2 — Pilot Variant 2",
+  "durationMinutes": 90,
+  "time": 90,
+  "maxScore": 20,
+  "tasks": [
+    {
+      "id": "c4s2v02_l01",
+      "type": "single_choice",
+      "prompt": "Listening 1. When will the computer systems class take place?",
+      "audioText": "The computer systems class will compare hardware and software on Monday at eleven. Students should bring the component glossary and meet in the digital laboratory. The instructor will review the roles of the processor, memory, storage and operating system. A short matching activity will use diagrams and product descriptions.",
+      "options": [
+        "On Monday at eleven",
+        "On Tuesday at ten",
+        "On Wednesday at eleven",
+        "On Monday at two"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v02_l02",
+      "type": "single_choice",
+      "prompt": "Listening 2. Which reference list is required for the computer-systems class?",
+      "audioText": "The computer systems class will compare hardware and software on Monday at eleven. Students should bring the component glossary and meet in the digital laboratory. The instructor will review the roles of the processor, memory, storage and operating system. A short matching activity will use diagrams and product descriptions.",
+      "options": [
+        "The safety checklist",
+        "The component glossary",
+        "The maintenance schedule",
+        "The circuit-symbol worksheet"
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v02_r01",
+      "type": "single_choice",
+      "prompt": "A computer system uses hardware and software to process information. The processor performs instructions, memory holds data that is currently in use, and storage keeps files for later access. The operating system manages resources and provides services for applications. These components have different roles, so a technical description should avoid using the terms as if they were interchangeable. Reading 1. What is the role of the operating system?",
+      "options": [
+        "It stores files for later access",
+        "It performs every calculation in the processor",
+        "It manages resources and provides services for applications",
+        "It connects the computer to the power supply"
+      ],
+      "correctIndex": 2,
+      "points": 1
+    },
+    {
+      "id": "c4s2v02_r02",
+      "type": "single_choice",
+      "prompt": "Why should a technical description distinguish component roles?",
+      "options": [
+        "Because all components perform the same function",
+        "Because software is always a type of hardware",
+        "Because technical terms have no fixed meaning",
+        "Because hardware and software components perform different functions"
+      ],
+      "correctIndex": 3,
+      "points": 1
+    },
+    {
+      "id": "c4s2v02_g01",
+      "type": "single_choice",
+      "prompt": "The operating system ___ system resources.",
+      "options": [
+        "manages",
+        "manage",
+        "managing",
+        "are manage"
+      ],
+      "correctIndex": 0,
+      "points": 1
+    },
+    {
+      "id": "c4s2v02_m01",
+      "type": "multiple_choice",
+      "prompt": "Choose TWO examples of computer hardware.",
+      "options": [
+        "Operating system",
+        "Spreadsheet application",
+        "Processor",
+        "Memory module"
+      ],
+      "correctIndices": [
+        2,
+        3
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v02_v01",
+      "type": "short_text",
+      "prompt": "A computer component that keeps files for later access is a storage ___.",
+      "acceptedAnswers": [
+        "device"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v02_f01",
+      "type": "single_choice",
+      "prompt": "A report uses the word 'memory' when it means storage. What should you suggest?",
+      "options": [
+        "The terms mean the same thing.",
+        "Let's use the correct term so the report distinguishes memory from storage.",
+        "The distinction is unnecessary.",
+        "Delete the whole report."
+      ],
+      "correctIndex": 1,
+      "points": 1
+    },
+    {
+      "id": "c4s2v02_o01",
+      "type": "ordering",
+      "prompt": "Put the stages of computer system components in a logical order.",
+      "options": [
+        "Compare it with related components",
+        "Identify the system component",
+        "Use the correct term in the technical description",
+        "Describe its main function"
+      ],
+      "correctOrder": [
+        "Identify the system component",
+        "Describe its main function",
+        "Compare it with related components",
+        "Use the correct term in the technical description"
+      ],
+      "points": 2
+    },
+    {
+      "id": "c4s2v02_w01",
+      "type": "written",
+      "prompt": "Write 80–100 words explaining the different roles of a processor, memory, storage and an operating system.",
+      "rubric": "8 points total: processor, memory, storage and operating system are all described (0–2); the response distinguishes processing, temporary working data, retained files and system-resource management (0–2); ideas are clearly connected with understandable grammar (0–2); computer-system vocabulary, spelling and punctuation are accurate (0–2).",
+      "points": 8
+    }
+  ],
+  "sourceNotes": {
+    "listeningScriptId": "c4s2v02_audio",
+    "readingPassageId": "c4s2v02_reading",
+    "status": "pilot_for_editorial_review"
+  }
+}
