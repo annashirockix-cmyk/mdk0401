@@ -59,6 +59,7 @@ window.getLevel = function(xp) { return Math.floor((xp || 0) / 100) + 1; };
 window.getLevelTitle = function(lvl) { if (lvl < 3) return "Новичок"; if (lvl < 5) return "Ученик"; if (lvl < 8) return "Практикант"; if (lvl < 12) return "Мастер"; return "Эксперт"; };
 
 window.updateMenuVisibility = function() {
+    if (window.resetDrawerNavigationFilter) window.resetDrawerNavigationFilter();
     var currentState = window.state || {};
     var currentRole = String((currentState.staff && currentState.staff.role) || (currentState.user && currentState.user.role) || (currentState.student && currentState.student.role) || currentState.role || "").toLowerCase();
     var isTeacher = !!(currentState.staff || currentState.teacher || currentState.admin || currentRole === "teacher" || currentRole === "admin");
@@ -99,6 +100,7 @@ window.updateMenuVisibility = function() {
             }).catch(function(){tutoringLink.style.display="none";});
         }
     }
+    if (window.updatePortalNavigation) window.updatePortalNavigation();
 };
 
 window.applyGlobalEffects = function() {
@@ -1575,6 +1577,18 @@ function setupDrawer() {
         drawer.setAttribute("aria-hidden", "false"); drawer.inert = false; burgerBtn.setAttribute("aria-expanded", "true");
         if (search) search.focus();
     }
+    window.resetDrawerNavigationFilter = function() {
+        drawer.querySelectorAll(".drawer-item[data-nav-original-display]").forEach(function(item) {
+            if (item.getAttribute("data-nav-filtered") === "1") item.style.display = item.getAttribute("data-nav-original-display") || "";
+            item.removeAttribute("data-nav-original-display"); item.removeAttribute("data-nav-filtered");
+        });
+        drawer.querySelectorAll("details.drawer-group[data-nav-was-open]").forEach(function(group) {
+            group.style.display = ""; group.open = group.getAttribute("data-nav-was-open") === "1" || !!group.querySelector(".drawer-item.is-current");
+            group.removeAttribute("data-nav-was-open");
+        });
+        if (search) search.value = "";
+        if (status) status.textContent = "";
+    };
     function applySearch() {
         if (!search) return;
         var query = search.value.trim().toLocaleLowerCase("ru");
@@ -1585,7 +1599,14 @@ function setupDrawer() {
             var original = item.getAttribute("data-nav-original-display");
             var allowedByRole = original !== "none";
             var match = !query || (allowedByRole && item.textContent.toLocaleLowerCase("ru").indexOf(query) >= 0);
-            item.style.display = match ? (original || "flex") : "none";
+            if (query) {
+                item.style.display = match ? (original || "flex") : "none";
+                item.setAttribute("data-nav-filtered", "1");
+            } else {
+                item.style.display = original;
+                item.removeAttribute("data-nav-filtered");
+                item.removeAttribute("data-nav-original-display");
+            }
             if (match && allowedByRole) visibleCount++;
         });
         drawer.querySelectorAll("details.drawer-group").forEach(function(group) {
@@ -1594,7 +1615,11 @@ function setupDrawer() {
             var hasVisible = children.some(function(item) { return item.style.display !== "none"; });
             group.style.display = hasVisible ? "" : "none";
             if (query) group.open = hasVisible;
-            else group.open = group.getAttribute("data-nav-was-open") === "1" || !!group.querySelector(".drawer-item.is-current");
+            else {
+                group.style.display = "";
+                group.open = group.getAttribute("data-nav-was-open") === "1" || !!group.querySelector(".drawer-item.is-current");
+                group.removeAttribute("data-nav-was-open");
+            }
         });
         if (status) status.textContent = query ? (visibleCount ? "Найдено разделов: " + visibleCount : "Ничего не найдено. Попробуйте другое слово.") : "";
         if (!query) window.updatePortalNavigation();
