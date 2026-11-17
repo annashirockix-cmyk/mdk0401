@@ -202,6 +202,7 @@ test("teacher publication controls call server-backed topic and material access 
  const api = read("api.js");
  const server = read("Code.gs");
  assert.match(controls, /API\.setTopicAccess\(cid,btn\.dataset\.topic,open\)/);
+ assert.ok(controls.includes("t.mdkId===cid&&!t.sourceTopicId"));
  assert.match(controls, /API\.setCustomContentAccess\(cid,id,open\)/);
  assert.match(api, /setCustomContentAccess:function\(courseId,id,open\)/);
  assert.match(api, /setTopicAccess:function\(courseId,topicId,open\)/);
