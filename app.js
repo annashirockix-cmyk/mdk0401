@@ -87,18 +87,6 @@ window.updateMenuVisibility = function() {
         link.style.display=(activeEnglish||(examOrLab&&hasEnglishAccess))?"flex":"none";
     });
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
-    var tutoringLink=document.getElementById("menuTutoring");
-    if(tutoringLink){
-        tutoringLink.style.display=isTeacher?"flex":"none";
-        if(currentState.student && window.API && window.API.getTutoringLink){
-            var tutoringCourse=String(currentState.activeCourseId||"07.01");
-            window.API.getTutoringLink(tutoringCourse).then(function(r){
-                if(String((window.state&&window.state.activeCourseId)||"07.01")!==tutoringCourse)return;
-                var link=r&&r.link;
-                tutoringLink.style.display=(link&&link.visible!==false&&String(link.url||"").trim())?"flex":"none";
-            }).catch(function(){tutoringLink.style.display="none";});
-        }
-    }
 };
 
 window.applyGlobalEffects = function() {
@@ -1285,10 +1273,10 @@ function setupLogin() {
     var hideReg=document.getElementById("hideRegisterBtn");if(hideReg)hideReg.onclick=function(){regForm.style.display="none";form.style.display="block";};
     if(regForm)regForm.onsubmit=function(e){
       e.preventDefault();var btn=document.getElementById("btnRegister");
-      var name=document.getElementById("regName").value.trim(),group=document.getElementById("regGroup").value.trim(),email=document.getElementById("regEmail").value.trim(),pass=document.getElementById("regPassword").value,invite=document.getElementById("regInvite").value.trim();
-      if(!invite){alert("Введите код приглашения.");return;}if(pass.length<8){alert("Пароль должен содержать не менее 8 символов.");return;}
+      var surname=document.getElementById("regSurname").value.trim(),firstName=document.getElementById("regFirstName").value.trim(),group=document.getElementById("regGroup").value.trim(),email=document.getElementById("regEmail").value.trim(),pass=document.getElementById("regPassword").value,invite=document.getElementById("regInvite").value.trim();
+      if(!surname||!firstName){alert("Укажите фамилию и имя. Оба поля обязательны.");return;}if(!invite){alert("Введите код приглашения.");return;}if(pass.length<8){alert("Пароль должен содержать не менее 8 символов.");return;}
       btn.disabled=true;btn.textContent="Регистрация…";
-      window.API.register(email,pass,name,group,invite).then(function(res){
+      window.API.register(email,pass,surname,firstName,group,invite).then(function(res){
         if(!res||!res.success)throw new Error(res&&res.error||"Не удалось зарегистрироваться.");
         return window.API.login(email,pass);
       }).then(function(res){if(!res||!res.success)throw new Error(res&&res.error||"Регистрация выполнена. Теперь войдите.");applyAuthSession(res,email);})

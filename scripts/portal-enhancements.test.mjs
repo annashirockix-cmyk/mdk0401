@@ -947,18 +947,18 @@ test("English VPR grades numbered choices correctly and renders per-gap option l
 });
 
 
-test("admin role is recognized for teacher navigation and tutoring is shown only when configured", () => {
+test("admin role is recognized and tutoring controls live on the home screen, not in the drawer or course editor", () => {
   const app = read("app.js");
   assert.match(app, /currentState\.user && currentState\.user\.role/);
   assert.match(app, /currentRole === "teacher" \|\| currentRole === "admin"/);
-  assert.match(app, /tutoringLink\.style\.display=isTeacher\?"flex":"none"/);
+  assert.doesNotMatch(app, /menuTutoring/);
   const controls = read("teacher-controls.js");
-  assert.match(controls, /editorTutoringPanel/);
-  assert.match(controls, /editorCourse/);
-  assert.match(controls, /getTutoringLink\(cid\)/);
-  assert.match(controls, /saveTutoringLink\(cid/);
-  assert.match(controls, /Показывать вкладку студентам/);
-  assert.match(app, /link\.visible!==false&&String\(link\.url\|\|""\)\.trim\(\)/);
+  assert.doesNotMatch(controls, /editorTutoringPanel|renderTutoringPage|tutorUrl|saveTutorLink/);
+  const ui = read("tutoring.js");
+  assert.match(ui, /tutoringHomeCard/);
+  assert.match(ui, /window\.API\.getTutoringLink/);
+  assert.match(ui, /window\.API\.saveTutoringLink/);
+  assert.match(ui, /Показывать мою ссылку студентам/);
 });
 
 
@@ -1829,4 +1829,55 @@ test("student assignment results query only matching submissions and history IDs
   assert.equal(records[1].attempts,1);
   assert.equal(records[1].payload,"Ответ 2");
   assert.equal(JSON.stringify(calls),JSON.stringify([[2,3,3,1],[2,1,1,12],[4,1,1,12],[2,3,3,1]]));
+});
+
+
+test("personal tutoring links are isolated per teacher and shown only to students of that teacher", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function tutoringSettingKey_");
+  const end = server.indexOf("/* ---------- In-app notifications ---------- */", start);
+  assert.ok(start >= 0 && end > start);
+  const block = server.slice(start, end);
+  assert.match(block, /tutoring:teacher:/);
+  assert.match(block, /auth_\(data\)/);
+  assert.match(block, /hasCourseAccess_\(user,courseId\)/);
+  assert.match(block, /role==="teacher"\|\|user\.role==="admin"/);
+  assert.match(block, /role!=="student"/);
+  assert.match(block, /role!=="teacher"\|\|!teacherEmail/);
+  assert.match(block, /if\(!link\.visible\|\|!link\.url\)continue/);
+  assert.match(block, /legacy\.updatedBy===teacherEmail/);
+  assert.match(block, /UpdatedBy\]\)===email_\(teacherEmail\)/);
+  assert.match(block, /writeSetting_\(tutoringSettingKey_\(teacher\.email\)/);
+  assert.doesNotMatch(block, /settingValue_\("tutoring:"\+courseId\)/);
+  const html = read("index.html");
+  assert.doesNotMatch(html, /href="#\/tutoring"/);
+  assert.match(html, /tutoring\.js\?v=2/);
+  const ui = read("tutoring.js");
+  assert.match(ui, /tutoringHomeCard/);
+  assert.match(ui, /Показывать мою ссылку студентам/);
+  assert.match(ui, /window\.API\.saveTutoringLink/);
+  assert.match(ui, /window\.API\.getTutoringLink/);
+  assert.match(ui, /rel="noopener noreferrer"/);
+  const app = read("app.js");
+  assert.doesNotMatch(app, /menuTutoring/);
+});
+
+
+test("registration requires separate surname and first name and normalizes group names", () => {
+  const backend = read("Code.gs");
+  const app = read("app.js");
+  const html = read("index.html");
+  const reports = read("reports.js");
+  assert.match(backend, /function normalizeGroupName_\(value\)/);
+  assert.match(backend, /\.toLocaleUpperCase\("ru-RU"\)/);
+  assert.match(backend, /if \(!surname \|\| !firstName\)/);
+  assert.match(backend, /Name: fullName/);
+  assert.match(backend, /Group: group/);
+  assert.match(app, /regSurname/);
+  assert.match(app, /regFirstName/);
+  assert.match(app, /API\.register\(email,pass,surname,firstName,group,invite\)/);
+  assert.match(html, /id="regSurname"[^>]*required/);
+  assert.match(html, /id="regFirstName"[^>]*required/);
+  assert.match(reports, /const normGroup=x=>/);
+  assert.match(reports, /normGroup\(x\.group\)/);
 });
