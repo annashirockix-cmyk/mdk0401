@@ -339,31 +339,103 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit3", "Unit 3", "Tatarstan",
             [
               lec("3.1", "Grammar: Participles, Gerunds, Infinitives", `
-                <h3>1. Причастие I (Participle I)</h3>
-                <p>Образуется прибавлением -ing к глаголу (asking, being asked). Переводится как причастие с суффиксами -ущ, -ющ, -ащ, -ящ (в функции определения) или деепричастие (в функции обстоятельства).</p>
-                <p><i>the playing boy</i> — играющий мальчик<br>
-                <i>waiting for his friend</i> — ожидая своего друга</p>
-                <h3>2. Причастие II (Participle II)</h3>
-                <p>Это 3-я форма глагола (asked, produced, written). Переводится страдательным причастием с суффиксами -нн, -т (данный, законченный).</p>
-                <p><i>The results obtained depended on the methods used.</i> — Полученные результаты зависели от использованных методов.</p>
-                <h3>3. Герундий (Gerund)</h3>
-                <p>Образуется прибавлением -ing. Выражает процесс действия. Переводится деепричастием или отглагольным существительным на -ние (using — использование, reading — чтение).</p>
-                <p><i>In describing the experiment he shows all details.</i> — При описании эксперимента он показывает все подробности.</p>
-                <h3>4. Инфинитив (Infinitive)</h3>
-                <p>Неопределенная форма глагола (to ask, to read). Может выполнять роль подлежащего, дополнения, обстоятельства цели.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится распознавать формы на -ing и третью форму глагола, различать Participle I, Participle II, gerund и infinitive в типичных конструкциях, а также выбирать форму после распространённых глаголов и предлогов.</p>
+<h3>1. Participle I: форма на -ing</h3>
+<p>Participle I образуется добавлением -ing: <i>work → working; write → writing; run → running</i>. Он может описывать действие, происходящее одновременно с другим действием, или характеризовать предмет/человека:</p>
+<ul><li><i>The student reading the text is my groupmate.</i> — Студент, читающий текст, — мой одногруппник.</li><li><i>Walking to college, I listened to an English podcast.</i> — Идя в колледж, я слушал подкаст.</li></ul>
+<p>Форма -ing сама по себе не означает только настоящее время. Сравните: <i>a working machine</i> (работающая машина) и <i>Working in pairs helps students practise speaking.</i> (Работа в парах помогает студентам практиковать речь.)</p>
+<h3>2. Participle II: третья форма глагола</h3>
+<p>Participle II — третья форма глагола: правильные глаголы обычно имеют окончание -ed (<i>check — checked</i>), неправильные нужно запоминать (<i>write — written; make — made; see — seen</i>). Эта форма часто используется в пассивном залоге и как определение:</p>
+<ul><li><i>The checked documents are on the desk.</i> — Проверенные документы лежат на столе.</li><li><i>The results were obtained yesterday.</i> — Результаты были получены вчера.</li></ul>
+<h3>3. Gerund: герундий</h3>
+<p>Герундий имеет форму -ing и функционирует как существительное. Он может быть подлежащим, дополнением или частью конструкции после предлога:</p>
+<ul><li><i>Reading improves vocabulary.</i> — Чтение расширяет словарный запас.</li><li><i>She enjoys learning languages.</i> — Ей нравится изучать языки.</li><li><i>Thank you for helping me.</i> — Спасибо за помощь.</li></ul>
+<p>После предлогов обычно используется форма -ing: <i>before starting, after reading, interested in learning</i>. Не путайте герундий с Participle I: форма одинакова, но функция в предложении различается.</p>
+<h3>4. Infinitive: инфинитив</h3>
+<p>Инфинитив с to часто выражает цель или следует после определённых глаголов: <i>I want to improve my English. We use a dictionary to check a word.</i> После модальных глаголов can, must, should используется инфинитив без to: <i>Students can use the glossary.</i></p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Часто + -ing</th><th>Часто + to-infinitive</th><th>Возможны обе формы</th></tr>
+<tr><td>enjoy, avoid, finish, suggest</td><td>want, decide, hope, plan, need</td><td>like, love, start, begin</td></tr>
+</table>
+<p>Некоторые глаголы меняют значение: <i>remember doing</i> — помнить уже совершённое действие; <i>remember to do</i> — не забыть выполнить действие. <i>Stop doing</i> — прекратить действие; <i>stop to do</i> — остановиться, чтобы выполнить другое действие.</p>
+<h3>5. Практика</h3>
+<p><b>Задание A. Определите функцию формы -ing:</b> 1) Reading is useful. 2) The student reading the notice is new. 3) She enjoys reading. 4) Before leaving, close the window.</p>
+<p><b>Задание B. Выберите форму:</b> 1) We decided (to start/starting) early. 2) He avoids (to make/making) the same mistake. 3) Thank you for (to explain/explaining) the rule. 4) They can (to use/use) the dictionary.</p>
+<p><b>Задание C. Вставьте Participle II:</b> 1) The documents (check) yesterday are ready. 2) The information (write) on the board is important. 3) The results were (send) by email.</p>
+<p><b>Задание D. Составьте четыре предложения: одно с gerund в роли подлежащего, одно после предлога, одно с to-infinitive цели и одно с Participle II.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>1) gerund/подлежащее; 2) Participle I/определение; 3) gerund/дополнение после enjoy; 4) gerund после предлога before.</li><li>to start; making; explaining; use.</li><li>checked; written; sent.</li></ol>
+<p><b>Самостоятельная работа:</b> найдите в коротком английском тексте по два примера -ing и Participle II. Для каждого укажите его функцию и переведите всё предложение, а не только отдельную форму.</p>
+`),
               lec("3.2", "Reading: Tatarstan", `
-                <h3>Text: Tatarstan</h3>
-                <p>Tatarstan is situated in the middle part of the Volga basin. The territory is 70 thousand square kilometers. Tatarstan is mostly plain with hills. The climate is continental, winters are cold, summers are rather warm.</p>
-                <p>The population of the republic is about 4 million people, mostly the Tatars and the Russians. The state languages are Tatar and Russian. The flag of Tatarstan consists of three horizontal stripes: green, red and white.</p>
-                <p>Tatarstan is rich in natural resources. The main branches of industry are oil and gas extracting, motorcar constructing, chemical production. The main agricultural products are rye, wheat, and potato.</p>
-                <p>Kazan is the capital of our republic. It is historical, cultural, educational and industrial center. Other big industrial cities are Naberezhny Chelny, Nizhnekamsk, Yelabuga, Almetyevsk, and Mendeleyevsk.</p>
-                <p>The state sovereignty was proclaimed on the 30th of August 1991. It opens new prospects for international cooperation with Russia and other countries, for the development of culture, education and social security.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится извлекать географическую, культурную и экономическую информацию из обзорного текста о регионе, описывать местоположение и отрасли экономики, использовать Present Simple и сравнительные конструкции. Текст не предназначен для заучивания изменяющихся статистических показателей.</p>
+<h3>1. Reading: Tatarstan — a Region of Russia</h3>
+<p><b>Read the adapted text.</b></p>
+<p>The Republic of Tatarstan is a federal subject of the Russian Federation in the Volga region. Its capital is Kazan. The republic has a varied landscape with rivers, forests, agricultural areas and cities. Russian and Tatar are widely used in public life, and both have official status in the republic.</p>
+<p>Tatarstan has a diversified economy. Important sectors include oil production and refining, petrochemicals, mechanical engineering, vehicle manufacturing, agriculture, information technology and services. Industrial and educational centres are connected by road and rail networks. Kazan is known for its universities, cultural institutions and historical architecture, while other cities have their own industrial and educational profiles.</p>
+<p>Regional facts can change. When preparing a current report, check population figures, economic rankings and other statistics in recent official sources. In this lesson, focus on the language used to describe a region and compare its features.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>federal subject</td><td>субъект федерации</td><td>Tatarstan is a federal subject of Russia.</td></tr>
+<tr><td>capital</td><td>столица</td><td>Kazan is the capital of the republic.</td></tr>
+<tr><td>landscape</td><td>ландшафт</td><td>The region has a varied landscape.</td></tr>
+<tr><td>natural resources</td><td>природные ресурсы</td><td>Natural resources influence some industries.</td></tr>
+<tr><td>petrochemicals</td><td>нефтехимия</td><td>Petrochemicals are an important sector.</td></tr>
+<tr><td>mechanical engineering</td><td>машиностроение</td><td>Mechanical engineering requires technical skills.</td></tr>
+<tr><td>agriculture</td><td>сельское хозяйство</td><td>Agriculture is important in many regions.</td></tr>
+<tr><td>infrastructure</td><td>инфраструктура</td><td>Transport is part of regional infrastructure.</td></tr>
+</table>
+<h3>3. Language focus: location and comparison</h3>
+<p>Местоположение: <i>in the Volga region; near a river; to the east of; in the north-west of</i>. Для описания наличия объектов используйте <i>there is/there are</i>. Для сравнения: короткие прилагательные + -er (<i>larger, smaller</i>), длинные прилагательные с <i>more/less</i> (<i>more developed, less crowded</i>). После сравнительной формы часто используется <i>than</i>.</p>
+<p>Для осторожных утверждений используйте <i>one of the important sectors, is known for, includes, may be associated with</i>. Не используйте абсолютные формулировки вроде “the best” без критерия и подтверждающих данных.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>Where is Tatarstan situated?</li><li>What is its capital?</li><li>Name three sectors of its economy.</li><li>Which languages have official status in the republic?</li><li>Why should current statistics be checked in recent sources?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Заполните пропуски:</b> 1) Kazan is the ___ of Tatarstan. 2) Oil refining and petrochemicals are important ___ . 3) Roads and railways are part of the transport ___ .</p>
+<p><b>Задание B. Выберите форму:</b> 1) Kazan is (larger/more large) than a small town. 2) This region is (more diverse/diverser) in its economic activities. 3) The republic has (many/much) industrial centres.</p>
+<p><b>Задание C. Сделайте краткое сравнение двух регионов или городов по трём критериям: location, industry, education. Используйте at least two comparative forms.</p>
+<p><b>Задание D. Speaking:</b> представьте регион за 60 секунд. Назовите расположение, два экономических сектора и один культурный или образовательный объект.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>In the Volga region of Russia.</li><li>Kazan.</li><li>Any three: oil production/refining, petrochemicals, mechanical engineering, vehicle manufacturing, agriculture, IT, services.</li><li>Russian and Tatar.</li><li>Because figures and rankings change over time.</li><li>capital; sectors; infrastructure.</li><li>larger; more diverse; many.</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте текст 100–120 слов о выбранном регионе. Используйте три проверенных факта, два сравнительных предложения и пять слов из словаря. Укажите источник и дату проверки фактов.</p>
+`),
               lec("3.3", "Reading Practice: Dealing with People", `
-                <h3>Text: Dealing with People</h3>
-                <p>Dealing with people is probably the biggest problem you face, especially if you are in business. Yes, and that is also true if you are a housewife, architect or engineer. Even in such technical lines as engineering about 15 percent of one's financial success is due to one's technical knowledge and about 85 percent is due to skill in human engineering - to personality and the ability to lead people. The person who had technical knowledge plus the ability to express ideas, to assume leadership and to arouse enthusiasm among people - that person is headed for higher earning power. The survey conducted by Chicago University revealed that the health is the prime interest of adults.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать текст о профессиональном взаимодействии, выделять главную мысль и аргументы, использовать лексику для общения в команде, вежливо выражать несогласие и уточнять задачу. Утверждения о «процентах успеха» без надёжного источника не используются как научный факт.</p>
+<h3>1. Reading: Working with People</h3>
+<p><b>Read the adapted text.</b></p>
+<p>Technical knowledge is important in engineering, but successful work also depends on communication. Engineers often work in teams that include designers, technicians, operators, programmers, managers and quality specialists. Team members need to explain ideas clearly, listen to other viewpoints and share information accurately.</p>
+<p>Good communication does not mean that everyone always agrees. A team may discuss several solutions, compare evidence and identify risks before making a decision. When an instruction is unclear, a professional asks for clarification rather than guessing. When a colleague makes a mistake, it is more useful to describe the problem respectfully and focus on the next step than to blame the person.</p>
+<p>People also have different communication styles. Some prefer a short written summary; others need a diagram or a spoken explanation. A clear message identifies the topic, gives the necessary details and states what action or response is required. These skills help a team coordinate work and prevent misunderstandings.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>team member</td><td>участник команды</td><td>Each team member has a role.</td></tr>
+<tr><td>viewpoint</td><td>точка зрения</td><td>Listen to another viewpoint.</td></tr>
+<tr><td>evidence</td><td>фактические данные, доказательства</td><td>Compare the options using evidence.</td></tr>
+<tr><td>clarification</td><td>уточнение</td><td>Ask for clarification if a step is unclear.</td></tr>
+<tr><td>misunderstanding</td><td>недопонимание</td><td>A clear message can prevent misunderstanding.</td></tr>
+<tr><td>respectfully</td><td>уважительно</td><td>Disagree respectfully.</td></tr>
+<tr><td>to coordinate</td><td>координировать</td><td>Team members coordinate their tasks.</td></tr>
+</table>
+<h3>3. Functional English: professional communication</h3>
+<p>Чтобы уточнить: <i>Could you clarify the last point, please? What do you mean by…? Could you show me an example?</i></p>
+<p>Чтобы выразить мнение: <i>In my view…; I think this option may be more suitable because…</i></p>
+<p>Чтобы вежливо не согласиться: <i>I see your point, but the data suggest…; Could we consider another option?</i></p>
+<p>Чтобы подтвердить задачу: <i>Let me check that I understood correctly. You would like me to…</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>Why is communication important in engineering teams?</li><li>Name three types of specialists who may work together.</li><li>What should a person do if an instruction is unclear?</li><li>How can a team compare different solutions?</li><li>What should a clear message include?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите ситуацию и фразу:</b> попросить пример; уточнить задание; вежливо не согласиться; подтвердить понимание. Используйте четыре фразы из раздела 3.</p>
+<p><b>Задание B. Выберите наиболее профессиональный ответ:</b> 1) “That is a stupid idea.” 2) “I see your point, but could we compare the evidence first?” 3) “I will ignore your suggestion.”</p>
+<p><b>Задание C. Ролевая ситуация:</b> один студент предлагает решение учебной задачи, второй задаёт уточняющий вопрос, третий кратко подводит итог и фиксирует следующий шаг. Каждый должен использовать одну фразу для согласия или несогласия.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Because teams need to explain ideas, listen, share information and coordinate tasks.</li><li>Any three: designers, technicians, operators, programmers, managers, quality specialists.</li><li>Ask for clarification rather than guess.</li><li>Compare evidence and risks.</li><li>The topic, necessary details and required action/response.</li><li>Задание B: вариант 2.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите диалог из 10–12 реплик о распределении задач в проектной группе. Включите просьбу об уточнении, аргументированное мнение, вежливое несогласие и итоговое подтверждение договорённости.</p>
+`)
             ],
             [],
             [],
