@@ -6,7 +6,7 @@ window.MDK_DATA = window.MDK_DATA || {};
   function splitTeacherSections(content) {
     var student = String(content || "");
     var teacher = [];
-    var headingPattern = /<h([1-6])\\b[^>]*>[\\s\\S]*?<\\/h\\1>/gi;
+    var headingPattern = /<h([1-6])\b[^>]*>[\s\S]*?<\/h\1>/gi;
     var headings = [];
     var match;
     while ((match = headingPattern.exec(student))) {
@@ -23,7 +23,7 @@ window.MDK_DATA = window.MDK_DATA || {};
     ranges.slice().reverse().forEach(function (range) {
       student = student.slice(0, range.start) + student.slice(range.end);
     });
-    return { student: student, teacher: teacher.join("\\n") };
+    return { student: student, teacher: teacher.join("\n") };
   }
   function lec(code, title, content) {
     var split = splitTeacherSections(content);
