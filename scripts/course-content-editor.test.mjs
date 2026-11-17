@@ -83,7 +83,13 @@ test("protected exam banks use a visual question editor instead of a JSON textar
  assert.ok(editor.includes("q.correctAnswers=indexes"));
  assert.ok(editor.includes("q.correctOrder=extra.slice()"));
  assert.ok(editor.includes("q.pairs=pairs"));
- const server=read("Code.gs");
+ assert.ok(editor.includes('<option value="short_text">Краткий текстовый ответ</option>'));
+ assert.ok(editor.includes('q.correctAnswer=raw;'));
+ const server=read("Code.gs"),app=read("app.js");
+ assert.ok(server.includes('"text","short_text"'));
+ assert.ok(server.includes('В текстовом задании №'));
+ assert.ok(app.includes('id="secureTextAnswer"'));
+ assert.ok(app.includes('type==="text"||type==="short_text"'));
  assert.ok(server.includes('["type","correct","correctAnswers","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"]'));
  assert.ok(!editor.includes('id="examBankJson"'));
 });
