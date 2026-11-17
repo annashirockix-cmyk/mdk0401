@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v405'; // Добавлена поддержка заданий на восстановление последовательности.
+const CACHE_NAME = 'portal-cache-v406'; // Добавлена полноценная форма заданий «Верно / неверно».
 
 const STATIC_ASSETS = [
   './',
