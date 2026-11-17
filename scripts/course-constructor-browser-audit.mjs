@@ -39,6 +39,11 @@ try {
       getTopicAccess: async () => ({ open: true }),
       getCustomContent: async () => ({ success: true, data: window.__constructorStore.map(x => ({ ...x })) }),
       uploadTestImage: async (courseId, dataUrl, name) => ({ success: true, imageRef: "drive:audit-image-reference", name, size: 12000 }),
+      getQuestionBank: async (courseId, bankId) => ({ success: true, courseId, questions: (window.__examBankRows || []).map(row => ({ ...row })) }),
+      saveQuestionBank: async (courseId, bankId, questions) => {
+        window.__examBankRows = questions.map(row => ({ questionId: row.questionId, question: { ...row.question } }));
+        return { success: true, questionsSaved: questions.length, backupId: "audit-backup-id" };
+      },
       saveCustomContent: async item => {
         const at = window.__constructorStore.findIndex(x => String(x.id) === String(item.id));
         if (at >= 0) window.__constructorStore[at] = { ...item };
@@ -113,6 +118,21 @@ try {
 
   await page.evaluate(() => window.renderCourseEditorPage());
   await page.waitForSelector("#createTopicBtn");
+  // Exercise the protected exam-bank visual editor end-to-end with a mocked server API.
+  await page.locator("#loadExamBankBtn").click();
+  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("Загружено заданий"));
+  await page.locator("#examQuestionText").fill("Какие операции относятся к подготовке станка?");
+  await page.locator("#examQuestionType").selectOption("multi");
+  await page.locator("#examQuestionOptions").fill("Проверка инструмента\nПроверка крепления\nСлучайный запуск\nПроверка программы");
+  await page.locator("#examQuestionCorrect").fill("1, 2, 4");
+  await page.locator("#saveExamQuestionBtn").click();
+  assert.ok((await page.locator("#examBankQuestionList").innerText()).includes("Какие операции относятся к подготовке станка?"));
+  await page.locator("#saveExamBankBtn").click();
+  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("audit-backup-id"));
+  const visualBankSaved = await page.evaluate(() => window.__examBankRows);
+  assert.equal(visualBankSaved.length, 1, "Visual exam bank editor must save the new question");
+  assert.deepEqual(visualBankSaved[0].question.correct, [0, 1, 3], "Multiple-answer keys must be stored as zero-based indices");
+  assert.deepEqual(visualBankSaved[0].question.options, ["Проверка инструмента", "Проверка крепления", "Случайный запуск", "Проверка программы"]);
   // Tutoring controls are tested in their dedicated home-screen workflow.
   await page.locator("#newTopicCode").fill("AUDIT");
   await page.locator("#newTopicTitle").fill("Проверка конструктора");
