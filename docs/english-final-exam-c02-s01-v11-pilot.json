@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should students check before joining?",
       "audioText": "The international exchange office has arranged an online briefing about a study visit to Hamburg. It will begin at half past two on Friday and last forty minutes. Students should test their microphone before joining and use their full names on the meeting screen. A recording and a list of useful links will be sent to registered participants.",
       "options": [
-        "On Friday",
-        "Their microphone",
-        "Next month",
-        "After the event"
+        "The meeting time",
+        "The microphone",
+        "The participant's full name",
+        "The list of useful links"
       ],
       "correctIndex": 1,
       "points": 1
