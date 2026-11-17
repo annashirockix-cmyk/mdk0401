@@ -329,7 +329,7 @@ test("custom numeric questions accept decimal input, validate tolerance and scor
  assert.ok(editor.includes("numericAnswer=meta.numericAnswer"));
  assert.ok(editor.includes("correctAnswer:numeric?String(numericAnswer):\"\""));
  assert.ok(editor.includes("tolerance:q.tolerance"));
- assert.ok(ux.includes("id=\\"ceTolerance\\""));
+ assert.ok(ux.includes('id="ceTolerance"'));
  assert.ok(ux.includes("Введите правильное число"));
  assert.ok(server.includes('type === "numeric" || type === "num" || type === "number"'));
  assert.ok(server.includes("return String(value == null ? \"\" : value).trim();"));
