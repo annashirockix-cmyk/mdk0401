@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v410'; // Визуальный редактор экзаменов поддерживает краткий текстовый ответ.
+const CACHE_NAME = 'portal-cache-v411'; // Добавлен предпросмотр защищённых экзаменационных вопросов для студента.
 
 const STATIC_ASSETS = [
   './',
