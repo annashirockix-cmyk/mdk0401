@@ -156,7 +156,12 @@
     const result=[];
     const c=window.MDK_DATA[courseId];
     if(c)(c.sections||[]).forEach(s=>(s.topics||[]).forEach(t=>result.push({id:t.id,title:(t.code||"")+" "+(t.title||"")})));
-    (window.customContent.topics||[]).filter(t=>t.mdkId===courseId).forEach(t=>result.push({id:t.id,title:t.title}));
+    (window.customContent.topics||[]).filter(t=>t.mdkId===courseId&&!t.sourceTopicId).forEach(t=>result.push({id:t.id,title:t.title}));
+    return result;
+  }
+  function getBuiltInTopics(courseId){
+    const result=[],course=window.MDK_DATA[courseId];
+    if(course)(course.sections||[]).forEach(section=>(section.topics||[]).forEach(topic=>result.push(topic)));
     return result;
   }
   window.renderCourseEditorPage=function(){
@@ -168,6 +173,7 @@
       '<section class="hero"><h1>Редактор учебного курса</h1><p>Создание, просмотр, изменение и удаление учебных материалов. Изменения доступны только в назначенных дисциплинах.</p></section>'+
       '<div class="module"><label>Дисциплина</label><select id="editorCourse" class="self-input">'+ids.map(id=>'<option value="'+id+'" '+(id===selected?"selected":"")+'>'+esc(COURSE_LABELS[id])+'</option>').join("")+'</select></div>'+
       '<div class="module"><h3>1. Создать новую тему</h3><input id="newTopicCode" class="self-input" placeholder="Код темы, например Тема 12" style="margin:8px 0"><input id="newTopicTitle" class="self-input" placeholder="Название темы" style="margin:8px 0"><button class="btn" id="createTopicBtn">Создать тему</button> <span id="topicStatus" aria-live="polite"></span></div>'+
+      '<div class="module"><h3>1а. Изменить основную тему</h3><p style="color:var(--muted)">Изменение кода и названия существующей темы без удаления исходных учебных материалов.</p><select id="mainTopicExisting" class="self-input"></select><input id="mainTopicCode" class="self-input" placeholder="Код темы" style="margin:8px 0"><input id="mainTopicTitle" class="self-input" placeholder="Название темы" style="margin:8px 0"><button class="btn" id="saveMainTopicBtn" type="button">Сохранить название основной темы</button> <span id="mainTopicStatus" aria-live="polite"></span></div>'+
       '<div class="module"><h3>2. Лекции</h3><p style="color:var(--muted)">Выберите существующую лекцию для изменения или создайте новую. Текст поддерживает простую HTML-разметку.</p>'+
       '<label>Тема</label><select id="lectureTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующая лекция</label><select id="lectureExisting" class="self-input"><option value="">— Новая лекция —</option></select>'+
       '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea>'+
@@ -180,9 +186,10 @@
       '<label>Правильный ответ</label><select id="qCorrect" class="self-input"><option value="0">А</option><option value="1">Б</option><option value="2">В</option><option value="3">Г</option></select>'+
       '<button class="btn ghost" id="addQuestionBtn" style="margin-top:10px">Добавить вопрос в тест</button> <button class="btn ghost" id="cancelQuestionEditBtn" type="button">Отмена изменения вопроса</button></div>'+
       '<button class="btn" id="saveTestBtn">Создать тест</button> <button class="btn ghost" id="resetTestBtn" type="button">Новый тест</button> <button class="btn ghost" id="deleteTestBtn" type="button" disabled>Удалить выбранный тест</button> <button class="btn ghost" id="previewTestBtn" type="button">Просмотреть задания и ответы</button> <span id="testStatus" aria-live="polite"></span><div id="testPreview" style="margin-top:12px"></div></div>'+
-      '<div class="module"><h3>4. Сохранённые материалы темы</h3><p style="color:var(--muted)">Список обновляется после сохранения. Выберите тему выше, чтобы увидеть её лекции и тесты.</p><div id="savedMaterials">Загрузка материалов…</div></div>';
-    const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),testSel=document.getElementById("testTopic");
-    let lectureId="",testId="",draft=[],editingQuestion=-1;
+      '<div class="module"><h3>4. Редактирование основных экзаменов</h3><p style="color:var(--muted)">Здесь редактируются защищённые банки вопросов основного и дополнительного экзамена. Формат — JSON-массив объектов с questionId и question. Перед заменой сервер автоматически сохраняет резервную копию.</p><label>Банк вопросов</label><select id="examBankId" class="self-input"><option value="exam_primary">Основной экзамен · exam_primary</option><option value="exam_extra">Дополнительный экзамен · exam_extra</option><option value="mdk_extra">Дополнительный банк · mdk_extra</option></select><div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button class="btn ghost" id="loadExamBankBtn" type="button">Загрузить текущий банк</button><button class="btn" id="saveExamBankBtn" type="button">Сохранить банк с резервной копией</button></div><textarea id="examBankJson" class="self-input" rows="14" spellcheck="false" placeholder='[{"questionId":"q-001","question":{"type":"mc","q":"Текст вопроса","options":["Вариант А","Вариант Б"],"correct":0}}]' style="width:100%;font-family:monospace"></textarea><div id="examBankStatus" aria-live="polite"></div></div>'+
+      '<div class="module"><h3>5. Сохранённые материалы темы</h3><p style="color:var(--muted)">Список обновляется после сохранения. Выберите тему выше, чтобы увидеть её лекции и тесты.</p><div id="savedMaterials">Загрузка материалов…</div></div>';
+    const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),testSel=document.getElementById("testTopic"),mainTopicSel=document.getElementById("mainTopicExisting"),examBankSel=document.getElementById("examBankId");
+    let lectureId="",testId="",draft=[],editingQuestion=-1,builtInLectureIndex=null;
     const $=id=>document.getElementById(id);
     function refreshContent(done){
       const pageToken=$("editorCourse");
@@ -197,6 +204,8 @@
     function fillTopics(){
       const opts=topics().map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
       topicSel.innerHTML=opts;testSel.innerHTML=opts;
+      mainTopicSel.innerHTML=getBuiltInTopics(courseSel.value).map(t=>'<option value="'+esc(t.id)+'">'+esc(t.code+" "+t.title)+'</option>').join("");
+      loadMainTopic();
       renderSaved();
     }
     function renderSaved(){
