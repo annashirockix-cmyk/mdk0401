@@ -4756,10 +4756,10 @@
                 "prompt": "Listening 2. Which document should students bring to the CV workshop?",
                 "audioText": "The careers office is offering a CV workshop on Friday afternoon. It begins at one thirty in Room 24. Bring a draft CV saved on a USB drive or in your college cloud folder. The adviser will show students how to describe practical skills and organise education details. There will also be time to ask individual questions. Places are limited, so book online before Thursday.",
                 "options": [
-                  "On Friday",
+                  "A completed engineering project",
                   "A draft CV",
-                  "Next month",
-                  "After the event"
+                  "A passport",
+                  "A list of examination results"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -4908,10 +4908,10 @@
                 "prompt": "Listening 2. How long will each mock interview last?",
                 "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
                 "options": [
-                  "On Friday",
+                  "About five minutes",
                   "About ten minutes",
-                  "Next month",
-                  "After the event"
+                  "About fifteen minutes",
+                  "About twenty minutes"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -5059,10 +5059,10 @@
                 "prompt": "Listening 2. Where will it take place?",
                 "audioText": "The college is holding an information session about progression routes next Thursday at three. Students can learn about advanced certificates, apprenticeships and university programmes. The session will take place in the library seminar room. Bring your questions about entry requirements and course length. A short guide will be available at the door, and the presentation slides will be shared afterwards.",
                 "options": [
-                  "On Friday",
+                  "In the main lecture theatre",
                   "In the library seminar room",
-                  "Next month",
-                  "After the event"
+                  "In the careers office",
+                  "In the engineering workshop"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -7191,10 +7191,10 @@
                 "prompt": "Listening 2. What should students read beforehand?",
                 "audioText": "The technology department will host a talk about renewable energy systems on Friday morning. The speaker will compare solar panels and wind turbines and explain why output changes with weather conditions. The talk begins at ten fifteen in Lecture Room 2. Students should read the short introduction on the college platform before attending.",
                 "options": [
-                  "On Friday",
+                  "The weekly timetable",
                   "The short introduction on the college platform",
-                  "Next month",
-                  "After the event"
+                  "The technical glossary",
+                  "The safety checklist"
                 ],
                 "correctIndex": 1,
                 "points": 1
