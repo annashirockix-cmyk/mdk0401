@@ -80,6 +80,18 @@ test("students fail closed and staff previews never grade from client data", () 
   assert.match(app, /if \(!previewOnly && Number\(selected\) === Number\(questions\[currentQ\]\.correct\)\)/);
 });
 
+test("student custom-content API responses strip teacher-only lecture payloads", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function getCustomContent_(data)");
+  const end = server.indexOf("/* ---------- Private built-in question bank ---------- */", start);
+  assert.ok(start >= 0 && end > start);
+  const handler = server.slice(start, end);
+  assert.match(handler, /user\.role === "student" && payload && typeof payload === "object"/);
+  for (const key of ["teacherContent", "teacherNotes", "teacherKey", "answerKey", "recordingScript", "transcriptReveal", "suggestedAnswers", "markingGuide"]) {
+    assert.ok(handler.includes('delete payload["' + key + '"]'), "student custom-content response must remove " + key);
+  }
+});
+
 test("protected server question delivery strips answer fields before returning to students", () => {
   const server = read("Code.gs");
   const start = server.indexOf("function safeBuiltInQuestion_");
