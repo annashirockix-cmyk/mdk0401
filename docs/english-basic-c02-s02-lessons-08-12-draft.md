@@ -1,7 +1,7 @@
 # Basic English — Course 2, Semester 2 — New Lessons 8–12
 ## Draft teaching materials: scientific English, argumentation and transition to ESP
 
-**Status:** new lesson drafts; not yet imported into the portal or approved as official programme content.  
+**Status:** lesson drafts are appended to the portal course runtime by `english-five-year-runtime.js`; they are not approved as official programme content.  
 **Level:** approximately B1 to B1+; final level and lesson hours require validation against the approved work programme and the exact Belova textbook edition.  
 **Audio:** five original Spotlight-style recording scripts are included as text for future recording; no MP3 files or player are included.
 
