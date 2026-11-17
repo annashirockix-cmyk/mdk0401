@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should students read beforehand?",
       "audioText": "The technology department will host a talk about renewable energy systems on Friday morning. The speaker will compare solar panels and wind turbines and explain why output changes with weather conditions. The talk begins at ten fifteen in Lecture Room 2. Students should read the short introduction on the college platform before attending.",
       "options": [
-        "On Friday",
+        "The weekly timetable",
         "The short introduction on the college platform",
-        "Next month",
-        "After the event"
+        "The technical glossary",
+        "The safety checklist"
       ],
       "correctIndex": 1,
       "points": 1
