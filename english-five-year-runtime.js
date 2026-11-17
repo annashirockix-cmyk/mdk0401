@@ -32,26 +32,26 @@
  function splitTeacherMaterial(markdown){
   var student=String(markdown||""),teacher=[];
   function move(match,label){teacher.push(label+"\n"+match.trim());}
-  student=student.replace(/^##\\s+(\\d+)\\.\\s+Self-check and teacher key\\s*\\n([\\s\\S]*?)(?=\\n##\\s|\\n---\\s*$)/gm,function(full,num,body){
+  student=student.replace(/^##\s+(\d+)\.\s+Self-check and teacher key\s*\n([\s\S]*?)(?=\n##\s|\n---\s*$)/gm,function(full,num,body){
    var kept=[],hidden=[],inKey=false,numbered=0;
-   body.split("\\n").forEach(function(line){
-    if(!inKey&&/^\\s*\\d+\\.\\s+/.test(line)){
+   body.split("\n").forEach(function(line){
+    if(!inKey&&/^\s*\d+\.\s+/.test(line)){
      numbered++;
-     if(numbered>3||/\\b(?:Practice|Listening|Reading:|Review key)\\b/i.test(line))inKey=true;
+     if(numbered>3||/\b(?:Practice|Listening|Reading:|Review key)\b/i.test(line))inKey=true;
     }
     if(inKey){
-     if(/^\\*\\*[^*]*(?:rubric|Independent work)/i.test(line)){inKey=false;kept.push(line);}
+     if(/^\*\*[^*]*(?:rubric|Independent work)/i.test(line)){inKey=false;kept.push(line);}
      else hidden.push(line);
     }else kept.push(line);
    });
-   if(hidden.join("\\n").trim())teacher.push("### "+num+". Teacher answer key\\n"+hidden.join("\\n"));
-   return "## "+num+". Self-check\\n"+kept.join("\\n");
+   if(hidden.join("\n").trim())teacher.push("### "+num+". Teacher answer key\n"+hidden.join("\n"));
+   return "## "+num+". Self-check\n"+kept.join("\n");
   });
-  student=student.replace(/(^|\\n)### Teacher key and feedback\\s*\\n([\\s\\S]*?)(?=\\n\\*\\*[^*\\n]*(?:rubric|Independent work)|\\n##\\s|\\n---|$)/gm,function(full,prefix,body){move(body,"### Teacher key and feedback");return prefix;});
-  student=student.replace(/(^|\\n)### Review key\\s*\\n([\\s\\S]*?)(?=\\n##\\s|\\n---|$)/gm,function(full,prefix,body){move(body,"### Review key");return prefix;});
-  student=student.replace(/(^|\\n)\\*\\*Teacher key:\\*\\*[^\\n]*(?:\\n(?!\\s*$)[^\\n]*)?/g,function(full){move(full,"Teacher key");return "";});
-  student=student.replace(/(^|\\n)\\*\\*Teacher key\\*\\*\\s*\\n([\\s\\S]*?)(?=\\n\\*\\*[^*\\n]+\\*\\*|\\n#{1,4}\\s|\\n---|$)/gm,function(full,prefix,body){move(body,"Teacher key");return prefix;});
-  return {student:student.replace(/\\n{3,}/g,"\\n\\n").trim(),teacher:teacher.join("\\n\\n").trim()};
+  student=student.replace(/(^|\n)### Teacher key and feedback\s*\n([\s\S]*?)(?=\n\*\*[^*\n]*(?:rubric|Independent work)|\n##\s|\n---|$)/gm,function(full,prefix,body){move(body,"### Teacher key and feedback");return prefix;});
+  student=student.replace(/(^|\n)### Review key\s*\n([\s\S]*?)(?=\n##\s|\n---|$)/gm,function(full,prefix,body){move(body,"### Review key");return prefix;});
+  student=student.replace(/(^|\n)\*\*Teacher key:\*\*[^\n]*(?:\n(?!\s*$)[^\n]*)?/g,function(full){move(full,"Teacher key");return "";});
+  student=student.replace(/(^|\n)\*\*Teacher key\*\*\s*\n([\s\S]*?)(?=\n\*\*[^*\n]+\*\*|\n#{1,4}\s|\n---|$)/gm,function(full,prefix,body){move(body,"Teacher key");return prefix;});
+  return {student:student.replace(/\n{3,}/g,"\n\n").trim(),teacher:teacher.join("\n\n").trim()};
  }
  function findTopic(id){var found=null;data.ENT.sections.some(function(section){return(section.topics||[]).some(function(t){if(t.id===id){found=t;return true;}return false;});});return found;}
  var c4=findTopic("t-unit8"),c5=findTopic("t-unit11");
