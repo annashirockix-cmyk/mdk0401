@@ -311,7 +311,7 @@ test("teachers can revise built-in topics, lectures and protected exam banks wit
  assert.match(editor, /sourceTopicId:topic\.id/);
  assert.match(editor, /isBuiltInOverride=true/);
  assert.match(editor, /sourceLectureCode=base\.code/);
- assert.match(editor, /saveQuestionBank\(courseSel\.value,examBankSel\.value,questions\)/);
+ assert.match(editor, /saveQuestionBank\(courseSel\.value,examBankSel\.value,examBankRows\)/);
  assert.match(app, /sourceTopicId/);
  assert.match(app, /isBuiltInOverride===true/);
 });
