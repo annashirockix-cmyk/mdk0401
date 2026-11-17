@@ -364,7 +364,7 @@
     $("addQuestionBtn").onclick=function(){
       const q=$("qText").value.trim(),options=["qA","qB","qC","qD"].map(id=>$(id).value.trim()),correct=Number($("qCorrect").value);
       if(!q||options.some(x=>!x)){window.showToast("Заполните вопрос и все четыре варианта ответа.","err");return;}
-      const image=window.__ceCurrentQuestionImage;const meta=window.__ceQuestionMeta&&window.__ceQuestionMeta[editingQuestion>=0?editingQuestion:draft.length]||{};const item={q:q,options:options,correct:correct,imageRef:image&&image.imageRef||"",imageData:image&&image.imageData||"",kind:meta.kind||"single",correctAnswers:meta.correctAnswers||[],extra:meta.extra||"",feedback:meta.feedback||""};
+      const image=window.__ceCurrentQuestionImage;const meta=window.__ceQuestionMeta&&window.__ceQuestionMeta[editingQuestion>=0?editingQuestion:draft.length]||{};if((meta.kind==="multi"||meta.kind==="multiple"||meta.kind==="multiple_choice")&&(!Array.isArray(meta.correctAnswers)||meta.correctAnswers.length<2)){window.showToast("Для множественного выбора отметьте минимум два правильных варианта (например, А, В).","err");return;}const item={q:q,options:options,correct:correct,imageRef:image&&image.imageRef||"",imageData:image&&image.imageData||"",kind:meta.kind||"single",correctAnswers:meta.correctAnswers||[],extra:meta.extra||"",feedback:meta.feedback||""};
       if(editingQuestion>=0)draft[editingQuestion]=item;else draft.push(item);
       clearQuestionForm();drawDraft();
     };
