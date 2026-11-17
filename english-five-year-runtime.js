@@ -32,12 +32,26 @@
  function splitTeacherMaterial(markdown){
   var student=String(markdown||""),teacher=[];
   function move(match,label){teacher.push(label+"\n"+match.trim());}
-  // Extract complete answer-key blocks, not just their heading or first bullet.
-  // The next section heading, Independent work block or horizontal rule ends a key.
-  var keyBlock=/(^|\n)(?:#{2,4}\s*(?:Teacher key(?: and feedback)?|Review key|Answer key(?:\s+for teacher)?|Answer key\s*\/\s*assessment guidance)\s*|\*\*(?:Teacher key|Answer key(?:\s+for teacher)?|Answer key\s*\/\s*assessment guidance):?\*\*)\s*\n([\s\S]*?)(?=\n(?:#{1,4}\s|\*\*Independent work\b|---\s*$)|$)/gi;
-  student=student.replace(keyBlock,function(full,prefix,body){
-   move(body,"### Teacher answer key");
+  // Move full teacher-key blocks, including Russian bold labels whose answers
+  // begin on the same line as the label.
+  var keyBlock=/(^|\n)(?:#{2,4}\s*(?:Teacher key(?: and feedback)?|Review key|Answer key(?:\s+for teacher)?|Answer key\s*\/\s*assessment guidance)\s*|\*\*(?:Teacher key|Answer key(?:\s+for teacher)?|Answer key\s*\/\s*assessment guidance|Ключ преподавателя|Ответы для преподавателя):?\*\*)[ \t]*([^\n]*)\n([\s\S]*?)(?=\n(?:#{1,4}\s|\*\*Independent work\b|---\s*$)|$)/gi;
+  student=student.replace(keyBlock,function(full,prefix,inlineAnswers,body){
+   move((inlineAnswers||"")+"\n"+(body||""),"### Teacher answer key");
    return prefix;
+  });
+  // Some technical lessons use a numbered "Self-check and teacher key" block:
+  // retain the first three student prompts and move the explicitly keyed remainder.
+  student=student.replace(/^##\s+(\d+)\.\s+Self-check and teacher key\s*\n([\s\S]*?)(?=\n##\s|\n---\s*$)/gm,function(full,num,body){
+   var kept=[],hidden=[],inKey=false,numbered=0;
+   body.split("\n").forEach(function(line){
+    if(!inKey&&/^\s*\d+\.\s+/.test(line)){
+     numbered++;
+     if(numbered>3||/\b(?:Practice|Listening|Reading:|Review key)\b/i.test(line))inKey=true;
+    }
+    if(inKey) hidden.push(line); else kept.push(line);
+   });
+   if(hidden.join("\n").trim()) teacher.push("### "+num+". Teacher answer key\n"+hidden.join("\n"));
+   return "## "+num+". Self-check\n"+kept.join("\n");
   });
   return {student:student.replace(/\n{3,}/g,"\n\n").trim(),teacher:teacher.join("\n\n").trim()};
  }
