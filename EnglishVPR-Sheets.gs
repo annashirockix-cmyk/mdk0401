@@ -296,7 +296,7 @@ function validateEnglishVprWrittenAnswers_(task, answers, taskIndex, allowIncomp
       throw new Error("Ответ " + (index + 1) + " письменного задания должен быть текстом.");
     }
     const answer = raw.trim();
-    const words = answer ? answer.split(/\\s+/).length : 0;
+    const words = answer ? answer.split(/\s+/).length : 0;
     if (!answer && allowIncomplete) {
       return {task:taskIndex,question:String(question),answer:"",maxPoints:1};
     }
