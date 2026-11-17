@@ -118,7 +118,7 @@ test("English teacher-material migration is admin-only and stores only protected
   assert.match(importer, /teacherContent: item\.teacherContent/);
   assert.match(importer, /rowById\[item\.id\]/);
   assert.match(importer, /courseId.*ENB.*ENT/s);
-  assert.match(importer, /courseNumber >= 1 && courseNumber <= 3/);
+  assert.match(importer, /Number\.isInteger\(courseNumber\).*courseNumber >= 1 && courseNumber <= 3/s);
   assert.match(importer, /five-year-c0\[1-3\]/);
   assert.match(server, /payload\.teacherOnly === true\) return/);
   const app = read("app.js");
