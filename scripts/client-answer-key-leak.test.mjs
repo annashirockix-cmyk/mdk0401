@@ -87,8 +87,9 @@ test("student custom-content API responses strip teacher-only lecture payloads",
   assert.ok(start >= 0 && end > start);
   const handler = server.slice(start, end);
   assert.match(handler, /user\.role === "student" && payload && typeof payload === "object"/);
+  assert.match(handler, /delete payload\[key\]/);
   for (const key of ["teacherContent", "teacherNotes", "teacherKey", "answerKey", "recordingScript", "transcriptReveal", "suggestedAnswers", "markingGuide"]) {
-    assert.ok(handler.includes('delete payload["' + key + '"]'), "student custom-content response must remove " + key);
+    assert.ok(handler.includes('"' + key + '"'), "student custom-content response must list " + key + " as private");
   }
 });
 
