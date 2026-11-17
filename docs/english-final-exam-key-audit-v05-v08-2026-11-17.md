@@ -57,7 +57,7 @@ Post-update checks confirm each of V05–V08 has the expected single-choice key-
 
 A content-level review was completed for all multiple-choice, short-text, ordering, and written tasks in the ten V05 files (40 tasks), and the same 40-task slice in V06. The C02-S02 V07–V08 non-single-choice tasks (8 additional tasks beyond those two full slices) were also checked. Two further defects were found and corrected: (1) C01-S01 V05 ordering `c1s1v05_o01` placed room preparation before inviting students; the corrected order is discuss ideas → choose date/place → invite students → prepare the room. (2) C02-S01 V06 multiple-choice `c2s1v06_m01` incorrectly marked “Ignoring instructions” as a professional habit; the key is now [0, 2], “Asking when a task is unclear” and “Arriving on time”. Both source JSON files and their embedded registry variants were updated. Other reviewed distractor sets, accepted answers, sequences, and rubrics did not show further defects in these slices. This remains a partial semantic review, not a full review of every task in all 40 V05–V08 files.
 
-The CI run #3002 completed successfully on the option-balance correction commit (`56849ee`). A later run #3004 was triggered for the subsequent content correction and was still in progress at the time of this update. The latest HEAD must be checked again before declaring CI green.
+The CI run #3002 completed successfully on the option-balance correction commit (`56849ee`). Run #3004 also completed successfully on `5293f21`, including the C01-S01 V05 ordering correction. The C02-S01 V06 multiple-choice key correction was committed afterward; no workflow run is currently associated with the latest HEAD, so CI is not yet confirmed for that final code change.
 
 ## Remaining validation
 
