@@ -1453,7 +1453,8 @@ window.installStudentActivityCapture = window.installStudentActivityCapture || f
     }, true);
 };
 
-window.router = function() {\n    if (window.updatePortalNavigation) window.updatePortalNavigation();
+window.router = function() {
+    if (window.updatePortalNavigation) window.updatePortalNavigation();
     var hash = location.hash.slice(1) || "/"; 
     var parts = hash.split("/").filter(p => p);
     var overlay = document.getElementById("loginOverlay");
