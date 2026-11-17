@@ -142,7 +142,7 @@ try {
   await page.locator("#examQuestionCorrect").fill("Ньютон");
   await page.locator("#previewExamQuestionBtn").click();
   const shortPreview = await page.locator("#examQuestionPreview").innerText();
-  assert.ok(shortPreview.includes("Введите краткий ответ"));
+  assert.equal(await page.locator("#examQuestionPreview textarea").getAttribute("placeholder"), "Введите краткий ответ");
   assert.ok(!shortPreview.includes("Ньютон"), "Short text answer key must stay hidden in student preview");
   await page.locator("#saveExamQuestionBtn").click();
   await page.locator("#saveExamBankBtn").click();
