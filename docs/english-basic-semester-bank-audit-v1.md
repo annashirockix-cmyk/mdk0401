@@ -124,3 +124,15 @@ A focused cross-batch review identified two pairs that repeated almost the same 
 - Q29 and Q81 both asked the learner to complete almost the same indirect question about the location of the nearest bus stop. Q81 has been replaced with an indirect yes/no question about the library opening on Saturdays (“Do you know whether the library is open…”), retaining key position A.
 
 The two revised source files retain four options and their existing answer-key positions. This is a targeted remediation of two high-confidence near-duplicates, not a claim that all 200 questions have been fully semantically de-duplicated. A complete review of grammar-target frequency, reading-topic overlap, distractor reuse and cross-track/protected-bank similarity remains open.
+
+
+## Grammar-target recurrence screen — 2026-11-17
+
+The cross-batch editorial pass also recorded recurring grammar families that should be deliberately distributed when the 200-item pool is mapped into four Basic semester slots:
+
+- **Since/for and duration up to the present:** Q3, Q46, Q87, Q106, Q127 and Q162. These are not identical stems, but several assess closely related time-reference choices. Avoid clustering them in one semester form.
+- **First conditional / unless clauses:** Q8, Q48, Q108, Q148, Q182 and Q196. Q108 uses a passive result clause; the others use different prompts and contexts. Allocate by taught progression rather than file order.
+- **Past-event sequencing:** Q23, Q77 and Q181 use past perfect against a later past reference; Q142 tests past perfect continuous with explicit times. These should be separated or staged by course level.
+- **Future perfect:** Q116, Q136 and Q176 all test completion by a future reference point. This is a more advanced target within the stated A2–B1 draft orientation and needs explicit syllabus confirmation before allocation.
+
+This is a distribution warning, not a finding that the items are invalid. The 200 questions remain an unmapped authoring pool. The approved work programme and exact Belova edition are still required before deciding which repeated structures are appropriate, at what level, and in which semester.
