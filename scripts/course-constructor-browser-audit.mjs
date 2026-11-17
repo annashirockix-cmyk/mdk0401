@@ -133,6 +133,17 @@ try {
   assert.equal(visualBankSaved.length, 1, "Visual exam bank editor must save the new question");
   assert.deepEqual(visualBankSaved[0].question.correct, [0, 1, 3], "Multiple-answer keys must be stored as zero-based indices");
   assert.deepEqual(visualBankSaved[0].question.options, ["Проверка инструмента", "Проверка крепления", "Случайный запуск", "Проверка программы"]);
+  await page.locator("#addExamQuestionBtn").click();
+  await page.locator("#examQuestionText").fill("Назовите физическую величину, измеряемую в ньютонах.");
+  await page.locator("#examQuestionType").selectOption("short_text");
+  await page.locator("#examQuestionCorrect").fill("Ньютон");
+  await page.locator("#saveExamQuestionBtn").click();
+  await page.locator("#saveExamBankBtn").click();
+  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("audit-backup-id"));
+  const visualBankWithText = await page.evaluate(() => window.__examBankRows);
+  assert.equal(visualBankWithText.length, 2, "Visual exam bank editor must retain both question types");
+  assert.equal(visualBankWithText[1].question.type, "short_text");
+  assert.equal(visualBankWithText[1].question.correctAnswer, "Ньютон");
   // Tutoring controls are tested in their dedicated home-screen workflow.
   await page.locator("#newTopicCode").fill("AUDIT");
   await page.locator("#newTopicTitle").fill("Проверка конструктора");
