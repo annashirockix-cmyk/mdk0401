@@ -21,7 +21,7 @@ test("only server-authorized reading materials are stored, never assessments or 
   assert.match(cache, /ALLOWED_TYPES = \{ lecture: true, file: true, topic: true \}/);
   assert.doesNotMatch(cache, /test:\s*true|game:\s*true|announcement:\s*true|flashcards:\s*true/);
   assert.match(cache, /MAX_BYTES = 8 \* 1024 \* 1024/);
-  assert.match(cache, /serialized\.length > MAX_BYTES/);
+  assert.match(cache, /serialized\\.length \\* 2 > MAX_BYTES/);
 });
 
 test("offline fallback requires the still-present session and clears data on logout or auth expiry", () => {
