@@ -14,12 +14,12 @@
       "prompt": "Listening 1. Which containers are for clean plastic bottles?",
       "audioText": "The college is changing the labels on its recycling bins from next week. Paper and cardboard should go into the blue containers, while clean plastic bottles should be placed in the yellow containers. Food waste must not be put into either bin. The student environment team will visit classrooms on Monday to explain the new system and answer questions.",
       "options": [
-        "The yellow containers",
         "The blue containers",
+        "The yellow containers",
         "The green containers",
         "The grey containers"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -28,12 +28,12 @@
       "prompt": "Listening 2. What will the student environment team do on Monday?",
       "audioText": "The college is changing the labels on its recycling bins from next week. Paper and cardboard should go into the blue containers, while clean plastic bottles should be placed in the yellow containers. Food waste must not be put into either bin. The student environment team will visit classrooms on Monday to explain the new system and answer questions.",
       "options": [
-        "Inspect recycling bins and record contamination",
         "Visit classrooms to explain the system and answer questions",
+        "Inspect recycling bins and record contamination",
         "Change the collection schedule",
         "Publish the new bin labels on the college website"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -46,7 +46,7 @@
         "The signs did not explain how to sort plastic",
         "The collection service arrived at the wrong time"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -56,8 +56,8 @@
       "options": [
         "The total weight of waste collected each week",
         "The number of bins installed around the college",
-        "Contamination levels before and after the changes",
-        "The total amount of plastic collected over the year"
+        "The total amount of plastic collected over the year",
+        "Contamination levels before and after the changes"
       ],
       "correctIndex": 3,
       "points": 1
@@ -106,11 +106,11 @@
       "prompt": "A student is unsure which bin to use. What is the most helpful response?",
       "options": [
         "Put it anywhere; it does not matter.",
-        "Let's check the label together and find the correct container.",
         "Ignore the question and leave the item on the floor.",
+        "Let's check the label together and find the correct container.",
         "Use the nearest bin without checking."
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
