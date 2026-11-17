@@ -283,10 +283,10 @@
       lectureId=item.id;$("lectureTitle").value=item.title||"";$("lectureBody").value=item.content||"";
       $("saveLectureBtn").textContent="Сохранить изменения лекции";$("deleteLectureBtn").disabled=false;$("lectureStatus").textContent="Загружена дополнительная лекция для изменения.";
     }
-    function clearQuestionForm(){$("qText").value="";["qA","qB","qC","qD"].forEach(id=>$(id).value="");$("qCorrect").value="0";editingQuestion=-1;window.__ceCurrentQuestionImage=null;if(window.__ceRenderQuestionImage)window.__ceRenderQuestionImage();$("addQuestionBtn").textContent="Добавить вопрос в тест";}
+    function clearQuestionForm(){$("qText").value="";["qA","qB","qC","qD"].forEach(id=>$(id).value="");$("qCorrect").value="0";editingQuestion=-1;window.__ceEditingQuestionIndex=null;window.__ceCurrentQuestionImage=null;if(window.__ceRenderQuestionImage)window.__ceRenderQuestionImage();$("addQuestionBtn").textContent="Добавить вопрос в тест";}
     function drawDraft(){
       $("questionDrafts").innerHTML='<h4>Задания теста ('+draft.length+')</h4>'+(draft.length?draft.map((q,i)=>'<div class="module" style="padding:10px;margin:8px 0"><b>'+(i+1)+'. '+esc(q.q)+'</b>'+(q.imageData?'<img src="'+esc(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:220px;object-fit:contain;margin:8px 0;border-radius:8px">':'')+'<ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b>— правильный ответ</b>':'')+'</li>').join("")+'</ol><button class="btn ghost edit-q" data-i="'+i+'">Изменить</button> <button class="btn ghost remove-q" data-i="'+i+'">Удалить</button></div>').join(""):'<p>Добавьте первый вопрос.</p>');
-      $("questionDrafts").querySelectorAll(".edit-q").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,q=draft[i];$("qText").value=q.q;["qA","qB","qC","qD"].forEach((id,j)=>$(id).value=q.options[j]||"");$("qCorrect").value=String(q.correct);window.__ceCurrentQuestionImage=q.imageRef?{imageRef:q.imageRef,imageData:q.imageData||""}:null;if(window.__ceRenderQuestionImage)window.__ceRenderQuestionImage();editingQuestion=i;$("addQuestionBtn").textContent="Сохранить вопрос";});
+      $("questionDrafts").querySelectorAll(".edit-q").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,q=draft[i];window.__ceEditingQuestionIndex=i;$("qText").value=q.q;["qA","qB","qC","qD"].forEach((id,j)=>$(id).value=q.options[j]||"");$("qCorrect").value=String(q.correct);window.__ceCurrentQuestionImage=q.imageRef?{imageRef:q.imageRef,imageData:q.imageData||""}:null;if(window.__ceRenderQuestionImage)window.__ceRenderQuestionImage();editingQuestion=i;$("addQuestionBtn").textContent="Сохранить вопрос";});
       $("questionDrafts").querySelectorAll(".remove-q").forEach(b=>b.onclick=()=>{draft.splice(+b.dataset.i,1);if(editingQuestion===+b.dataset.i)clearQuestionForm();drawDraft();});
     }
     function resetTest(){
@@ -296,7 +296,7 @@
     function loadTest(){
       const id=$("testExisting").value;if(!id){resetTest();return;}
       const item=records("test",testSel.value).find(x=>String(x.id)===id);if(!item)return;
-      testId=item.id;draft=(item.questions||[]).map(q=>({q:q.q,options:(q.options||[]).slice(),correct:Number(q.correct)||0,imageRef:q.imageRef||"",imageData:q.imageData||""}));
+      testId=item.id;draft=(item.questions||[]).map(q=>({q:q.q,options:(q.options||[]).slice(),correct:Number(q.correct)||0,imageRef:q.imageRef||"",imageData:q.imageData||"",kind:q.kind||q.type||"single",correctAnswers:Array.isArray(q.correctAnswers)?q.correctAnswers.slice():[],extra:q.extra||"",feedback:q.feedback||""}));window.__ceQuestionMeta=draft.map(q=>({kind:q.kind,correctAnswers:q.correctAnswers,extra:q.extra,feedback:q.feedback}));
       $("testTitle").value=item.title||"";$("saveTestBtn").textContent="Сохранить изменения теста";$("deleteTestBtn").disabled=false;
       $("testStatus").textContent="Загружен тест. Можно изменять вопросы и варианты ответов.";drawDraft();
     }
@@ -364,7 +364,7 @@
     $("addQuestionBtn").onclick=function(){
       const q=$("qText").value.trim(),options=["qA","qB","qC","qD"].map(id=>$(id).value.trim()),correct=Number($("qCorrect").value);
       if(!q||options.some(x=>!x)){window.showToast("Заполните вопрос и все четыре варианта ответа.","err");return;}
-      const image=window.__ceCurrentQuestionImage;const item={q:q,options:options,correct:correct,imageRef:image&&image.imageRef||"",imageData:image&&image.imageData||""};
+      const image=window.__ceCurrentQuestionImage;const meta=window.__ceQuestionMeta&&window.__ceQuestionMeta[editingQuestion>=0?editingQuestion:draft.length]||{};const item={q:q,options:options,correct:correct,imageRef:image&&image.imageRef||"",imageData:image&&image.imageData||"",kind:meta.kind||"single",correctAnswers:meta.correctAnswers||[],extra:meta.extra||"",feedback:meta.feedback||""};
       if(editingQuestion>=0)draft[editingQuestion]=item;else draft.push(item);
       clearQuestionForm();drawDraft();
     };
@@ -373,7 +373,7 @@
       const topicId=testSel.value,title=$("testTitle").value.trim(),status=$("testStatus");
       if(!topicId||!title||!draft.length){status.textContent="Укажите тему, название и добавьте хотя бы один вопрос.";return;}
       const id=testId||("test-"+Date.now());status.textContent="Сохранение…";
-      window.API.saveCustomContent({id:id,mdkId:courseSel.value,topicId:topicId,type:"test",title:title,questions:draft.map(q=>({q:q.q,options:q.options.slice(),correct:q.correct,imageRef:q.imageRef||""}))}).then(r=>{
+      window.API.saveCustomContent({id:id,mdkId:courseSel.value,topicId:topicId,type:"test",title:title,questions:draft.map(q=>({q:q.q,options:q.options.slice(),correct:q.correct,imageRef:q.imageRef||"",kind:q.kind||"single",type:q.kind||"single",correctAnswers:q.correctAnswers||[],extra:q.extra||"",feedback:q.feedback||""}))}).then(r=>{
         if(!r.success)throw new Error(r.error||"Ошибка сохранения");
         testId=id;return new Promise(resolve=>refreshContent(resolve));
       }).then(()=>{$("testExisting").value=id;$("saveTestBtn").textContent="Сохранить изменения теста";$("deleteTestBtn").disabled=false;status.textContent="Тест сохранён ✓ ("+draft.length+" заданий)";previewTest();}).catch(e=>status.textContent=e.message);
