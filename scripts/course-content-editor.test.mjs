@@ -254,7 +254,7 @@ test("teacher-created test questions support private image uploads and student d
  assert.match(api, /uploadTestImage:function\(courseId,dataUrl,name\)/);
  assert.match(editor, /id="ceQuestionImagePanel"/);
  assert.match(editor, /imageRef:q\.imageRef\|\|""/);
- assert.match(ux, /id='ceQuestionImageFile'/);
+ assert.match(ux, /id="ceQuestionImageFile"/);
  assert.match(ux, /window\.API\.uploadTestImage\(course,dataUrl/);
  assert.match(app, /q\.imageData && \/\^data:image/);
 });
