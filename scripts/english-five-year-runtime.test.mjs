@@ -116,26 +116,24 @@ test("all 120 existing and new lessons have usable listening activities", () => 
   }
 });
 
-test("runtime loads before app.js and lecture rendering resolves explicit listening IDs", () => {
+test("English listening is embedded in lectures and no separate listening tab is exposed", () => {
   const html = read("index.html");
   const app = read("app.js");
   assert.ok(html.indexOf("english-five-year-runtime.js") < html.indexOf("app.js"));
   assert.match(app, /lecture\.listeningId/);
+  assert.match(app, /getEmbeddedEnglishListening/);
+  assert.match(app, /english-listening-inline/);
+  assert.match(app, /EnglishListeningLesson\.render/);
+  assert.doesNotMatch(html, /href="#\/english-listening"/);
+  assert.doesNotMatch(html, /english-listening-route\.js/);
+  assert.doesNotMatch(app, /href==="#\/english-listening"/);
   assert.match(read("english-listening-tts.js"), /speechSynthesis/);
   assert.match(read("english-listening-tts.js"), /SpeechSynthesisUtterance/);
   const serviceWorker = read("service-worker.js");
   assert.match(serviceWorker, /const CACHE_NAME = 'portal-cache-v\d+'/);
-  for (const file of ["english-five-year-runtime.js", "english-listening-tts.js", "english-listening-lesson.js", "english-listening-catalog.js", "english-listening-route.js"]) {
+  for (const file of ["english-five-year-runtime.js", "english-listening-tts.js", "english-listening-lesson.js", "english-listening-catalog.js"]) {
     assert.ok(serviceWorker.includes("./" + file), `service worker must precache ${file}`);
   }
-});
-
-test("English listening lab has a visible navigation entry for users with English course access", () => {
-  const html = read("index.html");
-  const app = read("app.js");
-  assert.ok(html.includes('href="#/english-listening"'), "English Listening route must be reachable from the portal menu");
-  assert.ok(app.includes('href==="#/english-listening"'), "menu visibility must include the listening route in English-access checks");
-  assert.ok(html.indexOf('english-listening-route.js') > html.indexOf('app.js'), "listening route wrapper must install after the main router exists");
 });
 
 test("listening practice shuffles every option set and remaps the correct answer without mutating source data", () => {
@@ -151,4 +149,40 @@ test("listening practice shuffles every option set and remaps the correct answer
   assert.equal(prepared[0].options[prepared[0].answerIndex], "alpha");
   assert.equal(prepared[1].options[prepared[1].answerIndex], "west");
   assert.equal(JSON.stringify(source), before, "source catalogue must remain unchanged");
+});
+
+test("course 1–3 lecture students do not receive recording scripts, transcript reveals or compact answer keys", () => {
+  const window = loadEnglishRuntime();
+  const active = [window.MDK_DATA.ENB, window.MDK_DATA.ENT].flatMap((track) =>
+    track.sections.flatMap((section) =>
+      (section.topics || []).filter((topic) => /^t-five-year-c0[1-3]-s0[12]$/.test(topic.id || ""))
+        .flatMap((topic) => topic.lectures || []),
+    ),
+  );
+  assert.equal(active.length, 46, "active scope must contain exactly 46 new lessons for courses 1–3");
+  for (const lecture of active) {
+    const student = String(lecture.content || "");
+    assert.doesNotMatch(student, /Recording script|Transcript reveal|<strong>Key:?<\/strong>|<strong>Suggested answers:?<\/strong>|Suggested answers:|Suggested teacher key|Self-check[^<]*answers|Teacher answer key/i,
+      `teacher-only listening/key material leaked into ${lecture.listeningId}`);
+    assert.ok(lecture.teacherContent && lecture.teacherContent.trim(),
+      `teacher material should remain available in the staff accordion: ${lecture.listeningId}`);
+  }
+});
+
+test("original English lectures keep teacher answer sections out of student content", () => {
+  const window = loadEnglishRuntime();
+  const originals = [window.MDK_DATA.ENB, window.MDK_DATA.ENT].flatMap((track) =>
+    track.sections.flatMap((section) =>
+      (section.topics || []).flatMap((topic) =>
+        (topic.lectures || []).filter((lecture) => !lecture.listeningId),
+      ),
+    ),
+  );
+  assert.ok(originals.length >= 26, "the 26 original lectures in courses 1–3 must be present");
+  for (const lecture of originals) {
+    assert.doesNotMatch(String(lecture.content || ""), /<h[1-6][^>]*>[^<]*(?:ключ преподавателя|teacher key|answer key)/i,
+      `teacher answer heading leaked into original lecture ${lecture.code}`);
+  }
+  const protectedKeys = originals.filter((lecture) => /ключ преподавателя|teacher key|answer key/i.test(String(lecture.teacherContent || "")));
+  assert.ok(protectedKeys.length >= 20, "teacher keys from original lectures should remain available to staff");
 });

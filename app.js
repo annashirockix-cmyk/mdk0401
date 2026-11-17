@@ -83,7 +83,7 @@ window.updateMenuVisibility = function() {
     var englishLinks=document.querySelectorAll('.english-drawer-item');
     Array.prototype.forEach.call(englishLinks,function(link){
         var href=link.getAttribute("href")||"";
-        var examOrLab=href==="#/english-tests"||href==="#/laboratory/english"||href==="#/english-listening";
+        var examOrLab=href==="#/english-tests"||href==="#/laboratory/english";
         link.style.display=(activeEnglish||(examOrLab&&hasEnglishAccess))?"flex":"none";
     });
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
@@ -187,6 +187,64 @@ window.invalidateGlobalCustomContentLoad = function(clearContent) {
             window.customContent[key] = [];
         });
     }
+};
+
+/**
+ * Admin console helper: migrate English teacher-only companion content to the
+ * protected CourseContent sheet. Run only after deploying the matching Apps Script.
+ * Re-running is safe: server records use deterministic IDs and are upserted.
+ */
+window.migrateEnglishTeacherMaterialsToServer = async function () {
+    var identity = window.state && (window.state.staff || window.state.student);
+    if (!identity || String(identity.role || "").toLowerCase() !== "admin") {
+        throw new Error("Перенос доступен только администратору.");
+    }
+    if (!window.API || !window.API.importEnglishTeacherMaterials) {
+        throw new Error("Сначала разверните Apps Script и обновите страницу портала.");
+    }
+    var records = [];
+    ["ENB", "ENT"].forEach(function (courseId) {
+        var course = window.MDK_DATA && window.MDK_DATA[courseId];
+        (course && course.sections || []).forEach(function (section) {
+            (section.topics || []).forEach(function (topic) {
+                var topicId = String(topic.id || "");
+                (topic.lectures || []).forEach(function (lecture) {
+                    var teacherContent = String(lecture.teacherContent || "").trim();
+                    if (!teacherContent) return;
+                    var courseNumber = Number(lecture.courseNumber || 0);
+                    // Import only explicitly numbered first-to-third-year lessons.
+                    // Legacy textbook units have no reliable course number and must not
+                    // be guessed into this migration.
+                    var isCourseOneToThree = (courseNumber >= 1 && courseNumber <= 3) ||
+                        /^[bt]-five-year-c0[1-3]-s0[1-2]$/.test(topicId);
+                    if (!isCourseOneToThree) return;
+                    var code = String(lecture.code || lecture.listeningId || "").trim();
+                    var listeningId = String(lecture.listeningId || "").trim();
+                    if (!code) return;
+                    var stable = (listeningId || topicId + "-" + code).replace(/[^A-Za-z0-9._:-]/g, "-");
+                    records.push({
+                        id: "eng-teacher-" + courseId + ":" + stable,
+                        courseId: courseId,
+                        topicId: topicId,
+                        courseNumber: courseNumber,
+                        code: code,
+                        title: String(lecture.title || code),
+                        listeningId: listeningId,
+                        teacherContent: teacherContent
+                    });
+                });
+            });
+        });
+    });
+    if (!records.length) return { success: true, total: 0, batches: 0 };
+    var totalInserted = 0, totalUpdated = 0;
+    for (var i = 0; i < records.length; i += 50) {
+        var result = await window.API.importEnglishTeacherMaterials(records.slice(i, i + 50));
+        if (!result || !result.success) throw new Error("Сервер не подтвердил перенос пакета " + (Math.floor(i / 50) + 1));
+        totalInserted += Number(result.inserted || 0);
+        totalUpdated += Number(result.updated || 0);
+    }
+    return { success: true, total: records.length, inserted: totalInserted, updated: totalUpdated, batches: Math.ceil(records.length / 50) };
 };
 
 window.loadGlobalCustomContent = function(callback) {
@@ -674,8 +732,20 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         }
     }
     var customTopicTests = (window.customContent.tests || []).filter(function (t) { return String(t.mdkId || t.courseId) === String(courseId) && String(t.topicId) === String(topicId); });
+    var privateTeacherLectures = (window.customContent.lectures || []).filter(function (lecture) {
+        return lecture.teacherOnly === true && String(lecture.mdkId || lecture.courseId) === String(courseId) && String(lecture.topicId) === String(topicId);
+    });
+    if (topic && privateTeacherLectures.length) {
+        privateTeacherLectures.forEach(function (privateLecture) {
+            var target = (topic.lectures || []).find(function (lecture) {
+                return (privateLecture.listeningId && lecture.listeningId === privateLecture.listeningId) ||
+                    (privateLecture.sourceLectureCode && lecture.code === privateLecture.sourceLectureCode);
+            });
+            if (target) target.teacherContent = privateLecture.teacherContent || "";
+        });
+    }
     var customTopicLectures = (window.customContent.lectures || []).filter(function (lecture) {
-        return String(lecture.mdkId || lecture.courseId) === String(courseId) && String(lecture.topicId) === String(topicId);
+        return lecture.teacherOnly !== true && String(lecture.mdkId || lecture.courseId) === String(courseId) && String(lecture.topicId) === String(topicId);
     });
     function safeCustomLectureHtml(html) {
         var box = document.createElement("div");

@@ -143,6 +143,7 @@ function handleRequest_(e) {
       case "submitfinalexam": result = submitFinalExam_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
+      case "importenglishteachermaterials": result = importEnglishTeacherMaterials_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
       case "setteachercourses": result = setTeacherCourses_(data); break;
       case "setuserrole": result = setUserRole_(data); break;
@@ -1818,6 +1819,18 @@ function getCustomContent_(data) {
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
 
+    // Dedicated teacher-only lecture records are not returned to students at all.
+    if (user.role === "student" && payload && payload.teacherOnly === true) return;
+
+    // Teacher-only lecture notes, answer keys and recording masters must never leave the server in a student response.
+    // Built-in English lessons are migrated into CourseContent as lecture payloads; keep this guard here
+    // so a student cannot retrieve their private companion material through getCustomContent.
+    if (user.role === "student" && payload && typeof payload === "object" && !Array.isArray(payload)) {
+      ["teacherContent", "teacherNotes", "teacherKey", "answerKey", "recordingScript", "transcriptReveal", "suggestedAnswers", "markingGuide"].forEach(function (key) {
+        delete payload[key];
+      });
+    }
+
     // Student sessions receive test prompts and options only. Answer keys remain server-side.
     if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
       function stripTestKeys_(value) {
@@ -2429,6 +2442,63 @@ function getGameAnswer_(data) {
   if (!q) throw new Error("Вопрос не найден.");
   return {success:true, answer:String(q.a || q.answer || "")};
 }
+/**
+ * One-time, admin-only import of teacher companion materials from the English
+ * course runtime into CourseContent. Only the private companion field is stored.
+ * Send batches of at most 50 records; deterministic IDs make retries idempotent.
+ */
+function importEnglishTeacherMaterials_(data) {
+  const user = admin_(data);
+  const materials = Array.isArray(data.materials) ? data.materials : [];
+  if (!materials.length || materials.length > 50) throw new Error("Передайте от 1 до 50 материалов за один запрос.");
+  const normalized = materials.map(function (item) {
+    item = item || {};
+    const courseId = String(item.courseId || "").trim();
+    const topicId = String(item.topicId || "").trim();
+    const courseNumber = Number(item.courseNumber || 0);
+    const isCourseOneToThree = (Number.isInteger(courseNumber) && courseNumber >= 1 && courseNumber <= 3) ||
+      /^[bt]-five-year-c0[1-3]-s0[1-2]$/.test(topicId);
+    const code = String(item.code || "").trim();
+    const title = String(item.title || "").trim();
+    const teacherContent = String(item.teacherContent || "").trim();
+    const listeningId = String(item.listeningId || "").trim();
+    const id = String(item.id || "").trim();
+    if (["ENB", "ENT"].indexOf(courseId) === -1 || !topicId || !isCourseOneToThree || !code || !teacherContent || !/^eng-teacher-[A-Za-z0-9._:-]{3,150}$/.test(id)) {
+      throw new Error("Некорректная запись преподавательского материала: " + (code || "без кода"));
+    }
+    return { id: id, courseId: courseId, topicId: topicId, code: code, title: title || code, listeningId: listeningId, teacherContent: teacherContent };
+  });
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = content_();
+    const values = sheet.getDataRange().getValues();
+    const rowById = {};
+    for (let i = 1; i < values.length; i++) rowById[String(values[i][0])] = i + 1;
+    let inserted = 0, updated = 0;
+    normalized.forEach(function (item) {
+      const payload = {
+        teacherOnly: true,
+        sourceLectureCode: item.code,
+        listeningId: item.listeningId,
+        code: item.code,
+        teacherContent: item.teacherContent
+      };
+      const row = [item.id, item.courseId, item.topicId, "lecture", item.title, JSON.stringify(payload), user.email, new Date().toISOString()];
+      if (rowById[item.id]) {
+        sheet.getRange(rowById[item.id], 1, 1, row.length).setValues([row]);
+        updated++;
+      } else {
+        sheet.appendRow(row);
+        inserted++;
+      }
+    });
+    return { success: true, received: normalized.length, inserted: inserted, updated: updated };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function saveCustomContent_(data) {
   const courseId = String(data.mdkId || data.courseId || "");
   if (!courseId) throw new Error("Не указана дисциплина.");

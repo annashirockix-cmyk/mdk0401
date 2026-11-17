@@ -80,6 +80,19 @@ test("students fail closed and staff previews never grade from client data", () 
   assert.match(app, /if \(!previewOnly && Number\(selected\) === Number\(questions\[currentQ\]\.correct\)\)/);
 });
 
+test("student custom-content API responses strip teacher-only lecture payloads", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function getCustomContent_(data)");
+  const end = server.indexOf("/* ---------- Private built-in question bank ---------- */", start);
+  assert.ok(start >= 0 && end > start);
+  const handler = server.slice(start, end);
+  assert.match(handler, /user\.role === "student" && payload && typeof payload === "object"/);
+  assert.match(handler, /delete payload\[key\]/);
+  for (const key of ["teacherContent", "teacherNotes", "teacherKey", "answerKey", "recordingScript", "transcriptReveal", "suggestedAnswers", "markingGuide"]) {
+    assert.ok(handler.includes('"' + key + '"'), "student custom-content response must list " + key + " as private");
+  }
+});
+
 test("protected server question delivery strips answer fields before returning to students", () => {
   const server = read("Code.gs");
   const start = server.indexOf("function safeBuiltInQuestion_");
@@ -90,4 +103,30 @@ test("protected server question delivery strips answer fields before returning t
     assert.ok(sanitizer.includes('delete q["' + key + '"]') || sanitizer.includes('delete q.' + key) || sanitizer.includes('delete q[k]'), "server sanitizer must remove " + key);
   }
   assert.match(server, /if\(user\.role!==\"student\"\|\|!courseId\|\|!testId/);
+});
+
+test("English teacher-material migration is admin-only and stores only protected companion records", () => {
+  const server = read("Code.gs");
+  assert.match(server, /case "importenglishteachermaterials": result = importEnglishTeacherMaterials_\(data\)/);
+  const start = server.indexOf("function importEnglishTeacherMaterials_(data)");
+  const end = server.indexOf("function saveCustomContent_(data)", start);
+  assert.ok(start >= 0 && end > start);
+  const importer = server.slice(start, end);
+  assert.match(importer, /const user = admin_\(data\)/);
+  assert.match(importer, /materials\.length > 50/);
+  assert.match(importer, /teacherOnly: true/);
+  assert.match(importer, /teacherContent: item\.teacherContent/);
+  assert.match(importer, /rowById\[item\.id\]/);
+  assert.match(importer, /courseId.*ENB.*ENT/s);
+  assert.match(importer, /Number\.isInteger\(courseNumber\).*courseNumber >= 1 && courseNumber <= 3/s);
+  assert.match(importer, /five-year-c0\[1-3\]/);
+  assert.match(server, /payload\.teacherOnly === true\) return/);
+  const app = read("app.js");
+  assert.match(app, /window\.migrateEnglishTeacherMaterialsToServer = async function/);
+  assert.match(app, /identity\.role.*admin/);
+  assert.match(app, /privateTeacherLectures/);
+  assert.match(app, /courseNumber >= 1 && courseNumber <= 3/);
+  assert.match(app, /Legacy textbook units have no reliable course number/);
+  assert.doesNotMatch(app, /b-unit\\[1-6\\]|t-unit\\(\?:1\\|2\\|3\\|12\\)/);
+  assert.match(app, /lecture\.teacherOnly !== true/);
 });
