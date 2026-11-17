@@ -94,10 +94,10 @@
     {
       "id": "c2s1v04_v01",
       "type": "short_text",
-      "prompt": "Complete: 'A person who gives advice about education and careers is an adviser or ___.'",
+      "prompt": "A person who gives advice about education and careers is a career ___.",
       "acceptedAnswers": [
-        "counsellor",
-        "career adviser"
+        "adviser",
+        "counsellor"
       ],
       "points": 2
     },
