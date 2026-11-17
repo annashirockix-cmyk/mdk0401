@@ -39,7 +39,7 @@ test("real-browser constructor audit exercises student numeric, true-false and s
  assert.ok(audit.includes("#customNumericSubmit"));
  assert.ok(audit.includes('button[data-custom-answer="0"]'));
  assert.ok(audit.includes('button[data-custom-answer="1"]'));
- assert.ok(audit.includes('["12.5", 0]'));
+ assert.ok(audit.includes('["12.5", 0, "Ньютон"]'));
 });
 
 test("lecture editor includes in-text find and replace controls", () => {\n const ux = read("course-editor-ux.js");\n assert.ok(ux.includes("ceFindText"));\n assert.ok(ux.includes("ceReplaceText"));\n assert.ok(ux.includes("ceFindNext"));\n assert.ok(ux.includes("ceReplaceAll"));\n assert.ok(ux.includes("Найти далее"));\n assert.ok(ux.includes("Заменить все"));\n});\n\ntest("short text questions are rendered and scored on the server", () => {
@@ -353,7 +353,7 @@ test("custom numeric questions accept decimal input, validate tolerance and scor
  assert.ok(app.includes('questionType === "numeric" || questionType === "num" || questionType === "number"'));
  assert.ok(app.includes('type="text" inputmode="decimal"'));
  assert.ok(editor.includes("numericAnswer=meta.numericAnswer"));
- assert.ok(editor.includes("correctAnswer:numeric?String(numericAnswer):\"\""));
+ assert.ok(editor.includes('correctAnswer:numeric?String(numericAnswer):shortText?String(meta.textAnswer||""):""'));
  assert.ok(editor.includes("tolerance:q.tolerance"));
  assert.ok(ux.includes('id="ceTolerance"'));
  assert.ok(ux.includes("Введите правильное число"));
