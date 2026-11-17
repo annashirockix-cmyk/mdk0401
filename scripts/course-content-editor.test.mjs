@@ -222,6 +222,9 @@ test("teachers can revise built-in topics, lectures and protected exam banks wit
  assert.match(server, /\["exam_primary","exam_extra","mdk_extra"\]/);
  assert.match(server, /QuestionBankBackup/);
  assert.match(server, /previousQuestionsBackedUp/);
+ assert.match(server, /Неподдерживаемый тип задания/);
+ assert.match(server, /В числовом задании/);
+ assert.match(server, /правильный ответ/);
  assert.match(server, /protectedQuestionBankMap:v1/);
  assert.match(api, /saveQuestionBank:function\(courseId,bankId,questions\)/);
  assert.match(editor, /sourceTopicId:topic\.id/);
