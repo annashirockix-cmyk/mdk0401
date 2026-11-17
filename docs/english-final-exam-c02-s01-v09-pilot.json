@@ -43,10 +43,10 @@
       "options": [
         "They pay the full price and keep the cup",
         "They borrow a cup without paying a deposit",
-        "They pay a deposit and get it back when they return the cup",
-        "Students pay a deposit but keep it when they return the cup."
+        "Students pay a deposit but keep it when they return the cup.",
+        "They pay a deposit and get it back when they return the cup"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
