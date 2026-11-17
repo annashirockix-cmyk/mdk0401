@@ -2133,7 +2133,7 @@ function getBuiltInTest_(data) {
 
 function sameAnswer_(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
 function scoreBuiltInQuestion_(q,answer) {
-  const type=String(q.type||"mc").toLowerCase();
+  const type=String(q.type||q.kind||"mc").toLowerCase();
   let expected=Array.isArray(q.correctAnswers)?q.correctAnswers:(q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer)));
   if(type==="tf"||type==="true_false"){
     if(expected===undefined||expected===null)return false;
