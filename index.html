@@ -195,6 +195,7 @@
     <script src="./sprut-tp-question-bank.js?v=2"></script>
     <script src="./lecture-enrichment.js?v=2"></script>
     <script src="./lecture-visual-atlas.js?v=5"></script>
+    <script src="./offline-materials-cache.js?v=1"></script>
     <script src="./app.js?v=75"></script>
     <script src="./student-recommendations.js?v=3"></script>
     <script src="./app-offline-login.js?v=5"></script>
@@ -285,7 +286,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=418', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=419', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
