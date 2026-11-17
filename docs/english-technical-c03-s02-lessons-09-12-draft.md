@@ -344,15 +344,15 @@ B) How to choose a cutting speed.
 **Second listening — details**
 
 1. What is the nominal value for feature A?
-   B) 20.00 mm A) 2.00 kg C) 200 °C
+   C) 20.00 mm A) 2.00 kg B) 200 °C
 2. What are the limits for feature B?
-   C) 9.95 and 10.05 mm A) 19 and 21 kg B) 0 and 100 °C
+   A) 9.95 and 10.05 mm C) 19 and 21 kg B) 0 and 100 °C
 3. Can classroom limits be used for a real component?
-   A) No B) Yes C) Only if copied by hand
+   B) No A) Yes C) Only if copied by hand
 4. What must be checked in a real task?
-   B) current drawing and applicable criteria  
+   C) current drawing and applicable criteria  
    A) the student's guess  
-   C) an unrelated table
+   B) an unrelated table
 
 **Recording script**
 
@@ -395,7 +395,7 @@ Students report one row of the table and explicitly label it “classroom exampl
 2. Define tolerance.
 3. Distinguish clearance fit and interference fit in general terms.
 4. Practice 2: 1 variation; 2 measurement; 3 gap/space; 4 drawing/specification; 5 decision.
-5. Listening: gist C; details 1 B; 2 C; 3 A; 4 B.
+5. Listening: gist C; details 1 C; 2 A; 3 B; 4 C.
 
 **Writing task (100–120 words):** explain why a measured value must be compared with the correct controlled requirement.
 
@@ -530,18 +530,18 @@ Key words: *part reference, drawing revision, characteristic, measured value, in
 
 What is the briefing about?
 
-B) Reading a fictional first-piece inspection record.  
-A) Setting up a real measuring instrument.  
+A) Reading a fictional first-piece inspection record.  
+B) Setting up a real measuring instrument.  
 C) Repairing a machine.
 
 **Second listening — details**
 
 1. Which part reference is shown?
-   B) EDU-P-07 A) EDU-P-70 C) CAL-07
+   A) EDU-P-07 B) EDU-P-70 C) CAL-07
 2. What is the drawing revision?
-   C) B A) D B) 7
+   B) B A) D C) 7
 3. Which field is missing?
-   A) instrument status B) part reference C) measured value
+   C) instrument status B) part reference A) measured value
 4. What should the student do?
    B) request clarification and avoid an unsupported decision  
    A) invent the status  
@@ -591,7 +591,7 @@ Students conduct a role-play: inspector reports the fields; quality representati
 3. What is the difference between calibration and verification at an introductory level?
 4. Practice 1: EDU-P-07; B; overall length; mm; not supplied; no, because tolerance, instrument status and acceptance criteria are missing.
 5. Practice 2: suggested answers given above.
-6. Listening: gist B; details 1 B; 2 C; 3 A; 4 B.
+6. Listening: gist A; details 1 A; 2 B; 3 C; 4 B.
 
 **Writing task (100–120 words):** write a short inspection report summary and identify one missing field.
 
@@ -745,9 +745,9 @@ Key words: *warning indicator, observed, cause not confirmed, instructor, outsta
 
 What is the purpose of the conversation?
 
-C) To pass on an unresolved safety-related observation.  
+B) To pass on an unresolved safety-related observation.  
 A) To give permission to restart equipment.  
-B) To discuss a sports result.
+C) To discuss a sports result.
 
 **Second listening — details**
 
@@ -756,11 +756,11 @@ B) To discuss a sports result.
 2. What time is recorded?
    C) 14:20 A) 04:12 B) 20:14
 3. Has the cause been confirmed?
-   A) No B) Yes C) The record says it is irrelevant
+   B) No A) Yes C) The record says it is irrelevant
 4. Who has been informed?
-   B) the instructor A) a visitor C) nobody
+   C) the instructor A) a visitor B) nobody
 5. Is the issue cleared in this exercise?
-   C) No A) Yes B) Automatically
+   A) No C) Yes B) Automatically
 
 **Recording script**
 
@@ -805,7 +805,7 @@ Role-play in groups of three: outgoing student, incoming student and instructor.
 3. What should a student do when an instruction is unclear?
 4. Practice 1: 1 O; 2 D; 3 O; 4 D; 5 O.
 5. Record: Bay 2; 14:20; warning indicator visible; no; instructor; no, issue remains outstanding.
-6. Listening: gist C; details 1 B; 2 C; 3 A; 4 B; 5 C.
+6. Listening: gist B; details 1 B; 2 C; 3 B; 4 C; 5 A.
 
 **Speaking task:** deliver a 45–60 second handover using the fictional record.
 
