@@ -316,7 +316,7 @@ I get up at seven on weekdays. I have breakfast and leave home at half past seve
 
 **Правило 3.** Если слово оканчивается на согласную + y, меняем y на -ies: study → studies, try → tries. Если перед y стоит гласная, добавляем только -s: play → plays, enjoy → enjoys.
 
-**Особая форма:** have → has.
+**Особые формы:** have → has; do → does.
 
 ### 3. Существительное как подлежащее
 
@@ -347,9 +347,10 @@ I get up at seven on weekdays. I have breakfast and leave home at half past seve
 3. study
 4. play
 5. go
-6. fix
-7. have
-8. finish
+6. do
+7. fix
+8. have
+9. finish
 
 **Задание B. Выберите правильный вариант.**
 
@@ -378,7 +379,7 @@ My friend study at college. He go to the library after classes. The library clos
 
 **Ключ преподавателя:** 1) studies. 2) watches. 3) plays. 4) has. 5) works. 6) My sister goes to college by bus.
 
-Задание A: reads, teaches, studies, plays, goes, fixes, has, finishes.  
+Задание A: reads, teaches, studies, plays, goes, does, fixes, has, finishes.  
 Задание B: closes, use, needs, measures, tries.  
 Задание C: My friend studies; He goes; The library closes; He uses; His teacher gives.
 
