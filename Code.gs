@@ -2455,12 +2455,15 @@ function importEnglishTeacherMaterials_(data) {
     item = item || {};
     const courseId = String(item.courseId || "").trim();
     const topicId = String(item.topicId || "").trim();
+    const courseNumber = Number(item.courseNumber || 0);
+    const isCourseOneToThree = (courseNumber >= 1 && courseNumber <= 3) ||
+      /^[bt]-five-year-c0[1-3]-s0[1-2]$/.test(topicId);
     const code = String(item.code || "").trim();
     const title = String(item.title || "").trim();
     const teacherContent = String(item.teacherContent || "").trim();
     const listeningId = String(item.listeningId || "").trim();
     const id = String(item.id || "").trim();
-    if (["ENB", "ENT"].indexOf(courseId) === -1 || !topicId || !code || !teacherContent || !/^eng-teacher-[A-Za-z0-9._:-]{3,150}$/.test(id)) {
+    if (["ENB", "ENT"].indexOf(courseId) === -1 || !topicId || !isCourseOneToThree || !code || !teacherContent || !/^eng-teacher-[A-Za-z0-9._:-]{3,150}$/.test(id)) {
       throw new Error("Некорректная запись преподавательского материала: " + (code || "без кода"));
     }
     return { id: id, courseId: courseId, topicId: topicId, code: code, title: title || code, listeningId: listeningId, teacherContent: teacherContent };
