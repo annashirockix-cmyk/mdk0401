@@ -1,6 +1,6 @@
 # Basic English — Course 2, Semester 1 — Lessons 10–12
 
-**Status:** full teaching drafts for review; not imported into the portal.  
+**Status:** full teaching drafts appended to the portal course runtime by `english-five-year-runtime.js`; provisional and not approved as official programme content.  
 **Level:** approximately A2+/B1, subject to review against the approved programme and the exact Belova textbook edition.  
 **Lesson IDs:** `en-c02-s01-l10`–`en-c02-s01-l12`.  
 **Audio note:** all listening scripts are original recording masters. This file does not contain MP3 recordings or implement an audio player.
