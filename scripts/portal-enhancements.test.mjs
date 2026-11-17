@@ -1830,3 +1830,32 @@ test("student assignment results query only matching submissions and history IDs
   assert.equal(records[1].payload,"Ответ 2");
   assert.equal(JSON.stringify(calls),JSON.stringify([[2,3,3,1],[2,1,1,12],[4,1,1,12],[2,3,3,1]]));
 });
+
+
+test("personal tutoring links are isolated per teacher and shown only to students of that teacher", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function tutoringSettingKey_");
+  const end = server.indexOf("/* ---------- In-app notifications ---------- */", start);
+  assert.ok(start >= 0 && end > start);
+  const block = server.slice(start, end);
+  assert.match(block, /tutoring:teacher:/);
+  assert.match(block, /auth_\(data\)/);
+  assert.match(block, /hasCourseAccess_\(user,courseId\)/);
+  assert.match(block, /role==="teacher"\|\|user\.role==="admin"/);
+  assert.match(block, /role!=="student"/);
+  assert.match(block, /role!=="teacher"\|\|!teacherEmail/);
+  assert.match(block, /if\(!link\.visible\|\|!link\.url\)continue/);
+  assert.match(block, /writeSetting_\(tutoringSettingKey_\(teacher\.email\)/);
+  assert.doesNotMatch(block, /settingValue_\("tutoring:"\+courseId\)/);
+  const html = read("index.html");
+  assert.doesNotMatch(html, /href="#\/tutoring"/);
+  assert.match(html, /tutoring\.js\?v=1/);
+  const ui = read("tutoring.js");
+  assert.match(ui, /tutoringHomeCard/);
+  assert.match(ui, /Показывать мою ссылку студентам/);
+  assert.match(ui, /window\.API\.saveTutoringLink/);
+  assert.match(ui, /window\.API\.getTutoringLink/);
+  assert.match(ui, /rel="noopener noreferrer"/);
+  const app = read("app.js");
+  assert.doesNotMatch(app, /menuTutoring/);
+});
