@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v407'; // Добавлен краткий текстовый ответ в редакторе тестов.
+const CACHE_NAME = 'portal-cache-v408'; // Добавлены поиск и замена в редакторе лекций.
 
 const STATIC_ASSETS = [
   './',
