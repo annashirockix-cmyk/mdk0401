@@ -260,7 +260,7 @@
         window.alert("Серверная проверка недоступна. Ответы не отправлены; обратитесь к преподавателю.");
         return;
       }
-      window.API.submitEnglishVprExam({track:track,attemptId:attemptId,answers:answers,timeSpent:elapsed}).then(function(result) {
+      window.API.submitEnglishVprExam({track:track,attemptId:attemptId,answers:answers,timeSpent:elapsed,timeExpired:seconds<=0}).then(function(result) {
         if (!result || !result.success) throw new Error(result && result.error || "Сервер не подтвердил отправку.");
         finished = true;
         if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
