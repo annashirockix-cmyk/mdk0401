@@ -67,12 +67,12 @@
       "type": "single_choice",
       "prompt": "The article would be more convincing if it ___ the original research.",
       "options": [
-        "cited",
-        "will cite yesterday",
         "cites last year",
+        "will cite yesterday",
+        "cited",
         "was cite"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -106,11 +106,11 @@
       "prompt": "A friend shares an unsupported claim. What is a constructive reply?",
       "options": [
         "That is obviously true because many people shared it.",
-        "Do you have a reliable source for this claim? I would like to check the evidence.",
+        "I will repost it before checking.",
         "Only foolish people believe that.",
-        "I will repost it before checking."
+        "Do you have a reliable source for this claim? I would like to check the evidence."
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
