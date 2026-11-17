@@ -1453,7 +1453,7 @@ window.installStudentActivityCapture = window.installStudentActivityCapture || f
     }, true);
 };
 
-window.router = function() {
+window.router = function() {\n    if (window.updatePortalNavigation) window.updatePortalNavigation();
     var hash = location.hash.slice(1) || "/"; 
     var parts = hash.split("/").filter(p => p);
     var overlay = document.getElementById("loginOverlay");
@@ -1530,14 +1530,87 @@ window.router = function() {
     window.renderHomePage();
 };
 
+window.updatePortalNavigation = function() {
+    var drawer = document.getElementById("drawer");
+    if (!drawer) return;
+    var route = location.hash.slice(1) || "/";
+    drawer.querySelectorAll(".drawer-item[href^=\"#/\"]").forEach(function(link) {
+        var href = link.getAttribute("href").slice(1);
+        var active = href === route || (href !== "/" && route.indexOf(href + "/") === 0);
+        link.classList.toggle("is-current", active);
+        if (active) {
+            link.setAttribute("aria-current", "page");
+            var group = link.closest("details.drawer-group");
+            if (group) group.open = true;
+        } else link.removeAttribute("aria-current");
+    });
+    var current = drawer.querySelector(".drawer-item.is-current");
+    var status = document.getElementById("drawerSearchResults");
+    var search = document.getElementById("drawerSearch");
+    if (status && (!search || !search.value.trim())) status.textContent = current ? "Сейчас открыт раздел: " + current.textContent.trim().replace(/\\s+/g, " ") : "";
+};
+
 function setupDrawer() {
-    var burgerBtn = document.getElementById('burgerBtn'), drawer = document.getElementById('drawer'), drawerOverlay = document.getElementById('drawerOverlay'), drawerClose = document.getElementById('drawerClose');
-    if (burgerBtn && drawer && drawerOverlay) {
-        burgerBtn.onclick = function() { drawer.classList.add('open'); drawerOverlay.classList.add('open'); };
-        drawerOverlay.onclick = function() { drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); };
-        if (drawerClose) drawerClose.onclick = function() { drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); };
-        document.querySelectorAll('.drawer-item').forEach(item => { item.onclick = function() { drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }; });
+    var burgerBtn = document.getElementById("burgerBtn"), drawer = document.getElementById("drawer"), drawerOverlay = document.getElementById("drawerOverlay"), drawerClose = document.getElementById("drawerClose");
+    var search = document.getElementById("drawerSearch"), clear = document.getElementById("drawerSearchClear"), status = document.getElementById("drawerSearchResults");
+    if (!burgerBtn || !drawer || !drawerOverlay) return;
+    function closeDrawer(restoreFocus) {
+        drawer.classList.remove("open"); drawerOverlay.classList.remove("open");
+        drawer.setAttribute("aria-hidden", "true"); burgerBtn.setAttribute("aria-expanded", "false");
+        if (restoreFocus) burgerBtn.focus();
     }
+    function openDrawer() {
+        drawer.classList.add("open"); drawerOverlay.classList.add("open");
+        drawer.setAttribute("aria-hidden", "false"); burgerBtn.setAttribute("aria-expanded", "true");
+        if (search) search.focus();
+    }
+    function applySearch() {
+        if (!search) return;
+        var query = search.value.trim().toLocaleLowerCase("ru");
+        var links = Array.from(drawer.querySelectorAll(".drawer-item"));
+        var visibleCount = 0;
+        links.forEach(function(item) {
+            if (!item.hasAttribute("data-nav-original-display")) item.setAttribute("data-nav-original-display", item.style.display || "");
+            var original = item.getAttribute("data-nav-original-display");
+            var allowedByRole = original !== "none";
+            var match = !query || (allowedByRole && item.textContent.toLocaleLowerCase("ru").indexOf(query) >= 0);
+            item.style.display = match ? (original || "flex") : "none";
+            if (match && allowedByRole) visibleCount++;
+        });
+        drawer.querySelectorAll("details.drawer-group").forEach(function(group) {
+            if (!group.hasAttribute("data-nav-was-open")) group.setAttribute("data-nav-was-open", group.open ? "1" : "0");
+            var children = Array.from(group.querySelectorAll(".drawer-item"));
+            var hasVisible = children.some(function(item) { return item.style.display !== "none"; });
+            group.style.display = hasVisible ? "" : "none";
+            if (query) group.open = hasVisible;
+            else group.open = group.getAttribute("data-nav-was-open") === "1" || !!group.querySelector(".drawer-item.is-current");
+        });
+        if (status) status.textContent = query ? (visibleCount ? "Найдено разделов: " + visibleCount : "Ничего не найдено. Попробуйте другое слово.") : "";
+        if (!query) window.updatePortalNavigation();
+    }
+    burgerBtn.onclick = openDrawer;
+    drawerOverlay.onclick = function() { closeDrawer(false); };
+    if (drawerClose) drawerClose.onclick = function() { closeDrawer(true); };
+    if (search) search.addEventListener("input", applySearch);
+    if (clear) clear.onclick = function() { if (search) { search.value = ""; applySearch(); search.focus(); } };
+    drawer.querySelectorAll(".drawer-item").forEach(function(item) {
+        item.addEventListener("click", function() {
+            if (search) { search.value = ""; applySearch(); }
+            closeDrawer(false);
+        });
+    });
+    document.addEventListener("keydown", function(event) {
+        var tag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : "";
+        var typing = tag === "input" || tag === "textarea" || tag === "select" || (event.target && event.target.isContentEditable);
+        if (event.key === "/" && !typing && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            event.preventDefault(); if (!drawer.classList.contains("open")) openDrawer(); if (search) search.focus();
+        }
+        if (event.key === "Escape" && drawer.classList.contains("open")) {
+            if (search && search.value) { search.value = ""; applySearch(); search.focus(); }
+            else closeDrawer(true);
+        }
+    });
+    window.updatePortalNavigation();
 }
 
 window.addEventListener("hashchange", function () { window.router(); });
