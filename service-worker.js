@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v391'; // Обновлены материалы английского курсов 1–3 и версия runtime.
+const CACHE_NAME = 'portal-cache-v392'; // Обновлены материалы английского курсов 1–3 и версия runtime.
 
 const STATIC_ASSETS = [
   './',
@@ -36,7 +36,6 @@ const STATIC_ASSETS = [
   './english-listening-tts.js',
   './english-listening-lesson.js',
   './english-listening-catalog.js',
-  './english-listening-route.js',
   './english-vpr-engine.js',
   './english-proficiency-lab.js',
   './english-tools.js',
