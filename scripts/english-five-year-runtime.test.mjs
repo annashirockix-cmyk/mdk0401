@@ -120,13 +120,13 @@ test("English listening is embedded in lectures and no separate listening tab is
   const html = read("index.html");
   const app = read("app.js");
   assert.ok(html.indexOf("english-five-year-runtime.js") < html.indexOf("app.js"));
-  assert.match(app, /lecture\\.listeningId/);
+  assert.match(app, /lecture\.listeningId/);
   assert.match(app, /getEmbeddedEnglishListening/);
   assert.match(app, /english-listening-inline/);
-  assert.match(app, /EnglishListeningLesson\\.render/);
-  assert.doesNotMatch(html, /href="#\\/english-listening"/);
-  assert.doesNotMatch(html, /english-listening-route\\.js/);
-  assert.doesNotMatch(app, /href==="#\\/english-listening"/);
+  assert.match(app, /EnglishListeningLesson\.render/);
+  assert.doesNotMatch(html, /href="#\/english-listening"/);
+  assert.doesNotMatch(html, /english-listening-route\.js/);
+  assert.doesNotMatch(app, /href==="#\/english-listening"/);
   assert.match(read("english-listening-tts.js"), /speechSynthesis/);
   assert.match(read("english-listening-tts.js"), /SpeechSynthesisUtterance/);
   const serviceWorker = read("service-worker.js");
