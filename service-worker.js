@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v400'; // Добавлена поддержка заданий на восстановление последовательности.
+const CACHE_NAME = 'portal-cache-v401'; // Добавлена поддержка заданий на восстановление последовательности.
 
 const STATIC_ASSETS = [
   './',
