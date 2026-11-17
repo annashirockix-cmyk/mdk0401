@@ -1894,7 +1894,7 @@ test("tutoring group and individual audiences are enforced by the server", () =>
   });
   const usersSheet=makeSheet(usersRows),settingsSheet=makeSheet(settingsRows);
   const getMap=sheet=>Object.fromEntries(sheet.getDataRange().getValues()[0].map((key,index)=>[key,index]));
-  let currentUser={role:"student",email:"student-one@example.invalid",group:"24-тм",courses:"07.01"};
+  let currentUser={role:"student",email:"student-two@example.invalid",group:"24-тм",courses:"07.01"};
   const getTutoringLink=new Function("auth_","users_","settings_","headerMap_","email_","hasCourseAccess_","tutoringSettingKey_","parseTutoringLink_","legacyTutoringLink_",getTutoringLinkSource+"; return getTutoringLink_;")(
     ()=>currentUser,
     ()=>usersSheet,
