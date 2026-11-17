@@ -843,6 +843,35 @@ test("Technical English safety quizzes match the risk-based lesson content", () 
   assert.doesNotMatch(technical, /What should be worn when working with loud machinery\?/);
 });
 
+test("English course 1–3 lesson answer keys are removed from student lecture content", () => {
+  const runtime = read("english-five-year-runtime.js");
+  const data = {
+    ENB: { sections: [] },
+    ENT: { sections: [{ title: "Existing", topics: [
+      { id: "t-unit8", lectures: [] },
+      { id: "t-unit11", lectures: [] }
+    ] }] }
+  };
+  const context = { window: { MDK_DATA: data }, console: { info() {}, error() {} } };
+  vm.runInNewContext(runtime, context);
+  const topics = data.ENB.sections.flatMap((section) => section.topics || []);
+  const lesson = topics.flatMap((topic) => topic.lectures || []).find((lecture) =>
+    lecture.listeningId === "en-c01-s01-l09"
+  );
+  assert.ok(lesson, "course 1 lesson 9 should be appended");
+  assert.ok(lesson.teacherContent.includes("Practice A: 1 visited"), "teacher copy retains the answer key");
+  assert.ok(!lesson.content.includes("Answer key for teacher"), "answer-key heading is not student-visible");
+  assert.ok(!lesson.content.includes("Practice A: 1 visited; 2 wrote"), "complete answer block is not student-visible");
+
+  const technicalTopics = data.ENT.sections.flatMap((section) => section.topics || []);
+  const technicalLesson = technicalTopics.flatMap((topic) => topic.lectures || []).find((lecture) =>
+    lecture.listeningId === "en-c03-s02-l08"
+  );
+  assert.ok(technicalLesson, "course 3 technical lesson should be appended");
+  assert.ok(technicalLesson.teacherContent.length > 0, "technical teacher key is retained separately");
+  assert.ok(!technicalLesson.content.includes("Teacher key and feedback"), "technical answer-key heading is hidden");
+});
+
 test("English VPR answer keys stay server-side and the client uses protected exam endpoints", () => {
   const server = read("Code.gs");
   const bank = read("EnglishVPR-Sheets.gs");
