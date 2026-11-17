@@ -49,14 +49,14 @@
     if (!window.API || !window.API.getEnglishVprExam) { document.getElementById("englishVprLoading").textContent="Сервер экзаменов недоступен. Обратитесь к преподавателю."; return; }
     window.API.getEnglishVprExam(track).then(function(response) {
       if (!response || !response.success || !response.exam) throw new Error(response && response.error || "Экзамен не найден на сервере.");
-      renderLoadedExam(response.exam,track,course,app,response.attemptId,response.startedAt);
+      renderLoadedExam(response.exam,track,course,app,response.attemptId,response.startedAt,response.savedAnswers);
     }).catch(function(error) {
       var loading=document.getElementById("englishVprLoading");
       if(loading) loading.textContent="Не удалось загрузить экзамен с сервера: "+(error.message||error)+". Обратитесь к преподавателю.";
     });
     return;
   }
-  function renderLoadedExam(exam,track,course,app,attemptId,startedAt) {
+  function renderLoadedExam(exam,track,course,app,attemptId,startedAt,savedAnswers) {
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
     if(track!=="basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) { var b=el("button","btn ghost","Basic English"); b.type="button"; b.onclick=function(){renderPage("final-basic");}; tabs.appendChild(b); }
@@ -73,12 +73,12 @@
     } else {
       var start = el("button", "btn", "Начать экзамен");
       start.type = "button"; start.style.cssText = "width:100%;padding:15px;font-size:17px";
-      start.onclick = function () { startExam(exam, key, panel, course, track, attemptId, startedAt); };
+      start.onclick = function () { startExam(exam, key, panel, course, track, attemptId, startedAt,savedAnswers); };
       panel.appendChild(start);
     }
     app.appendChild(panel);
   }
-  function startExam(exam, key, panel, courseId, track, attemptId, startedAt) {
+  function startExam(exam, key, panel, courseId, track, attemptId, startedAt,savedAnswers) {
     courseId = courseId || courseForTrack(exam.track);
     var student = window.state && window.state.student;
     if (student && window.API && window.API.getTestAttemptStatus && window._englishVprGate !== key) {
@@ -89,7 +89,7 @@
           return;
         }
         window._englishVprGate = key;
-        startExam(exam, key, panel, courseId, track, attemptId, startedAt);
+        startExam(exam, key, panel, courseId, track, attemptId, startedAt,savedAnswers);
         window._englishVprGate = "";
       }).catch(function () { panel.textContent = "Не удалось проверить доступ. Обновите страницу и попробуйте ещё раз."; });
       return;
@@ -104,7 +104,7 @@
         if (!started || started.success !== true || !started.attemptId || !started.exam) {
           throw new Error(started && started.error || "Сервер не выдал вариант экзамена.");
         }
-        startExam(started.exam, key, panel, courseId, track, started.attemptId, started.startedAt);
+        startExam(started.exam, key, panel, courseId, track, started.attemptId, started.startedAt,started.savedAnswers);
       }).catch(function(error) {
         panel.textContent = "Не удалось запустить экзамен: " + (error.message || error);
       });
@@ -225,6 +225,67 @@
       }
       form.appendChild(section);
     });
+    function collectAnswers() {
+      return exam.tasks.map(function(task,ti) {
+        var row = {};
+        var count = (task.items || []).length;
+        if (task.type === "gap") count = (task.answers || []).length || (task.text.match(/[A-F]_____/g) || []).length;
+        for (var i=0;i<count;i++) {
+          var selector = task.type === "choice" ? 'input[name="vpr_'+ti+'_'+i+'"]:checked' : '[name="vpr_'+ti+'_'+i+'"]';
+          var field = form.querySelector(selector);
+          row[i] = field ? (field.value || "").trim() : "";
+        }
+        return row;
+      });
+    }
+    // Восстанавливаем только ответы ученика; ключи и правильные ответы сервер не отдаёт.
+    if (Array.isArray(savedAnswers)) savedAnswers.forEach(function(row,ti) {
+      if (!row || typeof row !== "object") return;
+      Object.keys(row).forEach(function(index) {
+        var fields = form.querySelectorAll('[name="vpr_'+ti+'_'+index+'"]');
+        Array.prototype.forEach.call(fields,function(field) {
+          if (field.type === "radio") field.checked = String(field.value) === String(row[index]);
+          else field.value = String(row[index] == null ? "" : row[index]);
+        });
+      });
+    });
+    var draftStatus = el("small","museum-muted","Ответы сохраняются на сервере после изменения.");
+    draftStatus.style.cssText = "display:block;text-align:center;min-height:20px;margin:4px 0";
+    form.appendChild(draftStatus);
+    var draftSaveTimer = null, draftSaving = false, draftDirty = false, draftRevision = 0;
+    function queueDraftSave() {
+      if (finished || !attemptId || !window.API || !window.API.saveEnglishVprExamDraft) return;
+      draftDirty = true; draftRevision++;
+      draftStatus.textContent = "Есть несохранённые изменения…";
+      if (draftSaveTimer) window.clearTimeout(draftSaveTimer);
+      draftSaveTimer = window.setTimeout(saveDraftNow,850);
+    }
+    function saveDraftNow() {
+      if (finished || !draftDirty || !attemptId || !window.API || !window.API.saveEnglishVprExamDraft) return;
+      if (draftSaving) { draftStatus.textContent = "Сохраняем ответы…"; return; }
+      draftSaving = true;
+      var revision = draftRevision, answers = collectAnswers();
+      draftStatus.textContent = "Сохраняем ответы…";
+      window.API.saveEnglishVprExamDraft(track,attemptId,answers).then(function(result) {
+        if (!result || result.success !== true) throw new Error(result && result.error || "Сервер не подтвердил сохранение.");
+        if (revision === draftRevision) {
+          draftDirty = false;
+          draftStatus.textContent = "Сохранено на сервере";
+        }
+      }).catch(function(error) {
+        draftStatus.textContent = "Не удалось сохранить автоматически. Ответы останутся в форме до отправки.";
+        console.warn("English VPR draft save failed",error);
+      }).finally(function() {
+        draftSaving = false;
+        if (draftDirty && !finished) {
+          if (draftSaveTimer) window.clearTimeout(draftSaveTimer);
+          draftSaveTimer = window.setTimeout(saveDraftNow,900);
+        }
+      });
+    }
+    form.addEventListener("input",queueDraftSave);
+    form.addEventListener("change",queueDraftSave);
+    if (Array.isArray(savedAnswers) && savedAnswers.length) draftStatus.textContent = "Восстановлены ранее сохранённые ответы";
     var submit = el("button", "btn", "Завершить и отправить экзамен");
     submit.type = "button"; submit.style.cssText = "width:100%;padding:16px;font-size:17px;margin:12px 0";
     submit.onclick = function () {
@@ -242,17 +303,8 @@
       finished = true;
       if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
       if (window.speechSynthesis) window.speechSynthesis.cancel();
-      var answers = exam.tasks.map(function(task,ti) {
-        var row = {};
-        var count = (task.items || []).length;
-        if (task.type === "gap") count = (task.text.match(/[A-F]_____/g) || []).length;
-        for (var i=0;i<count;i++) {
-          var selector = task.type === "choice" ? 'input[name="vpr_'+ti+'_'+i+'"]:checked' : '[name="vpr_'+ti+'_'+i+'"]';
-          var field = form.querySelector(selector);
-          row[i] = field ? (field.value || "").trim() : "";
-        }
-        return row;
-      });
+      if (draftSaveTimer) { window.clearTimeout(draftSaveTimer); draftSaveTimer = null; }
+      var answers = collectAnswers();
       var elapsed = Math.max(0, Number(exam.time || 90) * 60 - seconds);
       submit.disabled = true; submit.textContent = "Отправляем на сервер…";
       if (!window.API || !window.API.submitEnglishVprExam) {
