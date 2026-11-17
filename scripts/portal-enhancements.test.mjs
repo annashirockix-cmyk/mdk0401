@@ -871,6 +871,8 @@ test("English VPR draft autosave is authenticated, bounded, and restores only st
   assert.match(save, /attempt\.track !== track/);
   assert.match(save, /attempt\.courseId !== courseId/);
   assert.match(save, /attempt\.processing === true/);
+  assert.match(save, /cache\.get\(String\(attempt\.stableKey\)\) !== attemptId/);
+  assert.match(save, /updatedAttempt\.length > 90000/);
   assert.match(save, /JSON\.stringify\(data\.answers \|\| \[\]\)\.length > 30000/);
   assert.match(save, /attempt\.savedAnswers = saved/);
   assert.match(bank, /savedAnswers:Array\.isArray\(activeAttempt\.savedAnswers\)/);
