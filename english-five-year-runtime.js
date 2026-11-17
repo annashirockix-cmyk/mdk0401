@@ -41,7 +41,7 @@
   });
   // Some technical lessons use a numbered "Self-check and teacher key" block:
   // retain the first three student prompts and move the explicitly keyed remainder.
-  student=student.replace(/^##\s+(\d+)\.\s+Self-check and teacher key\s*\n([\s\S]*?)(?=\n##\s|\n---\s*$)/gm,function(full,num,body){
+  student=student.replace(/^##\s+(\d+)\.\s+Self-check (?:and teacher key|and key)\s*\n([\s\S]*?)(?=\n##\s|\n---\s*$)/gm,function(full,num,body){
    var kept=[],hidden=[],inKey=false,numbered=0;
    body.split("\n").forEach(function(line){
     if(!inKey&&/^\s*\d+\.\s+/.test(line)){
