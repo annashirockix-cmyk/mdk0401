@@ -2518,9 +2518,9 @@ function uploadTestImage_(data) {
   const raw = String(data.dataUrl || "");
   const match = raw.match(/^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/i);
   if (!match) throw new Error("Поддерживаются изображения JPG, PNG, WEBP и GIF.");
-  if (match[2].length > 1800000) throw new Error("Изображение слишком большое. Уменьшите его размер до 1,2 МБ.");
+  if (match[2].length > 950000) throw new Error("Изображение слишком большое. Уменьшите его размер до 700 КБ.");
   const bytes = Utilities.base64Decode(match[2]);
-  if (!bytes.length || bytes.length > 1300000) throw new Error("Размер изображения превышает 1,3 МБ.");
+  if (!bytes.length || bytes.length > 700000) throw new Error("Размер изображения превышает 700 КБ.");
   const mime = match[1].toLowerCase();
   const name = String(data.name || "question-image").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
   const blob = Utilities.newBlob(bytes, mime, name);
