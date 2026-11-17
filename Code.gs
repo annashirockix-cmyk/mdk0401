@@ -121,6 +121,7 @@ function handleRequest_(e) {
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
       case "startenglishvprexam": result = startEnglishVprExam_(data); break;
+      case "saveenglishvprexamdraft": result = saveEnglishVprExamDraft_(data); break;
       case "importenglishsemestertests": result = importEnglishSemesterTests_(data); break;
       case "importenglishexamvariants": result = importEnglishExamVariants_(data); break;
       case "startenglishfinalexam": result = startEnglishFinalExam_(data); break;
