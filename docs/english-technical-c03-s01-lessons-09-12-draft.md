@@ -1,7 +1,7 @@
 # Technical English — Course 3, Semester 1 — Lessons 9–12
 ## Manufacturing workflow, measurement, technical language and specification reading
 
-**Status:** original draft lessons for the provisional five-year course map; not imported into the portal and not approved as official programme content.  
+**Status:** lesson drafts are appended to the portal course runtime by `english-five-year-runtime.js`; they remain provisional and are not approved as official programme content.  
 **Level:** B1–B1+ ESP.  
 **Professional groups:** technologists, programmers, electricians and machine-tool operators.  
 **Audio:** original Spotlight-style listening scripts are included as text for recording. No MP3 files or audio player are supplied.  
