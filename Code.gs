@@ -1990,6 +1990,28 @@ function saveQuestionBank_(data) {
     if(seen[questionId])throw new Error("Повторяется ID задания: "+questionId);
     if(!question||typeof question!=="object"||Array.isArray(question))throw new Error("Некорректный объект задания №"+(index+1)+".");
     if(!String(question.q||question.question||"").trim())throw new Error("У задания №"+(index+1)+" нет формулировки.");
+    const type=String(question.type||"mc").toLowerCase();
+    const hasAny=function(keys){return keys.some(function(key){return question[key]!==undefined&&question[key]!==null;});};
+    if(["mc","single","single_select","choice","multi","multiple","multiple_choice","num","numeric","number","order","ordering","match","matching","tf","true_false"].indexOf(type)<0)throw new Error("Неподдерживаемый тип задания №"+(index+1)+": "+type);
+    if(["mc","single","single_select","choice"].indexOf(type)>=0){
+      if(!Array.isArray(question.options)||question.options.length<2||!hasAny(["correct","correctAnswer","answer"]))throw new Error("В задании №"+(index+1)+" нужны варианты и правильный ответ.");
+    }
+    if(["multi","multiple","multiple_choice"].indexOf(type)>=0){
+      const answer=question.correct!==undefined?question.correct:(question.correctAnswer!==undefined?question.correctAnswer:(question.answers!==undefined?question.answers:question.answer));
+      if(!Array.isArray(question.options)||question.options.length<2||!Array.isArray(answer)||!answer.length)throw new Error("В задании с несколькими ответами №"+(index+1)+" проверьте варианты и массив правильных ответов.");
+    }
+    if(["num","numeric","number"].indexOf(type)>=0&&!hasAny(["answer","correct","correctAnswer"]))throw new Error("В числовом задании №"+(index+1)+" не указан правильный ответ.");
+    if(["order","ordering"].indexOf(type)>=0){
+      const expected=question.correctOrder||question.correct||question.answer||question.items;
+      if(!Array.isArray(question.items)||!Array.isArray(expected)||!expected.length)throw new Error("В задании на порядок №"+(index+1)+" нужны items и правильная последовательность.");
+    }
+    if(["match","matching"].indexOf(type)>=0){
+      const expected=question.correct!==undefined?question.correct:(question.correctAnswer!==undefined?question.correctAnswer:question.answer);
+      if(!(Array.isArray(question.pairs)&&question.pairs.length)||!question.pairs.every(function(pair){return pair&&pair.left!==undefined&&pair.right!==undefined;})){
+        if(!Array.isArray(expected)||!expected.length)throw new Error("В задании на соответствие №"+(index+1)+" не заданы пары или ответы.");
+      }
+    }
+    if(["tf","true_false"].indexOf(type)>=0&&!hasAny(["correct","correctAnswer","answer"]))throw new Error("В задании «Верно/неверно» №"+(index+1)+" не указан правильный ответ.");
     const serialized=JSON.stringify(question);
     if(!serialized||serialized.length>30000)throw new Error("Задание №"+(index+1)+" пустое или слишком большое.");
     seen[questionId]=true;
