@@ -29,11 +29,11 @@
       "audioText": "The college economics club is organising a discussion about responsible consumer choices. It will take place in the seminar room on Wednesday at one thirty. A guest speaker will explain product labels, repair services and the environmental cost of packaging. Students should read the short case study on the club page before the discussion.",
       "options": [
         "The product label",
-        "The short case study on the club page",
         "The speaker's presentation slides",
+        "The short case study on the club page",
         "The meeting minutes"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -46,7 +46,7 @@
         "Screen size and camera quality",
         "Delivery times and payment methods"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "It was the newest model available",
         "She expected the phone to be replaced within one year"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -106,11 +106,11 @@
       "prompt": "You want to ask a shop about repairing a device. What is a suitable question?",
       "options": [
         "I want a new one. Do not ask me anything.",
-        "Could you tell me whether the battery can be replaced?",
+        "I will open the device myself.",
         "Your products are all bad.",
-        "I will open the device myself."
+        "Could you tell me whether the battery can be replaced?"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
