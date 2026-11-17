@@ -2101,7 +2101,7 @@ function safeBuiltInQuestion_(entry, optionMaps) {
 function builtInScoringSnapshot_(question) {
   const source = question && typeof question === "object" ? question : {};
   const snapshot = {};
-  ["type","correct","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"].forEach(function(key) {
+  ["type","correct","correctAnswers","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"].forEach(function(key) {
     if (source[key] !== undefined) snapshot[key] = JSON.parse(JSON.stringify(source[key]));
   });
   return snapshot;
