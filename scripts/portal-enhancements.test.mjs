@@ -1841,6 +1841,8 @@ test("portal navigation provides accessible search, active route and keyboard sh
   assert.match(html, /id="drawerSearchResults"/);
   assert.match(html, /class="skip-link" href="#app"/);
   assert.match(app, /window\.updatePortalNavigation/);
+  assert.match(app, /window\.resetDrawerNavigationFilter/);
+  assert.match(app, /allowedByRole = original !== "none"/);
   assert.match(app, /toLocaleLowerCase\("ru"\)/);
   assert.match(app, /event\.key === "\/"/);
   assert.match(app, /event\.key === "Escape"/);
