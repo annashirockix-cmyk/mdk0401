@@ -181,7 +181,7 @@
       '<div class="module"><h3>3. Дополнительные тесты</h3><p style="color:var(--muted)">Можно создавать тесты, загружать ранее сохранённые тесты для изменения, просматривать формулировки всех заданий и правильные ответы.</p>'+
       '<label>Тема</label><select id="testTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующий тест</label><select id="testExisting" class="self-input"><option value="">— Новый тест —</option></select>'+
       '<input id="testTitle" class="self-input" placeholder="Название теста" style="margin:8px 0"><div id="questionDrafts"></div>'+
-      '<div class="module" style="padding:12px;margin:12px 0"><h4>Добавить / изменить вопрос</h4><textarea id="qText" class="self-input" rows="2" placeholder="Текст вопроса"></textarea>'+
+      '<div class="module" style="padding:12px;margin:12px 0"><h4>Добавить / изменить вопрос</h4><textarea id="qText" class="self-input" rows="2" placeholder="Текст вопроса"></textarea><div id="ceQuestionImagePanel"></div>'+
       '<input id="qA" class="self-input" placeholder="Вариант А" style="margin-top:6px"><input id="qB" class="self-input" placeholder="Вариант Б" style="margin-top:6px"><input id="qC" class="self-input" placeholder="Вариант В" style="margin-top:6px"><input id="qD" class="self-input" placeholder="Вариант Г" style="margin-top:6px">'+
       '<label>Правильный ответ</label><select id="qCorrect" class="self-input"><option value="0">А</option><option value="1">Б</option><option value="2">В</option><option value="3">Г</option></select>'+
       '<button class="btn ghost" id="addQuestionBtn" style="margin-top:10px">Добавить вопрос в тест</button> <button class="btn ghost" id="cancelQuestionEditBtn" type="button">Отмена изменения вопроса</button></div>'+
@@ -283,10 +283,10 @@
       lectureId=item.id;$("lectureTitle").value=item.title||"";$("lectureBody").value=item.content||"";
       $("saveLectureBtn").textContent="Сохранить изменения лекции";$("deleteLectureBtn").disabled=false;$("lectureStatus").textContent="Загружена дополнительная лекция для изменения.";
     }
-    function clearQuestionForm(){$("qText").value="";["qA","qB","qC","qD"].forEach(id=>$(id).value="");$("qCorrect").value="0";editingQuestion=-1;$("addQuestionBtn").textContent="Добавить вопрос в тест";}
+    function clearQuestionForm(){$("qText").value="";["qA","qB","qC","qD"].forEach(id=>$(id).value="");$("qCorrect").value="0";editingQuestion=-1;window.__ceCurrentQuestionImage=null;if(window.__ceRenderQuestionImage)window.__ceRenderQuestionImage();$("addQuestionBtn").textContent="Добавить вопрос в тест";}
     function drawDraft(){
-      $("questionDrafts").innerHTML='<h4>Задания теста ('+draft.length+')</h4>'+(draft.length?draft.map((q,i)=>'<div class="module" style="padding:10px;margin:8px 0"><b>'+(i+1)+'. '+esc(q.q)+'</b><ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b>— правильный ответ</b>':'')+'</li>').join("")+'</ol><button class="btn ghost edit-q" data-i="'+i+'">Изменить</button> <button class="btn ghost remove-q" data-i="'+i+'">Удалить</button></div>').join(""):'<p>Добавьте первый вопрос.</p>');
-      $("questionDrafts").querySelectorAll(".edit-q").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,q=draft[i];$("qText").value=q.q;["qA","qB","qC","qD"].forEach((id,j)=>$(id).value=q.options[j]||"");$("qCorrect").value=String(q.correct);editingQuestion=i;$("addQuestionBtn").textContent="Сохранить вопрос";});
+      $("questionDrafts").innerHTML='<h4>Задания теста ('+draft.length+')</h4>'+(draft.length?draft.map((q,i)=>'<div class="module" style="padding:10px;margin:8px 0"><b>'+(i+1)+'. '+esc(q.q)+'</b>'+(q.imageData?'<img src="'+esc(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:220px;object-fit:contain;margin:8px 0;border-radius:8px">':'')+'<ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b>— правильный ответ</b>':'')+'</li>').join("")+'</ol><button class="btn ghost edit-q" data-i="'+i+'">Изменить</button> <button class="btn ghost remove-q" data-i="'+i+'">Удалить</button></div>').join(""):'<p>Добавьте первый вопрос.</p>');
+      $("questionDrafts").querySelectorAll(".edit-q").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,q=draft[i];$("qText").value=q.q;["qA","qB","qC","qD"].forEach((id,j)=>$(id).value=q.options[j]||"");$("qCorrect").value=String(q.correct);window.__ceCurrentQuestionImage=q.imageRef?{imageRef:q.imageRef,imageData:q.imageData||""}:null;if(window.__ceRenderQuestionImage)window.__ceRenderQuestionImage();editingQuestion=i;$("addQuestionBtn").textContent="Сохранить вопрос";});
       $("questionDrafts").querySelectorAll(".remove-q").forEach(b=>b.onclick=()=>{draft.splice(+b.dataset.i,1);if(editingQuestion===+b.dataset.i)clearQuestionForm();drawDraft();});
     }
     function resetTest(){
@@ -296,13 +296,13 @@
     function loadTest(){
       const id=$("testExisting").value;if(!id){resetTest();return;}
       const item=records("test",testSel.value).find(x=>String(x.id)===id);if(!item)return;
-      testId=item.id;draft=(item.questions||[]).map(q=>({q:q.q,options:(q.options||[]).slice(),correct:Number(q.correct)||0}));
+      testId=item.id;draft=(item.questions||[]).map(q=>({q:q.q,options:(q.options||[]).slice(),correct:Number(q.correct)||0,imageRef:q.imageRef||"",imageData:q.imageData||""}));
       $("testTitle").value=item.title||"";$("saveTestBtn").textContent="Сохранить изменения теста";$("deleteTestBtn").disabled=false;
       $("testStatus").textContent="Загружен тест. Можно изменять вопросы и варианты ответов.";drawDraft();
     }
     function previewTest(){
       const title=$("testTitle").value.trim()||"Предварительный просмотр теста";
-      $("testPreview").innerHTML='<h3>'+esc(title)+' — просмотр заданий</h3>'+(draft.length?draft.map((q,i)=>'<div class="module" style="padding:12px;margin:8px 0"><b>Задание '+(i+1)+'. '+esc(q.q)+'</b><ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b style="color:var(--accent)">✓ Правильный ответ</b>':'')+'</li>').join("")+'</ol></div>').join(""):'<p>В тесте пока нет заданий.</p>');
+      $("testPreview").innerHTML='<h3>'+esc(title)+' — просмотр заданий</h3>'+(draft.length?draft.map((q,i)=>'<div class="module" style="padding:12px;margin:8px 0"><b>Задание '+(i+1)+'. '+esc(q.q)+'</b>'+(q.imageData?'<img src="'+esc(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:280px;object-fit:contain;margin:10px 0;border-radius:8px">':'')+'<ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b style="color:var(--accent)">✓ Правильный ответ</b>':'')+'</li>').join("")+'</ol></div>').join(""):'<p>В тесте пока нет заданий.</p>');
     }
     fillTopics();
     courseSel.onchange=()=>{resetLecture();resetTest();fillTopics();loadExamBank();};
@@ -364,7 +364,7 @@
     $("addQuestionBtn").onclick=function(){
       const q=$("qText").value.trim(),options=["qA","qB","qC","qD"].map(id=>$(id).value.trim()),correct=Number($("qCorrect").value);
       if(!q||options.some(x=>!x)){window.showToast("Заполните вопрос и все четыре варианта ответа.","err");return;}
-      const item={q:q,options:options,correct:correct};
+      const image=window.__ceCurrentQuestionImage;const item={q:q,options:options,correct:correct,imageRef:image&&image.imageRef||"",imageData:image&&image.imageData||""};
       if(editingQuestion>=0)draft[editingQuestion]=item;else draft.push(item);
       clearQuestionForm();drawDraft();
     };
@@ -373,7 +373,7 @@
       const topicId=testSel.value,title=$("testTitle").value.trim(),status=$("testStatus");
       if(!topicId||!title||!draft.length){status.textContent="Укажите тему, название и добавьте хотя бы один вопрос.";return;}
       const id=testId||("test-"+Date.now());status.textContent="Сохранение…";
-      window.API.saveCustomContent({id:id,mdkId:courseSel.value,topicId:topicId,type:"test",title:title,questions:draft.map(q=>({q:q.q,options:q.options.slice(),correct:q.correct}))}).then(r=>{
+      window.API.saveCustomContent({id:id,mdkId:courseSel.value,topicId:topicId,type:"test",title:title,questions:draft.map(q=>({q:q.q,options:q.options.slice(),correct:q.correct,imageRef:q.imageRef||""}))}).then(r=>{
         if(!r.success)throw new Error(r.error||"Ошибка сохранения");
         testId=id;return new Promise(resolve=>refreshContent(resolve));
       }).then(()=>{$("testExisting").value=id;$("saveTestBtn").textContent="Сохранить изменения теста";$("deleteTestBtn").disabled=false;status.textContent="Тест сохранён ✓ ("+draft.length+" заданий)";previewTest();}).catch(e=>status.textContent=e.message);
