@@ -341,7 +341,7 @@ Use the table above.
 
 1. Item A: state the nominal and recorded values.
 2. Item C: state the nominal and recorded values.
-3. Which two rows use millimetres?
+3. Which three rows use millimetres?
 4. Write one sentence explaining why the tolerance column or specification is needed.
 
 ## 6. Listening: reporting a measurement
@@ -871,7 +871,7 @@ Match the term and definition.
 6. traceability
 
 a) a document version  
-b) a planned variation associated with a specified dimension  
+b) the permitted variation associated with a specified dimension  
 c) ability to connect an item with records and history  
 d) a difference from a stated requirement  
 e) a document describing planned operations  
