@@ -9011,10 +9011,10 @@
                 "prompt": "Listening 2. What must students do before booking?",
                 "audioText": "The college is introducing a new online booking system for practical rooms. The system will open to students next Monday at eight in the morning. Before booking, students must check the room's equipment list and ask their tutor to approve the session. A short guide is available in the student portal, and technical support will be available during the first week.",
                 "options": [
-                  "On Friday",
-                  "Check the equipment list and get tutor approval",
-                  "Next month",
-                  "After the event"
+                  "The equipment checklist, service record and parts list",
+                  "The equipment list, booking form and user guide",
+                  "The booking record, maintenance schedule and inspection form",
+                  "The equipment specification, safety notice and attendance sheet"
                 ],
                 "correctIndex": 1,
                 "points": 1
