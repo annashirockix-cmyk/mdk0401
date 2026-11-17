@@ -340,11 +340,20 @@
     $("saveLectureBtn").onclick=function(){
       const topicId=topicSel.value,title=$("lectureTitle").value.trim(),content=$("lectureBody").value.trim(),status=$("lectureStatus");
       if(!topicId||!title||!content){status.textContent="Выберите тему и заполните название и текст.";return;}
-      const id=lectureId||("lec-"+Date.now());status.textContent="Сохранение…";
-      window.API.saveCustomContent({id:id,mdkId:courseSel.value,topicId:topicId,type:"lecture",title:title,code:"Доп. лекция",content:content}).then(r=>{
+      const sourceIndex=builtInLectureIndex,base=sourceIndex!==null?(getBuiltInTopic(topicId).lectures||[])[sourceIndex]:null;
+      const slug=base?String(base.code||sourceIndex).replace(/[^A-Za-z0-9._-]/g,"-"):"";
+      const id=lectureId||(base?("lec-override-"+courseSel.value+"-"+topicId+"-"+slug):("lec-"+Date.now()));
+      const payload={id:id,mdkId:courseSel.value,topicId:topicId,type:"lecture",title:title,code:base?base.code:"Доп. лекция",content:content};
+      if(base){payload.isBuiltInOverride=true;payload.sourceLectureCode=base.code;}
+      status.textContent="Сохранение…";
+      window.API.saveCustomContent(payload).then(r=>{
         if(!r.success)throw new Error(r.error||"Ошибка сохранения");
         lectureId=id;return new Promise(resolve=>refreshContent(resolve));
-      }).then(()=>{$("lectureExisting").value=id;$("saveLectureBtn").textContent="Сохранить изменения лекции";$("deleteLectureBtn").disabled=false;status.textContent="Лекция сохранена ✓";}).catch(e=>status.textContent=e.message);
+      }).then(()=>{
+        $("lectureExisting").value=sourceIndex!==null?("builtin:"+sourceIndex):id;
+        $("saveLectureBtn").textContent=sourceIndex!==null?"Сохранить основную лекцию":"Сохранить изменения лекции";
+        $("deleteLectureBtn").disabled=false;status.textContent=sourceIndex!==null?"Основная лекция обновлена ✓":"Дополнительная лекция сохранена ✓";
+      }).catch(e=>status.textContent=e.message);
     };
     $("deleteLectureBtn").onclick=function(){
       if(!lectureId||!confirm("Удалить выбранную лекцию?"))return;
@@ -375,6 +384,7 @@
     };
     drawDraft();
     refreshContent();
+    loadExamBank();
   };
 
   document.addEventListener("DOMContentLoaded",function(){filterCoursePicker();updateCourseChrome();});
