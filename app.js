@@ -1549,6 +1549,16 @@ window.updatePortalNavigation = function() {
     var status = document.getElementById("drawerSearchResults");
     var search = document.getElementById("drawerSearch");
     if (status && (!search || !search.value.trim())) status.textContent = current ? "Сейчас открыт раздел: " + current.textContent.trim().replace(/\\s+/g, " ") : "";
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) {
+        var label = current ? current.textContent.trim().replace(/\\s+/g, " ") : (route === "/" ? "Главная" : (route.indexOf("/topic/") === 0 ? "Материалы курса" : "Раздел портала"));
+        crumbs.replaceChildren();
+        if (route !== "/") {
+            var home = document.createElement("a"); home.href = "#/"; home.textContent = "Главная"; crumbs.appendChild(home);
+            var separator = document.createElement("span"); separator.className = "crumb-separator"; separator.textContent = "›"; separator.setAttribute("aria-hidden", "true"); crumbs.appendChild(separator);
+        }
+        var currentCrumb = document.createElement("span"); currentCrumb.textContent = label; currentCrumb.setAttribute("aria-current", "page"); crumbs.appendChild(currentCrumb);
+    }
 };
 
 function setupDrawer() {
