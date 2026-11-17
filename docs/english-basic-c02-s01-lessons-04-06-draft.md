@@ -325,7 +325,7 @@ Examples:
 4. Is it possible for you to repeat the question? (*could*)
 
 **C. Correct the mistakes.**
-1. You must to wear safety glasses.
+1. You must to wear the eye protection specified for this task.
 2. He don't have to come today.
 3. You mustn't to touch the control.
 4. May you help me, please? (rewrite as a polite request)
@@ -342,7 +342,7 @@ Examples:
 - Listening: briefing; specified protective equipment; after permission; work area; authorised staff; ask the supervisor.
 - A: 1 mustn't; 2 don't have to; 3 should; 4 May; 5 might.
 - B: 1 You have to submit the form today. 2 You should save your work. 3 You mustn't enter this room without permission. 4 Could you repeat the question?
-- C: 1 You must wear safety glasses. 2 He doesn't have to come today. 3 You mustn't touch the control. 4 Could you help me, please?
+- C: 1 You must wear the eye protection specified for this task. 2 He doesn't have to come today. 3 You mustn't touch the control. 4 Could you help me, please?
 - Self-check: *mustn't* is prohibition; *don't have to* means no necessity; 2 should; 3 May; 4 She can use the software. Item 5: accept accurate examples.
 
 ### 9. Independent work
