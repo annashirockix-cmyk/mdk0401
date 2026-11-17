@@ -212,10 +212,11 @@ window.migrateEnglishTeacherMaterialsToServer = async function () {
                     var teacherContent = String(lecture.teacherContent || "").trim();
                     if (!teacherContent) return;
                     var courseNumber = Number(lecture.courseNumber || 0);
+                    // Import only explicitly numbered first-to-third-year lessons.
+                    // Legacy textbook units have no reliable course number and must not
+                    // be guessed into this migration.
                     var isCourseOneToThree = (courseNumber >= 1 && courseNumber <= 3) ||
-                        /^t-five-year-c0[1-3]-s0[1-2]$/.test(topicId) ||
-                        (courseId === "ENB" && /^b-unit[1-6]$/.test(topicId)) ||
-                        (courseId === "ENT" && /^t-unit(?:1|2|3|12)$/.test(topicId));
+                        /^[bt]-five-year-c0[1-3]-s0[1-2]$/.test(topicId);
                     if (!isCourseOneToThree) return;
                     var code = String(lecture.code || lecture.listeningId || "").trim();
                     var listeningId = String(lecture.listeningId || "").trim();
