@@ -2398,9 +2398,10 @@ function getCustomTest_(data) {
   const scopedExtra = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + id);
   const extra = Number(scopedExtra !== "" ? scopedExtra : settingValue_("testAttempts:" + user.email + ":" + id)) || 0;
   if (prior >= 1 + Math.max(0, extra)) throw new Error("Попытки закончились. Обратитесь к преподавателю за дополнительной попыткой.");
-  const questions = hydrateTestQuestionImages_(Array.isArray(record.payload.questions) ? record.payload.questions : []);
+  const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   if (!questions.length) throw new Error("В тесте пока нет вопросов.");
-  const optionMaps = {}, safeQuestions = questions.map(function(question, index) {
+  const displayQuestions = hydrateTestQuestionImages_(questions);
+  const optionMaps = {}, safeQuestions = displayQuestions.map(function(question, index) {
     const safe = sanitizeAssessmentQuestionForStudent_(question || {});
     const options = Array.isArray(safe.options) ? safe.options.slice() : [];
     if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
