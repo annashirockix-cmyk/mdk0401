@@ -322,6 +322,17 @@ function normalizeCourseId_(value) {
   return String(value === null || value === undefined ? "" : value).trim();
 }
 
+// One canonical group label for matching and reporting: case, whitespace and
+// dash variants must never split one cohort into several report groups.
+function normalizeGroupName_(value) {
+  return String(value === null || value === undefined ? "" : value)
+    .normalize("NFKC")
+    .replace(/[‐‑‒–—−]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLocaleUpperCase("ru-RU");
+}
+
 function bytesToHex_(bytes) {
   return bytes.map(function (byte) {
     return ("0" + ((byte + 256) % 256).toString(16)).slice(-2);
@@ -494,7 +505,12 @@ function editor_(data, courseId) {
 function register_(data) {
   const email = email_(data.email);
   const password = String(data.password || "");
+  const surname = String(data.surname || "").trim().replace(/\s+/g, " ");
+  const firstName = String(data.firstName || "").trim().replace(/\s+/g, " ");
+  const fullName = [surname, firstName].filter(Boolean).join(" ");
+  const group = normalizeGroupName_(data.group);
   const inviteCode = String(data.invite || data.inviteCode || "").trim();
+  if (!surname || !firstName) return { success: false, error: "Укажите фамилию и имя. Оба поля обязательны." };
   if (!email || email.indexOf("@") < 1) return { success: false, error: "Укажите корректный email." };
   if (password.length < 8) return { success: false, error: "Пароль должен содержать не менее 8 символов." };
 
@@ -516,8 +532,8 @@ function register_(data) {
     const values = {
       Email: email,
       PasswordHash: passwordHash_(password, salt),
-      Name: String(data.name || email),
-      Group: String(data.group || ""),
+      Name: fullName,
+      Group: group,
       Role: "student",
       UpdatedAt: new Date().toISOString(),
       Courses: invite ? invite.courses.join(",") : "",
@@ -668,8 +684,8 @@ function saveStudent_(data) {
   if (!target) throw new Error("Пользователь не найден.");
 
   const fields = { UpdatedAt: new Date().toISOString() };
-  if (data.name !== undefined) fields.Name = String(data.name);
-  if (data.group !== undefined) fields.Group = String(data.group);
+  if (data.name !== undefined) fields.Name = String(data.name).trim().replace(/\s+/g, " ");
+  if (data.group !== undefined) fields.Group = normalizeGroupName_(data.group);
   if (data.payload !== undefined) {
     const incoming = typeof data.payload === "string" ? (function(){try{return JSON.parse(data.payload||"{}");}catch(e){return {};}})() : (data.payload || {});
     if (current.role === "teacher") {
@@ -728,7 +744,7 @@ function getStudents_(data) {
     return {
       email: row[map.Email],
       name: row[map.Name],
-      group: row[map.Group],
+      group: normalizeGroupName_(row[map.Group]),
       role: row[map.Role],
       courses: visibleCourses,
       payload: user.role === "admin" ? String(row[map.Payload] || "") :
@@ -1172,7 +1188,7 @@ function getResults_(data) {
     const feedbackMatch=submission.match(/\\n\\nКомментарий преподавателя:([\\s\\S]*)$/);
     const storedFeedback=resultMap.Feedback===undefined?"":String(r[resultMap.Feedback]||"");
     const legacyFeedback=Number(r[5])>=2&&feedbackMatch?String(feedbackMatch[1]||"").trim():"";
-    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:storedFeedback||legacyFeedback};
+    return {email:r[0],name:r[1],group:normalizeGroupName_(r[2]),testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:storedFeedback||legacyFeedback};
   });
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
@@ -1387,7 +1403,7 @@ function createAssignment_(data) {
   const instructions = String(data.instructions || "").trim().slice(0,10000);
   const targetType = String(data.targetType || "");
   const rawTarget = String(data.targetValue || "").trim().slice(0,120);
-  const targetValue = targetType === "individual" ? email_(rawTarget) : rawTarget;
+  const targetValue = targetType === "individual" ? email_(rawTarget) : normalizeGroupName_(rawTarget);
   const dueAt = String(data.dueAt || "").trim();
   if (!title || !instructions) throw new Error("Заполните название и условие задания.");
   if (["group","individual"].indexOf(targetType) < 0 || !targetValue) throw new Error("Выберите адресата.");
@@ -1403,7 +1419,7 @@ function createAssignment_(data) {
     if (String(r[um.Role] || "").toLowerCase() !== "student") return false;
     if (!hasCourseAccess_({role:"student",courses:String(r[um.Courses] || "")}, courseId)) return false;
     if (targetType === "individual") return email_(r[um.Email]) === targetValue;
-    return String(r[um.Group] || "").trim().toLowerCase() === targetValue.toLowerCase();
+    return normalizeGroupName_(r[um.Group]) === targetValue;
   });
   // Групповое назначение разрешено публиковать до регистрации обучающихся.
   if (targetType === "individual" && !matches.length) throw new Error("Обучающийся не найден или у него нет доступа к дисциплине.");
@@ -1460,7 +1476,7 @@ function getAssignments_(data) {
       const typ=String(r[h.TargetType]||""),val=String(r[h.TargetValue]||"");
       if(typ!=="individual"&&typ!=="group")return;
       if(typ==="individual"&&email_(val)!==user.email)return;
-      if(typ==="group"&&String(val||"").trim().toLowerCase()!==String(user.group||"").trim().toLowerCase())return;
+      if(typ==="group"&&normalizeGroupName_(val)!==normalizeGroupName_(user.group))return;
       if(String(r[h.Status]||"active")!=="active")return;
     }
     const item={id:String(r[h.Id]),courseId:cid,title:String(r[h.Title]||""),topic:String(r[h.Topic]||""),level:String(r[h.Level]||""),workType:String(r[h.WorkType]||""),dueAt:String(r[h.DueAt]||""),targetType:String(r[h.TargetType]||""),targetValue:String(r[h.TargetValue]||""),instructions:String(r[h.Instructions]||""),criteria:String(r[h.Criteria]||""),createdAt:String(r[h.CreatedAt]||""),status:String(r[h.Status]||"active")};
@@ -1486,7 +1502,7 @@ function submitAssignment_(data) {
   const a = rows.slice(1).find(function(r){ return String(r[h.Id]) === id; });
   if (!a) throw new Error("Задание не найдено.");
   const cid = String(a[h.CourseId] || ""), typ = String(a[h.TargetType] || ""), val = String(a[h.TargetValue] || "");
-  const eligible = (typ === "individual" && email_(val) === student.email) || (typ === "group" && String(val || "").trim().toLowerCase() === String(student.group || "").trim().toLowerCase());
+  const eligible = (typ === "individual" && email_(val) === student.email) || (typ === "group" && normalizeGroupName_(val) === normalizeGroupName_(student.group));
   if (!hasCourseAccess_(student,cid) || !eligible || String(a[h.Status] || "active") !== "active") throw new Error("Это задание вам недоступно.");
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
