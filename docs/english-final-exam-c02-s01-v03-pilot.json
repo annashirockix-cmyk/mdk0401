@@ -28,10 +28,10 @@
       "prompt": "Listening 2. How long will each mock interview last?",
       "audioText": "Students attending mock interviews should arrive at the careers office fifteen minutes before their appointment. The first interview starts at nine on Tuesday. Wear smart, comfortable clothes and bring a printed copy of your CV. Each interview will last about ten minutes. After the meeting, the adviser will give feedback on answers, confidence and clear communication.",
       "options": [
-        "On Friday",
+        "About five minutes",
         "About ten minutes",
-        "Next month",
-        "After the event"
+        "About fifteen minutes",
+        "About twenty minutes"
       ],
       "correctIndex": 1,
       "points": 1
