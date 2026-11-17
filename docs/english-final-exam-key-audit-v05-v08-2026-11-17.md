@@ -43,8 +43,24 @@ All 40 V05–V08 files across the ten slots were re-read after the corrections a
 
 This structural pass does not constitute a full semantic review of all 400 tasks. The remaining single-choice keys, multiple-choice keys, short-text accepted answers, ordering keys, and written rubrics still need content-level review.
 
+## Follow-up: C02-S02 V05–V08 option-position balance and semantic spot-check
+
+The first CI run on the pre-follow-up HEAD failed two assertions in `scripts/english-semester-assessment.test.mjs`: the C02-S02 variants no longer met the required single-choice answer-position distribution after the nine content corrections. This was a test-detected balance issue, not evidence that the corrected reading answers were wrong.
+
+The option order was adjusted without changing the correct answer text. Source JSON and the embedded registry variants were updated together for:
+- V05: `c2s2v05_f01` moved to option D.
+- V06: `c2s2v06_r01` moved to option C; `c2s2v06_f01` moved to option D.
+- V07: `c2s2v07_g01` moved to option C; `c2s2v07_f01` moved to option D.
+- V08: `c2s2v08_r01` moved to option C; `c2s2v08_f01` moved to option D.
+
+Post-update checks confirm each of V05–V08 has the expected single-choice key-position distribution `[2, 2, 1, 1]`; all four source payloads match their embedded registry variants exactly (4/4 parity). The required multiple-choice key pair remains `[2, 3]`.
+
+A content-level spot-check was also completed for all multiple-choice, short-text, ordering, and written tasks in C02-S02 V05–V08 (16 tasks). No further defect was identified in the distractor sets, accepted-answer wording, sequence logic, or rubric-to-prompt alignment. This is a focused review of those 16 tasks, not a full semantic review of the remaining V05–V08 tasks.
+
+The new CI run for the latest HEAD is run #3002 and was **in progress** when this document was updated. Its result must be checked before declaring CI green.
+
 ## Remaining validation
 
-1. Complete answer-key/content review for the other tasks in the 40 V05–V08 files; the nine confirmed defects do not imply the other 391 tasks are error-free.
-2. Inspect CI for the latest HEAD. No workflow run was returned for the latest docs-and-source commit at the time of this check; do not treat prior successful CI as validation of the current HEAD.
-3. Continue the next variant slice after the current checks are complete.
+1. Continue semantic review of the other tasks in the 40 V05–V08 files; the nine confirmed defects and the 16-task spot-check do not imply all 400 tasks are error-free.
+2. Recheck CI run #3002 on the latest HEAD and address any remaining failures.
+3. Continue the next variant slice only after the V05–V08 checks are complete.
