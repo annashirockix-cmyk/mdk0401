@@ -941,13 +941,27 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     return;
                 }
                 var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>'; if(q.imageData && /^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(q.imageData)){html += '<img src="'+window.escapeHtml(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:420px;object-fit:contain;margin:12px auto 18px;border:1px solid var(--border);border-radius:10px;padding:6px;background:var(--card)">';}
-                (q.options || []).forEach(function(option, i) {
-                    html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>';
-                });
-                area.innerHTML = html;
-                area.querySelectorAll("[data-custom-answer]").forEach(function(button) {
-                    button.onclick = function() { answers[index] = Number(button.dataset.customAnswer); index++; draw(); };
-                });
+                var questionType = String(q.type || q.kind || "single").toLowerCase();
+                if (questionType === "multi" || questionType === "multiple" || questionType === "multiple_choice") {
+                    html += '<p class="museum-muted">Выберите все подходящие варианты.</p>';
+                    (q.options || []).forEach(function(option, i) {
+                        html += '<label class="custom-multi-option" style="display:flex;align-items:flex-start;gap:10px;padding:12px;margin:7px 0;border:1px solid var(--border);border-radius:10px;cursor:pointer"><input type="checkbox" data-custom-answer="'+i+'" style="margin-top:4px;transform:scale(1.15)"><span>'+window.escapeHtml(option)+'</span></label>';
+                    });
+                    html += '<button class="btn" id="customMultiSubmit" style="margin-top:12px">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    area.querySelector("#customMultiSubmit").onclick = function() {
+                        answers[index] = Array.from(area.querySelectorAll("[data-custom-answer]:checked")).map(function(input){return Number(input.dataset.customAnswer);});
+                        index++; draw();
+                    };
+                } else {
+                    (q.options || []).forEach(function(option, i) {
+                        html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>';
+                    });
+                    area.innerHTML = html;
+                    area.querySelectorAll("[data-custom-answer]").forEach(function(button) {
+                        button.onclick = function() { answers[index] = Number(button.dataset.customAnswer); index++; draw(); };
+                    });
+                }
             }
             draw();
         } catch (error) {
