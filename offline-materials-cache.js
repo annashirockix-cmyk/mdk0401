@@ -42,7 +42,7 @@
     });
     var serialized;
     try { serialized = JSON.stringify(items); } catch (error) { return Promise.resolve(false); }
-    if (serialized.length > MAX_BYTES) return Promise.resolve(false);
+    if (serialized.length * 2 > MAX_BYTES) return Promise.resolve(false);
     var record = { key: key, email: String(user.email).trim().toLowerCase(),
       role: String(user.role).toLowerCase(), savedAt: Date.now(), items: items };
     return withStore("readwrite", function (store) { store.put(record); }).then(function () { return true; });
