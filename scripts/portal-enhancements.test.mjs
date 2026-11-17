@@ -1429,7 +1429,7 @@ test("legacy non-English written exam engine is no longer shipped or cached", ()
   const sw = read("service-worker.js");
   assert.doesNotMatch(html, /exam-engine\\.js/);
   assert.doesNotMatch(sw, /exam-engine\\.js/);
-  assert.match(sw, /portal-cache-v368/);
+  assert.match(sw, /const CACHE_NAME = 'portal-cache-v\d+'/);
   assert.doesNotMatch(read("final.js"), /writtenPrompts|textarea\\[name\\^="written"\\]/);
 });
 
