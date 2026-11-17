@@ -531,5 +531,5 @@ The portal's English Listening Lab already contains matching browser-readable ac
 
 - The three catalogue IDs above are present in `english-listening-catalog.js` and are distinct from the optional teacher-led scripts retained in the lesson draft.
 - The catalogue runs in practice mode. Its answer keys are client-side; it must not be used as a graded examination or as a substitute for the protected server-side assessment flow.
-- The three new lesson pages are not yet imported into the portal's course data. Until that import is completed, students can access the activities through the standalone English Listening Lab; the catalogue does not automatically make them appear inside these draft lecture pages.
+- The three lesson entries are appended to the portal course runtime by `english-five-year-runtime.js`. The Listening Lab is a separate practice route; its client-side answer keys do not save grades or protected exam attempts.
 - This note does not alter the existing VPR Basic/Technical banks, Apps Script, gradebook or student attempts.
