@@ -67,6 +67,22 @@ test("short text questions are rendered and scored on the server", () => {
  assert.ok(server.includes("normalize(answer)===normalize(textExpected)"));
 });
 
+test("protected exam banks use a visual question editor instead of a JSON textarea", () => {
+ const editor=read("course-admin.js");
+ assert.ok(editor.includes('id="visualExamBankEditor"'));
+ assert.ok(editor.includes('id="examBankQuestionList"'));
+ assert.ok(editor.includes('id="examQuestionText"'));
+ assert.ok(editor.includes('id="examQuestionType"'));
+ assert.ok(editor.includes('id="addExamQuestionBtn"'));
+ assert.ok(editor.includes('id="saveExamQuestionBtn"'));
+ assert.ok(editor.includes("function collectExamQuestion()"));
+ assert.ok(editor.includes("q.correctAnswers=indexes"));
+ assert.ok(editor.includes("q.correctOrder=extra.slice()"));
+ assert.ok(editor.includes("q.pairs=pairs"));
+ assert.ok(editor.includes("window.API.saveQuestionBank(courseSel.value,examBankSel.value,examBankRows)"));
+ assert.ok(!editor.includes('id="examBankJson"'));
+});
+
 test("short text scoring uses the explicit answer key and normalizes case and whitespace", () => {
  const server = read("Code.gs");
  const start = server.indexOf("function scoreBuiltInQuestion_(q,answer) {");
