@@ -116,26 +116,24 @@ test("all 120 existing and new lessons have usable listening activities", () => 
   }
 });
 
-test("runtime loads before app.js and lecture rendering resolves explicit listening IDs", () => {
+test("English listening is embedded in lectures and no separate listening tab is exposed", () => {
   const html = read("index.html");
   const app = read("app.js");
   assert.ok(html.indexOf("english-five-year-runtime.js") < html.indexOf("app.js"));
-  assert.match(app, /lecture\.listeningId/);
+  assert.match(app, /lecture\\.listeningId/);
+  assert.match(app, /getEmbeddedEnglishListening/);
+  assert.match(app, /english-listening-inline/);
+  assert.match(app, /EnglishListeningLesson\\.render/);
+  assert.doesNotMatch(html, /href="#\\/english-listening"/);
+  assert.doesNotMatch(html, /english-listening-route\\.js/);
+  assert.doesNotMatch(app, /href==="#\\/english-listening"/);
   assert.match(read("english-listening-tts.js"), /speechSynthesis/);
   assert.match(read("english-listening-tts.js"), /SpeechSynthesisUtterance/);
   const serviceWorker = read("service-worker.js");
-  assert.match(serviceWorker, /const CACHE_NAME = 'portal-cache-v\d+'/);
-  for (const file of ["english-five-year-runtime.js", "english-listening-tts.js", "english-listening-lesson.js", "english-listening-catalog.js", "english-listening-route.js"]) {
+  assert.match(serviceWorker, /const CACHE_NAME = 'portal-cache-v\\d+'/);
+  for (const file of ["english-five-year-runtime.js", "english-listening-tts.js", "english-listening-lesson.js", "english-listening-catalog.js"]) {
     assert.ok(serviceWorker.includes("./" + file), `service worker must precache ${file}`);
   }
-});
-
-test("English listening lab has a visible navigation entry for users with English course access", () => {
-  const html = read("index.html");
-  const app = read("app.js");
-  assert.ok(html.includes('href="#/english-listening"'), "English Listening route must be reachable from the portal menu");
-  assert.ok(app.includes('href==="#/english-listening"'), "menu visibility must include the listening route in English-access checks");
-  assert.ok(html.indexOf('english-listening-route.js') > html.indexOf('app.js'), "listening route wrapper must install after the main router exists");
 });
 
 test("listening practice shuffles every option set and remaps the correct answer without mutating source data", () => {
