@@ -80,6 +80,11 @@ test("protected exam banks use a visual question editor instead of a JSON textar
  assert.ok(editor.includes("q.correctOrder=extra.slice()"));
  assert.ok(editor.includes("q.pairs=pairs"));
  assert.ok(editor.includes("window.API.saveQuestionBank(courseSel.value,examBankSel.value,examBankRows)"));
+ assert.ok(editor.includes("q.correctAnswers=indexes"));
+ assert.ok(editor.includes("q.correctOrder=extra.slice()"));
+ assert.ok(editor.includes("q.pairs=pairs"));
+ const server=read("Code.gs");
+ assert.ok(server.includes('["type","correct","correctAnswers","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"]'));
  assert.ok(!editor.includes('id="examBankJson"'));
 });
 
