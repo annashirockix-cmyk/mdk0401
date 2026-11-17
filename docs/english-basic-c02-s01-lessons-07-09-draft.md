@@ -1,6 +1,6 @@
 # Basic English — Course 2, Semester 1 — Lessons 07–09
 
-**Status:** full teaching drafts for review; not imported into the portal.  
+**Status:** full teaching drafts appended to the portal course runtime by `english-five-year-runtime.js`; provisional and not approved as official programme content.  
 **Level:** approximately A2+/B1, to be adjusted after checking the approved programme and the exact Belova textbook edition.  
 **Course map:** `en-c02-s01-l07`–`en-c02-s01-l09`.  
 **Teaching pattern:** explanation → guided language work → reading → Spotlight-style listening → speaking/writing → self-check.  
