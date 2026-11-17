@@ -217,11 +217,13 @@ test("workbook figures are selected by relevant topics and all referenced files 
 test("teacher-created lectures are rendered in their assigned topics and sanitized", () => {
   const app = read("app.js");
   const editor = read("course-admin.js");
-  assert.match(editor, /type:"lecture",title:title,code:"Доп\. лекция",content:content/);
+  assert.match(editor, /type:"lecture",title:title,code:base\?base\.code:"Доп\. лекция",content:content/);
+  assert.match(editor, /isBuiltInOverride=true/);
+  assert.match(editor, /sourceLectureCode=base\.code/);
   assert.match(app, /window\.customContent\.lectures/);
-  assert.match(app, /customTopicLectures\.map/);
+  assert.match(app, /customTopicLectures\.filter/);
   assert.match(app, /safeCustomLectureHtml/);
-  assert.match(app, /topic\.lectures = \(topic\.lectures \|\| \[\]\)\.concat/);
+  assert.match(app, /topic\.lectures=builtInLectures\.concat\(additionalLectures\)/);
 });
 
 test("custom course materials normalize spreadsheet date-coerced course IDs", () => {
@@ -1227,7 +1229,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
   assert.match(html, /workbooks\.js\?v=[0-9]+/);
-  assert.match(html, /style\.css\?v=24/);
+  assert.match(html, /style\.css\?v=26/);
   assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
@@ -1829,4 +1831,29 @@ test("student assignment results query only matching submissions and history IDs
   assert.equal(records[1].attempts,1);
   assert.equal(records[1].payload,"Ответ 2");
   assert.equal(JSON.stringify(calls),JSON.stringify([[2,3,3,1],[2,1,1,12],[4,1,1,12],[2,3,3,1]]));
+});
+
+
+test("portal navigation provides accessible search, active route and keyboard shortcuts", () => {
+  const html=read("index.html"), app=read("app.js"), css=read("style.css");
+  assert.match(html, /id="drawerSearch"/);
+  assert.match(html, /aria-controls="drawerNavResultsList"/);
+  assert.match(html, /id="drawerSearchResults"/);
+  assert.match(html, /class="skip-link" href="#app"/);
+  assert.match(app, /window\.updatePortalNavigation/);
+  assert.match(app, /window\.resetDrawerNavigationFilter/);
+  assert.match(app, /item\.removeAttribute\("data-nav-filtered"\)/);
+  assert.match(app, /allowedByRole = original !== "none"/);
+  assert.match(app, /toLocaleLowerCase\("ru"\)/);
+  assert.match(app, /event\.key === "\/"/);
+  assert.match(app, /event\.key === "Escape"/);
+  assert.match(app, /aria-current/, "current route must be announced to assistive technology");
+  assert.match(app, /crumbs\.replaceChildren\(\)/);
+  assert.match(app, /window\._portalRouteStack/);
+  assert.match(app, /history\.back\(\)/);
+  assert.match(app, /Вернуться на предыдущую страницу портала/);
+  assert.match(html, /aria-label="Навигационная цепочка"/);
+  assert.match(css, /#crumbs a/);
+  assert.match(css, /\.drawer-item\.is-current/);
+  assert.match(css, /\.skip-link:focus/);
 });

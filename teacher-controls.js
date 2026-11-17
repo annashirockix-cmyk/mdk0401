@@ -6,7 +6,7 @@ function courseId(){return String((window.state&&window.state.activeCourseId)||"
 function topics(cid){
  const out=[],c=window.MDK_DATA&&window.MDK_DATA[cid];
  if(c)(c.sections||[]).forEach(sec=>(sec.topics||[]).forEach(t=>out.push({id:String(t.id),title:[t.code,t.title].filter(Boolean).join(" ")})));
- (window.customContent&&window.customContent.topics||[]).filter(t=>t.mdkId===cid).forEach(t=>{if(!out.some(x=>x.id===String(t.id)))out.push({id:String(t.id),title:t.title||t.id});});
+ (window.customContent&&window.customContent.topics||[]).filter(t=>t.mdkId===cid&&!t.sourceTopicId).forEach(t=>{if(!out.some(x=>x.id===String(t.id)))out.push({id:String(t.id),title:t.title||t.id});});
  return out;
 }
 window.renderTeacherControlsPage=function(){

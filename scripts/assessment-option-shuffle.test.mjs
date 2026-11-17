@@ -49,6 +49,10 @@ test("server scorer handles multi-select, numeric, order, matching and true-fals
   assert.equal(scoreBuiltIn({type:"match",pairs:[{left:"A",right:"east"},{left:"B",right:"west"}]},["west","east"]),false);
   assert.equal(scoreBuiltIn({type:"tf",correct:true,options:["Верно","Неверно"]},0),true);
   assert.equal(scoreBuiltIn({type:"tf",correct:false,options:["Верно","Неверно"]},0),false);
+  assert.equal(scoreBuiltIn({type:"short_text",correctAnswer:"Ньютон"},"  НЬЮТОН  "),true);
+  assert.equal(scoreBuiltIn({type:"short_text",correctAnswer:"Ньютон"},"Джоуль"),false);
+  const safeShortText=sanitizeQuestion({type:"short_text",q:"Назовите единицу силы",correctAnswer:"Ньютон"});
+  assert.equal(safeShortText.correctAnswer,undefined,"Short-text answer key must not be sent to students");
 });
 
 test("custom test scoring accepts both numeric keys and legacy option-text keys", () => {
@@ -138,7 +142,7 @@ test("built-in and final exams keep answer keys server-side and remap submitted 
   assert.match(builtInSubmit, /cache\.remove\("builtInAttempt:"\+attemptId\)/);
   assert.match(code, /function builtInScoringSnapshot_\(question\)/);
   assert.match(code, /builtInScoringSnapshot_\(entry\.question\)/);
-  assert.match(code,/\["type","correct","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"\]/);
+  assert.match(code,/\["type","correct","correctAnswers","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"\]/);
   assert.match(builtInSubmit, /Array\.isArray\(attempt\.questions\)\?attempt\.questions:\[\]/);
   assert.doesNotMatch(builtInSubmit,/const entries=builtInQuestions_\\(courseId,resolvedIds\\)/);
   const customSubmit = extract(code,"submitCustomTest_");

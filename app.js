@@ -59,6 +59,7 @@ window.getLevel = function(xp) { return Math.floor((xp || 0) / 100) + 1; };
 window.getLevelTitle = function(lvl) { if (lvl < 3) return "Новичок"; if (lvl < 5) return "Ученик"; if (lvl < 8) return "Практикант"; if (lvl < 12) return "Мастер"; return "Эксперт"; };
 
 window.updateMenuVisibility = function() {
+    if (window.resetDrawerNavigationFilter) window.resetDrawerNavigationFilter();
     var currentState = window.state || {};
     var currentRole = String((currentState.staff && currentState.staff.role) || (currentState.user && currentState.user.role) || (currentState.student && currentState.student.role) || currentState.role || "").toLowerCase();
     var isTeacher = !!(currentState.staff || currentState.teacher || currentState.admin || currentRole === "teacher" || currentRole === "admin");
@@ -99,6 +100,7 @@ window.updateMenuVisibility = function() {
             }).catch(function(){tutoringLink.style.display="none";});
         }
     }
+    if (window.updatePortalNavigation) window.updatePortalNavigation();
 };
 
 window.applyGlobalEffects = function() {
@@ -216,6 +218,28 @@ window.loadGlobalCustomContent = function(callback) {
             var rows = Array.isArray(res.data) ? res.data : [];
             window.customContent = window.customContent || {};
             window.customContent.topics = rows.filter(function(d) { return d.type === "topic"; });
+            // Apply saved title/code overrides to built-in topics without duplicating them.
+            Object.keys(window.MDK_DATA || {}).forEach(function(courseId){
+                var course=window.MDK_DATA[courseId];
+                (course.sections||[]).forEach(function(section){
+                    (section.topics||[]).forEach(function(topic){
+                        if(topic.__originalCode===undefined)topic.__originalCode=topic.code;
+                        if(topic.__originalTitle===undefined)topic.__originalTitle=topic.title;
+                        topic.code=topic.__originalCode;topic.title=topic.__originalTitle;
+                    });
+                });
+            });
+            window.customContent.topics.filter(function(d){return !!d.sourceTopicId;}).forEach(function(override){
+                var course=window.MDK_DATA[override.mdkId];if(!course)return;
+                (course.sections||[]).forEach(function(section){
+                    (section.topics||[]).forEach(function(topic){
+                        if(String(topic.id)===String(override.sourceTopicId)){
+                            if(override.code)topic.code=String(override.code);
+                            if(override.title)topic.title=String(override.title);
+                        }
+                    });
+                });
+            });
             window.customContent.files = rows.filter(function(d) { return d.type === "file"; });
             window.customContent.lectures = rows.filter(function(d) { return d.type === "lecture"; });
             window.customContent.tests = rows.filter(function(d) { return d.type === "test"; });
@@ -704,9 +728,15 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         return box.innerHTML;
     }
     if (topic && customTopicLectures.length) {
-        topic.lectures = (topic.lectures || []).concat(customTopicLectures.map(function (lecture) {
-            return { code: lecture.code || "Доп. лекция", title: lecture.title || "Материал преподавателя", content: safeCustomLectureHtml(lecture.content || "") };
-        }));
+        if(!Array.isArray(topic.__originalLectures))topic.__originalLectures=(topic.lectures||[]).slice();
+        var builtInLectures=topic.__originalLectures.map(function(base){
+            var override=customTopicLectures.find(function(item){return item.isBuiltInOverride===true&&String(item.sourceLectureCode||"")===String(base.code||"");});
+            return override?{code:base.code,title:override.title||base.title,content:safeCustomLectureHtml(override.content||"")}:base;
+        });
+        var additionalLectures=customTopicLectures.filter(function(lecture){return lecture.isBuiltInOverride!==true;}).map(function(lecture){
+            return {code:lecture.code||"Доп. лекция",title:lecture.title||"Материал преподавателя",content:safeCustomLectureHtml(lecture.content||"")};
+        });
+        topic.lectures=builtInLectures.concat(additionalLectures);
     }
     if (!topic) { app.innerHTML = '<div class="module">Тема не найдена</div>'; return; }
     
@@ -912,14 +942,76 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     });
                     return;
                 }
-                var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>';
-                (q.options || []).forEach(function(option, i) {
-                    html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>';
-                });
-                area.innerHTML = html;
-                area.querySelectorAll("[data-custom-answer]").forEach(function(button) {
-                    button.onclick = function() { answers[index] = Number(button.dataset.customAnswer); index++; draw(); };
-                });
+                var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>'; if(q.imageData && /^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(q.imageData)){html += '<img src="'+window.escapeHtml(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:420px;object-fit:contain;margin:12px auto 18px;border:1px solid var(--border);border-radius:10px;padding:6px;background:var(--card)">';}
+                var questionType = String(q.type || q.kind || "single").toLowerCase();
+                if (questionType === "numeric" || questionType === "num" || questionType === "number") {
+                    html += '<label style="display:block;margin:12px 0"><span class="museum-muted">Введите числовой ответ</span><input id="customNumericAnswer" class="self-input" type="text" inputmode="decimal" autocomplete="off" placeholder="Например, 12,5" style="display:block;width:100%;margin-top:6px"></label><button class="btn" id="customNumericSubmit">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    area.querySelector("#customNumericSubmit").onclick = function() {
+                        var input=area.querySelector("#customNumericAnswer"),raw=input.value.trim(),normalized=raw.replace(",", ".");
+                        if(!raw||!/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(normalized)||!Number.isFinite(Number(normalized))){window.showToast("Введите корректное число. Можно использовать запятую или точку.","err");return;}
+                        answers[index]=normalized;index++;draw();
+                    };
+                } else if (questionType === "short_text" || questionType === "text") {
+                    html += '<label style="display:block;margin:12px 0"><span class="museum-muted">Введите краткий ответ</span><textarea id="customShortTextAnswer" class="self-input" rows="3" maxlength="2000" placeholder="Ваш ответ" style="display:block;width:100%;margin-top:6px"></textarea></label><button class="btn" id="customShortTextSubmit">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    area.querySelector("#customShortTextSubmit").onclick = function() {
+                        var input=area.querySelector("#customShortTextAnswer"),raw=input.value.trim();
+                        if(!raw){window.showToast("Введите ответ перед продолжением.","err");return;}
+                        answers[index]=raw;index++;draw();
+                    };
+                } else if (questionType === "order" || questionType === "ordering") {
+                    html += '<p class="museum-muted">Расставьте элементы в правильной последовательности. Перетаскивайте строки или используйте кнопки ↑ и ↓.</p><ol id="customOrderList" style="list-style:none;padding:0;margin:10px 0">'+(q.items || []).map(function(item, i) {
+                        return '<li draggable="true" data-order-index="'+i+'" style="display:flex;gap:8px;align-items:center;padding:10px;margin:6px 0;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:grab"><span style="flex:1">'+window.escapeHtml(item)+'</span><button type="button" class="btn ghost" data-order-up aria-label="Переместить выше">↑</button><button type="button" class="btn ghost" data-order-down aria-label="Переместить ниже">↓</button></li>';
+                    }).join("")+'</ol><button class="btn" id="customOrderSubmit">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    var orderList = area.querySelector("#customOrderList"), dragged = null;
+                    orderList.querySelectorAll("[draggable=true]").forEach(function(item) {
+                        item.addEventListener("dragstart", function(){dragged=item;item.style.opacity=".5";});
+                        item.addEventListener("dragend", function(){item.style.opacity="";dragged=null;});
+                        item.addEventListener("dragover", function(event){event.preventDefault();});
+                        item.addEventListener("drop", function(event){event.preventDefault();if(dragged&&dragged!==item){var rect=item.getBoundingClientRect();orderList.insertBefore(dragged,event.clientY<rect.top+rect.height/2?item:item.nextSibling);}});
+                    });
+                    orderList.querySelectorAll("[data-order-up]").forEach(function(button){button.onclick=function(){var item=button.parentElement;if(item.previousElementSibling)orderList.insertBefore(item,item.previousElementSibling);};});
+                    orderList.querySelectorAll("[data-order-down]").forEach(function(button){button.onclick=function(){var item=button.parentElement;if(item.nextElementSibling)orderList.insertBefore(item.nextElementSibling,item);};});
+                    area.querySelector("#customOrderSubmit").onclick = function() {
+                        answers[index] = Array.from(orderList.querySelectorAll("[data-order-index]")).map(function(item){return Number(item.dataset.orderIndex);});
+                        index++; draw();
+                    };
+                } else if (questionType === "matching" || questionType === "match") {
+                    html += '<p class="museum-muted">Выберите правую часть для каждой строки.</p>';
+                    (q.pairs || []).forEach(function(pair, i) {
+                        html += '<label style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;padding:10px;margin:7px 0;border:1px solid var(--border);border-radius:10px"><span>'+window.escapeHtml(pair.left || "")+'</span><select data-match-left="'+i+'" class="self-input"><option value="">Выберите соответствие…</option>'+(q.options || []).map(function(option, j){return '<option value="'+j+'">'+window.escapeHtml(option)+'</option>';}).join("")+'</select></label>';
+                    });
+                    html += '<button class="btn" id="customMatchSubmit" style="margin-top:12px">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    area.querySelector("#customMatchSubmit").onclick = function() {
+                        var selects = Array.from(area.querySelectorAll("[data-match-left]"));
+                        if (selects.some(function(select){return select.value === "";})) { window.showToast("Установите соответствие для каждой строки.","err"); return; }
+                        var chosen = selects.map(function(select){return Number(select.value);});
+                        if (new Set(chosen).size !== chosen.length) { window.showToast("Каждую правую часть можно использовать только один раз.","err"); return; }
+                        answers[index] = chosen; index++; draw();
+                    };
+                } else if (questionType === "multi" || questionType === "multiple" || questionType === "multiple_choice") {
+                    html += '<p class="museum-muted">Выберите все подходящие варианты.</p>';
+                    (q.options || []).forEach(function(option, i) {
+                        html += '<label class="custom-multi-option" style="display:flex;align-items:flex-start;gap:10px;padding:12px;margin:7px 0;border:1px solid var(--border);border-radius:10px;cursor:pointer"><input type="checkbox" data-custom-answer="'+i+'" style="margin-top:4px;transform:scale(1.15)"><span>'+window.escapeHtml(option)+'</span></label>';
+                    });
+                    html += '<button class="btn" id="customMultiSubmit" style="margin-top:12px">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    area.querySelector("#customMultiSubmit").onclick = function() {
+                        answers[index] = Array.from(area.querySelectorAll("[data-custom-answer]:checked")).map(function(input){return Number(input.dataset.customAnswer);});
+                        index++; draw();
+                    };
+                } else {
+                    (q.options || []).forEach(function(option, i) {
+                        html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>';
+                    });
+                    area.innerHTML = html;
+                    area.querySelectorAll("[data-custom-answer]").forEach(function(button) {
+                        button.onclick = function() { answers[index] = Number(button.dataset.customAnswer); index++; draw(); };
+                    });
+                }
             }
             draw();
         } catch (error) {
@@ -1001,7 +1093,9 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     }
                     var entry=secureQuestions[secureIndex], q=entry.question||{}, type=String(q.type||"mc").toLowerCase();
                     var html='<div class="museum-muted">Вопрос '+(secureIndex+1)+' из '+secureQuestions.length+'</div><h3>'+safeText(q.q||q.question||"")+'</h3>';
-                    if(type==="num"||type==="numeric"||type==="number") {
+                    if(type==="text"||type==="short_text") {
+                        html+='<label style="display:block;margin:12px 0"><span class="museum-muted">Введите краткий ответ</span><textarea id="secureTextAnswer" class="self-input" rows="3" maxlength="2000" placeholder="Ваш ответ" style="display:block;width:100%;margin-top:6px"></textarea></label><button class="btn" id="secureNext">Ответить</button>';
+                    } else if(type==="num"||type==="numeric"||type==="number") {
                         html+='<input id="secureAnswerInput" class="self-input" type="text" inputmode="decimal" placeholder="Введите числовой ответ"><button class="btn" id="secureNext">Ответить</button>';
                     } else if(type==="multi"||type==="multiple"||type==="multiple_choice") {
                         html+='<p>Выберите все подходящие варианты</p>'+(q.options||[]).map(function(opt,i){return '<button class="btn ghost" data-secure-multi="'+i+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+safeText(opt)+'</button>';}).join("")+'<button class="btn" id="secureNext">Ответить</button>';
@@ -1019,6 +1113,8 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                         selectedMulti={};
                         contentArea.querySelectorAll("[data-secure-multi]").forEach(function(btn){btn.onclick=function(){var n=Number(btn.getAttribute("data-secure-multi"));selectedMulti[n]=!selectedMulti[n];btn.classList.toggle("active",!!selectedMulti[n]);};});
                         var next=contentArea.querySelector("#secureNext");if(next)next.onclick=function(){secureAnswers.push(Object.keys(selectedMulti).filter(function(k){return selectedMulti[k];}).map(Number).sort(function(a,b){return a-b;}));secureIndex++;drawSecureQuestion();};
+                    } else if(type==="text"||type==="short_text") {
+                        var textNext=contentArea.querySelector("#secureNext");if(textNext)textNext.onclick=function(){var input=contentArea.querySelector("#secureTextAnswer");if(!input||!String(input.value).trim()){input&&input.focus();return;}secureAnswers.push(input.value);secureIndex++;drawSecureQuestion();};
                     } else if(type==="num"||type==="numeric"||type==="number") {
                         var numNext=contentArea.querySelector("#secureNext");if(numNext)numNext.onclick=function(){var input=contentArea.querySelector("#secureAnswerInput");if(!input||!String(input.value).trim()){input&&input.focus();return;}secureAnswers.push(input.value);secureIndex++;drawSecureQuestion();};
                     } else if(type==="order"||type==="ordering") {
@@ -1369,6 +1465,12 @@ window.router = function() {
         return;
     }
     if (overlay) overlay.style.display = "none";
+    window._portalRouteStack = window._portalRouteStack || [];
+    if (window._portalRouteStack[window._portalRouteStack.length - 1] !== hash) {
+        window._portalRouteStack.push(hash);
+        if (window._portalRouteStack.length > 30) window._portalRouteStack.shift();
+    }
+    if (window.updatePortalNavigation) window.updatePortalNavigation();
     if (window.state.student) window.installStudentActivityCapture();
     if (window.state.student && window.API && window.API.logActivity) {
         var activityRoute = location.hash.slice(1) || "/";
@@ -1436,14 +1538,133 @@ window.router = function() {
     window.renderHomePage();
 };
 
-function setupDrawer() {
-    var burgerBtn = document.getElementById('burgerBtn'), drawer = document.getElementById('drawer'), drawerOverlay = document.getElementById('drawerOverlay'), drawerClose = document.getElementById('drawerClose');
-    if (burgerBtn && drawer && drawerOverlay) {
-        burgerBtn.onclick = function() { drawer.classList.add('open'); drawerOverlay.classList.add('open'); };
-        drawerOverlay.onclick = function() { drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); };
-        if (drawerClose) drawerClose.onclick = function() { drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); };
-        document.querySelectorAll('.drawer-item').forEach(item => { item.onclick = function() { drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }; });
+window.updatePortalNavigation = function() {
+    var drawer = document.getElementById("drawer");
+    if (!drawer) return;
+    var route = location.hash.slice(1) || "/";
+    drawer.querySelectorAll(".drawer-item[href^=\"#/\"]").forEach(function(link) {
+        var href = link.getAttribute("href").slice(1);
+        var active = href === route || (href !== "/" && route.indexOf(href + "/") === 0);
+        link.classList.toggle("is-current", active);
+        if (active) {
+            link.setAttribute("aria-current", "page");
+            var group = link.closest("details.drawer-group");
+            if (group) group.open = true;
+        } else link.removeAttribute("aria-current");
+    });
+    var current = drawer.querySelector(".drawer-item.is-current");
+    var status = document.getElementById("drawerSearchResults");
+    var search = document.getElementById("drawerSearch");
+    if (status && (!search || !search.value.trim())) status.textContent = current ? "Сейчас открыт раздел: " + current.textContent.trim().replace(/\\s+/g, " ") : "";
+    var crumbs = document.getElementById("crumbs");
+    if (crumbs) {
+        var label = current ? current.textContent.trim().replace(/\\s+/g, " ") : (route === "/" ? "Главная" : (route.indexOf("/topic/") === 0 ? "Материалы курса" : "Раздел портала"));
+        crumbs.replaceChildren();
+        var routeStack = window._portalRouteStack || [];
+        if (routeStack.length > 1) {
+            var back = document.createElement("a");
+            back.href = "#portal-back";
+            back.className = "crumb-back";
+            back.textContent = "← Назад";
+            back.setAttribute("aria-label", "Вернуться на предыдущую страницу портала");
+            back.addEventListener("click", function(event) {
+                event.preventDefault();
+                if ((window._portalRouteStack || []).length > 1) history.back();
+            });
+            crumbs.appendChild(back);
+        }
+        if (route !== "/") {
+            var home = document.createElement("a"); home.href = "#/"; home.textContent = "Главная"; crumbs.appendChild(home);
+            var separator = document.createElement("span"); separator.className = "crumb-separator"; separator.textContent = "›"; separator.setAttribute("aria-hidden", "true"); crumbs.appendChild(separator);
+        }
+        var currentCrumb = document.createElement("span"); currentCrumb.textContent = label; currentCrumb.setAttribute("aria-current", "page"); crumbs.appendChild(currentCrumb);
     }
+};
+
+function setupDrawer() {
+    var burgerBtn = document.getElementById("burgerBtn"), drawer = document.getElementById("drawer"), drawerOverlay = document.getElementById("drawerOverlay"), drawerClose = document.getElementById("drawerClose");
+    var search = document.getElementById("drawerSearch"), clear = document.getElementById("drawerSearchClear"), status = document.getElementById("drawerSearchResults");
+    if (!burgerBtn || !drawer || !drawerOverlay) return;
+    function closeDrawer(restoreFocus) {
+        drawer.classList.remove("open"); drawerOverlay.classList.remove("open");
+        drawer.setAttribute("aria-hidden", "true"); drawer.inert = true; burgerBtn.setAttribute("aria-expanded", "false");
+        if (restoreFocus) burgerBtn.focus();
+    }
+    function openDrawer() {
+        drawer.classList.add("open"); drawerOverlay.classList.add("open");
+        drawer.setAttribute("aria-hidden", "false"); drawer.inert = false; burgerBtn.setAttribute("aria-expanded", "true");
+        if (search) search.focus();
+    }
+    window.resetDrawerNavigationFilter = function() {
+        drawer.querySelectorAll(".drawer-item[data-nav-original-display]").forEach(function(item) {
+            if (item.getAttribute("data-nav-filtered") === "1") item.style.display = item.getAttribute("data-nav-original-display") || "";
+            item.removeAttribute("data-nav-original-display"); item.removeAttribute("data-nav-filtered");
+        });
+        drawer.querySelectorAll("details.drawer-group[data-nav-was-open]").forEach(function(group) {
+            group.style.display = ""; group.open = group.getAttribute("data-nav-was-open") === "1" || !!group.querySelector(".drawer-item.is-current");
+            group.removeAttribute("data-nav-was-open");
+        });
+        if (search) search.value = "";
+        if (status) status.textContent = "";
+    };
+    function applySearch() {
+        if (!search) return;
+        var query = search.value.trim().toLocaleLowerCase("ru");
+        var links = Array.from(drawer.querySelectorAll(".drawer-item"));
+        var visibleCount = 0;
+        links.forEach(function(item) {
+            if (!item.hasAttribute("data-nav-original-display")) item.setAttribute("data-nav-original-display", item.style.display || "");
+            var original = item.getAttribute("data-nav-original-display");
+            var allowedByRole = original !== "none";
+            var match = !query || (allowedByRole && item.textContent.toLocaleLowerCase("ru").indexOf(query) >= 0);
+            if (query) {
+                item.style.display = match ? (original || "flex") : "none";
+                item.setAttribute("data-nav-filtered", "1");
+            } else {
+                item.style.display = original;
+                item.removeAttribute("data-nav-filtered");
+                item.removeAttribute("data-nav-original-display");
+            }
+            if (match && allowedByRole) visibleCount++;
+        });
+        drawer.querySelectorAll("details.drawer-group").forEach(function(group) {
+            if (!group.hasAttribute("data-nav-was-open")) group.setAttribute("data-nav-was-open", group.open ? "1" : "0");
+            var children = Array.from(group.querySelectorAll(".drawer-item"));
+            var hasVisible = children.some(function(item) { return item.style.display !== "none"; });
+            group.style.display = hasVisible ? "" : "none";
+            if (query) group.open = hasVisible;
+            else {
+                group.style.display = "";
+                group.open = group.getAttribute("data-nav-was-open") === "1" || !!group.querySelector(".drawer-item.is-current");
+                group.removeAttribute("data-nav-was-open");
+            }
+        });
+        if (status) status.textContent = query ? (visibleCount ? "Найдено разделов: " + visibleCount : "Ничего не найдено. Попробуйте другое слово.") : "";
+        if (!query) window.updatePortalNavigation();
+    }
+    burgerBtn.onclick = openDrawer;
+    drawerOverlay.onclick = function() { closeDrawer(false); };
+    if (drawerClose) drawerClose.onclick = function() { closeDrawer(true); };
+    if (search) search.addEventListener("input", applySearch);
+    if (clear) clear.onclick = function() { if (search) { search.value = ""; applySearch(); search.focus(); } };
+    drawer.querySelectorAll(".drawer-item").forEach(function(item) {
+        item.addEventListener("click", function() {
+            if (search) { search.value = ""; applySearch(); }
+            closeDrawer(false);
+        });
+    });
+    document.addEventListener("keydown", function(event) {
+        var tag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : "";
+        var typing = tag === "input" || tag === "textarea" || tag === "select" || (event.target && event.target.isContentEditable);
+        if (event.key === "/" && !typing && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            event.preventDefault(); if (!drawer.classList.contains("open")) openDrawer(); if (search) search.focus();
+        }
+        if (event.key === "Escape" && drawer.classList.contains("open")) {
+            if (search && search.value) { search.value = ""; applySearch(); search.focus(); }
+            else closeDrawer(true);
+        }
+    });
+    window.updatePortalNavigation();
 }
 
 window.addEventListener("hashchange", function () { window.router(); });

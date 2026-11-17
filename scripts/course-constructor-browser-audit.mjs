@@ -38,6 +38,12 @@ try {
       },
       getTopicAccess: async () => ({ open: true }),
       getCustomContent: async () => ({ success: true, data: window.__constructorStore.map(x => ({ ...x })) }),
+      uploadTestImage: async (courseId, dataUrl, name) => ({ success: true, imageRef: "drive:audit-image-reference", name, size: 12000 }),
+      getQuestionBank: async (courseId, bankId) => ({ success: true, courseId, questions: (window.__examBankRows || []).map(row => ({ ...row })) }),
+      saveQuestionBank: async (courseId, bankId, questions) => {
+        window.__examBankRows = questions.map(row => ({ questionId: row.questionId, question: { ...row.question } }));
+        return { success: true, questionsSaved: questions.length, backupId: "audit-backup-id" };
+      },
       saveCustomContent: async item => {
         const at = window.__constructorStore.findIndex(x => String(x.id) === String(item.id));
         if (at >= 0) window.__constructorStore[at] = { ...item };
@@ -54,9 +60,16 @@ try {
       getTestAttemptStatus: async () => ({ allowed: true, used: 0, limit: 1 }),
       getCustomTest: async testId => ({
         success: true, attemptId: "audit-custom-attempt-" + String(testId),
-        questions: [{ q: "Какой вариант правильный?", options: ["Неверно", "Верно", "Не подходит", "Нет ответа"] }]
+        questions: [
+          { q: "Вычислите результат: 25 ÷ 2.", type: "numeric" },
+          { q: "Утверждение: 2 × 3 = 6.", type: "true_false", options: ["Верно", "Неверно"] },
+          { q: "Назовите единицу измерения силы.", type: "short_text" }
+        ]
       }),
-      submitCustomTest: async () => ({ success: true, score: 1, maxScore: 1, percent: 100, grade: 5 })
+      submitCustomTest: async payload => {
+        window.__submittedCustomAnswers = (payload && payload.answers || []).slice();
+        return { success: true, score: 3, maxScore: 3, percent: 100, grade: 5 };
+      }
     };
     // Reproduce an admin request finishing after a student has signed in.
     // The late admin response must not overwrite the student's role-filtered list.
@@ -103,19 +116,78 @@ try {
     window.confirm = () => true;
   });
 
+  await page.evaluate(() => window.updateMenuVisibility());
+  await page.locator("#burgerBtn").click();
+  assert.equal(await page.locator("#drawer").getAttribute("aria-hidden"), "false");
+  await page.locator("#drawerSearch").fill("Тренажёр метролога");
+  assert.ok(await page.locator('a[href="#/metrology-trainer"]').isVisible(), "navigation search must find the laboratory trainer");
+  assert.ok(await page.locator("#drawerLaboratory").evaluate(node => node.open), "search must expand the matching navigation group");
+  await page.locator("#drawerSearchClear").click();
+  await page.locator("#drawerSearch").fill("Конструктор карточек");
+  assert.ok(await page.locator("#menuFlashcardEditor").isVisible(), "teacher must find the flashcard editor");
+  await page.evaluate(() => {
+    window.state.staff = null;
+    window.state.student = { role: "student", courses: ["07.01"], email: "audit-student@example.invalid" };
+    window.updateMenuVisibility();
+  });
+  assert.equal(await page.locator("#drawerSearch").inputValue(), "", "role changes must reset filtered navigation");
+  await page.locator("#drawerSearch").fill("Конструктор карточек");
+  assert.equal(await page.locator("#menuFlashcardEditor").evaluate(node => getComputedStyle(node).display), "none", "search must not reveal teacher-only links to students");
+  assert.ok((await page.locator("#drawerSearchResults").innerText()).includes("Ничего не найдено"));
+  await page.evaluate(() => {
+    window.state.student = null;
+    window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
+    window.updateMenuVisibility();
+  });
+  await page.locator("#drawerClose").click();
+  assert.equal(await page.locator("#drawer").getAttribute("aria-hidden"), "true");
+  await page.keyboard.press("/");
+  assert.equal(await page.locator("#burgerBtn").getAttribute("aria-expanded"), "true", "slash shortcut must open navigation");
+  await page.keyboard.press("Escape");
+  assert.equal(await page.locator("#burgerBtn").getAttribute("aria-expanded"), "false", "Escape must close navigation");
+  await page.evaluate(() => { location.hash = "#/resources"; });
+  await page.waitForFunction(() => location.hash === "#/resources");
+  await page.evaluate(() => { location.hash = "#/videos"; });
+  await page.waitForFunction(() => location.hash === "#/videos");
+  assert.ok(await page.locator("#crumbs .crumb-back").isVisible(), "breadcrumb back link must appear after an in-portal transition");
+  await page.locator("#crumbs .crumb-back").click();
+  await page.waitForFunction(() => location.hash === "#/resources", null, { timeout: 5000 });
   await page.evaluate(() => window.renderCourseEditorPage());
   await page.waitForSelector("#createTopicBtn");
-  await page.waitForSelector("#editorTutoringPanel");
-  await page.locator("#editorTutorUrl").fill("https://example.invalid/tutoring");
-  await page.locator("#editorTutorTitle").fill("Запись на консультацию");
-  await page.locator("#editorTutorDescription").fill("Выберите удобное время.");
-  await page.locator("#editorTutorVisible").uncheck();
-  await page.locator("#saveEditorTutorLink").click();
-  await page.waitForFunction(() => document.getElementById("editorTutorStatus")?.textContent.includes("сохранены"));
-  assert.deepEqual(await page.evaluate(() => window.__tutoringSettings["07.01"]), {
-    url: "https://example.invalid/tutoring", title: "Запись на консультацию",
-    description: "Выберите удобное время.", visible: false
-  }, "Tutoring settings must save against the selected course");
+  // Exercise the protected exam-bank visual editor end-to-end with a mocked server API.
+  await page.locator("#loadExamBankBtn").click();
+  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("Загружено заданий"));
+  await page.locator("#examQuestionText").fill("Какие операции относятся к подготовке станка?");
+  await page.locator("#examQuestionType").selectOption("multi");
+  await page.locator("#examQuestionOptions").fill("Проверка инструмента\nПроверка крепления\nСлучайный запуск\nПроверка программы");
+  await page.locator("#examQuestionCorrect").fill("1, 2, 4");
+  await page.locator("#previewExamQuestionBtn").click();
+  assert.ok((await page.locator("#examQuestionPreview").innerText()).includes("Предпросмотр студенческого задания"));
+  assert.ok(!(await page.locator("#examQuestionPreview").innerText()).includes("Правильный ответ"));
+  await page.locator("#saveExamQuestionBtn").click();
+  assert.ok((await page.locator("#examBankQuestionList").innerText()).includes("Какие операции относятся к подготовке станка?"));
+  await page.locator("#saveExamBankBtn").click();
+  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("audit-backup-id"));
+  const visualBankSaved = await page.evaluate(() => window.__examBankRows);
+  assert.equal(visualBankSaved.length, 1, "Visual exam bank editor must save the new question");
+  assert.deepEqual(visualBankSaved[0].question.correct, [0, 1, 3], "Multiple-answer keys must be stored as zero-based indices");
+  assert.deepEqual(visualBankSaved[0].question.options, ["Проверка инструмента", "Проверка крепления", "Случайный запуск", "Проверка программы"]);
+  await page.locator("#addExamQuestionBtn").click();
+  await page.locator("#examQuestionText").fill("Назовите физическую величину, измеряемую в ньютонах.");
+  await page.locator("#examQuestionType").selectOption("short_text");
+  await page.locator("#examQuestionCorrect").fill("Ньютон");
+  await page.locator("#previewExamQuestionBtn").click();
+  const shortPreview = await page.locator("#examQuestionPreview").innerText();
+  assert.equal(await page.locator("#examQuestionPreview textarea").getAttribute("placeholder"), "Введите краткий ответ");
+  assert.ok(!shortPreview.includes("Ньютон"), "Short text answer key must stay hidden in student preview");
+  await page.locator("#saveExamQuestionBtn").click();
+  await page.locator("#saveExamBankBtn").click();
+  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("audit-backup-id"));
+  const visualBankWithText = await page.evaluate(() => window.__examBankRows);
+  assert.equal(visualBankWithText.length, 2, "Visual exam bank editor must retain both question types");
+  assert.equal(visualBankWithText[1].question.type, "short_text");
+  assert.equal(visualBankWithText[1].question.correctAnswer, "Ньютон");
+  // Tutoring controls are tested in their dedicated home-screen workflow.
   await page.locator("#newTopicCode").fill("AUDIT");
   await page.locator("#newTopicTitle").fill("Проверка конструктора");
   await page.locator("#createTopicBtn").click();
@@ -126,7 +198,7 @@ try {
   await page.locator("#lectureTitle").fill("Тестовая лекция конструктора");
   await page.locator("#lectureBody").fill("<h3>Проверка отображения</h3><p>Содержимое тестовой лекции.</p>");
   await page.locator("#saveLectureBtn").click();
-  await page.waitForFunction(() => document.getElementById("lectureStatus")?.textContent.includes("Лекция сохранена"));
+  await page.waitForFunction(() => document.getElementById("lectureStatus")?.textContent.includes("лекция сохранена"));
 
   await page.locator("#testTitle").fill("Тест конструктора");
   await page.locator("#qText").fill("Какой вариант правильный?");
@@ -135,9 +207,25 @@ try {
   await page.locator("#qC").fill("Не подходит");
   await page.locator("#qD").fill("Нет ответа");
   await page.locator("#qCorrect").selectOption("1");
+  await page.locator("#ceQuestionImageFile").setInputFiles({
+    name: "question-diagram.png",
+    mimeType: "image/png",
+    buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/iZk9HQAAAABJRU5ErkJggg==", "base64")
+  });
+  await page.waitForFunction(() => {
+    const status = document.getElementById("ceQuestionImageStatus")?.textContent || "";
+    return status.includes("Изображение загружено") || status.includes("Выберите PNG") ||
+      status.includes("больше 8 МБ") || status.includes("больше 700 КБ") ||
+      status.includes("не удалось") || status.includes("Не удалось") || status.includes("Ошибка");
+  }, undefined, { timeout: 15000 });
+  const imageUploadStatus = await page.locator("#ceQuestionImageStatus").innerText();
+  console.log("QUESTION_IMAGE_UPLOAD_STATUS", imageUploadStatus);
+  assert.ok(imageUploadStatus.includes("Изображение загружено"), "Question image upload failed: " + imageUploadStatus);
+  assert.equal(await page.locator("#ceQuestionImagePreview img").count(), 1, "Question image preview should be visible");
   await page.locator("#addQuestionBtn").click();
   await page.locator("#saveTestBtn").click();
   await page.waitForFunction(() => document.getElementById("testStatus")?.textContent.includes("Тест сохранён"));
+  assert.equal(await page.evaluate(() => window.__constructorStore.find(x => x.type === "test")?.questions?.[0]?.imageRef), "drive:audit-image-reference", "Question image reference must be saved with the test");
   assert.ok((await page.locator("#savedMaterials").innerText()).includes("Тест конструктора"));
   assert.ok((await page.locator("#savedMaterials").innerText()).includes("Тестовая лекция конструктора"));
 
@@ -257,9 +345,25 @@ try {
   await page.waitForSelector("#topicContent button");
   assert.ok((await page.locator("#topicContent").innerText()).includes("Тест конструктора"));
   await page.locator("#topicContent button").filter({ hasText: "Начать тест" }).click();
-  await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Какой вариант правильный?"));
-  const testStarted = await page.locator("#topicContent").innerText();
-  assert.ok(testStarted.includes("Какой вариант правильный?"));
+  await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Вычислите результат: 25 ÷ 2."));
+  assert.ok((await page.locator("#topicContent").innerText()).includes("Введите числовой ответ"),
+    "Numeric question must render a decimal-answer input");
+  await page.locator("#customNumericAnswer").fill("12,5");
+  await page.locator("#customNumericSubmit").click();
+  await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Утверждение: 2 × 3 = 6."));
+  assert.equal(await page.locator('#topicContent button[data-custom-answer="0"]').count(), 1,
+    "True/false question must render the fixed True option");
+  assert.equal(await page.locator('#topicContent button[data-custom-answer="1"]').count(), 1,
+    "True/false question must render the fixed False option");
+  await page.locator('#topicContent button[data-custom-answer="0"]').click();
+  await page.waitForFunction(() => document.getElementById("customShortTextAnswer"));
+  await page.locator("#customShortTextAnswer").fill("Ньютон");
+  await page.locator("#customShortTextSubmit").click();
+  await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Тест завершён"));
+  const submittedAnswers = await page.evaluate(() => window.__submittedCustomAnswers);
+  assert.deepEqual(submittedAnswers, ["12.5", 0, "Ньютон"],
+    "Student answers must preserve normalized numeric input and selected true/false value");
+  const testStarted = { numeric: true, trueFalse: true, shortText: true, submittedAnswers };
 
   await page.locator("#tab-custom-flashcards").click();
   await page.locator("#topicContent button").filter({ hasText: "Начать повторение" }).click();
@@ -290,7 +394,7 @@ try {
   const accountRaceAudit = await page.evaluate(() => window.__accountRaceAudit || null);
   assert.ok(accountRaceAudit && accountRaceAudit.pass && accountRaceAudit.staleAdminMaterialRejected,
     "Account-switch race audit did not produce a passing result");
-  const report = { topicId, savedCount, accountRaceAudit, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
+  const report = { topicId, savedCount, accountRaceAudit, lectureVisible: true, testStarted, flashcardFrontAndBack: true, sprutNavigation };
   fs.mkdirSync("artifacts/constructors", { recursive: true });
   fs.writeFileSync("artifacts/constructors/report.json", JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
