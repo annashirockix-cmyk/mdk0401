@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should students review before the session?",
       "audioText": "The media studies tutor has moved the digital citizenship workshop to Room 26. It will start at nine forty-five on Tuesday. Students should review their public profile settings before the session and bring one example of an online post they would like to discuss. The workshop will include a short activity on how information can remain available after it is deleted.",
       "options": [
-        "On Friday",
         "Their public profile settings",
-        "Next month",
-        "After the event"
+        "Their saved passwords",
+        "Their private messages",
+        "Their online shopping preferences"
       ],
       "correctIndex": 1,
       "points": 1
