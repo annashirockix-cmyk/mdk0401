@@ -117,7 +117,7 @@ try {
   await page.locator("#lectureTitle").fill("Тестовая лекция конструктора");
   await page.locator("#lectureBody").fill("<h3>Проверка отображения</h3><p>Содержимое тестовой лекции.</p>");
   await page.locator("#saveLectureBtn").click();
-  await page.waitForFunction(() => document.getElementById("lectureStatus")?.textContent.includes("Лекция сохранена"));
+  await page.waitForFunction(() => document.getElementById("lectureStatus")?.textContent.includes("лекция сохранена"));
 
   await page.locator("#testTitle").fill("Тест конструктора");
   await page.locator("#qText").fill("Какой вариант правильный?");
