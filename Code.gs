@@ -1035,24 +1035,36 @@ function parseTutoringLink_(raw) {
   value.visible=value.visible===true;
   return value;
 }
+function legacyTutoringLink_(courseId,teacherEmail) {
+  const sheet=settings_(),values=sheet.getDataRange().getValues(),m=headerMap_(sheet),key="tutoring:"+String(courseId||"");
+  for(let i=1;i<values.length;i++){
+    if(String(values[i][m.Key]||"")===key&&email_(values[i][m.UpdatedBy])===email_(teacherEmail)){
+      return parseTutoringLink_(String(values[i][m.Value]||""));
+    }
+  }
+  return parseTutoringLink_("");
+}
 function getTutoringLink_(data) {
   const user=auth_(data),courseId=String(data.courseId||"").trim();
   if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
   if(user.role==="teacher"||user.role==="admin"){
-    const link=parseTutoringLink_(settingValue_(tutoringSettingKey_(user.email)));
+    const personalRaw=settingValue_(tutoringSettingKey_(user.email));
+    const link=personalRaw?parseTutoringLink_(personalRaw):legacyTutoringLink_(courseId,user.email);
     return {success:true,link:link,links:[]};
   }
   if(user.role!=="student")throw new Error("Запись доступна только обучающимся и преподавателям.");
   const sheet=users_(),values=sheet.getDataRange().getValues(),m=headerMap_(sheet);
   const settingsSheet=settings_(),settingsValues=settingsSheet.getDataRange().getValues(),sm=headerMap_(settingsSheet),settings=Object.create(null);
-  for(let i=1;i<settingsValues.length;i++)settings[String(settingsValues[i][sm.Key]||"")]=String(settingsValues[i][sm.Value]||"");
+  for(let i=1;i<settingsValues.length;i++)settings[String(settingsValues[i][sm.Key]||"")]={value:String(settingsValues[i][sm.Value]||""),updatedBy:email_(settingsValues[i][sm.UpdatedBy])};
   const links=[];
   for(let i=1;i<values.length;i++){
     const row=values[i],role=String(row[m.Role]||"").toLowerCase(),teacherEmail=email_(row[m.Email]);
     if(role!=="teacher"||!teacherEmail)continue;
     const teacher={email:teacherEmail,role:role,courses:String(row[m.Courses]||"")};
     if(!hasCourseAccess_(teacher,courseId))continue;
-    const link=parseTutoringLink_(settings[tutoringSettingKey_(teacherEmail)]||"");
+    const personal=settings[tutoringSettingKey_(teacherEmail)];
+    const legacy=settings["tutoring:"+courseId];
+    const link=personal?parseTutoringLink_(personal.value):legacy&&legacy.updatedBy===teacherEmail?parseTutoringLink_(legacy.value):parseTutoringLink_("");
     if(!link.visible||!link.url)continue;
     links.push({teacherName:String(row[m.Name]||"Преподаватель"),title:link.title,description:link.description,url:link.url});
   }
