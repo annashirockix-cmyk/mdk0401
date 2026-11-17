@@ -125,6 +125,9 @@ try {
   await page.locator("#examQuestionType").selectOption("multi");
   await page.locator("#examQuestionOptions").fill("Проверка инструмента\nПроверка крепления\nСлучайный запуск\nПроверка программы");
   await page.locator("#examQuestionCorrect").fill("1, 2, 4");
+  await page.locator("#previewExamQuestionBtn").click();
+  assert.ok((await page.locator("#examQuestionPreview").innerText()).includes("Предпросмотр студенческого задания"));
+  assert.ok(!(await page.locator("#examQuestionPreview").innerText()).includes("Правильный ответ"));
   await page.locator("#saveExamQuestionBtn").click();
   assert.ok((await page.locator("#examBankQuestionList").innerText()).includes("Какие операции относятся к подготовке станка?"));
   await page.locator("#saveExamBankBtn").click();
@@ -137,6 +140,10 @@ try {
   await page.locator("#examQuestionText").fill("Назовите физическую величину, измеряемую в ньютонах.");
   await page.locator("#examQuestionType").selectOption("short_text");
   await page.locator("#examQuestionCorrect").fill("Ньютон");
+  await page.locator("#previewExamQuestionBtn").click();
+  const shortPreview = await page.locator("#examQuestionPreview").innerText();
+  assert.ok(shortPreview.includes("Введите краткий ответ"));
+  assert.ok(!shortPreview.includes("Ньютон"), "Short text answer key must stay hidden in student preview");
   await page.locator("#saveExamQuestionBtn").click();
   await page.locator("#saveExamBankBtn").click();
   await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("audit-backup-id"));
