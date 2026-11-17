@@ -1201,3 +1201,24 @@ test("C2-S1 and C2-S2 reading answer keys match the evidence in the passages", (
     assert.deepEqual(registryTask, source.tasks.find(task => task.id === taskId), "source and registry match: " + taskId);
   }
 });
+
+
+test("V01-V04 multiple-choice distractors do not create extra defensible answers", () => {
+  const registry = JSON.parse(fs.readFileSync(path.join(root, "docs/english-final-exam-registry-v1-pilot.json"), "utf8"));
+  const cases = [
+    ["EN-C5-S2-V01", "c5s2v01_m01", ["A note about the outgoing team's lunch arrangements", "A record of the next team's preferred break times", "Outstanding task references", "Issues requiring follow-up"]],
+    ["EN-C1-S2-V04", "c1s2v04_m01", ["I demand an answer.", "Do it for me.", "Would you mind helping me?", "Could you tell me where the nearest bus stop is, please?"]]
+  ];
+  for (const [variantId, taskId, expectedOptions] of cases) {
+    const variant = registry.exams.flatMap(exam => exam.variants).find(item => item.variantId === variantId);
+    assert.ok(variant, "variant exists: " + variantId);
+    const task = variant.variantJSON.tasks.find(item => item.id === taskId);
+    assert.ok(task, "multiple-choice task exists: " + taskId);
+    assert.deepEqual(task.options, expectedOptions);
+    assert.deepEqual(task.correctIndices, [2, 3]);
+    const match = variantId.match(/^EN-C(\d)-S(\d)-V(\d{2})$/);
+    const sourcePath = `docs/english-final-exam-c0${match[1]}-s0${match[2]}-v${match[3]}-pilot.json`;
+    const source = JSON.parse(fs.readFileSync(path.join(root, sourcePath), "utf8"));
+    assert.deepEqual(task, source.tasks.find(item => item.id === taskId), "source and registry match: " + taskId);
+  }
+});
