@@ -129,7 +129,7 @@ try {
   await page.locator("#ceQuestionImageFile").setInputFiles({
     name: "question-diagram.png",
     mimeType: "image/png",
-    buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADUlEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC", "base64")
+    buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/iZk9HQAAAABJRU5ErkJggg==", "base64")
   });
   await page.waitForFunction(() => {
     const status = document.getElementById("ceQuestionImageStatus")?.textContent || "";
