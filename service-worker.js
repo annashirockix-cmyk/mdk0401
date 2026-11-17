@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v409'; // Добавлен визуальный редактор защищённых экзаменационных банков.
+const CACHE_NAME = 'portal-cache-v410'; // Визуальный редактор экзаменов поддерживает краткий текстовый ответ.
 
 const STATIC_ASSETS = [
   './',
