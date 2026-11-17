@@ -16,9 +16,9 @@
 - C. The time needed to transport a product
 - D. The number of employees in a department
 
-**143.** Complete the sentence: “The replacement part is compatible ___ the existing assembly.”
-- A. with
-- B. for
+**143.** Complete the sentence: “The replacement sensor is suitable ___ use in the stated temperature range.”
+- A. for
+- B. with
 - C. by
 - D. at
 
@@ -130,7 +130,7 @@
 |---:|:---:|---|
 | 141 | A | “Findings” is plural and takes “are summarized”. |
 | 142 | A | Traceability links an item or record to its relevant history and movement. |
-| 143 | A | The standard collocation is “compatible with”. |
+| 143 | A | The standard construction is “suitable for use”. |
 | 144 | B | 7.5 bar is below the stated maximum of 8 bar. The item tests reading a stated limit, not an operating recommendation. |
 | 145 | B | The sentence is a clear and polite request for confirmation. |
 | 146 | D | A non-conformance report documents a failure to meet requirements. |
