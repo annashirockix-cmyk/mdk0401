@@ -42,8 +42,8 @@
       "prompt": "A student compared the monthly energy use of two college buildings. Building A used less electricity in most months, but the difference became smaller during the winter. The student included the number of rooms in each building because their sizes were not the same. She avoided saying that one building was more efficient until she could compare energy use per square metre. Reading 1. Why did the student include the number of rooms?",
       "options": [
         "Because the buildings had different electricity suppliers",
-        "Because the buildings were different sizes",
         "Because the buildings had different electricity tariffs",
+        "Because the buildings were different sizes",
         "Because the buildings were used at different times"
       ],
       "correctIndex": 2,
@@ -55,9 +55,9 @@
       "prompt": "Why did she avoid making an immediate conclusion about efficiency?",
       "options": [
         "She needed to compare the number of staff",
-        "She needed to compare energy use per square metre",
+        "She needed to compare total energy bills only",
         "She needed to calculate the total floor area only",
-        "She needed to compare total energy bills only"
+        "She needed to compare energy use per square metre"
       ],
       "correctIndex": 3,
       "points": 1
