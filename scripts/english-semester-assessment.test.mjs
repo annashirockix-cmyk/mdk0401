@@ -1241,3 +1241,23 @@ test("V01-V04 ordering keys reflect a defensible real-world sequence", () => {
     assert.deepEqual(task, source.tasks.find(item => item.id === taskId));
   }
 });
+
+
+test("V01-V04 short-text prompts have unambiguous accepted answers", () => {
+  const registry = JSON.parse(fs.readFileSync(path.join(root, "docs/english-final-exam-registry-v1-pilot.json"), "utf8"));
+  const cases = [
+    ["EN-C2-S1-V04", "c2s1v04_v01", "A person who gives advice about education and careers is a career ___.", ["adviser", "counsellor"]],
+    ["EN-C3-S1-V02", "c3s1v02_v01", "A sequence number assigned to a drawing update is its revision ___.", ["number"]],
+    ["EN-C4-S1-V04", "c4s1v04_v01", "A unit commonly used to record electrical energy consumption is the kilowatt-___.", ["hour"]]
+  ];
+  for (const [variantId, taskId, prompt, answers] of cases) {
+    const variant = registry.exams.flatMap(exam => exam.variants).find(item => item.variantId === variantId);
+    const task = variant.variantJSON.tasks.find(item => item.id === taskId);
+    assert.equal(task.prompt, prompt);
+    assert.deepEqual(task.acceptedAnswers, answers);
+    const match = variantId.match(/^EN-C(\d)-S(\d)-V(\d{2})$/);
+    const sourcePath = `docs/english-final-exam-c0${match[1]}-s0${match[2]}-v${match[3]}-pilot.json`;
+    const source = JSON.parse(fs.readFileSync(path.join(root, sourcePath), "utf8"));
+    assert.deepEqual(task, source.tasks.find(item => item.id === taskId));
+  }
+});
