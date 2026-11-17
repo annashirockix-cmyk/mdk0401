@@ -73,6 +73,10 @@ function validateEnglishVprExam_(track, exam) {
       !Array.isArray(exam.tasks) || exam.tasks.length !== expectedTypes.length) {
     throw new Error("Структура экзамена не соответствует утверждённому варианту " + track.toUpperCase() + ".");
   }
+  function validOneBasedIndex(value, length) {
+    const n = Number(value);
+    return Number.isInteger(n) && n >= 1 && n <= length;
+  }
   exam.tasks.forEach(function(task, index) {
     const count = task && task.type === "gap"
       ? (Array.isArray(task.answers) ? task.answers.length : 0)
@@ -83,19 +87,47 @@ function validateEnglishVprExam_(track, exam) {
     if (Number(task.points) !== (index === 6 ? 10 : 5)) {
       throw new Error("Неверное количество баллов в задании " + (index + 1) + ".");
     }
-    if (task.type === "gap" && (!Array.isArray(task.answers) || task.answers.length !== 5)) {
-      throw new Error("В задании " + (index + 1) + " должны быть пять ключей ответов.");
+    if (task.type === "choice") {
+      task.items.forEach(function(item, qi) {
+        const options = Array.isArray(item) && Array.isArray(item[2]) ? item[2] : task.options;
+        if (!Array.isArray(item) || !Array.isArray(options) || options.length < 2 ||
+            !validOneBasedIndex(item[1], options.length)) {
+          throw new Error("В задании 1 некорректный список вариантов или ключ ответа №" + (qi + 1) + ".");
+        }
+      });
+    } else if (task.type === "match") {
+      if (!Array.isArray(task.options) || task.options.length < 2) throw new Error("В задании 2 отсутствует список заголовков.");
+      task.items.forEach(function(item, qi) {
+        if (!Array.isArray(item) || !validOneBasedIndex(item[2], task.options.length)) {
+          throw new Error("В задании 2 некорректный ключ соответствия №" + (qi + 1) + ".");
+        }
+      });
+    } else if (task.type === "gap") {
+      task.answers.forEach(function(answer, qi) {
+        const options = Array.isArray(task.itemOptions) && Array.isArray(task.itemOptions[qi])
+          ? task.itemOptions[qi] : task.options;
+        if (!Array.isArray(options) || options.length < 2 || !validOneBasedIndex(answer, options.length)) {
+          throw new Error("В задании " + (index + 1) + " некорректный список вариантов или ключ пропуска №" + (qi + 1) + ".");
+        }
+      });
+    } else if (task.type === "transform") {
+      task.items.forEach(function(item, qi) {
+        if (!Array.isArray(item) || item.length < 4 || !Array.isArray(item[3]) || !item[3].length ||
+            item[3].some(function(answer) { return typeof answer !== "string" || !answer.trim(); })) {
+          throw new Error("В задании 6 отсутствуют допустимые текстовые ответы №" + (qi + 1) + ".");
+        }
+      });
+    } else if (task.type === "questionnaire") {
+      if (task.items.some(function(question) { return typeof question !== "string" || !question.trim(); })) {
+        throw new Error("В задании 7 обнаружен пустой или некорректный вопрос анкеты.");
+      }
     }
-    if (task.type === "transform" && task.items.some(function(item) {
-      return !Array.isArray(item) || !Array.isArray(item[3]) || !item[3].length;
-    })) throw new Error("В задании 6 отсутствуют допустимые варианты ответов.");
   });
   const duration = Number(exam.time);
   if (!Number.isInteger(duration) || duration < 1 || duration > 180) throw new Error("Продолжительность ВПР должна составлять от 1 до 180 минут.");
   if (Number(exam.maxScore) !== 40) throw new Error("Максимальный балл экзамена должен быть равен 40.");
   return true;
 }
-
 function importEnglishVprBank_(data) {
   const actor = auth_(data);
   if (actor.role !== "admin" && actor.role !== "teacher") throw new Error("Импорт доступен только преподавателю.");
