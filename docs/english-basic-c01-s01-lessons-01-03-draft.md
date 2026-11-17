@@ -266,11 +266,11 @@ I get up at seven on weekdays. I have breakfast and leave home at half past seve
 2. Выберите форму: They (go / goes) home at four.
 3. Исправьте ошибку: He work in the library.
 4. Поставьте always: I am busy on Mondays.
-5. Напишите отрицательное предложение к фразе I study at night. (Отрицательная форма будет подробно разобрана в следующей теме.)
+5. Поставьте наречие usually в правильное место: I study English in the evening.
 
-**Критерии:** по 1 баллу за пункты 1–4; пункт 5 оценивается по смыслу и корректности использования вспомогательного глагола, если он уже изучен.
+**Критерии:** по 1 баллу за каждый пункт.
 
-**Ключ преподавателя:** 1) studies. 2) go. 3) He works in the library. 4) I am always busy on Mondays. 5) I do not study at night / I don't study at night.
+**Ключ преподавателя:** 1) studies. 2) go. 3) He works in the library. 4) I am always busy on Mondays. 5) I usually study English in the evening.
 
 ### 9. Самостоятельная работа
 
