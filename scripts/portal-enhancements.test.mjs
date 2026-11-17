@@ -875,6 +875,7 @@ test("English VPR draft autosave is authenticated, bounded, and restores only st
   assert.match(save, /updatedAttempt\.length > 90000/);
   assert.match(save, /JSON\.stringify\(data\.answers \|\| \[\]\)\.length > 30000/);
   assert.match(save, /attempt\.savedAnswers = saved/);
+  assert.ok(save.includes('if (!/^\\d{1,2}$/.test(str))'), "draft validation must accept numeric option indexes");
   assert.match(bank, /savedAnswers:Array\.isArray\(activeAttempt\.savedAnswers\)/);
   assert.match(api, /saveEnglishVprExamDraft:function/);
   assert.match(engine, /API\.saveEnglishVprExamDraft\(track,attemptId,answers\)/);
