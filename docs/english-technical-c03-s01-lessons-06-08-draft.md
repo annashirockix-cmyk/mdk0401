@@ -514,10 +514,10 @@ Avoid absolute statements such as “titanium is always stronger” or “compos
 ### Practice 1. Complete with comparative forms
 
 1. This material is (light) ______ than the reference material.
-2. The new process is (expensive) ______ than the previous one.
+2. The new process is (expensive) ______ than the previous one. It costs less.
 3. The specification is (important) ______ than a general preference.
 4. This option may be (suitable) ______ for the stated conditions.
-5. No single material is (good) ______ for every application.
+5. This material is (good) ______ than the reference option for the stated requirement.
 
 ## 5. Listening: discussing a hypothetical material choice
 
@@ -594,7 +594,7 @@ Write 100–120 words answering: “Why is material selection a multi-factor dec
 1. What is an alloy?
 2. Name three material families.
 3. Why is density alone insufficient for material selection?
-4. Practice 1: 1 lighter; 2 less/more expensive (depending on intended comparison; specify the meaning); 3 more important; 4 more suitable; 5 good (rewrite as “No single material is best for every application” for a natural comparative-free form).
+4. Practice 1: 1 lighter; 2 less expensive; 3 more important; 4 suitable; 5 better.
 5. Listening: gist A; details 1 A; 2 A; 3 A; 4 A.
 
 **Writing rubric (8 points):** multi-factor explanation 2; correct property vocabulary 2; comparison 1; cautious claim 1; specification reference 1; clarity 1.
