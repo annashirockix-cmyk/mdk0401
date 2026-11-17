@@ -1858,7 +1858,7 @@ test("personal tutoring links are isolated per teacher and shown only to student
   assert.doesNotMatch(block, /settingValue_\("tutoring:"\+courseId\)/);
   const html = read("index.html");
   assert.doesNotMatch(html, /href="#\/tutoring"/);
-  assert.match(html, /tutoring\.js\?v=2/);
+  assert.match(html, /tutoring\.js\?v=3/);
   const ui = read("tutoring.js");
   assert.match(ui, /tutoringHomeCard/);
   assert.match(ui, /Показывать мою ссылку студентам/);
