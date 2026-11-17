@@ -154,27 +154,27 @@ Key words: *production planning, component, process sheet, data, wiring, dimensi
 
 What are the students discussing?
 
-A) How different professional roles contribute to aircraft production.  
-B) How to book a holiday.  
+B) How different professional roles contribute to aircraft production.  
+A) How to book a holiday.  
 C) How to repair a household appliance.
 
 **Second listening — details**
 
 1. What does the technologist prepare?
-   A) a process sheet  
-   B) a passenger ticket  
+   B) a process sheet  
+   A) a passenger ticket  
    C) a weather forecast
 2. What does the programmer help develop?
-   A) a digital tool for production data  
-   B) a new uniform  
-   C) a paper map
+   C) a digital tool for production data  
+   A) a new uniform  
+   B) a paper map
 3. What does the electrician read?
    A) wiring documentation  
    B) a restaurant menu  
    C) a travel brochure
 4. What does the machine-tool operator check?
-   A) dimensions against the drawing  
-   B) passenger names  
+   B) dimensions against the drawing  
+   A) passenger names  
    C) the flight timetable
 
 **Recording script — reveal after listening**
@@ -224,7 +224,7 @@ Add one sentence about why communication between teams matters.
 4. Practice 1: 1 b; 2 c; 3 d; 4 e; 5 a.
 5. Practice 2: 1 P; 2 M; 3 T; 4 E.
 6. Practice 3: 1 carry/transport; 2 describing/documenting; 3 providing/supplying; 4 consistent/reliable.
-7. Listening: gist A; details 1 A, 2 A, 3 A, 4 A.
+7. Listening: gist B; details 1 B, 2 C, 3 A, 4 B.
 
 **Writing/speaking rubric (8 points):** role accuracy 2; correct vocabulary 2; logical sequence 1; purpose language 1; intelligibility 1; team communication point 1.
 
@@ -355,20 +355,20 @@ Review: *forward, rear, above, below, attached to, control surface*. Predict whi
 
 What is the speaker doing?
 
-A) Describing the main parts of an aircraft diagram.  
-B) Giving airport security instructions.  
-C) Explaining how to buy a ticket.
+C) Describing the main parts of an aircraft diagram.  
+A) Giving airport security instructions.  
+B) Explaining how to buy a ticket.
 
 **Second listening — details**
 
 1. What is the main body called?
-   A) fuselage  B) aileron  C) landing gear
+   B) fuselage  A) aileron  C) landing gear
 2. What extends from the fuselage?
-   A) wings  B) cabin seats  C) the rudder only
+   C) wings  A) cabin seats  B) the rudder only
 3. Which part is associated with yaw control?
    A) rudder  B) flap  C) cockpit
 4. What supports the aircraft on the ground?
-   A) landing gear  B) elevator  C) wingtip
+   B) landing gear  A) elevator  C) wingtip
 
 **Recording script**
 
@@ -418,7 +418,7 @@ Each student gives 3–4 sentences. Do not describe real aircraft repair or modi
 3. What does landing gear do?
 4. Practice 1: 1 b; 2 d; 3 c; 4 a; 5 e.
 5. Practice 2: 1 fuselage; 2 wings; 3 landing gear; 4 engine; 5 tail.
-6. Listening: gist A; details 1 A; 2 A; 3 A; 4 A.
+6. Listening: gist C; details 1 B; 2 C; 3 A; 4 B.
 
 **Speaking rubric (8 points):** correct part names 3; correct basic functions 2; location language 1; clear sequence 1; scope/safety awareness 1.
 
@@ -529,27 +529,27 @@ Words: *density, strength, corrosion, manufacturing, specification, requirement*
 
 What are the speakers doing?
 
-A) Comparing two hypothetical material options against requirements.  
-B) Ordering lunch.  
+B) Comparing two hypothetical material options against requirements.  
+A) Ordering lunch.  
 C) Planning a holiday.
 
 **Second listening — details**
 
 1. What is the component for?
-   A) a classroom design exercise  
-   B) an actual aircraft repair  
+   B) a classroom design exercise  
+   A) an actual aircraft repair  
    C) a household decoration
 2. Which properties do they compare?
-   A) density and corrosion behaviour  
-   B) colour and packaging  
-   C) brand and advertising
+   C) density and corrosion behaviour  
+   A) colour and packaging  
+   B) brand and advertising
 3. What does the instructor say is essential?
    A) the approved specification  
    B) personal preference  
    C) the cheapest price alone
 4. What conclusion do they reach?
-   A) they need the full requirements before choosing  
-   B) the lightest option is always correct  
+   B) they need the full requirements before choosing  
+   A) the lightest option is always correct  
    C) they can select a real aircraft material without approval
 
 **Recording script**
@@ -595,7 +595,7 @@ Write 100–120 words answering: “Why is material selection a multi-factor dec
 2. Name three material families.
 3. Why is density alone insufficient for material selection?
 4. Practice 1: 1 lighter; 2 less expensive; 3 more important; 4 suitable; 5 better.
-5. Listening: gist A; details 1 A; 2 A; 3 A; 4 A.
+5. Listening: gist B; details 1 B; 2 C; 3 A; 4 B.
 
 **Writing rubric (8 points):** multi-factor explanation 2; correct property vocabulary 2; comparison 1; cautious claim 1; specification reference 1; clarity 1.
 
