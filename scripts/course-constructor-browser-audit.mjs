@@ -63,7 +63,7 @@ try {
       }),
       submitCustomTest: async payload => {
         window.__submittedCustomAnswers = (payload && payload.answers || []).slice();
-        return { success: true, score: 2, maxScore: 2, percent: 100, grade: 5 };
+        return { success: true, score: 3, maxScore: 3, percent: 100, grade: 5 };
       }
     };
     // Reproduce an admin request finishing after a student has signed in.
