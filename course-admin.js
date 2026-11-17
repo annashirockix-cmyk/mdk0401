@@ -172,7 +172,8 @@
       '<label>Тема</label><select id="lectureTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующая лекция</label><select id="lectureExisting" class="self-input"><option value="">— Новая лекция —</option></select>'+
       '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea>'+
       '<button class="btn" id="saveLectureBtn">Создать лекцию</button> <button class="btn ghost" id="resetLectureBtn" type="button">Очистить форму</button> <button class="btn ghost" id="deleteLectureBtn" type="button" disabled>Удалить выбранную</button> <span id="lectureStatus" aria-live="polite"></span></div>'+
-      '<div class="module"><h3>3. Дополнительные тесты</h3><p style="color:var(--muted)">Можно создавать тесты, загружать ранее сохранённые тесты для изменения, просматривать формулировки всех заданий и правильные ответы.</p>'+
+      '<div class="module"><h3>3. Файлы учебных материалов</h3><p style="color:var(--muted)">Загрузка PDF и Word-документов в закрытое хранилище. Документы будут доступны студентам только при открытой теме.</p><label>Тема</label><select id="fileTopic" class="self-input"></select><input id="fileTitle" class="self-input" placeholder="Название документа" style="margin:8px 0"><input id="courseMaterialFile" class="self-input" type="file" accept="application/pdf,.pdf,application/msword,.doc,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx" style="display:block;width:100%;margin:8px 0"><small>PDF, DOC или DOCX, до 7 МБ на файл.</small><br><button class="btn" id="uploadCourseMaterialBtn" type="button">Загрузить документ</button> <span id="courseFileStatus" aria-live="polite"></span><div id="courseFileList" style="margin-top:12px"></div></div>'+
+      '<div class="module"><h3>4. Дополнительные тесты</h3><p style="color:var(--muted)">Можно создавать тесты, загружать ранее сохранённые тесты для изменения, просматривать формулировки всех заданий и правильные ответы.</p>'+
       '<label>Тема</label><select id="testTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующий тест</label><select id="testExisting" class="self-input"><option value="">— Новый тест —</option></select>'+
       '<input id="testTitle" class="self-input" placeholder="Название теста" style="margin:8px 0"><div id="questionDrafts"></div>'+
       '<div class="module" style="padding:12px;margin:12px 0"><h4>Добавить / изменить вопрос</h4><textarea id="qText" class="self-input" rows="2" placeholder="Текст вопроса"></textarea>'+
@@ -181,7 +182,7 @@
       '<button class="btn ghost" id="addQuestionBtn" style="margin-top:10px">Добавить вопрос в тест</button> <button class="btn ghost" id="cancelQuestionEditBtn" type="button">Отмена изменения вопроса</button></div>'+
       '<button class="btn" id="saveTestBtn">Создать тест</button> <button class="btn ghost" id="resetTestBtn" type="button">Новый тест</button> <button class="btn ghost" id="deleteTestBtn" type="button" disabled>Удалить выбранный тест</button> <button class="btn ghost" id="previewTestBtn" type="button">Просмотреть задания и ответы</button> <span id="testStatus" aria-live="polite"></span><div id="testPreview" style="margin-top:12px"></div></div>'+
       '<div class="module"><h3>4. Сохранённые материалы темы</h3><p style="color:var(--muted)">Список обновляется после сохранения. Выберите тему выше, чтобы увидеть её лекции и тесты.</p><div id="savedMaterials">Загрузка материалов…</div></div>';
-    const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),testSel=document.getElementById("testTopic");
+    const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),testSel=document.getElementById("testTopic"),fileTopicSel=document.getElementById("fileTopic");
     let lectureId="",testId="",draft=[],editingQuestion=-1;
     const $=id=>document.getElementById(id);
     function refreshContent(done){
@@ -196,7 +197,7 @@
     function records(type,topicId){const key=type==="lecture"?"lectures":"tests";return (window.customContent[key]||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===topicId);}
     function fillTopics(){
       const opts=topics().map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
-      topicSel.innerHTML=opts;testSel.innerHTML=opts;
+      topicSel.innerHTML=opts;testSel.innerHTML=opts;fileTopicSel.innerHTML=opts;
       renderSaved();
     }
     function renderSaved(){
@@ -207,8 +208,11 @@
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
       const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
       const fs=(window.customContent.flashcards||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
+      const docs=(window.customContent.files||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===fileTopicSel.value);
       $("lectureExisting").innerHTML='<option value="">— Новая лекция —</option>'+ls.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
       $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
+      $("courseFileList").innerHTML='<h4>Документы темы ('+docs.length+')</h4>'+(docs.length?docs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>📄 '+esc(x.title)+'</b> · '+esc(x.name||"файл")+' <button class="btn ghost open-course-file" data-id="'+esc(x.id)+'">Открыть / скачать</button></div>').join(""):'<p>Документы не загружены.</p>');
+      $("courseFileList").querySelectorAll(".open-course-file").forEach(b=>b.onclick=()=>openCourseMaterialFile(b.dataset.id));
       $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button></div>').join(""):'<p>Лекций пока нет.</p>')+
         '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>')+
         '<h4 style="margin-top:16px">Карточки ('+fs.length+')</h4>'+(fs.length?fs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.cards||[]).length)+' карточек · '+esc(x.track||"all")+' <button class="btn ghost pick-flashcards" data-id="'+esc(x.id)+'">Открыть конструктор</button></div>').join(""):'<p>Наборов карточек пока нет.</p>');
@@ -216,6 +220,8 @@
       $("savedMaterials").querySelectorAll(".pick-test").forEach(b=>b.onclick=()=>{ $("testExisting").value=b.dataset.id;loadTest();$("previewTestBtn").click();});
       $("savedMaterials").querySelectorAll(".pick-flashcards").forEach(b=>b.onclick=()=>{window.state.activeCourseId=courseSel.value;if(window.saveStudentData)window.saveStudentData();location.hash="#/flashcard-editor";});
     }
+    function readCourseMaterialFile(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||"").split(",")[1]||"");reader.onerror=()=>reject(new Error("Не удалось прочитать файл."));reader.readAsDataURL(file);});}
+    function openCourseMaterialFile(id){window.API.getCourseMaterialFile(id).then(r=>{if(!r||!r.success)throw new Error(r&&r.error||"Не удалось получить документ.");const bytes=Uint8Array.from(atob(r.data),ch=>ch.charCodeAt(0)),blob=new Blob([bytes],{type:r.mimeType||"application/octet-stream"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=r.name||"document";a.target="_blank";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}).catch(e=>window.showToast?window.showToast(e.message,"err"):alert(e.message));}
     function resetLecture(){
       lectureId="";$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
       $("saveLectureBtn").textContent="Создать лекцию";$("deleteLectureBtn").disabled=true;$("lectureStatus").textContent="";
@@ -251,6 +257,23 @@
     courseSel.onchange=()=>{resetLecture();resetTest();fillTopics();};
     topicSel.onchange=()=>{resetLecture();renderSaved();};
     testSel.onchange=()=>{resetTest();renderSaved();};
+    fileTopicSel.onchange=renderSaved;
+    $("uploadCourseMaterialBtn").onclick=async function(){
+      const file=$("courseMaterialFile").files[0],title=$("fileTitle").value.trim(),status=$("courseFileStatus");
+      if(!file||!title||!fileTopicSel.value){status.textContent="Выберите тему, укажите название и выберите файл.";return;}
+      if(file.size>7*1024*1024){status.textContent="Размер файла не должен превышать 7 МБ.";return;}
+      const allowed=["application/pdf","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      if(!allowed.includes(file.type)){status.textContent="Поддерживаются только PDF, DOC и DOCX.";return;}
+      this.disabled=true;status.textContent="Загрузка…";
+      try{
+        const data=await readCourseMaterialFile(file);
+        const result=await window.API.uploadCourseMaterialFile({mdkId:courseSel.value,topicId:fileTopicSel.value,title:title,name:file.name,mimeType:file.type,data:data});
+        if(!result||!result.success)throw new Error(result&&result.error||"Не удалось загрузить файл.");
+        $("courseMaterialFile").value="";$("fileTitle").value="";status.textContent="Документ загружен ✓";
+        await new Promise(resolve=>refreshContent(resolve));
+      }catch(e){status.textContent=e.message||"Ошибка загрузки.";}
+      finally{this.disabled=false;}
+    };
     $("lectureExisting").onchange=loadLecture;
     $("testExisting").onchange=loadTest;
     $("resetLectureBtn").onclick=resetLecture;
