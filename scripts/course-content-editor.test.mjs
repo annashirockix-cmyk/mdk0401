@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import vm from "node:vm";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -64,6 +65,20 @@ test("short text questions are rendered and scored on the server", () => {
  assert.ok(server.includes('toLocaleLowerCase("ru")'));
  assert.ok(server.includes("const textExpected=q.correctAnswer!==undefined?q.correctAnswer"));
  assert.ok(server.includes("normalize(answer)===normalize(textExpected)"));
+});
+
+test("short text scoring uses the explicit answer key and normalizes case and whitespace", () => {
+ const server = read("Code.gs");
+ const start = server.indexOf("function scoreBuiltInQuestion_(q,answer) {");
+ const end = server.indexOf("\nfunction ", start + 10);
+ assert.ok(start >= 0 && end > start, "Server scoring function must be present");
+ const source = server.slice(start, end);
+ const score = vm.runInNewContext(source + "\nscoreBuiltInQuestion_", {
+  sameAnswer_: (left, right) => JSON.stringify(left) === JSON.stringify(right)
+ });
+ const question = { type: "short_text", correct: 0, correctAnswers: [], correctAnswer: "Ньютон" };
+ assert.equal(score(question, "  НЬЮТОН  "), true);
+ assert.equal(score(question, "Джоуль"), false);
 });
 
 test("flashcard constructor saves and reopens saved sets", () => {
