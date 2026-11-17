@@ -147,7 +147,7 @@
 | 77 | D | With “neither…nor”, agreement commonly follows the nearer singular subject “supervisor”; verify house style if teaching an alternative convention. |
 | 78 | C | Non-conformance is failure to satisfy a defined requirement. |
 | 79 | B | The sentence is grammatical, precise and includes time and verification context. |
-| 80 | A | Traceability depends on a dated, attributable record linked to the task and equipment. |
+| 80 | A | An identifiable author and date/time make the entry attributable and help distinguish who recorded it and when. |
 
 ## Review checklist
 
