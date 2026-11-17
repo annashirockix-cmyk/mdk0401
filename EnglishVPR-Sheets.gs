@@ -341,6 +341,7 @@ function saveEnglishVprExamDraft_(data) {
     if (!raw) throw new Error("Время попытки истекло. Черновик больше нельзя сохранить.");
     const attempt = JSON.parse(raw);
     if (attempt.email !== user.email || attempt.track !== track || attempt.courseId !== courseId) throw new Error("Попытка не принадлежит этой учётной записи.");
+    if (!attempt.stableKey || cache.get(String(attempt.stableKey)) !== attemptId) throw new Error("Эта попытка больше не активна.");
     if (attempt.processing === true) throw new Error("Ответы уже отправляются на проверку.");
     const exam = attempt.exam;
     validateEnglishVprExam_(track, exam);
@@ -379,8 +380,10 @@ function saveEnglishVprExamDraft_(data) {
     if (serialized.length > 20000) throw new Error("Черновик превышает допустимый размер.");
     attempt.savedAnswers = saved;
     attempt.savedAt = Date.now();
+    const updatedAttempt = JSON.stringify(attempt);
+    if (updatedAttempt.length > 90000) throw new Error("Не удалось сохранить: превышен безопасный размер черновика.");
     const remainingTtl = Math.max(1, Math.min(7200, Math.ceil((Number(attempt.startedAt) + (allowed + 300) * 1000 - Date.now()) / 1000)));
-    cache.put(key, JSON.stringify(attempt), remainingTtl);
+    cache.put(key, updatedAttempt, remainingTtl);
     return {success:true,savedAt:attempt.savedAt};
   } finally {
     lock.releaseLock();
