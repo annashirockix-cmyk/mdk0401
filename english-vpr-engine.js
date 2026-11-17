@@ -273,6 +273,7 @@
           draftStatus.textContent = "Сохранено на сервере";
         }
       }).catch(function(error) {
+        if (revision === draftRevision) draftDirty = false;
         draftStatus.textContent = "Не удалось сохранить автоматически. Ответы останутся в форме до отправки.";
         console.warn("English VPR draft save failed",error);
       }).finally(function() {
