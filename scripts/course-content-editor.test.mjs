@@ -10,7 +10,7 @@ test("custom lecture and test content has one student rendering path", () => {
  const editor = read("course-admin.js");
  const html = read("index.html");
  const sw = read("service-worker.js"); const css = read("style.css"); const enrichment = read("lecture-enrichment.js");
- assert.ok(html.includes("course-admin.js?v=24"));
+ assert.ok(html.includes("course-admin.js?v=25"));
  assert.ok(app.includes("customTopicLectures"));
  assert.ok(app.includes("customTopicTests"));
  assert.ok(app.includes("window.startCustomInlineTest"));
@@ -335,4 +335,7 @@ test("custom numeric questions accept decimal input, validate tolerance and scor
  assert.ok(server.includes("return String(value == null ? \"\" : value).trim();"));
  assert.ok(server.includes("Math.abs(actual-target)<=tolerance"));
  assert.ok(server.includes("!Number.isFinite(tolerance)||tolerance<0"));
+ assert.ok(server.includes("expected=q.correctAnswer!==undefined?q.correctAnswer"));
+ assert.ok(server.includes("delete safe.extra; delete safe.tolerance;"));
+ assert.ok(server.includes("actualText=String(answer==null?\"\":answer).trim().replace(\",\", \".\")"));
 });
