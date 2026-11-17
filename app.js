@@ -287,7 +287,6 @@ window.loadGlobalCustomContent = function(callback) {
                 });
                 var hours = Math.max(1, Math.floor(snapshot.ageMs / 3600000));
                 if (window.showToast) window.showToast("Нет связи. Открыты сохранённые лекции и файлы (" + hours + " ч. назад).", "info");
-                finish();
             }).catch(function(cacheError) {
                 console.warn("Офлайн-кэш материалов недоступен", cacheError);
             }).then(function() {
