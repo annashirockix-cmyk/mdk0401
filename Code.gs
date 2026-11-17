@@ -1821,6 +1821,7 @@ function getCustomContent_(data) {
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
     // Never expose the private Drive file ID in the general content feed.
     delete payload.driveFileId;
+    delete payload.uploadedBy;
 
     // Student sessions receive test prompts and options only. Answer keys remain server-side.
     if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
