@@ -57,6 +57,17 @@
    move(line,"### Teacher answer key");
    return prefix;
   });
+  // Move answer-only headings used by older technical drafts.
+  var answerSection=/(^|\n)([ \t]*#{2,4}\s*(?:\d+\.\s*)?(?:Self-check\s*[—–-]\s*answers|Suggested teacher key|Suggested answers|Answers for teachers?)\s*\n[\s\S]*?)(?=\n(?:#{1,4}\s|---\s*$)|$)/gi;
+  student=student.replace(answerSection,function(full,prefix,body){
+   move(body,"### Teacher answer key");
+   return prefix;
+  });
+  var suggestedAnswers=/(^|\n)([ \t]*Suggested answers\s*:\s*[^\n]*(?:\n(?![ \t]*(?:#{1,4}\s|\*\*|---|\s*$))[^\n]*)*)/gi;
+  student=student.replace(suggestedAnswers,function(full,prefix,body){
+   move(body,"### Teacher suggested answers");
+   return prefix;
+  });
   // Some technical lessons use a numbered "Self-check and teacher key" block:
   // retain the first three student prompts and move the explicitly keyed remainder.
   student=student.replace(/^##\s+(\d+)\.\s+Self-check (?:and teacher key|and key)\s*\n([\s\S]*?)(?=\n##\s|\n---\s*$)/gm,function(full,num,body){
