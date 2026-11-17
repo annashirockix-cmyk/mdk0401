@@ -10,11 +10,11 @@
 - C. summarizes
 - D. summarizing
 
-**142.** What does *traceability* mean in quality management?
-- A. The ability to follow the history, location or use of an item or record
-- B. The ability to change a product's colour
-- C. The time needed to transport a product
-- D. The number of employees in a department
+**142.** What does *first-pass yield* measure in a production process?
+- A. The proportion of units that meet requirements without rework on the first pass
+- B. The total number of employees on the production line
+- C. The time needed to approve a drawing revision
+- D. The number of machines installed in the workshop
 
 **143.** Complete the sentence: “The replacement sensor is suitable ___ use in the stated temperature range.”
 - A. for
@@ -129,7 +129,7 @@
 | No. | Key | Rationale |
 |---:|:---:|---|
 | 141 | A | “Findings” is plural and takes “are summarized”. |
-| 142 | A | Traceability links an item or record to its relevant history and movement. |
+| 142 | A | First-pass yield is the proportion of units that meet requirements on the first pass without rework. |
 | 143 | A | The standard construction is “suitable for use”. |
 | 144 | B | 7.5 bar is below the stated maximum of 8 bar. The item tests reading a stated limit, not an operating recommendation. |
 | 145 | B | The sentence is a clear and polite request for confirmation. |
