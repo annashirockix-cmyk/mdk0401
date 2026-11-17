@@ -46,7 +46,7 @@
         "The laboratory windows were left open overnight",
         "Students left windows open during lessons"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "A new system for booking laboratories",
         "A rota for cleaning the laboratory"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {
