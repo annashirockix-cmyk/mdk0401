@@ -33,7 +33,7 @@
         "Their private messages",
         "Their online shopping preferences"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "points": 1
     },
     {
@@ -46,7 +46,7 @@
         "A photograph showing his student card number",
         "A comment about a college event"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "Only friends can save a copy of a post",
         "Deleting a post guarantees that no one can save it."
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {
