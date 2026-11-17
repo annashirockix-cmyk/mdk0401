@@ -46,7 +46,7 @@
         "To measure only during the evening rush",
         "To collect readings only when the weather was clear"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "points": 1
     },
     {
@@ -59,7 +59,7 @@
         "They had measured only one road",
         "The results proved traffic was the only cause"
       ],
-      "correctIndex": 3,
+      "correctIndex": 1,
       "points": 1
     },
     {
