@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What can visitors submit at the entrance?",
       "audioText": "The town planning department is inviting students to a presentation about adapting public spaces to hotter summers. The event will be held at the civic centre on Thursday at half past five. The planner will discuss shade, drinking-water points and tree planting. Visitors can submit questions on paper at the entrance or through the council website.",
       "options": [
-        "On Friday",
+        "A completed feedback form",
         "Questions on paper",
-        "Next month",
-        "After the event"
+        "A registration card",
+        "A copy of the presentation"
       ],
       "correctIndex": 1,
       "points": 1
