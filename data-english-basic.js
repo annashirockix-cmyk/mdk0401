@@ -460,33 +460,102 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit4", "Unit 4", "Ecology",
             [
               lec("4.1", "Grammar: Conditionals & Reported Speech", `
-                <h3>1. Условные предложения (Conditionals)</h3>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Тип</th><th style="border:1px solid var(--border); padding:5px;">Формула</th><th style="border:1px solid var(--border); padding:5px;">Пример</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">Тип I (Реальное)</td><td style="border:1px solid var(--border); padding:5px;">If + Present Simple, will + V1</td><td style="border:1px solid var(--border); padding:5px;">If machine parts are oiled, they will not rust.</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">Тип II (Маловероятное)</td><td style="border:1px solid var(--border); padding:5px;">If + Past Simple, would + V1</td><td style="border:1px solid var(--border); padding:5px;">If I had time, I would help you.</td></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">Тип III (Нереальное)</td><td style="border:1px solid var(--border); padding:5px;">If + Past Perfect, would have + V3</td><td style="border:1px solid var(--border); padding:5px;">If they had checked the drawing, they would have avoided the mistake.</td></tr>
-                </table>
-                <h3>2. Согласование времен (Sequence of Tenses)</h3>
-                <p>Если сказуемое главного предложения стоит в прошедшем времени, то в придаточном время сдвигается на шаг назад (Present → Past, Past → Past Perfect, Future → Future in the Past).</p>
-                <h3>3. Косвенная речь (Reported Speech)</h3>
-                <p>При переводе вопросов в косвенную речь порядок слов становится прямым. Общие вопросы вводятся союзом <i>if</i> или <i>whether</i>, специальные — вопросительным словом.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится различать основные типы условных предложений и передавать высказывания, вопросы и инструкции в косвенной речи. Особое внимание уделяется смыслу конструкции и выбору времени, а не механическому сдвигу форм.</p>
+<h3>1. Conditionals — условные предложения</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Тип</th><th>Форма</th><th>Значение</th><th>Пример</th></tr>
+<tr><td>Zero</td><td>If + Present, Present</td><td>общий факт, закономерность</td><td>If water reaches 100°C at standard pressure, it boils.</td></tr>
+<tr><td>First</td><td>If + Present, will + V1</td><td>реальное возможное будущее</td><td>If the team checks the file, it will find the latest version.</td></tr>
+<tr><td>Second</td><td>If + Past, would + V1</td><td>воображаемая или маловероятная ситуация</td><td>If I had more time, I would revise the report.</td></tr>
+<tr><td>Third</td><td>If + Past Perfect, would have + V3</td><td>нереальное прошлое, сожаление/альтернативный результат</td><td>If they had checked the units, they would have avoided the error.</td></tr>
+</table>
+<p>В First Conditional обычно не ставят will сразу после if: <i>If it rains, we will stay inside.</i> Во Second Conditional форма <i>were</i> возможна со всеми лицами в более формальном стиле: <i>If I were the team leader…</i> В Third Conditional обе части относятся к воображаемому прошлому.</p>
+<h3>2. Reported Speech — косвенная речь</h3>
+<p>Косвенная речь передаёт содержание слов другого человека. Если вводный глагол стоит в прошедшем времени, форма часто сдвигается назад, если точка отсчёта изменилась:</p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Прямая речь</th><th>Косвенная речь</th></tr>
+<tr><td>“I am ready.”</td><td>She said (that) she was ready.</td></tr>
+<tr><td>“We checked the file.”</td><td>They said they had checked the file.</td></tr>
+<tr><td>“I will call you.”</td><td>He said he would call me.</td></tr>
+<tr><td>“I can help.”</td><td>She said she could help.</td></tr>
+</table>
+<p>Сдвиг времени не обязателен, если факт остаётся верным или говорящий сохраняет исходную точку отсчёта: <i>The teacher said that water boils at 100°C at standard pressure.</i></p>
+<h3>3. Косвенные вопросы и инструкции</h3>
+<p>В косвенном вопросе используется прямой порядок слов: <i>“Where is the lab?” → He asked where the lab was.</i> Общий вопрос вводится if/whether: <i>“Are you ready?” → She asked if we were ready.</i> Не используйте do/does/did в косвенном вопросе.</p>
+<p>Просьбы и инструкции часто передаются конструкцией <i>ask/tell + object + (not) to + verb</i>: <i>“Please check the date.” → The teacher asked us to check the date.</i> / <i>“Do not open the file.” → He told us not to open the file.</i></p>
+<h3>4. Практика</h3>
+<p><b>Задание A. Выберите тип:</b> 1) If metal gets hot, it expands. 2) If I finish early, I will call you. 3) If I knew the answer, I would tell you. 4) If they had saved the file, they would not have lost it.</p>
+<p><b>Задание B. Поставьте глагол в нужную форму:</b> 1) If the bus (be) late, we (wait) inside. 2) If I (have) a new laptop, I (install) the programme. 3) If the team (check) the drawing, it (notice) the error.</p>
+<p><b>Задание C. Передайте косвенно:</b> 1) “The results are ready,” she said. 2) “Where is the timetable?” he asked. 3) “Do not touch the equipment,” the instructor said.</p>
+<h3>5. Самопроверка и ключ преподавателя</h3>
+<ol><li>Zero; First; Second; Third.</li><li>is / will wait; had / would install; had checked / would have noticed.</li><li>She said that the results were ready. He asked where the timetable was. The instructor told us not to touch the equipment.</li></ol>
+<p><b>Самостоятельная работа:</b> придумайте по одному примеру каждого типа условного предложения на тему учёбы и безопасности; затем запишите короткий диалог из четырёх реплик и передайте две реплики в косвенной речи.</p>
+`),
               lec("4.2", "Reading: Environmental Protection", `
-                <h3>Text: Ecology</h3>
-                <p>About two hundred years ago man lived in harmony with nature because industry was not so much developed. Today the situation is quite different: the contradictions between man and nature are dramatic. The intensive development of science, industry and chemistry during the last century resulted in the global pollution of the environment.</p>
-                <p>Now many parts of the world are overcrowded. Rapid growth of population increases the pollution of the environment greatly. People living in big cities suffer from smog. Factories, electric power stations, the chemical industry and heavy industry throw out into atmosphere billions tons of dust and harmful substances. Much of this waste is carried by winds for great distances. The destruction of the ozone layer could lead our planet to a global catastrophe.</p>
-                <p>In recent years the pollution problems have received great publicity. People all over the world are worried about what is happening to the environment. Newspapers and magazines write about water, air and land pollution. The protection of nature is becoming a political program of every country. The Earth is our home that's why we must take care of it and keep it clean for ourselves and for the next generations.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать текст о воздействии человека на окружающую среду, различать причины и последствия, использовать лексику по теме экологии и формулировать предложения по снижению воздействия на окружающую среду.</p>
+<h3>1. Reading: Environmental Challenges</h3>
+<p>Human activities affect air, water, soil and ecosystems. Transport, energy production, agriculture, construction and industry can create emissions, waste and pressure on natural resources. The scale and type of impact depend on technology, local conditions, regulation and everyday choices.</p>
+<p>Air pollution may be caused by particles and gases released by vehicles, heating systems and industrial processes. Water quality can be affected by untreated wastewater, agricultural runoff and accidental releases. Waste creates additional problems when materials are not reused, recycled or safely managed. Some pollutants remain in the environment for a long time and can move through food chains.</p>
+<p>Environmental protection includes prevention, monitoring, efficient use of resources, treatment of emissions and waste, restoration of damaged areas and public information. No single measure solves every problem. Decisions should be based on reliable measurements and an understanding of possible consequences. Individuals, businesses and public authorities all have roles to play.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>emission</td><td>выброс</td><td>Vehicle emissions can affect air quality.</td></tr>
+<tr><td>particle</td><td>частица</td><td>Fine particles can remain in the air.</td></tr>
+<tr><td>wastewater</td><td>сточные воды</td><td>Wastewater must be treated appropriately.</td></tr>
+<tr><td>runoff</td><td>поверхностный сток</td><td>Agricultural runoff may carry nutrients into rivers.</td></tr>
+<tr><td>ecosystem</td><td>экосистема</td><td>An ecosystem includes living organisms and their environment.</td></tr>
+<tr><td>renewable resource</td><td>возобновляемый ресурс</td><td>Some energy sources are renewable.</td></tr>
+<tr><td>to reduce / prevent</td><td>сокращать / предотвращать</td><td>Better planning can reduce waste.</td></tr>
+<tr><td>monitoring</td><td>мониторинг, наблюдение</td><td>Monitoring helps identify changes.</td></tr>
+</table>
+<h3>3. Language focus: cause, effect and solutions</h3>
+<p>Причина: <i>because, due to, as a result of</i>. Следствие: <i>therefore, as a result, this can lead to</i>. Предложение: <i>One possible measure is…; The impact could be reduced by…</i></p>
+<p>Пассивный залог часто используется в научных и общественных текстах: <i>Wastewater is treated before discharge. Air quality is monitored by local authorities.</i></p>
+<h3>4. Reading comprehension</h3>
+<ol><li>Name four areas of the environment mentioned in the text.</li><li>Give two possible sources of air pollution.</li><li>How can water quality be affected?</li><li>Why can waste be a long-term problem?</li><li>Why should decisions be based on reliable measurements?</li><li>Name three groups that have a role in environmental protection.</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Соотнесите причину и возможное следствие:</b> untreated wastewater; excessive material use; vehicle emissions; poor waste sorting. Используйте понятия water quality, resource use, air quality, recycling.</p>
+<p><b>Задание B. Дополните связками:</b> 1) The factory installed filters. ___, some emissions were reduced. 2) The river was polluted ___ untreated wastewater. 3) Waste should be sorted; ___, useful materials can be recovered.</p>
+<p><b>Задание C. Предложите три меры для колледжа: saving energy, reducing paper use, sorting waste, responsible transport. Для каждой объясните ожидаемый эффект.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Air, water, soil and ecosystems.</li><li>Vehicles, heating systems or industrial processes.</li><li>Untreated wastewater, agricultural runoff or accidental releases.</li><li>Some materials/pollutants remain for a long time and may affect ecosystems.</li><li>To understand the real scale and possible consequences of the impact.</li><li>Individuals, businesses and public authorities.</li><li>Задание B: As a result; due to; therefore/as a result.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о конкретной экологической проблеме. Структура: проблема → причины → последствия → две реалистичные меры. Не приводите статистику без проверенного источника.</p>
+`),
               lec("4.3", "Reading Practice: The Speed Limit", `
-                <h3>Text: The Speed Limit</h3>
-                <p>Before the World War II the speed of aircraft was far below the speed of sound. Today we have supersonic aircraft. Radio waves propagate at the velocity of light. Could we perhaps create "superlight" telegraphy to send signals at velocities greater than the velocity of light? No, that is an impossible thing to do. Since the experiment disproves the absolute nature of time, we conclude that signal transmission cannot be instantaneous. The velocity of transmission from one point of space to another can't be infinite, in other words, can't be greater than some ultimate value, the latter being called the speed limit. This speed limit concurs with the light velocity.</p>
-                <p>Indeed, according to the principles of the relativity of motion the laws of nature will be the same for all the laboratories moving relatively to each other. The affirmation that no velocity can be greater than the given limit is also the law of Nature and, therefore, the value of the speed limit should be exactly similar in different laboratories. The light velocity is known to possess the same qualities. Thus, the speed of light is not merely the speed of propagation of a natural phenomenon. It plays the important part of being the top velocity. The discovery of the existence of the top velocity in the Universe is one of the greatest triumphs of human genius and of the experimental capacity of the mankind.</p>
-                <p>In the 19th century physicists were unable to perceive that a top speed existed and that its existence could be proved. Moreover, if they had stumbled upon it by chance in their experiments, they wouldn't have been sure that it was a law of nature and not merely the effect of their limited experimental capacity.</p>
-                <p>To assume that technological development will enable us to attain velocities greater than the velocity of light is just as ridiculous as to suggest that the absence of points on the Earth's surface more than 20 thousand kilometers apart is not a geographical law, but the upshot of our limited knowledge, and to hope that some day, when geography makes further advances, we will be able to find points on the Earth that are still farther apart.</p>
-                <p>Light velocity is sure to play such an exceptional part in nature exactly because it is the top velocity for the propagation of anything. Light either outstrips all other phenomena, or, at the outside, arrives simultaneously with them.</p>
-                <p>If the Sun should split in two and form two stars, the motion of the Earth would, naturally, suffer a change as well. The 19th century physicists, who didn't know that the top velocity existed in nature, would certainly assume that the Earth changed its motion instantly after the Sun split in two. Yet it would have taken light all of eight minutes to cover the distance from the split Sun to the Earth. The change in the Earth's rotary motion would begin eight minutes after the Sun split up. Until that moment, the Earth would continue to move as if the Sun had not split. Anything that may occur with or on the Sun will not affect the Earth or its motion until eight minutes later.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Студент научится понимать научно-популярный текст о предельной скорости передачи информации, извлекать основные положения, объяснять причинно-следственные связи и использовать лексику для описания скорости, расстояния и времени.</p>
+<h3>1. Reading: The Speed of Light as a Limit</h3>
+<p>In everyday life, speeds can be compared with the speed of a car, a train or an aircraft. In modern physics, the speed of light in a vacuum is approximately 300,000 kilometres per second. According to the theory of special relativity, this speed is a fundamental limit for the transfer of information and causal influence. An object with mass cannot be accelerated to the speed of light in a vacuum.</p>
+<p>This does not mean that every object moves at the same speed. Light travels at the same speed in a vacuum for all inertial observers, while measured distances and time intervals depend on the observer's motion. These ideas are described by special relativity. The theory is supported by many experiments and is used in modern physics and technologies such as satellite navigation, where very accurate timing is essential.</p>
+<p>The Sun is about 150 million kilometres from the Earth. Sunlight takes a little over eight minutes to reach us. If the Sun changed in a way that affected the light reaching Earth, we would not observe that change immediately; the information would travel at the speed of light. This example helps explain why physical effects cannot be treated as instantaneous over large distances.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>speed</td><td>скорость</td><td>The speed of light in a vacuum is very high.</td></tr>
+<tr><td>distance</td><td>расстояние</td><td>The distance is measured in kilometres.</td></tr>
+<tr><td>vacuum</td><td>вакуум</td><td>Light travels through a vacuum.</td></tr>
+<tr><td>to transfer information</td><td>передавать информацию</td><td>A signal transfers information.</td></tr>
+<tr><td>causal influence</td><td>причинное воздействие</td><td>Relativity limits the speed of causal influence.</td></tr>
+<tr><td>observer</td><td>наблюдатель</td><td>Different observers may measure different time intervals.</td></tr>
+<tr><td>approximately</td><td>приблизительно</td><td>The distance is approximately 150 million kilometres.</td></tr>
+<tr><td>instantaneous</td><td>мгновенный</td><td>Information is not transferred instantaneously.</td></tr>
+</table>
+<h3>3. Language focus: quantities and cautious statements</h3>
+<p>Для приблизительных величин используйте <i>about, approximately, roughly, a little over</i>. Для сравнения: <i>faster than, slower than, as fast as</i>. Для осторожных научных утверждений: <i>according to, the theory predicts, experiments support, approximately</i>.</p>
+<p>Не путайте скорость и ускорение: <i>speed</i> — быстрота движения; <i>acceleration</i> — изменение скорости по величине или направлению. Скорость обычно выражается в m/s или km/h.</p>
+<h3>4. Reading comprehension</h3>
+<ol><li>What is the approximate speed of light in a vacuum?</li><li>What does special relativity identify as a fundamental limit?</li><li>Can an object with mass reach the speed of light in a vacuum?</li><li>How long does sunlight take to reach Earth?</li><li>Why is satellite navigation mentioned?</li><li>What does the word “approximately” tell the reader?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите правильное слово:</b> 1) speed / distance is measured in kilometres per second. 2) Acceleration / observer describes a change in velocity. 3) Light travels in a vacuum / timetable.</p>
+<p><b>Задание B. Передайте смысл с помощью приблизительных выражений:</b> “The distance is 150 million kilometres.” Используйте about или approximately.</p>
+<p><b>Задание C. Обсудите:</b> почему сообщение с большого расстояния нельзя получить мгновенно? Используйте слова signal, distance, speed, information.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol><li>Approximately 300,000 kilometres per second.</li><li>The speed of light in a vacuum for information transfer and causal influence.</li><li>No.</li><li>A little over eight minutes.</li><li>Because accurate timing is important in satellite navigation.</li><li>It indicates that the value is not exact.</li><li>Задание A: speed; acceleration; vacuum.</li></ol>
+<p><b>Самостоятельная работа:</b> подготовьте краткое объяснение на 80–100 слов о разнице между speed и acceleration. Включите два примера с единицами измерения и используйте приблизительные выражения.</p>
+`)
             ],
             [],
             [],
