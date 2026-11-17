@@ -87,3 +87,13 @@ The five-year map and final-exam blueprint files exist in the repository, but bo
 - The keyed meaning remains “separate the circuit from its energy supply”.
 - The teacher-key rationale now explicitly states that this definition is not a substitute for the approved isolation procedure and verification by authorised personnel.
 - This wording correction reduces the risk of students treating a one-line vocabulary definition as practical electrical-safety instruction. An electrical subject specialist must still validate the term against the college's approved teaching reference before release.
+
+
+## 4C. Technical authoring-pool semantic recurrence screen — 2026-11-17
+
+A cross-batch editorial screen of the 200 Technical draft items identified two repeated narrow language targets that were not caught by exact-stem matching:
+
+- Q94 and Q143 both tested the same collocation, *compatible with*. Q143 has been rewritten to test *suitable for use* (the sentence is now about a replacement sensor and a stated temperature range); the keyed position remains A and the teacher rationale is synchronized.
+- Q123 and Q163 both tested *notify someone of* a change. Q163 has been rewritten to test the distinct phrase *ahead of schedule* in a short delivery update; the keyed position remains A and the teacher rationale is synchronized.
+
+The changes are limited to the Technical authoring drafts v8 and v9. They do not alter the final-exam pilot registry, protected VPR banks, Google Sheets, Apps Script, or student-facing portal. The remaining 200-item semantic review is still editorial and provisional: repeated broad themes (document control, non-conformity, measurement evidence, technical reporting) are intentional curriculum strands unless an individual item repeats the same assessed skill too closely. A full comparison against protected VPR variants is still outstanding.
