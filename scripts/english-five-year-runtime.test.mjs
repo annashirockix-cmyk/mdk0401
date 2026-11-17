@@ -152,3 +152,21 @@ test("listening practice shuffles every option set and remaps the correct answer
   assert.equal(prepared[1].options[prepared[1].answerIndex], "west");
   assert.equal(JSON.stringify(source), before, "source catalogue must remain unchanged");
 });
+
+test("course 1–3 lecture students do not receive recording scripts, transcript reveals or compact answer keys", () => {
+  const window = loadEnglishRuntime();
+  const active = [window.MDK_DATA.ENB, window.MDK_DATA.ENT].flatMap((track) =>
+    track.sections.flatMap((section) =>
+      (section.topics || []).filter((topic) => /^t-five-year-c0[1-3]-s0[12]$/.test(topic.id || ""))
+        .flatMap((topic) => topic.lectures || []),
+    ),
+  );
+  assert.equal(active.length, 46, "active scope must contain exactly 46 new lessons for courses 1–3");
+  for (const lecture of active) {
+    const student = String(lecture.content || "");
+    assert.doesNotMatch(student, /Recording script|Transcript reveal|<strong>Key:?<\/strong>|<strong>Suggested answers:?<\/strong>/i,
+      `teacher-only listening/key material leaked into ${lecture.listeningId}`);
+    assert.ok(lecture.teacherContent && lecture.teacherContent.trim(),
+      `teacher material should remain available in the staff accordion: ${lecture.listeningId}`);
+  }
+});
