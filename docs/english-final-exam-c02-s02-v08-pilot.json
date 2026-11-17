@@ -42,11 +42,11 @@
       "prompt": "An energy audit at a college found that several computer rooms remained fully lit after the last lesson. The facilities team introduced a simple closing checklist and asked the final group to check lights and equipment. The audit also recommended replacing older lamps with more efficient models. After a month, electricity use had decreased, although the team planned to compare figures over a longer period. Reading 1. What problem did the audit identify?",
       "options": [
         "The laboratory heating was left on overnight",
-        "Computer rooms stayed fully lit after the last lesson",
         "The laboratory windows were left open overnight",
+        "Computer rooms stayed fully lit after the last lesson",
         "Students left windows open during lessons"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "points": 1
     },
     {
@@ -107,11 +107,11 @@
       "prompt": "You are writing to the facilities team about an energy-saving idea. Which sentence is best?",
       "options": [
         "You must install my idea immediately.",
-        "Would it be possible to test motion sensors in another corridor?",
+        "I will change the lighting myself.",
         "Your energy policy makes no sense.",
-        "I will change the lighting myself."
+        "Would it be possible to test motion sensors in another corridor?"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
