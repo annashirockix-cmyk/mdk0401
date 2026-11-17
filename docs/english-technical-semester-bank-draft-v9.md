@@ -16,11 +16,11 @@
 - C. The dimensions of a technical drawing
 - D. The time of a daily meeting
 
-**163.** Complete the sentence: “Please notify the project manager ___ any unexpected change.”
-- A. of
-- B. to
-- C. at
-- D. into
+**163.** Complete the sentence: “The shipment arrived ___ schedule, two days earlier than planned.”
+- A. ahead of
+- B. because
+- C. unless
+- D. despite
 
 **164.** A maintenance note says: “The fault could not be reproduced during the follow-up test.” What does this mean?
 - A. The fault was deliberately made worse
@@ -130,7 +130,7 @@
 |---:|:---:|---|
 | 161 | C | Past perfect marks the examination as completed before the report was issued. |
 | 162 | A | A batch or lot number identifies a defined production group. |
-| 163 | A | The collocation is “notify someone of” a change. |
+| 163 | A | “Ahead of schedule” means earlier than the planned time. |
 | 164 | B | The fault was not observed again under the stated follow-up conditions; this does not prove it can never recur. |
 | 165 | D | It is a polite, precise request for clarification. |
 | 166 | C | Version control records changes and helps identify revisions. |
