@@ -947,18 +947,18 @@ test("English VPR grades numbered choices correctly and renders per-gap option l
 });
 
 
-test("admin role is recognized for teacher navigation and tutoring is shown only when configured", () => {
+test("admin role is recognized and tutoring controls live on the home screen, not in the drawer or course editor", () => {
   const app = read("app.js");
   assert.match(app, /currentState\.user && currentState\.user\.role/);
   assert.match(app, /currentRole === "teacher" \|\| currentRole === "admin"/);
-  assert.match(app, /tutoringLink\.style\.display=isTeacher\?"flex":"none"/);
+  assert.doesNotMatch(app, /menuTutoring/);
   const controls = read("teacher-controls.js");
-  assert.match(controls, /editorTutoringPanel/);
-  assert.match(controls, /editorCourse/);
-  assert.match(controls, /getTutoringLink\(cid\)/);
-  assert.match(controls, /saveTutoringLink\(cid/);
-  assert.match(controls, /Показывать вкладку студентам/);
-  assert.match(app, /link\.visible!==false&&String\(link\.url\|\|""\)\.trim\(\)/);
+  assert.doesNotMatch(controls, /editorTutoringPanel|renderTutoringPage|tutorUrl|saveTutorLink/);
+  const ui = read("tutoring.js");
+  assert.match(ui, /tutoringHomeCard/);
+  assert.match(ui, /window\.API\.getTutoringLink/);
+  assert.match(ui, /window\.API\.saveTutoringLink/);
+  assert.match(ui, /Показывать мою ссылку студентам/);
 });
 
 
