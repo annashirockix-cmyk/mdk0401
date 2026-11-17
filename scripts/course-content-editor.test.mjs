@@ -229,4 +229,6 @@ test("course documents are stored privately and downloaded only through course a
  assert.match(editor, /uploadCourseMaterialFile\(/);
  assert.match(app, /data-course-file/);
  assert.match(app, /API\.getCourseMaterialFile\(button\.dataset\.courseFile\)/);
+ assert.match(app, /if \(f\.fileUrl && \^https/);
+ assert.match(server, /delete payload\.uploadedBy/);
 });
