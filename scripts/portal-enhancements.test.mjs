@@ -855,7 +855,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.doesNotMatch(engine, /window\.ENGLISH_VPR_EXAMS/);
   assert.match(bank, /const exam = seeds\[track\]/);
   assert.match(html, /api\.js\?v=\d+/);
-  assert.match(html, /english-vpr-engine\.js\?v=24/);
+  assert.match(html, /english-vpr-engine\.js\?v=\d+/);
 });
 
 
@@ -894,7 +894,7 @@ test("English VPR chooser grants admin role access and verifies both server impo
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
   assert.ok(engine.includes("check.success !== true"));
   assert.ok(engine.includes("контрольное чтение"));
-  assert.ok(html.includes("english-vpr-engine.js?v=24"));
+  assert.match(html, /english-vpr-engine\.js\?v=\d+/);
   assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
@@ -1533,7 +1533,7 @@ test("English VPR enforces the five-word written-answer limit on the server", ()
   );
   const submitStart = bank.indexOf("function submitEnglishVprExam_(data)");
   const submitEnd = bank.indexOf("function gradeEnglishVprWrittenPart_(data)", submitStart);
-  assert.ok(bank.slice(submitStart, submitEnd).includes("validateEnglishVprWrittenAnswers_(task,ans,ti)"));
+  assert.match(bank.slice(submitStart, submitEnd), /validateEnglishVprWrittenAnswers_\(task,ans,ti,allowIncompleteWritten\)/);
 });
 
 
