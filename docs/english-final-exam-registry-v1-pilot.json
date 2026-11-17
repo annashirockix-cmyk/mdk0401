@@ -4939,7 +4939,7 @@
                   "Which qualities the company values in a trainee",
                   "Which qualifications are needed before applying?"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -5090,7 +5090,7 @@
                   "To help her make an informed decision",
                   "To find out whether the courses include a final examination"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -7374,7 +7374,7 @@
                   "That the student's password had already been changed",
                   "The message asked the student to update her timetable."
                 ],
-                "correctIndex": 3,
+                "correctIndex": 1,
                 "points": 1
               },
               {
