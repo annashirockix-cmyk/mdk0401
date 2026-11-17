@@ -208,6 +208,7 @@
       $("mainTopicTitle").value=override&&override.title||topic&&topic.title||"";
     }
     function getBuiltInTopic(topicId){return getBuiltInTopics(courseSel.value).find(x=>String(x.id)===String(topicId));}
+    function getBuiltInLectures(topic){return topic?(Array.isArray(topic.__originalLectures)?topic.__originalLectures:(topic.lectures||[])):[];}
     async function loadExamBank(){
       const status=$("examBankStatus"),btn=$("loadExamBankBtn");btn.disabled=true;status.textContent="Загрузка защищённого банка…";
       try{
@@ -248,7 +249,7 @@
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
       const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
       const fs=(window.customContent.flashcards||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
-      const builtInTopic=getBuiltInTopic(lectureTopicId),builtInLectures=builtInTopic&&Array.isArray(builtInTopic.lectures)?builtInTopic.lectures:[];
+      const builtInTopic=getBuiltInTopic(lectureTopicId),builtInLectures=getBuiltInLectures(builtInTopic);
       const additionalLectures=ls.filter(x=>x.isBuiltInOverride!==true);
       $("lectureExisting").innerHTML='<option value="">— Новая дополнительная лекция —</option>'+builtInLectures.map((x,i)=>'<option value="builtin:'+i+'">Основная: '+esc(x.code||"")+' '+esc(x.title||"")+'</option>').join("")+additionalLectures.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
       $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
@@ -266,7 +267,7 @@
     function loadLecture(){
       const id=$("lectureExisting").value;if(!id){resetLecture();return;}
       if(id.indexOf("builtin:")===0){
-        const index=Number(id.slice(8)),topic=getBuiltInTopic(topicSel.value),base=topic&&topic.lectures&&topic.lectures[index];
+        const index=Number(id.slice(8)),topic=getBuiltInTopic(topicSel.value),base=getBuiltInLectures(topic)[index];
         if(!base||!Number.isInteger(index)){resetLecture();return;}
         const override=records("lecture",topicSel.value).find(x=>x.isBuiltInOverride===true&&String(x.sourceLectureCode||"")===String(base.code||""));
         builtInLectureIndex=index;lectureId=override?override.id:"";
@@ -340,7 +341,7 @@
     $("saveLectureBtn").onclick=function(){
       const topicId=topicSel.value,title=$("lectureTitle").value.trim(),content=$("lectureBody").value.trim(),status=$("lectureStatus");
       if(!topicId||!title||!content){status.textContent="Выберите тему и заполните название и текст.";return;}
-      const sourceIndex=builtInLectureIndex,base=sourceIndex!==null?(getBuiltInTopic(topicId).lectures||[])[sourceIndex]:null;
+      const sourceIndex=builtInLectureIndex,base=sourceIndex!==null?getBuiltInLectures(getBuiltInTopic(topicId))[sourceIndex]:null;
       const slug=base?String(base.code||sourceIndex).replace(/[^A-Za-z0-9._-]/g,"-"):"";
       const id=lectureId||(base?("lec-override-"+courseSel.value+"-"+topicId+"-"+slug):("lec-"+Date.now()));
       const payload={id:id,mdkId:courseSel.value,topicId:topicId,type:"lecture",title:title,code:base?base.code:"Доп. лекция",content:content};
