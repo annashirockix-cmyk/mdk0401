@@ -7512,7 +7512,7 @@
                   "The college car park was closed during the survey",
                   "Students were required to carry large equipment"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -7525,7 +7525,7 @@
                   "Safety assessments must be completed",
                   "The cycle route had already been approved"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -7665,7 +7665,7 @@
                   "To measure only during the evening rush",
                   "To collect readings only when the weather was clear"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -7678,7 +7678,7 @@
                   "They had measured only one road",
                   "The results proved traffic was the only cause"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -7804,7 +7804,7 @@
                   "A newspaper opinion article",
                   "A summary written by another student"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 0,
                 "points": 1
               },
               {
@@ -7817,7 +7817,7 @@
                   "A photograph showing the product label",
                   "A link to a shopping website"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -7830,7 +7830,7 @@
                   "Only personal experience is needed to support a claim",
                   "A personal recommendation is enough to support broad claims"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -7968,7 +7968,7 @@
                   "The laboratory windows were left open overnight",
                   "Students left windows open during lessons"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -7981,7 +7981,7 @@
                   "A new system for booking laboratories",
                   "A rota for cleaning the laboratory"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 1,
                 "points": 1
               },
               {
