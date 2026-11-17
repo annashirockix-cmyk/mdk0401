@@ -97,6 +97,8 @@ function handleRequest_(e) {
       case "getmycourseresults": result = getMyCourseResults_(data); break;
       case "savegcodeprogress": result = saveGCodeProgress_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
+      case "uploadcoursematerialfile": result = uploadCourseMaterialFile_(data); break;
+      case "getcoursematerialfile": result = getCourseMaterialFile_(data); break;
       case "getcustomcontentaccess": result = getCustomContentAccess_(data); break;
       case "setcustomcontentaccess": result = setCustomContentAccess_(data); break;
       case "gettopicaccess": result = getTopicAccess_(data); break;
@@ -1817,6 +1819,8 @@ function getCustomContent_(data) {
 
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
+    // Never expose the private Drive file ID in the general content feed.
+    delete payload.driveFileId;
 
     // Student sessions receive test prompts and options only. Answer keys remain server-side.
     if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
@@ -2429,6 +2433,68 @@ function getGameAnswer_(data) {
   if (!q) throw new Error("Вопрос не найден.");
   return {success:true, answer:String(q.a || q.answer || "")};
 }
+/* ---------- Private course document storage ---------- */
+function courseMaterialFolder_() {
+  const props=PropertiesService.getScriptProperties(),key="COURSE_MATERIALS_FOLDER_ID";
+  let id=String(props.getProperty(key)||"");
+  if(id){try{return DriveApp.getFolderById(id);}catch(e){}}
+  const folder=DriveApp.createFolder("MDK Portal — private course materials");
+  props.setProperty(key,folder.getId());
+  return folder;
+}
+function uploadCourseMaterialFile_(data) {
+  const courseId=normalizeCourseId_(data.mdkId||data.courseId||"");
+  const topicId=String(data.topicId||"").trim();
+  const title=String(data.title||"").trim().slice(0,180);
+  const name=String(data.name||"document").replace(/[\\/:*?"<>|]/g,"_").slice(0,140);
+  const mime=String(data.mimeType||"").toLowerCase();
+  const allowed={
+    "application/pdf":".pdf",
+    "application/msword":".doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":".docx"
+  };
+  if(!courseId||!topicId||!title)throw new Error("Выберите дисциплину и тему, укажите название документа.");
+  const user=editor_(data,courseId);
+  if(!allowed[mime])throw new Error("Поддерживаются только PDF, DOC и DOCX.");
+  const encoded=String(data.data||"").replace(/^data:[^;]+;base64,/i,"").replace(/\\s/g,"");
+  if(!encoded||encoded.length>9800000)throw new Error("Файл пустой или превышает лимит 7 МБ.");
+  const bytes=Utilities.base64Decode(encoded);
+  if(!bytes.length||bytes.length>7*1024*1024)throw new Error("Размер файла не должен превышать 7 МБ.");
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  let driveFile=null;
+  try{
+    const folder=courseMaterialFolder_();
+    driveFile=folder.createFile(Utilities.newBlob(bytes,mime,name||("document"+allowed[mime])));
+    driveFile.setDescription("Private course material: "+courseId+" / "+topicId+" / "+title);
+    const id="course-file-"+Utilities.getUuid().replace(/-/g,"");
+    const payload={driveFileId:driveFile.getId(),name:name,mimeType:mime,size:bytes.length,uploadedAt:new Date().toISOString(),uploadedBy:user.email};
+    const sh=content_();
+    sh.appendRow([id,courseId,topicId,"file",title,JSON.stringify(payload),user.email,new Date().toISOString()]);
+    return {success:true,id:id,title:title,name:name,size:bytes.length,mimeType:mime};
+  }catch(error){
+    if(driveFile){try{driveFile.setTrashed(true);}catch(ignore){}}
+    throw error;
+  }finally{lock.releaseLock();}
+}
+function getCourseMaterialFile_(data) {
+  const user=auth_(data),id=String(data.id||"").trim();
+  if(!id)throw new Error("Не указан документ.");
+  const values=content_().getDataRange().getValues();
+  let row=null,payload={};
+  for(let i=1;i<values.length;i++){
+    if(String(values[i][0])===id&&String(values[i][3])==="file"){row=values[i];try{payload=JSON.parse(String(row[5]||"{}"));}catch(e){}break;}
+  }
+  if(!row||!payload.driveFileId)throw new Error("Документ не найден.");
+  const courseId=normalizeCourseId_(row[1]),topicId=String(row[2]||"");
+  if(user.role==="student"){
+    if(!hasCourseAccess_(user,courseId)||!customContentIsOpen_(courseId,id,topicId,"file"))throw new Error("Документ закрыт или у вас нет доступа.");
+  }else if(user.role==="teacher"||user.role==="admin"){
+    editor_(data,courseId);
+  }else throw new Error("Недостаточно прав.");
+  const blob=DriveApp.getFileById(String(payload.driveFileId)).getBlob();
+  return {success:true,name:String(payload.name||row[4]||"document"),mimeType:String(payload.mimeType||blob.getContentType()),data:Utilities.base64Encode(blob.getBytes())};
+}
+
 function saveCustomContent_(data) {
   const courseId = String(data.mdkId || data.courseId || "");
   if (!courseId) throw new Error("Не указана дисциплина.");
