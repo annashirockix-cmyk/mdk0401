@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What must students wear?",
       "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
       "options": [
-        "On Friday",
         "Their college identification badges",
-        "Next month",
-        "After the event"
+        "Their student timetables",
+        "Their safety shoes",
+        "Their notebooks"
       ],
       "correctIndex": 1,
       "points": 1
