@@ -6,10 +6,10 @@
 
 ## Questions
 
-**121.** My sister is interested ___ learning another foreign language.
-- A. on
-- B. in
-- C. at
+**121.** The students were proud ___ their team's success.
+- A. at
+- B. of
+- C. with
 - D. for
 
 **122.** The students ___ their project when the electricity went off.
@@ -134,7 +134,7 @@
 
 | No. | Key | Rationale |
 |---:|:---:|---|
-| 121 | B | The fixed expression is “interested in”. |
+| 121 | B | The fixed expression is “proud of”. |
 | 122 | C | Past continuous describes an action in progress when another past event occurred. |
 | 123 | A | After “before” in a future time clause, present simple is used. |
 | 124 | D | “This week” is an unfinished time period; present perfect is appropriate. |
