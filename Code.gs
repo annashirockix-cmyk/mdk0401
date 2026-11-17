@@ -117,6 +117,7 @@ function handleRequest_(e) {
       case "restorequestionbanks": result = restoreQuestionBanks_(data); break;
       case "importquestionbanks": result = importQuestionBanks_(data); break;
       case "getquestionbank": result = getQuestionBank_(data); break;
+      case "savequestionbank": result = saveQuestionBank_(data); break;
       case "getquestionbankstats": result = getQuestionBankStats_(data); break;
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
@@ -1970,6 +1971,48 @@ function getQuestionBank_(data) {
     return {bankId:String(row[m.BankId]||""),questionId:String(row[m.QuestionId]||""),question:question,updatedAt:String(row[m.UpdatedAt]||""),updatedBy:String(row[m.UpdatedBy]||"")};
   });
   return {success:true,courseId:courseId,questions:rows};
+}
+
+
+/** Replace one editable built-in exam bank, preserving a complete server-side backup. */
+function saveQuestionBank_(data) {
+  const courseId=normalizeCourseId_(data.courseId||"");
+  const actor=editor_(data,courseId);
+  const bankId=String(data.bankId||"").trim();
+  if(["exam_primary","exam_extra","mdk_extra"].indexOf(bankId)<0)throw new Error("Можно редактировать только основной и дополнительный экзаменационные банки.");
+  const incoming=Array.isArray(data.questions)?data.questions:[];
+  if(!incoming.length||incoming.length>500)throw new Error("В банке должно быть от 1 до 500 вопросов.");
+  const seen={},prepared=[];
+  incoming.forEach(function(item,index){
+    const question=item&&item.question&&typeof item.question==="object"?item.question:item;
+    const questionId=String(item&&item.questionId||"").trim();
+    if(!questionId||questionId.length>180)throw new Error("У задания №"+(index+1)+" отсутствует корректный ID.");
+    if(seen[questionId])throw new Error("Повторяется ID задания: "+questionId);
+    if(!question||typeof question!=="object"||Array.isArray(question))throw new Error("Некорректный объект задания №"+(index+1)+".");
+    if(!String(question.q||question.question||"").trim())throw new Error("У задания №"+(index+1)+" нет формулировки.");
+    const serialized=JSON.stringify(question);
+    if(!serialized||serialized.length>30000)throw new Error("Задание №"+(index+1)+" пустое или слишком большое.");
+    seen[questionId]=true;
+    prepared.push([courseId,bankId,questionId,serialized,new Date().toISOString(),actor.email]);
+  });
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try{
+    const sh=questionBank_(),values=sh.getDataRange().getValues(),m=headerMap_(sh);
+    const retained=values.slice(1).filter(function(row){return !(sameCourseId_(row[m.CourseId],courseId)&&String(row[m.BankId])===bankId);});
+    const previous=values.slice(1).filter(function(row){return sameCourseId_(row[m.CourseId],courseId)&&String(row[m.BankId])===bankId;});
+    const backupId="exam-edit-"+Utilities.getUuid().replace(/-/g,""),now=new Date().toISOString();
+    if(previous.length){
+      const backup=ensureSheet_("QuestionBankBackup");
+      const backupRows=previous.map(function(row){return [backupId,courseId,bankId,JSON.stringify(row),now,actor.email];});
+      backup.getRange(backup.getLastRow()+1,1,backupRows.length,6).setValues(backupRows);
+    }
+    const header=values.length?values[0]:HEADERS.QuestionBank;
+    const output=[header].concat(retained,prepared);
+    sh.clearContents();
+    sh.getRange(1,1,output.length,6).setValues(output);
+    CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");
+    return {success:true,courseId:courseId,bankId:bankId,questionsSaved:prepared.length,previousQuestionsBackedUp:previous.length,backupId:backupId};
+  }finally{lock.releaseLock();}
 }
 
 
