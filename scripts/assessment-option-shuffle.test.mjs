@@ -370,7 +370,10 @@ test("English VPR duration is measured from the server attempt start", () => {
 
 test("English VPR server timer starts only when the student launches the exam", () => {
   const get = extract(vpr, "getEnglishVprExam_");
-  assert.doesNotMatch(get, /englishVprAttempt:/);
+  assert.match(get, /englishVprAttemptCacheKey_\(user\.email, track, source\.id\)/);
+  assert.match(get, /cache\.get\("englishVprAttempt:" \+ activeId\)/);
+  assert.match(get, /attemptId:activeId/);
+  assert.match(get, /startedAt:activeAttempt\.startedAt/);
   const start = extract(vpr, "startEnglishVprExam_");
   assert.match(start, /const startedAt = Date\.now\(\)/);
   assert.match(start, /englishVprPrepareAttempt_\(source\)/);
