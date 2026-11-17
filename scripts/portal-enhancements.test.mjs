@@ -1845,6 +1845,9 @@ test("portal navigation provides accessible search, active route and keyboard sh
   assert.match(app, /event\.key === "\/"/);
   assert.match(app, /event\.key === "Escape"/);
   assert.match(app, /aria-current/, "current route must be announced to assistive technology");
+  assert.match(app, /crumbs\.replaceChildren\(\)/);
+  assert.match(html, /aria-label="Навигационная цепочка"/);
+  assert.match(css, /#crumbs a/);
   assert.match(css, /\.drawer-item\.is-current/);
   assert.match(css, /\.skip-link:focus/);
 });
