@@ -226,6 +226,7 @@ window.migrateEnglishTeacherMaterialsToServer = async function () {
                         id: "eng-teacher-" + courseId + ":" + stable,
                         courseId: courseId,
                         topicId: topicId,
+                        courseNumber: courseNumber,
                         code: code,
                         title: String(lecture.title || code),
                         listeningId: listeningId,
