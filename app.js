@@ -1091,7 +1091,9 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     }
                     var entry=secureQuestions[secureIndex], q=entry.question||{}, type=String(q.type||"mc").toLowerCase();
                     var html='<div class="museum-muted">Вопрос '+(secureIndex+1)+' из '+secureQuestions.length+'</div><h3>'+safeText(q.q||q.question||"")+'</h3>';
-                    if(type==="num"||type==="numeric"||type==="number") {
+                    if(type==="text"||type==="short_text") {
+                        html+='<label style="display:block;margin:12px 0"><span class="museum-muted">Введите краткий ответ</span><textarea id="secureTextAnswer" class="self-input" rows="3" maxlength="2000" placeholder="Ваш ответ" style="display:block;width:100%;margin-top:6px"></textarea></label><button class="btn" id="secureNext">Ответить</button>';
+                    } else if(type==="num"||type==="numeric"||type==="number") {
                         html+='<input id="secureAnswerInput" class="self-input" type="text" inputmode="decimal" placeholder="Введите числовой ответ"><button class="btn" id="secureNext">Ответить</button>';
                     } else if(type==="multi"||type==="multiple"||type==="multiple_choice") {
                         html+='<p>Выберите все подходящие варианты</p>'+(q.options||[]).map(function(opt,i){return '<button class="btn ghost" data-secure-multi="'+i+'" style="display:block;width:100%;text-align:left;margin:6px 0">'+safeText(opt)+'</button>';}).join("")+'<button class="btn" id="secureNext">Ответить</button>';
@@ -1109,6 +1111,8 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                         selectedMulti={};
                         contentArea.querySelectorAll("[data-secure-multi]").forEach(function(btn){btn.onclick=function(){var n=Number(btn.getAttribute("data-secure-multi"));selectedMulti[n]=!selectedMulti[n];btn.classList.toggle("active",!!selectedMulti[n]);};});
                         var next=contentArea.querySelector("#secureNext");if(next)next.onclick=function(){secureAnswers.push(Object.keys(selectedMulti).filter(function(k){return selectedMulti[k];}).map(Number).sort(function(a,b){return a-b;}));secureIndex++;drawSecureQuestion();};
+                    } else if(type==="text"||type==="short_text") {
+                        var textNext=contentArea.querySelector("#secureNext");if(textNext)textNext.onclick=function(){var input=contentArea.querySelector("#secureTextAnswer");if(!input||!String(input.value).trim()){input&&input.focus();return;}secureAnswers.push(input.value);secureIndex++;drawSecureQuestion();};
                     } else if(type==="num"||type==="numeric"||type==="number") {
                         var numNext=contentArea.querySelector("#secureNext");if(numNext)numNext.onclick=function(){var input=contentArea.querySelector("#secureAnswerInput");if(!input||!String(input.value).trim()){input&&input.focus();return;}secureAnswers.push(input.value);secureIndex++;drawSecureQuestion();};
                     } else if(type==="order"||type==="ordering") {
