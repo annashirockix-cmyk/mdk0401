@@ -38,6 +38,7 @@ try {
       },
       getTopicAccess: async () => ({ open: true }),
       getCustomContent: async () => ({ success: true, data: window.__constructorStore.map(x => ({ ...x })) }),
+      uploadTestImage: async (courseId, dataUrl, name) => ({ success: true, imageRef: "drive:audit-image-reference", name, size: 12000 }),
       saveCustomContent: async item => {
         const at = window.__constructorStore.findIndex(x => String(x.id) === String(item.id));
         if (at >= 0) window.__constructorStore[at] = { ...item };
@@ -125,9 +126,17 @@ try {
   await page.locator("#qC").fill("Не подходит");
   await page.locator("#qD").fill("Нет ответа");
   await page.locator("#qCorrect").selectOption("1");
+  await page.locator("#ceQuestionImageFile").setInputFiles({
+    name: "question-diagram.png",
+    mimeType: "image/png",
+    buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p0sAAAAASUVORK5CYII=", "base64")
+  });
+  await page.waitForFunction(() => document.getElementById("ceQuestionImageStatus")?.textContent.includes("Изображение загружено"));
+  assert.equal(await page.locator("#ceQuestionImagePreview img").count(), 1, "Question image preview should be visible");
   await page.locator("#addQuestionBtn").click();
   await page.locator("#saveTestBtn").click();
   await page.waitForFunction(() => document.getElementById("testStatus")?.textContent.includes("Тест сохранён"));
+  assert.equal(await page.evaluate(() => window.__constructorStore.find(x => x.type === "test")?.questions?.[0]?.imageRef), "drive:audit-image-reference", "Question image reference must be saved with the test");
   assert.ok((await page.locator("#savedMaterials").innerText()).includes("Тест конструктора"));
   assert.ok((await page.locator("#savedMaterials").innerText()).includes("Тестовая лекция конструктора"));
 
