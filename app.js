@@ -828,7 +828,13 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             var files = window.customContent.files ? window.customContent.files.filter(f => f.mdkId === courseId && f.topicId === topicId) : [];
             if (files.length > 0) {
                 var filesHtml = `<div style="margin-top:20px; padding-top:15px; border-top:2px solid var(--border);"><h3 style="color:var(--accent); margin-bottom:10px;">📎 Прикрепленные материалы:</h3><div style="display:flex; flex-direction:column; gap:8px;">`;
-                files.forEach(f => { filesHtml += `<button type="button" data-course-file="${window.escapeHtml(f.id)}" class="btn ghost" style="justify-content:flex-start; padding:12px 15px; text-align:left;"><span style="font-size:20px;">📄</span> <b>${window.escapeHtml(f.title)}</b></button>`; });
+                files.forEach(f => {
+                    if (f.fileUrl && /^https:\/\//i.test(String(f.fileUrl))) {
+                        filesHtml += `<a href="${window.escapeHtml(f.fileUrl)}" target="_blank" rel="noopener noreferrer" class="btn ghost" style="justify-content:flex-start; padding:12px 15px; text-align:left;"><span style="font-size:20px;">📄</span> <b>${window.escapeHtml(f.title)}</b></a>`;
+                    } else {
+                        filesHtml += `<button type="button" data-course-file="${window.escapeHtml(f.id)}" class="btn ghost" style="justify-content:flex-start; padding:12px 15px; text-align:left;"><span style="font-size:20px;">📄</span> <b>${window.escapeHtml(f.title)}</b></button>`;
+                    }
+                });
                 filesHtml += `</div></div>`;
                 contentArea.insertAdjacentHTML("beforeend", filesHtml);
                 contentArea.querySelectorAll("[data-course-file]").forEach(function(button){
