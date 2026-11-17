@@ -1023,22 +1023,52 @@ function getProctorEvents_(data) {
   rows.sort(function(a,b){return String(b.serverTime).localeCompare(String(a.serverTime));});
   return {success:true,events:rows.slice(0,200)};
 }
-function getTutoringLink_(data) {
-  const user=auth_(data),courseId=String(data.courseId||"");
-  if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
-  const raw=settingValue_("tutoring:"+courseId);
-  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:true};
+function tutoringSettingKey_(teacherEmail) {
+  return "tutoring:teacher:" + email_(teacherEmail);
+}
+function parseTutoringLink_(raw) {
+  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:false};
   if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
-  return {success:true,link:value};
+  value.url=String(value.url||"").trim();
+  value.title=String(value.title||"Запись на дополнительные занятия").slice(0,120);
+  value.description=String(value.description||"").slice(0,500);
+  value.visible=value.visible===true;
+  return value;
+}
+function getTutoringLink_(data) {
+  const user=auth_(data),courseId=String(data.courseId||"").trim();
+  if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
+  if(user.role==="teacher"||user.role==="admin"){
+    const link=parseTutoringLink_(settingValue_(tutoringSettingKey_(user.email)));
+    return {success:true,link:link,links:[]};
+  }
+  if(user.role!=="student")throw new Error("Запись доступна только обучающимся и преподавателям.");
+  const sheet=users_(),values=sheet.getDataRange().getValues(),m=headerMap_(sheet);
+  const settingsSheet=settings_(),settingsValues=settingsSheet.getDataRange().getValues(),sm=headerMap_(settingsSheet),settings=Object.create(null);
+  for(let i=1;i<settingsValues.length;i++)settings[String(settingsValues[i][sm.Key]||"")]=String(settingsValues[i][sm.Value]||"");
+  const links=[];
+  for(let i=1;i<values.length;i++){
+    const row=values[i],role=String(row[m.Role]||"").toLowerCase(),teacherEmail=email_(row[m.Email]);
+    if(role!=="teacher"||!teacherEmail)continue;
+    const teacher={email:teacherEmail,role:role,courses:String(row[m.Courses]||"")};
+    if(!hasCourseAccess_(teacher,courseId))continue;
+    const link=parseTutoringLink_(settings[tutoringSettingKey_(teacherEmail)]||"");
+    if(!link.visible||!link.url)continue;
+    links.push({teacherName:String(row[m.Name]||"Преподаватель"),title:link.title,description:link.description,url:link.url});
+  }
+  links.sort(function(a,b){return a.teacherName.localeCompare(b.teacherName,"ru");});
+  return {success:true,links:links};
 }
 function saveTutoringLink_(data) {
-  const courseId=String(data.courseId||""),teacher=editor_(data,courseId);
+  const courseId=String(data.courseId||"").trim(),teacher=editor_(data,courseId);
+  if(teacher.role!=="teacher"&&teacher.role!=="admin")throw new Error("Настроить личную запись может только преподаватель.");
   const url=String(data.url||"").trim(),title=String(data.title||"Запись на дополнительные занятия").trim().slice(0,120);
-  const description=String(data.description||"").trim().slice(0,500),visible=data.visible!==false;
+  const description=String(data.description||"").trim().slice(0,500),visible=data.visible===true;
   if(url&&!/^https?:\/\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
   if(url.length>1000)throw new Error("Слишком длинная ссылка.");
-  writeSetting_("tutoring:"+courseId,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible}),teacher.email);
-  return {success:true,link:{url:url,title:title,description:description,visible:visible}};
+  const link={url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible&&!!url};
+  writeSetting_(tutoringSettingKey_(teacher.email),JSON.stringify(link),teacher.email);
+  return {success:true,link:link};
 }
 
 /* ---------- In-app notifications ---------- */
