@@ -336,12 +336,12 @@ window.MDK_DATA = window.MDK_DATA || {};
             [],
             [],
             [
-              tq("Who may use workshop equipment?", ["People who are trained and authorised", "Any visitor", "Anyone who has read a short notice"]),
-              tq("What should happen if a machine guard appears damaged?", ["Report it and do not use the equipment until the responsible person has dealt with it", "Remove the guard and continue", "Ignore it if the machine still runs"]),
-              tq("Why may gloves be unsuitable near rotating machinery?", ["They can create an entanglement hazard", "They always reduce grip", "They replace machine guards"]),
-              tq("Who determines the PPE required for a task?", ["The task-specific risk assessment and approved local instructions", "A universal rule that requires the same PPE everywhere", "The student's personal preference"]),
-              tq("Who may isolate or maintain workshop equipment?", ["Authorised personnel following the approved procedure", "Any student working alone", "Anyone wearing gloves"]),
-              tq("When may firefighting equipment be used?", ["Only when the person is trained, it is safe and local procedures permit it", "Whenever a person sees smoke, regardless of training", "Before raising an alarm or following evacuation arrangements"])
+              tq("A lathe rotates the", ["workpiece", "tool", "spindle only", "bed"]),
+              tq("A milling machine uses", ["rotary cutters", "a single point tool", "a drill bit only", "a grinding wheel"]),
+              tq("CNC stands for", ["Computer Numerical Control", "Central Numerical Center", "Common Numerical Control", "Complex NC"]),
+              tq("A drill creates", ["holes", "threads", "flat surfaces", "grooves"]),
+              tq("Grinding is used for", ["finishing", "roughing", "drilling", "turning"]),
+              tq("The tailstock is part of a", ["lathe", "milling machine", "drill", "grinder"])
             ],
             [
               { code: "W 3.1", title: "Match the processes", task: "Read the texts again and write the correct processes that produce the objects listed below:\n1 wires - ______\n2 pasta - ______\n3 sheet - ______\n4 bricks - ______\n5 tubes - ______\n6 rods and bars - ______\n7 golden leaves - ______\n8 machine parts - ______\n9 concrete - ______" },
@@ -744,9 +744,9 @@ window.MDK_DATA = window.MDK_DATA || {};
               tq("What is a hazard?", ["A source of potential harm", "The likelihood and severity of harm", "A record of completed training"]),
               tq("What does risk describe?", ["The likelihood and possible severity of harm", "A type of personal protective equipment", "A machine guard"]),
               tq("Why must legal safety statements identify the country?", ["Legal duties and regulatory systems differ by jurisdiction", "The same law applies worldwide", "Workshop rules are identical in every country"]),
-              tq("What is the role of personal protective equipment (PPE)?", ["It is one possible risk-control measure", "It removes every workplace hazard", "It replaces training and safe procedures"]),
-              tq("What should guide the choice of risk controls?", ["A suitable risk assessment and approved instructions", "A universal list that applies to every task", "Personal preference alone"]),
-              tq("What should workers do when they notice a workplace hazard?", ["Report it through the approved arrangements", "Ignore it if work is continuing", "Repair equipment without authorisation"])
+              tq("Who may use workshop equipment?", ["People who are trained and authorised", "Any visitor", "Anyone who has read a short notice"]),
+              tq("What should happen if a machine guard appears damaged?", ["Report it and do not use the equipment until the responsible person has dealt with it", "Remove the guard and continue", "Ignore it if the machine still runs"]),
+              tq("Why may gloves be unsuitable near rotating machinery?", ["They can create an entanglement hazard", "They always reduce grip", "They replace machine guards"])
             ],
             [
               { code: "W 12.1", title: "Match words with definitions", task: "Match the words with their definitions:\n1 precautionary measure\na a responsibility or task that you have to do as part of your job\n2 carelessness\nb to deal effectively with a difficult situation\n3 welfare\nc the buildings and land occupied by a business\n4 duty\nd poor attention to an activity, which results in harm or errors\n5 premises\ne action taken in order to prevent something dangerous from happening\n6 to cope with\nf the health, comfort and well-being of a person or group" },
