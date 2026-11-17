@@ -126,10 +126,10 @@
         "Explain what service you need"
       ],
       "correctOrder": [
-        "Explain what service you need",
-        "Ask the assistant for information",
         "Check the directions on the map",
-        "Visit the shop"
+        "Visit the shop",
+        "Explain what service you need",
+        "Ask the assistant for information"
       ],
       "points": 2
     },
