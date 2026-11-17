@@ -115,7 +115,7 @@
 
 ### Reading answer-key verification in V01–V04 (2026-11-17)
 - Reviewed both reading questions and their keys in all 40 V01–V04 variants across the 10 course/semester slots.
-- Found three answer-key mismatches in Course 2: C2-S1 V03 Reading 2 (key corrected from D to C), C2-S1 V04 Reading 2 (D to C), and C2-S2 V04 Reading 2 (D to B). In each case the corrected answer is directly supported by the passage.
-- Updated the individual JSON and combined registry; source/registry equality remains enforced by the 150-variant regression test.
+- Found three answer-key mismatches in Course 2: C2-S1 V03 Reading 2, C2-S1 V04 Reading 2 and C2-S2 V04 Reading 2. In each case the original key pointed to a distractor rather than the passage-supported answer.
+- Reordered the options so the passage-supported answer occupies the existing balanced key position D in all three variants; no answer-position distribution changed. Updated the individual JSON files and combined registry.
 - Added a targeted regression test in scripts/english-semester-assessment.test.mjs to assert the three passage-supported answers and their parity between source JSON and registry.
 - This closes the focused reading-key pass for V01–V04; it does not constitute a full expert review of every task or a CEFR/programme approval.
