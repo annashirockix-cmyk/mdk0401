@@ -56,8 +56,8 @@
       "options": [
         "How to block the college account",
         "Where to collect lost property",
-        "How to request a replacement card",
-        "How to report an absence."
+        "How to report an absence.",
+        "How to request a replacement card"
       ],
       "correctIndex": 3,
       "points": 1
