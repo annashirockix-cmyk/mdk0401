@@ -131,7 +131,13 @@ try {
     mimeType: "image/png",
     buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADUlEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC", "base64")
   });
-  await page.waitForFunction(() => document.getElementById("ceQuestionImageStatus")?.textContent.includes("Изображение загружено"));
+  await page.waitForFunction(() => {
+    const status = document.getElementById("ceQuestionImageStatus")?.textContent || "";
+    return status.length > 0;
+  }, { timeout: 10000 });
+  const imageUploadStatus = await page.locator("#ceQuestionImageStatus").innerText();
+  console.log("QUESTION_IMAGE_UPLOAD_STATUS", imageUploadStatus);
+  assert.ok(imageUploadStatus.includes("Изображение загружено"), "Question image upload failed: " + imageUploadStatus);
   assert.equal(await page.locator("#ceQuestionImagePreview img").count(), 1, "Question image preview should be visible");
   await page.locator("#addQuestionBtn").click();
   await page.locator("#saveTestBtn").click();
