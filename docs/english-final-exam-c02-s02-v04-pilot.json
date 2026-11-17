@@ -55,11 +55,11 @@
       "prompt": "What did the IT team confirm?",
       "options": [
         "That the message was a routine college notice",
-        "That the message was a phishing attempt",
+        "The message asked the student to update her timetable.",
         "That the student's password had already been changed",
-        "The message asked the student to update her timetable."
+        "That the message was a phishing attempt"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
