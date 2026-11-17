@@ -29,7 +29,7 @@
       "audioText": "The student council is collecting ideas for a volunteering week in April. A planning meeting will take place in the student common room on Tuesday at twelve. Suggested activities include helping at a community garden, supporting a book collection and organising a repair café. Students should send one idea with a short explanation before the meeting.",
       "options": [
         "A one-page proposal and short evidence summary",
-        "A list of suggested volunteering activities",
+        "One idea with a short explanation",
         "A copy of the student council timetable",
         "A completed attendance form"
       ],
@@ -55,9 +55,9 @@
       "prompt": "What wider effect did the event aim to encourage?",
       "options": [
         "Encouraging residents to buy new household items",
-        "Encouraging people to repair items before replacing them",
+        "Encouraging residents to learn how to repair cars",
         "Encouraging visitors to donate electrical equipment",
-        "Encouraging residents to learn how to repair cars"
+        "Encouraging people to repair items before replacing them"
       ],
       "correctIndex": 3,
       "points": 1
