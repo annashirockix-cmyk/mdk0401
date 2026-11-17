@@ -28,10 +28,10 @@
       "prompt": "Listening 2. How can students send feedback about corridor lighting?",
       "audioText": "The facilities team will switch off heating in the old laboratory during the spring break while maintenance is carried out. Students who need access to stored equipment should contact the technician before Friday. The team is also testing motion sensors in two corridors. Feedback about lighting levels can be sent through the maintenance form on the college portal.",
       "options": [
-        "On Friday",
+        "At the next student council meeting",
         "Through the maintenance form on the college portal",
-        "Next month",
-        "After the event"
+        "By calling the facilities team directly",
+        "In a paper feedback box near the canteen"
       ],
       "correctIndex": 1,
       "points": 1
