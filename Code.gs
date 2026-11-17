@@ -2143,7 +2143,7 @@ function scoreBuiltInQuestion_(q,answer) {
     else target=Number(expected);
     return Number(answer)===target;
   }
-  if(type==="multi"||type==="multiple"||type==="multiple_choice"||Array.isArray(expected)){
+  if(type==="multi"||type==="multiple"||type==="multiple_choice"||(Array.isArray(expected)&&type!=="text"&&type!=="short_text")){
     if(!Array.isArray(answer)||!Array.isArray(expected))return false;
     if(expected.length&&typeof expected[0]==="string"&&q.options)expected=expected.map(function(value){const index=q.options.indexOf(value);return index<0?value:index;});
     return sameAnswer_(answer.map(String).sort(),expected.map(String).sort());
