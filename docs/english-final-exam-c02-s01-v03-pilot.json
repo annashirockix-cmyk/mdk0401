@@ -56,10 +56,10 @@
       "options": [
         "When the company was founded",
         "How many hours a trainee works",
-        "Which qualities the company values in a trainee",
-        "Which qualifications are needed before applying?"
+        "Which qualifications are needed before applying?",
+        "Which qualities the company values in a trainee"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
