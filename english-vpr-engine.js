@@ -49,14 +49,14 @@
     if (!window.API || !window.API.getEnglishVprExam) { document.getElementById("englishVprLoading").textContent="Сервер экзаменов недоступен. Обратитесь к преподавателю."; return; }
     window.API.getEnglishVprExam(track).then(function(response) {
       if (!response || !response.success || !response.exam) throw new Error(response && response.error || "Экзамен не найден на сервере.");
-      renderLoadedExam(response.exam,track,course,app,response.attemptId);
+      renderLoadedExam(response.exam,track,course,app,response.attemptId,response.startedAt);
     }).catch(function(error) {
       var loading=document.getElementById("englishVprLoading");
       if(loading) loading.textContent="Не удалось загрузить экзамен с сервера: "+(error.message||error)+". Обратитесь к преподавателю.";
     });
     return;
   }
-  function renderLoadedExam(exam,track,course,app,attemptId) {
+  function renderLoadedExam(exam,track,course,app,attemptId,startedAt) {
     var tabs = el("section", "module");
     tabs.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
     if(track!=="basic" && (!window.canAccessCourse || window.canAccessCourse("ENB") || window.canAccessCourse("EN"))) { var b=el("button","btn ghost","Basic English"); b.type="button"; b.onclick=function(){renderPage("final-basic");}; tabs.appendChild(b); }
@@ -73,7 +73,7 @@
     } else {
       var start = el("button", "btn", "Начать экзамен");
       start.type = "button"; start.style.cssText = "width:100%;padding:15px;font-size:17px";
-      start.onclick = function () { startExam(exam, key, panel, course, track); };
+      start.onclick = function () { startExam(exam, key, panel, course, track, attemptId, startedAt); };
       panel.appendChild(start);
     }
     app.appendChild(panel);
