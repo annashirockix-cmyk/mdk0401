@@ -962,19 +962,27 @@ test("admin role is recognized for teacher navigation and tutoring is shown only
 });
 
 
-test("English VPR chooser grants admin role access and verifies both server imports by reading them back", () => {
+test("English VPR chooser checks bank availability and imports only missing tracks the user can access", () => {
   const engine = read("english-vpr-engine.js");
   const html = read("index.html");
   const sw = read("service-worker.js");
   assert.ok(engine.includes("!window.state.student && !hasStaffAccess()"));
   assert.ok(engine.includes("!hasEnglishAccess && !hasStaffAccess()"));
-  assert.ok(engine.includes("result.success !== true"));
+  assert.ok(engine.includes("function readBankStatus(track)"));
+  assert.ok(engine.includes('status:"ready"'));
+  assert.ok(engine.includes('status:"missing"'));
+  assert.ok(engine.includes('status:"error"'));
+  assert.ok(engine.includes('var tracks = course === "ENB" ? ["basic"] : course === "ENT" ? ["technical"] : ["basic", "technical"]'));
+  assert.ok(engine.includes("var missingTracks=states.filter"));
+  assert.ok(engine.includes("missingTracks.map(function(track)"));
+  assert.ok(engine.includes("Повторный импорт не требуется"));
+  assert.ok(engine.includes("Не удалось проверить доступность экзамена"));
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
-  assert.ok(engine.includes("check.success !== true"));
-  assert.ok(engine.includes("контрольное чтение"));
-  assert.match(html, /english-vpr-engine\.js\?v=\d+/);
-  assert.match(sw, /portal-cache-v[0-9]+/);
-});
+  assert.ok(engine.includes("button.disabled = true"));
+  assert.ok(engine.includes("Открыть экзамен"));
+  assert.match(html, /english-vpr-engine\.js\?v=32/);
+  assert.match(sw, /portal-cache-v392/);
+});;
 
 
 test("non-English final exams contain 45 auto-graded questions and no written-response fields", () => {
