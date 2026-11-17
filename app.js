@@ -947,7 +947,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     area.innerHTML = html;
                     area.querySelector("#customNumericSubmit").onclick = function() {
                         var input=area.querySelector("#customNumericAnswer"),raw=input.value.trim(),normalized=raw.replace(",", ".");
-                        if(!raw||!/^[-+]?(?:\\d+\\.?\\d*|\\.\\d+)$/.test(normalized)||!Number.isFinite(Number(normalized))){window.showToast("Введите корректное число. Можно использовать запятую или точку.","err");return;}
+                        if(!raw||!/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(normalized)||!Number.isFinite(Number(normalized))){window.showToast("Введите корректное число. Можно использовать запятую или точку.","err");return;}
                         answers[index]=normalized;index++;draw();
                     };
                 } else if (questionType === "order" || questionType === "ordering") {
