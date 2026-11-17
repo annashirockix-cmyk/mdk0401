@@ -324,6 +324,69 @@ function validateEnglishVprWrittenAnswers_(task, answers, taskIndex, allowIncomp
     return {task:taskIndex,question:String(question),answer:answer,maxPoints:1};
   });
 }
+/** Сохраняет черновик ответов English VPR без передачи ключей проверки клиенту. */
+function saveEnglishVprExamDraft_(data) {
+  const user = auth_(data), track = String(data.track || "").toLowerCase();
+  if (user.role !== "student" || ["basic","technical"].indexOf(track) < 0) throw new Error("Нет доступа к сохранению ответов.");
+  const courseId = track === "basic" ? "ENB" : "ENT";
+  if (!hasCourseAccess_(user, courseId) && !hasCourseAccess_(user, "EN")) throw new Error("Дисциплина не назначена.");
+  const attemptId = String(data.attemptId || "").trim();
+  if (!/^[a-f0-9]{32}$/i.test(attemptId)) throw new Error("Некорректный идентификатор попытки.");
+  const cache = CacheService.getScriptCache();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const key = "englishVprAttempt:" + attemptId;
+    const raw = cache.get(key);
+    if (!raw) throw new Error("Время попытки истекло. Черновик больше нельзя сохранить.");
+    const attempt = JSON.parse(raw);
+    if (attempt.email !== user.email || attempt.track !== track || attempt.courseId !== courseId) throw new Error("Попытка не принадлежит этой учётной записи.");
+    if (attempt.processing === true) throw new Error("Ответы уже отправляются на проверку.");
+    const exam = attempt.exam;
+    validateEnglishVprExam_(track, exam);
+    const elapsed = Math.max(0, Math.floor((Date.now() - Number(attempt.startedAt || 0)) / 1000));
+    const allowed = Math.max(1, Number(exam.time) || 90) * 60;
+    if (!Number(attempt.startedAt) || elapsed > allowed + 300) throw new Error("Время экзамена истекло. Черновик больше нельзя изменить.");
+    if (String(data.answers || "").length > 30000) throw new Error("Слишком большой объём ответов.");
+    const submitted = data.answers;
+    if (!Array.isArray(submitted) || submitted.length !== (exam.tasks || []).length) throw new Error("Структура ответов не совпадает с вариантом.");
+    const saved = (exam.tasks || []).map(function(task, ti) {
+      const row = submitted[ti];
+      if (!row || typeof row !== "object" || Array.isArray(row)) throw new Error("Некорректный формат ответов.");
+      const count = task.type === "gap" ? (task.answers || []).length : (task.items || []).length;
+      const clean = {};
+      for (let i = 0; i < count; i++) {
+        const value = row[i] == null ? "" : row[i];
+        if (["choice","match","gap"].indexOf(task.type) >= 0) {
+          const str = String(value).trim();
+          if (!str) { clean[i] = ""; continue; }
+          if (!/^\\d{1,2}$/.test(str)) throw new Error("Некорректный выбор в задании.");
+          const options = task.type === "choice" ? ((task.items[i] && task.items[i][2]) || task.options || []) :
+            task.type === "match" ? (task.options || []) :
+            ((task.itemOptions && task.itemOptions[i]) || task.options || []);
+          const n = Number(str);
+          if (!Number.isInteger(n) || n < 1 || n > options.length) throw new Error("Выбранный вариант отсутствует в задании.");
+          clean[i] = str;
+        } else {
+          const str = String(value);
+          if (str.length > 100) throw new Error("Ответ не должен превышать 100 символов.");
+          clean[i] = str;
+        }
+      }
+      return clean;
+    });
+    const serialized = JSON.stringify(saved);
+    if (serialized.length > 20000) throw new Error("Черновик превышает допустимый размер.");
+    attempt.savedAnswers = saved;
+    attempt.savedAt = Date.now();
+    const remainingTtl = Math.max(1, Math.min(7200, Math.ceil((Number(attempt.startedAt) + (allowed + 300) * 1000 - Date.now()) / 1000)));
+    cache.put(key, JSON.stringify(attempt), remainingTtl);
+    return {success:true,savedAt:attempt.savedAt};
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function submitEnglishVprExam_(data) {
   const user = auth_(data), track = String(data.track||"").toLowerCase();
   if (user.role !== "student" || ["basic","technical"].indexOf(track)<0) throw new Error("Нет доступа к отправке экзамена.");
