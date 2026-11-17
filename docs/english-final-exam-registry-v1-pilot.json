@@ -1584,9 +1584,9 @@
                 "prompt": "Reading 2. How does Nadia use information from the books?",
                 "options": [
                   "She asks a friend to write the report",
-                  "She checks facts and writes in her own words",
+                  "She copies every paragraph",
                   "She removes the pages",
-                  "She copies every paragraph"
+                  "She checks facts and writes in her own words"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -6136,10 +6136,10 @@
                 "options": [
                   "The host college accommodation",
                   "The travel document checklist",
-                  "The study visit programme",
-                  "The host college's examination timetable"
+                  "The host college's examination timetable",
+                  "The study visit programme"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -6152,7 +6152,7 @@
                   "To ask for safety information in English",
                   "To confirm whether the visit was optional"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -8406,11 +8406,11 @@
                 "audioText": "The college economics club is organising a discussion about responsible consumer choices. It will take place in the seminar room on Wednesday at one thirty. A guest speaker will explain product labels, repair services and the environmental cost of packaging. Students should read the short case study on the club page before the discussion.",
                 "options": [
                   "The product label",
-                  "The short case study on the club page",
                   "The speaker's presentation slides",
+                  "The short case study on the club page",
                   "The meeting minutes"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -8423,7 +8423,7 @@
                   "Screen size and camera quality",
                   "Delivery times and payment methods"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -8436,7 +8436,7 @@
                   "It was the newest model available",
                   "She expected the phone to be replaced within one year"
                 ],
-                "correctIndex": 3,
+                "correctIndex": 1,
                 "points": 1
               },
               {
@@ -8483,11 +8483,11 @@
                 "prompt": "You want to ask a shop about repairing a device. What is a suitable question?",
                 "options": [
                   "I want a new one. Do not ask me anything.",
-                  "Could you tell me whether the battery can be replaced?",
+                  "I will open the device myself.",
                   "Your products are all bad.",
-                  "I will open the device myself."
+                  "Could you tell me whether the battery can be replaced?"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
