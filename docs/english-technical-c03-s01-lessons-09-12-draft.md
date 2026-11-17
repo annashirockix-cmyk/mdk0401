@@ -148,27 +148,27 @@ Key words: *part number, revision, operation, inspection point, record, discrepa
 
 What is the instructor explaining?
 
-A) How to read a simplified process sheet.  
-B) How to book a flight.  
-C) How to prepare a meal.
+C) How to read a simplified process sheet.  
+A) How to book a flight.  
+B) How to prepare a meal.
 
 **Second listening — details**
 
 1. What should be checked first?
-   A) part identification and drawing revision  
-   B) the colour of the folder  
+   B) part identification and drawing revision  
+   A) the colour of the folder  
    C) the student's favourite tool
 2. What does the process sheet show?
-   A) a planned sequence of operations  
-   B) private information about staff  
-   C) a holiday schedule
+   C) a planned sequence of operations  
+   A) private information about staff  
+   B) a holiday schedule
 3. What should happen if a discrepancy is found?
    A) report it to the responsible person  
    B) choose a value independently  
    C) hide the record
 4. Why are records kept?
-   A) to support traceability  
-   B) to replace all technical requirements  
+   B) to support traceability  
+   A) to replace all technical requirements  
    C) to avoid communication
 
 **Recording script — reveal after listening**
@@ -222,7 +222,7 @@ Use the same fictional process-sheet extract provided by the teacher.
 4. Practice 1: 1 d; 2 c; 3 a; 4 e; 5 b.
 5. Practice 2: b → c → d → a (a simplified classroom order; actual sequence is document-specific).
 6. Practice 3: 1 revision; 2 workpiece; 3 non-conformity; 4 traceability.
-7. Listening: gist A; details 1 A, 2 A, 3 A, 4 A.
+7. Listening: gist C; details 1 B, 2 C, 3 A, 4 B.
 
 **Writing task:** write 100–120 words explaining why a process sheet must be clear and current.
 
@@ -354,27 +354,27 @@ Key words: *nominal, measured, diameter, millimetres, record, specification*. Pr
 
 What is the student reporting?
 
-A) Values from a fictional training measurement table.  
-B) A flight announcement.  
+B) Values from a fictional training measurement table.  
+A) A flight announcement.  
 C) A shopping list.
 
 **Second listening — details**
 
 1. What is the nominal length in the example?
-   A) 50.0 mm  
-   B) 5.0 kg  
+   B) 50.0 mm  
+   A) 5.0 kg  
    C) 500 °C
 2. What value was recorded for item A?
-   A) 50.1 mm  
-   B) 20.0 mm  
-   C) 1.6 kg
+   C) 50.1 mm  
+   A) 20.0 mm  
+   B) 1.6 kg
 3. What does the instructor ask the student to check?
    A) the applicable specification and tolerance  
    B) the weather  
    C) the colour of the instrument
 4. Does the instructor accept or reject the item from the table alone?
-   A) No; more controlled information is needed.  
-   B) Yes; every difference is automatically acceptable.  
+   B) No; more controlled information is needed.  
+   A) Yes; every difference is automatically acceptable.  
    C) Yes; every difference is automatically unacceptable.
 
 **Recording script**
@@ -418,7 +418,7 @@ Students take turns reporting one row from the training table. The listener chec
 3. Why must a value include its unit?
 4. Practice 1: 1 mm; 2 kg; 3 diameter; 4 tolerance; 5 measured value.
 5. Practice 2: 1 nominal 50.0 mm, recorded 50.1 mm; 2 nominal 3.0 mm, recorded 2.9 mm; 3 A, B and C use mm (three rows); 4 the specification/tolerance is needed to interpret whether the recorded value meets the requirement.
-6. Listening: gist A; details 1 A, 2 A, 3 A, 4 A.
+6. Listening: gist B; details 1 B, 2 C, 3 A, 4 B.
 
 **Writing rubric (8):** correct item identification 2; values and units 2; distinction between nominal and measured 1; tolerance awareness 1; clarity 1; grammar 1.
 
@@ -558,27 +558,27 @@ Key words: *abbreviation, glossary, revision, context, symbol, confirm*. Predict
 
 What is the instructor explaining?
 
-A) How to interpret abbreviations safely and consistently.  
-B) How to choose a holiday destination.  
-C) How to design a poster.
+C) How to interpret abbreviations safely and consistently.  
+A) How to choose a holiday destination.  
+B) How to design a poster.
 
 **Second listening — details**
 
 1. Where should the student look first?
-   A) the document glossary or legend  
-   B) a random social media post  
+   B) the document glossary or legend  
+   A) a random social media post  
    C) an unrelated textbook
 2. Why does context matter?
-   A) the same letters can have different meanings  
-   B) context changes the unit of every measurement  
-   C) abbreviations are always decorative
+   C) the same letters can have different meanings  
+   A) context changes the unit of every measurement  
+   B) abbreviations are always decorative
 3. What should the student do if the term is not defined?
    A) ask the responsible instructor  
    B) invent a meaning  
    C) delete the term
 4. What should be recorded in a glossary?
-   A) the term, meaning and source/context  
-   B) only the colour of the page  
+   B) the term, meaning and source/context  
+   A) only the colour of the page  
    C) a guessed translation
 
 **Recording script**
@@ -634,7 +634,7 @@ Do not invent expansions for abbreviations.
 5. Practice 2: 1 c; 2 b; 3 d; 4 e; 5 a.
 6. Reading: A-104; D-208; Rev. B; Ø; glossary on final page; ask the instructor.
 7. Practice 3: 1 true; 2 false; 3 true; 4 false; 5 true.
-8. Listening: gist A; details 1 A, 2 A, 3 A, 4 A.
+8. Listening: gist C; details 1 B, 2 C, 3 A, 4 B.
 
 **Glossary rubric (8):** ten relevant entries 2; correct meanings 2; source/context 2; examples 1; clear organisation 1.
 
@@ -775,27 +775,27 @@ Key words: *title block, revision, units, row, column, note, missing information
 
 What is the student learning to do?
 
-A) Read a simplified technical table carefully.  
-B) Make an online payment.  
+B) Read a simplified technical table carefully.  
+A) Make an online payment.  
 C) Prepare a sports report.
 
 **Second listening — details**
 
 1. What should the student check before reading values?
-   A) document number and revision  
-   B) the paper colour  
+   B) document number and revision  
+   A) the paper colour  
    C) the author's favourite subject
 2. What should be checked next?
-   A) the unit heading  
-   B) an unrelated paragraph  
-   C) the page decoration
+   C) the unit heading  
+   A) an unrelated paragraph  
+   B) the page decoration
 3. What is missing from the training table?
    A) material grades and tolerances  
    B) item descriptions  
    C) all quantities
 4. What should the student do about missing information?
-   A) ask for clarification  
-   B) invent a value  
+   B) ask for clarification  
+   A) invent a value  
    C) ignore the notes
 
 **Recording script**
@@ -847,7 +847,7 @@ For each role, state one question to ask if information is missing.
 4. Reading: EDU-TR-014; A; mm; P-02; 4; no; no; because material grades, tolerances and detailed instructions are missing.
 5. Practice 1: 1 A; 2 A; 3 A; 4 A.
 6. Practice 2: 1 Support plate; 2 60 × 30 × 2; 3 2; 4 material grade, tolerance, referenced drawing and other approved process data as applicable; 5 answers vary, e.g. “Could you provide the applicable material grade and drawing revision?”
-7. Listening: gist A; details 1 A, 2 A, 3 A, 4 A.
+7. Listening: gist B; details 1 B, 2 C, 3 A, 4 B.
 
 **Integrated writing (100–120 words):** explain how to read a technical table without misinterpreting its values.
 
