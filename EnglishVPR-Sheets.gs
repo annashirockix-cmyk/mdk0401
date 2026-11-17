@@ -279,7 +279,7 @@ function startEnglishVprExam_(data) {
               String(activeAttempt.exam && activeAttempt.exam.id || "") === String(source.id || "") &&
               activeAttempt.displayExam && Number(activeAttempt.startedAt)) {
             return {success:true,track:track,attemptId:activeId,attemptNo:activeAttempt.attemptNo,
-              startedAt:activeAttempt.startedAt,exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
+              startedAt:activeAttempt.startedAt,savedAnswers:Array.isArray(activeAttempt.savedAnswers)?activeAttempt.savedAnswers:[],exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
           }
         }
         cache.remove(activeKey);
