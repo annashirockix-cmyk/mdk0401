@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v406'; // Добавлена полноценная форма заданий «Верно / неверно».
+const CACHE_NAME = 'portal-cache-v407'; // Добавлен краткий текстовый ответ в редакторе тестов.
 
 const STATIC_ASSETS = [
   './',
