@@ -95,7 +95,7 @@
       "id": "c3s1v02_v01",
       "type": "short_text",
       "points": 2,
-      "prompt": "A number or code that identifies the current version of a drawing is a revision ___.",
+      "prompt": "A sequence number assigned to a drawing update is its revision ___.",
       "acceptedAnswers": [
         "number"
       ]
