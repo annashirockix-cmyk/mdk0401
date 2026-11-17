@@ -28,15 +28,30 @@ test("custom lecture sanitizer preserves safe images and figure captions", () =>
  assert.ok(app.includes("png|jpeg|gif|webp"));
  assert.ok(app.includes("\"alt\", \"width\", \"height\", \"loading\""));
 });
-test("real-browser constructor audit exercises student numeric and true-false questions", () => {
+test("real-browser constructor audit exercises student numeric, true-false and short-text questions", () => {
  const audit = read("scripts/course-constructor-browser-audit.mjs");
  assert.ok(audit.includes('type: "numeric"'));
  assert.ok(audit.includes('type: "true_false"'));
+ assert.ok(audit.includes('type: "short_text"'));
+ assert.ok(audit.includes("#customShortTextAnswer"));
+ assert.ok(audit.includes("#customShortTextSubmit"));
  assert.ok(audit.includes("#customNumericAnswer"));
  assert.ok(audit.includes("#customNumericSubmit"));
  assert.ok(audit.includes('button[data-custom-answer="0"]'));
  assert.ok(audit.includes('button[data-custom-answer="1"]'));
  assert.ok(audit.includes('["12.5", 0]'));
+});
+
+test("short text questions are rendered and scored on the server", () => {
+ const app = read("app.js");
+ const server = read("Code.gs");
+ const ux = read("course-editor-ux.js");
+ const editor = read("course-admin.js");
+ assert.ok(ux.includes('<option value="short_text">Краткий текстовый ответ</option>'));
+ assert.ok(editor.includes('shortText?String(meta.textAnswer||""):'));
+ assert.ok(app.includes('questionType === "short_text"'));
+ assert.ok(server.includes('type === "text" || type === "short_text"'));
+ assert.ok(server.includes('toLocaleLowerCase("ru")'));
 });
 
 test("flashcard constructor saves and reopens saved sets", () => {
