@@ -30,6 +30,8 @@ jobs:
           node --check scripts/gas-read-load-test.mjs
       - name: Check PWA install experience
         run: node --test scripts/pwa-install.test.mjs
+      - name: Check offline cache integrity
+        run: node --test scripts/offline-cache-integrity.test.mjs
       - name: Check notification center contract
         run: node scripts/check-notification-contract.mjs
       - name: Check assignment workflow
