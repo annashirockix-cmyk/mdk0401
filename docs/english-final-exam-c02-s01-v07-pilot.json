@@ -55,11 +55,11 @@
       "prompt": "How did they improve their work?",
       "options": [
         "They changed the project topic and worked separately",
-        "They made a plan, assigned roles and met regularly",
+        "They asked the tutor to divide the work for them",
         "They asked the tutor to complete the materials list",
-        "They asked the tutor to divide the work for them"
+        "They made a plan, assigned roles and met regularly"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "points": 1
     },
     {
