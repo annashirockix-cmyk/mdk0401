@@ -940,7 +940,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     });
                     return;
                 }
-                var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>';
+                var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>'; if(q.imageData && /^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(q.imageData)){html += '<img src="'+window.escapeHtml(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:420px;object-fit:contain;margin:12px auto 18px;border:1px solid var(--border);border-radius:10px;padding:6px;background:var(--card)">';}
                 (q.options || []).forEach(function(option, i) {
                     html += '<button class="btn ghost" data-custom-answer="'+i+'" style="display:block;width:100%;text-align:left;margin:7px 0">'+window.escapeHtml(option)+'</button>';
                 });
