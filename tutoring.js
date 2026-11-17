@@ -10,7 +10,8 @@
     var app=document.getElementById("app"),state=window.state||{};
     if(!app || (location.hash && location.hash!=="#/" && location.hash!=="#/"))return;
     if(!state.student&&!state.staff)return;
-    if(document.getElementById("tutoringHomeCard"))return;
+    var existingCard=document.getElementById("tutoringHomeCard");
+    if(existingCard){if(existingCard.getAttribute("data-course-id")===courseId)return;existingCard.remove();}
     var isStudent=!!state.student;
     var staff=state.staff||{};
     var isTeacher=!isStudent&&(String(staff.role||"").toLowerCase()==="teacher"||String(staff.role||"").toLowerCase()==="admin");
@@ -18,6 +19,7 @@
     var courseId=currentCourse(),identity=state.student||state.staff;
     var card=document.createElement("section");
     card.id="tutoringHomeCard";
+    card.setAttribute("data-course-id",courseId);
     card.className="module";
     card.style.cssText="margin:18px 0;padding:20px;border:1px solid var(--border);border-radius:18px;background:var(--card);";
     card.innerHTML='<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px"><div style="font-size:28px">🎓</div><div style="flex:1;min-width:180px"><h2 style="margin:0 0 4px">Дополнительные занятия</h2><div style="color:var(--muted);font-size:13px">Индивидуальные консультации и репетиторство</div></div><span style="font-size:12px;color:var(--muted)">Главный экран</span></div><div id="tutoringHomeContent"><p style="color:var(--muted);margin:8px 0">Загружаем настройки записи…</p></div>';
