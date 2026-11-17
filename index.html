@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-    <title>МДК Портал - Учебный портал</title>
+    <title>Учебный портал СПО</title>
     <link rel="icon" href="data:,">
     <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#1e40af">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Учебный портал">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
     <link rel="stylesheet" href="./style.css?v=26">
     <link rel="stylesheet" href="./style-bg-fix.css?v=10">
     <link rel="stylesheet" href="./animations.css">
@@ -19,7 +23,7 @@
     <div id="loginOverlay" class="login-overlay" style="display: flex;">
         <div class="login-shell">
             <div style="text-align: center; margin-bottom: 20px;">
-                <h2 style="color: var(--accent); margin-bottom: 5px;">МДК Портал</h2>
+                <h2 style="color: var(--accent); margin-bottom: 5px;">Учебный портал</h2>
                 <p style="color: var(--muted); font-size: 14px;">Авторизация в системе</p>
             </div>
             <form id="unifiedLoginForm" class="login-card">
@@ -265,10 +269,23 @@
     <script src="./portal-ux.js?v=6"></script>
     <script src="./laboratory.js?v=2"></script>
     <script src="./pdf-viewer.js?v=2"></script>
+
+    <aside id="pwaInstallCard" class="pwa-install-card" aria-label="Установка учебного портала" hidden>
+        <div class="pwa-install-copy">
+            <strong>Учебный портал — как приложение</strong>
+            <span id="pwaInstallHelp">Установите портал на устройство для быстрого доступа с главного экрана.</span>
+            <span id="pwaInstallStatus" class="pwa-install-status" aria-live="polite"></span>
+        </div>
+        <div class="pwa-install-actions">
+            <button type="button" class="btn" id="pwaInstallButton">Установить</button>
+            <button type="button" class="btn ghost" id="pwaInstallClose" aria-label="Закрыть предложение установки">Позже</button>
+        </div>
+    </aside>
+    <script src="./pwa-install.js?v=1"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=306', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=418', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
