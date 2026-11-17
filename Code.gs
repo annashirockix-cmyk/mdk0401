@@ -2148,6 +2148,11 @@ function scoreBuiltInQuestion_(q,answer) {
     if(expected.length&&typeof expected[0]==="string"&&q.options)expected=expected.map(function(value){const index=q.options.indexOf(value);return index<0?value:index;});
     return sameAnswer_(answer.map(String).sort(),expected.map(String).sort());
   }
+  if(type==="text"||type==="short_text"){
+    if(expected===undefined||expected===null)return false;
+    const normalize=function(value){return String(value==null?"":value).normalize("NFKC").trim().replace(/\s+/g," ").toLocaleLowerCase("ru");};
+    return normalize(answer)===normalize(expected);
+  }
   if(type==="num"||type==="numeric"||type==="number"){
     expected=q.correctAnswer!==undefined?q.correctAnswer:(q.extra!==undefined?q.extra:expected);
     if(expected===undefined||expected===null)return false;
@@ -2430,6 +2435,10 @@ function getCustomTest_(data) {
         throw new Error("В вопросе " + (index + 1) + " неверно задана последовательность. Укажите минимум два уникальных элемента и правильный порядок.");
       }
     }
+    if (type === "text" || type === "short_text") {
+      const expected = String(question.correctAnswer !== undefined ? question.correctAnswer : question.extra || "").trim();
+      if (!expected) throw new Error("В вопросе " + (index + 1) + " укажите эталонный текстовый ответ.");
+    }
     if (type === "numeric" || type === "num" || type === "number") {
       const expected = String(question.correctAnswer !== undefined ? question.correctAnswer : question.extra || "").trim().replace(",", ".");
       const tolerance = Number(question.tolerance === undefined ? 0.01 : question.tolerance);
@@ -2458,7 +2467,7 @@ function getCustomTest_(data) {
       optionMaps[String(index)] = order;
     } else if (type === "numeric" || type === "num" || type === "number" || type === "text" || type === "short_text") {
       safe.options = [];
-      if (type === "numeric" || type === "num" || type === "number") { delete safe.extra; delete safe.tolerance; }
+      if (type === "numeric" || type === "num" || type === "number" || type === "text" || type === "short_text") { delete safe.extra; delete safe.tolerance; }
     } else {
       const options = Array.isArray(safe.options) ? safe.options.slice() : [];
       if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
