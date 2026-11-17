@@ -230,7 +230,7 @@ window.MDK_DATA = window.MDK_DATA || {};
         topics: [
           topic("t-unit3", "Unit 3", "Machine Tools",
             [
-              lec("3.1", "Turning, Shaper, Drilling", `
+              lec("3.1", "Turning, Shaping and Drilling", `
 <h3>Цель и результаты обучения</h3>
 <p>Студент научится различать токарную, строгальную и сверлильную обработку, называть основные части станка и описывать назначение операции на английском языке. Занятие посвящено чтению и терминологии; оно не является инструкцией по настройке, наладке или эксплуатации станка.</p>
 <h3>1. Reading: Turning, Shaping and Drilling</h3>
@@ -263,7 +263,7 @@ window.MDK_DATA = window.MDK_DATA || {};
 <ol><li>The workpiece.</li><li>It removes material from the workpiece.</li><li>Back-and-forth/reciprocating movement.</li><li>A drill.</li><li>Because programmes, equipment, tooling and workholding must be verified and safety procedures followed.</li><li>Turning — rotating workpiece; shaping — reciprocating tool; drilling — round hole with a rotating drill.</li><li>workpiece; drill; reciprocating.</li></ol>
 <p><b>Самостоятельная работа:</b> составьте словарную карточку для пяти деталей токарного станка и напишите 80–100 слов о назначении turning, shaping и drilling. Не включайте режимы резания или последовательность реальной наладки.</p>
 `),
-              lec("3.2", "Milling, Grinding, Press, Band saw", `
+              lec("3.2", "Milling, Grinding, Pressing and Band Sawing", `
 <h3>Цель и результаты обучения</h3>
 <p>Студент научится описывать фрезерование, шлифование, прессование и ленточное пиление, различать движение инструмента и заготовки и использовать лексику для сравнения операций. Любые реальные операции выполняются только обученным персоналом по локальным инструкциям и оценке рисков.</p>
 <h3>1. Reading: Milling, Grinding, Pressing and Band Sawing</h3>
