@@ -2456,7 +2456,7 @@ function importEnglishTeacherMaterials_(data) {
     const courseId = String(item.courseId || "").trim();
     const topicId = String(item.topicId || "").trim();
     const courseNumber = Number(item.courseNumber || 0);
-    const isCourseOneToThree = (courseNumber >= 1 && courseNumber <= 3) ||
+    const isCourseOneToThree = (Number.isInteger(courseNumber) && courseNumber >= 1 && courseNumber <= 3) ||
       /^[bt]-five-year-c0[1-3]-s0[1-2]$/.test(topicId);
     const code = String(item.code || "").trim();
     const title = String(item.title || "").trim();
