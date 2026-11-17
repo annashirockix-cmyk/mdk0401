@@ -830,6 +830,17 @@ test("English course exam catalogue and CEFR laboratory expose the requested str
 });
 
 
+test("Technical English safety quizzes match the risk-based lesson content", () => {
+  const technical = read("data-english-technical.js");
+  assert.match(technical, /What is a hazard\?/);
+  assert.match(technical, /The likelihood and possible severity of harm/);
+  assert.match(technical, /Legal duties and regulatory systems differ by jurisdiction/);
+  assert.match(technical, /task-specific risk assessment and approved local instructions/);
+  assert.match(technical, /They can create an entanglement hazard/);
+  assert.doesNotMatch(technical, /What is the main cause of industrial accidents\?/);
+  assert.doesNotMatch(technical, /What should be worn when working with loud machinery\?/);
+});
+
 test("English VPR answer keys stay server-side and the client uses protected exam endpoints", () => {
   const server = read("Code.gs");
   const bank = read("EnglishVPR-Sheets.gs");
