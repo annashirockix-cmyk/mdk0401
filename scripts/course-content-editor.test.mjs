@@ -271,3 +271,32 @@ test("custom test editor preserves per-question metadata and test settings while
  assert.match(ux, /const editing=Number\.isInteger\(window\.__ceEditingQuestionIndex\)/);
  assert.match(ux, /editing>=0\?editing:drafts\.querySelectorAll\('\.edit-q'\)\.length/);
 });
+
+
+test("custom multi-select questions render safely and are scored server-side", () => {
+ const app = read("app.js");
+ const server = read("Code.gs");
+ const editorUx = read("course-editor-ux.js");
+ const launchStart = server.indexOf("function getCustomTest_(data)");
+ const launchEnd = server.indexOf("\\nfunction submitCustomTest_", launchStart);
+ const launch = server.slice(launchStart, launchEnd);
+ const submitStart = server.indexOf("function submitCustomTest_(data)");
+ const submitEnd = server.indexOf("\\nfunction getGameAnswer_", submitStart);
+ const submit = server.slice(submitStart, submitEnd);
+ const scorerStart = server.indexOf("function scoreBuiltInQuestion_(q,answer)");
+ const scorerEnd = server.indexOf("\\nfunction submitBuiltInTest_", scorerStart);
+ const scorer = server.slice(scorerStart, scorerEnd);
+ assert.match(app, /questionType === "multi"/);
+ assert.match(app, /data-custom-answer=\\"\+i/);
+ assert.match(app, /customMultiSubmit/);
+ assert.match(app, /Array\.from\(area\.querySelectorAll\("\\[data-custom-answer\\]:checked"\)\)/);
+ assert.match(launch, /sanitizeAssessmentQuestionForStudent_\(question \|\| \{\}\)/);
+ assert.match(launch, /optionMaps\[String\(index\)\] = order/);
+ assert.match(launch, /"correctAnswers"/);
+ assert.match(submit, /if \(Array\.isArray\(value\)\)/);
+ assert.match(submit, /mapped\.sort\(function\(a,b\)/);
+ assert.match(scorer, /Array\.isArray\(q\.correctAnswers\)/);
+ assert.match(scorer, /type===\\"multi\\"/);
+ assert.match(editorUx, /Выберите все подходящие варианты/);
+ assert.match(editorUx, /проверка выполняется на сервере/);
+});
