@@ -29,17 +29,16 @@ The following defects were manually checked against the reading passages or list
 
 All indices above are zero-based, matching the JSON `correctIndex` convention.
 
-## Change-control limitation
+## Corrections applied and synchronized
 
-No pilot JSON source file was changed in this pass. The combined registry `docs/english-final-exam-registry-v1-pilot.json` was requested from the PR branch, but the GitHub file-content endpoint returned an empty payload (blob SHA `ac9d7a8005b182eb1b1d0c90006e540973794193`). Therefore its corresponding embedded exam entries could not be inspected or safely synchronized.
+The combined registry was retrieved by blob SHA after the path-based file endpoint returned an empty payload. The nine corrections were applied to the four source JSON files and to the corresponding embedded tasks in `docs/english-final-exam-registry-v1-pilot.json`.
 
-Changing the individual source JSON files without updating and verifying the combined registry would create a known source/registry parity risk. The nine corrections are therefore recorded as confirmed blockers, not silently patched in only one representation.
+A follow-up read verified all nine IDs: each source `correctIndex` equals the expected answer index, exactly one matching registry task exists for each ID, and the registry value equals the source value. Result: **9/9 source-to-registry parity checks passed**.
 
-## Next required work
+The changes were made only on the PR feature branch. No production bank, protected Google Sheet, Apps Script deployment, or production deployment was touched.
 
-1. Retrieve the combined registry through a supported route and locate the C02-S02 V05–V08 entries.
-2. Check all answer keys in the remaining V05–V08 files against their source passages/scripts; the nine defects above do not imply the other 391 tasks are error-free.
-3. Apply the nine key corrections to both source JSON files and the combined registry in one controlled change.
-4. Run JSON/schema checks, source-to-registry parity checks, and PR CI.
+## Remaining validation
 
-No production bank, protected Google Sheet, Apps Script deployment, or production deployment was touched.
+1. Complete answer-key/content review for the other tasks in the 40 V05–V08 files; the nine confirmed defects do not imply the other 391 tasks are error-free.
+2. Run the full JSON/schema checks, source-to-registry parity checks, and inspect CI for the latest HEAD.
+3. Continue the next variant slice after the current checks are complete.
