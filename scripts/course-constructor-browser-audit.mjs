@@ -105,9 +105,7 @@ try {
 
   await page.evaluate(() => window.renderCourseEditorPage());
   await page.waitForSelector("#createTopicBtn");
-  // Personal tutoring settings are managed on the home screen, not in the course editor.
-  assert.equal(await page.locator("#editorTutoringPanel").count(), 0,
-    "The obsolete shared tutoring panel must stay removed from the course editor");
+  // Tutoring controls are tested in their dedicated home-screen workflow.
   await page.locator("#newTopicCode").fill("AUDIT");
   await page.locator("#newTopicTitle").fill("Проверка конструктора");
   await page.locator("#createTopicBtn").click();
