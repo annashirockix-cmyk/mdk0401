@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v385'; // Обновлены материалы английского курсов 1–3 и версия runtime.
+const CACHE_NAME = 'portal-cache-v386'; // Обновлены материалы английского курсов 1–3 и версия runtime.
 
 const STATIC_ASSETS = [
   './',
