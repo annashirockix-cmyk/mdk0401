@@ -28,6 +28,17 @@ test("custom lecture sanitizer preserves safe images and figure captions", () =>
  assert.ok(app.includes("png|jpeg|gif|webp"));
  assert.ok(app.includes("\"alt\", \"width\", \"height\", \"loading\""));
 });
+test("real-browser constructor audit exercises student numeric and true-false questions", () => {
+ const audit = read("scripts/course-constructor-browser-audit.mjs");
+ assert.ok(audit.includes('type: "numeric"'));
+ assert.ok(audit.includes('type: "true_false"'));
+ assert.ok(audit.includes("#customNumericAnswer"));
+ assert.ok(audit.includes("#customNumericSubmit"));
+ assert.ok(audit.includes('button[data-custom-answer="0"]'));
+ assert.ok(audit.includes('button[data-custom-answer="1"]'));
+ assert.ok(audit.includes('["12.5", 0]'));
+});
+
 test("flashcard constructor saves and reopens saved sets", () => {
  const workflow = read(".github/workflows/portal-syntax.yml");
  const audit = read("scripts/course-constructor-browser-audit.mjs");
