@@ -123,5 +123,8 @@ test("English teacher-material migration is admin-only and stores only protected
   assert.match(app, /window\.migrateEnglishTeacherMaterialsToServer = async function/);
   assert.match(app, /identity\.role.*admin/);
   assert.match(app, /privateTeacherLectures/);
+  assert.match(app, /courseNumber >= 1 && courseNumber <= 3/);
+  assert.match(app, /Legacy textbook units have no reliable course number/);
+  assert.doesNotMatch(app, /b-unit\\[1-6\\]|t-unit\\(\?:1\\|2\\|3\\|12\\)/);
   assert.match(app, /lecture\.teacherOnly !== true/);
 });
