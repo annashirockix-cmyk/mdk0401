@@ -196,7 +196,7 @@
       '<label>Правильный ответ</label><select id="qCorrect" class="self-input"><option value="0">А</option><option value="1">Б</option><option value="2">В</option><option value="3">Г</option></select>'+
       '<button class="btn ghost" id="addQuestionBtn" style="margin-top:10px">Добавить вопрос в тест</button> <button class="btn ghost" id="cancelQuestionEditBtn" type="button">Отмена изменения вопроса</button></div>'+
       '<button class="btn" id="saveTestBtn">Создать тест</button> <button class="btn ghost" id="resetTestBtn" type="button">Новый тест</button> <button class="btn ghost" id="deleteTestBtn" type="button" disabled>Удалить выбранный тест</button> <button class="btn ghost" id="previewTestBtn" type="button">Просмотреть задания и ответы</button> <span id="testStatus" aria-live="polite"></span><div id="testPreview" style="margin-top:12px"></div></div>'+
-      '<div class="module"><h3>4. Редактирование основных экзаменов</h3><p style="color:var(--muted)">Здесь редактируются защищённые банки вопросов основного и дополнительного экзамена. Формат — JSON-массив объектов с questionId и question. Перед заменой сервер автоматически сохраняет резервную копию.</p><label>Банк вопросов</label><select id="examBankId" class="self-input"><option value="exam_primary">Основной экзамен · exam_primary</option><option value="exam_extra">Дополнительный экзамен · exam_extra</option><option value="mdk_extra">Дополнительный банк · mdk_extra</option></select><div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button class="btn ghost" id="loadExamBankBtn" type="button">Загрузить текущий банк</button><button class="btn" id="saveExamBankBtn" type="button">Сохранить банк с резервной копией</button></div><textarea id="examBankJson" class="self-input" rows="14" spellcheck="false" placeholder="JSON-массив объектов с полями questionId и question" style="width:100%;font-family:monospace"></textarea><div id="examBankStatus" aria-live="polite"></div></div>'+
+      '<div class="module" id="visualExamBankEditor"><h3>4. Редактор основных экзаменов</h3><p style="color:var(--muted)">Редактируйте вопросы через форму, без ручного JSON. При сохранении сервер проверяет структуру и создаёт резервную копию предыдущего банка.</p><label>Банк вопросов</label><select id="examBankId" class="self-input"><option value="exam_primary">Основной экзамен · exam_primary</option><option value="exam_extra">Дополнительный экзамен · exam_extra</option><option value="mdk_extra">Дополнительный банк · mdk_extra</option></select><div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button class="btn ghost" id="loadExamBankBtn" type="button">Загрузить текущий банк</button><button class="btn" id="saveExamBankBtn" type="button">Сохранить банк с резервной копией</button><button class="btn ghost" id="addExamQuestionBtn" type="button">+ Новое задание</button></div><div id="examBankStatus" aria-live="polite"></div><div id="examBankQuestionList" style="display:grid;gap:8px;margin:12px 0"></div><div class="module" id="examQuestionForm" style="padding:14px;margin-top:12px"><h4 id="examQuestionFormTitle">Новое задание</h4><label>Формулировка вопроса</label><textarea id="examQuestionText" class="self-input" rows="3" maxlength="5000" placeholder="Введите формулировку задания"></textarea><label style="display:block;margin-top:10px">Тип задания</label><select id="examQuestionType" class="self-input"><option value="mc">Один правильный ответ</option><option value="multi">Несколько правильных ответов</option><option value="true_false">Верно / неверно</option><option value="numeric">Числовой ответ</option><option value="order">Последовательность</option><option value="matching">Соответствие</option></select><label id="examQuestionOptionsLabel" style="display:block;margin-top:10px">Варианты ответа — каждый с новой строки</label><textarea id="examQuestionOptions" class="self-input" rows="4" placeholder="Вариант А&#10;Вариант Б&#10;Вариант В&#10;Вариант Г"></textarea><label id="examQuestionCorrectLabel" style="display:block;margin-top:10px">Номер правильного варианта (с 1)</label><input id="examQuestionCorrect" class="self-input" type="text" placeholder="Например: 2"><label id="examQuestionExtraLabel" style="display:block;margin-top:10px">Дополнительные данные</label><textarea id="examQuestionExtra" class="self-input" rows="4" placeholder="Для последовательности — по одному элементу на строку; для соответствия — левая часть | правая часть"></textarea><label id="examQuestionToleranceLabel" style="display:block;margin-top:10px">Допустимая погрешность</label><input id="examQuestionTolerance" class="self-input" type="number" min="0" step="any" value="0.01"><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" id="saveExamQuestionBtn" type="button">Добавить задание</button><button class="btn ghost" id="cancelExamQuestionBtn" type="button">Очистить форму</button></div></div></div>'+
       '<div class="module"><h3>5. Сохранённые материалы темы</h3><p style="color:var(--muted)">Список обновляется после сохранения. Выберите тему выше, чтобы увидеть её лекции и тесты.</p><div id="savedMaterials">Загрузка материалов…</div></div>';
     const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),testSel=document.getElementById("testTopic"),mainTopicSel=document.getElementById("mainTopicExisting"),examBankSel=document.getElementById("examBankId");
     let lectureId="",testId="",draft=[],editingQuestion=-1,builtInLectureIndex=null;
@@ -219,31 +219,54 @@
     }
     function getBuiltInTopic(topicId){return getBuiltInTopics(courseSel.value).find(x=>String(x.id)===String(topicId));}
     function getBuiltInLectures(topic){return topic?(Array.isArray(topic.__originalLectures)?topic.__originalLectures:(topic.lectures||[])):[];}
-    async function loadExamBank(){
-      const status=$("examBankStatus"),btn=$("loadExamBankBtn");btn.disabled=true;status.textContent="Загрузка защищённого банка…";
-      try{
-        const result=await window.API.getQuestionBank(courseSel.value,examBankSel.value);
-        if(!result||!result.success)throw new Error(result&&result.error||"Не удалось загрузить банк.");
-        const rows=(result.questions||[]).map(x=>({questionId:x.questionId,question:x.question}));
-        $("examBankJson").value=JSON.stringify(rows,null,2);
-        status.textContent="Загружено заданий: "+rows.length+". Ключи ответов доступны только в этом редакторе преподавателя.";
-      }catch(error){status.textContent=error.message||"Ошибка загрузки.";}
-      finally{btn.disabled=false;}
+    let examBankRows=[],editingExamQuestion=-1;
+    function examTypeFields(){
+      const type=$("examQuestionType").value,isChoice=type==="mc"||type==="multi",isTF=type==="true_false",isNumeric=type==="numeric",isOrder=type==="order",isMatch=type==="matching";
+      $("examQuestionOptionsLabel").hidden=!isChoice;$("examQuestionOptions").hidden=!isChoice;
+      $("examQuestionCorrectLabel").hidden=!(isChoice||isTF||isNumeric);$("examQuestionCorrect").hidden=!(isChoice||isTF||isNumeric);
+      $("examQuestionExtraLabel").hidden=!(isOrder||isMatch);$("examQuestionExtra").hidden=!(isOrder||isMatch);
+      $("examQuestionToleranceLabel").hidden=!isNumeric;$("examQuestionTolerance").hidden=!isNumeric;
+      $("examQuestionCorrectLabel").textContent=isTF?"Правильный ответ (1 — верно, 2 — неверно)":isNumeric?"Эталонное число":"Номер правильного варианта (с 1; для нескольких — через запятую)";
+      $("examQuestionExtraLabel").textContent=isMatch?"Пары соответствия — каждая строка: левая часть | правая часть":"Элементы правильной последовательности — каждый с новой строки";
+      $("examQuestionExtra").placeholder=isMatch?"Понятие 1 | Определение 1\nПонятие 2 | Определение 2":"Первый этап\nВторой этап\nТретий этап";
     }
-    async function saveExamBank(){
-      const status=$("examBankStatus"),btn=$("saveExamBankBtn");let questions;
-      try{questions=JSON.parse($("examBankJson").value);}catch(error){status.textContent="Проверьте JSON: "+error.message;return;}
-      if(!Array.isArray(questions)){status.textContent="Нужен JSON-массив заданий.";return;}
-      if(!confirm("Сохранить "+questions.length+" заданий в банке «"+examBankSel.value+"»? Перед заменой будет создана резервная копия."))return;
-      btn.disabled=true;status.textContent="Сохранение и резервное копирование…";
-      try{
-        const result=await window.API.saveQuestionBank(courseSel.value,examBankSel.value,questions);
-        if(!result||!result.success)throw new Error(result&&result.error||"Не удалось сохранить банк.");
-        status.textContent="Сохранено: "+result.questionsSaved+". Резервная копия: "+result.backupId;
-        await loadExamBank();
-      }catch(error){status.textContent=error.message||"Ошибка сохранения.";}
-      finally{btn.disabled=false;}
+    function drawExamBankRows(){
+      const list=$("examBankQuestionList");
+      if(!examBankRows.length){list.innerHTML='<p style="color:var(--muted)">Банк пуст. Добавьте первое задание.</p>';return;}
+      const labels={mc:"Один ответ",single:"Один ответ",multi:"Несколько ответов",true_false:"Верно / неверно",tf:"Верно / неверно",numeric:"Числовой ответ",num:"Числовой ответ",order:"Последовательность",ordering:"Последовательность",matching:"Соответствие",match:"Соответствие"};
+      list.innerHTML=examBankRows.map(function(row,index){const q=row.question||{},type=String(q.type||"mc").toLowerCase();return '<article class="module" style="padding:12px;margin:0;display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap"><div style="flex:1;min-width:180px"><b>'+(index+1)+'. '+esc(q.q||q.question||"Без формулировки")+'</b><div style="font-size:12px;color:var(--muted);margin-top:4px">'+esc(labels[type]||type)+' · ID: '+esc(row.questionId)+'</div></div><button class="btn ghost" type="button" data-exam-edit="'+index+'">Изменить</button><button class="btn ghost" type="button" data-exam-remove="'+index+'">Удалить</button></article>';}).join("");
+      list.querySelectorAll("[data-exam-edit]").forEach(function(button){button.onclick=function(){editExamQuestion(Number(button.getAttribute("data-exam-edit")));};});
+      list.querySelectorAll("[data-exam-remove]").forEach(function(button){button.onclick=function(){const index=Number(button.getAttribute("data-exam-remove"));if(!confirm("Удалить задание №"+(index+1)+" из текущего черновика?"))return;examBankRows.splice(index,1);if(editingExamQuestion===index)resetExamQuestionForm();else if(editingExamQuestion>index)editingExamQuestion--;drawExamBankRows();};});
     }
+    function resetExamQuestionForm(){editingExamQuestion=-1;$("examQuestionFormTitle").textContent="Новое задание";$("examQuestionText").value="";$("examQuestionType").value="mc";$("examQuestionOptions").value="";$("examQuestionCorrect").value="1";$("examQuestionExtra").value="";$("examQuestionTolerance").value="0.01";$("saveExamQuestionBtn").textContent="Добавить задание";examTypeFields();}
+    function editExamQuestion(index){
+      const row=examBankRows[index];if(!row)return;const q=row.question||{},type=String(q.type||"mc").toLowerCase();
+      editingExamQuestion=index;$("examQuestionFormTitle").textContent="Изменение задания №"+(index+1);$("examQuestionText").value=q.q||q.question||"";
+      $("examQuestionType").value=["single","single_select","choice"].includes(type)?"mc":type==="tf"?"true_false":type==="num"||type==="number"?"numeric":type==="ordering"?"order":type==="match"?"matching":type;
+      $("examQuestionOptions").value=(q.options||[]).join("\n");
+      const expected=q.correctAnswers!==undefined?q.correctAnswers:(q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer));
+      $("examQuestionCorrect").value=Array.isArray(expected)?expected.map(x=>Number(x)+1).join(", "):type==="true_false"||type==="tf"?String(Number(expected)+1):type==="numeric"||type==="num"||type==="number"?String(expected===undefined?"":expected):String(expected===undefined?"":Number(expected)+1);
+      $("examQuestionExtra").value=type==="order"||type==="ordering"?(q.correctOrder||q.items||[]).join("\n"):type==="matching"||type==="match"?(q.pairs||[]).map(p=>String(p.left||"")+" | "+String(p.right||"")).join("\n"):"";
+      $("examQuestionTolerance").value=String(q.tolerance===undefined?0.01:q.tolerance);$("saveExamQuestionBtn").textContent="Сохранить задание";examTypeFields();
+    }
+    function collectExamQuestion(){
+      const text=$("examQuestionText").value.trim(),type=$("examQuestionType").value,raw=$("examQuestionCorrect").value.trim(),options=$("examQuestionOptions").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),extra=$("examQuestionExtra").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+      if(!text)throw new Error("Введите формулировку задания.");
+      const q={q:text,type:type};
+      if(type==="mc"||type==="multi"){
+        if(options.length<2)throw new Error("Добавьте не менее двух вариантов ответа.");
+        const indexes=raw.split(/[,;\s]+/).filter(Boolean).map(x=>Number(x)-1);
+        if(!indexes.length||indexes.some(x=>!Number.isInteger(x)||x<0||x>=options.length))throw new Error("Укажите правильный номер варианта из списка.");
+        q.options=options;if(type==="multi"){q.correct=indexes;q.correctAnswers=indexes;}else{if(indexes.length!==1)throw new Error("Для вопроса с одним ответом укажите только один номер.");q.correct=indexes[0];}
+      }else if(type==="true_false"){const index=Number(raw)-1;if(index!==0&&index!==1)throw new Error("Для «Верно / неверно» введите 1 или 2.");q.options=["Верно","Неверно"];q.correct=index;
+      }else if(type==="numeric"){const target=Number(raw.replace(",",".")),tolerance=Number($("examQuestionTolerance").value);if(!raw||!Number.isFinite(target)||!Number.isFinite(tolerance)||tolerance<0)throw new Error("Проверьте эталонное число и допустимую погрешность.");q.correctAnswer=raw.replace(",",".");q.tolerance=tolerance;
+      }else if(type==="order"){if(extra.length<2)throw new Error("Для последовательности добавьте не менее двух этапов.");q.items=extra.slice();q.correctOrder=extra.slice();
+      }else if(type==="matching"){const pairs=extra.map(line=>line.split("|").map(part=>part.trim())).filter(parts=>parts.length===2&&parts[0]&&parts[1]).map(parts=>({left:parts[0],right:parts[1]}));if(pairs.length<2||pairs.length!==extra.length)throw new Error("Добавьте не менее двух корректных пар в формате «левая часть | правая часть».");q.pairs=pairs;}
+      return q;
+    }
+    function addOrUpdateExamQuestion(){try{const question=collectExamQuestion(),old=editingExamQuestion>=0?examBankRows[editingExamQuestion]:null;const questionId=old?old.questionId:"manual-"+Date.now()+"-"+Math.random().toString(36).slice(2,8);const row={questionId:questionId,question:question};if(editingExamQuestion>=0)examBankRows[editingExamQuestion]=row;else examBankRows.push(row);resetExamQuestionForm();drawExamBankRows();$("examBankStatus").textContent="Черновик обновлён. Не забудьте сохранить банк на сервер.";}catch(error){$("examBankStatus").textContent=error.message||"Проверьте поля задания.";}}
+    async function loadExamBank(){const status=$("examBankStatus"),btn=$("loadExamBankBtn");btn.disabled=true;status.textContent="Загрузка защищённого банка…";try{const result=await window.API.getQuestionBank(courseSel.value,examBankSel.value);if(!result||!result.success)throw new Error(result&&result.error||"Не удалось загрузить банк.");examBankRows=(result.questions||[]).map(x=>({questionId:x.questionId,question:x.question||{}}));resetExamQuestionForm();drawExamBankRows();status.textContent="Загружено заданий: "+examBankRows.length+". Ключи остаются в редакторе преподавателя.";}catch(error){status.textContent=error.message||"Ошибка загрузки.";}finally{btn.disabled=false;}}
+    async function saveExamBank(){const status=$("examBankStatus"),btn=$("saveExamBankBtn");if(!examBankRows.length){status.textContent="Добавьте хотя бы одно задание.";return;}if(!confirm("Сохранить "+examBankRows.length+" заданий в банке «"+examBankSel.value+"»? Предыдущая версия будет сохранена в резервной копии."))return;btn.disabled=true;status.textContent="Сохранение и резервное копирование…";try{const result=await window.API.saveQuestionBank(courseSel.value,examBankSel.value,examBankRows);if(!result||!result.success)throw new Error(result&&result.error||"Не удалось сохранить банк.");status.textContent="Сохранено: "+result.questionsSaved+". Резервная копия: "+result.backupId;await loadExamBank();}catch(error){status.textContent=error.message||"Ошибка сохранения.";}finally{btn.disabled=false;}}
     function fillTopics(){
       const opts=topics().map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
       topicSel.innerHTML=opts;testSel.innerHTML=opts;
@@ -332,6 +355,7 @@
     };
     $("loadExamBankBtn").onclick=loadExamBank;
     $("saveExamBankBtn").onclick=saveExamBank;
+    $("examQuestionType").onchange=examTypeFields;$("addExamQuestionBtn").onclick=resetExamQuestionForm;$("saveExamQuestionBtn").onclick=addOrUpdateExamQuestion;$("cancelExamQuestionBtn").onclick=resetExamQuestionForm;examTypeFields();
     examBankSel.onchange=loadExamBank;
     topicSel.onchange=()=>{resetLecture();renderSaved();};
     testSel.onchange=()=>{resetTest();renderSaved();};
