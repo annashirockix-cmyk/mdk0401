@@ -45,7 +45,7 @@
     </div>
     <header class="topbar">
         <div class="brand" style="display: flex; align-items: center; gap: 10px;">
-            <button class="burger-btn" id="burgerBtn"><span></span><span></span><span></span></button>
+            <a class="skip-link" href="#app">К содержимому</a><button class="burger-btn" id="burgerBtn" type="button" aria-label="Открыть навигацию" aria-controls="drawer" aria-expanded="false"><span></span><span></span><span></span></button>
             <span class="brand-badge" id="mainLogo">МДК Портал</span>
             <select id="mdkSelector" class="group-select" style="background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px; font-size: 13px; outline: none;" onchange="if(!this.value)return;window.state.activeCourseId=this.value;window.saveStudentData&&window.saveStudentData();window.syncCourseSelector&&window.syncCourseSelector();window.updateMenuVisibility&&window.updateMenuVisibility();window.renderHomePage&&window.renderHomePage();">
                 <option value="07.01">МДК 07.01 (ЧПУ)</option>
@@ -74,9 +74,10 @@
         </div>
     </header>
     <div class="drawer-overlay" id="drawerOverlay"></div>
-    <nav class="drawer" id="drawer">
-        <div class="drawer-head"><span style="font-weight:bold;color:var(--accent)">Навигация</span><button class="drawer-close" id="drawerClose">✕</button></div>
-        <div class="drawer-nav">
+    <nav class="drawer" id="drawer" aria-label="Основная навигация" aria-hidden="true">
+        <div class="drawer-head"><span style="font-weight:bold;color:var(--accent)">Навигация</span><button class="drawer-close" id="drawerClose" type="button" aria-label="Закрыть навигацию">✕</button></div>
+        <div class="drawer-search"><label for="drawerSearch">Быстрый переход</label><div class="drawer-search-row"><input id="drawerSearch" type="search" placeholder="Найти раздел или функцию…" autocomplete="off" aria-controls="drawerNavResults"><button type="button" id="drawerSearchClear" aria-label="Очистить поиск" title="Очистить">✕</button></div><div class="drawer-search-hint">Нажмите / для поиска, Esc — закрыть</div><div id="drawerNavResults" class="drawer-nav-status" aria-live="polite"></div></div>
+        <div class="drawer-nav" id="drawerNavResultsList">
             <a href="#/" class="drawer-item">🏠 Главная</a>
             <details class="drawer-group" id="drawerCabinet">
                 <summary>👤 Личный кабинет</summary>
@@ -140,7 +141,7 @@
     </nav>
     <main>
         <div id="crumbs" style="padding:10px 20px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--border)"></div>
-        <div id="app" style="padding:20px;max-width:1200px;margin:0 auto;width:100%"></div>
+        <div id="app" tabindex="-1" style="padding:20px;max-width:1200px;margin:0 auto;width:100%"></div>
     </main>
     <script src="./api.js?v=51"></script>
     <script src="./data-global.js?v=6"></script>
