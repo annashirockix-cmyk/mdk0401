@@ -105,7 +105,7 @@
       "type": "single_choice",
       "prompt": "A recorded measurement differs from the expected range. What should be verified before interpreting it?",
       "options": [
-        "Repeat the measurement with the same setup and accept it if the result is consistent.",
+        "Ignore the reading and continue with the planned maintenance.",
         "Compare the number with the expected range before checking the measurement method.",
         "Please check the measurement method and instrument status, then compare the value with supporting evidence.",
         "Change the recorded value to the nearest expected figure and note the difference."
