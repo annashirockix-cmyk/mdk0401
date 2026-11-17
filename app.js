@@ -726,7 +726,8 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         return box.innerHTML;
     }
     if (topic && customTopicLectures.length) {
-        var builtInLectures=(topic.lectures||[]).map(function(base){
+        if(!Array.isArray(topic.__originalLectures))topic.__originalLectures=(topic.lectures||[]).slice();
+        var builtInLectures=topic.__originalLectures.map(function(base){
             var override=customTopicLectures.find(function(item){return item.isBuiltInOverride===true&&String(item.sourceLectureCode||"")===String(base.code||"");});
             return override?{code:base.code,title:override.title||base.title,content:safeCustomLectureHtml(override.content||"")}:base;
         });
