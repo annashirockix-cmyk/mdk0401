@@ -100,6 +100,16 @@
     originalRouter.apply(this,arguments);updateCourseChrome();
   };
 
+  // Re-render the standalone flashcard editor after the core hash router runs.
+  window.addEventListener("hashchange",function(){
+    const route=(location.hash||"").replace(/^#/,"").split("/").filter(Boolean);
+    if(route[0]==="flashcard-editor"&&typeof window.renderFlashcardEditorPage==="function")window.renderFlashcardEditorPage();
+  });
+  window.addEventListener("DOMContentLoaded",function(){
+    const route=(location.hash||"").replace(/^#/,"").split("/").filter(Boolean);
+    if(route[0]==="flashcard-editor"&&typeof window.renderFlashcardEditorPage==="function")window.renderFlashcardEditorPage();
+  });
+
   window.renderAdminPanel=function(){
     const app=document.getElementById("app");if(!app)return;
     if(!isAdmin()){app.innerHTML='<div class="module">Доступ только администратору.</div>';return;}
