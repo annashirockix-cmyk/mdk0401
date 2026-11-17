@@ -3,7 +3,32 @@
 window.MDK_DATA = window.MDK_DATA || {};
 
 (function () {
-  function lec(code, title, content) { return { code, title, content }; }
+  function splitTeacherSections(content) {
+    var student = String(content || "");
+    var teacher = [];
+    var headingPattern = /<h([1-6])\\b[^>]*>[\\s\\S]*?<\\/h\\1>/gi;
+    var headings = [];
+    var match;
+    while ((match = headingPattern.exec(student))) {
+      var plainHeading = match[0].replace(/<[^>]+>/g, " ").replace(/&nbsp;/gi, " ").toLowerCase();
+      headings.push({ start: match.index, end: headingPattern.lastIndex, isKey: /ключ преподавателя|teacher key|answer key|ответы для преподавателя/.test(plainHeading) });
+    }
+    var ranges = [];
+    headings.forEach(function (heading, index) {
+      if (!heading.isKey) return;
+      var end = index + 1 < headings.length ? headings[index + 1].start : student.length;
+      ranges.push({ start: heading.start, end: end });
+      teacher.push(student.slice(heading.start, end));
+    });
+    ranges.slice().reverse().forEach(function (range) {
+      student = student.slice(0, range.start) + student.slice(range.end);
+    });
+    return { student: student, teacher: teacher.join("\\n") };
+  }
+  function lec(code, title, content) {
+    var split = splitTeacherSections(content);
+    return { code: code, title: title, content: split.student, teacherContent: split.teacher };
+  }
   function prac(code, title, goal, task, variants) { return { code, title, goal, task, variants: variants || [] }; }
   function selfwork(code, title, task) { return { code, title, task }; }
   function tq(q, options) { return { q: q, options: options }; }
