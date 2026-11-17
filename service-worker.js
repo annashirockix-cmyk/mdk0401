@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v398'; // Обновлены материалы английского курсов 1–3 и версия runtime.
+const CACHE_NAME = 'portal-cache-v399'; // Добавлена сквозная поддержка множественного выбора в пользовательских тестах.
 
 const STATIC_ASSETS = [
   './',
