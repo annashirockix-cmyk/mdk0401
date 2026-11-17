@@ -1136,7 +1136,7 @@ function getResults_(data) {
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
   // сравнивался со всем массивом и отчёт резко замедлялся по мере роста журнала.
-  function resultCourseKey_(value){const v=normalizeCourseId_(value);return /^-?\\d+(?:\\.\\d+)?$/.test(v)?String(Number(v)):v;}
+  function resultCourseKey_(value){const v=normalizeCourseId_(value);return /^-?\d+(?:\\.\d+)?$/.test(v)?String(Number(v)):v;}
   const resultKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId),resultCourseKey_(x.courseId)]);}));
   const assignmentKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId)]);}));
   vals.slice(1).forEach(function(row){
@@ -2149,9 +2149,10 @@ function scoreBuiltInQuestion_(q,answer) {
     return sameAnswer_(answer.map(String).sort(),expected.map(String).sort());
   }
   if(type==="num"||type==="numeric"||type==="number"){
+    expected=q.correctAnswer!==undefined?q.correctAnswer:(q.extra!==undefined?q.extra:expected);
     if(expected===undefined||expected===null)return false;
     const actualText=String(answer==null?"":answer).trim().replace(",", "."),targetText=String(expected).trim().replace(",", ".");
-    if(!/^[-+]?(?:\\d+\\.?\\d*|\\.\\d+)$/.test(actualText)||!/^[-+]?(?:\\d+\\.?\\d*|\\.\\d+)$/.test(targetText))return false;
+    if(!/^[-+]?(?:\d+\\.?\d*|\\.\d+)$/.test(actualText)||!/^[-+]?(?:\d+\\.?\d*|\\.\d+)$/.test(targetText))return false;
     const actual=Number(actualText),target=Number(targetText);
     if(!Number.isFinite(actual)||!Number.isFinite(target))return false;
     const toleranceRaw=q.tolerance!==undefined?q.tolerance:(q.tol!==undefined?q.tol:0.01),tolerance=Number(toleranceRaw);
@@ -2432,7 +2433,7 @@ function getCustomTest_(data) {
     if (type === "numeric" || type === "num" || type === "number") {
       const expected = String(question.correctAnswer !== undefined ? question.correctAnswer : question.extra || "").trim().replace(",", ".");
       const tolerance = Number(question.tolerance === undefined ? 0.01 : question.tolerance);
-      if (!/^[-+]?(?:\\d+\\.?\\d*|\\.\\d+)$/.test(expected) || !Number.isFinite(Number(expected)) ||
+      if (!/^[-+]?(?:\d+\\.?\d*|\\.\d+)$/.test(expected) || !Number.isFinite(Number(expected)) ||
           !Number.isFinite(tolerance) || tolerance < 0 || tolerance > 1000000000) {
         throw new Error("В вопросе " + (index + 1) + " укажите правильное число и допустимую погрешность от 0 до 1 000 000 000.");
       }
@@ -2457,6 +2458,7 @@ function getCustomTest_(data) {
       optionMaps[String(index)] = order;
     } else if (type === "numeric" || type === "num" || type === "number" || type === "text" || type === "short_text") {
       safe.options = [];
+      if (type === "numeric" || type === "num" || type === "number") { delete safe.extra; delete safe.tolerance; }
     } else {
       const options = Array.isArray(safe.options) ? safe.options.slice() : [];
       if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
