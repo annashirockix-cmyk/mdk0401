@@ -1,7 +1,7 @@
 # Technical English — Course 3, Semester 2 — Lessons 6–8
 ## CNC machine components, axes, coordinates and basic G-code reading
 
-**Status:** original draft lessons for the provisional five-year course map; not imported into the portal or approved as official programme content.  
+**Status:** lesson drafts are appended to the portal course runtime by `english-five-year-runtime.js`; they remain provisional and are not approved as official programme content.  
 **Level:** B1–B1+ ESP.  
 **Professional focus:** machine-tool operators, technologists and programmers; supporting vocabulary for electricians working with machine electrical/control documentation.  
 **Audio:** original Spotlight-style scripts for future recording; no MP3 files or player are included.  
