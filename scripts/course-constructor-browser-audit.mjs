@@ -129,7 +129,7 @@ try {
   await page.locator("#ceQuestionImageFile").setInputFiles({
     name: "question-diagram.png",
     mimeType: "image/png",
-    buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p0sAAAAASUVORK5CYII=", "base64")
+    buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADUlEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC", "base64")
   });
   await page.waitForFunction(() => document.getElementById("ceQuestionImageStatus")?.textContent.includes("Изображение загружено"));
   assert.equal(await page.locator("#ceQuestionImagePreview img").count(), 1, "Question image preview should be visible");
