@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v408'; // Добавлены поиск и замена в редакторе лекций.
+const CACHE_NAME = 'portal-cache-v409'; // Добавлен визуальный редактор защищённых экзаменационных банков.
 
 const STATIC_ASSETS = [
   './',
