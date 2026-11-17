@@ -828,9 +828,30 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             var files = window.customContent.files ? window.customContent.files.filter(f => f.mdkId === courseId && f.topicId === topicId) : [];
             if (files.length > 0) {
                 var filesHtml = `<div style="margin-top:20px; padding-top:15px; border-top:2px solid var(--border);"><h3 style="color:var(--accent); margin-bottom:10px;">📎 Прикрепленные материалы:</h3><div style="display:flex; flex-direction:column; gap:8px;">`;
-                files.forEach(f => { filesHtml += `<a href="${f.fileUrl}" target="_blank" class="btn ghost" style="justify-content:flex-start; padding:12px 15px; text-align:left;"><span style="font-size:20px;">📄</span> <b>${f.title}</b></a>`; });
+                files.forEach(f => {
+                    if (f.fileUrl && /^https:\/\//i.test(String(f.fileUrl))) {
+                        filesHtml += `<a href="${window.escapeHtml(f.fileUrl)}" target="_blank" rel="noopener noreferrer" class="btn ghost" style="justify-content:flex-start; padding:12px 15px; text-align:left;"><span style="font-size:20px;">📄</span> <b>${window.escapeHtml(f.title)}</b></a>`;
+                    } else {
+                        filesHtml += `<button type="button" data-course-file="${window.escapeHtml(f.id)}" class="btn ghost" style="justify-content:flex-start; padding:12px 15px; text-align:left;"><span style="font-size:20px;">📄</span> <b>${window.escapeHtml(f.title)}</b></button>`;
+                    }
+                });
                 filesHtml += `</div></div>`;
-                contentArea.innerHTML += filesHtml;
+                contentArea.insertAdjacentHTML("beforeend", filesHtml);
+                contentArea.querySelectorAll("[data-course-file]").forEach(function(button){
+                    button.onclick=function(){
+                        button.disabled=true;
+                        window.API.getCourseMaterialFile(button.dataset.courseFile).then(function(result){
+                            if(!result||!result.success)throw new Error(result&&result.error||"Не удалось получить документ.");
+                            var bytes=Uint8Array.from(atob(result.data),function(ch){return ch.charCodeAt(0);});
+                            var blob=new Blob([bytes],{type:result.mimeType||"application/octet-stream"});
+                            var url=URL.createObjectURL(blob),link=document.createElement("a");
+                            link.href=url;link.download=result.name||"document";link.target="_blank";
+                            document.body.appendChild(link);link.click();link.remove();
+                            setTimeout(function(){URL.revokeObjectURL(url);},60000);
+                        }).catch(function(error){window.showToast?window.showToast(error.message,"err"):alert(error.message);})
+                        .finally(function(){button.disabled=false;});
+                    };
+                });
             }
             window.unlockAchievement('reader');
         }

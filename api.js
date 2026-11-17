@@ -118,6 +118,8 @@ window.API = {
  submitFinalExam:function(data){return fetchAPI("submitFinalExam",data||{},"POST");},
  getGameAnswer:function(gameId,categoryIndex,questionIndex){return fetchAPI("getGameAnswer",{gameId:gameId,categoryIndex:categoryIndex,questionIndex:questionIndex},"POST");},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
+ uploadCourseMaterialFile:function(data){return fetchAPI("uploadCourseMaterialFile",data||{},"POST",120000);},
+ getCourseMaterialFile:function(id){return fetchAPI("getCourseMaterialFile",{id:id},"POST",60000);},
  deleteCustomContent:function(id,courseId){return fetchAPI("deleteCustomContent",{id:id,courseId:courseId||""},"POST");},
  setTeacherCourses:function(email,courses){return fetchAPI("setTeacherCourses",{email:email,courses:courses},"POST");},
 setUserRole:function(email,role){return fetchAPI("setUserRole",{email:email,role:role},"POST");},
