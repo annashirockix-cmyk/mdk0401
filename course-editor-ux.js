@@ -28,11 +28,11 @@ function installQuestionImage(){
    if(file.size>8*1024*1024){status.textContent='Исходный файл больше 8 МБ. Выберите изображение поменьше.';e.target.value='';return}
    button.disabled=true;status.textContent='Подготовка изображения…';
    try{
-     const bitmap=await createImageBitmap(file),max=1600,ratio=Math.min(1,max/Math.max(bitmap.width,bitmap.height));
+     const bitmap=await createImageBitmap(file),max=1400,ratio=Math.min(1,max/Math.max(bitmap.width,bitmap.height));
      const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*ratio));canvas.height=Math.max(1,Math.round(bitmap.height*ratio));
      const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close&&bitmap.close();
-     const blob=await new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(new Error('Не удалось обработать изображение.')),'image/jpeg',0.82));
-     if(blob.size>1300000)throw new Error('После сжатия изображение всё ещё слишком большое. Выберите другое изображение.');
+     const blob=await new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(new Error('Не удалось обработать изображение.')),'image/jpeg',0.76));
+     if(blob.size>700000)throw new Error('После сжатия изображение больше 700 КБ. Выберите изображение меньшего размера.');
      const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Не удалось прочитать изображение.'));reader.readAsDataURL(blob)});
      status.textContent='Загрузка в закрытое хранилище…';
      const course=$('editorCourse')&&$('editorCourse').value;
