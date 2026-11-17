@@ -5817,10 +5817,10 @@
                 "prompt": "Listening 2. Which items should students not bring?",
                 "audioText": "The college environmental team is organising a repair and reuse day next Wednesday. Students can bring small electrical items that are safe to inspect, clean containers and unwanted books. The event starts at ten in the technology hall. Please do not bring damaged batteries or equipment with exposed wires. Volunteers should register online by Tuesday.",
                 "options": [
-                  "On Friday",
+                  "Small electrical items that are safe to inspect",
                   "Damaged batteries or equipment with exposed wires",
-                  "Next month",
-                  "After the event"
+                  "Clean containers",
+                  "Unwanted books"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -8102,10 +8102,10 @@
                 "prompt": "Listening 2. What should students review before the session?",
                 "audioText": "The media studies tutor has moved the digital citizenship workshop to Room 26. It will start at nine forty-five on Tuesday. Students should review their public profile settings before the session and bring one example of an online post they would like to discuss. The workshop will include a short activity on how information can remain available after it is deleted.",
                 "options": [
-                  "On Friday",
                   "Their public profile settings",
-                  "Next month",
-                  "After the event"
+                  "Their saved passwords",
+                  "Their private messages",
+                  "Their online shopping preferences"
                 ],
                 "correctIndex": 1,
                 "points": 1
