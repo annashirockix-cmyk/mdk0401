@@ -305,3 +305,18 @@ test("custom matching questions hide right-side keys and score shuffled selectio
  assert.ok(server.includes("originalOptions[originalIndex]"));
  assert.ok(server.includes('String(answer[index])===String(pair.right)'));
 });
+test("custom ordering questions shuffle items and preserve student drag order for server scoring", () => {
+ const app = read("app.js");
+ const server = read("Code.gs");
+ const editor = read("course-admin.js");
+ const ux = read("course-editor-ux.js");
+ assert.ok(app.includes('questionType === "order" || questionType === "ordering"'));
+ assert.ok(app.includes("customOrderList"));
+ assert.ok(app.includes("data-order-up"));
+ assert.ok(editor.includes("correctOrder:ordering?items.slice():[]"));
+ assert.ok(editor.includes("ordering?'<ol>'"));
+ assert.ok(ux.includes("Введите элементы в правильном порядке"));
+ assert.ok(server.includes("safe.items = order.map(function(i) { return items[i]; })"));
+ assert.ok(server.includes('type === "order" || type === "ordering"'));
+ assert.ok(server.includes("return mapped.map(function(originalIndex){return originalItems[originalIndex] || \"\";});"));
+});
