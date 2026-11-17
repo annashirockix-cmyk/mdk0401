@@ -2134,7 +2134,7 @@ function getBuiltInTest_(data) {
 function sameAnswer_(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
 function scoreBuiltInQuestion_(q,answer) {
   const type=String(q.type||"mc").toLowerCase();
-  let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+  let expected=Array.isArray(q.correctAnswers)?q.correctAnswers:(q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer)));
   if(type==="tf"||type==="true_false"){
     if(expected===undefined||expected===null)return false;
     let target;
@@ -2434,6 +2434,13 @@ function submitCustomTest_(data) {
   if (!questions.length || answers.length !== questions.length) throw new Error("Количество ответов не совпадает с количеством вопросов.");
   const canonicalAnswers = answers.map(function(value, index) {
     const order = attempt.optionMaps[String(index)] || [];
+    if (Array.isArray(value)) {
+      const mapped = value.map(function(item) {
+        const displayed = Number(item);
+        return Number.isInteger(displayed) && displayed >= 0 && displayed < order.length ? order[displayed] : -1;
+      });
+      return mapped.every(function(item) { return item >= 0; }) && new Set(mapped).size === mapped.length ? mapped.sort(function(a,b){return a-b;}) : [];
+    }
     const displayed = Number(value);
     return Number.isInteger(displayed) && displayed >= 0 && displayed < order.length ? order[displayed] : -1;
   });
