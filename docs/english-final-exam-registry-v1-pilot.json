@@ -441,8 +441,8 @@
                 ],
                 "correctOrder": [
                   "Choose a book from the shelf",
-                  "Show your student card",
                   "Take the book to the library desk",
+                  "Show your student card",
                   "Receive the book and the return date"
                 ],
                 "points": 2
@@ -2878,10 +2878,10 @@
                   "Explain what service you need"
                 ],
                 "correctOrder": [
-                  "Explain what service you need",
-                  "Ask the assistant for information",
                   "Check the directions on the map",
-                  "Visit the shop"
+                  "Visit the shop",
+                  "Explain what service you need",
+                  "Ask the assistant for information"
                 ],
                 "points": 2
               },
