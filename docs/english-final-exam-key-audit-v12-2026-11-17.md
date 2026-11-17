@@ -12,7 +12,7 @@ Reviewed all ten V12 source variants across C01-S01, C01-S02, C02-S01, C02-S02, 
 
 ## Content review and corrections
 
-Reviewed all 100 tasks (60 single-choice and 40 other task types). Four confirmed reading-key errors were corrected:
+Reviewed all 100 tasks (60 single-choice and 40 other task types). Five confirmed reading-key errors were corrected:
 
 1. C01-S01 `c1s1v12_r01`: the students assign tasks to named team members.
 2. C01-S01 `c1s1v12_r02`: the students check the drawing and ask the teacher for advice about missing measurements.
