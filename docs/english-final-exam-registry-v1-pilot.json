@@ -5832,10 +5832,10 @@
                 "options": [
                   "They pay the full price and keep the cup",
                   "They borrow a cup without paying a deposit",
-                  "They pay a deposit and get it back when they return the cup",
-                  "Students pay a deposit but keep it when they return the cup."
+                  "Students pay a deposit but keep it when they return the cup.",
+                  "They pay a deposit and get it back when they return the cup"
                 ],
-                "correctIndex": 2,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -8102,12 +8102,12 @@
                 "prompt": "Listening 2. What should students review before the session?",
                 "audioText": "The media studies tutor has moved the digital citizenship workshop to Room 26. It will start at nine forty-five on Tuesday. Students should review their public profile settings before the session and bring one example of an online post they would like to discuss. The workshop will include a short activity on how information can remain available after it is deleted.",
                 "options": [
-                  "Their public profile settings",
-                  "Their saved passwords",
                   "Their private messages",
+                  "Their saved passwords",
+                  "Their public profile settings",
                   "Their online shopping preferences"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -8129,11 +8129,11 @@
                 "prompt": "What did he understand about deleting a post?",
                 "options": [
                   "Deleting a post removes every copy immediately",
-                  "Deleting a post does not guarantee that every copy has disappeared",
+                  "Deleting a post guarantees that no one can save it.",
                   "Only friends can save a copy of a post",
-                  "Deleting a post guarantees that no one can save it."
+                  "Deleting a post does not guarantee that every copy has disappeared"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
