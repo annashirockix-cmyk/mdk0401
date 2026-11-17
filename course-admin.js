@@ -201,6 +201,38 @@
     }
     function topics(){return getTopics(courseSel.value);}
     function records(type,topicId){const key=type==="lecture"?"lectures":"tests";return (window.customContent[key]||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===topicId);}
+    function loadMainTopic(){
+      const topic=getBuiltInTopics(courseSel.value).find(x=>String(x.id)===String(mainTopicSel.value));
+      const override=(window.customContent.topics||[]).find(x=>x.mdkId===courseSel.value&&String(x.sourceTopicId||"")===String(mainTopicSel.value));
+      $("mainTopicCode").value=override&&override.code||topic&&topic.code||"";
+      $("mainTopicTitle").value=override&&override.title||topic&&topic.title||"";
+    }
+    function getBuiltInTopic(topicId){return getBuiltInTopics(courseSel.value).find(x=>String(x.id)===String(topicId));}
+    async function loadExamBank(){
+      const status=$("examBankStatus"),btn=$("loadExamBankBtn");btn.disabled=true;status.textContent="Загрузка защищённого банка…";
+      try{
+        const result=await window.API.getQuestionBank(courseSel.value,examBankSel.value);
+        if(!result||!result.success)throw new Error(result&&result.error||"Не удалось загрузить банк.");
+        const rows=(result.questions||[]).map(x=>({questionId:x.questionId,question:x.question}));
+        $("examBankJson").value=JSON.stringify(rows,null,2);
+        status.textContent="Загружено заданий: "+rows.length+". Ключи ответов доступны только в этом редакторе преподавателя.";
+      }catch(error){status.textContent=error.message||"Ошибка загрузки.";}
+      finally{btn.disabled=false;}
+    }
+    async function saveExamBank(){
+      const status=$("examBankStatus"),btn=$("saveExamBankBtn");let questions;
+      try{questions=JSON.parse($("examBankJson").value);}catch(error){status.textContent="Проверьте JSON: "+error.message;return;}
+      if(!Array.isArray(questions)){status.textContent="Нужен JSON-массив заданий.";return;}
+      if(!confirm("Сохранить "+questions.length+" заданий в банке «"+examBankSel.value+"»? Перед заменой будет создана резервная копия."))return;
+      btn.disabled=true;status.textContent="Сохранение и резервное копирование…";
+      try{
+        const result=await window.API.saveQuestionBank(courseSel.value,examBankSel.value,questions);
+        if(!result||!result.success)throw new Error(result&&result.error||"Не удалось сохранить банк.");
+        status.textContent="Сохранено: "+result.questionsSaved+". Резервная копия: "+result.backupId;
+        await loadExamBank();
+      }catch(error){status.textContent=error.message||"Ошибка сохранения.";}
+      finally{btn.disabled=false;}
+    }
     function fillTopics(){
       const opts=topics().map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
       topicSel.innerHTML=opts;testSel.innerHTML=opts;
@@ -216,7 +248,9 @@
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
       const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
       const fs=(window.customContent.flashcards||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
-      $("lectureExisting").innerHTML='<option value="">— Новая лекция —</option>'+ls.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
+      const builtInTopic=getBuiltInTopic(lectureTopicId),builtInLectures=builtInTopic&&Array.isArray(builtInTopic.lectures)?builtInTopic.lectures:[];
+      const additionalLectures=ls.filter(x=>x.isBuiltInOverride!==true);
+      $("lectureExisting").innerHTML='<option value="">— Новая дополнительная лекция —</option>'+builtInLectures.map((x,i)=>'<option value="builtin:'+i+'">Основная: '+esc(x.code||"")+' '+esc(x.title||"")+'</option>').join("")+additionalLectures.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
       $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
       $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button></div>').join(""):'<p>Лекций пока нет.</p>')+
         '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>')+
@@ -226,14 +260,27 @@
       $("savedMaterials").querySelectorAll(".pick-flashcards").forEach(b=>b.onclick=()=>{window.state.activeCourseId=courseSel.value;if(window.saveStudentData)window.saveStudentData();location.hash="#/flashcard-editor";});
     }
     function resetLecture(){
-      lectureId="";$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
-      $("saveLectureBtn").textContent="Создать лекцию";$("deleteLectureBtn").disabled=true;$("lectureStatus").textContent="";
+      lectureId="";builtInLectureIndex=null;$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
+      $("saveLectureBtn").textContent="Создать дополнительную лекцию";$("deleteLectureBtn").disabled=true;$("lectureStatus").textContent="";
     }
     function loadLecture(){
       const id=$("lectureExisting").value;if(!id){resetLecture();return;}
+      if(id.indexOf("builtin:")===0){
+        const index=Number(id.slice(8)),topic=getBuiltInTopic(topicSel.value),base=topic&&topic.lectures&&topic.lectures[index];
+        if(!base||!Number.isInteger(index)){resetLecture();return;}
+        const override=records("lecture",topicSel.value).find(x=>x.isBuiltInOverride===true&&String(x.sourceLectureCode||"")===String(base.code||""));
+        builtInLectureIndex=index;lectureId=override?override.id:"";
+        $("lectureTitle").value=override&&override.title||base.title||"";
+        $("lectureBody").value=override&&override.content||base.content||"";
+        $("saveLectureBtn").textContent="Сохранить основную лекцию";
+        $("deleteLectureBtn").disabled=!override;
+        $("lectureStatus").textContent=override?"Загружена изменённая основная лекция.":"Открыта исходная лекция. Сохранение создаст её редакцию.";
+        return;
+      }
+      builtInLectureIndex=null;
       const item=records("lecture",topicSel.value).find(x=>String(x.id)===id);if(!item)return;
       lectureId=item.id;$("lectureTitle").value=item.title||"";$("lectureBody").value=item.content||"";
-      $("saveLectureBtn").textContent="Сохранить изменения лекции";$("deleteLectureBtn").disabled=false;$("lectureStatus").textContent="Загружена лекция для изменения.";
+      $("saveLectureBtn").textContent="Сохранить изменения лекции";$("deleteLectureBtn").disabled=false;$("lectureStatus").textContent="Загружена дополнительная лекция для изменения.";
     }
     function clearQuestionForm(){$("qText").value="";["qA","qB","qC","qD"].forEach(id=>$(id).value="");$("qCorrect").value="0";editingQuestion=-1;$("addQuestionBtn").textContent="Добавить вопрос в тест";}
     function drawDraft(){
@@ -257,7 +304,24 @@
       $("testPreview").innerHTML='<h3>'+esc(title)+' — просмотр заданий</h3>'+(draft.length?draft.map((q,i)=>'<div class="module" style="padding:12px;margin:8px 0"><b>Задание '+(i+1)+'. '+esc(q.q)+'</b><ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b style="color:var(--accent)">✓ Правильный ответ</b>':'')+'</li>').join("")+'</ol></div>').join(""):'<p>В тесте пока нет заданий.</p>');
     }
     fillTopics();
-    courseSel.onchange=()=>{resetLecture();resetTest();fillTopics();};
+    courseSel.onchange=()=>{resetLecture();resetTest();fillTopics();loadExamBank();};
+    mainTopicSel.onchange=loadMainTopic;
+    $("saveMainTopicBtn").onclick=async function(){
+      const topic=getBuiltInTopics(courseSel.value).find(x=>String(x.id)===String(mainTopicSel.value)),status=$("mainTopicStatus");
+      const code=$("mainTopicCode").value.trim(),title=$("mainTopicTitle").value.trim();
+      if(!topic||!code||!title){status.textContent="Выберите основную тему и заполните код и название.";return;}
+      this.disabled=true;status.textContent="Сохранение…";
+      try{
+        const id="topic-override-"+courseSel.value+"-"+topic.id;
+        const result=await window.API.saveCustomContent({id:id,mdkId:courseSel.value,type:"topic",sourceTopicId:topic.id,code:code,title:title,content:""});
+        if(!result||!result.success)throw new Error(result&&result.error||"Не удалось сохранить тему.");
+        await new Promise(resolve=>refreshContent(resolve));fillTopics();mainTopicSel.value=topic.id;loadMainTopic();status.textContent="Основная тема обновлена ✓";
+      }catch(error){status.textContent=error.message||"Ошибка сохранения.";}
+      finally{this.disabled=false;}
+    };
+    $("loadExamBankBtn").onclick=loadExamBank;
+    $("saveExamBankBtn").onclick=saveExamBank;
+    examBankSel.onchange=loadExamBank;
     topicSel.onchange=()=>{resetLecture();renderSaved();};
     testSel.onchange=()=>{resetTest();renderSaved();};
     $("lectureExisting").onchange=loadLecture;
