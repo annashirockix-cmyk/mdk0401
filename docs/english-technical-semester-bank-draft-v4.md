@@ -94,11 +94,11 @@
 - C. The cause of the fault was confirmed
 - D. Signal loss occurred intermittently during the second test
 
-**76.** Choose the correct term for a device that converts a physical quantity, such as pressure, into a signal.
+**76.** Choose the correct term for a device that converts a control signal into a physical action, such as movement.
 - A. Fastener
 - B. Gasket
 - C. Bearing
-- D. Transducer
+- D. Actuator
 
 **77.** Complete the sentence: “Neither the operator nor the supervisor ___ the revised schedule.”
 - A. have received
@@ -143,7 +143,7 @@
 | 73 | D | The comparative form of “reliable” is “more reliable”. |
 | 74 | B | In many specifications, “shall” denotes a requirement; confirm the convention used by the relevant standard/document set. |
 | 75 | D | The log states intermittent signal loss was observed during test two; it does not identify a confirmed cause. |
-| 76 | D | A transducer converts a physical quantity into another form of signal. |
+| 76 | D | An actuator converts a control signal or energy input into a physical action, such as movement. |
 | 77 | D | With “neither…nor”, agreement commonly follows the nearer singular subject “supervisor”; verify house style if teaching an alternative convention. |
 | 78 | C | Non-conformance is failure to satisfy a defined requirement. |
 | 79 | B | The sentence is grammatical, precise and includes time and verification context. |
