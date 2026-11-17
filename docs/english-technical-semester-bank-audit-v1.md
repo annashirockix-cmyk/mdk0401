@@ -97,3 +97,13 @@ A cross-batch editorial screen of the 200 Technical draft items identified two r
 - Q123 and Q163 both tested *notify someone of* a change. Q163 has been rewritten to test the distinct phrase *ahead of schedule* in a short delivery update; the keyed position remains A and the teacher rationale is synchronized.
 
 The changes are limited to the Technical authoring drafts v8 and v9. They do not alter the final-exam pilot registry, protected VPR banks, Google Sheets, Apps Script, or student-facing portal. The remaining 200-item semantic review is still editorial and provisional: repeated broad themes (document control, non-conformity, measurement evidence, technical reporting) are intentional curriculum strands unless an individual item repeats the same assessed skill too closely. A full comparison against protected VPR variants is still outstanding.
+
+
+## 4D. Technical semantic recurrence screen — additional concept separation (2026-11-17)
+
+A further pass found two repeated concept checks across the Technical pool:
+
+- Q42 described a sensor as converting a physical quantity into a signal, while Q76 defined a transducer in essentially the same way. Q76 now tests *actuator*: a device converting a control signal or energy input into physical action. The correct option remains D; the teacher rationale has been updated.
+- Q56 and Q142 both defined *traceability*. Q142 now tests *first-pass yield*, the proportion of units meeting requirements without rework on the first pass. The correct option remains A; the teacher rationale has been updated.
+
+These are content-level edits to Technical draft v4 and v8 only. They do not affect protected banks, final-exam pilot variants, Google Sheets, Apps Script or student-facing content. Further checks are still needed for overlapping traceability applications (including Q57 and Q80), repeated document-control ideas, and protected VPR content.
