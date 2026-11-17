@@ -286,7 +286,7 @@ function englishVprNormalize_(value) {
   return String(value == null ? "" : value).toLowerCase().replace(/\s+/g," ").trim();
 }
 
-function validateEnglishVprWrittenAnswers_(task, answers, taskIndex) {
+function validateEnglishVprWrittenAnswers_(task, answers, taskIndex, allowIncomplete) {
   if (!task || task.type !== "questionnaire" || !Array.isArray(task.items) || !task.items.length) {
     throw new Error("Структура письменного задания ВПР повреждена.");
   }
@@ -296,14 +296,16 @@ function validateEnglishVprWrittenAnswers_(task, answers, taskIndex) {
       throw new Error("Ответ " + (index + 1) + " письменного задания должен быть текстом.");
     }
     const answer = raw.trim();
-    const words = answer ? answer.split(/\s+/).length : 0;
+    const words = answer ? answer.split(/\\s+/).length : 0;
+    if (!answer && allowIncomplete) {
+      return {task:taskIndex,question:String(question),answer:"",maxPoints:1};
+    }
     if (!answer || answer.length > 100 || words > 5) {
       throw new Error("В письменном задании каждый ответ должен содержать от 1 до 5 слов и не более 100 символов.");
     }
     return {task:taskIndex,question:String(question),answer:answer,maxPoints:1};
   });
 }
-
 function submitEnglishVprExam_(data) {
   const user = auth_(data), track = String(data.track||"").toLowerCase();
   if (user.role !== "student" || ["basic","technical"].indexOf(track)<0) throw new Error("Нет доступа к отправке экзамена.");
@@ -323,6 +325,9 @@ function submitEnglishVprExam_(data) {
   if (!startedAt || elapsedSeconds > allowedSeconds + 300) {
     throw new Error("Время экзамена истекло. Обратитесь к преподавателю.");
   }
+  // Неполная письменная часть принимается только при подтверждённом сервером
+  // истечении времени, а не по одному клиентскому флагу.
+  const allowIncompleteWritten = data.timeExpired === true && elapsedSeconds >= allowedSeconds - 5;
   const submitted=Array.isArray(data.answers)?data.answers:[];
   if(submitted.length!==(exam.tasks||[]).length) throw new Error("Не все задания отправлены.");
   let objective=0, maxObjective=0, written=[];
@@ -347,7 +352,7 @@ function submitEnglishVprExam_(data) {
       if(selected===Number(expected))objective++;
     });
     else if(task.type==="transform") (task.items||[]).forEach(function(item,i){maxObjective++;const accepted=Array.isArray(item[3])?item[3]:[];if(accepted.map(englishVprNormalize_).indexOf(englishVprNormalize_(ans[i]))>=0)objective++;});
-    else if(task.type==="questionnaire") written=written.concat(validateEnglishVprWrittenAnswers_(task,ans,ti));
+    else if(task.type==="questionnaire") written=written.concat(validateEnglishVprWrittenAnswers_(task,ans,ti,allowIncompleteWritten));
   });
   const maxScore=maxObjective+written.length;
   const percent=maxObjective?Math.round(objective/maxObjective*100):0;
