@@ -6272,10 +6272,10 @@
                 "prompt": "Listening 2. Which timetable should participants bring to the support workshop?",
                 "audioText": "The student support centre is running a workshop on managing study time and rest. It takes place in Room 12 on Tuesday at one o'clock. The session will cover planning revision, taking regular breaks and finding support when workloads become difficult. Students do not need to bring books, but they should bring a weekly timetable.",
                 "options": [
-                  "On Friday",
+                  "The meeting room",
                   "A weekly timetable",
-                  "Next month",
-                  "After the event"
+                  "The project notes",
+                  "The support workshop handout"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -8556,10 +8556,10 @@
                 "prompt": "Listening 2. What can visitors submit at the entrance?",
                 "audioText": "The town planning department is inviting students to a presentation about adapting public spaces to hotter summers. The event will be held at the civic centre on Thursday at half past five. The planner will discuss shade, drinking-water points and tree planting. Visitors can submit questions on paper at the entrance or through the council website.",
                 "options": [
-                  "On Friday",
+                  "A completed feedback form",
                   "Questions on paper",
-                  "Next month",
-                  "After the event"
+                  "A registration card",
+                  "A copy of the presentation"
                 ],
                 "correctIndex": 1,
                 "points": 1
