@@ -859,9 +859,9 @@ test("English course 1–3 lesson answer keys are removed from student lecture c
     lecture.listeningId === "en-c01-s01-l09"
   );
   assert.ok(lesson, "course 1 lesson 9 should be appended");
-  assert.ok(lesson.teacherContent.includes("1) on. 2) at. 3) in."), "teacher copy retains the Russian-labelled answer key");
+  assert.ok(lesson.teacherContent.includes("on. 2) at. 3) in."), "teacher copy retains the Russian-labelled answer key");
   assert.ok(!lesson.content.includes("Ключ преподавателя"), "Russian answer-key heading is not student-visible");
-  assert.ok(!lesson.content.includes("1) on. 2) at. 3) in."), "complete inline answer block is not student-visible");
+  assert.ok(!lesson.content.includes("on. 2) at. 3) in."), "complete inline answer block is not student-visible");
 
   const technicalTopics = data.ENT.sections.flatMap((section) => section.topics || []);
   const technicalLesson = technicalTopics.flatMap((topic) => topic.lectures || []).find((lecture) =>
