@@ -114,3 +114,14 @@ A further separation was made for Q57 and Q80, which both previously asked what 
 ## 4E. Basic–Technical cross-track screen — 2026-11-17
 
 A review of the 200 Basic and 200 Technical draft stems found no exact cross-track stem collision (consistent with the earlier exact-normalized-stem screen). Several general English structures intentionally recur across tracks—present perfect, past perfect, passive voice, comparatives, prepositions and polite requests—but the contexts and assessed language items differ. These are shared language foundations, not evidence that the two authoring pools are interchangeable. The Technical pool adds manufacturing, measurement, control systems, technical records and workplace ESP contexts. A final overlap check against protected VPR variants remains blocked pending authorised access to their current contents.
+
+
+## 4F. Technical semantic recurrence screen — metrology, conformity and document revisions (2026-11-17)
+
+A further cross-batch review found three pairs where the same narrow assessed distinction was repeated:
+
+- Q11 and Q109 both asked for the definition/purpose of instrument calibration. Q109 now tests *measurement uncertainty* instead; its correct option remains A and the teacher-key rationale has been updated.
+- Q78 and Q122 both tested the meaning of failure to meet specified requirements (non-conformance / out of specification). Q122 now tests *rework* in manufacturing; its correct option remains A and the rationale is synchronized.
+- Q19 and Q132 both asked students to identify or interpret the current document revision. Q132 now tests the meaning of retaining a superseded revision for historical evidence, rather than selecting the current revision. Its correct option remains C.
+
+The edits are confined to Technical draft batches v6 and v7. They do not change the protected VPR banks, final-exam pilot registry, Google Sheets, Apps Script or student-facing portal. The recurrence screen remains editorial rather than expert approval; metrology and quality-management terminology must still be checked against the programme glossary and relevant subject references.
