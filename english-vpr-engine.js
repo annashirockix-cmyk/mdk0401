@@ -673,47 +673,100 @@
         app.querySelector(".module").appendChild(semesterNotice);
       }
     }
-    if (hasStaffAccess() && window.API && window.API.importEnglishVprBank) {
-      var migrate = el("button","btn ghost","Перенести экзамены в защищённую таблицу");
-      migrate.type="button"; migrate.style.cssText="margin:0 0 14px;width:100%";
-      migrate.onclick=function(){
-        if(!window.confirm("Импортировать варианты Basic и Technical в закрытый лист EnglishVPRBank?")) return;
-        migrate.disabled=true; migrate.textContent="Импортируем и проверяем…";
-        Promise.all(["basic","technical"].map(function(track){
-          return window.API.importEnglishVprBank(track).then(function(result){
-            if(!result || result.success !== true) throw new Error("Сервер не подтвердил импорт "+track+": "+(result && result.error || "пустой ответ"));
-            return window.API.getEnglishVprExam(track).then(function(check){
-              if(!check || check.success !== true || !check.exam || !Array.isArray(check.exam.tasks) || !check.exam.tasks.length) {
-                throw new Error("Импорт "+track+" не прошёл контрольное чтение: "+(check && check.error || "вариант не найден или пуст"));
-              }
-              return {track:track, tasks:check.exam.tasks.length, title:check.exam.title || track};
-            });
-          });
-        })).then(function(results){
-          migrate.textContent="Basic и Technical подтверждены сервером";
-          migrate.disabled=true;
-          var details=results.map(function(item){return item.track.toUpperCase()+": "+item.tasks+" заданий";}).join("; ");
-          if(window.showToast)window.showToast("Импорт и чтение с сервера подтверждены: "+details,"success");
-          else window.alert("Импорт и контрольное чтение подтверждены: "+details);
-        }).catch(function(err){
-          migrate.disabled=false; migrate.textContent="Повторить импорт и проверку";
-          window.alert("Импорт/проверка не завершены: "+(err.message||err)+". Ни один вариант не считается готовым без подтверждения чтением с сервера.");
-        });
-      };
-      app.querySelector(".module").appendChild(migrate);
-    }
     var tracks = course === "ENB" ? ["basic"] : course === "ENT" ? ["technical"] : ["basic", "technical"];
+    var bankStates = {};
+    var bankStatus = el("p","museum-muted","Проверяем доступность экзаменов на сервере…");
+    app.querySelector(".module").appendChild(bankStatus);
+    function readBankStatus(track) {
+      if (!window.API || !window.API.getEnglishVprExam) {
+        return Promise.resolve({status:"error",error:"Серверный API экзаменов недоступен."});
+      }
+      return window.API.getEnglishVprExam(track).then(function(check) {
+        if (check && check.success === true && check.exam && Array.isArray(check.exam.tasks) && check.exam.tasks.length) {
+          return {status:"ready",tasks:check.exam.tasks.length,title:check.exam.title || track};
+        }
+        var message=String(check && check.error || "Сервер не подтвердил доступность экзамена.");
+        if (/экзамен ещё не импортирован|экзамен не импортирован|вариант не найден/i.test(message)) return {status:"missing",error:message};
+        return {status:"error",error:message};
+      }).catch(function(error) {
+        return {status:"error",error:String(error && error.message || error || "Ошибка чтения экзамена.")};
+      });
+    }
+    var bankChecks = Promise.all(tracks.map(function(track) {
+      return readBankStatus(track).then(function(result){bankStates[track]=result;return {track:track,result:result};});
+    }));
+    if (hasStaffAccess() && window.API && window.API.importEnglishVprBank) {
+      bankChecks.then(function(states) {
+        var missingTracks=states.filter(function(item){return item.result.status==="missing";}).map(function(item){return item.track;});
+        var failedTracks=states.filter(function(item){return item.result.status==="error";});
+        if (failedTracks.length) {
+          bankStatus.textContent="Не удалось проверить доступность экзамена: "+failedTracks.map(function(item){return item.track.toUpperCase()+": "+item.result.error;}).join("; ")+". Импорт не запускается автоматически.";
+          return;
+        }
+        if (!missingTracks.length) {
+          bankStatus.textContent="Все доступные варианты экзамена найдены на сервере. Повторный импорт не требуется.";
+          return;
+        }
+        bankStatus.textContent="Не найдены варианты: "+missingTracks.map(function(track){return track.toUpperCase();}).join(", ")+". Импорт доступен только для отсутствующих вариантов.";
+        var migrate=el("button","btn ghost","Импортировать отсутствующие варианты");
+        migrate.type="button";migrate.style.cssText="margin:0 0 14px;width:100%";
+        migrate.onclick=function(){
+          if(!window.confirm("Импортировать только отсутствующие варианты: "+missingTracks.map(function(track){return track.toUpperCase();}).join(", ")+"? Уже существующие банки не будут перезаписаны."))return;
+          migrate.disabled=true;migrate.textContent="Импортируем и проверяем…";
+          Promise.all(missingTracks.map(function(track){
+            return window.API.importEnglishVprBank(track).then(function(saved){
+              if(!saved||saved.success!==true)throw new Error("Сервер не подтвердил импорт "+track+": "+(saved&&saved.error||"пустой ответ"));
+              return readBankStatus(track).then(function(check){
+                if(check.status!=="ready")throw new Error("Контрольное чтение "+track+" не прошло: "+(check.error||"вариант не найден или пуст"));
+                bankStates[track]=check;
+                return {track:track,tasks:check.tasks,title:check.title};
+              });
+            });
+          })).then(function(results){
+            migrate.remove();
+            bankStatus.textContent="Импортированы и проверены: "+results.map(function(item){return item.track.toUpperCase()+": "+item.tasks+" заданий";}).join("; ")+".";
+            if(window.showToast)window.showToast("Отсутствующие экзамены восстановлены и прочитаны с сервера.","success");
+          }).catch(function(error){
+            migrate.disabled=false;migrate.textContent="Повторить импорт отсутствующих вариантов";
+            bankStatus.textContent="Импорт не завершён: "+(error.message||error)+". Существующие варианты не следует импортировать повторно без необходимости.";
+          });
+        };
+        app.querySelector(".module").appendChild(migrate);
+      });
+    }
     tracks.forEach(function (track) {
       var card = el("article", "question");
       card.style.cssText = "padding:18px;border:1px solid var(--border);border-radius:12px;background:var(--card-soft)";
       card.appendChild(el("h3", "", track === "basic" ? "Basic English — базовый" : "Technical English — технический"));
       card.appendChild(el("p", "", "90 минут · 7 заданий · аудирование, чтение, лексика, грамматика и письменные ответы"));
-      var button = el("button", "btn", "Открыть экзамен");
+      var availability = el("p","museum-muted","Проверяем доступность…");
+      var button = el("button", "btn", "Проверяем экзамен…");
       button.type = "button";
       button.style.width = "100%";
-      button.onclick = function () { renderPage(track === "basic" ? "final-basic" : "final-technical"); };
+      button.disabled = true;
+      button.onclick = function () {
+        if (!bankStates[track] || bankStates[track].status !== "ready") {
+          window.alert(bankStates[track] && bankStates[track].error || "Экзамен пока недоступен. Обратитесь к преподавателю.");
+          return;
+        }
+        renderPage(track === "basic" ? "final-basic" : "final-technical");
+      };
+      card.appendChild(availability);
       card.appendChild(button);
       choices.appendChild(card);
+      bankChecks.then(function() {
+        var state=bankStates[track] || {status:"error",error:"Не удалось проверить экзамен."};
+        if(state.status==="ready") {
+          availability.textContent="Экзамен доступен · "+state.tasks+" заданий";
+          button.disabled=false;button.textContent="Открыть экзамен";
+        } else if(state.status==="missing") {
+          availability.textContent="Экзамен ещё не импортирован преподавателем.";
+          button.disabled=true;button.textContent="Пока недоступен";
+        } else {
+          availability.textContent="Не удалось проверить доступность: "+state.error;
+          button.disabled=true;button.textContent="Проверка не пройдена";
+        }
+      });
       renderSemesterTests(track, course, choices);
     });
     if(window.state&&window.state.student&&window.API&&window.API.startEnglishFinalExam){
