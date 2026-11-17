@@ -105,17 +105,10 @@ try {
 
   await page.evaluate(() => window.renderCourseEditorPage());
   await page.waitForSelector("#createTopicBtn");
-  await page.waitForSelector("#editorTutoringPanel");
-  await page.locator("#editorTutorUrl").fill("https://example.invalid/tutoring");
-  await page.locator("#editorTutorTitle").fill("Запись на консультацию");
-  await page.locator("#editorTutorDescription").fill("Выберите удобное время.");
-  await page.locator("#editorTutorVisible").uncheck();
-  await page.locator("#saveEditorTutorLink").click();
-  await page.waitForFunction(() => document.getElementById("editorTutorStatus")?.textContent.includes("сохранены"));
-  assert.deepEqual(await page.evaluate(() => window.__tutoringSettings["07.01"]), {
-    url: "https://example.invalid/tutoring", title: "Запись на консультацию",
-    description: "Выберите удобное время.", visible: false
-  }, "Tutoring settings must save against the selected course");
+  // Tutoring settings moved to the personal home-screen card; the course editor
+  // must no longer expose the old discipline-wide settings panel.
+  assert.equal(await page.locator("#editorTutoringPanel").count(), 0,
+    "The obsolete shared tutoring panel must stay removed from the course editor");
   await page.locator("#newTopicCode").fill("AUDIT");
   await page.locator("#newTopicTitle").fill("Проверка конструктора");
   await page.locator("#createTopicBtn").click();
