@@ -1183,9 +1183,9 @@ test("C5-S1 reading answer keys point to passage-supported answers in all 15 var
 test("C2-S1 and C2-S2 reading answer keys match the evidence in the passages", () => {
   const registry = JSON.parse(fs.readFileSync(path.join(root, "docs/english-final-exam-registry-v1-pilot.json"), "utf8"));
   const expected = [
-    ["EN-C2-S1-V03", "c2s1v03_r02", 2, "Which qualities the company values in a trainee"],
-    ["EN-C2-S1-V04", "c2s1v04_r02", 2, "To help her make an informed decision"],
-    ["EN-C2-S2-V04", "c2s2v04_r02", 1, "That the message was a phishing attempt"]
+    ["EN-C2-S1-V03", "c2s1v03_r02", 3, "Which qualities the company values in a trainee"],
+    ["EN-C2-S1-V04", "c2s1v04_r02", 3, "To help her make an informed decision"],
+    ["EN-C2-S2-V04", "c2s2v04_r02", 3, "That the message was a phishing attempt"]
   ];
   for (const [variantId, taskId, correctIndex, answer] of expected) {
     const variant = registry.exams.flatMap(exam => exam.variants).find(item => item.variantId === variantId);
