@@ -34,6 +34,18 @@
   function move(match,label){teacher.push(label+"\n"+String(match||"").trim());}
   // The student page has its own listening widget. Keep the recording master
   // and transcript/answer reveal in the authenticated teacher accordion only.
+  // Original course drafts use a separate "Listening script for teacher recording" label.
+  // Move only the recording master; keep student listening prompts and tasks visible.
+  var listeningScript=/(^|\n)([ \t]*\*\*Listening script for teacher recording[^\n]*\*\*[ \t]*\n(?:[ \t]*\n|[ \t]*>[^\n]*(?:\n|$))+)/gi;
+  student=student.replace(listeningScript,function(full,prefix,body){
+   move(body,"### Listening recording master");
+   return prefix;
+  });
+  var teacherNote=/(^|\n)([ \t]*\*Teacher note:[^\n]*(?:\n(?![ \t]*(?:#{1,4}\s|\*\*|---|\s*$))[^\n]*)*)/gi;
+  student=student.replace(teacherNote,function(full,prefix,body){
+   move(body,"### Teacher recording note");
+   return prefix;
+  });
   var recordingBlock=/(^|\n)([ \t]*(?:#{2,4}\s*)?\*\*Recording script(?:\s*[—-][^*\n]*)?\*\*[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:\*\*(?:Language focus|After listening|Transcript reveal|Teacher key|Independent work|Self-check|Speaking|Writing|Guided practice|Integrated task|Self-check and teacher key)\b|#{1,4}\s|---\s*$)|$)/gi;
   student=student.replace(recordingBlock,function(full,prefix,body){
    move(body,"### Listening recording master");
