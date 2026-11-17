@@ -143,6 +143,7 @@ function handleRequest_(e) {
       case "getfinalexam": result = getFinalExam_(data); break;
       case "submitfinalexam": result = submitFinalExam_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
+      case "uploadtestimage": result = uploadTestImage_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
       case "setteachercourses": result = setTeacherCourses_(data); break;
@@ -1819,6 +1820,10 @@ function getCustomContent_(data) {
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
 
+    // Teachers receive the image preview needed to edit their own question bank.
+    if (user.role !== "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
+      payload.questions = hydrateTestQuestionImages_(payload.questions);
+    }
     // Student sessions receive test prompts and options only. Answer keys remain server-side.
     if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
       function stripTestKeys_(value) {
@@ -2393,7 +2398,7 @@ function getCustomTest_(data) {
   const scopedExtra = settingValue_("testAttempts:" + user.email + ":" + courseId + ":" + id);
   const extra = Number(scopedExtra !== "" ? scopedExtra : settingValue_("testAttempts:" + user.email + ":" + id)) || 0;
   if (prior >= 1 + Math.max(0, extra)) throw new Error("Попытки закончились. Обратитесь к преподавателю за дополнительной попыткой.");
-  const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
+  const questions = hydrateTestQuestionImages_(Array.isArray(record.payload.questions) ? record.payload.questions : []);
   if (!questions.length) throw new Error("В тесте пока нет вопросов.");
   const optionMaps = {}, safeQuestions = questions.map(function(question, index) {
     const safe = sanitizeAssessmentQuestionForStudent_(question || {});
@@ -2494,6 +2499,53 @@ function getGameAnswer_(data) {
   if (!q) throw new Error("Вопрос не найден.");
   return {success:true, answer:String(q.a || q.answer || "")};
 }
+
+/* ---------- Private images used by teacher-created test questions ---------- */
+function testImageFolder_() {
+  const props = PropertiesService.getScriptProperties();
+  const saved = props.getProperty("TEST_QUESTION_IMAGE_FOLDER_ID");
+  if (saved) {
+    try { return DriveApp.getFolderById(saved); } catch (e) { props.deleteProperty("TEST_QUESTION_IMAGE_FOLDER_ID"); }
+  }
+  const folder = DriveApp.createFolder("Portal test question images");
+  props.setProperty("TEST_QUESTION_IMAGE_FOLDER_ID", folder.getId());
+  return folder;
+}
+function uploadTestImage_(data) {
+  const courseId = normalizeCourseId_(data.courseId || data.mdkId || "");
+  const actor = editor_(data, courseId);
+  const raw = String(data.dataUrl || "");
+  const match = raw.match(/^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/i);
+  if (!match) throw new Error("Поддерживаются изображения JPG, PNG, WEBP и GIF.");
+  if (match[2].length > 1800000) throw new Error("Изображение слишком большое. Уменьшите его размер до 1,2 МБ.");
+  const bytes = Utilities.base64Decode(match[2]);
+  if (!bytes.length || bytes.length > 1300000) throw new Error("Размер изображения превышает 1,3 МБ.");
+  const mime = match[1].toLowerCase();
+  const name = String(data.name || "question-image").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
+  const blob = Utilities.newBlob(bytes, mime, name);
+  const folder = testImageFolder_();
+  const file = folder.createFile(blob);
+  file.setDescription("Изображение к вопросу теста. Дисциплина: " + courseId + ". Автор: " + actor.email);
+  return {success:true,imageRef:"drive:" + file.getId(),name:file.getName(),size:bytes.length,mimeType:mime};
+}
+function testImageDataUri_(imageRef) {
+  const match = String(imageRef || "").match(/^drive:([A-Za-z0-9_-]{10,})$/);
+  if (!match) return "";
+  try {
+    const blob = DriveApp.getFileById(match[1]).getBlob();
+    const mime = String(blob.getContentType() || "");
+    if (!/^image\/(jpeg|png|webp|gif)$/i.test(mime)) return "";
+    return "data:" + mime.toLowerCase() + ";base64," + Utilities.base64Encode(blob.getBytes());
+  } catch (e) { return ""; }
+}
+function hydrateTestQuestionImages_(questions) {
+  return (Array.isArray(questions) ? questions : []).map(function(question) {
+    const safe = Object.assign({}, question || {});
+    if (safe.imageRef) safe.imageData = testImageDataUri_(safe.imageRef);
+    return safe;
+  });
+}
+
 function saveCustomContent_(data) {
   const courseId = String(data.mdkId || data.courseId || "");
   if (!courseId) throw new Error("Не указана дисциплина.");
