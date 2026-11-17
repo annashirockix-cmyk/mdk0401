@@ -52,7 +52,7 @@
   });
   // Also protect compact inline keys such as **Key:** 1a, 2c and
   // **Suggested answers:** ... which are common in the new lesson drafts.
-  var compactKey=/(^|\n)([ \t]*\*\*(?:Key|Answer key|Listening key|Teacher key|Suggested answers|Answers)\s*: ?\*\*[^^\n]*)(?=\n|$)/gi;
+  var compactKey=/(^|\n)([ \t]*\*\*(?:Key|Answer key|Listening key|Teacher key|Suggested answers|Answers)\s*: ?\*\*[^\n]*)(?=\n|$)/gi;
   student=student.replace(compactKey,function(full,prefix,line){
    move(line,"### Teacher answer key");
    return prefix;
