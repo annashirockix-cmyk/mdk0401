@@ -5968,10 +5968,10 @@
                 "prompt": "Listening 2. What must students wear?",
                 "audioText": "Students on the business communication course will visit the airport information desk on Monday. The group will leave college at eight thirty by minibus and return before lunch. During the visit, staff will demonstrate how to answer passenger questions and explain delays politely. Students must wear their college identification badges and take a notebook.",
                 "options": [
-                  "On Friday",
                   "Their college identification badges",
-                  "Next month",
-                  "After the event"
+                  "Their student timetables",
+                  "Their safety shoes",
+                  "Their notebooks"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -8254,10 +8254,10 @@
                 "prompt": "Listening 2. What will the student environment team do on Monday?",
                 "audioText": "The college is changing the labels on its recycling bins from next week. Paper and cardboard should go into the blue containers, while clean plastic bottles should be placed in the yellow containers. Food waste must not be put into either bin. The student environment team will visit classrooms on Monday to explain the new system and answer questions.",
                 "options": [
-                  "On Friday",
+                  "Inspect recycling bins and record contamination",
                   "Visit classrooms to explain the system and answer questions",
-                  "Next month",
-                  "After the event"
+                  "Change the collection schedule",
+                  "Publish the new bin labels on the college website"
                 ],
                 "correctIndex": 1,
                 "points": 1
