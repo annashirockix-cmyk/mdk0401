@@ -837,6 +837,8 @@ test("Technical English safety quizzes match the risk-based lesson content", () 
   assert.match(technical, /Legal duties and regulatory systems differ by jurisdiction/);
   assert.match(technical, /task-specific risk assessment and approved local instructions/);
   assert.match(technical, /They can create an entanglement hazard/);
+  assert.match(technical, /A lathe rotates the/);
+  assert.match(technical, /The tailstock is part of a/);
   assert.doesNotMatch(technical, /What is the main cause of industrial accidents\?/);
   assert.doesNotMatch(technical, /What should be worn when working with loud machinery\?/);
 });
