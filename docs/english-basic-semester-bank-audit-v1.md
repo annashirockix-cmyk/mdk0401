@@ -97,3 +97,20 @@ A Library search for an approved English work programme and the exact Belova tex
 ## Limitation
 
 This is a source and editorial review, not an independent second-methodologist sign-off. It is not a certification of CEFR level, textbook alignment, factual currency, or methodological suitability.
+
+
+## Recomputed answer-position distribution and batch warning — 2026-11-17
+
+A fresh count of the teacher-key tables in all ten current Basic draft files (20 questions per file) recovered 200/200 keys and the following pool-wide distribution:
+
+| Position | Current count |
+|---|---:|
+| A | 50 |
+| B | 50 |
+| C | 49 |
+| D | 51 |
+| **Total** | **200** |
+
+This corrects the earlier tally in this document (A 49, B 51, C 49, D 51), which is stale relative to the current source files. The overall pool remains balanced within the intended 49–51 range.
+
+The authoring batches are **not individually balanced exam forms**. For example, draft v1 has A 5 / B 0 / C 0 / D 15; v2 has A 6 / B 1 / C 5 / D 8. Other batches also vary. This is acceptable only while the files remain authoring batches and the approved semester banks are built from a cross-batch allocation. Do not use a single 20-question draft file as a student test or assign sequential 20-item batches directly to semester assessments. When the four Basic semester slots are finally mapped, rebalance correct-answer positions within each slot and recheck after option shuffling.
