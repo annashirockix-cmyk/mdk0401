@@ -1,7 +1,7 @@
 # Technical English — Course 3, Semester 2 — Lessons 9–12
 ## Cutting tools, tolerances, inspection and safe workshop communication
 
-**Status:** original draft lessons for the provisional five-year course map; not imported into the portal and not approved as official programme content.  
+**Status:** lesson drafts are appended to the portal course runtime by `english-five-year-runtime.js`; they remain provisional and are not approved as official programme content.  
 **Level:** B1–B1+ ESP.  
 **Professional focus:** machine-tool operators and technologists, with shared tasks for programmers and electricians.  
 **Audio:** original Spotlight-style listening scripts for future recording; no MP3 files or player are included.  
