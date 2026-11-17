@@ -29,4 +29,4 @@ The latest observed CI run (#3027, for the earlier V10 HEAD) failed in the full 
 - Basic English Course 2 Semester 1 pilot answer distribution: actual A/B/C/D = 2/3/2/1, expected 2/2/2/2.
 - Final-exam registry balance: EN-C2-S1-V07 had single-choice distribution [2, 3, 1, 0], expected [2, 2, 1, 1].
 
-These findings need targeted repair and a fresh CI run on the current HEAD. The run predates V11 updates; no green CI claim is made for the current HEAD.
+Both failures traced to the same C2-S1 V07 key-position imbalance. The reading answer in `c2s1v07_r02` was moved to option index 3 without changing its answer text. The single-choice distribution is now [2, 2, 1, 1], and the combined single-/multiple-choice A/B/C/D distribution is [2, 2, 2, 2]. The source JSON and registry were updated together. A fresh CI run is still required to verify the repair and all V11 changes; no green CI claim is made for the current HEAD.
