@@ -339,3 +339,16 @@ test("custom numeric questions accept decimal input, validate tolerance and scor
  assert.ok(server.includes("delete safe.extra; delete safe.tolerance;"));
  assert.ok(server.includes("actualText=String(answer==null?\"\":answer).trim().replace(\",\", \".\")"));
 });
+
+test("custom true/false questions use fixed labels and retain server-side answer isolation", () => {
+ const app=read("app.js"),server=read("Code.gs"),editor=read("course-admin.js"),ux=read("course-editor-ux.js");
+ assert.ok(ux.includes("trueFalse=kind==='true_false'||kind==='tf'"));
+ assert.ok(ux.includes('<option value="0">Верно</option><option value="1">Неверно</option>'));
+ assert.ok(ux.includes("correct:Number($('qCorrect').value)"));
+ assert.ok(editor.includes('trueFalse?["Верно","Неверно"]'));
+ assert.ok(editor.includes('kind==="true_false"||kind==="tf"'));
+ assert.ok(app.includes("var questionType = String(q.type || q.kind || \"single\").toLowerCase()"));
+ assert.ok(server.includes('if(type==="tf"||type==="true_false")'));
+ assert.ok(server.includes("return Number(answer)===target;"));
+ assert.ok(server.includes("optionMaps[String(entry.questionIndex)]=order;"));
+});
