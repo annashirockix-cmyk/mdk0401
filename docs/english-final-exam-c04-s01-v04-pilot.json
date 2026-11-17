@@ -96,9 +96,7 @@
       "type": "short_text",
       "prompt": "A unit commonly used to record electrical energy consumption is the kilowatt-___.",
       "acceptedAnswers": [
-        "hour",
-        "kilowatt-hour",
-        "kwh"
+        "hour"
       ],
       "points": 2
     },
