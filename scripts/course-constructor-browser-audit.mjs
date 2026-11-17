@@ -133,8 +133,10 @@ try {
   });
   await page.waitForFunction(() => {
     const status = document.getElementById("ceQuestionImageStatus")?.textContent || "";
-    return status.length > 0;
-  }, undefined, { timeout: 10000 });
+    return status.includes("Изображение загружено") || status.includes("Выберите PNG") ||
+      status.includes("больше 8 МБ") || status.includes("больше 700 КБ") ||
+      status.includes("не удалось") || status.includes("Не удалось") || status.includes("Ошибка");
+  }, undefined, { timeout: 15000 });
   const imageUploadStatus = await page.locator("#ceQuestionImageStatus").innerText();
   console.log("QUESTION_IMAGE_UPLOAD_STATUS", imageUploadStatus);
   assert.ok(imageUploadStatus.includes("Изображение загружено"), "Question image upload failed: " + imageUploadStatus);
