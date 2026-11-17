@@ -125,8 +125,8 @@
       ],
       "correctOrder": [
         "Choose a book from the shelf",
-        "Show your student card",
         "Take the book to the library desk",
+        "Show your student card",
         "Receive the book and the return date"
       ],
       "points": 2
