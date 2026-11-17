@@ -37,8 +37,14 @@ A follow-up read verified all nine IDs: each source `correctIndex` equals the ex
 
 The changes were made only on the PR feature branch. No production bank, protected Google Sheet, Apps Script deployment, or production deployment was touched.
 
+## Structural validation of the 40-file slice
+
+All 40 V05–V08 files across the ten slots were re-read after the corrections and parsed successfully. Each has exactly 10 tasks, 20 total points, and the expected type distribution: 6 single-choice, 1 multiple-choice, 1 short-text, 1 ordering, and 1 written task. The nine corrected keys were also rechecked against the combined registry: 9/9 pass.
+
+This structural pass does not constitute a full semantic review of all 400 tasks. The remaining single-choice keys, multiple-choice keys, short-text accepted answers, ordering keys, and written rubrics still need content-level review.
+
 ## Remaining validation
 
 1. Complete answer-key/content review for the other tasks in the 40 V05–V08 files; the nine confirmed defects do not imply the other 391 tasks are error-free.
-2. Run the full JSON/schema checks, source-to-registry parity checks, and inspect CI for the latest HEAD.
+2. Inspect CI for the latest HEAD. No workflow run was returned for the latest docs-and-source commit at the time of this check; do not treat prior successful CI as validation of the current HEAD.
 3. Continue the next variant slice after the current checks are complete.
