@@ -73,3 +73,19 @@
 - Более ранний run 43952208724 завершился неуспешно на промежуточном состоянии, когда source JSON и combined registry ещё не были синхронизированы. Ошибка выявила расхождение C5-S1 V14; после синхронизации source/registry и уточнения тестов актуальный HEAD прошёл полный CI.
 - Эти результаты закрывают структурные проверки и известные точечные дефекты, но не заменяют методическую экспертизу всего содержания. Не подтверждены соответствие утверждённой программе и точному изданию Белова, корректность всех технических утверждений и CEFR-уровней.
 - PR #125 остаётся Draft. Нет независимого review approval. Защищённые VPR-банки не изменялись; тестовый или production import, Apps Script deploy, merge не выполнялись.
+
+
+## Targeted final-exam editorial pass V05–V15 — 2026-11-17
+
+- Reviewed the ten individual pilot JSON files for each variant V05 through V15: 110 variants / 1,100 tasks. This first-pass review focused on task structure, prompt/option fit, distractor category and plausibility, accepted short answers, written-task rubrics and obvious wording defects. It is not a complete second-methodologist review of every assessment decision.
+- V05: no blocking defect identified in this pass.
+- Corrected 17 listening distractor sets where options did not belong to the semantic category asked for by the prompt:
+  - C2-S1 V06;
+  - C2-S1 and C2-S2 V07, V08, V09, V10, V11, V12 and V13;
+  - C2-S2 V14 and V15.
+- Corrected one additional wording defect in C2-S1 V14: changed the distractor pronoun to agree with the male subject.
+- For every correction, updated the individual source JSON and the corresponding `variantJSON` in the combined registry in the same branch. The intended correct option remained in its existing keyed position; no answer-key index was changed.
+- The revised distractors now match the question type (e.g. actions against actions, documents against documents, locations against locations, timetables against timetables) and remain plausible enough to test comprehension rather than simple category elimination.
+- Latest reviewed branch HEAD at the time of this note: `e23c69d685b4826fd3335a7c2fd756646d88d283`. GitHub Actions run `44032712663` / #2943 was in progress at last check; automated English runtime and browser exam checks had passed, with Playwright/Chromium and subsequent browser audits still running.
+- Remaining work: complete the run on the final head; perform a focused answer-key/audio-text verification for the amended variants; continue the full editorial review of V01–V15, including all 150 listening scripts, reading passages, objective keys, short-text acceptance sets and written rubrics; obtain independent English-methodologist and technical subject-matter approval. The 110-variant first pass does not certify CEFR level, factual currency, programme alignment or release suitability.
+- No protected Google Sheet, active VPR bank, Apps Script deployment, production import, merge or student publication was performed.
