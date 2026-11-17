@@ -942,7 +942,25 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                 }
                 var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>'; if(q.imageData && /^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(q.imageData)){html += '<img src="'+window.escapeHtml(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:420px;object-fit:contain;margin:12px auto 18px;border:1px solid var(--border);border-radius:10px;padding:6px;background:var(--card)">';}
                 var questionType = String(q.type || q.kind || "single").toLowerCase();
-                if (questionType === "matching" || questionType === "match") {
+                if (questionType === "order" || questionType === "ordering") {
+                    html += '<p class="museum-muted">Расставьте элементы в правильной последовательности. Перетаскивайте строки или используйте кнопки ↑ и ↓.</p><ol id="customOrderList" style="list-style:none;padding:0;margin:10px 0">'+(q.items || []).map(function(item, i) {
+                        return '<li draggable="true" data-order-index="'+i+'" style="display:flex;gap:8px;align-items:center;padding:10px;margin:6px 0;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:grab"><span style="flex:1">'+window.escapeHtml(item)+'</span><button type="button" class="btn ghost" data-order-up aria-label="Переместить выше">↑</button><button type="button" class="btn ghost" data-order-down aria-label="Переместить ниже">↓</button></li>';
+                    }).join("")+'</ol><button class="btn" id="customOrderSubmit">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    var orderList = area.querySelector("#customOrderList"), dragged = null;
+                    orderList.querySelectorAll("[draggable=true]").forEach(function(item) {
+                        item.addEventListener("dragstart", function(){dragged=item;item.style.opacity=".5";});
+                        item.addEventListener("dragend", function(){item.style.opacity="";dragged=null;});
+                        item.addEventListener("dragover", function(event){event.preventDefault();});
+                        item.addEventListener("drop", function(event){event.preventDefault();if(dragged&&dragged!==item){var rect=item.getBoundingClientRect();orderList.insertBefore(dragged,event.clientY<rect.top+rect.height/2?item:item.nextSibling);}});
+                    });
+                    orderList.querySelectorAll("[data-order-up]").forEach(function(button){button.onclick=function(){var item=button.parentElement;if(item.previousElementSibling)orderList.insertBefore(item,item.previousElementSibling);};});
+                    orderList.querySelectorAll("[data-order-down]").forEach(function(button){button.onclick=function(){var item=button.parentElement;if(item.nextElementSibling)orderList.insertBefore(item.nextElementSibling,item);};});
+                    area.querySelector("#customOrderSubmit").onclick = function() {
+                        answers[index] = Array.from(orderList.querySelectorAll("[data-order-index]")).map(function(item){return Number(item.dataset.orderIndex);});
+                        index++; draw();
+                    };
+                } else if (questionType === "matching" || questionType === "match") {
                     html += '<p class="museum-muted">Выберите правую часть для каждой строки.</p>';
                     (q.pairs || []).forEach(function(pair, i) {
                         html += '<label style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;padding:10px;margin:7px 0;border:1px solid var(--border);border-radius:10px"><span>'+window.escapeHtml(pair.left || "")+'</span><select data-match-left="'+i+'" class="self-input"><option value="">Выберите соответствие…</option>'+(q.options || []).map(function(option, j){return '<option value="'+j+'">'+window.escapeHtml(option)+'</option>';}).join("")+'</select></label>';
