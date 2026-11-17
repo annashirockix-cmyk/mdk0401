@@ -7574,11 +7574,11 @@
                 "prompt": "You want to comment on the proposal politely. Which sentence is best?",
                 "options": [
                   "This plan is stupid and nobody should discuss it.",
-                  "I would like to support the proposal, provided that the crossings are made safe.",
+                  "Build it exactly where I say.",
                   "I have no evidence, but the council is wrong.",
-                  "Build it exactly where I say."
+                  "I would like to support the proposal, provided that the crossings are made safe."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -7661,11 +7661,11 @@
                 "prompt": "A group of students measured air quality near three busy roads and one park. They recorded the results at the same time on several weekdays to make the comparison fair. The readings were usually higher beside the roads, but wind direction affected some results. The students explained that their small study could show a local pattern, not prove that traffic was the only cause of pollution. Reading 1. Why did students take readings at the same time?",
                 "options": [
                   "To avoid measuring during rush hour",
-                  "To make the comparison fair",
                   "To measure only during the evening rush",
+                  "To make the comparison fair",
                   "To collect readings only when the weather was clear"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -7726,11 +7726,11 @@
                 "prompt": "You are presenting the study results. Which statement is appropriately cautious?",
                 "options": [
                   "Our small study proves that traffic is the only cause of pollution.",
-                  "Our results suggest a local pattern, but further measurements are needed.",
+                  "We did not collect enough information, so no discussion is possible.",
                   "The data are perfect and cannot be questioned.",
-                  "We did not collect enough information, so no discussion is possible."
+                  "Our results suggest a local pattern, but further measurements are needed."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -7838,12 +7838,12 @@
                 "type": "single_choice",
                 "prompt": "The article would be more convincing if it ___ the original research.",
                 "options": [
-                  "cited",
-                  "will cite yesterday",
                   "cites last year",
+                  "will cite yesterday",
+                  "cited",
                   "was cite"
                 ],
-                "correctIndex": 0,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -7877,11 +7877,11 @@
                 "prompt": "A friend shares an unsupported claim. What is a constructive reply?",
                 "options": [
                   "That is obviously true because many people shared it.",
-                  "Do you have a reliable source for this claim? I would like to check the evidence.",
+                  "I will repost it before checking.",
                   "Only foolish people believe that.",
-                  "I will repost it before checking."
+                  "Do you have a reliable source for this claim? I would like to check the evidence."
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
@@ -7964,11 +7964,11 @@
                 "prompt": "An energy audit at a college found that several computer rooms remained fully lit after the last lesson. The facilities team introduced a simple closing checklist and asked the final group to check lights and equipment. The audit also recommended replacing older lamps with more efficient models. After a month, electricity use had decreased, although the team planned to compare figures over a longer period. Reading 1. What problem did the audit identify?",
                 "options": [
                   "The laboratory heating was left on overnight",
-                  "Computer rooms stayed fully lit after the last lesson",
                   "The laboratory windows were left open overnight",
+                  "Computer rooms stayed fully lit after the last lesson",
                   "Students left windows open during lessons"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 2,
                 "points": 1
               },
               {
@@ -8029,11 +8029,11 @@
                 "prompt": "You are writing to the facilities team about an energy-saving idea. Which sentence is best?",
                 "options": [
                   "You must install my idea immediately.",
-                  "Would it be possible to test motion sensors in another corridor?",
+                  "I will change the lighting myself.",
                   "Your energy policy makes no sense.",
-                  "I will change the lighting myself."
+                  "Would it be possible to test motion sensors in another corridor?"
                 ],
-                "correctIndex": 1,
+                "correctIndex": 3,
                 "points": 1
               },
               {
