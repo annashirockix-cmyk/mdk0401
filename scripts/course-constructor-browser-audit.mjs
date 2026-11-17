@@ -134,7 +134,7 @@ try {
   await page.waitForFunction(() => {
     const status = document.getElementById("ceQuestionImageStatus")?.textContent || "";
     return status.length > 0;
-  }, { timeout: 10000 });
+  }, undefined, { timeout: 10000 });
   const imageUploadStatus = await page.locator("#ceQuestionImageStatus").innerText();
   console.log("QUESTION_IMAGE_UPLOAD_STATUS", imageUploadStatus);
   assert.ok(imageUploadStatus.includes("Изображение загружено"), "Question image upload failed: " + imageUploadStatus);
