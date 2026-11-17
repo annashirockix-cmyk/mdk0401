@@ -288,3 +288,20 @@ test("custom multi-select questions render safely and are scored server-side", (
  assert.ok(editorUx.includes("Студент отметит все подходящие варианты"));
  assert.ok(editorUx.includes("проверка выполняется на сервере"));
 });
+
+test("custom matching questions hide right-side keys and score shuffled selections", () => {
+ const app = read("app.js");
+ const server = read("Code.gs");
+ const editor = read("course-admin.js");
+ const ux = read("course-editor-ux.js");
+ assert.ok(app.includes('questionType === "matching"'));
+ assert.ok(app.includes("customMatchSubmit"));
+ assert.ok(app.includes("Каждую правую часть можно использовать только один раз"));
+ assert.ok(editor.includes("pairs:matching?pairs:[]"));
+ assert.ok(editor.includes("pair.left)+' → '+esc(pair.right)"));
+ assert.ok(ux.includes("Введите пары построчно"));
+ assert.ok(server.includes('type === "matching" || type === "match"'));
+ assert.ok(server.includes("safe.pairs = pairs.map(function(pair){return {left:String(pair.left || \"\")};})"));
+ assert.ok(server.includes("originalOptions[originalIndex]"));
+ assert.ok(server.includes('String(answer[index])===String(pair.right)'));
+});
