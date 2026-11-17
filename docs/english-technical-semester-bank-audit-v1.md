@@ -107,3 +107,10 @@ A further pass found two repeated concept checks across the Technical pool:
 - Q56 and Q142 both defined *traceability*. Q142 now tests *first-pass yield*, the proportion of units meeting requirements without rework on the first pass. The correct option remains A; the teacher rationale has been updated.
 
 These are content-level edits to Technical draft v4 and v8 only. They do not affect protected banks, final-exam pilot variants, Google Sheets, Apps Script or student-facing content. Further checks are still needed for overlapping traceability applications (including Q57 and Q80), repeated document-control ideas, and protected VPR content.
+
+
+A further separation was made for Q57 and Q80, which both previously asked what information supports traceability in an aviation/technical record. Q80 now asks how to identify the author and time of a controlled record entry; Q57 remains focused on component identification and work-record details. The keyed position remains A. This separates record authorship from component traceability while retaining the technical-record context.
+
+## 4E. Basic–Technical cross-track screen — 2026-11-17
+
+A review of the 200 Basic and 200 Technical draft stems found no exact cross-track stem collision (consistent with the earlier exact-normalized-stem screen). Several general English structures intentionally recur across tracks—present perfect, past perfect, passive voice, comparatives, prepositions and polite requests—but the contexts and assessed language items differ. These are shared language foundations, not evidence that the two authoring pools are interchangeable. The Technical pool adds manufacturing, measurement, control systems, technical records and workplace ESP contexts. A final overlap check against protected VPR variants remains blocked pending authorised access to their current contents.
