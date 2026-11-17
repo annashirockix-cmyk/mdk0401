@@ -942,7 +942,21 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                 }
                 var q = questions[index], html = '<div class="museum-muted">Вопрос '+(index+1)+' из '+questions.length+'</div><h3>'+window.escapeHtml(q.q||"")+'</h3>'; if(q.imageData && /^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(q.imageData)){html += '<img src="'+window.escapeHtml(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:420px;object-fit:contain;margin:12px auto 18px;border:1px solid var(--border);border-radius:10px;padding:6px;background:var(--card)">';}
                 var questionType = String(q.type || q.kind || "single").toLowerCase();
-                if (questionType === "multi" || questionType === "multiple" || questionType === "multiple_choice") {
+                if (questionType === "matching" || questionType === "match") {
+                    html += '<p class="museum-muted">Выберите правую часть для каждой строки.</p>';
+                    (q.pairs || []).forEach(function(pair, i) {
+                        html += '<label style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;padding:10px;margin:7px 0;border:1px solid var(--border);border-radius:10px"><span>'+window.escapeHtml(pair.left || "")+'</span><select data-match-left="'+i+'" class="self-input"><option value="">Выберите соответствие…</option>'+(q.options || []).map(function(option, j){return '<option value="'+j+'">'+window.escapeHtml(option)+'</option>';}).join("")+'</select></label>';
+                    });
+                    html += '<button class="btn" id="customMatchSubmit" style="margin-top:12px">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    area.querySelector("#customMatchSubmit").onclick = function() {
+                        var selects = Array.from(area.querySelectorAll("[data-match-left]"));
+                        if (selects.some(function(select){return select.value === "";})) { window.showToast("Установите соответствие для каждой строки.","err"); return; }
+                        var chosen = selects.map(function(select){return Number(select.value);});
+                        if (new Set(chosen).size !== chosen.length) { window.showToast("Каждую правую часть можно использовать только один раз.","err"); return; }
+                        answers[index] = chosen; index++; draw();
+                    };
+                } else if (questionType === "multi" || questionType === "multiple" || questionType === "multiple_choice") {
                     html += '<p class="museum-muted">Выберите все подходящие варианты.</p>';
                     (q.options || []).forEach(function(option, i) {
                         html += '<label class="custom-multi-option" style="display:flex;align-items:flex-start;gap:10px;padding:12px;margin:7px 0;border:1px solid var(--border);border-radius:10px;cursor:pointer"><input type="checkbox" data-custom-answer="'+i+'" style="margin-top:4px;transform:scale(1.15)"><span>'+window.escapeHtml(option)+'</span></label>';
