@@ -10,8 +10,8 @@
 - C. completing
 - D. completion
 
-**62.** Choose the best meaning of *to isolate a circuit* in an electrical safety context.
-- A. To disconnect it from its energy source
+**62.** In electrical-safety terminology, what does *to isolate a circuit* mean? This is a vocabulary question, not a complete safe-isolation procedure.
+- A. To separate it from its energy supply
 - B. To connect it to another circuit
 - C. To measure its resistance
 - D. To increase its voltage
@@ -129,7 +129,7 @@
 | No. | Key | Rationale |
 |---:|:---:|---|
 | 61 | A | Singular subject “team” takes the present simple form “completes”; the sentence describes a required routine. |
-| 62 | A | “Isolate” means separate from the energy source; the item checks vocabulary comprehension, not a work procedure. |
+| 62 | A | In this vocabulary context, isolate means separate the circuit from its energy supply; this definition is not a substitute for the approved isolation procedure and verification by authorised personnel. |
 | 63 | A | Revision letters identify successive document revisions; local document-control rules should be checked in the applicable standard. |
 | 64 | B | The time marker “yesterday” requires the past simple active form. |
 | 65 | A | The warning instructs personnel to maintain distance from moving parts. |
