@@ -6452,8 +6452,8 @@
                 "options": [
                   "How to block the college account",
                   "Where to collect lost property",
-                  "How to request a replacement card",
-                  "How to report an absence."
+                  "How to report an absence.",
+                  "How to request a replacement card"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -6603,9 +6603,9 @@
                 "prompt": "Why did he make that choice?",
                 "options": [
                   "It was the shortest course available",
-                  "It fitted his schedule and presentation skills were covered elsewhere",
+                  "It was taught by a tutor he already knew.",
                   "It was recommended by a classmate",
-                  "It was taught by a tutor he already knew."
+                  "It fitted his schedule and presentation skills were covered elsewhere"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -8722,8 +8722,8 @@
                 "prompt": "A student compared the monthly energy use of two college buildings. Building A used less electricity in most months, but the difference became smaller during the winter. The student included the number of rooms in each building because their sizes were not the same. She avoided saying that one building was more efficient until she could compare energy use per square metre. Reading 1. Why did the student include the number of rooms?",
                 "options": [
                   "Because the buildings had different electricity suppliers",
-                  "Because the buildings were different sizes",
                   "Because the buildings had different electricity tariffs",
+                  "Because the buildings were different sizes",
                   "Because the buildings were used at different times"
                 ],
                 "correctIndex": 2,
@@ -8735,9 +8735,9 @@
                 "prompt": "Why did she avoid making an immediate conclusion about efficiency?",
                 "options": [
                   "She needed to compare the number of staff",
-                  "She needed to compare energy use per square metre",
+                  "She needed to compare total energy bills only",
                   "She needed to calculate the total floor area only",
-                  "She needed to compare total energy bills only"
+                  "She needed to compare energy use per square metre"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -8861,7 +8861,7 @@
                 "audioText": "The student council is collecting ideas for a volunteering week in April. A planning meeting will take place in the student common room on Tuesday at twelve. Suggested activities include helping at a community garden, supporting a book collection and organising a repair café. Students should send one idea with a short explanation before the meeting.",
                 "options": [
                   "A one-page proposal and short evidence summary",
-                  "A list of suggested volunteering activities",
+                  "One idea with a short explanation",
                   "A copy of the student council timetable",
                   "A completed attendance form"
                 ],
@@ -8887,9 +8887,9 @@
                 "prompt": "What wider effect did the event aim to encourage?",
                 "options": [
                   "Encouraging residents to buy new household items",
-                  "Encouraging people to repair items before replacing them",
+                  "Encouraging residents to learn how to repair cars",
                   "Encouraging visitors to donate electrical equipment",
-                  "Encouraging residents to learn how to repair cars"
+                  "Encouraging people to repair items before replacing them"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -9038,9 +9038,9 @@
                 "prompt": "What changed after the first month?",
                 "options": [
                   "More students cancelled their room bookings",
-                  "Fewer booking errors were reported",
+                  "More booking errors were reported",
                   "The college stopped reviewing feedback",
-                  "More booking errors were reported"
+                  "Fewer booking errors were reported"
                 ],
                 "correctIndex": 3,
                 "points": 1
@@ -17899,7 +17899,7 @@
                 "type": "single_choice",
                 "prompt": "A recorded measurement differs from the expected range. What should be verified before interpreting it?",
                 "options": [
-                  "Repeat the measurement with the same setup and accept it if the result is consistent.",
+                  "Ignore the reading and continue with the planned maintenance.",
                   "Compare the number with the expected range before checking the measurement method.",
                   "Please check the measurement method and instrument status, then compare the value with supporting evidence.",
                   "Change the recorded value to the nearest expected figure and note the difference."
