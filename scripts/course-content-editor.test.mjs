@@ -285,6 +285,6 @@ test("custom multi-select questions render safely and are scored server-side", (
  assert.ok(server.includes("Array.isArray(q.correctAnswers)"));
  assert.ok(server.includes('const privateKey = /^(?:correct|answer|expected|accepted|solution|explanation|rationale|grading|rubric|key|iscorrect|feedback)/i'));
  assert.ok(server.includes('const type=String(q.type||q.kind||"mc").toLowerCase()'));
- assert.ok(editorUx.includes("Выберите все подходящие варианты"));
+ assert.ok(editorUx.includes("Студент отметит все подходящие варианты"));
  assert.ok(editorUx.includes("проверка выполняется на сервере"));
 });
