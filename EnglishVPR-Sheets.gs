@@ -221,7 +221,7 @@ function getEnglishVprExam_(data) {
             String(activeAttempt.exam && activeAttempt.exam.id || "") === String(source.id || "") &&
             activeAttempt.displayExam && Number(activeAttempt.startedAt)) {
           return {success:true,track:track,attemptId:activeId,attemptNo:activeAttempt.attemptNo,
-            startedAt:activeAttempt.startedAt,exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
+            startedAt:activeAttempt.startedAt,savedAnswers:Array.isArray(activeAttempt.savedAnswers)?activeAttempt.savedAnswers:[],exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
         }
       }
     }
@@ -347,7 +347,7 @@ function saveEnglishVprExamDraft_(data) {
     const elapsed = Math.max(0, Math.floor((Date.now() - Number(attempt.startedAt || 0)) / 1000));
     const allowed = Math.max(1, Number(exam.time) || 90) * 60;
     if (!Number(attempt.startedAt) || elapsed > allowed + 300) throw new Error("Время экзамена истекло. Черновик больше нельзя изменить.");
-    if (String(data.answers || "").length > 30000) throw new Error("Слишком большой объём ответов.");
+    if (JSON.stringify(data.answers || []).length > 30000) throw new Error("Слишком большой объём ответов.");
     const submitted = data.answers;
     if (!Array.isArray(submitted) || submitted.length !== (exam.tasks || []).length) throw new Error("Структура ответов не совпадает с вариантом.");
     const saved = (exam.tasks || []).map(function(task, ti) {
