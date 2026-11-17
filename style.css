@@ -514,3 +514,6 @@ body { font-size: calc(16px * var(--portal-font-scale, 1)); }
 #crumbs a:hover{text-decoration:underline}
 #crumbs [aria-current="page"]{color:var(--text);font-weight:600}
 #crumbs .crumb-separator{color:var(--muted)}
+
+#crumbs .crumb-back{margin-right:4px;padding:5px 9px;border:1px solid var(--border);border-radius:8px;color:var(--text);font-weight:600}
+#crumbs .crumb-back:hover{background:var(--surface-2,var(--border));text-decoration:none}
