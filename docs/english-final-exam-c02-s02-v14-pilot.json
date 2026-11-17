@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should students send before the meeting?",
       "audioText": "The student council is collecting ideas for a volunteering week in April. A planning meeting will take place in the student common room on Tuesday at twelve. Suggested activities include helping at a community garden, supporting a book collection and organising a repair café. Students should send one idea with a short explanation before the meeting.",
       "options": [
-        "On Friday",
-        "One idea with a short explanation",
-        "Next month",
-        "After the event"
+        "A one-page proposal and short evidence summary",
+        "A list of suggested volunteering activities",
+        "A copy of the student council timetable",
+        "A completed attendance form"
       ],
       "correctIndex": 1,
       "points": 1
