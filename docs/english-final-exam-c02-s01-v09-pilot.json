@@ -28,10 +28,10 @@
       "prompt": "Listening 2. Which items should students not bring?",
       "audioText": "The college environmental team is organising a repair and reuse day next Wednesday. Students can bring small electrical items that are safe to inspect, clean containers and unwanted books. The event starts at ten in the technology hall. Please do not bring damaged batteries or equipment with exposed wires. Volunteers should register online by Tuesday.",
       "options": [
-        "On Friday",
+        "Small electrical items that are safe to inspect",
         "Damaged batteries or equipment with exposed wires",
-        "Next month",
-        "After the event"
+        "Clean containers",
+        "Unwanted books"
       ],
       "correctIndex": 1,
       "points": 1
