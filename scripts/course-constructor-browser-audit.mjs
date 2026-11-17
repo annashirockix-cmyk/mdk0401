@@ -55,9 +55,15 @@ try {
       getTestAttemptStatus: async () => ({ allowed: true, used: 0, limit: 1 }),
       getCustomTest: async testId => ({
         success: true, attemptId: "audit-custom-attempt-" + String(testId),
-        questions: [{ q: "Какой вариант правильный?", options: ["Неверно", "Верно", "Не подходит", "Нет ответа"] }]
+        questions: [
+          { q: "Вычислите результат: 25 ÷ 2.", type: "numeric" },
+          { q: "Утверждение: 2 × 3 = 6.", type: "true_false", options: ["Верно", "Неверно"] }
+        ]
       }),
-      submitCustomTest: async () => ({ success: true, score: 1, maxScore: 1, percent: 100, grade: 5 })
+      submitCustomTest: async payload => {
+        window.__submittedCustomAnswers = (payload && payload.answers || []).slice();
+        return { success: true, score: 2, maxScore: 2, percent: 100, grade: 5 };
+      }
     };
     // Reproduce an admin request finishing after a student has signed in.
     // The late admin response must not overwrite the student's role-filtered list.
@@ -264,9 +270,22 @@ try {
   await page.waitForSelector("#topicContent button");
   assert.ok((await page.locator("#topicContent").innerText()).includes("Тест конструктора"));
   await page.locator("#topicContent button").filter({ hasText: "Начать тест" }).click();
-  await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Какой вариант правильный?"));
-  const testStarted = await page.locator("#topicContent").innerText();
-  assert.ok(testStarted.includes("Какой вариант правильный?"));
+  await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Вычислите результат: 25 ÷ 2."));
+  assert.ok((await page.locator("#topicContent").innerText()).includes("Введите числовой ответ"),
+    "Numeric question must render a decimal-answer input");
+  await page.locator("#customNumericAnswer").fill("12,5");
+  await page.locator("#customNumericSubmit").click();
+  await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Утверждение: 2 × 3 = 6."));
+  assert.equal(await page.locator('#topicContent button[data-custom-answer="0"]').count(), 1,
+    "True/false question must render the fixed True option");
+  assert.equal(await page.locator('#topicContent button[data-custom-answer="1"]').count(), 1,
+    "True/false question must render the fixed False option");
+  await page.locator('#topicContent button[data-custom-answer="0"]').click();
+  await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Тест завершён"));
+  const submittedAnswers = await page.evaluate(() => window.__submittedCustomAnswers);
+  assert.deepEqual(submittedAnswers, ["12.5", 0],
+    "Student answers must preserve normalized numeric input and selected true/false value");
+  const testStarted = { numeric: true, trueFalse: true, submittedAnswers };
 
   await page.locator("#tab-custom-flashcards").click();
   await page.locator("#topicContent button").filter({ hasText: "Начать повторение" }).click();
@@ -297,7 +316,7 @@ try {
   const accountRaceAudit = await page.evaluate(() => window.__accountRaceAudit || null);
   assert.ok(accountRaceAudit && accountRaceAudit.pass && accountRaceAudit.staleAdminMaterialRejected,
     "Account-switch race audit did not produce a passing result");
-  const report = { topicId, savedCount, accountRaceAudit, lectureVisible: true, testStarted: true, flashcardFrontAndBack: true, sprutNavigation };
+  const report = { topicId, savedCount, accountRaceAudit, lectureVisible: true, testStarted, flashcardFrontAndBack: true, sprutNavigation };
   fs.mkdirSync("artifacts/constructors", { recursive: true });
   fs.writeFileSync("artifacts/constructors/report.json", JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
