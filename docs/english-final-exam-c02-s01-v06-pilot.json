@@ -43,10 +43,10 @@
       "options": [
         "At an airport information desk",
         "At a railway museum",
-        "At an aircraft museum",
-        "At a college careers office"
+        "At a college careers office",
+        "At an aircraft museum"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "points": 1
     },
     {
@@ -80,14 +80,14 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO professional habits that help a new employee.",
       "options": [
-        "Asking when a task is unclear",
         "Sharing private passwords",
-        "Arriving on time",
-        "Ignoring instructions"
+        "Ignoring instructions",
+        "Asking when a task is unclear",
+        "Arriving on time"
       ],
       "correctIndices": [
-        0,
-        2
+        2,
+        3
       ],
       "points": 2
     },
