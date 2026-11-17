@@ -207,6 +207,24 @@ function getEnglishVprExam_(data) {
     if (String(values[i][map.Track]||"") !== track || String(values[i][map.Active]||"").toUpperCase() !== "TRUE") continue;
     const source = JSON.parse(String(values[i][map.ExamJSON]||"{}"));
     validateEnglishVprExam_(track, source);
+    // Если студент уже начал этот вариант, возвращаем тот же перемешанный
+    // экземпляр и исходный таймер, чтобы клиент мог восстановить попытку.
+    const activeKey = englishVprAttemptCacheKey_(user.email, track, source.id);
+    const activeId = CacheService.getScriptCache().get(activeKey);
+    if (activeId) {
+      const activeRaw = CacheService.getScriptCache().get("englishVprAttempt:" + activeId);
+      if (activeRaw) {
+        let activeAttempt = null;
+        try { activeAttempt = JSON.parse(activeRaw); } catch (e) { activeAttempt = null; }
+        if (activeAttempt && activeAttempt.email === user.email && activeAttempt.track === track &&
+            activeAttempt.courseId === courseId &&
+            String(activeAttempt.exam && activeAttempt.exam.id || "") === String(source.id || "") &&
+            activeAttempt.displayExam && Number(activeAttempt.startedAt)) {
+          return {success:true,track:track,attemptId:activeId,attemptNo:activeAttempt.attemptNo,
+            startedAt:activeAttempt.startedAt,exam:sanitizeEnglishVprExam_(activeAttempt.displayExam)};
+        }
+      }
+    }
     return {success:true,track:track,exam:sanitizeEnglishVprExam_(source)};
   }
   return {success:false,error:"Экзамен ещё не импортирован преподавателем."};
