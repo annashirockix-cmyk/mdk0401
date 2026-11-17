@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should each group choose?",
       "audioText": "The engineering department will run a teamwork session on Thursday morning. Students will meet in Workshop 3 at nine fifteen. Each group should bring its project notes and agree on one person to record decisions. The tutor will explain how to divide tasks fairly and report progress. The session finishes at eleven thirty.",
       "options": [
-        "On Friday",
+        "One person to present the group's results",
         "One person to record decisions",
-        "Next month",
-        "After the event"
+        "One person to organise the materials",
+        "One person to keep track of the time"
       ],
       "correctIndex": 1,
       "points": 1
