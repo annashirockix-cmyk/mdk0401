@@ -18,7 +18,7 @@ By the end of this block, students should be able to read accessible scientific 
 ## Learning outcomes
 Students will:
 1. recognise active and passive voice;
-2. form the Present Simple and Past Simple Passive;
+2. form the Present Simple and Past Simple Passive, and recognise common extended forms in context (Present Perfect, future with *will* and modal passive);
 3. identify the agent when it is important and omit it when it is unknown or unimportant;
 4. understand a short description of how a product is checked;
 5. write a short process description.
