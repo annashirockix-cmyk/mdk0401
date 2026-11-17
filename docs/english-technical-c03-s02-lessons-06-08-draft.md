@@ -131,20 +131,20 @@ Key words: *spindle, worktable, tool magazine, enclosure, control panel*. Look a
 
 What is the instructor doing?
 
-A) Giving an introductory description of a CNC machine diagram.  
-B) Giving permission to start a machine.  
-C) Describing a passenger aircraft.
+C) Giving an introductory description of a CNC machine diagram.  
+A) Giving permission to start a machine.  
+B) Describing a passenger aircraft.
 
 **Second listening — details**
 
 1. Which component provides rotation?
-   A) spindle B) enclosure C) control panel
+   B) spindle A) enclosure C) control panel
 2. What supports the workholding arrangement?
-   A) worktable B) tool magazine C) display screen
+   C) worktable A) tool magazine B) display screen
 3. Which component may store several tools?
    A) tool magazine B) enclosure C) coolant tank
 4. What should students consult for machine-specific details?
-   A) manufacturer's documentation B) an unrelated social media post C) memory alone
+   B) manufacturer's documentation A) an unrelated social media post C) memory alone
 
 **Recording script — reveal after listening**
 
@@ -180,7 +180,7 @@ C) Describing a passenger aircraft.
 3. Why is the diagram not an operating instruction?
 4. Practice 1: 1 b; 2 d; 3 e; 4 a; 5 c.
 5. Practice 2: 1 display/show; 2 protect; 3 supports; 4 store; 5 depends.
-6. Listening: gist A; details 1 A, 2 A, 3 A, 4 A.
+6. Listening: gist C; details 1 B, 2 C, 3 A, 4 B.
 
 **Speaking rubric (8):** correct component names 2; general functions 2; location language 1; clarity 1; use of technical vocabulary 1; safety boundary 1.
 
@@ -293,20 +293,20 @@ Key words: *axis, origin, coordinate, positive direction, reference*. Predict ho
 
 What is being explained?
 
-A) A basic coordinate grid.  
-B) A real machine setup.  
+B) A basic coordinate grid.  
+A) A real machine setup.  
 C) A safety evacuation.
 
 **Second listening — details**
 
 1. Which axis is horizontal?
-   A) X B) Y C) Z
+   B) X A) Y C) Z
 2. Where is the origin?
-   A) where the axes meet B) at every point C) outside the grid
+   C) where the axes meet A) at every point B) outside the grid
 3. What does (3, 2) mean?
    A) three units in X and two in Y B) two units in Z only C) three degrees Celsius
 4. Can students use this grid to set a machine offset?
-   A) No B) Yes, on any machine C) Only by guessing
+   B) No A) Yes, on any machine C) Only by guessing
 
 **Recording script**
 
@@ -344,7 +344,7 @@ Use these prompts:
 3. What does (3, 2) mean in the lesson's 2D example?
 4. Practice 1: 1 X; 2 Y; 3 origin; 4 Z; 5 identified/defined.
 5. Grid answers depend on the teacher's grid; point coordinates should be read as (x, y).
-6. Listening: gist A; details 1 A, 2 A, 3 A, 4 A.
+6. Listening: gist B; details 1 B, 2 C, 3 A, 4 B.
 
 **Writing rubric (8):** axis vocabulary 2; correct coordinate reading 2; reference/origin explanation 1; clear sequence 1; accuracy 1; scope awareness 1.
 
@@ -467,20 +467,20 @@ Key words: *block, address, comment, controller, syntax, read-only*. Predict wha
 
 What is the instructor explaining?
 
-A) How to recognise programme structure without executing it.  
-B) How to start a real CNC machine.  
-C) How to repair a controller.
+C) How to recognise programme structure without executing it.  
+A) How to start a real CNC machine.  
+B) How to repair a controller.
 
 **Second listening — details**
 
 1. What identifies a block in the printed example?
-   A) a line number B) a photograph C) a material colour
+   B) a line number A) a photograph C) a material colour
 2. What does a comment do?
-   A) helps explain the text to a reader B) guarantees machine safety C) replaces the controller manual
+   C) helps explain the text to a reader A) guarantees machine safety B) replaces the controller manual
 3. Why must the controller documentation be checked?
    A) syntax and behaviour can depend on the control B) all controls are identical C) comments define every machine limit
 4. What is the student allowed to do with the classroom extract?
-   A) read and discuss its structure B) run it on a machine C) change a production programme
+   B) read and discuss its structure A) run it on a machine C) change a production programme
 
 **Recording script**
 
@@ -516,7 +516,7 @@ C) How to repair a controller.
 3. Why is the controller documentation important?
 4. Practice 1: 1 N; 2 text in parentheses; 3 no; 4 it warns the reader not to execute the sample; 5 consult approved controller/machine documentation and an authorised instructor.
 5. Practice 2: 1 blocks; 2 comment; 3 controller; 4 syntax; 5 controller.
-6. Listening: gist A; details 1 A; 2 A; 3 A; 4 A.
+6. Listening: gist C; details 1 B; 2 C; 3 A; 4 B.
 
 **Writing task:** write 100–120 words explaining how a student can read a printed programme extract responsibly. Include *block, comment, controller, syntax* and *revision*.
 
