@@ -1027,13 +1027,16 @@ function tutoringSettingKey_(teacherEmail) {
   return "tutoring:teacher:" + email_(teacherEmail);
 }
 function parseTutoringLink_(raw) {
-  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:false};
+  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:false,audienceType:"all",audienceValue:""};
   if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
   value.url=String(value.url||"").trim();
   if(value.url&&!/^https?:\/\//i.test(value.url)){value.url="";value.visible=false;}
   value.title=String(value.title||"Запись на дополнительные занятия").slice(0,120);
   value.description=String(value.description||"").slice(0,500);
   value.visible=value.visible===true;
+  value.audienceType=["all","group","individual"].indexOf(String(value.audienceType||"all"))>=0?String(value.audienceType||"all"):"all";
+  value.audienceValue=String(value.audienceValue||"").trim().slice(0,200);
+  if(value.audienceType!=="all"&&!value.audienceValue)value.visible=false;
   return value;
 }
 function legacyTutoringLink_(courseId,teacherEmail) {
@@ -1067,6 +1070,9 @@ function getTutoringLink_(data) {
     const legacy=settings["tutoring:"+courseId];
     const link=personal?parseTutoringLink_(personal.value):legacy&&legacy.updatedBy===teacherEmail?parseTutoringLink_(legacy.value):parseTutoringLink_("");
     if(!link.visible||!link.url)continue;
+    const audienceType=link.audienceType||"all",audienceValue=String(link.audienceValue||"").trim();
+    if(audienceType==="group"&&audienceValue.toLocaleLowerCase("ru")!==String(user.group||"").trim().toLocaleLowerCase("ru"))continue;
+    if(audienceType==="individual"&&email_(audienceValue)!==email_(user.email))continue;
     links.push({teacherName:String(row[m.Name]||"Преподаватель"),title:link.title,description:link.description,url:link.url});
   }
   links.sort(function(a,b){return a.teacherName.localeCompare(b.teacherName,"ru");});
@@ -1079,7 +1085,20 @@ function saveTutoringLink_(data) {
   const description=String(data.description||"").trim().slice(0,500),visible=data.visible===true;
   if(url&&!/^https?:\/\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
   if(url.length>1000)throw new Error("Слишком длинная ссылка.");
-  const link={url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible&&!!url};
+  const audienceType=String(data.audienceType||"all"),audienceValue=String(data.audienceValue||"").trim();
+  if(["all","group","individual"].indexOf(audienceType)<0)throw new Error("Выбран неизвестный тип адресата.");
+  if(audienceType==="group"||audienceType==="individual"){
+    if(!audienceValue)throw new Error("Укажите группу или электронную почту студента.");
+    const usersSheet=users_(),rows=usersSheet.getDataRange().getValues(),m=headerMap_(usersSheet);
+    const target=rows.slice(1).find(function(row){
+      if(String(row[m.Role]||"").toLowerCase()!=="student"||!hasCourseAccess_({role:"student",courses:String(row[m.Courses]||"")},courseId))return false;
+      return audienceType==="group"
+        ? String(row[m.Group]||"").trim().toLocaleLowerCase("ru")===audienceValue.toLocaleLowerCase("ru")
+        : email_(row[m.Email])===email_(audienceValue);
+    });
+    if(!target)throw new Error(audienceType==="group"?"В этой дисциплине не найдена указанная учебная группа.":"Студент с этой почтой не найден среди обучающихся по дисциплине.");
+  }
+  const link={url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible&&!!url,audienceType:audienceType,audienceValue:audienceType==="all"?"":audienceValue.slice(0,200)};
   writeSetting_(tutoringSettingKey_(teacher.email),JSON.stringify(link),teacher.email);
   return {success:true,link:link};
 }
