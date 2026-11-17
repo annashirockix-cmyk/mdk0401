@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What should students do before Friday evening?",
       "audioText": "The college learning platform will be unavailable for maintenance on Saturday from eight until ten in the morning. Students should download any materials they need before Friday evening. Submitted work will remain saved, but online quizzes cannot be opened during the maintenance period. If the service is still unavailable after ten, contact the IT help desk.",
       "options": [
-        "On Friday",
+        "Ask the tutor to email the materials after the maintenance",
         "Download the materials they need",
-        "Next month",
-        "After the event"
+        "Wait until the platform is available again",
+        "Print the materials after Friday evening"
       ],
       "correctIndex": 1,
       "points": 1
