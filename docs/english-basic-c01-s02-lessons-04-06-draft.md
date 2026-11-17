@@ -1,6 +1,6 @@
 # Basic English — курс 1, семестр 2: лекции 4–6
 
-Статус: редакционные черновики для предметной проверки. Не импортированы в портал. Предполагается, что студенты освоили базовые темы первого семестра. До утверждения требуется сверка с рабочей программой и точным изданием учебника Белова.
+Статус: редакционные черновики для предметной проверки, подключённые к runtime портала через `english-five-year-runtime.js`; не утверждены как официальная программа. Предполагается, что студенты освоили базовые темы первого семестра. До утверждения требуется сверка с рабочей программой и точным изданием учебника Белова.
 
 ## Лекция en-c01-s02-l04. My College: Departments, Facilities and People
 
@@ -397,4 +397,4 @@ The matching activities are available in the portal's English Listening Lab. The
 
 Students open **English → Аудирование**, select an English voice if needed, listen to the script (normally twice), answer the comprehension questions and submit for practice feedback and transcript reveal. The same catalogue item can be embedded inside the lesson after its lecture record is imported into the course data.
 
-**Boundary:** these are practice activities. Their answer keys are client-side; they do not save grades or protected exam attempts. The new lesson drafts have not yet been imported into the portal, so the standalone Listening Lab is the available access route until that import is completed. Existing lecture text, VPR banks, Apps Script and gradebook are unchanged.
+**Boundary:** these are practice activities. Their answer keys are client-side; they do not save grades or protected exam attempts. The lecture entries are appended to the course runtime by `english-five-year-runtime.js`. The Listening Lab remains a separate practice route; its activities do not save grades or protected exam attempts. Existing lecture text, VPR banks, Apps Script and gradebook are unchanged.
