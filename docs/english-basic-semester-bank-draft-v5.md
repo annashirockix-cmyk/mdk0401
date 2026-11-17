@@ -6,11 +6,11 @@
 
 ## Questions
 
-**81.** Could you tell me where the nearest bus stop ___?
+**81.** Do you know whether the library ___ open on Saturdays?
 - A. is
-- B. are
+- B. does
 - C. be
-- D. does
+- D. has
 
 **82.** I would rather ___ at home tonight than go to a noisy café.
 - A. staying
@@ -134,7 +134,7 @@
 
 | No. | Key | Rationale |
 |---:|:---:|---|
-| 81 | A | An indirect question uses statement word order: “where the bus stop is”. |
+| 81 | A | The indirect yes/no question uses statement word order after “whether”: “whether the library is open”. |
 | 82 | C | “Would rather” is followed by the bare infinitive. |
 | 83 | B | A completed event in a finished time period (“in one evening”) takes past simple. |
 | 84 | D | “Needn't” is followed by the bare infinitive. |
