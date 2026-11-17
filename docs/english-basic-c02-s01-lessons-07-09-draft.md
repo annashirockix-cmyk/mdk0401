@@ -107,7 +107,7 @@ Better: `I have been studying English since September.` (If the course focuses o
 Use the Present Perfect form of the verb and **for** or **since**.
 
 1. I ______ (study) at this college ______ September.
-2. Our group ______ (learn) English ______ two years.
+2. Our group ______ (have) English classes ______ two years.
 3. He ______ (not use) this software ______ last term.
 4. ______ you ever ______ (take) an online course?
 5. They ______ (have) practical classes ______ January.
@@ -219,7 +219,7 @@ In pairs, role-play a conversation about a course relevant to your future profes
 ### Teacher key and feedback
 
 - Practice 1: 1 apprentice; 2 qualification; 3 lifelong learning; 4 practical.
-- Practice 2: 1 have studied, since; 2 have learned, for; 3 has not used, since; 4 Have, taken; 5 have had, since.
+- Practice 2: 1 have studied, since; 2 has had, for; 3 has not used, since; 4 Have, taken; 5 have had, since.
 - Reading: 1 B; 2 examples: changing technology / new equipment / updated standards; 3 electrician–c, programmer–b, machine-tool operator–a, manufacturing technician–d; 4 “identify a gap in your knowledge”; 5 No. The text says practical experience should be combined with reliable information and safe procedures.
 - Listening: gist B; details 1 B, 2 A, 3 B, 4 A.
 - Self-check: 1 B; 2 B; 3 **for** + duration, **since** + starting point; 4 examples: short courses, online learning, manuals, mentoring, practical training; 5 accept a relevant and clearly explained example.
