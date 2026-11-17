@@ -950,6 +950,14 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                         if(!raw||!/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(normalized)||!Number.isFinite(Number(normalized))){window.showToast("Введите корректное число. Можно использовать запятую или точку.","err");return;}
                         answers[index]=normalized;index++;draw();
                     };
+                } else if (questionType === "short_text" || questionType === "text") {
+                    html += '<label style="display:block;margin:12px 0"><span class="museum-muted">Введите краткий ответ</span><textarea id="customShortTextAnswer" class="self-input" rows="3" maxlength="2000" placeholder="Ваш ответ" style="display:block;width:100%;margin-top:6px"></textarea></label><button class="btn" id="customShortTextSubmit">Ответить и продолжить</button>';
+                    area.innerHTML = html;
+                    area.querySelector("#customShortTextSubmit").onclick = function() {
+                        var input=area.querySelector("#customShortTextAnswer"),raw=input.value.trim();
+                        if(!raw){window.showToast("Введите ответ перед продолжением.","err");return;}
+                        answers[index]=raw;index++;draw();
+                    };
                 } else if (questionType === "order" || questionType === "ordering") {
                     html += '<p class="museum-muted">Расставьте элементы в правильной последовательности. Перетаскивайте строки или используйте кнопки ↑ и ↓.</p><ol id="customOrderList" style="list-style:none;padding:0;margin:10px 0">'+(q.items || []).map(function(item, i) {
                         return '<li draggable="true" data-order-index="'+i+'" style="display:flex;gap:8px;align-items:center;padding:10px;margin:6px 0;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:grab"><span style="flex:1">'+window.escapeHtml(item)+'</span><button type="button" class="btn ghost" data-order-up aria-label="Переместить выше">↑</button><button type="button" class="btn ghost" data-order-down aria-label="Переместить ниже">↓</button></li>';
