@@ -6424,10 +6424,10 @@
                 "prompt": "Listening 2. How are valuable items kept?",
                 "audioText": "The college reception has changed its procedure for reporting lost property. Students should complete a short form at the front desk and describe the item clearly. Valuable items are kept in a locked cabinet. The office is open from eight thirty until four thirty on weekdays. Students will be contacted if an item matching their description is found.",
                 "options": [
-                  "On Friday",
+                  "In an open tray at reception",
                   "In a locked cabinet",
-                  "Next month",
-                  "After the event"
+                  "In the staff office drawer",
+                  "With the security desk"
                 ],
                 "correctIndex": 1,
                 "points": 1
@@ -8708,10 +8708,10 @@
                 "prompt": "Listening 2. Which classroom materials are needed for the session?",
                 "audioText": "The mathematics and science departments are holding a joint session on presenting research data. It will begin at eleven on Monday in the computer laboratory. Students will practise choosing suitable chart types and describing trends without exaggerating results. They should bring a small table of figures from a recent class project.",
                 "options": [
-                  "On Friday",
+                  "A printed poster about the research topic",
                   "A small table of figures from a recent class project",
-                  "Next month",
-                  "After the event"
+                  "A draft paragraph from the final report",
+                  "A list of questions for the guest speaker"
                 ],
                 "correctIndex": 1,
                 "points": 1
