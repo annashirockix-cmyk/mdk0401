@@ -314,6 +314,8 @@ test("custom ordering questions shuffle items and preserve student drag order fo
  assert.ok(app.includes("customOrderList"));
  assert.ok(app.includes("data-order-up"));
  assert.ok(editor.includes("correctOrder:ordering?items.slice():[]"));
+ assert.ok(editor.includes("items:Array.isArray(q.items)?q.items.map(String):[]"));
+ assert.ok(editor.includes("items:Array.isArray(q.items)?q.items.slice():[]"));
  assert.ok(editor.includes("ordering?'<ol>'"));
  assert.ok(ux.includes("Введите элементы в правильном порядке"));
  assert.ok(server.includes("safe.items = order.map(function(i) { return items[i]; })"));
