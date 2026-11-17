@@ -217,11 +217,13 @@ test("workbook figures are selected by relevant topics and all referenced files 
 test("teacher-created lectures are rendered in their assigned topics and sanitized", () => {
   const app = read("app.js");
   const editor = read("course-admin.js");
-  assert.match(editor, /type:"lecture",title:title,code:"Доп\. лекция",content:content/);
+  assert.match(editor, /type:"lecture",title:title,code:base\?base\.code:"Доп\. лекция",content:content/);
+  assert.match(editor, /isBuiltInOverride=true/);
+  assert.match(editor, /sourceLectureCode=base\.code/);
   assert.match(app, /window\.customContent\.lectures/);
-  assert.match(app, /customTopicLectures\.map/);
+  assert.match(app, /customTopicLectures\.filter/);
   assert.match(app, /safeCustomLectureHtml/);
-  assert.match(app, /topic\.lectures = \(topic\.lectures \|\| \[\]\)\.concat/);
+  assert.match(app, /topic\.lectures=builtInLectures\.concat\(additionalLectures\)/);
 });
 
 test("custom course materials normalize spreadsheet date-coerced course IDs", () => {
