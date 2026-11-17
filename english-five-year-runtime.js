@@ -29,6 +29,30 @@
   });
   flushPara();flushList();flushTable();return out.join("\n");
  }
+ function splitTeacherMaterial(markdown){
+  var student=String(markdown||""),teacher=[];
+  function move(match,label){teacher.push(label+"\n"+match.trim());}
+  student=student.replace(/^##\\s+(\\d+)\\.\\s+Self-check and teacher key\\s*\\n([\\s\\S]*?)(?=\\n##\\s|\\n---\\s*$)/gm,function(full,num,body){
+   var kept=[],hidden=[],inKey=false,numbered=0;
+   body.split("\\n").forEach(function(line){
+    if(!inKey&&/^\\s*\\d+\\.\\s+/.test(line)){
+     numbered++;
+     if(numbered>3||/\\b(?:Practice|Listening|Reading:|Review key)\\b/i.test(line))inKey=true;
+    }
+    if(inKey){
+     if(/^\\*\\*[^*]*(?:rubric|Independent work)/i.test(line)){inKey=false;kept.push(line);}
+     else hidden.push(line);
+    }else kept.push(line);
+   });
+   if(hidden.join("\\n").trim())teacher.push("### "+num+". Teacher answer key\\n"+hidden.join("\\n"));
+   return "## "+num+". Self-check\\n"+kept.join("\\n");
+  });
+  student=student.replace(/(^|\\n)### Teacher key and feedback\\s*\\n([\\s\\S]*?)(?=\\n\\*\\*[^*\\n]*(?:rubric|Independent work)|\\n##\\s|\\n---|$)/gm,function(full,prefix,body){move(body,"### Teacher key and feedback");return prefix;});
+  student=student.replace(/(^|\\n)### Review key\\s*\\n([\\s\\S]*?)(?=\\n##\\s|\\n---|$)/gm,function(full,prefix,body){move(body,"### Review key");return prefix;});
+  student=student.replace(/(^|\\n)\\*\\*Teacher key:\\*\\*[^\\n]*(?:\\n(?!\\s*$)[^\\n]*)?/g,function(full){move(full,"Teacher key");return "";});
+  student=student.replace(/(^|\\n)\\*\\*Teacher key\\*\\*\\s*\\n([\\s\\S]*?)(?=\\n\\*\\*[^*\\n]+\\*\\*|\\n#{1,4}\\s|\\n---|$)/gm,function(full,prefix,body){move(body,"Teacher key");return prefix;});
+  return {student:student.replace(/\\n{3,}/g,"\\n\\n").trim(),teacher:teacher.join("\\n\\n").trim()};
+ }
  function findTopic(id){var found=null;data.ENT.sections.some(function(section){return(section.topics||[]).some(function(t){if(t.id===id){found=t;return true;}return false;});});return found;}
  var c4=findTopic("t-unit8"),c5=findTopic("t-unit11");
  if(!c4||!c5){console.error("[English 5Y] Existing target topics not found; no draft additions applied.");return;}
@@ -56,7 +80,7 @@
   if(!topic){topic={id:topicId,code:"C"+row.course+" · S"+row.semester,title:"Course "+row.course+" · Semester "+row.semester+" — "+(row.track==="basic"?"Basic English":"Technical English"),sourceTrack:row.track,lectures:[],practicals:[],selfWork:[],test:[]};section.topics.push(topic);}
   var code="C"+row.course+"."+row.semester+"."+String(row.number).padStart(2,"0");
   if(!topic.lectures.some(function(x){return x.listeningId===row.id;})){
-   topic.lectures.push({code:code,title:row.title,content:markdownToHtml(row.markdown),listeningId:row.id,courseNumber:row.course,semesterNumber:row.semester,lessonNumber:row.number});
+   var split=splitTeacherMaterial(row.markdown);\n   topic.lectures.push({code:code,title:row.title,content:markdownToHtml(split.student),teacherContent:markdownToHtml(split.teacher),listeningId:row.id,courseNumber:row.course,semesterNumber:row.semester,lessonNumber:row.number});
   }
  });
  console.info("[English 5Y] Added 46 Basic/Technical draft lessons across courses 1–3.");
