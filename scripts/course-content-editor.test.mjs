@@ -42,7 +42,17 @@ test("real-browser constructor audit exercises student numeric, true-false and s
  assert.ok(audit.includes('["12.5", 0, "Ньютон"]'));
 });
 
-test("lecture editor includes in-text find and replace controls", () => {\n const ux = read("course-editor-ux.js");\n assert.ok(ux.includes("ceFindText"));\n assert.ok(ux.includes("ceReplaceText"));\n assert.ok(ux.includes("ceFindNext"));\n assert.ok(ux.includes("ceReplaceAll"));\n assert.ok(ux.includes("Найти далее"));\n assert.ok(ux.includes("Заменить все"));\n});\n\ntest("short text questions are rendered and scored on the server", () => {
+test("lecture editor includes in-text find and replace controls", () => {
+ const ux = read("course-editor-ux.js");
+ assert.ok(ux.includes("ceFindText"));
+ assert.ok(ux.includes("ceReplaceText"));
+ assert.ok(ux.includes("ceFindNext"));
+ assert.ok(ux.includes("ceReplaceAll"));
+ assert.ok(ux.includes("Найти далее"));
+ assert.ok(ux.includes("Заменить все"));
+});
+
+test("short text questions are rendered and scored on the server", () => {
  const app = read("app.js");
  const server = read("Code.gs");
  const ux = read("course-editor-ux.js");
