@@ -1449,7 +1449,10 @@ function getAssignments_(data) {
   const ss = assignmentSubmissions_(), m = headerMap_(ss);
   const hs = assignmentSubmissionHistory_(), hm = headerMap_(hs), list = [];
   function parseAttachments_(value) {
-    try { const parsed=JSON.parse(String(value||"[]")); return Array.isArray(parsed)?parsed:[]; } catch(e) { return []; }
+    try {
+      const parsed=JSON.parse(String(value||"[]"));
+      return Array.isArray(parsed)?parsed.map(function(file){return {id:String(file.id||""),name:String(file.name||"attachment"),mimeType:String(file.mimeType||""),size:Number(file.size)||0,uploadedAt:String(file.uploadedAt||"")};}):[];
+    } catch(e) { return []; }
   }
   function rowsForStudent(sheet, map) {
     const lastRow = sheet.getLastRow(), lastColumn = sheet.getLastColumn();
