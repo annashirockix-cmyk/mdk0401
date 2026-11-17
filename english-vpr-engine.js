@@ -237,7 +237,7 @@
           if (!field || !field.value.trim() || count > 5) questionnaireError = true;
         });
       });
-      if (questionnaireError) { window.alert("Заполните все 10 пунктов задания 7. Каждый ответ должен содержать не более пяти слов."); return; }
+      if (questionnaireError && seconds > 0) { window.alert("Заполните все 10 пунктов задания 7. Каждый ответ должен содержать не более пяти слов. По истечении времени неполная работа будет отправлена с имеющимися ответами."); return; }
       if (seconds > 0 && !window.confirm("Отправить ответы? После отправки изменить их будет нельзя.")) return;
       finished = true;
       if (window.englishAssessmentTimer) { clearInterval(window.englishAssessmentTimer); window.englishAssessmentTimer = null; }
