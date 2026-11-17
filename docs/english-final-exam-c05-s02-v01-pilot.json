@@ -80,8 +80,8 @@
       "type": "multiple_choice",
       "prompt": "Choose TWO entries that must be carried forward to the incoming shift in a maintenance handover.",
       "options": [
-        "Tasks completed and signed off during the previous shift",
-        "Routine work planned for a later scheduled visit",
+        "A note about the outgoing team's lunch arrangements",
+        "A record of the next team's preferred break times",
         "Outstanding task references",
         "Issues requiring follow-up"
       ],
