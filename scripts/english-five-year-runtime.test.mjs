@@ -170,3 +170,21 @@ test("course 1–3 lecture students do not receive recording scripts, transcript
       `teacher material should remain available in the staff accordion: ${lecture.listeningId}`);
   }
 });
+
+test("original English lectures keep teacher answer sections out of student content", () => {
+  const window = loadEnglishRuntime();
+  const originals = [window.MDK_DATA.ENB, window.MDK_DATA.ENT].flatMap((track) =>
+    track.sections.flatMap((section) =>
+      (section.topics || []).flatMap((topic) =>
+        (topic.lectures || []).filter((lecture) => !lecture.listeningId),
+      ),
+    ),
+  );
+  assert.ok(originals.length >= 26, "the 26 original lectures in courses 1–3 must be present");
+  for (const lecture of originals) {
+    assert.doesNotMatch(String(lecture.content || ""), /<h[1-6][^>]*>[^<]*(?:ключ преподавателя|teacher key|answer key)/i,
+      `teacher answer heading leaked into original lecture ${lecture.code}`);
+  }
+  const protectedKeys = originals.filter((lecture) => /ключ преподавателя|teacher key|answer key/i.test(String(lecture.teacherContent || "")));
+  assert.ok(protectedKeys.length >= 20, "teacher keys from original lectures should remain available to staff");
+});
