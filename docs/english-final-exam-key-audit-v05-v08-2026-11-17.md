@@ -55,12 +55,12 @@ The option order was adjusted without changing the correct answer text. Source J
 
 Post-update checks confirm each of V05–V08 has the expected single-choice key-position distribution `[2, 2, 1, 1]`; all four source payloads match their embedded registry variants exactly (4/4 parity). The required multiple-choice key pair remains `[2, 3]`.
 
-A content-level spot-check was also completed for all multiple-choice, short-text, ordering, and written tasks in C02-S02 V05–V08 (16 tasks). No further defect was identified in the distractor sets, accepted-answer wording, sequence logic, or rubric-to-prompt alignment. This is a focused review of those 16 tasks, not a full semantic review of the remaining V05–V08 tasks.
+A content-level review was completed for all multiple-choice, short-text, ordering, and written tasks in the ten V05 files (40 tasks), plus the corresponding 16 tasks in C02-S02 V06–V08. One ordering defect was found in C01-S01 V05: the original key placed room preparation before inviting students. The source and registry were corrected to discuss ideas → choose date/place → invite students → prepare the room. The other reviewed distractor sets, accepted answers, sequences, and rubrics did not show further defects in this slice. This remains a partial semantic review, not a full review of every task in all 40 V05–V08 files.
 
-The new CI run for the latest HEAD is run #3002 and was **in progress** when this document was updated. Its result must be checked before declaring CI green.
+The CI run #3002 completed successfully on the option-balance correction commit (`56849ee`). A later run #3004 was triggered for the subsequent content correction and was still in progress at the time of this update. The latest HEAD must be checked again before declaring CI green.
 
 ## Remaining validation
 
-1. Continue semantic review of the other tasks in the 40 V05–V08 files; the nine confirmed defects and the 16-task spot-check do not imply all 400 tasks are error-free.
+1. Continue semantic review of the single-choice items and remaining tasks in the 40 V05–V08 files; the ten corrected key/ordering defects and the reviewed 56 non-single-choice tasks do not imply all 400 tasks are error-free.
 2. Recheck CI run #3002 on the latest HEAD and address any remaining failures.
 3. Continue the next variant slice only after the V05–V08 checks are complete.
