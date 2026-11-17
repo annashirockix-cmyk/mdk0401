@@ -235,3 +235,26 @@ test("teachers can revise built-in topics, lectures and protected exam banks wit
  assert.match(app, /sourceTopicId/);
  assert.match(app, /isBuiltInOverride===true/);
 });
+
+test("teacher-created test questions support private image uploads and student display", () => {
+ const server = read("Code.gs");
+ const api = read("api.js");
+ const editor = read("course-admin.js");
+ const ux = read("course-editor-ux.js");
+ const app = read("app.js");
+ assert.match(server, /case "uploadtestimage": result = uploadTestImage_\(data\)/);
+ assert.match(server, /function uploadTestImage_\(data\)/);
+ assert.match(server, /editor_\(data, courseId\)/);
+ assert.match(server, /TEST_QUESTION_IMAGE_FOLDER_ID/);
+ assert.match(server, /folder\.createFile\(blob\)/);
+ assert.match(server, /function hydrateTestQuestionImages_\(questions\)/);
+ assert.match(server, /const displayQuestions = hydrateTestQuestionImages_\(questions\)/);
+ assert.match(server, /questions:questions,optionMaps:optionMaps/,
+  "only compact image references, not base64 image bytes, are stored in the attempt cache");
+ assert.match(api, /uploadTestImage:function\(courseId,dataUrl,name\)/);
+ assert.match(editor, /id="ceQuestionImagePanel"/);
+ assert.match(editor, /imageRef:q\.imageRef\|\|""/);
+ assert.match(ux, /id='ceQuestionImageFile'/);
+ assert.match(ux, /window\.API\.uploadTestImage\(course,dataUrl/);
+ assert.match(app, /q\.imageData && \/\^data:image/);
+});
