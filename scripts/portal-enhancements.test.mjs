@@ -1861,3 +1861,23 @@ test("personal tutoring links are isolated per teacher and shown only to student
   const app = read("app.js");
   assert.doesNotMatch(app, /menuTutoring/);
 });
+
+
+test("registration requires separate surname and first name and normalizes group names", () => {
+  const backend = read("Code.gs");
+  const app = read("app.js");
+  const html = read("index.html");
+  const reports = read("reports.js");
+  assert.match(backend, /function normalizeGroupName_\(value\)/);
+  assert.match(backend, /\.toLocaleUpperCase\("ru-RU"\)/);
+  assert.match(backend, /if \(!surname \|\| !firstName\)/);
+  assert.match(backend, /Name: fullName/);
+  assert.match(backend, /Group: group/);
+  assert.match(app, /regSurname/);
+  assert.match(app, /regFirstName/);
+  assert.match(app, /API\.register\(email,pass,surname,firstName,group,invite\)/);
+  assert.match(html, /id="regSurname"[^>]*required/);
+  assert.match(html, /id="regFirstName"[^>]*required/);
+  assert.match(reports, /const normGroup=x=>/);
+  assert.match(reports, /normGroup\(x\.group\)/);
+});
