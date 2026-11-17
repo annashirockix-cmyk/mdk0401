@@ -154,8 +154,8 @@ Key words: *production planning, component, process sheet, data, wiring, dimensi
 
 What are the students discussing?
 
-B) How different professional roles contribute to aircraft production.  
-A) How to book a holiday.  
+A) How different professional roles contribute to aircraft production.  
+B) How to book a holiday.  
 C) How to repair a household appliance.
 
 **Second listening — details**
@@ -224,7 +224,7 @@ Add one sentence about why communication between teams matters.
 4. Practice 1: 1 b; 2 c; 3 d; 4 e; 5 a.
 5. Practice 2: 1 P; 2 M; 3 T; 4 E.
 6. Practice 3: 1 carry/transport; 2 describing/documenting; 3 providing/supplying; 4 consistent/reliable.
-7. Listening: gist B; details 1 B, 2 C, 3 A, 4 B.
+7. Listening: gist A; details 1 B, 2 C, 3 A, 4 B.
 
 **Writing/speaking rubric (8 points):** role accuracy 2; correct vocabulary 2; logical sequence 1; purpose language 1; intelligibility 1; team communication point 1.
 
@@ -355,20 +355,20 @@ Review: *forward, rear, above, below, attached to, control surface*. Predict whi
 
 What is the speaker doing?
 
-C) Describing the main parts of an aircraft diagram.  
+B) Describing the main parts of an aircraft diagram.  
 A) Giving airport security instructions.  
-B) Explaining how to buy a ticket.
+C) Explaining how to buy a ticket.
 
 **Second listening — details**
 
 1. What is the main body called?
-   B) fuselage  A) aileron  C) landing gear
+   C) fuselage  A) aileron  B) landing gear
 2. What extends from the fuselage?
-   C) wings  A) cabin seats  B) the rudder only
+   A) wings  C) cabin seats  B) the rudder only
 3. Which part is associated with yaw control?
-   A) rudder  B) flap  C) cockpit
+   B) rudder  A) flap  C) cockpit
 4. What supports the aircraft on the ground?
-   B) landing gear  A) elevator  C) wingtip
+   C) landing gear  A) elevator  B) wingtip
 
 **Recording script**
 
@@ -418,7 +418,7 @@ Each student gives 3–4 sentences. Do not describe real aircraft repair or modi
 3. What does landing gear do?
 4. Practice 1: 1 b; 2 d; 3 c; 4 a; 5 e.
 5. Practice 2: 1 fuselage; 2 wings; 3 landing gear; 4 engine; 5 tail.
-6. Listening: gist C; details 1 B; 2 C; 3 A; 4 B.
+6. Listening: gist B; details 1 C; 2 A; 3 B; 4 C.
 
 **Speaking rubric (8 points):** correct part names 3; correct basic functions 2; location language 1; clear sequence 1; scope/safety awareness 1.
 
@@ -529,24 +529,24 @@ Words: *density, strength, corrosion, manufacturing, specification, requirement*
 
 What are the speakers doing?
 
-B) Comparing two hypothetical material options against requirements.  
+C) Comparing two hypothetical material options against requirements.  
 A) Ordering lunch.  
-C) Planning a holiday.
+B) Planning a holiday.
 
 **Second listening — details**
 
 1. What is the component for?
-   B) a classroom design exercise  
-   A) an actual aircraft repair  
+   A) a classroom design exercise  
+   B) an actual aircraft repair  
    C) a household decoration
 2. Which properties do they compare?
-   C) density and corrosion behaviour  
+   B) density and corrosion behaviour  
    A) colour and packaging  
-   B) brand and advertising
+   C) brand and advertising
 3. What does the instructor say is essential?
-   A) the approved specification  
+   C) the approved specification  
    B) personal preference  
-   C) the cheapest price alone
+   A) the cheapest price alone
 4. What conclusion do they reach?
    B) they need the full requirements before choosing  
    A) the lightest option is always correct  
@@ -595,7 +595,7 @@ Write 100–120 words answering: “Why is material selection a multi-factor dec
 2. Name three material families.
 3. Why is density alone insufficient for material selection?
 4. Practice 1: 1 lighter; 2 less expensive; 3 more important; 4 suitable; 5 better.
-5. Listening: gist B; details 1 B; 2 C; 3 A; 4 B.
+5. Listening: gist C; details 1 A; 2 B; 3 C; 4 B.
 
 **Writing rubric (8 points):** multi-factor explanation 2; correct property vocabulary 2; comparison 1; cautious claim 1; specification reference 1; clarity 1.
 
