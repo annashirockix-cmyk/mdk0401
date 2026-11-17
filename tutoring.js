@@ -10,13 +10,14 @@
     var app=document.getElementById("app"),state=window.state||{};
     if(!app || (location.hash && location.hash!=="#/" && location.hash!=="#/"))return;
     if(!state.student&&!state.staff)return;
+    var courseId=currentCourse();
     var existingCard=document.getElementById("tutoringHomeCard");
     if(existingCard){if(existingCard.getAttribute("data-course-id")===courseId)return;existingCard.remove();}
     var isStudent=!!state.student;
     var staff=state.staff||{};
     var isTeacher=!isStudent&&(String(staff.role||"").toLowerCase()==="teacher"||String(staff.role||"").toLowerCase()==="admin");
     if(!isStudent&&!isTeacher)return;
-    var courseId=currentCourse(),identity=state.student||state.staff;
+
     var card=document.createElement("section");
     card.id="tutoringHomeCard";
     card.setAttribute("data-course-id",courseId);
