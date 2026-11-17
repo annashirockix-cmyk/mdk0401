@@ -10,11 +10,11 @@
 - C. describing
 - D. have describe
 
-**122.** What does *out of specification* mean?
-- A. A result or characteristic is outside the permitted requirements
-- B. A product has been shipped to the wrong building
-- C. A document has no title
-- D. A machine is operating without an operator
+**122.** What does *rework* mean in manufacturing?
+- A. Processing a nonconforming item again to make it meet the specified requirements
+- B. Discarding an item without recording its status
+- C. Approving a design change before it is reviewed
+- D. Measuring a finished item for the first time
 
 **123.** Complete the sentence: “The supplier notified us ___ a change in the delivery date.”
 - A. between
@@ -70,11 +70,11 @@
 - C. The maximum temperature specified for a material
 - D. The temperature used only during welding
 
-**132.** Read the status update: “Revision C is current. Revision B is retained for historical reference only.” Which statement is correct?
-- A. Revision B replaces Revision C
-- B. Both revisions are current operating instructions
-- C. Revision C is the current version; Revision B is kept as a record
-- D. Revision C has been withdrawn
+**132.** Read the status update: “Revision C is current. Revision B is retained for historical reference only.” What does the note imply about Revision B?
+- A. It should replace Revision C at the point of use
+- B. It is automatically approved for new work
+- C. It is retained as historical evidence and should not be treated as the current instruction
+- D. It has never been issued
 
 **133.** Complete the sentence: “The data ___ collected from three separate test runs.”
 - A. was
@@ -129,7 +129,7 @@
 | No. | Key | Rationale |
 |---:|:---:|---|
 | 121 | A | Singular subject “report” takes “describes”. |
-| 122 | A | “Out of specification” means outside stated acceptance limits or requirements. |
+| 122 | A | Rework means carrying out additional processing so that a nonconforming item meets the specified requirements. |
 | 123 | D | The natural collocation is “notify someone about” a change. |
 | 124 | A | A scale of 1:2 means one unit on the drawing represents two units on the real component, so the drawing is half-size. |
 | 125 | B | This is a polite, grammatically correct formal request. |
@@ -139,7 +139,7 @@
 | 129 | D | “Feasible” means capable of being done or put into practice; “practical” is the closest option. |
 | 130 | C | “Because” introduces the reason for postponement. |
 | 131 | A | Ambient temperature is the temperature of the surrounding environment. |
-| 132 | C | The notice explicitly identifies C as current and B as historical. |
+| 132 | C | A superseded revision may be retained as historical evidence, but it is not the current instruction for new work. |
 | 133 | B | In this technical context, “data” is treated as a plural noun; “were collected” is the expected form. Check local style guide if it treats “data” as a mass singular. |
 | 134 | D | A technical log records relevant aircraft technical status and maintenance information under applicable procedures. |
 | 135 | C | It reports a measurable value and location without speculation. |
