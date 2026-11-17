@@ -79,3 +79,11 @@ A second structural screen parsed all 200 Basic and all 200 Technical draft ques
 - The existing Technical near-duplicate corrections (BOM, root-cause analysis, obsolete documentation) remain in place. A full semantic comparison against the protected VPR variants still requires access to the current protected bank contents and a task-by-task review.
 
 The five-year map and final-exam blueprint files exist in the repository, but both explicitly remain provisional pending the approved work programme, semester hours and exact Belova textbook edition. No authoritative curriculum file was found in the repository tree during this pass.
+
+
+## Clarification to electrical-safety vocabulary item Q62 — 2026-11-17
+
+- Reworded Q62 to make clear that it tests the vocabulary meaning of *to isolate a circuit*, not the steps of a complete safe-isolation procedure.
+- The keyed meaning remains “separate the circuit from its energy supply”.
+- The teacher-key rationale now explicitly states that this definition is not a substitute for the approved isolation procedure and verification by authorised personnel.
+- This wording correction reduces the risk of students treating a one-line vocabulary definition as practical electrical-safety instruction. An electrical subject specialist must still validate the term against the college's approved teaching reference before release.
