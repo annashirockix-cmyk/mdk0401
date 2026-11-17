@@ -57,7 +57,8 @@ try {
         success: true, attemptId: "audit-custom-attempt-" + String(testId),
         questions: [
           { q: "Вычислите результат: 25 ÷ 2.", type: "numeric" },
-          { q: "Утверждение: 2 × 3 = 6.", type: "true_false", options: ["Верно", "Неверно"] }
+          { q: "Утверждение: 2 × 3 = 6.", type: "true_false", options: ["Верно", "Неверно"] },
+          { q: "Назовите единицу измерения силы.", type: "short_text" }
         ]
       }),
       submitCustomTest: async payload => {
@@ -281,11 +282,14 @@ try {
   assert.equal(await page.locator('#topicContent button[data-custom-answer="1"]').count(), 1,
     "True/false question must render the fixed False option");
   await page.locator('#topicContent button[data-custom-answer="0"]').click();
+  await page.waitForFunction(() => document.getElementById("customShortTextAnswer"));
+  await page.locator("#customShortTextAnswer").fill("Ньютон");
+  await page.locator("#customShortTextSubmit").click();
   await page.waitForFunction(() => document.getElementById("topicContent")?.innerText.includes("Тест завершён"));
   const submittedAnswers = await page.evaluate(() => window.__submittedCustomAnswers);
-  assert.deepEqual(submittedAnswers, ["12.5", 0],
+  assert.deepEqual(submittedAnswers, ["12.5", 0, "Ньютон"],
     "Student answers must preserve normalized numeric input and selected true/false value");
-  const testStarted = { numeric: true, trueFalse: true, submittedAnswers };
+  const testStarted = { numeric: true, trueFalse: true, shortText: true, submittedAnswers };
 
   await page.locator("#tab-custom-flashcards").click();
   await page.locator("#topicContent button").filter({ hasText: "Начать повторение" }).click();
