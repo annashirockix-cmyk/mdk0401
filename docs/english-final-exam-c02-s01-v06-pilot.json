@@ -28,10 +28,10 @@
       "prompt": "Listening 2. What information should students take to the employment meeting?",
       "audioText": "The student employment office is holding a short meeting about part-time jobs on Tuesday at four in Room 18. Local employers will explain weekend shifts and workplace expectations. Bring your timetable so the adviser can check that working hours do not conflict with lessons. Students who want an individual appointment should book at the reception desk before Monday.",
       "options": [
-        "On Friday",
+        "A copy of their CV",
         "A copy of their timetable",
-        "Next month",
-        "After the event"
+        "A list of professional references",
+        "Copies of relevant certificates"
       ],
       "correctIndex": 1,
       "points": 1
