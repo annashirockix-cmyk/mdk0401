@@ -258,3 +258,16 @@ test("teacher-created test questions support private image uploads and student d
  assert.match(ux, /window\.API\.uploadTestImage\(course,dataUrl/);
  assert.match(app, /q\.imageData && \/\^data:image/);
 });
+
+
+test("custom test editor preserves per-question metadata and test settings while editing", () => {
+ const editor = read("course-admin.js");
+ const ux = read("course-editor-ux.js");
+ assert.match(editor, /window\.__ceEditingQuestionIndex=i/);
+ assert.match(editor, /kind:q\.kind\|\|"single"/);
+ assert.match(editor, /variantCount:\$\("ceVariantCount"\)/);
+ assert.match(editor, /questionOrder:\$\("ceShuffleQuestions"\)/);
+ assert.match(editor, /optionOrder:\$\("ceShuffleOptions"\)/);
+ assert.match(ux, /const editing=Number\.isInteger\(window\.__ceEditingQuestionIndex\)/);
+ assert.match(ux, /editing>=0\?editing:drafts\.querySelectorAll\('\.edit-q'\)\.length/);
+});
