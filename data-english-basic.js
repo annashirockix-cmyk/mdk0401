@@ -182,31 +182,138 @@ window.MDK_DATA = window.MDK_DATA || {};
           topic("b-unit2", "Unit 2", "Nizhnekamsk",
             [
               lec("2.1", "Grammar: Word Formation & Chain of Definitions", `
-                <h3>1. Word Formation (Словообразование)</h3>
-                <table style="width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;">
-                  <tr style="background:var(--card-soft);"><th style="border:1px solid var(--border); padding:5px;">Суффиксы существительных</th><th style="border:1px solid var(--border); padding:5px;">Суффиксы прилагательных</th><th style="border:1px solid var(--border); padding:5px;">Приставки с отрицанием</th></tr>
-                  <tr><td style="border:1px solid var(--border); padding:5px;">-er (worker), -or (insulator), -ment (development), -ness (happiness), -ity (equality), -ion (union)</td><td style="border:1px solid var(--border); padding:5px;">-able (comfortable), -al (formal), -ant (important), -ful (peaceful), -ive (effective), -ous (dangerous)</td><td style="border:1px solid var(--border); padding:5px;">un- (unimportant), in- (inaccuracy), im- (impossible), il- (illegal), ir- (irresponsible)</td></tr>
-                </table>
-                <h3>2. «Цепочка определений» (Chain of Definitions)</h3>
-                <p>В английском языке часто используются беспредложные словосочетания, состоящие из нескольких существительных. Главным словом является последнее, а все стоящие слева — определениями к нему. Перевод следует начинать с последнего слова.</p>
-                <p><i>state border</i> — государственная граница<br>
-                <i>remote control system</i> — система дистанционного управления</p>
-                <h3>3. Порядок слов в предложении</h3>
-                <p>Прямой порядок: Подлежащее → Сказуемое → Дополнение → Обстоятельство.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>На занятии изучаются основные модели словообразования и длинные именные группы. После занятия студент сможет определить часть речи по распространённым суффиксам, распознать отрицательное значение некоторых приставок, выделить главное слово в цепочке существительных и перевести словосочетание с учётом контекста.</p>
+<h3>1. Словообразование: основа, приставка и суффикс</h3>
+<p>Слово может состоять из основы и дополнительных морфем. Приставка обычно меняет значение слова, суффикс часто меняет часть речи или оттенок значения. Это полезная подсказка, но не абсолютное правило: значение незнакомого слова всегда проверяйте по контексту и словарю.</p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Модель</th><th>Примеры</th><th>Значение / функция</th></tr>
+<tr><td>-er / -or</td><td>teach → teacher; operate → operator</td><td>человек, выполняющий действие</td></tr>
+<tr><td>-ment</td><td>develop → development</td><td>процесс или результат</td></tr>
+<tr><td>-tion / -sion</td><td>inform → information; decide → decision</td><td>действие, процесс или понятие</td></tr>
+<tr><td>-ness</td><td>kind → kindness</td><td>качество или состояние</td></tr>
+<tr><td>-ity</td><td>active → activity</td><td>свойство или состояние</td></tr>
+<tr><td>-ful / -less</td><td>use → useful / useless</td><td>наличие / отсутствие признака</td></tr>
+<tr><td>-able / -ible</td><td>read → readable; access → accessible</td><td>возможность или пригодность</td></tr>
+<tr><td>un- / in- / im- / il- / ir-</td><td>clear → unclear; correct → incorrect; possible → impossible</td><td>отрицание или противоположное значение</td></tr>
+</table>
+<p>Не добавляйте приставку механически: например, не каждое слово образует отрицание с un-. Проверяйте готовую форму: <i>unusual, incorrect, impossible, illegal, irregular</i>.</p>
+<h3>2. Семейства слов</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Глагол</th><th>Существительное</th><th>Прилагательное</th><th>Пример</th></tr>
+<tr><td>educate</td><td>education</td><td>educational</td><td>education system</td></tr>
+<tr><td>employ</td><td>employment</td><td>employed</td><td>employment record</td></tr>
+<tr><td>measure</td><td>measurement</td><td>measurable</td><td>measurement result</td></tr>
+<tr><td>inform</td><td>information</td><td>informative</td><td>information source</td></tr>
+<tr><td>develop</td><td>development</td><td>developed</td><td>professional development</td></tr>
+</table>
+<p>Окончание помогает предположить часть речи: -tion/-ment часто образуют существительные, -al/-ful/-able — прилагательные, -ly — многие наречия. Но есть исключения: <i>friendly</i> — прилагательное, а не наречие.</p>
+<h3>3. Цепочки существительных (noun compounds)</h3>
+<p>В английском несколько существительных могут стоять рядом без предлога: <i>college library card</i>, <i>machine tool operator</i>, <i>student progress report</i>. Обычно последнее слово является главным, а предыдущие уточняют его. Определите главное слово, затем двигайтесь слева направо, задавая вопрос «какой? для чего? чей?». Перевод не всегда дословный: учитывайте устойчивые сочетания и контекст.</p>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>Сочетание</th><th>Главное слово</th><th>Возможный перевод</th></tr>
+<tr><td>college library card</td><td>card</td><td>карта читателя библиотеки колледжа</td></tr>
+<tr><td>machine tool operator</td><td>operator</td><td>оператор станка</td></tr>
+<tr><td>student progress report</td><td>report</td><td>отчёт об успеваемости студента</td></tr>
+<tr><td>computer safety rules</td><td>rules</td><td>правила безопасности при работе с компьютером</td></tr>
+</table>
+<h3>4. Порядок слов в предложении</h3>
+<p>Базовая нейтральная модель: <b>Subject + Verb + Object + Place + Time</b>: <i>Students study English in the classroom every Monday.</i> Вопросы и отрицания в Present Simple требуют do/does, если в предложении нет be или другого вспомогательного глагола: <i>Does the lesson start at nine?</i> / <i>The lesson does not start at ten.</i></p>
+<p>Прилагательное обычно стоит перед существительным: <i>a new computer</i>. Наречия частотности обычно стоят перед смысловым глаголом, но после be: <i>We usually study here.</i> / <i>She is always punctual.</i></p>
+<h3>5. Практика</h3>
+<p><b>Задание A. Определите часть речи:</b> development, useful, operator, impossible, carefully, information.</p>
+<p><b>Задание B. Образуйте слово:</b> 1) educate → noun; 2) measure → noun; 3) correct → negative adjective; 4) use → adjective meaning “can be used”; 5) employ → noun.</p>
+<p><b>Задание C. Найдите главное слово и переведите:</b> college timetable; workshop safety rules; machine tool operator; student information form.</p>
+<p><b>Задание D. Исправьте порядок слов:</b> 1) English every week students study. 2) usually is she on time. 3) Does he studies at college?</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>development — существительное; useful — прилагательное; operator — существительное; impossible — прилагательное; carefully — наречие; information — существительное.</li>
+<li>education; measurement; incorrect; usable; employment.</li>
+<li>Главные слова: timetable; rules; operator; form. Переводы: расписание колледжа; правила безопасности мастерской; оператор станка; анкета/форма с информацией о студенте.</li>
+<li>Students study English every week. She is usually on time. Does he study at college?</li>
+</ol>
+<p><b>Самостоятельная работа:</b> составьте 8 слов из семейств educate, employ, measure, inform и develop; затем разберите 5 именных цепочек из учебного текста, выделив главное слово и предложив контекстный перевод.</p>
+`),
               lec("2.2", "Reading: Nizhnekamsk", `
-                <h3>Text: The Town I Live In</h3>
-                <p>Nizhnekamsk is a young town. It is located on the left bank of the river Kama, the tributary of the Volga. It is a very nice town with new blocks of houses, wide streets, wonderful squares and parks. The architectural symbol of our town is the Mosque, a very beautiful building with four minarets.</p>
-                <p>Nizhnekamsk is a developed economic center. The biggest industrial enterprises of our town are the petrochemical and the tyre plants. A lot of useful goods produced here are exported to other republics and countries.</p>
-                <p>Nizhnekamsk is an important educational center of Tatarstan. Thousands of students receive higher education at higher schools, colleges and universities.</p>
-                <p>Nizhnekamsk is a new green town with a widely developed infrastructure. We have a railway station, a bus station, an airport, a river port. The vast forests surround the town. You can spend your days off enjoying the magnificent nature in the suburbs.</p>
-              `),
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — описывать город или населённый пункт, рассказывать о его расположении, инфраструктуре и значимых местах. Студент научится извлекать основную и детальную информацию из короткого текста и задавать уточняющие вопросы о маршруте и городских объектах.</p>
+<h3>1. Reading: A City in Tatarstan</h3>
+<p><b>Read the text.</b></p>
+<p>Nizhnekamsk is a city in the Republic of Tatarstan, in the Volga region of Russia. It is situated near the Kama River and is known for its industrial enterprises, including petrochemical and tyre production. The city has residential areas, educational institutions, shops, sports facilities and public spaces. People use buses and other local transport to travel between neighbourhoods. The city is also connected with the wider region by road and rail routes.</p>
+<p>Like many industrial cities, Nizhnekamsk combines places of work and study with areas for everyday life and recreation. Residents may visit parks, cultural venues and sports centres. When describing a city, it is useful to name its location, main activities, transport links and public facilities. Specific opening hours, routes and current statistics should be checked using up-to-date local information.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>be situated / be located</td><td>располагаться</td><td>The city is situated near a river.</td></tr>
+<tr><td>industrial enterprise</td><td>промышленное предприятие</td><td>The region has several industrial enterprises.</td></tr>
+<tr><td>residential area</td><td>жилой район</td><td>There is a park in the residential area.</td></tr>
+<tr><td>public facility</td><td>общественный объект / учреждение</td><td>A library is a public facility.</td></tr>
+<tr><td>transport link</td><td>транспортное сообщение</td><td>The town has good transport links.</td></tr>
+<tr><td>recreation</td><td>отдых</td><td>The park is a place for recreation.</td></tr>
+<tr><td>neighbourhood</td><td>район, соседство</td><td>My college is in another neighbourhood.</td></tr>
+</table>
+<h3>3. Language focus: describing places</h3>
+<p>Для расположения используйте <i>in, near, on, to the north/south of</i>: <i>The city is in Tatarstan. It is near the Kama River.</i> Для наличия объектов используйте <i>there is</i> с единственным числом и неисчисляемыми существительными, <i>there are</i> — с множественным: <i>There is a railway station. There are several parks.</i></p>
+<p>Чтобы описать назначение, используйте <i>is used for</i> или <i>people go there to…</i>: <i>A sports centre is used for training. People go there to exercise.</i> Для сравнения: <i>larger than, more convenient than, less crowded than</i>.</p>
+<h3>4. Reading comprehension</h3>
+<ol>
+<li>In which republic is Nizhnekamsk situated?</li><li>Which river is mentioned?</li><li>Name two industrial activities mentioned in the text.</li><li>What kinds of public places are available in the city?</li><li>Why should current routes and opening hours be checked?</li></ol>
+<h3>5. Практика</h3>
+<p><b>Задание A. Выберите форму:</b> 1) There (is/are) several parks. 2) The city (is/are) near the river. 3) There (is/are) a railway station.</p>
+<p><b>Задание B. Дополните предложения:</b> 1) My college is situated… 2) There are… near my home. 3) People go to the library to… 4) The main transport links are…</p>
+<p><b>Задание C. Составьте маршрут:</b> спросите, как пройти от колледжа до библиотеки или остановки. Используйте <i>Excuse me, how can I get to…? Go straight ahead. Turn left/right. It is opposite/next to…</i></p>
+<p><b>Задание D. Speaking:</b> подготовьте описание своего города или района на 8–10 предложений. Можно выбрать любой населённый пункт, а не только место проживания.</p>
+<h3>6. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>The Republic of Tatarstan.</li><li>The Kama River.</li><li>Petrochemical and tyre production.</li><li>Educational institutions, shops, sports facilities, parks and cultural venues.</li><li>Because routes and opening hours can change.</li><li>Задание A: are; is; is.</li></ol>
+<p><b>Самостоятельная работа:</b> создайте мини-гид из 100–120 слов: location, transport, education, public facilities, recreation. Если используете конкретные сведения о городе, проверьте их по актуальному официальному источнику и укажите дату проверки.</p>
+`),
               lec("2.3", "Reading Practice: A Machine Should Work", `
-                <h3>Text: A Machine Should Work, a Man Think</h3>
-                <p>The robots of our time resemble humans very little. According to specialists, the main thing for them is not to look like people, but to do their work for them. Factories, which are equipped with automatic machine tools, transfer lines and management information systems place a lot of hope. Automation sought out areas where a robot can operate as well as a person but where people don't like to work. In other words, man has created the robot so as not to become a robot himself.</p>
-                <p>The first generation of robots appeared in the 60s and they were complex and capricious in maintenance. They could perform operations of the type "take off - put on" or "pick up - bring". They could pick up items only from definite positions determined by a rigid program. Today, to avoid errors, robots are supplied with vision (TV camera) and hearing (microphone). They can perform more complex production operations - painting, soldering, welding and assembly work. A more complex task lies ahead - to remove people completely from production areas where there are harmful fumes, excessively high or low temperatures and pressures. People should not work in conditions that are dangerous. Let the robot replace them there - and the sooner, the better.</p>
-                <p>Generally speaking a single robot by itself is hardly of any use in production. It must be coupled in design with other equipment, with a system of machines, machine tools and other devices. We must set up robotized complexes and flexible productions capable of transferring easily and quickly to an output of new goods. Flexible production system consists, as a rule, of several machine tools with numerical programmed control or of processing centers - machine tools equipped with microprocessors. An all-purpose computer controls the entire cycle, including the storage facilities. One hundred per cent automated production is no longer a dream.</p>
-              `)
+<h3>Цель и результаты обучения</h3>
+<p>Цель занятия — понять роль автоматизации в производстве и научиться описывать взаимодействие человека, оборудования и управляющей системы. Студент освоит лексику по теме, извлечёт основную информацию из текста и объяснит преимущества и ограничения автоматизации.</p>
+<h3>1. Reading: A Machine Should Work, a Person Should Think</h3>
+<p><b>Read the adapted text.</b></p>
+<p>Automation is the use of control systems and technology to perform tasks with limited continuous human intervention. In manufacturing, automated equipment may move materials, carry out repeated operations, collect measurements and report process information. A robot is only one possible part of an automated production system; sensors, controllers, actuators, software, machine tools and safety devices may also be involved.</p>
+<p>A simple automated system can be described through several functions. A <b>programme</b> defines the intended sequence. <b>Sensors</b> collect information about the process. A <b>controller</b> compares the available information with the required conditions and sends commands. <b>Actuators</b> or other output devices carry out the commands. A feedback signal can help the controller respond when the measured condition differs from the target.</p>
+<p>Automation can improve repeatability, productivity and working conditions, especially when tasks are repetitive or expose people to hazardous environments. However, automated systems still require planning, monitoring, maintenance by authorised personnel and clear procedures. People design processes, interpret information, respond to unexpected situations and make decisions that require judgement. The purpose is not simply to remove people from production, but to use technology responsibly and support human work.</p>
+<h3>2. Vocabulary</h3>
+<table style="width:100%;border-collapse:collapse">
+<tr><th>English</th><th>Перевод</th><th>Example</th></tr>
+<tr><td>automation</td><td>автоматизация</td><td>Automation can improve repeatability.</td></tr>
+<tr><td>control system</td><td>система управления</td><td>The control system receives sensor data.</td></tr>
+<tr><td>sensor</td><td>датчик</td><td>A sensor measures a process variable.</td></tr>
+<tr><td>controller</td><td>контроллер, устройство управления</td><td>The controller compares the value with a target.</td></tr>
+<tr><td>actuator</td><td>исполнительный механизм</td><td>An actuator changes the system state.</td></tr>
+<tr><td>feedback</td><td>обратная связь</td><td>Feedback provides information about the result.</td></tr>
+<tr><td>repeatability</td><td>повторяемость</td><td>The process has good repeatability.</td></tr>
+<tr><td>human intervention</td><td>вмешательство человека</td><td>The system requires human intervention in unusual cases.</td></tr>
+<tr><td>hazardous environment</td><td>опасная среда</td><td>Robots may work in a hazardous environment.</td></tr>
+</table>
+<h3>3. How a basic control loop works</h3>
+<ol>
+<li>A sensor measures a process variable.</li>
+<li>The controller receives the measured value.</li>
+<li>The controller compares it with the target or setpoint.</li>
+<li>The controller sends a command to an output device.</li>
+<li>The system changes, and a new measurement may be taken.</li>
+</ol>
+<p>Это упрощённая учебная модель. Реальные системы могут иметь несколько датчиков, контроллеров, режимов и независимых защитных функций. Не используйте эту схему как инструкцию по настройке оборудования.</p>
+<h3>4. Language focus: describing processes</h3>
+<p>Для последовательности используйте <i>first, then, next, after that, finally</i>. Для описания функций — <i>is used to, is responsible for, receives, compares, sends</i>. Для пассивного залога: <i>The value is measured by a sensor. A command is sent to the actuator.</i></p>
+<p>Сравните: <i>The sensor measures the temperature.</i> (активный залог, важен исполнитель) и <i>The temperature is measured by a sensor.</i> (пассивный залог, важен объект измерения).</p>
+<h3>5. Reading comprehension</h3>
+<ol>
+<li>What is automation?</li><li>Name four elements that may be part of an automated system.</li><li>What does a sensor do?</li><li>What does the controller compare?</li><li>Name two possible benefits of automation.</li><li>Why do automated systems still need people?</li></ol>
+<h3>6. Практика</h3>
+<p><b>Задание A. Соотнесите термин и функцию:</b> sensor; controller; actuator; programme. Функции: defines a sequence; measures a condition; compares information and sends commands; carries out a command.</p>
+<p><b>Задание B. Поставьте этапы в порядок:</b> controller compares the value; sensor measures the process; actuator receives a command; a new value is measured.</p>
+<p><b>Задание C. Выберите правильную форму:</b> 1) The data (is/are) collected by sensors. 2) The controller (compare/compares) the value with a target. 3) A command (is sent/sends) to the output device.</p>
+<p><b>Задание D. Обсуждение:</b> назовите две задачи, которые целесообразно автоматизировать, и две ситуации, где необходим контроль человека. Обоснуйте мнение словами <i>because, however, therefore</i>.</p>
+<h3>7. Самопроверка и ключ преподавателя</h3>
+<ol>
+<li>Automation uses technology/control systems to perform tasks with limited continuous human intervention.</li><li>Possible answers: sensors, controllers, actuators, software, machine tools, safety devices.</li><li>A sensor collects/measures information about a condition.</li><li>The measured value with a target or required condition.</li><li>Repeatability, productivity, improved working conditions, reduced exposure to hazards.</li><li>People plan, monitor, interpret information and respond to unexpected situations.</li><li>Задание A: programme — defines a sequence; sensor — measures; controller — compares and sends commands; actuator — carries out a command.</li><li>Задание B: sensor measures → controller compares → actuator receives command → new value is measured.</li><li>Задание C: are; compares; is sent.</li></ol>
+<p><b>Самостоятельная работа:</b> напишите 100–120 слов о простой автоматизированной системе. Назовите её назначение, два входных сигнала или измеряемых параметра, функцию контроллера и возможную роль оператора. Не описывайте настройки или запуск реального оборудования.</p>
+`)
             ],
             [],
             [],
