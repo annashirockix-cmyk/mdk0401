@@ -209,3 +209,25 @@ test("teacher publication controls call server-backed topic and material access 
  assert.match(server, /function setTopicAccess_\(data\)/);
  assert.match(server, /function customContentIsOpen_\(courseId, contentId, topicId, contentType\)/);
 });
+
+
+test("teachers can revise built-in topics, lectures and protected exam banks with backups", () => {
+ const server = read("Code.gs");
+ const api = read("api.js");
+ const editor = read("course-admin.js");
+ const app = read("app.js");
+ assert.match(server, /case "savequestionbank": result = saveQuestionBank_\(data\)/);
+ assert.match(server, /function saveQuestionBank_\(data\)/);
+ assert.match(server, /editor_\(data,courseId\)/);
+ assert.match(server, /\["exam_primary","exam_extra","mdk_extra"\]/);
+ assert.match(server, /QuestionBankBackup/);
+ assert.match(server, /previousQuestionsBackedUp/);
+ assert.match(server, /protectedQuestionBankMap:v1/);
+ assert.match(api, /saveQuestionBank:function\(courseId,bankId,questions\)/);
+ assert.match(editor, /sourceTopicId:topic\.id/);
+ assert.match(editor, /isBuiltInOverride=true/);
+ assert.match(editor, /sourceLectureCode=base\.code/);
+ assert.match(editor, /saveQuestionBank\(courseSel\.value,examBankSel\.value,questions\)/);
+ assert.match(app, /sourceTopicId/);
+ assert.match(app, /isBuiltInOverride===true/);
+});
