@@ -209,3 +209,24 @@ test("teacher publication controls call server-backed topic and material access 
  assert.match(server, /function setTopicAccess_\(data\)/);
  assert.match(server, /function customContentIsOpen_\(courseId, contentId, topicId, contentType\)/);
 });
+
+
+test("course documents are stored privately and downloaded only through course access checks", () => {
+ const server = read("Code.gs");
+ const api = read("api.js");
+ const editor = read("course-admin.js");
+ const app = read("app.js");
+ assert.match(server, /function uploadCourseMaterialFile_\(data\)/);
+ assert.match(server, /editor_\(data,courseId\)/);
+ assert.match(server, /DriveApp\.createFolder\("MDK Portal — private course materials"\)/);
+ assert.match(server, /folder\.createFile\(Utilities\.newBlob\(bytes,mime,name/);
+ assert.match(server, /function getCourseMaterialFile_\(data\)/);
+ assert.match(server, /customContentIsOpen_\(courseId,id,topicId,"file"\)/);
+ assert.match(server, /delete payload\.driveFileId/);
+ assert.match(api, /uploadCourseMaterialFile:function\(data\)/);
+ assert.match(api, /getCourseMaterialFile:function\(id\)/);
+ assert.match(editor, /type="file" accept="application\/pdf/);
+ assert.match(editor, /uploadCourseMaterialFile\(/);
+ assert.match(app, /data-course-file/);
+ assert.match(app, /API\.getCourseMaterialFile\(button\.dataset\.courseFile\)/);
+});
