@@ -42,8 +42,8 @@
       "prompt": "Reading 1. Read the text. A group of students is designing a small bridge for a college project. They agree on three tasks and write each task next to a student's name. During the first meeting, they discover that two measurements are missing. Instead of guessing, they check the drawing and ask their teacher for advice. They update the project plan and set a new time to review the design. How does the group organise its work?",
       "options": [
         "They wait for the teacher to do it",
-        "They assign tasks to named students",
         "Everyone does the same task",
+        "They assign tasks to named students",
         "They work without a plan"
       ],
       "correctIndex": 2,
@@ -56,8 +56,8 @@
       "options": [
         "They estimate them",
         "They leave them out",
-        "They check the drawing and ask for advice",
-        "They cancel the project"
+        "They cancel the project",
+        "They check the drawing and ask for advice"
       ],
       "correctIndex": 3,
       "points": 1
