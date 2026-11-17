@@ -5125,10 +5125,10 @@
               {
                 "id": "c2s1v04_v01",
                 "type": "short_text",
-                "prompt": "Complete: 'A person who gives advice about education and careers is an adviser or ___.'",
+                "prompt": "A person who gives advice about education and careers is a career ___.",
                 "acceptedAnswers": [
-                  "counsellor",
-                  "career adviser"
+                  "adviser",
+                  "counsellor"
                 ],
                 "points": 2
               },
@@ -9389,7 +9389,7 @@
                 "id": "c3s1v02_v01",
                 "type": "short_text",
                 "points": 2,
-                "prompt": "A number or code that identifies the current version of a drawing is a revision ___.",
+                "prompt": "A sequence number assigned to a drawing update is its revision ___.",
                 "acceptedAnswers": [
                   "number"
                 ]
@@ -14255,9 +14255,7 @@
                 "type": "short_text",
                 "prompt": "A unit commonly used to record electrical energy consumption is the kilowatt-___.",
                 "acceptedAnswers": [
-                  "hour",
-                  "kilowatt-hour",
-                  "kwh"
+                  "hour"
                 ],
                 "points": 2
               },
