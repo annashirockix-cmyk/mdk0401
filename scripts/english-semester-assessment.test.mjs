@@ -1194,7 +1194,9 @@ test("C2-S1 and C2-S2 reading answer keys match the evidence in the passages", (
     assert.ok(registryTask, "reading task exists: " + taskId);
     assert.equal(registryTask.correctIndex, correctIndex, "correct key index: " + taskId);
     assert.equal(registryTask.options[correctIndex], answer, "passage-supported answer: " + taskId);
-    const sourcePath = `docs/english-final-exam-c0${variantId.match(/C2-S([12])-V(\\d{2})/)[1]}-s0${variantId.match(/C2-S([12])-V(\\d{2})/)[1]}-v${variantId.match(/V(\\d{2})/)[1]}-pilot.json`;
+    const match = variantId.match(/^EN-C(\\d)-S(\\d)-V(\\d{2})$/);
+    assert.ok(match, "well-formed variant ID: " + variantId);
+    const sourcePath = `docs/english-final-exam-c0${match[1]}-s0${match[2]}-v${match[3]}-pilot.json`;
     const source = JSON.parse(fs.readFileSync(path.join(root, sourcePath), "utf8"));
     assert.deepEqual(registryTask, source.tasks.find(task => task.id === taskId), "source and registry match: " + taskId);
   }
