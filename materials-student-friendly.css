@@ -1,0 +1,19 @@
+/* Student-friendly presentation for the MAT course */
+.mat-easy-lecture{max-width:980px;margin:0 auto;line-height:1.72;font-size:1.04rem}
+.mat-easy-lecture h3{margin:1.35rem 0 .55rem;font-size:1.16rem;line-height:1.35}
+.mat-easy-lecture p{margin:.55rem 0 1rem}
+.mat-easy-lead{padding:16px 18px;border-left:4px solid var(--accent,#4f8cff);border-radius:10px;background:var(--surface,rgba(100,140,200,.10));font-size:1.1rem;font-weight:600}
+.mat-easy-scheme{margin:18px 0;padding:15px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card);overflow-wrap:anywhere}
+.mat-easy-scheme p{margin:.35rem 0 0;font-weight:700;letter-spacing:.01em}
+.mat-easy-block{margin:18px 0;padding:0 0 4px}
+.mat-easy-block h3{color:var(--accent);font-size:1.12rem}
+.mat-easy-remember{margin:20px 0;padding:15px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.mat-easy-remember h3{margin-top:0}
+.mat-easy-glossary{margin:20px 0}
+.mat-easy-glossary table{width:100%;border-collapse:collapse}
+.mat-easy-glossary th,.mat-easy-glossary td{padding:10px 12px;border:1px solid var(--border);text-align:left;vertical-align:top}
+.mat-easy-glossary th{width:34%;font-weight:700;background:var(--surface,rgba(100,140,200,.08))}
+.mat-easy-selfcheck{margin:20px 0;padding:15px 18px;border:1px solid var(--border);border-radius:12px}
+.mat-easy-selfcheck h3{margin-top:0}
+.mat-easy-selfcheck li{margin:.55rem 0;padding-left:3px}
+@media(max-width:600px){.mat-easy-lecture{font-size:1rem}.mat-easy-glossary th{width:40%}.mat-easy-glossary th,.mat-easy-glossary td{padding:8px}}
