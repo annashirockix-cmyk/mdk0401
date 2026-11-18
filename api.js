@@ -119,6 +119,8 @@ window.API = {
  submitFinalExam:function(data){return fetchAPI("submitFinalExam",data||{},"POST");},
  getGameAnswer:function(gameId,categoryIndex,questionIndex){return fetchAPI("getGameAnswer",{gameId:gameId,categoryIndex:categoryIndex,questionIndex:questionIndex},"POST");},
  uploadTestImage:function(courseId,dataUrl,name){return fetchAPI("uploadTestImage",{courseId:courseId,dataUrl:dataUrl,name:name||"question-image.jpg"},"POST",60000);},
+ uploadCourseFile:function(courseId,topicId,title,fileName,dataUrl){return fetchAPI("uploadCourseFile",{courseId:courseId,topicId:topicId,title:title,fileName:fileName,dataUrl:dataUrl},"POST",60000);},
+ getCourseFile:function(itemId,fileRef){return fetchAPI("getCourseFile",{itemId:itemId,fileRef:fileRef},"POST",60000);},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
  deleteCustomContent:function(id,courseId){return fetchAPI("deleteCustomContent",{id:id,courseId:courseId||""},"POST");},
  setTeacherCourses:function(email,courses){return fetchAPI("setTeacherCourses",{email:email,courses:courses},"POST");},
