@@ -1957,7 +1957,7 @@ function uploadExamFile_(data) {
   if(!match)throw new Error("Поддерживаются только PDF, DOC и DOCX.");
   if(match[2].length>4900000)throw new Error("Размер файла не должен превышать 3,5 МБ.");
   const bytes=Utilities.base64Decode(match[2]);if(!bytes.length||bytes.length>3500000)throw new Error("Размер файла не должен превышать 3,5 МБ.");
-  const mime=match[1].toLowerCase(),sig=bytes.slice(0,4).map(function(b){return (b+256)%256;}),starts=function(t){return String.fromCharCode.apply(null,sig.slice(0,t.length))===t;};
+  const mime=match[1].toLowerCase(),sig=bytes.slice(0,12).map(function(b){return (b+256)%256;}),starts=function(t){return String.fromCharCode.apply(null,sig.slice(0,t.length))===t;};
   const valid=mime==="application/pdf"?starts("%PDF-"):mime==="application/msword"?starts("\xD0\xCF\x11\xE0"):starts("PK\x03\x04");
   if(!valid)throw new Error("Содержимое файла не соответствует заявленному формату.");
   const original=String(data.fileName||"exam-file").replace(/[\\\\/]/g,"_").slice(0,100);
