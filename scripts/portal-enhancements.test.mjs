@@ -1925,3 +1925,23 @@ test("MDK 04.01 lectures explain diagnostics, setup and TPM in student-friendly 
   assert.match(source, /p\.indexOf\("html:"\) === 0/, "lecture renderer must preserve raw table markup");
   assert.match(source, /#Типичные ошибки/);
 });
+
+
+test("MDK 02.02 lectures include practical assembly examples, fault handling and self-checks", () => {
+  const source = read("data-0202.js");
+  const marker = 'window.MDK_DATA["02.02"] = ';
+  const start = source.indexOf(marker);
+  const end = source.lastIndexOf(";");
+  assert.ok(start >= 0 && end > start, "MDK 02.02 data object must exist");
+  const course = JSON.parse(source.slice(start + marker.length, end));
+  const lectures = course.sections.flatMap(section => section.topics.flatMap(topic => topic.lectures || []));
+  assert.equal(lectures.length, 7, "all seven planned lectures must be present");
+  for (const lecture of lectures) {
+    assert.ok(lecture.content.includes("Практический разбор"), lecture.code + " needs a practical worked example");
+    assert.ok(lecture.content.includes("<table>"), lecture.code + " needs a reference table");
+    assert.ok(lecture.content.includes("Типичные ошибки"), lecture.code + " needs common mistakes");
+    assert.ok(lecture.content.includes("Самопроверка"), lecture.code + " needs self-check questions");
+  }
+  assert.match(lectures.find(item => item.code === "2.2.1").content, /не обходить блокировку/i);
+  assert.match(lectures.find(item => item.code === "2.4.1").content, /анизотроп/i);
+});
