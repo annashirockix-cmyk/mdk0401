@@ -487,13 +487,14 @@ test("protected final exam bank excludes questions without valid automatic answe
 
 
 test("MDK 02.01 and 02.02 legacy entrypoints route to protected assessment pages", () => {
-  for (const [file, training, final] of [
-    ["exam_0201.js", "#/training/02.01", "#/final/02.01"],
-    ["exam_0202.js", "#/training/02.02", "#/final/02.02"]
+  for (const [file, suffix, training, final] of [
+    ["exam_0201.js", "0201", "#/training/02.01", "#/final/02.01"],
+    ["exam_0202.js", "0202", "#/training/02.02", "#/final/02.02"]
   ]) {
     const source = fs.readFileSync(path.join(root, file), "utf8");
     assert.doesNotMatch(source, /\bcorrect\s*:/, file + " must not expose answer keys");
-    assert.match(source, new RegExp("window\\.renderTraining_" + file.slice(-8,-4) + " = function"));
+    assert.match(source, new RegExp("window\\.renderTraining_" + suffix + " = function"));
+    assert.match(source, new RegExp("window\\.renderFinal_" + suffix + " = function"));
     assert.ok(source.includes('window.location.hash = "' + training + '"'));
     assert.ok(source.includes('window.location.hash = "' + final + '"'));
   }
