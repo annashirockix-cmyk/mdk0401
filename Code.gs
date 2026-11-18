@@ -2475,7 +2475,7 @@ function finalQuestionHasAnswerKey_(q) {
   if(type==="num")return has(expected)&&isFinite(Number(String(expected).replace(",",".")));
   if(type==="order"){
     const items=Array.isArray(q.items)?q.items.map(function(value){return String(value===undefined||value===null?"":value).trim();}):[];
-    const ordered=Array.isArray(q.correctOrder)?q.correctOrder:(Array.isArray(q.correct)?q.correct:(Array.isArray(q.answer)?q.answer:null));
+    const ordered=Array.isArray(q.correctOrder)?q.correctOrder:(Array.isArray(q.correct)?q.correct:(Array.isArray(q.correctAnswer)?q.correctAnswer:(Array.isArray(q.answers)?q.answers:(Array.isArray(q.answer)?q.answer:null))));
     if(items.length<2||items.some(function(value){return !value;})||new Set(items).size!==items.length||!Array.isArray(ordered)||ordered.length!==items.length)return false;
     const expected=ordered.map(function(value){return String(value===undefined||value===null?"":value).trim();});
     return expected.every(function(value){return !!value&&items.indexOf(value)>=0;})&&new Set(expected).size===expected.length;
@@ -2548,8 +2548,10 @@ function getFinalExam_(data) {
 function scoreFinalAnswer_(q,answer) {
   if(answer===undefined||answer===null||(typeof answer==="string"&&!answer.trim()))return 0;
   const type=finalQuestionType_(q||{});
+  const hasKey=function(value){return value!==undefined&&value!==null&&value!=="";};
+  const answerKey=function(){return hasKey(q.correct)?q.correct:(hasKey(q.correctAnswer)?q.correctAnswer:(hasKey(q.answers)?q.answers:q.answer));};
   if(type==="tf"){
-    let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+    let expected=answerKey();
     if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     if(expected===undefined||expected===null)return 0;
     let target;
@@ -2559,21 +2561,21 @@ function scoreFinalAnswer_(q,answer) {
     return Number(answer)===target?1:0;
   }
   if(type==="num"){
-    let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+    let expected=answerKey();
     if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     const a=Number(String(answer).replace(",", ".")),b=Number(String(expected).replace(",", "."));
     const tolerance=Math.max(0,Number(q.tol!==undefined?q.tol:q.tolerance)||0.01);
     return isFinite(a)&&isFinite(b)&&Math.abs(a-b)<=tolerance?1:0;
   }
   if(type==="multi"){
-    let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+    let expected=answerKey();
     if(!Array.isArray(answer)||!Array.isArray(expected))return 0;
     if(expected.length&&typeof expected[0]==="string"&&q.options&&q.options.length)expected=expected.map(function(value){const index=q.options.indexOf(value);return index<0?value:index;});
     const a=answer.map(String).sort(),b=expected.map(String).sort();
     return a.length===b.length&&a.every(function(value,index){return value===b[index];})?1:0;
   }
   if(type==="order"){
-    const expected=q.correctOrder||q.correct||q.answer||q.items||[];
+    const expected=hasKey(q.correctOrder)?q.correctOrder:(hasKey(q.correct)?q.correct:(hasKey(q.correctAnswer)?q.correctAnswer:(hasKey(q.answers)?q.answers:(hasKey(q.answer)?q.answer:q.items||[]))));
     if(!Array.isArray(answer)||!Array.isArray(expected)||!expected.length)return 0;
     const right=answer.filter(function(value,index){return String(value)===String(expected[index]);}).length;
     return right/expected.length;
@@ -2581,12 +2583,12 @@ function scoreFinalAnswer_(q,answer) {
   if(type==="match"){
     const pairs=q.pairs||[];
     if(Array.isArray(answer)&&pairs.length)return pairs.filter(function(pair,index){return String(answer[index])===String(pair.right);}).length/pairs.length;
-    let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+    let expected=answerKey();
   if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     if(!Array.isArray(answer)||!Array.isArray(expected)||!expected.length)return 0;
     return answer.filter(function(value,index){return String(value)===String(expected[index]);}).length/expected.length;
   }
-  let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+  let expected=answerKey();
   if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
   if(typeof expected==="string"&&q.options&&q.options.indexOf(expected)>=0)return Number(answer)===q.options.indexOf(expected)?1:0;
   return Number(answer)===Number(expected)?1:0;
