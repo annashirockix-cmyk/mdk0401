@@ -46,6 +46,7 @@ const HEADERS = {
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt", "PreviousGrade", "PreviousFeedback", "Feedback"],
   QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"],
   QuestionBankBackup: ["BackupId", "CourseId", "BankId", "RowJSON", "BackedUpAt", "BackedUpBy"],
+  ExamFiles: ["Id", "CourseId", "BankId", "DriveFileId", "FileName", "MimeType", "Size", "Status", "UploadedBy", "CreatedAt"],
   EnglishVPRBank: ["Track", "ExamJSON", "Active", "UpdatedAt", "UpdatedBy"],
   EnglishSemesterBank: ["Track", "TestsJSON", "Active", "UpdatedAt", "UpdatedBy"],
   EnglishExamVariantsBank: ["ExamId", "CourseNo", "CourseId", "Track", "Semester", "VariantId", "BlueprintId", "VariantJSON", "Active", "UpdatedAt", "UpdatedBy"],
@@ -119,6 +120,9 @@ function handleRequest_(e) {
       case "importquestionbanks": result = importQuestionBanks_(data); break;
       case "getquestionbank": result = getQuestionBank_(data); break;
       case "savequestionbank": result = saveQuestionBank_(data); break;
+      case "uploadexamfile": result = uploadExamFile_(data); break;
+      case "getexamfile": result = getExamFile_(data); break;
+      case "deleteexamfile": result = deleteExamFile_(data); break;
       case "getquestionbankstats": result = getQuestionBankStats_(data); break;
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
@@ -285,10 +289,10 @@ function notifyProctorSanction_(student,courseId,testId,attemptNo,violationNo,pe
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "AssignmentFiles", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "AssignmentFiles", "ExamFiles", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
-  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, AssignmentFiles, Notifications, ProctorEvents, AttemptAudit, QuestionBank, EnglishExamVariantsBank, EnglishExamAttempts, ActivityLog.";
+  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, AssignmentFiles, ExamFiles, Notifications, ProctorEvents, AttemptAudit, QuestionBank, EnglishExamVariantsBank, EnglishExamAttempts, ActivityLog.";
 }
 
 /* ---------- Common helpers and authentication ---------- */
@@ -1933,6 +1937,55 @@ function getCustomContent_(data) {
 
 /* ---------- Private built-in question bank ---------- */
 function questionBank_() { return ensureSheet_("QuestionBank"); }
+function examFiles_() { return ensureSheet_("ExamFiles"); }
+function examFileFolder_() {
+  const props=PropertiesService.getScriptProperties(),key="EXAM_DOCUMENT_FOLDER_ID";
+  let folder=null;const saved=props.getProperty(key);
+  if(saved){try{folder=DriveApp.getFolderById(saved);}catch(e){}}
+  if(!folder){folder=DriveApp.createFolder("Учебный портал — материалы экзаменов");props.setProperty(key,folder.getId());}
+  folder.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);return folder;
+}
+function examFileList_(courseId,bankId) {
+  const sh=examFiles_(),values=sh.getDataRange().getValues(),m=headerMap_(sh);
+  return values.slice(1).filter(function(row){return sameCourseId_(row[m.CourseId],courseId)&&(!bankId||String(row[m.BankId])===String(bankId))&&String(row[m.Status]||"active")==="active";})
+    .map(function(row){return {id:String(row[m.Id]||""),fileName:String(row[m.FileName]||"Файл"),mimeType:String(row[m.MimeType]||""),size:Number(row[m.Size])||0,bankId:String(row[m.BankId]||"")};});
+}
+function uploadExamFile_(data) {
+  const courseId=normalizeCourseId_(data.courseId||""),actor=editor_(data,courseId),bankId=String(data.bankId||"").trim();
+  if(["exam_primary","exam_extra","mdk_extra"].indexOf(bankId)<0)throw new Error("Файлы можно прикреплять только к экзаменационным банкам.");
+  const raw=String(data.dataUrl||""),match=raw.match(/^data:(application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document);base64,([A-Za-z0-9+/=]+)$/i);
+  if(!match)throw new Error("Поддерживаются только PDF, DOC и DOCX.");
+  if(match[2].length>4900000)throw new Error("Размер файла не должен превышать 3,5 МБ.");
+  const bytes=Utilities.base64Decode(match[2]);if(!bytes.length||bytes.length>3500000)throw new Error("Размер файла не должен превышать 3,5 МБ.");
+  const mime=match[1].toLowerCase(),sig=bytes.slice(0,4).map(function(b){return (b+256)%256;}),starts=function(t){return String.fromCharCode.apply(null,sig.slice(0,t.length))===t;};
+  const valid=mime==="application/pdf"?starts("%PDF-"):mime==="application/msword"?starts("\\xD0\\xCF\\x11\\xE0"):starts("PK\\x03\\x04");
+  if(!valid)throw new Error("Содержимое файла не соответствует заявленному формату.");
+  const original=String(data.fileName||"exam-file").replace(/[\\\\/]/g,"_").slice(0,100);
+  const ext=mime==="application/pdf"?".pdf":mime==="application/msword"?".doc":".docx";
+  const namedExt=(original.match(/\\.(pdf|doc|docx)$/i)||[])[0]||"";
+  if(namedExt&&namedExt.toLowerCase()!==ext)throw new Error("Расширение имени файла не соответствует его формату.");
+  const name=namedExt?original:original+ext,file=examFileFolder_().createFile(Utilities.newBlob(bytes,mime,name));
+  try{const id=Utilities.getUuid();appendMappedRecord_(examFiles_(),{Id:id,CourseId:courseId,BankId:bankId,DriveFileId:file.getId(),FileName:name,MimeType:mime,Size:bytes.length,Status:"active",UploadedBy:actor.email,CreatedAt:new Date().toISOString()});return {success:true,id:id,fileName:name,size:bytes.length};}
+  catch(error){try{file.setTrashed(true);}catch(cleanupError){}throw error;}
+}
+function getExamFile_(data) {
+  const user=auth_(data),id=String(data.attachmentId||"");if(!id)throw new Error("Не указан файл экзамена.");
+  const sh=examFiles_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),row=values.slice(1).find(function(x){return String(x[m.Id]||"")===id&&String(x[m.Status]||"active")==="active";});
+  if(!row)throw new Error("Файл экзамена не найден.");
+  const courseId=String(row[m.CourseId]||""),bankId=String(row[m.BankId]||"");
+  if(user.role==="student"){if(!hasCourseAccess_(user,courseId)||["exam_primary","exam_extra","mdk_extra"].indexOf(bankId)<0)throw new Error("У вас нет доступа к материалу экзамена.");}
+  else if(user.role==="teacher"||user.role==="admin")editor_(data,courseId);else throw new Error("Недостаточно прав.");
+  const file=DriveApp.getFileById(String(row[m.DriveFileId]||"")),blob=file.getBlob(),bytes=blob.getBytes(),mime=String(blob.getContentType()||"");
+  if(bytes.length>3500000||mime!==String(row[m.MimeType]||""))throw new Error("Сохранённый файл не прошёл проверку размера или типа.");
+  return {success:true,fileName:String(row[m.FileName]||file.getName()),mimeType:mime,data:Utilities.base64Encode(bytes),size:bytes.length};
+}
+function deleteExamFile_(data) {
+  const courseId=normalizeCourseId_(data.courseId||""),actor=editor_(data,courseId),id=String(data.attachmentId||"");
+  const sh=examFiles_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),index=values.slice(1).findIndex(function(row){return String(row[m.Id]||"")===id&&sameCourseId_(row[m.CourseId],courseId)&&String(row[m.Status]||"active")==="active";});
+  if(index<0)throw new Error("Файл экзамена не найден.");
+  const row=values[index+1];DriveApp.getFileById(String(row[m.DriveFileId]||"")).setTrashed(true);
+  updateMappedRecord_(sh,index+2,{Status:"deleted"});return {success:true};
+}
 /** Read-only inventory of the protected question bank. Admin only. */
 function getQuestionBankStats_(data) {
   admin_(data);
@@ -2048,7 +2101,7 @@ function getQuestionBank_(data) {
     try { question = JSON.parse(String(row[m.QuestionJSON] || "{}")); } catch (e) {}
     return {bankId:String(row[m.BankId]||""),questionId:String(row[m.QuestionId]||""),question:question,updatedAt:String(row[m.UpdatedAt]||""),updatedBy:String(row[m.UpdatedBy]||"")};
   });
-  return {success:true,courseId:courseId,questions:rows};
+  return {success:true,courseId:courseId,questions:rows,attachments:examFileList_(courseId,bankId)};
 }
 
 
@@ -2379,7 +2432,7 @@ function getFinalExam_(data) {
   if(selected.length!==target)throw new Error("Не удалось сформировать полный вариант из 45 уникальных заданий.");
   const optionMaps={},examId=Utilities.getUuid(),safeQuestions=selected.map(function(entry,index){return safeFinalExamQuestion_(entry,index,optionMaps);});
   CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,startedAt:Date.now(),durationSeconds:60*60,questions:selected.map(function(e){return e.question;}),optionMaps:optionMaps}),7200);
-  return {success:true,examId:examId,questions:safeQuestions};
+  return {success:true,examId:examId,questions:safeQuestions,attachments:examFileList_(courseId,"").filter(function(file){return ["exam_primary","exam_extra","mdk_extra"].indexOf(file.bankId)>=0;})};
 }
 function scoreFinalAnswer_(q,answer) {
   const type=finalQuestionType_(q||{});
