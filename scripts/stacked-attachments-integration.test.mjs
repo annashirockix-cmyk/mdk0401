@@ -1,0 +1,77 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const read = file => fs.readFileSync(path.join(root, file), "utf8");
+
+function section(source, startMarker, endMarker) {
+  const start = source.indexOf(startMarker);
+  assert.ok(start >= 0, "missing source section: " + startMarker);
+  const end = source.indexOf(endMarker, start + startMarker.length);
+  assert.ok(end > start, "missing end marker for: " + startMarker);
+  return source.slice(start, end);
+}
+
+test("course, assignment and exam attachments coexist in one Apps Script schema", () => {
+  const code = read("Code.gs");
+  assert.match(code, /CourseContent:\s*\["Id",\s*"CourseId",\s*"TopicId",\s*"Type",\s*"Title",\s*"Payload"/);
+  assert.match(code, /AssignmentSubmissions:\s*\[[^\]]*"AttachmentsJSON"\]/);
+  assert.match(code, /AssignmentSubmissionHistory:\s*\[[^\]]*"AttachmentsJSON"\]/);
+  assert.match(code, /AssignmentFiles:\s*\[/);
+  assert.match(code, /ExamFiles:\s*\[/);
+
+  const setup = section(code, "function setupPortal()", "/* ---------- Common helpers");
+  for (const sheet of ["AssignmentFiles", "ExamFiles"]) {
+    assert.ok(setup.includes('"' + sheet + '"'), "setupPortal must create " + sheet);
+  }
+  assert.match(code, /function ensureSheet_\(name\)[\s\S]*?existing\.indexOf\(header\) === -1[\s\S]*?setValue\(header\)/,
+    "schema updates must append missing headers without replacing existing rows");
+});
+
+test("all three attachment families have server routes and matching handlers", () => {
+  const code = read("Code.gs");
+  const routes = [
+    ["uploadcoursefile", "uploadCourseFile_"],
+    ["getcoursefile", "getCourseFile_"],
+    ["uploadassignmentattachment", "uploadAssignmentAttachment_"],
+    ["getassignmentattachment", "getAssignmentAttachment_"],
+    ["uploadexamfile", "uploadExamFile_"],
+    ["getexamfile", "getExamFile_"],
+    ["deleteexamfile", "deleteExamFile_"]
+  ];
+  for (const [route, handler] of routes) {
+    assert.ok(code.includes('case "' + route + '": result = ' + handler + '(data);'),
+      "missing API route " + route);
+    assert.ok(code.includes("function " + handler + "(data)"), "missing handler " + handler);
+  }
+});
+
+test("uploaded course, assignment and exam files are stored in private Drive folders", () => {
+  const code = read("Code.gs");
+  for (const helper of ["courseFileFolder_", "assignmentFileFolder_", "examFileFolder_"]) {
+    const match = code.match(new RegExp("function " + helper + "\\(\\) \\{[\\s\\S]*?\\n\\}"));
+    assert.ok(match, "missing Drive folder helper " + helper);
+    assert.match(match[0], /folder\.setSharing\(DriveApp\.Access\.PRIVATE,\s*DriveApp\.Permission\.NONE\)/,
+      helper + " must enforce private Drive permissions for both new and reused folders");
+  }
+});
+
+test("downloads retain role, course and publication checks for each attachment family", () => {
+  const code = read("Code.gs");
+  const course = section(code, "function getCourseFile_(data)", "function saveCustomContent_(data)");
+  assert.match(course, /hasCourseAccess_\(user, courseId\)/);
+  assert.match(course, /customContentIsOpen_\(courseId, itemId/);
+
+  const assignment = section(code, "function getAssignmentAttachment_(data)", "function submitAssignment_(data)");
+  assert.match(assignment, /record\[m\.Status\][^;]*attached/);
+  assert.match(assignment, /email_\(record\[m\.StudentEmail\]\) !== user\.email/);
+  assert.match(assignment, /hasCourseAccess_\(user, courseId\)/);
+  assert.match(assignment, /editor_\(data, courseId\)/);
+
+  const exam = section(code, "function getExamFile_(data)", "function deleteExamFile_(data)");
+  assert.match(exam, /hasCourseAccess_\(user, courseId\)/);
+  assert.match(exam, /editor_\(data, courseId\)/);
+});
