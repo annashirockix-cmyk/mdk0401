@@ -17,13 +17,14 @@ test("course documents are uploaded only by an editor and stored in a private Dr
   assert.match(source, /DriveApp\.createFolder/);
   assert.match(source, /createFile\(Utilities\.newBlob\(bytes, mime, safeName\)\)/);
   assert.match(source, /setDescription/);
-  assert.doesNotMatch(source, /setSharing\s*\(/, "private materials must not be made public by link");
+  assert.match(source, /folder\.setSharing\(DriveApp\.Access\.PRIVATE, DriveApp\.Permission\.NONE\)/, "the Drive folder must be explicitly private");
   assert.match(source, /3500000/);
   assert.match(source, /application\/pdf/);
   assert.match(source, /application\/msword/);
   assert.match(source, /openxmlformats-officedocument\.wordprocessingml\.document/);
   assert.match(source, /%PDF-/);
   assert.match(source, /PK/);
+  assert.match(source, /namedExtension\.toLowerCase\(\) !== extension/);
 });
 
 test("document retrieval is bound to the exact course-content record and access switch", () => {
