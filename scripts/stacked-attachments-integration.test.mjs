@@ -62,16 +62,16 @@ test("uploaded course, assignment and exam files are stored in private Drive fol
 test("downloads retain role, course and publication checks for each attachment family", () => {
   const code = read("Code.gs");
   const course = section(code, "function getCourseFile_(data)", "function saveCustomContent_(data)");
-  assert.match(course, /hasCourseAccess_\(user, courseId\)/);
+  assert.match(course, /hasCourseAccess_\\(\\s*user\\s*,\\s*courseId\\s*\\)/);
   assert.match(course, /customContentIsOpen_\(courseId, itemId/);
 
   const assignment = section(code, "function getAssignmentAttachment_(data)", "function submitAssignment_(data)");
   assert.match(assignment, /record\[m\.Status\][^;]*attached/);
-  assert.match(assignment, /email_\(record\[m\.StudentEmail\]\) !== user\.email/);
-  assert.match(assignment, /hasCourseAccess_\(user, courseId\)/);
-  assert.match(assignment, /editor_\(data, courseId\)/);
+  assert.match(assignment, /email_\\(record\\[m\\.StudentEmail\\]\\)\\s*!==\\s*user\\.email/);
+  assert.match(assignment, /hasCourseAccess_\\(\\s*user\\s*,\\s*courseId\\s*\\)/);
+  assert.match(assignment, /editor_\\(data\\s*,\\s*courseId\\s*\\)/);
 
   const exam = section(code, "function getExamFile_(data)", "function deleteExamFile_(data)");
-  assert.match(exam, /hasCourseAccess_\(user, courseId\)/);
-  assert.match(exam, /editor_\(data, courseId\)/);
+  assert.match(exam, /hasCourseAccess_\\(\\s*user\\s*,\\s*courseId\\s*\\)/);
+  assert.match(exam, /editor_\\(data\\s*,\\s*courseId\\s*\\)/);
 });
