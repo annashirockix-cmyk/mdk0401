@@ -1,7 +1,7 @@
 "use strict";
 
 var CURRENT_STUDENTS_CACHE = [];
-function normalizeJournalGroup(value) { return String(value == null ? "" : value).normalize("NFKC").replace(/[\\s\\u00A0]+/g, " ").trim().toLocaleUpperCase("ru-RU"); }
+function normalizeJournalGroup(value) { return String(value == null ? "" : value).normalize("NFKC").replace(/[\s\u00A0]+/g, " ").trim().toLocaleUpperCase("ru-RU"); }
 
 window.renderJournalPage = function() {
   var app = document.getElementById("app"); 
