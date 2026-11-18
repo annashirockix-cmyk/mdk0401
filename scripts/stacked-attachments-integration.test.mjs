@@ -146,27 +146,17 @@ test("final exam scoring never awards points for blank answers, including zero-v
 });
 
 
-test("final exam scoring accepts every answer-key field recognized by readiness validation", () => {
+test("final exam scoring uses a shared answer-key fallback for all supported single-answer types", () => {
   const code = read("Code.gs");
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
-  assert.match(scorer, /type==="tf"[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
-    "true/false scoring must read the answers fallback");
-  assert.match(scorer, /type==="num"[\s\S]*?q\\.answers!==undefined\\?q\\.answers:q\\.answer/,
-    "numeric scoring must read the answers fallback");
-  assert.match(scorer, /type==="multi"[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
-    "multiple-choice scoring must read the answers fallback");
-  assert.match(scorer, /let expected=q\.correct!==undefined\?q\.correct:[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
-    "single-choice scoring must read the answers fallback");
+  assert.match(scorer, /const answerKey=function\(\)/);
+  assert.equal((scorer.match(/answerKey\(\)/g) || []).length >= 5, true,
+    "true/false, numeric, multiple-choice, matching fallback and single-choice must share answer-key selection");
+  assert.match(scorer, /hasKey\(q\.correctAnswer\)\?q\.correctAnswer/);
+  assert.match(scorer, /hasKey\(q\.answers\)\?q\.answers:q\.answer/);
+  assert.match(scorer, /const expected=hasKey\(q\.correctOrder\)[\s\S]*?hasKey\(q\.correctAnswer\)[\s\S]*?hasKey\(q\.answers\)/,
+    "ordering scoring must support the same answer-key fields as readiness validation");
 });
-
-
-test("numeric final-exam scoring follows the same answer-key precedence as readiness validation", () => {
-  const code = read("Code.gs");
-  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
-  assert.match(scorer, /if\(type==="num"\)\{\s*let expected=q\.correct!==undefined\?q\.correct:\(q\.correctAnswer!==undefined\?q\.correctAnswer:\(q\.answers!==undefined\?q\.answers:q\.answer\)\)/,
-    "numeric scoring must prefer correct, correctAnswer, answers, then answer");
-});
-
 
 test("final exam answer-key selection skips empty higher-priority fields consistently", () => {
   const code = read("Code.gs");
