@@ -185,3 +185,12 @@ test("multi-answer scoring normalizes mixed text and numeric answer keys like re
   assert.match(scorer, /if\(q\.options&&q\.options\.length\)expected=expected\.map\(function\(value\)\{if\(q\.options\.indexOf\(value\)>=0\)return q\.options\.indexOf\(value\);const index=Number\(value\);return Number\.isInteger\(index\)&&index>=0&&index<q\.options\.length\?index:value;\}\);/);
   assert.match(validator, /const mapped=expected\.map\(function\(value\)\{[\s\S]*?const index=Number\(value\)/);
 });
+
+
+test("ordering exam scoring trims values consistently with readiness validation", () => {
+  const code = read("Code.gs");
+  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
+  const validator = section(code, "function finalQuestionHasAnswerKey_(q)", "function finalQuestionType_(question)");
+  assert.match(scorer, /String\(value===undefined\|\|value===null\?"":value\)\.trim\(\)===String\(expected\[index\]===undefined\|\|expected\[index\]===null\?"":expected\[index\]\)\.trim\(\)/);
+  assert.match(validator, /map\(function\(value\)\{return String\(value===undefined\|\|value===null\?"":value\)\.trim\(\);\}\)/);
+});
