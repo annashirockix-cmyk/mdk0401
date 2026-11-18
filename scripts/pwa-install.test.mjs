@@ -22,7 +22,7 @@ test("portal exposes a standards-based install prompt and mobile home-screen gui
   assert.deepEqual(manifest.display_override, ["standalone", "minimal-ui"]);
   assert.ok(manifest.icons.some((icon) => icon.src === "icons/icon-192.png"));
   assert.ok(manifest.icons.some((icon) => icon.src === "icons/icon-512.png"));
-  assert.match(worker, /portal-cache-v424/);
+  assert.match(worker, /portal-cache-v425/);
   assert.match(worker, /\.\/pwa-install\.js/);
   assert.match(worker, /\.\/icons\/icon-192\.png/);
 });
