@@ -52,6 +52,6 @@ test("student final exam displays and downloads only the attachments returned by
   assert.match(api, /getExamFile:function/);
   assert.match(api, /deleteExamFile:function/);
   assert.match(finalExam, /serverExam\.attachments/);
-  assert.match(finalExam, /window\.API\.getExamFile\(file\.id\)/);
+  assert.match(finalExam, /window\.API\.getExamFile\(file\.id,serverExam\.examId\)/);
   assert.match(finalExam, /Материалы к экзамену/);
 });
