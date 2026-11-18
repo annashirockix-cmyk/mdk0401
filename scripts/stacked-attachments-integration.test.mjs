@@ -151,7 +151,7 @@ test("final exam scoring accepts every answer-key field recognized by readiness 
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
   assert.match(scorer, /type==="tf"[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
     "true/false scoring must read the answers fallback");
-  assert.match(scorer, /type==="num"[\s\S]*?q\.answers\)/,
+  assert.match(scorer, /type==="num"[\s\S]*?q\\.answers!==undefined\\?q\\.answers:q\\.answer/,
     "numeric scoring must read the answers fallback");
   assert.match(scorer, /type==="multi"[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
     "multiple-choice scoring must read the answers fallback");
@@ -165,4 +165,15 @@ test("numeric final-exam scoring follows the same answer-key precedence as readi
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
   assert.match(scorer, /if\(type==="num"\)\{\s*let expected=q\.correct!==undefined\?q\.correct:\(q\.correctAnswer!==undefined\?q\.correctAnswer:\(q\.answers!==undefined\?q\.answers:q\.answer\)\)/,
     "numeric scoring must prefer correct, correctAnswer, answers, then answer");
+});
+
+
+test("final exam answer-key selection skips empty higher-priority fields consistently", () => {
+  const code = read("Code.gs");
+  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
+  assert.match(scorer, /const hasKey=function\(value\)\{return value!==undefined&&value!==null&&value!=="";\}/);
+  assert.match(scorer, /const answerKey=function\(\)\{return hasKey\(q\.correct\)\?q\.correct:\(hasKey\(q\.correctAnswer\)\?q\.correctAnswer:\(hasKey\(q\.answers\)\?q\.answers:q\.answer\)\)\);/);
+  const validator = section(code, "function finalQuestionHasAnswerKey_(q)", "function finalQuestionType_(question)");
+  assert.match(validator, /Array\.isArray\(q\.correctAnswer\)\?q\.correctAnswer/);
+  assert.match(validator, /Array\.isArray\(q\.answers\)\?q\.answers/);
 });
