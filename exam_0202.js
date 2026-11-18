@@ -133,7 +133,6 @@ window.renderFinal_0202 = function(mdkId) {
       }));
   }
   var extraQuestions = [ /* Тот же массив, что и выше */ ]; 
-  baseQuestions.forEach(function(q){ if (q && Array.isArray(q.options) && !Number.isInteger(q.correct)) q.correct = 0; });
   var allQ = (window.EXAM_BANK_0202 || baseQuestions.concat(extraQuestions)).filter(function(q){ return q && Array.isArray(q.options) && Number.isInteger(q.correct) && q.correct >= 0 && q.correct < q.options.length; });
   if (window._shuffleQuestionOptions) allQ.forEach(window._shuffleQuestionOptions);
 
