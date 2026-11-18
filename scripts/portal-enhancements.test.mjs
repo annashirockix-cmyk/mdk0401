@@ -1871,4 +1871,6 @@ test("student registration requires surname and first name; patronymic stays opt
   assert.match(app, /\[surname,firstName,patronymic\]\.filter\(Boolean\)\.join\(" "\)/);
   assert.match(server, /nameParts\.length < 2/);
   assert.match(server, /Name: normalizedName/);
+  assert.match(server, /normalizedGroup.*toLocaleUpperCase/);
+  assert.match(server, /Group: normalizedGroup/);
 });
