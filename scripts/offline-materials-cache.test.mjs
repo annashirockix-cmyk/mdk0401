@@ -71,3 +71,15 @@ test("selective deletion persists as an exclusion until the user explicitly rese
   assert.match(ui, /OfflineMaterialsCache\.clear\(user\)/);
   assert.match(ui, /Сбросить и загрузить всё/);
 });
+
+
+test("offline materials refresh reports actual server outcome and blocks offline reset", () => {
+  const ui = read("offline-materials-ui.js");
+  const app = read("app.js");
+  assert.match(app, /function finish\(success\).*callback\(success === true\)/);
+  assert.match(app, /finish\(!!\(res && res\.success\)\)/);
+  assert.match(app, /finish\(false\)/);
+  assert.match(ui, /navigator\.onLine === false/);
+  assert.match(ui, /Материалы обновлены с сервера/);
+  assert.match(ui, /загрузить материалы не удалось/);
+});
