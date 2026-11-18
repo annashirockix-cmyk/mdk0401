@@ -283,10 +283,11 @@
         </div>
     </aside>
     <script src="./pwa-install.js?v=1"></script>
+    <script src="./offline-materials-ui.js?v=1"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=419', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=420', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
