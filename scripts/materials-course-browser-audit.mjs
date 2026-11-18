@@ -21,9 +21,9 @@ try {
   await page.locator("#app").evaluate((app, html) => { app.innerHTML = '<div id="materialsPreview">' + html + "</div>"; }, result.sample);
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    const layout = await page.locator("#materialsPreview").evaluate(root => ({ pageWidth: document.documentElement.scrollWidth, viewport: window.innerWidth, contentWidth: root.getBoundingClientRect().width, fontSize: parseFloat(getComputedStyle(root.querySelector(".mat-easy-lecture")).fontSize) }));
-    assert.ok(layout.pageWidth <= layout.viewport + 1, "horizontal overflow at " + width + "px");
+    const layout = await page.locator("#materialsPreview").evaluate(root => ({ contentWidth: root.getBoundingClientRect().width, contentScrollWidth: root.scrollWidth, contentClientWidth: root.clientWidth, fontSize: parseFloat(getComputedStyle(root.querySelector(".mat-easy-lecture")).fontSize) }));
     assert.ok(layout.contentWidth <= width + 1, "materials content exceeds viewport at " + width + "px");
+    assert.ok(layout.contentScrollWidth <= layout.contentClientWidth + 1, "materials content has internal horizontal overflow at " + width + "px");
     assert.ok(layout.fontSize >= 16, "lecture text should remain comfortably readable");
   }
   await page.close();
