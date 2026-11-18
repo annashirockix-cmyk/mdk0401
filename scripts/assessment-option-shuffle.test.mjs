@@ -216,7 +216,7 @@ test("local practice question helper reorders options and moves the answer key w
 });
 
 test("all course practice exam renderers invoke the shared option shuffle", () => {
-  for (const file of ["exam_0201.js","exam_0202.js","exam_0401.js","exam_0701.js"]) {
+  for (const file of ["exam_0401.js","exam_0701.js"]) {
     const source = fs.readFileSync(path.join(root,file),"utf8");
     assert.match(source,/window\._shuffleQuestionOptions\) questions\.forEach\(window\._shuffleQuestionOptions\)/,file+" must shuffle options");
     assert.match(source,/window\._shuffleQuestionOptions\) allQ\.forEach\(window\._shuffleQuestionOptions\)/,file+" standalone exam route must shuffle options");
@@ -486,16 +486,15 @@ test("protected final exam bank excludes questions without valid automatic answe
 });
 
 
-test("MDK 02.01 and 02.02 legacy exam banks contain answer keys and final exams use them", () => {
-  for (const [file, bankName] of [["exam_0201.js", "EXAM_BANK_0201"], ["exam_0202.js", "EXAM_BANK_0202"]]) {
+test("MDK 02.01 and 02.02 legacy entrypoints route to protected assessment pages", () => {
+  for (const [file, training, final] of [
+    ["exam_0201.js", "#/training/02.01", "#/final/02.01"],
+    ["exam_0202.js", "#/training/02.02", "#/final/02.02"]
+  ]) {
     const source = fs.readFileSync(path.join(root, file), "utf8");
-    const questionCount = (source.match(/\{\s*q\s*:/g) || []).length;
-    const keyedCount = (source.match(/\bcorrect\s*:\s*0/g) || []).length;
-    assert.ok(questionCount > 0, file + " must contain questions");
-    assert.equal(keyedCount, questionCount, file + " must define a correct answer for every legacy question");
-    assert.ok(source.includes("window." + bankName + " || baseQuestions"), file + " final exam must use the keyed bank");
-    assert.match(source, /Number\.isInteger\(q\.correct\)/);
-    assert.doesNotMatch(source, /baseQuestions\.forEach\(function\(q\).*q\.correct = 0\)/, file + " must not invent keys for unverified questions");
-    assert.match(source, /var questions = allQuestions\.filter\(function\(q\).*Number\.isInteger\(q\.correct\)/, file + " practice must exclude questions without explicit answer keys");
+    assert.doesNotMatch(source, /\\bcorrect\\s*:/, file + " must not expose answer keys");
+    assert.match(source, new RegExp("window\\\\.renderTraining_" + file.slice(-8,-4) + " = function"));
+    assert.ok(source.includes('window.location.hash = "' + training + '"'));
+    assert.ok(source.includes('window.location.hash = "' + final + '"'));
   }
 });
