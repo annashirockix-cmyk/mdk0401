@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v421'; // Добавлен предпросмотр защищённых экзаменационных вопросов для студента.
+const CACHE_NAME = 'portal-cache-v422'; // Добавлен предпросмотр защищённых экзаменационных вопросов для студента.
 
 const STATIC_ASSETS = [
   './',
@@ -33,6 +33,8 @@ const STATIC_ASSETS = [
   './mastercam-practicals.js',
   './g_code_full.html',
   './data-material.js',
+  './data-material-easy.js',
+  './materials-student-friendly.css',
   './data-english-basic.js',
   './data-english-technical.js',
   './english-data-global.js',
