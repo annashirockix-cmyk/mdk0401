@@ -545,6 +545,9 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /uploadAssignmentAttachment/);
   assert.match(ui, /getAssignmentAttachment/);
   assert.match(ui, /attachmentHtml\(s\.attachments\)/);
+  assert.match(ui, /dialog\.showModal\(\)/);
+  assert.match(ui, /Прикреплённое изображение/);
+  assert.match(ui, /mime\.indexOf\("image\/"\)===0/);
   assert.match(api, /uploadAssignmentAttachment\s*:/);
   assert.match(api, /getAssignmentAttachment\s*:/);
   assert.match(backend, /function uploadAssignmentAttachment_\(data\)/);
