@@ -2062,12 +2062,12 @@ function importQuestionBanks_(data) {
     seen[key]=true;
     if (!questions.length || questions.length>1000) throw new Error("Банк "+bankId+": допустимо от 1 до 1000 вопросов.");
     const out=questions.map(function(q,index){
-      if(!q||typeof q!=="object")throw new Error("Некорректный вопрос в банке "+bankId+".");
+      if(!q||typeof q!=="object"||Array.isArray(q))throw new Error("Некорректный вопрос в банке "+bankId+".");
       const json=JSON.stringify(q);
       if(json.length>45000)throw new Error("Вопрос "+(index+1)+" банка "+bankId+" превышает лимит 45 КБ.");
       return [courseId,bankId,String(q.id||(bankId+":"+index)).slice(0,220),json,new Date().toISOString(),actor.email];
     });
-    total+=out.length;prepared.push({courseId:courseId,bankId:bankId,rows:out});
+    total+=out.length;prepared.push({courseId:courseId,bankId:bankId,rows:out,questions:questions});
   });
   if(total>2500)throw new Error("Разбейте импорт на части: не более 2500 вопросов за запрос.");
   const sh=questionBank_(),lock=LockService.getScriptLock();lock.waitLock(10000);
@@ -2075,18 +2075,56 @@ function importQuestionBanks_(data) {
     const map=headerMap_(sh),targets={};
     prepared.forEach(function(bank){targets[bank.courseId+"|"+bank.bankId]=true;});
     const current=sh.getDataRange().getValues(),header=current.length?current[0]:HEADERS.QuestionBank;
+    // An import must never replace a better populated exam source with an unkeyed legacy bank.
+    prepared.forEach(function(bank){
+      if(!/^exam_(primary|extra)$/.test(bank.bankId)&&bank.bankId!=="mdk_extra")return;
+      const uniqueEligible=function(items){
+        const seenPrompts={},count=0;let total=0;
+        items.forEach(function(item){
+          let q=item;
+          if(item&&item.question&&typeof item.question==="object")q=item.question;
+          const prompt=String(q&&(q.q||q.question)||"").trim();
+          if(!prompt||!finalQuestionHasAnswerKey_(q))return;
+          const signature=String(q.type||"mc")+"|"+prompt;
+          if(seenPrompts[signature])return;
+          seenPrompts[signature]=true;total++;
+        });
+        return total;
+      };
+      const incoming=uniqueEligible(bank.questions),existing=[];
+      current.slice(1).forEach(function(row){
+        if(!sameCourseId_(row[map.CourseId],bank.courseId)||String(row[map.BankId])!==bank.bankId)return;
+        try{existing.push(JSON.parse(String(row[map.QuestionJSON]||"{}")));}catch(e){}
+      });
+      const previous=uniqueEligible(existing);
+      if(incoming<previous)throw new Error("Импорт остановлен: "+bank.courseId+"/"+bank.bankId+" содержит "+incoming+" пригодных уникальных вопросов вместо уже сохранённых "+previous+". Существующий защищённый банк не изменён.");
+      if(incoming===0&&previous===0)throw new Error("Импорт экзаменационного банка "+bank.courseId+"/"+bank.bankId+" остановлен: в нём нет вопросов с проверяемыми ключами ответов.");
+    });
+    // Every target bank is backed up before any rows are replaced, including empty targets.
+    const backupId="bank-import-"+Utilities.getUuid().replace(/-/g,""),now=new Date().toISOString();
+    const backup=ensureSheet_("QuestionBankBackup"),backupMap=headerMap_(backup),backupRows=[];
+    prepared.forEach(function(bank){
+      let found=0;
+      current.slice(1).forEach(function(row){
+        if(sameCourseId_(row[map.CourseId],bank.courseId)&&String(row[map.BankId])===bank.bankId){
+          backupRows.push([backupId,bank.courseId,bank.bankId,JSON.stringify(row),now,actor.email]);found++;
+        }
+      });
+      if(!found)backupRows.push([backupId,bank.courseId,bank.bankId,"",now,actor.email]);
+    });
+    if(backupRows.length)backup.getRange(backup.getLastRow()+1,1,backupRows.length,6).setValues(backupRows);
     // Rebuild once: repeated row deletion and per-bank writes were timing out in Apps Script.
     const retained=current.slice(1).filter(function(row){
       const key=normalizeCourseId_(row[map.CourseId])+"|"+String(row[map.BankId]);
       return !targets[key];
     });
-    const incoming=[];
-    prepared.forEach(function(bank){Array.prototype.push.apply(incoming,bank.rows);});
-    const output=[header].concat(retained,incoming);
+    const incomingRows=[];
+    prepared.forEach(function(bank){Array.prototype.push.apply(incomingRows,bank.rows);});
+    const output=[header].concat(retained,incomingRows);
     sh.clearContents();
     sh.getRange(1,1,output.length,6).setValues(output);
     CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");
-    return {success:true,banksImported:prepared.length,questionsImported:total};
+    return {success:true,banksImported:prepared.length,questionsImported:total,backupId:backupId};
   } finally {lock.releaseLock();}
 }
 
