@@ -408,7 +408,7 @@ function userByEmail_(email) {
     loginChangedAt:index.LoginChangedAt!==undefined?String(row[index.LoginChangedAt]||""):"",
     passwordChangedAt:index.PasswordChangedAt!==undefined?String(row[index.PasswordChangedAt]||""):"",
     name:String(row[index.Name]||""),
-    group:String(row[index.Group]||""),
+    group:normalizeGroup_(row[index.Group]),
     role:String(row[index.Role]||"student").toLowerCase(),
     courses:String(row[index.Courses]||""),
     payload:String(row[index.Payload]||"")
@@ -693,7 +693,7 @@ function saveStudent_(data) {
 
   const fields = { UpdatedAt: new Date().toISOString() };
   if (data.name !== undefined) fields.Name = String(data.name);
-  if (data.group !== undefined) fields.Group = String(data.group);
+  if (data.group !== undefined) fields.Group = normalizeGroup_(data.group);
   if (data.payload !== undefined) {
     const incoming = typeof data.payload === "string" ? (function(){try{return JSON.parse(data.payload||"{}");}catch(e){return {};}})() : (data.payload || {});
     if (current.role === "teacher") {
@@ -3041,7 +3041,7 @@ function adminCreateUser_(data) {
     if (userByEmail_(email)) throw new Error("Пользователь с таким email уже существует.");
     const salt = Utilities.getUuid() + Utilities.getUuid(), sheet = users_(), map = headerMap_(sheet);
     const row = new Array(sheet.getLastColumn()).fill("");
-    const values = {Email:email,PasswordHash:passwordHash_(password,salt),Name:name,Group:group,Role:role,
+    const values = {Email:email,PasswordHash:passwordHash_(password,salt),Name:name,Group:normalizeGroup_(group),Role:role,
       UpdatedAt:new Date().toISOString(),Courses:role==="admin"?"*":"",Payload:"",PasswordSalt:salt};
     Object.keys(values).forEach(function(key){if(map[key]!==undefined)row[map[key]]=values[key];});
     sheet.appendRow(row);
