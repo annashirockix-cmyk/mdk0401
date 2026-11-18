@@ -2385,11 +2385,42 @@ function allFinalExamEntries_(courseId) {
     // Встроенные тесты допускают оба поля формулировки: q и question.
     // Итоговый экзамен должен читать те же записи, иначе банк есть, но экзамен считает его пустым.
     const prompt=String(q&&(q.q||q.question)||"").trim();
-    if(!q||!prompt)return;
+    if(!q||!prompt||!finalQuestionHasAnswerKey_(q))return;
     if(!q.q)q.q=prompt;
     const sig=String(q.type||"mc")+"|"+prompt;if(seen[sig])return;seen[sig]=true;
     out.push({bankId:bid,questionId:String(row[m.QuestionId]||""),question:q});
   });return out;
+}
+function finalQuestionHasAnswerKey_(q) {
+  if(!q||typeof q!=="object")return false;
+  const rawType=String(q.type||"mc").toLowerCase();
+  if(["written","essay","short_text","text","file","upload","open"].indexOf(rawType)>=0)return false;
+  const type=finalQuestionType_(q),options=Array.isArray(q.options)?q.options:[];
+  const has=function(value){return value!==undefined&&value!==null&&value!=="";};
+  const expected=has(q.correct)?q.correct:(has(q.correctAnswer)?q.correctAnswer:(has(q.answers)?q.answers:q.answer));
+  if(type==="mc"){
+    if(options.length<2||!has(expected))return false;
+    if(typeof expected==="string"&&options.indexOf(expected)>=0)return true;
+    const index=Number(expected);
+    return Number.isInteger(index)&&index>=0&&index<options.length;
+  }
+  if(type==="multi"){
+    if(options.length<2||!Array.isArray(expected)||expected.length<2)return false;
+    const mapped=expected.map(function(value){
+      if(options.indexOf(value)>=0)return options.indexOf(value);
+      const index=Number(value);
+      return Number.isInteger(index)&&index>=0&&index<options.length?index:-1;
+    });
+    return mapped.every(function(value){return value>=0;})&&new Set(mapped).size===mapped.length;
+  }
+  if(type==="num")return has(expected)&&isFinite(Number(String(expected).replace(",",".")));
+  if(type==="order"){
+    const ordered=Array.isArray(q.correctOrder)?q.correctOrder:(Array.isArray(q.correct)?q.correct:(Array.isArray(q.answer)?q.answer:null));
+    return Array.isArray(q.items)&&q.items.length>=2&&Array.isArray(ordered)&&ordered.length===q.items.length;
+  }
+  if(type==="match")return Array.isArray(q.pairs)&&q.pairs.length>=2&&q.pairs.every(function(pair){return pair&&has(pair.left)&&has(pair.right);});
+  if(type==="tf")return has(expected)&&(typeof expected==="boolean"||expected===0||expected===1||expected==="0"||expected==="1"||options.indexOf(expected)>=0);
+  return false;
 }
 function finalQuestionType_(question) {
   const type=String(question&&question.type||"mc").toLowerCase();
