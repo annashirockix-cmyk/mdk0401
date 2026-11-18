@@ -39,7 +39,7 @@ test("offline helper is loaded before app logic and is precached", () => {
   const html = read("index.html");
   const worker = read("service-worker.js");
   assert.ok(html.indexOf("offline-materials-cache.js") < html.indexOf('src="./app.js'));
-  assert.match(worker, /portal-cache-v419/);
+  assert.match(worker, /portal-cache-v420/);
   assert.match(worker, /'\.\/offline-materials-cache\.js'/);
   assert.match(html, /service-worker\.js\?v=419/);
 });
@@ -51,10 +51,23 @@ test("offline materials manager exposes inventory, refresh and selective removal
   const worker = read("service-worker.js");
   assert.match(ui, /Обновить материалы/);
   assert.match(ui, /Удалить выбранные/);
+  assert.match(ui, /Сбросить и загрузить всё/);
   assert.match(ui, /OfflineMaterialsCache\.summary/);
   assert.match(ui, /OfflineMaterialsCache\.remove/);
   assert.match(html, /offline-materials-ui\.js/);
   assert.match(worker, /portal-cache-v420/);
   assert.match(worker, /'\.\/offline-materials-ui\.js'/);
   assert.match(html, /service-worker\.js\?v=420/);
+});
+
+
+test("selective deletion persists as an exclusion until the user explicitly resets the snapshot", () => {
+  const cache = read("offline-materials-cache.js");
+  const ui = read("offline-materials-ui.js");
+  assert.match(cache, /excluded: excluded/);
+  assert.match(cache, /!excludedMap\[itemKey\(row\)\]/);
+  assert.match(cache, /function remove\(user, keys\)/);
+  assert.match(cache, /record\.excluded = excluded/);
+  assert.match(ui, /OfflineMaterialsCache\.clear\(user\)/);
+  assert.match(ui, /Сбросить и загрузить всё/);
 });
