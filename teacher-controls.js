@@ -55,6 +55,7 @@ window.renderTeacherControlsPage=function(){
    };
    document.getElementById("migrateQuestionBanks").onclick=async function(){
     const btn=this,status=document.getElementById("bankMigrationStatus");btn.disabled=true;status.textContent="Подготовка банков…";
+    const backupIds=[];
     try{
      const allowedCourses=new Set(["07.01","04.01","02.01","02.02","MCAM","MAT","MET","OT","PFI","EN","ENB","ENT"]);
      const topicCourse={},ambiguousTopics={},banks=[],seen={};
@@ -90,11 +91,13 @@ window.renderTeacherControlsPage=function(){
       add(cid,"mdk_extra",window.MDK_EXTRA_QUESTIONS&&window.MDK_EXTRA_QUESTIONS[cid]);
      });
      if(!banks.length)throw Error("Не найдены встроенные банки. Проверьте загрузку файлов данных.");
-     const totalExpected=banks.reduce((n,b)=>n+b.questions.length,0);let total=0,bankCount=0,batch=[],batchQuestions=0,partNo=0,backupIds=[];
+     const totalExpected=banks.reduce((n,b)=>n+b.questions.length,0);let total=0,bankCount=0,batch=[],batchQuestions=0,partNo=0;
      async function sendImportBatch(){
       if(!batch.length)return;
       partNo++;
-      const result=await window.API.importQuestionBanks(batch);
+      const batchBackupId="qb-migration-"+Date.now()+"-"+partNo;
+      backupIds.push(batchBackupId);
+      const result=await window.API.importQuestionBanks(batch,batchBackupId);
       if(!result||!result.success)throw Error(result&&result.error||"Ошибка импорта части "+partNo);
       if(result.backupId)backupIds.push(result.backupId);
       total+=Number(result.questionsImported)||0;bankCount+=Number(result.banksImported)||batch.length;
@@ -113,7 +116,21 @@ window.renderTeacherControlsPage=function(){
      }
      await sendImportBatch();
      status.textContent="Импорт подтверждён сервером: "+bankCount+" из "+banks.length+" банков; "+total+" из "+totalExpected+" вопросов. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов банков: "+skippedDuplicates+"."+(bankCount!==banks.length||total!==totalExpected?" ВНИМАНИЕ: есть расхождение — запустите «Проверить закрытое хранилище» и сверьте счётчики по дисциплинам.":" Все подготовленные банки и вопросы подтверждены ответами сервера.")+" Резервные копии импортированных банков: "+(backupIds.join(", ")||"не получены")+". Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
-    }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
+    }catch(error){
+     let message=error.message||String(error);
+     if(backupIds.length){
+      status.textContent="Импорт прерван. Восстанавливаем уже затронутые банки…";
+      let restoredBanks=0;const rollbackErrors=[];
+      for(const backupId of backupIds.slice().reverse()){
+       try{const restored=await window.API.restoreQuestionBanks(backupId);if(!restored||!restored.success)throw new Error(restored&&restored.error||"Откат не подтверждён");restoredBanks+=Number(restored.banksRestored)||0;}
+       catch(rollbackError){if(!/резервная копия не найдена/i.test(rollbackError.message||""))rollbackErrors.push(backupId+": "+(rollbackError.message||rollbackError));}
+      }
+      message+=" Автоматический откат: восстановлено банков "+restoredBanks+".";
+      if(rollbackErrors.length)message+=" Не удалось восстановить: "+rollbackErrors.join("; ")+". Проверьте резервные копии QuestionBankBackup.";
+      else message+=" Резервные копии пакетов сохранены для дополнительной проверки.";
+     }
+     status.textContent="Импорт прерван: "+message;
+    }
     finally{btn.disabled=false;}
    };
   }
