@@ -1026,6 +1026,7 @@ test("server builds 45-question advanced non-English exams with protected answer
     sameCourseId_:()=>true,
     settingValue_:()=>""
     ,allFinalExamEntries_:()=>bank
+    ,examFileList_:()=>[]
     ,shuffledServer_:items=>items.slice()
     ,Utilities:{getUuid:()=>"exam-test"}
     ,CacheService:{getScriptCache:()=>({put:(key,value)=>{sandbox.cached=JSON.parse(value);}})}
