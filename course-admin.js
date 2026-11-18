@@ -305,7 +305,7 @@
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
       const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
       const fs=(window.customContent.flashcards||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
-      const docs=(window.customContent.files||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
+      const docs=(window.customContent.files||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===fileTopicSel.value);
       const builtInTopic=getBuiltInTopic(lectureTopicId),builtInLectures=getBuiltInLectures(builtInTopic);
       const additionalLectures=ls.filter(x=>x.isBuiltInOverride!==true);
       $("lectureExisting").innerHTML='<option value="">— Новая дополнительная лекция —</option>'+builtInLectures.map((x,i)=>'<option value="builtin:'+i+'">Основная: '+esc(x.code||"")+' '+esc(x.title||"")+'</option>').join("")+additionalLectures.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
@@ -385,6 +385,7 @@
     $("examQuestionType").onchange=examTypeFields;$("addExamQuestionBtn").onclick=resetExamQuestionForm;$("saveExamQuestionBtn").onclick=addOrUpdateExamQuestion;$("cancelExamQuestionBtn").onclick=resetExamQuestionForm;$("previewExamQuestionBtn").onclick=previewExamQuestion;examTypeFields();
     examBankSel.onchange=loadExamBank;
     topicSel.onchange=()=>{resetLecture();renderSaved();};
+    fileTopicSel.onchange=renderSaved;
     testSel.onchange=()=>{resetTest();renderSaved();};
     $("lectureExisting").onchange=loadLecture;
     $("uploadCourseFileBtn").onclick=async function(){
