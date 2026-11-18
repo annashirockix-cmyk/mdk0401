@@ -66,9 +66,9 @@ test("lecture explanations cover concepts required by preserved practicals and t
   ];
   for (const item of required) {
     const id = item[0];
-    const start = easySource.indexOf("\\"" + id + "\\": {");
+    const start = easySource.indexOf('"' + id + '": {');
     assert.ok(start >= 0, id + " lesson exists");
-    const next = easySource.indexOf('\\n    },', start);
+    const next = easySource.indexOf('\n    },', start);
     const lesson = easySource.slice(start, next < 0 ? undefined : next);
     for (const pattern of item.slice(1)) assert.match(lesson, pattern, id + " covers " + pattern);
   }
