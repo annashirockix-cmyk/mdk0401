@@ -1857,3 +1857,42 @@ test("portal navigation provides accessible search, active route and keyboard sh
   assert.match(css, /\.drawer-item\.is-current/);
   assert.match(css, /\.skip-link:focus/);
 });
+
+test("test question images stay private in Drive whether the folder is new or reused", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function testImageFolder_()");
+  const end = server.indexOf("\\nfunction uploadTestImage_", start);
+  assert.ok(start >= 0 && end > start, "test image folder helper must exist");
+  const source = server.slice(start, end);
+
+  for (const savedId of ["existing-folder-id", ""]) {
+    const sharingCalls = [];
+    const propertyWrites = [];
+    const folder = {
+      getId: () => "new-folder-id",
+      setSharing: (access, permission) => sharingCalls.push([access, permission])
+    };
+    const properties = {
+      getProperty: () => savedId,
+      setProperty: (key, value) => propertyWrites.push([key, value]),
+      deleteProperty: key => propertyWrites.push(["deleted", key])
+    };
+    const sandbox = {
+      PropertiesService: { getScriptProperties: () => properties },
+      DriveApp: {
+        Access: { PRIVATE: "PRIVATE" },
+        Permission: { NONE: "NONE" },
+        getFolderById: id => {
+          if (savedId) return folder;
+          throw new Error("No saved folder");
+        },
+        createFolder: name => folder
+      }
+    };
+    vm.runInNewContext(source + ";this.testImageFolder_ = testImageFolder_;", sandbox);
+    assert.equal(sandbox.testImageFolder_(), folder);
+    assert.deepEqual(sharingCalls, [["PRIVATE", "NONE"]]);
+    if (!savedId) assert.ok(propertyWrites.some(row => row[0] === "TEST_QUESTION_IMAGE_FOLDER_ID"));
+  }
+});
+
