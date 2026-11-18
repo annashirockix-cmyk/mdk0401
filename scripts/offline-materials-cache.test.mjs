@@ -41,7 +41,7 @@ test("offline helper is loaded before app logic and is precached", () => {
   assert.ok(html.indexOf("offline-materials-cache.js") < html.indexOf('src="./app.js'));
   assert.match(worker, /portal-cache-v420/);
   assert.match(worker, /'\.\/offline-materials-cache\.js'/);
-  assert.match(html, /service-worker\.js\?v=419/);
+  assert.match(html, /service-worker\.js\?v=420/);
 });
 
 
