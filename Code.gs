@@ -301,6 +301,13 @@ function email_(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+// Единый ключ группы для сравнений и отображения. Исторические строки в таблицах
+// не переписываются: нормализация применяется только при чтении и новых назначениях.
+function normalizeGroup_(value) {
+  return String(value === null || value === undefined ? "" : value)
+    .normalize("NFKC").replace(/[\\s\\u00A0]+/g, " ").trim().toLocaleUpperCase("ru-RU");
+}
+
 // Сопоставляет текстовый код курса с числовым значением из Google Sheets,
 // не меняя остальные текстовые идентификаторы.
 var COURSE_ID_TIME_ZONE_CACHE_ = "";
@@ -745,7 +752,7 @@ function getStudents_(data) {
     return {
       email: row[map.Email],
       name: row[map.Name],
-      group: row[map.Group],
+      group: normalizeGroup_(row[map.Group]),
       role: row[map.Role],
       courses: visibleCourses,
       payload: user.role === "admin" ? String(row[map.Payload] || "") :
@@ -1014,8 +1021,8 @@ function getActivityLog_(data) {
   const sh=activityLog_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
   const rows=vals.slice(1).filter(function(row){
     const cid=String(row[m.CourseId]||"");
-    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||String(row[m.Group]||"")===group)&&(user.role==="admin"||!!cid&&hasCourseAccess_(user,cid));
-  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:String(row[m.Group]||""),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||""),eventType:m.EventType===undefined?"page_view":String(row[m.EventType]||"page_view"),details:m.Details===undefined?"":String(row[m.Details]||"")};});
+    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||normalizeGroup_(row[m.Group])===normalizeGroup_(group))&&(user.role==="admin"||!!cid&&hasCourseAccess_(user,cid));
+  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:normalizeGroup_(row[m.Group]),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||""),eventType:m.EventType===undefined?"page_view":String(row[m.EventType]||"page_view"),details:m.Details===undefined?"":String(row[m.Details]||"")};});
   rows.sort(function(x,y){return String(y.createdAt).localeCompare(String(x.createdAt));});
   const offset=Math.max(0,Math.floor(Number(data.offset)||0));
   const limit=Math.min(500,Math.max(1,Math.floor(Number(data.limit)||250)));
@@ -1146,7 +1153,7 @@ function getResults_(data) {
     const feedbackMatch=submission.match(/\\n\\nКомментарий преподавателя:([\\s\\S]*)$/);
     const storedFeedback=resultMap.Feedback===undefined?"":String(r[resultMap.Feedback]||"");
     const legacyFeedback=Number(r[5])>=2&&feedbackMatch?String(feedbackMatch[1]||"").trim():"";
-    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:storedFeedback||legacyFeedback};
+    return {email:r[0],name:r[1],group:normalizeGroup_(r[2]),testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:storedFeedback||legacyFeedback};
   });
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
@@ -1361,7 +1368,7 @@ function createAssignment_(data) {
   const instructions = String(data.instructions || "").trim().slice(0,10000);
   const targetType = String(data.targetType || "");
   const rawTarget = String(data.targetValue || "").trim().slice(0,120);
-  const targetValue = targetType === "individual" ? email_(rawTarget) : rawTarget;
+  const targetValue = targetType === "individual" ? email_(rawTarget) : normalizeGroup_(rawTarget);
   const dueAt = String(data.dueAt || "").trim();
   if (!title || !instructions) throw new Error("Заполните название и условие задания.");
   if (["group","individual"].indexOf(targetType) < 0 || !targetValue) throw new Error("Выберите адресата.");
@@ -1377,7 +1384,7 @@ function createAssignment_(data) {
     if (String(r[um.Role] || "").toLowerCase() !== "student") return false;
     if (!hasCourseAccess_({role:"student",courses:String(r[um.Courses] || "")}, courseId)) return false;
     if (targetType === "individual") return email_(r[um.Email]) === targetValue;
-    return String(r[um.Group] || "").trim().toLowerCase() === targetValue.toLowerCase();
+    return normalizeGroup_(r[um.Group]) === targetValue;
   });
   // Групповое назначение разрешено публиковать до регистрации обучающихся.
   if (targetType === "individual" && !matches.length) throw new Error("Обучающийся не найден или у него нет доступа к дисциплине.");
@@ -1434,7 +1441,7 @@ function getAssignments_(data) {
       const typ=String(r[h.TargetType]||""),val=String(r[h.TargetValue]||"");
       if(typ!=="individual"&&typ!=="group")return;
       if(typ==="individual"&&email_(val)!==user.email)return;
-      if(typ==="group"&&String(val||"").trim().toLowerCase()!==String(user.group||"").trim().toLowerCase())return;
+      if(typ==="group"&&normalizeGroup_(val)!==normalizeGroup_(user.group))return;
       if(String(r[h.Status]||"active")!=="active")return;
     }
     const item={id:String(r[h.Id]),courseId:cid,title:String(r[h.Title]||""),topic:String(r[h.Topic]||""),level:String(r[h.Level]||""),workType:String(r[h.WorkType]||""),dueAt:String(r[h.DueAt]||""),targetType:String(r[h.TargetType]||""),targetValue:String(r[h.TargetValue]||""),instructions:String(r[h.Instructions]||""),criteria:String(r[h.Criteria]||""),createdAt:String(r[h.CreatedAt]||""),status:String(r[h.Status]||"active")};
@@ -1443,7 +1450,7 @@ function getAssignments_(data) {
       const ownStudent=own.filter(function(x){return email_(x[m.StudentEmail])===user.email;}).sort(function(x,y){return String(y[m.SubmittedAt]).localeCompare(String(x[m.SubmittedAt]));})[0];
       item.submission=ownStudent?{answer:String(ownStudent[m.Answer]||""),submittedAt:String(ownStudent[m.SubmittedAt]||""),status:String(ownStudent[m.Status]||"submitted"),grade:ownStudent[m.Grade]===""?null:ownStudent[m.Grade],feedback:String(ownStudent[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(ownStudent[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:historyFor(ownStudent).length,history:historyFor(ownStudent)}:null;
     } else {
-      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:String(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(x[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:hist.length,history:hist};});
+      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:normalizeGroup_(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(x[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:hist.length,history:hist};});
     }
     list.push(item);
   });
@@ -1454,7 +1461,7 @@ function assignmentEligible_(student, assignment) {
   const h = headerMap_(assignments_()), courseId = String(assignment[h.CourseId] || "");
   const type = String(assignment[h.TargetType] || ""), value = String(assignment[h.TargetValue] || "");
   const eligible = (type === "individual" && email_(value) === student.email) ||
-    (type === "group" && value.trim().toLowerCase() === String(student.group || "").trim().toLowerCase());
+    (type === "group" && normalizeGroup_(value) === normalizeGroup_(student.group));
   if (!hasCourseAccess_(student, courseId) || !eligible || String(assignment[h.Status] || "active") !== "active") throw new Error("Это задание вам недоступно.");
   return courseId;
 }
@@ -1650,7 +1657,7 @@ function sendAssignmentDueReminders_() {
   av.slice(1).forEach(function(a){
     const id=String(a[ah.Id]||""),course=String(a[ah.CourseId]||""),due=String(a[ah.DueAt]||"");
     if(!id||due!==dueKey||String(a[ah.Status]||"active")!=="active")return;
-    const type=String(a[ah.TargetType]||""),target=String(a[ah.TargetValue]||"").trim().toLowerCase();
+    const type=String(a[ah.TargetType]||""),target=type==="group"?normalizeGroup_(a[ah.TargetValue]):email_(a[ah.TargetValue]);
     if(type!=="group"&&type!=="individual")return;
     const submitted={};
     sv.slice(1).forEach(function(sub){
@@ -1658,7 +1665,7 @@ function sendAssignmentDueReminders_() {
     });
     uv.slice(1).forEach(function(userRow){
       if(String(userRow[um.Role]||"").toLowerCase()!=="student")return;
-      const mail=email_(userRow[um.Email]),group=String(userRow[um.Group]||"").trim().toLowerCase();
+      const mail=email_(userRow[um.Email]),group=normalizeGroup_(userRow[um.Group]);
       const recipient={role:"student",courses:String(userRow[um.Courses]||"")};
       if(!mail||!hasCourseAccess_(recipient,course)||submitted[mail])return;
       if(type==="individual"&&mail!==email_(target))return;
