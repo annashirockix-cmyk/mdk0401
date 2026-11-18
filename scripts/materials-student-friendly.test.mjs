@@ -54,3 +54,22 @@ test("crystallization wording distinguishes solidification from hardness", () =>
   assert.match(easySource, /Затвердевание — это переход из жидкого состояния в твёрдое/);
   assert.doesNotMatch(easySource, /Как металл становится твёрдым/);
 });
+
+
+test("lecture explanations cover concepts required by preserved practicals and tests", () => {
+  const required = [
+    ["mat-t5", /Магниевые сплавы/, /Цинк и его сплавы/],
+    ["mat-t6", /40Х/, /09Г2С/, /действующим стандартом/],
+    ["mat-t7", /Волочение/, /волоку/],
+    ["mat-t9", /Цинкование/, /Питтинг/, /Перед окраской поверхность очищают/],
+    ["mat-t10", /Входной контроль/, /Относительное удлинение/, /испытании образца на растяжение/]
+  ];
+  for (const item of required) {
+    const id = item[0];
+    const start = easySource.indexOf("\\"" + id + "\\": {");
+    assert.ok(start >= 0, id + " lesson exists");
+    const next = easySource.indexOf("\\n    },", start);
+    const lesson = easySource.slice(start, next < 0 ? undefined : next);
+    for (const pattern of item.slice(1)) assert.match(lesson, pattern, id + " covers " + pattern);
+  }
+});
