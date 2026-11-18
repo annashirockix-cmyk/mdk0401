@@ -107,24 +107,33 @@
     refreshButton.addEventListener("click", function () {
       var user = currentUser();
       if (!user || !root.loadGlobalCustomContent) return;
+      if (root.navigator && root.navigator.onLine === false) {
+        if (root.showToast) root.showToast("Для обновления офлайн-материалов подключитесь к интернету.", "info");
+        return;
+      }
       refreshButton.disabled = true;
       refreshButton.textContent = "Обновление…";
-      root.loadGlobalCustomContent(function () {
+      root.loadGlobalCustomContent(function (success) {
         refreshButton.disabled = false;
         refreshButton.textContent = "Обновить материалы";
+        if (root.showToast) root.showToast(success ? "Материалы обновлены с сервера." : "Не удалось обновить материалы. Проверьте соединение и доступ к порталу.", success ? "success" : "error");
         refreshSummary();
       });
     });
     resetButton.addEventListener("click", function () {
       var user = currentUser();
       if (!user || !root.OfflineMaterialsCache || !root.loadGlobalCustomContent) return;
+      if (root.navigator && root.navigator.onLine === false) {
+        if (root.showToast) root.showToast("Сброс с повторной загрузкой доступен только при подключении к интернету.", "info");
+        return;
+      }
       resetButton.disabled = true;
       resetButton.textContent = "Сброс…";
       root.OfflineMaterialsCache.clear(user).then(function () {
-        root.loadGlobalCustomContent(function () {
+        root.loadGlobalCustomContent(function (success) {
           resetButton.disabled = false;
           resetButton.textContent = "Сбросить и загрузить всё";
-          if (root.showToast) root.showToast("Список очищен. Доступные материалы загружены заново.", "success");
+          if (root.showToast) root.showToast(success ? "Список очищен. Доступные материалы загружены заново." : "Список очищен, но загрузить материалы не удалось. Повторите попытку при стабильном соединении.", success ? "success" : "error");
           refreshSummary();
         });
       }).catch(function (error) {
