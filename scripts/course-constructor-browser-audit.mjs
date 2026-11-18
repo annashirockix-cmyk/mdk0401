@@ -39,6 +39,16 @@ try {
       getTopicAccess: async () => ({ open: true }),
       getCustomContent: async () => ({ success: true, data: window.__constructorStore.map(x => ({ ...x })) }),
       uploadTestImage: async (courseId, dataUrl, name) => ({ success: true, imageRef: "drive:audit-image-reference", name, size: 12000 }),
+      uploadCourseFile: async (courseId, topicId, title, fileName, dataUrl) => {
+        const item = { id: "audit-course-file-12345", mdkId: courseId, topicId, type: "file", title,
+          fileRef: "coursefile:audit-course-file-12345", fileName, mimeType: "application/pdf", size: 12 };
+        window.__constructorStore.push(item); sync();
+        return { success: true, ...item };
+      },
+      getCourseFile: async (itemId, fileRef) => ({
+        success: itemId === "audit-course-file-12345" && fileRef === "coursefile:audit-course-file-12345",
+        fileName: "methodical-guide.pdf", mimeType: "application/pdf", data: "JVBERi0xLjQK", size: 9
+      }),
       getQuestionBank: async (courseId, bankId) => ({ success: true, courseId, questions: (window.__examBankRows || []).map(row => ({ ...row })) }),
       saveQuestionBank: async (courseId, bankId, questions) => {
         window.__examBankRows = questions.map(row => ({ questionId: row.questionId, question: { ...row.question } }));
@@ -207,6 +217,15 @@ try {
   assert.equal(await page.locator("#ceLecturePreviewFrame").evaluate(el => getComputedStyle(el).display), "block");
   await page.locator("#saveLectureBtn").click();
   await page.waitForFunction(() => document.getElementById("lectureStatus")?.textContent.includes("лекция сохранена"));
+  await page.locator("#courseFileTopic").selectOption(topicId);
+  await page.locator("#courseFileTitle").fill("Методическое пособие к теме");
+  await page.locator("#courseFileInput").setInputFiles({
+    name: "methodical-guide.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\\nAudit document")
+  });
+  await page.locator("#uploadCourseFileBtn").click();
+  await page.waitForFunction(() => document.getElementById("courseFileStatus")?.textContent.includes("Файл прикреплён к теме"));
+  assert.equal(await page.evaluate(() => window.__constructorStore.find(x => x.type === "file")?.fileRef),
+    "coursefile:audit-course-file-12345", "Uploaded course document must be stored as a private file reference");
 
   await page.locator("#testTitle").fill("Тест конструктора");
   await page.locator("#qText").fill("Какой вариант правильный?");
@@ -348,6 +367,12 @@ try {
   await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
   const lectureVisible = await page.locator("#topicContent").innerText();
   assert.ok(lectureVisible.includes("Тестовая лекция конструктора"));
+  assert.ok(lectureVisible.includes("Методическое пособие к теме"), "Student lecture view must list the attached course document");
+  const courseFileDownload = page.waitForEvent("download");
+  await page.locator("#topicContent button").filter({ hasText: "Методическое пособие к теме" }).click();
+  const downloadedCourseFile = await courseFileDownload;
+  assert.equal(downloadedCourseFile.suggestedFilename(), "methodical-guide.pdf",
+    "Student must download the attached document through the authorized API");
 
   await page.locator("#tab-test").click();
   await page.waitForSelector("#topicContent button");
