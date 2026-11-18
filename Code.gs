@@ -2549,7 +2549,8 @@ function scoreFinalAnswer_(q,answer) {
   if(answer===undefined||answer===null||(typeof answer==="string"&&!answer.trim()))return 0;
   const type=finalQuestionType_(q||{});
   if(type==="tf"){
-    const expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
+    let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+    if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     if(expected===undefined||expected===null)return 0;
     let target;
     if(typeof expected==="boolean")target=expected?0:1;
@@ -2558,7 +2559,8 @@ function scoreFinalAnswer_(q,answer) {
     return Number(answer)===target?1:0;
   }
   if(type==="num"){
-    const expected=q.answer!==undefined?q.answer:(q.correct!==undefined?q.correct:q.correctAnswer);
+    let expected=q.answer!==undefined?q.answer:(q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answers));
+    if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     const a=Number(String(answer).replace(",", ".")),b=Number(String(expected).replace(",", "."));
     const tolerance=Math.max(0,Number(q.tol!==undefined?q.tol:q.tolerance)||0.01);
     return isFinite(a)&&isFinite(b)&&Math.abs(a-b)<=tolerance?1:0;
@@ -2579,7 +2581,8 @@ function scoreFinalAnswer_(q,answer) {
   if(type==="match"){
     const pairs=q.pairs||[];
     if(Array.isArray(answer)&&pairs.length)return pairs.filter(function(pair,index){return String(answer[index])===String(pair.right);}).length/pairs.length;
-    const expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
+    let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+  if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     if(!Array.isArray(answer)||!Array.isArray(expected)||!expected.length)return 0;
     return answer.filter(function(value,index){return String(value)===String(expected[index]);}).length/expected.length;
   }
