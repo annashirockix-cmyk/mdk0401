@@ -11,6 +11,32 @@ bar.appendChild(button('Ссылка','Вставить ссылку',()=>{const
 bar.appendChild(button('Фото','Вставить изображение',()=>{const u=prompt('Прямая ссылка на изображение');if(u&&/^https?:\/\//i.test(u)){const t='<figure><img src="'+u.replace(/"/g,'&quot;')+'" alt="Иллюстрация" style="max-width:100%;height:auto"><figcaption>Подпись</figcaption></figure>';a.setRangeText(t,a.selectionStart,a.selectionEnd,'end')}}));a.before(bar);
 const findRow=document.createElement('div');findRow.id='ceFindReplace';findRow.className='ce-find-row';findRow.innerHTML='<input id="ceFindText" type="search" placeholder="Найти в тексте…" aria-label="Найти в тексте"><input id="ceReplaceText" type="text" placeholder="Заменить на…" aria-label="Заменить на"><div class="ce-find-actions"><button type="button" class="ce-tool-btn" id="ceFindNext">Найти далее</button><button type="button" class="ce-tool-btn" id="ceReplaceOne">Заменить</button><button type="button" class="ce-tool-btn" id="ceReplaceAll">Заменить все</button><span class="ce-find-status" id="ceFindStatus" aria-live="polite"></span></div>';
 bar.after(findRow);
+const previewWrap=document.createElement('section');previewWrap.id='ceLecturePreviewWrap';previewWrap.className='module';previewWrap.style.margin='10px 0';previewWrap.innerHTML='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b>Предпросмотр лекции</b><span class="ce-help">Проверка оформления до сохранения</span><span style="flex:1"></span><button type="button" class="ce-tool-btn" id="ceLecturePreviewToggle">Показать предпросмотр</button></div><iframe id="ceLecturePreviewFrame" title="Предпросмотр лекции" sandbox="" style="display:none;width:100%;height:520px;border:1px solid var(--border);border-radius:10px;background:#fff;margin-top:10px"></iframe>';
+a.insertAdjacentElement('afterend',previewWrap);
+const previewButton=$('ceLecturePreviewToggle'),previewFrame=$('ceLecturePreviewFrame');
+function previewSafeHtml(source){
+ const parsed=new DOMParser().parseFromString('<div>'+String(source||'')+'</div>','text/html'),root=parsed.body.firstElementChild;
+ const allowed=['P','BR','HR','H1','H2','H3','H4','H5','H6','DIV','SPAN','B','STRONG','I','EM','U','S','UL','OL','LI','TABLE','THEAD','TBODY','TFOOT','TR','TH','TD','CAPTION','BLOCKQUOTE','PRE','CODE','SUB','SUP','FIGURE','FIGCAPTION','IMG','A'];
+ Array.from(root.querySelectorAll('*')).reverse().forEach(node=>{
+  if(!allowed.includes(node.tagName)){const parent=node.parentNode;while(node.firstChild)parent.insertBefore(node.firstChild,node);parent.removeChild(node);return;}
+  Array.from(node.attributes).forEach(attr=>{
+   const name=attr.name.toLowerCase(),value=attr.value;
+   if(node.tagName==='IMG'&&name==='src'&&/^(https?:|\.\/|\.\.\/|\/|data:image\/(?:png|jpeg|gif|webp);base64,)/i.test(value))return;
+   if(node.tagName==='IMG'&&['alt','width','height'].includes(name))return;
+   if(node.tagName==='A'&&name==='href'&&/^(https?:|mailto:|\.\/|\.\.\/|\/|#)/i.test(value))return;
+   node.removeAttribute(attr.name);
+  });
+  if(node.tagName==='A'&&node.hasAttribute('href')){node.setAttribute('rel','noopener noreferrer');if(/^https?:/i.test(node.getAttribute('href')))node.setAttribute('target','_blank');}
+ });
+ return root.innerHTML;
+}
+function renderLecturePreview(){
+ const title=String($('lectureTitle')&&$('lectureTitle').value||'Лекция').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const body=previewSafeHtml(a.value);
+ previewFrame.srcdoc='<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font:16px/1.65 Arial,sans-serif;color:#20242b;padding:24px;max-width:900px;margin:auto}h1,h2,h3{line-height:1.25}img{max-width:100%;height:auto}table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}th,td{border:1px solid #aeb5bf;padding:8px;text-align:left}blockquote{border-left:4px solid #7c8797;padding:8px 16px;margin-left:0;background:#f3f5f7}pre{white-space:pre-wrap;background:#f3f5f7;padding:12px;overflow:auto}a{overflow-wrap:anywhere}</style></head><body><h1>'+title+'</h1>'+body+'</body></html>';
+}
+previewButton.onclick=()=>{const show=previewFrame.style.display==='none';if(show)renderLecturePreview();previewFrame.style.display=show?'block':'none';previewButton.textContent=show?'Обновить предпросмотр':'Показать предпросмотр';if(show)previewFrame.scrollIntoView({behavior:'smooth',block:'nearest'});};
+
 const findInput=$('ceFindText'),replaceInput=$('ceReplaceText'),findStatus=$('ceFindStatus');
 function findNext(){const query=findInput.value;if(!query){findStatus.textContent='Введите фразу для поиска.';return -1;}const value=a.value,lower=value.toLocaleLowerCase('ru'),needle=query.toLocaleLowerCase('ru');let at=lower.indexOf(needle,a.selectionEnd);if(at<0)at=lower.indexOf(needle,0);if(at<0){findStatus.textContent='Совпадений не найдено.';return -1;}a.focus();a.setSelectionRange(at,at+query.length);findStatus.textContent='Найдено совпадение.';return at;}
 $('ceFindNext').onclick=findNext;findInput.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();findNext();}});
