@@ -2017,6 +2017,9 @@ function getQuestionBankStats_(data) {
     try { const parsed = JSON.parse(String(row[m.QuestionJSON] || "")); if (!parsed || typeof parsed !== "object") throw new Error("invalid"); }
     catch (e) { course.invalidJson++; bank.invalidJson++; invalidJson++; }
   }
+  CFG.COURSES.forEach(function(id) {
+    if (!courses[id]) courses[id] = { courseId: id, banks: 0, rows: 0, uniqueQuestions: 0, duplicateQuestionIds: 0, invalidJson: 0, emptyQuestionIds: 0 };
+  });
   const courseList = Object.keys(courses).sort().map(function(id) {
     const course = courses[id], eligible = allFinalExamEntries_(id), byType = {}, byBank = {};
     eligible.forEach(function(entry) {
