@@ -78,7 +78,7 @@ window.renderJournalPage = function() {
           var tbody = document.createElement("tbody");
 
           students.forEach((s) => {
-              var sKey = s.name.trim().toLowerCase() + "|" + normalizeJournalGroup(s.group).toLowerCase();
+              var sKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
               var tr = document.createElement("tr");
               var results = resultIndex[s.email] || {};
 
