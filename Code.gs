@@ -2546,6 +2546,7 @@ function getFinalExam_(data) {
   return {success:true,examId:examId,questions:safeQuestions,attachments:examFileList_(courseId,"").filter(function(file){return ["exam_primary","exam_extra","mdk_extra"].indexOf(file.bankId)>=0;})};
 }
 function scoreFinalAnswer_(q,answer) {
+  if(answer===undefined||answer===null||(typeof answer==="string"&&!answer.trim()))return 0;
   const type=finalQuestionType_(q||{});
   if(type==="tf"){
     const expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
