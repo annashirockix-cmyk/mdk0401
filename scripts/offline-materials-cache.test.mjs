@@ -41,7 +41,7 @@ test("offline helper is loaded before app logic and is precached", () => {
   assert.ok(html.indexOf("offline-materials-cache.js") < html.indexOf('src="./app.js'));
   assert.match(worker, /portal-cache-v422/);
   assert.match(worker, /'\.\/offline-materials-cache\.js'/);
-  assert.match(html, /service-worker\.js\?v=421/);
+  assert.match(html, /service-worker\.js\?v=422/);
 });
 
 
@@ -57,7 +57,7 @@ test("offline materials manager exposes inventory, refresh and selective removal
   assert.match(html, /offline-materials-ui\.js/);
   assert.match(worker, /portal-cache-v422/);
   assert.match(worker, /'\.\/offline-materials-ui\.js'/);
-  assert.match(html, /service-worker\.js\?v=421/);
+  assert.match(html, /service-worker\.js\?v=422/);
 });
 
 
