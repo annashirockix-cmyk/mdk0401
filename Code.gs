@@ -288,7 +288,7 @@ function setupPortal() {
   [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "AssignmentFiles", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
-  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications, ProctorEvents, AttemptAudit, QuestionBank, EnglishExamVariantsBank, EnglishExamAttempts, ActivityLog.";
+  return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, AssignmentFiles, Notifications, ProctorEvents, AttemptAudit, QuestionBank, EnglishExamVariantsBank, EnglishExamAttempts, ActivityLog.";
 }
 
 /* ---------- Common helpers and authentication ---------- */
