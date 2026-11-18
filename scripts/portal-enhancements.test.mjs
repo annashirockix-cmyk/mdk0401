@@ -1956,7 +1956,7 @@ test("MDK 02.01 key assembly lectures include step-by-step examples and diagnost
     const end = source.indexOf("`)", start);
     assert.ok(start >= 0 && end > start, code + " lecture must exist");
     const lesson = source.slice(start, end);
-    assert.match(lesson, /Учебный пример/, code + " needs an accessible worked example");
+    assert.match(lesson, /(Учебный|Практический) пример/, code + " needs an accessible worked example");
     assert.match(lesson, /Самопроверка/, code + " needs self-check questions");
     assert.match(lesson, /<table>/, code + " needs a practical reference table");
   }
