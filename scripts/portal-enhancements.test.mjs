@@ -1961,3 +1961,12 @@ test("MDK 02.01 key assembly lectures include step-by-step examples and diagnost
     assert.match(lesson, /<table>/, code + " needs a practical reference table");
   }
 });
+
+
+test("MDK 02.01 and 02.02 training banks do not append hard questions twice", () => {
+  for (const file of ["exam_0201.js", "exam_0202.js"]) {
+    const source = read(file);
+    const hardAppend = /baseQuestions\s*=\s*baseQuestions\.concat\(window\.HARD_TESTS\[t\.id\]\)/g;
+    assert.equal((source.match(hardAppend) || []).length, 1, file + " must append each topic hard bank exactly once");
+  }
+});
