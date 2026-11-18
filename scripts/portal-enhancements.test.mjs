@@ -1969,9 +1969,9 @@ test("MDK 02.01 and 02.02 legacy exam entrypoints use protected assessment route
     ["exam_0202.js", "02.02", "0202"]
   ]) {
     const source = read(file);
-    assert.doesNotMatch(source, /\\bcorrect\\s*:/, file + " must not expose answer keys");
-    assert.match(source, new RegExp("window\\\\.renderTraining_" + suffix + " = function"));
-    assert.match(source, new RegExp("window\\\\.renderFinal_" + suffix + " = function"));
+    assert.doesNotMatch(source, /\bcorrect\s*:/, file + " must not expose answer keys");
+    assert.match(source, new RegExp("window\\.renderTraining_" + suffix + " = function"));
+    assert.match(source, new RegExp("window\\.renderFinal_" + suffix + " = function"));
     assert.ok(source.includes('window.location.hash = "#/training/' + courseId + '"'));
     assert.ok(source.includes('window.location.hash = "#/final/' + courseId + '"'));
   }
