@@ -2586,7 +2586,8 @@ function scoreFinalAnswer_(q,answer) {
     if(!Array.isArray(answer)||!Array.isArray(expected)||!expected.length)return 0;
     return answer.filter(function(value,index){return String(value)===String(expected[index]);}).length/expected.length;
   }
-  const expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
+  let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+  if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
   if(typeof expected==="string"&&q.options&&q.options.indexOf(expected)>=0)return Number(answer)===q.options.indexOf(expected)?1:0;
   return Number(answer)===Number(expected)?1:0;
 }
