@@ -256,6 +256,22 @@ window.renderFinalExamPage = function (mdkId) {
         var picked=serverExam.questions.map(function(entry){return entry.question;});
         if(picked.length!==45)throw new Error("Вариант должен содержать 45 заданий с автоматической проверкой; сервер вернул "+picked.length+". Проверьте объём защищённого банка.");
         mount.innerHTML="";
+        var examFiles=Array.isArray(serverExam.attachments)?serverExam.attachments:[];
+        if(examFiles.length){
+          var resources=examNode("section","module");resources.style.cssText="padding:12px;margin-bottom:14px";
+          resources.appendChild(examNode("h3","","Материалы к экзамену"));
+          resources.appendChild(examNode("p","","При необходимости откройте приложенные методические документы. Время экзамена продолжает идти."));
+          examFiles.forEach(function(file){
+            var button=examNode("button","btn ghost","📎 "+(file.fileName||"Документ"));button.type="button";button.style.cssText="margin:4px 8px 4px 0";
+            button.addEventListener("click",async function(){button.disabled=true;var oldText=button.textContent;button.textContent="Загрузка…";try{
+              var result=await window.API.getExamFile(file.id);if(!result||!result.success||!result.data)throw new Error(result&&result.error||"Не удалось получить файл.");
+              var binary=atob(result.data),bytes=new Uint8Array(binary.length);for(var i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+              var url=URL.createObjectURL(new Blob([bytes],{type:result.mimeType||"application/octet-stream"})),link=document.createElement("a");link.href=url;link.download=result.fileName||"exam-file";document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
+            }catch(error){button.textContent="Ошибка: "+error.message;}finally{button.disabled=false;if(button.textContent==="Загрузка…")button.textContent=oldText;}});
+            resources.appendChild(button);
+          });
+          mount.appendChild(resources);
+        }
         var timerBox=examNode("div","exam-timer",duration+":00");timerBox.style.cssText="font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;color:var(--accent);";mount.appendChild(timerBox);
         var form=examNode("form");form.addEventListener("submit",function(e){e.preventDefault();});
         picked.forEach(function(question,index){form.appendChild(renderExamQuestion(question,index));});
