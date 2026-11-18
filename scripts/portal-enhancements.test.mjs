@@ -1989,7 +1989,7 @@ test("admin bank diagnostics display final-exam readiness and question-type brea
   const html = read("index.html");
   assert.match(html, /teacher-controls\.js\?v=29/);
   const sw = read("service-worker.js");
-  assert.match(sw, /portal-cache-v425/);
+  assert.match(sw, /portal-cache-v426/);
 });
 
 test("final exam bank eligibility excludes invalid keys, unsupported formats and duplicate prompts", () => {
