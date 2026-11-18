@@ -90,15 +90,17 @@ window.renderTeacherControlsPage=function(){
       add(cid,"mdk_extra",window.MDK_EXTRA_QUESTIONS&&window.MDK_EXTRA_QUESTIONS[cid]);
      });
      if(!banks.length)throw Error("Не найдены встроенные банки. Проверьте загрузку файлов данных.");
-     const totalExpected=banks.reduce((n,b)=>n+b.questions.length,0);let total=0,bankCount=0,batch=[],batchQuestions=0,partNo=0;
+     const totalExpected=banks.reduce((n,b)=>n+b.questions.length,0);let total=0,bankCount=0,batch=[],batchQuestions=0,partNo=0,backupIds=[];
      async function sendImportBatch(){
       if(!batch.length)return;
       partNo++;
       const result=await window.API.importQuestionBanks(batch);
       if(!result||!result.success)throw Error(result&&result.error||"Ошибка импорта части "+partNo);
+      if(result.backupId)backupIds.push(result.backupId);
       total+=Number(result.questionsImported)||0;bankCount+=Number(result.banksImported)||batch.length;
       status.textContent="Импортировано банков: "+bankCount+" из "+banks.length; 
       status.textContent+=" · вопросов: "+total+" из "+totalExpected;
+      if(result.backupId)status.textContent+=" · резервная копия: "+result.backupId;
       batch=[];batchQuestions=0;
      }
      for(const bank of banks){
@@ -110,7 +112,7 @@ window.renderTeacherControlsPage=function(){
       batch.push(bank);batchQuestions+=count;
      }
      await sendImportBatch();
-     status.textContent="Импорт подтверждён сервером: "+bankCount+" из "+banks.length+" банков; "+total+" из "+totalExpected+" вопросов. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов банков: "+skippedDuplicates+"."+(bankCount!==banks.length||total!==totalExpected?" ВНИМАНИЕ: есть расхождение — запустите «Проверить закрытое хранилище» и сверьте счётчики по дисциплинам.":" Все подготовленные банки и вопросы подтверждены ответами сервера.")+" Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
+     status.textContent="Импорт подтверждён сервером: "+bankCount+" из "+banks.length+" банков; "+total+" из "+totalExpected+" вопросов. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов банков: "+skippedDuplicates+"."+(bankCount!==banks.length||total!==totalExpected?" ВНИМАНИЕ: есть расхождение — запустите «Проверить закрытое хранилище» и сверьте счётчики по дисциплинам.":" Все подготовленные банки и вопросы подтверждены ответами сервера.")+" Резервные копии импортированных банков: "+(backupIds.join(", ")||"не получены")+". Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
     }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
     finally{btn.disabled=false;}
    };
