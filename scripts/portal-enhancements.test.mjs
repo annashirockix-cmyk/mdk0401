@@ -1918,10 +1918,10 @@ test("legacy group normalization is applied in teacher dashboard, journal and re
 
 test("MDK 04.01 lectures explain diagnostics, setup and TPM in student-friendly steps", () => {
   const source = read("data-0401.js");
-  assert.equal((source.match(/topic\\("m0401-t1[1-6]"/g) || []).length, 6);
+  assert.equal((source.match(/topic\("m0401-t1[1-6]"/g) || []).length, 6);
   assert.equal((source.match(/html:<table>/g) || []).length, 6, "each topic must include a reference table");
   assert.equal((source.match(/#Учебный пример/g) || []).length, 6, "each topic must include a worked example");
   assert.equal((source.match(/#Главное/g) || []).length, 6, "each topic must end with a short takeaway");
-  assert.match(source, /p\\.indexOf\\("html:"\\) === 0/, "lecture renderer must preserve raw table markup");
+  assert.match(source, /p\.indexOf\("html:"\) === 0/, "lecture renderer must preserve raw table markup");
   assert.match(source, /#Типичные ошибки/);
-});;
+});
