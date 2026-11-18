@@ -68,6 +68,8 @@ jobs:
         run: node --test scripts/course-content-editor.test.mjs
       - name: Check protected course document attachments
         run: node --test scripts/course-document-attachments.test.mjs
+      - name: Check protected course attachment runtime permissions
+        run: node --test scripts/course-document-attachments-runtime.test.mjs
       - name: Install Playwright CLI for browser audit
         run: npm install --global playwright@1.62.0
       - name: Install Chromium for workbook print audit
