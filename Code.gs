@@ -2456,7 +2456,10 @@ function finalQuestionHasAnswerKey_(q) {
   if(["written","essay","short_text","text","file","upload","open"].indexOf(rawType)>=0)return false;
   const type=finalQuestionType_(q),options=Array.isArray(q.options)?q.options:[];
   const has=function(value){return value!==undefined&&value!==null&&value!=="";};
-  const expected=has(q.correct)?q.correct:(has(q.correctAnswer)?q.correctAnswer:(has(q.answers)?q.answers:q.answer));
+  let expected=has(q.correct)?q.correct:(has(q.correctAnswer)?q.correctAnswer:(has(q.answers)?q.answers:q.answer));
+  if(type==="mc"||type==="tf"||type==="num"){
+    if(Array.isArray(expected)){if(expected.length!==1)return false;expected=expected[0];}
+  }
   if(type==="mc"){
     if(options.length<2||!has(expected))return false;
     if(typeof expected==="string"&&options.indexOf(expected)>=0)return true;
