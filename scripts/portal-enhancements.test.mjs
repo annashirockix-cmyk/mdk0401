@@ -1898,3 +1898,19 @@ test("legacy group spellings resolve to one canonical group without merging dist
   assert.ok(server.includes("normalizeGroup_(row[m.Group])===normalizeGroup_(group)"));
   assert.ok(server.includes("group:normalizeGroup_(r[2])"));
 });
+
+
+test("legacy group normalization is applied in teacher dashboard, journal and reports", () => {
+  const dashboard = read("teacher-dashboard.js");
+  const journal = read("journal.js");
+  const reports = read("reports.js");
+  assert.match(dashboard, /const normalizeGroup=value=>String\(value==null\?"":value\)\.normalize\("NFKC"\)/);
+  assert.match(dashboard, /group:normalizeGroup\(x\.group\)\|\|"Без группы"/);
+  assert.match(dashboard, /targetValue:x\.targetType==="group"\?normalizeGroup\(x\.targetValue\)/);
+  assert.match(journal, /function normalizeJournalGroup\(value\)/);
+  assert.match(journal, /students = students\.filter\(s => normalizeJournalGroup\(s\.group\) === normalizeJournalGroup\(groupFilter\)\)/);
+  assert.match(reports, /function normalizeReportGroup\(value\)/);
+  assert.match(reports, /normalizeReportGroup\(x\.group\)===normalizeReportGroup\(g\)/);
+  assert.match(reports, /normalizeReportGroup\(s\.group\)===normalizeReportGroup\(group\)/);
+  assert.match(reports, /normalizeReportGroup\(a\.targetValue\)===normalizeReportGroup\(selectedGroup\)/);
+});
