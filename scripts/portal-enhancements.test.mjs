@@ -1987,7 +1987,7 @@ test("admin bank diagnostics display final-exam readiness and question-type brea
   assert.match(controls, /Типы заданий:/);
   assert.match(controls, /Экзаменационные источники:/);
   const html = read("index.html");
-  assert.match(html, /teacher-controls\.js\?v=28/);
+  assert.match(html, /teacher-controls\.js\?v=29/);
   const sw = read("service-worker.js");
   assert.match(sw, /portal-cache-v425/);
 });
