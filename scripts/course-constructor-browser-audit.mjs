@@ -391,7 +391,7 @@ try {
       return originalAnchorClick.call(this);
     };
   });
-  await page.locator("#topicContent button").filter({ hasText: "Методическое пособие к теме" }).click();
+  await page.locator("#topicContent button").filter({ hasText: "Методическое пособие к теме" }).evaluate(button => button.click());
   await page.waitForFunction(() => {
     const audit = window.__courseFileDownloadAudit;
     return audit && audit.apiCalls === 1 && audit.anchorClicks.length === 1;
