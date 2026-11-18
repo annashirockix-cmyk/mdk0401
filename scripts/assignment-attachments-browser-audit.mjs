@@ -38,7 +38,7 @@ try {
   await page.evaluate(() => window.renderTeacherTasksPage());
   const fileInput = page.locator('input[name="attachments"]');
   await fileInput.setInputFiles({ name: "detail.png", mimeType: "image/png", buffer: png });
-  await page.locator('textarea[name="answer"]').fill("Работа готова");
+  assert.equal(await page.locator('textarea[name="answer"]').inputValue(), "", "file-only submission should not require a text answer");
   await page.locator(".taSubmit button[type=submit]").click();
   await page.waitForFunction(() => window.__uploads.length === 1 && window.__submissions.length === 1);
   assert.equal(await page.locator(".taAttachment").count(), 1, "student should see their submitted attachment");
