@@ -11,7 +11,7 @@ const browser = await chromium.launch({ headless: true });
 async function render(state, width = 390) {
   const page = await browser.newPage({ viewport: { width, height: 844 } });
   await page.setContent('<main id="app" tabindex="-1"><section class="hero"><h1>Учебный портал</h1></section></main>');
-  await page.addStyleTag({ content: portalCss + "\\nbody{margin:0}" });
+  await page.addStyleTag({ content: portalCss + "\nbody{margin:0}" });
   await page.evaluate((value) => {
     window.state = value;
     window.MDK_DATA = { "07.01": { shortName: "МДК 07.01", sections: [{ topics: [{ id: "topic-1" }] }] } };
