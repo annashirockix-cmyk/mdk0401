@@ -110,6 +110,8 @@ jobs:
           path: artifacts/constructors/
           if-no-files-found: ignore
           retention-days: 7
+      - name: Run real-browser assignment attachment audit
+        run: PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/assignment-attachments-browser-audit.mjs
       - name: Run real-browser certificate A4 landscape audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/certificate-audit-server.log 2>&1 &
