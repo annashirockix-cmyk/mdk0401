@@ -509,6 +509,9 @@ function register_(data) {
   const inviteCode = String(data.invite || data.inviteCode || "").trim();
   if (!email || email.indexOf("@") < 1) return { success: false, error: "Укажите корректный email." };
   if (password.length < 8) return { success: false, error: "Пароль должен содержать не менее 8 символов." };
+  const normalizedName = String(data.name || "").replace(/\s+/g, " ").trim();
+  const nameParts = normalizedName.split(" ").filter(Boolean);
+  if (nameParts.length < 2) return { success: false, error: "Укажите фамилию и имя. Отчество можно добавить по желанию." };
 
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -528,7 +531,7 @@ function register_(data) {
     const values = {
       Email: email,
       PasswordHash: passwordHash_(password, salt),
-      Name: String(data.name || email),
+      Name: normalizedName,
       Group: String(data.group || ""),
       Role: "student",
       UpdatedAt: new Date().toISOString(),
