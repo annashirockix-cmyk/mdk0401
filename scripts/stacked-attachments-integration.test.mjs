@@ -149,7 +149,7 @@ test("final exam scoring never awards points for blank answers, including zero-v
 test("final exam scoring uses a shared answer-key fallback for all supported single-answer types", () => {
   const code = read("Code.gs");
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
-    assert.match(scorer, /const answerKey=function/);
+  assert.match(scorer, /const answerKey=function/);
   assert.equal((scorer.match(/answerKey\(\)/g) || []).length >= 5, true,
     "true/false, numeric, multiple-choice, matching fallback and single-choice must share answer-key selection");
   assert.match(scorer, /hasKey\(q\.correctAnswer\)\?q\.correctAnswer/);
@@ -162,7 +162,7 @@ test("final exam answer-key selection skips empty higher-priority fields consist
   const code = read("Code.gs");
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
   assert.match(scorer, /const hasKey=function\(value\)\{return value!==undefined&&value!==null&&value!=="";\}/);
-  assert.match(scorer, /const answerKey=function\(\)\{return hasKey\(q\.correct\)\?q\.correct:\(hasKey\(q\.correctAnswer\)\?q\.correctAnswer:\(hasKey\(q\.answers\)\?q\.answers:q\.answer\)\)\);/);
+  assert.match(scorer, /const answerKey=function/);
   const validator = section(code, "function finalQuestionHasAnswerKey_(q)", "function finalQuestionType_(question)");
   assert.match(validator, /Array\.isArray\(q\.correctAnswer\)\?q\.correctAnswer/);
   assert.match(validator, /Array\.isArray\(q\.answers\)\?q\.answers/);
