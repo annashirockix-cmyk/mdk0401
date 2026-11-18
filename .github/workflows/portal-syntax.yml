@@ -90,6 +90,8 @@ jobs:
           path: artifacts/workbooks/
           if-no-files-found: ignore
           retention-days: 7
+      - name: Check isolated lecture preview
+        run: node --test scripts/lecture-editor-preview.test.mjs
       - name: Run real-browser course constructor round-trip audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/constructor-audit-server.log 2>&1 &
