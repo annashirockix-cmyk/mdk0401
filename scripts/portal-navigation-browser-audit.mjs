@@ -8,7 +8,7 @@ try {
   const response = await page.goto(process.env.PORTAL_NAV_AUDIT_URL || "http://127.0.0.1:4173/", { waitUntil: "domcontentloaded", timeout: 45000 });
   assert.ok(response && response.ok(), `Portal did not load: ${response?.status()}`);
   await page.evaluate(() => document.getElementById("loginOverlay")?.remove());
-  const menuButton = page.getByRole("button", { name: "Открыть навигацию" });
+  const menuButton = page.locator("#burgerBtn");
   await menuButton.click();
   await page.waitForFunction(() => document.getElementById("drawer")?.classList.contains("open"));
   assert.equal(await menuButton.getAttribute("aria-expanded"), "true");
