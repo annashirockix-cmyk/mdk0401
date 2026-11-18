@@ -2779,6 +2779,15 @@ function deleteCustomContent_(data) {
 
     for (let i = 1; i < values.length; i++) {
       if (String(values[i][0]) === id && sameCourseId_(values[i][1], courseId)) {
+        if (String(values[i][3] || "") === "file") {
+          let payload = {};
+          try { payload = JSON.parse(values[i][5] || "{}"); } catch (e) {}
+          const fileMatch = String(payload.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+          if (fileMatch) {
+            try { DriveApp.getFileById(fileMatch[1]).setTrashed(true); }
+            catch (fileError) { throw new Error("Не удалось удалить файл из Google Drive. Запись материала сохранена."); }
+          }
+        }
         sheet.deleteRow(i + 1);
         return { success: true };
       }
