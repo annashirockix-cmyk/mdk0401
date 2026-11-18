@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v427'; // Обновлена нормализация учебных групп в журналах и отчётах.
+const CACHE_NAME = 'portal-cache-v428'; // Обновлена нормализация учебных групп в журналах и отчётах.
 
 const STATIC_ASSETS = [
   './',
