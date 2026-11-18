@@ -1991,3 +1991,32 @@ test("admin bank diagnostics display final-exam readiness and question-type brea
   const sw = read("service-worker.js");
   assert.match(sw, /portal-cache-v425/);
 });
+
+test("final exam bank eligibility excludes invalid keys, unsupported formats and duplicate prompts", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function allFinalExamEntries_(courseId)");
+  const end = server.indexOf("\nfunction safeFinalExamQuestion_", start);
+  assert.ok(start >= 0 && end > start);
+  const rows = [["CourseId","BankId","QuestionJSON","QuestionId"]];
+  const add = (bankId,id,q) => rows.push(["02.01",bankId,JSON.stringify(q),id]);
+  add("exam_primary","Q1",{q:"Базовый вопрос",options:["A","B"],correct:0});
+  add("exam_extra","Q2",{question:"Вопрос с альтернативным полем",options:["A","B"],correct:"B"});
+  add("hard_topic","Q3",{type:"multi",q:"Множественный выбор",options:["A","B","C"],correct:[0,2]});
+  add("self_topic","Q4",{type:"order",q:"Порядок операций",items:["Шаг А","Шаг Б"],correctOrder:["Шаг А","Шаг Б"]});
+  add("topic_1","Q5",{type:"match",q:"Соответствие",pairs:[{left:"Лево 1",right:"Право 1"},{left:"Лево 2",right:"Право 2"}]});
+  add("exam_primary","Q6",{q:"Нет ключа",options:["A","B"]});
+  add("exam_primary","Q7",{type:"written",q:"Письменный вопрос",answer:"текст"});
+  add("exam_primary","Q8",{q:"Базовый вопрос",options:["A","B"],correct:1});
+  add("unrelated_bank","Q9",{q:"Неэкзаменационный банк",options:["A","B"],correct:0});
+  add("exam_primary","Q10",{q:"Повреждённый вопрос",options:["A","B"],correct:7});
+  const sandbox = {
+    questionBank_:()=>({getDataRange:()=>({getValues:()=>rows})}),
+    headerMap_:()=>({CourseId:0,BankId:1,QuestionJSON:2,QuestionId:3}),
+    sameCourseId_:(a,b)=>String(a)===String(b)
+  };
+  vm.runInNewContext(server.slice(start,end)+";this.allFinalExamEntries_=allFinalExamEntries_;",sandbox,{timeout:1000});
+  const entries=sandbox.allFinalExamEntries_("02.01");
+  assert.deepEqual(Array.from(entries,e=>e.questionId),["Q1","Q2","Q3","Q4","Q5"]);
+  assert.deepEqual(Array.from(entries,e=>e.bankId),["exam_primary","exam_extra","hard_topic","self_topic","topic_1"]);
+  assert.equal(entries.length,5);
+});
