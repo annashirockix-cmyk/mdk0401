@@ -35,3 +35,27 @@ test("dashboard is idempotent and augments rather than replaces the existing cur
   assert.match(script, /hero\.insertAdjacentElement\("afterend", section\)/);
   assert.match(script, /original\.apply\(this, arguments\)/);
 });
+
+
+test("every dashboard shortcut resolves through an installed portal route", () => {
+  const app = fs.readFileSync(new URL("../app.js", import.meta.url), "utf8");
+  const teacherControls = fs.readFileSync(new URL("../teacher-controls.js", import.meta.url), "utf8");
+  const courseAdmin = fs.readFileSync(new URL("../course-admin.js", import.meta.url), "utf8");
+  const laboratory = fs.readFileSync(new URL("../laboratory.js", import.meta.url), "utf8");
+  const routeOwners = [app, teacherControls, courseAdmin, laboratory].join("\n");
+  [
+    "#/teacher-dashboard", "#/journal", "#/teacher-tasks", "#/course-editor",
+    "#/question-bank", "#/tutoring", "#/admin", "#/grades", "#/resources",
+    "#/laboratory", "#/profile"
+  ].forEach(route => {
+    assert.ok(script.includes(route), "dashboard shortcut missing: " + route);
+    const page = route.replace(/^#\//, "").split("/")[0];
+    assert.ok(
+      routeOwners.includes('route==="' + page + '"') ||
+      routeOwners.includes('page === "' + page + '"') ||
+      routeOwners.includes('page==="' + page + '"') ||
+      routeOwners.includes('p[0]==="' + page + '"'),
+      "no route handler found for dashboard shortcut: " + route
+    );
+  });
+});
