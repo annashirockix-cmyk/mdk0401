@@ -1,9 +1,9 @@
 name: Portal syntax checks
 on:
   push:
-    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit]
+    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit, feat/lecture-editor-save-preview]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, feat/home-dashboard-responsive-audit]
   workflow_dispatch:
 permissions:
   contents: read
