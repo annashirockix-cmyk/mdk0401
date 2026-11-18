@@ -2474,10 +2474,19 @@ function finalQuestionHasAnswerKey_(q) {
   }
   if(type==="num")return has(expected)&&isFinite(Number(String(expected).replace(",",".")));
   if(type==="order"){
+    const items=Array.isArray(q.items)?q.items.map(function(value){return String(value===undefined||value===null?"":value).trim();}):[];
     const ordered=Array.isArray(q.correctOrder)?q.correctOrder:(Array.isArray(q.correct)?q.correct:(Array.isArray(q.answer)?q.answer:null));
-    return Array.isArray(q.items)&&q.items.length>=2&&Array.isArray(ordered)&&ordered.length===q.items.length;
+    if(items.length<2||items.some(function(value){return !value;})||new Set(items).size!==items.length||!Array.isArray(ordered)||ordered.length!==items.length)return false;
+    const expected=ordered.map(function(value){return String(value===undefined||value===null?"":value).trim();});
+    return expected.every(function(value){return !!value&&items.indexOf(value)>=0;})&&new Set(expected).size===expected.length;
   }
-  if(type==="match")return Array.isArray(q.pairs)&&q.pairs.length>=2&&q.pairs.every(function(pair){return pair&&has(pair.left)&&has(pair.right);});
+  if(type==="match"){
+    const pairs=Array.isArray(q.pairs)?q.pairs:[];
+    if(pairs.length<2)return false;
+    const left=pairs.map(function(pair){return String(pair&&pair.left!==undefined?pair.left:"").trim();});
+    const right=pairs.map(function(pair){return String(pair&&pair.right!==undefined?pair.right:"").trim();});
+    return left.every(function(value){return !!value;})&&right.every(function(value){return !!value;})&&new Set(left).size===left.length&&new Set(right).size===right.length;
+  }
   if(type==="tf")return has(expected)&&(typeof expected==="boolean"||expected===0||expected===1||expected==="0"||expected==="1"||options.indexOf(expected)>=0);
   return false;
 }
