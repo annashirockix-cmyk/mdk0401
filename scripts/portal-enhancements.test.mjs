@@ -1945,3 +1945,19 @@ test("MDK 02.02 lectures include practical assembly examples, fault handling and
   assert.match(lectures.find(item => item.code === "2.2.1").content, /не обходить блокировку/i);
   assert.match(lectures.find(item => item.code === "2.4.1").content, /анизотроп/i);
 });
+
+
+test("MDK 02.01 key assembly lectures include step-by-step examples and diagnostic checks", () => {
+  const source = read("data-0201.js");
+  const lectures = [...source.matchAll(/lec\("([^"]+)",\s*"([^"]+)"/g)];
+  assert.equal(lectures.length, 18, "all 18 assembly lectures must remain available");
+  for (const code of ["1.1.3", "1.1.4", "1.1.8", "1.1.9", "1.1.12"]) {
+    const start = source.indexOf('lec("' + code + '"');
+    const end = source.indexOf("`)", start);
+    assert.ok(start >= 0 && end > start, code + " lecture must exist");
+    const lesson = source.slice(start, end);
+    assert.match(lesson, /Учебный пример/, code + " needs an accessible worked example");
+    assert.match(lesson, /Самопроверка/, code + " needs self-check questions");
+    assert.match(lesson, /<table>/, code + " needs a practical reference table");
+  }
+});
