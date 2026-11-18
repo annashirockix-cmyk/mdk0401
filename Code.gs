@@ -38,8 +38,9 @@ const HEADERS = {
   GameRooms: ["Code", "HostEmail", "State", "CreatedAt", "ExpiresAt", "Status"],
   GameActions: ["Id", "RoomCode", "Email", "Type", "Payload", "CreatedAt"],
   Assignments: ["Id", "CourseId", "Title", "Topic", "Level", "WorkType", "DueAt", "TargetType", "TargetValue", "Instructions", "Criteria", "CreatedBy", "CreatedAt", "Status"],
-  AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt"],
-  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "Status"],
+  AssignmentSubmissions: ["Id", "AssignmentId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "Status", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "AttachmentsJSON"],
+  AssignmentSubmissionHistory: ["Id", "AssignmentId", "SubmissionId", "StudentEmail", "StudentName", "Group", "Answer", "SubmittedAt", "AttemptNo", "Grade", "Feedback", "ReviewedBy", "ReviewedAt", "Status", "AttachmentsJSON"],
+  AssignmentFiles: ["Id", "AssignmentId", "StudentEmail", "DriveFileId", "FileName", "MimeType", "Size", "Status", "SubmissionId", "AttemptNo", "CreatedAt"],
   Notifications: ["Id", "RecipientEmail", "Type", "Title", "Message", "CourseId", "RelatedId", "CreatedAt", "ReadAt"],
   ProctorEvents: ["Id", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "AttemptNo", "EventType", "Page", "ClientTime", "ServerTime", "Details", "ViolationNo", "Action", "PenaltyPoints"],
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt", "PreviousGrade", "PreviousFeedback", "Feedback"],
@@ -167,6 +168,8 @@ function handleRequest_(e) {
       case "createassignment": result = createAssignment_(data); break;
       case "getassignments": result = getAssignments_(data); break;
       case "submitassignment": result = submitAssignment_(data); break;
+      case "uploadassignmentattachment": result = uploadAssignmentAttachment_(data); break;
+      case "getassignmentattachment": result = getAssignmentAttachment_(data); break;
       case "gradeassignment": result = gradeAssignment_(data); break;
       case "gradewrittenresult": result = gradeWrittenResult_(data); break;
       case "getnotifications": result = getNotifications_(data); break;
@@ -238,6 +241,7 @@ function settings_() { return ensureSheet_(CFG.SETTINGS); }
 function assignments_() { return ensureSheet_("Assignments"); }
 function assignmentSubmissions_() { return ensureSheet_("AssignmentSubmissions"); }
 function assignmentSubmissionHistory_() { return ensureSheet_("AssignmentSubmissionHistory"); }
+function assignmentFiles_() { return ensureSheet_("AssignmentFiles"); }
 function notifications_() { return ensureSheet_("Notifications"); }
 function proctorEvents_() { return ensureSheet_("ProctorEvents"); }
 function attemptAudit_() { return ensureSheet_("AttemptAudit"); }
@@ -281,7 +285,7 @@ function notifyProctorSanction_(student,courseId,testId,attemptNo,violationNo,pe
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "AssignmentFiles", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
   return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, Notifications, ProctorEvents, AttemptAudit, QuestionBank, EnglishExamVariantsBank, EnglishExamAttempts, ActivityLog.";
@@ -1437,18 +1441,69 @@ function getAssignments_(data) {
   list.sort(function(x,y){return String(y.createdAt).localeCompare(String(x.createdAt));});
   return {success:true,assignments:list};
 }
+function assignmentEligible_(student, assignment) {
+  const h = headerMap_(assignments_()), courseId = String(assignment[h.CourseId] || "");
+  const type = String(assignment[h.TargetType] || ""), value = String(assignment[h.TargetValue] || "");
+  const eligible = (type === "individual" && email_(value) === student.email) ||
+    (type === "group" && value.trim().toLowerCase() === String(student.group || "").trim().toLowerCase());
+  if (!hasCourseAccess_(student, courseId) || !eligible || String(assignment[h.Status] || "active") !== "active") throw new Error("Это задание вам недоступно.");
+  return courseId;
+}
+function assignmentFileFolder_() {
+  const props = PropertiesService.getScriptProperties(), key = "ASSIGNMENT_ATTACHMENT_FOLDER_ID";
+  const saved = props.getProperty(key); let folder = null;
+  if (saved) { try { folder = DriveApp.getFolderById(saved); } catch (e) {} }
+  if (!folder) { folder = DriveApp.createFolder("Учебный портал — ответы и вложения студентов"); props.setProperty(key, folder.getId()); }
+  folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE); return folder;
+}
+function uploadAssignmentAttachment_(data) {
+  const student = auth_(data); if (student.role !== "student") throw new Error("Прикреплять файлы к ответу может только обучающийся.");
+  const assignmentId = String(data.assignmentId || "").trim(), as = assignments_(), rows = as.getDataRange().getValues(), h = headerMap_(as);
+  const assignment = rows.slice(1).find(function(r){return String(r[h.Id] || "") === assignmentId;});
+  if (!assignment) throw new Error("Задание не найдено."); assignmentEligible_(student, assignment);
+  const raw = String(data.dataUrl || ""), match = raw.match(/^data:(image\\/(?:jpeg|png|webp)|application\\/pdf|application\\/msword|application\\/vnd\\.openxmlformats-officedocument\\.wordprocessingml\\.document);base64,([A-Za-z0-9+/=]+)$/i);
+  if (!match) throw new Error("Поддерживаются фото JPG, PNG, WEBP и документы PDF, DOC, DOCX.");
+  if (match[2].length > 4200000) throw new Error("Размер одного файла не должен превышать 3 МБ.");
+  const bytes = Utilities.base64Decode(match[2]); if (!bytes.length || bytes.length > 3000000) throw new Error("Размер одного файла не должен превышать 3 МБ.");
+  const mime = match[1].toLowerCase(), sig = bytes.slice(0, 8).map(function(b){return (b+256)%256;}), starts = function(t){return String.fromCharCode.apply(null,sig.slice(0,t.length))===t;};
+  const valid = mime==="application/pdf" ? starts("%PDF-") : mime==="image/jpeg" ? starts("\\xFF\\xD8\\xFF") : mime==="image/png" ? starts("\\x89PNG\\r\\n\\x1A\\n") :
+    mime==="image/webp" ? starts("RIFF") && String.fromCharCode.apply(null,bytes.slice(8,12))==="WEBP" : mime==="application/msword" ? starts("\\xD0\\xCF\\x11\\xE0") :
+    mime==="application/vnd.openxmlformats-officedocument.wordprocessingml.document" && starts("PK\\x03\\x04");
+  if (!valid) throw new Error("Содержимое файла не соответствует заявленному формату.");
+  const original = String(data.fileName || "attachment").replace(/[\\\\/]/g,"_").slice(0,100);
+  const ext = mime==="image/jpeg"?".jpg":mime==="image/png"?".png":mime==="image/webp"?".webp":mime==="application/pdf"?".pdf":mime==="application/msword"?".doc":".docx";
+  const name = /\\.(jpg|jpeg|png|webp|pdf|doc|docx)$/i.test(original) ? original : original+ext;
+  const file = assignmentFileFolder_().createFile(Utilities.newBlob(bytes,mime,name));
+  try { const id=Utilities.getUuid(); appendMappedRecord_(assignmentFiles_(),{Id:id,AssignmentId:assignmentId,StudentEmail:student.email,DriveFileId:file.getId(),FileName:name,MimeType:mime,Size:bytes.length,Status:"pending",CreatedAt:new Date().toISOString()}); return {success:true,id:id,fileName:name,mimeType:mime,size:bytes.length}; }
+  catch(error){try{file.setTrashed(true);}catch(cleanupError){} throw error;}
+}
+function getAssignmentAttachment_(data) {
+  const user=auth_(data), id=String(data.attachmentId||""); if(!id)throw new Error("Не указан файл ответа.");
+  const fs=assignmentFiles_(), rows=fs.getDataRange().getValues(), m=headerMap_(fs), record=rows.slice(1).find(function(r){return String(r[m.Id]||"")===id;});
+  if(!record||String(record[m.Status]||"")!=="attached")throw new Error("Вложение не найдено или ещё не отправлено.");
+  const as=assignments_(), av=as.getDataRange().getValues(), ah=headerMap_(as), assignment=av.slice(1).find(function(r){return String(r[ah.Id]||"")===String(record[m.AssignmentId]||"");});
+  if(!assignment)throw new Error("Задание не найдено."); const courseId=String(assignment[ah.CourseId]||"");
+  if(user.role==="student"){if(email_(record[m.StudentEmail])!==user.email||!hasCourseAccess_(user,courseId))throw new Error("У вас нет доступа к этому вложению.");}
+  else if(user.role==="teacher"||user.role==="admin")editor_(data,courseId); else throw new Error("Недостаточно прав.");
+  const file=DriveApp.getFileById(String(record[m.DriveFileId]||"")), blob=file.getBlob(), bytes=blob.getBytes();
+  if(bytes.length>3000000)throw new Error("Файл превышает допустимый размер."); const mime=String(blob.getContentType()||record[m.MimeType]||"");
+  if(mime!==String(record[m.MimeType]||""))throw new Error("Тип сохранённого файла не совпадает с записью.");
+  return {success:true,fileName:String(record[m.FileName]||file.getName()),mimeType:mime,data:Utilities.base64Encode(bytes),size:bytes.length};
+}
+
 function submitAssignment_(data) {
   const student = auth_(data);
   if (student.role !== "student") throw new Error("Отправлять ответы может только обучающийся.");
   const id = String(data.assignmentId || "");
   const answer = String(data.answer || "").trim().slice(0,12000);
+  const attachmentIds = Array.isArray(data.attachmentIds) ? data.attachmentIds.map(String).filter(Boolean) : [];
+  if (attachmentIds.length > 5 || new Set(attachmentIds).size !== attachmentIds.length) throw new Error("Можно прикрепить не более 5 разных файлов.");
   if (!id || !answer) throw new Error("Введите ответ.");
   const sh = assignments_(), rows = sh.getDataRange().getValues(), h = headerMap_(sh);
   const a = rows.slice(1).find(function(r){ return String(r[h.Id]) === id; });
   if (!a) throw new Error("Задание не найдено.");
   const cid = String(a[h.CourseId] || ""), typ = String(a[h.TargetType] || ""), val = String(a[h.TargetValue] || "");
-  const eligible = (typ === "individual" && email_(val) === student.email) || (typ === "group" && String(val || "").trim().toLowerCase() === String(student.group || "").trim().toLowerCase());
-  if (!hasCourseAccess_(student,cid) || !eligible || String(a[h.Status] || "active") !== "active") throw new Error("Это задание вам недоступно.");
+  assignmentEligible_(student, a);
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
@@ -1463,6 +1518,13 @@ function submitAssignment_(data) {
       }
     }
     const hist = assignmentSubmissionHistory_(), hv = hist.getDataRange().getValues(), hm = headerMap_(hist);
+    const filesSheet = assignmentFiles_(), fileRows = filesSheet.getDataRange().getValues(), fm = headerMap_(filesSheet);
+    const selectedFiles = attachmentIds.map(function(fileId) {
+      const index = fileRows.slice(1).findIndex(function(row){return String(row[fm.Id]||"")===fileId;});
+      if(index<0)throw new Error("Одно из вложений не найдено."); const row=fileRows[index+1];
+      if(email_(row[fm.StudentEmail])!==student.email||String(row[fm.AssignmentId])!==id||String(row[fm.Status])!=="pending")throw new Error("Вложение принадлежит другому пользователю или уже использовано.");
+      return {id:fileId,fileName:String(row[fm.FileName]||""),mimeType:String(row[fm.MimeType]||""),size:Number(row[fm.Size])||0};
+    });
     const saved = hv.slice(1).filter(function(r){ return String(r[hm.SubmissionId] || "") === submissionId; });
     let attempt = saved.length + 1;
     if (i >= 0) {
@@ -1475,7 +1537,7 @@ function submitAssignment_(data) {
         Status:String(previous[m.Status] || "submitted")
       };
       if (!saved.length) {
-        appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1,Grade:reviewSnapshot.Grade,Feedback:reviewSnapshot.Feedback,ReviewedBy:reviewSnapshot.ReviewedBy,ReviewedAt:reviewSnapshot.ReviewedAt,Status:reviewSnapshot.Status});
+        appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1,AttachmentsJSON:String(previous[m.AttachmentsJSON] || "[]"),Grade:reviewSnapshot.Grade,Feedback:reviewSnapshot.Feedback,ReviewedBy:reviewSnapshot.ReviewedBy,ReviewedAt:reviewSnapshot.ReviewedAt,Status:reviewSnapshot.Status});
         attempt = 2;
       } else {
         for (let h = hv.length - 1; h >= 1; h--) {
@@ -1486,12 +1548,16 @@ function submitAssignment_(data) {
         }
       }
     }
-    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt,Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Status:"submitted"});
-    const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
+    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt,AttachmentsJSON:JSON.stringify(selectedFiles),Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Status:"submitted"});
+    const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",AttachmentsJSON:JSON.stringify(selectedFiles),Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
     if (i >= 0) updateMappedRecord_(sub, i + 2, record); else appendMappedRecord_(sub, record);
+    selectedFiles.forEach(function(fileMeta) {
+      const fileIndex=fileRows.slice(1).findIndex(function(row){return String(row[fm.Id]||"")===fileMeta.id;});
+      if(fileIndex>=0)updateMappedRecord_(filesSheet,fileIndex+2,{Status:"attached",SubmissionId:submissionId,AttemptNo:attempt});
+    });
     notifyCourseStaff_(cid,"submission",attempt > 1 ? "Повторная отправка задания" : "Новый ответ на задание",
       student.name + " (" + student.group + ") отправил(а) работу: " + String(a[h.Title] || "") + ". Откройте раздел «Задания и проверка работ».",id);
-    return {success:true,submittedAt:now,attempt:attempt,submissionId:submissionId};
+    return {success:true,submittedAt:now,attempt:attempt,submissionId:submissionId,attachments:selectedFiles};
   } finally { lock.releaseLock(); }
 }
 function gradeAssignment_(data) {
