@@ -1874,3 +1874,25 @@ test("student registration requires surname and first name; patronymic stays opt
   assert.match(server, /normalizedGroup.*toLocaleUpperCase/);
   assert.match(server, /Group: normalizedGroup/);
 });
+
+
+test("legacy group spellings resolve to one canonical group without merging distinct codes", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function normalizeGroup_(value)");
+  const end = server.indexOf("\\n}", start) + 2;
+  assert.ok(start >= 0 && end > start, "server group normalizer must exist");
+  const sandbox = {};
+  vm.runInNewContext(server.slice(start, end) + ";this.normalizeGroup_=normalizeGroup_;", sandbox);
+  const normalize = value => sandbox.normalizeGroup_(value);
+  assert.equal(normalize("ИС-21"), "ИС-21");
+  assert.equal(normalize("ис-21"), "ИС-21");
+  assert.equal(normalize("  ИС-21  "), "ИС-21");
+  assert.equal(normalize("ИС-21\\u00A0"), "ИС-21");
+  assert.equal(normalize("ИC-21"), "ИC-21", "Latin C must not be silently rewritten to Cyrillic С");
+  assert.notEqual(normalize("ИС-21"), normalize("ИС-22"));
+  assert.match(server, /group: normalizeGroup_\\(row\\[map\\.Group\\]\\)/);
+  assert.match(server, /targetValue:String\\(r\\[h\\.TargetType\\]\\|\\|""\\)==="group"\\?normalizeGroup_/);
+  assert.match(server, /normalizeGroup_\\(value\\) === normalizeGroup_\\(student\\.group\\)/);
+  assert.match(server, /normalizeGroup_\\(row\\[m\\.Group\\]\\)===normalizeGroup_\\(group\\)/);
+  assert.match(server, /group:normalizeGroup_\\(r\\[2\\]\\)/);
+});
