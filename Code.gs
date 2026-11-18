@@ -512,6 +512,8 @@ function register_(data) {
   const normalizedName = String(data.name || "").replace(/\s+/g, " ").trim();
   const nameParts = normalizedName.split(" ").filter(Boolean);
   if (nameParts.length < 2) return { success: false, error: "Укажите фамилию и имя. Отчество можно добавить по желанию." };
+  const normalizedGroup = String(data.group || "").replace(/\\s+/g, " ").trim().toLocaleUpperCase("ru-RU");
+  if (!normalizedGroup) return { success: false, error: "Укажите учебную группу." };
 
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -532,7 +534,7 @@ function register_(data) {
       Email: email,
       PasswordHash: passwordHash_(password, salt),
       Name: normalizedName,
-      Group: String(data.group || ""),
+      Group: normalizedGroup,
       Role: "student",
       UpdatedAt: new Date().toISOString(),
       Courses: invite ? invite.courses.join(",") : "",
