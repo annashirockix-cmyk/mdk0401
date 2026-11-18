@@ -85,9 +85,9 @@ test("admin question-bank statistics report usable final-exam readiness, not raw
   for (const field of ["requiredQuestions", "eligibleUniqueQuestions", "ready", "shortage", "byType", "byBank"]) {
     assert.ok(stats.includes(field), "missing final exam readiness field " + field);
   }
-  assert.match(stats, /requiredQuestions:\\s*45/);
-  assert.match(stats, /eligible\\.length\\s*>=\\s*45/);
-  assert.match(stats, /Math\\.max\\(0,\\s*45\\s*-\\s*eligible\\.length\\)/);
-  assert.match(code, /function allFinalExamEntries_\\(courseId\\)[\\s\\S]*?finalQuestionHasAnswerKey_\\(q\\)/,
+  assert.match(stats, /requiredQuestions:\s*45/);
+  assert.match(stats, /eligible\.length\s*>=\s*45/);
+  assert.match(stats, /Math\.max\(0,\s*45\s*-\s*eligible\.length\)/);
+  assert.match(code, /function allFinalExamEntries_\(courseId\)[\s\S]*?finalQuestionHasAnswerKey_\(q\)/,
     "readiness must exclude questions without valid automatic keys");
 });
