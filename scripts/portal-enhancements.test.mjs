@@ -1861,7 +1861,7 @@ test("portal navigation provides accessible search, active route and keyboard sh
 test("test question images stay private in Drive whether the folder is new or reused", () => {
   const server = read("Code.gs");
   const start = server.indexOf("function testImageFolder_()");
-  const end = server.indexOf("\\nfunction uploadTestImage_", start);
+  const end = server.indexOf("\nfunction uploadTestImage_", start);
   assert.ok(start >= 0 && end > start, "test image folder helper must exist");
   const source = server.slice(start, end);
 
