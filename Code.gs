@@ -1973,7 +1973,7 @@ function getExamFile_(data) {
   const sh=examFiles_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),row=values.slice(1).find(function(x){return String(x[m.Id]||"")===id&&String(x[m.Status]||"active")==="active";});
   if(!row)throw new Error("Файл экзамена не найден.");
   const courseId=String(row[m.CourseId]||""),bankId=String(row[m.BankId]||"");
-  if(user.role==="student"){if(!hasCourseAccess_(user,courseId)||["exam_primary","exam_extra","mdk_extra"].indexOf(bankId)<0)throw new Error("У вас нет доступа к материалу экзамена.");}
+  if(user.role==="student"){const examId=String(data.examId||"");if(!hasCourseAccess_(user,courseId)||["exam_primary","exam_extra","mdk_extra"].indexOf(bankId)<0||!examId)throw new Error("У вас нет доступа к материалу экзамена.");const activeRaw=CacheService.getScriptCache().get("finalExam:"+examId);if(!activeRaw)throw new Error("Экзаменационная попытка завершена или истекла. Повторно открыть материалы нельзя.");let activeExam;try{activeExam=JSON.parse(activeRaw);}catch(e){throw new Error("Не удалось проверить экзаменационную попытку.");}if(activeExam.email!==user.email||activeExam.courseId!==courseId)throw new Error("Материал не относится к вашей активной экзаменационной попытке.");}
   else if(user.role==="teacher"||user.role==="admin")editor_(data,courseId);else throw new Error("Недостаточно прав.");
   const file=DriveApp.getFileById(String(row[m.DriveFileId]||"")),blob=file.getBlob(),bytes=blob.getBytes(),mime=String(blob.getContentType()||"");
   if(bytes.length>3500000||mime!==String(row[m.MimeType]||""))throw new Error("Сохранённый файл не прошёл проверку размера или типа.");
