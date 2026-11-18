@@ -113,7 +113,7 @@
               !record.savedAt || now - record.savedAt > MAX_AGE_MS || record.savedAt > now + 60000) {
             resolve(null); return;
           }
-          resolve({ items: record.items, savedAt: record.savedAt, ageMs: now - record.savedAt });
+          resolve({ items: record.items, savedAt: record.savedAt, ageMs: now - record.savedAt, bytes: record.bytes || JSON.stringify(record.items).length * 2 });
         };
         request.onerror = function () { reject(request.error || new Error("Не удалось прочитать офлайн-материалы")); };
         tx.oncomplete = function () { db.close(); };
