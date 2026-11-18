@@ -1,6 +1,7 @@
 "use strict";
 
 var CURRENT_STUDENTS_CACHE = [];
+function normalizeJournalGroup(value) { return String(value == null ? "" : value).normalize("NFKC").replace(/[\\s\\u00A0]+/g, " ").trim().toLocaleUpperCase("ru-RU"); }
 
 window.renderJournalPage = function() {
   var app = document.getElementById("app"); 
@@ -77,7 +78,7 @@ window.renderJournalPage = function() {
           var tbody = document.createElement("tbody");
 
           students.forEach((s) => {
-              var sKey = s.name.trim().toLowerCase() + "|" + s.group.trim().toLowerCase();
+              var sKey = s.name.trim().toLowerCase() + "|" + normalizeJournalGroup(s.group).toLowerCase();
               var tr = document.createElement("tr");
               var results = resultIndex[s.email] || {};
 
@@ -207,7 +208,7 @@ window.renderJournalPage = function() {
               });
               var students = d.students.filter(s => String(s.role || 'student').toLowerCase() === 'student' && (window.state.staff.role === 'admin' || (s.courses || []).includes(window.state.activeCourseId) || ((window.state.activeCourseId === "ENB" || window.state.activeCourseId === "ENT") && (s.courses || []).includes("EN"))));
               if (groupFilter !== "all") {
-                  students = students.filter(s => s.group === groupFilter);
+                  students = students.filter(s => normalizeJournalGroup(s.group) === normalizeJournalGroup(groupFilter));
               }
 
               if (students.length === 0) { wrap.innerHTML = "<div class='module'>В этой группе нет студентов.</div>"; return; }
