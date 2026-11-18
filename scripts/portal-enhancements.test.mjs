@@ -1985,6 +1985,7 @@ test("admin bank diagnostics display final-exam readiness and question-type brea
   assert.match(controls, /eligibleUniqueQuestions/);
   assert.match(controls, /audit\.ready\?"ГОТОВ":"НЕ ГОТОВ"/);
   assert.match(controls, /Типы заданий:/);
+  assert.match(controls, /корректным ключом автоматической проверки/);
   assert.match(controls, /Экзаменационные источники:/);
   const html = read("index.html");
   assert.match(html, /teacher-controls\.js\?v=29/);
