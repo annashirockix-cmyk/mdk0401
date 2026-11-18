@@ -115,3 +115,20 @@ test("protected question-bank imports back up prior rows and reject weaker exam 
   assert.match(controls, /backupIds\.push\(batchBackupId\)/);
   assert.match(controls, /Резервные копии импортированных банков/);
 });
+
+test("final exam readiness rejects ambiguous ordering and matching answer keys", () => {
+  const code = read("Code.gs");
+  const validator = section(code, "function finalQuestionHasAnswerKey_(q)", "function finalQuestionType_(question)");
+  assert.match(validator, /new Set\(items\)\.size!==items\.length/,
+    "ordering items must be unique");
+  assert.match(validator, /new Set\(expected\)\.size!==expected\.length/,
+    "the correct order must be an exact permutation without duplicates");
+  assert.match(validator, /items\.indexOf\(value\)>=0/,
+    "every expected ordering item must exist in the displayed item list");
+  assert.match(validator, /new Set\(left\)\.size===left\.length/,
+    "matching left labels must be unique");
+  assert.match(validator, /new Set\(right\)\.size===right\.length/,
+    "matching right labels must be unique");
+  assert.match(code, /function scoreFinalAnswer_\(q,answer\)[\s\S]*?if\(type==="order"\)/);
+  assert.match(code, /if\(type==="match"\)[\s\S]*?const pairs=q\.pairs\|\|\[\]/);
+});
