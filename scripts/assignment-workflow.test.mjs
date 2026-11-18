@@ -571,6 +571,7 @@ test("assignment attachments are private, tied to the student and attempt, and r
   const stored = new Map(), props = new Map();
   let fileNo = 0, privateFolder = false;
   const folder = {
+    getId: () => "assignment-private-folder",
     setSharing(access, permission) { privateFolder = access === "PRIVATE" && permission === "NONE"; },
     createFile(blob) {
       const id = "drive-assignment-file-" + (++fileNo);
