@@ -2559,7 +2559,7 @@ function scoreFinalAnswer_(q,answer) {
     return Number(answer)===target?1:0;
   }
   if(type==="num"){
-    let expected=q.answer!==undefined?q.answer:(q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answers));
+    let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
     if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     const a=Number(String(answer).replace(",", ".")),b=Number(String(expected).replace(",", "."));
     const tolerance=Math.max(0,Number(q.tol!==undefined?q.tol:q.tolerance)||0.01);
