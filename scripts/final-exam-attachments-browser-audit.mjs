@@ -13,7 +13,8 @@ try {
     window.__examFileRequests=[];
     window.API={
       getFinalExam:async()=>({success:true,examId:"exam-browser-audit",questions:Array.from({length:45},(_,i)=>({question:{type:"mc",q:"Контрольный вопрос "+(i+1),options:["Вариант А","Вариант Б"],correct:0}})),attachments:[{id:"exam-file-1",fileName:"exam-guide.pdf",mimeType:"application/pdf",size:48,bankId:"exam_primary"}]}),
-      getExamFile:async(id)=>{window.__examFileRequests.push(id);return {success:true,fileName:"exam-guide.pdf",mimeType:"application/pdf",data:"${pdf}",size:48};}
+      getExamFile:async(id)=>{window.__examFileRequests.push(id);return {success:true,fileName:"exam-guide.pdf",mimeType:"application/pdf",data:"${pdf}",size:48};},
+      submitFinalExam:async()=>({success:true})
     };
   `});
   const fs = await import("node:fs/promises");
