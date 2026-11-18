@@ -205,11 +205,13 @@
     const terms = lesson.terms.map(([term, meaning]) =>
       '<tr><th scope="row">' + esc(term) + '</th><td>' + esc(meaning) + '</td></tr>'
     ).join("");
-    const outcomesHtml = (outcomes[id] || []).map(item => '<li>' + esc(item) + '</li>').join(\"\");\n    const questions = lesson.questions.map(question => "<li>" + esc(question) + "</li>").join("");
+    const outcomesHtml = (outcomes[id] || []).map(item => '<li>' + esc(item) + '</li>').join("");
+    const questions = lesson.questions.map(question => "<li>" + esc(question) + "</li>").join("");
     topic.lectures[0].content =
       '<article class="lecture-methodical mat-easy-lecture">' +
       '<p class="mat-easy-lead">' + esc(lesson.lead) + '</p>' +
-      '<section class="mat-easy-outcomes"><h3>После изучения темы вы сможете</h3><ul>' + outcomesHtml + '</ul></section>' +\n      '<section class="mat-easy-scheme"><h3>Главная схема темы</h3><p>' + esc(lesson.scheme) + '</p></section>' +
+      '<section class="mat-easy-outcomes"><h3>После изучения темы вы сможете</h3><ul>' + outcomesHtml + '</ul></section>' +
+      '<section class="mat-easy-scheme"><h3>Главная схема темы</h3><p>' + esc(lesson.scheme) + '</p></section>' +
       blocks +
       '<section class="mat-easy-remember"><h3>Запомните главное</h3><p>' + esc(lesson.remember) + '</p></section>' +
       '<section class="mat-easy-glossary"><h3>Словарь простыми словами</h3><table><tbody>' + terms + '</tbody></table></section>' +
