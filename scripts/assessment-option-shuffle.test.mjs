@@ -489,11 +489,11 @@ test("protected final exam bank excludes questions without valid automatic answe
 test("MDK 02.01 and 02.02 legacy exam banks contain answer keys and final exams use them", () => {
   for (const [file, bankName] of [["exam_0201.js", "EXAM_BANK_0201"], ["exam_0202.js", "EXAM_BANK_0202"]]) {
     const source = fs.readFileSync(path.join(root, file), "utf8");
-    const questionCount = (source.match(/\\{\\s*q\\s*:/g) || []).length;
-    const keyedCount = (source.match(/\\bcorrect\\s*:\\s*0/g) || []).length;
+    const questionCount = (source.match(/\{\s*q\s*:/g) || []).length;
+    const keyedCount = (source.match(/\bcorrect\s*:\s*0/g) || []).length;
     assert.ok(questionCount > 0, file + " must contain questions");
     assert.equal(keyedCount, questionCount, file + " must define a correct answer for every legacy question");
-    assert.match(source, new RegExp("window\\\\." + bankName + " \\|\\| baseQuestions"));
-    assert.match(source, /Number\\.isInteger\\(q\\.correct\\)/);
+    assert.ok(source.includes("window." + bankName + " || baseQuestions"), file + " final exam must use the keyed bank");
+    assert.match(source, /Number\.isInteger\(q\.correct\)/);
   }
 });
