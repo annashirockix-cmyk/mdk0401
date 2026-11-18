@@ -1472,7 +1472,12 @@ function uploadAssignmentAttachment_(data) {
   if (!valid) throw new Error("Содержимое файла не соответствует заявленному формату.");
   const original = String(data.fileName || "attachment").replace(/[\\/]/g,"_").slice(0,100);
   const ext = mime==="image/jpeg"?".jpg":mime==="image/png"?".png":mime==="image/webp"?".webp":mime==="application/pdf"?".pdf":mime==="application/msword"?".doc":".docx";
-  const name = /\.(jpg|jpeg|png|webp|pdf|doc|docx)$/i.test(original) ? original : original+ext;
+  const namedExt = (original.match(/\.(jpg|jpeg|png|webp|pdf|doc|docx)$/i) || [])[0] || "";
+  const extensionMatches = !namedExt || (mime==="image/jpeg" ? /^\.(jpg|jpeg)$/i.test(namedExt) :
+    mime==="image/png" ? namedExt.toLowerCase()===".png" : mime==="image/webp" ? namedExt.toLowerCase()===".webp" :
+    mime==="application/pdf" ? namedExt.toLowerCase()===".pdf" : mime==="application/msword" ? namedExt.toLowerCase()===".doc" : namedExt.toLowerCase()===".docx");
+  if (!extensionMatches) throw new Error("Расширение имени файла не соответствует его формату.");
+  const name = namedExt ? original : original+ext;
   const file = assignmentFileFolder_().createFile(Utilities.newBlob(bytes,mime,name));
   try { const id=Utilities.getUuid(); appendMappedRecord_(assignmentFiles_(),{Id:id,AssignmentId:assignmentId,StudentEmail:student.email,DriveFileId:file.getId(),FileName:name,MimeType:mime,Size:bytes.length,Status:"pending",CreatedAt:new Date().toISOString()}); return {success:true,id:id,fileName:name,mimeType:mime,size:bytes.length}; }
   catch(error){try{file.setTrashed(true);}catch(cleanupError){} throw error;}
