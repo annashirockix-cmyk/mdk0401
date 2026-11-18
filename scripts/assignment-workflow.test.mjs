@@ -614,6 +614,10 @@ test("assignment attachments are private, tied to the student and attempt, and r
     targetValue: "ТО-21", title: "Практика с вложением", instructions: "Прикрепите фото."
   });
   const pdf = Buffer.from("%PDF-1.4\nproof").toString("base64");
+  assert.throws(() => api.uploadAssignmentAttachment_({
+    token: "studentToken", assignmentId: created.id, fileName: "spoofed.png",
+    dataUrl: "data:application/pdf;base64," + pdf
+  }), /Расширение/);
   const upload = api.uploadAssignmentAttachment_({
     token: "studentToken", assignmentId: created.id, fileName: "proof.pdf",
     dataUrl: "data:application/pdf;base64," + pdf
