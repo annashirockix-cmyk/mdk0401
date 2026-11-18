@@ -464,3 +464,23 @@ test("English VPR Basic and Technical seed content remains track-specific", () =
   const overlap = stems(seeds.technical).filter((stem) => basic.has(stem));
   assert.deepEqual(overlap, [], "Basic and Technical VPR prompts/passages must remain distinct");
 });
+
+
+const hasFinalAnswerKey = new Function(
+  extract(code, "finalQuestionType_") + "\n" + extract(code, "finalQuestionHasAnswerKey_") + "; return finalQuestionHasAnswerKey_;"
+)();
+
+test("protected final exam bank excludes questions without valid automatic answer keys", () => {
+  assert.equal(hasFinalAnswerKey({type:"mc",q:"Q",options:["A","B"],correct:1}),true);
+  assert.equal(hasFinalAnswerKey({type:"mc",q:"Q",options:["A","B"]}),false);
+  assert.equal(hasFinalAnswerKey({type:"mc",q:"Q",options:["A","B"],correct:4}),false);
+  assert.equal(hasFinalAnswerKey({type:"multi",q:"Q",options:["A","B","C"],correct:[0,2]}),true);
+  assert.equal(hasFinalAnswerKey({type:"multi",q:"Q",options:["A","B","C"],correct:[0,0]}),false);
+  assert.equal(hasFinalAnswerKey({type:"num",q:"Q",answer:"12,5"}),true);
+  assert.equal(hasFinalAnswerKey({type:"num",q:"Q",answer:"не число"}),false);
+  assert.equal(hasFinalAnswerKey({type:"order",q:"Q",items:["A","B"],correctOrder:["B","A"]}),true);
+  assert.equal(hasFinalAnswerKey({type:"order",q:"Q",items:["A","B"]}),false);
+  assert.equal(hasFinalAnswerKey({type:"match",q:"Q",pairs:[{left:"A",right:"1"},{left:"B",right:"2"}]}),true);
+  assert.equal(hasFinalAnswerKey({type:"tf",q:"Q",correct:true}),true);
+  assert.equal(hasFinalAnswerKey({type:"written",q:"Explain"}),false);
+});
