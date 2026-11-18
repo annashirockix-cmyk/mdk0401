@@ -7,6 +7,8 @@ const source = readFileSync(new URL("../course-editor-ux.js", import.meta.url), 
 test("lecture editor provides an isolated, live preview", () => {
   assert.match(source, /function lecturePreview\(\)/);
   assert.match(source, /frame\.setAttribute\('sandbox',''\)/);
+  assert.doesNotMatch(source, /setAttribute\('sandbox',[^)]*(?:allow-scripts|allow-same-origin)/);
+  assert.match(source, /frame\.srcdoc=/);
   assert.match(source, /Content-Security-Policy/);
   assert.match(source, /script-src \\'none\\'/);
   assert.match(source, /area\.addEventListener\('input'/);
