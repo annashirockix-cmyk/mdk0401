@@ -1976,3 +1976,18 @@ test("MDK 02.01 and 02.02 legacy exam entrypoints use protected assessment route
     assert.ok(source.includes('window.location.hash = "#/final/' + courseId + '"'));
   }
 });
+
+
+test("admin bank diagnostics display final-exam readiness and question-type breakdown", () => {
+  const controls = read("teacher-controls.js");
+  assert.match(controls, /window\.API\.getQuestionBankStats\(\)/);
+  assert.match(controls, /finalExamReadiness/);
+  assert.match(controls, /eligibleUniqueQuestions/);
+  assert.match(controls, /audit\.ready\?"ГОТОВ":"НЕ ГОТОВ"/);
+  assert.match(controls, /Типы заданий:/);
+  assert.match(controls, /Экзаменационные источники:/);
+  const html = read("index.html");
+  assert.match(html, /teacher-controls\.js\?v=28/);
+  const sw = read("service-worker.js");
+  assert.match(sw, /portal-cache-v425/);
+});
