@@ -1503,7 +1503,7 @@ function submitAssignment_(data) {
   const answer = String(data.answer || "").trim().slice(0,12000);
   const attachmentIds = Array.isArray(data.attachmentIds) ? data.attachmentIds.map(String).filter(Boolean) : [];
   if (attachmentIds.length > 5 || new Set(attachmentIds).size !== attachmentIds.length) throw new Error("Можно прикрепить не более 5 разных файлов.");
-  if (!id || !answer) throw new Error("Введите ответ.");
+  if (!id || (!answer && !attachmentIds.length)) throw new Error("Введите ответ или прикрепите хотя бы один файл.");
   const sh = assignments_(), rows = sh.getDataRange().getValues(), h = headerMap_(sh);
   const a = rows.slice(1).find(function(r){ return String(r[h.Id]) === id; });
   if (!a) throw new Error("Задание не найдено.");
