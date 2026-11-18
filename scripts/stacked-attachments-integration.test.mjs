@@ -144,3 +144,17 @@ test("final exam scoring never awards points for blank answers, including zero-v
   assert.match(scorer, /Number\(answer\)===Number\(expected\)/,
     "valid numeric zero and option index zero must remain scoreable");
 });
+
+
+test("final exam scoring accepts every answer-key field recognized by readiness validation", () => {
+  const code = read("Code.gs");
+  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
+  assert.match(scorer, /type==="tf"[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
+    "true/false scoring must read the answers fallback");
+  assert.match(scorer, /type==="num"[\s\S]*?q\.answers\)/,
+    "numeric scoring must read the answers fallback");
+  assert.match(scorer, /type==="multi"[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
+    "multiple-choice scoring must read the answers fallback");
+  assert.match(scorer, /let expected=q\.correct!==undefined\?q\.correct:[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
+    "single-choice scoring must read the answers fallback");
+});
