@@ -5,7 +5,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || "playwright");
 const baseUrl = process.env.CONSTRUCTOR_AUDIT_URL || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ headless: true });
-const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, acceptDownloads: true });
 page.on("pageerror", error => console.log("PAGE_ERROR", error.stack || error.message));
 page.on("console", message => { if (message.type() === "error" || /FLASHCARD_/.test(message.text())) console.log("BROWSER_CONSOLE", message.type(), JSON.stringify(message.location()), message.text()); });
 page.on("requestfailed", request => console.log("REQUEST_FAILED", request.url(), request.failure()?.errorText));
