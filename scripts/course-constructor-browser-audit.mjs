@@ -27,6 +27,7 @@ try {
       window.customContent.lectures = rows.filter(x => x.type === "lecture");
       window.customContent.tests = rows.filter(x => x.type === "test");
       window.customContent.flashcards = rows.filter(x => x.type === "flashcards");
+      window.customContent.files = rows.filter(x => x.type === "file");
       window.customContent.games = rows.filter(x => x.type === "game");
     }
     window.__tutoringSettings = {};
