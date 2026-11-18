@@ -2101,7 +2101,9 @@ function importQuestionBanks_(data) {
       if(incoming===0&&previous===0)throw new Error("Импорт экзаменационного банка "+bank.courseId+"/"+bank.bankId+" остановлен: в нём нет вопросов с проверяемыми ключами ответов.");
     });
     // Every target bank is backed up before any rows are replaced, including empty targets.
-    const backupId="bank-import-"+Utilities.getUuid().replace(/-/g,""),now=new Date().toISOString();
+    const requestedBackupId=String(data.backupId||"").trim();
+    if(requestedBackupId.length>120)throw new Error("Идентификатор резервной копии слишком длинный.");
+    const backupId=requestedBackupId||("bank-import-"+Utilities.getUuid().replace(/-/g,"")),now=new Date().toISOString();
     const backup=ensureSheet_("QuestionBankBackup"),backupRows=[];
     prepared.forEach(function(bank){
       let found=0;
