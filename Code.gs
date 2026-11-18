@@ -2017,7 +2017,23 @@ function getQuestionBankStats_(data) {
     try { const parsed = JSON.parse(String(row[m.QuestionJSON] || "")); if (!parsed || typeof parsed !== "object") throw new Error("invalid"); }
     catch (e) { course.invalidJson++; bank.invalidJson++; invalidJson++; }
   }
-  const courseList = Object.keys(courses).sort().map(function(id) { return courses[id]; });
+  const courseList = Object.keys(courses).sort().map(function(id) {
+    const course = courses[id], eligible = allFinalExamEntries_(id), byType = {}, byBank = {};
+    eligible.forEach(function(entry) {
+      const type = finalQuestionType_(entry.question), bankId = String(entry.bankId || "");
+      byType[type] = (byType[type] || 0) + 1;
+      byBank[bankId] = (byBank[bankId] || 0) + 1;
+    });
+    course.finalExamReadiness = {
+      requiredQuestions: 45,
+      eligibleUniqueQuestions: eligible.length,
+      ready: eligible.length >= 45,
+      shortage: Math.max(0, 45 - eligible.length),
+      byType: byType,
+      byBank: byBank
+    };
+    return course;
+  });
   const bankList = Object.keys(bankKeys).sort().map(function(key) { const b = bankKeys[key]; return { courseId: b.courseId, bankId: b.bankId, questions: b.questions, uniqueQuestions: b.uniqueQuestions, duplicateQuestionIds: b.duplicateQuestionIds, invalidJson: b.invalidJson }; });
   return { success: true, totals: { courses: courseList.length, banks: bankList.length, rows: totalRows, uniqueQuestions: courseList.reduce(function(n, c) { return n + c.uniqueQuestions; }, 0), duplicateQuestionIds: courseList.reduce(function(n, c) { return n + c.duplicateQuestionIds; }, 0), invalidJson: invalidJson, emptyQuestionIds: emptyQuestionIds }, courses: courseList, banks: bankList };
 }
