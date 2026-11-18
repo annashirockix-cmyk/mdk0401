@@ -1745,7 +1745,8 @@ test("student authentication looks up one user row instead of downloading all us
         throw new Error("Unexpected full-sheet read");
       }
     }),
-    email_:value=>String(value||"").trim().toLowerCase()
+    email_:value=>String(value||"").trim().toLowerCase(),
+    normalizeGroup_:value=>String(value==null?"":value).normalize("NFKC").replaceAll(String.fromCharCode(160)," ").replaceAll(String.fromCharCode(9)," ").trim().split(" ").filter(Boolean).join(" ").toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.userByEmail_=userByEmail_;",sandbox);
   const user=sandbox.userByEmail_("STUDENT@TEST");
