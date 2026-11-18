@@ -1461,18 +1461,18 @@ function uploadAssignmentAttachment_(data) {
   const assignmentId = String(data.assignmentId || "").trim(), as = assignments_(), rows = as.getDataRange().getValues(), h = headerMap_(as);
   const assignment = rows.slice(1).find(function(r){return String(r[h.Id] || "") === assignmentId;});
   if (!assignment) throw new Error("Задание не найдено."); assignmentEligible_(student, assignment);
-  const raw = String(data.dataUrl || ""), match = raw.match(/^data:(image\\/(?:jpeg|png|webp)|application\\/pdf|application\\/msword|application\\/vnd\\.openxmlformats-officedocument\\.wordprocessingml\\.document);base64,([A-Za-z0-9+/=]+)$/i);
+  const raw = String(data.dataUrl || ""), match = raw.match(/^data:(image\/(?:jpeg|png|webp)|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document);base64,([A-Za-z0-9+/=]+)$/i);
   if (!match) throw new Error("Поддерживаются фото JPG, PNG, WEBP и документы PDF, DOC, DOCX.");
   if (match[2].length > 4200000) throw new Error("Размер одного файла не должен превышать 3 МБ.");
   const bytes = Utilities.base64Decode(match[2]); if (!bytes.length || bytes.length > 3000000) throw new Error("Размер одного файла не должен превышать 3 МБ.");
   const mime = match[1].toLowerCase(), sig = bytes.slice(0, 8).map(function(b){return (b+256)%256;}), starts = function(t){return String.fromCharCode.apply(null,sig.slice(0,t.length))===t;};
-  const valid = mime==="application/pdf" ? starts("%PDF-") : mime==="image/jpeg" ? starts("\\xFF\\xD8\\xFF") : mime==="image/png" ? starts("\\x89PNG\\r\\n\\x1A\\n") :
-    mime==="image/webp" ? starts("RIFF") && String.fromCharCode.apply(null,bytes.slice(8,12))==="WEBP" : mime==="application/msword" ? starts("\\xD0\\xCF\\x11\\xE0") :
-    mime==="application/vnd.openxmlformats-officedocument.wordprocessingml.document" && starts("PK\\x03\\x04");
+  const valid = mime==="application/pdf" ? starts("%PDF-") : mime==="image/jpeg" ? starts("\xFF\xD8\xFF") : mime==="image/png" ? starts("\x89PNG\r\n\x1A\n") :
+    mime==="image/webp" ? starts("RIFF") && String.fromCharCode.apply(null,bytes.slice(8,12))==="WEBP" : mime==="application/msword" ? starts("\xD0\xCF\x11\xE0") :
+    mime==="application/vnd.openxmlformats-officedocument.wordprocessingml.document" && starts("PK\x03\x04");
   if (!valid) throw new Error("Содержимое файла не соответствует заявленному формату.");
-  const original = String(data.fileName || "attachment").replace(/[\\\\/]/g,"_").slice(0,100);
+  const original = String(data.fileName || "attachment").replace(/[\\/]/g,"_").slice(0,100);
   const ext = mime==="image/jpeg"?".jpg":mime==="image/png"?".png":mime==="image/webp"?".webp":mime==="application/pdf"?".pdf":mime==="application/msword"?".doc":".docx";
-  const name = /\\.(jpg|jpeg|png|webp|pdf|doc|docx)$/i.test(original) ? original : original+ext;
+  const name = /\.(jpg|jpeg|png|webp|pdf|doc|docx)$/i.test(original) ? original : original+ext;
   const file = assignmentFileFolder_().createFile(Utilities.newBlob(bytes,mime,name));
   try { const id=Utilities.getUuid(); appendMappedRecord_(assignmentFiles_(),{Id:id,AssignmentId:assignmentId,StudentEmail:student.email,DriveFileId:file.getId(),FileName:name,MimeType:mime,Size:bytes.length,Status:"pending",CreatedAt:new Date().toISOString()}); return {success:true,id:id,fileName:name,mimeType:mime,size:bytes.length}; }
   catch(error){try{file.setTrashed(true);}catch(cleanupError){} throw error;}
