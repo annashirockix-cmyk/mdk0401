@@ -206,10 +206,10 @@ window.loadGlobalCustomContent = function(callback) {
             String(currentIdentity && currentIdentity.email || "").toLowerCase() === email &&
             String(currentIdentity && currentIdentity.role || "").toLowerCase() === role;
     }
-    function finish() { if (isCurrentRequest() && callback) callback(); }
+    function finish(success) { if (isCurrentRequest() && callback) callback(success === true); }
     if (!window.API || !window.API.getCustomContent || !identity || !hasSession) {
         window.invalidateGlobalCustomContentLoad(true);
-        if (callback) callback();
+        if (callback) callback(false);
         return;
     }
     return window.API.getCustomContent().then(function(res) {
@@ -268,7 +268,7 @@ window.loadGlobalCustomContent = function(callback) {
                 if (window.updateMenuVisibility) window.updateMenuVisibility();
             }
         }
-        finish();
+        finish(!!(res && res.success));
     }).catch(function(err) {
         if (!isCurrentRequest()) return;
         console.error("Ошибка загрузки кастомного контента", err);
@@ -317,7 +317,7 @@ window.loadGlobalCustomContent = function(callback) {
             if (window.renderUserChip) window.renderUserChip();
             if (window.updateMenuVisibility) window.updateMenuVisibility();
         }
-        finish();
+        finish(false);
     });
 };
 
