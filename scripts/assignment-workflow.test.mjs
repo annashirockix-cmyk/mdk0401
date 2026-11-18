@@ -540,6 +540,7 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /ENB":"Английский язык — базовый/);
   assert.match(ui, /ENT":"Английский язык — технический/);
   assert.match(ui, /window\.API\.createAssignment/);
+  assert.match(ui, /taForm\)\.insertAdjacentElement\("beforebegin",templateBar\)/);
   assert.match(ui, /window\.API\.submitAssignment/);
   assert.match(ui, /name="attachments" multiple/);
   assert.match(ui, /uploadAssignmentAttachment/);
