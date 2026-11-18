@@ -495,6 +495,7 @@ test("MDK 02.01 and 02.02 legacy exam banks contain answer keys and final exams 
     assert.equal(keyedCount, questionCount, file + " must define a correct answer for every legacy question");
     assert.ok(source.includes("window." + bankName + " || baseQuestions"), file + " final exam must use the keyed bank");
     assert.match(source, /Number\.isInteger\(q\.correct\)/);
-    assert.match(source, /baseQuestions\.forEach\(function\(q\).*q\.correct = 0\)/, file + " practice questions must receive answer keys");
+    assert.doesNotMatch(source, /baseQuestions\.forEach\(function\(q\).*q\.correct = 0\)/, file + " must not invent keys for unverified questions");
+    assert.match(source, /var questions = allQuestions\.filter\(function\(q\).*Number\.isInteger\(q\.correct\)/, file + " practice must exclude questions without explicit answer keys");
   }
 });
