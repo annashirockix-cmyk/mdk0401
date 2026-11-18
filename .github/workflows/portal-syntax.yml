@@ -1,7 +1,7 @@
 name: Portal syntax checks
 on:
   push:
-    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation]
+    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit]
   pull_request:
     branches: [main, master]
   workflow_dispatch:
