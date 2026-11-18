@@ -105,6 +105,11 @@ test("protected question-bank imports back up prior rows and reject weaker exam 
   assert.ok(importer.indexOf("backup.getRange") < importer.indexOf("sh.clearContents()"),
     "all target banks must be backed up before any existing rows are cleared");
   assert.match(importer, /backupId:backupId/);
+  assert.match(importer, /requestedBackupId=String\(data\.backupId\|\|""\)/);
+  assert.match(read("api.js"), /importQuestionBanks:function\(banks,backupId\)/);
+  assert.match(controls, /qb-migration-/);
+  assert.match(controls, /restoreQuestionBanks\(backupId\)/);
+  assert.match(controls, /Автоматический откат/);
 
   const controls = read("teacher-controls.js");
   assert.match(controls, /backupIds\.push\(result\.backupId\)/);
