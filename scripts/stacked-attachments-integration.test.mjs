@@ -82,6 +82,7 @@ test("admin question-bank statistics report usable final-exam readiness, not raw
   const stats = section(code, "function getQuestionBankStats_(data)", "/**\n * Импорт встроенного банка");
   assert.match(stats, /admin_\(data\)/, "question-bank diagnostics must remain admin-only");
   assert.match(stats, /allFinalExamEntries_\(id\)/, "readiness must use the same eligible-question filter as the exam");
+  assert.match(stats, /CFG\.COURSES\.forEach/, "courses with empty banks must still appear as not ready");
   for (const field of ["requiredQuestions", "eligibleUniqueQuestions", "ready", "shortage", "byType", "byBank"]) {
     assert.ok(stats.includes(field), "missing final exam readiness field " + field);
   }
