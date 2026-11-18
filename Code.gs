@@ -305,7 +305,7 @@ function email_(value) {
 // не переписываются: нормализация применяется только при чтении и новых назначениях.
 function normalizeGroup_(value) {
   return String(value === null || value === undefined ? "" : value)
-    .normalize("NFKC").replace(/[\\s\\u00A0]+/g, " ").trim().toLocaleUpperCase("ru-RU");
+    .normalize("NFKC").replace(/[\s\u00A0]+/g, " ").trim().toLocaleUpperCase("ru-RU");
 }
 
 // Сопоставляет текстовый код курса с числовым значением из Google Sheets,
