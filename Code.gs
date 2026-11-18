@@ -2592,12 +2592,20 @@ function getGameAnswer_(data) {
 /* ---------- Private images used by teacher-created test questions ---------- */
 function testImageFolder_() {
   const props = PropertiesService.getScriptProperties();
-  const saved = props.getProperty("TEST_QUESTION_IMAGE_FOLDER_ID");
+  const key = "TEST_QUESTION_IMAGE_FOLDER_ID";
+  const saved = props.getProperty(key);
+  let folder = null;
   if (saved) {
-    try { return DriveApp.getFolderById(saved); } catch (e) { props.deleteProperty("TEST_QUESTION_IMAGE_FOLDER_ID"); }
+    try { folder = DriveApp.getFolderById(saved); }
+    catch (e) { props.deleteProperty(key); }
   }
-  const folder = DriveApp.createFolder("Portal test question images");
-  props.setProperty("TEST_QUESTION_IMAGE_FOLDER_ID", folder.getId());
+  if (!folder) {
+    folder = DriveApp.createFolder("Portal test question images");
+    props.setProperty(key, folder.getId());
+  }
+  // Images are delivered only through the authenticated test endpoint.
+  // Keep the Drive folder private even when reusing a previously created folder.
+  folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
   return folder;
 }
 function uploadTestImage_(data) {
