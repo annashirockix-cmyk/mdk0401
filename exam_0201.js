@@ -91,9 +91,9 @@ window.renderTraining_0201 = function(mdkId) {
     { q: "Какой тип сборки исключает подгонку деталей?", options: ["Полная взаимозаменяемость", "Неполная", "Пригонка", "Индивидуальная подборка"], correct: 0}
   ];
 
-  baseQuestions.forEach(function(q){ if (q && Array.isArray(q.options) && !Number.isInteger(q.correct)) q.correct = 0; });
-  var allQuestions = baseQuestions.concat(extraQuestions);
-  var questions = allQuestions.sort(function(){ return Math.random() - 0.5; });
+  var allQuestions = (window.EXAM_BANK_0201 || []).concat(baseQuestions, extraQuestions);
+  var questions = allQuestions.filter(function(q){ return q && Array.isArray(q.options) && Number.isInteger(q.correct) && q.correct >= 0 && q.correct < q.options.length; });
+  questions.sort(function(){ return Math.random() - 0.5; });
         if (window._shuffleQuestionOptions) questions.forEach(window._shuffleQuestionOptions);
   var idx = 0, correct = 0, answered = 0;
 
