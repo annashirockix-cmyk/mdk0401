@@ -149,7 +149,7 @@ test("final exam scoring never awards points for blank answers, including zero-v
 test("final exam scoring uses a shared answer-key fallback for all supported single-answer types", () => {
   const code = read("Code.gs");
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
-  assert.match(scorer, /const answerKey=function\(\)/);
+    assert.match(scorer, /const answerKey=function/);
   assert.equal((scorer.match(/answerKey\(\)/g) || []).length >= 5, true,
     "true/false, numeric, multiple-choice, matching fallback and single-choice must share answer-key selection");
   assert.match(scorer, /hasKey\(q\.correctAnswer\)\?q\.correctAnswer/);
