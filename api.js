@@ -96,7 +96,7 @@ window.API = {
  getQuestionBank:function(courseId,bankId){return fetchAPI("getQuestionBank",{courseId:courseId,bankId:bankId||""},"GET");},
  saveQuestionBank:function(courseId,bankId,questions){return fetchAPI("saveQuestionBank",{courseId:courseId,bankId:bankId,questions:questions||[]},"POST",120000);},
  uploadExamFile:function(courseId,bankId,fileName,dataUrl){return fetchAPI("uploadExamFile",{courseId:courseId,bankId:bankId,fileName:fileName,dataUrl:dataUrl},"POST",60000);},
- getExamFile:function(attachmentId){return fetchAPI("getExamFile",{attachmentId:attachmentId},"POST",60000);},
+ getExamFile:function(attachmentId,examId){return fetchAPI("getExamFile",{attachmentId:attachmentId,examId:examId||""},"POST",60000);},
  deleteExamFile:function(courseId,attachmentId){return fetchAPI("deleteExamFile",{courseId:courseId,attachmentId:attachmentId},"POST",60000);},
  getQuestionBankStats:function(){return fetchAPI("getQuestionBankStats",{},"GET",60000);},
  getEnglishVprExam:function(track){return fetchAPI("getEnglishVprExam",{track:track},"GET");},
