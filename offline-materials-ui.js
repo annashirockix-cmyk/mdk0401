@@ -1,6 +1,6 @@
 (function (root) {
   "use strict";
-  var panel, toggle, list, status, total, refreshButton, removeButton, closeButton;
+  var panel, toggle, list, status, total, refreshButton, removeButton, resetButton, closeButton;
   function currentUser() {
     return root.state && (root.state.student || root.state.staff) || null;
   }
@@ -83,8 +83,11 @@
     refreshButton.type = "button";
     removeButton = make("button", "btn ghost", "Удалить выбранные");
     removeButton.type = "button";
+    resetButton = make("button", "btn ghost", "Сбросить и загрузить всё");
+    resetButton.type = "button";
     actions.appendChild(refreshButton);
     actions.appendChild(removeButton);
+    actions.appendChild(resetButton);
     panel.appendChild(head);
     panel.appendChild(total);
     panel.appendChild(status);
@@ -110,6 +113,24 @@
         refreshButton.disabled = false;
         refreshButton.textContent = "Обновить материалы";
         refreshSummary();
+      });
+    });
+    resetButton.addEventListener("click", function () {
+      var user = currentUser();
+      if (!user || !root.OfflineMaterialsCache || !root.loadGlobalCustomContent) return;
+      resetButton.disabled = true;
+      resetButton.textContent = "Сброс…";
+      root.OfflineMaterialsCache.clear(user).then(function () {
+        root.loadGlobalCustomContent(function () {
+          resetButton.disabled = false;
+          resetButton.textContent = "Сбросить и загрузить всё";
+          if (root.showToast) root.showToast("Список очищен. Доступные материалы загружены заново.", "success");
+          refreshSummary();
+        });
+      }).catch(function (error) {
+        resetButton.disabled = false;
+        resetButton.textContent = "Сбросить и загрузить всё";
+        if (root.showToast) root.showToast("Не удалось сбросить хранилище: " + (error.message || "ошибка"), "error");
       });
     });
     removeButton.addEventListener("click", function () {
