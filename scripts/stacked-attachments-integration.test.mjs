@@ -167,3 +167,12 @@ test("final exam answer-key selection skips empty higher-priority fields consist
   assert.match(validator, /Array\.isArray\(q\.correctAnswer\)\?q\.correctAnswer/);
   assert.match(validator, /Array\.isArray\(q\.answers\)\?q\.answers/);
 });
+
+
+test("final exam readiness normalizes one-element answer arrays for single-answer question types", () => {
+  const code = read("Code.gs");
+  const validator = section(code, "function finalQuestionHasAnswerKey_(q)", "function finalQuestionType_(question)");
+  assert.match(validator, /if\(type==="mc"\|\|type==="tf"\|\|type==="num"\)\{\s*if\(Array\.isArray\(expected\)\)\{if\(expected\.length!==1\)return false;expected=expected\[0\];\}\s*\}/);
+  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
+  assert.match(scorer, /if\(Array\.isArray\(expected\)\)\{if\(expected\.length!==1\)return 0;expected=expected\[0\];\}/);
+});
