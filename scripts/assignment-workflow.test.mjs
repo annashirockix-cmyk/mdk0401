@@ -634,9 +634,14 @@ test("assignment attachments are private, tied to the student and attempt, and r
     token: "otherStudentToken", assignmentId: created.id, fileName: "proof.pdf",
     dataUrl: "data:application/pdf;base64," + pdf
   }), /доступ/);
+  assert.throws(() => api.submitAssignment_({
+    token: "studentToken", assignmentId: created.id, answer: "  ", attachmentIds: []
+  }), /Введите ответ или прикрепите/);
   const submitted = api.submitAssignment_({
-    token: "studentToken", assignmentId: created.id, answer: "Готово", attachmentIds: [upload.id]
+    token: "studentToken", assignmentId: created.id, answer: "  ", attachmentIds: [upload.id]
   });
+  assert.equal(api.getAssignments_({ token: "studentToken" }).assignments[0].submission.answer, "",
+    "an attachment-only submission should be stored with an empty text answer");
   assert.equal(submitted.attachments.length, 1);
   const studentView = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
   assert.equal(studentView.attachments[0].fileName, "proof.pdf");
