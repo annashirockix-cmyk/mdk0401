@@ -158,3 +158,11 @@ test("final exam scoring accepts every answer-key field recognized by readiness 
   assert.match(scorer, /let expected=q\.correct!==undefined\?q\.correct:[\s\S]*?q\.answers!==undefined\?q\.answers:q\.answer/,
     "single-choice scoring must read the answers fallback");
 });
+
+
+test("numeric final-exam scoring follows the same answer-key precedence as readiness validation", () => {
+  const code = read("Code.gs");
+  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
+  assert.match(scorer, /if\(type==="num"\)\{\s*let expected=q\.correct!==undefined\?q\.correct:\(q\.correctAnswer!==undefined\?q\.correctAnswer:\(q\.answers!==undefined\?q\.answers:q\.answer\)\)/,
+    "numeric scoring must prefer correct, correctAnswer, answers, then answer");
+});
