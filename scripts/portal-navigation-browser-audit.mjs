@@ -35,6 +35,7 @@ try {
   assert.equal(await menuButton.evaluate(el => el === document.activeElement), true, "focus returns to the menu trigger");
 
   await menuButton.click();
+  await page.locator("#drawerCabinet > summary").click();
   await page.locator('#drawer a[href="#/profile"]').click();
   assert.equal(await page.locator("#drawer").evaluate(el => el.classList.contains("open")), false);
   assert.equal(await page.locator("#app").evaluate(el => el === document.activeElement), true, "navigation moves focus to main content");
