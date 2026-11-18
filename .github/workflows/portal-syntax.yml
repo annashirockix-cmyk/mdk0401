@@ -72,6 +72,8 @@ jobs:
         run: node --test scripts/course-document-attachments.test.mjs
       - name: Check protected exam document attachments
         run: node --test scripts/exam-document-attachments.test.mjs
+      - name: Check stacked attachment integration
+        run: node --test scripts/stacked-attachments-integration.test.mjs
       - name: Install Playwright CLI for browser audit
         run: npm install --global playwright@1.62.0
       - name: Install Chromium for workbook print audit
