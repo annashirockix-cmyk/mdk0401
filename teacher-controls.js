@@ -99,7 +99,6 @@ window.renderTeacherControlsPage=function(){
       backupIds.push(batchBackupId);
       const result=await window.API.importQuestionBanks(batch,batchBackupId);
       if(!result||!result.success)throw Error(result&&result.error||"Ошибка импорта части "+partNo);
-      if(result.backupId)backupIds.push(result.backupId);
       total+=Number(result.questionsImported)||0;bankCount+=Number(result.banksImported)||batch.length;
       status.textContent="Импортировано банков: "+bankCount+" из "+banks.length; 
       status.textContent+=" · вопросов: "+total+" из "+totalExpected;
