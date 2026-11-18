@@ -1858,3 +1858,17 @@ test("portal navigation provides accessible search, active route and keyboard sh
   assert.match(css, /\.drawer-item\.is-current/);
   assert.match(css, /\.skip-link:focus/);
 });
+
+
+test("student registration requires surname and first name; patronymic stays optional", () => {
+  const html = read("index.html");
+  const app = read("app.js");
+  const server = read("Code.gs");
+  assert.match(html, /id="regSurname"[^>]*required/);
+  assert.match(html, /id="regFirstName"[^>]*required/);
+  assert.match(html, /id="regPatronymic"[^>]*необязательно/);
+  assert.match(app, /if\(!surname\|\|!firstName\)/);
+  assert.match(app, /\[surname,firstName,patronymic\]\.filter\(Boolean\)\.join\(" "\)/);
+  assert.match(server, /nameParts\.length < 2/);
+  assert.match(server, /Name: normalizedName/);
+});
