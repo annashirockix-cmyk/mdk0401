@@ -369,11 +369,40 @@ try {
   const lectureVisible = await page.locator("#topicContent").innerText();
   assert.ok(lectureVisible.includes("Тестовая лекция конструктора"));
   assert.ok(lectureVisible.includes("Методическое пособие к теме"), "Student lecture view must list the attached course document");
-  const courseFileDownload = page.waitForEvent("download");
+  await page.evaluate(() => {
+    window.__courseFileDownloadAudit = { apiCalls: 0, fileName: "", mimeType: "", anchorClicks: [] };
+    const originalGetCourseFile = window.API.getCourseFile;
+    window.API.getCourseFile = async function(itemId, fileRef) {
+      window.__courseFileDownloadAudit.apiCalls++;
+      const result = await originalGetCourseFile(itemId, fileRef);
+      window.__courseFileDownloadAudit.fileName = result && result.fileName || "";
+      window.__courseFileDownloadAudit.mimeType = result && result.mimeType || "";
+      return result;
+    };
+    const originalCreateObjectURL = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = function(blob) {
+      window.__courseFileDownloadAudit.blobType = blob && blob.type || "";
+      window.__courseFileDownloadAudit.blobSize = blob && blob.size || 0;
+      return originalCreateObjectURL(blob);
+    };
+    const originalAnchorClick = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function() {
+      if (this.download) window.__courseFileDownloadAudit.anchorClicks.push({ fileName: this.download, href: this.href });
+      return originalAnchorClick.call(this);
+    };
+  });
   await page.locator("#topicContent button").filter({ hasText: "Методическое пособие к теме" }).click();
-  const downloadedCourseFile = await courseFileDownload;
-  assert.equal(downloadedCourseFile.suggestedFilename(), "methodical-guide.pdf",
-    "Student must download the attached document through the authorized API");
+  await page.waitForFunction(() => {
+    const audit = window.__courseFileDownloadAudit;
+    return audit && audit.apiCalls === 1 && audit.anchorClicks.length === 1;
+  });
+  const courseFileDownload = await page.evaluate(() => window.__courseFileDownloadAudit);
+  assert.equal(courseFileDownload.fileName, "methodical-guide.pdf");
+  assert.equal(courseFileDownload.mimeType, "application/pdf");
+  assert.equal(courseFileDownload.blobType, "application/pdf");
+  assert.ok(courseFileDownload.blobSize > 0, "Student download must create a non-empty PDF blob");
+  assert.equal(courseFileDownload.anchorClicks[0].fileName, "methodical-guide.pdf",
+    "Student must initiate a download with the attached document filename");
 
   await page.locator("#tab-test").click();
   await page.waitForSelector("#topicContent button");
