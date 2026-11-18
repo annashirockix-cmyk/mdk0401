@@ -84,6 +84,7 @@ jobs:
           for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/portal-navigation-browser-audit.mjs
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/home-dashboard-browser-audit.mjs
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/materials-course-browser-audit.mjs
       - name: Run real-browser A4 and PDF audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/workbook-audit-server.log 2>&1 &
