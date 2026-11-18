@@ -1,5 +1,5 @@
 "use strict";
-function normalizeReportGroup(value){return String(value==null?"":value).normalize("NFKC").replace(/[\\s\\u00A0]+/g," ").trim().toLocaleUpperCase("ru-RU");}
+function normalizeReportGroup(value){return String(value==null?"":value).normalize("NFKC").replace(/[\s\u00A0]+/g," ").trim().toLocaleUpperCase("ru-RU");}
 window.renderCourseReportsPage=function(){
  const app=document.getElementById("app");if(!app)return;app.innerHTML="";
  const actor=window.state.staff;if(!actor||!["teacher","admin"].includes(actor.role)){app.innerHTML='<div class="module">Отчёты доступны только преподавателям и администраторам.</div>';return;}
