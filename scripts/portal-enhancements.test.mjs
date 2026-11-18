@@ -1914,3 +1914,23 @@ test("legacy group normalization is applied in teacher dashboard, journal and re
   assert.match(reports, /normalizeReportGroup\(s\.group\)===normalizeReportGroup\(group\)/);
   assert.match(reports, /normalizeReportGroup\(a\.targetValue\)===normalizeReportGroup\(selectedGroup\)/);
 });
+
+
+test("MDK 04.01 lectures explain diagnostics, setup and TPM in student-friendly steps", () => {
+  const source = read("data-0401.js");
+  const sandbox = { window: { MDK_DATA: {} } };
+  vm.runInNewContext(source, sandbox);
+  const course = sandbox.window.MDK_DATA["04.01"];
+  assert.ok(course, "MDK 04.01 course data must load");
+  const topics = course.sections.flatMap(section => section.topics || []);
+  assert.equal(topics.length, 6);
+  for (const topic of topics) {
+    assert.ok(topic.lectures && topic.lectures.length === 1, topic.title + " must have a lecture");
+    const html = topic.lectures[0].content;
+    assert.ok(html.length >= 1800, topic.title + " lecture must contain a developed explanation");
+    assert.match(html, /<h3>/);
+    assert.match(html, /<table>/, topic.title + " must include a reference table");
+    assert.match(html, /Учебный пример|Главное/);
+  }
+  assert.match(source, /p\.indexOf\("html:"\) === 0/, "lecture renderer must preserve raw table markup");
+});
