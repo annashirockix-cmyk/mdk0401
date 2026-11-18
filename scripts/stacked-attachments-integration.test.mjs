@@ -92,3 +92,21 @@ test("admin question-bank statistics report usable final-exam readiness, not raw
   assert.match(code, /function allFinalExamEntries_\(courseId\)[\s\S]*?finalQuestionHasAnswerKey_\(q\)/,
     "readiness must exclude questions without valid automatic keys");
 });
+
+
+test("protected question-bank imports back up prior rows and reject weaker exam replacements", () => {
+  const code = read("Code.gs");
+  const importer = section(code, "function importQuestionBanks_(data)", "function backupQuestionBanks_(data)");
+  assert.match(importer, /finalQuestionHasAnswerKey_\(q\)/);
+  assert.match(importer, /if\(incoming<previous\)throw new Error/);
+  assert.match(importer, /bank-import-/);
+  assert.match(importer, /ensureSheet_\("QuestionBankBackup"\)/);
+  assert.match(importer, /JSON\.stringify\(row\)/);
+  assert.ok(importer.indexOf("backup.getRange") < importer.indexOf("sh.clearContents()"),
+    "all target banks must be backed up before any existing rows are cleared");
+  assert.match(importer, /backupId:backupId/);
+
+  const controls = read("teacher-controls.js");
+  assert.match(controls, /backupIds\.push\(result\.backupId\)/);
+  assert.match(controls, /Резервные копии импортированных банков/);
+});
