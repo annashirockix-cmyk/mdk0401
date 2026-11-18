@@ -41,7 +41,15 @@ window.renderTeacherControlsPage=function(){
     const btn=this,status=document.getElementById("bankMigrationStatus");btn.disabled=true;status.textContent="Читаем закрытое хранилище…";
     try{const r=await window.API.getQuestionBankStats();if(!r||!r.success)throw Error(r&&r.error||"Не удалось получить статистику.");
      const t=r.totals||{},lines=["ИТОГО: "+(t.banks||0)+" банков · "+(t.rows||0)+" строк-вопросов · "+(t.uniqueQuestions||0)+" уникальных ID","Повторы ID: "+(t.duplicateQuestionIds||0)+" · ошибок JSON: "+(t.invalidJson||0)+" · пустых ID: "+(t.emptyQuestionIds||0),"","ПО ДИСЦИПЛИНАМ:"];
-     (r.courses||[]).forEach(c=>lines.push(c.courseId+": "+c.banks+" банков · "+c.rows+" строк · "+c.uniqueQuestions+" уникальных · "+c.duplicateQuestionIds+" повторов · "+c.invalidJson+" ошибок JSON"));status.textContent=lines.join("\n");
+     (r.courses||[]).forEach(function(c){
+      const audit=c.finalExamReadiness||{},types=audit.byType||{},banks=audit.byBank||{};
+      const typeSummary=Object.keys(types).sort().map(function(key){return key+": "+types[key];}).join(", ")||"нет пригодных заданий";
+      const bankSummary=Object.keys(banks).sort().map(function(key){return key+": "+banks[key];}).join(", ")||"нет";
+      lines.push(c.courseId+": "+c.banks+" банков · "+c.rows+" строк · "+c.uniqueQuestions+" уникальных ID · "+c.duplicateQuestionIds+" повторов ID · "+c.invalidJson+" ошибок JSON");
+      lines.push("  Итоговый экзамен: "+(audit.ready?"ГОТОВ":"НЕ ГОТОВ")+" · пригодных уникальных заданий: "+(audit.eligibleUniqueQuestions||0)+"/"+(audit.requiredQuestions||45)+" · не хватает: "+(audit.shortage||0));
+      lines.push("  Типы заданий: "+typeSummary);
+      lines.push("  Экзаменационные источники: "+bankSummary);
+     });status.textContent=lines.join("\n");
     }catch(e){status.textContent="Ошибка диагностики: "+(e.message||e);}finally{btn.disabled=false;}
    };
    document.getElementById("migrateQuestionBanks").onclick=async function(){
