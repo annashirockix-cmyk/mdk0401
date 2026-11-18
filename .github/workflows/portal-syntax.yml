@@ -1,9 +1,9 @@
 name: Portal syntax checks
 on:
   push:
-    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments, feat/assignment-submission-attachments]
+    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments, feat/assignment-submission-attachments, feat/exam-document-attachments]
   pull_request:
-    branches: [main, master, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments]
+    branches: [main, master, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments, feat/exam-document-attachments]
   workflow_dispatch:
 permissions:
   contents: read
@@ -68,6 +68,10 @@ jobs:
         run: node --test scripts/course-content-editor.test.mjs
       - name: Check protected course document attachments
         run: node --test scripts/course-document-attachments.test.mjs
+      - name: Check protected exam document attachments
+        run: node --test scripts/exam-document-attachments.test.mjs
+      - name: Check protected exam attachment runtime permissions
+        run: node --test scripts/exam-document-attachments-runtime.test.mjs
       - name: Install Playwright CLI for browser audit
         run: npm install --global playwright@1.62.0
       - name: Install Chromium for workbook print audit
@@ -112,6 +116,8 @@ jobs:
           retention-days: 7
       - name: Run real-browser assignment attachment audit
         run: PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/assignment-attachments-browser-audit.mjs
+      - name: Run real-browser final exam attachment audit
+        run: PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/final-exam-attachments-browser-audit.mjs
       - name: Run real-browser certificate A4 landscape audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/certificate-audit-server.log 2>&1 &
