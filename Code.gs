@@ -2079,7 +2079,7 @@ function importQuestionBanks_(data) {
     prepared.forEach(function(bank){
       if(!/^exam_(primary|extra)$/.test(bank.bankId)&&bank.bankId!=="mdk_extra")return;
       const uniqueEligible=function(items){
-        const seenPrompts={},count=0;let total=0;
+        const seenPrompts={};let total=0;
         items.forEach(function(item){
           let q=item;
           if(item&&item.question&&typeof item.question==="object")q=item.question;
@@ -2102,7 +2102,7 @@ function importQuestionBanks_(data) {
     });
     // Every target bank is backed up before any rows are replaced, including empty targets.
     const backupId="bank-import-"+Utilities.getUuid().replace(/-/g,""),now=new Date().toISOString();
-    const backup=ensureSheet_("QuestionBankBackup"),backupMap=headerMap_(backup),backupRows=[];
+    const backup=ensureSheet_("QuestionBankBackup"),backupRows=[];
     prepared.forEach(function(bank){
       let found=0;
       current.slice(1).forEach(function(row){
