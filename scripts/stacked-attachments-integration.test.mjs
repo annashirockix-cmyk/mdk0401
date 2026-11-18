@@ -121,7 +121,7 @@ test("final exam readiness rejects ambiguous ordering and matching answer keys",
   const validator = section(code, "function finalQuestionHasAnswerKey_(q)", "function finalQuestionType_(question)");
   assert.match(validator, /new Set\(items\)\.size!==items\.length/,
     "ordering items must be unique");
-  assert.match(validator, /new Set\(expected\)\.size!==expected\.length/,
+  assert.match(validator, /new Set\(expected\)\.size===expected\.length/,
     "the correct order must be an exact permutation without duplicates");
   assert.match(validator, /items\.indexOf\(value\)>=0/,
     "every expected ordering item must exist in the displayed item list");
