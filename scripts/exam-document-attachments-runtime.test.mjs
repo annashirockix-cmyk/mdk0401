@@ -32,7 +32,7 @@ function makeSheet(headers) {
 
 function createRuntime() {
   const sheet = makeSheet(["Id","CourseId","BankId","DriveFileId","FileName","MimeType","Size","Status","UploadedBy","CreatedAt"]);
-  const files = new Map(), properties = new Map();
+  const files = new Map(), properties = new Map(), cache = new Map();
   let uuid = 0, fileNo = 0, folderPrivate = false;
   const folder = {
     getId: () => "exam-folder",
@@ -68,6 +68,7 @@ function createRuntime() {
         setProperty: (key, value) => properties.set(key, value)
       })
     },
+    CacheService: { getScriptCache: () => ({ get: key => cache.get(key) || null }) },
     DriveApp: {
       Access: { PRIVATE: "PRIVATE" }, Permission: { NONE: "NONE" },
       createFolder: () => folder,
@@ -103,7 +104,7 @@ function createRuntime() {
   sandbox.hasCourseAccess_ = (user, courseId) =>
     user.role === "admin" || user.courses.split(",").includes(courseId);
   sandbox.examFiles_ = () => sheet;
-  return { sandbox, sheet, files, get folderPrivate() { return folderPrivate; } };
+  return { sandbox, sheet, files, cache, get folderPrivate() { return folderPrivate; } };
 }
 
 test("exam attachments enforce upload validation, private storage, course access and teacher-only deletion", () => {
@@ -130,16 +131,20 @@ test("exam attachments enforce upload validation, private storage, course access
   assert.equal(r.folderPrivate, true, "the Drive folder must be private");
   assert.equal(r.sheet.rows[1][7], "active");
 
-  const studentDownload = api.getExamFile_({ token: "student", attachmentId: uploaded.id });
+  r.cache.set("finalExam:active-exam", JSON.stringify({email:"student@example.test",courseId:"07.01"}));
+  const studentDownload = api.getExamFile_({ token: "student", attachmentId: uploaded.id, examId:"active-exam" });
   assert.equal(studentDownload.fileName, "guide.pdf");
   assert.equal(studentDownload.mimeType, "application/pdf");
   assert.equal(Buffer.from(studentDownload.data, "base64").toString(), pdfBytes.toString());
-  assert.throws(() => api.getExamFile_({ token: "outsider", attachmentId: uploaded.id }), /доступа/);
+  assert.throws(() => api.getExamFile_({ token: "outsider", attachmentId: uploaded.id, examId:"active-exam" }), /доступа/);
+  assert.throws(() => api.getExamFile_({ token: "student", attachmentId: uploaded.id }), /доступа/);
+  r.cache.set("finalExam:other-exam", JSON.stringify({email:"outsider@example.test",courseId:"07.01"}));
+  assert.throws(() => api.getExamFile_({ token: "student", attachmentId: uploaded.id, examId:"other-exam" }), /не относится/);
   assert.throws(() => api.getExamFile_({ token: "otherTeacher", attachmentId: uploaded.id }), /прав|доступ/);
   assert.throws(() => api.deleteExamFile_({ token: "student", courseId: "07.01", attachmentId: uploaded.id }), /прав|редактировать/);
 
   assert.equal(api.deleteExamFile_({ token: "teacher", courseId: "07.01", attachmentId: uploaded.id }).success, true);
   assert.equal(r.sheet.rows[1][7], "deleted");
-  assert.throws(() => api.getExamFile_({ token: "student", attachmentId: uploaded.id }), /не найден/);
+  assert.throws(() => api.getExamFile_({ token: "student", attachmentId: uploaded.id, examId:"active-exam" }), /не найден/);
   assert.throws(() => api.deleteExamFile_({ token: "teacher", courseId: "07.01", attachmentId: uploaded.id }), /не найден/);
 });
