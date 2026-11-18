@@ -47,3 +47,10 @@ test("student-friendly script is loaded after the original materials course data
   assert.ok(originalAt >= 0 && easyAt > originalAt);
   assert.match(index, /materials-student-friendly\.css/);
 });
+
+
+test("crystallization wording distinguishes solidification from hardness", () => {
+  assert.match(easySource, /"Как расплав затвердевает"/);
+  assert.match(easySource, /Затвердевание — это переход из жидкого состояния в твёрдое/);
+  assert.doesNotMatch(easySource, /Как металл становится твёрдым/);
+});
