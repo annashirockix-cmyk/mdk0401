@@ -2573,7 +2573,7 @@ function scoreFinalAnswer_(q,answer) {
   if(type==="multi"){
     let expected=answerKey();
     if(!Array.isArray(answer)||!Array.isArray(expected))return 0;
-    if(expected.length&&typeof expected[0]==="string"&&q.options&&q.options.length)expected=expected.map(function(value){const index=q.options.indexOf(value);return index<0?value:index;});
+    if(q.options&&q.options.length)expected=expected.map(function(value){if(q.options.indexOf(value)>=0)return q.options.indexOf(value);const index=Number(value);return Number.isInteger(index)&&index>=0&&index<q.options.length?index:value;});
     const a=answer.map(String).sort(),b=expected.map(String).sort();
     return a.length===b.length&&a.every(function(value,index){return value===b[index];})?1:0;
   }
