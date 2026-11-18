@@ -1963,10 +1963,16 @@ test("MDK 02.01 key assembly lectures include step-by-step examples and diagnost
 });
 
 
-test("MDK 02.01 and 02.02 training banks do not append hard questions twice", () => {
-  for (const file of ["exam_0201.js", "exam_0202.js"]) {
+test("MDK 02.01 and 02.02 legacy exam entrypoints use protected assessment routes", () => {
+  for (const [file, courseId, suffix] of [
+    ["exam_0201.js", "02.01", "0201"],
+    ["exam_0202.js", "02.02", "0202"]
+  ]) {
     const source = read(file);
-    const hardAppend = /baseQuestions\s*=\s*baseQuestions\.concat\(window\.HARD_TESTS\[t\.id\]\)/g;
-    assert.equal((source.match(hardAppend) || []).length, 2, file + " must append each topic hard bank once in training and once in the legacy exam builder");
+    assert.doesNotMatch(source, /\\bcorrect\\s*:/, file + " must not expose answer keys");
+    assert.match(source, new RegExp("window\\\\.renderTraining_" + suffix + " = function"));
+    assert.match(source, new RegExp("window\\\\.renderFinal_" + suffix + " = function"));
+    assert.ok(source.includes('window.location.hash = "#/training/' + courseId + '"'));
+    assert.ok(source.includes('window.location.hash = "#/final/' + courseId + '"'));
   }
 });
