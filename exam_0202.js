@@ -73,6 +73,7 @@ window.renderTraining_0202 = function(mdkId) {
     { q: "Какая команда отменяет цикл сверления?", options: ["G80", "G81", "G82", "G83"], correct: 0}
   ];
 
+  baseQuestions.forEach(function(q){ if (q && Array.isArray(q.options) && !Number.isInteger(q.correct)) q.correct = 0; });
   var allQuestions = baseQuestions.concat(extraQuestions);
   var questions = allQuestions.sort(function(){ return Math.random() - 0.5; });
         if (window._shuffleQuestionOptions) questions.forEach(window._shuffleQuestionOptions);
