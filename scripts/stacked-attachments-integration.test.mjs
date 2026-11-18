@@ -132,3 +132,15 @@ test("final exam readiness rejects ambiguous ordering and matching answer keys",
   assert.match(code, /function scoreFinalAnswer_\(q,answer\)[\s\S]*?if\(type==="order"\)/);
   assert.match(code, /if\(type==="match"\)[\s\S]*?const pairs=q\.pairs\|\|\[\]/);
 });
+
+
+test("final exam scoring never awards points for blank answers, including zero-valued keys", () => {
+  const code = read("Code.gs");
+  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
+  assert.match(scorer, /if\(answer===undefined\|\|answer===null\|\|\(typeof answer==="string"&&!answer\.trim\(\)\)\)return 0;/,
+    "blank strings must be rejected before numeric coercion");
+  assert.match(scorer, /if\(type==="num"\)/);
+  assert.match(scorer, /if\(type==="tf"\)/);
+  assert.match(scorer, /Number\(answer\)===Number\(expected\)/,
+    "valid numeric zero and option index zero must remain scoreable");
+});
