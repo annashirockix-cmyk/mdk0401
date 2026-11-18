@@ -13,9 +13,9 @@ if(!u||!(u.success||u.ok))throw Error(u&&u.error||"Не удалось полу�
 if(!r||!r.success)throw Error(r&&r.error||"Не удалось получить результаты");
 if(!a||!a.success)throw Error(a&&a.error||"Не удалось получить задания");
 if(!activity||!activity.success)throw Error(activity&&activity.error||"Не удалось получить журнал активности");
-const students=(u.students||[]).filter(x=>String(x.role||"student").toLowerCase()==="student"&&(staff.role==="admin"||(x.courses||[]).some(c=>(staff.courses||[]).includes(c))));
-const results=(r.results||[]).filter(x=>staff.role==="admin"||!x.courseId||(staff.courses||[]).includes(x.courseId));
-const tasks=(a.assignments||[]).filter(x=>staff.role==="admin"||(staff.courses||[]).includes(x.courseId));
+const students=(u.students||[]).filter(x=>String(x.role||"student").toLowerCase()==="student"&&(staff.role==="admin"||(x.courses||[]).some(c=>(staff.courses||[]).includes(c)))).map(x=>Object.assign({},x,{group:normalizeGroup(x.group)||"Без группы"}));
+const results=(r.results||[]).filter(x=>staff.role==="admin"||!x.courseId||(staff.courses||[]).includes(x.courseId)).map(x=>Object.assign({},x,{group:normalizeGroup(x.group)||"Без группы"}));
+const tasks=(a.assignments||[]).filter(x=>staff.role==="admin"||(staff.courses||[]).includes(x.courseId)).map(x=>Object.assign({},x,{targetValue:x.targetType==="group"?normalizeGroup(x.targetValue):x.targetValue,submissions:(x.submissions||[]).map(sub=>Object.assign({},sub,{group:normalizeGroup(sub.group)||"Без группы"}))}));
 const subs=tasks.flatMap(t=>(t.submissions||[]).map(s=>Object.assign({task:t.title,courseId:t.courseId,taskId:t.id},s)));
 const wait=subs.filter(s=>s.status!=="reviewed"),done=subs.filter(s=>s.status==="reviewed");
 const today=new Date();today.setHours(0,0,0,0);
