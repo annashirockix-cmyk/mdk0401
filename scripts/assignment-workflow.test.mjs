@@ -624,6 +624,19 @@ test("assignment attachments are private, tied to the student and attempt, and r
   assert.equal(studentView.attachments[0].fileName, "proof.pdf");
   const teacherView = api.getAssignments_({ token: "teacherToken" }).assignments[0].submissions[0];
   assert.equal(teacherView.attachments[0].id, upload.id);
+  api.gradeAssignment_({ token: "teacherToken", submissionId: submitted.submissionId, grade: 2, feedback: "Добавьте пояснение." });
+  const retryUpload = api.uploadAssignmentAttachment_({
+    token: "studentToken", assignmentId: created.id, fileName: "proof-revised.pdf",
+    dataUrl: "data:application/pdf;base64," + pdf
+  });
+  const retry = api.submitAssignment_({
+    token: "studentToken", assignmentId: created.id, answer: "Исправлено", attachmentIds: [retryUpload.id]
+  });
+  assert.equal(retry.attempt, 2);
+  const retryView = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
+  assert.equal(retryView.attachments[0].id, retryUpload.id);
+  assert.equal(retryView.history[0].attachments[0].id, upload.id,
+    "the first attempt file must remain linked to its historical answer");
   assert.equal(api.getAssignmentAttachment_({ token: "teacherToken", attachmentId: upload.id }).fileName, "proof.pdf");
   assert.throws(() => api.getAssignmentAttachment_({ token: "otherStudentToken", attachmentId: upload.id }), /доступ/);
   assert.throws(() => api.getAssignmentAttachment_({ token: "otherTeacherToken", attachmentId: upload.id }), /прав|доступ/);
