@@ -1823,7 +1823,7 @@ test("student assignment results query only matching submissions and history IDs
     headerMap_:sheet=>Object.fromEntries(sheet.headers.map((name,index)=>[name,index])),
     email_:value=>String(value||"").trim().toLowerCase(),
     normalizeCourseId_:value=>String(value||""),
-    normalizeGroup_:value=>String(value==null?"":value).normalize("NFKC").replace(/[\\s\\u00A0]+/g," ").trim().toLocaleUpperCase("ru-RU")
+    normalizeGroup_:value=>String(value==null?"":value).normalize("NFKC").replaceAll(String.fromCharCode(160)," ").replaceAll(String.fromCharCode(9)," ").trim().split(" ").filter(Boolean).join(" ").toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.assignmentResultRecords_=assignmentResultRecords_;",sandbox);
   const records=sandbox.assignmentResultRecords_("STUDENT@TEST");
