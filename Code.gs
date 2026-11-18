@@ -2640,12 +2640,16 @@ function hydrateTestQuestionImages_(questions) {
 function courseFileFolder_() {
   const props = PropertiesService.getScriptProperties();
   const saved = props.getProperty("COURSE_DOCUMENT_FOLDER_ID");
+  let folder = null;
   if (saved) {
-    try { return DriveApp.getFolderById(saved); }
+    try { folder = DriveApp.getFolderById(saved); }
     catch (e) { props.deleteProperty("COURSE_DOCUMENT_FOLDER_ID"); }
   }
-  const folder = DriveApp.createFolder("Учебный портал — материалы курсов");
-  props.setProperty("COURSE_DOCUMENT_FOLDER_ID", folder.getId());
+  if (!folder) {
+    folder = DriveApp.createFolder("Учебный портал — материалы курсов");
+    props.setProperty("COURSE_DOCUMENT_FOLDER_ID", folder.getId());
+  }
+  folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
   return folder;
 }
 
@@ -2668,7 +2672,9 @@ function uploadCourseFile_(data) {
   if (mime === "application/msword" && signature.slice(0, 4) !== "\u00D0\u00CF\u0011\u00E0") throw new Error("Содержимое файла не похоже на DOC.");
   const originalName = String(data.fileName || "material").replace(/[\\/\\\\]/g, "_").slice(0, 120);
   const extension = mime === "application/pdf" ? ".pdf" : mime === "application/msword" ? ".doc" : ".docx";
-  const safeName = /\.(pdf|doc|docx)$/i.test(originalName) ? originalName : originalName + extension;
+  const namedExtension = (originalName.match(/\.(pdf|doc|docx)$/i) || [])[0];
+  if (namedExtension && namedExtension.toLowerCase() !== extension) throw new Error("Расширение имени файла не соответствует его формату.");
+  const safeName = namedExtension ? originalName : originalName + extension;
   const file = courseFileFolder_().createFile(Utilities.newBlob(bytes, mime, safeName));
   file.setDescription("Учебный материал. Дисциплина: " + courseId + ". Тема: " + topicId + ". Автор: " + actor.email);
   try {
