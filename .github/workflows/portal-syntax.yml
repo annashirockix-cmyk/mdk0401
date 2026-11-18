@@ -1,7 +1,7 @@
 name: Portal syntax checks
 on:
   push:
-    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache]
+    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation]
   pull_request:
     branches: [main, master]
   workflow_dispatch:
@@ -34,6 +34,8 @@ jobs:
         run: node --test scripts/offline-cache-integrity.test.mjs
       - name: Check account-scoped offline materials cache
         run: node --test scripts/offline-materials-cache.test.mjs
+      - name: Check accessible portal navigation
+        run: node --test scripts/portal-navigation-a11y.test.mjs
       - name: Check notification center contract
         run: node scripts/check-notification-contract.mjs
       - name: Check assignment workflow
