@@ -1638,15 +1638,35 @@ function setupDrawer() {
     var burgerBtn = document.getElementById("burgerBtn"), drawer = document.getElementById("drawer"), drawerOverlay = document.getElementById("drawerOverlay"), drawerClose = document.getElementById("drawerClose");
     var search = document.getElementById("drawerSearch"), clear = document.getElementById("drawerSearchClear"), status = document.getElementById("drawerSearchResults");
     if (!burgerBtn || !drawer || !drawerOverlay) return;
+    var previousBodyOverflow = "";
     function closeDrawer(restoreFocus) {
         drawer.classList.remove("open"); drawerOverlay.classList.remove("open");
         drawer.setAttribute("aria-hidden", "true"); drawer.inert = true; burgerBtn.setAttribute("aria-expanded", "false");
+        burgerBtn.setAttribute("aria-label", "Открыть навигацию");
+        document.body.style.overflow = previousBodyOverflow;
         if (restoreFocus) burgerBtn.focus();
     }
     function openDrawer() {
+        if (drawer.classList.contains("open")) return;
+        previousBodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
         drawer.classList.add("open"); drawerOverlay.classList.add("open");
         drawer.setAttribute("aria-hidden", "false"); drawer.inert = false; burgerBtn.setAttribute("aria-expanded", "true");
+        burgerBtn.setAttribute("aria-label", "Закрыть навигацию");
         if (search) search.focus();
+        else if (drawerClose) drawerClose.focus();
+    }
+    function keepFocusInside(event) {
+        if (event.key !== "Tab" || !drawer.classList.contains("open")) return;
+        var focusable = Array.prototype.slice.call(drawer.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+            .filter(function(element) { return element.offsetWidth || element.offsetHeight || element === document.activeElement; });
+        if (!focusable.length) { event.preventDefault(); drawer.focus(); return; }
+        var first = focusable[0], last = focusable[focusable.length - 1];
+        if (event.shiftKey && (document.activeElement === first || !drawer.contains(document.activeElement))) {
+            event.preventDefault(); last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !drawer.contains(document.activeElement))) {
+            event.preventDefault(); first.focus();
+        }
     }
     window.resetDrawerNavigationFilter = function() {
         drawer.querySelectorAll(".drawer-item[data-nav-original-display]").forEach(function(item) {
@@ -1696,7 +1716,7 @@ function setupDrawer() {
         if (!query) window.updatePortalNavigation();
     }
     burgerBtn.onclick = openDrawer;
-    drawerOverlay.onclick = function() { closeDrawer(false); };
+    drawerOverlay.onclick = function() { closeDrawer(true); };
     if (drawerClose) drawerClose.onclick = function() { closeDrawer(true); };
     if (search) search.addEventListener("input", applySearch);
     if (clear) clear.onclick = function() { if (search) { search.value = ""; applySearch(); search.focus(); } };
@@ -1704,6 +1724,8 @@ function setupDrawer() {
         item.addEventListener("click", function() {
             if (search) { search.value = ""; applySearch(); }
             closeDrawer(false);
+            var main = document.getElementById("app");
+            if (main) main.focus();
         });
     });
     document.addEventListener("keydown", function(event) {
@@ -1716,6 +1738,7 @@ function setupDrawer() {
             if (search && search.value) { search.value = ""; applySearch(); search.focus(); }
             else closeDrawer(true);
         }
+        keepFocusInside(event);
     });
     window.updatePortalNavigation();
 }
