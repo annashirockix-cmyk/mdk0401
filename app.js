@@ -217,7 +217,9 @@ window.loadGlobalCustomContent = function(callback) {
         if (res && res.success) {
             var rows = Array.isArray(res.data) ? res.data : [];
             if (window.OfflineMaterialsCache && identity) {
-                window.OfflineMaterialsCache.save(rows, identity).catch(function(error) {
+                window.OfflineMaterialsCache.save(rows, identity).then(function() {
+                    if (window.OfflineMaterialsUI) window.OfflineMaterialsUI.refresh();
+                }).catch(function(error) {
                     console.warn("Не удалось сохранить офлайн-материалы", error);
                 });
             }
@@ -287,6 +289,7 @@ window.loadGlobalCustomContent = function(callback) {
                 });
                 var hours = Math.max(1, Math.floor(snapshot.ageMs / 3600000));
                 if (window.showToast) window.showToast("Нет связи. Открыты сохранённые лекции и файлы (" + hours + " ч. назад).", "info");
+                if (window.OfflineMaterialsUI) window.OfflineMaterialsUI.refresh();
             }).catch(function(cacheError) {
                 console.warn("Офлайн-кэш материалов недоступен", cacheError);
             }).then(function() {
@@ -1326,7 +1329,9 @@ function setupLogin() {
         if (window.invalidateGlobalCustomContentLoad) window.invalidateGlobalCustomContentLoad(true);
         var role = (res.role || "student").toLowerCase();
         if (window.OfflineMaterialsCache) {
-            window.OfflineMaterialsCache.clearOtherUsers({ email: email, role: role }).catch(function(error) {
+            window.OfflineMaterialsCache.clearOtherUsers({ email: email, role: role }).then(function() {
+                if (window.OfflineMaterialsUI) window.OfflineMaterialsUI.refresh();
+            }).catch(function(error) {
                 console.warn("Не удалось очистить офлайн-материалы другого аккаунта", error);
             });
         }
