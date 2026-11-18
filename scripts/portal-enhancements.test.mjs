@@ -1822,7 +1822,8 @@ test("student assignment results query only matching submissions and history IDs
     assignmentSubmissionHistory_:()=>historySheet,
     headerMap_:sheet=>Object.fromEntries(sheet.headers.map((name,index)=>[name,index])),
     email_:value=>String(value||"").trim().toLowerCase(),
-    normalizeCourseId_:value=>String(value||"")
+    normalizeCourseId_:value=>String(value||""),
+    normalizeGroup_:value=>String(value==null?"":value).normalize("NFKC").replace(/[\\s\\u00A0]+/g," ").trim().toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.assignmentResultRecords_=assignmentResultRecords_;",sandbox);
   const records=sandbox.assignmentResultRecords_("STUDENT@TEST");
@@ -1890,9 +1891,9 @@ test("legacy group spellings resolve to one canonical group without merging dist
   assert.equal(normalize("ИС-21" + String.fromCharCode(160)), "ИС-21");
   assert.equal(normalize("ИC-21"), "ИC-21", "Latin C must not be silently rewritten to Cyrillic С");
   assert.notEqual(normalize("ИС-21"), normalize("ИС-22"));
-  assert.match(server, /group: normalizeGroup_\\(row\\[map\\.Group\\]\\)/);
-  assert.match(server, /targetValue:String\\(r\\[h\\.TargetType\\]\\|\\|""\\)==="group"\\?normalizeGroup_/);
-  assert.match(server, /normalizeGroup_\\(value\\) === normalizeGroup_\\(student\\.group\\)/);
-  assert.match(server, /normalizeGroup_\\(row\\[m\\.Group\\]\\)===normalizeGroup_\\(group\\)/);
-  assert.match(server, /group:normalizeGroup_\\(r\\[2\\]\\)/);
+  assert.ok(server.includes("group: normalizeGroup_(row[map.Group])"));
+  assert.ok(server.includes('targetValue:String(r[h.TargetType]||"")==="group"?normalizeGroup_(r[h.TargetValue])'));
+  assert.ok(server.includes("normalizeGroup_(value) === normalizeGroup_(student.group)"));
+  assert.ok(server.includes("normalizeGroup_(row[m.Group])===normalizeGroup_(group)"));
+  assert.ok(server.includes("group:normalizeGroup_(r[2])"));
 });
