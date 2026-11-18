@@ -541,6 +541,15 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(ui, /ENT":"Английский язык — технический/);
   assert.match(ui, /window\.API\.createAssignment/);
   assert.match(ui, /window\.API\.submitAssignment/);
+  assert.match(ui, /name="attachments" multiple/);
+  assert.match(ui, /uploadAssignmentAttachment/);
+  assert.match(ui, /getAssignmentAttachment/);
+  assert.match(ui, /attachmentHtml\(s\.attachments\)/);
+  assert.match(api, /uploadAssignmentAttachment\s*:/);
+  assert.match(api, /getAssignmentAttachment\s*:/);
+  assert.match(backend, /function uploadAssignmentAttachment_\(data\)/);
+  assert.match(backend, /function getAssignmentAttachment_\(data\)/);
+  assert.match(backend, /AssignmentFiles: \[/);
   assert.match(ui, /Работа проверена и зачтена\. Повторная отправка не требуется/);
   assert.match(ui, /Отправить исправленную работу/);
   assert.match(ui, /Комментарий преподавателя:/);
