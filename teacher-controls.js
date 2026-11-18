@@ -49,6 +49,7 @@ window.renderTeacherControlsPage=function(){
       lines.push("  Итоговый экзамен: "+(audit.ready?"ГОТОВ":"НЕ ГОТОВ")+" · пригодных уникальных заданий: "+(audit.eligibleUniqueQuestions||0)+"/"+(audit.requiredQuestions||45)+" · не хватает: "+(audit.shortage||0));
       lines.push("  Типы заданий: "+typeSummary);
       lines.push("  Экзаменационные источники: "+bankSummary);
+      lines.push("  В расчёт входят только уникальные вопросы с корректным ключом автоматической проверки; вопросы без ключа и письменные задания исключены.");
      });status.textContent=lines.join("\n");
     }catch(e){status.textContent="Ошибка диагностики: "+(e.message||e);}finally{btn.disabled=false;}
    };
