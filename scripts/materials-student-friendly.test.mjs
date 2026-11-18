@@ -23,6 +23,7 @@ test("all 11 materials science lectures receive a student-friendly rewrite", () 
   assert.equal(topics.length, 11);
   for (const topic of topics) {
     assert.ok(topic.lectures?.[0]?.content, topic.id + " has lecture content");
+    assert.match(topic.lectures[0].content, /После изучения темы вы сможете/);
     assert.match(topic.lectures[0].content, /Главная схема темы/);
     assert.match(topic.lectures[0].content, /Словарь простыми словами/);
     assert.match(topic.lectures[0].content, /Проверьте себя/);
