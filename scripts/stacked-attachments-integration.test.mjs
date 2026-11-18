@@ -75,3 +75,19 @@ test("downloads retain role, course and publication checks for each attachment f
   assert.match(exam, /hasCourseAccess_\(\s*user\s*,\s*courseId\s*\)/);
   assert.match(exam, /editor_\(data\s*,\s*courseId\s*\)/);
 });
+
+
+test("admin question-bank statistics report usable final-exam readiness, not raw row count", () => {
+  const code = read("Code.gs");
+  const stats = section(code, "function getQuestionBankStats_(data)", "/**\n * Импорт встроенного банка");
+  assert.match(stats, /admin_\(data\)/, "question-bank diagnostics must remain admin-only");
+  assert.match(stats, /allFinalExamEntries_\(id\)/, "readiness must use the same eligible-question filter as the exam");
+  for (const field of ["requiredQuestions", "eligibleUniqueQuestions", "ready", "shortage", "byType", "byBank"]) {
+    assert.ok(stats.includes(field), "missing final exam readiness field " + field);
+  }
+  assert.match(stats, /requiredQuestions:\\s*45/);
+  assert.match(stats, /eligible\\.length\\s*>=\\s*45/);
+  assert.match(stats, /Math\\.max\\(0,\\s*45\\s*-\\s*eligible\\.length\\)/);
+  assert.match(code, /function allFinalExamEntries_\\(courseId\\)[\\s\\S]*?finalQuestionHasAnswerKey_\\(q\\)/,
+    "readiness must exclude questions without valid automatic keys");
+});
