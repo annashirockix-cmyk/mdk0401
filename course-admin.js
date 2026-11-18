@@ -188,6 +188,7 @@
       '<label>Тема</label><select id="lectureTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующая лекция</label><select id="lectureExisting" class="self-input"><option value="">— Новая лекция —</option></select>'+
       '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea>'+
       '<button class="btn" id="saveLectureBtn">Создать лекцию</button> <button class="btn ghost" id="resetLectureBtn" type="button">Очистить форму</button> <button class="btn ghost" id="deleteLectureBtn" type="button" disabled>Удалить выбранную</button> <span id="lectureStatus" aria-live="polite"></span></div>'+
+      '<div class="module"><h3>2а. Файлы к теме</h3><p style="color:var(--muted)">PDF, DOC и DOCX до 3,5 МБ. Файлы хранятся в закрытой папке Google Drive и выдаются с проверкой доступа к теме.</p><label>Тема</label><select id="courseFileTopic" class="self-input"></select><input id="courseFileTitle" class="self-input" placeholder="Название материала" style="margin:8px 0"><input id="courseFileInput" type="file" accept=".pdf,.doc,.docx" class="self-input"><button class="btn" id="uploadCourseFileBtn" type="button" style="margin-top:10px">Загрузить файл к теме</button> <span id="courseFileStatus" aria-live="polite"></span><div id="courseFileList" style="margin-top:12px"></div></div>'+
       '<div class="module"><h3>3. Дополнительные тесты</h3><p style="color:var(--muted)">Можно создавать тесты, загружать ранее сохранённые тесты для изменения, просматривать формулировки всех заданий и правильные ответы.</p>'+
       '<label>Тема</label><select id="testTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующий тест</label><select id="testExisting" class="self-input"><option value="">— Новый тест —</option></select>'+
       '<input id="testTitle" class="self-input" placeholder="Название теста" style="margin:8px 0"><div id="questionDrafts"></div>'+
@@ -198,7 +199,7 @@
       '<button class="btn" id="saveTestBtn">Создать тест</button> <button class="btn ghost" id="resetTestBtn" type="button">Новый тест</button> <button class="btn ghost" id="deleteTestBtn" type="button" disabled>Удалить выбранный тест</button> <button class="btn ghost" id="previewTestBtn" type="button">Просмотреть задания и ответы</button> <span id="testStatus" aria-live="polite"></span><div id="testPreview" style="margin-top:12px"></div></div>'+
       '<div class="module" id="visualExamBankEditor"><h3>4. Редактор основных экзаменов</h3><p style="color:var(--muted)">Редактируйте вопросы через форму, без ручного JSON. При сохранении сервер проверяет структуру и создаёт резервную копию предыдущего банка.</p><label>Банк вопросов</label><select id="examBankId" class="self-input"><option value="exam_primary">Основной экзамен · exam_primary</option><option value="exam_extra">Дополнительный экзамен · exam_extra</option><option value="mdk_extra">Дополнительный банк · mdk_extra</option></select><div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button class="btn ghost" id="loadExamBankBtn" type="button">Загрузить текущий банк</button><button class="btn" id="saveExamBankBtn" type="button">Сохранить банк с резервной копией</button><button class="btn ghost" id="addExamQuestionBtn" type="button">+ Новое задание</button></div><div id="examBankStatus" aria-live="polite"></div><div id="examBankQuestionList" style="display:grid;gap:8px;margin:12px 0"></div><div class="module" id="examQuestionForm" style="padding:14px;margin-top:12px"><h4 id="examQuestionFormTitle">Новое задание</h4><label>Формулировка вопроса</label><textarea id="examQuestionText" class="self-input" rows="3" maxlength="5000" placeholder="Введите формулировку задания"></textarea><label style="display:block;margin-top:10px">Тип задания</label><select id="examQuestionType" class="self-input"><option value="mc">Один правильный ответ</option><option value="multi">Несколько правильных ответов</option><option value="true_false">Верно / неверно</option><option value="numeric">Числовой ответ</option><option value="short_text">Краткий текстовый ответ</option><option value="order">Последовательность</option><option value="matching">Соответствие</option></select><label id="examQuestionOptionsLabel" style="display:block;margin-top:10px">Варианты ответа — каждый с новой строки</label><textarea id="examQuestionOptions" class="self-input" rows="4" placeholder="Вариант А&#10;Вариант Б&#10;Вариант В&#10;Вариант Г"></textarea><label id="examQuestionCorrectLabel" style="display:block;margin-top:10px">Номер правильного варианта (с 1)</label><input id="examQuestionCorrect" class="self-input" type="text" placeholder="Например: 2"><label id="examQuestionExtraLabel" style="display:block;margin-top:10px">Дополнительные данные</label><textarea id="examQuestionExtra" class="self-input" rows="4" placeholder="Для последовательности — по одному элементу на строку; для соответствия — левая часть | правая часть"></textarea><label id="examQuestionToleranceLabel" style="display:block;margin-top:10px">Допустимая погрешность</label><input id="examQuestionTolerance" class="self-input" type="number" min="0" step="any" value="0.01"><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" id="saveExamQuestionBtn" type="button">Добавить задание</button><button class="btn ghost" id="cancelExamQuestionBtn" type="button">Очистить форму</button><button class="btn ghost" id="previewExamQuestionBtn" type="button">Предпросмотр для студента</button></div><div id="examQuestionPreview" style="margin-top:12px"></div></div></div>'+
       '<div class="module"><h3>5. Сохранённые материалы темы</h3><p style="color:var(--muted)">Список обновляется после сохранения. Выберите тему выше, чтобы увидеть её лекции и тесты.</p><div id="savedMaterials">Загрузка материалов…</div></div>';
-    const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),testSel=document.getElementById("testTopic"),mainTopicSel=document.getElementById("mainTopicExisting"),examBankSel=document.getElementById("examBankId");
+    const courseSel=document.getElementById("editorCourse"),topicSel=document.getElementById("lectureTopic"),fileTopicSel=document.getElementById("courseFileTopic"),testSel=document.getElementById("testTopic"),mainTopicSel=document.getElementById("mainTopicExisting"),examBankSel=document.getElementById("examBankId");
     let lectureId="",testId="",draft=[],editingQuestion=-1,builtInLectureIndex=null;
     const $=id=>document.getElementById(id);
     function refreshContent(done){
@@ -291,7 +292,7 @@
     async function saveExamBank(){const status=$("examBankStatus"),btn=$("saveExamBankBtn");if(!examBankRows.length){status.textContent="Добавьте хотя бы одно задание.";return;}if(!confirm("Сохранить "+examBankRows.length+" заданий в банке «"+examBankSel.value+"»? Предыдущая версия будет сохранена в резервной копии."))return;btn.disabled=true;status.textContent="Сохранение и резервное копирование…";try{const result=await window.API.saveQuestionBank(courseSel.value,examBankSel.value,examBankRows);if(!result||!result.success)throw new Error(result&&result.error||"Не удалось сохранить банк.");await loadExamBank();status.textContent="Сохранено: "+result.questionsSaved+". Резервная копия: "+result.backupId;}catch(error){status.textContent=error.message||"Ошибка сохранения.";}finally{btn.disabled=false;}}
     function fillTopics(){
       const opts=topics().map(t=>'<option value="'+esc(t.id)+'">'+esc(t.title)+'</option>').join("");
-      topicSel.innerHTML=opts;testSel.innerHTML=opts;
+      topicSel.innerHTML=opts;fileTopicSel.innerHTML=opts;testSel.innerHTML=opts;
       mainTopicSel.innerHTML=getBuiltInTopics(courseSel.value).map(t=>'<option value="'+esc(t.id)+'">'+esc(t.code+" "+t.title)+'</option>').join("");
       loadMainTopic();
       renderSaved();
@@ -304,16 +305,20 @@
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
       const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
       const fs=(window.customContent.flashcards||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
+      const docs=(window.customContent.files||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
       const builtInTopic=getBuiltInTopic(lectureTopicId),builtInLectures=getBuiltInLectures(builtInTopic);
       const additionalLectures=ls.filter(x=>x.isBuiltInOverride!==true);
       $("lectureExisting").innerHTML='<option value="">— Новая дополнительная лекция —</option>'+builtInLectures.map((x,i)=>'<option value="builtin:'+i+'">Основная: '+esc(x.code||"")+' '+esc(x.title||"")+'</option>').join("")+additionalLectures.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
       $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
       $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button></div>').join(""):'<p>Лекций пока нет.</p>')+
         '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>')+
+        '<h4 style="margin-top:16px">Файлы темы ('+docs.length+')</h4>'+(docs.length?docs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+esc(x.fileName||"файл")+' <button class="btn ghost delete-course-file" data-id="'+esc(x.id)+'">Удалить</button></div>').join(""):'<p>Файлов пока нет.</p>')+
         '<h4 style="margin-top:16px">Карточки ('+fs.length+')</h4>'+(fs.length?fs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.cards||[]).length)+' карточек · '+esc(x.track||"all")+' <button class="btn ghost pick-flashcards" data-id="'+esc(x.id)+'">Открыть конструктор</button></div>').join(""):'<p>Наборов карточек пока нет.</p>');
       $("savedMaterials").querySelectorAll(".pick-lecture").forEach(b=>b.onclick=()=>{ $("lectureExisting").value=b.dataset.id;loadLecture();});
       $("savedMaterials").querySelectorAll(".pick-test").forEach(b=>b.onclick=()=>{ $("testExisting").value=b.dataset.id;loadTest();$("previewTestBtn").click();});
       $("savedMaterials").querySelectorAll(".pick-flashcards").forEach(b=>b.onclick=()=>{window.state.activeCourseId=courseSel.value;if(window.saveStudentData)window.saveStudentData();location.hash="#/flashcard-editor";});
+      $("courseFileList").innerHTML=docs.map(x=>'<div style="padding:6px 0">'+esc(x.title)+' · '+esc(x.fileName||"")+'</div>').join("");
+      $("savedMaterials").querySelectorAll(".delete-course-file").forEach(b=>b.onclick=async()=>{if(!confirm("Удалить прикреплённый файл?"))return;b.disabled=true;try{const result=await window.API.deleteCustomContent(b.dataset.id,courseSel.value);if(!result||!result.success)throw new Error(result&&result.error||"Не удалось удалить файл.");await new Promise(resolve=>refreshContent(resolve));$("courseFileStatus").textContent="Файл удалён.";}catch(error){$("courseFileStatus").textContent=error.message||"Ошибка удаления.";b.disabled=false;}});
     }
     function resetLecture(){
       lectureId="";builtInLectureIndex=null;$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
@@ -382,6 +387,22 @@
     topicSel.onchange=()=>{resetLecture();renderSaved();};
     testSel.onchange=()=>{resetTest();renderSaved();};
     $("lectureExisting").onchange=loadLecture;
+    $("uploadCourseFileBtn").onclick=async function(){
+      const button=this,input=$("courseFileInput"),file=input.files&&input.files[0],title=$("courseFileTitle").value.trim(),topicId=fileTopicSel.value,status=$("courseFileStatus");
+      if(!topicId||!file||!title){status.textContent="Выберите тему, укажите название и выберите PDF/DOC/DOCX.";return;}
+      if(file.size>3500000){status.textContent="Файл больше 3,5 МБ. Уменьшите размер и повторите загрузку.";return;}
+      const ext=(file.name.match(/\.([^.]+)$/)||[])[1]||"";
+      if(!/^(pdf|doc|docx)$/i.test(ext)){status.textContent="Разрешены только PDF, DOC и DOCX.";return;}
+      button.disabled=true;status.textContent="Загрузка файла…";
+      try{
+        const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||""));reader.onerror=()=>reject(new Error("Не удалось прочитать файл."));reader.readAsDataURL(file);});
+        const result=await window.API.uploadCourseFile(courseSel.value,topicId,title,file.name,dataUrl);
+        if(!result||!result.success)throw new Error(result&&result.error||"Не удалось загрузить файл.");
+        await new Promise(resolve=>refreshContent(resolve));input.value="";$("courseFileTitle").value="";fileTopicSel.value=topicSel.value;
+        status.textContent="Файл прикреплён к теме ✓ ("+Math.round(result.size/1024)+" КБ)";
+      }catch(error){status.textContent=error.message||"Ошибка загрузки.";}
+      finally{button.disabled=false;}
+    };
     $("testExisting").onchange=loadTest;
     $("resetLectureBtn").onclick=resetLecture;
     $("resetTestBtn").onclick=resetTest;
