@@ -2580,7 +2580,7 @@ function scoreFinalAnswer_(q,answer) {
   if(type==="order"){
     const expected=hasKey(q.correctOrder)?q.correctOrder:(hasKey(q.correct)?q.correct:(hasKey(q.correctAnswer)?q.correctAnswer:(hasKey(q.answers)?q.answers:(hasKey(q.answer)?q.answer:q.items||[]))));
     if(!Array.isArray(answer)||!Array.isArray(expected)||!expected.length)return 0;
-    const right=answer.filter(function(value,index){return String(value)===String(expected[index]);}).length;
+    const right=answer.filter(function(value,index){return String(value===undefined||value===null?"":value).trim()===String(expected[index]===undefined||expected[index]===null?"":expected[index]).trim();}).length;
     return right/expected.length;
   }
   if(type==="match"){
