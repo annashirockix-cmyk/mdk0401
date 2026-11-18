@@ -1414,7 +1414,7 @@ function getAssignments_(data) {
   function historyFor(submission) {
     const sid = String(submission[m.Id] || "");
     const saved = historyRows.slice(1).filter(function(x){return String(x[hm.SubmissionId]||"")===sid;})
-      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||""),grade:x[hm.Grade]===undefined||x[hm.Grade]===""?null:x[hm.Grade],feedback:String(x[hm.Feedback]||""),reviewedBy:String(x[hm.ReviewedBy]||""),reviewedAt:String(x[hm.ReviewedAt]||""),status:String(x[hm.Status]||"")};})
+      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||""),grade:x[hm.Grade]===undefined||x[hm.Grade]===""?null:x[hm.Grade],feedback:String(x[hm.Feedback]||""),reviewedBy:String(x[hm.ReviewedBy]||""),reviewedAt:String(x[hm.ReviewedAt]||""),status:String(x[hm.Status]||""),attachments:(function(){try{return JSON.parse(String(x[hm.AttachmentsJSON]||"[]"));}catch(e){return [];}})()};})
       .sort(function(x,y){return x.attempt-y.attempt;});
     return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||""),grade:submission[m.Grade]===undefined||submission[m.Grade]===""?null:submission[m.Grade],feedback:String(submission[m.Feedback]||""),reviewedBy:String(submission[m.ReviewedBy]||""),reviewedAt:String(submission[m.ReviewedAt]||""),status:String(submission[m.Status]||"")}];
   }
@@ -1432,9 +1432,9 @@ function getAssignments_(data) {
     const own=subs.slice(1).filter(function(x){return String(x[m.AssignmentId])===item.id;});
     if(user.role==="student"){
       const ownStudent=own.filter(function(x){return email_(x[m.StudentEmail])===user.email;}).sort(function(x,y){return String(y[m.SubmittedAt]).localeCompare(String(x[m.SubmittedAt]));})[0];
-      item.submission=ownStudent?{answer:String(ownStudent[m.Answer]||""),submittedAt:String(ownStudent[m.SubmittedAt]||""),status:String(ownStudent[m.Status]||"submitted"),grade:ownStudent[m.Grade]===""?null:ownStudent[m.Grade],feedback:String(ownStudent[m.Feedback]||""),attempts:historyFor(ownStudent).length,history:historyFor(ownStudent)}:null;
+      item.submission=ownStudent?{answer:String(ownStudent[m.Answer]||""),submittedAt:String(ownStudent[m.SubmittedAt]||""),status:String(ownStudent[m.Status]||"submitted"),grade:ownStudent[m.Grade]===""?null:ownStudent[m.Grade],feedback:String(ownStudent[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(ownStudent[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:historyFor(ownStudent).length,history:historyFor(ownStudent)}:null;
     } else {
-      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:String(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attempts:hist.length,history:hist};});
+      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:String(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(x[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:hist.length,history:hist};});
     }
     list.push(item);
   });
