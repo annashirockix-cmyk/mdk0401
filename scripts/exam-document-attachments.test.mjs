@@ -20,7 +20,7 @@ test("exam files use a separate private Drive folder and sheet", () => {
 test("exam upload validates teacher rights, supported formats, signatures, extension and size", () => {
   assert.match(backend, /function uploadExamFile_\(data\)/);
   assert.match(backend, /actor=editor_\(data,courseId\)/);
-  assert.match(backend, /application\/pdf\|application\/msword/);
+  assert.ok(backend.includes(String.raw`application\/pdf|application\/msword`));
   assert.match(backend, /bytes\.length>3500000/);
   assert.match(backend, /starts\("%PDF-"\)/);
   assert.match(backend, /starts\("\\xD0\\xCF\\x11\\xE0"\)/);
