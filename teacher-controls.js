@@ -46,7 +46,10 @@ window.renderTeacherControlsPage=function(){
       const typeSummary=Object.keys(types).sort().map(function(key){return key+": "+types[key];}).join(", ")||"нет пригодных заданий";
       const bankSummary=Object.keys(banks).sort().map(function(key){return key+": "+banks[key];}).join(", ")||"нет";
       lines.push(c.courseId+": "+c.banks+" банков · "+c.rows+" строк · "+c.uniqueQuestions+" уникальных ID · "+c.duplicateQuestionIds+" повторов ID · "+c.invalidJson+" ошибок JSON");
-      lines.push("  Итоговый экзамен: "+(audit.ready?"ГОТОВ":"НЕ ГОТОВ")+" · пригодных уникальных заданий: "+(audit.eligibleUniqueQuestions||0)+"/"+(audit.requiredQuestions||45)+" · не хватает: "+(audit.shortage||0));
+      lines.push("  Итоговый экзамен: "+(audit.ready?"ГОТОВ по количеству":"НЕ ГОТОВ по количеству")+" · пригодных уникальных заданий: "+(audit.eligibleUniqueQuestions||0)+"/"+(audit.requiredQuestions||45)+" · не хватает: "+(audit.shortage||0));
+      const quotas=audit.requiredByType||{},shortages=audit.typeShortages||{};
+      const quotaSummary=Object.keys(quotas).map(function(key){return key+": "+(types[key]||0)+"/"+quotas[key]+(shortages[key]?" (не хватает "+shortages[key]+")":"");}).join(", ");
+      lines.push("  Состав варианта: "+(audit.distributionReady?"ПО ПЛАНУ":"ЕСТЬ ДЕФИЦИТ ТИПОВ")+(quotaSummary?" · "+quotaSummary:""));
       lines.push("  Типы заданий: "+typeSummary);
       lines.push("  Экзаменационные источники: "+bankSummary);
       lines.push("  В расчёт входят только уникальные вопросы с корректным ключом автоматической проверки; вопросы без ключа и письменные задания исключены.");
