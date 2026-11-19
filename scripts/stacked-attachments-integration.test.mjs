@@ -203,3 +203,13 @@ test("numeric final-exam scoring preserves an explicitly configured zero toleran
   assert.match(scorer, /const parsedTolerance=Number\(rawTolerance\),tolerance=isFinite\(parsedTolerance\)&&parsedTolerance>=0\?parsedTolerance:0\.01;/);
   assert.doesNotMatch(scorer, /Number\(q\.tol!==undefined\?q\.tol:q\.tolerance\)\|\|0\.01/);
 });
+
+
+test("ordering scoring selects the first valid array key exactly like readiness validation", () => {
+  const code = read("Code.gs");
+  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
+  const validator = section(code, "function finalQuestionHasAnswerKey_(q)", "function finalQuestionType_(question)");
+  const expected = "Array.isArray(q.correctOrder)?q.correctOrder:(Array.isArray(q.correct)?q.correct:(Array.isArray(q.correctAnswer)?q.correctAnswer:(Array.isArray(q.answers)?q.answers:(Array.isArray(q.answer)?q.answer:null))))";
+  assert.ok(scorer.includes(expected), "scoring must skip non-array higher-priority fields");
+  assert.ok(validator.includes(expected), "readiness must use the same array-key precedence");
+});
