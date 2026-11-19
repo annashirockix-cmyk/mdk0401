@@ -371,6 +371,9 @@ window.MDK_DATA = window.MDK_DATA || {};
     (section.topics || []).forEach(function (topic) {
       var updated = false;
       (topic.lectures || []).forEach(function (lecture, i) {
+        // Не заменяем содержательную авторскую лекцию устаревшим универсальным шаблоном.
+        // MATERIAL остаётся резервным источником только для записей без собственного текста.
+        if (lecture.content && String(lecture.content).trim()) return;
         var pack = MATERIAL[lecture.title] || MATERIAL[topic.title];
         if (!pack) return;
         lecture.content = makeContent(lecture.title || topic.title, pack);
