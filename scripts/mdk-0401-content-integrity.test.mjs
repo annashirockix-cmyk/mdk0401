@@ -1,0 +1,45 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import vm from "node:vm";
+
+const source = fs.readFileSync(new URL("../data-0401.js", import.meta.url), "utf8");
+const sandbox = { console };
+sandbox.window = sandbox;
+vm.runInNewContext(source, sandbox, { filename: "data-0401.js" });
+const course = sandbox.MDK_DATA["04.01"];
+const topics = (course.sections || []).flatMap(section => section.topics || []);
+
+test("MDK 04.01 contains six structured learning topics", () => {
+  assert.equal(topics.length, 6);
+  const ids = new Set();
+  const titles = new Set();
+
+  for (const topic of topics) {
+    assert.ok(topic.id && topic.code && topic.title, "topic has id, code and title");
+    assert.ok(!ids.has(topic.id), topic.id + " is unique");
+    ids.add(topic.id);
+    assert.ok(!titles.has(topic.title), topic.title + " is unique");
+    titles.add(topic.title);
+
+    assert.ok(Array.isArray(topic.lectures) && topic.lectures.length >= 1, topic.id + " has a lecture");
+    for (const lecture of topic.lectures) {
+      assert.ok(lecture.title && lecture.content && lecture.content.length > 1200, topic.id + " lecture has expanded content");
+      assert.match(lecture.content, /Цель занятия/);
+      assert.match(lecture.content, /Самопроверка/);
+      assert.match(lecture.content, /Практическое задание/);
+      assert.match(lecture.content, /Вывод/);
+    }
+
+    assert.ok(Array.isArray(topic.practicals) && topic.practicals.length >= 1, topic.id + " has a practical assignment");
+    assert.ok(topic.practicals.every(item => item.title && item.goal && item.task), topic.id + " practical has a title, goal and task");
+    assert.ok(Array.isArray(topic.selfWork) && topic.selfWork.length >= 1, topic.id + " has independent work");
+    assert.ok(topic.selfWork.every(item => item.title && item.task), topic.id + " independent work has a task");
+    assert.ok(Array.isArray(topic.test) && topic.test.length >= 2, topic.id + " has topic test questions");
+    assert.ok(topic.test.every(item => item.q && Array.isArray(item.options) && item.options.length >= 2), topic.id + " test questions have answer options");
+  }
+});
+
+test("MDK 04.01 does not advertise unfinished placeholder materials", () => {
+  assert.doesNotMatch(source, /Документ будет загружен позже|материал готовится|лекция не подготовлена|в разработке/i);
+});
