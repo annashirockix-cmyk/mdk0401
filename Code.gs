@@ -2027,20 +2027,11 @@ function getQuestionBankStats_(data) {
       byType[type] = (byType[type] || 0) + 1;
       byBank[bankId] = (byBank[bankId] || 0) + 1;
     });
-    const requiredByType = { multi: 10, order: 7, match: 7, num: 5, tf: 2 };
-    const typeShortages = {};
-    Object.keys(requiredByType).forEach(function(type) {
-      typeShortages[type] = Math.max(0, requiredByType[type] - (byType[type] || 0));
-    });
-    const distributionReady = Object.keys(typeShortages).every(function(type) { return typeShortages[type] === 0; });
     course.finalExamReadiness = {
       requiredQuestions: 45,
       eligibleUniqueQuestions: eligible.length,
       ready: eligible.length >= 45,
       shortage: Math.max(0, 45 - eligible.length),
-      requiredByType: requiredByType,
-      typeShortages: typeShortages,
-      distributionReady: distributionReady,
       byType: byType,
       byBank: byBank
     };
