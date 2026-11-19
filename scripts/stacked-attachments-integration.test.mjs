@@ -194,3 +194,12 @@ test("ordering exam scoring trims values consistently with readiness validation"
   assert.match(scorer, /String\(value===undefined\|\|value===null\?"":value\)\.trim\(\)===String\(expected\[index\]===undefined\|\|expected\[index\]===null\?"":expected\[index\]\)\.trim\(\)/);
   assert.match(validator, /map\(function\(value\)\{return String\(value===undefined\|\|value===null\?"":value\)\.trim\(\);\}\)/);
 });
+
+
+test("numeric final-exam scoring preserves an explicitly configured zero tolerance", () => {
+  const code = read("Code.gs");
+  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
+  assert.match(scorer, /const rawTolerance=q\.tol!==undefined&&q\.tol!==null&&q\.tol!==""\?q\.tol:/);
+  assert.match(scorer, /const parsedTolerance=Number\(rawTolerance\),tolerance=isFinite\(parsedTolerance\)&&parsedTolerance>=0\?parsedTolerance:0\.01;/);
+  assert.doesNotMatch(scorer, /Number\(q\.tol!==undefined\?q\.tol:q\.tolerance\)\|\|0\.01/);
+});
