@@ -2336,8 +2336,11 @@ function scoreBuiltInQuestion_(q,answer) {
   if(type==="tf"||type==="true_false"){
     if(expected===undefined||expected===null)return false;
     let target;
-    if(typeof expected==="boolean")target=expected?0:1;
-    else if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)target=q.options.indexOf(expected);
+    if(typeof expected==="boolean"){
+      const labels=Array.isArray(q.options)?q.options:[];
+      const semanticIndex=labels.findIndex(function(value){return expected?/^(верно|верный|true|да|правда|истина)$/i.test(String(value).trim()):/^(неверно|неверный|false|нет|ложь)$/i.test(String(value).trim());});
+      target=semanticIndex>=0?semanticIndex:(expected?0:1);
+    } else if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)target=q.options.indexOf(expected);
     else target=Number(expected);
     return Number(answer)===target;
   }
