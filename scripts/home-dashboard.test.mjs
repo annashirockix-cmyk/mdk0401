@@ -9,8 +9,8 @@ const worker = fs.readFileSync(new URL("../service-worker.js", import.meta.url),
 test("home dashboard is loaded after existing home composition and cached offline", () => {
   assert.match(html, /home-dashboard\.js\?v=1/);
   assert.match(worker, /\.\/home-dashboard\.js/);
-  assert.match(worker, /portal-cache-v429/);
-  assert.match(html, /service-worker\.js\?v=422/);
+  assert.match(worker, /portal-cache-v430/);
+  assert.match(html, /service-worker\.js\?v=423/);
 });
 
 test("dashboard uses existing role state and only shows teacher actions to staff", () => {
