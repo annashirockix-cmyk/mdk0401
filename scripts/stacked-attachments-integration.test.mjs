@@ -158,6 +158,15 @@ test("final exam scoring uses a shared answer-key fallback for all supported sin
     "ordering scoring must support the same answer-key fields as readiness validation");
 });
 
+test("final exam duplicate prompts normalize whitespace, case and Unicode", () => {
+  const code = read("Code.gs");
+  const entries = section(code, "function allFinalExamEntries_(courseId)", "function finalQuestionHasAnswerKey_(q)");
+  assert.ok(entries.includes("prompt.normalize(\"NFKC\")"));
+  assert.ok(entries.includes(".replace(/\\\\s+/g,\" \")"));
+  assert.ok(entries.includes(".toLocaleLowerCase(\"ru-RU\")"));
+  assert.ok(entries.includes("finalQuestionType_(q)+\"|\"+normalizedPrompt"));
+});
+
 test("true-false scoring follows semantic option labels when their order is reversed", () => {
   const code = read("Code.gs");
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
