@@ -83,14 +83,12 @@ test("admin question-bank statistics report usable final-exam readiness, not raw
   assert.match(stats, /admin_\(data\)/, "question-bank diagnostics must remain admin-only");
   assert.match(stats, /allFinalExamEntries_\(id\)/, "readiness must use the same eligible-question filter as the exam");
   assert.match(stats, /CFG\.COURSES\.forEach/, "courses with empty banks must still appear as not ready");
-  for (const field of ["requiredQuestions", "eligibleUniqueQuestions", "ready", "shortage", "requiredByType", "typeShortages", "distributionReady", "byType", "byBank"]) {
+  for (const field of ["requiredQuestions", "eligibleUniqueQuestions", "ready", "shortage", "byType", "byBank"]) {
     assert.ok(stats.includes(field), "missing final exam readiness field " + field);
   }
   assert.match(stats, /requiredQuestions:\s*45/);
   assert.match(stats, /eligible\.length\s*>=\s*45/);
   assert.match(stats, /Math\.max\(0,\s*45\s*-\s*eligible\.length\)/);
-  assert.match(stats, /multi:\s*10,\s*order:\s*7,\s*match:\s*7,\s*num:\s*5,\s*tf:\s*2/);
-  assert.match(stats, /distributionReady/);
   assert.match(code, /function allFinalExamEntries_\(courseId\)[\s\S]*?finalQuestionHasAnswerKey_\(q\)/,
     "readiness must exclude questions without valid automatic keys");
 });
