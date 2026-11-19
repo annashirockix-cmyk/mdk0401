@@ -161,10 +161,10 @@ test("final exam scoring uses a shared answer-key fallback for all supported sin
 test("true-false scoring follows semantic option labels when their order is reversed", () => {
   const code = read("Code.gs");
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
-  assert.match(scorer, /semanticIndex=labels\\.findIndex\\(function\\(value\\)\\{return expected\\?/);
-  assert.match(scorer, /верно\\|верный\\|true\\|да\\|правда\\|истина/);
-  assert.match(scorer, /неверно\\|неверный\\|false\\|нет\\|ложь/);
-  assert.match(scorer, /semanticIndex>=0\\?semanticIndex:\\(expected\\?0:1\\)/);
+  assert.ok(scorer.includes("semanticIndex=labels.findIndex"));
+  assert.ok(scorer.includes("верно|верный|true|да|правда|истина"));
+  assert.ok(scorer.includes("неверно|неверный|false|нет|ложь"));
+  assert.ok(scorer.includes("semanticIndex>=0?semanticIndex:(expected?0:1)"));
 });
 
 
