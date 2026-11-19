@@ -154,7 +154,7 @@ test("final exam scoring uses a shared answer-key fallback for all supported sin
     "true/false, numeric, multiple-choice, matching fallback and single-choice must share answer-key selection");
   assert.match(scorer, /hasKey\(q\.correctAnswer\)\?q\.correctAnswer/);
   assert.match(scorer, /hasKey\(q\.answers\)\?q\.answers:q\.answer/);
-  assert.match(scorer, /const expected=Array\\.isArray\\(q\\.correctOrder\\)\\?q\\.correctOrder[\\s\\S]*?Array\\.isArray\\(q\\.correctAnswer\\)\\?q\\.correctAnswer[\\s\\S]*?Array\\.isArray\\(q\\.answers\\)\\?q\\.answers/,
+  assert.match(scorer, /const expected=Array\.isArray\(q\.correctOrder\)\?q\.correctOrder[\s\S]*?Array\.isArray\(q\.correctAnswer\)\?q\.correctAnswer[\s\S]*?Array\.isArray\(q\.answers\)\?q\.answers/,
     "ordering scoring must support the same answer-key fields as readiness validation");
 });
 
