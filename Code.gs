@@ -2567,7 +2567,8 @@ function scoreFinalAnswer_(q,answer) {
     let expected=answerKey();
     if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     const a=Number(String(answer).replace(",", ".")),b=Number(String(expected).replace(",", "."));
-    const tolerance=Math.max(0,Number(q.tol!==undefined?q.tol:q.tolerance)||0.01);
+    const rawTolerance=q.tol!==undefined&&q.tol!==null&&q.tol!==""?q.tol:(q.tolerance!==undefined&&q.tolerance!==null&&q.tolerance!==""?q.tolerance:0.01);
+    const parsedTolerance=Number(rawTolerance),tolerance=isFinite(parsedTolerance)&&parsedTolerance>=0?parsedTolerance:0.01;
     return isFinite(a)&&isFinite(b)&&Math.abs(a-b)<=tolerance?1:0;
   }
   if(type==="multi"){
