@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE_NAME = 'portal-cache-v12';
+const CACHE_NAME = 'portal-cache-v11';
 
 const STATIC_ASSETS = [
   './',
