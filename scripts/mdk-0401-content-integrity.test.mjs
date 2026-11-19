@@ -41,4 +41,15 @@ test("MDK 04.01 contains six structured learning topics", () => {
 
 test("MDK 04.01 does not advertise unfinished placeholder materials", () => {
   assert.doesNotMatch(source, /Документ будет загружен позже|материал готовится|лекция не подготовлена|в разработке/i);
+  assert.deepEqual(course.videos, [], "course does not expose non-working placeholder video links");
+});
+
+test("MDK 04.01 safety guidance requires stopping equipment before chip removal", () => {
+  assert.ok(Array.isArray(course.safety) && course.safety.length >= 2);
+  const general = course.safety[0].content;
+  const emergency = course.safety[1].content;
+  assert.match(general, /после остановки шпинделя и полного прекращения движения/);
+  assert.match(general, /руками стружку не убирайте/);
+  assert.match(emergency, /аварийный останов/);
+  assert.match(emergency, /Не запускайте станок повторно/);
 });
