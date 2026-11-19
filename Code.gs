@@ -2449,7 +2449,7 @@ function allFinalExamEntries_(courseId) {
     const prompt=String(q&&(q.q||q.question)||"").trim();
     if(!q||!prompt||!finalQuestionHasAnswerKey_(q))return;
     if(!q.q)q.q=prompt;
-    const normalizedPrompt=prompt.normalize("NFKC").replace(/\\s+/g," ").trim().toLocaleLowerCase("ru-RU");
+    const normalizedPrompt=prompt.normalize("NFKC").replace(/\s+/g," ").trim().toLocaleLowerCase("ru-RU");
     const sig=finalQuestionType_(q)+"|"+normalizedPrompt;if(seen[sig])return;seen[sig]=true;
     out.push({bankId:bid,questionId:String(row[m.QuestionId]||""),question:q});
   });return out;
