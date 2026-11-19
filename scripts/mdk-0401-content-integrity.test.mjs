@@ -41,7 +41,7 @@ test("MDK 04.01 contains six structured learning topics", () => {
 
 test("MDK 04.01 does not advertise unfinished placeholder materials", () => {
   assert.doesNotMatch(source, /Документ будет загружен позже|материал готовится|лекция не подготовлена|в разработке/i);
-  assert.deepEqual(course.videos, [], "course does not expose non-working placeholder video links");
+  assert.equal(course.videos.length, 0, "course does not expose non-working placeholder video links");
 });
 
 test("MDK 04.01 safety guidance requires stopping equipment before chip removal", () => {
