@@ -9,10 +9,24 @@ sandbox.window = sandbox;
 vm.runInNewContext(source, sandbox, { filename: "data-0701.js" });
 const course = sandbox.MDK_DATA["07.01"];
 const topics = (course.sections || []).flatMap(section => section.topics || []);
+const resourceTopicId = "t-6-1";
 
-test("MDK 07.01 contains 22 populated topics", () => {
+test("MDK 07.01 contains 22 topics, including its methodology resource section", () => {
   assert.equal(topics.length, 22);
-  for (const topic of topics) {
+  const resourceTopic = topics.find(topic => topic.id === resourceTopicId);
+  assert.ok(resourceTopic, "methodology resource topic exists");
+  assert.ok(
+    resourceTopic.lectures?.some(item => /materials\/reference\/method\.pdf/.test(item.content || "")),
+    "methodology section links to its PDF"
+  );
+  assert.ok(
+    fs.existsSync(new URL("../materials/reference/method.pdf", import.meta.url)),
+    "linked methodology PDF exists in the repository"
+  );
+
+  const learningTopics = topics.filter(topic => topic.id !== resourceTopicId);
+  assert.equal(learningTopics.length, 21);
+  for (const topic of learningTopics) {
     assert.ok(topic.id && topic.code && topic.title, "topic has id, code and title");
     assert.ok(Array.isArray(topic.lectures) && topic.lectures.length >= 1, topic.id + " has a lecture");
     assert.ok(topic.lectures.every(item => item.content && item.content.trim().length > 100), topic.id + " lecture has substantive content");
