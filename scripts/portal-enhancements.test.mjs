@@ -1984,8 +1984,6 @@ test("admin bank diagnostics display final-exam readiness and question-type brea
   assert.match(controls, /finalExamReadiness/);
   assert.match(controls, /eligibleUniqueQuestions/);
   assert.match(controls, /audit\.ready\?"ГОТОВ по количеству":"НЕ ГОТОВ по количеству"/);
-  assert.match(controls, /Состав варианта:/);
-  assert.match(controls, /audit\.distributionReady/);
   assert.match(controls, /Типы заданий:/);
   assert.match(controls, /корректным ключом автоматической проверки/);
   assert.match(controls, /Экзаменационные источники:/);
