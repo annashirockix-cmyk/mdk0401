@@ -1983,14 +1983,14 @@ test("admin bank diagnostics display final-exam readiness and question-type brea
   assert.match(controls, /window\.API\.getQuestionBankStats\(\)/);
   assert.match(controls, /finalExamReadiness/);
   assert.match(controls, /eligibleUniqueQuestions/);
-  assert.match(controls, /audit\.ready\?"ГОТОВ":"НЕ ГОТОВ"/);
+  assert.match(controls, /audit\.ready\?"ГОТОВ по количеству":"НЕ ГОТОВ по количеству"/);\n  assert.match(controls, /Состав варианта:/);\n  assert.match(controls, /audit\.distributionReady/);
   assert.match(controls, /Типы заданий:/);
   assert.match(controls, /корректным ключом автоматической проверки/);
   assert.match(controls, /Экзаменационные источники:/);
   const html = read("index.html");
-  assert.match(html, /teacher-controls\.js\?v=32/);
+  assert.match(html, /teacher-controls\.js\?v=33/);
   const sw = read("service-worker.js");
-  assert.match(sw, /portal-cache-v429/);
+  assert.match(sw, /portal-cache-v430/);
 });
 
 test("final exam bank eligibility excludes invalid keys, unsupported formats and duplicate prompts", () => {
