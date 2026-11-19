@@ -70,6 +70,8 @@ jobs:
         run: node --test scripts/course-content-editor.test.mjs
       - name: Check MDK 02.01 content integrity
         run: node --test scripts/mdk-0201-content-integrity.test.mjs
+      - name: Check MDK 02.02 content integrity
+        run: node --test scripts/mdk-0202-content-integrity.test.mjs
       - name: Check protected course document attachments
         run: node --test scripts/course-document-attachments.test.mjs
       - name: Check protected course attachment runtime permissions
