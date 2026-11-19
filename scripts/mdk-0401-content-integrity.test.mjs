@@ -25,10 +25,9 @@ test("MDK 04.01 contains six structured learning topics", () => {
     assert.ok(Array.isArray(topic.lectures) && topic.lectures.length >= 1, topic.id + " has a lecture");
     for (const lecture of topic.lectures) {
       assert.ok(lecture.title && lecture.content && lecture.content.length > 1200, topic.id + " lecture has expanded content");
-      assert.match(lecture.content, /Цель занятия/);
-      assert.match(lecture.content, /Самопроверка/);
-      assert.match(lecture.content, /Практическое задание/);
-      assert.match(lecture.content, /Вывод/);
+      assert.match(lecture.content, /Учебный пример/, topic.id + " has a topic-specific learning example");
+      assert.match(lecture.content, /Главное/, topic.id + " has a concise takeaway");
+      assert.doesNotMatch(lecture.content, /lecture-expanded/, topic.id + " keeps its authored lecture instead of the legacy generic template");
     }
 
     assert.ok(Array.isArray(topic.practicals) && topic.practicals.length >= 1, topic.id + " has a practical assignment");
