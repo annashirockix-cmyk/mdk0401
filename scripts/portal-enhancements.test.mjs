@@ -1745,7 +1745,8 @@ test("student authentication looks up one user row instead of downloading all us
         throw new Error("Unexpected full-sheet read");
       }
     }),
-    email_:value=>String(value||"").trim().toLowerCase()
+    email_:value=>String(value||"").trim().toLowerCase(),
+    normalizeGroup_:value=>String(value==null?"":value).normalize("NFKC").replaceAll(String.fromCharCode(160)," ").replaceAll(String.fromCharCode(9)," ").trim().split(" ").filter(Boolean).join(" ").toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.userByEmail_=userByEmail_;",sandbox);
   const user=sandbox.userByEmail_("STUDENT@TEST");
@@ -1822,7 +1823,8 @@ test("student assignment results query only matching submissions and history IDs
     assignmentSubmissionHistory_:()=>historySheet,
     headerMap_:sheet=>Object.fromEntries(sheet.headers.map((name,index)=>[name,index])),
     email_:value=>String(value||"").trim().toLowerCase(),
-    normalizeCourseId_:value=>String(value||"")
+    normalizeCourseId_:value=>String(value||""),
+    normalizeGroup_:value=>String(value==null?"":value).normalize("NFKC").replaceAll(String.fromCharCode(160)," ").replaceAll(String.fromCharCode(9)," ").trim().split(" ").filter(Boolean).join(" ").toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.assignmentResultRecords_=assignmentResultRecords_;",sandbox);
   const records=sandbox.assignmentResultRecords_("STUDENT@TEST");
@@ -1857,4 +1859,165 @@ test("portal navigation provides accessible search, active route and keyboard sh
   assert.match(css, /#crumbs a/);
   assert.match(css, /\.drawer-item\.is-current/);
   assert.match(css, /\.skip-link:focus/);
+});
+
+
+test("student registration requires surname and first name; patronymic stays optional", () => {
+  const html = read("index.html");
+  const app = read("app.js");
+  const server = read("Code.gs");
+  assert.match(html, /id="regSurname"[^>]*required/);
+  assert.match(html, /id="regFirstName"[^>]*required/);
+  assert.match(html, /id="regPatronymic"[^>]*необязательно/);
+  assert.match(app, /if\(!surname\|\|!firstName\)/);
+  assert.match(app, /\[surname,firstName,patronymic\]\.filter\(Boolean\)\.join\(" "\)/);
+  assert.match(server, /nameParts\.length < 2/);
+  assert.match(server, /Name: normalizedName/);
+  assert.match(server, /normalizedGroup.*toLocaleUpperCase/);
+  assert.match(server, /Group: normalizedGroup/);
+});
+
+
+test("legacy group spellings resolve to one canonical group without merging distinct codes", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function normalizeGroup_(value)");
+  const end = server.indexOf("\n}", start) + 2;
+  assert.ok(start >= 0 && end > start, "server group normalizer must exist");
+  const sandbox = {};
+  vm.runInNewContext(server.slice(start, end) + ";this.normalizeGroup_=normalizeGroup_;", sandbox);
+  const normalize = value => sandbox.normalizeGroup_(value);
+  assert.equal(normalize("ИС-21"), "ИС-21");
+  assert.equal(normalize("ис-21"), "ИС-21");
+  assert.equal(normalize("  ИС-21  "), "ИС-21");
+  assert.equal(normalize("ИС-21" + String.fromCharCode(160)), "ИС-21");
+  assert.equal(normalize("ИC-21"), "ИC-21", "Latin C must not be silently rewritten to Cyrillic С");
+  assert.notEqual(normalize("ИС-21"), normalize("ИС-22"));
+  assert.ok(server.includes("group: normalizeGroup_(row[map.Group])"));
+  assert.ok(server.includes('targetValue:String(r[h.TargetType]||"")==="group"?normalizeGroup_(r[h.TargetValue])'));
+  assert.ok(server.includes("normalizeGroup_(value) === normalizeGroup_(student.group)"));
+  assert.ok(server.includes("normalizeGroup_(row[m.Group])===normalizeGroup_(group)"));
+  assert.ok(server.includes("group:normalizeGroup_(r[2])"));
+});
+
+
+test("legacy group normalization is applied in teacher dashboard, journal and reports", () => {
+  const dashboard = read("teacher-dashboard.js");
+  const journal = read("journal.js");
+  const reports = read("reports.js");
+  assert.match(dashboard, /const normalizeGroup=value=>String\(value==null\?"":value\)\.normalize\("NFKC"\)/);
+  assert.match(dashboard, /group:normalizeGroup\(x\.group\)\|\|"Без группы"/);
+  assert.match(dashboard, /targetValue:x\.targetType==="group"\?normalizeGroup\(x\.targetValue\)/);
+  assert.match(journal, /function normalizeJournalGroup\(value\)/);
+  assert.match(journal, /students = students\.filter\(s => normalizeJournalGroup\(s\.group\) === normalizeJournalGroup\(groupFilter\)\)/);
+  assert.match(reports, /function normalizeReportGroup\(value\)/);
+  assert.match(reports, /normalizeReportGroup\(x\.group\)===normalizeReportGroup\(g\)/);
+  assert.match(reports, /normalizeReportGroup\(s\.group\)===normalizeReportGroup\(group\)/);
+  assert.match(reports, /normalizeReportGroup\(a\.targetValue\)===normalizeReportGroup\(selectedGroup\)/);
+});
+
+
+test("MDK 04.01 lectures explain diagnostics, setup and TPM in student-friendly steps", () => {
+  const source = read("data-0401.js");
+  assert.equal((source.match(/topic\("m0401-t1[1-6]"/g) || []).length, 6);
+  assert.equal((source.match(/html:<table>/g) || []).length, 6, "each topic must include a reference table");
+  assert.equal((source.match(/#Учебный пример/g) || []).length, 6, "each topic must include a worked example");
+  assert.equal((source.match(/#Главное/g) || []).length, 6, "each topic must end with a short takeaway");
+  assert.match(source, /p\.indexOf\("html:"\) === 0/, "lecture renderer must preserve raw table markup");
+  assert.match(source, /#Типичные ошибки/);
+});
+
+
+test("MDK 02.02 lectures include practical assembly examples, fault handling and self-checks", () => {
+  const source = read("data-0202.js");
+  const marker = 'window.MDK_DATA["02.02"] = ';
+  const start = source.indexOf(marker);
+  const end = source.lastIndexOf(";");
+  assert.ok(start >= 0 && end > start, "MDK 02.02 data object must exist");
+  const course = JSON.parse(source.slice(start + marker.length, end));
+  const lectures = course.sections.flatMap(section => section.topics.flatMap(topic => topic.lectures || []));
+  assert.equal(lectures.length, 7, "all seven planned lectures must be present");
+  for (const lecture of lectures) {
+    assert.ok(lecture.content.includes("Практический разбор"), lecture.code + " needs a practical worked example");
+    assert.ok(lecture.content.includes("<table>"), lecture.code + " needs a reference table");
+    assert.ok(lecture.content.includes("Типичные ошибки"), lecture.code + " needs common mistakes");
+    assert.ok(lecture.content.includes("Самопроверка"), lecture.code + " needs self-check questions");
+  }
+  assert.match(lectures.find(item => item.code === "2.2.1").content, /не обходить блокировку/i);
+  assert.match(lectures.find(item => item.code === "2.4.1").content, /анизотроп/i);
+});
+
+
+test("MDK 02.01 key assembly lectures include step-by-step examples and diagnostic checks", () => {
+  const source = read("data-0201.js");
+  const lectures = [...source.matchAll(/lec\("([^"]+)",\s*"([^"]+)"/g)];
+  assert.equal(lectures.length, 18, "all 18 assembly lectures must remain available");
+  for (const code of ["1.1.3", "1.1.4", "1.1.8", "1.1.9", "1.1.12"]) {
+    const start = source.indexOf('lec("' + code + '"');
+    const end = source.indexOf("`)", start);
+    assert.ok(start >= 0 && end > start, code + " lecture must exist");
+    const lesson = source.slice(start, end);
+    assert.match(lesson, /(Учебный|Практический) пример/, code + " needs an accessible worked example");
+    assert.match(lesson, /Самопроверка/, code + " needs self-check questions");
+    assert.match(lesson, /<table>/, code + " needs a practical reference table");
+  }
+});
+
+
+test("MDK 02.01 and 02.02 legacy exam entrypoints use protected assessment routes", () => {
+  for (const [file, courseId, suffix] of [
+    ["exam_0201.js", "02.01", "0201"],
+    ["exam_0202.js", "02.02", "0202"]
+  ]) {
+    const source = read(file);
+    assert.doesNotMatch(source, /\bcorrect\s*:/, file + " must not expose answer keys");
+    assert.match(source, new RegExp("window\\.renderTraining_" + suffix + " = function"));
+    assert.match(source, new RegExp("window\\.renderFinal_" + suffix + " = function"));
+    assert.ok(source.includes('window.location.hash = "#/training/' + courseId + '"'));
+    assert.ok(source.includes('window.location.hash = "#/final/' + courseId + '"'));
+  }
+});
+
+
+test("admin bank diagnostics display final-exam readiness and question-type breakdown", () => {
+  const controls = read("teacher-controls.js");
+  assert.match(controls, /window\.API\.getQuestionBankStats\(\)/);
+  assert.match(controls, /finalExamReadiness/);
+  assert.match(controls, /eligibleUniqueQuestions/);
+  assert.match(controls, /audit\.ready\?"ГОТОВ по количеству":"НЕ ГОТОВ по количеству"/);
+  assert.match(controls, /Типы заданий:/);
+  assert.match(controls, /корректным ключом автоматической проверки/);
+  assert.match(controls, /Экзаменационные источники:/);
+  const html = read("index.html");
+  assert.match(html, /teacher-controls\.js\?v=34/);
+  const sw = read("service-worker.js");
+  assert.match(sw, /portal-cache-v431/);
+});
+
+test("final exam bank eligibility excludes invalid keys, unsupported formats and duplicate prompts", () => {
+  const server = read("Code.gs");
+  const start = server.indexOf("function allFinalExamEntries_(courseId)");
+  const end = server.indexOf("\nfunction safeFinalExamQuestion_", start);
+  assert.ok(start >= 0 && end > start);
+  const rows = [["CourseId","BankId","QuestionJSON","QuestionId"]];
+  const add = (bankId,id,q) => rows.push(["02.01",bankId,JSON.stringify(q),id]);
+  add("exam_primary","Q1",{q:"Базовый вопрос",options:["A","B"],correct:0});
+  add("exam_extra","Q2",{question:"Вопрос с альтернативным полем",options:["A","B"],correct:"B"});
+  add("hard_topic","Q3",{type:"multi",q:"Множественный выбор",options:["A","B","C"],correct:[0,2]});
+  add("self_topic","Q4",{type:"order",q:"Порядок операций",items:["Шаг А","Шаг Б"],correctOrder:["Шаг А","Шаг Б"]});
+  add("topic_1","Q5",{type:"match",q:"Соответствие",pairs:[{left:"Лево 1",right:"Право 1"},{left:"Лево 2",right:"Право 2"}]});
+  add("exam_primary","Q6",{q:"Нет ключа",options:["A","B"]});
+  add("exam_primary","Q7",{type:"written",q:"Письменный вопрос",answer:"текст"});
+  add("exam_primary","Q8",{q:"Базовый вопрос",options:["A","B"],correct:1});
+  add("unrelated_bank","Q9",{q:"Неэкзаменационный банк",options:["A","B"],correct:0});
+  add("exam_primary","Q10",{q:"Повреждённый вопрос",options:["A","B"],correct:7});
+  const sandbox = {
+    questionBank_:()=>({getDataRange:()=>({getValues:()=>rows})}),
+    headerMap_:()=>({CourseId:0,BankId:1,QuestionJSON:2,QuestionId:3}),
+    sameCourseId_:(a,b)=>String(a)===String(b)
+  };
+  vm.runInNewContext(server.slice(start,end)+";this.allFinalExamEntries_=allFinalExamEntries_;",sandbox,{timeout:1000});
+  const entries=sandbox.allFinalExamEntries_("02.01");
+  assert.deepEqual(Array.from(entries,e=>e.questionId),["Q1","Q2","Q3","Q4","Q5"]);
+  assert.deepEqual(Array.from(entries,e=>e.bankId),["exam_primary","exam_extra","hard_topic","self_topic","topic_1"]);
+  assert.equal(entries.length,5);
 });

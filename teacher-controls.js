@@ -41,11 +41,21 @@ window.renderTeacherControlsPage=function(){
     const btn=this,status=document.getElementById("bankMigrationStatus");btn.disabled=true;status.textContent="Читаем закрытое хранилище…";
     try{const r=await window.API.getQuestionBankStats();if(!r||!r.success)throw Error(r&&r.error||"Не удалось получить статистику.");
      const t=r.totals||{},lines=["ИТОГО: "+(t.banks||0)+" банков · "+(t.rows||0)+" строк-вопросов · "+(t.uniqueQuestions||0)+" уникальных ID","Повторы ID: "+(t.duplicateQuestionIds||0)+" · ошибок JSON: "+(t.invalidJson||0)+" · пустых ID: "+(t.emptyQuestionIds||0),"","ПО ДИСЦИПЛИНАМ:"];
-     (r.courses||[]).forEach(c=>lines.push(c.courseId+": "+c.banks+" банков · "+c.rows+" строк · "+c.uniqueQuestions+" уникальных · "+c.duplicateQuestionIds+" повторов · "+c.invalidJson+" ошибок JSON"));status.textContent=lines.join("\n");
+     (r.courses||[]).forEach(function(c){
+      const audit=c.finalExamReadiness||{},types=audit.byType||{},banks=audit.byBank||{};
+      const typeSummary=Object.keys(types).sort().map(function(key){return key+": "+types[key];}).join(", ")||"нет пригодных заданий";
+      const bankSummary=Object.keys(banks).sort().map(function(key){return key+": "+banks[key];}).join(", ")||"нет";
+      lines.push(c.courseId+": "+c.banks+" банков · "+c.rows+" строк · "+c.uniqueQuestions+" уникальных ID · "+c.duplicateQuestionIds+" повторов ID · "+c.invalidJson+" ошибок JSON");
+      lines.push("  Итоговый экзамен: "+(audit.ready?"ГОТОВ по количеству":"НЕ ГОТОВ по количеству")+" · пригодных уникальных заданий: "+(audit.eligibleUniqueQuestions||0)+"/"+(audit.requiredQuestions||45)+" · не хватает: "+(audit.shortage||0));
+      lines.push("  Типы заданий: "+typeSummary);
+      lines.push("  Экзаменационные источники: "+bankSummary);
+      lines.push("  В расчёт входят только уникальные вопросы с корректным ключом автоматической проверки; вопросы без ключа и письменные задания исключены.");
+     });status.textContent=lines.join("\n");
     }catch(e){status.textContent="Ошибка диагностики: "+(e.message||e);}finally{btn.disabled=false;}
    };
    document.getElementById("migrateQuestionBanks").onclick=async function(){
     const btn=this,status=document.getElementById("bankMigrationStatus");btn.disabled=true;status.textContent="Подготовка банков…";
+    const backupIds=[];
     try{
      const allowedCourses=new Set(["07.01","04.01","02.01","02.02","MCAM","MAT","MET","OT","PFI","EN","ENB","ENT"]);
      const topicCourse={},ambiguousTopics={},banks=[],seen={};
@@ -85,11 +95,14 @@ window.renderTeacherControlsPage=function(){
      async function sendImportBatch(){
       if(!batch.length)return;
       partNo++;
-      const result=await window.API.importQuestionBanks(batch);
+      const batchBackupId="qb-migration-"+Date.now()+"-"+partNo;
+      backupIds.push(batchBackupId);
+      const result=await window.API.importQuestionBanks(batch,batchBackupId);
       if(!result||!result.success)throw Error(result&&result.error||"Ошибка импорта части "+partNo);
       total+=Number(result.questionsImported)||0;bankCount+=Number(result.banksImported)||batch.length;
       status.textContent="Импортировано банков: "+bankCount+" из "+banks.length; 
       status.textContent+=" · вопросов: "+total+" из "+totalExpected;
+      if(result.backupId)status.textContent+=" · резервная копия: "+result.backupId;
       batch=[];batchQuestions=0;
      }
      for(const bank of banks){
@@ -101,8 +114,22 @@ window.renderTeacherControlsPage=function(){
       batch.push(bank);batchQuestions+=count;
      }
      await sendImportBatch();
-     status.textContent="Импорт подтверждён сервером: "+bankCount+" из "+banks.length+" банков; "+total+" из "+totalExpected+" вопросов. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов банков: "+skippedDuplicates+"."+(bankCount!==banks.length||total!==totalExpected?" ВНИМАНИЕ: есть расхождение — запустите «Проверить закрытое хранилище» и сверьте счётчики по дисциплинам.":" Все подготовленные банки и вопросы подтверждены ответами сервера.")+" Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
-    }catch(error){status.textContent="Импорт прерван: "+(error.message||error);}
+     status.textContent="Импорт подтверждён сервером: "+bankCount+" из "+banks.length+" банков; "+total+" из "+totalExpected+" вопросов. Пропущено неподдерживаемых записей: "+skippedUnsupported+", повторов банков: "+skippedDuplicates+"."+(bankCount!==banks.length||total!==totalExpected?" ВНИМАНИЕ: есть расхождение — запустите «Проверить закрытое хранилище» и сверьте счётчики по дисциплинам.":" Все подготовленные банки и вопросы подтверждены ответами сервера.")+" Резервные копии импортированных банков: "+(backupIds.join(", ")||"не получены")+". Встроенные тесты и итоговые экзамены используют серверную проверку ответов.";
+    }catch(error){
+     let message=error.message||String(error);
+     if(backupIds.length){
+      status.textContent="Импорт прерван. Восстанавливаем уже затронутые банки…";
+      let restoredBanks=0;const rollbackErrors=[];
+      for(const backupId of backupIds.slice().reverse()){
+       try{const restored=await window.API.restoreQuestionBanks(backupId);if(!restored||!restored.success)throw new Error(restored&&restored.error||"Откат не подтверждён");restoredBanks+=Number(restored.banksRestored)||0;}
+       catch(rollbackError){if(!/резервная копия не найдена/i.test(rollbackError.message||""))rollbackErrors.push(backupId+": "+(rollbackError.message||rollbackError));}
+      }
+      message+=" Автоматический откат: восстановлено банков "+restoredBanks+".";
+      if(rollbackErrors.length)message+=" Не удалось восстановить: "+rollbackErrors.join("; ")+". Проверьте резервные копии QuestionBankBackup.";
+      else message+=" Резервные копии пакетов сохранены для дополнительной проверки.";
+     }
+     status.textContent="Импорт прерван: "+message;
+    }
     finally{btn.disabled=false;}
    };
   }

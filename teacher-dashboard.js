@@ -5,6 +5,7 @@ if(!app)return;if(crumb)crumb.textContent="Панель преподавател
 if(!staff||!["teacher","admin"].includes(String(staff.role).toLowerCase())){app.innerHTML='<section class="module">⛔ Доступ только преподавателю.</section>';return;}
 app.innerHTML='<div class="teacher-dashboard"><div class="td-head"><div><a href="#/">← На главную</a><h1>Панель преподавателя</h1><p>Сводка по заданиям, группам и результатам</p></div><div class="td-head-actions"><a class="btn" href="#/teaching-controls">🔐 Управление доступом и попытками</a> <button class="btn ghost" id="efReviewRefresh">✍️ Письменные экзамены</button> <button class="btn ghost" id="efVariantImportOpen">📥 Импорт итоговых экзаменов</button> <button class="btn ghost" id="tdRefresh">↻ Обновить</button></div></div><section class="module" id="efVariantImportPanel" hidden><h2>Импорт итоговых экзаменов по английскому</h2><p>Загрузите JSON-реестр из 10 комплектов и 150 вариантов только после редакторского утверждения каждого варианта (sourceNotes.status = approved_for_import). Черновики pilot_for_editorial_review сервер не активирует. Импорт доступен администратору и заменяет активный реестр только после проверки всего пакета.</p><label>Файл JSON <input id="efVariantImportFile" type="file" accept=".json,application/json"></label><button class="btn" id="efVariantImportRun" type="button" disabled>Проверить и импортировать 150 вариантов</button><p id="efVariantImportStatus" aria-live="polite"></p></section><section class="module" id="efReviewPanel" hidden><h2>Письменные ответы на проверку</h2><p id="efReviewStatus">Нажмите «Обновить», чтобы загрузить работы.</p><div id="efReviewItems"></div></section><p id="tdStatus">Загрузка…</p><div id="tdContent"></div></div>';
 const E=v=>window.escapeHtml(String(v==null?"":v));
+const normalizeGroup=value=>String(value==null?"":value).normalize("NFKC").replace(/[\s\u00A0]+/g," ").trim().toLocaleUpperCase("ru-RU");
 const courses={"07.01":"МДК 07.01 — ЧПУ","04.01":"МДК 04.01 — Диагностика","02.01":"МДК 02.01 — Сборка","02.02":"МДК 02.02 — Программирование","MCAM":"Mastercam","MAT":"Материаловедение","MET":"Метрология","OT":"Охрана труда","PFI":"ПФИ"};
 function load(){
 const statusEl=document.getElementById("tdStatus");if(statusEl&&statusEl.isConnected)statusEl.textContent="Обновляем…";
@@ -13,9 +14,9 @@ if(!u||!(u.success||u.ok))throw Error(u&&u.error||"Не удалось полу�
 if(!r||!r.success)throw Error(r&&r.error||"Не удалось получить результаты");
 if(!a||!a.success)throw Error(a&&a.error||"Не удалось получить задания");
 if(!activity||!activity.success)throw Error(activity&&activity.error||"Не удалось получить журнал активности");
-const students=(u.students||[]).filter(x=>String(x.role||"student").toLowerCase()==="student"&&(staff.role==="admin"||(x.courses||[]).some(c=>(staff.courses||[]).includes(c))));
-const results=(r.results||[]).filter(x=>staff.role==="admin"||!x.courseId||(staff.courses||[]).includes(x.courseId));
-const tasks=(a.assignments||[]).filter(x=>staff.role==="admin"||(staff.courses||[]).includes(x.courseId));
+const students=(u.students||[]).filter(x=>String(x.role||"student").toLowerCase()==="student"&&(staff.role==="admin"||(x.courses||[]).some(c=>(staff.courses||[]).includes(c)))).map(x=>Object.assign({},x,{group:normalizeGroup(x.group)||"Без группы"}));
+const results=(r.results||[]).filter(x=>staff.role==="admin"||!x.courseId||(staff.courses||[]).includes(x.courseId)).map(x=>Object.assign({},x,{group:normalizeGroup(x.group)||"Без группы"}));
+const tasks=(a.assignments||[]).filter(x=>staff.role==="admin"||(staff.courses||[]).includes(x.courseId)).map(x=>Object.assign({},x,{targetValue:x.targetType==="group"?normalizeGroup(x.targetValue):x.targetValue,submissions:(x.submissions||[]).map(sub=>Object.assign({},sub,{group:normalizeGroup(sub.group)||"Без группы"}))}));
 const subs=tasks.flatMap(t=>(t.submissions||[]).map(s=>Object.assign({task:t.title,courseId:t.courseId,taskId:t.id},s)));
 const wait=subs.filter(s=>s.status!=="reviewed"),done=subs.filter(s=>s.status==="reviewed");
 const today=new Date();today.setHours(0,0,0,0);
