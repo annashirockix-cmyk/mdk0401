@@ -1269,9 +1269,9 @@ N100 M30
       ]
     }
   ],
-  videos: [{ title: "Видео 1" }],
-  passports: [{ title: "Паспорт" }],
-  safety: [{ title: "Инструкция" }],
+  videos: [],
+  passports: [],
+  safety: [],
   formatting: {}
 };
 (function(){
