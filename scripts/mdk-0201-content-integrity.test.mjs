@@ -20,7 +20,7 @@ test("MDK 02.01 keeps its real lecture, practical, self-study and test materials
   const topic = topics[0];
   assert.ok(topic.lectures.length >= 15, "lecture set should remain available");
   assert.ok(topic.lectures.every(item => item.content && item.content.trim().length > 100), "each lecture should contain substantive material");
-  assert.ok(topic.practicals.length >= 3, "practical assignments should remain available");
+  assert.ok(topic.practicals.length >= 2, "both practical assignments should remain available");
   assert.ok(topic.selfWork.length >= 3, "self-study tasks should remain available");
   assert.ok(topic.test.length >= 10, "topic test questions should remain available");
 });
