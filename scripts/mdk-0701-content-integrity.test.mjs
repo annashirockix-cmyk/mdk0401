@@ -40,4 +40,8 @@ test("MDK 07.01 contains 22 topics, including its methodology resource section",
 
 test("MDK 07.01 learning materials include no unfinished placeholder notices", () => {
   assert.doesNotMatch(source, /Документ будет загружен позже|материал готовится|лекция не подготовлена|в разработке/i);
+  for (const key of ["videos", "passports", "safety"]) {
+    assert.ok(Array.isArray(course[key]), key + " is an explicit list");
+    assert.equal(course[key].length, 0, key + " does not expose title-only placeholder entries");
+  }
 });
