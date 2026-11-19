@@ -158,7 +158,7 @@ test("final exam scoring uses a shared answer-key fallback for all supported sin
     "ordering scoring must support the same answer-key fields as readiness validation");
 });
 
-test("final exam answer-key selection skips empty higher-priority fields consistently", () => {
+test("true-false scoring follows semantic option labels when their order is reversed", () => {\n  const code = read("Code.gs");\n  const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");\n  assert.match(scorer, /semanticIndex=labels\\.findIndex\\(function\\(value\\)\\{return expected\\?/);\n  assert.match(scorer, /верно\\|верный\\|true\\|да\\|правда\\|истина/);\n  assert.match(scorer, /неверно\\|неверный\\|false\\|нет\\|ложь/);\n  assert.match(scorer, /semanticIndex>=0\\?semanticIndex:\\(expected\\?0:1\\)/);\n});\n\n\ntest("final exam answer-key selection skips empty higher-priority fields consistently", () => {
   const code = read("Code.gs");
   const scorer = section(code, "function scoreFinalAnswer_(q,answer)", "function submitFinalExam_(data)");
   assert.match(scorer, /const hasKey=function\(value\)\{return value!==undefined&&value!==null&&value!=="";\}/);
