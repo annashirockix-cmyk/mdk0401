@@ -72,6 +72,8 @@ jobs:
         run: node --test scripts/mdk-0201-content-integrity.test.mjs
       - name: Check MDK 02.02 content integrity
         run: node --test scripts/mdk-0202-content-integrity.test.mjs
+      - name: Check MDK 04.01 content integrity
+        run: node --test scripts/mdk-0401-content-integrity.test.mjs
       - name: Check MDK 07.01 content integrity
         run: node --test scripts/mdk-0701-content-integrity.test.mjs
       - name: Check protected course document attachments
