@@ -162,7 +162,7 @@ test("final exam duplicate prompts normalize whitespace, case and Unicode", () =
   const code = read("Code.gs");
   const entries = section(code, "function allFinalExamEntries_(courseId)", "function finalQuestionHasAnswerKey_(q)");
   assert.ok(entries.includes("prompt.normalize(\"NFKC\")"));
-  assert.ok(entries.includes(".replace(/\\\\s+/g,\" \")"));
+  assert.match(entries, /replace\\(\\/\\\\s\\+\\/g," ")/);
   assert.ok(entries.includes(".toLocaleLowerCase(\"ru-RU\")"));
   assert.ok(entries.includes("finalQuestionType_(q)+\"|\"+normalizedPrompt"));
 });
