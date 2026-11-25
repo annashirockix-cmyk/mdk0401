@@ -1769,7 +1769,8 @@ test("student authentication looks up one user row instead of downloading all us
         throw new Error("Unexpected full-sheet read");
       }
     }),
-    email_:value=>String(value||"").trim().toLowerCase()
+    email_:value=>String(value||"").trim().toLowerCase(),
+    normalizeGroupName_:value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\\s+/g," ").trim().toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.userByEmail_=userByEmail_;",sandbox);
   const user=sandbox.userByEmail_("STUDENT@TEST");
@@ -1846,7 +1847,8 @@ test("student assignment results query only matching submissions and history IDs
     assignmentSubmissionHistory_:()=>historySheet,
     headerMap_:sheet=>Object.fromEntries(sheet.headers.map((name,index)=>[name,index])),
     email_:value=>String(value||"").trim().toLowerCase(),
-    normalizeCourseId_:value=>String(value||"")
+    normalizeCourseId_:value=>String(value||""),
+    normalizeGroupName_:value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\\s+/g," ").trim().toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.assignmentResultRecords_=assignmentResultRecords_;",sandbox);
   const records=sandbox.assignmentResultRecords_("STUDENT@TEST");
