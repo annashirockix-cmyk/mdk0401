@@ -81,6 +81,8 @@ jobs:
         run: node --test scripts/tutoring-privacy-integrity.test.mjs
       - name: Check isolated lecture preview
         run: node --test scripts/lecture-editor-preview.test.mjs
+      - name: Check teacher journal and reports browser audit syntax
+        run: node --check scripts/teacher-journal-reports-browser-audit.mjs
       - name: Install Playwright CLI for browser audit
         run: npm install --global playwright@1.62.0
       - name: Install Chromium for workbook print audit
@@ -140,6 +142,13 @@ jobs:
           path: artifacts/certificate/
           if-no-files-found: ignore
           retention-days: 7
+      - name: Run real-browser teacher journal and reports audit
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/teacher-journal-reports-audit-server.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/teacher-journal-reports-browser-audit.mjs
       - name: Run real-browser English final-exam audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/english-exam-audit-server.log 2>&1 &
