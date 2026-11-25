@@ -38,7 +38,6 @@ try {
       })
     };
   });
-  await page.addScriptTag({ path: "certificate-supplement.js" });
   await page.evaluate(() => window.renderCertificatePage());
   await page.waitForFunction(() => {
     const button = document.querySelector("#app .no-print button");
