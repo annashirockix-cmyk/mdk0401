@@ -27,6 +27,21 @@ try {
       topics };
   }));
   console.log("COURSE_TOPIC_REGISTRY", JSON.stringify(topicRegistry.map(({topics, ...summary}) => summary)));
+  const editorialCoverage = await page.evaluate(() => Object.entries(window.MDK_DATA || {}).map(([courseId, course]) => {
+    const profiles = window.WORKBOOK_EDITORIAL?.[courseId] || {};
+    const topics = (course.sections || []).flatMap(section => (section.topics || []).map(topic => {
+      const profile = profiles[String(topic.id || "")] || null;
+      const fields = ["explanation", "caseTitle", "caseText", "mistakes", "route"];
+      return { id: String(topic.id || ""), title: String(topic.title || ""),
+        profile: !!profile, missingFields: profile ? fields.filter(field =>
+          Array.isArray(profile[field]) ? profile[field].length === 0 : !String(profile[field] || "").trim()) : fields };
+    }));
+    return { courseId, topicCount: topics.length, profiled: topics.filter(topic => topic.profile).length,
+      missingProfiles: topics.filter(topic => !topic.profile).map(topic => ({id: topic.id, title: topic.title})),
+      incompleteProfiles: topics.filter(topic => topic.profile && topic.missingFields.length)
+        .map(topic => ({id: topic.id, title: topic.title, missingFields: topic.missingFields})) };
+  }));
+  console.log("WORKBOOK_EDITORIAL_COVERAGE", JSON.stringify(editorialCoverage));
   for (const course of topicRegistry) {
     assert.equal(course.missingIds, 0, `Course ${course.courseId} has topics without stable IDs`);
     assert.equal(course.missingTitles, 0, `Course ${course.courseId} has topics without titles`);
