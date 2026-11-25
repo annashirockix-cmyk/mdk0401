@@ -193,7 +193,7 @@ window.migrateEnglishTeacherMaterialsToServer = async function () {
                     var teacherContent = String(lecture.teacherContent || "").trim();
                     if (!teacherContent) return;
                     var courseNumber = Number(lecture.courseNumber || 0);
-                    if (!Number.isInteger(courseNumber) || courseNumber < 1 || courseNumber > 5) return;
+                    if (!Number.isInteger(courseNumber) || courseNumber < 0 || courseNumber > 5) return;
                     var code = String(lecture.code || lecture.listeningId || "").trim();
                     var listeningId = String(lecture.listeningId || "").trim();
                     if (!code) return;
