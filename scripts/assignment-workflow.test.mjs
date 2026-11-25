@@ -221,6 +221,12 @@ test("assignment resubmission is allowed after a grade of 2 but not after accept
   });
   const first = api.submitAssignment_({ token: "studentToken", assignmentId: created.id, answer: "Первая версия" });
   api.gradeAssignment_({ token: "teacherToken", submissionId: first.submissionId, grade: 2, feedback: "Нужна доработка." });
+  const reviewedBeforeRetry = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
+  assert.equal(reviewedBeforeRetry.history.length, 1);
+  assert.equal(reviewedBeforeRetry.history[0].grade, 2,
+    "the first reviewed grade must immediately appear in the attempt history");
+  assert.equal(reviewedBeforeRetry.history[0].feedback, "Нужна доработка.");
+  assert.equal(reviewedBeforeRetry.history[0].status, "reviewed");
   const retry = api.submitAssignment_({ token: "studentToken", assignmentId: created.id, answer: "Исправленная версия" });
   assert.equal(retry.attempt, 2);
   const afterRetry = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
