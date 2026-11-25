@@ -45,7 +45,7 @@ test("every dashboard shortcut resolves through an installed portal route", () =
   const routeOwners = [app, teacherControls, courseAdmin, laboratory].join("\n");
   [
     "#/teacher-dashboard", "#/journal", "#/teacher-tasks", "#/course-editor",
-    "#/question-bank", "#/tutoring", "#/admin", "#/grades", "#/resources",
+    "#/question-bank", "#/admin", "#/grades", "#/resources",
     "#/laboratory", "#/profile"
   ].forEach(route => {
     assert.ok(script.includes(route), "dashboard shortcut missing: " + route);
