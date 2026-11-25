@@ -18,14 +18,15 @@ test("MDK 02.02 contains seven populated learning topics", () => {
     assert.ok(topic.lectures.every(item => item.content && item.content.trim().length > 100), topic.id + " lecture has substantive content");
     assert.ok(topic.practical && topic.practical.title && topic.practical.task, topic.id + " has a practical assignment");
     assert.ok(Array.isArray(topic.selfWork) && topic.selfWork.length >= 1, topic.id + " has self-study");
-    assert.ok(Array.isArray(topic.test) && topic.test.length >= 3, topic.id + " has topic questions");
+    assert.ok(Array.isArray(topic.test) && topic.test.length >= 4, topic.id + " has at least four topic questions");
   }
 });
 
 test("MDK 02.02 practical assignments include goals and variants or detailed tasks", () => {
   for (const topic of topics) {
     assert.ok(topic.practical.goal && topic.practical.goal.trim().length > 10, topic.id + " practical has a goal");
-    assert.ok(topic.practical.task.trim().length > 50, topic.id + " practical has a detailed task");
+    assert.ok(topic.practical.task.trim().length > 250, topic.id + " practical has a guided, step-by-step task");
+    assert.ok(Array.isArray(topic.practical.variants) && topic.practical.variants.length >= 2, topic.id + " practical has at least two variants");
   }
 });
 
