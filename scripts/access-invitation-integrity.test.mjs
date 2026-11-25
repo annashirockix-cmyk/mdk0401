@@ -10,12 +10,12 @@ test("invitation interface describes only the link it actually generates", () =>
   assert.match(access, /Пригласительная ссылка создаёт учётную запись/);
   assert.match(access, /Создать приглашение/);
   assert.doesNotMatch(access, /Создать ссылку и QR-код|Ссылка и QR-код создают/);
-  assert.match(html, /access\\.js\\?v=9/);
+  assert.match(html, /access\.js\?v=9/);
 });
 
 test("student course access is restricted to the acting teacher's assigned courses", () => {
   const start = server.indexOf("function setStudentCourses_(data)");
-  const end = server.indexOf("\\nfunction ", start + 10);
+  const end = server.indexOf("function ", start + 10);
   assert.ok(start >= 0 && end > start);
   const source = server.slice(start, end);
   assert.ok(source.includes("actor.courses.split(',')"));
