@@ -132,7 +132,8 @@ test("teacher companion migration is admin-only, server-backed, and attached onl
   assert.match(server, /payload\.teacherOnly === true\) return/);
 });
 
-test("teacher recording masters, transcript reveals and answer keys are removed from student lecture HTML", () => {
+test("English teacher scripts and answer keys are absent from every public runtime lesson", () => {
+  const runtime = read("english-five-year-runtime.js");
   const window = loadEnglishRuntime();
   const additions = [window.MDK_DATA.ENB, window.MDK_DATA.ENT].flatMap((track) =>
     track.sections.flatMap((section) =>
@@ -140,12 +141,18 @@ test("teacher recording masters, transcript reveals and answer keys are removed 
     ),
   );
   assert.equal(additions.length, 75);
-  const teacherLessons = additions.filter((lecture) => String(lecture.teacherContent || "").trim());
-  assert.ok(teacherLessons.length > 0, "teacher companion material should be extracted for server migration");
+  assert.doesNotMatch(runtime, /function splitTeacherMaterial|teacherContent\\s*:/);
+  assert.doesNotMatch(runtime, /\\*\\*Recording script|\\*\\*Transcript reveal|\\*\\*Teacher key|\\*\\*Suggested answers|\\*\\*Listening script for teacher recording/i);
   for (const lecture of additions) {
+    assert.equal(Object.prototype.hasOwnProperty.call(lecture, "teacherContent"), false,
+      "private teacher material must not be attached to public lesson " + lecture.listeningId);
     assert.doesNotMatch(String(lecture.content || ""), /Recording script|Transcript reveal|Teacher key|Answer key|Suggested answers|Listening script for teacher recording/i,
       "teacher-only section leaked into student lesson " + lecture.listeningId);
   }
+  const app = read("app.js");
+  const server = read("Code.gs");
+  assert.match(app, /customContent\\.teacherMaterials/);
+  assert.match(server, /payload\\.teacherOnly === true\\) return/);
 });
 
 test("runtime loads before app.js and lecture rendering resolves explicit listening IDs", () => {
