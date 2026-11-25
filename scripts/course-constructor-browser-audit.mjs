@@ -210,14 +210,15 @@ try {
 
   await page.locator("#lectureTitle").fill("Тестовая лекция конструктора");
   await page.locator("#lectureBody").fill('<h3>Проверка отображения</h3><p>Содержимое тестовой лекции.</p><img src="https://example.invalid/diagram.png" alt="Схема" onerror="window.__previewXss=1">');
-  await page.locator("#ceLecturePreviewToggle").click();
-  const lecturePreview = await page.locator("#ceLecturePreviewFrame").getAttribute("srcdoc");
+  await page.getByRole("button", { name: "Показать предпросмотр" }).click();
+  const previewFrame = page.locator('#ceLecturePreviewPanel iframe[title="Предпросмотр содержимого лекции"]');
+  const lecturePreview = await previewFrame.getAttribute("srcdoc");
   assert.ok(lecturePreview.includes("Тестовая лекция конструктора"), "Lecture preview must include the current title");
   assert.ok(lecturePreview.includes("Содержимое тестовой лекции."), "Lecture preview must render the current body");
   assert.ok(lecturePreview.includes("https://example.invalid/diagram.png"), "Lecture preview must preserve safe image sources");
   assert.ok(!lecturePreview.includes("onerror"), "Lecture preview must strip executable image handlers");
-  assert.equal(await page.locator("#ceLecturePreviewFrame").getAttribute("sandbox"), "", "Lecture preview must run in a fully sandboxed iframe");
-  assert.equal(await page.locator("#ceLecturePreviewFrame").evaluate(el => getComputedStyle(el).display), "block");
+  assert.equal(await previewFrame.getAttribute("sandbox"), "", "Lecture preview must run in a fully sandboxed iframe");
+  assert.equal(await previewFrame.evaluate(el => getComputedStyle(el).display), "block");
   await page.locator("#saveLectureBtn").click();
   await page.waitForFunction(() => document.getElementById("lectureStatus")?.textContent.includes("лекция сохранена"));
   await page.locator("#courseFileTopic").selectOption(topicId);
