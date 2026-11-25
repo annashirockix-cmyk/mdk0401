@@ -46,12 +46,12 @@
    move(body,"### Teacher recording note");
    return prefix;
   });
-  var recordingBlock=/(^|\n)([ \t]*(?:#{1,4}\s*)?\*\*Recording script[^*\n]*\*\*[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:\*\*[^*\n]+\*\*[ \t]*$|#{1,4}\s|---\s*$)|$)/gi;
+  var recordingBlock=/(^|\n)([ \t]*(?:#{2,4}\s*(?:\*\*)?Recording script[^\n]*|\*\*Recording script[^*\n]*\*\*)[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:#{2,4}\s|\*\*[^*\n]+\*\*[ \t]*$|---\s*$)|$)/gi;
   student=student.replace(recordingBlock,function(full,prefix,body){
    move(body,"### Listening recording master");
    return prefix;
   });
-  var transcriptBlock=/(^|\n)([ \t]*\*\*Transcript reveal[^\n]*\*\*[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:\*\*(?:Language focus|After listening|Teacher key|Independent work|Self-check|Speaking|Writing|Guided practice|Integrated task)\b|#{1,4}\s|---\s*$)|$)/gi;
+  var transcriptBlock=/(^|\n)([ \t]*(?:#{2,4}\s*(?:\*\*)?Transcript reveal[^\n]*|\*\*Transcript reveal[^*\n]*\*\*)[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:#{2,4}\s|\*\*[^*\n]+\*\*[ \t]*$|---\s*$)|$)/gi;
   student=student.replace(transcriptBlock,function(full,prefix,body){
    move(body,"### Listening transcript and feedback");
    return prefix;
