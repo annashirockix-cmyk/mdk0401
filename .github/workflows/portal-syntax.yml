@@ -76,6 +76,10 @@ jobs:
         run: node --test scripts/mdk-0401-content-integrity.test.mjs
       - name: Check MDK 07.01 content integrity
         run: node --test scripts/mdk-0701-content-integrity.test.mjs
+      - name: Check metrology course content integrity
+        run: node --test scripts/metrology-content-integrity.test.mjs
+      - name: Check occupational safety course content integrity
+        run: node --test scripts/occupational-safety-content-integrity.test.mjs
       - name: Check protected course document attachments
         run: node --test scripts/course-document-attachments.test.mjs
       - name: Check protected course attachment runtime permissions
