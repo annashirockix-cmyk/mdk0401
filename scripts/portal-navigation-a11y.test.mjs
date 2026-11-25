@@ -49,3 +49,14 @@ test("topic headings render dynamic topic names as text nodes", () => {
   assert.match(app, /topicHeading\.textContent = String\(topic\.code/);
   assert.doesNotMatch(app, /neon-text">\$\{topic\.code\} \$\{topic\.title\}/);
 });
+
+test("course plan provides accessible search across topic names and codes", () => {
+  assert.match(app, /id="courseTopicSearch"/);
+  assert.match(app, /Поиск по темам дисциплины/);
+  assert.match(app, /aria-describedby="courseTopicSearchCount"/);
+  assert.match(app, /data-course-topic/);
+  assert.match(app, /toLocaleLowerCase\("ru-RU"\)/);
+  assert.match(app, /card\.hidden = !match/);
+  assert.match(app, /section\.hidden = !Array\.prototype\.some/);
+  assert.match(app, /topicSearchCount\.textContent = visible \+ " из " \+ topicCards\.length/);
+});
