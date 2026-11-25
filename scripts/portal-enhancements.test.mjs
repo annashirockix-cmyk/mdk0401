@@ -195,7 +195,7 @@ test("workbook figures are selected by relevant topics and all referenced files 
   const workbook = read("workbooks.js");
   const html = read("index.html");
   assert.match(html, /workbooks\.js\?v=[0-9]+/);
-  assert.match(html, /workbook-editorial\.js\?v=7/);
+  assert.match(html, /workbook-editorial\.js\?v=8/);
   assert.match(workbook, /editorial&&Array\.isArray\(editorial\.images\)/);
   assert.match(workbook, /function diagram\(/);
   for (const courseBranch of [/String\(courseId\)==="MET"/, /String\(courseId\)==="OT"/, /String\(courseId\)==="04\.01"/, /\["02\.01","02\.02","MCAM"\]/]) assert.match(workbook, courseBranch);
