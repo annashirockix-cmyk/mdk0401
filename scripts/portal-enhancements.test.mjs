@@ -1903,6 +1903,9 @@ test("registration requires surname and first name and group matching is case- a
   assert.match(backend, /function createAssignment_\(data\)[\s\S]*normalizeGroupName_\(r\[um\.Group\]\)/);
   assert.match(backend, /function getAssignments_\(data\)[\s\S]*normalizeGroupName_\(val\)!==normalizeGroupName_\(user\.group\)/);
   assert.match(backend, /function submitAssignment_\(data\)[\s\S]*normalizeGroupName_\(val\) === normalizeGroupName_\(student\.group\)/);
+  assert.match(backend, /function sendAssignmentDueReminders_\(\)[\s\S]*normalizeGroupName_\(a\[ah\.TargetValue\]\)/);
+  assert.match(backend, /function getActivityLog_\(data\)[\s\S]*normalizeGroupName_\(row\[m\.Group\]\)/);
+  assert.match(backend, /function assignmentResultRecords_\(emailFilter\)[\s\S]*group:normalizeGroupName_\(r\[sh\.Group\]\)/);
   assert.match(api, /register:function\(email,password,surname,firstName,group,invite\)/);
   assert.match(app, /regSurname/);
   assert.match(app, /regFirstName/);
