@@ -29,3 +29,12 @@ test("MDK 02.01 keeps its real lecture, practical, self-study and test materials
   assert.ok(topic.selfWork.length >= 3, "self-study tasks should remain available");
   assert.ok(topic.test.length >= 10, "topic test questions should remain available");
 });
+
+
+test("MDK 02.01 does not present equipment-specific limits as universal rules", () => {
+  assert.doesNotMatch(source, /выше 120\s*°С\s*[—-]\s*разрушает термообработку/i);
+  assert.doesNotMatch(source, /смазка 1\/3[–-]1\/2 объёма/i);
+  assert.doesNotMatch(source, /опрессовкой давлением 1,25[–-]1,5 от номинального/i);
+  assert.match(source, /по документации конкретного узла/i);
+  assert.match(source, /не являются универсальной нормой/i);
+});
