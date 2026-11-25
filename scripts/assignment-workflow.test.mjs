@@ -89,8 +89,8 @@ function makeSheet(headers) {
 function runtime() {
   const users = makeSheet(["Email","PasswordHash","Name","Group","Role","UpdatedAt","Courses","Payload","PasswordSalt","LoginChangedAt","PasswordChangedAt"]);
   const assignments = makeSheet(["Id","CourseId","Title","Topic","Level","WorkType","DueAt","TargetType","TargetValue","Instructions","Criteria","CreatedBy","CreatedAt","Status","LegacyNote"]);
-  const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote"]);
-  const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","AttachmentsJSON"]);
+  const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote","AttachmentsJSON"]);
+  const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","LegacyNote","AttachmentsJSON"]);
   const assignmentFiles = makeSheet(["Id","AssignmentId","StudentEmail","DriveFileId","FileName","MimeType","Size","Status","SubmissionId","AttemptNo","CreatedAt"]);
   const results = makeSheet(["Email","Name","Group","TestId","TestTitle","Grade","Score","MaxScore","Percent","TimeSpent","Attempts","FinishedAt","CourseId","Submission","PenaltyPoints","ViolationCount","Feedback","ReviewedBy","ReviewedAt"]);
   users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01","","","",""]);
