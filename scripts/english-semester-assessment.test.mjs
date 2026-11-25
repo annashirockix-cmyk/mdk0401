@@ -1261,3 +1261,89 @@ test("V01-V04 short-text prompts have unambiguous accepted answers", () => {
     assert.deepEqual(task, source.tasks.find(item => item.id === taskId));
   }
 });
+
+
+const vprSource = fs.readFileSync(path.join(root, "EnglishVPR-Sheets.gs"), "utf8");
+function extractVprFunction(name) {
+  const marker = "function " + name + "(";
+  const start = vprSource.indexOf(marker);
+  assert.notEqual(start, -1, "missing VPR function " + name);
+  const open = vprSource.indexOf("{", start);
+  let depth = 0, quote = "", escaped = false, line = false, block = false;
+  for (let i = open; i < vprSource.length; i++) {
+    const c = vprSource[i], next = vprSource[i + 1];
+    if (line) { if (c === "\\n") line = false; continue; }
+    if (block) { if (c === "*" && next === "/") { block = false; i++; } continue; }
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (c === "\\\\") escaped = true;
+      else if (c === quote) quote = "";
+      continue;
+    }
+    if (c === "/" && next === "/") { line = true; i++; continue; }
+    if (c === "/" && next === "*") { block = true; i++; continue; }
+    if (c === "'" || c === '"' || c === "`") { quote = c; continue; }
+    if (c === "{") depth++;
+    if (c === "}" && --depth === 0) return vprSource.slice(start, i + 1);
+  }
+  throw new Error("unterminated VPR function " + name);
+}
+
+test("English VPR seed contains exactly two independent tracks with seven tasks and 40 points each", () => {
+  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_();")();
+  const validate = new Function(extractVprFunction("validateEnglishVprExam_") + "; return validateEnglishVprExam_;")();
+  assert.deepEqual(Object.keys(seed).sort(), ["basic", "technical"]);
+  for (const track of ["basic", "technical"]) {
+    assert.equal(seed[track].track, track);
+    assert.equal(seed[track].id, "english_vpr_" + track + "_2026");
+    assert.equal(seed[track].tasks.length, 7);
+    assert.equal(seed[track].tasks.reduce((sum, task) => sum + Number(task.points || 0), 0), 40);
+    assert.equal(validate(track, seed[track]), true);
+  }
+});
+
+test("English VPR student sanitizer removes objective and written answer keys recursively", () => {
+  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_();")();
+  const sanitize = new Function(extractVprFunction("sanitizeEnglishVprExam_") + "; return sanitizeEnglishVprExam_;")();
+  for (const track of ["basic", "technical"]) {
+    const safe = sanitize(seed[track]);
+    assert.equal(safe.tasks.length, 7);
+    for (const task of safe.tasks) {
+      if (task.type === "choice") for (const item of task.items) assert.equal(item[1], null);
+      if (task.type === "match") for (const item of task.items) assert.equal(item.length, 2);
+      if (task.type === "gap") assert.equal(Object.hasOwn(task, "answers"), false);
+      if (task.type === "transform") for (const item of task.items) assert.equal(item.length, 3);
+    }
+    const serialized = JSON.stringify(safe);
+    assert.doesNotMatch(serialized, /"acceptedAnswers"|"correctIndex"|"correctOrder"|"expectedAnswer"/);
+  }
+});
+
+test("English VPR per-attempt option shuffling preserves the keyed answer for choice, matching and gap tasks", () => {
+  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_();")();
+  const prepare = new Function("shuffledServer_", extractVprFunction("englishVprPrepareAttempt_") + "; return englishVprPrepareAttempt_;")(
+    values => values.slice().reverse()
+  );
+  for (const track of ["basic", "technical"]) {
+    const original = seed[track], prepared = prepare(original), display = prepared.exam;
+    original.tasks.forEach((task, ti) => {
+      const shown = display.tasks[ti];
+      if (task.type === "choice") task.items.forEach((item, qi) => {
+        const sourceOptions = item[2] || task.options;
+        const shownOptions = shown.items[qi][2] || shown.options;
+        assert.equal(shownOptions[Number(shown.items[qi][1]) - 1], sourceOptions[Number(item[1]) - 1]);
+        assert.ok(Array.isArray(prepared.optionMaps["choice|" + ti + "|" + qi]));
+      });
+      if (task.type === "match") task.items.forEach((item, qi) => {
+        assert.equal(shown.options[Number(shown.items[qi][2]) - 1], task.options[Number(item[2]) - 1]);
+        assert.ok(Array.isArray(prepared.optionMaps["match|" + ti]));
+      });
+      if (task.type === "gap") task.answers.forEach((answer, qi) => {
+        const sourceOptions = task.itemOptions && task.itemOptions[qi] || task.options;
+        const shownOptions = shown.itemOptions && shown.itemOptions[qi] || shown.options;
+        assert.equal(shownOptions[Number(shown.answers[qi]) - 1], sourceOptions[Number(answer) - 1]);
+        assert.ok(Array.isArray(prepared.optionMaps["gap|" + ti + "|" + qi] || prepared.optionMaps["gap|" + ti]));
+      });
+    });
+  }
+});
