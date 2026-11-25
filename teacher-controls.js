@@ -381,7 +381,18 @@ window.renderQuestionBankPage=function(){
 window.renderTutoringPage=function(){
  const app=document.getElementById("app");if(!app)return;const cid=courseId();
  app.innerHTML='<section class="hero"><h1>🎓 Дополнительные занятия</h1><p>Запись на индивидуальные консультации и репетиторство</p></section><div class="module" id="tutoringContent">Загрузка информации…</div>';
- window.API.getTutoringLink(cid).then(r=>{const l=r.link||{},box=document.getElementById("tutoringContent");if(!box)return;if(l.visible===false&&!staff()){box.textContent="Преподаватель временно скрыл запись на дополнительные занятия.";return;}if(l.url){box.innerHTML='<h3>'+esc(l.title||"Запись на дополнительные занятия")+'</h3><p>'+esc(l.description||"Вы можете записаться на дополнительное занятие по ссылке ниже.")+'</p><a class="btn" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">Перейти к записи и оплате</a>';}else{box.textContent="Преподаватель пока не добавил ссылку для записи на дополнительные занятия.";}}).catch(e=>{const box=document.getElementById("tutoringContent");if(box)box.textContent=e.message;});
+ window.API.getTutoringLink(cid).then(r=>{
+  const box=document.getElementById("tutoringContent");if(!box)return;
+  if(staff()){
+   const l=r.link||{};
+   if(l.url){box.innerHTML='<h3>'+esc(l.title||"Запись на дополнительные занятия")+'</h3><p>'+esc(l.description||"Ваша ссылка для записи студентов.")+'</p><a class="btn" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">Проверить ссылку</a>';}
+   else box.textContent="Вы ещё не добавили свою ссылку. Настройте её в разделе «Управление доступом и попытками».";
+   return;
+  }
+  const links=Array.isArray(r.links)?r.links:[];
+  if(!links.length){box.textContent="Преподаватели пока не открыли запись на дополнительные занятия по этой дисциплине.";return;}
+  box.innerHTML=links.map(l=>'<article style="padding:14px 0;border-bottom:1px solid var(--border)"><h3>'+esc(l.title||"Запись на дополнительные занятия")+'</h3><p><b>'+esc(l.teacherName||"Преподаватель")+'</b></p><p>'+esc(l.description||"Вы можете записаться на дополнительное занятие по ссылке ниже.")+'</p><a class="btn" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">Перейти к записи</a></article>').join("");
+ }).catch(e=>{const box=document.getElementById("tutoringContent");if(box)box.textContent=e.message;});
 };
 
 const oldRouter=window.router;
