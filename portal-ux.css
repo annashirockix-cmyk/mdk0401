@@ -65,3 +65,16 @@ label{line-height:1.45}
   .portal-ux-review-card{padding:12px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* PWA install prompt */
+.pwa-install-card{position:fixed;z-index:1200;left:18px;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:760px;margin:0 auto;padding:16px 18px;border:1px solid var(--border);border-radius:16px;background:var(--card, var(--bg));box-shadow:0 12px 38px rgba(0,0,0,.24);color:var(--text)}
+.pwa-install-card[hidden]{display:none}
+.pwa-install-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
+.pwa-install-copy strong{font-size:14px}
+.pwa-install-copy span{font-size:12px;color:var(--muted);line-height:1.45}
+.pwa-install-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.pwa-install-actions .btn{white-space:nowrap}
+.pwa-install-status{color:var(--accent)!important}
+@media(max-width:560px){.pwa-install-card{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));align-items:stretch;flex-direction:column;padding:14px}.pwa-install-actions{display:grid;grid-template-columns:1fr 1fr}.pwa-install-actions .btn{width:100%;padding:10px 8px}}
+@media(prefers-reduced-motion:no-preference){.pwa-install-card{animation:pwa-install-in .22s ease-out}@keyframes pwa-install-in{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}}
