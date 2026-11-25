@@ -158,6 +158,10 @@ try {
   // must no longer expose the old discipline-wide settings panel.
   assert.equal(await page.locator("#editorTutoringPanel").count(), 0,
     "The obsolete shared tutoring panel must stay removed from the course editor");
+  await page.locator("#newTopicCode").fill("AUDIT");
+  await page.locator("#newTopicTitle").fill("Проверка конструктора");
+  await page.locator("#createTopicBtn").click();
+  await page.waitForFunction(() => document.getElementById("topicStatus")?.textContent.includes("Тема создана"));
   const topicId = await page.locator("#lectureTopic").inputValue();
   assert.ok(topicId.startsWith("custom-"), "New topic was not added to the editor selectors");
 
