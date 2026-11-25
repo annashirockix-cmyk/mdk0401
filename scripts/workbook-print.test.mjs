@@ -56,7 +56,7 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.ok(editorialProfiles.includes('"met-10": {'));
  assert.ok(editorialProfiles.includes('"met-11": {'));
  assert.match(editorialProfiles, /Кейс: вал проходит по диаметру, но не проходит по биению/);
- assert.match(editorialProfiles, /условные числа за реальные измерения/);
+ assert.match(editorialProfiles, /условные числа как результаты реального контроля/);
   assert.ok(editorialProfiles.includes('"02.01": {'));
  assert.match(editorialProfiles, /Кейс: сборка опоры приводного вала/);
  assert.match(editorialProfiles, /не передавая монтажную нагрузку через тела качения/);
