@@ -1134,7 +1134,7 @@ function assignmentResultRecords_(emailFilter) {
   return submissions.filter(function(r){return r[sh.Id]&&(!wanted||email_(r[sh.StudentEmail])===wanted);}).map(function(r){
     const a=byId[String(r[sh.AssignmentId])];if(!a)return null;
     const grade=r[sh.Grade]===""||r[sh.Grade]===null?"":Number(r[sh.Grade]);
-    return {email:email_(r[sh.StudentEmail]),name:String(r[sh.StudentName]||""),group:String(r[sh.Group]||""),testId:"assignment_"+String(a[ah.Id]),testTitle:"Задание: "+String(a[ah.Title]||""),grade:grade,score:grade===""?0:grade,maxScore:5,percent:grade===""?0:grade*20,timeSpent:0,attempts:Math.max(1,attemptCounts[String(r[sh.Id])]||1),finishedAt:String(r[sh.SubmittedAt]||""),courseId:normalizeCourseId_(a[ah.CourseId]),payload:String(r[sh.Answer]||""),assignmentStatus:String(r[sh.Status]||"submitted"),feedback:String(r[sh.Feedback]||""),assignmentId:String(a[ah.Id])};
+    return {email:email_(r[sh.StudentEmail]),name:String(r[sh.StudentName]||""),group:normalizeGroupName_(r[sh.Group]),testId:"assignment_"+String(a[ah.Id]),testTitle:"Задание: "+String(a[ah.Title]||""),grade:grade,score:grade===""?0:grade,maxScore:5,percent:grade===""?0:grade*20,timeSpent:0,attempts:Math.max(1,attemptCounts[String(r[sh.Id])]||1),finishedAt:String(r[sh.SubmittedAt]||""),courseId:normalizeCourseId_(a[ah.CourseId]),payload:String(r[sh.Answer]||""),assignmentStatus:String(r[sh.Status]||"submitted"),feedback:String(r[sh.Feedback]||""),assignmentId:String(a[ah.Id])};
   }).filter(Boolean);
 }
 
@@ -1173,7 +1173,7 @@ function getResults_(data) {
       if(isProtectedAssessment_(key,cid,protectedBanks))return;
       resultKeys.add(resultKey);
       assignmentKeys.add(JSON.stringify([email,String(key)]));
-      list.push({email:email,name:row[m.Name],group:row[m.Group],testId:key,testTitle:rec.testTitle||key,grade:rec.grade,score:rec.score||0,maxScore:rec.max||rec.maxScore||0,percent:rec.percent||0,timeSpent:rec.timeSpent||0,attempts:rec.attempts||1,finishedAt:rec.finishedAt||"",courseId:cid});
+      list.push({email:email,name:row[m.Name],group:normalizeGroupName_(row[m.Group]),testId:key,testTitle:rec.testTitle||key,grade:rec.grade,score:rec.score||0,maxScore:rec.max||rec.maxScore||0,percent:rec.percent||0,timeSpent:rec.timeSpent||0,attempts:rec.attempts||1,finishedAt:rec.finishedAt||"",courseId:cid});
     });
   });
   assignmentResultRecords_().forEach(function(x){
@@ -1246,7 +1246,7 @@ function getPublicSubjectRatings_(data) {
     const r = latest[key], courseId = String(r[12] || ""), studentKey = email_(r[0]);
     if (!grouped[courseId]) grouped[courseId] = {};
     if (!grouped[courseId][studentKey]) grouped[courseId][studentKey] = {
-      name: String(r[1] || "Обучающийся"), group: String(r[2] || ""), gradeSum: 0, percentSum: 0, completed: 0
+      name: String(r[1] || "Обучающийся"), group: normalizeGroupName_(r[2]), gradeSum: 0, percentSum: 0, completed: 0
     };
     const st = grouped[courseId][studentKey], grade = Number(r[5]) || 0;
     const testId = String(r[3] || "");
@@ -2814,7 +2814,7 @@ function promoteUserToAdmin(email) {
 function adminCreateUser_(data) {
   admin_(data);
   const email = email_(data.email), password = String(data.password || "");
-  const name = String(data.name || "").trim(), group = String(data.group || "").trim();
+  const name = String(data.name || "").trim(), group = normalizeGroupName_(data.group);
   const role = String(data.role || "student").toLowerCase();
   if (!email || email.indexOf("@") < 1) throw new Error("Укажите корректный email.");
   if (password.length < 8) throw new Error("Временный пароль должен содержать не менее 8 символов.");
@@ -3164,7 +3164,7 @@ function importLegacyResultsFromSpreadsheet() {
     if (!src.some(v => String(v == null ? "" : v).trim())) continue;
     let email = col.email >= 0 ? email_(src[col.email]) : "";
     const name = col.name >= 0 ? String(src[col.name] || "").trim() : "";
-    const group = col.group >= 0 ? String(src[col.group] || "").trim() : "";
+    const group = col.group >= 0 ? normalizeGroupName_(src[col.group]) : "";
     let matched = null;
     if (email) matched = studentRows.find(r => email_(r[um.Email]) === email) || null;
     if (!matched && name) {
