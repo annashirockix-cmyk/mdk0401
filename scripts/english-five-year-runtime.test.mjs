@@ -189,7 +189,7 @@ test("listening practice shuffles every option set and remaps the correct answer
 test("admin migration uploads every teacher companion in idempotent batches of at most 50", async () => {
   const app = read("app.js");
   const start = app.indexOf("window.migrateEnglishTeacherMaterialsToServer = async function () {");
-  const end = app.indexOf("\\n\\nwindow.loadGlobalCustomContent", start);
+  const end = app.indexOf("\n\nwindow.loadGlobalCustomContent", start);
   assert.ok(start >= 0 && end > start, "admin migration function must be present in app.js");
   const calls = [];
   const makeLectures = (prefix, count, courseNumber) =>
@@ -233,7 +233,7 @@ test("admin migration uploads every teacher companion in idempotent batches of a
 test("admin migration refuses non-admin users and reports a missing Apps Script endpoint", async () => {
   const app = read("app.js");
   const start = app.indexOf("window.migrateEnglishTeacherMaterialsToServer = async function () {");
-  const end = app.indexOf("\\n\\nwindow.loadGlobalCustomContent", start);
+  const end = app.indexOf("\n\nwindow.loadGlobalCustomContent", start);
   const window = { state: { staff: { role: "teacher" } }, MDK_DATA: {}, API: {} };
   vm.runInNewContext(app.slice(start, end), { window });
   await assert.rejects(window.migrateEnglishTeacherMaterialsToServer(), /только администратору/);
