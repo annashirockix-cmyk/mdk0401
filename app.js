@@ -206,16 +206,23 @@ window.loadGlobalCustomContent = function(callback) {
             String(currentIdentity && currentIdentity.email || "").toLowerCase() === email &&
             String(currentIdentity && currentIdentity.role || "").toLowerCase() === role;
     }
-    function finish() { if (isCurrentRequest() && callback) callback(); }
+    function finish(success) { if (isCurrentRequest() && callback) callback(success === true); }
     if (!window.API || !window.API.getCustomContent || !identity || !hasSession) {
         window.invalidateGlobalCustomContentLoad(true);
-        if (callback) callback();
+        if (callback) callback(false);
         return;
     }
     return window.API.getCustomContent().then(function(res) {
         if (!isCurrentRequest()) return;
         if (res && res.success) {
             var rows = Array.isArray(res.data) ? res.data : [];
+            if (window.OfflineMaterialsCache && identity) {
+                window.OfflineMaterialsCache.save(rows, identity).then(function() {
+                    if (window.OfflineMaterialsUI) window.OfflineMaterialsUI.refresh();
+                }).catch(function(error) {
+                    console.warn("Не удалось сохранить офлайн-материалы", error);
+                });
+            }
             window.customContent = window.customContent || {};
             window.customContent.topics = rows.filter(function(d) { return d.type === "topic"; });
             // Apply saved title/code overrides to built-in topics without duplicating them.
@@ -261,7 +268,7 @@ window.loadGlobalCustomContent = function(callback) {
                 if (window.updateMenuVisibility) window.updateMenuVisibility();
             }
         }
-        finish();
+        finish(!!(res && res.success));
     }).catch(function(err) {
         if (!isCurrentRequest()) return;
         console.error("Ошибка загрузки кастомного контента", err);
@@ -269,6 +276,37 @@ window.loadGlobalCustomContent = function(callback) {
         // successful materials snapshot. An auth failure clears the token in API.
         var tokenStillPresent = "";
         try { tokenStillPresent = localStorage.getItem("mdk.session") || sessionStorage.getItem("mdk.session") || ""; } catch (e) {}
+        if (tokenStillPresent && identity && window.OfflineMaterialsCache) {
+            return window.OfflineMaterialsCache.load(identity).then(function(snapshot) {
+                if (!snapshot || !isCurrentRequest()) return;
+                var cachedRows = snapshot.items || [];
+                window.customContent = window.customContent || {};
+                window.customContent.topics = cachedRows.filter(function(row) { return row.type === "topic"; });
+                window.customContent.files = cachedRows.filter(function(row) { return row.type === "file"; });
+                window.customContent.lectures = cachedRows.filter(function(row) { return row.type === "lecture"; });
+                ["tests", "flashcards", "games", "announcements"].forEach(function(key) {
+                    window.customContent[key] = [];
+                });
+                var hours = Math.max(1, Math.floor(snapshot.ageMs / 3600000));
+                if (window.showToast) window.showToast("Нет связи. Открыты сохранённые лекции и файлы (" + hours + " ч. назад).", "info");
+                if (window.OfflineMaterialsUI) window.OfflineMaterialsUI.refresh();
+            }).catch(function(cacheError) {
+                console.warn("Офлайн-кэш материалов недоступен", cacheError);
+            }).then(function() {
+                if (!isCurrentRequest()) return;
+                if (!tokenStillPresent && window.state && (window.state.student || window.state.staff)) {
+                    window.invalidateGlobalCustomContentLoad(true);
+                    window.state.student = null;
+                    window.state.staff = null;
+                    try { localStorage.setItem("mdk.state", JSON.stringify(window.state)); } catch (e) {}
+                    var login = document.getElementById("loginOverlay");
+                    if (login) login.style.display = "flex";
+                    if (window.renderUserChip) window.renderUserChip();
+                    if (window.updateMenuVisibility) window.updateMenuVisibility();
+                }
+                finish();
+            });
+        }
         if (!tokenStillPresent && window.state && (window.state.student || window.state.staff)) {
             window.invalidateGlobalCustomContentLoad(true);
             window.state.student = null;
@@ -279,7 +317,7 @@ window.loadGlobalCustomContent = function(callback) {
             if (window.renderUserChip) window.renderUserChip();
             if (window.updateMenuVisibility) window.updateMenuVisibility();
         }
-        finish();
+        finish(false);
     });
 };
 
@@ -1290,6 +1328,13 @@ function setupLogin() {
     function applyAuthSession(res, email) {
         if (window.invalidateGlobalCustomContentLoad) window.invalidateGlobalCustomContentLoad(true);
         var role = (res.role || "student").toLowerCase();
+        if (window.OfflineMaterialsCache) {
+            window.OfflineMaterialsCache.clearOtherUsers({ email: email, role: role }).then(function() {
+                if (window.OfflineMaterialsUI) window.OfflineMaterialsUI.refresh();
+            }).catch(function(error) {
+                console.warn("Не удалось очистить офлайн-материалы другого аккаунта", error);
+            });
+        }
         if (role === "teacher" || role === "admin") {
             window.state.staff = { name: res.name || email, role: role, email: email, courses: res.courses || [] };
             window.state.student = null;
@@ -1393,6 +1438,10 @@ function setupLogin() {
 }
 
 window.handleAuthExpired = function(reason) {
+    if (window.OfflineMaterialsCache && window.state) {
+        var expiredUser = window.state.student || window.state.staff;
+        if (expiredUser) window.OfflineMaterialsCache.clear(expiredUser).catch(function(error) { console.warn("Не удалось очистить офлайн-кэш", error); });
+    }
     if (window.invalidateGlobalCustomContentLoad) window.invalidateGlobalCustomContentLoad(true);
     // Вызывается API-клиентом только при явном отказе сервера по авторизации.
     if (window.API && window.API.logout) window.API.logout();
@@ -1406,6 +1455,10 @@ window.handleAuthExpired = function(reason) {
 };
 
 window.handleLogout = function() {
+    if (window.OfflineMaterialsCache && window.state) {
+        var logoutUser = window.state.student || window.state.staff;
+        if (logoutUser) window.OfflineMaterialsCache.clear(logoutUser).catch(function(error) { console.warn("Не удалось очистить офлайн-кэш", error); });
+    }
     if (window.invalidateGlobalCustomContentLoad) window.invalidateGlobalCustomContentLoad(true);
     // Событие отправляется до удаления токена: fetchAPI успевает приложить действующую сессию.
     if (window.state && window.state.student && window.API && window.API.logActivity) {
