@@ -901,7 +901,7 @@ test("English VPR answer keys stay server-side and the client uses protected exa
   assert.match(engine, /app\.classList\.add\("notranslate"\)/);
   assert.match(engine, /window\.API\.submitEnglishVprExam/);
   assert.doesNotMatch(engine, /item\[1\]\+1/);
-  assert.match(engine, /Перенести экзамены в защищённую таблицу/);
+  assert.match(engine, /Импортировать отсутствующие варианты/);
   assert.match(engine, /function hasStaffAccess\(\)/);
   assert.match(engine, /role === "teacher" \|\| role === "admin"/);
   assert.match(engine, /if \(hasStaffAccess\(\) && window\.API && window\.API\.importEnglishVprBank\)/);
@@ -964,18 +964,29 @@ test("admin role is recognized for teacher navigation and tutoring is shown only
 });
 
 
-test("English VPR chooser grants admin role access and verifies both server imports by reading them back", () => {
+test("English VPR chooser checks server bank availability and imports only missing tracks", () => {
   const engine = read("english-vpr-engine.js");
   const html = read("index.html");
   const sw = read("service-worker.js");
   assert.ok(engine.includes("!window.state.student && !hasStaffAccess()"));
   assert.ok(engine.includes("!hasEnglishAccess && !hasStaffAccess()"));
-  assert.ok(engine.includes("result.success !== true"));
+  assert.ok(engine.includes("function readBankStatus(track)"));
+  assert.ok(engine.includes('status:"ready"'));
+  assert.ok(engine.includes('status:"missing"'));
+  assert.ok(engine.includes('status:"error"'));
+  assert.ok(engine.includes('var tracks = course === "ENB" ? ["basic"] : course === "ENT" ? ["technical"] : ["basic", "technical"]'));
+  assert.ok(engine.includes("var missingTracks=states.filter"));
+  assert.ok(engine.includes("missingTracks.map(function(track)"));
+  assert.ok(engine.includes("Повторный импорт не требуется"));
+  assert.ok(engine.includes("Не удалось проверить доступность экзамена"));
   assert.ok(engine.includes("window.API.getEnglishVprExam(track)"));
-  assert.ok(engine.includes("check.success !== true"));
-  assert.ok(engine.includes("контрольное чтение"));
-  assert.match(html, /english-vpr-engine\.js\?v=\d+/);
-  assert.match(sw, /portal-cache-v[0-9]+/);
+  assert.ok(engine.includes("button.disabled=true;button.textContent=\"Пока недоступен\""));
+  assert.ok(engine.includes("button.disabled=false;button.textContent=\"Открыть экзамен\""));
+  assert.ok(engine.includes("Импортировать отсутствующие варианты"));
+  assert.ok(engine.includes("Уже существующие банки не будут перезаписаны"));
+  assert.ok(html.includes("english-vpr-engine.js?v=32"));
+  assert.ok(html.includes("service-worker.js?v=422"));
+  assert.match(sw, /portal-cache-v422/);
 });
 
 
@@ -1474,6 +1485,20 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
   assert.throws(() => sandbox.validateEnglishVprExam_("basic", invalidGap), /некорректный список вариантов или ключ/i);
   const emptyWritten = exam("basic"); emptyWritten.tasks[6].items[0] = "";
   assert.throws(() => sandbox.validateEnglishVprExam_("basic", emptyWritten), /пустой или некорректный вопрос/i);
+});
+
+
+test("English VPR importer never overwrites an existing Basic or Technical track", () => {
+  const bank = read("EnglishVPR-Sheets.gs");
+  const start = bank.indexOf("function importEnglishVprBank_(data)");
+  const end = bank.indexOf("function sanitizeEnglishVprExam_", start);
+  assert.ok(start >= 0 && end > start);
+  const importer = bank.slice(start, end);
+  assert.ok(importer.includes("if (rowNo) {"));
+  assert.ok(importer.includes("skipped:true"));
+  assert.ok(importer.includes('reason:"already_exists"'));
+  assert.ok(importer.includes("appendMappedRecord_(sh, record)"));
+  assert.doesNotMatch(importer, /updateMappedRecord_\(sh, rowNo, record\)/);
 });
 
 

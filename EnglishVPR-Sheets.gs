@@ -152,9 +152,16 @@ function importEnglishVprBank_(data) {
     const values = sh.getDataRange().getValues(), map = headerMap_(sh);
     let rowNo = 0;
     for (let i = 1; i < values.length; i++) if (String(values[i][map.Track] || "") === track) { rowNo = i + 1; break; }
+    // Повторный импорт не должен перезаписывать уже существующий вариант.
+    // Даже неактивную строку оставляем без изменений: её состояние требует
+    // отдельного решения преподавателя, а не неявной замены содержимого.
+    if (rowNo) {
+      const existingActive = String(values[rowNo - 1][map.Active] || "").toUpperCase() === "TRUE";
+      return {success:true, track:track, skipped:true, active:existingActive, reason:"already_exists"};
+    }
     const record = {Track:track, ExamJSON:json, Active:"TRUE", UpdatedAt:new Date().toISOString(), UpdatedBy:actor.email};
-    if (rowNo) updateMappedRecord_(sh, rowNo, record); else appendMappedRecord_(sh, record);
-    return {success:true, track:track, bytes:json.length, updatedAt:record.UpdatedAt};
+    appendMappedRecord_(sh, record);
+    return {success:true, track:track, bytes:json.length, updatedAt:record.UpdatedAt, created:true};
   } finally { lock.releaseLock(); }
 }
 
