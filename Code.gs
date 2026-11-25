@@ -1428,9 +1428,9 @@ function getAssignments_(data) {
   function historyFor(submission) {
     const sid = String(submission[m.Id] || "");
     const saved = historyRows.slice(1).filter(function(x){return String(x[hm.SubmissionId]||"")===sid;})
-      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||""),grade:x[hm.Grade]===undefined||x[hm.Grade]===""?null:x[hm.Grade],feedback:String(x[hm.Feedback]||""),reviewedBy:String(x[hm.ReviewedBy]||""),reviewedAt:String(x[hm.ReviewedAt]||""),status:String(x[hm.Status]||"")};})
+      .map(function(x){return {attempt:Number(x[hm.AttemptNo])||1,answer:String(x[hm.Answer]||""),submittedAt:String(x[hm.SubmittedAt]||""),grade:x[hm.Grade]===undefined||x[hm.Grade]===""?null:x[hm.Grade],feedback:String(x[hm.Feedback]||""),reviewedBy:String(x[hm.ReviewedBy]||""),reviewedAt:String(x[hm.ReviewedAt]||""),status:String(x[hm.Status]||""),attachments:(function(){try{return JSON.parse(String(x[hm.AttachmentsJSON]||"[]"));}catch(e){return [];}})()};})
       .sort(function(x,y){return x.attempt-y.attempt;});
-    return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||""),grade:submission[m.Grade]===undefined||submission[m.Grade]===""?null:submission[m.Grade],feedback:String(submission[m.Feedback]||""),reviewedBy:String(submission[m.ReviewedBy]||""),reviewedAt:String(submission[m.ReviewedAt]||""),status:String(submission[m.Status]||"")}];
+    return saved.length?saved:[{attempt:1,answer:String(submission[m.Answer]||""),submittedAt:String(submission[m.SubmittedAt]||""),grade:submission[m.Grade]===undefined||submission[m.Grade]===""?null:submission[m.Grade],feedback:String(submission[m.Feedback]||""),reviewedBy:String(submission[m.ReviewedBy]||""),reviewedAt:String(submission[m.ReviewedAt]||""),status:String(submission[m.Status]||""),attachments:(function(){try{return JSON.parse(String(submission[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})()}];
   }
   rows.slice(1).forEach(function(r){
     if (!r[h.Id]) return;
@@ -1446,9 +1446,9 @@ function getAssignments_(data) {
     const own=subs.slice(1).filter(function(x){return String(x[m.AssignmentId])===item.id;});
     if(user.role==="student"){
       const ownStudent=own.filter(function(x){return email_(x[m.StudentEmail])===user.email;}).sort(function(x,y){return String(y[m.SubmittedAt]).localeCompare(String(x[m.SubmittedAt]));})[0];
-      item.submission=ownStudent?{answer:String(ownStudent[m.Answer]||""),submittedAt:String(ownStudent[m.SubmittedAt]||""),status:String(ownStudent[m.Status]||"submitted"),grade:ownStudent[m.Grade]===""?null:ownStudent[m.Grade],feedback:String(ownStudent[m.Feedback]||""),attempts:historyFor(ownStudent).length,history:historyFor(ownStudent)}:null;
+      item.submission=ownStudent?{answer:String(ownStudent[m.Answer]||""),submittedAt:String(ownStudent[m.SubmittedAt]||""),status:String(ownStudent[m.Status]||"submitted"),grade:ownStudent[m.Grade]===""?null:ownStudent[m.Grade],feedback:String(ownStudent[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(ownStudent[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:historyFor(ownStudent).length,history:historyFor(ownStudent)}:null;
     } else {
-      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:normalizeGroupName_(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attempts:hist.length,history:hist};});
+      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:normalizeGroupName_(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(x[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:hist.length,history:hist};});
     }
     list.push(item);
   });
@@ -1570,7 +1570,9 @@ function submitAssignment_(data) {
   if (student.role !== "student") throw new Error("Отправлять ответы может только обучающийся.");
   const id = String(data.assignmentId || "");
   const answer = String(data.answer || "").trim().slice(0,12000);
-  if (!id || !answer) throw new Error("Введите ответ.");
+  const attachmentIds = Array.isArray(data.attachmentIds) ? data.attachmentIds.map(String).filter(Boolean) : [];
+  if (attachmentIds.length > 5 || new Set(attachmentIds).size !== attachmentIds.length) throw new Error("Можно прикрепить не более 5 разных файлов.");
+  if (!id || (!answer && !attachmentIds.length)) throw new Error("Введите ответ или прикрепите хотя бы один файл.");
   const sh = assignments_(), rows = sh.getDataRange().getValues(), h = headerMap_(sh);
   const a = rows.slice(1).find(function(r){ return String(r[h.Id]) === id; });
   if (!a) throw new Error("Задание не найдено.");
@@ -1591,6 +1593,14 @@ function submitAssignment_(data) {
       }
     }
     const hist = assignmentSubmissionHistory_(), hv = hist.getDataRange().getValues(), hm = headerMap_(hist);
+    const filesSheet = assignmentFiles_(), fileRows = filesSheet.getDataRange().getValues(), fm = headerMap_(filesSheet);
+    const selectedFiles = attachmentIds.map(function(fileId) {
+      const index = fileRows.slice(1).findIndex(function(row){return String(row[fm.Id]||"")===fileId;});
+      if(index<0)throw new Error("Одно из вложений не найдено.");
+      const row=fileRows[index+1];
+      if(email_(row[fm.StudentEmail])!==student.email||String(row[fm.AssignmentId])!==id||String(row[fm.Status])!=="pending")throw new Error("Вложение принадлежит другому пользователю или уже использовано.");
+      return {id:fileId,fileName:String(row[fm.FileName]||""),mimeType:String(row[fm.MimeType]||""),size:Number(row[fm.Size])||0};
+    });
     const saved = hv.slice(1).filter(function(r){ return String(r[hm.SubmissionId] || "") === submissionId; });
     let attempt = saved.length + 1;
     if (i >= 0) {
@@ -1603,7 +1613,7 @@ function submitAssignment_(data) {
         Status:String(previous[m.Status] || "submitted")
       };
       if (!saved.length) {
-        appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1,Grade:reviewSnapshot.Grade,Feedback:reviewSnapshot.Feedback,ReviewedBy:reviewSnapshot.ReviewedBy,ReviewedAt:reviewSnapshot.ReviewedAt,Status:reviewSnapshot.Status});
+        appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:String(previous[m.StudentName] || student.name),Group:String(previous[m.Group] || student.group),Answer:String(previous[m.Answer] || ""),SubmittedAt:previousAt,AttemptNo:1,Grade:reviewSnapshot.Grade,Feedback:reviewSnapshot.Feedback,ReviewedBy:reviewSnapshot.ReviewedBy,ReviewedAt:reviewSnapshot.ReviewedAt,Status:reviewSnapshot.Status,AttachmentsJSON:String(previous[m.AttachmentsJSON]||"[]")});
         attempt = 2;
       } else {
         for (let h = hv.length - 1; h >= 1; h--) {
@@ -1614,12 +1624,16 @@ function submitAssignment_(data) {
         }
       }
     }
-    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt,Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Status:"submitted"});
-    const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
+    appendMappedRecord_(hist, {Id:Utilities.getUuid(),AssignmentId:id,SubmissionId:submissionId,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,AttemptNo:attempt,AttachmentsJSON:JSON.stringify(selectedFiles),Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:"",Status:"submitted"});
+    const record = {Id:submissionId,AssignmentId:id,StudentEmail:student.email,StudentName:student.name,Group:student.group,Answer:answer,SubmittedAt:now,Status:"submitted",AttachmentsJSON:JSON.stringify(selectedFiles),Grade:"",Feedback:"",ReviewedBy:"",ReviewedAt:""};
     if (i >= 0) updateMappedRecord_(sub, i + 2, record); else appendMappedRecord_(sub, record);
+    selectedFiles.forEach(function(fileMeta) {
+      const fileIndex=fileRows.slice(1).findIndex(function(row){return String(row[fm.Id]||"")===fileMeta.id;});
+      if(fileIndex>=0)updateMappedRecord_(filesSheet,fileIndex+2,{Status:"attached",SubmissionId:submissionId,AttemptNo:attempt});
+    });
     notifyCourseStaff_(cid,"submission",attempt > 1 ? "Повторная отправка задания" : "Новый ответ на задание",
       student.name + " (" + student.group + ") отправил(а) работу: " + String(a[h.Title] || "") + ". Откройте раздел «Задания и проверка работ».",id);
-    return {success:true,submittedAt:now,attempt:attempt,submissionId:submissionId};
+    return {success:true,submittedAt:now,attempt:attempt,submissionId:submissionId,attachments:selectedFiles};
   } finally { lock.releaseLock(); }
 }
 function gradeAssignment_(data) {
