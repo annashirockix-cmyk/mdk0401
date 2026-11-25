@@ -24,7 +24,7 @@ test("tutoring links are private per teacher and removed from the shared drawer 
   assert.ok(!/editorTutoringPanel|renderTutoringPage|tutorUrl|saveTutorLink/.test(controls));
   assert.ok(!html.includes('href="#/tutoring"'));
   assert.ok(html.includes("tutoring.js?v=3"));
-  assert.ok(worker.includes("portal-cache-v426"));
+  assert.ok(worker.includes("portal-cache-v427"));
   assert.ok(worker.includes("./tutoring.js"));
   for (const phrase of ["tutoringHomeCard", "Кому показывать ссылку", "Только выбранной группе", "Только одному студенту", 'rel="noopener noreferrer"']) {
     assert.ok(ui.includes(phrase), "missing tutoring UI phrase: " + phrase);
