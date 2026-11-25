@@ -1,4 +1,4 @@
-name: Portal syntax checks # materials student-friendly audit
+name: Portal syntax checks # materials student-friendly audit v2
 on:
   push:
     branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation]
