@@ -1455,6 +1455,116 @@ function getAssignments_(data) {
   list.sort(function(x,y){return String(y.createdAt).localeCompare(String(x.createdAt));});
   return {success:true,assignments:list};
 }
+
+function assignmentEligible_(student, assignment) {
+  const h = headerMap_(assignments_()), courseId = String(assignment[h.CourseId] || "");
+  const type = String(assignment[h.TargetType] || ""), value = String(assignment[h.TargetValue] || "");
+  const eligible = (type === "individual" && email_(value) === student.email) ||
+    (type === "group" && normalizeGroupName_(value) === normalizeGroupName_(student.group));
+  if (!hasCourseAccess_(student, courseId) || !eligible || String(assignment[h.Status] || "active") !== "active") {
+    throw new Error("Это задание вам недоступно.");
+  }
+  return courseId;
+}
+
+function assignmentFileFolder_() {
+  const props = PropertiesService.getScriptProperties(), key = "ASSIGNMENT_ATTACHMENT_FOLDER_ID";
+  const saved = props.getProperty(key); let folder = null;
+  if (saved) { try { folder = DriveApp.getFolderById(saved); } catch (e) {} }
+  if (!folder) {
+    folder = DriveApp.createFolder("Учебный портал — ответы и вложения студентов");
+    props.setProperty(key, folder.getId());
+  }
+  folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
+  return folder;
+}
+
+function uploadAssignmentAttachment_(data) {
+  const student = auth_(data);
+  if (student.role !== "student") throw new Error("Прикреплять файлы к ответу может только обучающийся.");
+  const assignmentId = String(data.assignmentId || "").trim();
+  const as = assignments_(), rows = as.getDataRange().getValues(), h = headerMap_(as);
+  const assignment = rows.slice(1).find(function(r) { return String(r[h.Id] || "") === assignmentId; });
+  if (!assignment) throw new Error("Задание не найдено.");
+  assignmentEligible_(student, assignment);
+
+  const raw = String(data.dataUrl || "");
+  const match = raw.match(/^data:(image\/(?:jpeg|png|webp)|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document);base64,([A-Za-z0-9+/=]+)$/i);
+  if (!match) throw new Error("Поддерживаются фото JPG, PNG, WEBP и документы PDF, DOC, DOCX.");
+  if (match[2].length > 4200000) throw new Error("Размер одного файла не должен превышать 3 МБ.");
+  const bytes = Utilities.base64Decode(match[2]);
+  if (!bytes.length || bytes.length > 3000000) throw new Error("Размер одного файла не должен превышать 3 МБ.");
+  const mime = match[1].toLowerCase();
+  const sig = bytes.slice(0, 8).map(function(b) { return (b + 256) % 256; });
+  const starts = function(t) { return String.fromCharCode.apply(null, sig.slice(0, t.length)) === t; };
+  const valid = mime === "application/pdf" ? starts("%PDF-") :
+    mime === "image/jpeg" ? starts("\xFF\xD8\xFF") :
+    mime === "image/png" ? starts("\x89PNG\r\n\x1A\n") :
+    mime === "image/webp" ? starts("RIFF") && String.fromCharCode.apply(null, bytes.slice(8, 12)) === "WEBP" :
+    mime === "application/msword" ? starts("\xD0\xCF\x11\xE0") :
+    mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && starts("PK\x03\x04");
+  if (!valid) throw new Error("Содержимое файла не соответствует заявленному формату.");
+  const original = String(data.fileName || "attachment").replace(/[\\/]/g, "_").slice(0, 100);
+  const ext = mime === "image/jpeg" ? ".jpg" : mime === "image/png" ? ".png" : mime === "image/webp" ? ".webp" :
+    mime === "application/pdf" ? ".pdf" : mime === "application/msword" ? ".doc" : ".docx";
+  const namedExt = (original.match(/\.(jpg|jpeg|png|webp|pdf|doc|docx)$/i) || [])[0] || "";
+  const extensionMatches = !namedExt || (mime === "image/jpeg" ? /^\.(jpg|jpeg)$/i.test(namedExt) :
+    mime === "image/png" ? namedExt.toLowerCase() === ".png" : mime === "image/webp" ? namedExt.toLowerCase() === ".webp" :
+    mime === "application/pdf" ? namedExt.toLowerCase() === ".pdf" :
+    mime === "application/msword" ? namedExt.toLowerCase() === ".doc" : namedExt.toLowerCase() === ".docx");
+  if (!extensionMatches) throw new Error("Расширение имени файла не соответствует его формату.");
+  const name = namedExt ? original : original + ext;
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  let file = null;
+  try {
+    const fs = assignmentFiles_(), fv = fs.getDataRange().getValues(), fm = headerMap_(fs), now = Date.now();
+    let pending = 0;
+    fv.slice(1).forEach(function(row, index) {
+      if (email_(row[fm.StudentEmail]) !== student.email || String(row[fm.AssignmentId] || "") !== assignmentId ||
+          String(row[fm.Status] || "") !== "pending") return;
+      const created = new Date(row[fm.CreatedAt] || 0).getTime();
+      if (isFinite(created) && created && now - created > 24 * 60 * 60 * 1000) {
+        try { DriveApp.getFileById(String(row[fm.DriveFileId] || "")).setTrashed(true); } catch (e) {}
+        updateMappedRecord_(fs, index + 2, {Status:"expired"});
+      } else pending++;
+    });
+    if (pending >= 5) throw new Error("Уже загружено 5 файлов, которые ещё не отправлены. Отправьте их вместе с ответом или повторите попытку позже.");
+    file = assignmentFileFolder_().createFile(Utilities.newBlob(bytes, mime, name));
+    const id = Utilities.getUuid();
+    appendMappedRecord_(fs, {Id:id,AssignmentId:assignmentId,StudentEmail:student.email,DriveFileId:file.getId(),
+      FileName:name,MimeType:mime,Size:bytes.length,Status:"pending",CreatedAt:new Date().toISOString()});
+    return {success:true,id:id,fileName:name,mimeType:mime,size:bytes.length};
+  } catch (error) {
+    if (file) { try { file.setTrashed(true); } catch (cleanupError) {} }
+    throw error;
+  } finally { lock.releaseLock(); }
+}
+
+function getAssignmentAttachment_(data) {
+  const user = auth_(data), id = String(data.attachmentId || "");
+  if (!id) throw new Error("Не указан файл ответа.");
+  const fs = assignmentFiles_(), rows = fs.getDataRange().getValues(), m = headerMap_(fs);
+  const record = rows.slice(1).find(function(r) { return String(r[m.Id] || "") === id; });
+  if (!record || String(record[m.Status] || "") !== "attached") throw new Error("Вложение не найдено или ещё не отправлено.");
+  const as = assignments_(), av = as.getDataRange().getValues(), ah = headerMap_(as);
+  const assignment = av.slice(1).find(function(r) { return String(r[ah.Id] || "") === String(record[m.AssignmentId] || ""); });
+  if (!assignment) throw new Error("Задание не найдено.");
+  const courseId = String(assignment[ah.CourseId] || "");
+  if (user.role === "student") {
+    if (email_(record[m.StudentEmail]) !== user.email || !hasCourseAccess_(user, courseId)) throw new Error("У вас нет доступа к этому вложению.");
+  } else if (user.role === "teacher" || user.role === "admin") {
+    editor_(data, courseId);
+  } else throw new Error("Недостаточно прав.");
+  const file = DriveApp.getFileById(String(record[m.DriveFileId] || ""));
+  const blob = file.getBlob(), content = blob.getBytes();
+  if (content.length > 3000000) throw new Error("Файл превышает допустимый размер.");
+  const mime = String(blob.getContentType() || record[m.MimeType] || "");
+  if (mime !== String(record[m.MimeType] || "")) throw new Error("Тип сохранённого файла не совпадает с записью.");
+  return {success:true,fileName:String(record[m.FileName] || file.getName()),mimeType:mime,data:Utilities.base64Encode(content),size:content.length};
+}
+
 function submitAssignment_(data) {
   const student = auth_(data);
   if (student.role !== "student") throw new Error("Отправлять ответы может только обучающийся.");
