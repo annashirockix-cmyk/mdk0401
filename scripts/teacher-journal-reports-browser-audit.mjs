@@ -51,6 +51,7 @@ try {
   await page.waitForSelector("#saveManualBtn");
   await page.locator("#manualGrade_0").fill("4");
   await page.locator("#manualFeedback_0").fill("Проверено в браузерном аудите");
+  await page.locator("#manualGrade_1").fill("3");
   await page.locator("#saveManualBtn").click();
   await page.waitForFunction(() => window.__savedGrades.length === 2);
   const saved = await page.evaluate(() => window.__savedGrades);
