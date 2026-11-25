@@ -9,6 +9,7 @@ const quietConsole = { log() {}, info() {}, warn() {}, error() {} };
 function loadTrack(file, trackId) {
   const window = { MDK_DATA: {} };
   vm.runInNewContext(read(file), { window, console: quietConsole }, { filename: file });
+  vm.runInNewContext(read("english-course.js"), { window, console: quietConsole }, { filename: "english-course.js" });
   return window.MDK_DATA[trackId];
 }
 
