@@ -57,7 +57,7 @@
    return prefix;
   });
   // Capture compact bold answer headings even when the heading has no colon.
-  var compactAnswerSection=/(^|\n)([ \t]*\*\*(?:Suggested answers|Key|Answers|Answer key|Teacher key|Listening key)(?:\s*:[^*\n]*)?\*\*[ \t]*\n[\s\S]*?)(?=\n(?:#{1,4}\s|\*\*[^*\n]+\*\*[ \t]*$|---\s*$)|$)/gi;
+  var compactAnswerSection=/(^|\n)([ \t]*\*\*(?:Suggested answers|Key|Answers|Answer key|Teacher key|Listening key|Transcript reveal(?: and key)?)(?:\s*:[^*\n]*)?\*\*[ \t]*\n[\s\S]*?)(?=\n(?:#{1,4}\s|\*\*[^*\n]+\*\*[ \t]*$|---\s*$)|$)/gi;
   student=student.replace(compactAnswerSection,function(full,prefix,body){
    move(body,"### Teacher answer key");
    return prefix;
