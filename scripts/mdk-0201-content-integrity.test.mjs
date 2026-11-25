@@ -37,4 +37,5 @@ test("MDK 02.01 does not present equipment-specific limits as universal rules", 
   assert.doesNotMatch(source, /опрессовкой давлением 1,25[–-]1,5 от номинального/i);
   assert.match(source, /по документации конкретного узла/i);
   assert.match(source, /не являются универсальной нормой/i);
+  assert.match(source, /значение Z50 не гарантирует безопасный зазор/i);
 });
