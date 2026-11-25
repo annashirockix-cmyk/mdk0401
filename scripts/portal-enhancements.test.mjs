@@ -1491,7 +1491,7 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
 test("English VPR importer never overwrites an existing Basic or Technical track", () => {
   const bank = read("EnglishVPR-Sheets.gs");
   const start = bank.indexOf("function importEnglishVprBank_(data)");
-  const end = bank.indexOf("\nfunction sanitizeEnglishVprExam_", start);
+  const end = bank.indexOf("function sanitizeEnglishVprExam_", start);
   assert.ok(start >= 0 && end > start);
   const importer = bank.slice(start, end);
   assert.ok(importer.includes("if (rowNo) {"));
