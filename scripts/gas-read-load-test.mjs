@@ -34,6 +34,7 @@ const actions = [
 ];
 if (["basic", "technical"].includes(englishTrack)) {
   actions.push({ name: "getEnglishVprExam", params: { track: englishTrack } });
+  actions.push({ name: "getEnglishSemesterTests", params: { track: englishTrack } });
 }
 
 const samples = new Map(actions.map(action => [action.name, []]));

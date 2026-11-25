@@ -17,7 +17,7 @@ $env:GAS_TEST_TOKENS = "TEST_TOKEN_1,TEST_TOKEN_2"
 $env:GAS_COURSE_ID = "07.01"
 $env:GAS_TEST_ID = "test_0701_01"
 $env:GAS_CONCURRENCY = "40"
-# Optional: include the protected English VPR read endpoint for students with English access.
+# Optional: include protected English VPR and semester-test read endpoints for students with English access.
 $env:GAS_ENGLISH_TRACK = "technical"
 
 node scripts/gas-read-load-test.mjs
@@ -34,7 +34,7 @@ Each virtual student sequentially calls:
 - `getMyCourseResults`
 - `getCustomContent`
 - `getTestAttemptStatus`
-- optionally `getEnglishVprExam` for `basic` or `technical`
+- optionally `getEnglishVprExam` and `getEnglishSemesterTests` for `basic` or `technical`
 
 The report includes success counts and p50/p95/maximum latency per action. Any failed request makes the process exit with code 1.
 
