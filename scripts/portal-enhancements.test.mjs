@@ -845,7 +845,7 @@ test("Technical English safety quizzes match the risk-based lesson content", () 
   assert.doesNotMatch(technical, /What should be worn when working with loud machinery\?/);
 });
 
-test("English course 1–3 lesson answer keys are removed from student lecture content", () => {
+test("English course 1–3 teacher keys are absent from public runtime lesson objects", () => {
   const runtime = read("english-five-year-runtime.js");
   const data = {
     ENB: { sections: [] },
@@ -861,7 +861,7 @@ test("English course 1–3 lesson answer keys are removed from student lecture c
     lecture.listeningId === "en-c01-s01-l09"
   );
   assert.ok(lesson, "course 1 lesson 9 should be appended");
-  assert.ok(lesson.teacherContent.includes("on. 2) at. 3) in."), "teacher copy retains the Russian-labelled answer key");
+  assert.equal(Object.prototype.hasOwnProperty.call(lesson, "teacherContent"), false);
   assert.ok(!lesson.content.includes("Ключ преподавателя"), "Russian answer-key heading is not student-visible");
   assert.ok(!lesson.content.includes("on. 2) at. 3) in."), "complete inline answer block is not student-visible");
 
@@ -870,8 +870,8 @@ test("English course 1–3 lesson answer keys are removed from student lecture c
     lecture.listeningId === "en-c03-s02-l08"
   );
   assert.ok(technicalLesson, "course 3 technical lesson should be appended");
-  assert.ok(technicalLesson.teacherContent.length > 0, "technical teacher key is retained separately");
-  assert.ok(!technicalLesson.content.includes("Teacher key and feedback"), "technical answer-key heading is hidden");
+  assert.equal(Object.prototype.hasOwnProperty.call(technicalLesson, "teacherContent"), false);
+  assert.ok(!technicalLesson.content.includes("Teacher key and feedback"), "technical answer-key heading is not student-visible");
 
   const courseTwoTopics = data.ENB.sections.flatMap((section) => section.topics || []);
   const courseTwoLesson = courseTwoTopics.flatMap((topic) => topic.lectures || []).find((lecture) =>
@@ -879,8 +879,9 @@ test("English course 1–3 lesson answer keys are removed from student lecture c
   );
   assert.ok(courseTwoLesson, "course 2 lesson should be appended");
   assert.ok(courseTwoLesson.content.includes("Which linker introduces contrast?"), "student self-check prompts remain visible");
-  assert.ok(!courseTwoLesson.content.includes("Practice 1: 1 however"), "embedded self-check answers are hidden");
-  assert.ok(courseTwoLesson.teacherContent.includes("Practice 1"), "embedded answers remain in teacher copy");
+  assert.ok(!courseTwoLesson.content.includes("Practice 1: 1 however"), "embedded self-check answers are not student-visible");
+  assert.equal(Object.prototype.hasOwnProperty.call(courseTwoLesson, "teacherContent"), false);
+  assert.doesNotMatch(runtime, /function splitTeacherMaterial|teacherContent\\s*:/);
 });
 
 test("English VPR answer keys stay server-side and the client uses protected exam endpoints", () => {
@@ -984,8 +985,8 @@ test("English VPR chooser checks server bank availability and imports only missi
   assert.ok(engine.includes("Импортировать отсутствующие варианты"));
   assert.ok(engine.includes("Уже существующие банки не будут перезаписаны"));
   assert.ok(html.includes("english-vpr-engine.js?v=32"));
-  assert.ok(html.includes("service-worker.js?v=424"));
-  assert.match(sw, /portal-cache-v424/);
+  assert.ok(html.includes("service-worker.js?v=425"));
+  assert.match(sw, /portal-cache-v425/);
 });
 
 

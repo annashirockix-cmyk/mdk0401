@@ -18,23 +18,23 @@ function loadTrack(trackId) {
 test("legacy Basic English answer keys are separated while student self-check prompts remain", () => {
   const track = loadTrack("ENB");
   const lectures = track.sections.flatMap(section => (section.topics || []).flatMap(topic => topic.lectures || []));
-  const privateLessons = lectures.filter(lecture => String(lecture.teacherContent || "").trim());
-  assert.ok(privateLessons.length >= 10, "expected legacy Basic English teacher-key lessons");
+  assert.doesNotMatch(read("data-english-basic.js"), /ключ преподавателя|teacherContent/i);
+  assert.ok(lectures.length > 0);
   const lesson = lectures.find(lecture => lecture.code === "1.1");
   assert.ok(lesson, "expected the first Basic English lecture");
   assert.match(lesson.content, /Сколько букв в английском алфавите/);
   assert.doesNotMatch(lesson.content, /ключ преподавателя|—\s*26\./i);
-  assert.match(lesson.teacherContent, /26\./);
+  assert.equal(Object.prototype.hasOwnProperty.call(lesson, "teacherContent"), false);
 });
 
 test("legacy Technical English answer keys are separated from student lecture HTML", () => {
   const track = loadTrack("ENT");
   const lectures = track.sections.flatMap(section => (section.topics || []).flatMap(topic => topic.lectures || []));
-  const privateLessons = lectures.filter(lecture => String(lecture.teacherContent || "").trim());
-  assert.ok(privateLessons.length >= 5, "expected legacy Technical English teacher-key lessons");
-  for (const lecture of privateLessons) {
-    assert.match(lecture.teacherContent, /ключ преподавателя/i);
-    assert.doesNotMatch(lecture.content, /ключ преподавателя/i);
+  assert.doesNotMatch(read("data-english-technical.js"), /ключ преподавателя|teacherContent/i);
+  assert.ok(lectures.length > 0);
+  for (const lecture of lectures) {
+    assert.equal(Object.prototype.hasOwnProperty.call(lecture, "teacherContent"), false);
+    assert.doesNotMatch(lecture.content || "", /ключ преподавателя|teacher key|answer key/i);
   }
 });
 
