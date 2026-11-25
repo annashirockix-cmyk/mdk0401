@@ -63,6 +63,8 @@ jobs:
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
         run: node --test scripts/course-content-editor.test.mjs
+      - name: Check personal tutoring privacy and audiences
+        run: node --test scripts/tutoring-privacy-integrity.test.mjs
       - name: Check isolated lecture preview
         run: node --test scripts/lecture-editor-preview.test.mjs
       - name: Install Playwright CLI for browser audit
