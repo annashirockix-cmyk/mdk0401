@@ -87,7 +87,7 @@
    return prefix;
   });
   // Move standalone teacher-preparation sections as a whole, including quality notes and delivery guidance.
-  var preparationBlock=/(^|\n)([ \t]*(?:#{1,4}\s*Teacher (?:preparation|notes|guidance)[^\n]*|\*\*Teacher (?:preparation|notes|guidance)[^*\n]*\*\*|#{1,4}\s*(?:Примечания преподавателю|Методические рекомендации преподавателю)|\*\*(?:Примечания преподавателю|Методические рекомендации преподавателю):?\*\*)[ \t]*\n[\s\S]*?)(?=\n(?:#{1,4}\s|\*\*[^*]+\*\*[ \t]*$)|$)/gi;
+  var preparationBlock=/(^|\n)([ \t]*(?:#{1,4}\s*Teacher (?:preparation|notes|guidance|answer[- ]key policy)[^\n]*|\*\*Teacher (?:preparation|notes|guidance|answer[- ]key policy)[^*\n]*\*\*|#{1,4}\s*(?:Примечания преподавателю|Методические рекомендации преподавателю)|\*\*(?:Примечания преподавателю|Методические рекомендации преподавателю):?\*\*)[ \t]*\n[\s\S]*?)(?=\n(?:#{1,4}\s|\*\*[^*]+\*\*[ \t]*$)|$)/gi;
   student=student.replace(preparationBlock,function(full,prefix,body){
    move(body,"### Teacher preparation and quality notes");
    return prefix;
