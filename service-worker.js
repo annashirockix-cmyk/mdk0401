@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v423'; // Добавлен предпросмотр защищённых экзаменационных вопросов для студента.
+const CACHE_NAME = 'portal-cache-v424'; // Добавлены приватные вложения к письменным заданиям.
 
 const STATIC_ASSETS = [
   './',
