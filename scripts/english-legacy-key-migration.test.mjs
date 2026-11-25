@@ -20,8 +20,8 @@ test("legacy Basic English answer keys are separated while student self-check pr
   const lesson = lectures.find(lecture => lecture.code === "1.1");
   assert.ok(lesson, "expected the first Basic English lecture");
   assert.match(lesson.content, /Сколько букв в английском алфавите/);
-  assert.doesNotMatch(lesson.content, /ключ преподавателя|—\\s*26\\./i);
-  assert.match(lesson.teacherContent, /26\\./);
+  assert.doesNotMatch(lesson.content, /ключ преподавателя|—\s*26\./i);
+  assert.match(lesson.teacherContent, /26\./);
 });
 
 test("legacy Technical English answer keys are separated from student lecture HTML", () => {
@@ -64,5 +64,5 @@ test("admin migration includes legacy teacher keys even when a lesson has no cou
 
 test("Apps Script importer accepts legacy records with an explicit zero course-year marker", () => {
   const server = read("Code.gs");
-  assert.match(server, /const validCourse = Number\\.isInteger\\(courseNumber\\) && courseNumber >= 0 && courseNumber <= 5/);
+  assert.match(server, /const validCourse = Number\.isInteger\(courseNumber\) && courseNumber >= 0 && courseNumber <= 5/);
 });
