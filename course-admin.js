@@ -211,7 +211,7 @@
       });else{renderSaved();if(done)done();}
     }
     function topics(){return getTopics(courseSel.value);}
-    function records(type,topicId){const key=type==="lecture"?"lectures":"tests";return (window.customContent[key]||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===topicId);}
+    function records(type,topicId){const key=type==="lecture"?"lectures":type==="file"?"files":"tests";return (window.customContent[key]||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===topicId);}
     function loadMainTopic(){
       const topic=getBuiltInTopics(courseSel.value).find(x=>String(x.id)===String(mainTopicSel.value));
       const override=(window.customContent.topics||[]).find(x=>x.mdkId===courseSel.value&&String(x.sourceTopicId||"")===String(mainTopicSel.value));
