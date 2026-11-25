@@ -1,7 +1,7 @@
 name: Portal syntax checks # materials student-friendly audit v2
 on:
   push:
-    branches: [main, master, feat/materials-science-student-friendly-mainline, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation]
+    branches: [main, master, feat/materials-science-student-friendly-mainline, feat/protected-course-exam-attachments-mainline, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation]
   pull_request:
     branches: [main, master, feat/accessible-portal-navigation]
   workflow_dispatch:
