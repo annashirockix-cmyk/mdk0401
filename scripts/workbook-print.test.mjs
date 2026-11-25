@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import vm from "node:vm";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
 test("generated workbooks print SPRUT-TP self-study labels", () => {
@@ -52,6 +53,27 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(html, /style\.css\?v=26/);
  assert.match(sw, /portal-cache-v[0-9]+/);
  const editorialProfiles = read("workbook-editorial.js");
+ const editorialContext = { window: {} };
+ vm.runInNewContext(editorialProfiles, editorialContext, { filename: "workbook-editorial.js" });
+ const editorialCatalog = editorialContext.window.WORKBOOK_EDITORIAL;
+ assert.ok(editorialCatalog && typeof editorialCatalog === "object");
+ let profileCount = 0;
+ for (const [courseId, topics] of Object.entries(editorialCatalog)) {
+  assert.ok(topics && typeof topics === "object" && !Array.isArray(topics), `Invalid editorial course group: ${courseId}`);
+  for (const [topicId, profile] of Object.entries(topics)) {
+   profileCount++;
+   assert.ok(profile && typeof profile === "object", `Missing editorial profile: ${courseId}/${topicId}`);
+   for (const field of ["explanation", "caseTitle", "caseText"]) {
+    assert.equal(typeof profile[field], "string", `Missing ${field}: ${courseId}/${topicId}`);
+    assert.ok(profile[field].trim().length >= (field === "caseTitle" ? 8 : 35), `Too short ${field}: ${courseId}/${topicId}`);
+   }
+   for (const field of ["mistakes", "route"]) {
+    assert.ok(Array.isArray(profile[field]) && profile[field].length >= 3, `Incomplete ${field}: ${courseId}/${topicId}`);
+    assert.ok(profile[field].every(item => typeof item === "string" && item.trim().length > 0), `Invalid ${field} item: ${courseId}/${topicId}`);
+   }
+  }
+ }
+ assert.ok(profileCount >= 80, `Unexpectedly small editorial catalog: ${profileCount}`);
  for (const id of ["mc-practical-1", "mc-practical-2", "mc-practical-3", "mc-practical-4", "mc-practical-5"]) assert.ok(editorialProfiles.includes(`"${id}": {`));
  assert.match(editorialProfiles, /Кейс: подготовить управляющую программу к передаче на проверку/);
  assert.match(editorialProfiles, /Не запускайте учебную программу на станке/);
