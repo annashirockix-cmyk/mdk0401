@@ -402,7 +402,7 @@ function userByEmail_(email) {
     loginChangedAt:index.LoginChangedAt!==undefined?String(row[index.LoginChangedAt]||""):"",
     passwordChangedAt:index.PasswordChangedAt!==undefined?String(row[index.PasswordChangedAt]||""):"",
     name:String(row[index.Name]||""),
-    group:String(row[index.Group]||""),
+    group:normalizeGroupName_(row[index.Group]),
     role:String(row[index.Role]||"student").toLowerCase(),
     courses:String(row[index.Courses]||""),
     payload:String(row[index.Payload]||"")
@@ -1010,13 +1010,13 @@ function logActivity_(data) {
 function getActivityLog_(data) {
   const user=auth_(data);
   if(user.role!=="admin"&&user.role!=="teacher")throw new Error("Журнал активности доступен только преподавателям и администраторам.");
-  const courseId=String(data.courseId||""),wanted=email_(data.email||""),group=String(data.group||"");
+  const courseId=String(data.courseId||""),wanted=email_(data.email||""),group=normalizeGroupName_(data.group);
   if(user.role==="teacher"&&courseId&&!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к этой дисциплине.");
   const sh=activityLog_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
   const rows=vals.slice(1).filter(function(row){
     const cid=String(row[m.CourseId]||"");
-    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||String(row[m.Group]||"")===group)&&(user.role==="admin"||!!cid&&hasCourseAccess_(user,cid));
-  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:String(row[m.Group]||""),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||""),eventType:m.EventType===undefined?"page_view":String(row[m.EventType]||"page_view"),details:m.Details===undefined?"":String(row[m.Details]||"")};});
+    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||normalizeGroupName_(row[m.Group])===group)&&(user.role==="admin"||!!cid&&hasCourseAccess_(user,cid));
+  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:normalizeGroupName_(row[m.Group]),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||""),eventType:m.EventType===undefined?"page_view":String(row[m.EventType]||"page_view"),details:m.Details===undefined?"":String(row[m.Details]||"")};});
   rows.sort(function(x,y){return String(y.createdAt).localeCompare(String(x.createdAt));});
   const offset=Math.max(0,Math.floor(Number(data.offset)||0));
   const limit=Math.min(500,Math.max(1,Math.floor(Number(data.limit)||250)));
@@ -1027,7 +1027,7 @@ function getActivityLog_(data) {
 function getAttemptAudit_(data) {
   const courseId=String(data.courseId||""),teacher=editor_(data,courseId),wanted=email_(data.email||""),testId=String(data.testId||"");
   const sh=attemptAudit_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
-  const rows=vals.slice(1).filter(function(r){return String(r[m.CourseId]||"")===courseId&&(!wanted||email_(r[m.StudentEmail])===wanted)&&(!testId||String(r[m.TestId]||"")===testId);}).map(function(r){return {eventType:String(r[m.EventType]||""),actorEmail:String(r[m.ActorEmail]||""),email:String(r[m.StudentEmail]||""),name:String(r[m.StudentName]||""),group:String(r[m.Group]||""),courseId:String(r[m.CourseId]||""),testId:String(r[m.TestId]||""),testTitle:String(r[m.TestTitle]||""),extraAttempts:r[m.ExtraAttempts],attemptNo:r[m.AttemptNo],grade:r[m.Grade],score:r[m.Score],maxScore:r[m.MaxScore],percent:r[m.Percent],createdAt:String(r[m.CreatedAt]||""),previousGrade:r[m.PreviousGrade],previousFeedback:String(r[m.PreviousFeedback]||""),feedback:String(r[m.Feedback]||"")};});
+  const rows=vals.slice(1).filter(function(r){return String(r[m.CourseId]||"")===courseId&&(!wanted||email_(r[m.StudentEmail])===wanted)&&(!testId||String(r[m.TestId]||"")===testId);}).map(function(r){return {eventType:String(r[m.EventType]||""),actorEmail:String(r[m.ActorEmail]||""),email:String(r[m.StudentEmail]||""),name:String(r[m.StudentName]||""),group:normalizeGroupName_(r[m.Group]),courseId:String(r[m.CourseId]||""),testId:String(r[m.TestId]||""),testTitle:String(r[m.TestTitle]||""),extraAttempts:r[m.ExtraAttempts],attemptNo:r[m.AttemptNo],grade:r[m.Grade],score:r[m.Score],maxScore:r[m.MaxScore],percent:r[m.Percent],createdAt:String(r[m.CreatedAt]||""),previousGrade:r[m.PreviousGrade],previousFeedback:String(r[m.PreviousFeedback]||""),feedback:String(r[m.Feedback]||"")};});
   rows.sort(function(a,b){return String(b.createdAt).localeCompare(String(a.createdAt));});
   return {success:true,events:rows.slice(0,200)};
 }
@@ -1584,7 +1584,7 @@ function sendAssignmentDueReminders_() {
   av.slice(1).forEach(function(a){
     const id=String(a[ah.Id]||""),course=String(a[ah.CourseId]||""),due=String(a[ah.DueAt]||"");
     if(!id||due!==dueKey||String(a[ah.Status]||"active")!=="active")return;
-    const type=String(a[ah.TargetType]||""),target=String(a[ah.TargetValue]||"").trim().toLowerCase();
+    const type=String(a[ah.TargetType]||""),target=type==="group"?normalizeGroupName_(a[ah.TargetValue]):String(a[ah.TargetValue]||"").trim().toLowerCase();
     if(type!=="group"&&type!=="individual")return;
     const submitted={};
     sv.slice(1).forEach(function(sub){
@@ -1592,7 +1592,7 @@ function sendAssignmentDueReminders_() {
     });
     uv.slice(1).forEach(function(userRow){
       if(String(userRow[um.Role]||"").toLowerCase()!=="student")return;
-      const mail=email_(userRow[um.Email]),group=String(userRow[um.Group]||"").trim().toLowerCase();
+      const mail=email_(userRow[um.Email]),group=normalizeGroupName_(userRow[um.Group]);
       const recipient={role:"student",courses:String(userRow[um.Courses]||"")};
       if(!mail||!hasCourseAccess_(recipient,course)||submitted[mail])return;
       if(type==="individual"&&mail!==email_(target))return;
