@@ -116,6 +116,38 @@ test("all 120 existing and new lessons have usable listening activities", () => 
   }
 });
 
+test("teacher companion migration is admin-only, server-backed, and attached only to staff lessons", () => {
+  const runtime = read("english-five-year-runtime.js");
+  const app = read("app.js");
+  const api = read("api.js");
+  const server = read("Code.gs");
+  assert.match(runtime, /var split=splitTeacherMaterial\(row\.markdown\)/);
+  assert.match(app, /migrateEnglishTeacherMaterialsToServer/);
+  assert.match(app, /role[^;]*admin/);
+  assert.match(app, /teacherMaterials = rows\.filter/);
+  assert.match(app, /window\.state && window\.state\.staff && teacherHtml/);
+  assert.match(api, /importEnglishTeacherMaterials/);
+  assert.match(server, /case "importenglishteachermaterials"/);
+  assert.match(server, /const user = admin_\(data\)/);
+  assert.match(server, /payload\.teacherOnly === true\) return/);
+});
+
+test("teacher recording masters, transcript reveals and answer keys are removed from student lecture HTML", () => {
+  const window = loadEnglishRuntime();
+  const additions = [window.MDK_DATA.ENB, window.MDK_DATA.ENT].flatMap((track) =>
+    track.sections.flatMap((section) =>
+      section.topics.flatMap((topic) => (topic.lectures || []).filter((lecture) => lecture.listeningId)),
+    ),
+  );
+  assert.equal(additions.length, 75);
+  const teacherLessons = additions.filter((lecture) => String(lecture.teacherContent || "").trim());
+  assert.ok(teacherLessons.length > 0, "teacher companion material should be extracted for server migration");
+  for (const lecture of additions) {
+    assert.doesNotMatch(String(lecture.content || ""), /Recording script|Transcript reveal|Teacher key|Answer key|Suggested answers|Listening script for teacher recording/i,
+      "teacher-only section leaked into student lesson " + lecture.listeningId);
+  }
+});
+
 test("runtime loads before app.js and lecture rendering resolves explicit listening IDs", () => {
   const html = read("index.html");
   const app = read("app.js");

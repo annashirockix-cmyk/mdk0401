@@ -179,6 +179,41 @@ window.invalidateGlobalCustomContentLoad = function(clearContent) {
     }
 };
 
+/** One-time admin migration. Run after deploying the matching Apps Script; safe to repeat. */
+window.migrateEnglishTeacherMaterialsToServer = async function () {
+    var identity = window.state && (window.state.staff || window.state.student);
+    if (!identity || String(identity.role || "").toLowerCase() !== "admin") throw new Error("Перенос доступен только администратору.");
+    if (!window.API || !window.API.importEnglishTeacherMaterials) throw new Error("Сначала разверните Apps Script с поддержкой миграции и обновите страницу.");
+    var records = [];
+    ["ENB","ENT"].forEach(function (courseId) {
+        var course = window.MDK_DATA && window.MDK_DATA[courseId];
+        (course && course.sections || []).forEach(function (section) {
+            (section.topics || []).forEach(function (topic) {
+                (topic.lectures || []).forEach(function (lecture) {
+                    var teacherContent = String(lecture.teacherContent || "").trim();
+                    if (!teacherContent) return;
+                    var courseNumber = Number(lecture.courseNumber || 0);
+                    if (!Number.isInteger(courseNumber) || courseNumber < 1 || courseNumber > 5) return;
+                    var code = String(lecture.code || lecture.listeningId || "").trim();
+                    var listeningId = String(lecture.listeningId || "").trim();
+                    if (!code) return;
+                    var stable = (listeningId || String(topic.id || "") + "-" + code).replace(/[^A-Za-z0-9._:-]/g,"-");
+                    records.push({id:"eng-teacher-"+courseId+":"+stable,courseId:courseId,topicId:String(topic.id || ""),courseNumber:courseNumber,code:code,title:String(lecture.title || code),listeningId:listeningId,teacherContent:teacherContent});
+                });
+            });
+        });
+    });
+    if (!records.length) return {success:true,total:0,batches:0};
+    var inserted=0,updated=0;
+    for (var i=0;i<records.length;i+=50) {
+        var batch=records.slice(i,i+50);
+        var result=await window.API.importEnglishTeacherMaterials(batch);
+        if (!result || !result.success || Number(result.received)!==batch.length) throw new Error("Сервер не подтвердил пакет "+(Math.floor(i/50)+1));
+        inserted+=Number(result.inserted||0); updated+=Number(result.updated||0);
+    }
+    return {success:true,total:records.length,inserted:inserted,updated:updated,batches:Math.ceil(records.length/50)};
+};
+
 window.loadGlobalCustomContent = function(callback) {
     var requestId = window._customContentLoadRequestId = (window._customContentLoadRequestId || 0) + 1;
     var hasSession = false, token = "", identity = window.state && (window.state.student || window.state.staff);
@@ -213,6 +248,7 @@ window.loadGlobalCustomContent = function(callback) {
             }
             window.customContent = window.customContent || {};
             window.customContent.topics = rows.filter(function(d) { return d.type === "topic"; });
+            window.customContent.teacherMaterials = rows.filter(function(d) { return d.teacherOnly === true && d.teacherContent; });
             // Apply saved title/code overrides to built-in topics without duplicating them.
             Object.keys(window.MDK_DATA || {}).forEach(function(courseId){
                 var course=window.MDK_DATA[courseId];
@@ -836,7 +872,9 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     lectureBody.innerHTML = lec.content || "";
                     details.appendChild(lectureBody);
                     // Teacher material is rendered only in the authenticated staff view.
-                    if (window.state && window.state.staff && lec.teacherContent) {
+                    var privateTeacherMaterial = (window.customContent && window.customContent.teacherMaterials || []).find(function(item) { return item.listeningId && item.listeningId === lec.listeningId; });
+                    var teacherHtml = lec.teacherContent || (privateTeacherMaterial && privateTeacherMaterial.teacherContent) || "";
+                    if (window.state && window.state.staff && teacherHtml) {
                         var teacherDetails = document.createElement("details");
                         teacherDetails.className = "lec-teacher-material";
                         teacherDetails.style.cssText = "margin:12px 20px 18px;padding:12px;border:1px dashed var(--accent);border-radius:8px;background:var(--card-soft);";
@@ -847,7 +885,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                         var teacherBody = document.createElement("div");
                         teacherBody.className = "lec-teacher-content";
                         teacherBody.style.cssText = "margin-top:12px;line-height:1.6;";
-                        teacherBody.innerHTML = lec.teacherContent;
+                        teacherBody.innerHTML = teacherHtml;
                         teacherDetails.appendChild(teacherBody);
                         details.appendChild(teacherDetails);
                     }

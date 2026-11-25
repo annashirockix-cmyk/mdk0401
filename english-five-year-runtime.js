@@ -31,12 +31,65 @@
  }
  function splitTeacherMaterial(markdown){
   var student=String(markdown||""),teacher=[];
-  function move(match,label){teacher.push(label+"\n"+match.trim());}
-  // Move full teacher-key blocks, including Russian bold labels whose answers
-  // begin on the same line as the label.
+  function move(match,label){teacher.push(label+"\n"+String(match||"").trim());}
+  // The student page has its own listening widget. Keep the recording master
+  // and transcript/answer reveal in the authenticated teacher accordion only.
+  // Original course drafts use a separate "Listening script for teacher recording" label.
+  // Move only the recording master; keep student listening prompts and tasks visible.
+  var listeningScript=/(^|\n)([ \t]*\*\*Listening script for teacher recording[^\n]*\*\*[ \t]*\n(?:[ \t]*\n|[ \t]*>[^\n]*(?:\n|$))+)/gi;
+  student=student.replace(listeningScript,function(full,prefix,body){
+   move(body,"### Listening recording master");
+   return prefix;
+  });
+  var teacherNote=/(^|\n)([ \t]*\*Teacher note:[^\n]*(?:\n(?![ \t]*(?:#{1,4}\s|\*\*|---|\s*$))[^\n]*)*)/gi;
+  student=student.replace(teacherNote,function(full,prefix,body){
+   move(body,"### Teacher recording note");
+   return prefix;
+  });
+  var recordingBlock=/(^|\n)([ \t]*(?:#{2,4}\s*(?:\*\*)?Recording script[^\n]*|\*\*Recording script[^*\n]*\*\*)[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:#{2,4}\s|\*\*(?:Language focus|After listening|Transcript reveal|Teacher key|Independent work|Self-check|Speaking|Writing|Guided practice|Integrated task|Teacher notes|Teacher preparation)\b|---\s*$)|$)/gi;
+  student=student.replace(recordingBlock,function(full,prefix,body){
+   move(body,"### Listening recording master");
+   return prefix;
+  });
+  var transcriptBlock=/(^|\n)([ \t]*(?:#{2,4}\s*(?:\*\*)?Transcript reveal[^\n]*|\*\*Transcript reveal[^*\n]*\*\*)[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:#{2,4}\s|\*\*(?:Language focus|After listening|Teacher key|Independent work|Self-check|Speaking|Writing|Guided practice|Integrated task|Teacher notes|Teacher preparation)\b|---\s*$)|$)/gi;
+  student=student.replace(transcriptBlock,function(full,prefix,body){
+   move(body,"### Listening transcript and feedback");
+   return prefix;
+  });
+  // Capture compact bold answer headings even when the heading has no colon.
+  var compactAnswerSection=/(^|\n)([ \t]*\*\*(?:Suggested answers|Key|Answers|Answer key|Teacher key|Listening key|Transcript reveal(?:\s*(?:and|\/)\s*(?:key|feedback))?)(?:\s*:[^*\n]*)?\*\*[^\n]*(?:\n[\s\S]*?)?)(?=\n(?:#{1,4}\s|\*\*[^*\n]+\*\*[ \t]*$|---\s*$)|$)/gi;
+  student=student.replace(compactAnswerSection,function(full,prefix,body){
+   move(body,"### Teacher answer key");
+   return prefix;
+  });
+  // Move complete teacher-key sections, including Russian labels and inline answers.
   var keyBlock=/(^|\n)(?:#{2,4}\s*(?:Teacher key(?: and feedback)?|Review key|Answer key(?:\s+for teacher)?|Answer key\s*\/\s*assessment guidance)\s*|\*\*(?:Teacher key|Answer key(?:\s+for teacher)?|Answer key\s*\/\s*assessment guidance|Ключ преподавателя|Ответы для преподавателя):?\*\*)[ \t]*([^\n]*)\n([\s\S]*?)(?=\n(?:#{1,4}\s|\*\*Independent work\b|---\s*$)|$)/gi;
   student=student.replace(keyBlock,function(full,prefix,inlineAnswers,body){
    move((inlineAnswers||"")+"\n"+(body||""),"### Teacher answer key");
+   return prefix;
+  });
+  // Also protect compact inline keys such as **Key:** 1a, 2c and
+  // **Suggested answers:** ... which are common in the new lesson drafts.
+  var compactKey=/(^|\n)([ \t]*\*\*(?:Key|Answer key|Listening key|Teacher key|Suggested answers|Answers)\s*: ?\*\*[^\n]*)(?=\n|$)/gi;
+  student=student.replace(compactKey,function(full,prefix,line){
+   move(line,"### Teacher answer key");
+   return prefix;
+  });
+  // Move answer-only headings used by older technical drafts.
+  var answerSection=/(^|\n)([ \t]*#{2,4}\s*(?:\d+\.\s*)?(?:Self-check\s*[—–-]\s*answers|Suggested teacher key|Suggested answers|Answers for teachers?)\s*\n[\s\S]*?)(?=\n(?:#{1,4}\s|---\s*$)|$)/gi;
+  student=student.replace(answerSection,function(full,prefix,body){
+   move(body,"### Teacher answer key");
+   return prefix;
+  });
+  var suggestedAnswers=/(^|\n)([ \t]*Suggested answers\s*:\s*[^\n]*(?:\n(?![ \t]*(?:#{1,4}\s|\*\*|---|\s*$))[^\n]*)*)/gi;
+  student=student.replace(suggestedAnswers,function(full,prefix,body){
+   move(body,"### Teacher suggested answers");
+   return prefix;
+  });
+  // Move standalone teacher-preparation sections as a whole, including quality notes and delivery guidance.
+  var preparationBlock=/(^|\n)([ \t]*(?:#{1,4}\s*Teacher (?:preparation|notes|guidance|answer[- ]key policy)[^\n]*|\*\*Teacher (?:preparation|notes|guidance|answer[- ]key policy)[^*\n]*\*\*|#{1,4}\s*(?:Примечания преподавателю|Методические рекомендации преподавателю)|\*\*(?:Примечания преподавателю|Методические рекомендации преподавателю):?\*\*)[ \t]*\n[\s\S]*?)(?=\n(?:#{1,4}\s|\*\*[^*]+\*\*[ \t]*$)|$)/gi;
+  student=student.replace(preparationBlock,function(full,prefix,body){
+   move(body,"### Teacher preparation and quality notes");
    return prefix;
   });
   // Some technical lessons use a numbered "Self-check and teacher key" block:
@@ -62,7 +115,8 @@
  rows.forEach(function(row){
   var target=row.course===4?c4:(row.course===5&&row.semester===1?c5:null);
   var code=row.course===4?"8."+row.number:(row.semester===1?"11."+row.number:"5.2."+row.number);
-  var lecture={code:code,title:row.title,content:markdownToHtml(row.markdown),listeningId:row.id,courseNumber:row.course,semesterNumber:row.semester,lessonNumber:row.number};
+  var split=splitTeacherMaterial(row.markdown);
+  var lecture={code:code,title:row.title,content:markdownToHtml(split.student),teacherContent:markdownToHtml(split.teacher),listeningId:row.id,courseNumber:row.course,semesterNumber:row.semester,lessonNumber:row.number};
   if(row.course===5&&row.semester===2){c5s2.lectures.push(lecture);return;}
   if(target&&!target.lectures.some(function(x){return x.listeningId===row.id||x.code===code;}))target.lectures.push(lecture);
  });
