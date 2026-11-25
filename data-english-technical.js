@@ -6,7 +6,7 @@ window.MDK_DATA = window.MDK_DATA || {};
   function splitTeacherSections(content) {
     var student = String(content || "");
     var teacher = [];
-    var headingPattern = /<h([1-6])\b[^>]*>[\s\S]*?<\/h\\1>/gi;
+    var headingPattern = /<h([1-6])\b[^>]*>[\s\S]*?<\/h\1>/gi;
     var headings = [], match;
     while ((match = headingPattern.exec(student))) {
       var plain = match[0].replace(/<[^>]+>/g, " ").replace(/&nbsp;/gi, " ").toLowerCase();
