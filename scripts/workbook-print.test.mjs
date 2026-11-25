@@ -75,6 +75,9 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  }
  assert.ok(profileCount >= 80, `Unexpectedly small editorial catalog: ${profileCount}`);
  for (const id of ["mc-practical-1", "mc-practical-2", "mc-practical-3", "mc-practical-4", "mc-practical-5"]) assert.ok(editorialProfiles.includes(`"${id}": {`));
+ assert.ok(editorialProfiles.includes('"t-6-1": {'));
+ assert.match(editorialProfiles, /Кейс: подготовить отчёт по методическому пособию/);
+ assert.match(editorialProfiles, /Не подставляйте вымышленные режимы/);
  assert.match(editorialProfiles, /Кейс: подготовить управляющую программу к передаче на проверку/);
  assert.match(editorialProfiles, /Не запускайте учебную программу на станке/);
  assert.ok(editorialProfiles.includes('"met-9": {'));
