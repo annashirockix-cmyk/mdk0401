@@ -1344,24 +1344,35 @@ window.renderHomePage = function() {
         }
     }
 
-    var title = course ? course.title : "Добро пожаловать!"; 
+    var escapeText = window.escapeHtml || function(value) { return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]; }); };
+    var title = course ? course.title : "Добро пожаловать!";
     var module = course ? course.module : "Выберите раздел.";
     var paletteHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">`;
     Object.keys(window.MDK_DATA || {}).filter(id => id !== "basic" && id !== "technical" && id !== "EN" && (window.canAccessCourse ? window.canAccessCourse(id) : true)).forEach(id => {
         var c = window.MDK_DATA[id]; var isActive = id === mdkId;
-        paletteHtml += `<button class="btn ${isActive ? '' : 'ghost'}" onclick="window.state.activeCourseId='${id}'; window.saveStudentData(); window.renderHomePage();" style="padding:10px 20px;">${c.shortName}</button>`;
+        paletteHtml += `<button type="button" class="btn ${isActive ? '' : 'ghost'}" data-course-id="${escapeText(id)}" style="padding:10px 20px;">${escapeText(c.shortName)}</button>`;
     });
     paletteHtml += `</div>`;
 
-    app.innerHTML = `<section class="hero" style="text-align: left; padding: 40px;"><span class="brand-badge" style="margin-bottom: 10px; display: inline-block;">${course ? course.shortName : "Портал"}</span><h1 style="font-size: 2.2rem; margin-bottom: 10px;">${title}</h1><p style="font-size: 1.1rem; color: var(--text-soft);">${module}</p>${paletteHtml}</section>`;
-    
+    app.innerHTML = `<section class="hero" style="text-align: left; padding: 40px;"><span class="brand-badge" style="margin-bottom: 10px; display: inline-block;">${escapeText(course ? course.shortName : "Портал")}</span><h1 style="font-size: 2.2rem; margin-bottom: 10px;">${escapeText(title)}</h1><p style="font-size: 1.1rem; color: var(--text-soft);">${escapeText(module)}</p>${paletteHtml}</section>`;
+    app.querySelectorAll("[data-course-id]").forEach(function(button) {
+        button.addEventListener("click", function() {
+            var nextCourseId = button.getAttribute("data-course-id");
+            if (!nextCourseId || !window.MDK_DATA[nextCourseId]) return;
+            window.state.activeCourseId = nextCourseId;
+            window.saveStudentData();
+            window.renderHomePage();
+        });
+    });
+
     if (course && course.sections) {
         var contentHtml = '<div class="steps-title" style="font-size:20px; font-weight:bold; margin:20px 0 10px;">Учебный план</div>';
         course.sections.forEach(function(section) {
-            contentHtml += `<div class="module" style="padding: 20px; margin-bottom: 15px;"><h3 style="color: var(--accent); margin-top: 0;">${section.title}</h3><div style="display: flex; flex-direction: column; gap: 10px;">`;
+            contentHtml += `<div class="module" style="padding: 20px; margin-bottom: 15px;"><h3 style="color: var(--accent); margin-top: 0;">${escapeText(section.title)}</h3><div style="display: flex; flex-direction: column; gap: 10px;">`;
             section.topics.forEach(function(topic) {
                 var isDone = window.state.results && window.state.results[`topic_${topic.id}`] ? "✅ " : "";
-                contentHtml += `<a href="#/topic/${mdkId}/${topic.id}" class="topic" style="background: var(--card-soft); padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; text-decoration: none; color: var(--text); border: 1px solid var(--border); transition: 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'"><span>${isDone}<b>${topic.code}</b> ${topic.title}</span><span>→</span></a>`;
+                var topicUrl = "#/topic/" + encodeURIComponent(mdkId) + "/" + encodeURIComponent(topic.id);
+                contentHtml += `<a href="${escapeText(topicUrl)}" class="topic" style="background: var(--card-soft); padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; text-decoration: none; color: var(--text); border: 1px solid var(--border); transition: 0.2s;"><span>${isDone}<b>${escapeText(topic.code)}</b> ${escapeText(topic.title)}</span><span>→</span></a>`;
             });
             contentHtml += `</div></div>`;
         });
