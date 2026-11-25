@@ -62,7 +62,8 @@
  rows.forEach(function(row){
   var target=row.course===4?c4:(row.course===5&&row.semester===1?c5:null);
   var code=row.course===4?"8."+row.number:(row.semester===1?"11."+row.number:"5.2."+row.number);
-  var lecture={code:code,title:row.title,content:markdownToHtml(row.markdown),listeningId:row.id,courseNumber:row.course,semesterNumber:row.semester,lessonNumber:row.number};
+  var split=splitTeacherMaterial(row.markdown);
+  var lecture={code:code,title:row.title,content:markdownToHtml(split.student),teacherContent:markdownToHtml(split.teacher),listeningId:row.id,courseNumber:row.course,semesterNumber:row.semester,lessonNumber:row.number};
   if(row.course===5&&row.semester===2){c5s2.lectures.push(lecture);return;}
   if(target&&!target.lectures.some(function(x){return x.listeningId===row.id||x.code===code;}))target.lectures.push(lecture);
  });
