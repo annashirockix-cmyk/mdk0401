@@ -30,7 +30,10 @@ try {
   const generatedProfileCourses = new Set(["02.01", "02.02", "04.01", "MCAM", "SPRUT_TP", "MAT", "MET", "OT", "ENB", "ENT"]);
   const workbookSource = fs.readFileSync("workbooks.js", "utf8");
   for (const courseId of generatedProfileCourses) {
-    assert.ok(workbookSource.includes(`id==="${courseId}")profile`),
+    const branchPattern = courseId === "ENB" || courseId === "ENT"
+      ? `id==="${courseId}"){`
+      : `id==="${courseId}")profile`;
+    assert.ok(workbookSource.includes(branchPattern),
       `Generated workbook profile branch for ${courseId} must remain present`);
   }
   const editorialCoverage = await page.evaluate((generatedCourses) => Object.entries(window.MDK_DATA || {})
