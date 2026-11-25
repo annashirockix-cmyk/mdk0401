@@ -80,6 +80,12 @@
    move(body,"### Teacher suggested answers");
    return prefix;
   });
+  // Move standalone teacher-preparation sections as a whole, including quality notes and delivery guidance.
+  var preparationBlock=/(^|\n)([ \t]*(?:#{2,4}\s*(?:Teacher preparation and quality notes|Teacher preparation|Teacher guidance|Teacher notes|Примечания преподавателю|Методические рекомендации преподавателю)|\*\*(?:Teacher preparation and quality notes|Teacher preparation|Teacher guidance|Teacher notes|Примечания преподавателю|Методические рекомендации преподавателю):?\*\*)[ \t]*\n[\s\S]*?)(?=\n(?:#{1,4}\s|\*\*[^*]+\*\*[ \t]*$)|$)/gi;
+  student=student.replace(preparationBlock,function(full,prefix,body){
+   move(body,"### Teacher preparation and quality notes");
+   return prefix;
+  });
   // Some technical lessons use a numbered "Self-check and teacher key" block:
   // retain the first three student prompts and move the explicitly keyed remainder.
   student=student.replace(/^##\s+(\d+)\.\s+Self-check (?:and teacher key|and key)\s*\n([\s\S]*?)(?=\n##\s|\n---\s*$)/gm,function(full,num,body){
