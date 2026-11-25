@@ -131,6 +131,13 @@ jobs:
           trap "kill $SERVER_PID" EXIT
           for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/english-final-exam-browser-audit.mjs
+      - name: Run real-browser assignment attachment audit
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/assignment-attachments-audit-server.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/assignment-attachments-browser-audit.mjs
       - name: Check inline scripts in HTML
         run: |
           python - <<'PY'

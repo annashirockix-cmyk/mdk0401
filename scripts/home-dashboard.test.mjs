@@ -10,7 +10,7 @@ test("home dashboard is loaded after existing home composition and cached offlin
   assert.match(html, /home-dashboard\.js\?v=1/);
   assert.match(worker, /\.\/home-dashboard\.js/);
   assert.match(worker, /portal-cache-v423/);
-  assert.match(html, /service-worker\.js\?v=423/);
+  assert.match(html, /service-worker\.js\?v=424/);
 });
 
 test("dashboard uses existing role state and only shows teacher actions to staff", () => {

@@ -89,8 +89,9 @@ function makeSheet(headers) {
 function runtime() {
   const users = makeSheet(["Email","PasswordHash","Name","Group","Role","UpdatedAt","Courses","Payload","PasswordSalt","LoginChangedAt","PasswordChangedAt"]);
   const assignments = makeSheet(["Id","CourseId","Title","Topic","Level","WorkType","DueAt","TargetType","TargetValue","Instructions","Criteria","CreatedBy","CreatedAt","Status","LegacyNote"]);
-  const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote"]);
-  const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","LegacyNote"]);
+  const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote","AttachmentsJSON"]);
+  const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","LegacyNote","AttachmentsJSON"]);
+  const assignmentFiles = makeSheet(["Id","AssignmentId","StudentEmail","DriveFileId","FileName","MimeType","Size","Status","SubmissionId","AttemptNo","CreatedAt"]);
   const results = makeSheet(["Email","Name","Group","TestId","TestTitle","Grade","Score","MaxScore","Percent","TimeSpent","Attempts","FinishedAt","CourseId","Submission","PenaltyPoints","ViolationCount","Feedback","ReviewedBy","ReviewedAt"]);
   users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01","","","",""]);
   users.appendRow(["other.teacher@example.test","","Другой преподаватель","","teacher","","MAT","","","",""]);
@@ -124,6 +125,7 @@ function runtime() {
   sandbox.assignments_ = () => assignments;
   sandbox.assignmentSubmissions_ = () => submissions;
   sandbox.assignmentSubmissionHistory_ = () => history;
+  sandbox.assignmentFiles_ = () => assignmentFiles;
   sandbox.results_ = () => results;
   sandbox.protectedQuestionBankMap_ = () => ({});
   sandbox.isProtectedAssessment_ = () => false;
@@ -151,7 +153,7 @@ function runtime() {
   };
   sandbox.createNotification_ = (...args) => notifications.push(args);
   sandbox.appendAttemptAudit_ = record => audit.push(record);
-  return { sandbox, users, assignments, submissions, history, results, notifications, audit, originalPayload: payload };
+  return { sandbox, users, assignments, submissions, history, assignmentFiles, results, notifications, audit, originalPayload: payload };
 }
 
 test("general English enrollment grants both tracks consistently in server access and journal", () => {
@@ -571,4 +573,90 @@ test("Apps Script assignment functions do not write into Users.Payload", () => {
   assert.doesNotMatch(assignmentModule, /Payload|payload/);
   assert.match(backend, /function appendMappedRecord_\(sheet, record\)/);
   assert.match(backend, /function updateMappedRecord_\(sheet, rowNumber, record\)/);
+});
+
+
+test("assignment attachments are private, tied to the student and attempt, and readable by assigned staff", () => {
+  const { sandbox: api } = runtime();
+  const stored = new Map(), props = new Map();
+  let fileNo = 0, privateFolder = false;
+  const folder = {
+    getId: () => "assignment-private-folder",
+    setSharing(access, permission) { privateFolder = access === "PRIVATE" && permission === "NONE"; },
+    createFile(blob) {
+      const id = "drive-assignment-file-" + (++fileNo);
+      const file = {
+        getId: () => id,
+        getName: () => blob.name,
+        getBlob: () => blob,
+        setTrashed: value => { if (value) stored.delete(id); }
+      };
+      stored.set(id, file);
+      return file;
+    }
+  };
+  api.PropertiesService = { getScriptProperties: () => ({
+    getProperty: key => props.get(key) || null,
+    setProperty: (key, value) => props.set(key, value)
+  }) };
+  api.DriveApp = {
+    Access: { PRIVATE: "PRIVATE" }, Permission: { NONE: "NONE" },
+    createFolder: () => folder, getFolderById: () => folder,
+    getFileById: id => { if (!stored.has(id)) throw new Error("missing file"); return stored.get(id); }
+  };
+  api.Utilities.base64Decode = value => Array.from(Buffer.from(value, "base64"));
+  api.Utilities.base64Encode = value => Buffer.from(value).toString("base64");
+  api.Utilities.newBlob = (bytes, mime, name) => ({
+    bytes: Array.from(bytes), name, getBytes() { return this.bytes; },
+    getContentType() { return mime; }
+  });
+  const created = api.createAssignment_({
+    token: "teacherToken", courseId: "07.01", targetType: "group",
+    targetValue: "ТО-21", title: "Практика с вложением", instructions: "Прикрепите фото."
+  });
+  const pdf = Buffer.from("%PDF-1.4\nproof").toString("base64");
+  assert.throws(() => api.uploadAssignmentAttachment_({
+    token: "studentToken", assignmentId: created.id, fileName: "spoofed.png",
+    dataUrl: "data:application/pdf;base64," + pdf
+  }), /Расширение/);
+  const upload = api.uploadAssignmentAttachment_({
+    token: "studentToken", assignmentId: created.id, fileName: "proof.pdf",
+    dataUrl: "data:application/pdf;base64," + pdf
+  });
+  assert.equal(upload.success, true);
+  assert.equal(privateFolder, true, "Drive folder must be private");
+  assert.throws(() => api.getAssignmentAttachment_({ token: "studentToken", attachmentId: upload.id }), /не найдено|не отправлено/);
+  assert.throws(() => api.uploadAssignmentAttachment_({
+    token: "otherStudentToken", assignmentId: created.id, fileName: "proof.pdf",
+    dataUrl: "data:application/pdf;base64," + pdf
+  }), /доступ/);
+  assert.throws(() => api.submitAssignment_({
+    token: "studentToken", assignmentId: created.id, answer: "  ", attachmentIds: []
+  }), /Введите ответ или прикрепите/);
+  const submitted = api.submitAssignment_({
+    token: "studentToken", assignmentId: created.id, answer: "  ", attachmentIds: [upload.id]
+  });
+  assert.equal(api.getAssignments_({ token: "studentToken" }).assignments[0].submission.answer, "",
+    "an attachment-only submission should be stored with an empty text answer");
+  assert.equal(submitted.attachments.length, 1);
+  const studentView = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
+  assert.equal(studentView.attachments[0].fileName, "proof.pdf");
+  const teacherView = api.getAssignments_({ token: "teacherToken" }).assignments[0].submissions[0];
+  assert.equal(teacherView.attachments[0].id, upload.id);
+  api.gradeAssignment_({ token: "teacherToken", submissionId: submitted.submissionId, grade: 2, feedback: "Добавьте пояснение." });
+  const retryUpload = api.uploadAssignmentAttachment_({
+    token: "studentToken", assignmentId: created.id, fileName: "proof-revised.pdf",
+    dataUrl: "data:application/pdf;base64," + pdf
+  });
+  const retry = api.submitAssignment_({
+    token: "studentToken", assignmentId: created.id, answer: "Исправлено", attachmentIds: [retryUpload.id]
+  });
+  assert.equal(retry.attempt, 2);
+  const retryView = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
+  assert.equal(retryView.attachments[0].id, retryUpload.id);
+  assert.equal(retryView.history[0].attachments[0].id, upload.id,
+    "the first attempt file must remain linked to its historical answer");
+  assert.equal(api.getAssignmentAttachment_({ token: "teacherToken", attachmentId: upload.id }).fileName, "proof.pdf");
+  assert.throws(() => api.getAssignmentAttachment_({ token: "otherStudentToken", attachmentId: upload.id }), /доступ/);
+  assert.throws(() => api.getAssignmentAttachment_({ token: "otherTeacherToken", attachmentId: upload.id }), /прав|доступ/);
 });
