@@ -152,7 +152,7 @@ test("English teacher scripts and answer keys are absent from every public runti
   const app = read("app.js");
   const server = read("Code.gs");
   assert.match(app, /customContent\.teacherMaterials/);
-  assert.match(server, /payload\.teacherOnly === true\\) return/);
+  assert.match(server, /payload\.teacherOnly === true\) return/);
 });
 
 test("runtime loads before app.js and lecture rendering resolves explicit listening IDs", () => {
