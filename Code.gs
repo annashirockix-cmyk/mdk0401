@@ -2041,7 +2041,20 @@ function getCustomContent_(data) {
     // Dedicated teacher-only English companion records must never be sent to students.
     if (user.role === "student" && payload && payload.teacherOnly === true) return;
     if (user.role === "student" && payload && typeof payload === "object") {
-      ["teacherContent","teacherNotes","teacherKey","answerKey","recordingScript","transcriptReveal","suggestedAnswers","markingGuide"].forEach(function (key) { delete payload[key]; });
+      // Sanitize every nested object, not only the top-level payload or test questions.
+      // Lecture companions and custom materials may contain nested teacher-only keys too.
+      function stripStudentPrivateFields_(value, stripImageRefs) {
+        if (!value || typeof value !== "object") return;
+        if (Array.isArray(value)) { value.forEach(function (item) { stripStudentPrivateFields_(item, stripImageRefs); }); return; }
+        Object.keys(value).forEach(function (key) {
+          if (/^(correct|answer|expected|accepted|solution|explanation|rationale|grading|rubric|key|iscorrect|feedback|teacherOnly|teacherContent|teacherNotes|teacherKey|recordingScript|transcriptReveal|suggestedAnswers|markingGuide)/i.test(key) || (stripImageRefs && /^imageRef$/i.test(key))) {
+            delete value[key];
+          } else {
+            stripStudentPrivateFields_(value[key], stripImageRefs);
+          }
+        });
+      }
+      stripStudentPrivateFields_(payload, String(row[3] || "") === "test");
     }
 
     // Teachers receive the image preview needed to edit their own question bank.
