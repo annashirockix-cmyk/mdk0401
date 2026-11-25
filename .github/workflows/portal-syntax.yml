@@ -39,6 +39,8 @@ jobs:
         run: node --test scripts/offline-materials-cache.test.mjs
       - name: Check accessible portal navigation
         run: node --test scripts/portal-navigation-a11y.test.mjs
+      - name: Check access and invitation integrity
+        run: node --test scripts/access-invitation-integrity.test.mjs
       - name: Check role-aware home dashboard and route targets
         run: node --test scripts/home-dashboard.test.mjs
       - name: Check notification center contract
