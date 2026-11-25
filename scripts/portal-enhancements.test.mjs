@@ -1488,6 +1488,20 @@ test("English VPR bank accepts only the approved 7-task, 40-point Basic/Technica
 });
 
 
+test("English VPR importer never overwrites an existing Basic or Technical track", () => {
+  const bank = read("EnglishVPR-Sheets.gs");
+  const start = bank.indexOf("function importEnglishVprBank_(data)");
+  const end = bank.indexOf("\\nfunction sanitizeEnglishVprExam_", start);
+  assert.ok(start >= 0 && end > start);
+  const importer = bank.slice(start, end);
+  assert.ok(importer.includes("if (rowNo) {"));
+  assert.ok(importer.includes("skipped:true"));
+  assert.ok(importer.includes('reason:"already_exists"'));
+  assert.ok(importer.includes("appendMappedRecord_(sh, record)"));
+  assert.doesNotMatch(importer, /updateMappedRecord_\\(sh, rowNo, record\\)/);
+});
+
+
 test("English VPR and semester grades cannot be forged through the generic saveResult endpoint", () => {
   const server = read("Code.gs");
   const bank = read("EnglishVPR-Sheets.gs");
