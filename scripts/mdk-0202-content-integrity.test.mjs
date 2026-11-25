@@ -33,3 +33,22 @@ test("MDK 02.02 practical assignments include goals and variants or detailed tas
 test("MDK 02.02 does not advertise unavailable PDF materials", () => {
   assert.doesNotMatch(source, /Документ будет загружен позже|Методические указания к практическим работам \(ПДФ\)|в разработке/i);
 });
+
+
+test("MDK 02.02 safety-critical answers favor stopping and preserving safeguards", () => {
+  const allQuestions = topics.flatMap(topic => topic.test || []);
+  const interlock = allQuestions.find(item => /неисправной блокировке ограждения/i.test(item.q));
+  const alarm = allQuestions.find(item => /неизвестной аварийной ошибке/i.test(item.q));
+  assert.ok(interlock, "interlock-failure question exists");
+  assert.match(interlock.options[0], /остановить работу/i);
+  assert.ok(alarm, "unknown-alarm question exists");
+  assert.match(alarm.options[0], /остановить работу/i);
+  for (const topic of topics) {
+    assert.doesNotMatch(topic.practical.task, /обойти блокировк|отключить защит|зафиксировать блокировку в обход/i);
+  }
+});
+
+test("MDK 02.02 has no exact duplicate question stems", () => {
+  const stems = topics.flatMap(topic => topic.test || []).map(item => item.q.trim().toLocaleLowerCase("ru-RU").replace(/\\s+/g, " "));
+  assert.equal(new Set(stems).size, stems.length);
+});
