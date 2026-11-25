@@ -90,7 +90,8 @@ function runtime() {
   const users = makeSheet(["Email","PasswordHash","Name","Group","Role","UpdatedAt","Courses","Payload","PasswordSalt","LoginChangedAt","PasswordChangedAt"]);
   const assignments = makeSheet(["Id","CourseId","Title","Topic","Level","WorkType","DueAt","TargetType","TargetValue","Instructions","Criteria","CreatedBy","CreatedAt","Status","LegacyNote"]);
   const submissions = makeSheet(["Id","AssignmentId","StudentEmail","StudentName","Group","Answer","SubmittedAt","Status","Grade","Feedback","ReviewedBy","ReviewedAt","LegacyNote"]);
-  const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","LegacyNote"]);
+  const history = makeSheet(["Id","AssignmentId","SubmissionId","StudentEmail","StudentName","Group","Answer","SubmittedAt","AttemptNo","Grade","Feedback","ReviewedBy","ReviewedAt","Status","AttachmentsJSON"]);
+  const assignmentFiles = makeSheet(["Id","AssignmentId","StudentEmail","DriveFileId","FileName","MimeType","Size","Status","SubmissionId","AttemptNo","CreatedAt"]);
   const results = makeSheet(["Email","Name","Group","TestId","TestTitle","Grade","Score","MaxScore","Percent","TimeSpent","Attempts","FinishedAt","CourseId","Submission","PenaltyPoints","ViolationCount","Feedback","ReviewedBy","ReviewedAt"]);
   users.appendRow(["teacher@example.test","","Преподаватель","","teacher","","07.01","","","",""]);
   users.appendRow(["other.teacher@example.test","","Другой преподаватель","","teacher","","MAT","","","",""]);
@@ -124,6 +125,7 @@ function runtime() {
   sandbox.assignments_ = () => assignments;
   sandbox.assignmentSubmissions_ = () => submissions;
   sandbox.assignmentSubmissionHistory_ = () => history;
+  sandbox.assignmentFiles_ = () => assignmentFiles;
   sandbox.results_ = () => results;
   sandbox.protectedQuestionBankMap_ = () => ({});
   sandbox.isProtectedAssessment_ = () => false;
@@ -151,7 +153,7 @@ function runtime() {
   };
   sandbox.createNotification_ = (...args) => notifications.push(args);
   sandbox.appendAttemptAudit_ = record => audit.push(record);
-  return { sandbox, users, assignments, submissions, history, results, notifications, audit, originalPayload: payload };
+  return { sandbox, users, assignments, submissions, history, assignmentFiles, results, notifications, audit, originalPayload: payload };
 }
 
 test("general English enrollment grants both tracks consistently in server access and journal", () => {
