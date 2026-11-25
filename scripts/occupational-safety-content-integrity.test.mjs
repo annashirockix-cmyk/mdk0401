@@ -28,6 +28,6 @@ test("Occupational safety course has twelve complete lessons and assessments", (
 test("Safety lessons retain critical stop-work and protective-device rules", () => {
   assert.match(source, /не отключать блокировки и ограждения/i);
   assert.match(source, /необходимо прекратить операцию безопасным способом/i);
-  assert.match(source, /не открывать электрические шкафы/i);
+  assert.match(source, /не вскрывайте электрощит/i);
   assert.match(source, /не заменяют инженерную защиту/i);
 });
