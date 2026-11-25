@@ -1882,3 +1882,33 @@ test("portal navigation provides accessible search, active route and keyboard sh
   assert.match(css, /\.drawer-item\.is-current/);
   assert.match(css, /\.skip-link:focus/);
 });
+
+
+test("registration requires surname and first name and group matching is case- and dash-insensitive", () => {
+  const backend = read("Code.gs");
+  const api = read("api.js");
+  const app = read("app.js");
+  const html = read("index.html");
+  const reports = read("reports.js");
+  const normalizerStart = backend.indexOf("function normalizeGroupName_(value)");
+  const normalizerEnd = backend.indexOf("\\nfunction bytesToHex_", normalizerStart);
+  assert.ok(normalizerStart >= 0 && normalizerEnd > normalizerStart);
+  const sandbox = {};
+  vm.runInNewContext(backend.slice(normalizerStart, normalizerEnd) + ";this.normalizeGroupName_=normalizeGroupName_;", sandbox);
+  assert.equal(sandbox.normalizeGroupName_("  мк- 21 – а  "), "МК- 21 - А");
+  assert.equal(sandbox.normalizeGroupName_("Мк—21 А"), "МК-21 А");
+  assert.match(backend, /if \(!surname \|\| !firstName\)/);
+  assert.match(backend, /Name: fullName/);
+  assert.match(backend, /Group: group/);
+  assert.match(backend, /function createAssignment_\(data\)[\s\S]*normalizeGroupName_\(r\[um\.Group\]\)/);
+  assert.match(backend, /function getAssignments_\(data\)[\s\S]*normalizeGroupName_\(val\)!==normalizeGroupName_\(user\.group\)/);
+  assert.match(backend, /function submitAssignment_\(data\)[\s\S]*normalizeGroupName_\(val\) === normalizeGroupName_\(student\.group\)/);
+  assert.match(api, /register:function\(email,password,surname,firstName,group,invite\)/);
+  assert.match(app, /regSurname/);
+  assert.match(app, /regFirstName/);
+  assert.match(app, /API\.register\(email,pass,surname,firstName,group,invite\)/);
+  assert.match(html, /id="regSurname"[^>]*required/);
+  assert.match(html, /id="regFirstName"[^>]*required/);
+  assert.match(reports, /const normGroup=x=>/);
+  assert.match(reports, /normGroup\(x\.group\)/);
+});
