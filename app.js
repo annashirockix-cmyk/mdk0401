@@ -921,10 +921,50 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
 
             var files = window.customContent.files ? window.customContent.files.filter(f => f.mdkId === courseId && f.topicId === topicId) : [];
             if (files.length > 0) {
-                var filesHtml = `<div style="margin-top:20px; padding-top:15px; border-top:2px solid var(--border);"><h3 style="color:var(--accent); margin-bottom:10px;">📎 Прикрепленные материалы:</h3><div style="display:flex; flex-direction:column; gap:8px;">`;
-                files.forEach(f => { filesHtml += `<a href="${f.fileUrl}" target="_blank" class="btn ghost" style="justify-content:flex-start; padding:12px 15px; text-align:left;"><span style="font-size:20px;">📄</span> <b>${f.title}</b></a>`; });
-                filesHtml += `</div></div>`;
-                contentArea.innerHTML += filesHtml;
+                var filesSection = document.createElement("section");
+                filesSection.style.cssText = "margin-top:20px;padding-top:15px;border-top:2px solid var(--border);";
+                var filesHeading = document.createElement("h3");
+                filesHeading.textContent = "📎 Прикреплённые материалы";
+                filesSection.appendChild(filesHeading);
+                var filesList = document.createElement("div");
+                filesList.style.cssText = "display:flex;flex-direction:column;gap:8px;";
+                files.forEach(function(fileItem) {
+                    var label = String(fileItem.title || fileItem.fileName || "Учебный материал");
+                    if (fileItem.fileRef && /^coursefile:[A-Za-z0-9_-]{10,}$/.test(String(fileItem.fileRef))) {
+                        var button = document.createElement("button");
+                        button.type = "button";
+                        button.className = "btn ghost";
+                        button.style.cssText = "justify-content:flex-start;padding:12px 15px;text-align:left;";
+                        button.textContent = "📄 " + label + " · " + String(fileItem.fileName || "");
+                        button.addEventListener("click", async function() {
+                            button.disabled = true;
+                            var oldText = button.textContent;
+                            button.textContent = "Загрузка файла…";
+                            try {
+                                var result = await window.API.getCourseFile(fileItem.id, fileItem.fileRef);
+                                if (!result || !result.success || !result.data) throw new Error(result && result.error || "Не удалось получить файл.");
+                                var binary = atob(result.data), bytes = new Uint8Array(binary.length);
+                                for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                                var blob = new Blob([bytes], { type: result.mimeType || "application/octet-stream" });
+                                var url = URL.createObjectURL(blob), anchor = document.createElement("a");
+                                anchor.href = url; anchor.download = result.fileName || "учебный-материал";
+                                document.body.appendChild(anchor); anchor.click(); anchor.remove();
+                                setTimeout(function() { URL.revokeObjectURL(url); }, 60000);
+                                button.textContent = oldText;
+                            } catch (error) {
+                                button.textContent = "Ошибка загрузки: " + (error.message || "повторите попытку");
+                            } finally { button.disabled = false; }
+                        });
+                        filesList.appendChild(button);
+                    } else if (/^https?:\/\//i.test(String(fileItem.fileUrl || ""))) {
+                        var link = document.createElement("a");
+                        link.href = fileItem.fileUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
+                        link.className = "btn ghost"; link.textContent = "📄 " + label;
+                        filesList.appendChild(link);
+                    }
+                });
+                filesSection.appendChild(filesList);
+                contentArea.appendChild(filesSection);
             }
             window.unlockAchievement('reader');
         }

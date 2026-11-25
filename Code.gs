@@ -46,6 +46,7 @@ const HEADERS = {
   AttemptAudit: ["Id", "EventType", "ActorEmail", "StudentEmail", "StudentName", "Group", "CourseId", "TestId", "TestTitle", "ExtraAttempts", "AttemptNo", "Grade", "Score", "MaxScore", "Percent", "CreatedAt", "PreviousGrade", "PreviousFeedback", "Feedback"],
   QuestionBank: ["CourseId", "BankId", "QuestionId", "QuestionJSON", "UpdatedAt", "UpdatedBy"],
   QuestionBankBackup: ["BackupId", "CourseId", "BankId", "RowJSON", "BackedUpAt", "BackedUpBy"],
+  ExamFiles: ["Id", "CourseId", "BankId", "DriveFileId", "FileName", "MimeType", "Size", "Status", "UploadedBy", "CreatedAt"],
   EnglishVPRBank: ["Track", "ExamJSON", "Active", "UpdatedAt", "UpdatedBy"],
   EnglishSemesterBank: ["Track", "TestsJSON", "Active", "UpdatedAt", "UpdatedBy"],
   EnglishExamVariantsBank: ["ExamId", "CourseNo", "CourseId", "Track", "Semester", "VariantId", "BlueprintId", "VariantJSON", "Active", "UpdatedAt", "UpdatedBy"],
@@ -146,6 +147,11 @@ function handleRequest_(e) {
       case "submitfinalexam": result = submitFinalExam_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "uploadtestimage": result = uploadTestImage_(data); break;
+      case "uploadcoursefile": result = uploadCourseFile_(data); break;
+      case "getcoursefile": result = getCourseFile_(data); break;
+      case "uploadexamfile": result = uploadExamFile_(data); break;
+      case "getexamfile": result = getExamFile_(data); break;
+      case "deleteexamfile": result = deleteExamFile_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
       case "setteachercourses": result = setTeacherCourses_(data); break;
@@ -284,7 +290,7 @@ function notifyProctorSanction_(student,courseId,testId,attemptNo,violationNo,pe
  * Функция создаёт недостающие листы и заголовки, но не удаляет данные.
  */
 function setupPortal() {
-  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "AssignmentFiles", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
+  [CFG.USERS, CFG.RESULTS, CFG.CONTENT, CFG.SCHEDULE, CFG.INVITES, CFG.PASSWORD_REQUESTS, CFG.SETTINGS, CFG.GAME_ROOMS, CFG.GAME_ACTIONS, "Assignments", "AssignmentSubmissions", "AssignmentSubmissionHistory", "AssignmentFiles", "Notifications", "ProctorEvents", "AttemptAudit", "QuestionBank", "ExamFiles", "EnglishVPRBank", "EnglishExamVariantsBank", "EnglishExamAttempts", "ActivityLog"].forEach(ensureSheet_);
   const ss = getSpreadsheet_();
   Logger.log("Портал настроен. Таблица: " + ss.getName());
   return "Готово. Созданы/проверены листы Users, Results, CourseContent, Schedule, Invites, PasswordRequests, PortalSettings, Assignments, AssignmentSubmissions, AssignmentSubmissionHistory, AssignmentFiles, Notifications, ProctorEvents, AttemptAudit, QuestionBank, EnglishExamVariantsBank, EnglishExamAttempts, ActivityLog.";
@@ -2078,6 +2084,96 @@ function getCustomContent_(data) {
 
 /* ---------- Private built-in question bank ---------- */
 function questionBank_() { return ensureSheet_("QuestionBank"); }
+function assertPortalPrivateFile_(file, folder, descriptionPrefix) {
+  if (!file || file.isTrashed()) throw new Error("Защищённый файл не найден или удалён.");
+  if (!folder || folder.getSharingAccess() !== DriveApp.Access.PRIVATE) {
+    throw new Error("Папка защищённых материалов должна быть закрыта для общего доступа.");
+  }
+  if (file.getSharingAccess() !== DriveApp.Access.PRIVATE) {
+    throw new Error("Файл имеет небезопасные настройки доступа.");
+  }
+  const folderId = folder.getId();
+  const parents = file.getParents();
+  let belongsToFolder = false;
+  while (parents.hasNext()) {
+    if (parents.next().getId() === folderId) belongsToFolder = true;
+  }
+  if (!belongsToFolder) throw new Error("Файл находится вне закрытой папки портала.");
+  if (descriptionPrefix && String(file.getDescription() || "").indexOf(descriptionPrefix) !== 0) {
+    throw new Error("Файл не привязан к указанной дисциплине и теме.");
+  }
+  return file;
+}
+function examFiles_() { return ensureSheet_("ExamFiles"); }
+function examFileFolder_() {
+  const props=PropertiesService.getScriptProperties(),key="EXAM_DOCUMENT_FOLDER_ID";
+  let folder=null;const saved=props.getProperty(key);
+  if(saved){try{folder=DriveApp.getFolderById(saved);}catch(e){}}
+  if(!folder){folder=DriveApp.createFolder("Учебный портал — материалы экзаменов");props.setProperty(key,folder.getId());}
+  folder.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);return folder;
+}
+function assertPortalPrivateFile_(file, folder, descriptionPrefix) {
+  if (!file || file.isTrashed()) throw new Error("Защищённый файл не найден или удалён.");
+  if (!folder || folder.getSharingAccess() !== DriveApp.Access.PRIVATE) {
+    throw new Error("Папка защищённых материалов должна быть закрыта для общего доступа.");
+  }
+  if (file.getSharingAccess() !== DriveApp.Access.PRIVATE) {
+    throw new Error("Файл имеет небезопасные настройки доступа.");
+  }
+  const folderId = folder.getId();
+  const parents = file.getParents();
+  let belongsToFolder = false;
+  while (parents.hasNext()) {
+    if (parents.next().getId() === folderId) belongsToFolder = true;
+  }
+  if (!belongsToFolder) throw new Error("Файл находится вне закрытой папки портала.");
+  if (descriptionPrefix && String(file.getDescription() || "").indexOf(descriptionPrefix) !== 0) {
+    throw new Error("Файл не привязан к указанной дисциплине и теме.");
+  }
+  return file;
+}
+
+function examFileList_(courseId,bankId) {
+  const sh=examFiles_(),values=sh.getDataRange().getValues(),m=headerMap_(sh);
+  return values.slice(1).filter(function(row){return sameCourseId_(row[m.CourseId],courseId)&&(!bankId||String(row[m.BankId])===String(bankId))&&String(row[m.Status]||"active")==="active";})
+    .map(function(row){return {id:String(row[m.Id]||""),fileName:String(row[m.FileName]||"Файл"),mimeType:String(row[m.MimeType]||""),size:Number(row[m.Size])||0,bankId:String(row[m.BankId]||"")};});
+}
+function uploadExamFile_(data) {
+  const courseId=normalizeCourseId_(data.courseId||""),actor=editor_(data,courseId),bankId=String(data.bankId||"").trim();
+  if(["exam_primary","exam_extra","mdk_extra"].indexOf(bankId)<0)throw new Error("Файлы можно прикреплять только к экзаменационным банкам.");
+  const raw=String(data.dataUrl||""),match=raw.match(/^data:(application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document);base64,([A-Za-z0-9+/=]+)$/i);
+  if(!match)throw new Error("Поддерживаются только PDF, DOC и DOCX.");
+  if(match[2].length>4900000)throw new Error("Размер файла не должен превышать 3,5 МБ.");
+  const bytes=Utilities.base64Decode(match[2]);if(!bytes.length||bytes.length>3500000)throw new Error("Размер файла не должен превышать 3,5 МБ.");
+  const mime=match[1].toLowerCase(),sig=bytes.slice(0,12).map(function(b){return (b+256)%256;}),starts=function(t){return String.fromCharCode.apply(null,sig.slice(0,t.length))===t;};
+  const valid=mime==="application/pdf"?starts("%PDF-"):mime==="application/msword"?starts("\xD0\xCF\x11\xE0"):starts("PK\x03\x04");
+  if(!valid)throw new Error("Содержимое файла не соответствует заявленному формату.");
+  const original=String(data.fileName||"exam-file").replace(/[\\\\/]/g,"_").slice(0,100);
+  const ext=mime==="application/pdf"?".pdf":mime==="application/msword"?".doc":".docx";
+  const namedExt=(original.match(/\.(pdf|doc|docx)$/i)||[])[0]||"";
+  if(namedExt&&namedExt.toLowerCase()!==ext)throw new Error("Расширение имени файла не соответствует его формату.");
+  const name=namedExt?original:original+ext,folder=examFileFolder_(),file=folder.createFile(Utilities.newBlob(bytes,mime,name));
+  try{assertPortalPrivateFile_(file,folder,null);const id=Utilities.getUuid();appendMappedRecord_(examFiles_(),{Id:id,CourseId:courseId,BankId:bankId,DriveFileId:file.getId(),FileName:name,MimeType:mime,Size:bytes.length,Status:"active",UploadedBy:actor.email,CreatedAt:new Date().toISOString()});return {success:true,id:id,fileName:name,size:bytes.length};}
+  catch(error){try{file.setTrashed(true);}catch(cleanupError){}throw error;}
+}
+function getExamFile_(data) {
+  const user=auth_(data),id=String(data.attachmentId||"");if(!id)throw new Error("Не указан файл экзамена.");
+  const sh=examFiles_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),row=values.slice(1).find(function(x){return String(x[m.Id]||"")===id&&String(x[m.Status]||"active")==="active";});
+  if(!row)throw new Error("Файл экзамена не найден.");
+  const courseId=String(row[m.CourseId]||""),bankId=String(row[m.BankId]||"");
+  if(user.role==="student"){const examId=String(data.examId||"");if(!hasCourseAccess_(user,courseId)||["exam_primary","exam_extra","mdk_extra"].indexOf(bankId)<0||!examId)throw new Error("У вас нет доступа к материалу экзамена.");const activeRaw=CacheService.getScriptCache().get("finalExam:"+examId);if(!activeRaw)throw new Error("Экзаменационная попытка завершена или истекла. Повторно открыть материалы нельзя.");let activeExam;try{activeExam=JSON.parse(activeRaw);}catch(e){throw new Error("Не удалось проверить экзаменационную попытку.");}if(activeExam.email!==user.email||activeExam.courseId!==courseId)throw new Error("Материал не относится к вашей активной экзаменационной попытке.");const startedAt=Number(activeExam.startedAt),durationSeconds=Number(activeExam.durationSeconds);if(!startedAt||!durationSeconds)throw new Error("У попытки отсутствуют данные таймера.");if(Math.floor((Date.now()-startedAt)/1000)>durationSeconds+300){CacheService.getScriptCache().remove("finalExam:"+examId);throw new Error("Время экзамена истекло. Доступ к материалам закрыт.");}}
+  else if(user.role==="teacher"||user.role==="admin")editor_(data,courseId);else throw new Error("Недостаточно прав.");
+  const file=assertPortalPrivateFile_(DriveApp.getFileById(String(row[m.DriveFileId]||"")),examFileFolder_(),null),blob=file.getBlob(),bytes=blob.getBytes(),mime=String(blob.getContentType()||"");
+  if(bytes.length>3500000||mime!==String(row[m.MimeType]||""))throw new Error("Сохранённый файл не прошёл проверку размера или типа.");
+  return {success:true,fileName:String(row[m.FileName]||file.getName()),mimeType:mime,data:Utilities.base64Encode(bytes),size:bytes.length};
+}
+function deleteExamFile_(data) {
+  const courseId=normalizeCourseId_(data.courseId||""),actor=editor_(data,courseId),id=String(data.attachmentId||"");
+  const sh=examFiles_(),values=sh.getDataRange().getValues(),m=headerMap_(sh),index=values.slice(1).findIndex(function(row){return String(row[m.Id]||"")===id&&sameCourseId_(row[m.CourseId],courseId)&&String(row[m.Status]||"active")==="active";});
+  if(index<0)throw new Error("Файл экзамена не найден.");
+  const row=values[index+1];assertPortalPrivateFile_(DriveApp.getFileById(String(row[m.DriveFileId]||"")),examFileFolder_(),null).setTrashed(true);
+  updateMappedRecord_(sh,index+2,{Status:"deleted"});return {success:true};
+}
 /** Read-only inventory of the protected question bank. Admin only. */
 function getQuestionBankStats_(data) {
   admin_(data);
@@ -2193,7 +2289,7 @@ function getQuestionBank_(data) {
     try { question = JSON.parse(String(row[m.QuestionJSON] || "{}")); } catch (e) {}
     return {bankId:String(row[m.BankId]||""),questionId:String(row[m.QuestionId]||""),question:question,updatedAt:String(row[m.UpdatedAt]||""),updatedBy:String(row[m.UpdatedBy]||"")};
   });
-  return {success:true,courseId:courseId,questions:rows};
+  return {success:true,courseId:courseId,questions:rows,attachments:examFileList_(courseId,bankId)};
 }
 
 
@@ -2524,7 +2620,7 @@ function getFinalExam_(data) {
   if(selected.length!==target)throw new Error("Не удалось сформировать полный вариант из 45 уникальных заданий.");
   const optionMaps={},examId=Utilities.getUuid(),safeQuestions=selected.map(function(entry,index){return safeFinalExamQuestion_(entry,index,optionMaps);});
   CacheService.getScriptCache().put("finalExam:"+examId,JSON.stringify({email:user.email,courseId:courseId,startedAt:Date.now(),durationSeconds:60*60,questions:selected.map(function(e){return e.question;}),optionMaps:optionMaps}),7200);
-  return {success:true,examId:examId,questions:safeQuestions};
+  return {success:true,examId:examId,questions:safeQuestions,attachments:examFileList_(courseId,"").filter(function(file){return ["exam_primary","exam_extra","mdk_extra"].indexOf(file.bankId)>=0;})};
 }
 function scoreFinalAnswer_(q,answer) {
   const type=finalQuestionType_(q||{});
@@ -2898,6 +2994,93 @@ function importEnglishTeacherMaterials_(data) {
   } finally { lock.releaseLock(); }
 }
 
+function courseFileFolder_() {
+  const props = PropertiesService.getScriptProperties();
+  const saved = props.getProperty("COURSE_DOCUMENT_FOLDER_ID");
+  let folder = null;
+  if (saved) {
+    try { folder = DriveApp.getFolderById(saved); }
+    catch (e) { props.deleteProperty("COURSE_DOCUMENT_FOLDER_ID"); }
+  }
+  if (!folder) {
+    folder = DriveApp.createFolder("Учебный портал — материалы курсов");
+    props.setProperty("COURSE_DOCUMENT_FOLDER_ID", folder.getId());
+  }
+  folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
+  return folder;
+}
+
+function uploadCourseFile_(data) {
+  const courseId = normalizeCourseId_(data.courseId || data.mdkId || "");
+  const actor = editor_(data, courseId);
+  const topicId = String(data.topicId || "").trim();
+  const title = String(data.title || "").trim().slice(0, 180);
+  const raw = String(data.dataUrl || "");
+  if (!topicId || !title) throw new Error("Выберите тему и укажите название файла.");
+  const match = raw.match(/^data:(application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document);base64,([A-Za-z0-9+/=]+)$/i);
+  if (!match) throw new Error("Поддерживаются только PDF, DOC и DOCX.");
+  if (match[2].length > 4800000) throw new Error("Файл слишком большой. Максимальный размер — 3,5 МБ.");
+  const bytes = Utilities.base64Decode(match[2]);
+  if (!bytes.length || bytes.length > 3500000) throw new Error("Файл слишком большой. Максимальный размер — 3,5 МБ.");
+  const mime = match[1].toLowerCase();
+  const signature = String.fromCharCode.apply(null, bytes.slice(0, 8));
+  if (mime === "application/pdf" && signature.indexOf("%PDF-") !== 0) throw new Error("Содержимое файла не похоже на PDF.");
+  if (mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && signature.slice(0, 4) !== "PK\u0003\u0004") throw new Error("Содержимое файла не похоже на DOCX.");
+  if (mime === "application/msword" && signature.slice(0, 4) !== "\u00D0\u00CF\u0011\u00E0") throw new Error("Содержимое файла не похоже на DOC.");
+  const originalName = String(data.fileName || "material").replace(/[\\/\\\\]/g, "_").slice(0, 120);
+  const extension = mime === "application/pdf" ? ".pdf" : mime === "application/msword" ? ".doc" : ".docx";
+  const namedExtension = (originalName.match(/\.(pdf|doc|docx)$/i) || [])[0];
+  if (namedExtension && namedExtension.toLowerCase() !== extension) throw new Error("Расширение имени файла не соответствует его формату.");
+  const safeName = namedExtension ? originalName : originalName + extension;
+  const folder = courseFileFolder_();
+  const file = folder.createFile(Utilities.newBlob(bytes, mime, safeName));
+  file.setDescription("Учебный материал. Дисциплина: " + courseId + ". Тема: " + topicId + ". Автор: " + actor.email);
+  try {
+    assertPortalPrivateFile_(file, folder, "Учебный материал. Дисциплина: " + courseId + ". Тема: " + topicId + ".");
+    const saved = saveCustomContent_({
+      token: data.token, mdkId: courseId, topicId: topicId, type: "file", title: title,
+      fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length
+    });
+    return { success: true, id: saved.id, fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length };
+  } catch (error) {
+    try { file.setTrashed(true); } catch (cleanupError) {}
+    throw error;
+  }
+}
+
+function getCourseFile_(data) {
+  const user = auth_(data);
+  const itemId = String(data.itemId || "");
+  const fileRef = String(data.fileRef || "");
+  const match = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+  if (!itemId || !match) throw new Error("Не указан учебный файл.");
+  const rows = content_().getDataRange().getValues();
+  let record = null;
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][0] || "") === itemId && String(rows[i][3] || "") === "file") {
+      record = rows[i]; break;
+    }
+  }
+  if (!record) throw new Error("Файл не найден.");
+  const courseId = normalizeCourseId_(record[1] || "");
+  if (!hasCourseAccess_(user, courseId)) throw new Error("У вас нет доступа к этой дисциплине.");
+  if (user.role === "student" && !customContentIsOpen_(courseId, itemId, String(record[2] || ""), "file")) {
+    throw new Error("Этот материал пока закрыт преподавателем.");
+  }
+  let payload = {};
+  try { payload = JSON.parse(record[5] || "{}"); } catch (e) {}
+  if (String(payload.fileRef || "") !== fileRef) throw new Error("Ссылка на файл не совпадает с записью материала.");
+  const file = assertPortalPrivateFile_(DriveApp.getFileById(match[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(record[2] || "") + ".");
+  const blob = file.getBlob(), bytes = blob.getBytes();
+  if (bytes.length > 3500000) throw new Error("Файл превышает допустимый размер для защищённой загрузки.");
+  const mime = String(blob.getContentType() || payload.mimeType || "");
+  if (["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].indexOf(mime) < 0) {
+    throw new Error("Тип файла не поддерживается.");
+  }
+  return { success: true, fileName: String(payload.fileName || file.getName()), mimeType: mime,
+    data: Utilities.base64Encode(bytes), size: bytes.length };
+}
+
 function saveCustomContent_(data) {
   const courseId = String(data.mdkId || data.courseId || "");
   if (!courseId) throw new Error("Не указана дисциплина.");
@@ -2926,6 +3109,12 @@ function saveCustomContent_(data) {
         targetRow = i + 1;
         break;
       }
+    }
+
+    if (type === "file") {
+      const fileMatch = String(data.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+      if (!fileMatch) throw new Error("Для учебного файла допустима только внутренняя ссылка портала.");
+      assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(data.topicId || "") + ".");
     }
 
     const payload = Object.assign({}, data);
@@ -2961,6 +3150,15 @@ function deleteCustomContent_(data) {
 
     for (let i = 1; i < values.length; i++) {
       if (String(values[i][0]) === id && sameCourseId_(values[i][1], courseId)) {
+        if (String(values[i][3] || "") === "file") {
+          let payload = {};
+          try { payload = JSON.parse(values[i][5] || "{}"); } catch (e) {}
+          const fileMatch = String(payload.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+          if (fileMatch) {
+            try { assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(values[i][2] || "") + ".").setTrashed(true); }
+            catch (fileError) { throw new Error("Не удалось удалить файл из Google Drive. Запись материала сохранена."); }
+          }
+        }
         sheet.deleteRow(i + 1);
         return { success: true };
       }
