@@ -44,4 +44,12 @@ test("MDK 02.01 does not present equipment-specific limits as universal rules", 
   assert.doesNotMatch(source, /ψ = Δ\/d \(0,001 - 0,002\)/i);
   assert.doesNotMatch(source, /Твёрдость шеек 50–60 HRC/i);
   assert.doesNotMatch(source, /Зазор «поршень — цилиндр»: 0,03–0,09 мм/i);
+  assert.doesNotMatch(source, /нагрев колеса до 80–120 °С/i);
+  assert.doesNotMatch(source, /менее 10 мм\/мин/i);
+  assert.doesNotMatch(source, /не более 0,02 – 0,03 мм/i);
+  assert.doesNotMatch(source, /рабочее давление 0,4–0,8 МПа/i);
+  assert.doesNotMatch(source, /до 3000 об\/мин/i);
+  assert.doesNotMatch(source, /15 000 – 60 000 об\/мин/i);
+  assert.doesNotMatch(source, /не более 0,01 мм на 1000 мм/i);
+  assert.doesNotMatch(source, /не более 0,05 мм/i);
 });
