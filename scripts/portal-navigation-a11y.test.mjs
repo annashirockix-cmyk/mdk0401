@@ -26,3 +26,11 @@ test("drawer restores focus after overlay close and moves focus to content after
   assert.match(app, /var main = document\.getElementById\("app"\);\s*if \(main\) main\.focus\(\)/);
   assert.match(app, /if \(event\.key === "Escape" && drawer\.classList\.contains\("open"\)\)/);
 });
+
+test("long lecture lists open compactly and provide accessible full-text search", () => {
+  assert.match(app, /Поиск по лекциям темы/);
+  assert.match(app, /Найти лекцию по названию или тексту/);
+  assert.match(app, /card\.textContent[\s\S]*toLocaleLowerCase\("ru-RU"\)/);
+  assert.match(app, /details\.open = lectureCards\.length === 0/);
+  assert.match(app, /lectureSearchCount\.textContent = visible \+ " из " \+ lectureCards\.length/);
+});
