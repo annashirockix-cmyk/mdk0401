@@ -55,7 +55,7 @@ try {
         genericFallback: topics.filter(topic => topic.source === "generic-fallback").map(topic => ({id: topic.id, title: topic.title})),
         incompleteTopicProfiles: topics.filter(topic => topic.source === "topic-specific" && topic.missingFields.length)
           .map(topic => ({id: topic.id, title: topic.title, missingFields: topic.missingFields})) };
-    }), [...generatedCourses]);
+    }), [...generatedProfileCourses]);
   console.log("WORKBOOK_EDITORIAL_COVERAGE", JSON.stringify(editorialCoverage));
   for (const course of topicRegistry) {
     assert.equal(course.missingIds, 0, `Course ${course.courseId} has topics without stable IDs`);
