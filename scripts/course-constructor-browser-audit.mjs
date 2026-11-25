@@ -27,6 +27,36 @@ try {
       topics };
   }));
   console.log("COURSE_TOPIC_REGISTRY", JSON.stringify(topicRegistry.map(({topics, ...summary}) => summary)));
+  const generatedProfileCourses = new Set(["02.01", "02.02", "04.01", "MCAM", "SPRUT_TP", "MAT", "MET", "OT", "ENB", "ENT"]);
+  const workbookSource = fs.readFileSync("workbooks.js", "utf8");
+  for (const courseId of generatedProfileCourses) {
+    const branchPattern = courseId === "ENB" || courseId === "ENT"
+      ? `id==="${courseId}"){`
+      : `id==="${courseId}")profile`;
+    assert.ok(workbookSource.includes(branchPattern),
+      `Generated workbook profile branch for ${courseId} must remain present`);
+  }
+  const editorialCoverage = await page.evaluate((generatedCourses) => Object.entries(window.MDK_DATA || {})
+    .filter(([courseId]) => ["07.01", "04.01", "02.01", "02.02", "MCAM", "SPRUT_TP", "MAT", "MET", "OT", "ENB", "ENT", "PFI"].includes(courseId))
+    .map(([courseId, course]) => {
+      const profiles = window.WORKBOOK_EDITORIAL?.[courseId] || {};
+      const topics = (course.sections || []).flatMap(section => (section.topics || []).map(topic => {
+        const id = String(topic.id || "");
+        const profile = profiles[id] || profiles[String(topic.code || "")] || null;
+        const fields = ["explanation", "caseTitle", "caseText", "mistakes", "route"];
+        const missingFields = profile ? fields.filter(field =>
+          Array.isArray(profile[field]) ? profile[field].length === 0 : !String(profile[field] || "").trim()) : fields;
+        const source = profile ? "topic-specific" : generatedCourses.includes(courseId) ? "course-template" : "generic-fallback";
+        return { id, title: String(topic.title || ""), source, missingFields: profile ? missingFields : [] };
+      }));
+      return { courseId, topicCount: topics.length,
+        topicSpecific: topics.filter(topic => topic.source === "topic-specific").length,
+        courseTemplate: topics.filter(topic => topic.source === "course-template").length,
+        genericFallback: topics.filter(topic => topic.source === "generic-fallback").map(topic => ({id: topic.id, title: topic.title})),
+        incompleteTopicProfiles: topics.filter(topic => topic.source === "topic-specific" && topic.missingFields.length)
+          .map(topic => ({id: topic.id, title: topic.title, missingFields: topic.missingFields})) };
+    }), [...generatedProfileCourses]);
+  console.log("WORKBOOK_EDITORIAL_COVERAGE", JSON.stringify(editorialCoverage));
   for (const course of topicRegistry) {
     assert.equal(course.missingIds, 0, `Course ${course.courseId} has topics without stable IDs`);
     assert.equal(course.missingTitles, 0, `Course ${course.courseId} has topics without titles`);
