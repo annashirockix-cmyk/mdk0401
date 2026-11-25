@@ -184,3 +184,64 @@ test("listening practice shuffles every option set and remaps the correct answer
   assert.equal(prepared[1].options[prepared[1].answerIndex], "west");
   assert.equal(JSON.stringify(source), before, "source catalogue must remain unchanged");
 });
+
+
+test("admin migration uploads every teacher companion in idempotent batches of at most 50", async () => {
+  const app = read("app.js");
+  const start = app.indexOf("window.migrateEnglishTeacherMaterialsToServer = async function () {");
+  const end = app.indexOf("\\n\\nwindow.loadGlobalCustomContent", start);
+  assert.ok(start >= 0 && end > start, "admin migration function must be present in app.js");
+  const calls = [];
+  const makeLectures = (prefix, count, courseNumber) =>
+    Array.from({ length: count }, (_, index) => ({
+      code: prefix + "." + (index + 1),
+      title: "Teacher companion " + (index + 1),
+      listeningId: prefix + "-l" + String(index + 1).padStart(2, "0"),
+      courseNumber,
+      teacherContent: "<p>Private teacher note " + (index + 1) + "</p>",
+    }));
+  const window = {
+    state: { staff: { role: "admin" } },
+    MDK_DATA: {
+      ENB: { sections: [{ topics: [{ id: "basic-topic", lectures: makeLectures("basic", 50, 2) }] }] },
+      ENT: { sections: [{ topics: [{ id: "technical-topic", lectures: makeLectures("technical", 1, 4) }] }] },
+    },
+    API: {
+      importEnglishTeacherMaterials: async (batch) => {
+        calls.push(batch);
+        return { success: true, received: batch.length, inserted: batch.length, updated: 0 };
+      },
+    },
+  };
+  vm.runInNewContext(app.slice(start, end), { window });
+  const result = await window.migrateEnglishTeacherMaterialsToServer();
+
+  assert.deepEqual(
+    { success: result.success, total: result.total, inserted: result.inserted, updated: result.updated, batches: result.batches },
+    { success: true, total: 51, inserted: 51, updated: 0, batches: 2 },
+  );
+  assert.deepEqual(calls.map((batch) => batch.length), [50, 1]);
+  const all = calls.flat();
+  assert.equal(new Set(all.map((item) => item.id)).size, 51);
+  for (const item of all) {
+    assert.match(item.id, /^eng-teacher-(ENB|ENT):[A-Za-z0-9._:-]+$/);
+    assert.ok(item.topicId && item.courseId && item.teacherContent);
+    assert.ok(item.courseNumber >= 1 && item.courseNumber <= 5);
+  }
+});
+
+test("admin migration refuses non-admin users and reports a missing Apps Script endpoint", async () => {
+  const app = read("app.js");
+  const start = app.indexOf("window.migrateEnglishTeacherMaterialsToServer = async function () {");
+  const end = app.indexOf("\\n\\nwindow.loadGlobalCustomContent", start);
+  const window = { state: { staff: { role: "teacher" } }, MDK_DATA: {}, API: {} };
+  vm.runInNewContext(app.slice(start, end), { window });
+  await assert.rejects(window.migrateEnglishTeacherMaterialsToServer(), /только администратору/);
+  window.state.staff.role = "admin";
+  await assert.rejects(window.migrateEnglishTeacherMaterialsToServer(), /поддержкой миграции/);
+});
+
+test("teacher-only companion records are excluded from the ordinary custom lecture collection", () => {
+  const app = read("app.js");
+  assert.match(app, /window\\.customContent\\.lectures = rows\\.filter\\(function\\(d\\) \\{ return d\\.type === "lecture" && d\\.teacherOnly !== true; \\}\\);/);
+});
