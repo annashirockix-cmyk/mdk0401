@@ -11,9 +11,11 @@ try {
   const response = await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45000 });
   assert.ok(response && response.ok(), `Portal did not load: ${response?.status()}`);
   await page.evaluate(() => {
-    document.body.innerHTML = '<main id="app"></main>';
+    document.body.innerHTML = '<div id="crumbs"></div><main id="app"></main>';
     window.state = {
       student: { name: "Тестовый обучающийся", email: "certificate-audit@example.invalid" },
+      staff: null,
+      results: { certificateApproved: true },
       activeCourseId: "07.01"
     };
     window.MDK_DATA = { "07.01": { id: "07.01", title: "МДК 07.01 — Технология обработки на станках с ЧПУ" } };
@@ -34,15 +36,6 @@ try {
           submission: { status: "reviewed", grade: 4 + (i % 2), submittedAt: "2026-10-15T10:00:00Z" }
         }))
       })
-    };
-    window.renderCertificatePage = function () {
-      const app = document.getElementById("app");
-      app.innerHTML = '<div class="no-print"><button type="button">Распечатать сертификат</button></div>' +
-        '<section id="printable-cert" style="border:3px double #9b3d32;padding:20px;text-align:center">' +
-        '<p>УЧЕБНЫЙ ПОРТАЛ</p><h1>СЕРТИФИКАТ</h1>' +
-        '<h2>Об освоении программы профессионального обучения</h2>' +
-        '<p>Выдан: Тестовый обучающийся</p><p>Дисциплина: МДК 07.01</p>' +
-        '<p>Дата: 12 ноября 2026 года</p></section>';
     };
   });
   await page.addScriptTag({ path: "certificate-supplement.js" });
