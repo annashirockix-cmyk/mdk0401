@@ -34,3 +34,13 @@ test("long lecture lists open compactly and provide accessible full-text search"
   assert.match(app, /details\.open = lectureCards\.length === 0/);
   assert.match(app, /lectureSearchCount\.textContent = visible \+ " из " \+ lectureCards\.length/);
 });
+
+test("course navigation escapes dynamic labels and encodes topic route segments", () => {
+  assert.match(app, /var escapeText = window\.escapeHtml/);
+  assert.match(app, /escapeText\(section\.title\)/);
+  assert.match(app, /escapeText\(topic\.title\)/);
+  assert.match(app, /escapeText\(topic\.code\)/);
+  assert.match(app, /encodeURIComponent\(mdkId\).*encodeURIComponent\(topic\.id\)/);
+  assert.match(app, /data-course-id=/);
+  assert.doesNotMatch(app, /onclick="window\.state\.activeCourseId=/);
+});
