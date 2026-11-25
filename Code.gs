@@ -2249,7 +2249,7 @@ function getQuestionBank_(data) {
     try { question = JSON.parse(String(row[m.QuestionJSON] || "{}")); } catch (e) {}
     return {bankId:String(row[m.BankId]||""),questionId:String(row[m.QuestionId]||""),question:question,updatedAt:String(row[m.UpdatedAt]||""),updatedBy:String(row[m.UpdatedBy]||"")};
   });
-  return {success:true,courseId:courseId,questions:rows};
+  return {success:true,courseId:courseId,questions:rows,attachments:examFileList_(courseId,bankId)};
 }
 
 
