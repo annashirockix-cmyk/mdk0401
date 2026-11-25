@@ -44,3 +44,8 @@ test("course navigation escapes dynamic labels and encodes topic route segments"
   assert.match(app, /data-course-id=/);
   assert.doesNotMatch(app, /onclick="window\.state\.activeCourseId=/);
 });
+
+test("topic headings render dynamic topic names as text nodes", () => {
+  assert.match(app, /topicHeading\.textContent = String\(topic\.code/);
+  assert.doesNotMatch(app, /neon-text">\$\{topic\.code\} \$\{topic\.title\}/);
+});
