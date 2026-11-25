@@ -621,12 +621,16 @@ test("failed assignment submissions roll back only the current student's pending
   assert.throws(() => api.discardAssignmentAttachments_({token:"otherStudentToken",attachmentIds:[upload.id]}),/доступ/);
   assert.equal(stored.size,1,"another student must not be able to delete the pending file");
   const cleanup = api.discardAssignmentAttachments_({token:"studentToken",attachmentIds:[upload.id]});
-  assert.deepEqual({success:cleanup.success,discarded:cleanup.discarded,kept:cleanup.kept},{success:true,discarded:1,kept:0});
+  assert.equal(cleanup.success,true);
+  assert.equal(cleanup.discarded,1);
+  assert.equal(cleanup.kept,0);
   assert.equal(stored.size,0,"the Drive file must be trashed during rollback");
   const row = assignmentFiles.rows[1];
   assert.equal(row[7],"discarded","the file record must no longer be pending");
-  assert.deepEqual(api.discardAssignmentAttachments_({token:"studentToken",attachmentIds:[upload.id]}),{success:true,discarded:0,kept:1},
-    "cleanup is idempotent and does not recreate or delete a file twice");
+  const repeated = api.discardAssignmentAttachments_({token:"studentToken",attachmentIds:[upload.id]});
+  assert.equal(repeated.success,true);
+  assert.equal(repeated.discarded,0);
+  assert.equal(repeated.kept,1,"cleanup is idempotent and does not recreate or delete a file twice");
   assert.throws(() => api.discardAssignmentAttachments_({token:"studentToken",attachmentIds:[]}),/от 1 до 5/);
 });
 
