@@ -98,6 +98,7 @@ function handleRequest_(e) {
       case "getmycourseresults": result = getMyCourseResults_(data); break;
       case "savegcodeprogress": result = saveGCodeProgress_(data); break;
       case "getcustomcontent": result = getCustomContent_(data); break;
+      case "importenglishteachermaterials": result = importEnglishTeacherMaterials_(data); break;
       case "getcustomcontentaccess": result = getCustomContentAccess_(data); break;
       case "setcustomcontentaccess": result = setCustomContentAccess_(data); break;
       case "gettopicaccess": result = getTopicAccess_(data); break;
@@ -2031,6 +2032,12 @@ function getCustomContent_(data) {
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
 
+    // Dedicated teacher-only English companion records must never be sent to students.
+    if (user.role === "student" && payload && payload.teacherOnly === true) return;
+    if (user.role === "student" && payload && typeof payload === "object") {
+      ["teacherContent","teacherNotes","teacherKey","answerKey","recordingScript","transcriptReveal","suggestedAnswers","markingGuide"].forEach(function (key) { delete payload[key]; });
+    }
+
     // Teachers receive the image preview needed to edit their own question bank.
     if (user.role !== "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
       payload.questions = hydrateTestQuestionImages_(payload.questions);
@@ -2844,6 +2851,46 @@ function hydrateTestQuestionImages_(questions) {
     if (safe.imageRef) safe.imageData = testImageDataUri_(safe.imageRef);
     return safe;
   });
+}
+
+
+/** Admin-only, idempotent migration of English teacher companions to private CourseContent records. */
+function importEnglishTeacherMaterials_(data) {
+  const user = admin_(data);
+  const materials = Array.isArray(data.materials) ? data.materials : [];
+  if (!materials.length || materials.length > 50) throw new Error("Передайте от 1 до 50 материалов за один запрос.");
+  const normalized = materials.map(function (item) {
+    item = item || {};
+    const courseId = String(item.courseId || "").trim();
+    const topicId = String(item.topicId || "").trim();
+    const courseNumber = Number(item.courseNumber || 0);
+    const validCourse = Number.isInteger(courseNumber) && courseNumber >= 1 && courseNumber <= 5;
+    const code = String(item.code || "").trim();
+    const title = String(item.title || "").trim();
+    const teacherContent = String(item.teacherContent || "").trim();
+    const listeningId = String(item.listeningId || "").trim();
+    const id = String(item.id || "").trim();
+    if (["ENB", "ENT"].indexOf(courseId) === -1 || !topicId || !validCourse || !code || !teacherContent || !/^eng-teacher-[A-Za-z0-9._:-]{3,150}$/.test(id)) {
+      throw new Error("Некорректная запись преподавательского материала: " + (code || "без кода"));
+    }
+    return { id:id, courseId:courseId, topicId:topicId, code:code, title:title || code, listeningId:listeningId, teacherContent:teacherContent };
+  });
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = content_();
+    const values = sheet.getDataRange().getValues();
+    const rowById = {};
+    for (let i = 1; i < values.length; i++) rowById[String(values[i][0])] = i + 1;
+    let inserted = 0, updated = 0;
+    normalized.forEach(function (item) {
+      const payload = { teacherOnly:true, sourceLectureCode:item.code, listeningId:item.listeningId, code:item.code, teacherContent:item.teacherContent };
+      const row = [item.id,item.courseId,item.topicId,"lecture",item.title,JSON.stringify(payload),user.email,new Date().toISOString()];
+      if (rowById[item.id]) { sheet.getRange(rowById[item.id],1,1,row.length).setValues([row]); updated++; }
+      else { sheet.appendRow(row); inserted++; }
+    });
+    return { success:true, received:normalized.length, inserted:inserted, updated:updated };
+  } finally { lock.releaseLock(); }
 }
 
 function saveCustomContent_(data) {
