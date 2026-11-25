@@ -272,7 +272,7 @@ window.loadGlobalCustomContent = function(callback) {
                 });
             });
             window.customContent.files = rows.filter(function(d) { return d.type === "file"; });
-            window.customContent.lectures = rows.filter(function(d) { return d.type === "lecture"; });
+            window.customContent.lectures = rows.filter(function(d) { return d.type === "lecture" && d.teacherOnly !== true; });
             window.customContent.tests = rows.filter(function(d) { return d.type === "test"; });
             window.customContent.flashcards = rows.filter(function(d) { return d.type === "flashcards"; });
             window.customContent.games = rows.filter(function(d) { return d.type === "game"; });
