@@ -59,8 +59,8 @@ test("read-only load runner exercises 40 concurrent virtual students against a l
   assert.deepEqual([...new Set(seen.map(x => x.action))].sort(),
     ["getCustomContent", "getMyCourseResults", "getTestAttemptStatus"].sort());
   assert.ok(maxActive > 1, "requests should overlap to create concurrent load");
-  assert.match(result.stdout, /Virtual students:\\s+40/);
-  assert.match(result.stdout, /Failures:\\s+0/);
+  assert.ok(result.stdout.includes("Virtual students: 40"));
+  assert.ok(result.stdout.includes("Failures: 0"));
 });
 
 test("load runner rejects plain HTTP unless explicitly limited to localhost", async () => {
