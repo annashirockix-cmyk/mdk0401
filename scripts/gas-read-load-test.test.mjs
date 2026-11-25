@@ -33,7 +33,7 @@ test("read-only load runner exercises 40 concurrent virtual students against a l
     seen.push({ method: req.method, action: url.searchParams.get("action"), token: url.searchParams.get("token") });
     setTimeout(() => {
       active--;
-      res.writeHead(200, { "content-type": "application/json" });
+      res.writeHead(200, { "content-type": "application/json", "connection": "close" });
       res.end(JSON.stringify({ success: true, data: [] }));
     }, 8);
   });
