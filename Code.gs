@@ -175,6 +175,7 @@ function handleRequest_(e) {
       case "submitassignment": result = submitAssignment_(data); break;
       case "uploadassignmentattachment": result = uploadAssignmentAttachment_(data); break;
       case "getassignmentattachment": result = getAssignmentAttachment_(data); break;
+      case "discardassignmentattachments": result = discardAssignmentAttachments_(data); break;
       case "gradeassignment": result = gradeAssignment_(data); break;
       case "gradewrittenresult": result = gradeWrittenResult_(data); break;
       case "getnotifications": result = getNotifications_(data); break;
@@ -1609,6 +1610,42 @@ function uploadAssignmentAttachment_(data) {
     if (file) { try { file.setTrashed(true); } catch (cleanupError) {} }
     throw error;
   } finally { lock.releaseLock(); }
+}
+
+function discardAssignmentAttachments_(data) {
+  const student = auth_(data);
+  if (student.role !== "student") throw new Error("Удалять незавершённые вложения может только обучающийся.");
+  const ids = Array.isArray(data.attachmentIds) ? data.attachmentIds.map(function(id) { return String(id || "").trim(); }).filter(Boolean) : [];
+  if (!ids.length || ids.length > 5 || new Set(ids).size !== ids.length) throw new Error("Укажите от 1 до 5 разных вложений.");
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const fs = assignmentFiles_(), rows = fs.getDataRange().getValues(), m = headerMap_(fs);
+    const targets = ids.map(function(id) {
+      const index = rows.slice(1).findIndex(function(row) { return String(row[m.Id] || "") === id; });
+      if (index < 0) throw new Error("Одно из вложений не найдено.");
+      const row = rows[index + 1];
+      if (email_(row[m.StudentEmail]) !== student.email) throw new Error("Нет доступа к одному из вложений.");
+      const status = String(row[m.Status] || "");
+      if (status !== "pending" && status !== "attached" && status !== "discarded" && status !== "expired") {
+        throw new Error("Нельзя удалить вложение в текущем состоянии.");
+      }
+      return { id:id, index:index + 2, row:row, status:status };
+    });
+
+    let discarded = 0, kept = 0;
+    targets.forEach(function(target) {
+      if (target.status !== "pending") { kept++; return; }
+      const driveId = String(target.row[m.DriveFileId] || "");
+      if (driveId) DriveApp.getFileById(driveId).setTrashed(true);
+      updateMappedRecord_(fs, target.index, {Status:"discarded"});
+      discarded++;
+    });
+    return {success:true,discarded:discarded,kept:kept};
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function getAssignmentAttachment_(data) {
