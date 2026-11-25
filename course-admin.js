@@ -322,7 +322,7 @@
       const required=["lectureExisting","testExisting","savedMaterials","lectureTopic","testTopic"];
       if(document.getElementById("editorCourse")!==courseSel||required.some(id=>!$(id)))return;
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
-      const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId);
+      const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId),docs=records("file",lectureTopicId);
       const fs=(window.customContent.flashcards||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
       const builtInTopic=getBuiltInTopic(lectureTopicId),builtInLectures=getBuiltInLectures(builtInTopic);
       const additionalLectures=ls.filter(x=>x.isBuiltInOverride!==true);
@@ -330,10 +330,13 @@
       $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
       $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button></div>').join(""):'<p>Лекций пока нет.</p>')+
         '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>')+
+        '<h4 style="margin-top:16px">Файлы темы ('+docs.length+')</h4>'+(docs.length?docs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+esc(x.fileName||"файл")+' <button class="btn ghost delete-course-file" data-id="'+esc(x.id)+'">Удалить</button></div>').join(""):'<p>Файлов пока нет.</p>')+
         '<h4 style="margin-top:16px">Карточки ('+fs.length+')</h4>'+(fs.length?fs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.cards||[]).length)+' карточек · '+esc(x.track||"all")+' <button class="btn ghost pick-flashcards" data-id="'+esc(x.id)+'">Открыть конструктор</button></div>').join(""):'<p>Наборов карточек пока нет.</p>');
       $("savedMaterials").querySelectorAll(".pick-lecture").forEach(b=>b.onclick=()=>{ $("lectureExisting").value=b.dataset.id;loadLecture();});
       $("savedMaterials").querySelectorAll(".pick-test").forEach(b=>b.onclick=()=>{ $("testExisting").value=b.dataset.id;loadTest();$("previewTestBtn").click();});
       $("savedMaterials").querySelectorAll(".pick-flashcards").forEach(b=>b.onclick=()=>{window.state.activeCourseId=courseSel.value;if(window.saveStudentData)window.saveStudentData();location.hash="#/flashcard-editor";});
+      $("courseFileList").innerHTML=docs.map(x=>'<div style="padding:6px 0">'+esc(x.title)+' · '+esc(x.fileName||"")+'</div>').join("");
+      $("savedMaterials").querySelectorAll(".delete-course-file").forEach(b=>b.onclick=async()=>{if(!confirm("Удалить прикреплённый файл?"))return;b.disabled=true;try{const result=await window.API.deleteCustomContent(b.dataset.id,courseSel.value);if(!result||!result.success)throw new Error(result&&result.error||"Не удалось удалить файл.");await new Promise(resolve=>refreshContent(resolve));$("courseFileStatus").textContent="Файл удалён.";}catch(error){$("courseFileStatus").textContent=error.message||"Ошибка удаления.";b.disabled=false;}});
     }
     function resetLecture(){
       lectureId="";builtInLectureIndex=null;$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
