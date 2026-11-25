@@ -161,14 +161,13 @@ list.querySelectorAll(".taAttachment").forEach(button=>button.onclick=async()=>{
  finally{button.disabled=false;if(button.textContent==="Загрузка…")button.textContent=old;}
 });
 if(!staff)list.querySelectorAll(".taSubmit").forEach(form=>form.onsubmit=async e=>{
- e.preventDefault();let b=form.querySelector("button"),m=form.querySelector(".taMsg");b.disabled=true;
+ e.preventDefault();let b=form.querySelector("button"),m=form.querySelector(".taMsg");b.disabled=true;const uploaded=[];
  try{
   const files=Array.from(form.elements.attachments.files||[]);
   if(files.length>5)throw Error("Можно прикрепить не более 5 файлов.");
   if(!String(form.elements.answer.value||"").trim()&&!files.length)throw Error("Введите ответ или прикрепите хотя бы один файл.");
   const oversized=files.find(file=>file.size>3000000);
   if(oversized)throw Error("Файл «"+oversized.name+"» больше 3 МБ.");
-  const uploaded=[];
   for(const file of files){
    const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||""));reader.onerror=()=>reject(Error("Не удалось прочитать файл "+file.name));reader.readAsDataURL(file);});
    m.textContent="Загрузка файла: "+file.name;
@@ -177,10 +176,19 @@ if(!staff)list.querySelectorAll(".taSubmit").forEach(form=>form.onsubmit=async e
    uploaded.push(result.id);
   }
   m.textContent="Отправка ответа…";
-  const result=await window.API.submitAssignment(form.dataset.id,form.elements.answer.value,uploaded);
+  const result=await window.API.submitAssignment(form.dataset.id,form.elements.answer.value,uploaded.slice());
   if(!result||!result.success)throw Error(result&&result.error||"Ошибка отправки");
+  uploaded.length=0;
   m.textContent="Ответ и вложения отправлены.";load();
- }catch(error){m.textContent=error.message;}
+ }catch(error){
+  if(uploaded.length&&window.API&&typeof window.API.discardAssignmentAttachments==="function"){
+   try{
+    const cleanup=await window.API.discardAssignmentAttachments(uploaded.slice());
+    if(!cleanup||!cleanup.success)throw Error(cleanup&&cleanup.error||"Не удалось отменить загрузку вложений.");
+   }catch(cleanupError){console.warn("[Assignments] Не удалось очистить незавершённые вложения:",cleanupError);}
+  }
+  m.textContent=error.message;
+ }
  finally{b.disabled=false;}
 });
 else list.querySelectorAll(".taGrade").forEach(form=>form.onsubmit=e=>{e.preventDefault();let b=form.querySelector("button");b.disabled=true;window.API.gradeAssignment(form.dataset.id,form.elements.grade.value,form.elements.feedback.value,!!(form.elements.regrade&&form.elements.regrade.checked)).then(r=>{if(!r||!r.success)throw Error(r&&r.error||"Ошибка сохранения");load();}).catch(x=>{b.disabled=false;b.textContent=x.message;});});

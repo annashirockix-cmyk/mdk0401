@@ -141,6 +141,7 @@ setUserRole:function(email,role){return fetchAPI("setUserRole",{email:email,role
  getAssignments:function(){return fetchAPI("getAssignments",{},"GET");},
  uploadAssignmentAttachment:function(assignmentId,fileName,dataUrl){return fetchAPI("uploadAssignmentAttachment",{assignmentId:assignmentId,fileName:fileName,dataUrl:dataUrl},"POST",60000);},
  getAssignmentAttachment:function(attachmentId){return fetchAPI("getAssignmentAttachment",{attachmentId:attachmentId},"POST",60000);},
+ discardAssignmentAttachments:function(attachmentIds){return fetchAPI("discardAssignmentAttachments",{attachmentIds:Array.isArray(attachmentIds)?attachmentIds:[]},"POST",60000);},
  submitAssignment:function(assignmentId,answer,attachmentIds){return fetchAPI("submitAssignment",{assignmentId:assignmentId,answer:answer,attachmentIds:attachmentIds||[]},"POST");},
  gradeAssignment:function(submissionId,grade,feedback,regrade){return fetchAPI("gradeAssignment",{submissionId:submissionId,grade:grade,feedback:feedback||"",regrade:regrade===true},"POST");},
  getNotifications:function(){return fetchAPI("getNotifications",{},"GET");},
