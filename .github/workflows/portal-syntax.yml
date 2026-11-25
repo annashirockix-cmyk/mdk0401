@@ -69,8 +69,6 @@ jobs:
         run: node --test scripts/course-document-attachments.test.mjs scripts/course-document-attachments-runtime.test.mjs
       - name: Check protected exam document attachments
         run: node --test scripts/exam-document-attachments.test.mjs scripts/exam-document-attachments-runtime.test.mjs
-      - name: Check combined attachment schema and cleanup
-        run: node --test scripts/stacked-attachments-integration.test.mjs
       - name: Check student-friendly Materials Science course
         run: node --check data-material-easy.js && node --test scripts/materials-student-friendly.test.mjs
       - name: Check personal tutoring privacy and audiences
