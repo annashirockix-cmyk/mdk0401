@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v391'; // Обновлены материалы английского курсов 1–3 и версия runtime.
+const CACHE_NAME = 'portal-cache-v417'; // Добавлен предпросмотр защищённых экзаменационных вопросов для студента.
 
 const STATIC_ASSETS = [
   './',
@@ -132,6 +132,7 @@ const STATIC_ASSETS = [
   './extra.js',
   './portal-final.js',
   './course-admin.js',
+  './course-editor-ux.js',
   './teacher-controls.js',
   './proctor-monitor.js',
   './course-announcements.js',

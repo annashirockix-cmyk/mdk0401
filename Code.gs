@@ -117,6 +117,7 @@ function handleRequest_(e) {
       case "restorequestionbanks": result = restoreQuestionBanks_(data); break;
       case "importquestionbanks": result = importQuestionBanks_(data); break;
       case "getquestionbank": result = getQuestionBank_(data); break;
+      case "savequestionbank": result = saveQuestionBank_(data); break;
       case "getquestionbankstats": result = getQuestionBankStats_(data); break;
       case "importenglishvprbank": result = importEnglishVprBank_(data); break;
       case "getenglishvprexam": result = getEnglishVprExam_(data); break;
@@ -142,6 +143,7 @@ function handleRequest_(e) {
       case "getfinalexam": result = getFinalExam_(data); break;
       case "submitfinalexam": result = submitFinalExam_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
+      case "uploadtestimage": result = uploadTestImage_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
       case "setteachercourses": result = setTeacherCourses_(data); break;
@@ -1134,7 +1136,7 @@ function getResults_(data) {
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
   // сравнивался со всем массивом и отчёт резко замедлялся по мере роста журнала.
-  function resultCourseKey_(value){const v=normalizeCourseId_(value);return /^-?\\d+(?:\\.\\d+)?$/.test(v)?String(Number(v)):v;}
+  function resultCourseKey_(value){const v=normalizeCourseId_(value);return /^-?\d+(?:\.\d+)?$/.test(v)?String(Number(v)):v;}
   const resultKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId),resultCourseKey_(x.courseId)]);}));
   const assignmentKeys=new Set(list.map(function(x){return JSON.stringify([email_(x.email),String(x.testId)]);}));
   vals.slice(1).forEach(function(row){
@@ -1818,13 +1820,17 @@ function getCustomContent_(data) {
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (error) { payload = {}; }
 
+    // Teachers receive the image preview needed to edit their own question bank.
+    if (user.role !== "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
+      payload.questions = hydrateTestQuestionImages_(payload.questions);
+    }
     // Student sessions receive test prompts and options only. Answer keys remain server-side.
     if (user.role === "student" && String(row[3] || "") === "test" && Array.isArray(payload.questions)) {
       function stripTestKeys_(value) {
         if (!value || typeof value !== "object") return;
         if (Array.isArray(value)) { value.forEach(stripTestKeys_); return; }
         Object.keys(value).forEach(function(key) {
-          if (/^(correct|correctAnswer|correctIndex|correctOption|answer|answerIndex|answers|expectedAnswer|acceptedAnswers|correctOrder|key|solution|explanation|rationale|isCorrect)$/i.test(key)) delete value[key];
+          if (/^(correct|correctAnswer|correctIndex|correctOption|answer|answerIndex|answers|expectedAnswer|acceptedAnswers|correctOrder|key|solution|explanation|rationale|isCorrect|imageRef)$/i.test(key)) delete value[key];
           else stripTestKeys_(value[key]);
         });
       }
@@ -1973,6 +1979,71 @@ function getQuestionBank_(data) {
 }
 
 
+/** Replace one editable built-in exam bank, preserving a complete server-side backup. */
+function saveQuestionBank_(data) {
+  const courseId=normalizeCourseId_(data.courseId||"");
+  const actor=editor_(data,courseId);
+  const bankId=String(data.bankId||"").trim();
+  if(["exam_primary","exam_extra","mdk_extra"].indexOf(bankId)<0)throw new Error("Можно редактировать только основной и дополнительный экзаменационные банки.");
+  const incoming=Array.isArray(data.questions)?data.questions:[];
+  if(!incoming.length||incoming.length>500)throw new Error("В банке должно быть от 1 до 500 вопросов.");
+  const seen={},prepared=[];
+  incoming.forEach(function(item,index){
+    const question=item&&item.question&&typeof item.question==="object"?item.question:item;
+    const questionId=String(item&&item.questionId||"").trim();
+    if(!questionId||questionId.length>180)throw new Error("У задания №"+(index+1)+" отсутствует корректный ID.");
+    if(seen[questionId])throw new Error("Повторяется ID задания: "+questionId);
+    if(!question||typeof question!=="object"||Array.isArray(question))throw new Error("Некорректный объект задания №"+(index+1)+".");
+    if(!String(question.q||question.question||"").trim())throw new Error("У задания №"+(index+1)+" нет формулировки.");
+    const type=String(question.type||"mc").toLowerCase();
+    const hasAny=function(keys){return keys.some(function(key){return question[key]!==undefined&&question[key]!==null;});};
+    if(["mc","single","single_select","choice","multi","multiple","multiple_choice","num","numeric","number","order","ordering","match","matching","tf","true_false","text","short_text"].indexOf(type)<0)throw new Error("Неподдерживаемый тип задания №"+(index+1)+": "+type);
+    if(["mc","single","single_select","choice"].indexOf(type)>=0){
+      if(!Array.isArray(question.options)||question.options.length<2||!hasAny(["correct","correctAnswer","answer"]))throw new Error("В задании №"+(index+1)+" нужны варианты и правильный ответ.");
+    }
+    if(["multi","multiple","multiple_choice"].indexOf(type)>=0){
+      const answer=question.correct!==undefined?question.correct:(question.correctAnswer!==undefined?question.correctAnswer:(question.answers!==undefined?question.answers:question.answer));
+      if(!Array.isArray(question.options)||question.options.length<2||!Array.isArray(answer)||!answer.length)throw new Error("В задании с несколькими ответами №"+(index+1)+" проверьте варианты и массив правильных ответов.");
+    }
+    if(["num","numeric","number"].indexOf(type)>=0&&!hasAny(["answer","correct","correctAnswer"]))throw new Error("В числовом задании №"+(index+1)+" не указан правильный ответ.");
+    if(["order","ordering"].indexOf(type)>=0){
+      const expected=question.correctOrder||question.correct||question.answer||question.items;
+      if(!Array.isArray(question.items)||!Array.isArray(expected)||!expected.length)throw new Error("В задании на порядок №"+(index+1)+" нужны items и правильная последовательность.");
+    }
+    if(["match","matching"].indexOf(type)>=0){
+      const expected=question.correct!==undefined?question.correct:(question.correctAnswer!==undefined?question.correctAnswer:question.answer);
+      if(!(Array.isArray(question.pairs)&&question.pairs.length)||!question.pairs.every(function(pair){return pair&&pair.left!==undefined&&pair.right!==undefined;})){
+        if(!Array.isArray(expected)||!expected.length)throw new Error("В задании на соответствие №"+(index+1)+" не заданы пары или ответы.");
+      }
+    }
+    if(["tf","true_false"].indexOf(type)>=0&&!hasAny(["correct","correctAnswer","answer"]))throw new Error("В задании «Верно/неверно» №"+(index+1)+" не указан правильный ответ.");
+    if(["text","short_text"].indexOf(type)>=0&&!hasAny(["correct","correctAnswer","answer"]))throw new Error("В текстовом задании №"+(index+1)+" не указан эталонный ответ.");
+    const serialized=JSON.stringify(question);
+    if(!serialized||serialized.length>30000)throw new Error("Задание №"+(index+1)+" пустое или слишком большое.");
+    seen[questionId]=true;
+    prepared.push([courseId,bankId,questionId,serialized,new Date().toISOString(),actor.email]);
+  });
+  const lock=LockService.getScriptLock();lock.waitLock(10000);
+  try{
+    const sh=questionBank_(),values=sh.getDataRange().getValues(),m=headerMap_(sh);
+    const retained=values.slice(1).filter(function(row){return !(sameCourseId_(row[m.CourseId],courseId)&&String(row[m.BankId])===bankId);});
+    const previous=values.slice(1).filter(function(row){return sameCourseId_(row[m.CourseId],courseId)&&String(row[m.BankId])===bankId;});
+    const backupId="exam-edit-"+Utilities.getUuid().replace(/-/g,""),now=new Date().toISOString();
+    if(previous.length){
+      const backup=ensureSheet_("QuestionBankBackup");
+      const backupRows=previous.map(function(row){return [backupId,courseId,bankId,JSON.stringify(row),now,actor.email];});
+      backup.getRange(backup.getLastRow()+1,1,backupRows.length,6).setValues(backupRows);
+    }
+    const header=values.length?values[0]:HEADERS.QuestionBank;
+    const output=[header].concat(retained,prepared);
+    sh.clearContents();
+    sh.getRange(1,1,output.length,6).setValues(output);
+    CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");
+    return {success:true,courseId:courseId,bankId:bankId,questionsSaved:prepared.length,previousQuestionsBackedUp:previous.length,backupId:backupId};
+  }finally{lock.releaseLock();}
+}
+
+
 /* ---------- Server-delivered built-in tests ---------- */
 function resolvedBuiltInBankIds_(courseId, bankIds) {
   if(bankIds.length && String(bankIds[0]).indexOf("self_")===0) {
@@ -2031,7 +2102,7 @@ function safeBuiltInQuestion_(entry, optionMaps) {
 function builtInScoringSnapshot_(question) {
   const source = question && typeof question === "object" ? question : {};
   const snapshot = {};
-  ["type","correct","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"].forEach(function(key) {
+  ["type","correct","correctAnswers","correctAnswer","answers","answer","options","tolerance","tol","correctOrder","items","pairs"].forEach(function(key) {
     if (source[key] !== undefined) snapshot[key] = JSON.parse(JSON.stringify(source[key]));
   });
   return snapshot;
@@ -2063,8 +2134,8 @@ function getBuiltInTest_(data) {
 
 function sameAnswer_(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
 function scoreBuiltInQuestion_(q,answer) {
-  const type=String(q.type||"mc").toLowerCase();
-  let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+  const type=String(q.type||q.kind||"mc").toLowerCase();
+  let expected=Array.isArray(q.correctAnswers)?q.correctAnswers:(q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer)));
   if(type==="tf"||type==="true_false"){
     if(expected===undefined||expected===null)return false;
     let target;
@@ -2073,16 +2144,26 @@ function scoreBuiltInQuestion_(q,answer) {
     else target=Number(expected);
     return Number(answer)===target;
   }
-  if(type==="multi"||type==="multiple"||type==="multiple_choice"||Array.isArray(expected)){
+  if(type==="multi"||type==="multiple"||type==="multiple_choice"||(Array.isArray(expected)&&type!=="text"&&type!=="short_text")){
     if(!Array.isArray(answer)||!Array.isArray(expected))return false;
     if(expected.length&&typeof expected[0]==="string"&&q.options)expected=expected.map(function(value){const index=q.options.indexOf(value);return index<0?value:index;});
     return sameAnswer_(answer.map(String).sort(),expected.map(String).sort());
   }
+  if(type==="text"||type==="short_text"){
+    const textExpected=q.correctAnswer!==undefined?q.correctAnswer:(q.extra!==undefined?q.extra:expected);
+    if(textExpected===undefined||textExpected===null)return false;
+    const normalize=function(value){return String(value==null?"":value).normalize("NFKC").trim().replace(/\s+/g," ").toLocaleLowerCase("ru");};
+    return normalize(answer)===normalize(textExpected);
+  }
   if(type==="num"||type==="numeric"||type==="number"){
+    expected=q.correctAnswer!==undefined?q.correctAnswer:(q.extra!==undefined?q.extra:expected);
     if(expected===undefined||expected===null)return false;
-    const actual=Number(String(answer).replace(",", ".")),target=Number(String(expected).replace(",", "."));
-    if(!isFinite(actual)||!isFinite(target))return false;
-    const tolerance=Math.max(0,Number(q.tolerance!==undefined?q.tolerance:q.tol)||0.01);
+    const actualText=String(answer==null?"":answer).trim().replace(",", "."),targetText=String(expected).trim().replace(",", ".");
+    if(!/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(actualText)||!/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(targetText))return false;
+    const actual=Number(actualText),target=Number(targetText);
+    if(!Number.isFinite(actual)||!Number.isFinite(target))return false;
+    const toleranceRaw=q.tolerance!==undefined?q.tolerance:(q.tol!==undefined?q.tol:0.01),tolerance=Number(toleranceRaw);
+    if(!Number.isFinite(tolerance)||tolerance<0)return false;
     return Math.abs(actual-target)<=tolerance;
   }
   if(type==="order"||type==="ordering"){
@@ -2330,14 +2411,73 @@ function getCustomTest_(data) {
   if (prior >= 1 + Math.max(0, extra)) throw new Error("Попытки закончились. Обратитесь к преподавателю за дополнительной попыткой.");
   const questions = Array.isArray(record.payload.questions) ? record.payload.questions : [];
   if (!questions.length) throw new Error("В тесте пока нет вопросов.");
-  const optionMaps = {}, safeQuestions = questions.map(function(question, index) {
+  questions.forEach(function(question, index) {
+    const type = String(question && (question.type || question.kind) || "single").toLowerCase();
+    if (type === "multi" || type === "multiple" || type === "multiple_choice") {
+      const options = Array.isArray(question.options) ? question.options : [];
+      const key = Array.isArray(question.correctAnswers) ? question.correctAnswers : [];
+      if (options.length < 2 || key.length < 2 || key.some(function(value) {
+        return !Number.isInteger(Number(value)) || Number(value) < 0 || Number(value) >= options.length;
+      }) || new Set(key.map(Number)).size !== key.length) {
+        throw new Error("В вопросе " + (index + 1) + " неверно задан ключ множественного выбора. Укажите минимум два разных правильных варианта.");
+      }
+    }
+    if (type === "matching" || type === "match") {
+      const pairs = Array.isArray(question.pairs) ? question.pairs : [];
+      const left = pairs.map(function(pair){return String(pair && pair.left || "").trim();});
+      const right = pairs.map(function(pair){return String(pair && pair.right || "").trim();});
+      if (pairs.length < 2 || left.some(function(value){return !value;}) || right.some(function(value){return !value;}) || new Set(left).size !== left.length || new Set(right).size !== right.length) {
+        throw new Error("В вопросе " + (index + 1) + " неверно заданы пары. Нужны минимум две пары с непустыми и уникальными частями.");
+      }
+    }
+    if (type === "order" || type === "ordering") {
+      const items = Array.isArray(question.items) ? question.items.map(function(value){return String(value).trim();}) : [];
+      const expected = Array.isArray(question.correctOrder) ? question.correctOrder.map(String) : items;
+      if (items.length < 2 || items.some(function(value){return !value;}) || new Set(items).size !== items.length || expected.length !== items.length || new Set(expected).size !== expected.length || expected.some(function(value){return items.indexOf(value)<0;})) {
+        throw new Error("В вопросе " + (index + 1) + " неверно задана последовательность. Укажите минимум два уникальных элемента и правильный порядок.");
+      }
+    }
+    if (type === "text" || type === "short_text") {
+      const expected = String(question.correctAnswer !== undefined ? question.correctAnswer : question.extra || "").trim();
+      if (!expected) throw new Error("В вопросе " + (index + 1) + " укажите эталонный текстовый ответ.");
+    }
+    if (type === "numeric" || type === "num" || type === "number") {
+      const expected = String(question.correctAnswer !== undefined ? question.correctAnswer : question.extra || "").trim().replace(",", ".");
+      const tolerance = Number(question.tolerance === undefined ? 0.01 : question.tolerance);
+      if (!/^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(expected) || !Number.isFinite(Number(expected)) ||
+          !Number.isFinite(tolerance) || tolerance < 0 || tolerance > 1000000000) {
+        throw new Error("В вопросе " + (index + 1) + " укажите правильное число и допустимую погрешность от 0 до 1 000 000 000.");
+      }
+    }
+  });
+  const displayQuestions = hydrateTestQuestionImages_(questions);
+  const optionMaps = {}, safeQuestions = displayQuestions.map(function(question, index) {
     const safe = sanitizeAssessmentQuestionForStudent_(question || {});
-    const options = Array.isArray(safe.options) ? safe.options.slice() : [];
-    if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
-    const order = shuffledServer_(options.map(function(_, i) { return i; }));
-    safe.options = order.map(function(i) { return options[i]; });
-    optionMaps[String(index)] = order;
-    ["correct","answer","correctAnswer","answers","explanation","solution","key","rationale","answerIndex","correctIndex","correctOption","expectedAnswer","acceptedAnswers","correctOrder","isCorrect"].forEach(function(key) { delete safe[key]; });
+    const type = String(safe.type || safe.kind || "single").toLowerCase();
+    if (type === "matching" || type === "match") {
+      const pairs = Array.isArray(question.pairs) ? question.pairs : [];
+      const options = pairs.map(function(pair){return String(pair.right || "");});
+      const order = shuffledServer_(options.map(function(_, i) { return i; }));
+      safe.options = order.map(function(i) { return options[i]; });
+      safe.pairs = pairs.map(function(pair){return {left:String(pair.left || "")};});
+      optionMaps[String(index)] = order;
+    } else if (type === "order" || type === "ordering") {
+      const items = Array.isArray(question.items) ? question.items.map(String) : [];
+      if (items.length < 2 || items.some(function(item){return !item.trim();}) || new Set(items).size !== items.length) throw new Error("В вопросе " + (index + 1) + " неверно задана последовательность.");
+      const order = shuffledServer_(items.map(function(_, i) { return i; }));
+      safe.items = order.map(function(i) { return items[i]; });
+      optionMaps[String(index)] = order;
+    } else if (type === "numeric" || type === "num" || type === "number" || type === "text" || type === "short_text") {
+      safe.options = [];
+      if (type === "numeric" || type === "num" || type === "number" || type === "text" || type === "short_text") { delete safe.extra; delete safe.tolerance; }
+    } else {
+      const options = Array.isArray(safe.options) ? safe.options.slice() : [];
+      if (options.length < 2) throw new Error("Вопрос " + (index + 1) + " не содержит минимум двух вариантов ответа.");
+      const order = shuffledServer_(options.map(function(_, i) { return i; }));
+      safe.options = order.map(function(i) { return options[i]; });
+      optionMaps[String(index)] = order;
+    }
+    ["correct","answer","correctAnswer","answers","explanation","solution","key","rationale","answerIndex","correctIndex","correctOption","expectedAnswer","acceptedAnswers","correctOrder","isCorrect","imageRef"].forEach(function(key) { delete safe[key]; });
     return safe;
   });
   const attemptId = Utilities.getUuid().replace(/-/g, "");
@@ -2363,6 +2503,25 @@ function submitCustomTest_(data) {
   if (!questions.length || answers.length !== questions.length) throw new Error("Количество ответов не совпадает с количеством вопросов.");
   const canonicalAnswers = answers.map(function(value, index) {
     const order = attempt.optionMaps[String(index)] || [];
+    const question = questions[index] || {};
+    const type = String(question.type || question.kind || "single").toLowerCase();
+    if (type === "numeric" || type === "num" || type === "number" || type === "text" || type === "short_text") return String(value == null ? "" : value).trim();
+    if (Array.isArray(value)) {
+      const mapped = value.map(function(item) {
+        const displayed = Number(item);
+        return Number.isInteger(displayed) && displayed >= 0 && displayed < order.length ? order[displayed] : -1;
+      });
+      if (!mapped.every(function(item) { return item >= 0; }) || new Set(mapped).size !== mapped.length) return [];
+      if (type === "matching" || type === "match") {
+        const originalOptions = Array.isArray(question.pairs) ? question.pairs.map(function(pair){return String(pair.right || "");}) : [];
+        return mapped.map(function(originalIndex){return originalOptions[originalIndex] || "";});
+      }
+      if (type === "order" || type === "ordering") {
+        const originalItems = Array.isArray(question.items) ? question.items.map(String) : [];
+        return mapped.map(function(originalIndex){return originalItems[originalIndex] || "";});
+      }
+      return mapped.sort(function(a,b){return a-b;});
+    }
     const displayed = Number(value);
     return Number.isInteger(displayed) && displayed >= 0 && displayed < order.length ? order[displayed] : -1;
   });
@@ -2429,6 +2588,53 @@ function getGameAnswer_(data) {
   if (!q) throw new Error("Вопрос не найден.");
   return {success:true, answer:String(q.a || q.answer || "")};
 }
+
+/* ---------- Private images used by teacher-created test questions ---------- */
+function testImageFolder_() {
+  const props = PropertiesService.getScriptProperties();
+  const saved = props.getProperty("TEST_QUESTION_IMAGE_FOLDER_ID");
+  if (saved) {
+    try { return DriveApp.getFolderById(saved); } catch (e) { props.deleteProperty("TEST_QUESTION_IMAGE_FOLDER_ID"); }
+  }
+  const folder = DriveApp.createFolder("Portal test question images");
+  props.setProperty("TEST_QUESTION_IMAGE_FOLDER_ID", folder.getId());
+  return folder;
+}
+function uploadTestImage_(data) {
+  const courseId = normalizeCourseId_(data.courseId || data.mdkId || "");
+  const actor = editor_(data, courseId);
+  const raw = String(data.dataUrl || "");
+  const match = raw.match(/^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/i);
+  if (!match) throw new Error("Поддерживаются изображения JPG, PNG, WEBP и GIF.");
+  if (match[2].length > 950000) throw new Error("Изображение слишком большое. Уменьшите его размер до 700 КБ.");
+  const bytes = Utilities.base64Decode(match[2]);
+  if (!bytes.length || bytes.length > 700000) throw new Error("Размер изображения превышает 700 КБ.");
+  const mime = match[1].toLowerCase();
+  const name = String(data.name || "question-image").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
+  const blob = Utilities.newBlob(bytes, mime, name);
+  const folder = testImageFolder_();
+  const file = folder.createFile(blob);
+  file.setDescription("Изображение к вопросу теста. Дисциплина: " + courseId + ". Автор: " + actor.email);
+  return {success:true,imageRef:"drive:" + file.getId(),name:file.getName(),size:bytes.length,mimeType:mime};
+}
+function testImageDataUri_(imageRef) {
+  const match = String(imageRef || "").match(/^drive:([A-Za-z0-9_-]{10,})$/);
+  if (!match) return "";
+  try {
+    const blob = DriveApp.getFileById(match[1]).getBlob();
+    const mime = String(blob.getContentType() || "");
+    if (!/^image\/(jpeg|png|webp|gif)$/i.test(mime)) return "";
+    return "data:" + mime.toLowerCase() + ";base64," + Utilities.base64Encode(blob.getBytes());
+  } catch (e) { return ""; }
+}
+function hydrateTestQuestionImages_(questions) {
+  return (Array.isArray(questions) ? questions : []).map(function(question) {
+    const safe = Object.assign({}, question || {});
+    if (safe.imageRef) safe.imageData = testImageDataUri_(safe.imageRef);
+    return safe;
+  });
+}
+
 function saveCustomContent_(data) {
   const courseId = String(data.mdkId || data.courseId || "");
   if (!courseId) throw new Error("Не указана дисциплина.");
@@ -2830,7 +3036,7 @@ function legacyNorm_(v) { return String(v == null ? "" : v).toLowerCase().replac
 function legacyNumber_(v) {
   if (typeof v === "number") return v;
   const s = String(v == null ? "" : v).replace(/\\s/g,"").replace(",",".").replace("%","");
-  const m = s.match(/-?\d+(?:\\.\d+)?/);
+  const m = s.match(/-?\d+(?:\.\d+)?/);
   return m ? Number(m[0]) : 0;
 }
 function legacyColumn_(headers, aliases) {
