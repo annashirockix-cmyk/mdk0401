@@ -708,8 +708,10 @@ test("assignment attachments are private, tied to the student and attempt, and r
   assert.equal(api.getAssignments_({ token: "studentToken" }).assignments[0].submission.answer, "",
     "an attachment-only submission should be stored with an empty text answer");
   assert.equal(submitted.attachments.length, 1);
-  assert.deepEqual(api.discardAssignmentAttachments_({ token: "studentToken", attachmentIds: [upload.id] }), {success:true,discarded:0,kept:1},
-    "an attachment already linked to a submitted attempt must never be trashed");
+  const preserved = api.discardAssignmentAttachments_({ token: "studentToken", attachmentIds: [upload.id] });
+  assert.equal(preserved.success,true);
+  assert.equal(preserved.discarded,0);
+  assert.equal(preserved.kept,1,"an attachment already linked to a submitted attempt must never be trashed");
   const studentView = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
   assert.equal(studentView.attachments[0].fileName, "proof.pdf");
   const teacherView = api.getAssignments_({ token: "teacherToken" }).assignments[0].submissions[0];
