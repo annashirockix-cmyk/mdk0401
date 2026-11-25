@@ -985,8 +985,8 @@ test("English VPR chooser checks server bank availability and imports only missi
   assert.ok(engine.includes("Импортировать отсутствующие варианты"));
   assert.ok(engine.includes("Уже существующие банки не будут перезаписаны"));
   assert.ok(html.includes("english-vpr-engine.js?v=32"));
-  assert.ok(html.includes("service-worker.js?v=422"));
-  assert.match(sw, /portal-cache-v422/);
+  assert.ok(html.includes("service-worker.js?v=423"));
+  assert.match(sw, /portal-cache-v423/);
 });
 
 
@@ -1769,7 +1769,8 @@ test("student authentication looks up one user row instead of downloading all us
         throw new Error("Unexpected full-sheet read");
       }
     }),
-    email_:value=>String(value||"").trim().toLowerCase()
+    email_:value=>String(value||"").trim().toLowerCase(),
+    normalizeGroupName_:value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\s+/g," ").trim().toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.userByEmail_=userByEmail_;",sandbox);
   const user=sandbox.userByEmail_("STUDENT@TEST");
@@ -1846,7 +1847,8 @@ test("student assignment results query only matching submissions and history IDs
     assignmentSubmissionHistory_:()=>historySheet,
     headerMap_:sheet=>Object.fromEntries(sheet.headers.map((name,index)=>[name,index])),
     email_:value=>String(value||"").trim().toLowerCase(),
-    normalizeCourseId_:value=>String(value||"")
+    normalizeCourseId_:value=>String(value||""),
+    normalizeGroupName_:value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\s+/g," ").trim().toLocaleUpperCase("ru-RU")
   };
   vm.runInNewContext(server.slice(start,end)+";this.assignmentResultRecords_=assignmentResultRecords_;",sandbox);
   const records=sandbox.assignmentResultRecords_("STUDENT@TEST");
@@ -1881,4 +1883,37 @@ test("portal navigation provides accessible search, active route and keyboard sh
   assert.match(css, /#crumbs a/);
   assert.match(css, /\.drawer-item\.is-current/);
   assert.match(css, /\.skip-link:focus/);
+});
+
+
+test("registration requires surname and first name and group matching is case- and dash-insensitive", () => {
+  const backend = read("Code.gs");
+  const api = read("api.js");
+  const app = read("app.js");
+  const html = read("index.html");
+  const reports = read("reports.js");
+  const normalizerStart = backend.indexOf("function normalizeGroupName_(value)");
+  const normalizerEnd = backend.indexOf("\nfunction bytesToHex_", normalizerStart);
+  assert.ok(normalizerStart >= 0 && normalizerEnd > normalizerStart);
+  const sandbox = {};
+  vm.runInNewContext(backend.slice(normalizerStart, normalizerEnd) + ";this.normalizeGroupName_=normalizeGroupName_;", sandbox);
+  assert.equal(sandbox.normalizeGroupName_("  мк- 21 – а  "), "МК- 21 - А");
+  assert.equal(sandbox.normalizeGroupName_("Мк—21 А"), "МК-21 А");
+  assert.match(backend, /if \(!surname \|\| !firstName\)/);
+  assert.match(backend, /Name: fullName/);
+  assert.match(backend, /Group: group/);
+  assert.match(backend, /function createAssignment_\(data\)[\s\S]*normalizeGroupName_\(r\[um\.Group\]\)/);
+  assert.match(backend, /function getAssignments_\(data\)[\s\S]*normalizeGroupName_\(val\)!==normalizeGroupName_\(user\.group\)/);
+  assert.match(backend, /function submitAssignment_\(data\)[\s\S]*normalizeGroupName_\(val\) === normalizeGroupName_\(student\.group\)/);
+  assert.match(backend, /function sendAssignmentDueReminders_\(\)[\s\S]*normalizeGroupName_\(a\[ah\.TargetValue\]\)/);
+  assert.match(backend, /function getActivityLog_\(data\)[\s\S]*normalizeGroupName_\(row\[m\.Group\]\)/);
+  assert.match(backend, /function assignmentResultRecords_\(emailFilter\)[\s\S]*group:normalizeGroupName_\(r\[sh\.Group\]\)/);
+  assert.match(api, /register:function\(email,password,surname,firstName,group,invite\)/);
+  assert.match(app, /regSurname/);
+  assert.match(app, /regFirstName/);
+  assert.match(app, /API\.register\(email,pass,surname,firstName,group,invite\)/);
+  assert.match(html, /id="regSurname"[^>]*required/);
+  assert.match(html, /id="regFirstName"[^>]*required/);
+  assert.match(reports, /const normGroup=x=>/);
+  assert.match(reports, /normGroup\(x\.group\)/);
 });
