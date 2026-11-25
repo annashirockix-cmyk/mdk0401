@@ -29,7 +29,7 @@ test("tutoring page renders multiple teacher offers and menu opens when at least
 });
 
 test("tutoring links reject unsafe protocols and render user-provided text as escaped HTML", () => {
-  assert.ok(server.includes("https?:\\\\/\\\\/"));
+  assert.ok(server.includes("https?:\\/\\/"));
   assert.match(server, /url\.length>1000/);
   assert.match(controls, /esc\(l\.url\)/);
   assert.match(controls, /esc\(l\.title/);
