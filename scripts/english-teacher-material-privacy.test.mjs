@@ -34,7 +34,7 @@ function makeReader(role) {
     ["teacher-lesson","ENB","unit-1","lecture","Teacher companion",
       JSON.stringify({teacherOnly:true,teacherContent:"Private recording script",answerKey:"private"})],
     ["public-lesson","ENB","unit-1","lecture","Student lesson",
-      JSON.stringify({body:"Public lesson",teacherNotes:"private note",suggestedAnswers:["private"],markingGuide:"private"})],
+      JSON.stringify({body:"Public lesson",teacherNotes:"private note",suggestedAnswers:["private"],markingGuide:"private",sections:[{title:"Listening",prompt:"Keep this prompt",teacherOnly:true,teacherContent:"nested private script",nested:{answerKey:"private",transcriptReveal:"private",expectedAnswer:"private",notes:"keep"}}]})],
     ["public-test","ENB","unit-1","test","Student test",
       JSON.stringify({questions:[{q:"Question",options:["A","B"],correct:1,explanation:"private",nested:{answerKey:"private",teacherNotes:"private",recordingScript:"private",suggestedAnswers:["private"],prompt:"keep"}}]})]
   ];
@@ -65,6 +65,10 @@ test("student content API omits teacher-only records and strips private companio
   for (const key of ["teacherNotes","teacherKey","answerKey","recordingScript","transcriptReveal","suggestedAnswers","markingGuide"]) {
     assert.equal(Object.hasOwn(lesson,key), false, key + " must not reach student browser");
   }
+  assert.equal(lesson.sections[0].prompt, "Keep this prompt");
+  for (const key of ["teacherOnly","teacherContent"]) assert.equal(Object.hasOwn(lesson.sections[0],key),false,key + " must not reach student browser from nested lecture data");
+  for (const key of ["answerKey","transcriptReveal","expectedAnswer"]) assert.equal(Object.hasOwn(lesson.sections[0].nested,key),false,key + " must not reach student browser from nested lecture data");
+  assert.equal(lesson.sections[0].nested.notes, "keep");
   const exam = response.data.find(item => item.id === "public-test");
   assert.equal(exam.questions[0].correct, undefined);
   assert.equal(exam.questions[0].explanation, undefined);
