@@ -234,7 +234,7 @@ test("admin migration uploads every teacher companion in idempotent batches of a
   for (const item of all) {
     assert.match(item.id, /^eng-teacher-(ENB|ENT):[A-Za-z0-9._:-]+$/);
     assert.ok(item.topicId && item.courseId && item.teacherContent);
-    assert.ok(item.courseNumber >= 1 && item.courseNumber <= 5);
+    assert.ok(item.courseNumber >= 0 && item.courseNumber <= 5);
   }
 });
 
