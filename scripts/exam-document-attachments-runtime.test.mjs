@@ -45,7 +45,7 @@ function createRuntime() {
         getName: () => blob.name,
         getBlob: () => blob,
         getSharingAccess: () => "PRIVATE", isTrashed: () => !!file.trashed,
-        getParents: () => ({hasNext: () => true, next: () => folder}),
+        getParents: () => { let used = false; return {hasNext: () => !used, next: () => { used = true; return folder; }}; },
         setTrashed(value) { if (value) file.trashed = true; },
         trashed: false
       };

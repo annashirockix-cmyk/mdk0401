@@ -17,7 +17,7 @@ function createRuntime() {
       const file = {
         getId: () => id, getName: () => blob.name, getBlob: () => blob,
         getSharingAccess: () => "PRIVATE", isTrashed: () => !!file.trashed,
-        getParents: () => ({hasNext: () => true, next: () => folder}),
+        getParents: () => { let used = false; return {hasNext: () => !used, next: () => { used = true; return folder; }}; },
         getDescription: () => file.description || "", setDescription(value) { file.description = value; }, setTrashed(value) { if (value) file.trashed = true; },
         trashed: false
       };
@@ -117,7 +117,7 @@ test("course attachments require an editor, private storage and a published cour
   assert.throws(() => api.getCourseFile_({ ...request, token: "outsider" }), /доступа/);
   assert.throws(() => api.getCourseFile_({ ...request, fileRef: "coursefile:someone-elses-id" }), /не совпадает/);
   const foreign = { getId: () => "foreign-file", isTrashed: () => false, getSharingAccess: () => "PRIVATE",
-    getParents: () => ({hasNext: () => true, next: () => ({getId: () => "another-folder"})}),
+    getParents: () => { let used = false; return {hasNext: () => !used, next: () => { used = true; return {getId: () => "another-folder"}; }}; },
     getDescription: () => "Учебный материал. Дисциплина: 07.01. Тема: topic-1." };
   assert.throws(() => api.assertPortalPrivateFile_(foreign, api.courseFileFolder_(), "Учебный материал. Дисциплина: 07.01. Тема: topic-1."), /вне закрытой папки/);
 });
