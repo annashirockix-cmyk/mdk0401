@@ -132,6 +132,22 @@ test("teacher companion migration is admin-only, server-backed, and attached onl
   assert.match(server, /payload\.teacherOnly === true\) return/);
 });
 
+test("teacher recording masters, transcript reveals and answer keys are removed from student lecture HTML", () => {
+  const window = loadEnglishRuntime();
+  const additions = [window.MDK_DATA.ENB, window.MDK_DATA.ENT].flatMap((track) =>
+    track.sections.flatMap((section) =>
+      section.topics.flatMap((topic) => (topic.lectures || []).filter((lecture) => lecture.listeningId)),
+    ),
+  );
+  assert.equal(additions.length, 75);
+  const teacherLessons = additions.filter((lecture) => String(lecture.teacherContent || "").trim());
+  assert.ok(teacherLessons.length > 0, "teacher companion material should be extracted for server migration");
+  for (const lecture of additions) {
+    assert.doesNotMatch(String(lecture.content || ""), /Recording script|Transcript reveal|Teacher key|Answer key|Suggested answers|Listening script for teacher recording/i,
+      "teacher-only section leaked into student lesson " + lecture.listeningId);
+  }
+});
+
 test("runtime loads before app.js and lecture rendering resolves explicit listening IDs", () => {
   const html = read("index.html");
   const app = read("app.js");
