@@ -46,7 +46,7 @@
    move(body,"### Teacher recording note");
    return prefix;
   });
-  var recordingBlock=/(^|\n)([ \t]*(?:#{2,4}\s*)?\*\*Recording script(?:\s*[—-][^*\n]*)?\*\*[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:\*\*(?:Language focus|After listening|Transcript reveal|Teacher key|Independent work|Self-check|Speaking|Writing|Guided practice|Integrated task|Self-check and teacher key)\b|#{1,4}\s|---\s*$)|$)/gi;
+  var recordingBlock=/(^|\n)([ \t]*(?:#{1,4}\s*)?\*\*Recording script[^*\n]*\*\*[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:\*\*[^*\n]+\*\*[ \t]*$|#{1,4}\s|---\s*$)|$)/gi;
   student=student.replace(recordingBlock,function(full,prefix,body){
    move(body,"### Listening recording master");
    return prefix;
@@ -54,6 +54,12 @@
   var transcriptBlock=/(^|\n)([ \t]*\*\*Transcript reveal[^\n]*\*\*[ \t]*\n[\s\S]*?)(?=\n[ \t]*(?:\*\*(?:Language focus|After listening|Teacher key|Independent work|Self-check|Speaking|Writing|Guided practice|Integrated task)\b|#{1,4}\s|---\s*$)|$)/gi;
   student=student.replace(transcriptBlock,function(full,prefix,body){
    move(body,"### Listening transcript and feedback");
+   return prefix;
+  });
+  // Capture compact bold answer headings even when the heading has no colon.
+  var compactAnswerSection=/(^|\n)([ \t]*\*\*(?:Suggested answers|Key|Answers|Answer key|Teacher key|Listening key)(?:\s*:[^*\n]*)?\*\*[ \t]*\n[\s\S]*?)(?=\n(?:#{1,4}\s|\*\*[^*\n]+\*\*[ \t]*$|---\s*$)|$)/gi;
+  student=student.replace(compactAnswerSection,function(full,prefix,body){
+   move(body,"### Teacher answer key");
    return prefix;
   });
   // Move complete teacher-key sections, including Russian labels and inline answers.
