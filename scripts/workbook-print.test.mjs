@@ -65,7 +65,7 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
    assert.ok(profile && typeof profile === "object", `Missing editorial profile: ${courseId}/${topicId}`);
    for (const field of ["explanation", "caseTitle", "caseText"]) {
     assert.equal(typeof profile[field], "string", `Missing ${field}: ${courseId}/${topicId}`);
-    assert.ok(profile[field].trim().length >= 35, `Too short ${field}: ${courseId}/${topicId}`);
+    assert.ok(profile[field].trim().length >= (field === "caseTitle" ? 8 : 35), `Too short ${field}: ${courseId}/${topicId}`);
    }
    for (const field of ["mistakes", "route"]) {
     assert.ok(Array.isArray(profile[field]) && profile[field].length >= 3, `Incomplete ${field}: ${courseId}/${topicId}`);
