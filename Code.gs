@@ -1538,6 +1538,9 @@ function uploadAssignmentAttachment_(data) {
   const assignmentId = String(data.assignmentId || "").trim(), as = assignments_(), rows = as.getDataRange().getValues(), h = headerMap_(as);
   const assignment = rows.slice(1).find(function(r){return String(r[h.Id] || "") === assignmentId;});
   if (!assignment) throw new Error("Задание не найдено."); assignmentEligible_(student, assignment);
+  const fileSheet=assignmentFiles_(), fileRows=fileSheet.getDataRange().getValues(), fileMap=headerMap_(fileSheet);
+  const pendingCount=fileRows.slice(1).filter(function(row){return email_(row[fileMap.StudentEmail])===student.email&&String(row[fileMap.AssignmentId]||"")===assignmentId&&String(row[fileMap.Status]||"")==="pending";}).length;
+  if(pendingCount>=5)throw new Error("Можно загрузить не более 5 неподтверждённых файлов для одного задания.");
   const raw = String(data.dataUrl || ""), match = raw.match(/^data:(image\/(?:jpeg|png|webp)|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document);base64,([A-Za-z0-9+/=]+)$/i);
   if (!match) throw new Error("Поддерживаются фото JPG, PNG, WEBP и документы PDF, DOC, DOCX.");
   if (match[2].length > 4200000) throw new Error("Размер одного файла не должен превышать 3 МБ.");
@@ -1556,7 +1559,7 @@ function uploadAssignmentAttachment_(data) {
   if (!extensionMatches) throw new Error("Расширение имени файла не соответствует его формату.");
   const name = namedExt ? original : original+ext;
   const file = assignmentFileFolder_().createFile(Utilities.newBlob(bytes,mime,name));
-  try { const id=Utilities.getUuid(); appendMappedRecord_(assignmentFiles_(),{Id:id,AssignmentId:assignmentId,StudentEmail:student.email,DriveFileId:file.getId(),FileName:name,MimeType:mime,Size:bytes.length,Status:"pending",CreatedAt:new Date().toISOString()}); return {success:true,id:id,fileName:name,mimeType:mime,size:bytes.length}; }
+  try { const id=Utilities.getUuid(); appendMappedRecord_(fileSheet,{Id:id,AssignmentId:assignmentId,StudentEmail:student.email,DriveFileId:file.getId(),FileName:name,MimeType:mime,Size:bytes.length,Status:"pending",CreatedAt:new Date().toISOString()}); return {success:true,id:id,fileName:name,mimeType:mime,size:bytes.length}; }
   catch(error){try{file.setTrashed(true);}catch(cleanupError){} throw error;}
 }
 function getAssignmentAttachment_(data) {
