@@ -253,9 +253,8 @@ test("student custom-content delivery enforces publication switches and strips a
  assert.match(delivery, /const user = auth_\(data\)/);
  assert.match(delivery, /user\.role !== "admin" && !hasCourseAccess_\(user, courseId\)/);
  assert.match(delivery, /user\.role === "student" && !customContentIsOpen_\(/);
- for (const key of ["correct", "answer", "correctAnswer", "answers", "explanation", "solution", "key"]) {
-  assert.ok(delivery.includes(key), "student delivery must remove "+key);
- }
+ assert.match(delivery, /correct\|answer\|expected\|accepted\|solution\|explanation\|rationale\|grading\|rubric\|key\|iscorrect\|feedback/);
+ assert.match(delivery, /imageRef/);
  assert.match(delivery, /return \{ success: true, data: list \}/);
 });
 
