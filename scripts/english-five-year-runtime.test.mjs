@@ -243,5 +243,5 @@ test("admin migration refuses non-admin users and reports a missing Apps Script 
 
 test("teacher-only companion records are excluded from the ordinary custom lecture collection", () => {
   const app = read("app.js");
-  assert.match(app, /window\\.customContent\\.lectures = rows\\.filter\\(function\\(d\\) \\{ return d\\.type === "lecture" && d\\.teacherOnly !== true; \\}\\);/);
+  assert.match(app, /window\.customContent\.lectures = rows\.filter\(function\(d\) \{ return d\.type === "lecture" && d\.teacherOnly !== true; \}\);/);
 });
