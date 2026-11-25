@@ -42,8 +42,6 @@ jobs:
         run: node scripts/check-notification-contract.mjs
       - name: Check assignment workflow
         run: node --test scripts/assignment-workflow.test.mjs
-      - name: Check assignment attachment browser flow
-        run: node scripts/assignment-attachments-browser-audit.mjs
       - name: Check portal enhancements
         run: node --test scripts/portal-enhancements.test.mjs
       - name: Check client assessment answer-key isolation
@@ -81,6 +79,7 @@ jobs:
           for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/portal-navigation-browser-audit.mjs
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/home-dashboard-browser-audit.mjs
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/assignment-attachments-browser-audit.mjs
       - name: Run real-browser A4 and PDF audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/workbook-audit-server.log 2>&1 &
