@@ -11,31 +11,24 @@ test("tutoring links are private per teacher and removed from the shared drawer 
   const end = server.indexOf("/* ---------- In-app notifications ---------- */", start);
   assert.ok(start >= 0 && end > start);
   const block = server.slice(start, end);
-  assert.match(block, /tutoring:teacher:/);
-  assert.match(block, /auth_\\(data\\)/);
-  assert.match(block, /hasCourseAccess_\\(user,courseId\\)/);
-  assert.match(block, /role===\"teacher\"\\|\\|user\\.role===\"admin\"/);
-  assert.match(block, /audienceType===\"group\"/);
-  assert.match(block, /audienceType===\"individual\"/);
-  assert.match(block, /writeSetting_\\(tutoringSettingKey_\\(teacher\\.email\\)/);
-  assert.match(block, /legacy\\.updatedBy===teacherEmail/);
-  assert.doesNotMatch(block, /settingValue_\\(\"tutoring:\"\\+courseId/);
+  for (const phrase of ["tutoring:teacher:", "auth_(data)", "hasCourseAccess_(user,courseId)", 'role==="teacher"||user.role==="admin"', 'audienceType==="group"', 'audienceType==="individual"', "writeSetting_(tutoringSettingKey_(teacher.email)", "legacy.updatedBy===teacherEmail"]) {
+    assert.ok(block.includes(phrase), "missing backend privacy contract: " + phrase);
+  }
+  assert.ok(!block.includes('settingValue_("tutoring:"+courseId'));
   const app = read("app.js");
   const controls = read("teacher-controls.js");
   const html = read("index.html");
   const worker = read("service-worker.js");
   const ui = read("tutoring.js");
-  assert.doesNotMatch(app, /menuTutoring/);
-  assert.doesNotMatch(controls, /editorTutoringPanel|renderTutoringPage|tutorUrl|saveTutorLink/);
-  assert.doesNotMatch(html, /href=\"#\\/tutoring\"/);
-  assert.match(html, /tutoring\\.js\\?v=3/);
-  assert.match(worker, /portal-cache-v423/);
-  assert.match(worker, /\\.\\/tutoring\\.js/);
-  assert.match(ui, /tutoringHomeCard/);
-  assert.match(ui, /Кому показывать ссылку/);
-  assert.match(ui, /Только выбранной группе/);
-  assert.match(ui, /Только одному студенту/);
-  assert.match(ui, /rel=\"noopener noreferrer\"/);
+  assert.ok(!app.includes("menuTutoring"));
+  assert.ok(!/editorTutoringPanel|renderTutoringPage|tutorUrl|saveTutorLink/.test(controls));
+  assert.ok(!html.includes('href="#/tutoring"'));
+  assert.ok(html.includes("tutoring.js?v=3"));
+  assert.ok(worker.includes("portal-cache-v423"));
+  assert.ok(worker.includes("./tutoring.js"));
+  for (const phrase of ["tutoringHomeCard", "Кому показывать ссылку", "Только выбранной группе", "Только одному студенту", 'rel="noopener noreferrer"']) {
+    assert.ok(ui.includes(phrase), "missing tutoring UI phrase: " + phrase);
+  }
 });
 
 test("server filters tutoring links by course, selected group and individual student", () => {
