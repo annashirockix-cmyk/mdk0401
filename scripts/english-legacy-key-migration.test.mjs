@@ -6,15 +6,17 @@ import vm from "node:vm";
 const read = (name) => fs.readFileSync(new URL("../" + name, import.meta.url), "utf8");
 const quietConsole = { log() {}, info() {}, warn() {}, error() {} };
 
-function loadTrack(file, trackId) {
+function loadTrack(trackId) {
   const window = { MDK_DATA: {} };
-  vm.runInNewContext(read(file), { window, console: quietConsole }, { filename: file });
+  for (const file of ["data-english-basic.js", "data-english-technical.js"]) {
+    vm.runInNewContext(read(file), { window, console: quietConsole }, { filename: file });
+  }
   vm.runInNewContext(read("english-course.js"), { window, console: quietConsole }, { filename: "english-course.js" });
   return window.MDK_DATA[trackId];
 }
 
 test("legacy Basic English answer keys are separated while student self-check prompts remain", () => {
-  const track = loadTrack("data-english-basic.js", "ENB");
+  const track = loadTrack("ENB");
   const lectures = track.sections.flatMap(section => (section.topics || []).flatMap(topic => topic.lectures || []));
   const privateLessons = lectures.filter(lecture => String(lecture.teacherContent || "").trim());
   assert.ok(privateLessons.length >= 10, "expected legacy Basic English teacher-key lessons");
@@ -26,7 +28,7 @@ test("legacy Basic English answer keys are separated while student self-check pr
 });
 
 test("legacy Technical English answer keys are separated from student lecture HTML", () => {
-  const track = loadTrack("data-english-technical.js", "ENT");
+  const track = loadTrack("ENT");
   const lectures = track.sections.flatMap(section => (section.topics || []).flatMap(topic => topic.lectures || []));
   const privateLessons = lectures.filter(lecture => String(lecture.teacherContent || "").trim());
   assert.ok(privateLessons.length >= 5, "expected legacy Technical English teacher-key lessons");
