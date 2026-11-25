@@ -274,6 +274,10 @@ try {
     window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
     window.customContent = window.customContent || { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
+    // Restore a teacher identity after the preceding student-only topic access check.
+    window.state.user = { role: "teacher" };
+    window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
+    window.state.student = null;
     const appNode = document.getElementById("app");
     const originalAppNode = appNode;
     const documentObserver = new MutationObserver(() => {
