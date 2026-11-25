@@ -1891,7 +1891,7 @@ test("registration requires surname and first name and group matching is case- a
   const html = read("index.html");
   const reports = read("reports.js");
   const normalizerStart = backend.indexOf("function normalizeGroupName_(value)");
-  const normalizerEnd = backend.indexOf("\\nfunction bytesToHex_", normalizerStart);
+  const normalizerEnd = backend.indexOf("\nfunction bytesToHex_", normalizerStart);
   assert.ok(normalizerStart >= 0 && normalizerEnd > normalizerStart);
   const sandbox = {};
   vm.runInNewContext(backend.slice(normalizerStart, normalizerEnd) + ";this.normalizeGroupName_=normalizeGroupName_;", sandbox);
