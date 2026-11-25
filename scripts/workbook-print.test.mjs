@@ -51,6 +51,11 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  assert.match(html, /workbook-editorial\.js\?v=6/);
  assert.match(html, /style\.css\?v=26/);
  assert.match(sw, /portal-cache-v[0-9]+/);
+ const editorialProfiles = read("workbook-editorial.js");
+ assert.match(editorialProfiles, /"02\\.01":\\s*\\{[\\s\\S]*?"m0201-t11":\\s*\\{/);
+ assert.match(editorialProfiles, /Кейс: сборка опоры приводного вала/);
+ assert.match(editorialProfiles, /не передавая монтажную нагрузку через тела качения/);
+ assert.match(editorialProfiles, /Контроль вращения, люфта\\/преднатяга и биения/);
  const editorialSource = read("workbooks.js");
  assert.match(editorialSource, /Introducing myself and my future profession/);
  assert.match(editorialSource, /Language practice:/);
