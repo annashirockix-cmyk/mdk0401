@@ -54,7 +54,7 @@ test("generated workbooks print SPRUT-TP self-study labels", () => {
  const editorialProfiles = read("workbook-editorial.js");
  for (const id of ["mc-practical-1", "mc-practical-2", "mc-practical-3", "mc-practical-4", "mc-practical-5"]) assert.ok(editorialProfiles.includes(`"${id}": {`));
  assert.match(editorialProfiles, /Кейс: подготовить управляющую программу к передаче на проверку/);
- assert.match(editorialProfiles, /не запускайте его на станке/);
+ assert.match(editorialProfiles, /Не запускайте учебную программу на станке/);
  assert.ok(editorialProfiles.includes('"met-9": {'));
  assert.ok(editorialProfiles.includes('"met-10": {'));
  assert.ok(editorialProfiles.includes('"met-11": {'));
