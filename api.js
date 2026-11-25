@@ -62,7 +62,7 @@ window.API = {
  resolvePasswordReset:function(id,temporaryPassword){return fetchAPI("resolvePasswordReset",{id:id,temporaryPassword:temporaryPassword},"POST");},
  getPortalSettings:function(){return fetchAPI("getPortalSettings",{},"GET");},
  setGamesAccess:function(gamesByRole){return fetchAPI("setGamesAccess",{gamesByRole:gamesByRole},"POST");},
- register:function(email,password,name,group,invite){return fetchAPI("register",{email:email,password:password,name:name,group:group,invite:invite},"POST");},
+ register:function(email,password,surname,firstName,group,invite){return fetchAPI("register",{email:email,password:password,surname:surname,firstName:firstName,group:group,invite:invite},"POST");},
  getStudents:function(){return fetchAPI("getStudents",{},"GET");},
  saveStudent:function(key,name,group,payload){var email=String(key||"").indexOf("@")>=0?String(key).trim():(window.state&&window.state.student&&window.state.student.email)||String(key||"").split("|")[0];return fetchAPI("saveStudent",{email:email,name:name,group:group,payload:payload},"POST");},
  getResults:function(filters){return fetchAPI("getResults",filters||{},"GET");},
