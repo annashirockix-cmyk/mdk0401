@@ -319,10 +319,10 @@
     function renderSaved(){
       // The content request may finish after the teacher has navigated away.
       // Never update elements belonging to a page that is no longer mounted.
-      const required=["lectureExisting","testExisting","savedMaterials","lectureTopic","testTopic"];
+      const required=["lectureExisting","testExisting","savedMaterials","lectureTopic","testTopic","courseFileTopic"];
       if(document.getElementById("editorCourse")!==courseSel||required.some(id=>!$(id)))return;
       const lectureTopicId=topicSel.value,testTopicId=testSel.value;
-      const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId),docs=records("file",lectureTopicId);
+      const ls=records("lecture",lectureTopicId),ts=records("test",testTopicId),docs=records("file",fileTopicSel.value||lectureTopicId);
       const fs=(window.customContent.flashcards||[]).filter(x=>x.mdkId===courseSel.value&&x.topicId===lectureTopicId);
       const builtInTopic=getBuiltInTopic(lectureTopicId),builtInLectures=getBuiltInLectures(builtInTopic);
       const additionalLectures=ls.filter(x=>x.isBuiltInOverride!==true);
