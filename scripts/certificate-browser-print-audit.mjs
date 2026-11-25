@@ -7,6 +7,8 @@ const baseUrl = process.env.CERTIFICATE_AUDIT_URL || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1123, height: 794 } });
 fs.mkdirSync("artifacts/certificate", { recursive: true });
+const pageErrors = [];
+page.on("pageerror", error => pageErrors.push(error.stack || error.message));
 try {
   const response = await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45000 });
   assert.ok(response && response.ok(), `Portal did not load: ${response?.status()}`);
@@ -39,10 +41,24 @@ try {
     };
   });
   await page.evaluate(() => window.renderCertificatePage());
+  await page.waitForTimeout(1000);
+  const renderDiagnostics = await page.evaluate(() => ({
+    renderType: typeof window.renderCertificatePage,
+    appText: document.getElementById("app")?.innerText?.slice(0, 1200),
+    button: (() => { const b = document.querySelector("#app .no-print button"); return b ? { text: b.textContent, disabled: b.disabled } : null; })(),
+    printRoot: !!document.getElementById("certificatePrintRoot"),
+    supplement: !!document.querySelector("#app .certificate-supplement"),
+    table: !!document.querySelector("#certificatePrintRoot .certificate-supplement table"),
+    status: document.querySelector(".certificate-supplement .cs-summary")?.textContent,
+    api: { results: typeof window.API?.getMyCourseResults, assignments: typeof window.API?.getAssignments }
+  }));
+  console.log("CERTIFICATE_RENDER_DIAGNOSTICS", JSON.stringify({ ...renderDiagnostics, pageErrors }));
   await page.waitForFunction(() => {
     const button = document.querySelector("#app .no-print button");
     return button && !button.disabled && document.querySelector("#certificatePrintRoot .certificate-supplement table");
-  }, null, { timeout: 20000 });
+  }, null, { timeout: 20000 }).catch(error => {
+    throw new Error(error.message + " | diagnostics=" + JSON.stringify({ ...renderDiagnostics, pageErrors }));
+  });
 
   const selections = await page.evaluate(async () => {
     const design = document.getElementById("certificateDesign");
