@@ -121,7 +121,7 @@ test("teacher companion migration is admin-only, server-backed, and attached onl
   const app = read("app.js");
   const api = read("api.js");
   const server = read("Code.gs");
-  assert.match(runtime, /var split=splitTeacherMaterial\(row\.markdown\)/);
+  assert.doesNotMatch(runtime, /splitTeacherMaterial|teacherContent\s*:/);
   assert.match(app, /migrateEnglishTeacherMaterialsToServer/);
   assert.match(app, /role[^;]*admin/);
   assert.match(app, /teacherMaterials = rows\.filter/);
