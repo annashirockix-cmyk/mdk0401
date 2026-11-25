@@ -128,6 +128,7 @@ test("semester shuffle is stable within one attempt and different across student
 
 test("custom teacher-created tests require server-issued shuffled attempts", () => {
   assert.match(code,/case "getcustomtest": result = getCustomTest_\(data\); break;/);
+  assert.match(extract(code,"getBuiltInTest_"),/entries=shuffledServer_\(builtInQuestions_\(courseId,resolvedIds\)\)/,"protected built-in question order must be randomized server-side");
   assert.match(extract(code,"getCustomTest_"),/customTestAttempt:/);
   assert.match(extract(code,"getCustomTest_"),/optionMaps/);
   assert.match(extract(code,"submitCustomTest_"),/canonicalAnswers/);

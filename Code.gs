@@ -2116,7 +2116,7 @@ function getBuiltInTest_(data) {
   const limit=policy===""?1:1+Math.max(0,Number(policy)||0);
   const used=resultAttemptRows_().filter(function(row){return email_(row[0])===user.email&&String(row[3])===testId&&sameCourseId_(row[12]||courseId,courseId);}).length;
   if(used>=limit)throw new Error("Работа уже завершена ("+used+" из "+limit+"). Повторное прохождение закрыто. Если нужна дополнительная попытка, обратитесь к преподавателю.");
-  const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds),entries=builtInQuestions_(courseId,resolvedIds);
+  const resolvedIds=resolvedBuiltInBankIds_(courseId,bankIds),entries=shuffledServer_(builtInQuestions_(courseId,resolvedIds));
   if(!entries.length){
     const sh=questionBank_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),available=[];
     vals.slice(1).forEach(function(row){
