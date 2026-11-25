@@ -27,3 +27,11 @@ test("tutoring page renders multiple teacher offers and menu opens when at least
   assert.match(controls, /teacherName/);
   assert.match(app, /links\.length>0/);
 });
+
+test("tutoring links reject unsafe protocols and render user-provided text as escaped HTML", () => {
+  assert.match(server, /!\/^https\?:\\/\\//i\.test\(url\)/);
+  assert.match(server, /url\.length>1000/);
+  assert.match(controls, /esc\(l\.url\)/);
+  assert.match(controls, /esc\(l\.title/);
+  assert.match(controls, /esc\(l\.description/);
+});
