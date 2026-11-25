@@ -141,8 +141,8 @@ test("English teacher scripts and answer keys are absent from every public runti
     ),
   );
   assert.equal(additions.length, 75);
-  assert.doesNotMatch(runtime, /function splitTeacherMaterial|teacherContent\\s*:/);
-  assert.doesNotMatch(runtime, /\\*\\*Recording script|\\*\\*Transcript reveal|\\*\\*Teacher key|\\*\\*Suggested answers|\\*\\*Listening script for teacher recording/i);
+  assert.doesNotMatch(runtime, /function splitTeacherMaterial|teacherContent\s*:/);
+  assert.doesNotMatch(runtime, /\*\*Recording script|\*\*Transcript reveal|\*\*Teacher key|\*\*Suggested answers|\*\*Listening script for teacher recording/i);
   for (const lecture of additions) {
     assert.equal(Object.prototype.hasOwnProperty.call(lecture, "teacherContent"), false,
       "private teacher material must not be attached to public lesson " + lecture.listeningId);
@@ -151,8 +151,8 @@ test("English teacher scripts and answer keys are absent from every public runti
   }
   const app = read("app.js");
   const server = read("Code.gs");
-  assert.match(app, /customContent\\.teacherMaterials/);
-  assert.match(server, /payload\\.teacherOnly === true\\) return/);
+  assert.match(app, /customContent\.teacherMaterials/);
+  assert.match(server, /payload\.teacherOnly === true\\) return/);
 });
 
 test("runtime loads before app.js and lecture rendering resolves explicit listening IDs", () => {
