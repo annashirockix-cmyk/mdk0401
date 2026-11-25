@@ -1372,17 +1372,42 @@ window.renderHomePage = function() {
     });
 
     if (course && course.sections) {
-        var contentHtml = '<div class="steps-title" style="font-size:20px; font-weight:bold; margin:20px 0 10px;">Учебный план</div>';
+        var contentHtml = '<div class="steps-title" style="font-size:20px; font-weight:bold; margin:20px 0 10px;">Учебный план</div>' +
+            '<div class="course-topic-search" style="margin:0 0 16px">' +
+            '<label for="courseTopicSearch" style="display:block;margin-bottom:6px;font-weight:600">Поиск по темам дисциплины</label>' +
+            '<input id="courseTopicSearch" class="self-input" type="search" autocomplete="off" placeholder="Введите название или номер темы…" aria-describedby="courseTopicSearchCount">' +
+            '<p id="courseTopicSearchCount" aria-live="polite" style="margin:6px 0 0;color:var(--text-soft)"></p></div>';
         course.sections.forEach(function(section) {
-            contentHtml += `<div class="module" style="padding: 20px; margin-bottom: 15px;"><h3 style="color: var(--accent); margin-top: 0;">${escapeText(section.title)}</h3><div style="display: flex; flex-direction: column; gap: 10px;">`;
+            contentHtml += `<div class="module course-plan-section" data-course-section style="padding: 20px; margin-bottom: 15px;"><h3 style="color: var(--accent); margin-top: 0;">${escapeText(section.title)}</h3><div style="display: flex; flex-direction: column; gap: 10px;">`;
             section.topics.forEach(function(topic) {
                 var isDone = window.state.results && window.state.results[`topic_${topic.id}`] ? "✅ " : "";
                 var topicUrl = "#/topic/" + encodeURIComponent(mdkId) + "/" + encodeURIComponent(topic.id);
-                contentHtml += `<a href="${escapeText(topicUrl)}" class="topic" style="background: var(--card-soft); padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; text-decoration: none; color: var(--text); border: 1px solid var(--border); transition: 0.2s;"><span>${isDone}<b>${escapeText(topic.code)}</b> ${escapeText(topic.title)}</span><span>→</span></a>`;
+                contentHtml += `<a href="${escapeText(topicUrl)}" class="topic" data-course-topic style="background: var(--card-soft); padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; text-decoration: none; color: var(--text); border: 1px solid var(--border); transition: 0.2s;"><span>${isDone}<b>${escapeText(topic.code)}</b> ${escapeText(topic.title)}</span><span>→</span></a>`;
             });
             contentHtml += `</div></div>`;
         });
         app.innerHTML += contentHtml;
+        var topicSearch = document.getElementById("courseTopicSearch");
+        var topicSearchCount = document.getElementById("courseTopicSearchCount");
+        if (topicSearch && topicSearchCount) {
+            var topicCards = Array.prototype.slice.call(app.querySelectorAll("[data-course-topic]"));
+            var topicSections = Array.prototype.slice.call(app.querySelectorAll("[data-course-section]"));
+            function filterCourseTopics() {
+                var query = String(topicSearch.value || "").trim().toLocaleLowerCase("ru-RU");
+                var visible = 0;
+                topicCards.forEach(function(card) {
+                    var match = !query || String(card.textContent || "").toLocaleLowerCase("ru-RU").indexOf(query) >= 0;
+                    card.hidden = !match;
+                    if (match) visible++;
+                });
+                topicSections.forEach(function(section) {
+                    section.hidden = !Array.prototype.some.call(section.querySelectorAll("[data-course-topic]"), function(card) { return !card.hidden; });
+                });
+                topicSearchCount.textContent = visible + " из " + topicCards.length + " тем";
+            }
+            topicSearch.addEventListener("input", filterCourseTopics);
+            filterCourseTopics();
+        }
     }
     window.applyGlobalEffects();
 };
