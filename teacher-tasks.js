@@ -166,9 +166,10 @@ if(!staff)list.querySelectorAll(".taSubmit").forEach(form=>form.onsubmit=async e
   const files=Array.from(form.elements.attachments.files||[]);
   if(files.length>5)throw Error("Можно прикрепить не более 5 файлов.");
   if(!String(form.elements.answer.value||"").trim()&&!files.length)throw Error("Введите ответ или прикрепите хотя бы один файл.");
+  const oversized=files.find(file=>file.size>3000000);
+  if(oversized)throw Error("Файл «"+oversized.name+"» больше 3 МБ.");
   const uploaded=[];
   for(const file of files){
-   if(file.size>3000000)throw Error("Файл «"+file.name+"» больше 3 МБ.");
    const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||""));reader.onerror=()=>reject(Error("Не удалось прочитать файл "+file.name));reader.readAsDataURL(file);});
    m.textContent="Загрузка файла: "+file.name;
    const result=await window.API.uploadAssignmentAttachment(form.dataset.id,file.name,dataUrl);
