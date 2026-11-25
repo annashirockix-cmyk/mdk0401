@@ -38,4 +38,10 @@ test("MDK 02.01 does not present equipment-specific limits as universal rules", 
   assert.match(source, /по документации конкретного узла/i);
   assert.match(source, /не являются универсальной нормой/i);
   assert.match(source, /значение Z50 не гарантирует безопасный зазор/i);
+  assert.match(source, /размерную цепь и допускам конкретной детали/i);
+  assert.doesNotMatch(source, /погрешность будет равна допуску на длину/i);
+  assert.doesNotMatch(source, /h_min > h_кр \(обычно 2–5 мкм\)/i);
+  assert.doesNotMatch(source, /ψ = Δ\/d \(0,001 - 0,002\)/i);
+  assert.doesNotMatch(source, /Твёрдость шеек 50–60 HRC/i);
+  assert.doesNotMatch(source, /Зазор «поршень — цилиндр»: 0,03–0,09 мм/i);
 });
