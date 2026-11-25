@@ -7,13 +7,17 @@ const baseUrl = process.env.CERTIFICATE_AUDIT_URL || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1123, height: 794 } });
 fs.mkdirSync("artifacts/certificate", { recursive: true });
+const pageErrors = [];
+page.on("pageerror", error => pageErrors.push(error.stack || error.message));
 try {
   const response = await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 45000 });
   assert.ok(response && response.ok(), `Portal did not load: ${response?.status()}`);
   await page.evaluate(() => {
-    document.body.innerHTML = '<main id="app"></main>';
+    document.body.innerHTML = '<div id="crumbs"></div><main id="app"></main>';
     window.state = {
       student: { name: "Тестовый обучающийся", email: "certificate-audit@example.invalid" },
+      staff: null,
+      results: { certificateApproved: true },
       activeCourseId: "07.01"
     };
     window.MDK_DATA = { "07.01": { id: "07.01", title: "МДК 07.01 — Технология обработки на станках с ЧПУ" } };
@@ -35,22 +39,28 @@ try {
         }))
       })
     };
-    window.renderCertificatePage = function () {
-      const app = document.getElementById("app");
-      app.innerHTML = '<div class="no-print"><button type="button">Распечатать сертификат</button></div>' +
-        '<section id="printable-cert" style="border:3px double #9b3d32;padding:20px;text-align:center">' +
-        '<p>УЧЕБНЫЙ ПОРТАЛ</p><h1>СЕРТИФИКАТ</h1>' +
-        '<h2>Об освоении программы профессионального обучения</h2>' +
-        '<p>Выдан: Тестовый обучающийся</p><p>Дисциплина: МДК 07.01</p>' +
-        '<p>Дата: 12 ноября 2026 года</p></section>';
-    };
   });
-  await page.addScriptTag({ path: "certificate-supplement.js" });
   await page.evaluate(() => window.renderCertificatePage());
+  await page.waitForTimeout(1000);
+  const renderDiagnostics = await page.evaluate(() => ({
+    renderType: typeof window.renderCertificatePage,
+    appText: document.getElementById("app")?.innerText?.slice(0, 1200),
+    button: (() => { const b = document.querySelector("#app .no-print button"); return b ? { text: b.textContent, disabled: b.disabled } : null; })(),
+    cert: (() => { const e = document.getElementById("printable-cert"); return e ? { tag: e.tagName, parent: e.parentElement?.id, html: e.outerHTML.slice(0, 220) } : null; })(),
+    printRoot: !!document.getElementById("certificatePrintRoot"),
+    appChildren: Array.from(document.getElementById("app").children).map(e => ({ tag: e.tagName, id: e.id, className: e.className })),
+    supplement: !!document.querySelector("#app .certificate-supplement"),
+    table: !!document.querySelector("#certificatePrintRoot .certificate-supplement table"),
+    status: document.querySelector(".certificate-supplement .cs-summary")?.textContent,
+    api: { results: typeof window.API?.getMyCourseResults, assignments: typeof window.API?.getAssignments }
+  }));
+  console.log("CERTIFICATE_RENDER_DIAGNOSTICS", JSON.stringify({ ...renderDiagnostics, pageErrors }));
   await page.waitForFunction(() => {
     const button = document.querySelector("#app .no-print button");
     return button && !button.disabled && document.querySelector("#certificatePrintRoot .certificate-supplement table");
-  }, null, { timeout: 20000 });
+  }, null, { timeout: 20000 }).catch(error => {
+    throw new Error(error.message + " | diagnostics=" + JSON.stringify({ ...renderDiagnostics, pageErrors }));
+  });
 
   const selections = await page.evaluate(async () => {
     const design = document.getElementById("certificateDesign");

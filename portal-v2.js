@@ -288,16 +288,16 @@
       '<div class="no-print" style="text-align:center;margin:20px 0">' +
       '<button type="button" class="btn" onclick="window.print()">Печать</button></div>';
     html +=
-      '<div style="background:#fff;color:#000;padding:40px;max-width:900px;margin:0 auto;border:10px double #c14a2a;text-align:center;position:relative">';
+      '<div id="printable-cert" style="background:#fff;color:#000;padding:40px;max-width:900px;margin:0 auto;border:10px double #c14a2a;text-align:center;position:relative">';
     html += '<h1 style="font-size:40px;color:#c14a2a;margin:0">СЕРТИФИКАТ</h1>';
     html += '<p style="font-size:20px;margin:40px 0">подтверждает, что</p>';
     html +=
       '<h2 style="font-size:32px;border-bottom:2px solid #ccc;display:inline-block">' +
-      who.name +
+      window.escapeHtml(who.name || "") +
       "</h2>";
     html +=
       '<p style="font-size:18px;margin-top:40px">успешно прошёл(ла) обучение по программе</p>';
-    html += '<h3 style="font-size:22px;color:#c14a2a">' + course + "</h3>";
+    html += '<h3 style="font-size:22px;color:#c14a2a">' + window.escapeHtml(course) + "</h3>";
     html +=
       '<div style="margin-top:60px;display:flex;justify-content:space-between">' +
       "<div>Дата: " +
