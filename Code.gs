@@ -144,6 +144,8 @@ function handleRequest_(e) {
       case "submitfinalexam": result = submitFinalExam_(data); break;
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "uploadtestimage": result = uploadTestImage_(data); break;
+      case "uploadcoursefile": result = uploadCourseFile_(data); break;
+      case "getcoursefile": result = getCourseFile_(data); break;
       case "savecustomcontent": result = saveCustomContent_(data); break;
       case "deletecustomcontent": result = deleteCustomContent_(data); break;
       case "setteachercourses": result = setTeacherCourses_(data); break;
@@ -2643,6 +2645,91 @@ function hydrateTestQuestionImages_(questions) {
   });
 }
 
+function courseFileFolder_() {
+  const props = PropertiesService.getScriptProperties();
+  const saved = props.getProperty("COURSE_DOCUMENT_FOLDER_ID");
+  let folder = null;
+  if (saved) {
+    try { folder = DriveApp.getFolderById(saved); }
+    catch (e) { props.deleteProperty("COURSE_DOCUMENT_FOLDER_ID"); }
+  }
+  if (!folder) {
+    folder = DriveApp.createFolder("Учебный портал — материалы курсов");
+    props.setProperty("COURSE_DOCUMENT_FOLDER_ID", folder.getId());
+  }
+  folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
+  return folder;
+}
+
+function uploadCourseFile_(data) {
+  const courseId = normalizeCourseId_(data.courseId || data.mdkId || "");
+  const actor = editor_(data, courseId);
+  const topicId = String(data.topicId || "").trim();
+  const title = String(data.title || "").trim().slice(0, 180);
+  const raw = String(data.dataUrl || "");
+  if (!topicId || !title) throw new Error("Выберите тему и укажите название файла.");
+  const match = raw.match(/^data:(application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document);base64,([A-Za-z0-9+/=]+)$/i);
+  if (!match) throw new Error("Поддерживаются только PDF, DOC и DOCX.");
+  if (match[2].length > 4800000) throw new Error("Файл слишком большой. Максимальный размер — 3,5 МБ.");
+  const bytes = Utilities.base64Decode(match[2]);
+  if (!bytes.length || bytes.length > 3500000) throw new Error("Файл слишком большой. Максимальный размер — 3,5 МБ.");
+  const mime = match[1].toLowerCase();
+  const signature = String.fromCharCode.apply(null, bytes.slice(0, 8));
+  if (mime === "application/pdf" && signature.indexOf("%PDF-") !== 0) throw new Error("Содержимое файла не похоже на PDF.");
+  if (mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && signature.slice(0, 4) !== "PK\u0003\u0004") throw new Error("Содержимое файла не похоже на DOCX.");
+  if (mime === "application/msword" && signature.slice(0, 4) !== "\u00D0\u00CF\u0011\u00E0") throw new Error("Содержимое файла не похоже на DOC.");
+  const originalName = String(data.fileName || "material").replace(/[\\/\\\\]/g, "_").slice(0, 120);
+  const extension = mime === "application/pdf" ? ".pdf" : mime === "application/msword" ? ".doc" : ".docx";
+  const namedExtension = (originalName.match(/\.(pdf|doc|docx)$/i) || [])[0];
+  if (namedExtension && namedExtension.toLowerCase() !== extension) throw new Error("Расширение имени файла не соответствует его формату.");
+  const safeName = namedExtension ? originalName : originalName + extension;
+  const file = courseFileFolder_().createFile(Utilities.newBlob(bytes, mime, safeName));
+  file.setDescription("Учебный материал. Дисциплина: " + courseId + ". Тема: " + topicId + ". Автор: " + actor.email);
+  try {
+    const saved = saveCustomContent_({
+      token: data.token, mdkId: courseId, topicId: topicId, type: "file", title: title,
+      fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length
+    });
+    return { success: true, id: saved.id, fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length };
+  } catch (error) {
+    try { file.setTrashed(true); } catch (cleanupError) {}
+    throw error;
+  }
+}
+
+function getCourseFile_(data) {
+  const user = auth_(data);
+  const itemId = String(data.itemId || "");
+  const fileRef = String(data.fileRef || "");
+  const match = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+  if (!itemId || !match) throw new Error("Не указан учебный файл.");
+  const rows = content_().getDataRange().getValues();
+  let record = null;
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][0] || "") === itemId && String(rows[i][3] || "") === "file") {
+      record = rows[i]; break;
+    }
+  }
+  if (!record) throw new Error("Файл не найден.");
+  const courseId = normalizeCourseId_(record[1] || "");
+  if (!hasCourseAccess_(user, courseId)) throw new Error("У вас нет доступа к этой дисциплине.");
+  if (user.role === "student" && !customContentIsOpen_(courseId, itemId, String(record[2] || ""), "file")) {
+    throw new Error("Этот материал пока закрыт преподавателем.");
+  }
+  let payload = {};
+  try { payload = JSON.parse(record[5] || "{}"); } catch (e) {}
+  if (String(payload.fileRef || "") !== fileRef) throw new Error("Ссылка на файл не совпадает с записью материала.");
+  const file = DriveApp.getFileById(match[1]);
+  const blob = file.getBlob(), bytes = blob.getBytes();
+  if (bytes.length > 3500000) throw new Error("Файл превышает допустимый размер для защищённой загрузки.");
+  const mime = String(blob.getContentType() || payload.mimeType || "");
+  if (["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].indexOf(mime) < 0) {
+    throw new Error("Тип файла не поддерживается.");
+  }
+  return { success: true, fileName: String(payload.fileName || file.getName()), mimeType: mime,
+    data: Utilities.base64Encode(bytes), size: bytes.length };
+}
+
 function saveCustomContent_(data) {
   const courseId = String(data.mdkId || data.courseId || "");
   if (!courseId) throw new Error("Не указана дисциплина.");
@@ -2706,6 +2793,15 @@ function deleteCustomContent_(data) {
 
     for (let i = 1; i < values.length; i++) {
       if (String(values[i][0]) === id && sameCourseId_(values[i][1], courseId)) {
+        if (String(values[i][3] || "") === "file") {
+          let payload = {};
+          try { payload = JSON.parse(values[i][5] || "{}"); } catch (e) {}
+          const fileMatch = String(payload.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+          if (fileMatch) {
+            try { DriveApp.getFileById(fileMatch[1]).setTrashed(true); }
+            catch (fileError) { throw new Error("Не удалось удалить файл из Google Drive. Запись материала сохранена."); }
+          }
+        }
         sheet.deleteRow(i + 1);
         return { success: true };
       }
