@@ -6,7 +6,7 @@ window.MDK_DATA = window.MDK_DATA || {};
   function splitTeacherSections(content) {
     var student = String(content || "");
     var teacher = [];
-    var headingPattern = /<h([1-6])\\b[^>]*>[\\s\\S]*?<\\/h\\1>/gi;
+    var headingPattern = /<h([1-6])\b[^>]*>[\s\S]*?<\/h\\1>/gi;
     var headings = [], match;
     while ((match = headingPattern.exec(student))) {
       var plain = match[0].replace(/<[^>]+>/g, " ").replace(/&nbsp;/gi, " ").toLowerCase();
@@ -22,10 +22,10 @@ window.MDK_DATA = window.MDK_DATA || {};
       if (/самопроверка/.test(heading.plain)) {
         var visible = section.replace(heading.html, function (html) {
           return html.replace(/ключ преподавателя|teacher key|answer key|ответы для преподавателя/gi, "")
-            .replace(/\\s+и(?=\\s*<\\/h)/i, "").replace(/\\s+<\\/h/i, "</h");
+            .replace(/\s+и(?=\s*<\/h)/i, "").replace(/\s+<\/h/i, "</h");
         });
-        visible = visible.replace(/(<li\\b[^>]*>)([\\s\\S]*?)(<\\/li>)/gi, function (full, open, body, close) {
-          var answerAt = body.search(/\\s+[—–-]\\s+/);
+        visible = visible.replace(/(<li\b[^>]*>)([\s\S]*?)(<\/li>)/gi, function (full, open, body, close) {
+          var answerAt = body.search(/\s+[—–-]\s+/);
           return answerAt >= 0 ? open + body.slice(0, answerAt).trim() + close : full;
         });
         edits.push({ start: heading.start, end: end, text: visible });
@@ -36,7 +36,7 @@ window.MDK_DATA = window.MDK_DATA || {};
     edits.sort(function (a, b) { return b.start - a.start; }).forEach(function (edit) {
       student = student.slice(0, edit.start) + edit.text + student.slice(edit.end);
     });
-    return { student: student, teacher: teacher.join("\\n") };
+    return { student: student, teacher: teacher.join("\n") };
   }
   function lec(code, title, content) {
     var split = splitTeacherSections(content);
