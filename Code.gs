@@ -1047,13 +1047,43 @@ function getProctorEvents_(data) {
   rows.sort(function(a,b){return String(b.serverTime).localeCompare(String(a.serverTime));});
   return {success:true,events:rows.slice(0,200)};
 }
+function tutoringLinkValue_(raw) {
+  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:true};
+  if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
+  value.url=String(value.url||"").trim();
+  value.title=String(value.title||"Запись на дополнительные занятия").slice(0,120);
+  value.description=String(value.description||"").slice(0,500);
+  value.visible=value.visible!==false;
+  return value;
+}
 function getTutoringLink_(data) {
   const user=auth_(data),courseId=String(data.courseId||"");
   if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
-  const raw=settingValue_("tutoring:"+courseId);
-  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:true};
-  if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
-  return {success:true,link:value};
+  const sh=settings_(),rows=sh.getDataRange().getValues(),m=headerMap_(sh);
+  const prefix="tutoring:"+courseId+":";
+  if(user.role==="teacher"||user.role==="admin") {
+    const ownKey=prefix+user.email;
+    let ownRaw="";
+    for(let i=1;i<rows.length;i++)if(String(rows[i][m.Key]||"")===ownKey){ownRaw=String(rows[i][m.Value]||"");break;}
+    // Legacy course-wide settings are visible only to their original owner.
+    if(!ownRaw)for(let i=1;i<rows.length;i++)if(String(rows[i][m.Key]||"")==="tutoring:"+courseId&&email_(rows[i][m.UpdatedBy])===user.email){ownRaw=String(rows[i][m.Value]||"");break;}
+    return {success:true,link:tutoringLinkValue_(ownRaw),links:[]};
+  }
+  const links=[],seen={};
+  for(let i=1;i<rows.length;i++) {
+    const key=String(rows[i][m.Key]||"");
+    let owner="";
+    if(key.indexOf(prefix)===0) owner=email_(key.slice(prefix.length));
+    else if(key==="tutoring:"+courseId) owner=email_(rows[i][m.UpdatedBy]);
+    if(!owner||seen[owner])continue;
+    const teacher=userByEmail_(owner);
+    if(!teacher||teacher.role!=="teacher"||!hasCourseAccess_(teacher,courseId))continue;
+    const link=tutoringLinkValue_(String(rows[i][m.Value]||""));
+    if(!link.visible||!link.url)continue;
+    seen[owner]=true;
+    links.push({url:link.url,title:link.title,description:link.description,teacherName:String(teacher.name||"Преподаватель")});
+  }
+  return {success:true,links:links,link:links[0]||{url:"",title:"Запись на дополнительные занятия",description:"",visible:true}};
 }
 function saveTutoringLink_(data) {
   const courseId=String(data.courseId||""),teacher=editor_(data,courseId);
@@ -1061,7 +1091,8 @@ function saveTutoringLink_(data) {
   const description=String(data.description||"").trim().slice(0,500),visible=data.visible!==false;
   if(url&&!/^https?:\/\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
   if(url.length>1000)throw new Error("Слишком длинная ссылка.");
-  writeSetting_("tutoring:"+courseId,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible}),teacher.email);
+  const key="tutoring:"+courseId+":"+teacher.email;
+  writeSetting_(key,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible}),teacher.email);
   return {success:true,link:{url:url,title:title,description:description,visible:visible}};
 }
 
