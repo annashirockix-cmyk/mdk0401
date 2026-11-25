@@ -65,6 +65,12 @@ jobs:
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
         run: node --test scripts/course-content-editor.test.mjs
+      - name: Check protected course document attachments
+        run: node --test scripts/course-document-attachments.test.mjs scripts/course-document-attachments-runtime.test.mjs
+      - name: Check protected exam document attachments
+        run: node --test scripts/exam-document-attachments.test.mjs scripts/exam-document-attachments-runtime.test.mjs
+      - name: Check combined attachment schema and cleanup
+        run: node --test scripts/stacked-attachments-integration.test.mjs
       - name: Check student-friendly Materials Science course
         run: node --check data-material-easy.js && node --test scripts/materials-student-friendly.test.mjs
       - name: Check personal tutoring privacy and audiences
@@ -84,6 +90,8 @@ jobs:
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/portal-navigation-browser-audit.mjs
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/home-dashboard-browser-audit.mjs
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/materials-course-browser-audit.mjs
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/course-constructor-browser-audit.mjs
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/final-exam-attachments-browser-audit.mjs
       - name: Run real-browser A4 and PDF audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/workbook-audit-server.log 2>&1 &
