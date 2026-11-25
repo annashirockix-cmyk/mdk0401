@@ -73,6 +73,7 @@ window.API = {
  saveTeacherResult:function(data){return fetchAPI("saveTeacherResult",data||{},"POST");},
  saveManualGrade:function(data){return fetchAPI("saveManualGrade",data||{},"POST");},
  getCustomContent:function(){return fetchAPI("getCustomContent",{},"GET");},
+ importEnglishTeacherMaterials:function(materials){return fetchAPI("importEnglishTeacherMaterials",{materials:materials||[]},"POST",120000);},
  getCustomContentAccess:function(courseId,id){return fetchAPI("getCustomContentAccess",{courseId:courseId,id:id},"GET");},
  setCustomContentAccess:function(courseId,id,open){return fetchAPI("setCustomContentAccess",{courseId:courseId,id:id,open:open},"POST");},
  getTopicAccess:function(courseId,topicId){return fetchAPI("getTopicAccess",{courseId:courseId,topicId:topicId},"GET");},
