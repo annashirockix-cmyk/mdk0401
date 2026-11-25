@@ -17,7 +17,7 @@ try {
     typeof window.renderFlashcardEditorPage === "function" && window.MDK_DATA && window.MDK_DATA["07.01"]);
   await page.evaluate(async () => {
     document.getElementById("loginOverlay")?.remove();
-    window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
+    window.state = { user: { role: "teacher" }, staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
     window.__constructorStore = [];
     window.customContent = { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
