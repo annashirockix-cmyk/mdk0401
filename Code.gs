@@ -2875,6 +2875,11 @@ function importEnglishTeacherMaterials_(data) {
     }
     return { id:id, courseId:courseId, topicId:topicId, code:code, title:title || code, listeningId:listeningId, teacherContent:teacherContent };
   });
+  const seenIds = {};
+  normalized.forEach(function (item) {
+    if (seenIds[item.id]) throw new Error("Повторяется ID преподавательского материала: " + item.id);
+    seenIds[item.id] = true;
+  });
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
@@ -2887,7 +2892,7 @@ function importEnglishTeacherMaterials_(data) {
       const payload = { teacherOnly:true, sourceLectureCode:item.code, listeningId:item.listeningId, code:item.code, teacherContent:item.teacherContent };
       const row = [item.id,item.courseId,item.topicId,"lecture",item.title,JSON.stringify(payload),user.email,new Date().toISOString()];
       if (rowById[item.id]) { sheet.getRange(rowById[item.id],1,1,row.length).setValues([row]); updated++; }
-      else { sheet.appendRow(row); inserted++; }
+      else { sheet.appendRow(row); rowById[item.id] = sheet.getLastRow(); inserted++; }
     });
     return { success:true, received:normalized.length, inserted:inserted, updated:updated };
   } finally { lock.releaseLock(); }
