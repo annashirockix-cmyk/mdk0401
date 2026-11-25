@@ -179,8 +179,17 @@ if(!staff)list.querySelectorAll(".taSubmit").forEach(form=>form.onsubmit=async e
   m.textContent="Отправка ответа…";
   const result=await window.API.submitAssignment(form.dataset.id,form.elements.answer.value,uploaded);
   if(!result||!result.success)throw Error(result&&result.error||"Ошибка отправки");
+  uploaded.length=0;
   m.textContent="Ответ и вложения отправлены.";load();
- }catch(error){m.textContent=error.message;}
+ }catch(error){
+  if(uploaded.length&&window.API&&typeof window.API.discardAssignmentAttachments==="function"){
+   try{
+    const cleanup=await window.API.discardAssignmentAttachments(uploaded.slice());
+    if(!cleanup||!cleanup.success)throw Error(cleanup&&cleanup.error||"Не удалось отменить загрузку вложений.");
+   }catch(cleanupError){console.warn("[Assignments] Не удалось очистить незавершённые вложения:",cleanupError);}
+  }
+  m.textContent=error.message;
+ }
  finally{b.disabled=false;}
 });
 else list.querySelectorAll(".taGrade").forEach(form=>form.onsubmit=e=>{e.preventDefault();let b=form.querySelector("button");b.disabled=true;window.API.gradeAssignment(form.dataset.id,form.elements.grade.value,form.elements.feedback.value,!!(form.elements.regrade&&form.elements.regrade.checked)).then(r=>{if(!r||!r.success)throw Error(r&&r.error||"Ошибка сохранения");load();}).catch(x=>{b.disabled=false;b.textContent=x.message;});});
