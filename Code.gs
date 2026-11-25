@@ -2864,7 +2864,7 @@ function importEnglishTeacherMaterials_(data) {
     const courseId = String(item.courseId || "").trim();
     const topicId = String(item.topicId || "").trim();
     const courseNumber = Number(item.courseNumber || 0);
-    const validCourse = Number.isInteger(courseNumber) && courseNumber >= 1 && courseNumber <= 5;
+    const validCourse = Number.isInteger(courseNumber) && courseNumber >= 0 && courseNumber <= 5;
     const code = String(item.code || "").trim();
     const title = String(item.title || "").trim();
     const teacherContent = String(item.teacherContent || "").trim();
