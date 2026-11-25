@@ -116,6 +116,22 @@ test("all 120 existing and new lessons have usable listening activities", () => 
   }
 });
 
+test("teacher companion migration is admin-only, server-backed, and attached only to staff lessons", () => {
+  const runtime = read("english-five-year-runtime.js");
+  const app = read("app.js");
+  const api = read("api.js");
+  const server = read("Code.gs");
+  assert.match(runtime, /var split=splitTeacherMaterial\(row\.markdown\)/);
+  assert.match(app, /migrateEnglishTeacherMaterialsToServer/);
+  assert.match(app, /role[^;]*admin/);
+  assert.match(app, /teacherMaterials = rows\.filter/);
+  assert.match(app, /window\.state && window\.state\.staff && teacherHtml/);
+  assert.match(api, /importEnglishTeacherMaterials/);
+  assert.match(server, /case "importenglishteachermaterials"/);
+  assert.match(server, /const user = admin_\(data\)/);
+  assert.match(server, /payload\.teacherOnly === true\) return/);
+});
+
 test("runtime loads before app.js and lecture rendering resolves explicit listening IDs", () => {
   const html = read("index.html");
   const app = read("app.js");
