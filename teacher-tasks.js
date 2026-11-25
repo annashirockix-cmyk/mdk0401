@@ -177,7 +177,7 @@ if(!staff)list.querySelectorAll(".taSubmit").forEach(form=>form.onsubmit=async e
    uploaded.push(result.id);
   }
   m.textContent="Отправка ответа…";
-  const result=await window.API.submitAssignment(form.dataset.id,form.elements.answer.value,uploaded);
+  const result=await window.API.submitAssignment(form.dataset.id,form.elements.answer.value,uploaded.slice());
   if(!result||!result.success)throw Error(result&&result.error||"Ошибка отправки");
   uploaded.length=0;
   m.textContent="Ответ и вложения отправлены.";load();
