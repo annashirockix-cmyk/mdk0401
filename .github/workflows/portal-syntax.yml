@@ -1,9 +1,9 @@
 name: Portal syntax checks
 on:
   push:
-    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit]
+    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments]
   pull_request:
-    branches: [main, master, feat/home-dashboard-responsive-audit]
+    branches: [main, master, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments]
   workflow_dispatch:
 permissions:
   contents: read
@@ -24,6 +24,9 @@ jobs:
             echo "Checking $file"
             node --check "$file"
           done
+          echo "Checking course editor UX module"
+          node --check course-editor-ux.js
+          node --check course-admin.js
           echo "Checking Google Apps Script backend"
           node --check < Code.gs
           node --check < EnglishVPR-Sheets.gs
@@ -63,6 +66,10 @@ jobs:
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
         run: node --test scripts/course-content-editor.test.mjs
+      - name: Check protected course document attachments
+        run: node --test scripts/course-document-attachments.test.mjs
+      - name: Check protected course attachment runtime permissions
+        run: node --test scripts/course-document-attachments-runtime.test.mjs
       - name: Install Playwright CLI for browser audit
         run: npm install --global playwright@1.62.0
       - name: Install Chromium for workbook print audit

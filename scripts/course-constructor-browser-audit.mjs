@@ -5,7 +5,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || "playwright");
 const baseUrl = process.env.CONSTRUCTOR_AUDIT_URL || "http://127.0.0.1:4173/";
 const browser = await chromium.launch({ headless: true });
-const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, acceptDownloads: true });
 page.on("pageerror", error => console.log("PAGE_ERROR", error.stack || error.message));
 page.on("console", message => { if (message.type() === "error" || /FLASHCARD_/.test(message.text())) console.log("BROWSER_CONSOLE", message.type(), JSON.stringify(message.location()), message.text()); });
 page.on("requestfailed", request => console.log("REQUEST_FAILED", request.url(), request.failure()?.errorText));
@@ -27,6 +27,7 @@ try {
       window.customContent.lectures = rows.filter(x => x.type === "lecture");
       window.customContent.tests = rows.filter(x => x.type === "test");
       window.customContent.flashcards = rows.filter(x => x.type === "flashcards");
+      window.customContent.files = rows.filter(x => x.type === "file");
       window.customContent.games = rows.filter(x => x.type === "game");
     }
     window.__tutoringSettings = {};
@@ -39,6 +40,16 @@ try {
       getTopicAccess: async () => ({ open: true }),
       getCustomContent: async () => ({ success: true, data: window.__constructorStore.map(x => ({ ...x })) }),
       uploadTestImage: async (courseId, dataUrl, name) => ({ success: true, imageRef: "drive:audit-image-reference", name, size: 12000 }),
+      uploadCourseFile: async (courseId, topicId, title, fileName, dataUrl) => {
+        const item = { id: "audit-course-file-12345", mdkId: courseId, topicId, type: "file", title,
+          fileRef: "coursefile:audit-course-file-12345", fileName, mimeType: "application/pdf", size: 12 };
+        window.__constructorStore.push(item); sync();
+        return { success: true, ...item };
+      },
+      getCourseFile: async (itemId, fileRef) => ({
+        success: itemId === "audit-course-file-12345" && fileRef === "coursefile:audit-course-file-12345",
+        fileName: "methodical-guide.pdf", mimeType: "application/pdf", data: "JVBERi0xLjQK", size: 9
+      }),
       getQuestionBank: async (courseId, bankId) => ({ success: true, courseId, questions: (window.__examBankRows || []).map(row => ({ ...row })) }),
       saveQuestionBank: async (courseId, bankId, questions) => {
         window.__examBankRows = questions.map(row => ({ questionId: row.questionId, question: { ...row.question } }));
@@ -196,9 +207,26 @@ try {
   assert.ok(topicId.startsWith("custom-"), "New topic was not added to the editor selectors");
 
   await page.locator("#lectureTitle").fill("Тестовая лекция конструктора");
-  await page.locator("#lectureBody").fill("<h3>Проверка отображения</h3><p>Содержимое тестовой лекции.</p>");
+  await page.locator("#lectureBody").fill('<h3>Проверка отображения</h3><p>Содержимое тестовой лекции.</p><img src="https://example.invalid/diagram.png" alt="Схема" onerror="window.__previewXss=1">');
+  await page.locator("#ceLecturePreviewToggle").click();
+  const lecturePreview = await page.locator("#ceLecturePreviewFrame").getAttribute("srcdoc");
+  assert.ok(lecturePreview.includes("Тестовая лекция конструктора"), "Lecture preview must include the current title");
+  assert.ok(lecturePreview.includes("Содержимое тестовой лекции."), "Lecture preview must render the current body");
+  assert.ok(lecturePreview.includes("https://example.invalid/diagram.png"), "Lecture preview must preserve safe image sources");
+  assert.ok(!lecturePreview.includes("onerror"), "Lecture preview must strip executable image handlers");
+  assert.equal(await page.locator("#ceLecturePreviewFrame").getAttribute("sandbox"), "", "Lecture preview must run in a fully sandboxed iframe");
+  assert.equal(await page.locator("#ceLecturePreviewFrame").evaluate(el => getComputedStyle(el).display), "block");
   await page.locator("#saveLectureBtn").click();
   await page.waitForFunction(() => document.getElementById("lectureStatus")?.textContent.includes("лекция сохранена"));
+  await page.locator("#courseFileTopic").selectOption(topicId);
+  await page.locator("#courseFileTitle").fill("Методическое пособие к теме");
+  await page.locator("#courseFileInput").setInputFiles({
+    name: "methodical-guide.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\\nAudit document")
+  });
+  await page.locator("#uploadCourseFileBtn").click();
+  await page.waitForFunction(() => document.getElementById("courseFileStatus")?.textContent.includes("Файл прикреплён к теме"));
+  assert.equal(await page.evaluate(() => window.__constructorStore.find(x => x.type === "file")?.fileRef),
+    "coursefile:audit-course-file-12345", "Uploaded course document must be stored as a private file reference");
 
   await page.locator("#testTitle").fill("Тест конструктора");
   await page.locator("#qText").fill("Какой вариант правильный?");
@@ -340,6 +368,41 @@ try {
   await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
   const lectureVisible = await page.locator("#topicContent").innerText();
   assert.ok(lectureVisible.includes("Тестовая лекция конструктора"));
+  assert.ok(lectureVisible.includes("Методическое пособие к теме"), "Student lecture view must list the attached course document");
+  await page.evaluate(() => {
+    window.__courseFileDownloadAudit = { apiCalls: 0, fileName: "", mimeType: "", anchorClicks: [] };
+    const originalGetCourseFile = window.API.getCourseFile;
+    window.API.getCourseFile = async function(itemId, fileRef) {
+      window.__courseFileDownloadAudit.apiCalls++;
+      const result = await originalGetCourseFile(itemId, fileRef);
+      window.__courseFileDownloadAudit.fileName = result && result.fileName || "";
+      window.__courseFileDownloadAudit.mimeType = result && result.mimeType || "";
+      return result;
+    };
+    const originalCreateObjectURL = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = function(blob) {
+      window.__courseFileDownloadAudit.blobType = blob && blob.type || "";
+      window.__courseFileDownloadAudit.blobSize = blob && blob.size || 0;
+      return originalCreateObjectURL(blob);
+    };
+    const originalAnchorClick = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function() {
+      if (this.download) window.__courseFileDownloadAudit.anchorClicks.push({ fileName: this.download, href: this.href });
+      return originalAnchorClick.call(this);
+    };
+  });
+  await page.locator("#topicContent button").filter({ hasText: "Методическое пособие к теме" }).evaluate(button => button.click());
+  await page.waitForFunction(() => {
+    const audit = window.__courseFileDownloadAudit;
+    return audit && audit.apiCalls === 1 && audit.anchorClicks.length === 1;
+  });
+  const courseFileDownload = await page.evaluate(() => window.__courseFileDownloadAudit);
+  assert.equal(courseFileDownload.fileName, "methodical-guide.pdf");
+  assert.equal(courseFileDownload.mimeType, "application/pdf");
+  assert.equal(courseFileDownload.blobType, "application/pdf");
+  assert.ok(courseFileDownload.blobSize > 0, "Student download must create a non-empty PDF blob");
+  assert.equal(courseFileDownload.anchorClicks[0].fileName, "methodical-guide.pdf",
+    "Student must initiate a download with the attached document filename");
 
   await page.locator("#tab-test").click();
   await page.waitForSelector("#topicContent button");
