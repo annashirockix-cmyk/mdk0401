@@ -46,7 +46,9 @@ jobs:
         run: node --test scripts/portal-enhancements.test.mjs
       - name: Check client assessment answer-key isolation
         run: node --test scripts/client-answer-key-leak.test.mjs
-      - name: Check English teacher-material privacy boundary\n        run: node --test scripts/english-teacher-material-privacy.test.mjs\n      - name: Check five-year English runtime and listening modules
+      - name: Check English teacher-material privacy boundary
+        run: node --test scripts/english-teacher-material-privacy.test.mjs
+      - name: Check five-year English runtime and listening modules
         run: |
           for file in english-five-year-runtime.js english-listening-catalog.js english-listening-lesson.js english-listening-tts.js english-listening-route.js; do
             echo "Checking $file"
