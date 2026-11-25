@@ -1290,7 +1290,7 @@ function extractVprFunction(name) {
 }
 
 test("English VPR seed contains exactly two independent tracks with seven tasks and 40 points each", () => {
-  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_;")();
+  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_();")();
   const validate = new Function(extractVprFunction("validateEnglishVprExam_") + "; return validateEnglishVprExam_;")();
   assert.deepEqual(Object.keys(seed).sort(), ["basic", "technical"]);
   for (const track of ["basic", "technical"]) {
@@ -1303,7 +1303,7 @@ test("English VPR seed contains exactly two independent tracks with seven tasks 
 });
 
 test("English VPR student sanitizer removes objective and written answer keys recursively", () => {
-  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_;")();
+  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_();")();
   const sanitize = new Function(extractVprFunction("sanitizeEnglishVprExam_") + "; return sanitizeEnglishVprExam_;")();
   for (const track of ["basic", "technical"]) {
     const safe = sanitize(seed[track]);
@@ -1320,7 +1320,7 @@ test("English VPR student sanitizer removes objective and written answer keys re
 });
 
 test("English VPR per-attempt option shuffling preserves the keyed answer for choice, matching and gap tasks", () => {
-  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_;")();
+  const seed = new Function(extractVprFunction("englishVprSeedExams_") + "; return englishVprSeedExams_();")();
   const prepare = new Function("shuffledServer_", extractVprFunction("englishVprPrepareAttempt_") + "; return englishVprPrepareAttempt_;")(
     values => values.slice().reverse()
   );
