@@ -1593,7 +1593,12 @@ function submitAssignment_(data) {
       }
     }
     const hist = assignmentSubmissionHistory_(), hv = hist.getDataRange().getValues(), hm = headerMap_(hist);
-    const filesSheet = assignmentFiles_(), fileRows = filesSheet.getDataRange().getValues(), fm = headerMap_(filesSheet);
+    let filesSheet = null, fileRows = [], fm = {};
+    if (attachmentIds.length) {
+      filesSheet = assignmentFiles_();
+      fileRows = filesSheet.getDataRange().getValues();
+      fm = headerMap_(filesSheet);
+    }
     const selectedFiles = attachmentIds.map(function(fileId) {
       const index = fileRows.slice(1).findIndex(function(row){return String(row[fm.Id]||"")===fileId;});
       if(index<0)throw new Error("Одно из вложений не найдено.");
