@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v427'; // Добавлен предпросмотр защищённых экзаменационных вопросов для студента.
+const CACHE_NAME = 'portal-cache-v428'; // Синхронизация результата защищённого пользовательского теста в активном кабинете студента.
 
 const STATIC_ASSETS = [
   './',

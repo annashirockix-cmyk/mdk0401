@@ -1038,6 +1038,11 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                         answers: answers, timeSpent: Math.round((Date.now() - started) / 1000)
                     }).then(function (result) {
                         if (!result || !result.success) throw new Error(result && result.error || "Не удалось проверить тест.");
+                        // Keep the freshly verified custom-test grade in the active student view.
+                        // The server remains authoritative; saveStudent_ strips client-supplied grade fields.
+                        if (!window.state.results) window.state.results = {};
+                        window.state.results["custom_" + testId] = {grade:result.grade,percent:result.percent,score:result.score,maxScore:result.maxScore,attempts:result.attempts};
+                        if (window.saveStudentData) window.saveStudentData();
                         area.dataset.proctorAssessment = "0";
                         area.innerHTML = '<div style="text-align:center;padding:28px;background:var(--card-soft);border-radius:12px"><h2>Тест завершён</h2><p>Верных ответов: <b>'+result.score+' из '+result.maxScore+'</b></p><p>Результат: <b>'+result.percent+'%</b></p><h1 style="font-size:48px;color:var(--accent)">Оценка: '+result.grade+'</h1><button class="btn" onclick="window.switchTopicTab(\'test\')">Вернуться к тестам</button></div>';
                     }).catch(function (error) {
