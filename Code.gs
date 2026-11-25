@@ -301,6 +301,13 @@ function email_(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+// Единый ключ группы для сравнений и отображения. Исторические строки в таблицах
+// не переписываются: нормализация применяется только при чтении и новых назначениях.
+function normalizeGroup_(value) {
+  return String(value === null || value === undefined ? "" : value)
+    .normalize("NFKC").replace(/[\s\u00A0]+/g, " ").trim().toLocaleUpperCase("ru-RU");
+}
+
 // Сопоставляет текстовый код курса с числовым значением из Google Sheets,
 // не меняя остальные текстовые идентификаторы.
 var COURSE_ID_TIME_ZONE_CACHE_ = "";
@@ -401,7 +408,7 @@ function userByEmail_(email) {
     loginChangedAt:index.LoginChangedAt!==undefined?String(row[index.LoginChangedAt]||""):"",
     passwordChangedAt:index.PasswordChangedAt!==undefined?String(row[index.PasswordChangedAt]||""):"",
     name:String(row[index.Name]||""),
-    group:String(row[index.Group]||""),
+    group:normalizeGroup_(row[index.Group]),
     role:String(row[index.Role]||"student").toLowerCase(),
     courses:String(row[index.Courses]||""),
     payload:String(row[index.Payload]||"")
@@ -509,6 +516,11 @@ function register_(data) {
   const inviteCode = String(data.invite || data.inviteCode || "").trim();
   if (!email || email.indexOf("@") < 1) return { success: false, error: "Укажите корректный email." };
   if (password.length < 8) return { success: false, error: "Пароль должен содержать не менее 8 символов." };
+  const normalizedName = String(data.name || "").replace(/\s+/g, " ").trim();
+  const nameParts = normalizedName.split(" ").filter(Boolean);
+  if (nameParts.length < 2) return { success: false, error: "Укажите фамилию и имя. Отчество можно добавить по желанию." };
+  const normalizedGroup = String(data.group || "").replace(/\s+/g, " ").trim().toLocaleUpperCase("ru-RU");
+  if (!normalizedGroup) return { success: false, error: "Укажите учебную группу." };
 
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -528,8 +540,8 @@ function register_(data) {
     const values = {
       Email: email,
       PasswordHash: passwordHash_(password, salt),
-      Name: String(data.name || email),
-      Group: String(data.group || ""),
+      Name: normalizedName,
+      Group: normalizedGroup,
       Role: "student",
       UpdatedAt: new Date().toISOString(),
       Courses: invite ? invite.courses.join(",") : "",
@@ -681,7 +693,7 @@ function saveStudent_(data) {
 
   const fields = { UpdatedAt: new Date().toISOString() };
   if (data.name !== undefined) fields.Name = String(data.name);
-  if (data.group !== undefined) fields.Group = String(data.group);
+  if (data.group !== undefined) fields.Group = normalizeGroup_(data.group);
   if (data.payload !== undefined) {
     const incoming = typeof data.payload === "string" ? (function(){try{return JSON.parse(data.payload||"{}");}catch(e){return {};}})() : (data.payload || {});
     if (current.role === "teacher") {
@@ -740,7 +752,7 @@ function getStudents_(data) {
     return {
       email: row[map.Email],
       name: row[map.Name],
-      group: row[map.Group],
+      group: normalizeGroup_(row[map.Group]),
       role: row[map.Role],
       courses: visibleCourses,
       payload: user.role === "admin" ? String(row[map.Payload] || "") :
@@ -1009,8 +1021,8 @@ function getActivityLog_(data) {
   const sh=activityLog_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh);
   const rows=vals.slice(1).filter(function(row){
     const cid=String(row[m.CourseId]||"");
-    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||String(row[m.Group]||"")===group)&&(user.role==="admin"||!!cid&&hasCourseAccess_(user,cid));
-  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:String(row[m.Group]||""),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||""),eventType:m.EventType===undefined?"page_view":String(row[m.EventType]||"page_view"),details:m.Details===undefined?"":String(row[m.Details]||"")};});
+    return (!courseId||cid===courseId)&&(!wanted||email_(row[m.Email])===wanted)&&(!group||normalizeGroup_(row[m.Group])===normalizeGroup_(group))&&(user.role==="admin"||!!cid&&hasCourseAccess_(user,cid));
+  }).map(function(row){return {email:String(row[m.Email]||""),name:String(row[m.Name]||""),group:normalizeGroup_(row[m.Group]),courseId:String(row[m.CourseId]||""),route:String(row[m.Route]||""),pageTitle:String(row[m.PageTitle]||""),createdAt:String(row[m.CreatedAt]||""),clientAt:String(row[m.ClientAt]||""),eventType:m.EventType===undefined?"page_view":String(row[m.EventType]||"page_view"),details:m.Details===undefined?"":String(row[m.Details]||"")};});
   rows.sort(function(x,y){return String(y.createdAt).localeCompare(String(x.createdAt));});
   const offset=Math.max(0,Math.floor(Number(data.offset)||0));
   const limit=Math.min(500,Math.max(1,Math.floor(Number(data.limit)||250)));
@@ -1035,13 +1047,43 @@ function getProctorEvents_(data) {
   rows.sort(function(a,b){return String(b.serverTime).localeCompare(String(a.serverTime));});
   return {success:true,events:rows.slice(0,200)};
 }
+function tutoringLinkValue_(raw) {
+  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:true};
+  if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
+  value.url=String(value.url||"").trim();
+  value.title=String(value.title||"Запись на дополнительные занятия").slice(0,120);
+  value.description=String(value.description||"").slice(0,500);
+  value.visible=value.visible!==false;
+  return value;
+}
 function getTutoringLink_(data) {
   const user=auth_(data),courseId=String(data.courseId||"");
   if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
-  const raw=settingValue_("tutoring:"+courseId);
-  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:true};
-  if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
-  return {success:true,link:value};
+  const sh=settings_(),rows=sh.getDataRange().getValues(),m=headerMap_(sh);
+  const prefix="tutoring:"+courseId+":";
+  if(user.role==="teacher"||user.role==="admin") {
+    const ownKey=prefix+user.email;
+    let ownRaw="";
+    for(let i=1;i<rows.length;i++)if(String(rows[i][m.Key]||"")===ownKey){ownRaw=String(rows[i][m.Value]||"");break;}
+    // Legacy course-wide settings are visible only to their original owner.
+    if(!ownRaw)for(let i=1;i<rows.length;i++)if(String(rows[i][m.Key]||"")==="tutoring:"+courseId&&email_(rows[i][m.UpdatedBy])===user.email){ownRaw=String(rows[i][m.Value]||"");break;}
+    return {success:true,link:tutoringLinkValue_(ownRaw),links:[]};
+  }
+  const links=[],seen={};
+  for(let i=1;i<rows.length;i++) {
+    const key=String(rows[i][m.Key]||"");
+    let owner="";
+    if(key.indexOf(prefix)===0) owner=email_(key.slice(prefix.length));
+    else if(key==="tutoring:"+courseId) owner=email_(rows[i][m.UpdatedBy]);
+    if(!owner||seen[owner])continue;
+    const teacher=userByEmail_(owner);
+    if(!teacher||teacher.role!=="teacher"||!hasCourseAccess_(teacher,courseId))continue;
+    const link=tutoringLinkValue_(String(rows[i][m.Value]||""));
+    if(!link.visible||!link.url)continue;
+    seen[owner]=true;
+    links.push({url:link.url,title:link.title,description:link.description,teacherName:String(teacher.name||"Преподаватель")});
+  }
+  return {success:true,links:links,link:links[0]||{url:"",title:"Запись на дополнительные занятия",description:"",visible:true}};
 }
 function saveTutoringLink_(data) {
   const courseId=String(data.courseId||""),teacher=editor_(data,courseId);
@@ -1049,7 +1091,8 @@ function saveTutoringLink_(data) {
   const description=String(data.description||"").trim().slice(0,500),visible=data.visible!==false;
   if(url&&!/^https?:\/\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
   if(url.length>1000)throw new Error("Слишком длинная ссылка.");
-  writeSetting_("tutoring:"+courseId,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible}),teacher.email);
+  const key="tutoring:"+courseId+":"+teacher.email;
+  writeSetting_(key,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible}),teacher.email);
   return {success:true,link:{url:url,title:title,description:description,visible:visible}};
 }
 
@@ -1128,7 +1171,7 @@ function assignmentResultRecords_(emailFilter) {
   return submissions.filter(function(r){return r[sh.Id]&&(!wanted||email_(r[sh.StudentEmail])===wanted);}).map(function(r){
     const a=byId[String(r[sh.AssignmentId])];if(!a)return null;
     const grade=r[sh.Grade]===""||r[sh.Grade]===null?"":Number(r[sh.Grade]);
-    return {email:email_(r[sh.StudentEmail]),name:String(r[sh.StudentName]||""),group:String(r[sh.Group]||""),testId:"assignment_"+String(a[ah.Id]),testTitle:"Задание: "+String(a[ah.Title]||""),grade:grade,score:grade===""?0:grade,maxScore:5,percent:grade===""?0:grade*20,timeSpent:0,attempts:Math.max(1,attemptCounts[String(r[sh.Id])]||1),finishedAt:String(r[sh.SubmittedAt]||""),courseId:normalizeCourseId_(a[ah.CourseId]),payload:String(r[sh.Answer]||""),assignmentStatus:String(r[sh.Status]||"submitted"),feedback:String(r[sh.Feedback]||""),assignmentId:String(a[ah.Id])};
+    return {email:email_(r[sh.StudentEmail]),name:String(r[sh.StudentName]||""),group:normalizeGroup_(r[sh.Group]),testId:"assignment_"+String(a[ah.Id]),testTitle:"Задание: "+String(a[ah.Title]||""),grade:grade,score:grade===""?0:grade,maxScore:5,percent:grade===""?0:grade*20,timeSpent:0,attempts:Math.max(1,attemptCounts[String(r[sh.Id])]||1),finishedAt:String(r[sh.SubmittedAt]||""),courseId:normalizeCourseId_(a[ah.CourseId]),payload:String(r[sh.Answer]||""),assignmentStatus:String(r[sh.Status]||"submitted"),feedback:String(r[sh.Feedback]||""),assignmentId:String(a[ah.Id])};
   }).filter(Boolean);
 }
 
@@ -1141,7 +1184,7 @@ function getResults_(data) {
     const feedbackMatch=submission.match(/\\n\\nКомментарий преподавателя:([\\s\\S]*)$/);
     const storedFeedback=resultMap.Feedback===undefined?"":String(r[resultMap.Feedback]||"");
     const legacyFeedback=Number(r[5])>=2&&feedbackMatch?String(feedbackMatch[1]||"").trim():"";
-    return {email:r[0],name:r[1],group:r[2],testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:storedFeedback||legacyFeedback};
+    return {email:r[0],name:r[1],group:normalizeGroup_(r[2]),testId:r[3],testTitle:r[4],grade:r[5],score:r[6],maxScore:r[7],percent:r[8],timeSpent:r[9],attempts:r[10],finishedAt:r[11],date:String(r[11]||"").slice(0,10),courseId:normalizeCourseId_(r[12]),payload:submission.replace(/\\n\\nКомментарий преподавателя:[\\s\\S]*$/,""),feedback:storedFeedback||legacyFeedback};
   });
   const sh=users_(),vals=sh.getDataRange().getValues(),m=headerMap_(sh),protectedBanks=protectedQuestionBankMap_();
   // Индексируем уже загруженные результаты один раз: без этого каждый legacy-результат
@@ -1356,7 +1399,7 @@ function createAssignment_(data) {
   const instructions = String(data.instructions || "").trim().slice(0,10000);
   const targetType = String(data.targetType || "");
   const rawTarget = String(data.targetValue || "").trim().slice(0,120);
-  const targetValue = targetType === "individual" ? email_(rawTarget) : rawTarget;
+  const targetValue = targetType === "individual" ? email_(rawTarget) : normalizeGroup_(rawTarget);
   const dueAt = String(data.dueAt || "").trim();
   if (!title || !instructions) throw new Error("Заполните название и условие задания.");
   if (["group","individual"].indexOf(targetType) < 0 || !targetValue) throw new Error("Выберите адресата.");
@@ -1372,7 +1415,7 @@ function createAssignment_(data) {
     if (String(r[um.Role] || "").toLowerCase() !== "student") return false;
     if (!hasCourseAccess_({role:"student",courses:String(r[um.Courses] || "")}, courseId)) return false;
     if (targetType === "individual") return email_(r[um.Email]) === targetValue;
-    return String(r[um.Group] || "").trim().toLowerCase() === targetValue.toLowerCase();
+    return normalizeGroup_(r[um.Group]) === targetValue;
   });
   // Групповое назначение разрешено публиковать до регистрации обучающихся.
   if (targetType === "individual" && !matches.length) throw new Error("Обучающийся не найден или у него нет доступа к дисциплине.");
@@ -1429,16 +1472,16 @@ function getAssignments_(data) {
       const typ=String(r[h.TargetType]||""),val=String(r[h.TargetValue]||"");
       if(typ!=="individual"&&typ!=="group")return;
       if(typ==="individual"&&email_(val)!==user.email)return;
-      if(typ==="group"&&String(val||"").trim().toLowerCase()!==String(user.group||"").trim().toLowerCase())return;
+      if(typ==="group"&&normalizeGroup_(val)!==normalizeGroup_(user.group))return;
       if(String(r[h.Status]||"active")!=="active")return;
     }
-    const item={id:String(r[h.Id]),courseId:cid,title:String(r[h.Title]||""),topic:String(r[h.Topic]||""),level:String(r[h.Level]||""),workType:String(r[h.WorkType]||""),dueAt:String(r[h.DueAt]||""),targetType:String(r[h.TargetType]||""),targetValue:String(r[h.TargetValue]||""),instructions:String(r[h.Instructions]||""),criteria:String(r[h.Criteria]||""),createdAt:String(r[h.CreatedAt]||""),status:String(r[h.Status]||"active")};
+    const item={id:String(r[h.Id]),courseId:cid,title:String(r[h.Title]||""),topic:String(r[h.Topic]||""),level:String(r[h.Level]||""),workType:String(r[h.WorkType]||""),dueAt:String(r[h.DueAt]||""),targetType:String(r[h.TargetType]||""),targetValue:String(r[h.TargetType]||"")==="group"?normalizeGroup_(r[h.TargetValue]):String(r[h.TargetValue]||""),instructions:String(r[h.Instructions]||""),criteria:String(r[h.Criteria]||""),createdAt:String(r[h.CreatedAt]||""),status:String(r[h.Status]||"active")};
     const own=subs.slice(1).filter(function(x){return String(x[m.AssignmentId])===item.id;});
     if(user.role==="student"){
       const ownStudent=own.filter(function(x){return email_(x[m.StudentEmail])===user.email;}).sort(function(x,y){return String(y[m.SubmittedAt]).localeCompare(String(x[m.SubmittedAt]));})[0];
       item.submission=ownStudent?{answer:String(ownStudent[m.Answer]||""),submittedAt:String(ownStudent[m.SubmittedAt]||""),status:String(ownStudent[m.Status]||"submitted"),grade:ownStudent[m.Grade]===""?null:ownStudent[m.Grade],feedback:String(ownStudent[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(ownStudent[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:historyFor(ownStudent).length,history:historyFor(ownStudent)}:null;
     } else {
-      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:String(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(x[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:hist.length,history:hist};});
+      item.submissions=own.map(function(x){const hist=historyFor(x);return {id:String(x[m.Id]),studentEmail:email_(x[m.StudentEmail]),studentName:String(x[m.StudentName]),group:normalizeGroup_(x[m.Group]),answer:String(x[m.Answer]||""),submittedAt:String(x[m.SubmittedAt]||""),status:String(x[m.Status]||"submitted"),grade:x[m.Grade]===""?null:x[m.Grade],feedback:String(x[m.Feedback]||""),attachments:(function(){try{return JSON.parse(String(x[m.AttachmentsJSON]||"[]"));}catch(e){return [];}})(),attempts:hist.length,history:hist};});
     }
     list.push(item);
   });
@@ -1449,7 +1492,7 @@ function assignmentEligible_(student, assignment) {
   const h = headerMap_(assignments_()), courseId = String(assignment[h.CourseId] || "");
   const type = String(assignment[h.TargetType] || ""), value = String(assignment[h.TargetValue] || "");
   const eligible = (type === "individual" && email_(value) === student.email) ||
-    (type === "group" && value.trim().toLowerCase() === String(student.group || "").trim().toLowerCase());
+    (type === "group" && normalizeGroup_(value) === normalizeGroup_(student.group));
   if (!hasCourseAccess_(student, courseId) || !eligible || String(assignment[h.Status] || "active") !== "active") throw new Error("Это задание вам недоступно.");
   return courseId;
 }
@@ -1645,7 +1688,7 @@ function sendAssignmentDueReminders_() {
   av.slice(1).forEach(function(a){
     const id=String(a[ah.Id]||""),course=String(a[ah.CourseId]||""),due=String(a[ah.DueAt]||"");
     if(!id||due!==dueKey||String(a[ah.Status]||"active")!=="active")return;
-    const type=String(a[ah.TargetType]||""),target=String(a[ah.TargetValue]||"").trim().toLowerCase();
+    const type=String(a[ah.TargetType]||""),target=type==="group"?normalizeGroup_(a[ah.TargetValue]):email_(a[ah.TargetValue]);
     if(type!=="group"&&type!=="individual")return;
     const submitted={};
     sv.slice(1).forEach(function(sub){
@@ -1653,7 +1696,7 @@ function sendAssignmentDueReminders_() {
     });
     uv.slice(1).forEach(function(userRow){
       if(String(userRow[um.Role]||"").toLowerCase()!=="student")return;
-      const mail=email_(userRow[um.Email]),group=String(userRow[um.Group]||"").trim().toLowerCase();
+      const mail=email_(userRow[um.Email]),group=normalizeGroup_(userRow[um.Group]);
       const recipient={role:"student",courses:String(userRow[um.Courses]||"")};
       if(!mail||!hasCourseAccess_(recipient,course)||submitted[mail])return;
       if(type==="individual"&&mail!==email_(target))return;
@@ -2005,7 +2048,26 @@ function getQuestionBankStats_(data) {
     try { const parsed = JSON.parse(String(row[m.QuestionJSON] || "")); if (!parsed || typeof parsed !== "object") throw new Error("invalid"); }
     catch (e) { course.invalidJson++; bank.invalidJson++; invalidJson++; }
   }
-  const courseList = Object.keys(courses).sort().map(function(id) { return courses[id]; });
+  CFG.COURSES.forEach(function(id) {
+    if (!courses[id]) courses[id] = { courseId: id, banks: 0, rows: 0, uniqueQuestions: 0, duplicateQuestionIds: 0, invalidJson: 0, emptyQuestionIds: 0 };
+  });
+  const courseList = Object.keys(courses).sort().map(function(id) {
+    const course = courses[id], eligible = allFinalExamEntries_(id), byType = {}, byBank = {};
+    eligible.forEach(function(entry) {
+      const type = finalQuestionType_(entry.question), bankId = String(entry.bankId || "");
+      byType[type] = (byType[type] || 0) + 1;
+      byBank[bankId] = (byBank[bankId] || 0) + 1;
+    });
+    course.finalExamReadiness = {
+      requiredQuestions: 45,
+      eligibleUniqueQuestions: eligible.length,
+      ready: eligible.length >= 45,
+      shortage: Math.max(0, 45 - eligible.length),
+      byType: byType,
+      byBank: byBank
+    };
+    return course;
+  });
   const bankList = Object.keys(bankKeys).sort().map(function(key) { const b = bankKeys[key]; return { courseId: b.courseId, bankId: b.bankId, questions: b.questions, uniqueQuestions: b.uniqueQuestions, duplicateQuestionIds: b.duplicateQuestionIds, invalidJson: b.invalidJson }; });
   return { success: true, totals: { courses: courseList.length, banks: bankList.length, rows: totalRows, uniqueQuestions: courseList.reduce(function(n, c) { return n + c.uniqueQuestions; }, 0), duplicateQuestionIds: courseList.reduce(function(n, c) { return n + c.duplicateQuestionIds; }, 0), invalidJson: invalidJson, emptyQuestionIds: emptyQuestionIds }, courses: courseList, banks: bankList };
 }
@@ -2031,12 +2093,12 @@ function importQuestionBanks_(data) {
     seen[key]=true;
     if (!questions.length || questions.length>1000) throw new Error("Банк "+bankId+": допустимо от 1 до 1000 вопросов.");
     const out=questions.map(function(q,index){
-      if(!q||typeof q!=="object")throw new Error("Некорректный вопрос в банке "+bankId+".");
+      if(!q||typeof q!=="object"||Array.isArray(q))throw new Error("Некорректный вопрос в банке "+bankId+".");
       const json=JSON.stringify(q);
       if(json.length>45000)throw new Error("Вопрос "+(index+1)+" банка "+bankId+" превышает лимит 45 КБ.");
       return [courseId,bankId,String(q.id||(bankId+":"+index)).slice(0,220),json,new Date().toISOString(),actor.email];
     });
-    total+=out.length;prepared.push({courseId:courseId,bankId:bankId,rows:out});
+    total+=out.length;prepared.push({courseId:courseId,bankId:bankId,rows:out,questions:questions});
   });
   if(total>2500)throw new Error("Разбейте импорт на части: не более 2500 вопросов за запрос.");
   const sh=questionBank_(),lock=LockService.getScriptLock();lock.waitLock(10000);
@@ -2044,18 +2106,58 @@ function importQuestionBanks_(data) {
     const map=headerMap_(sh),targets={};
     prepared.forEach(function(bank){targets[bank.courseId+"|"+bank.bankId]=true;});
     const current=sh.getDataRange().getValues(),header=current.length?current[0]:HEADERS.QuestionBank;
+    // An import must never replace a better populated exam source with an unkeyed legacy bank.
+    prepared.forEach(function(bank){
+      if(!/^exam_(primary|extra)$/.test(bank.bankId)&&bank.bankId!=="mdk_extra")return;
+      const uniqueEligible=function(items){
+        const seenPrompts={};let total=0;
+        items.forEach(function(item){
+          let q=item;
+          if(item&&item.question&&typeof item.question==="object")q=item.question;
+          const prompt=String(q&&(q.q||q.question)||"").trim();
+          if(!prompt||!finalQuestionHasAnswerKey_(q))return;
+          const signature=String(q.type||"mc")+"|"+prompt;
+          if(seenPrompts[signature])return;
+          seenPrompts[signature]=true;total++;
+        });
+        return total;
+      };
+      const incoming=uniqueEligible(bank.questions),existing=[];
+      current.slice(1).forEach(function(row){
+        if(!sameCourseId_(row[map.CourseId],bank.courseId)||String(row[map.BankId])!==bank.bankId)return;
+        try{existing.push(JSON.parse(String(row[map.QuestionJSON]||"{}")));}catch(e){}
+      });
+      const previous=uniqueEligible(existing);
+      if(incoming<previous)throw new Error("Импорт остановлен: "+bank.courseId+"/"+bank.bankId+" содержит "+incoming+" пригодных уникальных вопросов вместо уже сохранённых "+previous+". Существующий защищённый банк не изменён.");
+      if(incoming===0&&previous===0)throw new Error("Импорт экзаменационного банка "+bank.courseId+"/"+bank.bankId+" остановлен: в нём нет вопросов с проверяемыми ключами ответов.");
+    });
+    // Every target bank is backed up before any rows are replaced, including empty targets.
+    const requestedBackupId=String(data.backupId||"").trim();
+    if(requestedBackupId.length>120)throw new Error("Идентификатор резервной копии слишком длинный.");
+    const backupId=requestedBackupId||("bank-import-"+Utilities.getUuid().replace(/-/g,"")),now=new Date().toISOString();
+    const backup=ensureSheet_("QuestionBankBackup"),backupRows=[];
+    prepared.forEach(function(bank){
+      let found=0;
+      current.slice(1).forEach(function(row){
+        if(sameCourseId_(row[map.CourseId],bank.courseId)&&String(row[map.BankId])===bank.bankId){
+          backupRows.push([backupId,bank.courseId,bank.bankId,JSON.stringify(row),now,actor.email]);found++;
+        }
+      });
+      if(!found)backupRows.push([backupId,bank.courseId,bank.bankId,"",now,actor.email]);
+    });
+    if(backupRows.length)backup.getRange(backup.getLastRow()+1,1,backupRows.length,6).setValues(backupRows);
     // Rebuild once: repeated row deletion and per-bank writes were timing out in Apps Script.
     const retained=current.slice(1).filter(function(row){
       const key=normalizeCourseId_(row[map.CourseId])+"|"+String(row[map.BankId]);
       return !targets[key];
     });
-    const incoming=[];
-    prepared.forEach(function(bank){Array.prototype.push.apply(incoming,bank.rows);});
-    const output=[header].concat(retained,incoming);
+    const incomingRows=[];
+    prepared.forEach(function(bank){Array.prototype.push.apply(incomingRows,bank.rows);});
+    const output=[header].concat(retained,incomingRows);
     sh.clearContents();
     sh.getRange(1,1,output.length,6).setValues(output);
     CacheService.getScriptCache().remove("protectedQuestionBankMap:v1");
-    return {success:true,banksImported:prepared.length,questionsImported:total};
+    return {success:true,banksImported:prepared.length,questionsImported:total,backupId:backupId};
   } finally {lock.releaseLock();}
 }
 
@@ -2265,8 +2367,11 @@ function scoreBuiltInQuestion_(q,answer) {
   if(type==="tf"||type==="true_false"){
     if(expected===undefined||expected===null)return false;
     let target;
-    if(typeof expected==="boolean")target=expected?0:1;
-    else if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)target=q.options.indexOf(expected);
+    if(typeof expected==="boolean"){
+      const labels=Array.isArray(q.options)?q.options:[];
+      const semanticIndex=labels.findIndex(function(value){return expected?/^(верно|верный|true|да|правда|истина)$/i.test(String(value).trim()):/^(неверно|неверный|false|нет|ложь)$/i.test(String(value).trim());});
+      target=semanticIndex>=0?semanticIndex:(expected?0:1);
+    } else if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)target=q.options.indexOf(expected);
     else target=Number(expected);
     return Number(answer)===target;
   }
@@ -2373,11 +2478,55 @@ function allFinalExamEntries_(courseId) {
     // Встроенные тесты допускают оба поля формулировки: q и question.
     // Итоговый экзамен должен читать те же записи, иначе банк есть, но экзамен считает его пустым.
     const prompt=String(q&&(q.q||q.question)||"").trim();
-    if(!q||!prompt)return;
+    if(!q||!prompt||!finalQuestionHasAnswerKey_(q))return;
     if(!q.q)q.q=prompt;
-    const sig=String(q.type||"mc")+"|"+prompt;if(seen[sig])return;seen[sig]=true;
+    const normalizedPrompt=prompt.normalize("NFKC").replace(/\s+/g," ").trim().toLocaleLowerCase("ru-RU");
+    const sig=finalQuestionType_(q)+"|"+normalizedPrompt;if(seen[sig])return;seen[sig]=true;
     out.push({bankId:bid,questionId:String(row[m.QuestionId]||""),question:q});
   });return out;
+}
+function finalQuestionHasAnswerKey_(q) {
+  if(!q||typeof q!=="object")return false;
+  const rawType=String(q.type||"mc").toLowerCase();
+  if(["written","essay","short_text","text","file","upload","open"].indexOf(rawType)>=0)return false;
+  const type=finalQuestionType_(q),options=Array.isArray(q.options)?q.options:[];
+  const has=function(value){return value!==undefined&&value!==null&&value!=="";};
+  let expected=has(q.correct)?q.correct:(has(q.correctAnswer)?q.correctAnswer:(has(q.answers)?q.answers:q.answer));
+  if(type==="mc"||type==="tf"||type==="num"){
+    if(Array.isArray(expected)){if(expected.length!==1)return false;expected=expected[0];}
+  }
+  if(type==="mc"){
+    if(options.length<2||!has(expected))return false;
+    if(typeof expected==="string"&&options.indexOf(expected)>=0)return true;
+    const index=Number(expected);
+    return Number.isInteger(index)&&index>=0&&index<options.length;
+  }
+  if(type==="multi"){
+    if(options.length<2||!Array.isArray(expected)||expected.length<2)return false;
+    const mapped=expected.map(function(value){
+      if(options.indexOf(value)>=0)return options.indexOf(value);
+      const index=Number(value);
+      return Number.isInteger(index)&&index>=0&&index<options.length?index:-1;
+    });
+    return mapped.every(function(value){return value>=0;})&&new Set(mapped).size===mapped.length;
+  }
+  if(type==="num")return has(expected)&&isFinite(Number(String(expected).replace(",",".")));
+  if(type==="order"){
+    const items=Array.isArray(q.items)?q.items.map(function(value){return String(value===undefined||value===null?"":value).trim();}):[];
+    const ordered=Array.isArray(q.correctOrder)?q.correctOrder:(Array.isArray(q.correct)?q.correct:(Array.isArray(q.correctAnswer)?q.correctAnswer:(Array.isArray(q.answers)?q.answers:(Array.isArray(q.answer)?q.answer:null))));
+    if(items.length<2||items.some(function(value){return !value;})||new Set(items).size!==items.length||!Array.isArray(ordered)||ordered.length!==items.length)return false;
+    const expected=ordered.map(function(value){return String(value===undefined||value===null?"":value).trim();});
+    return expected.every(function(value){return !!value&&items.indexOf(value)>=0;})&&new Set(expected).size===expected.length;
+  }
+  if(type==="match"){
+    const pairs=Array.isArray(q.pairs)?q.pairs:[];
+    if(pairs.length<2)return false;
+    const left=pairs.map(function(pair){return String(pair&&pair.left!==undefined?pair.left:"").trim();});
+    const right=pairs.map(function(pair){return String(pair&&pair.right!==undefined?pair.right:"").trim();});
+    return left.every(function(value){return !!value;})&&right.every(function(value){return !!value;})&&new Set(left).size===left.length&&new Set(right).size===right.length;
+  }
+  if(type==="tf")return has(expected)&&(typeof expected==="boolean"||expected===0||expected===1||expected==="0"||expected==="1"||options.indexOf(expected)>=0);
+  return false;
 }
 function finalQuestionType_(question) {
   const type=String(question&&question.type||"mc").toLowerCase();
@@ -2435,43 +2584,54 @@ function getFinalExam_(data) {
   return {success:true,examId:examId,questions:safeQuestions,attachments:examFileList_(courseId,"").filter(function(file){return ["exam_primary","exam_extra","mdk_extra"].indexOf(file.bankId)>=0;})};
 }
 function scoreFinalAnswer_(q,answer) {
+  if(answer===undefined||answer===null||(typeof answer==="string"&&!answer.trim()))return 0;
   const type=finalQuestionType_(q||{});
+  const hasKey=function(value){return value!==undefined&&value!==null&&value!=="";};
+  const answerKey=function(){return hasKey(q.correct)?q.correct:(hasKey(q.correctAnswer)?q.correctAnswer:(hasKey(q.answers)?q.answers:q.answer));};
   if(type==="tf"){
-    const expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
+    let expected=answerKey();
+    if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     if(expected===undefined||expected===null)return 0;
     let target;
-    if(typeof expected==="boolean")target=expected?0:1;
-    else if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)target=q.options.indexOf(expected);
+    if(typeof expected==="boolean"){
+      const labels=Array.isArray(q.options)?q.options:[];
+      const semanticIndex=labels.findIndex(function(value){return expected?/^(верно|верный|true|да|правда|истина)$/i.test(String(value).trim()):/^(неверно|неверный|false|нет|ложь)$/i.test(String(value).trim());});
+      target=semanticIndex>=0?semanticIndex:(expected?0:1);
+    } else if(typeof expected==="string"&&Array.isArray(q.options)&&q.options.indexOf(expected)>=0)target=q.options.indexOf(expected);
     else target=Number(expected);
     return Number(answer)===target?1:0;
   }
   if(type==="num"){
-    const expected=q.answer!==undefined?q.answer:(q.correct!==undefined?q.correct:q.correctAnswer);
+    let expected=answerKey();
+    if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     const a=Number(String(answer).replace(",", ".")),b=Number(String(expected).replace(",", "."));
-    const tolerance=Math.max(0,Number(q.tol!==undefined?q.tol:q.tolerance)||0.01);
+    const rawTolerance=q.tol!==undefined&&q.tol!==null&&q.tol!==""?q.tol:(q.tolerance!==undefined&&q.tolerance!==null&&q.tolerance!==""?q.tolerance:0.01);
+    const parsedTolerance=Number(rawTolerance),tolerance=isFinite(parsedTolerance)&&parsedTolerance>=0?parsedTolerance:0.01;
     return isFinite(a)&&isFinite(b)&&Math.abs(a-b)<=tolerance?1:0;
   }
   if(type==="multi"){
-    let expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:(q.answers!==undefined?q.answers:q.answer));
+    let expected=answerKey();
     if(!Array.isArray(answer)||!Array.isArray(expected))return 0;
-    if(expected.length&&typeof expected[0]==="string"&&q.options&&q.options.length)expected=expected.map(function(value){const index=q.options.indexOf(value);return index<0?value:index;});
+    if(q.options&&q.options.length)expected=expected.map(function(value){if(q.options.indexOf(value)>=0)return q.options.indexOf(value);const index=Number(value);return Number.isInteger(index)&&index>=0&&index<q.options.length?index:value;});
     const a=answer.map(String).sort(),b=expected.map(String).sort();
     return a.length===b.length&&a.every(function(value,index){return value===b[index];})?1:0;
   }
   if(type==="order"){
-    const expected=q.correctOrder||q.correct||q.answer||q.items||[];
+    const expected=Array.isArray(q.correctOrder)?q.correctOrder:(Array.isArray(q.correct)?q.correct:(Array.isArray(q.correctAnswer)?q.correctAnswer:(Array.isArray(q.answers)?q.answers:(Array.isArray(q.answer)?q.answer:q.items||[]))));
     if(!Array.isArray(answer)||!Array.isArray(expected)||!expected.length)return 0;
-    const right=answer.filter(function(value,index){return String(value)===String(expected[index]);}).length;
+    const right=answer.filter(function(value,index){return String(value===undefined||value===null?"":value).trim()===String(expected[index]===undefined||expected[index]===null?"":expected[index]).trim();}).length;
     return right/expected.length;
   }
   if(type==="match"){
     const pairs=q.pairs||[];
     if(Array.isArray(answer)&&pairs.length)return pairs.filter(function(pair,index){return String(answer[index])===String(pair.right);}).length/pairs.length;
-    const expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
+    let expected=answerKey();
+  if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
     if(!Array.isArray(answer)||!Array.isArray(expected)||!expected.length)return 0;
     return answer.filter(function(value,index){return String(value)===String(expected[index]);}).length/expected.length;
   }
-  const expected=q.correct!==undefined?q.correct:(q.correctAnswer!==undefined?q.correctAnswer:q.answer);
+  let expected=answerKey();
+  if(Array.isArray(expected)){if(expected.length!==1)return 0;expected=expected[0];}
   if(typeof expected==="string"&&q.options&&q.options.indexOf(expected)>=0)return Number(answer)===q.options.indexOf(expected)?1:0;
   return Number(answer)===Number(expected)?1:0;
 }
@@ -3029,7 +3189,7 @@ function adminCreateUser_(data) {
     if (userByEmail_(email)) throw new Error("Пользователь с таким email уже существует.");
     const salt = Utilities.getUuid() + Utilities.getUuid(), sheet = users_(), map = headerMap_(sheet);
     const row = new Array(sheet.getLastColumn()).fill("");
-    const values = {Email:email,PasswordHash:passwordHash_(password,salt),Name:name,Group:group,Role:role,
+    const values = {Email:email,PasswordHash:passwordHash_(password,salt),Name:name,Group:normalizeGroup_(group),Role:role,
       UpdatedAt:new Date().toISOString(),Courses:role==="admin"?"*":"",Payload:"",PasswordSalt:salt};
     Object.keys(values).forEach(function(key){if(map[key]!==undefined)row[map[key]]=values[key];});
     sheet.appendRow(row);

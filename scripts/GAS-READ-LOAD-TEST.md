@@ -27,6 +27,12 @@ Remove-Item Env:GAS_WEB_APP_URL, Env:GAS_TEST_TOKENS, Env:GAS_COURSE_ID, Env:GAS
 
 Set `GAS_TEST_TOKENS` to a comma-separated list of session tokens. The script cycles through them. For a realistic 40-student run, use 40 distinct test-student tokens; with one token, the test stresses the API using one account and is not a full multi-account simulation.
 
+## Local CI dry-run
+
+The repository test `node --test scripts/gas-read-load-test.test.mjs` runs 40 virtual students against a local HTTP stub. It verifies that requests overlap, each student uses a distinct fixture token, only the three read actions are called, and failures are reported. The load runner permits HTTP only for loopback hosts when `GAS_ALLOW_LOCAL_HTTP_TEST=1` is explicitly set; ordinary runs still require HTTPS.
+
+This local dry-run validates the load-test tool, not the deployed Apps Script capacity.
+
 ## What it measures
 
 Each virtual student sequentially calls:

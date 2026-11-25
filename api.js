@@ -92,7 +92,7 @@ window.API = {
  submitCustomTest:function(data){return fetchAPI("submitCustomTest",data||{},"POST");},
  backupQuestionBanks:function(backupId,banks){return fetchAPI("backupQuestionBanks",{backupId:backupId,banks:banks},"POST",120000);},
  restoreQuestionBanks:function(backupId){return fetchAPI("restoreQuestionBanks",{backupId:backupId},"POST",120000);},
- importQuestionBanks:function(banks){return fetchAPI("importQuestionBanks",{banks:banks},"POST",120000);},
+ importQuestionBanks:function(banks,backupId){return fetchAPI("importQuestionBanks",{banks:banks,backupId:backupId||""},"POST",120000);},
  getQuestionBank:function(courseId,bankId){return fetchAPI("getQuestionBank",{courseId:courseId,bankId:bankId||""},"GET");},
  saveQuestionBank:function(courseId,bankId,questions){return fetchAPI("saveQuestionBank",{courseId:courseId,bankId:bankId,questions:questions||[]},"POST",120000);},
  uploadExamFile:function(courseId,bankId,fileName,dataUrl){return fetchAPI("uploadExamFile",{courseId:courseId,bankId:bankId,fileName:fileName,dataUrl:dataUrl},"POST",60000);},

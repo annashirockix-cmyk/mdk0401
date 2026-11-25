@@ -21,7 +21,12 @@ if (!endpoint || !tokens.length || !courseId || !testId) {
 let baseUrl;
 try {
   baseUrl = new URL(endpoint);
-  if (baseUrl.protocol !== "https:") throw new Error("HTTPS required");
+  const localHost = ["localhost", "127.0.0.1", "[::1]"].includes(baseUrl.hostname);
+  const explicitlyAllowedLocalHttp = env.GAS_ALLOW_LOCAL_HTTP_TEST === "1" &&
+    baseUrl.protocol === "http:" && localHost;
+  if (baseUrl.protocol !== "https:" && !explicitlyAllowedLocalHttp) {
+    throw new Error("HTTPS required (HTTP is allowed only for explicit localhost tests)");
+  }
 } catch {
   console.error("GAS_WEB_APP_URL must be a valid HTTPS Apps Script /exec URL.");
   process.exit(2);

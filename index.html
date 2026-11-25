@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="./games-visual.css?v=5">
     <link rel="stylesheet" href="./room-visual.css?v=1">
     <link rel="stylesheet" href="./lecture-methodical.css">
+    <link rel="stylesheet" href="./materials-student-friendly.css?v=1">
     <link rel="stylesheet" href="./lecture-visual-atlas.css?v=6">
     <link rel="stylesheet" href="./portal-ux.css?v=2">
 </head>
@@ -37,7 +38,9 @@
             </form>
             <form id="portalRegisterForm" class="login-card" style="display:none;margin-top:12px;">
                 <h3>Регистрация студента</h3>
-                <input id="regName" type="text" placeholder="ФИО" required>
+                <input id="regSurname" type="text" autocomplete="family-name" placeholder="Фамилия" required>
+                <input id="regFirstName" type="text" autocomplete="given-name" placeholder="Имя" required>
+                <input id="regPatronymic" type="text" autocomplete="additional-name" placeholder="Отчество (необязательно)">
                 <input id="regGroup" type="text" placeholder="Группа" required>
                 <input id="regEmail" type="email" placeholder="Email" required>
                 <input id="regPassword" type="password" minlength="8" placeholder="Пароль (не менее 8 символов)" required>
@@ -147,7 +150,7 @@
         <nav id="crumbs" aria-label="Навигационная цепочка" style="padding:10px 20px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--border)"></nav>
         <div id="app" tabindex="-1" style="padding:20px;max-width:1200px;margin:0 auto;width:100%"></div>
     </main>
-    <script src="./api.js?v=51"></script>
+    <script src="./api.js?v=52"></script>
     <script src="./data-global.js?v=6"></script>
     <script src="./data-0701.js?v=23"></script>
     <script src="./gcode-reference.js?v=3"></script>
@@ -160,6 +163,7 @@
     <script src="./sprut-tp-document-examples.js?v=3"></script>
     <script src="./mastercam-practicals.js?v=3"></script>
     <script src="./data-material.js?v=8"></script>
+    <script src="./data-material-easy.js?v=1"></script>
     <script src="./data-english-basic.js?v=2"></script>
     <script src="./data-english-technical.js?v=6"></script>
     <script src="./english-data-global.js?v=1"></script>
@@ -196,7 +200,7 @@
     <script src="./lecture-enrichment.js?v=2"></script>
     <script src="./lecture-visual-atlas.js?v=5"></script>
     <script src="./offline-materials-cache.js?v=1"></script>
-    <script src="./app.js?v=75"></script>
+    <script src="./app.js?v=76"></script>
     <script src="./student-recommendations.js?v=3"></script>
     <script src="./app-offline-login.js?v=5"></script>
     <script src="./media-fix.js?v=5"></script>
@@ -210,8 +214,8 @@
     <script src="./easter-eggs.js"></script>
     <script src="./exam_0701.js?v=5"></script>
     <script src="./exam_0401.js?v=4"></script>
-    <script src="./exam_0201.js?v=3"></script>
-    <script src="./exam_0202.js?v=3"></script>
+    <script src="./exam_0201.js?v=4"></script>
+    <script src="./exam_0202.js?v=4"></script>
     <script src="./final-exam-question-types.js?v=2"></script>
     <script src="./final.js?v=25"></script>
     <script src="./games.js?v=6"></script>
@@ -221,12 +225,12 @@
     <script src="./network-party-games.js?v=8"></script>
     <script src="./coop-detective.js?v=9"></script>
     <script src="./games-ui-enhance.js?v=3"></script>
-    <script src="./journal.js?v=10"></script>
+    <script src="./journal.js?v=11"></script>
     <script src="./rating.js?v=2"></script>
     <script src="./rating-subjects.js?v=3"></script>
-    <script src="./reports.js?v=16"></script>
+    <script src="./reports.js?v=17"></script>
     <script src="./teacher-tasks.js?v=13"></script>
-    <script src="./teacher-dashboard.js?v=12"></script>
+    <script src="./teacher-dashboard.js?v=13"></script>
     <script src="./student-progress.js?v=5"></script>
     <script src="./learning-path.js?v=1"></script>
     <script src="./learning-missions.js?v=1"></script>
@@ -242,7 +246,7 @@
     <script src="./portal-final.js?v=23"></script>
     <script src="./course-admin.js?v=30"></script>
     <script src="./course-editor-ux.js?v=11"></script>
-    <script src="./teacher-controls.js?v=27"></script>
+    <script src="./teacher-controls.js?v=34"></script>
     <script src="./proctor-monitor.js?v=8"></script>
     <script src="./flashcard-editor.js?v=8"></script>
     <script src="./teacher-game.js?v=7"></script>
@@ -254,7 +258,7 @@
      <script src="./english-vpr-engine.js?v=31"></script>
     <script src="./english-proficiency-lab.js?v=5"></script>
     <script src="./course-announcements.js?v=4"></script>
-    <script src="./access.js?v=8"></script>
+    <script src="./access.js?v=9"></script>
     <script src="./account.js?v=3"></script>
     <script src="./workbook-editorial.js?v=6"></script>
     <script src="./workbooks.js?v=69"></script>
@@ -288,7 +292,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=421', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=431', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>

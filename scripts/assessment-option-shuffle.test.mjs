@@ -216,7 +216,7 @@ test("local practice question helper reorders options and moves the answer key w
 });
 
 test("all course practice exam renderers invoke the shared option shuffle", () => {
-  for (const file of ["exam_0201.js","exam_0202.js","exam_0401.js","exam_0701.js"]) {
+  for (const file of ["exam_0401.js","exam_0701.js"]) {
     const source = fs.readFileSync(path.join(root,file),"utf8");
     assert.match(source,/window\._shuffleQuestionOptions\) questions\.forEach\(window\._shuffleQuestionOptions\)/,file+" must shuffle options");
     assert.match(source,/window\._shuffleQuestionOptions\) allQ\.forEach\(window\._shuffleQuestionOptions\)/,file+" standalone exam route must shuffle options");
@@ -463,4 +463,39 @@ test("English VPR Basic and Technical seed content remains track-specific", () =
   const basic = new Set(stems(seeds.basic));
   const overlap = stems(seeds.technical).filter((stem) => basic.has(stem));
   assert.deepEqual(overlap, [], "Basic and Technical VPR prompts/passages must remain distinct");
+});
+
+
+const hasFinalAnswerKey = new Function(
+  extract(code, "finalQuestionType_") + "\n" + extract(code, "finalQuestionHasAnswerKey_") + "; return finalQuestionHasAnswerKey_;"
+)();
+
+test("protected final exam bank excludes questions without valid automatic answer keys", () => {
+  assert.equal(hasFinalAnswerKey({type:"mc",q:"Q",options:["A","B"],correct:1}),true);
+  assert.equal(hasFinalAnswerKey({type:"mc",q:"Q",options:["A","B"]}),false);
+  assert.equal(hasFinalAnswerKey({type:"mc",q:"Q",options:["A","B"],correct:4}),false);
+  assert.equal(hasFinalAnswerKey({type:"multi",q:"Q",options:["A","B","C"],correct:[0,2]}),true);
+  assert.equal(hasFinalAnswerKey({type:"multi",q:"Q",options:["A","B","C"],correct:[0,0]}),false);
+  assert.equal(hasFinalAnswerKey({type:"num",q:"Q",answer:"12,5"}),true);
+  assert.equal(hasFinalAnswerKey({type:"num",q:"Q",answer:"не число"}),false);
+  assert.equal(hasFinalAnswerKey({type:"order",q:"Q",items:["A","B"],correctOrder:["B","A"]}),true);
+  assert.equal(hasFinalAnswerKey({type:"order",q:"Q",items:["A","B"]}),false);
+  assert.equal(hasFinalAnswerKey({type:"match",q:"Q",pairs:[{left:"A",right:"1"},{left:"B",right:"2"}]}),true);
+  assert.equal(hasFinalAnswerKey({type:"tf",q:"Q",correct:true}),true);
+  assert.equal(hasFinalAnswerKey({type:"written",q:"Explain"}),false);
+});
+
+
+test("MDK 02.01 and 02.02 legacy entrypoints route to protected assessment pages", () => {
+  for (const [file, suffix, training, final] of [
+    ["exam_0201.js", "0201", "#/training/02.01", "#/final/02.01"],
+    ["exam_0202.js", "0202", "#/training/02.02", "#/final/02.02"]
+  ]) {
+    const source = fs.readFileSync(path.join(root, file), "utf8");
+    assert.doesNotMatch(source, /\bcorrect\s*:/, file + " must not expose answer keys");
+    assert.match(source, new RegExp("window\\.renderTraining_" + suffix + " = function"));
+    assert.match(source, new RegExp("window\\.renderFinal_" + suffix + " = function"));
+    assert.ok(source.includes('window.location.hash = "' + training + '"'));
+    assert.ok(source.includes('window.location.hash = "' + final + '"'));
+  }
 });

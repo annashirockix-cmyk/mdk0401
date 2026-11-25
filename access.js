@@ -8,8 +8,8 @@
   const allowed=actor.role==="admin"?ALL:ALL.filter(c=>(actor.courses||[]).includes(c[0]));
   app.innerHTML='<a class="backlink" href="#/">← На главную</a><section class="hero"><h1>🔐 Доступ к дисциплинам и приглашения</h1><p>Назначайте студентам доступ к МДК и создавайте ссылки/QR-коды для регистрации.</p></section>'+
    '<div class="module"><h3>Доступ студентов к дисциплинам</h3><p style="color:var(--muted)">Отмечайте дисциплины для каждого студента. Преподаватель управляет только своими дисциплинами, администратор — всеми.</p><div id="accessStudents">Загрузка списка…</div></div>'+
-   '<div class="module"><h3>Приглашение новых студентов</h3><p>Ссылка и QR-код создают учётную запись студента и сразу выдают доступ к выбранным дисциплинам.</p><div id="inviteCourseList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px"></div>'+
-   '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><label>Срок действия, дней <input id="inviteDays" class="self-input" type="number" min="1" max="90" value="30" style="width:110px"></label><label>Регистраций <input id="inviteUses" class="self-input" type="number" min="1" max="500" value="30" style="width:110px"></label><button class="btn" id="makeInvite">Создать ссылку и QR-код</button></div><div id="inviteOutput" style="margin-top:16px"></div></div>'+
+   '<div class="module"><h3>Приглашение новых студентов</h3><p>Пригласительная ссылка создаёт учётную запись студента и сразу выдаёт доступ к выбранным дисциплинам.</p><div id="inviteCourseList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px"></div>'+
+   '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><label>Срок действия, дней <input id="inviteDays" class="self-input" type="number" min="1" max="90" value="30" style="width:110px"></label><label>Регистраций <input id="inviteUses" class="self-input" type="number" min="1" max="500" value="30" style="width:110px"></label><button class="btn" id="makeInvite">Создать приглашение</button></div><div id="inviteOutput" style="margin-top:16px"></div></div>'+
    '<div class="module"><h3>Созданные приглашения</h3><div id="inviteList">Загрузка…</div></div>';
   const courseBox=document.getElementById("inviteCourseList");
   courseBox.innerHTML=allowed.map(c=>'<label style="padding:8px;background:var(--card-soft);border-radius:8px"><input type="checkbox" class="inviteCourse" value="'+c[0]+'"> '+c[1]+'</label>').join("")||"<p>Вам не назначены дисциплины.</p>";
@@ -47,10 +47,10 @@
    window.API.createInvite({courses:courses,days:Number(document.getElementById("inviteDays").value),maxUses:Number(document.getElementById("inviteUses").value)}).then(r=>{
     if(!r.success)throw new Error(r.error||"Не удалось создать приглашение.");
     const url=location.origin+location.pathname+"?invite="+encodeURIComponent(r.code);
-    document.getElementById("inviteOutput").innerHTML='<div class="module" style="display:flex;gap:18px;flex-wrap:wrap;align-items:center"><div><b>Ссылка для регистрации</b><p><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(url)+'</a></p><button class="btn ghost" id="copyInvite">Скопировать ссылку</button><p style="color:var(--muted)">Дисциплины: '+esc(courses.join(", "))+'<br>Регистраций: '+r.maxUses+'<br>Истекает: '+new Date(r.expiresAt).toLocaleDateString("ru-RU")+'</p></div><p style="font-size:13px;color:var(--muted)">Ссылка содержит персональный код приглашения. Код не передаётся сторонним QR-сервисам. При необходимости создайте QR-код локальным инструментом.</p></div>';
+    document.getElementById("inviteOutput").innerHTML='<div class="module" style="display:flex;gap:18px;flex-wrap:wrap;align-items:center"><div><b>Ссылка для регистрации</b><p><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(url)+'</a></p><button class="btn ghost" id="copyInvite">Скопировать ссылку</button><p style="color:var(--muted)">Дисциплины: '+esc(courses.join(", "))+'<br>Регистраций: '+r.maxUses+'<br>Истекает: '+new Date(r.expiresAt).toLocaleDateString("ru-RU")+'</p></div><p style="font-size:13px;color:var(--muted)">Ссылка содержит персональный код приглашения. Передавайте её только тем студентам, которым предназначен доступ.</p></div>';
     document.getElementById("copyInvite").onclick=()=>{if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>window.showToast("Ссылка скопирована","ok"));else prompt("Скопируйте ссылку",url);};
     loadInvites();
-   }).catch(e=>alert(e.message)).finally(()=>{btn.disabled=false;btn.textContent="Создать ссылку и QR-код";});
+   }).catch(e=>alert(e.message)).finally(()=>{btn.disabled=false;btn.textContent="Создать приглашение";});
   };
   loadStudents();loadInvites();
  };
