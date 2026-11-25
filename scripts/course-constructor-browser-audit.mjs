@@ -366,14 +366,33 @@ try {
       return originalFetch(url, options);
     };
     window.API = window.API || {};
-    window.API.getTopicAccess = async () => ({ success: true, open: true });
+    window.__topicAccessAudit = { calls: 0, course: "", topic: "", userRole: "" };
+    window.API.getTopicAccess = async (course, topic) => {
+      window.__topicAccessAudit.calls++;
+      window.__topicAccessAudit.course = String(course);
+      window.__topicAccessAudit.topic = String(topic);
+      window.__topicAccessAudit.userRole = String(window.state.user && window.state.user.role || "");
+      return { success: true, open: true };
+    };
     window.API.getTestAttemptStatus = async () => ({ allowed: true, used: 0, limit: 1 });
     window.API.requestTestAttempts = async () => ({ success: true });
     // Stub access before changing the hash so the router cannot start a real, racing request.
     window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
-  await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
+  try {
+    await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")), undefined, { timeout: 10000 });
+  } catch (error) {
+    console.log("TOPIC_RENDER_DIAGNOSTICS", JSON.stringify(await page.evaluate(() => ({
+      access: window.__topicAccessAudit,
+      student: window.state && window.state.student,
+      user: window.state && window.state.user,
+      topicRecords: (window.customContent && window.customContent.topics || []).map(x => ({id:x.id,mdkId:x.mdkId})),
+      lectureRecords: (window.customContent && window.customContent.lectures || []).map(x => ({id:x.id,topicId:x.topicId,mdkId:x.mdkId,title:x.title})),
+      appText: (document.getElementById("app")?.innerText || "").slice(0, 500)
+    }))));
+    throw error;
+  }
   const lectureVisible = await page.locator("#topicContent").innerText();
   assert.ok(lectureVisible.includes("Тестовая лекция конструктора"));
   assert.ok(lectureVisible.includes("Методическое пособие к теме"), "Student lecture view must list the attached course document");
