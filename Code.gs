@@ -1041,22 +1041,84 @@ function getProctorEvents_(data) {
   rows.sort(function(a,b){return String(b.serverTime).localeCompare(String(a.serverTime));});
   return {success:true,events:rows.slice(0,200)};
 }
-function getTutoringLink_(data) {
-  const user=auth_(data),courseId=String(data.courseId||"");
-  if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
-  const raw=settingValue_("tutoring:"+courseId);
-  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:true};
+function tutoringSettingKey_(teacherEmail) {
+  return "tutoring:teacher:" + email_(teacherEmail);
+}
+function parseTutoringLink_(raw) {
+  let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:false,audienceType:"all",audienceValue:""};
   if(raw){try{value=Object.assign(value,JSON.parse(raw)||{});}catch(e){}}
-  return {success:true,link:value};
+  value.url=String(value.url||"").trim();
+  if(value.url&&!/^https?:\/\//i.test(value.url)){value.url="";value.visible=false;}
+  value.title=String(value.title||"Запись на дополнительные занятия").slice(0,120);
+  value.description=String(value.description||"").slice(0,500);
+  value.visible=value.visible===true;
+  value.audienceType=["all","group","individual"].indexOf(String(value.audienceType||"all"))>=0?String(value.audienceType||"all"):"all";
+  value.audienceValue=String(value.audienceValue||"").trim().slice(0,200);
+  if(value.audienceType!=="all"&&!value.audienceValue)value.visible=false;
+  return value;
+}
+function legacyTutoringLink_(courseId,teacherEmail) {
+  const sheet=settings_(),values=sheet.getDataRange().getValues(),m=headerMap_(sheet),key="tutoring:"+String(courseId||"");
+  for(let i=1;i<values.length;i++){
+    if(String(values[i][m.Key]||"")===key&&email_(values[i][m.UpdatedBy])===email_(teacherEmail)){
+      return parseTutoringLink_(String(values[i][m.Value]||""));
+    }
+  }
+  return parseTutoringLink_("");
+}
+function getTutoringLink_(data) {
+  const user=auth_(data),courseId=String(data.courseId||"").trim();
+  if(!courseId||!hasCourseAccess_(user,courseId))throw new Error("Нет доступа к дисциплине.");
+  if(user.role==="teacher"||user.role==="admin"){
+    const personalRaw=settingValue_(tutoringSettingKey_(user.email));
+    const link=personalRaw?parseTutoringLink_(personalRaw):legacyTutoringLink_(courseId,user.email);
+    return {success:true,link:link,links:[]};
+  }
+  if(user.role!=="student")throw new Error("Запись доступна только обучающимся и преподавателям.");
+  const sheet=users_(),lastUserRow=sheet.getLastRow(),values=lastUserRow?sheet.getRange(1,1,lastUserRow,7).getValues():[],m=headerMap_(sheet);
+  const settingsSheet=settings_(),settingsValues=settingsSheet.getDataRange().getValues(),sm=headerMap_(settingsSheet),settings=Object.create(null);
+  for(let i=1;i<settingsValues.length;i++)settings[String(settingsValues[i][sm.Key]||"")]={value:String(settingsValues[i][sm.Value]||""),updatedBy:email_(settingsValues[i][sm.UpdatedBy])};
+  const links=[];
+  for(let i=1;i<values.length;i++){
+    const row=values[i],role=String(row[m.Role]||"").toLowerCase(),teacherEmail=email_(row[m.Email]);
+    if(role!=="teacher"||!teacherEmail)continue;
+    const teacher={email:teacherEmail,role:role,courses:String(row[m.Courses]||"")};
+    if(!hasCourseAccess_(teacher,courseId))continue;
+    const personal=settings[tutoringSettingKey_(teacherEmail)];
+    const legacy=settings["tutoring:"+courseId];
+    const link=personal?parseTutoringLink_(personal.value):legacy&&legacy.updatedBy===teacherEmail?parseTutoringLink_(legacy.value):parseTutoringLink_("");
+    if(!link.visible||!link.url)continue;
+    const audienceType=link.audienceType||"all",audienceValue=String(link.audienceValue||"").trim();
+    if(audienceType==="group"&&audienceValue.toLocaleLowerCase("ru")!==String(user.group||"").trim().toLocaleLowerCase("ru"))continue;
+    if(audienceType==="individual"&&email_(audienceValue)!==email_(user.email))continue;
+    links.push({teacherName:String(row[m.Name]||"Преподаватель"),title:link.title,description:link.description,url:link.url});
+  }
+  links.sort(function(a,b){return a.teacherName.localeCompare(b.teacherName,"ru");});
+  return {success:true,links:links};
 }
 function saveTutoringLink_(data) {
-  const courseId=String(data.courseId||""),teacher=editor_(data,courseId);
+  const courseId=String(data.courseId||"").trim(),teacher=editor_(data,courseId);
+  if(teacher.role!=="teacher"&&teacher.role!=="admin")throw new Error("Настроить личную запись может только преподаватель.");
   const url=String(data.url||"").trim(),title=String(data.title||"Запись на дополнительные занятия").trim().slice(0,120);
-  const description=String(data.description||"").trim().slice(0,500),visible=data.visible!==false;
+  const description=String(data.description||"").trim().slice(0,500),visible=data.visible===true;
   if(url&&!/^https?:\/\//i.test(url))throw new Error("Ссылка должна начинаться с https:// или http://.");
   if(url.length>1000)throw new Error("Слишком длинная ссылка.");
-  writeSetting_("tutoring:"+courseId,JSON.stringify({url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible}),teacher.email);
-  return {success:true,link:{url:url,title:title,description:description,visible:visible}};
+  const audienceType=String(data.audienceType||"all"),audienceValue=String(data.audienceValue||"").trim();
+  if(["all","group","individual"].indexOf(audienceType)<0)throw new Error("Выбран неизвестный тип адресата.");
+  if(audienceType==="group"||audienceType==="individual"){
+    if(!audienceValue)throw new Error("Укажите группу или электронную почту студента.");
+    const usersSheet=users_(),rows=usersSheet.getDataRange().getValues(),m=headerMap_(usersSheet);
+    const target=rows.slice(1).find(function(row){
+      if(String(row[m.Role]||"").toLowerCase()!=="student"||!hasCourseAccess_({role:"student",courses:String(row[m.Courses]||"")},courseId))return false;
+      return audienceType==="group"
+        ? String(row[m.Group]||"").trim().toLocaleLowerCase("ru")===audienceValue.toLocaleLowerCase("ru")
+        : email_(row[m.Email])===email_(audienceValue);
+    });
+    if(!target)throw new Error(audienceType==="group"?"В этой дисциплине не найдена указанная учебная группа.":"Студент с этой почтой не найден среди обучающихся по дисциплине.");
+  }
+  const link={url:url,title:title||"Запись на дополнительные занятия",description:description,visible:visible&&!!url,audienceType:audienceType,audienceValue:audienceType==="all"?"":audienceValue.slice(0,200)};
+  writeSetting_(tutoringSettingKey_(teacher.email),JSON.stringify(link),teacher.email);
+  return {success:true,link:link};
 }
 
 /* ---------- In-app notifications ---------- */

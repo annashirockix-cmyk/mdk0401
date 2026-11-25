@@ -110,6 +110,7 @@ const STATIC_ASSETS = [
   './portal-genz.js',
   './home-cleanup.js',
   './home-dashboard.js',
+  './tutoring.js',
   './certificate-supplement.js',
   './avatar-studio.js',
   './reward-collection.js',

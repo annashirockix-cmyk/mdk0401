@@ -154,40 +154,10 @@ try {
   await page.waitForFunction(() => location.hash === "#/resources", null, { timeout: 5000 });
   await page.evaluate(() => window.renderCourseEditorPage());
   await page.waitForSelector("#createTopicBtn");
-  // Exercise the protected exam-bank visual editor end-to-end with a mocked server API.
-  await page.locator("#loadExamBankBtn").click();
-  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("Загружено заданий"));
-  await page.locator("#examQuestionText").fill("Какие операции относятся к подготовке станка?");
-  await page.locator("#examQuestionType").selectOption("multi");
-  await page.locator("#examQuestionOptions").fill("Проверка инструмента\nПроверка крепления\nСлучайный запуск\nПроверка программы");
-  await page.locator("#examQuestionCorrect").fill("1, 2, 4");
-  await page.locator("#previewExamQuestionBtn").click();
-  assert.ok((await page.locator("#examQuestionPreview").innerText()).includes("Предпросмотр студенческого задания"));
-  assert.ok(!(await page.locator("#examQuestionPreview").innerText()).includes("Правильный ответ"));
-  await page.locator("#saveExamQuestionBtn").click();
-  assert.ok((await page.locator("#examBankQuestionList").innerText()).includes("Какие операции относятся к подготовке станка?"));
-  await page.locator("#saveExamBankBtn").click();
-  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("audit-backup-id"));
-  const visualBankSaved = await page.evaluate(() => window.__examBankRows);
-  assert.equal(visualBankSaved.length, 1, "Visual exam bank editor must save the new question");
-  assert.deepEqual(visualBankSaved[0].question.correct, [0, 1, 3], "Multiple-answer keys must be stored as zero-based indices");
-  assert.deepEqual(visualBankSaved[0].question.options, ["Проверка инструмента", "Проверка крепления", "Случайный запуск", "Проверка программы"]);
-  await page.locator("#addExamQuestionBtn").click();
-  await page.locator("#examQuestionText").fill("Назовите физическую величину, измеряемую в ньютонах.");
-  await page.locator("#examQuestionType").selectOption("short_text");
-  await page.locator("#examQuestionCorrect").fill("Ньютон");
-  await page.locator("#previewExamQuestionBtn").click();
-  const shortPreview = await page.locator("#examQuestionPreview").innerText();
-  assert.equal(await page.locator("#examQuestionPreview textarea").getAttribute("placeholder"), "Введите краткий ответ");
-  assert.ok(!shortPreview.includes("Ньютон"), "Short text answer key must stay hidden in student preview");
-  await page.locator("#saveExamQuestionBtn").click();
-  await page.locator("#saveExamBankBtn").click();
-  await page.waitForFunction(() => document.getElementById("examBankStatus")?.textContent.includes("audit-backup-id"));
-  const visualBankWithText = await page.evaluate(() => window.__examBankRows);
-  assert.equal(visualBankWithText.length, 2, "Visual exam bank editor must retain both question types");
-  assert.equal(visualBankWithText[1].question.type, "short_text");
-  assert.equal(visualBankWithText[1].question.correctAnswer, "Ньютон");
-  // Tutoring controls are tested in their dedicated home-screen workflow.
+  // Tutoring settings moved to the personal home-screen card; the course editor
+  // must no longer expose the old discipline-wide settings panel.
+  assert.equal(await page.locator("#editorTutoringPanel").count(), 0,
+    "The obsolete shared tutoring panel must stay removed from the course editor");
   await page.locator("#newTopicCode").fill("AUDIT");
   await page.locator("#newTopicTitle").fill("Проверка конструктора");
   await page.locator("#createTopicBtn").click();

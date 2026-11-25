@@ -17,7 +17,7 @@ test("dashboard uses existing role state and only shows teacher actions to staff
   assert.match(script, /var student = state\.student/);
   assert.match(script, /var staff = state\.staff \|\| state\.teacher \|\| state\.admin/);
   assert.match(script, /if \(isTeacher\)/);
-  assert.match(script, /Дополнительные занятия/);
+  assert.ok(!script.includes("Дополнительные занятия") && !script.includes("#/tutoring"));
   assert.match(script, /if \(isAdmin\).*Администрирование/s);
 });
 
@@ -45,7 +45,7 @@ test("every dashboard shortcut resolves through an installed portal route", () =
   const routeOwners = [app, teacherControls, courseAdmin, laboratory].join("\n");
   [
     "#/teacher-dashboard", "#/journal", "#/teacher-tasks", "#/course-editor",
-    "#/question-bank", "#/tutoring", "#/admin", "#/grades", "#/resources",
+    "#/question-bank", "#/admin", "#/grades", "#/resources",
     "#/laboratory", "#/profile"
   ].forEach(route => {
     assert.ok(script.includes(route), "dashboard shortcut missing: " + route);

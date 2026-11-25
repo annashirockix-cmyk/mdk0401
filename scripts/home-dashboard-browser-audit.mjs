@@ -31,7 +31,8 @@ try {
   const teacher = await render({ staff: { role: "teacher", courses: ["07.01"] }, activeCourseId: "07.01" });
   const teacherLinks = await teacher.locator("#homeDashboard a").evaluateAll(nodes => nodes.map(a => a.getAttribute("href")));
   assert.ok(teacherLinks.includes("#/teacher-dashboard") && teacherLinks.includes("#/journal") && teacherLinks.includes("#/course-editor"));
-  assert.ok(teacherLinks.includes("#/question-bank") && teacherLinks.includes("#/tutoring"));
+  assert.ok(teacherLinks.includes("#/question-bank"));
+  assert.ok(!teacherLinks.includes("#/tutoring"), "Tutoring is now a home-screen card, not a dashboard route shortcut");
   assert.ok(!teacherLinks.includes("#/admin"), "teacher must not see admin shortcut");
   await teacher.close();
 

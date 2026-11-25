@@ -949,18 +949,17 @@ test("English VPR grades numbered choices correctly and renders per-gap option l
 });
 
 
-test("admin role is recognized for teacher navigation and tutoring is shown only when configured", () => {
+test("admin role is recognized and tutoring controls live on the home screen, not in the drawer or course editor", () => {
   const app = read("app.js");
-  assert.match(app, /currentState\.user && currentState\.user\.role/);
-  assert.match(app, /currentRole === "teacher" \|\| currentRole === "admin"/);
-  assert.match(app, /tutoringLink\.style\.display=isTeacher\?"flex":"none"/);
+  assert.ok(app.includes("currentState.user && currentState.user.role"));
+  assert.ok(app.includes('currentRole === "teacher" || currentRole === "admin"'));
+  assert.ok(!app.includes("menuTutoring"));
   const controls = read("teacher-controls.js");
-  assert.match(controls, /editorTutoringPanel/);
-  assert.match(controls, /editorCourse/);
-  assert.match(controls, /getTutoringLink\(cid\)/);
-  assert.match(controls, /saveTutoringLink\(cid/);
-  assert.match(controls, /Показывать вкладку студентам/);
-  assert.match(app, /link\.visible!==false&&String\(link\.url\|\|""\)\.trim\(\)/);
+  assert.ok(!/editorTutoringPanel|renderTutoringPage|tutorUrl|saveTutorLink/.test(controls));
+  const ui = read("tutoring.js");
+  for (const phrase of ["tutoringHomeCard", "window.API.getTutoringLink", "window.API.saveTutoringLink", "Кому показывать ссылку", "Только выбранной группе", "Только одному студенту"]) {
+    assert.ok(ui.includes(phrase), "missing tutoring UI contract: " + phrase);
+  }
 });
 
 

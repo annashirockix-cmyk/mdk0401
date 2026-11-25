@@ -66,7 +66,6 @@
       addAction(actions, "Конструктор заданий", "Создание и проверка учебных работ", "#/teacher-tasks", "🧩");
       addAction(actions, "Редактор курсов", "Лекции, темы, тесты и материалы", "#/course-editor", "✍️");
       addAction(actions, "Банк вопросов", "Управление вопросами для контроля знаний", "#/question-bank", "🗂️");
-      addAction(actions, "Дополнительные занятия", "Настройка консультаций и записи студентов", "#/tutoring", "🎓");
       if (isAdmin) addAction(actions, "Администрирование", "Системные настройки и управление доступом", "#/admin", "⚙️");
     } else {
       var firstTopic = null;
