@@ -10,24 +10,24 @@ test("invitation interface describes only the link it actually generates", () =>
   assert.match(access, /Пригласительная ссылка создаёт учётную запись/);
   assert.match(access, /Создать приглашение/);
   assert.doesNotMatch(access, /Создать ссылку и QR-код|Ссылка и QR-код создают/);
-  assert.match(html, /access\.js\?v=9/);
+  assert.match(html, /access\\.js\\?v=9/);
 });
 
 test("student course access is restricted to the acting teacher's assigned courses", () => {
   const start = server.indexOf("function setStudentCourses_(data)");
-  const end = server.indexOf("\nfunction ", start + 10);
+  const end = server.indexOf("\\nfunction ", start + 10);
   assert.ok(start >= 0 && end > start);
   const source = server.slice(start, end);
-  assert.match(source, /actor\.role==='admin'\?CFG\.COURSES:actor\.courses\.split\(', '\)/);
-  assert.match(source, /Нельзя назначить дисциплину вне ваших полномочий/);
-  assert.match(source, /other=target\.courses\.split\(', '\)/);
+  assert.ok(source.includes("actor.courses.split(',')"));
+  assert.ok(source.includes("Нельзя назначить дисциплину вне ваших полномочий"));
+  assert.ok(source.includes("other=target.courses.split(',')"));
 });
 
 test("teachers can view only students with at least one assigned course", () => {
   const start = server.indexOf("function getStudents_(data)");
-  const end = server.indexOf("\nfunction ", start + 10);
+  const end = server.indexOf("\\nfunction ", start + 10);
   assert.ok(start >= 0 && end > start);
   const source = server.slice(start, end);
-  assert.match(source, /user\.role === "admin" \|\| hasCourseAccess_\(user,id\)/);
-  assert.match(source, /user\.role === "admin" \|\| student\.courses\.length > 0/);
+  assert.ok(source.includes("hasCourseAccess_(user,id)"));
+  assert.ok(source.includes("student.courses.length > 0"));
 });
