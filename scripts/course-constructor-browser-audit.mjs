@@ -210,7 +210,7 @@ try {
 
   await page.locator("#lectureTitle").fill("Тестовая лекция конструктора");
   await page.locator("#lectureBody").fill('<h3>Проверка отображения</h3><p>Содержимое тестовой лекции.</p><img src="https://example.invalid/diagram.png" alt="Схема" onerror="window.__previewXss=1">');
-  await page.getByRole("button", { name: "Показать предпросмотр" }).click();
+  await page.getByTitle("Показать или скрыть предпросмотр лекции").click();
   const previewFrame = page.locator('#ceLecturePreviewPanel iframe[title="Предпросмотр содержимого лекции"]');
   const lecturePreview = await previewFrame.getAttribute("srcdoc");
   assert.ok(lecturePreview.includes("Тестовая лекция конструктора"), "Lecture preview must include the current title");
