@@ -17,7 +17,7 @@ try {
     typeof window.renderFlashcardEditorPage === "function" && window.MDK_DATA && window.MDK_DATA["07.01"]);
   await page.evaluate(async () => {
     document.getElementById("loginOverlay")?.remove();
-    window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
+    window.state = { user: { role: "teacher" }, staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
     window.__constructorStore = [];
     window.customContent = { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
@@ -138,6 +138,7 @@ try {
   assert.ok(await page.locator("#menuFlashcardEditor").isVisible(), "teacher must find the flashcard editor");
   await page.evaluate(() => {
     window.state.staff = null;
+    window.state.user = { role: "student" };
     window.state.student = { role: "student", courses: ["07.01"], email: "audit-student@example.invalid" };
     window.updateMenuVisibility();
   });
@@ -147,6 +148,7 @@ try {
   assert.ok((await page.locator("#drawerSearchResults").innerText()).includes("Ничего не найдено"));
   await page.evaluate(() => {
     window.state.student = null;
+    window.state.user = { role: "teacher" };
     window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
     window.updateMenuVisibility();
   });
@@ -272,6 +274,10 @@ try {
     window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
       student: null, activeCourseId: "07.01", results: {}, xp: 0 };
     window.customContent = window.customContent || { topics: [], lectures: [], tests: [], flashcards: [], files: [] };
+    // Restore a teacher identity after the preceding student-only topic access check.
+    window.state.user = { role: "teacher" };
+    window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
+    window.state.student = null;
     const appNode = document.getElementById("app");
     const originalAppNode = appNode;
     const documentObserver = new MutationObserver(() => {
@@ -351,21 +357,44 @@ try {
 
   await page.evaluate(() => {
     window.state.staff = null;
+    window.state.user = { role: "student" };
     window.state.student = { role: "student", courses: ["07.01"] };
     const topicId = document.getElementById("fcTopic").value;
-    window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
     const originalFetch = window.fetch.bind(window);
     window.fetch = async (url, options) => {
       if (String(url).includes("action=getTopicAccess")) return new Response(JSON.stringify({ success: true, open: true }), { status: 200, headers: { "Content-Type": "application/json" } });
       return originalFetch(url, options);
     };
     window.API = window.API || {};
-    window.API.getTopicAccess = async () => ({ success: true, open: true });
+    window.__topicAccessAudit = { calls: 0, course: "", topic: "", userRole: "" };
+    window.API.getTopicAccess = async (course, topic) => {
+      window.__topicAccessAudit.calls++;
+      window.__topicAccessAudit.course = String(course);
+      window.__topicAccessAudit.topic = String(topic);
+      window.__topicAccessAudit.userRole = String(window.state.user && window.state.user.role || "");
+      return { success: true, open: true };
+    };
     window.API.getTestAttemptStatus = async () => ({ allowed: true, used: 0, limit: 1 });
     window.API.requestTestAttempts = async () => ({ success: true });
+    // Stub access before changing the hash so the router cannot start a real, racing request.
+    window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
-  await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
+  // The student lecture list opens compactly; explicitly open the additional lecture before checking its body.
+  await page.locator("#topicContent details").filter({ hasText: "Тестовая лекция конструктора" }).locator("summary").click();
+  try {
+    await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")), undefined, { timeout: 10000 });
+  } catch (error) {
+    console.log("TOPIC_RENDER_DIAGNOSTICS", JSON.stringify(await page.evaluate(() => ({
+      access: window.__topicAccessAudit,
+      student: window.state && window.state.student,
+      user: window.state && window.state.user,
+      topicRecords: (window.customContent && window.customContent.topics || []).map(x => ({id:x.id,mdkId:x.mdkId})),
+      lectureRecords: (window.customContent && window.customContent.lectures || []).map(x => ({id:x.id,topicId:x.topicId,mdkId:x.mdkId,title:x.title})),
+      appText: (document.getElementById("app")?.innerText || "").slice(0, 500)
+    }))));
+    throw error;
+  }
   const lectureVisible = await page.locator("#topicContent").innerText();
   assert.ok(lectureVisible.includes("Тестовая лекция конструктора"));
   assert.ok(lectureVisible.includes("Методическое пособие к теме"), "Student lecture view must list the attached course document");

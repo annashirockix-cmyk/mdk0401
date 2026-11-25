@@ -26,3 +26,37 @@ test("drawer restores focus after overlay close and moves focus to content after
   assert.match(app, /var main = document\.getElementById\("app"\);\s*if \(main\) main\.focus\(\)/);
   assert.match(app, /if \(event\.key === "Escape" && drawer\.classList\.contains\("open"\)\)/);
 });
+
+test("long lecture lists open compactly and provide accessible full-text search", () => {
+  assert.match(app, /Поиск по лекциям темы/);
+  assert.match(app, /Найти лекцию по названию или тексту/);
+  assert.match(app, /card\.textContent[\s\S]*toLocaleLowerCase\("ru-RU"\)/);
+  assert.match(app, /details\.open = lectureCards\.length === 0/);
+  assert.match(app, /lectureSearchCount\.textContent = visible \+ " из " \+ lectureCards\.length/);
+});
+
+test("course navigation escapes dynamic labels and encodes topic route segments", () => {
+  assert.match(app, /var escapeText = window\.escapeHtml/);
+  assert.match(app, /escapeText\(section\.title\)/);
+  assert.match(app, /escapeText\(topic\.title\)/);
+  assert.match(app, /escapeText\(topic\.code\)/);
+  assert.match(app, /encodeURIComponent\(mdkId\).*encodeURIComponent\(topic\.id\)/);
+  assert.match(app, /data-course-id=/);
+  assert.doesNotMatch(app, /onclick="window\.state\.activeCourseId=/);
+});
+
+test("topic headings render dynamic topic names as text nodes", () => {
+  assert.match(app, /topicHeading\.textContent = String\(topic\.code/);
+  assert.doesNotMatch(app, /neon-text">\$\{topic\.code\} \$\{topic\.title\}/);
+});
+
+test("course plan provides accessible search across topic names and codes", () => {
+  assert.match(app, /id="courseTopicSearch"/);
+  assert.match(app, /Поиск по темам дисциплины/);
+  assert.match(app, /aria-describedby="courseTopicSearchCount"/);
+  assert.match(app, /data-course-topic/);
+  assert.match(app, /toLocaleLowerCase\("ru-RU"\)/);
+  assert.match(app, /card\.hidden = !match/);
+  assert.match(app, /section\.hidden = !Array\.prototype\.some/);
+  assert.match(app, /topicSearchCount\.textContent = visible \+ " из " \+ topicCards\.length/);
+});

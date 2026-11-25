@@ -1,9 +1,9 @@
 name: Portal syntax checks
 on:
   push:
-    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments, feat/assignment-submission-attachments]
+    branches: [main, master, feat/edit-core-topics-and-exams, feat/pwa-install-experience, feat/secure-offline-materials-cache, feat/accessible-portal-navigation, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments, feat/assignment-submission-attachments, feat/exam-document-attachments, feat/materials-science-student-friendly]
   pull_request:
-    branches: [main, master, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments]
+    branches: [main, master, feat/home-dashboard-responsive-audit, feat/lecture-editor-preview, feat/course-document-attachments, feat/exam-document-attachments]
   workflow_dispatch:
 permissions:
   contents: read
@@ -31,6 +31,8 @@ jobs:
           node --check < Code.gs
           node --check < EnglishVPR-Sheets.gs
           node --check scripts/gas-read-load-test.mjs
+      - name: Check Apps Script read-only concurrency load harness
+        run: node --test scripts/gas-read-load-test.test.mjs
       - name: Check PWA install experience
         run: node --test scripts/pwa-install.test.mjs
       - name: Check offline cache integrity
@@ -39,6 +41,10 @@ jobs:
         run: node --test scripts/offline-materials-cache.test.mjs
       - name: Check accessible portal navigation
         run: node --test scripts/portal-navigation-a11y.test.mjs
+      - name: Check access and invitation integrity
+        run: node --test scripts/access-invitation-integrity.test.mjs
+      - name: Check per-teacher tutoring link privacy
+        run: node --test scripts/tutoring-privacy-integrity.test.mjs
       - name: Check role-aware home dashboard and route targets
         run: node --test scripts/home-dashboard.test.mjs
       - name: Check notification center contract
@@ -61,13 +67,35 @@ jobs:
           node --test scripts/english-basic-semester-draft.test.mjs
           node --test scripts/assessment-option-shuffle.test.mjs
       - name: Check public assessment data syntax
-        run: node --check data-0701.js && node --check data-0401.js && node --check data-0201.js && node --check data-0202.js && node --check data-mastercam.js && node --check data-sprut-tp.js && node --check data-material.js && node --check data-safety.js && node --check data-metrology.js && node --check data-extra.js && node --check data-english-basic.js && node --check data-english-technical.js && node --check english-assessment-data.js && node --check tests-extra.js && node --check course-assessment-advanced.js && node --check hard-questions.js && node --check challenge-questions.js && node --check sprut-tp-question-bank.js && node --check exam_0401.js && node --check exam_0201.js && node --check exam_0202.js
+        run: node --check data-0701.js && node --check data-material-easy.js && node --check data-0401.js && node --check data-0201.js && node --check data-0202.js && node --check data-mastercam.js && node --check data-sprut-tp.js && node --check data-material.js && node --check data-safety.js && node --check data-metrology.js && node --check data-extra.js && node --check data-english-basic.js && node --check data-english-technical.js && node --check english-assessment-data.js && node --check tests-extra.js && node --check course-assessment-advanced.js && node --check hard-questions.js && node --check challenge-questions.js && node --check sprut-tp-question-bank.js && node --check exam_0401.js && node --check exam_0201.js && node --check exam_0202.js
+      - name: Check student-friendly materials science course
+        run: node --test scripts/materials-student-friendly.test.mjs
       - name: Check workbook cache and print layout
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
         run: node --test scripts/course-content-editor.test.mjs
+      - name: Check MDK 02.01 content integrity
+        run: node --test scripts/mdk-0201-content-integrity.test.mjs
+      - name: Check MDK 02.02 content integrity
+        run: node --test scripts/mdk-0202-content-integrity.test.mjs
+      - name: Check MDK 04.01 content integrity
+        run: node --test scripts/mdk-0401-content-integrity.test.mjs
+      - name: Check MDK 07.01 content integrity
+        run: node --test scripts/mdk-0701-content-integrity.test.mjs
+      - name: Check metrology course content integrity
+        run: node --test scripts/metrology-content-integrity.test.mjs
+      - name: Check occupational safety course content integrity
+        run: node --test scripts/occupational-safety-content-integrity.test.mjs
       - name: Check protected course document attachments
         run: node --test scripts/course-document-attachments.test.mjs
+      - name: Check protected course attachment runtime permissions
+        run: node --test scripts/course-document-attachments-runtime.test.mjs
+      - name: Check protected exam document attachments
+        run: node --test scripts/exam-document-attachments.test.mjs
+      - name: Check protected exam attachment runtime permissions
+        run: node --test scripts/exam-document-attachments-runtime.test.mjs
+      - name: Check stacked attachment integration
+        run: node --test scripts/stacked-attachments-integration.test.mjs
       - name: Install Playwright CLI for browser audit
         run: npm install --global playwright@1.62.0
       - name: Install Chromium for workbook print audit
@@ -80,6 +108,7 @@ jobs:
           for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/portal-navigation-browser-audit.mjs
           PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/home-dashboard-browser-audit.mjs
+          PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/materials-course-browser-audit.mjs
       - name: Run real-browser A4 and PDF audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/workbook-audit-server.log 2>&1 &
@@ -112,6 +141,8 @@ jobs:
           retention-days: 7
       - name: Run real-browser assignment attachment audit
         run: PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/assignment-attachments-browser-audit.mjs
+      - name: Run real-browser final exam attachment audit
+        run: PLAYWRIGHT_MODULE_PATH="$(npm root -g)/playwright" node scripts/final-exam-attachments-browser-audit.mjs
       - name: Run real-browser certificate A4 landscape audit
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/certificate-audit-server.log 2>&1 &
