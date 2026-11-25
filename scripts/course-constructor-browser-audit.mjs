@@ -357,6 +357,7 @@ try {
 
   await page.evaluate(() => {
     window.state.staff = null;
+    window.state.user = { role: "student" };
     window.state.student = { role: "student", courses: ["07.01"] };
     const topicId = document.getElementById("fcTopic").value;
     window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
