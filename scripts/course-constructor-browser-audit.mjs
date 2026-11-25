@@ -15,6 +15,27 @@ try {
   assert.ok(response && response.ok(), `Portal did not load: ${response?.status()}`);
   await page.waitForFunction(() => typeof window.renderCourseEditorPage === "function" &&
     typeof window.renderFlashcardEditorPage === "function" && window.MDK_DATA && window.MDK_DATA["07.01"]);
+  const topicRegistry = await page.evaluate(() => Object.entries(window.MDK_DATA || {}).map(([courseId, course]) => {
+    const topics = (course.sections || []).flatMap(section => (section.topics || []).map(topic => ({
+      id: String(topic.id || "").trim(), code: String(topic.code || "").trim(), title: String(topic.title || "").trim()
+    })));
+    return { courseId, sectionCount: (course.sections || []).length, topicCount: topics.length,
+      uniqueIds: new Set(topics.map(topic => topic.id).filter(Boolean)).size,
+      missingIds: topics.filter(topic => !topic.id).length,
+      missingTitles: topics.filter(topic => !topic.title).length,
+      duplicateIds: topics.map(topic => topic.id).filter((id, index, all) => id && all.indexOf(id) !== index),
+      topics };
+  }));
+  console.log("COURSE_TOPIC_REGISTRY", JSON.stringify(topicRegistry.map(({topics, ...summary}) => summary)));
+  for (const course of topicRegistry) {
+    assert.equal(course.missingIds, 0, `Course ${course.courseId} has topics without stable IDs`);
+    assert.equal(course.missingTitles, 0, `Course ${course.courseId} has topics without titles`);
+    assert.equal(course.uniqueIds, course.topicCount, `Course ${course.courseId} has duplicate topic route IDs`);
+    assert.deepEqual(course.duplicateIds, [], `Course ${course.courseId} contains duplicate topic IDs`);
+  }
+  const pfi = topicRegistry.find(course => course.courseId === "PFI");
+  assert.ok(pfi, "Teacher-managed PFI course must be present in the registry");
+  assert.equal(pfi.topicCount, 0, "PFI is intentionally empty until the teacher adds its curriculum");
   await page.evaluate(async () => {
     document.getElementById("loginOverlay")?.remove();
     window.state = { staff: { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" },
