@@ -50,8 +50,8 @@ try {
   await forms.nth(1).locator('input[name="feedback"]').fill("Программа выполнена корректно.");
   await forms.nth(0).locator('button[type="submit"]').click();
   await page.waitForFunction(() => window.__gradeCalls.length === 1);
-  await page.waitForFunction(() => document.querySelectorAll("#taList form.taGrade").length === 2);
-  await forms.nth(0).locator('button[type="submit"]').click();
+  await page.waitForFunction(() => document.querySelectorAll("#taList form.taGrade").length === 1);
+  await page.locator('#taList form.taGrade button[type="submit"]').click();
   await page.waitForFunction(() => window.__gradeCalls.length === 2);
   await page.waitForFunction(() => document.querySelectorAll("#taList form.taGrade").length === 0);
 
