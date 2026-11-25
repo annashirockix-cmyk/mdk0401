@@ -88,18 +88,6 @@ window.updateMenuVisibility = function() {
         link.style.display=(activeEnglish||(examOrLab&&hasEnglishAccess))?"flex":"none";
     });
     var portfolioLink=document.querySelector('.drawer-item[href="#/portfolio"]'); if(portfolioLink) portfolioLink.style.display=(window.state.student||isTeacher)?"flex":"none";
-    var tutoringLink=document.getElementById("menuTutoring");
-    if(tutoringLink){
-        tutoringLink.style.display=isTeacher?"flex":"none";
-        if(currentState.student && window.API && window.API.getTutoringLink){
-            var tutoringCourse=String(currentState.activeCourseId||"07.01");
-            window.API.getTutoringLink(tutoringCourse).then(function(r){
-                if(String((window.state&&window.state.activeCourseId)||"07.01")!==tutoringCourse)return;
-                var link=r&&r.link;
-                tutoringLink.style.display=(link&&link.visible!==false&&String(link.url||"").trim())?"flex":"none";
-            }).catch(function(){tutoringLink.style.display="none";});
-        }
-    }
     if (window.updatePortalNavigation) window.updatePortalNavigation();
 };
 
