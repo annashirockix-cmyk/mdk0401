@@ -1426,10 +1426,10 @@ function setupLogin() {
     var hideReg=document.getElementById("hideRegisterBtn");if(hideReg)hideReg.onclick=function(){regForm.style.display="none";form.style.display="block";};
     if(regForm)regForm.onsubmit=function(e){
       e.preventDefault();var btn=document.getElementById("btnRegister");
-      var name=document.getElementById("regName").value.trim(),group=document.getElementById("regGroup").value.trim(),email=document.getElementById("regEmail").value.trim(),pass=document.getElementById("regPassword").value,invite=document.getElementById("regInvite").value.trim();
-      if(!invite){alert("Введите код приглашения.");return;}if(pass.length<8){alert("Пароль должен содержать не менее 8 символов.");return;}
+      var surname=document.getElementById("regSurname").value.trim(),firstName=document.getElementById("regFirstName").value.trim(),group=document.getElementById("regGroup").value.trim(),email=document.getElementById("regEmail").value.trim(),pass=document.getElementById("regPassword").value,invite=document.getElementById("regInvite").value.trim();
+      if(!surname||!firstName){alert("Укажите фамилию и имя. Оба поля обязательны.");return;}if(!invite){alert("Введите код приглашения.");return;}if(pass.length<8){alert("Пароль должен содержать не менее 8 символов.");return;}
       btn.disabled=true;btn.textContent="Регистрация…";
-      window.API.register(email,pass,name,group,invite).then(function(res){
+      window.API.register(email,pass,surname,firstName,group,invite).then(function(res){
         if(!res||!res.success)throw new Error(res&&res.error||"Не удалось зарегистрироваться.");
         return window.API.login(email,pass);
       }).then(function(res){if(!res||!res.success)throw new Error(res&&res.error||"Регистрация выполнена. Теперь войдите.");applyAuthSession(res,email);})
