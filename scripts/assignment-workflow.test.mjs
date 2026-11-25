@@ -582,6 +582,7 @@ test("assignment submission validates every selected file before uploading any a
   assert.ok(firstUpload > validation, "no attachment upload may begin before complete file validation");
   assert.ok(handler.includes("window.API.discardAssignmentAttachments(uploaded.slice())"), "partial uploads must be rolled back when submission fails");
   assert.ok(handler.includes("window.API.submitAssignment(form.dataset.id,form.elements.answer.value,uploaded.slice())"), "submitted attachment IDs must be a stable snapshot before the rollback list is cleared");
+  assert.ok(handler.indexOf("const uploaded=[];") >= 0 && handler.indexOf("const uploaded=[];") < handler.indexOf("try{"), "the rollback list must be declared outside try so the catch handler can access it");
 });
 
 test("failed assignment submissions roll back only the current student's pending uploads", () => {
