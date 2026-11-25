@@ -566,7 +566,7 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
 });
 
 test("assignment attachments are private, tied to the student and attempt, and readable by assigned staff", () => {
-  const { sandbox: api } = runtime();
+  const { sandbox: api, assignmentFiles } = runtime();
   const stored = new Map(), props = new Map();
   let fileNo = 0, privateFolder = false;
   const folder = {
@@ -603,6 +603,9 @@ test("assignment attachments are private, tied to the student and attempt, and r
     token: "teacherToken", courseId: "07.01", targetType: "group",
     targetValue: "ТО-21", title: "Практика с вложением", instructions: "Прикрепите фото."
   });
+  for(let i=0;i<5;i++)assignmentFiles.appendRow(["pending-"+i,created.id,"student@example.test","drive-pending-"+i,"pending.pdf","application/pdf",20,"pending","","",new Date().toISOString()]);
+  assert.throws(() => api.uploadAssignmentAttachment_({token:"studentToken",assignmentId:created.id,fileName:"proof.pdf",dataUrl:"data:application/pdf;base64,"+Buffer.from("%PDF-1.4\\nproof").toString("base64")}), /не более 5/);
+  assignmentFiles.rows.splice(1);
   const pdf = Buffer.from("%PDF-1.4\nproof").toString("base64");
   assert.throws(() => api.uploadAssignmentAttachment_({
     token: "studentToken", assignmentId: created.id, fileName: "spoofed.png",
