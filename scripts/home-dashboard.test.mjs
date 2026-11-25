@@ -17,7 +17,7 @@ test("dashboard uses existing role state and only shows teacher actions to staff
   assert.match(script, /var student = state\.student/);
   assert.match(script, /var staff = state\.staff \|\| state\.teacher \|\| state\.admin/);
   assert.match(script, /if \(isTeacher\)/);
-  assert.doesNotMatch(script, /Дополнительные занятия|#\\/tutoring/);
+  assert.ok(!script.includes("Дополнительные занятия") && !script.includes("#/tutoring"));
   assert.match(script, /if \(isAdmin\).*Администрирование/s);
 });
 
