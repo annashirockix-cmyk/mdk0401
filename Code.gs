@@ -2054,7 +2054,7 @@ function getCustomContent_(data) {
         if (!value || typeof value !== "object") return;
         if (Array.isArray(value)) { value.forEach(stripTestKeys_); return; }
         Object.keys(value).forEach(function(key) {
-          if (/^(correct|correctAnswer|correctIndex|correctOption|answer|answerIndex|answers|expectedAnswer|acceptedAnswers|correctOrder|key|solution|explanation|rationale|isCorrect|imageRef)$/i.test(key)) delete value[key];
+          if (/^(correct|answer|expected|accepted|solution|explanation|rationale|grading|rubric|key|iscorrect|feedback|teacherContent|teacherNotes|teacherKey|recordingScript|transcriptReveal|suggestedAnswers|markingGuide)/i.test(key) || /^imageRef$/i.test(key)) delete value[key];
           else stripTestKeys_(value[key]);
         });
       }
