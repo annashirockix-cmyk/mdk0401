@@ -95,8 +95,8 @@ window.updateMenuVisibility = function() {
             var tutoringCourse=String(currentState.activeCourseId||"07.01");
             window.API.getTutoringLink(tutoringCourse).then(function(r){
                 if(String((window.state&&window.state.activeCourseId)||"07.01")!==tutoringCourse)return;
-                var link=r&&r.link;
-                tutoringLink.style.display=(link&&link.visible!==false&&String(link.url||"").trim())?"flex":"none";
+                var link=r&&r.link,links=r&&Array.isArray(r.links)?r.links:[];
+                tutoringLink.style.display=(links.length>0||(link&&link.visible!==false&&String(link.url||"").trim()))?"flex":"none";
             }).catch(function(){tutoringLink.style.display="none";});
         }
     }
