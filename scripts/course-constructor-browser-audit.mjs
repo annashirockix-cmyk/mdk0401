@@ -382,7 +382,8 @@ try {
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
   // The student lecture list opens compactly; explicitly open the additional lecture before checking its body.
-  await page.locator("#topicContent details").filter({ hasText: "Тестовая лекция конструктора" }).locator("summary").click();
+  const additionalLecture = page.locator("#topicContent details").filter({ hasText: "Тестовая лекция конструктора" });
+  if (!(await additionalLecture.evaluate(node => node.open))) await additionalLecture.locator("summary").click();
   try {
     await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")), undefined, { timeout: 10000 });
   } catch (error) {
