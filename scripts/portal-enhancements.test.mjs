@@ -984,8 +984,8 @@ test("English VPR chooser checks server bank availability and imports only missi
   assert.ok(engine.includes("button.disabled=false;button.textContent=\"Открыть экзамен\""));
   assert.ok(engine.includes("Импортировать отсутствующие варианты"));
   assert.ok(engine.includes("Уже существующие банки не будут перезаписаны"));
-  assert.match(html, /english-vpr-engine\\.js\\?v=32/);
-  assert.match(html, /service-worker\\.js\\?v=422/);
+  assert.match(html, /english-vpr-engine\.js\?v=32/);
+  assert.match(html, /service-worker\.js\?v=422/);
   assert.match(sw, /portal-cache-v422/);
 });
 
