@@ -360,7 +360,6 @@ try {
     window.state.user = { role: "student" };
     window.state.student = { role: "student", courses: ["07.01"] };
     const topicId = document.getElementById("fcTopic").value;
-    window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
     const originalFetch = window.fetch.bind(window);
     window.fetch = async (url, options) => {
       if (String(url).includes("action=getTopicAccess")) return new Response(JSON.stringify({ success: true, open: true }), { status: 200, headers: { "Content-Type": "application/json" } });
@@ -370,6 +369,8 @@ try {
     window.API.getTopicAccess = async () => ({ success: true, open: true });
     window.API.getTestAttemptStatus = async () => ({ allowed: true, used: 0, limit: 1 });
     window.API.requestTestAttempts = async () => ({ success: true });
+    // Stub access before changing the hash so the router cannot start a real, racing request.
+    window.location.hash = "#/topic/" + window.state.activeCourseId + "/" + topicId + "/lectures";
     window.renderTopicPage(window.state.activeCourseId, topicId, "lectures");
   });
   await page.waitForFunction(() => Array.from(document.querySelectorAll("#topicContent .lec-content")).some(node => node.innerText.includes("Содержимое тестовой лекции")));
