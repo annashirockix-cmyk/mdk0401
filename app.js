@@ -833,10 +833,24 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
 
         if (tabName === 'lectures') {
             if (topic.lectures && topic.lectures.length) {
+                var lectureSearchWrap = document.createElement("div");
+                lectureSearchWrap.style.cssText = "display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px;";
+                var lectureSearch = document.createElement("input");
+                lectureSearch.type = "search";
+                lectureSearch.className = "input";
+                lectureSearch.placeholder = "Найти лекцию по названию или тексту…";
+                lectureSearch.setAttribute("aria-label", "Поиск по лекциям темы");
+                lectureSearch.style.cssText = "flex:1;min-width:220px;padding:11px 13px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);";
+                var lectureSearchCount = document.createElement("span");
+                lectureSearchCount.style.cssText = "font-size:13px;color:var(--muted);white-space:nowrap;";
+                lectureSearchWrap.appendChild(lectureSearch);
+                lectureSearchWrap.appendChild(lectureSearchCount);
+                contentArea.appendChild(lectureSearchWrap);
+                var lectureCards = [];
                 topic.lectures.forEach(lec => {
                     var details = document.createElement("details");
                     details.className = "lec-accordion";
-                    details.open = true;
+                    details.open = lectureCards.length === 0;
                     details.style.cssText = "margin-bottom:10px; background:var(--card); border:1px solid var(--border); border-radius:8px;";
                     var summary = document.createElement("summary");
                     summary.style.cssText = "padding:15px; font-weight:bold; cursor:pointer;";
@@ -888,7 +902,20 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                         });
                     }
                     contentArea.appendChild(details);
+                    lectureCards.push(details);
                 });
+                function filterLectures() {
+                    var query = String(lectureSearch.value || "").trim().toLocaleLowerCase("ru-RU");
+                    var visible = 0;
+                    lectureCards.forEach(function(card) {
+                        var matches = !query || String(card.textContent || "").toLocaleLowerCase("ru-RU").indexOf(query) !== -1;
+                        card.hidden = !matches;
+                        if (matches) visible++;
+                    });
+                    lectureSearchCount.textContent = visible + " из " + lectureCards.length + " лекций";
+                }
+                lectureSearch.addEventListener("input", filterLectures);
+                filterLectures();
             } else {
                 contentArea.innerHTML += "<p>Текстовых лекций нет.</p>";
             }
