@@ -604,8 +604,6 @@ test("assignment attachments are private, tied to the student and attempt, and r
     createFolder: () => folder, getFolderById: () => folder,
     getFileById: id => { if (!stored.has(id)) throw new Error("missing file"); return stored.get(id); }
   };
-  const filesSheet = makeSheet(["Id","AssignmentId","StudentEmail","DriveFileId","FileName","MimeType","Size","Status","SubmissionId","AttemptNo","CreatedAt"]);
-  api.assignmentFiles_ = () => filesSheet;
   api.Utilities.base64Decode = value => Array.from(Buffer.from(value, "base64"));
   api.Utilities.base64Encode = value => Buffer.from(value).toString("base64");
   api.Utilities.newBlob = (bytes, mime, name) => ({
