@@ -816,7 +816,13 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
 
     document.getElementById("crumbs").textContent = topic.code + " " + topic.title;
     app.appendChild(el(`<a class="backlink" href="#/" style="color:var(--accent);">← Назад к плану</a>`));
-    app.appendChild(el(`<section class="hero"><h1 class="neon-text">${topic.code} ${topic.title}</h1></section>`));
+    var topicHero = document.createElement("section");
+    topicHero.className = "hero";
+    var topicHeading = document.createElement("h1");
+    topicHeading.className = "neon-text";
+    topicHeading.textContent = String(topic.code || "") + " " + String(topic.title || "");
+    topicHero.appendChild(topicHeading);
+    app.appendChild(topicHero);
     
     var tabsHtml = `<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
         <button class="btn tab active" id="tab-lectures" onclick="window.switchTopicTab('lectures')">📖 Лекции</button>
