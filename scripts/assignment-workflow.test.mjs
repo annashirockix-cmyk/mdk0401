@@ -580,6 +580,54 @@ test("assignment submission validates every selected file before uploading any a
   const firstUpload = handler.indexOf('window.API.uploadAssignmentAttachment');
   assert.ok(validation >= 0, "all selected files must be size-checked before upload");
   assert.ok(firstUpload > validation, "no attachment upload may begin before complete file validation");
+  assert.ok(handler.includes("window.API.discardAssignmentAttachments(uploaded.slice())"), "partial uploads must be rolled back when submission fails");
+});
+
+test("failed assignment submissions roll back only the current student's pending uploads", () => {
+  const { sandbox: api, assignmentFiles } = runtime();
+  const stored = new Map(), props = new Map();
+  let fileNo = 0;
+  const folder = {
+    getId: () => "assignment-private-folder",
+    setSharing() {},
+    createFile(blob) {
+      const id = "drive-assignment-file-" + (++fileNo);
+      const file = { getId: () => id, getBlob: () => blob, setTrashed: value => { if (value) stored.delete(id); } };
+      stored.set(id, file);
+      return file;
+    }
+  };
+  api.PropertiesService = { getScriptProperties: () => ({
+    getProperty: key => props.get(key) || null,
+    setProperty: (key, value) => props.set(key, value)
+  }) };
+  api.DriveApp = {
+    Access: { PRIVATE: "PRIVATE" }, Permission: { NONE: "NONE" },
+    createFolder: () => folder, getFolderById: () => folder,
+    getFileById: id => { if (!stored.has(id)) throw new Error("missing file"); return stored.get(id); }
+  };
+  api.Utilities.base64Decode = value => Array.from(Buffer.from(value, "base64"));
+  api.Utilities.newBlob = (bytes, mime, name) => ({ bytes:Array.from(bytes), name, getBytes(){return this.bytes;}, getContentType(){return mime;} });
+  const created = api.createAssignment_({
+    token:"teacherToken",courseId:"07.01",targetType:"group",targetValue:"ТО-21",
+    title:"Проверка отмены вложений",instructions:"Прикрепите файл."
+  });
+  const pdf = Buffer.from("%PDF-1.4\\nproof").toString("base64");
+  const upload = api.uploadAssignmentAttachment_({
+    token:"studentToken",assignmentId:created.id,fileName:"pending.pdf",
+    dataUrl:"data:application/pdf;base64,"+pdf
+  });
+  assert.equal(stored.size,1);
+  assert.throws(() => api.discardAssignmentAttachments_({token:"otherStudentToken",attachmentIds:[upload.id]}),/доступ/);
+  assert.equal(stored.size,1,"another student must not be able to delete the pending file");
+  const cleanup = api.discardAssignmentAttachments_({token:"studentToken",attachmentIds:[upload.id]});
+  assert.deepEqual({success:cleanup.success,discarded:cleanup.discarded,kept:cleanup.kept},{success:true,discarded:1,kept:0});
+  assert.equal(stored.size,0,"the Drive file must be trashed during rollback");
+  const row = assignmentFiles.rows[1];
+  assert.equal(row[7],"discarded","the file record must no longer be pending");
+  assert.deepEqual(api.discardAssignmentAttachments_({token:"studentToken",attachmentIds:[upload.id]}),{success:true,discarded:0,kept:1},
+    "cleanup is idempotent and does not recreate or delete a file twice");
+  assert.throws(() => api.discardAssignmentAttachments_({token:"studentToken",attachmentIds:[]}),/от 1 до 5/);
 });
 
 test("Apps Script assignment functions do not write into Users.Payload", () => {
@@ -656,6 +704,8 @@ test("assignment attachments are private, tied to the student and attempt, and r
   assert.equal(api.getAssignments_({ token: "studentToken" }).assignments[0].submission.answer, "",
     "an attachment-only submission should be stored with an empty text answer");
   assert.equal(submitted.attachments.length, 1);
+  assert.deepEqual(api.discardAssignmentAttachments_({ token: "studentToken", attachmentIds: [upload.id] }), {success:true,discarded:0,kept:1},
+    "an attachment already linked to a submitted attempt must never be trashed");
   const studentView = api.getAssignments_({ token: "studentToken" }).assignments[0].submission;
   assert.equal(studentView.attachments[0].fileName, "proof.pdf");
   const teacherView = api.getAssignments_({ token: "teacherToken" }).assignments[0].submissions[0];
