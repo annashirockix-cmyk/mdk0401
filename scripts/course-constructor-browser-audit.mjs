@@ -138,6 +138,7 @@ try {
   assert.ok(await page.locator("#menuFlashcardEditor").isVisible(), "teacher must find the flashcard editor");
   await page.evaluate(() => {
     window.state.staff = null;
+    window.state.user = { role: "student" };
     window.state.student = { role: "student", courses: ["07.01"], email: "audit-student@example.invalid" };
     window.updateMenuVisibility();
   });
@@ -147,6 +148,7 @@ try {
   assert.ok((await page.locator("#drawerSearchResults").innerText()).includes("Ничего не найдено"));
   await page.evaluate(() => {
     window.state.student = null;
+    window.state.user = { role: "teacher" };
     window.state.staff = { role: "teacher", courses: ["07.01"], email: "audit-teacher@example.invalid" };
     window.updateMenuVisibility();
   });
