@@ -23,7 +23,9 @@ test("portal exposes a standards-based install prompt and mobile home-screen gui
   assert.ok(manifest.icons.some((icon) => icon.src === "icons/icon-192.png"));
   assert.ok(manifest.icons.some((icon) => icon.src === "icons/icon-512.png"));
   assert.match(worker, /portal-cache-v431/);
-  assert.match(html, /service-worker\.js\?v=431/);
+  const cacheVersion = worker.match(/portal-cache-v(\d+)/)?.[1];
+  assert.ok(cacheVersion, "service worker cache version must be declared");
+  assert.match(html, new RegExp("service-worker\\.js\\?v=" + cacheVersion));
   assert.match(worker, /\.\/pwa-install\.js/);
   assert.match(worker, /\.\/icons\/icon-192\.png/);
 });
