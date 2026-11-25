@@ -216,10 +216,11 @@ test("admin migration uploads every teacher companion in idempotent batches of a
   vm.runInNewContext(app.slice(start, end), { window });
   const result = await window.migrateEnglishTeacherMaterialsToServer();
 
-  assert.deepEqual(
-    { success: result.success, total: result.total, inserted: result.inserted, updated: result.updated, batches: result.batches },
-    { success: true, total: 51, inserted: 51, updated: 0, batches: 2 },
-  );
+  assert.equal(result.success, true);
+  assert.equal(result.total, 51);
+  assert.equal(result.inserted, 51);
+  assert.equal(result.updated, 0);
+  assert.equal(result.batches, 2);
   assert.deepEqual(calls.map((batch) => batch.length), [50, 1]);
   const all = calls.flat();
   assert.equal(new Set(all.map((item) => item.id)).size, 51);
