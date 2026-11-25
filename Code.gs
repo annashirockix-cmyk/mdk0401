@@ -2084,7 +2084,26 @@ function getCustomContent_(data) {
 
 /* ---------- Private built-in question bank ---------- */
 function questionBank_() { return ensureSheet_("QuestionBank"); }
-/** Read-only inventory of the protected question bank. Admin only. */
+function assertPortalPrivateFile_(file, folder, descriptionPrefix) {
+  if (!file || file.isTrashed()) throw new Error("Защищённый файл не найден или удалён.");
+  if (!folder || folder.getSharingAccess() !== DriveApp.Access.PRIVATE) {
+    throw new Error("Папка защищённых материалов должна быть закрыта для общего доступа.");
+  }
+  if (file.getSharingAccess() !== DriveApp.Access.PRIVATE) {
+    throw new Error("Файл имеет небезопасные настройки доступа.");
+  }
+  const folderId = folder.getId();
+  const parents = file.getParents();
+  let belongsToFolder = false;
+  while (parents.hasNext()) {
+    if (parents.next().getId() === folderId) belongsToFolder = true;
+  }
+  if (!belongsToFolder) throw new Error("Файл находится вне закрытой папки портала.");
+  if (descriptionPrefix && String(file.getDescription() || "").indexOf(descriptionPrefix) !== 0) {
+    throw new Error("Файл не привязан к указанной дисциплине и теме.");
+  }
+  return file;
+}
 function examFiles_() { return ensureSheet_("ExamFiles"); }
 function examFileFolder_() {
   const props=PropertiesService.getScriptProperties(),key="EXAM_DOCUMENT_FOLDER_ID";
@@ -3084,13 +3103,6 @@ function saveCustomContent_(data) {
     let targetRow = 0;
     for (let i = 1; i < values.length; i++) {
       if (String(values[i][0]) === id) {
-        if (type === "file") {
-          const fileMatch = String(data.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
-          if (!fileMatch) throw new Error("Для учебного файла допустима только внутренняя ссылка портала.");
-          const expectedCourse = normalizeCourseId_(courseId);
-          const expectedTopic = String(data.topicId || "");
-          assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + expectedCourse + ". Тема: " + expectedTopic + ".");
-        }
         if (!sameCourseId_(values[i][1], courseId) && user.role !== "admin") {
           throw new Error("Нельзя переносить материал между дисциплинами.");
         }
@@ -3099,16 +3111,16 @@ function saveCustomContent_(data) {
       }
     }
 
-    const payload = Object.assign({}, data);
-    ["token", "action", "id", "mdkId", "courseId", "topicId", "type", "title"].forEach(function (key) {
-      delete payload[key];
-    });
-
     if (type === "file") {
       const fileMatch = String(data.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
       if (!fileMatch) throw new Error("Для учебного файла допустима только внутренняя ссылка портала.");
       assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(data.topicId || "") + ".");
     }
+
+    const payload = Object.assign({}, data);
+    ["token", "action", "id", "mdkId", "courseId", "topicId", "type", "title"].forEach(function (key) {
+      delete payload[key];
+    });
 
     const row = [
       id, courseId, String(data.topicId || ""), type, String(data.title || ""),
