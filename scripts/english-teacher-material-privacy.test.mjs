@@ -36,7 +36,7 @@ function makeReader(role) {
     ["public-lesson","ENB","unit-1","lecture","Student lesson",
       JSON.stringify({body:"Public lesson",teacherNotes:"private note",suggestedAnswers:["private"],markingGuide:"private"})],
     ["public-test","ENB","unit-1","test","Student test",
-      JSON.stringify({questions:[{q:"Question",options:["A","B"],correct:1,explanation:"private",nested:{answerKey:"private",prompt:"keep"}}]})]
+      JSON.stringify({questions:[{q:"Question",options:["A","B"],correct:1,explanation:"private",nested:{answerKey:"private",teacherNotes:"private",recordingScript:"private",suggestedAnswers:["private"],prompt:"keep"}}]})]
   ];
   const sheet = {getDataRange:()=>({getValues:()=>rows.map(row=>row.slice())})};
   const users = {
@@ -68,7 +68,7 @@ test("student content API omits teacher-only records and strips private companio
   const exam = response.data.find(item => item.id === "public-test");
   assert.equal(exam.questions[0].correct, undefined);
   assert.equal(exam.questions[0].explanation, undefined);
-  assert.equal(exam.questions[0].nested.answerKey, undefined);
+  for (const key of ["answerKey","teacherNotes","recordingScript","suggestedAnswers"]) assert.equal(Object.hasOwn(exam.questions[0].nested,key),false,key + " must not reach student browser");
   assert.equal(exam.questions[0].nested.prompt, "keep");
 });
 
