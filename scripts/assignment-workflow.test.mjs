@@ -571,6 +571,17 @@ test("assignment UI, API wiring and offline cache stay connected", () => {
   assert.match(serviceWorker, /\.\/teacher-tasks\.js/);
 });
 
+test("assignment submission validates every selected file before uploading any attachment", () => {
+  const start = ui.indexOf('if(!staff)list.querySelectorAll(".taSubmit")');
+  const end = ui.indexOf('else list.querySelectorAll(".taGrade")', start);
+  assert.ok(start >= 0 && end > start, "student submission handler must exist");
+  const handler = ui.slice(start, end);
+  const validation = handler.indexOf('files.find(file=>file.size>3000000)');
+  const firstUpload = handler.indexOf('window.API.uploadAssignmentAttachment');
+  assert.ok(validation >= 0, "all selected files must be size-checked before upload");
+  assert.ok(firstUpload > validation, "no attachment upload may begin before complete file validation");
+});
+
 test("Apps Script assignment functions do not write into Users.Payload", () => {
   new vm.Script(backend, { filename: "Code.gs" });
   const start = backend.indexOf("function createAssignment_(data)");
