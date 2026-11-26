@@ -74,3 +74,44 @@ test("server filters tutoring links by course, selected group and individual stu
   currentUser={role:"student",email:"STUDENT-ONE@example.invalid",group:"25-ТМ",courses:"07.01"};
   assert.deepEqual(getTutoringLink({courseId:"07.01"}).links.map(link=>link.teacherName),["Преподаватель Б"]);
 });
+
+
+test("saving tutoring links enforces teacher role and validates the selected audience against the course", () => {
+  const source=read("Code.gs");
+  const start=source.indexOf("function saveTutoringLink_(data) {");
+  const end=source.indexOf("/* ---------- In-app notifications ---------- */",start);
+  assert.ok(start>=0&&end>start,"saveTutoringLink_ must be available");
+  const fnSource=source.slice(start,end);
+  const rows=[
+    ["Email","PasswordHash","Name","Group","Role","UpdatedAt","Courses"],
+    ["student@example.invalid","","Студент","24-ТМ","student","","07.01"],
+    ["other-course@example.invalid","","Студент другой дисциплины","24-ТМ","student","","04.01"]
+  ];
+  const sheet={getDataRange:()=>({getValues:()=>rows})};
+  const headerMap=()=>Object.fromEntries(rows[0].map((name,index)=>[name,index]));
+  let actor={role:"teacher",email:"teacher@example.invalid"};
+  let saved=null;
+  const save=new Function("editor_","users_","headerMap_","hasCourseAccess_","email_","tutoringSettingKey_","writeSetting_",fnSource+"; return saveTutoringLink_;")(
+    (_data,_course)=>actor,
+    ()=>sheet,
+    headerMap,
+    (user,course)=>String(user.courses||"").split(",").map(value=>value.trim()).includes(course),
+    value=>String(value||"").trim().toLowerCase(),
+    email=>"tutoring:teacher:"+String(email||"").trim().toLowerCase(),
+    (key,value,updatedBy)=>{saved={key,value:JSON.parse(value),updatedBy};}
+  );
+
+  assert.throws(()=>save({courseId:"07.01",url:"javascript:alert(1)",visible:true}),/Ссылка должна начинаться/);
+  assert.throws(()=>save({courseId:"07.01",url:"https://example.invalid",audienceType:"group",audienceValue:"24-ТМ "}),/не найдена указанная учебная группа/);
+  assert.throws(()=>save({courseId:"07.01",url:"https://example.invalid",audienceType:"individual",audienceValue:"other-course@example.invalid"}),/не найден среди обучающихся/);
+
+  actor={role:"student",email:"student@example.invalid"};
+  assert.throws(()=>save({courseId:"07.01",url:"https://example.invalid"}),/только преподаватель/);
+
+  actor={role:"teacher",email:"teacher@example.invalid"};
+  const result=save({courseId:"07.01",url:"https://example.invalid/book",title:"  Консультация  ",description:"  Время по договорённости  ",visible:true,audienceType:"individual",audienceValue:"STUDENT@example.invalid"});
+  assert.equal(result.success,true);
+  assert.equal(saved.key,"tutoring:teacher:teacher@example.invalid");
+  assert.equal(saved.updatedBy,"teacher@example.invalid");
+  assert.deepEqual(saved.value,{url:"https://example.invalid/book",title:"Консультация",description:"Время по договорённости",visible:true,audienceType:"individual",audienceValue:"STUDENT@example.invalid"});
+});
