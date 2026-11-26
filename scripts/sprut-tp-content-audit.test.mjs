@@ -45,8 +45,9 @@ test("СПРУТ-ТП содержит полный и согласованны�
 
 test("СПРУТ-ТП lectures do not contain duplicated scheme text disguised as a reference table", () => {
   const source = read("data-sprut-tp.js");
-  const malformedTables = source.match(/<h3>3\\. Справочная таблица<\\/h3><table>[\\s\\S]*?Сверьте этап[\\s\\S]*?<\\/table>/g) || [];
+  const tableBlocks = source.split("<h3>3. Справочная таблица</h3>").slice(1).map(part => part.split("</table>")[0]);
+  const malformedTables = tableBlocks.filter(block => block.includes("<table>") && block.includes("Сверьте этап"));
   assert.equal(malformedTables.length, 0, "replace generic one-row tables that merely repeat the scheme above");
-  assert.equal((source.match(/<h3>3\\. Контрольный список этапов<\\/h3>/g) || []).length, 10,
+  assert.equal(source.split("<h3>3. Контрольный список этапов</h3>").length - 1, 10,
     "ten duplicated tables should be replaced by a clear stage-checklist instruction");
 });
