@@ -223,7 +223,12 @@ try {
   assert.ok(topicId.startsWith("custom-"), "New topic was not added to the editor selectors");
 
   await page.locator("#lectureTitle").fill("Тестовая лекция конструктора");
-  await page.locator("#lectureBody").fill("<h3>Проверка отображения</h3><p>Содержимое тестовой лекции.</p>");
+  const lectureEditor = page.locator("#lectureEditor");
+  if (await lectureEditor.count()) {
+    await lectureEditor.fill("Проверка отображения. Содержимое тестовой лекции.");
+  } else {
+    await page.locator("#lectureBody").fill("<h3>Проверка отображения</h3><p>Содержимое тестовой лекции.</p>");
+  }
   await page.locator("#saveLectureBtn").click();
   await page.waitForFunction(() => document.getElementById("lectureStatus")?.textContent.includes("лекция сохранена"));
 
