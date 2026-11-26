@@ -3100,6 +3100,12 @@ function assertPortalPrivateFolder_(folder, parentFolder, descriptionPrefix) {
   if (descriptionPrefix && String(folder.getDescription() || "").indexOf(descriptionPrefix) !== 0) throw new Error("Папка видео не принадлежит этой записи.");
   return folder;
 }
+function trashCourseVideoFolder_(folder) {
+  if (!folder || folder.isTrashed()) return;
+  const files = folder.getFiles();
+  while (files.hasNext()) { try { files.next().setTrashed(true); } catch (e) {} }
+  folder.setTrashed(true);
+}
 function courseVideoSessionKey_(id) { return "COURSE_VIDEO_UPLOAD_" + String(id || ""); }
 function courseVideoSession_(data) {
   const user = auth_(data), id = String(data.uploadId || "");
@@ -3111,7 +3117,7 @@ function courseVideoSession_(data) {
   if (email_(session.ownerEmail || "") !== user.email) throw new Error("Этот сеанс загрузки принадлежит другому преподавателю.");
   if (Number(session.expiresAt || 0) < Date.now()) {
     props.deleteProperty(courseVideoSessionKey_(id));
-    try { DriveApp.getFolderById(session.folderId).setTrashed(true); } catch (e) {}
+    try { trashCourseVideoFolder_(DriveApp.getFolderById(session.folderId)); } catch (e) {}
     throw new Error("Время загрузки истекло. Начните загрузку заново.");
   }
   editor_(data, session.courseId);
@@ -3182,7 +3188,7 @@ function finishCourseVideoUpload_(data) {
     PropertiesService.getScriptProperties().deleteProperty(courseVideoSessionKey_(loaded.id));
     return { success: true, id: saved.id, fileName: session.fileName, mimeType: session.mimeType, size: session.size, chunkCount: session.chunkCount };
   } catch (error) {
-    try { folder.setTrashed(true); } catch (cleanupError) {}
+    try { trashCourseVideoFolder_(folder); } catch (cleanupError) {}
     PropertiesService.getScriptProperties().deleteProperty(courseVideoSessionKey_(loaded.id));
     throw error;
   }
@@ -3480,7 +3486,7 @@ function deleteCustomContent_(data) {
             try { assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(values[i][2] || "") + ".").setTrashed(true); }
             catch (fileError) { throw new Error("Не удалось удалить файл из Google Drive. Запись материала сохранена."); }
           } else if (videoMatch) {
-            try { DriveApp.getFolderById(videoMatch[1]).setTrashed(true); } catch (videoDeleteError) { throw new Error("Не удалось удалить видео из защищённого хранилища. Запись материала сохранена."); }
+            try { trashCourseVideoFolder_(DriveApp.getFolderById(videoMatch[1])); } catch (videoDeleteError) { throw new Error("Не удалось удалить видео из защищённого хранилища. Запись материала сохранена."); }
           } else if (cloudMatch) {
             try { teacherCloudDeleteFile_(cloudMatch[1], email_(values[i][6] || ""), cloudMatch[2]); }
             catch (fileError) { throw new Error("Не удалось удалить файл из личного облака. Запись материала сохранена: " + String(fileError.message || fileError).slice(0, 180)); }
