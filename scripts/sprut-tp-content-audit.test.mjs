@@ -41,6 +41,8 @@ test("СПРУТ-ТП содержит полный и согласованны�
   }
 
   assert.ok(Array.isArray(course.resources) && course.resources.length >= 4, "official and reference resources must remain available");
+  assert.ok(course.resources.some(item => item.url === "https://csprut.ru/common_news/tp14_release/"),
+    "official СПРУТ-ТП 14.0 release notes must be linked");
 });
 
 test("СПРУТ-ТП lectures do not contain duplicated scheme text disguised as a reference table", () => {
@@ -74,4 +76,14 @@ test("СПРУТ-ТП runtime question bank maps every topic to a non-empty asse
     allQuestions.push(...questions.map(question => question.q));
   }
   assert.equal(new Set(allQuestions).size, allQuestions.length, "question prompts must be unique across the course");
+});
+
+
+test("СПРУТ-ТП учебное дополнение отражает подтверждённые изменения версии 14.0", () => {
+  const source = read("sprut-tp-lecture-upgrade.js");
+  for (const phrase of ["Предварительный ТП", "Портфеля заказов", "модели расчёта норм времени", "расширение возможностей функции"]) {
+    assert.ok(source.includes(phrase), "version 14.0 study note must mention " + phrase);
+  }
+  assert.ok(source.includes("конфигурации, лицензии, настроек и прав пользователя"),
+    "version-specific features must be qualified by configuration and permissions");
 });
