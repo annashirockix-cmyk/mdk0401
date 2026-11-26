@@ -46,6 +46,16 @@ test("changing a user role to student requires an existing normalized group", ()
   assert.match(fn, /Перед назначением роли student укажите учебную группу в таблице пользователей/);
 });
 
+test("profile sync cannot change or clear a student's study group", () => {
+  const fn = extractFunction(server, "saveStudent_");
+  assert.match(fn, /const requestedGroup = normalizeGroupName_\(data\.group\)/);
+  assert.match(fn, /const existingGroup = normalizeGroupName_\(target\.group\)/);
+  assert.match(fn, /current\.role !== "admin" && requestedGroup !== existingGroup/);
+  assert.match(fn, /Изменять учебную группу может только администратор/);
+  assert.match(fn, /current\.role === "admin" && target\.role === "student" && !requestedGroup/);
+  assert.match(fn, /Для студента учебная группа обязательна/);
+});
+
 test("read-only load smoke test includes protected English VPR and semester reads", () => {
   assert.match(loadTest, /name: "getEnglishVprExam", params: \{ track: englishTrack \}/);
   assert.match(loadTest, /name: "getEnglishSemesterTests", params: \{ track: englishTrack \}/);
