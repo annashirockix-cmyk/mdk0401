@@ -57,6 +57,9 @@ const HEADERS = {
 /* ---------- HTTP entry points ---------- */
 
 function doGet(e) {
+  if (e && e.parameter && String(e.parameter.storageOAuthCallback || "") === "1") {
+    return cloudStorageOAuthCallback_(e.parameter);
+  }
   return handleRequest_(e);
 }
 
@@ -81,6 +84,10 @@ function handleRequest_(e) {
     let result;
 
     switch (action) {
+      case "getcloudstoragestatus": result = getCloudStorageStatus_(data); break;
+      case "begincloudstorageconnection": result = beginCloudStorageConnection_(data); break;
+      case "disconnectcloudstorage": result = disconnectCloudStorage_(data); break;
+      case "setdefaultcloudstorage": result = setDefaultCloudStorage_(data); break;
       case "login": result = login_(data); break;
       case "changecredentials": result = changeCredentials_(data); break;
       case "requestpasswordreset": result = requestPasswordReset_(data); break;
@@ -195,6 +202,161 @@ function handleRequest_(e) {
 function json_(value) {
   return ContentService.createTextOutput(JSON.stringify(value))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+
+/* ---------- Teacher-owned cloud storage connections ---------- */
+const CLOUD_STORAGE_PROVIDERS_ = {
+  google: {
+    label: "Google Drive",
+    clientIdKey: "CLOUD_GOOGLE_CLIENT_ID", clientSecretKey: "CLOUD_GOOGLE_CLIENT_SECRET",
+    authorize: "https://accounts.google.com/o/oauth2/v2/auth",
+    token: "https://oauth2.googleapis.com/token",
+    scope: "https://www.googleapis.com/auth/drive.file"
+  },
+  yandex: {
+    label: "Яндекс Диск",
+    clientIdKey: "CLOUD_YANDEX_CLIENT_ID", clientSecretKey: "CLOUD_YANDEX_CLIENT_SECRET",
+    authorize: "https://oauth.yandex.com/authorize",
+    token: "https://oauth.yandex.com/token",
+    scope: "cloud_api:disk.app_folder"
+  },
+  onedrive: {
+    label: "OneDrive",
+    clientIdKey: "CLOUD_ONEDRIVE_CLIENT_ID", clientSecretKey: "CLOUD_ONEDRIVE_CLIENT_SECRET",
+    authorize: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+    token: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+    scope: "offline_access Files.ReadWrite.AppFolder User.Read"
+  },
+  dropbox: {
+    label: "Dropbox",
+    clientIdKey: "CLOUD_DROPBOX_CLIENT_ID", clientSecretKey: "CLOUD_DROPBOX_CLIENT_SECRET",
+    authorize: "https://www.dropbox.com/oauth2/authorize",
+    token: "https://api.dropbox.com/oauth2/token",
+    scope: "files.content.write files.content.read account_info.read"
+  }
+};
+
+function cloudStorageKey_(email, provider) {
+  return "cloud_storage:" + String(provider || "").toLowerCase() + ":" + email_(email);
+}
+function cloudStorageDefaultKey_(email) {
+  return "cloud_storage_default:" + email_(email);
+}
+function cloudStorageProvider_(provider) {
+  const key = String(provider || "").toLowerCase();
+  const config = CLOUD_STORAGE_PROVIDERS_[key];
+  if (!config) throw new Error("Неизвестный сервис облачного хранения.");
+  return { key: key, config: config };
+}
+function cloudStorageRedirectUri_() {
+  return ScriptApp.getService().getUrl();
+}
+function getCloudStorageStatus_(data) {
+  const user = auth_(data);
+  if (user.role !== "teacher" && user.role !== "admin") throw new Error("Личные хранилища доступны только преподавателям.");
+  const props = PropertiesService.getScriptProperties();
+  const defaultProvider = props.getProperty(cloudStorageDefaultKey_(user.email)) || "";
+  const providers = {};
+  Object.keys(CLOUD_STORAGE_PROVIDERS_).forEach(function(key) {
+    const token = props.getProperty(cloudStorageKey_(user.email, key));
+    let connected = false;
+    if (token) {
+      try { const parsed = JSON.parse(token); connected = !!(parsed && parsed.refreshToken); } catch (e) {}
+    }
+    providers[key] = { label: CLOUD_STORAGE_PROVIDERS_[key].label, connected: connected, isDefault: defaultProvider === key };
+  });
+  return { success: true, providers: providers, defaultProvider: defaultProvider };
+}
+function beginCloudStorageConnection_(data) {
+  const user = auth_(data);
+  if (user.role !== "teacher" && user.role !== "admin") throw new Error("Подключать личные хранилища могут только преподаватели.");
+  const selected = cloudStorageProvider_(data.provider), key = selected.key, cfg = selected.config;
+  const props = PropertiesService.getScriptProperties();
+  const clientId = props.getProperty(cfg.clientIdKey), clientSecret = props.getProperty(cfg.clientSecretKey);
+  if (!clientId || !clientSecret) throw new Error("Интеграция " + cfg.label + " ещё не настроена администратором портала.");
+  const state = Utilities.getUuid().replace(/-/g, "") + Utilities.getUuid().replace(/-/g, "");
+  props.setProperty("cloud_oauth_state:" + state, JSON.stringify({ email: user.email, provider: key, expiresAt: Date.now() + 600000 }));
+  const params = {
+    client_id: clientId, redirect_uri: cloudStorageRedirectUri_(),
+    response_type: "code", state: state, scope: cfg.scope
+  };
+  if (key === "google") { params.access_type = "offline"; params.prompt = "consent"; }
+  if (key === "dropbox") { params.token_access_type = "offline"; params.force_reapprove = "true"; }
+  if (key === "onedrive") { params.response_mode = "query"; }
+  const query = Object.keys(params).map(function(k) { return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }).join("&");
+  return { success: true, authorizationUrl: cfg.authorize + "?" + query };
+}
+function cloudStorageOAuthCallback_(params) {
+  const state = String(params.state || "");
+  const props = PropertiesService.getScriptProperties();
+  const stateKey = "cloud_oauth_state:" + state;
+  const raw = state ? props.getProperty(stateKey) : "";
+  if (!raw) return HtmlService.createHtmlOutput("Ссылка подключения недействительна или уже использована. Вернитесь в учебный портал и повторите подключение.");
+  props.deleteProperty(stateKey);
+  let saved;
+  try { saved = JSON.parse(raw); } catch (e) { saved = null; }
+  if (!saved || Number(saved.expiresAt) < Date.now()) return HtmlService.createHtmlOutput("Время подключения истекло. Вернитесь в портал и начните подключение заново.");
+  if (params.error) return HtmlService.createHtmlOutput("Сервис отклонил подключение: " + String(params.error).replace(/[<>]/g, ""));
+  const provider = cloudStorageProvider_(saved.provider), cfg = provider.config;
+  const clientId = props.getProperty(cfg.clientIdKey), clientSecret = props.getProperty(cfg.clientSecretKey);
+  const payload = {
+    code: String(params.code || ""), client_id: clientId, client_secret: clientSecret,
+    redirect_uri: cloudStorageRedirectUri_(), grant_type: "authorization_code"
+  };
+  if (!payload.code) return HtmlService.createHtmlOutput("Сервис не вернул код подтверждения. Повторите подключение.");
+  const headers = {};
+  if (saved.provider === "dropbox") {
+    headers.Authorization = "Basic " + Utilities.base64Encode(clientId + ":" + clientSecret);
+    delete payload.client_id; delete payload.client_secret;
+  }
+  const response = UrlFetchApp.fetch(cfg.token, {
+    method: "post", payload: payload, headers: headers, muteHttpExceptions: true,
+    contentType: "application/x-www-form-urlencoded"
+  });
+  const status = response.getResponseCode();
+  let token;
+  try { token = JSON.parse(response.getContentText()); } catch (e) { token = {}; }
+  if (status < 200 || status >= 300 || !token.access_token) {
+    console.error("Cloud OAuth token exchange failed for " + saved.provider + ": " + status + " " + response.getContentText().slice(0, 500));
+    return HtmlService.createHtmlOutput("Не удалось завершить подключение к " + cfg.label + ". Проверьте настройки приложения и URI возврата, затем повторите попытку.");
+  }
+  const record = {
+    accessToken: token.access_token,
+    refreshToken: token.refresh_token || "",
+    expiresAt: Date.now() + Math.max(60, Number(token.expires_in || 3600) - 60) * 1000,
+    tokenType: token.token_type || "Bearer",
+    scope: token.scope || cfg.scope,
+    connectedAt: new Date().toISOString()
+  };
+  if (!record.refreshToken && saved.provider !== "yandex") {
+    return HtmlService.createHtmlOutput("Сервис не выдал токен длительного доступа. Проверьте разрешения offline access и повторите подключение.");
+  }
+  props.setProperty(cloudStorageKey_(saved.email, saved.provider), JSON.stringify(record));
+  if (!props.getProperty(cloudStorageDefaultKey_(saved.email))) props.setProperty(cloudStorageDefaultKey_(saved.email), saved.provider);
+  const portal = "https://annashirockix-cmyk.github.io/mdk0401/#/teacher-storage";
+  return HtmlService.createHtmlOutput('<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Хранилище подключено</title><body style="font:16px Arial,sans-serif;max-width:560px;margin:12vh auto;padding:24px;color:#243044"><h2>✓ ' + cfg.label + ' подключён</h2><p>Вернитесь в учебный портал, чтобы выбрать хранилище для материалов.</p><p><a href="' + portal + '" style="display:inline-block;padding:12px 18px;background:#3156a5;color:white;border-radius:8px;text-decoration:none">Вернуться в портал</a></p></body></html>');
+}
+function disconnectCloudStorage_(data) {
+  const user = auth_(data);
+  if (user.role !== "teacher" && user.role !== "admin") throw new Error("Недостаточно прав.");
+  const selected = cloudStorageProvider_(data.provider);
+  const props = PropertiesService.getScriptProperties();
+  props.deleteProperty(cloudStorageKey_(user.email, selected.key));
+  if (props.getProperty(cloudStorageDefaultKey_(user.email)) === selected.key) props.deleteProperty(cloudStorageDefaultKey_(user.email));
+  return { success: true };
+}
+function setDefaultCloudStorage_(data) {
+  const user = auth_(data);
+  if (user.role !== "teacher" && user.role !== "admin") throw new Error("Недостаточно прав.");
+  const selected = cloudStorageProvider_(data.provider);
+  const props = PropertiesService.getScriptProperties();
+  const raw = props.getProperty(cloudStorageKey_(user.email, selected.key));
+  if (!raw) throw new Error("Сначала подключите это хранилище.");
+  const token = JSON.parse(raw);
+  if (!token || !token.accessToken) throw new Error("Подключение не найдено. Подключите хранилище повторно.");
+  props.setProperty(cloudStorageDefaultKey_(user.email), selected.key);
+  return { success: true, defaultProvider: selected.key };
 }
 
 /* ---------- Spreadsheet and sheets ---------- */
