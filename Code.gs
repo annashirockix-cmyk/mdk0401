@@ -525,6 +525,7 @@ function register_(data) {
   const group = normalizeGroupName_(data.group);
   const inviteCode = String(data.invite || data.inviteCode || "").trim();
   if (!surname || !firstName) return { success: false, error: "Укажите фамилию и имя. Оба поля обязательны." };
+  if (!group) return { success: false, error: "Укажите учебную группу." };
   if (!email || email.indexOf("@") < 1) return { success: false, error: "Укажите корректный email." };
   if (password.length < 8) return { success: false, error: "Пароль должен содержать не менее 8 символов." };
 
