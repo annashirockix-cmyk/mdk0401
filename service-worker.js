@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v437'; // Синхронизация результата защищённого пользовательского теста в активном кабинете студента.
+const CACHE_NAME = 'portal-cache-v438'; // Синхронизация результата защищённого пользовательского теста в активном кабинете студента.
 
 const STATIC_ASSETS = [
   './',
@@ -141,6 +141,8 @@ const STATIC_ASSETS = [
   './extra.js',
   './portal-final.js',
   './course-admin.js',
+  './webinars.js',
+  './webinars.css',
   './lecture-word-ribbon.js',
   './lecture-word-ribbon.css',
   './course-editor-ux.js',
