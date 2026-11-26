@@ -25,6 +25,13 @@ function extractFunction(source, name) {
   throw new Error("unterminated function " + name);
 }
 
+test("registration requires surname, first name and a normalized study group on the server", () => {
+  const fn = extractFunction(server, "register_");
+  assert.match(fn, /if \(!surname \|\| !firstName\) return/);
+  assert.match(fn, /if \(!group\) return \{ success: false, error: "Укажите учебную группу\." \}/);
+  assert.match(fn, /const group = normalizeGroupName_\(data\.group\)/);
+});
+
 test("read-only load smoke test includes protected English VPR and semester reads", () => {
   assert.match(loadTest, /name: "getEnglishVprExam", params: \{ track: englishTrack \}/);
   assert.match(loadTest, /name: "getEnglishSemesterTests", params: \{ track: englishTrack \}/);
