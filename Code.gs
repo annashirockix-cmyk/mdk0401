@@ -4969,7 +4969,7 @@ function teacherCloudApiError_(response, providerName) {
 }
 function teacherCloudAccessToken_(email, providerKey) {
   const provider = teacherCloudProvider_(providerKey), cfg = provider.config, props = PropertiesService.getScriptProperties();
-  const key = teacherCloudTokenKey_(email, provider.key), lock = LockService.getScriptLock();
+  const key = teacherCloudTokenKey_(email, provider.key), lock = LockService.getUserLock();
   lock.waitLock(10000);
   try {
     let token = null;
