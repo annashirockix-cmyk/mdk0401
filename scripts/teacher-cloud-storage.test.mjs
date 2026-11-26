@@ -165,8 +165,8 @@ test("large lecture videos upload in private chunks and stream through access-ch
  assert.match(api,/startCourseVideoUpload:function/);
  assert.match(api,/uploadCourseVideoChunk:function/);
  assert.match(api,/getCourseVideoChunk:function/);
- assert.match(courseAdmin,/video\\/mp4/);
- assert.match(courseAdmin,/uploadCourseVideoChunk/);
+ assert.ok(courseAdmin.includes("video/mp4"));
+ assert.ok(courseAdmin.includes("uploadCourseVideoChunk"));
  assert.match(app,/getCourseVideoChunk/);
  assert.match(app,/createElement\("video"\)/);
 });
