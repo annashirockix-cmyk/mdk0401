@@ -28,3 +28,24 @@ test("OAuth redirect URI reaches Apps Script callback and provider is resolved f
  assert.match(gs,/providerKey = String\(savedState\.provider \|\| ""\)\.toLowerCase\(\)/);
  assert.doesNotMatch(gs,/const providerKey = String\(params\.provider/);
 });
+
+test("course attachments support connected teacher clouds with server-side token refresh",()=>{
+ assert.match(gs,/function teacherCloudAccessToken_\(email, providerKey\)/);
+ assert.match(gs,/grant_type: "refresh_token"/);
+ assert.match(gs,/function teacherCloudUploadFile_\(providerKey, ownerEmail, bytes, mime, originalName\)/);
+ for(const endpoint of ["www.googleapis.com/upload/drive/v3/files","cloud-api.yandex.net/v1/disk/resources/upload","graph.microsoft.com/v1.0/me/drive/special/approot","content.dropboxapi.com/2/files/upload"])assert.ok(gs.includes(endpoint));
+ assert.match(gs,/function teacherCloudDownloadFile_\(providerKey, ownerEmail, encodedKey\)/);
+ assert.match(gs,/cloudfile:\(google\|yandex\|onedrive\|dropbox\)/);
+});
+test("cloud attachments are owned by the uploader and access-checked before student downloads",()=>{
+ assert.match(gs,/cloudOwnerEmail/);
+ assert.match(gs,/email_\(record\[6\] \|\| ""\)/);
+ assert.match(gs,/customContentIsOpen_\(courseId, itemId, String\(record\[2\] \|\| ""\), "file"\)/);
+ assert.match(gs,/Сначала удалите или перенесите все учебные файлы/);
+});
+test("course editor exposes connected personal drives for both topic and lecture attachments",()=>{
+ assert.match(api,/uploadCourseFile:function\(courseId,topicId,title,fileName,dataUrl,lectureId,storageProvider\)/);
+ assert.match(page,/getTeacherCloudStorage/);
+ assert.match(page,/courseFileStorage/);
+ assert.match(page,/uploadCourseFile\(courseSel\.value,topicId,file\.name,file\.name,dataUrl,lectureId,storageSel/);
+});
