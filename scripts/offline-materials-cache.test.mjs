@@ -57,7 +57,7 @@ test("offline materials manager exposes inventory, refresh and selective removal
   assert.match(html, /offline-materials-ui\.js/);
   assert.match(worker, /portal-cache-v\d+/);
   assert.match(worker, /'\.\/offline-materials-ui\.js'/);
-  assert.match(html, /service-worker\.js\?v=427/);
+  assert.match(html, /service-worker\.js\?v=441/);
 });
 
 
