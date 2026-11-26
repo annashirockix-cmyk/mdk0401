@@ -49,3 +49,12 @@ test("course editor exposes connected personal drives for both topic and lecture
  assert.match(page,/courseFileStorage/);
  assert.match(page,/uploadCourseFile\(courseSel\.value,topicId,file\.name,file\.name,dataUrl,lectureId,storageSel/);
 });
+
+test("cloud files are removed with their material and prevent unsafe disconnect",()=>{
+ assert.match(gs,/teacherCloudDeleteFile_\(cloudMatch\[1\], email_\(values\[i\]\[6\] \|\| ""\), cloudMatch\[2\]\)/);
+ assert.match(gs,/Сначала удалите или перенесите все учебные файлы/);
+});
+test("teacher cloud setup explains callback URL and attachment scope",()=>{
+ assert.match(fs.readFileSync(new URL("../TEACHER_CLOUD_STORAGE_SETUP.md",import.meta.url),"utf8"),/action=cloudOAuthCallback/);
+ assert.match(fs.readFileSync(new URL("../TEACHER_CLOUD_STORAGE_SETUP.md",import.meta.url),"utf8"),/Тексты лекций, тесты, карточки/);
+});
