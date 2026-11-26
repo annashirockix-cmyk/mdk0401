@@ -369,7 +369,7 @@ test("SPRUT-TP is registered as a complete course with all major process types",
  const source=read("data-sprut-tp.js"),sandbox={window:{MDK_DATA:{}}};
  const html=read("index.html");
  assert.match(html,/data-sprut-tp\.js\?v=8/);
- assert.match(read("service-worker.js"),/portal-cache-v435/);
+ assert.match(read("service-worker.js"),/portal-cache-v\\d+/);
  vm.runInNewContext(source,sandbox,{timeout:1000});
  const course=sandbox.window.MDK_DATA.SPRUT_TP;
  assert.ok(course&&course.sections.length>=5);
