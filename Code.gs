@@ -59,6 +59,8 @@ const HEADERS = {
 /* ---------- HTTP entry points ---------- */
 
 function doGet(e) {
+  const params = e && e.parameter ? e.parameter : {};
+  if (String(params.action || "").toLowerCase().replace(/[_-]/g, "") === "cloudoauthcallback") return handleTeacherCloudOAuthCallback_(params);
   return handleRequest_(e);
 }
 
@@ -152,6 +154,9 @@ function handleRequest_(e) {
       case "uploadcoursefile": result = uploadCourseFile_(data); break;
       case "getcoursefile": result = getCourseFile_(data); break;
       case "getwebinars": result = getWebinars_(data); break;
+      case "getteachercloudstorage": result = getTeacherCloudStorage_(data); break;
+      case "beginteachercloudoauth": result = beginTeacherCloudOAuth_(data); break;
+      case "disconnectteachercloudstorage": result = disconnectTeacherCloudStorage_(data); break;
       case "createwebinar": result = createWebinar_(data); break;
       case "joinwebinar": result = joinWebinar_(data); break;
       case "webinarattendance": result = webinarAttendance_(data); break;
@@ -4902,4 +4907,101 @@ function submitEnglishSemesterTest_(data) {
   } finally {
     lock.releaseLock();
   }
+}
+
+
+/* ---------- Teacher-owned cloud storage connections ---------- */
+function teacherCloudProviders_() {
+  return {
+    google: { name: "Google Drive", clientId: "GOOGLE_OAUTH_CLIENT_ID", clientSecret: "GOOGLE_OAUTH_CLIENT_SECRET", auth: "https://accounts.google.com/o/oauth2/v2/auth", token: "https://oauth2.googleapis.com/token", scope: "openid email https://www.googleapis.com/auth/drive.file" },
+    yandex: { name: "Яндекс Диск", clientId: "YANDEX_OAUTH_CLIENT_ID", clientSecret: "YANDEX_OAUTH_CLIENT_SECRET", auth: "https://oauth.yandex.ru/authorize", token: "https://oauth.yandex.ru/token", scope: "cloud_api:disk.app_folder" },
+    onedrive: { name: "OneDrive", clientId: "ONEDRIVE_OAUTH_CLIENT_ID", clientSecret: "ONEDRIVE_OAUTH_CLIENT_SECRET", auth: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize", token: "https://login.microsoftonline.com/common/oauth2/v2.0/token", scope: "offline_access User.Read Files.ReadWrite.AppFolder" },
+    dropbox: { name: "Dropbox", clientId: "DROPBOX_OAUTH_CLIENT_ID", clientSecret: "DROPBOX_OAUTH_CLIENT_SECRET", auth: "https://www.dropbox.com/oauth2/authorize", token: "https://api.dropboxapi.com/oauth2/token", scope: "account_info.read files.content.read files.content.write" }
+  };
+}
+function teacherCloudProvider_(value) {
+  const key = String(value || "").toLowerCase();
+  const providers = teacherCloudProviders_();
+  if (!providers[key]) throw new Error("Неизвестное облачное хранилище.");
+  return { key: key, config: providers[key] };
+}
+function teacherCloudTokenKey_(email, provider) {
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, email_(email) + "|" + provider, Utilities.Charset.UTF_8);
+  return "TEACHER_CLOUD_TOKEN_" + bytesToHex_(digest);
+}
+function teacherCloudRedirectUri_() {
+  const url = ScriptApp.getService().getUrl();
+  if (!url) throw new Error("Сначала разверните Apps Script как веб-приложение.");
+  return url;
+}
+function getTeacherCloudStorage_(data) {
+  const user = auth_(data);
+  if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Личные хранилища доступны только преподавателям.");
+  const props = PropertiesService.getScriptProperties(), providers = teacherCloudProviders_(), result = {};
+  Object.keys(providers).forEach(function(key) {
+    const cfg = providers[key], id = props.getProperty(cfg.clientId), secret = props.getProperty(cfg.clientSecret);
+    const raw = props.getProperty(teacherCloudTokenKey_(user.email, key));
+    let token = null;
+    try { token = raw ? JSON.parse(raw) : null; } catch (e) {}
+    result[key] = { name: cfg.name, configured: !!(id && secret), connected: !!(token && token.refreshToken), expiresAt: token && token.expiresAt ? token.expiresAt : null };
+  });
+  return { success: true, providers: result };
+}
+function beginTeacherCloudOAuth_(data) {
+  const user = auth_(data);
+  if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Подключать личные хранилища могут только преподаватели.");
+  const provider = teacherCloudProvider_(data.provider), cfg = provider.config, props = PropertiesService.getScriptProperties();
+  const clientId = String(props.getProperty(cfg.clientId) || ""), clientSecret = String(props.getProperty(cfg.clientSecret) || "");
+  if (!clientId || !clientSecret) throw new Error("Для " + cfg.name + " ещё не настроены OAuth Client ID и Client Secret администратором портала.");
+  const state = Utilities.getUuid().replace(/-/g, "") + Utilities.getUuid().replace(/-/g, "");
+  const redirectUri = teacherCloudRedirectUri_();
+  props.setProperty("TEACHER_CLOUD_STATE_" + state, JSON.stringify({ email: email_(user.email), provider: provider.key, expiresAt: Date.now() + 10 * 60 * 1000 }));
+  const params = { client_id: clientId, redirect_uri: redirectUri, response_type: "code", state: state };
+  if (provider.key === "google") { params.scope = cfg.scope; params.access_type = "offline"; params.prompt = "consent"; }
+  if (provider.key === "yandex") params.scope = cfg.scope;
+  if (provider.key === "onedrive") { params.scope = cfg.scope; params.response_mode = "query"; }
+  if (provider.key === "dropbox") { params.token_access_type = "offline"; params.scope = cfg.scope; }
+  const query = Object.keys(params).map(function(k) { return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }).join("&");
+  return { success: true, url: cfg.auth + "?" + query };
+}
+function handleTeacherCloudOAuthCallback_(params) {
+  const providerKey = String(params.provider || "").toLowerCase();
+  try {
+    const provider = teacherCloudProvider_(providerKey), cfg = provider.config, props = PropertiesService.getScriptProperties();
+    const state = String(params.state || ""), stateKey = "TEACHER_CLOUD_STATE_" + state, rawState = state ? props.getProperty(stateKey) : "";
+    if (!rawState) throw new Error("Сеанс подключения истёк или уже использован. Вернитесь в портал и повторите подключение.");
+    props.deleteProperty(stateKey);
+    const savedState = JSON.parse(rawState);
+    if (savedState.provider !== providerKey || Number(savedState.expiresAt) < Date.now()) throw new Error("Проверка безопасности подключения не пройдена. Начните заново.");
+    if (params.error) throw new Error("Провайдер отклонил подключение: " + String(params.error_description || params.error).slice(0, 240));
+    const code = String(params.code || "");
+    if (!code) throw new Error("Провайдер не вернул код авторизации.");
+    const payload = { code: code, client_id: props.getProperty(cfg.clientId), client_secret: props.getProperty(cfg.clientSecret), redirect_uri: teacherCloudRedirectUri_(), grant_type: "authorization_code" };
+    const response = UrlFetchApp.fetch(cfg.token, { method: "post", payload: payload, muteHttpExceptions: true });
+    const body = JSON.parse(response.getContentText() || "{}");
+    if (response.getResponseCode() < 200 || response.getResponseCode() >= 300 || !body.access_token) throw new Error("Не удалось получить токен " + cfg.name + ": " + String(body.error_description || body.error || response.getResponseCode()).slice(0, 240));
+    const previousRaw = props.getProperty(teacherCloudTokenKey_(savedState.email, providerKey));
+    let previous = {}; try { previous = previousRaw ? JSON.parse(previousRaw) : {}; } catch (e) {}
+    const refreshToken = String(body.refresh_token || previous.refreshToken || "");
+    if (!refreshToken) throw new Error("Провайдер не выдал долгосрочный токен. Проверьте настройки доступа приложения и повторите подключение.");
+    const token = { accessToken: body.access_token, refreshToken: refreshToken, tokenType: String(body.token_type || "Bearer"), scope: String(body.scope || cfg.scope), expiresAt: Date.now() + Math.max(60, Number(body.expires_in || 3600)) * 1000, connectedAt: new Date().toISOString() };
+    props.setProperty(teacherCloudTokenKey_(savedState.email, providerKey), JSON.stringify(token));
+    return teacherCloudOAuthPage_(true, cfg.name + " успешно подключён.");
+  } catch (error) {
+    console.error("Teacher cloud OAuth callback: " + (error && error.stack ? error.stack : error));
+    return teacherCloudOAuthPage_(false, String(error && error.message || error));
+  }
+}
+function teacherCloudOAuthPage_(success, message) {
+  const color = success ? "#16834a" : "#b54708";
+  const safe = String(message || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const html = '<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Подключение хранилища</title><body style="font:16px system-ui;background:#101827;color:#f3f5f8;padding:32px"><main style="max-width:560px;margin:8vh auto;padding:28px;border:1px solid #43516a;border-radius:16px"><h2 style="color:' + color + '">' + (success ? "Хранилище подключено" : "Не удалось подключить хранилище") + '</h2><p>' + safe + '</p><p>Можно закрыть это окно и вернуться в учебный портал.</p><a style="color:#8bb8ff" href="https://annashirockix-cmyk.github.io/mdk0401/#/teacher-storage">Вернуться в портал</a><script>setTimeout(function(){try{window.close()}catch(e){}},1800);</script></main></body></html>';
+  return HtmlService.createHtmlOutput(html).setTitle("Подключение облачного хранилища");
+}
+function disconnectTeacherCloudStorage_(data) {
+  const user = auth_(data);
+  if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Отключать личные хранилища могут только преподаватели.");
+  const provider = teacherCloudProvider_(data.provider);
+  PropertiesService.getScriptProperties().deleteProperty(teacherCloudTokenKey_(user.email, provider.key));
+  return { success: true };
 }
