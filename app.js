@@ -793,10 +793,10 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
         if(!Array.isArray(topic.__originalLectures))topic.__originalLectures=(topic.lectures||[]).slice();
         var builtInLectures=topic.__originalLectures.map(function(base){
             var override=customTopicLectures.find(function(item){return item.isBuiltInOverride===true&&String(item.sourceLectureCode||"")===String(base.code||"");});
-            return override?{code:base.code,title:override.title||base.title,content:safeCustomLectureHtml(override.content||"")}:base;
+            return override?{id:override.id,code:base.code,title:override.title||base.title,content:safeCustomLectureHtml(override.content||"")}:base;
         });
         var additionalLectures=customTopicLectures.filter(function(lecture){return lecture.isBuiltInOverride!==true;}).map(function(lecture){
-            return {code:lecture.code||"Доп. лекция",title:lecture.title||"Материал преподавателя",content:safeCustomLectureHtml(lecture.content||"")};
+            return {id:lecture.id,code:lecture.code||"Доп. лекция",title:lecture.title||"Материал преподавателя",content:safeCustomLectureHtml(lecture.content||"")};
         });
         topic.lectures=builtInLectures.concat(additionalLectures);
     }
@@ -871,6 +871,17 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     lectureBody.style.cssText = "padding:20px; border-top:1px solid var(--border); line-height:1.6; font-size:15px;";
                     lectureBody.innerHTML = lec.content || "";
                     details.appendChild(lectureBody);
+                    var lectureFiles = (window.customContent && window.customContent.files || []).filter(function(item) { return String(item.mdkId || item.courseId || "") === String(courseId) && String(item.topicId || "") === String(topicId) && String(item.lectureId || "") === String(lec.id || ""); });
+                    if (lectureFiles.length) {
+                        var lectureFilesBox = document.createElement("section"); lectureFilesBox.style.cssText = "margin:0 20px 16px;padding:12px;border:1px solid var(--border);border-radius:9px;background:var(--card-soft);";
+                        var lectureFilesTitle = document.createElement("b"); lectureFilesTitle.textContent = "📎 Файлы к этой лекции"; lectureFilesBox.appendChild(lectureFilesTitle);
+                        lectureFiles.forEach(function(fileItem) {
+                            var fileButton = document.createElement("button"); fileButton.type = "button"; fileButton.className = "btn ghost"; fileButton.style.cssText = "display:flex;margin-top:8px;justify-content:flex-start;text-align:left;"; fileButton.textContent = "📄 " + String(fileItem.title || fileItem.fileName || "Учебный файл") + " · " + String(fileItem.fileName || "");
+                            fileButton.addEventListener("click", async function() { fileButton.disabled = true; var oldText = fileButton.textContent; fileButton.textContent = "Загрузка файла…"; try { var result = await window.API.getCourseFile(fileItem.id, fileItem.fileRef); if (!result || !result.success || !result.data) throw new Error(result && result.error || "Не удалось получить файл."); var binary = atob(result.data), bytes = new Uint8Array(binary.length); for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i); var blob = new Blob([bytes], { type: result.mimeType || "application/octet-stream" }); var url = URL.createObjectURL(blob), anchor = document.createElement("a"); anchor.href = url; anchor.download = result.fileName || "учебный-материал"; document.body.appendChild(anchor); anchor.click(); anchor.remove(); setTimeout(function() { URL.revokeObjectURL(url); }, 60000); fileButton.textContent = oldText; } catch (error) { fileButton.textContent = "Ошибка загрузки: " + (error.message || "повторите попытку"); } finally { fileButton.disabled = false; } });
+                            lectureFilesBox.appendChild(fileButton);
+                        });
+                        details.appendChild(lectureFilesBox);
+                    }
                     // Teacher material is rendered only in the authenticated staff view.
                     var privateTeacherMaterial = (window.customContent && window.customContent.teacherMaterials || []).find(function(item) { return item.listeningId && item.listeningId === lec.listeningId; });
                     var teacherHtml = lec.teacherContent || (privateTeacherMaterial && privateTeacherMaterial.teacherContent) || "";

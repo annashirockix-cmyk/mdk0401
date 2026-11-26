@@ -123,7 +123,7 @@ window.API = {
  uploadExamFile:function(courseId,bankId,fileName,dataUrl){return fetchAPI("uploadExamFile",{courseId:courseId,bankId:bankId,fileName:fileName,dataUrl:dataUrl},"POST",60000);},
  getExamFile:function(attachmentId,examId){return fetchAPI("getExamFile",{attachmentId:attachmentId,examId:examId||""},"POST",60000);},
  deleteExamFile:function(courseId,attachmentId){return fetchAPI("deleteExamFile",{courseId:courseId,attachmentId:attachmentId},"POST",60000);},
- uploadCourseFile:function(courseId,topicId,title,fileName,dataUrl){return fetchAPI("uploadCourseFile",{courseId:courseId,topicId:topicId,title:title,fileName:fileName,dataUrl:dataUrl},"POST",60000);},
+ uploadCourseFile:function(courseId,topicId,title,fileName,dataUrl,lectureId){return fetchAPI("uploadCourseFile",{courseId:courseId,topicId:topicId,title:title,fileName:fileName,dataUrl:dataUrl,lectureId:lectureId||""},"POST",60000);},
  getCourseFile:function(itemId,fileRef){return fetchAPI("getCourseFile",{itemId:itemId,fileRef:fileRef},"POST",60000);},
  saveCustomContent:function(data){return fetchAPI("saveCustomContent",data||{},"POST");},
  deleteCustomContent:function(id,courseId){return fetchAPI("deleteCustomContent",{id:id,courseId:courseId||""},"POST");},

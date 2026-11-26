@@ -3076,8 +3076,16 @@ function uploadCourseFile_(data) {
   const actor = editor_(data, courseId);
   const topicId = String(data.topicId || "").trim();
   const title = String(data.title || "").trim().slice(0, 180);
-  const raw = String(data.dataUrl || "");
   if (!topicId || !title) throw new Error("Выберите тему и укажите название файла.");
+  const lectureId = String(data.lectureId || "").trim();
+  if (lectureId) {
+    const contentRows = content_().getDataRange().getValues();
+    const lectureExists = contentRows.slice(1).some(function(row) {
+      return String(row[0] || "") === lectureId && sameCourseId_(row[1] || "", courseId) && String(row[2] || "") === topicId && String(row[3] || "") === "lecture";
+    });
+    if (!lectureExists) throw new Error("Выбранная лекция не найдена в этой дисциплине и теме. Сначала сохраните лекцию.");
+  }
+  const raw = String(data.dataUrl || "");
   const match = raw.match(/^data:(application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document);base64,([A-Za-z0-9+/=]+)$/i);
   if (!match) throw new Error("Поддерживаются только PDF, DOC и DOCX.");
   if (match[2].length > 4800000) throw new Error("Файл слишком большой. Максимальный размер — 3,5 МБ.");
@@ -3100,7 +3108,7 @@ function uploadCourseFile_(data) {
     assertPortalPrivateFile_(file, folder, "Учебный материал. Дисциплина: " + courseId + ". Тема: " + topicId + ".");
     const saved = saveCustomContent_({
       token: data.token, mdkId: courseId, topicId: topicId, type: "file", title: title,
-      fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length
+      fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length, lectureId: lectureId
     });
     return { success: true, id: saved.id, fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length };
   } catch (error) {

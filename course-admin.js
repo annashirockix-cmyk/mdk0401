@@ -186,7 +186,7 @@
       '<div class="module"><h3>1а. Изменить основную тему</h3><p style="color:var(--muted)">Изменение кода и названия существующей темы без удаления исходных учебных материалов.</p><select id="mainTopicExisting" class="self-input"></select><input id="mainTopicCode" class="self-input" placeholder="Код темы" style="margin:8px 0"><input id="mainTopicTitle" class="self-input" placeholder="Название темы" style="margin:8px 0"><button class="btn" id="saveMainTopicBtn" type="button">Сохранить название основной темы</button> <span id="mainTopicStatus" aria-live="polite"></span></div>'+
       '<div class="module"><h3>2. Лекции</h3><p style="color:var(--muted)">Выберите существующую лекцию для изменения или создайте новую. Текст поддерживает простую HTML-разметку.</p>'+
       '<label>Тема</label><select id="lectureTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующая лекция</label><select id="lectureExisting" class="self-input"><option value="">— Новая лекция —</option></select>'+
-      '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea>'+
+      '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea><div class="module" style="padding:10px;margin:8px 0"><b>📎 Файл непосредственно к этой лекции</b><p style="color:var(--muted);font-size:13px">Сначала сохраните лекцию. Затем прикрепите PDF, DOC или DOCX до 3,5 МБ — студент увидит файл внутри этой лекции.</p><input id="lectureFileInput" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="self-input"><button class="btn ghost" id="uploadLectureFileBtn" type="button" style="margin-top:8px">Прикрепить файл к лекции</button> <span id="lectureFileStatus" aria-live="polite"></span></div>'+
       '<button class="btn" id="saveLectureBtn">Создать лекцию</button> <button class="btn ghost" id="resetLectureBtn" type="button">Очистить форму</button> <button class="btn ghost" id="deleteLectureBtn" type="button" disabled>Удалить выбранную</button> <span id="lectureStatus" aria-live="polite"></span></div>'+
       '<div class="module"><h3>2а. Файлы к теме</h3><p style="color:var(--muted)">PDF, DOC и DOCX до 3,5 МБ. Файлы хранятся в закрытой папке Google Drive и выдаются с проверкой доступа к теме.</p><label>Тема</label><select id="courseFileTopic" class="self-input"></select><input id="courseFileTitle" class="self-input" placeholder="Название материала" style="margin:8px 0"><input id="courseFileInput" type="file" accept=".pdf,.doc,.docx" class="self-input"><button class="btn" id="uploadCourseFileBtn" type="button" style="margin-top:10px">Загрузить файл к теме</button> <span id="courseFileStatus" aria-live="polite"></span><div id="courseFileList" style="margin-top:12px"></div></div>'+
       '<div class="module"><h3>3. Дополнительные тесты</h3><p style="color:var(--muted)">Можно создавать тесты, загружать ранее сохранённые тесты для изменения, просматривать формулировки всех заданий и правильные ответы.</p>'+
@@ -407,6 +407,22 @@
     fileTopicSel.onchange=renderSaved;
     testSel.onchange=()=>{resetTest();renderSaved();};
     $("lectureExisting").onchange=loadLecture;
+    $("uploadLectureFileBtn").onclick=async function(){
+      const button=this,input=$("lectureFileInput"),file=input.files&&input.files[0],status=$("lectureFileStatus"),topicId=topicSel.value;
+      if(!topicId||!lectureId){status.textContent="Сначала выберите и сохраните лекцию.";return;}
+      if(!file){status.textContent="Выберите PDF, DOC или DOCX.";return;}
+      if(file.size>3500000){status.textContent="Файл больше 3,5 МБ. Уменьшите размер и повторите загрузку.";return;}
+      const ext=(file.name.match(/\.([^.]+)$/)||[])[1]||"";
+      if(!/^(pdf|doc|docx)$/i.test(ext)){status.textContent="Разрешены только PDF, DOC и DOCX.";return;}
+      button.disabled=true;status.textContent="Загрузка файла к лекции…";
+      try{
+        const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||""));reader.onerror=()=>reject(new Error("Не удалось прочитать файл."));reader.readAsDataURL(file);});
+        const result=await window.API.uploadCourseFile(courseSel.value,topicId,file.name,file.name,dataUrl,lectureId);
+        if(!result||!result.success)throw new Error(result&&result.error||"Не удалось прикрепить файл к лекции.");
+        await new Promise(resolve=>refreshContent(resolve));input.value="";status.textContent="Файл прикреплён к лекции ✓ ("+Math.round(result.size/1024)+" КБ)";
+      }catch(error){status.textContent=error.message||"Ошибка загрузки.";}
+      finally{button.disabled=false;}
+    };
     $("uploadCourseFileBtn").onclick=async function(){
       const button=this,input=$("courseFileInput"),file=input.files&&input.files[0],title=$("courseFileTitle").value.trim(),topicId=fileTopicSel.value,status=$("courseFileStatus");
       if(!topicId||!file||!title){status.textContent="Выберите тему, укажите название и выберите PDF/DOC/DOCX.";return;}

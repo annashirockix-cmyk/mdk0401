@@ -73,3 +73,22 @@ test("student topic view downloads protected documents through the API, not a pu
   assert.match(app, /noopener noreferrer/);
   assert.doesNotMatch(app, /href="\$\{f\.fileUrl\}"/);
 });
+
+
+test("lecture attachments are linked to a saved lecture in the same course and topic", () => {
+  assert.match(api, /uploadCourseFile:function\(courseId,topicId,title,fileName,dataUrl,lectureId\)/);
+  assert.match(backend, /const lectureId = String\(data\.lectureId \|\| ""\)\.trim\(\)/);
+  assert.match(backend, /String\(row\[3\] \|\| ""\) === "lecture"/);
+  assert.match(backend, /size: bytes\.length, lectureId: lectureId/);
+  assert.match(editor, /id="lectureFileInput"/);
+  assert.match(editor, /uploadCourseFile\(courseSel\.value,topicId,file\.name,file\.name,dataUrl,lectureId\)/);
+  assert.match(app, /String\(item\.lectureId \|\| ""\) === String\(lec\.id \|\| ""\)/);
+  assert.match(app, /API\.getCourseFile\(fileItem\.id, fileItem\.fileRef\)/);
+});
+
+test("legacy admin uploader uses the current protected course-file API", () => {
+  const legacy = readFileSync(new URL("../admin.js", import.meta.url), "utf8");
+  assert.match(legacy, /API\.uploadCourseFile/);
+  assert.doesNotMatch(legacy, /API\.uploadFile/);
+  assert.doesNotMatch(legacy, /fileUrl/);
+});

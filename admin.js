@@ -1,54 +1,20 @@
-window.uploadFileToDrive = function() {
-    var fileInput = document.getElementById('admin-file-input');
-    var statusEl = document.getElementById('admin-file-status');
-    var btn = document.getElementById('admin-file-btn');
-    
-    if (!fileInput.files.length) { alert("Выберите файл!"); return; }
-    var file = fileInput.files[0];
-    var mdkId = document.getElementById('admin-file-mdk').value;
-    var topicId = document.getElementById('admin-file-topic-id').value.trim();
-    var fileTitle = document.getElementById('admin-file-title').value.trim() || file.name;
-
-    if (!topicId) { alert("Укажите ID темы (например: t-1-1)!"); return; }
-
-    btn.disabled = true;
-    btn.textContent = "Загрузка...";
-    statusEl.textContent = "Чтение файла...";
-
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        var base64Data = e.target.result; // Полный DataURL (data:...;base64,...)
-        statusEl.textContent = "Отправка на сервер...";
-
-        window.API.uploadFile(file.name, file.type, base64Data).then(function(res) {
-            btn.disabled = false;
-            btn.textContent = "Загрузить";
-            
-            if (res && res.success) {
-                statusEl.innerHTML = `<span style="color:var(--ok);">✅ Файл загружен! <a href="${res.downloadUrl}" target="_blank">Скачать</a></span>`;
-                
-                window.API.saveCustomContent({
-                    id: 'file_' + Date.now(),
-                    type: 'file',
-                    mdkId: mdkId,
-                    topicId: topicId,
-                    title: fileTitle,
-                    fileUrl: res.downloadUrl,
-                    fileName: file.name
-                }).then(() => {
-                    if (window.loadGlobalCustomContent) window.loadGlobalCustomContent();
-                });
-                
-                fileInput.value = '';
-                document.getElementById('admin-file-title').value = '';
-            } else {
-                statusEl.innerHTML = `<span style="color:var(--err);">❌ Ошибка: ${res ? res.error : 'Нет ответа'}</span>`;
-            }
-        }).catch(function(err) {
-            btn.disabled = false;
-            btn.textContent = "Загрузить";
-            statusEl.innerHTML = `<span style="color:var(--err);">❌ Сеть: ${err.message}</span>`;
-        });
-    };
-    reader.readAsDataURL(file);
+window.uploadFileToDrive = async function() {
+    var fileInput = document.getElementById('admin-file-input'), statusEl = document.getElementById('admin-file-status'), btn = document.getElementById('admin-file-btn');
+    if (!fileInput || !statusEl || !btn) return;
+    if (!fileInput.files || !fileInput.files.length) { statusEl.textContent = "Выберите файл."; return; }
+    var file = fileInput.files[0], courseId = document.getElementById('admin-file-mdk').value, topicId = document.getElementById('admin-file-topic-id').value.trim();
+    var title = document.getElementById('admin-file-title').value.trim() || file.name;
+    if (!topicId) { statusEl.textContent = "Укажите ID темы."; return; }
+    if (!/\.(pdf|doc|docx)$/i.test(file.name)) { statusEl.textContent = "Разрешены только PDF, DOC и DOCX."; return; }
+    if (file.size > 3500000) { statusEl.textContent = "Файл больше 3,5 МБ."; return; }
+    btn.disabled = true; btn.textContent = "Загрузка…"; statusEl.textContent = "Чтение файла…";
+    try {
+        var dataUrl = await new Promise(function(resolve, reject) { var reader = new FileReader(); reader.onload = function(e) { resolve(String(e.target.result || "")); }; reader.onerror = function() { reject(new Error("Не удалось прочитать файл.")); }; reader.readAsDataURL(file); });
+        statusEl.textContent = "Отправка в защищённое хранилище портала…";
+        var result = await window.API.uploadCourseFile(courseId, topicId, title, file.name, dataUrl, "");
+        if (!result || !result.success) throw new Error(result && result.error || "Не удалось загрузить файл.");
+        statusEl.textContent = "Файл загружен и привязан к теме ✓"; fileInput.value = ""; document.getElementById('admin-file-title').value = "";
+        if (window.loadGlobalCustomContent) window.loadGlobalCustomContent();
+    } catch (error) { statusEl.textContent = "Ошибка загрузки: " + (error.message || "повторите попытку"); }
+    finally { btn.disabled = false; btn.textContent = "Загрузить"; }
 };
