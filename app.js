@@ -1652,6 +1652,7 @@ window.router = function() {
     if (page === "grades") { window.renderStudentGradesPage(); return; }
     if (page === "journal") { window.renderTeacherJournalPage(); return; }
     if (page === "teacher-dashboard" && window.renderTeacherDashboard) { window.renderTeacherDashboard(); return; }
+    if (page === "teacher-storage" && window.renderTeacherStoragePage) { window.renderTeacherStoragePage(); return; }
     if (page === "student-progress" && window.renderStudentProgressPage) { window.renderStudentProgressPage(parts[1] || ""); return; }
     if (page === "learning-path" && window.renderLearningPathPage) { window.renderLearningPathPage(); return; }
     if (page === "missions" && window.renderLearningMissionsPage) { window.renderLearningMissionsPage(); return; }
