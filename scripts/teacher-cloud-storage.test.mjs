@@ -48,7 +48,7 @@ test("course editor exposes connected personal drives for both topic and lecture
  assert.match(api,/uploadCourseFile:function\(courseId,topicId,title,fileName,dataUrl,lectureId,storageProvider\)/);
  assert.match(page,/getTeacherCloudStorage/);
  assert.match(courseAdmin,/courseFileStorage/);
- assert.match(page,/uploadCourseFile\(courseSel\.value,topicId,file\.name,file\.name,dataUrl,lectureId,storageSel/);
+ assert.match(courseAdmin,/uploadCourseFile\(courseSel\.value,topicId,file\.name,file\.name,dataUrl,lectureId,storageSel/);
 });
 
 test("cloud files are removed with their material and prevent unsafe disconnect",()=>{
