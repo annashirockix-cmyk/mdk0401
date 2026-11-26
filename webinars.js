@@ -59,7 +59,7 @@ async function join(id){
    const foot=$("webinarParticipantCount");if(foot)foot.insertAdjacentHTML("afterend",' <button type="button" class="btn ghost webinar-record" id="webinarRecord">⏺ Начать запись</button>');
    const record=$("webinarRecord");if(record)record.onclick=()=>{try{api.startRecording({mode:"file"});record.textContent="Запись запрошена";record.disabled=true;}catch(e){window.showToast&&showToast("На сервере не настроена запись вебинаров","error");}};
   }
- }catch(e){host.innerHTML='<div class="webinar-error">'+esc(e.message)+'</div><button class="btn ghost" onclick="document.getElementById(\\'webinarRoom\\').hidden=true">Закрыть</button>';}
+ }catch(e){host.innerHTML='<div class="webinar-error">'+esc(e.message)+'</div><button class="btn ghost" id="webinarCloseError">Закрыть</button>';const closeError=$("webinarCloseError");if(closeError)closeError.onclick=()=>{host.hidden=true;};}
 }
 function updateCount(){if(!api)return;const el=$("webinarParticipantCount");if(el){try{el.textContent="Участников: "+api.getNumberOfParticipants();}catch(e){}}}
 async function leave(hangup){if(api&&hangup){try{api.executeCommand("hangup");}catch(e){}}api=null;current=null;const host=$("webinarRoom");if(host){host.hidden=true;host.innerHTML="";} }
