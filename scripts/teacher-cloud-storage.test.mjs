@@ -106,8 +106,8 @@ test("teacher cloud backup API exports only owned accessible course content and 
 test("teacher cloud backup controls refresh cached storage assets",()=>{
  assert.match(html,/teacher-storage\.js\?v=2/);
  assert.match(html,/teacher-storage\.css\?v=2/);
- assert.match(html,/service-worker\.js\?v=441/);
- assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v441/);
+ assert.match(html,/service-worker\.js\?v=442/);
+ assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v442/);
 });
 
 test("teacher cloud backups embed verified PDF, DOC and DOCX attachments in the archive",()=>{
