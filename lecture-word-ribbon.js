@@ -72,7 +72,7 @@
         const url=URL.createObjectURL(blob),name="lecture-recording-"+new Date().toISOString().replace(/[:.]/g,"-")+".webm";
         const a=document.createElement("a");a.href=url;a.download=name;a.textContent="Скачать запись ("+Math.round(blob.size/1024/1024*10)/10+" МБ)";a.className="ler-record-download";
         const note=document.createElement("p");note.textContent="Сохраните файл, загрузите его в своё облачное хранилище и вставьте ссылку в лекцию через «Видео по ссылке».";
-        overlay.innerHTML="";overlay.appendChild(a);overlay.appendChild(note);
+        overlay.innerHTML="";const preview=document.createElement("video");preview.controls=true;preview.playsInline=true;preview.src=url;preview.style.cssText="width:100%;max-height:300px;background:#05080d;border-radius:8px";overlay.appendChild(preview);overlay.appendChild(a);overlay.appendChild(note);
         const close=document.createElement("button");close.className="ler-btn";close.textContent="Закрыть";close.onclick=()=>{URL.revokeObjectURL(url);overlay.remove();};overlay.appendChild(close);
       };
       recorder.start(1000);
