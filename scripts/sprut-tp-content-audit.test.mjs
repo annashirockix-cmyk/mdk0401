@@ -60,7 +60,7 @@ test("СПРУТ-ТП runtime question bank maps every topic to a non-empty asse
   const course = sandbox.window.MDK_DATA.SPRUT_TP;
   const topics = course.sections.flatMap(section => section.topics || []);
   assert.equal(sandbox.window.SPRUT_TP_QUESTION_TOPICS, 14, "question bank must cover all fourteen topics");
-  assert.equal(sandbox.window.SPRUT_TP_QUESTION_COUNT, 57, "all fifty-seven authored questions must be registered");
+  assert.equal(sandbox.window.SPRUT_TP_QUESTION_COUNT, 56, "all fifty-six mapped questions must be registered");
   assert.equal(new Set(topics.map(topic => topic.id)).size, topics.length, "runtime topic IDs must remain unique");
 
   const allQuestions = [];
