@@ -40,6 +40,12 @@ test("manual student account creation requires a normalized study group", () => 
   assert.match(adminPanel, /data\.role==="student"&&!data\.group/);
 });
 
+test("changing a user role to student requires an existing normalized group", () => {
+  const fn = extractFunction(server, "setUserRole_");
+  assert.match(fn, /role === "student" && !normalizeGroupName_\(target\.group\)/);
+  assert.match(fn, /Перед назначением роли student укажите учебную группу в таблице пользователей/);
+});
+
 test("read-only load smoke test includes protected English VPR and semester reads", () => {
   assert.match(loadTest, /name: "getEnglishVprExam", params: \{ track: englishTrack \}/);
   assert.match(loadTest, /name: "getEnglishSemesterTests", params: \{ track: englishTrack \}/);
