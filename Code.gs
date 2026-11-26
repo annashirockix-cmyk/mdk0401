@@ -5002,7 +5002,8 @@ function teacherCloudFetch_(providerKey, ownerEmail, url, options) {
 function teacherCloudUploadFile_(providerKey, ownerEmail, bytes, mime, originalName) {
   const provider = teacherCloudProvider_(providerKey), key = provider.key;
   const ext = (String(originalName || "").match(/\.(pdf|doc|docx)$/i) || [])[0] || "";
-  const remoteName = "portal_" + Utilities.getUuid().replace(/-/g, "") + ext.toLowerCase();
+  const readableName = String(originalName || "material").replace(/[\\/]/g, "_").replace(/[^\\w.\\-а-яА-ЯёЁ ]/g, "_").replace(/\\s+/g, "_").slice(0, 72) || "material";
+  const remoteName = "portal_" + Utilities.getUuid().replace(/-/g, "").slice(0, 10) + "_" + readableName;
   let remoteKey = "";
   if (key === "google") {
     const created = teacherCloudFetch_(key, ownerEmail, "https://www.googleapis.com/drive/v3/files", {
