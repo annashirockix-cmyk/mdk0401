@@ -38,12 +38,52 @@
     if(mark)mark.oninput=()=>exec("hiliteColor",mark.value);
     // Button actions are attached in the markup factory's delegated action list.
   }
+  function insertVideo(){
+    const raw=prompt("Вставьте ссылку на YouTube или прямую ссылку на MP4/WebM:");
+    if(!raw)return;
+    let url;try{url=new URL(raw.trim());}catch(e){alert("Проверьте адрес видео.");return;}
+    if(url.protocol!=="https:"){alert("Разрешены только HTTPS-ссылки.");return;}
+    let html="";
+    const host=url.hostname.toLowerCase().replace(/^www\./,"");
+    let id="";
+    if(host==="youtu.be")id=url.pathname.slice(1).split("/")[0];
+    else if(host==="youtube.com"||host==="m.youtube.com"){if(url.pathname==="/watch")id=url.searchParams.get("v")||"";else if(url.pathname.startsWith("/embed/"))id=url.pathname.split("/")[2]||"";}
+    if(id&&/^[A-Za-z0-9_-]{6,20}$/.test(id))html='<figure class="lecture-video"><iframe src="https://www.youtube-nocookie.com/embed/'+id+'" title="Видео к лекции" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><figcaption>Видео к лекции</figcaption></figure><p><br></p>';
+    else if(/\.(mp4|webm|ogg)(?:$|[?#])/i.test(url.href))html='<figure class="lecture-video"><video controls preload="metadata" playsinline src="'+url.href.replace(/&/g,"&amp;").replace(/"/g,"&quot;")+'"></video><figcaption>Видео к лекции</figcaption></figure><p><br></p>';
+    else{alert("Поддерживаются YouTube и прямые ссылки на MP4, WebM или OGG.");return;}
+    exec("insertHTML",html);
+  }
+  async function recordVideo(){
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){alert("Запись видео доступна в современном браузере по HTTPS.");return;}
+    let stream=null;
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720}},audio:true});
+      const mime=["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"].find(t=>MediaRecorder.isTypeSupported(t))||"";
+      const recorder=new MediaRecorder(stream,mime?{mimeType:mime}:{});
+      const chunks=[];recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+      const overlay=document.createElement("div");overlay.className="ler-recorder";overlay.innerHTML='<div class="ler-recorder-head"><b>● Идёт запись видео</b><button type="button" class="ler-btn" id="lerStopRecord">Остановить запись</button></div><video autoplay muted playsinline></video><small>Камера и микрофон используются только после вашего разрешения браузеру.</small>';
+      overlay.querySelector("video").srcObject=stream;
+      document.body.appendChild(overlay);
+      const stop=()=>{if(recorder.state!=="inactive")recorder.stop();};
+      overlay.querySelector("#lerStopRecord").onclick=stop;
+      recorder.onstop=()=>{
+        stream.getTracks().forEach(t=>t.stop());
+        const blob=new Blob(chunks,{type:recorder.mimeType||"video/webm"});
+        const url=URL.createObjectURL(blob),name="lecture-recording-"+new Date().toISOString().replace(/[:.]/g,"-")+".webm";
+        const a=document.createElement("a");a.href=url;a.download=name;a.textContent="Скачать запись ("+Math.round(blob.size/1024/1024*10)/10+" МБ)";a.className="ler-record-download";
+        const note=document.createElement("p");note.textContent="Сохраните файл, загрузите его в своё облачное хранилище и вставьте ссылку в лекцию через «Видео по ссылке».";
+        overlay.innerHTML="";const preview=document.createElement("video");preview.controls=true;preview.playsInline=true;preview.src=url;preview.style.cssText="width:100%;max-height:300px;background:#05080d;border-radius:8px";overlay.appendChild(preview);overlay.appendChild(a);overlay.appendChild(note);
+        const close=document.createElement("button");close.className="ler-btn";close.textContent="Закрыть";close.onclick=()=>{URL.revokeObjectURL(url);overlay.remove();};overlay.appendChild(close);
+      };
+      recorder.start(1000);
+    }catch(e){if(stream)stream.getTracks().forEach(t=>t.stop());alert("Не удалось начать запись: "+(e.message||e));}
+  }
   function renderPanel(tab){
     const panel=$("lerRibbonPanel");if(!panel)return;
     const actions=[];
     const add=(label,title,fn,extra)=>{actions.push(fn);return '<button type="button" class="ler-btn '+(extra||'')+'" title="'+title+'">'+label+'</button>';};
     if(tab==="insert"){
-      panel.innerHTML='<div class="ler-group"><div class="ler-controls">'+add("▦ Таблица","Вставить таблицу",insertTable)+add("🔗 Ссылка","Вставить ссылку",()=>{const u=prompt("Адрес ссылки (https://…)");if(u&&/^https?:\/\//i.test(u))exec("createLink",u);})+add("▧ Изображение","Вставить изображение",insertImage)+add("— Разделитель","Горизонтальная линия",()=>exec("insertHorizontalRule"))+'</div><small>Элементы</small></div><div class="ler-group"><div class="ler-controls">'+add("H2","Заголовок",()=>exec("formatBlock","h2"))+add("H3","Подзаголовок",()=>exec("formatBlock","h3"))+add("Цитата","Цитата",()=>exec("formatBlock","blockquote"))+'</div><small>Блоки</small></div>';
+      panel.innerHTML='<div class="ler-group"><div class="ler-controls">'+add("▦ Таблица","Вставить таблицу",insertTable)+add("🔗 Ссылка","Вставить ссылку",()=>{const u=prompt("Адрес ссылки (https://…)");if(u&&/^https:\/\//i.test(u))exec("createLink",u);})+add("▧ Изображение","Вставить изображение",insertImage)+add("▶ Видео по ссылке","Вставить видео в лекцию",insertVideo)+add("● Записать видео","Записать объяснение с камеры и микрофона",recordVideo)+add("— Разделитель","Горизонтальная линия",()=>exec("insertHorizontalRule"))+'</div><small>Текст, медиа и запись</small></div><div class="ler-group"><div class="ler-controls">'+add("H2","Заголовок",()=>exec("formatBlock","h2"))+add("H3","Подзаголовок",()=>exec("formatBlock","h3"))+add("Цитата","Цитата",()=>exec("formatBlock","blockquote"))+'</div><small>Блоки</small></div>';
     } else if(tab==="layout"){
       panel.innerHTML='<div class="ler-group"><div class="ler-controls">'+add("⇤","По левому краю",()=>exec("justifyLeft"))+add("↔","По центру",()=>exec("justifyCenter"))+add("☰","По ширине",()=>exec("justifyFull"))+add("⇥","По правому краю",()=>exec("justifyRight"))+'</div><small>Выравнивание</small></div><div class="ler-group"><div class="ler-controls">'+add("↶ Отменить","Отменить",()=>exec("undo"))+add("↷ Повторить","Повторить",()=>exec("redo"))+add("Очистить формат","Очистить формат",()=>exec("removeFormat"))+'</div><small>Правки</small></div>';
     } else {
