@@ -151,3 +151,21 @@ test("teacher storage restore UI uses refreshed cached assets",()=>{
  assert.match(html,/service-worker\.js\?v=443/);
  assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v443/);
 });
+
+test("large lecture videos upload in private chunks and stream through access-checked chunk reads",()=>{
+ assert.match(gs,/function startCourseVideoUpload_\(/);
+ assert.match(gs,/function uploadCourseVideoChunk_\(/);
+ assert.match(gs,/function finishCourseVideoUpload_\(/);
+ assert.match(gs,/function getCourseVideoChunk_\(/);
+ assert.match(gs,/150 \* 1024 \* 1024/);
+ assert.match(gs,/PortalVideoUpload\|/);
+ assert.match(gs,/assertPortalPrivateFolder_/);
+ assert.match(gs,/customContentIsOpen_\(courseId, itemId, String\(record\[2\] \|\| ""\), "file"\)/);
+ assert.match(api,/startCourseVideoUpload:function/);
+ assert.match(api,/uploadCourseVideoChunk:function/);
+ assert.match(api,/getCourseVideoChunk:function/);
+ assert.match(page,/video\\/mp4/);
+ assert.match(page,/uploadCourseVideoChunk/);
+ assert.match(app,/getCourseVideoChunk/);
+ assert.match(app,/createElement\("video"\)/);
+});
