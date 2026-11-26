@@ -71,3 +71,41 @@ test("Google Drive stores teacher uploads in a dedicated app-created portal fold
  assert.match(gs,/parents: \[folderId\]/);
  assert.match(gs,/teacherCloudTokenKey_\(ownerEmail, "google"\) \+ "_FOLDER"/);
 });
+
+test("teacher can export an isolated backup of authored course content to a connected cloud",()=>{
+ assert.match(gs,/function backupTeacherMaterials_\(data\)/);
+ assert.match(gs,/const tokenKey = teacherCloudTokenKey_\(user\.email, provider\.key\)/);
+ assert.match(gs,/owner !== user\.email \|\| !courseId \|\| !hasCourseAccess_\(user, courseId\)/);
+ assert.match(gs,/format: "mdk0401-teacher-materials-backup", formatVersion: 1/);
+ assert.match(gs,/teacherCloudUploadFile_\(provider\.key, user\.email, blob\.getBytes\(\), "application\/json", fileName\)/);
+ assert.match(gs,/TeacherCloudBackups: \["BackupId", "OwnerEmail", "Provider"/);
+ assert.match(gs,/Данные студентов, оценки, попытки и личные сведения не включены/);
+ assert.match(gs,/Бинарные вложения не включены/);
+ assert.match(api,/backupTeacherMaterials:function\(provider\)/);
+ assert.match(page,/data-backup/);
+ assert.match(page,/Создать резервную копию/);
+});
+test("backup history is private to the signed-in teacher",()=>{
+ assert.match(gs,/backupRows = backupSheet\.getDataRange\(\)\.getValues\(\)\.slice\(1\)\.filter\(function\(row\) \{ return email_\(row\[1\] \|\| ""\) === user\.email; \}\)/);
+ assert.match(gs,/backupRows\.slice\(0, 12\)/);
+});
+
+test("teacher cloud backup API exports only owned accessible course content and stores a private history",()=>{
+ assert.match(gs,/TeacherCloudBackups: \["BackupId", "OwnerEmail", "Provider"/);
+ assert.match(gs,/function backupTeacherMaterials_\(data\)/);
+ assert.match(gs,/owner !== user\.email \|\| !courseId \|\| !hasCourseAccess_\(user, courseId\)/);
+ assert.match(gs,/format: "mdk0401-teacher-materials-backup", formatVersion: 1/);
+ assert.match(gs,/teacherCloudUploadFile_\(provider\.key, user\.email, blob\.getBytes\(\), "application\/json", fileName\)/);
+ assert.match(gs,/backupRows = backupSheet\.getDataRange\(\)\.getValues\(\)\.slice\(1\)\.filter\(function\(row\) \{ return email_\(row\[1\] \|\| ""\) === user\.email; \}\)/);
+ assert.match(gs,/Данные студентов, оценки, попытки и личные сведения не включены/);
+ assert.match(gs,/Бинарные вложения не включены/);
+ assert.match(api,/backupTeacherMaterials:function\(provider\)/);
+ assert.match(page,/data-backup/);
+ assert.match(page,/Создать резервную копию/);
+});
+test("teacher cloud backup controls refresh cached storage assets",()=>{
+ assert.match(html,/teacher-storage\.js\?v=2/);
+ assert.match(html,/teacher-storage\.css\?v=2/);
+ assert.match(html,/service-worker\.js\?v=441/);
+ assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v441/);
+});

@@ -53,7 +53,8 @@ const HEADERS = {
   EnglishExamAttempts: ["AttemptId", "StudentEmail", "StudentName", "Group", "CourseId", "ExamId", "VariantId", "Status", "StartedAt", "DeadlineAt", "SubmittedAt", "AttemptJSON", "ResponsesJSON", "ResultJSON", "UpdatedAt"],
   ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt", "EventType", "Details"],
   Webinars: ["WebinarId", "CourseId", "Title", "Description", "StartsAt", "RoomName", "Status", "CreatedBy", "CreatedAt"],
-  WebinarAttendance: ["WebinarId", "Email", "Name", "Event", "FirstJoinedAt", "LastLeftAt", "UpdatedAt"]
+  WebinarAttendance: ["WebinarId", "Email", "Name", "Event", "FirstJoinedAt", "LastLeftAt", "UpdatedAt"],
+  TeacherCloudBackups: ["BackupId", "OwnerEmail", "Provider", "FileRef", "FileName", "CreatedAt", "ItemCount", "CourseCount", "FormatVersion"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -155,6 +156,7 @@ function handleRequest_(e) {
       case "getcoursefile": result = getCourseFile_(data); break;
       case "getwebinars": result = getWebinars_(data); break;
       case "getteachercloudstorage": result = getTeacherCloudStorage_(data); break;
+      case "backupteachermaterials": result = backupTeacherMaterials_(data); break;
       case "beginteachercloudoauth": result = beginTeacherCloudOAuth_(data); break;
       case "disconnectteachercloudstorage": result = disconnectTeacherCloudStorage_(data); break;
       case "createwebinar": result = createWebinar_(data); break;
@@ -5104,7 +5106,61 @@ function getTeacherCloudStorage_(data) {
     try { token = raw ? JSON.parse(raw) : null; } catch (e) {}
     result[key] = { name: cfg.name, configured: !!(id && secret), connected: !!(token && token.refreshToken), expiresAt: token && token.expiresAt ? token.expiresAt : null };
   });
-  return { success: true, providers: result };
+  const backupSheet = ensureSheet_("TeacherCloudBackups");
+  const backupRows = backupSheet.getDataRange().getValues().slice(1).filter(function(row) { return email_(row[1] || "") === user.email; });
+  backupRows.sort(function(a, b) { return String(b[5] || "").localeCompare(String(a[5] || "")); });
+  const backups = backupRows.slice(0, 12).map(function(row) {
+    return { provider: String(row[2] || ""), fileName: String(row[4] || ""), createdAt: String(row[5] || ""), itemCount: Number(row[6] || 0), courseCount: Number(row[7] || 0) };
+  });
+  return { success: true, providers: result, backups: backups };
+}
+function backupTeacherMaterials_(data) {
+  const user = auth_(data);
+  if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Резервное копирование доступно только преподавателям.");
+  const provider = teacherCloudProvider_(data.provider);
+  const tokenKey = teacherCloudTokenKey_(user.email, provider.key);
+  if (!PropertiesService.getScriptProperties().getProperty(tokenKey)) throw new Error("Сначала подключите выбранное облачное хранилище.");
+  teacherCloudAccessToken_(user.email, provider.key);
+  const rows = content_().getDataRange().getValues(), materials = [], courses = {};
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i], owner = email_(row[6] || ""), courseId = normalizeCourseId_(row[1] || "");
+    if (owner !== user.email || !courseId || !hasCourseAccess_(user, courseId)) continue;
+    let payload = {};
+    try { payload = JSON.parse(row[5] || "{}"); } catch (e) {}
+    if (String(row[3] || "") === "file") {
+      payload = {
+        fileName: String(payload.fileName || ""),
+        mimeType: String(payload.mimeType || ""),
+        size: Number(payload.size || 0),
+        storageProvider: String(payload.storageProvider || "portal"),
+        lectureId: String(payload.lectureId || "")
+      };
+    }
+    materials.push({
+      id: String(row[0] || ""), courseId: courseId, topicId: String(row[2] || ""),
+      type: String(row[3] || ""), title: String(row[4] || ""),
+      payload: payload, updatedAt: String(row[7] || "")
+    });
+    courses[courseId] = true;
+  }
+  const createdAt = new Date().toISOString();
+  const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyyMMdd-HHmmss");
+  const fileName = "portal-materials-backup-" + stamp + ".json";
+  const backup = {
+    format: "mdk0401-teacher-materials-backup", formatVersion: 1,
+    createdAt: createdAt, ownerEmail: user.email, provider: provider.key,
+    courseIds: Object.keys(courses).sort(), itemCount: materials.length,
+    notes: ["Копия авторских записей CourseContent. Бинарные вложения не включены: файлы остаются в исходном хранилище.", "Данные студентов, оценки, попытки и личные сведения не включены."],
+    materials: materials
+  };
+  const json = JSON.stringify(backup, null, 2);
+  const blob = Utilities.newBlob(json, "application/json", fileName);
+  if (blob.getBytes().length > 12000000) throw new Error("Резервная копия превышает 12 МБ. Разделите материалы по дисциплинам и повторите попытку.");
+  const fileRef = teacherCloudUploadFile_(provider.key, user.email, blob.getBytes(), "application/json", fileName);
+  const sheet = ensureSheet_("TeacherCloudBackups");
+  const id = Utilities.getUuid();
+  sheet.appendRow([id, user.email, provider.key, fileRef, fileName, createdAt, materials.length, Object.keys(courses).length, 1]);
+  return { success: true, backupId: id, provider: provider.key, fileName: fileName, createdAt: createdAt, itemCount: materials.length, courseCount: Object.keys(courses).length, size: blob.getBytes().length };
 }
 function beginTeacherCloudOAuth_(data) {
   const user = auth_(data);
