@@ -4999,6 +4999,27 @@ function teacherCloudFetch_(providerKey, ownerEmail, url, options) {
   request.muteHttpExceptions = true;
   return teacherCloudApiError_(UrlFetchApp.fetch(url, request), provider.config.name);
 }
+function teacherCloudGoogleFolder_(ownerEmail) {
+  const props = PropertiesService.getScriptProperties();
+  const key = teacherCloudTokenKey_(ownerEmail, "google") + "_FOLDER";
+  let folderId = String(props.getProperty(key) || "");
+  if (folderId) {
+    try {
+      const check = teacherCloudFetch_("google", ownerEmail, "https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(folderId) + "?fields=id,mimeType,trashed", { method: "get" });
+      const meta = JSON.parse(check.getContentText() || "{}");
+      if (meta.id === folderId && meta.mimeType === "application/vnd.google-apps.folder" && !meta.trashed) return folderId;
+    } catch (e) {}
+    props.deleteProperty(key);
+  }
+  const created = teacherCloudFetch_("google", ownerEmail, "https://www.googleapis.com/drive/v3/files", {
+    method: "post", contentType: "application/json",
+    payload: JSON.stringify({ name: "Учебный портал", mimeType: "application/vnd.google-apps.folder" })
+  });
+  const folder = JSON.parse(created.getContentText() || "{}");
+  if (!folder.id) throw new Error("Google Drive не создал папку «Учебный портал».");
+  props.setProperty(key, String(folder.id));
+  return String(folder.id);
+}
 function teacherCloudUploadFile_(providerKey, ownerEmail, bytes, mime, originalName) {
   const provider = teacherCloudProvider_(providerKey), key = provider.key;
   const ext = (String(originalName || "").match(/\.(pdf|doc|docx)$/i) || [])[0] || "";
@@ -5006,9 +5027,10 @@ function teacherCloudUploadFile_(providerKey, ownerEmail, bytes, mime, originalN
   const remoteName = "portal_" + Utilities.getUuid().replace(/-/g, "").slice(0, 10) + "_" + readableName;
   let remoteKey = "";
   if (key === "google") {
+    const folderId = teacherCloudGoogleFolder_(ownerEmail);
     const created = teacherCloudFetch_(key, ownerEmail, "https://www.googleapis.com/drive/v3/files", {
       method: "post", contentType: "application/json",
-      payload: JSON.stringify({ name: remoteName, mimeType: mime })
+      payload: JSON.stringify({ name: remoteName, mimeType: mime, parents: [folderId] })
     });
     const meta = JSON.parse(created.getContentText() || "{}");
     if (!meta.id) throw new Error("Google Drive не вернул идентификатор файла.");
