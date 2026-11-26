@@ -51,3 +51,27 @@ test("СПРУТ-ТП lectures do not contain duplicated scheme text disguised a
   assert.equal(source.split("<h3>3. Контрольный список этапов</h3>").length - 1, 10,
     "ten duplicated tables should be replaced by a clear stage-checklist instruction");
 });
+
+test("СПРУТ-ТП runtime question bank maps every topic to a non-empty assessment bank", () => {
+  const sandbox = { window: { MDK_DATA: {} } };
+  vm.runInNewContext(read("data-sprut-tp.js"), sandbox, { filename: "data-sprut-tp.js" });
+  vm.runInNewContext(read("sprut-tp-question-bank.js"), sandbox, { filename: "sprut-tp-question-bank.js" });
+
+  const course = sandbox.window.MDK_DATA.SPRUT_TP;
+  const topics = course.sections.flatMap(section => section.topics || []);
+  assert.equal(sandbox.window.SPRUT_TP_QUESTION_TOPICS, 14, "question bank must cover all fourteen topics");
+  assert.equal(sandbox.window.SPRUT_TP_QUESTION_COUNT, 56, "all fifty-six mapped questions must be registered");
+  assert.equal(new Set(topics.map(topic => topic.id)).size, topics.length, "runtime topic IDs must remain unique");
+
+  const allQuestions = [];
+  for (const topic of topics) {
+    const questions = topic.test || [];
+    assert.ok(questions.length >= 4, topic.title + ": runtime question bank is incomplete");
+    assert.ok(questions.every(question => question.q && Array.isArray(question.options) && question.options.length === 4),
+      topic.title + ": each runtime question must have four answer options");
+    assert.deepEqual(sandbox.window.HARD_TESTS[topic.id].map(question => question.q), questions.map(question => question.q),
+      topic.title + ": protected hard-test lookup must use the same topic bank");
+    allQuestions.push(...questions.map(question => question.q));
+  }
+  assert.equal(new Set(allQuestions).size, allQuestions.length, "question prompts must be unique across the course");
+});
