@@ -104,10 +104,10 @@ test("teacher cloud backup API exports only owned accessible course content and 
  assert.match(page,/Создать резервную копию/);
 });
 test("teacher cloud backup controls refresh cached storage assets",()=>{
- assert.match(html,/teacher-storage\.js\?v=3/);
- assert.match(html,/teacher-storage\.css\?v=3/);
- assert.match(html,/service-worker\.js\?v=442/);
- assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v442/);
+ assert.match(html,/teacher-storage\.js\?v=4/);
+ assert.match(html,/teacher-storage\.css\?v=4/);
+ assert.match(html,/service-worker\.js\?v=443/);
+ assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v443/);
 });
 
 test("teacher cloud backups embed verified PDF, DOC and DOCX attachments in the archive",()=>{
@@ -124,4 +124,30 @@ test("teacher cloud backups embed verified PDF, DOC and DOCX attachments in the 
 test("teacher cloud backup uses stored MIME when cloud provider returns generic content type",()=>{
  assert.match(gs,/let mime = String\(blob\.getContentType\(\) \|\| ""\)\.toLowerCase\(\)/);
  assert.match(gs,/if \(allowedMimes\.indexOf\(mime\) < 0\) mime = String\(payload\.mimeType \|\| ""\)\.toLowerCase\(\)/);
+});
+
+test("teacher can preview and safely restore a self-contained backup with fresh IDs",()=>{
+ assert.match(gs,/function teacherLoadBackupForRestore_/);
+ assert.match(gs,/function previewTeacherRestore_/);
+ assert.match(gs,/function restoreTeacherMaterials_/);
+ assert.match(gs,/formatVersion\) !== 1/);
+ assert.match(gs,/idMap\[String\(item\.id\)\] = Utilities\.getUuid\(\)/);
+ assert.match(gs,/Восстановление отменено; созданные записи и файлы очищены/);
+ assert.match(api,/previewTeacherRestore:function\(backupId\)/);
+ assert.match(api,/restoreTeacherMaterials:function\(backupId\)/);
+ assert.match(page,/data-restore/);
+ assert.match(page,/Существующие записи не перезаписываются/);
+});
+test("restored attachments are validated and stored privately in portal Drive",()=>{
+ assert.match(gs,/contentBase64/);
+ assert.match(gs,/attachmentBytes > 8000000/);
+ assert.match(gs,/assertPortalPrivateFile_\(file, courseFileFolder_\(\)/);
+ assert.match(gs,/payload\.fileRef = "coursefile:"/);
+ assert.match(gs,/teacherCloudDownloadFile_\(provider\.key, user\.email, match\[2\]\)/);
+});
+test("teacher storage restore UI uses refreshed cached assets",()=>{
+ assert.match(html,/teacher-storage\.js\?v=4/);
+ assert.match(html,/teacher-storage\.css\?v=4/);
+ assert.match(html,/service-worker\.js\?v=443/);
+ assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v443/);
 });

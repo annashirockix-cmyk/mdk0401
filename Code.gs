@@ -157,6 +157,8 @@ function handleRequest_(e) {
       case "getwebinars": result = getWebinars_(data); break;
       case "getteachercloudstorage": result = getTeacherCloudStorage_(data); break;
       case "backupteachermaterials": result = backupTeacherMaterials_(data); break;
+      case "previewteacherrestore": result = previewTeacherRestore_(data); break;
+      case "restoreteachermaterials": result = restoreTeacherMaterials_(data); break;
       case "beginteachercloudoauth": result = beginTeacherCloudOAuth_(data); break;
       case "disconnectteachercloudstorage": result = disconnectTeacherCloudStorage_(data); break;
       case "createwebinar": result = createWebinar_(data); break;
@@ -5110,7 +5112,7 @@ function getTeacherCloudStorage_(data) {
   const backupRows = backupSheet.getDataRange().getValues().slice(1).filter(function(row) { return email_(row[1] || "") === user.email; });
   backupRows.sort(function(a, b) { return String(b[5] || "").localeCompare(String(a[5] || "")); });
   const backups = backupRows.slice(0, 12).map(function(row) {
-    return { provider: String(row[2] || ""), fileName: String(row[4] || ""), createdAt: String(row[5] || ""), itemCount: Number(row[6] || 0), courseCount: Number(row[7] || 0) };
+    return { id: String(row[0] || ""), provider: String(row[2] || ""), fileName: String(row[4] || ""), createdAt: String(row[5] || ""), itemCount: Number(row[6] || 0), courseCount: Number(row[7] || 0) };
   });
   return { success: true, providers: result, backups: backups };
 }
@@ -5192,6 +5194,100 @@ function backupTeacherMaterials_(data) {
   sheet.appendRow([id, user.email, provider.key, fileRef, fileName, createdAt, materials.length, Object.keys(courses).length, 1]);
   return { success: true, backupId: id, provider: provider.key, fileName: fileName, createdAt: createdAt, itemCount: materials.length, courseCount: Object.keys(courses).length, attachmentCount: attachmentCount, attachmentBytes: attachmentBytes, size: blob.getBytes().length };
 }
+
+function teacherLoadBackupForRestore_(data) {
+  const user = auth_(data);
+  if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Восстановление доступно только преподавателям.");
+  const backupId = String(data.backupId || "");
+  if (!backupId) throw new Error("Не выбрана резервная копия.");
+  const sheet = ensureSheet_("TeacherCloudBackups"), rows = sheet.getDataRange().getValues();
+  let record = null;
+  for (let i = 1; i < rows.length; i++) if (String(rows[i][0] || "") === backupId) { record = rows[i]; break; }
+  if (!record || email_(record[1] || "") !== user.email) throw new Error("Резервная копия не найдена или принадлежит другому пользователю.");
+  const provider = teacherCloudProvider_(record[2]);
+  if (!PropertiesService.getScriptProperties().getProperty(teacherCloudTokenKey_(user.email, provider.key))) throw new Error("Подключите облако, в котором хранится выбранная копия.");
+  const match = String(record[3] || "").match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
+  if (!match || match[1] !== provider.key) throw new Error("Ссылка на резервную копию повреждена.");
+  const blob = teacherCloudDownloadFile_(provider.key, user.email, match[2]), bytes = blob.getBytes();
+  if (!bytes.length || bytes.length > 12000000) throw new Error("Размер резервной копии недопустим.");
+  let backup;
+  try { backup = JSON.parse(blob.getDataAsString("UTF-8")); } catch (e) { throw new Error("Файл не является корректной JSON-копией портала."); }
+  if (!backup || backup.format !== "mdk0401-teacher-materials-backup" || Number(backup.formatVersion) !== 1) throw new Error("Формат или версия резервной копии не поддерживается.");
+  if (email_(backup.ownerEmail || "") !== user.email) throw new Error("Владелец внутри архива не совпадает с текущим пользователем.");
+  if (!Array.isArray(backup.materials) || backup.materials.length > 1500) throw new Error("Состав резервной копии повреждён или превышает допустимое количество материалов.");
+  const seen = {}, courseSet = {}, allowedTypes = ["topic", "lecture", "test", "flashcards", "file", "announcement", "game"];
+  let attachmentCount = 0, attachmentBytes = 0;
+  backup.materials.forEach(function(item) {
+    if (!item || !item.id || seen[String(item.id)] || !item.courseId || allowedTypes.indexOf(String(item.type)) < 0) throw new Error("В архиве обнаружена повреждённая или повторяющаяся запись материала.");
+    seen[String(item.id)] = true;
+    const courseId = normalizeCourseId_(item.courseId);
+    if (!courseId || !hasCourseAccess_(user, courseId)) throw new Error("Нет прав на восстановление дисциплины " + String(item.courseId) + ". Восстановление всей копии отменено.");
+    courseSet[courseId] = true;
+    if (typeof item.title !== "string" || item.title.length > 180 || !item.payload || typeof item.payload !== "object" || Array.isArray(item.payload)) throw new Error("В архиве обнаружены некорректные поля материала.");
+    if (String(item.type) === "file") {
+      const p = item.payload, mime = String(p.mimeType || "").toLowerCase(), encoded = String(p.contentBase64 || "");
+      const allowed = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      if (allowed.indexOf(mime) < 0 || !encoded || !/^[A-Za-z0-9+/]+={0,2}$/.test(encoded)) throw new Error("В архиве обнаружено вложение неподдерживаемого формата.");
+      const fileBytes = Utilities.base64Decode(encoded);
+      if (!fileBytes.length || fileBytes.length > 3500000 || Number(p.size) !== fileBytes.length) throw new Error("Размер вложения в архиве не прошёл проверку.");
+      const signature = String.fromCharCode.apply(null, fileBytes.slice(0, 8));
+      if ((mime === "application/pdf" && signature.indexOf("%PDF-") !== 0) ||
+          (mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && signature.slice(0, 4) !== "PK\u0003\u0004") ||
+          (mime === "application/msword" && signature.slice(0, 4) !== "\u00D0\u00CF\u0011\u00E0")) throw new Error("Содержимое вложения не соответствует заявленному формату.");
+      attachmentCount++; attachmentBytes += fileBytes.length;
+      if (attachmentBytes > 8000000) throw new Error("Общий объём вложений в архиве превышает 8 МБ.");
+      if (!String(p.fileName || "").trim() || String(p.fileName).length > 140) throw new Error("В архиве указано некорректное имя вложения.");
+    }
+  });
+  return { user: user, backup: backup, backupId: backupId, fileName: String(record[4] || "backup.json"), courseIds: Object.keys(courseSet).sort(), attachmentCount: attachmentCount, attachmentBytes: attachmentBytes };
+}
+function previewTeacherRestore_(data) {
+  const loaded = teacherLoadBackupForRestore_(data), backup = loaded.backup;
+  return { success: true, backupId: loaded.backupId, fileName: loaded.fileName, createdAt: String(backup.createdAt || ""), itemCount: backup.materials.length, courseIds: loaded.courseIds, attachmentCount: loaded.attachmentCount, attachmentBytes: loaded.attachmentBytes, mode: "new-ids" };
+}
+function restoreTeacherMaterials_(data) {
+  const loaded = teacherLoadBackupForRestore_(data), backup = loaded.backup, user = loaded.user;
+  const idMap = {}, createdIds = [], createdFiles = [];
+  backup.materials.forEach(function(item) { idMap[String(item.id)] = Utilities.getUuid(); });
+  try {
+    backup.materials.forEach(function(item) {
+      const courseId = normalizeCourseId_(item.courseId), payload = Object.assign({}, item.payload);
+      if (String(item.type) === "file") {
+        const bytes = Utilities.base64Decode(String(payload.contentBase64 || ""));
+        const mime = String(payload.mimeType || "").toLowerCase();
+        const name = String(payload.fileName || "material").replace(/[\\/]/g, "_").slice(0, 120);
+        const ext = mime === "application/pdf" ? ".pdf" : mime === "application/msword" ? ".doc" : ".docx";
+        const suffix = (name.match(/\.(pdf|doc|docx)$/i) || [])[0];
+        if (suffix && suffix.toLowerCase() !== ext) throw new Error("Расширение вложения не соответствует его формату: " + name);
+        const safeName = suffix ? name : name + ext;
+        const file = courseFileFolder_().createFile(Utilities.newBlob(bytes, mime, safeName));
+        file.setDescription("Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(item.topicId || "") + ". Автор: " + user.email);
+        createdFiles.push(file.getId());
+        assertPortalPrivateFile_(file, courseFileFolder_(), "Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(item.topicId || "") + ".");
+        delete payload.contentBase64;
+        payload.fileRef = "coursefile:" + file.getId();
+        payload.fileName = safeName; payload.mimeType = mime; payload.size = bytes.length; payload.storageProvider = "portal";
+        if (payload.lectureId && idMap[String(payload.lectureId)]) payload.lectureId = idMap[String(payload.lectureId)];
+      }
+      const saveData = Object.assign({}, payload, {
+        token: data.token, id: idMap[String(item.id)], mdkId: courseId,
+        topicId: String(item.topicId), type: String(item.type), title: String(item.title || "").slice(0, 180)
+      });
+      saveCustomContent_(saveData);
+      createdIds.push(saveData.id);
+    });
+    return { success: true, restoredCount: createdIds.length, attachmentCount: loaded.attachmentCount, courseIds: loaded.courseIds };
+  } catch (error) {
+    try {
+      const sheet = content_(), values = sheet.getDataRange().getValues(), indexes = [];
+      for (let i = 1; i < values.length; i++) if (createdIds.indexOf(String(values[i][0] || "")) >= 0) indexes.push(i + 1);
+      indexes.sort(function(a, b) { return b - a; }).forEach(function(row) { sheet.deleteRow(row); });
+    } catch (cleanupRowsError) {}
+    createdFiles.forEach(function(id) { try { DriveApp.getFileById(id).setTrashed(true); } catch (cleanupFileError) {} });
+    throw new Error("Восстановление отменено; созданные записи и файлы очищены. Причина: " + String(error && error.message || error).slice(0, 220));
+  }
+}
+
 function beginTeacherCloudOAuth_(data) {
   const user = auth_(data);
   if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Подключать личные хранилища могут только преподаватели.");

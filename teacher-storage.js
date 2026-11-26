@@ -19,7 +19,8 @@ window.renderTeacherStoragePage=function(){
   cards.innerHTML=providers.map(function(p){
    var v=(data.providers||{})[p.id]||{},connected=!!v.connected,configured=!!v.configured;
    var latest=(data.backups||[]).filter(function(b){return b.provider===p.id;})[0];
-   var backupInfo=latest?'<p class="teacher-storage-backup-info">Последняя копия: '+esc(latest.fileName)+'<br>'+esc(latest.itemCount)+' материалов · '+esc(latest.courseCount)+' дисциплин</p>':'<p class="teacher-storage-backup-info">Резервная копия ещё не создавалась</p>';
+   var providerBackups=(data.backups||[]).filter(function(b){return b.provider===p.id;});
+   var backupInfo=providerBackups.length?'<div class="teacher-storage-backup-info"><p>Резервные копии:</p>'+providerBackups.map(function(b){return '<div class="teacher-storage-backup-row"><span>'+esc(b.fileName)+' · '+esc(b.itemCount)+' материалов</span> <button class="btn ghost" data-restore="'+esc(b.id)+'">Проверить и восстановить</button></div>';}).join('')+'</div>':'<p class="teacher-storage-backup-info">Резервная копия ещё не создавалась</p>';
    var action=connected?'<button class="btn" data-backup="'+p.id+'">Создать резервную копию</button><button class="btn ghost" data-disconnect="'+p.id+'">Отключить</button>':configured?'<button class="btn" data-connect="'+p.id+'">Подключить</button>':'<button class="btn ghost" disabled>Ожидает настройки администратором</button>';
    return '<article class="teacher-storage-card"><div class="teacher-storage-card-top"><span class="teacher-storage-icon">'+p.icon+'</span><span class="teacher-storage-state '+(connected?'is-connected':'')+'">'+(connected?'Подключено':configured?'Не подключено':'Не настроено')+'</span></div><h2>'+p.name+'</h2><p>'+p.description+'</p>'+(connected?backupInfo:'')+'<div class="teacher-storage-card-actions">'+action+'</div></article>';
   }).join("");
@@ -36,6 +37,16 @@ window.renderTeacherStoragePage=function(){
     message("Копия сохранена: "+r.fileName+" · "+r.itemCount+" материалов · "+(r.attachmentCount||0)+" вложений · "+r.courseCount+" дисциплин.");
     load();
    }).catch(function(e){message(e.message,true);btn.disabled=false;});
+  });});
+  cards.querySelectorAll("[data-restore]").forEach(function(btn){btn.addEventListener("click",function(){
+   var backupId=btn.getAttribute("data-restore");btn.disabled=true;message("Проверяем архив и права доступа…");
+   window.API.previewTeacherRestore(backupId).then(function(p){
+    if(!p||!p.success)throw Error(p&&p.error||"Не удалось проверить архив");
+    var detail="Архив: "+p.fileName+"\nМатериалов: "+p.itemCount+"\nДисциплин: "+p.courseIds.join(", ")+"\nВложений: "+p.attachmentCount+" ("+Math.round(p.attachmentBytes/1024)+" КБ)\n\nМатериалы будут добавлены с новыми идентификаторами. Существующие записи не перезаписываются. Продолжить?";
+    if(!window.confirm(detail)){btn.disabled=false;message("Восстановление отменено.");return null;}
+    message("Восстанавливаем материалы и защищённые вложения…");
+    return window.API.restoreTeacherMaterials(backupId);
+   }).then(function(r){if(!r)return;if(!r.success)throw Error(r.error||"Не удалось восстановить архив");message("Восстановлено: "+r.restoredCount+" материалов, вложений: "+r.attachmentCount+".");load();}).catch(function(e){message(e.message,true);btn.disabled=false;});
   });});
   cards.querySelectorAll("[data-disconnect]").forEach(function(btn){btn.addEventListener("click",function(){
    var provider=btn.getAttribute("data-disconnect");if(!window.confirm("Отключить это облачное хранилище? Уже сохранённые в нём файлы не удалятся."))return;
