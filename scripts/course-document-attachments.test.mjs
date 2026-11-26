@@ -38,7 +38,8 @@ test("document retrieval is bound to the exact course-content record and access 
   assert.match(source, /hasCourseAccess_\(user, courseId\)/);
   assert.match(source, /customContentIsOpen_\(courseId, itemId/);
   assert.match(source, /String\(payload\.fileRef \|\| ""\) !== fileRef/);
-  assert.match(source, /assertPortalPrivateFile_\(DriveApp\.getFileById\(portalMatch\[1\]\), courseFileFolder_\(\)/);\n  assert.match(source, /teacherCloudDownloadFile_\(cloudMatch\[1\], ownerEmail, cloudMatch\[2\]\)/);
+  assert.match(source, /assertPortalPrivateFile_\(DriveApp\.getFileById\(portalMatch\[1\]\), courseFileFolder_\(\)/);
+  assert.match(source, /teacherCloudDownloadFile_\(cloudMatch\[1\], ownerEmail, cloudMatch\[2\]\)/);
   assert.match(source, /DriveApp\.getFileById/);
   assert.match(source, /Utilities\.base64Encode/);
 });
