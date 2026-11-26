@@ -31,3 +31,13 @@
 .lecture-word-page img{max-width:100%;height:auto}
 .lecture-word-page ul,.lecture-word-page ol{padding-left:28px}
 @media(max-width:700px){.lecture-word-page{padding:22px 18px;min-height:420px}.ler-panel{align-items:flex-start}.ler-savehint{display:none}}
+
+.lecture-word-page .lecture-video{margin:20px auto;max-width:900px}
+.lecture-word-page .lecture-video iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:8px}
+.lecture-word-page .lecture-video video{display:block;width:100%;max-height:560px;background:#080d16;border-radius:8px}
+.lecture-word-page .lecture-video figcaption{font-size:12px;color:#667085;text-align:center;margin-top:6px}
+.ler-recorder{position:fixed;z-index:100000;right:20px;bottom:20px;width:min(520px,calc(100vw - 40px));padding:14px;border-radius:14px;background:#172033;color:#fff;box-shadow:0 12px 44px #0008;display:flex;flex-direction:column;gap:10px}
+.ler-recorder-head{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#ff8d8d}
+.ler-recorder video{width:100%;max-height:300px;background:#05080d;border-radius:8px}
+.ler-recorder small,.ler-recorder p{color:#cbd5e1;font-size:12px;line-height:1.5}
+.ler-recorder .ler-record-download{display:inline-block;padding:10px 12px;border-radius:8px;background:#3978d8;color:white;font-weight:700;text-decoration:none}
