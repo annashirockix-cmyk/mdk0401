@@ -69,5 +69,5 @@ test("Google Drive stores teacher uploads in a dedicated app-created portal fold
  assert.match(gs,/function teacherCloudGoogleFolder_\(ownerEmail\)/);
  assert.match(gs,/name: "Учебный портал", mimeType: "application\/vnd\.google-apps\.folder"/);
  assert.match(gs,/parents: \[folderId\]/);
- assert.match(gs,/TEACHER_CLOUD_TOKEN_.*_FOLDER/);
+ assert.match(gs,/teacherCloudTokenKey_\(ownerEmail, "google"\) \+ "_FOLDER"/);
 });
