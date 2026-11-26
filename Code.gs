@@ -344,6 +344,7 @@ function normalizeGroupName_(value) {
     .replace(/[‐‑‒–—−]/g, "-")
     .replace(/\s+/g, " ")
     .trim()
+    .replace(/\s*-\s*/g, "-")
     .toLocaleUpperCase("ru-RU");
 }
 
