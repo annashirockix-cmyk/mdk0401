@@ -62,7 +62,7 @@ test("server filters tutoring links by course, selected group and individual stu
     ()=>settingsSheet,
     getMap,
     value=>String(value||"").trim().toLowerCase(),
-    value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\\s+/g," ").trim().toLocaleUpperCase("ru-RU"),
+    value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\s+/g," ").trim().toLocaleUpperCase("ru-RU"),
     (user,course)=>String(user.courses||"").split(",").map(value=>value.trim()).includes(course),
     email=>"tutoring:teacher:"+String(email||"").trim().toLowerCase(),
     raw=>{let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:false,audienceType:"all",audienceValue:""};try{value=Object.assign(value,JSON.parse(raw||"{}"));}catch{}return value;},
@@ -98,7 +98,7 @@ test("saving tutoring links enforces teacher role and validates the selected aud
     headerMap,
     (user,course)=>String(user.courses||"").split(",").map(value=>value.trim()).includes(course),
     value=>String(value||"").trim().toLowerCase(),
-    value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\\s+/g," ").trim().toLocaleUpperCase("ru-RU"),
+    value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\s+/g," ").trim().toLocaleUpperCase("ru-RU"),
     email=>"tutoring:teacher:"+String(email||"").trim().toLowerCase(),
     (key,value,updatedBy)=>{saved={key,value:JSON.parse(value),updatedBy};}
   );
