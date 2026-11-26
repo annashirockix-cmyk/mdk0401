@@ -75,6 +75,8 @@ jobs:
         run: node --check lecture-word-ribbon.js && node --test scripts/lecture-word-ribbon.test.mjs
       - name: Check webinar scheduling and meeting integration
         run: node --check webinars.js && node --test scripts/webinars.test.mjs
+      - name: Check teacher cloud storage connections
+        run: node --check teacher-storage.js && node --test scripts/teacher-cloud-storage.test.mjs
       - name: Check protected course document attachments
         run: node --test scripts/course-document-attachments.test.mjs scripts/course-document-attachments-runtime.test.mjs
       - name: Check protected exam document attachments
