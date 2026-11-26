@@ -22,3 +22,9 @@ test("teacher storage page and API are wired into the portal",()=>{
  assert.match(html,/teacher-storage\.js/);assert.match(html,/teacher-storage\.css/);assert.match(html,/#\/teacher-storage/);
  assert.match(page,/Google Drive/);assert.match(page,/Яндекс Диск/);assert.match(page,/OneDrive/);assert.match(page,/Dropbox/);
 });
+
+test("OAuth redirect URI reaches Apps Script callback and provider is resolved from one-time state",()=>{
+ assert.ok(gs.includes('return url + (url.indexOf("?") >= 0 ? "&" : "?") + "action=cloudOAuthCallback"'));
+ assert.match(gs,/providerKey = String\(savedState\.provider \|\| ""\)\.toLowerCase\(\)/);
+ assert.doesNotMatch(gs,/const providerKey = String\(params\.provider/);
+});

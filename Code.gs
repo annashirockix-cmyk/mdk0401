@@ -4932,7 +4932,8 @@ function teacherCloudTokenKey_(email, provider) {
 function teacherCloudRedirectUri_() {
   const url = ScriptApp.getService().getUrl();
   if (!url) throw new Error("Сначала разверните Apps Script как веб-приложение.");
-  return url;
+  // doGet dispatches OAuth callbacks by this action; providers must use this exact URI.
+  return url + (url.indexOf("?") >= 0 ? "&" : "?") + "action=cloudOAuthCallback";
 }
 function getTeacherCloudStorage_(data) {
   const user = auth_(data);
@@ -4965,13 +4966,16 @@ function beginTeacherCloudOAuth_(data) {
   return { success: true, url: cfg.auth + "?" + query };
 }
 function handleTeacherCloudOAuthCallback_(params) {
-  const providerKey = String(params.provider || "").toLowerCase();
+  let providerKey = "";
   try {
-    const provider = teacherCloudProvider_(providerKey), cfg = provider.config, props = PropertiesService.getScriptProperties();
+    const props = PropertiesService.getScriptProperties();
     const state = String(params.state || ""), stateKey = "TEACHER_CLOUD_STATE_" + state, rawState = state ? props.getProperty(stateKey) : "";
     if (!rawState) throw new Error("Сеанс подключения истёк или уже использован. Вернитесь в портал и повторите подключение.");
     props.deleteProperty(stateKey);
     const savedState = JSON.parse(rawState);
+    // Provider identity is bound to the one-time server-side state, never trusted from the callback URL.
+    providerKey = String(savedState.provider || "").toLowerCase();
+    const provider = teacherCloudProvider_(providerKey), cfg = provider.config;
     if (savedState.provider !== providerKey || Number(savedState.expiresAt) < Date.now()) throw new Error("Проверка безопасности подключения не пройдена. Начните заново.");
     if (params.error) throw new Error("Провайдер отклонил подключение: " + String(params.error_description || params.error).slice(0, 240));
     const code = String(params.code || "");
