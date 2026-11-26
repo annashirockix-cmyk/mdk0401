@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 const loadTest = readFileSync(new URL("./gas-read-load-test.mjs", import.meta.url), "utf8");
+const adminPanel = readFileSync(new URL("../course-admin.js", import.meta.url), "utf8");
 const server = readFileSync(new URL("../Code.gs", import.meta.url), "utf8");
 
 function extractFunction(source, name) {
@@ -30,6 +31,13 @@ test("registration requires surname, first name and a normalized study group on 
   assert.match(fn, /if \(!surname \|\| !firstName\) return/);
   assert.match(fn, /if \(!group\) return \{ success: false, error: "Укажите учебную группу\." \}/);
   assert.match(fn, /const group = normalizeGroupName_\(data\.group\)/);
+});
+
+test("manual student account creation requires a normalized study group", () => {
+  const fn = extractFunction(server, "adminCreateUser_");
+  assert.match(fn, /const name = String\(data\.name \|\| ""\)\.trim\(\), group = normalizeGroupName_\(data\.group\)/);
+  assert.match(fn, /if \(role === "student" && !group\) throw new Error\("Укажите учебную группу студенту\."\)/);
+  assert.match(adminPanel, /data\.role==="student"&&!data\.group/);
 });
 
 test("read-only load smoke test includes protected English VPR and semester reads", () => {
