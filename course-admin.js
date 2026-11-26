@@ -59,7 +59,7 @@
       hero.insertAdjacentElement("afterend",panel);
     }
     if(isTeacher()){
-      const b=document.createElement("a");b.href="#/course-editor";b.className="btn";b.style.margin="0 0 16px";b.textContent="✍️ Редактор курса и объявлений";
+      const b=document.createElement("a");b.href="#/course-editor";b.className="btn";b.style.margin="0 0 16px";b.textContent="✍️ Редактор курса и объявлений";const storageLink=document.createElement("a");storageLink.href="#/teacher-storage";storageLink.className="btn ghost";storageLink.style.margin="0 0 16px 8px";storageLink.textContent="☁️ Мои хранилища";b.insertAdjacentElement("afterend",storageLink);
       const first=app.querySelector(".module");if(first)first.insertAdjacentElement("beforebegin",b);else app.appendChild(b);
     }
     updateCourseChrome();
