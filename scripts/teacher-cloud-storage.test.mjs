@@ -64,3 +64,10 @@ test("cloud token refresh uses a user-scoped lock to avoid nesting the content s
  assert.match(gs,/LockService\.getUserLock\(\)/);
  assert.match(gs,/const readableName = String\(originalName \|\| "material"\)/);
 });
+
+test("Google Drive stores teacher uploads in a dedicated app-created portal folder",()=>{
+ assert.match(gs,/function teacherCloudGoogleFolder_\(ownerEmail\)/);
+ assert.match(gs,/name: "Учебный портал", mimeType: "application\/vnd\.google-apps\.folder"/);
+ assert.match(gs,/parents: \[folderId\]/);
+ assert.match(gs,/TEACHER_CLOUD_TOKEN_.*_FOLDER/);
+});
