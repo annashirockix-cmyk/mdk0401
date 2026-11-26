@@ -156,7 +156,7 @@
     if(!window.API||!window.API.adminCreateUser||!window.API.adminDeleteUser){box.textContent="API не подключён: обновите api.js и Code.gs.";return;}
     document.getElementById("createPortalUser").onclick=function(){
       const data={name:document.getElementById("newUserName").value.trim(),email:document.getElementById("newUserEmail").value.trim(),group:document.getElementById("newUserGroup").value.trim(),password:document.getElementById("newUserPassword").value,role:document.getElementById("newUserRole").value};
-      const btn=this;if(!data.name||!data.email||data.password.length<8){status.textContent="Заполните ФИО, корректный email и пароль от 8 символов.";return;}
+      const btn=this;if(!data.name||!data.email||data.password.length<8){status.textContent="Заполните ФИО, корректный email и пароль от 8 символов.";return;}if(data.role==="student"&&!data.group){status.textContent="Для создания учётной записи студента укажите учебную группу.";document.getElementById("newUserGroup").focus();return;}
       btn.disabled=true;status.textContent="Создание…";window.API.adminCreateUser(data).then(r=>{if(!r.success)throw new Error(r.error||"Не удалось создать пользователя.");status.textContent="Создан пользователь: "+r.email;["newUserName","newUserEmail","newUserGroup","newUserPassword"].forEach(id=>document.getElementById(id).value="");return loadUsers();}).catch(e=>status.textContent=e.message).finally(()=>btn.disabled=false);
     };
     loadUsers().catch(e=>{box.textContent="Ошибка: "+e.message;});

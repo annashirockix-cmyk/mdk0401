@@ -3315,6 +3315,7 @@ function adminCreateUser_(data) {
   if (!email || email.indexOf("@") < 1) throw new Error("Укажите корректный email.");
   if (password.length < 8) throw new Error("Временный пароль должен содержать не менее 8 символов.");
   if (!name) throw new Error("Укажите имя пользователя.");
+  if (role === "student" && !group) throw new Error("Укажите учебную группу студенту.");
   if (["student", "teacher", "admin"].indexOf(role) === -1) throw new Error("Недопустимая роль.");
   const lock = LockService.getScriptLock(); lock.waitLock(10000);
   try {
