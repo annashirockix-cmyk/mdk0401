@@ -28,6 +28,7 @@ test("only webinar creator or admin receives moderator privileges",()=>{
  assert.ok(gs.includes('const isHost=user.role==="admin"||(user.role==="teacher"&&w.createdBy===user.email);'));
 });
 
+test("Jitsi rooms can be secured with server-signed JWT tokens",()=>{
  assert.match(gs,/JITSI_APP_ID/);
  assert.match(gs,/JITSI_APP_SECRET/);
  assert.match(gs,/computeHmacSha256Signature/);
