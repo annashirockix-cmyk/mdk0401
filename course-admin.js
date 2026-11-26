@@ -412,7 +412,7 @@
       if(!topicId||!lectureId){status.textContent="Сначала выберите и сохраните лекцию.";return;}
       if(!file){status.textContent="Выберите PDF, DOC или DOCX.";return;}
       if(file.size>3500000){status.textContent="Файл больше 3,5 МБ. Уменьшите размер и повторите загрузку.";return;}
-      const ext=(file.name.match(/\\.([^.]+)$/)||[])[1]||"";
+      const ext=(file.name.match(/\.([^.]+)$/)||[])[1]||"";
       if(!/^(pdf|doc|docx)$/i.test(ext)){status.textContent="Разрешены только PDF, DOC и DOCX.";return;}
       button.disabled=true;status.textContent="Загрузка файла к лекции…";
       try{
