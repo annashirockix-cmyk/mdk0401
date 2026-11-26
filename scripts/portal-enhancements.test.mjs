@@ -390,7 +390,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
   assert.match(html, /lecture-visual-atlas\.js\?v=5/);
-  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=7/);
+  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=8/);
   assert.match(html, /sprut-tp-document-examples\.js\?v=3/);
   assert.match(html, /lecture-visual-atlas\.css\?v=6/);
   assert.ok(sw.includes("./sprut-tp-document-examples.js"));
@@ -684,7 +684,7 @@ test("lecture atlas uses topic-matched photos and diagrams instead of generic re
   const visual = read("lecture-visual-atlas.js");
   const css = read("lecture-visual-atlas.css");
   assert.match(html, /lecture-visual-atlas\.js\?v=5/);
-  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=7/);
+  assert.match(html, /sprut-tp-lecture-upgrade\.js\?v=8/);
   assert.match(html, /sprut-tp-document-examples\.js\?v=3/);
   assert.match(html, /lecture-visual-atlas\.css\?v=6/);
   assert.ok(sw.includes("./sprut-tp-document-examples.js"));
