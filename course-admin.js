@@ -35,7 +35,7 @@
   if(originalHome) window.renderHomePage=function(){
     filterCoursePicker();
     if(isTeacher()&&!accessible().length){
-      const app=document.getElementById("app"); if(app)app.innerHTML='<div class="module"><h2>Доступ пока не назначен</h2><p>Администратор должен открыть вам одну или несколько дисциплин.</p></div>';
+      const app=document.getElementById("app"); if(app)app.innerHTML='<div class="module"><h2>Доступ пока не назначен</h2><p>Администратор должен открыть вам одну или несколько дисциплин.</p><a class="btn ghost" href="#/teacher-storage">☁️ Подключить личное хранилище</a></div>';
       return;
     }
     originalHome.apply(this,arguments);
@@ -84,7 +84,7 @@
   if(originalRouter)window.router=function(){
     const p=(location.hash||"").replace(/^#/,"").split("/").filter(Boolean);
     const id=p[0]==="topic"?p[1]:(window.state.activeCourseId||"07.01");
-    if(isTeacher()&&!["account","login-help","links","games","course-editor","flashcard-editor"].includes(p[0])&&!canCourse(id)){
+    if(isTeacher()&&!["account","login-help","links","games","course-editor","flashcard-editor","teacher-storage"].includes(p[0])&&!canCourse(id)){
       window.showToast("Доступ к этой дисциплине закрыт администратором.","err");
       location.hash="#/";return;
     }
