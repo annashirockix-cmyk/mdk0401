@@ -28,7 +28,7 @@ test("course documents are uploaded only by an editor and stored in a private Dr
   assert.match(source, /namedExtension\.toLowerCase\(\) !== extension/);
 });
 
-test("document retrieval is bound to the exact course-content record and access switch", () => {
+test("document retrieval is bound to the exact course-content record, access switch and cloud provider", () => {
   const start = backend.indexOf("function getCourseFile_(data)");
   const end = backend.indexOf("function saveCustomContent_(data)", start);
   assert.ok(start >= 0 && end > start);
