@@ -4,6 +4,7 @@ import fs from "node:fs";
 const gs=fs.readFileSync(new URL("../Code.gs",import.meta.url),"utf8");
 const api=fs.readFileSync(new URL("../api.js",import.meta.url),"utf8");
 const page=fs.readFileSync(new URL("../teacher-storage.js",import.meta.url),"utf8");
+const courseAdmin=fs.readFileSync(new URL("../course-admin.js",import.meta.url),"utf8");
 const html=fs.readFileSync(new URL("../index.html",import.meta.url),"utf8");
 test("teacher cloud storage supports four allowlisted providers and app-folder scopes",()=>{
  for(const key of ["google","yandex","onedrive","dropbox"])assert.match(gs,new RegExp(key+": \\{ name:"));
@@ -46,7 +47,7 @@ test("cloud attachments are owned by the uploader and access-checked before stud
 test("course editor exposes connected personal drives for both topic and lecture attachments",()=>{
  assert.match(api,/uploadCourseFile:function\(courseId,topicId,title,fileName,dataUrl,lectureId,storageProvider\)/);
  assert.match(page,/getTeacherCloudStorage/);
- assert.match(page,/courseFileStorage/);
+ assert.match(courseAdmin,/courseFileStorage/);
  assert.match(page,/uploadCourseFile\(courseSel\.value,topicId,file\.name,file\.name,dataUrl,lectureId,storageSel/);
 });
 
