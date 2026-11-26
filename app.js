@@ -876,8 +876,41 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                         var lectureFilesBox = document.createElement("section"); lectureFilesBox.style.cssText = "margin:0 20px 16px;padding:12px;border:1px solid var(--border);border-radius:9px;background:var(--card-soft);";
                         var lectureFilesTitle = document.createElement("b"); lectureFilesTitle.textContent = "📎 Файлы к этой лекции"; lectureFilesBox.appendChild(lectureFilesTitle);
                         lectureFiles.forEach(function(fileItem) {
-                            var fileButton = document.createElement("button"); fileButton.type = "button"; fileButton.className = "btn ghost"; fileButton.style.cssText = "display:flex;margin-top:8px;justify-content:flex-start;text-align:left;"; fileButton.textContent = "📄 " + String(fileItem.title || fileItem.fileName || "Учебный файл") + " · " + String(fileItem.fileName || "");
-                            fileButton.addEventListener("click", async function() { fileButton.disabled = true; var oldText = fileButton.textContent; fileButton.textContent = "Загрузка файла…"; try { var result = await window.API.getCourseFile(fileItem.id, fileItem.fileRef); if (!result || !result.success || !result.data) throw new Error(result && result.error || "Не удалось получить файл."); var binary = atob(result.data), bytes = new Uint8Array(binary.length); for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i); var blob = new Blob([bytes], { type: result.mimeType || "application/octet-stream" }); var url = URL.createObjectURL(blob), anchor = document.createElement("a"); anchor.href = url; anchor.download = result.fileName || "учебный-материал"; document.body.appendChild(anchor); anchor.click(); anchor.remove(); setTimeout(function() { URL.revokeObjectURL(url); }, 60000); fileButton.textContent = oldText; } catch (error) { fileButton.textContent = "Ошибка загрузки: " + (error.message || "повторите попытку"); } finally { fileButton.disabled = false; } });
+                            var isVideo = /^video\//i.test(String(fileItem.mimeType || "")) && /^coursevideo:/.test(String(fileItem.fileRef || ""));
+                            var fileButton = document.createElement("button"); fileButton.type = "button"; fileButton.className = "btn ghost"; fileButton.style.cssText = "display:flex;margin-top:8px;justify-content:flex-start;text-align:left;"; fileButton.textContent = (isVideo ? "🎬 " : "📄 ") + String(fileItem.title || fileItem.fileName || "Учебный файл") + " · " + String(fileItem.fileName || "");
+                            fileButton.addEventListener("click", async function() {
+                                fileButton.disabled = true; var oldText = fileButton.textContent;
+                                try {
+                                    if (isVideo) {
+                                        var chunkCount = Number(fileItem.chunkCount || 0), parts = [];
+                                        if (!chunkCount || chunkCount > 160) throw new Error("Некорректное количество частей видео.");
+                                        for (var partIndex = 0; partIndex < chunkCount; partIndex++) {
+                                            fileButton.textContent = "Загружаем видео… " + Math.round((partIndex + 1) / chunkCount * 100) + "%";
+                                            var partResult = await window.API.getCourseVideoChunk(fileItem.id, fileItem.fileRef, partIndex);
+                                            if (!partResult || !partResult.success || !partResult.data) throw new Error(partResult && partResult.error || "Не удалось получить часть видео №" + (partIndex + 1));
+                                            var partBinary = atob(partResult.data), partBytes = new Uint8Array(partBinary.length);
+                                            for (var bi = 0; bi < partBinary.length; bi++) partBytes[bi] = partBinary.charCodeAt(bi);
+                                            parts.push(partBytes);
+                                        }
+                                        var videoBlob = new Blob(parts, { type: fileItem.mimeType || "video/mp4" }), videoUrl = URL.createObjectURL(videoBlob);
+                                        var player = document.createElement("video"); player.controls = true; player.playsInline = true; player.preload = "metadata"; player.src = videoUrl;
+                                        player.style.cssText = "display:block;width:100%;max-height:520px;margin-top:12px;border-radius:10px;background:#000;";
+                                        var previous = fileButton.nextElementSibling; if (previous && previous.tagName === "VIDEO") { try { URL.revokeObjectURL(previous.src); } catch (e) {} previous.remove(); }
+                                        fileButton.insertAdjacentElement("afterend", player);
+                                        fileButton.textContent = "🎬 " + String(fileItem.title || fileItem.fileName || "Видеолекция") + " · готово к просмотру";
+                                    } else {
+                                        fileButton.textContent = "Загрузка файла…";
+                                        var result = await window.API.getCourseFile(fileItem.id, fileItem.fileRef);
+                                        if (!result || !result.success || !result.data) throw new Error(result && result.error || "Не удалось получить файл.");
+                                        var binary = atob(result.data), bytes = new Uint8Array(binary.length);
+                                        for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                                        var blob = new Blob([bytes], { type: result.mimeType || "application/octet-stream" }), url = URL.createObjectURL(blob), anchor = document.createElement("a");
+                                        anchor.href = url; anchor.download = result.fileName || "учебный-материал"; document.body.appendChild(anchor); anchor.click(); anchor.remove(); setTimeout(function() { URL.revokeObjectURL(url); }, 60000);
+                                        fileButton.textContent = oldText;
+                                    }
+                                } catch (error) { fileButton.textContent = "Ошибка: " + (error.message || "повторите попытку"); }
+                                finally { fileButton.disabled = false; }
+                            });
                             lectureFilesBox.appendChild(fileButton);
                         });
                         details.appendChild(lectureFilesBox);
