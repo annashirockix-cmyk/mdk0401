@@ -80,7 +80,7 @@ test("teacher can export an isolated backup of authored course content to a conn
  assert.match(gs,/teacherCloudUploadFile_\(provider\.key, user\.email, blob\.getBytes\(\), "application\/json", fileName\)/);
  assert.match(gs,/TeacherCloudBackups: \["BackupId", "OwnerEmail", "Provider"/);
  assert.match(gs,/Данные студентов, оценки, попытки и личные сведения не включены/);
- assert.match(gs,/Бинарные вложения не включены/);
+ assert.match(gs,/Самодостаточная копия авторских записей CourseContent и бинарных вложений PDF, DOC и DOCX/);
  assert.match(api,/backupTeacherMaterials:function\(provider\)/);
  assert.match(page,/data-backup/);
  assert.match(page,/Создать резервную копию/);
@@ -98,14 +98,30 @@ test("teacher cloud backup API exports only owned accessible course content and 
  assert.match(gs,/teacherCloudUploadFile_\(provider\.key, user\.email, blob\.getBytes\(\), "application\/json", fileName\)/);
  assert.match(gs,/backupRows = backupSheet\.getDataRange\(\)\.getValues\(\)\.slice\(1\)\.filter\(function\(row\) \{ return email_\(row\[1\] \|\| ""\) === user\.email; \}\)/);
  assert.match(gs,/Данные студентов, оценки, попытки и личные сведения не включены/);
- assert.match(gs,/Бинарные вложения не включены/);
+ assert.match(gs,/contentBase64: Utilities\.base64Encode\(bytes\)/);
  assert.match(api,/backupTeacherMaterials:function\(provider\)/);
  assert.match(page,/data-backup/);
  assert.match(page,/Создать резервную копию/);
 });
 test("teacher cloud backup controls refresh cached storage assets",()=>{
- assert.match(html,/teacher-storage\.js\?v=2/);
- assert.match(html,/teacher-storage\.css\?v=2/);
- assert.match(html,/service-worker\.js\?v=441/);
- assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v441/);
+ assert.match(html,/teacher-storage\.js\?v=3/);
+ assert.match(html,/teacher-storage\.css\?v=3/);
+ assert.match(html,/service-worker\.js\?v=442/);
+ assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v442/);
+});
+
+test("teacher cloud backups embed verified PDF, DOC and DOCX attachments in the archive",()=>{
+ assert.match(gs,/function teacherBackupAttachment_\(row, payload, courseId\)/);
+ assert.match(gs,/contentBase64: Utilities\.base64Encode\(bytes\)/);
+ assert.match(gs,/attachmentBytes > 8000000/);
+ assert.match(gs,/attachmentCount: attachmentCount, attachmentBytes: attachmentBytes/);
+ assert.match(gs,/Самодостаточная копия авторских записей CourseContent и бинарных вложений PDF, DOC и DOCX/);
+ assert.match(gs,/Восстановление из архива выполняется отдельно/);
+ assert.match(page,/В копию входят авторские материалы и вложенные PDF, DOC и DOCX/);
+ assert.match(page,/r\.attachmentCount/);
+});
+
+test("teacher cloud backup uses stored MIME when cloud provider returns generic content type",()=>{
+ assert.match(gs,/let mime = String\(blob\.getContentType\(\) \|\| ""\)\.toLowerCase\(\)/);
+ assert.match(gs,/if \(allowedMimes\.indexOf\(mime\) < 0\) mime = String\(payload\.mimeType \|\| ""\)\.toLowerCase\(\)/);
 });
