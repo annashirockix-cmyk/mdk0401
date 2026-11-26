@@ -104,16 +104,27 @@
     app.innerHTML = '<a href="#/" class="backlink">← На главную</a><section class="hero"><h1>Восстановление доступа</h1><p>Запрос поступит администратору портала.</p></section>' +
       '<div class="module"><form id="resetRequestForm"><label>Email учётной записи</label><input id="resetRequestEmail" class="self-input" type="email" required placeholder="name@example.com">' +
       '<label style="display:block;margin-top:12px">Комментарий (необязательно)</label><textarea id="resetRequestNote" class="self-input" rows="3" maxlength="500" placeholder="Например, забыл пароль"></textarea>' +
-      '<button class="btn" style="margin-top:14px">Отправить запрос</button><p id="resetRequestStatus" aria-live="polite"></p></form></div>';
-    $("resetRequestForm").onsubmit = function (e) {
+      '<button id="resetRequestSubmit" class="btn" style="margin-top:14px">Отправить запрос</button><p id="resetRequestStatus" aria-live="polite"></p></form></div>';
+    let submitting = false;
+    $("resetRequestForm").onsubmit = async function (e) {
       e.preventDefault();
+      if (submitting) return;
+      submitting = true;
       const status = $("resetRequestStatus");
+      const button = $("resetRequestSubmit");
+      if (button) button.disabled = true;
       status.textContent = "Отправка…";
-      window.API.requestPasswordReset($("resetRequestEmail").value.trim(), $("resetRequestNote").value.trim()).then(r => {
+      try {
+        const r = await window.API.requestPasswordReset($("resetRequestEmail").value.trim(), $("resetRequestNote").value.trim());
         if (!r || !r.success) throw new Error(r && r.error || "Не удалось отправить запрос.");
         status.textContent = r.message || "Запрос отправлен администратору.";
         $("resetRequestForm").reset();
-      }).catch(err => status.textContent = err.message);
+      } catch (err) {
+        status.textContent = err.message || "Не удалось отправить запрос.";
+      } finally {
+        submitting = false;
+        if (button) button.disabled = false;
+      }
     };
   }
 

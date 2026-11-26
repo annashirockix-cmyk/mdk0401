@@ -18,6 +18,7 @@ function loadAccountRoute() {
     app,
     loginOverlay: overlay,
     resetRequestForm: { onsubmit: null, reset() {} },
+    resetRequestSubmit: { disabled: false },
     resetRequestEmail: { value: "student@example.edu" },
     resetRequestNote: { value: "Не помню пароль" },
     resetRequestStatus: { textContent: "" },
@@ -91,4 +92,27 @@ test("recovery requests do not disclose whether an email is registered", () => {
   assert.match(gas, /Если учётная запись существует, запрос отправлен администратору/);
   assert.match(gas, /function getPasswordRequests_\(data\)\s*\{\s*admin_\(data\)/);
   assert.match(gas, /function resolvePasswordReset_\(data\)\s*\{\s*const actor = admin_\(data\)/);
+});
+
+test("password recovery prevents duplicate submissions while the request is in flight", async () => {
+  const harness = loadAccountRoute();
+  let resolveRequest;
+  let calls = 0;
+  harness.window.API.requestPasswordReset = () => {
+    calls += 1;
+    return new Promise(resolve => { resolveRequest = resolve; });
+  };
+  harness.window.router();
+  let prevented = 0;
+  const event = { preventDefault() { prevented += 1; } };
+  const first = harness.elements.resetRequestForm.onsubmit(event);
+  assert.equal(harness.elements.resetRequestSubmit.disabled, true);
+  const second = await harness.elements.resetRequestForm.onsubmit(event);
+  assert.equal(second, undefined);
+  assert.equal(calls, 1);
+  assert.equal(prevented, 2);
+  resolveRequest({ success: true, message: "Запрос принят." });
+  await first;
+  assert.equal(harness.elements.resetRequestSubmit.disabled, false);
+  assert.equal(harness.elements.resetRequestStatus.textContent, "Запрос принят.");
 });
