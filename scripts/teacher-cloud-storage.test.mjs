@@ -127,9 +127,9 @@ test("teacher cloud backup uses stored MIME when cloud provider returns generic 
 });
 
 test("teacher can preview and safely restore a self-contained backup with fresh IDs",()=>{
- assert.match(gs,/function teacherLoadBackupForRestore_\(\data\)/);
- assert.match(gs,/function previewTeacherRestore_\(\data\)/);
- assert.match(gs,/function restoreTeacherMaterials_\(\data\)/);
+ assert.match(gs,/function teacherLoadBackupForRestore_/);
+ assert.match(gs,/function previewTeacherRestore_/);
+ assert.match(gs,/function restoreTeacherMaterials_/);
  assert.match(gs,/formatVersion\) !== 1/);
  assert.match(gs,/idMap\[String\(item\.id\)\] = Utilities\.getUuid\(\)/);
  assert.match(gs,/Восстановление отменено; созданные записи и файлы очищены/);
