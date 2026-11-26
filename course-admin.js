@@ -186,7 +186,7 @@
       '<div class="module"><h3>1а. Изменить основную тему</h3><p style="color:var(--muted)">Изменение кода и названия существующей темы без удаления исходных учебных материалов.</p><select id="mainTopicExisting" class="self-input"></select><input id="mainTopicCode" class="self-input" placeholder="Код темы" style="margin:8px 0"><input id="mainTopicTitle" class="self-input" placeholder="Название темы" style="margin:8px 0"><button class="btn" id="saveMainTopicBtn" type="button">Сохранить название основной темы</button> <span id="mainTopicStatus" aria-live="polite"></span></div>'+
       '<div class="module"><h3>2. Лекции</h3><p style="color:var(--muted)">Выберите существующую лекцию для изменения или создайте новую. Текст поддерживает простую HTML-разметку.</p>'+
       '<label>Тема</label><select id="lectureTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующая лекция</label><select id="lectureExisting" class="self-input"><option value="">— Новая лекция —</option></select>'+
-      '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea><div class="module" style="padding:10px;margin:8px 0"><b>📎 Файл непосредственно к этой лекции</b><p style="color:var(--muted);font-size:13px">Сначала сохраните лекцию. Затем прикрепите PDF, DOC или DOCX до 3,5 МБ — студент увидит файл внутри этой лекции.</p><input id="lectureFileInput" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="self-input"><button class="btn ghost" id="uploadLectureFileBtn" type="button" style="margin-top:8px">Прикрепить файл к лекции</button> <span id="lectureFileStatus" aria-live="polite"></span></div>'+
+      '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea><div class="module" style="padding:10px;margin:8px 0"><b>📎 Файл непосредственно к этой лекции</b><p style="color:var(--muted);font-size:13px">Сначала сохраните лекцию. Документы — до 3,5 МБ. Видео MP4, WEBM или MOV — до 150 МБ; загрузка идёт частями в закрытое хранилище.</p><input id="lectureFileInput" type="file" accept=".pdf,.doc,.docx,.mp4,.webm,.mov,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,video/mp4,video/webm,video/quicktime" class="self-input"><button class="btn ghost" id="uploadLectureFileBtn" type="button" style="margin-top:8px">Прикрепить файл к лекции</button> <span id="lectureFileStatus" aria-live="polite"></span></div>'+
       '<button class="btn" id="saveLectureBtn">Создать лекцию</button> <button class="btn ghost" id="resetLectureBtn" type="button">Очистить форму</button> <button class="btn ghost" id="deleteLectureBtn" type="button" disabled>Удалить выбранную</button> <span id="lectureStatus" aria-live="polite"></span></div>'+
       '<div class="module"><h3>2а. Файлы к теме</h3><p style="color:var(--muted)">PDF, DOC и DOCX до 3,5 МБ. Файлы выдаются только после проверки доступа студента к дисциплине и теме.</p><label>Хранилище для загрузки (также используется для файлов лекций)</label><select id="courseFileStorage" class="self-input"><option value="portal">Google Drive портала — защищённая папка</option></select><label>Тема</label><select id="courseFileTopic" class="self-input"></select><input id="courseFileTitle" class="self-input" placeholder="Название материала" style="margin:8px 0"><input id="courseFileInput" type="file" accept=".pdf,.doc,.docx" class="self-input"><button class="btn" id="uploadCourseFileBtn" type="button" style="margin-top:10px">Загрузить файл к теме</button> <span id="courseFileStatus" aria-live="polite"></span><div id="courseFileList" style="margin-top:12px"></div></div>'+
       '<div class="module"><h3>3. Дополнительные тесты</h3><p style="color:var(--muted)">Можно создавать тесты, загружать ранее сохранённые тесты для изменения, просматривать формулировки всех заданий и правильные ответы.</p>'+
@@ -420,11 +420,41 @@
     $("uploadLectureFileBtn").onclick=async function(){
       const button=this,input=$("lectureFileInput"),file=input.files&&input.files[0],status=$("lectureFileStatus"),topicId=topicSel.value;
       if(!topicId||!lectureId){status.textContent="Сначала выберите и сохраните лекцию.";return;}
-      if(!file){status.textContent="Выберите PDF, DOC или DOCX.";return;}
-      if(file.size>3500000){status.textContent="Файл больше 3,5 МБ. Уменьшите размер и повторите загрузку.";return;}
-      const ext=(file.name.match(/\.([^.]+)$/)||[])[1]||"";
-      if(!/^(pdf|doc|docx)$/i.test(ext)){status.textContent="Разрешены только PDF, DOC и DOCX.";return;}
-      button.disabled=true;status.textContent="Загрузка файла к лекции…";
+      if(!file){status.textContent="Выберите документ или видео.";return;}
+      const ext=(file.name.match(/\.([^.]+)$/)||[])[1]||"",isVideo=/^(mp4|webm|mov)$/i.test(ext);
+      if(isVideo){
+        if(file.size>150*1024*1024){status.textContent="Видео больше 150 МБ. Максимальный размер — 150 МБ.";return;}
+        const mime=file.type||({mp4:"video/mp4",webm:"video/webm",mov:"video/quicktime"}[ext.toLowerCase()]||"");
+        if(["video/mp4","video/webm","video/quicktime"].indexOf(mime)<0){status.textContent="Поддерживаются MP4, WEBM и MOV.";return;}
+        button.disabled=true;
+        try{
+          status.textContent="Подготовка загрузки видео…";
+          const session=await window.API.startCourseVideoUpload({courseId:courseSel.value,topicId:topicId,lectureId:lectureId,fileName:file.name,mimeType:mime,size:file.size});
+          if(!session||!session.success)throw new Error(session&&session.error||"Не удалось начать загрузку видео.");
+          const total=session.chunkCount,chunkSize=session.chunkSize;
+          for(let index=0;index<total;index++){
+            const buffer=await file.slice(index*chunkSize,Math.min(file.size,(index+1)*chunkSize)).arrayBuffer(),bytes=new Uint8Array(buffer);
+            let binary="";for(let i=0;i<bytes.length;i++)binary+=String.fromCharCode(bytes[i]);
+            const encoded=btoa(binary);let uploaded=false,lastError=null;
+            for(let attempt=0;attempt<3&&!uploaded;attempt++){
+              try{await window.API.uploadCourseVideoChunk(session.uploadId,index,encoded);uploaded=true;}
+              catch(error){lastError=error;if(attempt<2)await new Promise(resolve=>setTimeout(resolve,700*(attempt+1)));}
+            }
+            if(!uploaded)throw lastError||new Error("Не удалось загрузить часть "+(index+1));
+            status.textContent="Загрузка видео: "+Math.round((index+1)/total*100)+"% ("+(index+1)+"/"+total+" частей)";
+          }
+          status.textContent="Проверяем видео и прикрепляем к лекции…";
+          const result=await window.API.finishCourseVideoUpload(session.uploadId);
+          if(!result||!result.success)throw new Error(result&&result.error||"Не удалось завершить загрузку видео.");
+          await new Promise(resolve=>refreshContent(resolve));input.value="";
+          status.textContent="Видео прикреплено к лекции ✓ ("+(file.size/1024/1024).toFixed(1)+" МБ)";
+        }catch(error){status.textContent=error.message||"Ошибка загрузки видео.";}
+        finally{button.disabled=false;}
+        return;
+      }
+      if(file.size>3500000){status.textContent="Документ больше 3,5 МБ. Максимальный размер документа — 3,5 МБ.";return;}
+      if(!/^(pdf|doc|docx)$/i.test(ext)){status.textContent="Документы: PDF, DOC или DOCX. Видео: MP4, WEBM или MOV.";return;}
+      button.disabled=true;status.textContent="Загрузка документа к лекции…";
       try{
         const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||""));reader.onerror=()=>reject(new Error("Не удалось прочитать файл."));reader.readAsDataURL(file);});
         const result=await window.API.uploadCourseFile(courseSel.value,topicId,file.name,file.name,dataUrl,lectureId,storageSel&&storageSel.value||"portal");

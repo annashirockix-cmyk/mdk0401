@@ -5,6 +5,7 @@ const gs=fs.readFileSync(new URL("../Code.gs",import.meta.url),"utf8");
 const api=fs.readFileSync(new URL("../api.js",import.meta.url),"utf8");
 const page=fs.readFileSync(new URL("../teacher-storage.js",import.meta.url),"utf8");
 const courseAdmin=fs.readFileSync(new URL("../course-admin.js",import.meta.url),"utf8");
+const app=fs.readFileSync(new URL("../app.js",import.meta.url),"utf8");
 const html=fs.readFileSync(new URL("../index.html",import.meta.url),"utf8");
 test("teacher cloud storage supports four allowlisted providers and app-folder scopes",()=>{
  for(const key of ["google","yandex","onedrive","dropbox"])assert.match(gs,new RegExp(key+": \\{ name:"));
@@ -106,8 +107,8 @@ test("teacher cloud backup API exports only owned accessible course content and 
 test("teacher cloud backup controls refresh cached storage assets",()=>{
  assert.match(html,/teacher-storage\.js\?v=4/);
  assert.match(html,/teacher-storage\.css\?v=4/);
- assert.match(html,/service-worker\.js\?v=443/);
- assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v443/);
+ assert.match(html,/service-worker\.js\?v=445/);
+ assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v445/);
 });
 
 test("teacher cloud backups embed verified PDF, DOC and DOCX attachments in the archive",()=>{
@@ -148,6 +149,24 @@ test("restored attachments are validated and stored privately in portal Drive",(
 test("teacher storage restore UI uses refreshed cached assets",()=>{
  assert.match(html,/teacher-storage\.js\?v=4/);
  assert.match(html,/teacher-storage\.css\?v=4/);
- assert.match(html,/service-worker\.js\?v=443/);
- assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v443/);
+ assert.match(html,/service-worker\.js\?v=445/);
+ assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v445/);
+});
+
+test("large lecture videos upload in private chunks and stream through access-checked chunk reads",()=>{
+ assert.match(gs,/function startCourseVideoUpload_\(/);
+ assert.match(gs,/function uploadCourseVideoChunk_\(/);
+ assert.match(gs,/function finishCourseVideoUpload_\(/);
+ assert.match(gs,/function getCourseVideoChunk_\(/);
+ assert.match(gs,/150 \* 1024 \* 1024/);
+ assert.match(gs,/PortalVideoUpload\|/);
+ assert.match(gs,/assertPortalPrivateFolder_/);
+ assert.match(gs,/customContentIsOpen_\(courseId, itemId, String\(record\[2\] \|\| ""\), "file"\)/);
+ assert.match(api,/startCourseVideoUpload:function/);
+ assert.match(api,/uploadCourseVideoChunk:function/);
+ assert.match(api,/getCourseVideoChunk:function/);
+ assert.ok(courseAdmin.includes("video/mp4"));
+ assert.ok(courseAdmin.includes("uploadCourseVideoChunk"));
+ assert.match(app,/getCourseVideoChunk/);
+ assert.match(app,/createElement\("video"\)/);
 });

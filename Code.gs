@@ -153,6 +153,10 @@ function handleRequest_(e) {
       case "getgameanswer": result = getGameAnswer_(data); break;
       case "uploadtestimage": result = uploadTestImage_(data); break;
       case "uploadcoursefile": result = uploadCourseFile_(data); break;
+      case "startcoursevideoupload": result = startCourseVideoUpload_(data); break;
+      case "uploadcoursevideochunk": result = uploadCourseVideoChunk_(data); break;
+      case "finishcoursevideoupload": result = finishCourseVideoUpload_(data); break;
+      case "getcoursevideochunk": result = getCourseVideoChunk_(data); break;
       case "getcoursefile": result = getCourseFile_(data); break;
       case "getwebinars": result = getWebinars_(data); break;
       case "getteachercloudstorage": result = getTeacherCloudStorage_(data); break;
@@ -3086,6 +3090,129 @@ function courseFileFolder_() {
   return folder;
 }
 
+
+function assertPortalPrivateFolder_(folder, parentFolder, descriptionPrefix) {
+  if (!folder || folder.isTrashed()) throw new Error("Папка видео не найдена или удалена.");
+  if (!parentFolder || parentFolder.getSharingAccess() !== DriveApp.Access.PRIVATE || folder.getSharingAccess() !== DriveApp.Access.PRIVATE) throw new Error("Хранилище видео должно быть закрыто для общего доступа.");
+  let belongs = false, parents = folder.getParents();
+  while (parents.hasNext()) if (parents.next().getId() === parentFolder.getId()) belongs = true;
+  if (!belongs) throw new Error("Папка видео находится вне закрытого хранилища портала.");
+  if (descriptionPrefix && String(folder.getDescription() || "").indexOf(descriptionPrefix) !== 0) throw new Error("Папка видео не принадлежит этой записи.");
+  return folder;
+}
+function trashCourseVideoFolder_(folder) {
+  if (!folder || folder.isTrashed()) return;
+  const files = folder.getFiles();
+  while (files.hasNext()) { try { files.next().setTrashed(true); } catch (e) {} }
+  folder.setTrashed(true);
+}
+function courseVideoSessionKey_(id) { return "COURSE_VIDEO_UPLOAD_" + String(id || ""); }
+function courseVideoSession_(data) {
+  const user = auth_(data), id = String(data.uploadId || "");
+  if (!/^[a-f0-9-]{30,40}$/i.test(id)) throw new Error("Сеанс загрузки видео указан неверно.");
+  const props = PropertiesService.getScriptProperties(), raw = props.getProperty(courseVideoSessionKey_(id));
+  if (!raw) throw new Error("Сеанс загрузки видео истёк. Начните загрузку заново.");
+  let session;
+  try { session = JSON.parse(raw); } catch (e) { throw new Error("Данные сеанса загрузки повреждены."); }
+  if (email_(session.ownerEmail || "") !== user.email) throw new Error("Этот сеанс загрузки принадлежит другому преподавателю.");
+  if (Number(session.expiresAt || 0) < Date.now()) {
+    props.deleteProperty(courseVideoSessionKey_(id));
+    try { trashCourseVideoFolder_(DriveApp.getFolderById(session.folderId)); } catch (e) {}
+    throw new Error("Время загрузки истекло. Начните загрузку заново.");
+  }
+  editor_(data, session.courseId);
+  return { user: user, id: id, session: session };
+}
+function startCourseVideoUpload_(data) {
+  const courseId = normalizeCourseId_(data.courseId || data.mdkId || ""), user = editor_(data, courseId);
+  const topicId = String(data.topicId || "").trim(), lectureId = String(data.lectureId || "").trim();
+  const size = Number(data.size || 0), mime = String(data.mimeType || "").toLowerCase();
+  const name = String(data.fileName || "").replace(/[\\/]/g, "_").slice(0, 120);
+  const allowedMime = ["video/mp4", "video/webm", "video/quicktime"];
+  if (!topicId || !lectureId) throw new Error("Сначала сохраните лекцию и выберите её.");
+  if (!Number.isSafeInteger(size) || size < 1 || size > 150 * 1024 * 1024) throw new Error("Размер видео должен быть от 1 байта до 150 МБ.");
+  if (allowedMime.indexOf(mime) < 0) throw new Error("Поддерживаются видео MP4, WEBM и MOV.");
+  if (!/\.(mp4|webm|mov)$/i.test(name)) throw new Error("Файл должен иметь расширение MP4, WEBM или MOV.");
+  const contentRows = content_().getDataRange().getValues();
+  if (!contentRows.slice(1).some(function(row) { return String(row[0] || "") === lectureId && sameCourseId_(row[1] || "", courseId) && String(row[2] || "") === topicId && String(row[3] || "") === "lecture"; })) throw new Error("Выбранная лекция не найдена. Сначала сохраните её.");
+  const uploadId = Utilities.getUuid(), chunkSize = 1024 * 1024, chunkCount = Math.ceil(size / chunkSize);
+  const parent = courseFileFolder_(), folder = parent.createFolder("video-upload-" + uploadId);
+  folder.setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
+  folder.setDescription("PortalVideoUpload|" + user.email + "|" + courseId + "|" + topicId + "|" + lectureId);
+  const session = { ownerEmail: user.email, courseId: courseId, topicId: topicId, lectureId: lectureId, size: size, mimeType: mime, fileName: name, chunkSize: chunkSize, chunkCount: chunkCount, folderId: folder.getId(), expiresAt: Date.now() + 6 * 60 * 60 * 1000 };
+  PropertiesService.getScriptProperties().setProperty(courseVideoSessionKey_(uploadId), JSON.stringify(session));
+  return { success: true, uploadId: uploadId, chunkSize: chunkSize, chunkCount: chunkCount, maxSize: 150 * 1024 * 1024 };
+}
+function uploadCourseVideoChunk_(data) {
+  const loaded = courseVideoSession_(data), session = loaded.session;
+  const index = Number(data.index), encoded = String(data.chunkBase64 || "");
+  if (!Number.isInteger(index) || index < 0 || index >= session.chunkCount) throw new Error("Номер части видео указан неверно.");
+  if (!/^[A-Za-z0-9+/]+={0,2}$/.test(encoded) || encoded.length > Math.ceil(session.chunkSize * 4 / 3) + 8) throw new Error("Часть видео имеет неверный формат или слишком большой размер.");
+  const bytes = Utilities.base64Decode(encoded), expected = Math.min(session.chunkSize, session.size - index * session.chunkSize);
+  if (bytes.length !== expected) throw new Error("Размер части видео не совпадает с ожидаемым. Повторите загрузку этой части.");
+  const folder = assertPortalPrivateFolder_(DriveApp.getFolderById(session.folderId), courseFileFolder_(), "PortalVideoUpload|" + loaded.user.email + "|" + session.courseId + "|" + session.topicId + "|" + session.lectureId);
+  const fileName = "chunk-" + String(index).padStart(5, "0") + ".bin", old = folder.getFilesByName(fileName);
+  while (old.hasNext()) old.next().setTrashed(true);
+  folder.createFile(Utilities.newBlob(bytes, "application/octet-stream", fileName));
+  return { success: true, index: index, receivedBytes: bytes.length };
+}
+function finishCourseVideoUpload_(data) {
+  const loaded = courseVideoSession_(data), session = loaded.session;
+  const folder = assertPortalPrivateFolder_(DriveApp.getFolderById(session.folderId), courseFileFolder_(), "PortalVideoUpload|" + loaded.user.email + "|" + session.courseId + "|" + session.topicId + "|" + session.lectureId);
+  const files = folder.getFiles(), byName = {};
+  while (files.hasNext()) { const file = files.next(); byName[file.getName()] = file; }
+  let total = 0;
+  for (let i = 0; i < session.chunkCount; i++) {
+    const part = byName["chunk-" + String(i).padStart(5, "0") + ".bin"];
+    if (!part) throw new Error("Не все части видео загружены. Не хватает части №" + (i + 1) + ".");
+    const bytes = part.getBlob().getBytes(), expected = Math.min(session.chunkSize, session.size - i * session.chunkSize);
+    if (bytes.length !== expected) throw new Error("Часть №" + (i + 1) + " повреждена. Повторите загрузку.");
+    total += bytes.length;
+    if (i === 0) {
+      const sig = bytes.slice(0, 12).map(function(b) { return (b + 256) % 256; });
+      const mp4 = sig.length >= 8 && String.fromCharCode.apply(null, sig.slice(4, 8)) === "ftyp";
+      const webm = sig.length >= 4 && sig[0] === 26 && sig[1] === 69 && sig[2] === 223 && sig[3] === 163;
+      if ((session.mimeType === "video/mp4" && !mp4) || (session.mimeType === "video/quicktime" && !mp4) || (session.mimeType === "video/webm" && !webm)) throw new Error("Содержимое видео не соответствует выбранному формату.");
+    }
+  }
+  if (total !== session.size || Object.keys(byName).length !== session.chunkCount) throw new Error("Состав видео не прошёл итоговую проверку.");
+  const prefix = "Учебное видео. Дисциплина: " + session.courseId + ". Тема: " + session.topicId + ".";
+  folder.setDescription(prefix + " Лекция: " + session.lectureId + ". Автор: " + loaded.user.email);
+  try {
+    const saved = saveCustomContent_({
+      token: data.token, mdkId: session.courseId, topicId: session.topicId, type: "file",
+      title: session.fileName, fileRef: "coursevideo:" + folder.getId(), fileName: session.fileName,
+      mimeType: session.mimeType, size: session.size, lectureId: session.lectureId,
+      chunkCount: session.chunkCount, chunkSize: session.chunkSize, storageProvider: "portal"
+    });
+    PropertiesService.getScriptProperties().deleteProperty(courseVideoSessionKey_(loaded.id));
+    return { success: true, id: saved.id, fileName: session.fileName, mimeType: session.mimeType, size: session.size, chunkCount: session.chunkCount };
+  } catch (error) {
+    try { trashCourseVideoFolder_(folder); } catch (cleanupError) {}
+    PropertiesService.getScriptProperties().deleteProperty(courseVideoSessionKey_(loaded.id));
+    throw error;
+  }
+}
+function getCourseVideoChunk_(data) {
+  const user = auth_(data), itemId = String(data.itemId || ""), fileRef = String(data.fileRef || ""), index = Number(data.index);
+  if (!itemId || !Number.isInteger(index) || index < 0) throw new Error("Не указаны параметры видеозапроса.");
+  const rows = content_().getDataRange().getValues(); let record = null;
+  for (let i = 1; i < rows.length; i++) if (String(rows[i][0] || "") === itemId && String(rows[i][3] || "") === "file") { record = rows[i]; break; }
+  if (!record) throw new Error("Видеофайл не найден.");
+  const courseId = normalizeCourseId_(record[1] || "");
+  if (!hasCourseAccess_(user, courseId)) throw new Error("У вас нет доступа к этой дисциплине.");
+  if (user.role === "student" && !customContentIsOpen_(courseId, itemId, String(record[2] || ""), "file")) throw new Error("Это видео пока закрыто преподавателем.");
+  let payload = {}; try { payload = JSON.parse(record[5] || "{}"); } catch (e) {}
+  if (String(payload.fileRef || "") !== fileRef || !/^coursevideo:[A-Za-z0-9_-]{10,}$/.test(fileRef)) throw new Error("Ссылка на видео не совпадает с записью материала.");
+  if (index >= Number(payload.chunkCount || 0)) throw new Error("Запрошенная часть видео не существует.");
+  const folder = assertPortalPrivateFolder_(DriveApp.getFolderById(fileRef.slice("coursevideo:".length)), courseFileFolder_(), "Учебное видео. Дисциплина: " + courseId + ". Тема: " + String(record[2] || "") + ".");
+  const files = folder.getFilesByName("chunk-" + String(index).padStart(5, "0") + ".bin");
+  if (!files.hasNext()) throw new Error("Часть видео не найдена.");
+  const bytes = files.next().getBlob().getBytes(), expected = Math.min(Number(payload.chunkSize || 0), Number(payload.size || 0) - index * Number(payload.chunkSize || 0));
+  if (!expected || bytes.length !== expected) throw new Error("Часть видео повреждена.");
+  return { success: true, index: index, data: Utilities.base64Encode(bytes), mimeType: String(payload.mimeType || "video/mp4"), fileName: String(payload.fileName || "lecture-video"), size: bytes.length, totalSize: Number(payload.size || 0), chunkCount: Number(payload.chunkCount || 0) };
+}
+
 function uploadCourseFile_(data) {
   const courseId = normalizeCourseId_(data.courseId || data.mdkId || "");
   const actor = editor_(data, courseId);
@@ -3160,6 +3287,7 @@ function getCourseFile_(data) {
   let payload = {};
   try { payload = JSON.parse(record[5] || "{}"); } catch (e) {}
   if (String(payload.fileRef || "") !== fileRef) throw new Error("Ссылка на файл не совпадает с записью материала.");
+  if (/^coursevideo:/.test(fileRef)) throw new Error("Для видео используйте потоковую загрузку частями.");
   let blob;
   const portalMatch = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
   const cloudMatch = fileRef.match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
@@ -3302,9 +3430,12 @@ function saveCustomContent_(data) {
     if (type === "file") {
       const fileRef = String(data.fileRef || "");
       const fileMatch = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+      const videoMatch = fileRef.match(/^coursevideo:([A-Za-z0-9_-]{10,})$/);
       const cloudMatch = fileRef.match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
       if (fileMatch) {
         assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(data.topicId || "") + ".");
+      } else if (videoMatch) {
+        assertPortalPrivateFolder_(DriveApp.getFolderById(videoMatch[1]), courseFileFolder_(), "Учебное видео. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(data.topicId || "") + ".");
       } else if (cloudMatch) {
         if (email_(data.cloudOwnerEmail || "") !== user.email) throw new Error("Владелец облачного файла не совпадает с автором материала.");
         teacherCloudProvider_(cloudMatch[1]);
@@ -3349,10 +3480,13 @@ function deleteCustomContent_(data) {
           let payload = {};
           try { payload = JSON.parse(values[i][5] || "{}"); } catch (e) {}
           const fileMatch = String(payload.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+          const videoMatch = String(payload.fileRef || "").match(/^coursevideo:([A-Za-z0-9_-]{10,})$/);
           const cloudMatch = String(payload.fileRef || "").match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
           if (fileMatch) {
             try { assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(values[i][2] || "") + ".").setTrashed(true); }
             catch (fileError) { throw new Error("Не удалось удалить файл из Google Drive. Запись материала сохранена."); }
+          } else if (videoMatch) {
+            try { trashCourseVideoFolder_(DriveApp.getFolderById(videoMatch[1])); } catch (videoDeleteError) { throw new Error("Не удалось удалить видео из защищённого хранилища. Запись материала сохранена."); }
           } else if (cloudMatch) {
             try { teacherCloudDeleteFile_(cloudMatch[1], email_(values[i][6] || ""), cloudMatch[2]); }
             catch (fileError) { throw new Error("Не удалось удалить файл из личного облака. Запись материала сохранена: " + String(fileError.message || fileError).slice(0, 180)); }
