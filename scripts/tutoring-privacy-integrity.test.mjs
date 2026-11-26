@@ -102,7 +102,7 @@ test("saving tutoring links enforces teacher role and validates the selected aud
   );
 
   assert.throws(()=>save({courseId:"07.01",url:"javascript:alert(1)",visible:true}),/Ссылка должна начинаться/);
-  assert.throws(()=>save({courseId:"07.01",url:"https://example.invalid",audienceType:"group",audienceValue:"24-ТМ "}),/не найдена указанная учебная группа/);
+  assert.throws(()=>save({courseId:"07.01",url:"https://example.invalid",audienceType:"group",audienceValue:"25-ТМ"}),/не найдена указанная учебная группа/);
   assert.throws(()=>save({courseId:"07.01",url:"https://example.invalid",audienceType:"individual",audienceValue:"other-course@example.invalid"}),/не найден среди обучающихся/);
 
   actor={role:"student",email:"student@example.invalid"};
