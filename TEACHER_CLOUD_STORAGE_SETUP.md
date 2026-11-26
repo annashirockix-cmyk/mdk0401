@@ -13,7 +13,7 @@
 | OneDrive | ONEDRIVE_OAUTH_CLIENT_ID | ONEDRIVE_OAUTH_CLIENT_SECRET |
 | Dropbox | DROPBOX_OAUTH_CLIENT_ID | DROPBOX_OAUTH_CLIENT_SECRET |
 
-Redirect URI для всех приложений — точный URL развернутого Apps Script Web App (оканчивается на /exec). Для Google используйте scope drive.file; для Яндекс Диска — cloud_api:disk.app_folder; для OneDrive — Files.ReadWrite.AppFolder, User.Read и offline_access; Dropbox — App Folder app type и scopes account_info.read, files.content.read, files.content.write.
+Redirect URI для всех приложений — точный URL веб-приложения с параметром `?action=cloudOAuthCallback` (например, `https://script.google.com/macros/s/…/exec?action=cloudOAuthCallback`). Скопируйте фактическое значение из `ScriptApp.getService().getUrl()` и добавьте параметр; регистрируйте именно этот полный адрес у каждого провайдера. Для Google используйте scope drive.file; для Яндекс Диска — cloud_api:disk.app_folder; для OneDrive — Files.ReadWrite.AppFolder, User.Read и offline_access; Dropbox — App Folder app type и scopes account_info.read, files.content.read, files.content.write.
 
 ## Ограничения и безопасность
 
