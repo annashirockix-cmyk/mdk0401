@@ -56,6 +56,40 @@ test("profile sync cannot change or clear a student's study group", () => {
   assert.match(fn, /Для студента учебная группа обязательна/);
 });
 
+test("saveStudent_ enforces study-group changes at runtime", () => {
+  const normalize = new Function(extractFunction(server, "normalizeGroupName_") + "; return normalizeGroupName_;")();
+  function harness(role, targetRole, targetGroup) {
+    let written = null;
+    const save = new Function(
+      "auth_", "email_", "userByEmail_", "normalizeGroupName_", "writeUserFields_",
+      extractFunction(server, "saveStudent_") + "; return saveStudent_;"
+    )(
+      () => ({ email: "student@example.test", role }),
+      value => String(value || "").trim().toLowerCase(),
+      () => ({ email: "student@example.test", role: targetRole, group: targetGroup, courses: "", payload: "" }),
+      normalize,
+      (_target, fields) => { written = fields; }
+    );
+    return { save, getWritten: () => written };
+  }
+
+  const student = harness("student", "student", "МДК-01");
+  assert.throws(() => student.save({ token: "session", group: "МДК-02" }), /Изменять учебную группу может только администратор/);
+  assert.equal(student.getWritten(), null, "rejected student change must not write user fields");
+
+  const sameGroup = harness("student", "student", "мдк–01");
+  assert.equal(sameGroup.save({ token: "session", group: "МДК-01" }).success, true);
+  assert.equal(sameGroup.getWritten().Group, "МДК-01", "equivalent normalized group remains valid for profile sync");
+
+  const adminClear = harness("admin", "student", "МДК-01");
+  assert.throws(() => adminClear.save({ token: "admin-session", group: "" }), /Для студента учебная группа обязательна/);
+  assert.equal(adminClear.getWritten(), null, "rejected empty group must not write user fields");
+
+  const adminChange = harness("admin", "student", "МДК-01");
+  assert.equal(adminChange.save({ token: "admin-session", group: "МДК-02" }).success, true);
+  assert.equal(adminChange.getWritten().Group, "МДК-02", "administrator can deliberately reassign a student");
+});
+
 test("read-only load smoke test includes protected English VPR and semester reads", () => {
   assert.match(loadTest, /name: "getEnglishVprExam", params: \{ track: englishTrack \}/);
   assert.match(loadTest, /name: "getEnglishSemesterTests", params: \{ track: englishTrack \}/);
