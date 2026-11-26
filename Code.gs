@@ -1112,7 +1112,7 @@ function getTutoringLink_(data) {
     const link=personal?parseTutoringLink_(personal.value):legacy&&legacy.updatedBy===teacherEmail?parseTutoringLink_(legacy.value):parseTutoringLink_("");
     if(!link.visible||!link.url)continue;
     const audienceType=link.audienceType||"all",audienceValue=String(link.audienceValue||"").trim();
-    if(audienceType==="group"&&audienceValue.toLocaleLowerCase("ru")!==String(user.group||"").trim().toLocaleLowerCase("ru"))continue;
+    if(audienceType==="group"&&normalizeGroupName_(audienceValue)!==normalizeGroupName_(user.group))continue;
     if(audienceType==="individual"&&email_(audienceValue)!==email_(user.email))continue;
     links.push({teacherName:String(row[m.Name]||"Преподаватель"),title:link.title,description:link.description,url:link.url});
   }
@@ -1134,7 +1134,7 @@ function saveTutoringLink_(data) {
     const target=rows.slice(1).find(function(row){
       if(String(row[m.Role]||"").toLowerCase()!=="student"||!hasCourseAccess_({role:"student",courses:String(row[m.Courses]||"")},courseId))return false;
       return audienceType==="group"
-        ? String(row[m.Group]||"").trim().toLocaleLowerCase("ru")===audienceValue.toLocaleLowerCase("ru")
+        ? normalizeGroupName_(row[m.Group])===normalizeGroupName_(audienceValue)
         : email_(row[m.Email])===email_(audienceValue);
     });
     if(!target)throw new Error(audienceType==="group"?"В этой дисциплине не найдена указанная учебная группа.":"Студент с этой почтой не найден среди обучающихся по дисциплине.");

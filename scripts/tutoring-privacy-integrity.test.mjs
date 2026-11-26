@@ -45,7 +45,7 @@ test("server filters tutoring links by course, selected group and individual stu
   ];
   const settingsRows=[
     ["Key","Value","UpdatedAt","UpdatedBy"],
-    ["tutoring:teacher:teacher-a@example.invalid",JSON.stringify({url:"https://example.invalid/group",title:"Группа 24-ТМ",visible:true,audienceType:"group",audienceValue:"24-ТМ"}),"","teacher-a@example.invalid"],
+    ["tutoring:teacher:teacher-a@example.invalid",JSON.stringify({url:"https://example.invalid/group",title:"Группа 24-ТМ",visible:true,audienceType:"group",audienceValue:"24–тм"}),"","teacher-a@example.invalid"],
     ["tutoring:teacher:teacher-b@example.invalid",JSON.stringify({url:"https://example.invalid/individual",title:"Личная консультация",visible:true,audienceType:"individual",audienceValue:"student-one@example.invalid"}),"","teacher-b@example.invalid"]
   ];
   const makeSheet=rows=>({
@@ -56,19 +56,20 @@ test("server filters tutoring links by course, selected group and individual stu
   const usersSheet=makeSheet(usersRows),settingsSheet=makeSheet(settingsRows);
   const getMap=sheet=>Object.fromEntries(sheet.getDataRange().getValues()[0].map((key,index)=>[key,index]));
   let currentUser={role:"student",email:"student-two@example.invalid",group:"24-тм",courses:"07.01"};
-  const getTutoringLink=new Function("auth_","users_","settings_","headerMap_","email_","hasCourseAccess_","tutoringSettingKey_","parseTutoringLink_","legacyTutoringLink_",getTutoringLinkSource+"; return getTutoringLink_;")(
+  const getTutoringLink=new Function("auth_","users_","settings_","headerMap_","email_","normalizeGroupName_","hasCourseAccess_","tutoringSettingKey_","parseTutoringLink_","legacyTutoringLink_",getTutoringLinkSource+"; return getTutoringLink_;")(
     ()=>currentUser,
     ()=>usersSheet,
     ()=>settingsSheet,
     getMap,
     value=>String(value||"").trim().toLowerCase(),
+    value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\s+/g," ").trim().toLocaleUpperCase("ru-RU"),
     (user,course)=>String(user.courses||"").split(",").map(value=>value.trim()).includes(course),
     email=>"tutoring:teacher:"+String(email||"").trim().toLowerCase(),
     raw=>{let value={url:"",title:"Запись на дополнительные занятия",description:"",visible:false,audienceType:"all",audienceValue:""};try{value=Object.assign(value,JSON.parse(raw||"{}"));}catch{}return value;},
     ()=>({url:"",visible:false})
   );
   const groupResult=getTutoringLink({courseId:"07.01"});
-  assert.deepEqual(groupResult.links.map(link=>link.teacherName),["Преподаватель А"]);
+  assert.deepEqual(groupResult.links.map(link=>link.teacherName),["Преподаватель А"],"case and dash variants must match the canonical group");
   currentUser={role:"student",email:"other-student@example.invalid",group:"25-ТМ",courses:"07.01"};
   assert.deepEqual(getTutoringLink({courseId:"07.01"}).links,[]);
   currentUser={role:"student",email:"STUDENT-ONE@example.invalid",group:"25-ТМ",courses:"07.01"};
@@ -91,18 +92,21 @@ test("saving tutoring links enforces teacher role and validates the selected aud
   const headerMap=()=>Object.fromEntries(rows[0].map((name,index)=>[name,index]));
   let actor={role:"teacher",email:"teacher@example.invalid"};
   let saved=null;
-  const save=new Function("editor_","users_","headerMap_","hasCourseAccess_","email_","tutoringSettingKey_","writeSetting_",fnSource+"; return saveTutoringLink_;")(
+  const save=new Function("editor_","users_","headerMap_","hasCourseAccess_","email_","normalizeGroupName_","tutoringSettingKey_","writeSetting_",fnSource+"; return saveTutoringLink_;")(
     (_data,_course)=>actor,
     ()=>sheet,
     headerMap,
     (user,course)=>String(user.courses||"").split(",").map(value=>value.trim()).includes(course),
     value=>String(value||"").trim().toLowerCase(),
+    value=>String(value||"").normalize("NFKC").replace(/[‐‑‒–—−]/g,"-").replace(/\s+/g," ").trim().toLocaleUpperCase("ru-RU"),
     email=>"tutoring:teacher:"+String(email||"").trim().toLowerCase(),
     (key,value,updatedBy)=>{saved={key,value:JSON.parse(value),updatedBy};}
   );
 
   assert.throws(()=>save({courseId:"07.01",url:"javascript:alert(1)",visible:true}),/Ссылка должна начинаться/);
   assert.throws(()=>save({courseId:"07.01",url:"https://example.invalid",audienceType:"group",audienceValue:"25-ТМ"}),/не найдена указанная учебная группа/);
+  const normalizedGroupResult=save({courseId:"07.01",url:"https://example.invalid/group",audienceType:"group",audienceValue:"24–тм",visible:true});
+  assert.equal(normalizedGroupResult.success,true,"group lookup must accept Unicode dash and case variants");
   assert.throws(()=>save({courseId:"07.01",url:"https://example.invalid",audienceType:"individual",audienceValue:"other-course@example.invalid"}),/не найден среди обучающихся/);
 
   actor={role:"student",email:"student@example.invalid"};
