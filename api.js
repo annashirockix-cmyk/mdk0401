@@ -126,6 +126,7 @@ window.API = {
  uploadCourseFile:function(courseId,topicId,title,fileName,dataUrl,lectureId,storageProvider){return fetchAPI("uploadCourseFile",{courseId:courseId,topicId:topicId,title:title,fileName:fileName,dataUrl:dataUrl,lectureId:lectureId||"",storageProvider:storageProvider||"portal"},"POST",60000);},
  getCourseFile:function(itemId,fileRef){return fetchAPI("getCourseFile",{itemId:itemId,fileRef:fileRef},"POST",60000);},
  getTeacherCloudStorage:function(){return fetchAPI("getTeacherCloudStorage",{},"GET");},
+ backupTeacherMaterials:function(provider){return fetchAPI("backupTeacherMaterials",{provider:provider},"POST",120000);},
  beginTeacherCloudOAuth:function(provider){return fetchAPI("beginTeacherCloudOAuth",{provider:provider},"POST");},
  disconnectTeacherCloudStorage:function(provider){return fetchAPI("disconnectTeacherCloudStorage",{provider:provider},"POST");},
  getWebinars:function(){return fetchAPI("getWebinars",{},"GET");},
