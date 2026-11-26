@@ -5,6 +5,7 @@ const gs=fs.readFileSync(new URL("../Code.gs",import.meta.url),"utf8");
 const api=fs.readFileSync(new URL("../api.js",import.meta.url),"utf8");
 const page=fs.readFileSync(new URL("../teacher-storage.js",import.meta.url),"utf8");
 const courseAdmin=fs.readFileSync(new URL("../course-admin.js",import.meta.url),"utf8");
+const app=fs.readFileSync(new URL("../app.js",import.meta.url),"utf8");
 const html=fs.readFileSync(new URL("../index.html",import.meta.url),"utf8");
 test("teacher cloud storage supports four allowlisted providers and app-folder scopes",()=>{
  for(const key of ["google","yandex","onedrive","dropbox"])assert.match(gs,new RegExp(key+": \\{ name:"));
@@ -164,8 +165,8 @@ test("large lecture videos upload in private chunks and stream through access-ch
  assert.match(api,/startCourseVideoUpload:function/);
  assert.match(api,/uploadCourseVideoChunk:function/);
  assert.match(api,/getCourseVideoChunk:function/);
- assert.match(page,/video\\/mp4/);
- assert.match(page,/uploadCourseVideoChunk/);
+ assert.match(courseAdmin,/video\\/mp4/);
+ assert.match(courseAdmin,/uploadCourseVideoChunk/);
  assert.match(app,/getCourseVideoChunk/);
  assert.match(app,/createElement\("video"\)/);
 });
