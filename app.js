@@ -1313,7 +1313,7 @@ window.canAccessCourse = function(courseId) {
     var rawCourses = window.state.student ? (window.state.student.courses || []) : (window.state.staff.courses || []);
     // Старые профили могли хранить список дисциплин строкой. Разбираем его на
     // отдельные идентификаторы, чтобы ENB не давал доступ к ENT по подстроке.
-    var courses = (Array.isArray(rawCourses) ? rawCourses : String(rawCourses).split(/[,;|\\s]+/))
+    var courses = (Array.isArray(rawCourses) ? rawCourses : String(rawCourses).split(/[,;|\s]+/))
         .map(function(id) { return String(id || "").trim().toUpperCase(); })
         .filter(Boolean);
     var requested = String(courseId || "").trim().toUpperCase();
