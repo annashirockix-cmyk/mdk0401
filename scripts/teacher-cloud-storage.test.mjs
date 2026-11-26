@@ -59,3 +59,8 @@ test("teacher cloud setup explains callback URL and attachment scope",()=>{
  assert.match(fs.readFileSync(new URL("../TEACHER_CLOUD_STORAGE_SETUP.md",import.meta.url),"utf8"),/action=cloudOAuthCallback/);
  assert.match(fs.readFileSync(new URL("../TEACHER_CLOUD_STORAGE_SETUP.md",import.meta.url),"utf8"),/Тексты лекций, тесты, карточки/);
 });
+
+test("cloud token refresh uses a user-scoped lock to avoid nesting the content sheet script lock",()=>{
+ assert.match(gs,/LockService\.getUserLock\(\)/);
+ assert.match(gs,/const readableName = String\(originalName \|\| "material"\)/);
+});
