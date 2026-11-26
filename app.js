@@ -1310,8 +1310,15 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
 window.canAccessCourse = function(courseId) {
     if (!window.state.student && !window.state.staff) return false;
     if (window.state.staff && window.state.staff.role === "admin") return true;
-    var courses = window.state.student ? (window.state.student.courses || []) : (window.state.staff.courses || []);
-    return courses.indexOf(String(courseId)) !== -1 || ((courseId === "ENB" || courseId === "ENT") && courses.indexOf("EN") !== -1);
+    var rawCourses = window.state.student ? (window.state.student.courses || []) : (window.state.staff.courses || []);
+    // Старые профили могли хранить список дисциплин строкой. Разбираем его на
+    // отдельные идентификаторы, чтобы ENB не давал доступ к ENT по подстроке.
+    var courses = (Array.isArray(rawCourses) ? rawCourses : String(rawCourses).split(/[,;|\\s]+/))
+        .map(function(id) { return String(id || "").trim().toUpperCase(); })
+        .filter(Boolean);
+    var requested = String(courseId || "").trim().toUpperCase();
+    return courses.indexOf(requested) !== -1 ||
+        ((requested === "ENB" || requested === "ENT") && courses.indexOf("EN") !== -1);
 };
 window.syncCourseSelector = function() {
     var sel=document.getElementById("mdkSelector"); if(!sel)return;
