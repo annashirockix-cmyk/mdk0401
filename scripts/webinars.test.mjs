@@ -34,7 +34,7 @@ test("Jitsi rooms can be secured with server-signed JWT tokens",()=>{
 
 test("webinar page provides host scheduling, student join and embedded room controls",()=>{
  for(const feature of ["Создать вебинар","Войти в вебинар","JitsiMeetExternalAPI","participantJoined","participantLeft","startRecording","desktop","chat","raisehand"])assert.ok(js.includes(feature));
- assert.match(html,/#\\/webinars/);
+ assert.ok(html.includes('href="#/webinars"'));
  assert.match(html,/webinars\.js/);
  assert.match(html,/webinars\.css/);
  assert.match(sw,/\.\/webinars\.js/);
