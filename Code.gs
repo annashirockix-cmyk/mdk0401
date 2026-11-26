@@ -5129,8 +5129,10 @@ function teacherBackupAttachment_(row, payload, courseId) {
   } else throw new Error("Не удалось включить вложение в резервную копию: ссылка повреждена.");
   const bytes = blob.getBytes();
   if (!bytes.length || bytes.length > 3500000) throw new Error("Вложение превышает допустимый размер 3,5 МБ или пустое.");
-  const mime = String(blob.getContentType() || payload.mimeType || "").toLowerCase();
-  if (["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].indexOf(mime) < 0) throw new Error("Тип вложения не поддерживается для резервной копии.");
+  let mime = String(blob.getContentType() || "").toLowerCase();
+  const allowedMimes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+  if (allowedMimes.indexOf(mime) < 0) mime = String(payload.mimeType || "").toLowerCase();
+  if (allowedMimes.indexOf(mime) < 0) throw new Error("Тип вложения не поддерживается для резервной копии.");
   const signature = String.fromCharCode.apply(null, bytes.slice(0, 8));
   if (mime === "application/pdf" && signature.indexOf("%PDF-") !== 0) throw new Error("Вложение не прошло проверку формата PDF.");
   if (mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && signature.slice(0, 4) !== "PK\u0003\u0004") throw new Error("Вложение не прошло проверку формата DOCX.");
