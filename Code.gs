@@ -3258,6 +3258,9 @@ function setUserRole_(data) {
     if (["student", "teacher", "admin"].indexOf(role) === -1) {
       throw new Error("Роль должна быть student, teacher или admin.");
     }
+    if (role === "student" && !normalizeGroupName_(target.group)) {
+      throw new Error("Перед назначением роли student укажите учебную группу в таблице пользователей.");
+    }
     if (target.role === "admin" && role !== "admin") {
       const all = users_().getDataRange().getValues();
       const map = headerMap_(users_());
