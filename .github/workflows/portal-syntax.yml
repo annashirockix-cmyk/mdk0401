@@ -81,6 +81,8 @@ jobs:
         run: node --check data-material-easy.js && node --test scripts/materials-student-friendly.test.mjs
       - name: Check personal tutoring privacy and audiences
         run: node --test scripts/tutoring-privacy-integrity.test.mjs
+      - name: Check teacher cloud storage OAuth and access boundaries
+        run: node --test scripts/teacher-cloud-storage.test.mjs
       - name: Check isolated lecture preview
         run: node --test scripts/lecture-editor-preview.test.mjs
       - name: Check teacher journal and reports browser audit syntax
