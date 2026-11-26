@@ -127,6 +127,8 @@ window.API = {
  getCourseFile:function(itemId,fileRef){return fetchAPI("getCourseFile",{itemId:itemId,fileRef:fileRef},"POST",60000);},
  getTeacherCloudStorage:function(){return fetchAPI("getTeacherCloudStorage",{},"GET");},
  backupTeacherMaterials:function(provider){return fetchAPI("backupTeacherMaterials",{provider:provider},"POST",120000);},
+ previewTeacherRestore:function(backupId){return fetchAPI("previewTeacherRestore",{backupId:backupId},"POST",120000);},
+ restoreTeacherMaterials:function(backupId){return fetchAPI("restoreTeacherMaterials",{backupId:backupId},"POST",180000);},
  beginTeacherCloudOAuth:function(provider){return fetchAPI("beginTeacherCloudOAuth",{provider:provider},"POST");},
  disconnectTeacherCloudStorage:function(provider){return fetchAPI("disconnectTeacherCloudStorage",{provider:provider},"POST");},
  getWebinars:function(){return fetchAPI("getWebinars",{},"GET");},
