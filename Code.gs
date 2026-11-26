@@ -5218,7 +5218,7 @@ function teacherLoadBackupForRestore_(data) {
   const seen = {}, courseSet = {}, allowedTypes = ["topic", "lecture", "test", "flashcards", "file", "announcement", "game"];
   let attachmentCount = 0, attachmentBytes = 0;
   backup.materials.forEach(function(item) {
-    if (!item || !item.id || seen[String(item.id)] || !item.courseId || !item.topicId || allowedTypes.indexOf(String(item.type)) < 0) throw new Error("В архиве обнаружена повреждённая или повторяющаяся запись материала.");
+    if (!item || !item.id || seen[String(item.id)] || !item.courseId || allowedTypes.indexOf(String(item.type)) < 0) throw new Error("В архиве обнаружена повреждённая или повторяющаяся запись материала.");
     seen[String(item.id)] = true;
     const courseId = normalizeCourseId_(item.courseId);
     if (!courseId || !hasCourseAccess_(user, courseId)) throw new Error("Нет прав на восстановление дисциплины " + String(item.courseId) + ". Восстановление всей копии отменено.");
@@ -5262,8 +5262,8 @@ function restoreTeacherMaterials_(data) {
         const safeName = suffix ? name : name + ext;
         const file = courseFileFolder_().createFile(Utilities.newBlob(bytes, mime, safeName));
         file.setDescription("Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(item.topicId || "") + ". Автор: " + user.email);
-        assertPortalPrivateFile_(file, courseFileFolder_(), "Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(item.topicId || "") + ".");
         createdFiles.push(file.getId());
+        assertPortalPrivateFile_(file, courseFileFolder_(), "Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(item.topicId || "") + ".");
         delete payload.contentBase64;
         payload.fileRef = "coursefile:" + file.getId();
         payload.fileName = safeName; payload.mimeType = mime; payload.size = bytes.length; payload.storageProvider = "portal";
