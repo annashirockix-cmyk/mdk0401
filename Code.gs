@@ -5114,6 +5114,35 @@ function getTeacherCloudStorage_(data) {
   });
   return { success: true, providers: result, backups: backups };
 }
+function teacherBackupAttachment_(row, payload, courseId) {
+  const fileRef = String(payload.fileRef || "");
+  let blob = null;
+  const portalMatch = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+  const cloudMatch = fileRef.match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
+  if (portalMatch) {
+    const file = assertPortalPrivateFile_(DriveApp.getFileById(portalMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(row[2] || "") + ".");
+    blob = file.getBlob();
+  } else if (cloudMatch) {
+    const ownerEmail = email_(row[6] || "");
+    if (!ownerEmail) throw new Error("Не удалось определить владельца облачного вложения для резервной копии.");
+    blob = teacherCloudDownloadFile_(cloudMatch[1], ownerEmail, cloudMatch[2]);
+  } else throw new Error("Не удалось включить вложение в резервную копию: ссылка повреждена.");
+  const bytes = blob.getBytes();
+  if (!bytes.length || bytes.length > 3500000) throw new Error("Вложение превышает допустимый размер 3,5 МБ или пустое.");
+  const mime = String(blob.getContentType() || payload.mimeType || "").toLowerCase();
+  if (["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].indexOf(mime) < 0) throw new Error("Тип вложения не поддерживается для резервной копии.");
+  const signature = String.fromCharCode.apply(null, bytes.slice(0, 8));
+  if (mime === "application/pdf" && signature.indexOf("%PDF-") !== 0) throw new Error("Вложение не прошло проверку формата PDF.");
+  if (mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && signature.slice(0, 4) !== "PK\u0003\u0004") throw new Error("Вложение не прошло проверку формата DOCX.");
+  if (mime === "application/msword" && signature.slice(0, 4) !== "\u00D0\u00CF\u0011\u00E0") throw new Error("Вложение не прошло проверку формата DOC.");
+  return {
+    fileName: String(payload.fileName || blob.getName() || "material"),
+    mimeType: mime, size: bytes.length,
+    lectureId: String(payload.lectureId || ""),
+    contentBase64: Utilities.base64Encode(bytes)
+  };
+}
+
 function backupTeacherMaterials_(data) {
   const user = auth_(data);
   if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Резервное копирование доступно только преподавателям.");
@@ -5122,19 +5151,18 @@ function backupTeacherMaterials_(data) {
   if (!PropertiesService.getScriptProperties().getProperty(tokenKey)) throw new Error("Сначала подключите выбранное облачное хранилище.");
   teacherCloudAccessToken_(user.email, provider.key);
   const rows = content_().getDataRange().getValues(), materials = [], courses = {};
+  let attachmentCount = 0, attachmentBytes = 0;
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i], owner = email_(row[6] || ""), courseId = normalizeCourseId_(row[1] || "");
     if (owner !== user.email || !courseId || !hasCourseAccess_(user, courseId)) continue;
     let payload = {};
     try { payload = JSON.parse(row[5] || "{}"); } catch (e) {}
     if (String(row[3] || "") === "file") {
-      payload = {
-        fileName: String(payload.fileName || ""),
-        mimeType: String(payload.mimeType || ""),
-        size: Number(payload.size || 0),
-        storageProvider: String(payload.storageProvider || "portal"),
-        lectureId: String(payload.lectureId || "")
-      };
+      const attachment = teacherBackupAttachment_(row, payload, courseId);
+      attachmentBytes += attachment.size;
+      if (attachmentBytes > 8000000) throw new Error("Общий объём вложений превышает 8 МБ. Создайте резервные копии отдельно для каждой дисциплины.");
+      attachmentCount++;
+      payload = attachment;
     }
     materials.push({
       id: String(row[0] || ""), courseId: courseId, topicId: String(row[2] || ""),
@@ -5149,8 +5177,8 @@ function backupTeacherMaterials_(data) {
   const backup = {
     format: "mdk0401-teacher-materials-backup", formatVersion: 1,
     createdAt: createdAt, ownerEmail: user.email, provider: provider.key,
-    courseIds: Object.keys(courses).sort(), itemCount: materials.length,
-    notes: ["Копия авторских записей CourseContent. Бинарные вложения не включены: файлы остаются в исходном хранилище.", "Данные студентов, оценки, попытки и личные сведения не включены."],
+    courseIds: Object.keys(courses).sort(), itemCount: materials.length, attachmentCount: attachmentCount, attachmentBytes: attachmentBytes,
+    notes: ["Самодостаточная копия авторских записей CourseContent и бинарных вложений PDF, DOC и DOCX.", "Данные студентов, оценки, попытки и личные сведения не включены.", "Восстановление из архива выполняется отдельно; автоматическая синхронизация не включена."],
     materials: materials
   };
   const json = JSON.stringify(backup, null, 2);
@@ -5160,7 +5188,7 @@ function backupTeacherMaterials_(data) {
   const sheet = ensureSheet_("TeacherCloudBackups");
   const id = Utilities.getUuid();
   sheet.appendRow([id, user.email, provider.key, fileRef, fileName, createdAt, materials.length, Object.keys(courses).length, 1]);
-  return { success: true, backupId: id, provider: provider.key, fileName: fileName, createdAt: createdAt, itemCount: materials.length, courseCount: Object.keys(courses).length, size: blob.getBytes().length };
+  return { success: true, backupId: id, provider: provider.key, fileName: fileName, createdAt: createdAt, itemCount: materials.length, courseCount: Object.keys(courses).length, attachmentCount: attachmentCount, attachmentBytes: attachmentBytes, size: blob.getBytes().length };
 }
 function beginTeacherCloudOAuth_(data) {
   const user = auth_(data);
