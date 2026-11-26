@@ -3345,9 +3345,13 @@ function deleteCustomContent_(data) {
           let payload = {};
           try { payload = JSON.parse(values[i][5] || "{}"); } catch (e) {}
           const fileMatch = String(payload.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+          const cloudMatch = String(payload.fileRef || "").match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
           if (fileMatch) {
             try { assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(values[i][2] || "") + ".").setTrashed(true); }
             catch (fileError) { throw new Error("Не удалось удалить файл из Google Drive. Запись материала сохранена."); }
+          } else if (cloudMatch) {
+            try { teacherCloudDeleteFile_(cloudMatch[1], email_(values[i][6] || ""), cloudMatch[2]); }
+            catch (fileError) { throw new Error("Не удалось удалить файл из личного облака. Запись материала сохранена: " + String(fileError.message || fileError).slice(0, 180)); }
           }
         }
         sheet.deleteRow(i + 1);
