@@ -80,7 +80,7 @@ test("teacher can export an isolated backup of authored course content to a conn
  assert.match(gs,/teacherCloudUploadFile_\(provider\.key, user\.email, blob\.getBytes\(\), "application\/json", fileName\)/);
  assert.match(gs,/TeacherCloudBackups: \["BackupId", "OwnerEmail", "Provider"/);
  assert.match(gs,/Данные студентов, оценки, попытки и личные сведения не включены/);
- assert.match(gs,/Бинарные вложения не включены/);
+ assert.match(gs,/Самодостаточная копия авторских записей CourseContent и бинарных вложений PDF, DOC и DOCX/);
  assert.match(api,/backupTeacherMaterials:function\(provider\)/);
  assert.match(page,/data-backup/);
  assert.match(page,/Создать резервную копию/);
@@ -119,4 +119,9 @@ test("teacher cloud backups embed verified PDF, DOC and DOCX attachments in the 
  assert.match(gs,/Восстановление из архива выполняется отдельно/);
  assert.match(page,/В копию входят авторские материалы и вложенные PDF, DOC и DOCX/);
  assert.match(page,/r\.attachmentCount/);
+});
+
+test("teacher cloud backup uses stored MIME when cloud provider returns generic content type",()=>{
+ assert.match(gs,/let mime = String\(blob\.getContentType\(\) \|\| ""\)\.toLowerCase\(\)/);
+ assert.match(gs,/if \(allowedMimes\.indexOf\(mime\) < 0\) mime = String\(payload\.mimeType \|\| ""\)\.toLowerCase\(\)/);
 });
