@@ -50,7 +50,7 @@
       panel.innerHTML='<div class="ler-group"><div class="ler-controls">'+add("<b>B</b>","Полужирный",()=>exec("bold"))+add("<i>I</i>","Курсив",()=>exec("italic"))+add("<u>U</u>","Подчёркивание",()=>exec("underline"))+add("<s>S</s>","Зачёркивание",()=>exec("strikeThrough"))+add("x₂","Нижний индекс",()=>exec("subscript"))+add("x²","Верхний индекс",()=>exec("superscript"))+'</div><small>Начертание</small></div><div class="ler-group"><div class="ler-controls"><select id="lerFont" aria-label="Шрифт"><option>Arial</option><option>Calibri</option><option>Georgia</option><option>Times New Roman</option><option>Verdana</option></select><select id="lerSize" aria-label="Размер шрифта"><option value="2">10</option><option value="3" selected>12</option><option value="4">14</option><option value="5">18</option><option value="6">24</option><option value="7">36</option></select><label class="ler-color" title="Цвет текста">A<input id="lerColor" type="color" value="#172033"></label><label class="ler-color mark" title="Цвет выделения">▰<input id="lerHighlight" type="color" value="#fff2a8"></label></div><small>Шрифт и цвет</small></div><div class="ler-group"><div class="ler-controls">'+add("• Список","Маркированный список",()=>exec("insertUnorderedList"))+add("1. Список","Нумерованный список",()=>exec("insertOrderedList"))+add("Отступ −","Уменьшить отступ",()=>exec("outdent"))+add("Отступ +","Увеличить отступ",()=>exec("indent"))+'</div><small>Абзац</small></div><div class="ler-group"><div class="ler-controls">'+add("H1","Заголовок 1",()=>exec("formatBlock","h1"))+add("H2","Заголовок 2",()=>exec("formatBlock","h2"))+add("H3","Заголовок 3",()=>exec("formatBlock","h3"))+add("Обычный","Обычный текст",()=>exec("formatBlock","p"))+'</div><small>Стили</small></div>';
     }
     panel.__actions=actions;
-    panel.querySelectorAll(".ler-btn").forEach((b,i)=>b.addEventListener("click",actions[i]));
+    panel.querySelectorAll(".ler-btn").forEach((b,i)=>{b.addEventListener("mousedown",e=>e.preventDefault());b.addEventListener("click",actions[i]);});
     const f=$("lerFont"),z=$("lerSize"),co=$("lerColor"),hi=$("lerHighlight");
     if(f)f.onchange=()=>exec("fontName",f.value);
     if(z)z.onchange=()=>exec("fontSize",z.value);
@@ -60,6 +60,8 @@
   function enhance(){
     const old=$("lectureBody");if(!old||old.dataset.wordRibbon==="1")return;
     source=old;
+    const nativeValue=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,"value");
+    if(nativeValue)Object.defineProperty(source,"value",{configurable:true,get:()=>nativeValue.get.call(source),set:v=>{nativeValue.set.call(source,v);if(editor)editor.innerHTML=String(v||"");}});
     const wrap=document.createElement("section");wrap.className="lecture-word-editor";
     const ribbon=document.createElement("div");ribbon.className="ler-ribbon";
     ribbon.innerHTML='<div class="ler-titlebar"><span>Документ лекции</span><span class="ler-savehint">Форматирование сохраняется вместе с текстом</span></div><div class="ler-tabs" role="tablist"><button class="ler-tab active" data-tab="home" role="tab" aria-selected="true">Главная</button><button class="ler-tab" data-tab="insert" role="tab" aria-selected="false">Вставка</button><button class="ler-tab" data-tab="layout" role="tab" aria-selected="false">Макет и правка</button></div><div id="lerRibbonPanel" class="ler-panel"></div>';
