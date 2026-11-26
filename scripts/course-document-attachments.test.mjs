@@ -28,7 +28,7 @@ test("course documents are uploaded only by an editor and stored in a private Dr
   assert.match(source, /namedExtension\.toLowerCase\(\) !== extension/);
 });
 
-test("document retrieval is bound to the exact course-content record and access switch", () => {
+test("document retrieval is bound to the exact course-content record, access switch and cloud provider", () => {
   const start = backend.indexOf("function getCourseFile_(data)");
   const end = backend.indexOf("function saveCustomContent_(data)", start);
   assert.ok(start >= 0 && end > start);
@@ -38,7 +38,8 @@ test("document retrieval is bound to the exact course-content record and access 
   assert.match(source, /hasCourseAccess_\(user, courseId\)/);
   assert.match(source, /customContentIsOpen_\(courseId, itemId/);
   assert.match(source, /String\(payload\.fileRef \|\| ""\) !== fileRef/);
-  assert.match(source, /assertPortalPrivateFile_\(DriveApp\.getFileById\(match\[1\]\), courseFileFolder_\(\)/);
+  assert.match(source, /assertPortalPrivateFile_\(DriveApp\.getFileById\(portalMatch\[1\]\), courseFileFolder_\(\)/);
+  assert.match(source, /teacherCloudDownloadFile_\(cloudMatch\[1\], ownerEmail, cloudMatch\[2\]\)/);
   assert.match(source, /DriveApp\.getFileById/);
   assert.match(source, /Utilities\.base64Encode/);
 });
@@ -63,7 +64,7 @@ test("client exposes the upload and authenticated download endpoints", () => {
 test("teacher editor accepts only small PDF and Word documents and lists topic files", () => {
   assert.match(editor, /accept=".pdf,.doc,.docx"/);
   assert.match(editor, /file\.size>3500000/);
-  assert.match(editor, /uploadCourseFile\(courseSel\.value,topicId,title,file\.name,dataUrl\)/);
+  assert.match(editor, /uploadCourseFile\(courseSel\.value,topicId,title,file\.name,dataUrl,"",storageSel/);
   assert.match(editor, /delete-course-file/);
 });
 
@@ -76,12 +77,12 @@ test("student topic view downloads protected documents through the API, not a pu
 
 
 test("lecture attachments are linked to a saved lecture in the same course and topic", () => {
-  assert.match(api, /uploadCourseFile:function\(courseId,topicId,title,fileName,dataUrl,lectureId\)/);
+  assert.match(api, /uploadCourseFile:function\(courseId,topicId,title,fileName,dataUrl,lectureId,storageProvider\)/);
   assert.match(backend, /const lectureId = String\(data\.lectureId \|\| ""\)\.trim\(\)/);
   assert.match(backend, /String\(row\[3\] \|\| ""\) === "lecture"/);
   assert.match(backend, /size: bytes\.length, lectureId: lectureId/);
   assert.match(editor, /id="lectureFileInput"/);
-  assert.match(editor, /uploadCourseFile\(courseSel\.value,topicId,file\.name,file\.name,dataUrl,lectureId\)/);
+  assert.match(editor, /uploadCourseFile\(courseSel\.value,topicId,file\.name,file\.name,dataUrl,lectureId,storageSel/);
   assert.match(app, /String\(item\.lectureId \|\| ""\) === String\(lec\.id \|\| ""\)/);
   assert.match(app, /API\.getCourseFile\(fileItem\.id, fileItem\.fileRef\)/);
 });

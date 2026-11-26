@@ -3107,23 +3107,34 @@ function uploadCourseFile_(data) {
   if (mime === "application/pdf" && signature.indexOf("%PDF-") !== 0) throw new Error("Содержимое файла не похоже на PDF.");
   if (mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && signature.slice(0, 4) !== "PK\u0003\u0004") throw new Error("Содержимое файла не похоже на DOCX.");
   if (mime === "application/msword" && signature.slice(0, 4) !== "\u00D0\u00CF\u0011\u00E0") throw new Error("Содержимое файла не похоже на DOC.");
-  const originalName = String(data.fileName || "material").replace(/[\\/\\\\]/g, "_").slice(0, 120);
+  const originalName = String(data.fileName || "material").replace(/[\\/]/g, "_").slice(0, 120);
   const extension = mime === "application/pdf" ? ".pdf" : mime === "application/msword" ? ".doc" : ".docx";
   const namedExtension = (originalName.match(/\.(pdf|doc|docx)$/i) || [])[0];
   if (namedExtension && namedExtension.toLowerCase() !== extension) throw new Error("Расширение имени файла не соответствует его формату.");
   const safeName = namedExtension ? originalName : originalName + extension;
-  const folder = courseFileFolder_();
-  const file = folder.createFile(Utilities.newBlob(bytes, mime, safeName));
-  file.setDescription("Учебный материал. Дисциплина: " + courseId + ". Тема: " + topicId + ". Автор: " + actor.email);
-  try {
+  const storageProvider = String(data.storageProvider || "portal").toLowerCase();
+  let fileRef = "", cloudStored = false, file = null;
+  if (storageProvider === "portal") {
+    const folder = courseFileFolder_();
+    file = folder.createFile(Utilities.newBlob(bytes, mime, safeName));
+    file.setDescription("Учебный материал. Дисциплина: " + courseId + ". Тема: " + topicId + ". Автор: " + actor.email);
     assertPortalPrivateFile_(file, folder, "Учебный материал. Дисциплина: " + courseId + ". Тема: " + topicId + ".");
+    fileRef = "coursefile:" + file.getId();
+  } else {
+    teacherCloudProvider_(storageProvider);
+    fileRef = teacherCloudUploadFile_(storageProvider, actor.email, bytes, mime, safeName);
+    cloudStored = true;
+  }
+  try {
     const saved = saveCustomContent_({
       token: data.token, mdkId: courseId, topicId: topicId, type: "file", title: title,
-      fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length, lectureId: lectureId
+      fileRef: fileRef, fileName: safeName, mimeType: mime, size: bytes.length, lectureId: lectureId,
+      storageProvider: storageProvider, cloudOwnerEmail: cloudStored ? actor.email : ""
     });
-    return { success: true, id: saved.id, fileRef: "coursefile:" + file.getId(), fileName: safeName, mimeType: mime, size: bytes.length };
+    return { success: true, id: saved.id, fileRef: fileRef, fileName: safeName, mimeType: mime, size: bytes.length, storageProvider: storageProvider };
   } catch (error) {
-    try { file.setTrashed(true); } catch (cleanupError) {}
+    if (file) { try { file.setTrashed(true); } catch (cleanupError) {} }
+    if (cloudStored) { try { teacherCloudDeleteFile_(storageProvider, actor.email, fileRef.split(":").slice(2).join(":")); } catch (cleanupError) {} }
     throw error;
   }
 }
@@ -3132,35 +3143,36 @@ function getCourseFile_(data) {
   const user = auth_(data);
   const itemId = String(data.itemId || "");
   const fileRef = String(data.fileRef || "");
-  const match = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
-  if (!itemId || !match) throw new Error("Не указан учебный файл.");
+  if (!itemId) throw new Error("Не указан учебный файл.");
   const rows = content_().getDataRange().getValues();
   let record = null;
   for (let i = 1; i < rows.length; i++) {
-    if (String(rows[i][0] || "") === itemId && String(rows[i][3] || "") === "file") {
-      record = rows[i]; break;
-    }
+    if (String(rows[i][0] || "") === itemId && String(rows[i][3] || "") === "file") { record = rows[i]; break; }
   }
   if (!record) throw new Error("Файл не найден.");
   const courseId = normalizeCourseId_(record[1] || "");
   if (!hasCourseAccess_(user, courseId)) throw new Error("У вас нет доступа к этой дисциплине.");
-  if (user.role === "student" && !customContentIsOpen_(courseId, itemId, String(record[2] || ""), "file")) {
-    throw new Error("Этот материал пока закрыт преподавателем.");
-  }
+  if (user.role === "student" && !customContentIsOpen_(courseId, itemId, String(record[2] || ""), "file")) throw new Error("Этот материал пока закрыт преподавателем.");
   let payload = {};
   try { payload = JSON.parse(record[5] || "{}"); } catch (e) {}
   if (String(payload.fileRef || "") !== fileRef) throw new Error("Ссылка на файл не совпадает с записью материала.");
-  const file = assertPortalPrivateFile_(DriveApp.getFileById(match[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(record[2] || "") + ".");
-  const blob = file.getBlob(), bytes = blob.getBytes();
+  let blob;
+  const portalMatch = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+  const cloudMatch = fileRef.match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
+  if (portalMatch) {
+    const file = assertPortalPrivateFile_(DriveApp.getFileById(portalMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + courseId + ". Тема: " + String(record[2] || "") + ".");
+    blob = file.getBlob();
+  } else if (cloudMatch) {
+    const ownerEmail = email_(record[6] || "");
+    if (!ownerEmail) throw new Error("Не удалось определить владельца облачного файла.");
+    blob = teacherCloudDownloadFile_(cloudMatch[1], ownerEmail, cloudMatch[2]);
+  } else throw new Error("Ссылка на учебный файл повреждена.");
+  const bytes = blob.getBytes();
   if (bytes.length > 3500000) throw new Error("Файл превышает допустимый размер для защищённой загрузки.");
   const mime = String(blob.getContentType() || payload.mimeType || "");
-  if (["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].indexOf(mime) < 0) {
-    throw new Error("Тип файла не поддерживается.");
-  }
-  return { success: true, fileName: String(payload.fileName || file.getName()), mimeType: mime,
-    data: Utilities.base64Encode(bytes), size: bytes.length };
+  if (["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].indexOf(mime) < 0) throw new Error("Тип файла не поддерживается.");
+  return { success: true, fileName: String(payload.fileName || blob.getName() || "material"), mimeType: mime, data: Utilities.base64Encode(bytes), size: bytes.length };
 }
-
 
 /* ---------- Portal webinars ---------- */
 function webinars_(){return ensureSheet_("Webinars");}
@@ -3284,13 +3296,20 @@ function saveCustomContent_(data) {
     }
 
     if (type === "file") {
-      const fileMatch = String(data.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
-      if (!fileMatch) throw new Error("Для учебного файла допустима только внутренняя ссылка портала.");
-      assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(data.topicId || "") + ".");
+      const fileRef = String(data.fileRef || "");
+      const fileMatch = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+      const cloudMatch = fileRef.match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
+      if (fileMatch) {
+        assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(data.topicId || "") + ".");
+      } else if (cloudMatch) {
+        if (email_(data.cloudOwnerEmail || "") !== user.email) throw new Error("Владелец облачного файла не совпадает с автором материала.");
+        teacherCloudProvider_(cloudMatch[1]);
+        if (!PropertiesService.getScriptProperties().getProperty(teacherCloudTokenKey_(user.email, cloudMatch[1]))) throw new Error("Личное хранилище автора не подключено.");
+      } else throw new Error("Для учебного файла допустима только защищённая ссылка портала или подключённого облака.");
     }
 
     const payload = Object.assign({}, data);
-    ["token", "action", "id", "mdkId", "courseId", "topicId", "type", "title"].forEach(function (key) {
+    ["token", "action", "id", "mdkId", "courseId", "topicId", "type", "title", "cloudOwnerEmail"].forEach(function (key) {
       delete payload[key];
     });
 
@@ -3326,9 +3345,13 @@ function deleteCustomContent_(data) {
           let payload = {};
           try { payload = JSON.parse(values[i][5] || "{}"); } catch (e) {}
           const fileMatch = String(payload.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+          const cloudMatch = String(payload.fileRef || "").match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
           if (fileMatch) {
             try { assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(values[i][2] || "") + ".").setTrashed(true); }
             catch (fileError) { throw new Error("Не удалось удалить файл из Google Drive. Запись материала сохранена."); }
+          } else if (cloudMatch) {
+            try { teacherCloudDeleteFile_(cloudMatch[1], email_(values[i][6] || ""), cloudMatch[2]); }
+            catch (fileError) { throw new Error("Не удалось удалить файл из личного облака. Запись материала сохранена: " + String(fileError.message || fileError).slice(0, 180)); }
           }
         }
         sheet.deleteRow(i + 1);
@@ -4935,6 +4958,141 @@ function teacherCloudRedirectUri_() {
   // doGet dispatches OAuth callbacks by this action; providers must use this exact URI.
   return url + (url.indexOf("?") >= 0 ? "&" : "?") + "action=cloudOAuthCallback";
 }
+function teacherCloudApiError_(response, providerName) {
+  const code = response.getResponseCode(), body = response.getContentText() || "";
+  if (code < 200 || code >= 300) {
+    let detail = body;
+    try { const parsed = JSON.parse(body); detail = parsed.error_description || parsed.error && (parsed.error.message || parsed.error) || parsed.message || body; } catch (e) {}
+    throw new Error(providerName + ": " + String(detail || ("HTTP " + code)).slice(0, 260));
+  }
+  return response;
+}
+function teacherCloudAccessToken_(email, providerKey) {
+  const provider = teacherCloudProvider_(providerKey), cfg = provider.config, props = PropertiesService.getScriptProperties();
+  const key = teacherCloudTokenKey_(email, provider.key), lock = LockService.getUserLock();
+  lock.waitLock(10000);
+  try {
+    let token = null;
+    try { token = JSON.parse(props.getProperty(key) || "null"); } catch (e) {}
+    if (!token || !token.accessToken) throw new Error("Личное хранилище " + cfg.name + " не подключено. Подключите его в разделе «Мои хранилища».");
+    if (Number(token.expiresAt || 0) > Date.now() + 120000) return String(token.accessToken);
+    if (!token.refreshToken) throw new Error("Срок доступа к " + cfg.name + " истёк. Отключите и подключите хранилище заново.");
+    const payload = { grant_type: "refresh_token", refresh_token: token.refreshToken, client_id: props.getProperty(cfg.clientId), client_secret: props.getProperty(cfg.clientSecret) };
+    const response = UrlFetchApp.fetch(cfg.token, { method: "post", payload: payload, muteHttpExceptions: true });
+    const body = JSON.parse(response.getContentText() || "{}");
+    if (response.getResponseCode() < 200 || response.getResponseCode() >= 300 || !body.access_token) {
+      throw new Error("Не удалось обновить доступ к " + cfg.name + ". Переподключите хранилище. " + String(body.error_description || body.error || response.getResponseCode()).slice(0, 180));
+    }
+    token.accessToken = String(body.access_token);
+    token.refreshToken = String(body.refresh_token || token.refreshToken);
+    token.tokenType = String(body.token_type || token.tokenType || "Bearer");
+    token.expiresAt = Date.now() + Math.max(60, Number(body.expires_in || 3600)) * 1000;
+    token.refreshedAt = new Date().toISOString();
+    props.setProperty(key, JSON.stringify(token));
+    return token.accessToken;
+  } finally { lock.releaseLock(); }
+}
+function teacherCloudFetch_(providerKey, ownerEmail, url, options) {
+  const provider = teacherCloudProvider_(providerKey), token = teacherCloudAccessToken_(ownerEmail, provider.key);
+  const request = Object.assign({}, options || {});
+  request.headers = Object.assign({}, request.headers || {}, { Authorization: "Bearer " + token });
+  request.muteHttpExceptions = true;
+  return teacherCloudApiError_(UrlFetchApp.fetch(url, request), provider.config.name);
+}
+function teacherCloudGoogleFolder_(ownerEmail) {
+  const props = PropertiesService.getScriptProperties();
+  const key = teacherCloudTokenKey_(ownerEmail, "google") + "_FOLDER";
+  let folderId = String(props.getProperty(key) || "");
+  if (folderId) {
+    try {
+      const check = teacherCloudFetch_("google", ownerEmail, "https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(folderId) + "?fields=id,mimeType,trashed", { method: "get" });
+      const meta = JSON.parse(check.getContentText() || "{}");
+      if (meta.id === folderId && meta.mimeType === "application/vnd.google-apps.folder" && !meta.trashed) return folderId;
+    } catch (e) {}
+    props.deleteProperty(key);
+  }
+  const created = teacherCloudFetch_("google", ownerEmail, "https://www.googleapis.com/drive/v3/files", {
+    method: "post", contentType: "application/json",
+    payload: JSON.stringify({ name: "Учебный портал", mimeType: "application/vnd.google-apps.folder" })
+  });
+  const folder = JSON.parse(created.getContentText() || "{}");
+  if (!folder.id) throw new Error("Google Drive не создал папку «Учебный портал».");
+  props.setProperty(key, String(folder.id));
+  return String(folder.id);
+}
+function teacherCloudUploadFile_(providerKey, ownerEmail, bytes, mime, originalName) {
+  const provider = teacherCloudProvider_(providerKey), key = provider.key;
+  const ext = (String(originalName || "").match(/\.(pdf|doc|docx)$/i) || [])[0] || "";
+  const readableName = String(originalName || "material").replace(/[\\/]/g, "_").replace(/[^\w.\-а-яА-ЯёЁ ]/g, "_").replace(/\s+/g, "_").slice(0, 72) || "material";
+  const remoteName = "portal_" + Utilities.getUuid().replace(/-/g, "").slice(0, 10) + "_" + readableName;
+  let remoteKey = "";
+  if (key === "google") {
+    const folderId = teacherCloudGoogleFolder_(ownerEmail);
+    const created = teacherCloudFetch_(key, ownerEmail, "https://www.googleapis.com/drive/v3/files", {
+      method: "post", contentType: "application/json",
+      payload: JSON.stringify({ name: remoteName, mimeType: mime, parents: [folderId] })
+    });
+    const meta = JSON.parse(created.getContentText() || "{}");
+    if (!meta.id) throw new Error("Google Drive не вернул идентификатор файла.");
+    remoteKey = String(meta.id);
+    try {
+      teacherCloudFetch_(key, ownerEmail, "https://www.googleapis.com/upload/drive/v3/files/" + encodeURIComponent(remoteKey) + "?uploadType=media", {
+        method: "patch", contentType: mime, payload: bytes
+      });
+    } catch (uploadError) {
+      try { teacherCloudFetch_(key, ownerEmail, "https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(remoteKey), { method: "delete" }); } catch (cleanupError) {}
+      throw uploadError;
+    }
+  } else if (key === "yandex") {
+    remoteKey = "app:/" + remoteName;
+    const link = teacherCloudFetch_(key, ownerEmail, "https://cloud-api.yandex.net/v1/disk/resources/upload?path=" + encodeURIComponent(remoteKey) + "&overwrite=false", { method: "get" });
+    const href = String((JSON.parse(link.getContentText() || "{}")).href || "");
+    if (!href) throw new Error("Яндекс Диск не выдал адрес загрузки файла.");
+    teacherCloudApiError_(UrlFetchApp.fetch(href, { method: "put", payload: bytes, contentType: mime, muteHttpExceptions: true }), "Яндекс Диск");
+  } else if (key === "onedrive") {
+    const url = "https://graph.microsoft.com/v1.0/me/drive/special/approot:/" + encodeURIComponent(remoteName) + ":/content";
+    const response = teacherCloudFetch_(key, ownerEmail, url, { method: "put", contentType: mime, payload: bytes });
+    const item = JSON.parse(response.getContentText() || "{}");
+    if (!item.id) throw new Error("OneDrive не вернул идентификатор файла.");
+    remoteKey = String(item.id);
+  } else if (key === "dropbox") {
+    remoteKey = "/" + remoteName;
+    const arg = JSON.stringify({ path: remoteKey, mode: "add", autorename: true, mute: true }).replace(/[\u007f-\uffff]/g, function(ch) { return "\\u" + ("0000" + ch.charCodeAt(0).toString(16)).slice(-4); });
+    const response = teacherCloudFetch_(key, ownerEmail, "https://content.dropboxapi.com/2/files/upload", {
+      method: "post", contentType: "application/octet-stream",
+      headers: { "Dropbox-API-Arg": arg }, payload: bytes
+    });
+    const item = JSON.parse(response.getContentText() || "{}");
+    remoteKey = String(item.path_display || item.path_lower || remoteKey);
+  }
+  if (!remoteKey) throw new Error("Облачный провайдер не подтвердил сохранение файла.");
+  return "cloudfile:" + key + ":" + encodeURIComponent(remoteKey);
+}
+function teacherCloudDownloadFile_(providerKey, ownerEmail, encodedKey) {
+  const key = teacherCloudProvider_(providerKey).key, remoteKey = decodeURIComponent(String(encodedKey || ""));
+  if (!remoteKey) throw new Error("Не указан файл в облачном хранилище.");
+  if (key === "google") return teacherCloudFetch_(key, ownerEmail, "https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(remoteKey) + "?alt=media", { method: "get" }).getBlob();
+  if (key === "onedrive") return teacherCloudFetch_(key, ownerEmail, "https://graph.microsoft.com/v1.0/me/drive/items/" + encodeURIComponent(remoteKey) + "/content", { method: "get" }).getBlob();
+  if (key === "yandex") {
+    const link = teacherCloudFetch_(key, ownerEmail, "https://cloud-api.yandex.net/v1/disk/resources/download?path=" + encodeURIComponent(remoteKey), { method: "get" });
+    const href = String((JSON.parse(link.getContentText() || "{}")).href || "");
+    if (!href) throw new Error("Яндекс Диск не выдал адрес скачивания файла.");
+    return teacherCloudApiError_(UrlFetchApp.fetch(href, { method: "get", muteHttpExceptions: true }), "Яндекс Диск").getBlob();
+  }
+  if (key === "dropbox") {
+    const arg = JSON.stringify({ path: remoteKey }).replace(/[\u007f-\uffff]/g, function(ch) { return "\\u" + ("0000" + ch.charCodeAt(0).toString(16)).slice(-4); });
+    return teacherCloudFetch_(key, ownerEmail, "https://content.dropboxapi.com/2/files/download", { method: "post", headers: { "Dropbox-API-Arg": arg } }).getBlob();
+  }
+  throw new Error("Неизвестный провайдер файла.");
+}
+function teacherCloudDeleteFile_(providerKey, ownerEmail, encodedKey) {
+  const key = teacherCloudProvider_(providerKey).key, remoteKey = decodeURIComponent(String(encodedKey || ""));
+  if (key === "google") return teacherCloudFetch_(key, ownerEmail, "https://www.googleapis.com/drive/v3/files/" + encodeURIComponent(remoteKey), { method: "delete" });
+  if (key === "onedrive") return teacherCloudFetch_(key, ownerEmail, "https://graph.microsoft.com/v1.0/me/drive/items/" + encodeURIComponent(remoteKey), { method: "delete" });
+  if (key === "yandex") return teacherCloudFetch_(key, ownerEmail, "https://cloud-api.yandex.net/v1/disk/resources?path=" + encodeURIComponent(remoteKey), { method: "delete" });
+  if (key === "dropbox") return teacherCloudFetch_(key, ownerEmail, "https://api.dropboxapi.com/2/files/delete_v2", { method: "post", contentType: "application/json", payload: JSON.stringify({ path: remoteKey }) });
+}
+
 function getTeacherCloudStorage_(data) {
   const user = auth_(data);
   if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Личные хранилища доступны только преподавателям.");
@@ -5006,6 +5164,12 @@ function disconnectTeacherCloudStorage_(data) {
   const user = auth_(data);
   if (["teacher", "admin"].indexOf(user.role) === -1) throw new Error("Отключать личные хранилища могут только преподаватели.");
   const provider = teacherCloudProvider_(data.provider);
+  const rows = content_().getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (email_(rows[i][6] || "") !== user.email || String(rows[i][3] || "") !== "file") continue;
+    let payload = {}; try { payload = JSON.parse(rows[i][5] || "{}"); } catch (e) {}
+    if (String(payload.fileRef || "").indexOf("cloudfile:" + provider.key + ":") === 0) throw new Error("Сначала удалите или перенесите все учебные файлы, сохранённые в этом облаке. Иначе студенты потеряют к ним доступ.");
+  }
   PropertiesService.getScriptProperties().deleteProperty(teacherCloudTokenKey_(user.email, provider.key));
   return { success: true };
 }
