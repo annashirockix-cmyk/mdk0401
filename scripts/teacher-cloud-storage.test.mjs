@@ -98,7 +98,7 @@ test("teacher cloud backup API exports only owned accessible course content and 
  assert.match(gs,/teacherCloudUploadFile_\(provider\.key, user\.email, blob\.getBytes\(\), "application\/json", fileName\)/);
  assert.match(gs,/backupRows = backupSheet\.getDataRange\(\)\.getValues\(\)\.slice\(1\)\.filter\(function\(row\) \{ return email_\(row\[1\] \|\| ""\) === user\.email; \}\)/);
  assert.match(gs,/Данные студентов, оценки, попытки и личные сведения не включены/);
- assert.match(gs,/Бинарные вложения не включены/);
+ assert.match(gs,/contentBase64: Utilities\.base64Encode\(bytes\)/);
  assert.match(api,/backupTeacherMaterials:function\(provider\)/);
  assert.match(page,/data-backup/);
  assert.match(page,/Создать резервную копию/);
