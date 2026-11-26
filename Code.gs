@@ -51,7 +51,9 @@ const HEADERS = {
   EnglishSemesterBank: ["Track", "TestsJSON", "Active", "UpdatedAt", "UpdatedBy"],
   EnglishExamVariantsBank: ["ExamId", "CourseNo", "CourseId", "Track", "Semester", "VariantId", "BlueprintId", "VariantJSON", "Active", "UpdatedAt", "UpdatedBy"],
   EnglishExamAttempts: ["AttemptId", "StudentEmail", "StudentName", "Group", "CourseId", "ExamId", "VariantId", "Status", "StartedAt", "DeadlineAt", "SubmittedAt", "AttemptJSON", "ResponsesJSON", "ResultJSON", "UpdatedAt"],
-  ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt", "EventType", "Details"]
+  ActivityLog: ["Id", "Email", "Name", "Group", "Role", "CourseId", "Route", "PageTitle", "CreatedAt", "ClientAt", "EventType", "Details"],
+  Webinars: ["WebinarId", "CourseId", "Title", "Description", "StartsAt", "RoomName", "Status", "CreatedBy", "CreatedAt"],
+  WebinarAttendance: ["WebinarId", "Email", "Name", "Event", "FirstJoinedAt", "LastLeftAt", "UpdatedAt"]
 };
 
 /* ---------- HTTP entry points ---------- */
@@ -149,6 +151,10 @@ function handleRequest_(e) {
       case "uploadtestimage": result = uploadTestImage_(data); break;
       case "uploadcoursefile": result = uploadCourseFile_(data); break;
       case "getcoursefile": result = getCourseFile_(data); break;
+      case "getwebinars": result = getWebinars_(data); break;
+      case "createwebinar": result = createWebinar_(data); break;
+      case "joinwebinar": result = joinWebinar_(data); break;
+      case "webinarattendance": result = webinarAttendance_(data); break;
       case "uploadexamfile": result = uploadExamFile_(data); break;
       case "getexamfile": result = getExamFile_(data); break;
       case "deleteexamfile": result = deleteExamFile_(data); break;
@@ -3148,6 +3154,98 @@ function getCourseFile_(data) {
   }
   return { success: true, fileName: String(payload.fileName || file.getName()), mimeType: mime,
     data: Utilities.base64Encode(bytes), size: bytes.length };
+}
+
+
+/* ---------- Portal webinars ---------- */
+function webinars_(){return ensureSheet_("Webinars");}
+function webinarAttendanceSheet_(){return ensureSheet_("WebinarAttendance");}
+function webinarRows_(){
+  const sh=webinars_(),values=sh.getDataRange().getValues(),map=headerMap_(sh),rows=[];
+  for(let i=1;i<values.length;i++){
+    const row=values[i],id=String(row[map.WebinarId]||"");if(!id)continue;
+    rows.push({id:id,courseId:normalizeCourseId_(row[map.CourseId]||""),title:String(row[map.Title]||""),description:String(row[map.Description]||""),startsAt:String(row[map.StartsAt]||""),roomName:String(row[map.RoomName]||""),status:String(row[map.Status]||"draft"),createdBy:email_(row[map.CreatedBy]||""),createdAt:String(row[map.CreatedAt]||"")});
+  }
+  return rows;
+}
+function getWebinars_(data){
+  const user=auth_(data);
+  const rows=webinarRows_().filter(function(w){
+    if(user.role==="admin")return true;
+    if(!hasCourseAccess_(user,w.courseId))return false;
+    if(user.role==="student")return w.status==="published"||w.status==="live";
+    return user.role==="teacher"&&(w.createdBy===user.email||hasCourseAccess_(user,w.courseId));
+  });
+  const attendance=webinarAttendanceSheet_(),values=attendance.getDataRange().getValues(),map=headerMap_(attendance),counts={};
+  for(let i=1;i<values.length;i++){const id=String(values[i][map.WebinarId]||"");if(id)counts[id]=(counts[id]||0)+1;}
+  rows.sort(function(a,b){return new Date(a.startsAt).getTime()-new Date(b.startsAt).getTime();});
+  return {success:true,data:rows.map(function(w){w.participants=counts[w.id]||0;return w;})};
+}
+function createWebinar_(data){
+  const courseId=normalizeCourseId_(data.courseId||"");
+  const user=editor_(data,courseId);
+  const title=String(data.title||"").trim().replace(/\s+/g," ");
+  const startsAt=String(data.startsAt||"").trim();
+  if(!courseId||!title)throw new Error("Укажите дисциплину и название вебинара.");
+  if(title.length>120)throw new Error("Название вебинара слишком длинное.");
+  const start=new Date(startsAt);
+  if(!startsAt||isNaN(start.getTime()))throw new Error("Укажите корректную дату и время.");
+  if(start.getTime()<Date.now()-86400000)throw new Error("Нельзя запланировать вебинар в прошлом.");
+  const status=String(data.status||"draft")==="published"?"published":"draft";
+  const id=Utilities.getUuid(),room="portal-"+Utilities.getUuid().replace(/-/g,"");
+  const sh=webinars_();
+  sh.appendRow([id,courseId,title,String(data.description||"").slice(0,1000),start.toISOString(),room,status,user.email,new Date().toISOString()]);
+  return {success:true,id:id};
+}
+function webinarById_(id){
+  const sh=webinars_(),values=sh.getDataRange().getValues(),map=headerMap_(sh);
+  for(let i=1;i<values.length;i++)if(String(values[i][map.WebinarId]||"")===String(id||"")){
+    const row=values[i];return {row:i+1,id:String(row[map.WebinarId]),courseId:normalizeCourseId_(row[map.CourseId]||""),title:String(row[map.Title]||""),description:String(row[map.Description]||""),startsAt:String(row[map.StartsAt]||""),roomName:String(row[map.RoomName]||""),status:String(row[map.Status]||"draft"),createdBy:email_(row[map.CreatedBy]||"")};
+  }
+  return null;
+}
+function webinarJwt_(domain,room,user,isHost){
+  const props=PropertiesService.getScriptProperties(),appId=String(props.getProperty("JITSI_APP_ID")||""),secret=String(props.getProperty("JITSI_APP_SECRET")||"");
+  if(!appId||!secret)return "";
+  const now=Math.floor(Date.now()/1000);
+  const header=Utilities.base64EncodeWebSafe(JSON.stringify({alg:"HS256",typ:"JWT"})).replace(/=+$/g,"");
+  const payload=Utilities.base64EncodeWebSafe(JSON.stringify({aud:"jitsi",iss:appId,sub:domain,room:room,iat:now,nbf:now-10,exp:now+7200,context:{user:{name:user.name||user.email,email:user.email,moderator:!!isHost}}})).replace(/=+$/g,"");
+  const input=header+"."+payload;
+  const signature=Utilities.base64EncodeWebSafe(Utilities.computeHmacSha256Signature(input,secret)).replace(/=+$/g,"");
+  return input+"."+signature;
+}
+function joinWebinar_(data){
+  const user=auth_(data),w=webinarById_(data.webinarId);
+  if(!w)throw new Error("Вебинар не найден.");
+  if(w.status==="draft"||w.status==="cancelled")throw new Error("Вебинар ещё не опубликован или отменён.");
+  if(!hasCourseAccess_(user,w.courseId))throw new Error("У вас нет доступа к этой дисциплине.");
+  const isHost=user.role==="admin"||user.role==="teacher";
+  if(user.role==="teacher"&&w.createdBy!==user.email&&!hasCourseAccess_(user,w.courseId))throw new Error("Нет прав ведущего.");
+  const props=PropertiesService.getScriptProperties(),domain=String(props.getProperty("JITSI_DOMAIN")||"meet.jit.si").replace(/^https?:\/\//,"").replace(/\/.*$/,"");
+  const jwt=webinarJwt_(domain,w.roomName,user,isHost);
+  return {success:true,id:w.id,title:w.title,roomName:w.roomName,domain:domain,jwt:jwt||"",secure:!!jwt,isHost:isHost,displayName:user.name||user.email};
+}
+function webinarAttendance_(data){
+  const user=auth_(data),w=webinarById_(data.webinarId);
+  if(!w)throw new Error("Вебинар не найден.");
+  if(!hasCourseAccess_(user,w.courseId))throw new Error("Нет доступа к вебинару.");
+  const event=String(data.event||"").toLowerCase();
+  if(event!=="join"&&event!=="leave")throw new Error("Неизвестное событие посещения.");
+  const sh=webinarAttendanceSheet_(),values=sh.getDataRange().getValues(),map=headerMap_(sh);let rowNo=0;
+  for(let i=1;i<values.length;i++)if(String(values[i][map.WebinarId]||"")===w.id&&email_(values[i][map.Email])===user.email){rowNo=i+1;break;}
+  const now=new Date().toISOString();
+  if(rowNo){
+    const row=sh.getRange(rowNo,1,1,sh.getLastColumn()).getValues()[0];
+    row[map.Name]=user.name||user.email;row[map.Event]=event;row[map.UpdatedAt]=now;
+    if(event==="leave")row[map.LastLeftAt]=now;
+    if(event==="join"&&!row[map.FirstJoinedAt])row[map.FirstJoinedAt]=now;
+    sh.getRange(rowNo,1,1,row.length).setValues([row]);
+  }else{
+    const row=new Array(sh.getLastColumn()).fill("");
+    row[map.WebinarId]=w.id;row[map.Email]=user.email;row[map.Name]=user.name||user.email;row[map.Event]=event;
+    row[map.FirstJoinedAt]=event==="join"?now:"";row[map.LastLeftAt]=event==="leave"?now:"";row[map.UpdatedAt]=now;sh.appendRow(row);
+  }
+  return {success:true};
 }
 
 function saveCustomContent_(data) {
