@@ -71,6 +71,8 @@ jobs:
         run: node --test scripts/workbook-image-cache.test.mjs scripts/workbook-print.test.mjs
       - name: Check custom course content rendering
         run: node --test scripts/course-content-editor.test.mjs
+      - name: Check Word-style lecture editor ribbon
+        run: node --check lecture-word-ribbon.js && node --test scripts/lecture-word-ribbon.test.mjs
       - name: Check protected course document attachments
         run: node --test scripts/course-document-attachments.test.mjs scripts/course-document-attachments-runtime.test.mjs
       - name: Check protected exam document attachments
