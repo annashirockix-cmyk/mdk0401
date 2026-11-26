@@ -700,7 +700,17 @@ function saveStudent_(data) {
 
   const fields = { UpdatedAt: new Date().toISOString() };
   if (data.name !== undefined) fields.Name = String(data.name).trim().replace(/\s+/g, " ");
-  if (data.group !== undefined) fields.Group = normalizeGroupName_(data.group);
+  if (data.group !== undefined) {
+    const requestedGroup = normalizeGroupName_(data.group);
+    const existingGroup = normalizeGroupName_(target.group);
+    if (current.role !== "admin" && requestedGroup !== existingGroup) {
+      throw new Error("Изменять учебную группу может только администратор.");
+    }
+    if (current.role === "admin" && target.role === "student" && !requestedGroup) {
+      throw new Error("Для студента учебная группа обязательна.");
+    }
+    fields.Group = requestedGroup;
+  }
   if (data.payload !== undefined) {
     const incoming = typeof data.payload === "string" ? (function(){try{return JSON.parse(data.payload||"{}");}catch(e){return {};}})() : (data.payload || {});
     if (current.role === "teacher") {
