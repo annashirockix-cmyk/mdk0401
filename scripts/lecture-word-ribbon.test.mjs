@@ -13,7 +13,7 @@ test("lecture editor adds Word-like Home, Insert and Layout ribbon tabs", () => 
 });
 
 test("lecture editor supports font, color, tables, images and headings", () => {
-  for (const feature of ["lerFont", "lerSize", "lerColor", "lerHighlight", "insertTable", "insertImage", "lecture-content-table", "formatBlock"]) assert.ok(js.includes(feature));
+  for (const feature of ["lerFont", "lerSize", "lerColor", "lerHighlight", "insertTable", "insertImage", "insertVideo", "recordVideo", "MediaRecorder", "youtube-nocookie.com", "lecture-content-table", "formatBlock"]) assert.ok(js.includes(feature));
 });
 
 test("the editor preserves the existing lectureBody value contract for loading and saving", () => {
@@ -34,4 +34,6 @@ test("Word-like document page has readable paper layout and responsive styles", 
   assert.match(css, /\.lecture-word-page/);
   assert.match(css, /@media\(max-width:700px\)/);
   assert.match(css, /overflow-wrap:anywhere/);
+  assert.match(css, /\.lecture-video/);
+  assert.match(css, /\.ler-recorder/);
 });
