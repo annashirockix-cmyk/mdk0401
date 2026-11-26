@@ -3219,7 +3219,7 @@ function joinWebinar_(data){
   if(!w)throw new Error("Вебинар не найден.");
   if(w.status==="draft"||w.status==="cancelled")throw new Error("Вебинар ещё не опубликован или отменён.");
   if(!hasCourseAccess_(user,w.courseId))throw new Error("У вас нет доступа к этой дисциплине.");
-  const isHost=user.role==="admin"||user.role==="teacher";
+  const isHost=user.role==="admin"||(user.role==="teacher"&&w.createdBy===user.email);
   if(user.role==="teacher"&&w.createdBy!==user.email&&!hasCourseAccess_(user,w.courseId))throw new Error("Нет прав ведущего.");
   const props=PropertiesService.getScriptProperties(),domain=String(props.getProperty("JITSI_DOMAIN")||"meet.jit.si").replace(/^https?:\/\//,"").replace(/\/.*$/,"");
   const jwt=webinarJwt_(domain,w.roomName,user,isHost);
