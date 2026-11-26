@@ -45,7 +45,7 @@ test("server filters tutoring links by course, selected group and individual stu
   ];
   const settingsRows=[
     ["Key","Value","UpdatedAt","UpdatedBy"],
-    ["tutoring:teacher:teacher-a@example.invalid",JSON.stringify({url:"https://example.invalid/group",title:"Группа 24-ТМ",visible:true,audienceType:"group",audienceValue:"24-ТМ"}),"","teacher-a@example.invalid"],
+    ["tutoring:teacher:teacher-a@example.invalid",JSON.stringify({url:"https://example.invalid/group",title:"Группа 24-ТМ",visible:true,audienceType:"group",audienceValue:"24–тм"}),"","teacher-a@example.invalid"],
     ["tutoring:teacher:teacher-b@example.invalid",JSON.stringify({url:"https://example.invalid/individual",title:"Личная консультация",visible:true,audienceType:"individual",audienceValue:"student-one@example.invalid"}),"","teacher-b@example.invalid"]
   ];
   const makeSheet=rows=>({
