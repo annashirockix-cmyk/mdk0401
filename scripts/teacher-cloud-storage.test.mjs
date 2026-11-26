@@ -104,8 +104,8 @@ test("teacher cloud backup API exports only owned accessible course content and 
  assert.match(page,/Создать резервную копию/);
 });
 test("teacher cloud backup controls refresh cached storage assets",()=>{
- assert.match(html,/teacher-storage\.js\?v=2/);
- assert.match(html,/teacher-storage\.css\?v=2/);
+ assert.match(html,/teacher-storage\.js\?v=3/);
+ assert.match(html,/teacher-storage\.css\?v=3/);
  assert.match(html,/service-worker\.js\?v=442/);
  assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v442/);
 });
