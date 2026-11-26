@@ -24,7 +24,7 @@ test("teacher storage page and API are wired into the portal",()=>{
 });
 
 test("OAuth redirect URI reaches Apps Script callback and provider is resolved from one-time state",()=>{
- assert.match(gs,/return url \+ \(url\.indexOf\("\\?"\) >= 0 \? "&" : "\\?"\) \+ "action=cloudOAuthCallback"/);
+ assert.ok(gs.includes('return url + (url.indexOf("?") >= 0 ? "&" : "?") + "action=cloudOAuthCallback"'));
  assert.match(gs,/providerKey = String\(savedState\.provider \|\| ""\)\.toLowerCase\(\)/);
  assert.doesNotMatch(gs,/const providerKey = String\(params\.provider/);
 });
