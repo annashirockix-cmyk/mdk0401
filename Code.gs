@@ -3528,7 +3528,7 @@ function deleteCustomContent_(data) {
           assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(),
             "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(row[2] || "") + ".").setTrashed(true);
         } catch (fileError) {
-          throw new Error("Не удалось удалить прикреплённый файл из Google Drive. Лекция и записи материалов сохранены.");
+          throw new Error("Не удалось удалить прикреплённый файл из Google Drive. Запись материала сохранена; удаление лекции остановлено.");
         }
       } else if (videoMatch) {
         try {
@@ -3536,12 +3536,12 @@ function deleteCustomContent_(data) {
             "Учебное видео. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(row[2] || "") + ".");
           trashCourseVideoFolder_(folder);
         } catch (videoDeleteError) {
-          throw new Error("Не удалось удалить видео из защищённого хранилища. Лекция и записи материалов сохранены.");
+          throw new Error("Не удалось удалить видео из защищённого хранилища. Запись материала сохранена; удаление лекции остановлено.");
         }
       } else if (cloudMatch) {
         try { teacherCloudDeleteFile_(cloudMatch[1], email_(values[i][6] || ""), cloudMatch[2]); }
         catch (fileError) {
-          throw new Error("Не удалось удалить файл из личного облака. Лекция и записи материалов сохранены: " + String(fileError.message || fileError).slice(0, 180));
+          throw new Error("Не удалось удалить файл из личного облака. Запись материала сохранена; удаление лекции остановлено: " + String(fileError.message || fileError).slice(0, 180));
         }
       }
     });
