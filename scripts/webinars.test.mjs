@@ -37,10 +37,18 @@ test("Jitsi rooms can be secured with server-signed JWT tokens",()=>{
 });
 
 test("webinar page provides host scheduling, student join and embedded room controls",()=>{
- for(const feature of ["Создать вебинар","Войти в вебинар","JitsiMeetExternalAPI","participantJoined","participantLeft","startRecording","desktop","chat","raisehand"])assert.ok(js.includes(feature));
+ for(const feature of ["Создать вебинар","Войти в вебинар","JitsiMeetExternalAPI","participantJoined","participantLeft","desktop","chat","raisehand"])assert.ok(js.includes(feature));
  assert.ok(html.includes('href="#/webinars"'));
  assert.match(html,/webinars\.js/);
  assert.match(html,/webinars\.css/);
  assert.match(sw,/\.\/webinars\.js/);
  assert.match(sw,/\.\/webinars\.css/);
+});
+
+ 
+test("webinar UI does not promise recording without a configured recording service",()=>{
+ assert.ok(js.includes("webinar-record-note"));
+ assert.ok(js.includes("требуется настройка сервера записи"));
+ assert.ok(!js.includes("startRecording"));
+ assert.ok(!js.includes('"recording"'));
 });

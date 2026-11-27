@@ -47,7 +47,7 @@ async function join(id){
   await loadJitsi(r.domain);
   host.innerHTML='<div class="webinar-room-head"><div><strong>'+esc(r.title)+'</strong><span id="webinarRoomState">Подключаемся…</span></div><button id="webinarClose" class="btn ghost">Выйти из комнаты</button></div><div id="jitsiMeetFrame" class="webinar-meet"></div><div class="webinar-room-foot"><span id="webinarParticipantCount">Участники подключаются…</span><span>'+(r.secure?"Защищённая комната":"Демонстрационный режим — не используйте для закрытых занятий")+'</span></div>';
   $("webinarClose").onclick=()=>leave(true);
-  const options={roomName:r.roomName,parentNode:$("jitsiMeetFrame"),width:"100%",height:"100%",lang:"ru",jwt:r.jwt||undefined,userInfo:{displayName:r.displayName||"Участник"},configOverwrite:{prejoinConfig:{enabled:true},startWithAudioMuted:!r.isHost,startWithVideoMuted:!r.isHost,disableDeepLinking:true,toolbarButtons:["microphone","camera","desktop","chat","raisehand","tileview","participants-pane","hangup","settings","videoquality","fullscreen","recording"]},interfaceConfigOverwrite:{MOBILE_APP_PROMO:false,SHOW_JITSI_WATERMARK:true}};
+  const options={roomName:r.roomName,parentNode:$("jitsiMeetFrame"),width:"100%",height:"100%",lang:"ru",jwt:r.jwt||undefined,userInfo:{displayName:r.displayName||"Участник"},configOverwrite:{prejoinConfig:{enabled:true},startWithAudioMuted:!r.isHost,startWithVideoMuted:!r.isHost,disableDeepLinking:true,toolbarButtons:["microphone","camera","desktop","chat","raisehand","tileview","participants-pane","hangup","settings","videoquality","fullscreen"]},interfaceConfigOverwrite:{MOBILE_APP_PROMO:false,SHOW_JITSI_WATERMARK:true}};
   api=new JitsiMeetExternalAPI(r.domain,options);
   api.addEventListener("videoConferenceJoined",async ev=>{const state=$("webinarRoomState");if(state)state.textContent="Вы в вебинаре";try{await API.webinarAttendance(id,"join");}catch(e){}updateCount();});
   api.addEventListener("videoConferenceLeft",async()=>{try{await API.webinarAttendance(id,"leave");}catch(e){}api=null;});
@@ -56,8 +56,7 @@ async function join(id){
   if(r.isHost){
    const toolbar=$("webinarRoomState");
    toolbar.title="Вы ведущий вебинара";
-   const foot=$("webinarParticipantCount");if(foot)foot.insertAdjacentHTML("afterend",' <button type="button" class="btn ghost webinar-record" id="webinarRecord">⏺ Начать запись</button>');
-   const record=$("webinarRecord");if(record)record.onclick=()=>{try{api.startRecording({mode:"file"});record.textContent="Запись запрошена";record.disabled=true;}catch(e){window.showToast&&showToast("На сервере не настроена запись вебинаров","error");}};
+   const foot=$("webinarParticipantCount");if(foot)foot.insertAdjacentHTML("afterend",' <span class="webinar-record-note">Запись пока недоступна: требуется настройка сервера записи (Jibri или поддерживаемый сервис)</span>');
   }
  }catch(e){host.innerHTML='<div class="webinar-error">'+esc(e.message)+'</div><button class="btn ghost" id="webinarCloseError">Закрыть</button>';const closeError=$("webinarCloseError");if(closeError)closeError.onclick=()=>{host.hidden=true;};}
 }
