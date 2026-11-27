@@ -108,7 +108,7 @@ test("teacher cloud backup controls refresh cached storage assets",()=>{
  assert.match(html,/teacher-storage\.js\?v=4/);
  assert.match(html,/teacher-storage\.css\?v=4/);
  assert.match(html,/service-worker\.js\?v=446/);
- assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v445/);
+ assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v446/);
 });
 
 test("teacher cloud backups embed verified PDF, DOC and DOCX attachments in the archive",()=>{
