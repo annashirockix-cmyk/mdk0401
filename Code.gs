@@ -3429,21 +3429,28 @@ function webinarAttendance_(data){
   const event=String(data.event||"").toLowerCase();
   if(event!=="join"&&event!=="leave")throw new Error("Неизвестное событие посещения.");
   if(event==="join"&&w.status!=="published"&&w.status!=="live")throw new Error("Регистрация входа доступна только для опубликованного или идущего вебинара.");
-  const sh=webinarAttendanceSheet_(),values=sh.getDataRange().getValues(),map=headerMap_(sh);let rowNo=0;
-  for(let i=1;i<values.length;i++)if(String(values[i][map.WebinarId]||"")===w.id&&email_(values[i][map.Email])===user.email){rowNo=i+1;break;}
-  const now=new Date().toISOString();
-  if(rowNo){
-    const row=sh.getRange(rowNo,1,1,sh.getLastColumn()).getValues()[0];
-    row[map.Name]=user.name||user.email;row[map.Event]=event;row[map.UpdatedAt]=now;
-    if(event==="leave")row[map.LastLeftAt]=now;
-    if(event==="join"&&!row[map.FirstJoinedAt])row[map.FirstJoinedAt]=now;
-    sh.getRange(rowNo,1,1,row.length).setValues([row]);
-  }else{
-    const row=new Array(sh.getLastColumn()).fill("");
-    row[map.WebinarId]=w.id;row[map.Email]=user.email;row[map.Name]=user.name||user.email;row[map.Event]=event;
-    row[map.FirstJoinedAt]=event==="join"?now:"";row[map.LastLeftAt]=event==="leave"?now:"";row[map.UpdatedAt]=now;sh.appendRow(row);
+  // Serialize attendance upserts: simultaneous joins must not create duplicate rows.
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try{
+    const sh=webinarAttendanceSheet_(),values=sh.getDataRange().getValues(),map=headerMap_(sh);let rowNo=0;
+    for(let i=1;i<values.length;i++)if(String(values[i][map.WebinarId]||"")===w.id&&email_(values[i][map.Email])===user.email){rowNo=i+1;break;}
+    const now=new Date().toISOString();
+    if(rowNo){
+      const row=sh.getRange(rowNo,1,1,sh.getLastColumn()).getValues()[0];
+      row[map.Name]=user.name||user.email;row[map.Event]=event;row[map.UpdatedAt]=now;
+      if(event==="leave")row[map.LastLeftAt]=now;
+      if(event==="join"&&!row[map.FirstJoinedAt])row[map.FirstJoinedAt]=now;
+      sh.getRange(rowNo,1,1,row.length).setValues([row]);
+    }else{
+      const row=new Array(sh.getLastColumn()).fill("");
+      row[map.WebinarId]=w.id;row[map.Email]=user.email;row[map.Name]=user.name||user.email;row[map.Event]=event;
+      row[map.FirstJoinedAt]=event==="join"?now:"";row[map.LastLeftAt]=event==="leave"?now:"";row[map.UpdatedAt]=now;sh.appendRow(row);
+    }
+    return {success:true};
+  }finally{
+    lock.releaseLock();
   }
-  return {success:true};
 }
 
 function saveCustomContent_(data) {
