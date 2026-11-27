@@ -154,6 +154,7 @@ function handleRequest_(e) {
       case "uploadtestimage": result = uploadTestImage_(data); break;
       case "uploadcoursefile": result = uploadCourseFile_(data); break;
       case "startcoursevideoupload": result = startCourseVideoUpload_(data); break;
+      case "getcoursevideouploadstatus": result = getCourseVideoUploadStatus_(data); break;
       case "uploadcoursevideochunk": result = uploadCourseVideoChunk_(data); break;
       case "finishcoursevideoupload": result = finishCourseVideoUpload_(data); break;
       case "getcoursevideochunk": result = getCourseVideoChunk_(data); break;
@@ -3122,6 +3123,21 @@ function courseVideoSession_(data) {
   }
   editor_(data, session.courseId);
   return { user: user, id: id, session: session };
+}
+function getCourseVideoUploadStatus_(data) {
+  const loaded = courseVideoSession_(data), session = loaded.session;
+  const folder = assertPortalPrivateFolder_(DriveApp.getFolderById(session.folderId), courseFileFolder_(), "PortalVideoUpload|" + loaded.user.email + "|" + session.courseId + "|" + session.topicId + "|" + session.lectureId);
+  const files = folder.getFiles(), uploaded = [], expectedPrefix = "chunk-";
+  while (files.hasNext()) {
+    const file = files.next(), name = file.getName();
+    if (!/^chunk-\d{5}\.bin$/.test(name)) continue;
+    const index = Number(name.slice(expectedPrefix.length, expectedPrefix.length + 5));
+    if (!Number.isInteger(index) || index < 0 || index >= session.chunkCount) continue;
+    const expectedBytes = Math.min(session.chunkSize, session.size - index * session.chunkSize);
+    if (file.getSize() === expectedBytes) uploaded.push(index);
+  }
+  uploaded.sort(function(a,b){ return a-b; });
+  return { success: true, uploadId: loaded.id, fileName: session.fileName, size: session.size, mimeType: session.mimeType, chunkSize: session.chunkSize, chunkCount: session.chunkCount, uploadedChunks: uploaded, expiresAt: session.expiresAt };
 }
 function startCourseVideoUpload_(data) {
   const courseId = normalizeCourseId_(data.courseId || data.mdkId || ""), user = editor_(data, courseId);

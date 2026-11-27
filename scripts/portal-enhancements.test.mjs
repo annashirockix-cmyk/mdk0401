@@ -986,7 +986,7 @@ test("English VPR chooser checks server bank availability and imports only missi
   assert.ok(engine.includes("Импортировать отсутствующие варианты"));
   assert.ok(engine.includes("Уже существующие банки не будут перезаписаны"));
   assert.ok(html.includes("english-vpr-engine.js?v=32"));
-  assert.ok(html.includes("service-worker.js?v=447"));
+  assert.ok(html.includes("service-worker.js?v=448"));
   assert.match(sw, /portal-cache-v\d+/);
 });
 
@@ -1918,4 +1918,20 @@ test("registration requires surname and first name and group matching is case- a
   assert.match(html, /id="regFirstName"[^>]*required/);
   assert.match(reports, /const normGroup=x=>/);
   assert.match(reports, /normGroup\(x\.group\)/);
+});
+
+test("lecture video uploads can resume only from owner-checked server chunks", () => {
+  const backend = read("Code.gs");
+  const api = read("api.js");
+  const admin = read("course-admin.js");
+  assert.match(backend, /case "getcoursevideouploadstatus": result = getCourseVideoUploadStatus_\(data\)/);
+  assert.match(backend, /function getCourseVideoUploadStatus_\(data\)[\s\S]*courseVideoSession_\(data\)[\s\S]*assertPortalPrivateFolder_/);
+  assert.match(backend, /uploadedChunks: uploaded/);
+  assert.match(api, /getCourseVideoUploadStatus:function\(uploadId\)[\s\S]*fetchAPI\("getCourseVideoUploadStatus"/);
+  assert.match(admin, /portal-video-upload:/);
+  assert.match(admin, /sessionStorage\.setItem\(resumeKey/);
+  assert.match(admin, /getCourseVideoUploadStatus\(saved\.uploadId\)/);
+  assert.match(admin, /uploadedSet\.has\(index\)/);
+  assert.match(admin, /Выберите тот же файл повторно, чтобы продолжить/);
+  assert.match(admin, /sessionStorage\.removeItem\(resumeKey\)/);
 });
