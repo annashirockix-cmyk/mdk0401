@@ -3485,34 +3485,91 @@ function deleteCustomContent_(data) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    // Resolve and authorize the exact record within the requested course.
     const user = editor_(data, courseId);
     const sheet = content_();
     const values = sheet.getDataRange().getValues();
-
+    let targetIndex = -1;
     for (let i = 1; i < values.length; i++) {
-      if (String(values[i][0]) === id && sameCourseId_(values[i][1], courseId)) {
-        if (String(values[i][3] || "") === "file") {
-          let payload = {};
-          try { payload = JSON.parse(values[i][5] || "{}"); } catch (e) {}
-          const fileMatch = String(payload.fileRef || "").match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
-          const videoMatch = String(payload.fileRef || "").match(/^coursevideo:([A-Za-z0-9_-]{10,})$/);
-          const cloudMatch = String(payload.fileRef || "").match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
-          if (fileMatch) {
-            try { assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(), "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(values[i][2] || "") + ".").setTrashed(true); }
-            catch (fileError) { throw new Error("Не удалось удалить файл из Google Drive. Запись материала сохранена."); }
-          } else if (videoMatch) {
-            try { trashCourseVideoFolder_(DriveApp.getFolderById(videoMatch[1])); } catch (videoDeleteError) { throw new Error("Не удалось удалить видео из защищённого хранилища. Запись материала сохранена."); }
-          } else if (cloudMatch) {
-            try { teacherCloudDeleteFile_(cloudMatch[1], email_(values[i][6] || ""), cloudMatch[2]); }
-            catch (fileError) { throw new Error("Не удалось удалить файл из личного облака. Запись материала сохранена: " + String(fileError.message || fileError).slice(0, 180)); }
-          }
-        }
-        sheet.deleteRow(i + 1);
-        return { success: true };
+      if (String(values[i][0] || "") === id && sameCourseId_(values[i][1] || "", courseId)) {
+        targetIndex = i;
+        break;
       }
     }
-    return { success: false, error: "Материал не найден в выбранной дисциплине." };
+    if (targetIndex < 0) return { success: false, error: "Материал не найден в выбранной дисциплине." };
+
+    const target = values[targetIndex];
+    const targetType = String(target[3] || "");
+    const topicId = String(target[2] || "");
+    const rowsToDelete = [targetIndex];
+
+    // A lecture owns every file row explicitly linked to its ID in the same course and topic.
+    if (targetType === "lecture") {
+      for (let i = 1; i < values.length; i++) {
+        if (i === targetIndex || String(values[i][3] || "") !== "file") continue;
+        if (!sameCourseId_(values[i][1] || "", courseId) || String(values[i][2] || "") !== topicId) continue;
+        let attachment = {};
+        try { attachment = JSON.parse(values[i][5] || "{}"); } catch (e) {}
+        if (String(attachment.lectureId || "") === id) rowsToDelete.push(i);
+      }
+    }
+
+    // Remove all linked stored files before deleting their sheet records.
+    rowsToDelete.forEach(function(i) {
+      const row = values[i];
+      if (String(row[3] || "") !== "file") return;
+      let payload = {};
+      try { payload = JSON.parse(row[5] || "{}"); } catch (e) {}
+      const fileRef = String(payload.fileRef || "");
+      const fileMatch = fileRef.match(/^coursefile:([A-Za-z0-9_-]{10,})$/);
+      const videoMatch = fileRef.match(/^coursevideo:([A-Za-z0-9_-]{10,})$/);
+      const cloudMatch = fileRef.match(/^cloudfile:(google|yandex|onedrive|dropbox):(.+)$/);
+      if (fileMatch) {
+        try {
+          assertPortalPrivateFile_(DriveApp.getFileById(fileMatch[1]), courseFileFolder_(),
+            "Учебный материал. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(row[2] || "") + ".").setTrashed(true);
+        } catch (fileError) {
+          throw new Error("Не удалось удалить прикреплённый файл из Google Drive. Запись материала сохранена; удаление лекции остановлено.");
+        }
+      } else if (videoMatch) {
+        try {
+          const folder = assertPortalPrivateFolder_(DriveApp.getFolderById(videoMatch[1]), courseFileFolder_(),
+            "Учебное видео. Дисциплина: " + normalizeCourseId_(courseId) + ". Тема: " + String(row[2] || "") + ".");
+          trashCourseVideoFolder_(folder);
+        } catch (videoDeleteError) {
+          throw new Error("Не удалось удалить видео из защищённого хранилища. Запись материала сохранена; удаление лекции остановлено.");
+        }
+      } else if (cloudMatch) {
+        try { teacherCloudDeleteFile_(cloudMatch[1], email_(values[i][6] || ""), cloudMatch[2]); }
+        catch (fileError) {
+          throw new Error("Не удалось удалить файл из личного облака. Запись материала сохранена; удаление лекции остановлено: " + String(fileError.message || fileError).slice(0, 180));
+        }
+      }
+    });
+
+    // Remove unfinished resumable uploads belonging to this exact lecture.
+    if (targetType === "lecture") {
+      const props = PropertiesService.getScriptProperties();
+      const allProps = props.getProperties();
+      Object.keys(allProps).forEach(function(key) {
+        if (key.indexOf("COURSE_VIDEO_UPLOAD_") !== 0) return;
+        let session = {};
+        try { session = JSON.parse(allProps[key] || "{}"); } catch (e) { return; }
+        if (!sameCourseId_(session.courseId || "", courseId) ||
+            String(session.topicId || "") !== topicId ||
+            String(session.lectureId || "") !== id ||
+            (user.role !== "admin" && email_(session.ownerEmail || "") !== user.email)) return;
+        if (session.folderId) {
+          const folder = assertPortalPrivateFolder_(DriveApp.getFolderById(session.folderId), courseFileFolder_(),
+            "PortalVideoUpload|" + email_(session.ownerEmail || "") + "|" + session.courseId + "|" + session.topicId + "|" + session.lectureId);
+          trashCourseVideoFolder_(folder);
+        }
+        props.deleteProperty(key);
+      });
+    }
+
+    // Delete rows from bottom to top so sheet row indexes remain valid.
+    rowsToDelete.sort(function(a, b) { return b - a; }).forEach(function(index) { sheet.deleteRow(index + 1); });
+    return { success: true, deletedCount: rowsToDelete.length, deletedAttachments: rowsToDelete.length - 1 };
   } finally {
     lock.releaseLock();
   }
