@@ -11,7 +11,7 @@ test("custom lecture and test content has one student rendering path", () => {
  const editor = read("course-admin.js");
  const html = read("index.html");
  const sw = read("service-worker.js"); const css = read("style.css"); const enrichment = read("lecture-enrichment.js");
- assert.ok(html.includes("course-admin.js?v=34"));
+ assert.ok(html.includes("course-admin.js?v=35"));
  assert.ok(app.includes("customTopicLectures"));
  assert.ok(app.includes("customTopicTests"));
  assert.ok(app.includes("window.startCustomInlineTest"));
