@@ -195,7 +195,7 @@
         <button type="button" data-lec-command="justifyLeft" title="По левому краю">⇤</button><button type="button" data-lec-command="justifyCenter" title="По центру">↔</button><button type="button" data-lec-command="justifyRight" title="По правому краю">⇥</button>
         <button type="button" data-lec-action="table" title="Вставить таблицу">▦ Таблица</button><button type="button" data-lec-action="image" title="Вставить изображение">▧ Изображение</button><button type="button" data-lec-action="link" title="Добавить ссылку">↗ Ссылка</button>
         <button type="button" data-lec-command="undo" title="Отменить">↶</button><button type="button" data-lec-command="redo" title="Повторить">↷</button><button type="button" data-lec-command="removeFormat" title="Очистить форматирование">Очистить</button>
-        <input id="lectureImageInput" type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden>
+        
       </div>
       <div id="lectureBody" class="lecture-rich-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Текст лекции" data-placeholder="Начните писать лекцию… Используйте панель инструментов для оформления текста." style="min-height:320px;padding:18px;border:1px solid var(--border);border-top:0;border-radius:0 0 10px 10px;background:var(--surface);line-height:1.65;overflow:auto"></div>
       <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:5px"><small style="color:var(--muted)">Можно вставлять текст из Word, оформлять заголовки, списки, таблицы и изображения.</small><small id="lectureWordCount" style="color:var(--muted)">0 слов</small></div>
@@ -225,7 +225,7 @@
     }
     let lectureId="",testId="",draft=[],editingQuestion=-1,builtInLectureIndex=null;
     function initLectureRichEditor(){
-      const editor=$("lectureBody"),toolbar=document.querySelector(".lecture-editor-toolbar"),imageInput=$("lectureImageInput"),count=$("lectureWordCount");
+      const editor=$("lectureBody"),toolbar=document.querySelector(".lecture-editor-toolbar"),count=$("lectureWordCount");
       if(!editor||!toolbar||editor.dataset.ready==="1")return;
       editor.dataset.ready="1";
       function focusEditor(){editor.focus();}
@@ -243,12 +243,10 @@
         const html="<table style='width:100%;border-collapse:collapse;margin:12px 0'><tbody>"+Array.from({length:rows},(_,r)=>"<tr>"+Array.from({length:cols},()=>"<td style='border:1px solid #999;padding:7px'>&nbsp;</td>").join("")+"</tr>").join("")+"</tbody></table><p><br></p>";
         focusEditor();document.execCommand("insertHTML",false,html);updateCount();
       });
-      toolbar.querySelector('[data-lec-action="image"]').addEventListener("click",()=>imageInput.click());
-      imageInput.addEventListener("change",()=>{
-        const file=imageInput.files&&imageInput.files[0];if(!file)return;
-        if(!/^image\\/(png|jpeg|gif|webp)$/.test(file.type)){alert("Выберите PNG, JPG, GIF или WEBP.");imageInput.value="";return;}
-        if(file.size>2*1024*1024){alert("Изображение для вставки в текст должно быть не больше 2 МБ. Большие изображения предварительно уменьшите.");imageInput.value="";return;}
-        const reader=new FileReader();reader.onload=()=>{focusEditor();document.execCommand("insertHTML",false,"<img src='"+String(reader.result).replace(/'/g,"%27")+"' alt='"+file.name.replace(/[&<>"']/g,"")+"' style='max-width:100%;height:auto;display:block;margin:12px auto;border-radius:6px'>");updateCount();};reader.readAsDataURL(file);imageInput.value="";
+      toolbar.querySelector('[data-lec-action="image"]').addEventListener("click",()=>{
+        const url=prompt("Вставьте прямую ссылку на изображение (https://…). Для локального файла сначала загрузите его в облако преподавателя.");
+        if(!url)return;if(!(url.startsWith("https://")||url.startsWith("http://"))){alert("Для безопасности используйте ссылку с https:// или http://");return;}
+        focusEditor();document.execCommand("insertHTML",false,"<img src='"+url.replace(/\'/g,"%27")+"' alt='Иллюстрация к лекции' style='max-width:100%;height:auto;display:block;margin:12px auto;border-radius:6px'>");updateCount();
       });
       toolbar.querySelector('[data-lec-action="link"]').addEventListener("click",()=>{
         const url=prompt("Введите адрес ссылки (https://…)");if(!url)return;
