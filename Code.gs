@@ -160,6 +160,7 @@ function handleRequest_(e) {
       case "getcoursevideochunk": result = getCourseVideoChunk_(data); break;
       case "getcoursefile": result = getCourseFile_(data); break;
       case "getwebinars": result = getWebinars_(data); break;
+      case "updatewebinarstatus": result = updateWebinarStatus_(data); break;
       case "getteachercloudstorage": result = getTeacherCloudStorage_(data); break;
       case "backupteachermaterials": result = backupTeacherMaterials_(data); break;
       case "previewteacherrestore": result = previewTeacherRestore_(data); break;
@@ -3390,6 +3391,18 @@ function joinWebinar_(data){
   const jwt=webinarJwt_(domain,w.roomName,user,isHost);
   return {success:true,id:w.id,title:w.title,roomName:w.roomName,domain:domain,jwt:jwt||"",secure:!!jwt,isHost:isHost,displayName:user.name||user.email};
 }
+function updateWebinarStatus_(data){
+  const user=auth_(data),id=String(data.webinarId||""),next=String(data.status||"").toLowerCase();
+  const w=webinarById_(id);
+  if(!w)throw new Error("Вебинар не найден.");
+  if(!(user.role==="admin"||(user.role==="teacher"&&w.createdBy===user.email)))throw new Error("Изменять состояние вебинара может только его создатель или администратор.");
+  const allowed={draft:["published","cancelled"],published:["live","cancelled"],live:["completed","cancelled"]};
+  if(!allowed[w.status]||allowed[w.status].indexOf(next)<0)throw new Error("Недопустимый переход состояния вебинара.");
+  const sh=webinars_(),map=headerMap_(sh);
+  sh.getRange(w.row,map.Status+1).setValue(next);
+  return {success:true,id:w.id,status:next};
+}
+
 function webinarAttendance_(data){
   const user=auth_(data),w=webinarById_(data.webinarId);
   if(!w)throw new Error("Вебинар не найден.");
