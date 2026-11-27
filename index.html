@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- cache-bust service worker registration after portal-cache-v447 -->
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -299,7 +301,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('./service-worker.js?v=446', {updateViaCache: 'none'}).catch(function () {});
+                navigator.serviceWorker.register('./service-worker.js?v=447', {updateViaCache: 'none'}).catch(function () {});
             });
         }
     </script>
