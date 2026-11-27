@@ -186,20 +186,7 @@
       '<div class="module"><h3>1а. Изменить основную тему</h3><p style="color:var(--muted)">Изменение кода и названия существующей темы без удаления исходных учебных материалов.</p><select id="mainTopicExisting" class="self-input"></select><input id="mainTopicCode" class="self-input" placeholder="Код темы" style="margin:8px 0"><input id="mainTopicTitle" class="self-input" placeholder="Название темы" style="margin:8px 0"><button class="btn" id="saveMainTopicBtn" type="button">Сохранить название основной темы</button> <span id="mainTopicStatus" aria-live="polite"></span></div>'+
       '<div class="module"><h3>2. Лекции</h3><p style="color:var(--muted)">Выберите существующую лекцию для изменения или создайте новую. Текст поддерживает простую HTML-разметку.</p>'+
       '<label>Тема</label><select id="lectureTopic" class="self-input"></select><label style="display:block;margin-top:8px">Существующая лекция</label><select id="lectureExisting" class="self-input"><option value="">— Новая лекция —</option></select>'+
-      '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><div class="lecture-editor-shell" style="margin:8px 0">
-      <div class="lecture-editor-toolbar" role="toolbar" aria-label="Форматирование лекции" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px;border:1px solid var(--border);border-radius:10px 10px 0 0;background:var(--surface)">
-        <select data-lec-command="formatBlock" aria-label="Стиль абзаца" class="self-input" style="width:auto;min-width:130px"><option value="P">Обычный текст</option><option value="H1">Заголовок 1</option><option value="H2">Заголовок 2</option><option value="H3">Заголовок 3</option><option value="BLOCKQUOTE">Цитата</option></select>
-        <select data-lec-command="fontSize" aria-label="Размер текста" class="self-input" style="width:auto"><option value="3">Обычный</option><option value="2">Мелкий</option><option value="4">Крупный</option><option value="5">Очень крупный</option></select>
-        <button type="button" data-lec-command="bold" title="Жирный"><b>Ж</b></button><button type="button" data-lec-command="italic" title="Курсив"><i>К</i></button><button type="button" data-lec-command="underline" title="Подчёркивание"><u>Ч</u></button><button type="button" data-lec-command="strikeThrough" title="Зачёркивание">S̶</button>
-        <button type="button" data-lec-command="insertUnorderedList" title="Маркированный список">• Список</button><button type="button" data-lec-command="insertOrderedList" title="Нумерованный список">1. Список</button>
-        <button type="button" data-lec-command="justifyLeft" title="По левому краю">⇤</button><button type="button" data-lec-command="justifyCenter" title="По центру">↔</button><button type="button" data-lec-command="justifyRight" title="По правому краю">⇥</button>
-        <button type="button" data-lec-action="table" title="Вставить таблицу">▦ Таблица</button><button type="button" data-lec-action="image" title="Вставить изображение">▧ Изображение</button><button type="button" data-lec-action="link" title="Добавить ссылку">↗ Ссылка</button>
-        <button type="button" data-lec-command="undo" title="Отменить">↶</button><button type="button" data-lec-command="redo" title="Повторить">↷</button><button type="button" data-lec-command="removeFormat" title="Очистить форматирование">Очистить</button>
-        
-      </div>
-      <div id="lectureBody" class="lecture-rich-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Текст лекции" data-placeholder="Начните писать лекцию… Используйте панель инструментов для оформления текста." style="min-height:320px;padding:18px;border:1px solid var(--border);border-top:0;border-radius:0 0 10px 10px;background:var(--surface);line-height:1.65;overflow:auto"></div>
-      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:5px"><small style="color:var(--muted)">Можно вставлять текст из Word, оформлять заголовки, списки, таблицы и изображения.</small><small id="lectureWordCount" style="color:var(--muted)">0 слов</small></div>
-    </div><div class="module" style="padding:10px;margin:8px 0"><b>📎 Файл непосредственно к этой лекции</b><p style="color:var(--muted);font-size:13px">Сначала сохраните лекцию. Документы — до 3,5 МБ. Видео MP4, WEBM или MOV — до 150 МБ; загрузка идёт частями в закрытое хранилище.</p><input id="lectureFileInput" type="file" accept=".pdf,.doc,.docx,.mp4,.webm,.mov,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,video/mp4,video/webm,video/quicktime" class="self-input"><button class="btn ghost" id="uploadLectureFileBtn" type="button" style="margin-top:8px">Прикрепить файл к лекции</button> <span id="lectureFileStatus" aria-live="polite"></span></div>'+
+      '<input id="lectureTitle" class="self-input" placeholder="Название лекции" style="margin:8px 0"><textarea id="lectureBody" class="self-input" rows="12" placeholder="Текст лекции: заголовки, абзацы, таблицы, списки." style="margin:8px 0"></textarea><div class="module" style="padding:10px;margin:8px 0"><b>📎 Файл непосредственно к этой лекции</b><p style="color:var(--muted);font-size:13px">Сначала сохраните лекцию. Документы — до 3,5 МБ. Видео MP4, WEBM или MOV — до 150 МБ; загрузка идёт частями в закрытое хранилище.</p><input id="lectureFileInput" type="file" accept=".pdf,.doc,.docx,.mp4,.webm,.mov,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,video/mp4,video/webm,video/quicktime" class="self-input"><button class="btn ghost" id="uploadLectureFileBtn" type="button" style="margin-top:8px">Прикрепить файл к лекции</button> <span id="lectureFileStatus" aria-live="polite"></span></div>'+
       '<button class="btn" id="saveLectureBtn">Создать лекцию</button> <button class="btn ghost" id="resetLectureBtn" type="button">Очистить форму</button> <button class="btn ghost" id="deleteLectureBtn" type="button" disabled>Удалить выбранную</button> <span id="lectureStatus" aria-live="polite"></span></div>'+
       '<div class="module"><h3>2а. Файлы к теме</h3><p style="color:var(--muted)">PDF, DOC и DOCX до 3,5 МБ. Файлы выдаются только после проверки доступа студента к дисциплине и теме.</p><label>Хранилище для загрузки (также используется для файлов лекций)</label><select id="courseFileStorage" class="self-input"><option value="portal">Google Drive портала — защищённая папка</option></select><label>Тема</label><select id="courseFileTopic" class="self-input"></select><input id="courseFileTitle" class="self-input" placeholder="Название материала" style="margin:8px 0"><input id="courseFileInput" type="file" accept=".pdf,.doc,.docx" class="self-input"><button class="btn" id="uploadCourseFileBtn" type="button" style="margin-top:10px">Загрузить файл к теме</button> <span id="courseFileStatus" aria-live="polite"></span><div id="courseFileList" style="margin-top:12px"></div></div>'+
       '<div class="module"><h3>3. Дополнительные тесты</h3><p style="color:var(--muted)">Можно создавать тесты, загружать ранее сохранённые тесты для изменения, просматривать формулировки всех заданий и правильные ответы.</p>'+
@@ -224,38 +211,6 @@
       }).catch(function(){});
     }
     let lectureId="",testId="",draft=[],editingQuestion=-1,builtInLectureIndex=null;
-    function initLectureRichEditor(){
-      const editor=$("lectureBody"),toolbar=document.querySelector(".lecture-editor-toolbar"),count=$("lectureWordCount");
-      if(!editor||!toolbar||editor.dataset.ready==="1")return;
-      editor.dataset.ready="1";
-      function focusEditor(){editor.focus();}
-      function updateCount(){if(count){const words=(editor.innerText||"").trim().split(/\s+/).filter(Boolean).length;count.textContent=words+" слов";}}
-      toolbar.querySelectorAll("[data-lec-command]").forEach(control=>{
-        const run=()=>{focusEditor();document.execCommand(control.dataset.lecCommand,false,control.tagName==="SELECT"?control.value:null);updateCount();};
-        control.addEventListener("mousedown",event=>{if(control.tagName!=="SELECT")event.preventDefault();});
-        control.addEventListener(control.tagName==="SELECT"?"change":"click",run);
-      });
-      toolbar.querySelectorAll("[data-lec-action]").forEach(button=>button.addEventListener("mousedown",e=>e.preventDefault()));
-      toolbar.querySelector('[data-lec-action="table"]').addEventListener("click",()=>{
-        const rows=Math.max(1,Math.min(12,Number(prompt("Количество строк таблицы:", "3"))||0));
-        const cols=Math.max(1,Math.min(8,Number(prompt("Количество столбцов:", "2"))||0));
-        if(!rows||!cols)return;
-        const html="<table style='width:100%;border-collapse:collapse;margin:12px 0'><tbody>"+Array.from({length:rows},(_,r)=>"<tr>"+Array.from({length:cols},()=>"<td style='border:1px solid #999;padding:7px'>&nbsp;</td>").join("")+"</tr>").join("")+"</tbody></table><p><br></p>";
-        focusEditor();document.execCommand("insertHTML",false,html);updateCount();
-      });
-      toolbar.querySelector('[data-lec-action="image"]').addEventListener("click",()=>{
-        const url=prompt("Вставьте прямую ссылку на изображение (https://…). Для локального файла сначала загрузите его в облако преподавателя.");
-        if(!url)return;if(!(url.startsWith("https://")||url.startsWith("http://"))){alert("Для безопасности используйте ссылку с https:// или http://");return;}
-        focusEditor();document.execCommand("insertHTML",false,"<img src='"+url.replace(/\'/g,"%27")+"' alt='Иллюстрация к лекции' style='max-width:100%;height:auto;display:block;margin:12px auto;border-radius:6px'>");updateCount();
-      });
-      toolbar.querySelector('[data-lec-action="link"]').addEventListener("click",()=>{
-        const url=prompt("Введите адрес ссылки (https://…)");if(!url)return;
-        if(!/^https?:\/\//i.test(url)){alert("Для безопасности используйте ссылку с https:// или http://");return;}
-        focusEditor();document.execCommand("createLink",false,url);
-      });
-      editor.addEventListener("input",updateCount);editor.addEventListener("paste",()=>setTimeout(updateCount,0));updateCount();
-    }
-
     const $=id=>document.getElementById(id);
     function refreshContent(done){
       const pageToken=$("editorCourse");
@@ -394,7 +349,7 @@
       $("savedMaterials").querySelectorAll(".delete-course-file").forEach(b=>b.onclick=async()=>{if(!confirm("Удалить прикреплённый файл?"))return;b.disabled=true;try{const result=await window.API.deleteCustomContent(b.dataset.id,courseSel.value);if(!result||!result.success)throw new Error(result&&result.error||"Не удалось удалить файл.");await new Promise(resolve=>refreshContent(resolve));$("courseFileStatus").textContent="Файл удалён.";}catch(error){$("courseFileStatus").textContent=error.message||"Ошибка удаления.";b.disabled=false;}});
     }
     function resetLecture(){
-      lectureId="";builtInLectureIndex=null;$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").innerHTML="";
+      lectureId="";builtInLectureIndex=null;$("lectureExisting").value="";$("lectureTitle").value="";$("lectureBody").value="";
       $("saveLectureBtn").textContent="Создать дополнительную лекцию";$("deleteLectureBtn").disabled=true;$("lectureStatus").textContent="";
     }
     function loadLecture(){
@@ -405,7 +360,7 @@
         const override=records("lecture",topicSel.value).find(x=>x.isBuiltInOverride===true&&String(x.sourceLectureCode||"")===String(base.code||""));
         builtInLectureIndex=index;lectureId=override?override.id:"";
         $("lectureTitle").value=override&&override.title||base.title||"";
-        $("lectureBody").innerHTML=override&&override.content||base.content||"";
+        $("lectureBody").value=override&&override.content||base.content||"";
         $("saveLectureBtn").textContent="Сохранить основную лекцию";
         $("deleteLectureBtn").disabled=!override;
         $("lectureStatus").textContent=override?"Загружена изменённая основная лекция.":"Открыта исходная лекция. Сохранение создаст её редакцию.";
@@ -413,7 +368,7 @@
       }
       builtInLectureIndex=null;
       const item=records("lecture",topicSel.value).find(x=>String(x.id)===id);if(!item)return;
-      lectureId=item.id;$("lectureTitle").value=item.title||"";$("lectureBody").innerHTML=item.content||"";
+      lectureId=item.id;$("lectureTitle").value=item.title||"";$("lectureBody").value=item.content||"";
       $("saveLectureBtn").textContent="Сохранить изменения лекции";$("deleteLectureBtn").disabled=false;$("lectureStatus").textContent="Загружена дополнительная лекция для изменения.";
     }
     function clearQuestionForm(){$("qText").value="";["qA","qB","qC","qD"].forEach(id=>$(id).value="");$("qCorrect").value="0";if($("ceQuestionType"))$("ceQuestionType").value="single";if($("ceCorrectSet"))$("ceCorrectSet").value="";if($("ceExtra"))$("ceExtra").value="";if($("ceTolerance"))$("ceTolerance").value="0.01";if($("ceFeedback"))$("ceFeedback").value="";editingQuestion=-1;window.__ceEditingQuestionIndex=null;window.__ceCurrentQuestionImage=null;if(window.__ceRenderQuestionImage)window.__ceRenderQuestionImage();$("addQuestionBtn").textContent="Добавить вопрос в тест";}
@@ -437,8 +392,7 @@
       const title=$("testTitle").value.trim()||"Предварительный просмотр теста";
       $("testPreview").innerHTML='<h3>'+esc(title)+' — просмотр заданий</h3>'+(draft.length?draft.map((q,i)=>{const matching=q.kind==="matching"||q.kind==="match",ordering=q.kind==="order"||q.kind==="ordering",numeric=q.kind==="numeric"||q.kind==="num"||q.kind==="number",shortText=q.kind==="short_text"||q.kind==="text";const detail=matching?'<ul>'+(q.pairs||[]).map(pair=>'<li>'+esc(pair.left)+' → '+esc(pair.right)+'</li>').join("")+'</ul>':ordering?'<ol>'+(q.items||[]).map(item=>'<li>'+esc(item)+'</li>').join("")+'</ol>':numeric?'<p>Числовой ответ: '+esc(q.correctAnswer)+'; допуск: '+esc(q.tolerance)+'</p>':shortText?'<p>Эталонный текст: '+esc(q.correctAnswer)+'</p>':'<ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b style="color:var(--accent)">✓ Правильный ответ</b>':'')+'</li>').join("")+'</ol>';return '<div class="module" style="padding:12px;margin:8px 0"><b>Задание '+(i+1)+'. '+esc(q.q)+'</b>'+(q.imageData?'<img src="'+esc(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:280px;object-fit:contain;margin:10px 0;border-radius:8px">':'')+detail+'</div>';}).join(""):'<p>В тесте пока нет заданий.</p>');
     }
-    initLectureRichEditor();
-    fillTopics();
+        fillTopics();
     courseSel.onchange=()=>{resetLecture();resetTest();fillTopics();loadExamBank();};
     mainTopicSel.onchange=loadMainTopic;
     $("saveMainTopicBtn").onclick=async function(){
@@ -538,7 +492,7 @@
       }).then(()=>{fillTopics();topicSel.value=id;testSel.value=id;renderSaved();status.textContent="Тема создана ✓";$("newTopicCode").value="";$("newTopicTitle").value="";}).catch(e=>status.textContent=e.message);
     };
     $("saveLectureBtn").onclick=function(){
-      const topicId=topicSel.value,title=$("lectureTitle").value.trim(),content=$("lectureBody").innerHTML.trim(),status=$("lectureStatus");
+      const topicId=topicSel.value,title=$("lectureTitle").value.trim(),content=$("lectureBody").value.trim(),status=$("lectureStatus");
       if(!topicId||!title||!content){status.textContent="Выберите тему и заполните название и текст.";return;}
       const sourceIndex=builtInLectureIndex,base=sourceIndex!==null?getBuiltInLectures(getBuiltInTopic(topicId))[sourceIndex]:null;
       const slug=base?String(base.code||sourceIndex).replace(/[^A-Za-z0-9._-]/g,"-"):"";
