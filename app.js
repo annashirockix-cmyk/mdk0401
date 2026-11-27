@@ -795,7 +795,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             while (node.firstChild) span.appendChild(node.firstChild);
             node.parentNode.replaceChild(span, node);
         });
-        var allowed = ["P","BR","HR","H1","H2","H3","H4","H5","H6","DIV","SPAN","B","STRONG","I","EM","U","S","UL","OL","LI","TABLE","THEAD","TBODY","TFOOT","TR","TH","TD","CAPTION","BLOCKQUOTE","PRE","CODE","SUB","SUP","FIGURE","FIGCAPTION","IMG","A"];
+        var allowed = ["P","BR","HR","H1","H2","H3","H4","H5","H6","DIV","SPAN","B","STRONG","I","EM","U","S","UL","OL","LI","TABLE","THEAD","TBODY","TFOOT","TR","TH","TD","CAPTION","BLOCKQUOTE","PRE","CODE","SUB","SUP","FIGURE","FIGCAPTION","IMG","A","IFRAME","VIDEO","SOURCE"];
         Array.from(box.querySelectorAll("*")).reverse().forEach(function (node) {
             if (allowed.indexOf(node.tagName) < 0) {
                 var parent = node.parentNode;
@@ -811,11 +811,25 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                     if (cleanedStyle) node.setAttribute("style", cleanedStyle); else node.removeAttribute("style");
                     return;
                 }
+                if (node.tagName === "IFRAME" && name === "src" && /^https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{6,20}$/.test(value)) return;
+                if (node.tagName === "IFRAME" && name === "title") return;
+                if (node.tagName === "IFRAME" && name === "loading" && value === "lazy") return;
+                if (node.tagName === "IFRAME" && name === "allow" && value === "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share") return;
+                if (node.tagName === "IFRAME" && name === "allowfullscreen") return;
+                if ((node.tagName === "VIDEO" || node.tagName === "SOURCE") && name === "src" && /^https:\/\/.+\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(value)) return;
+                if (node.tagName === "VIDEO" && name === "controls") return;
+                if (node.tagName === "VIDEO" && name === "playsinline") return;
+                if (node.tagName === "VIDEO" && name === "preload" && /^(metadata|none)$/.test(value)) return;
+                if (node.tagName === "SOURCE" && name === "type" && /^video\/(?:mp4|webm|ogg)$/.test(value)) return;
                 if (node.tagName === "IMG" && name === "src" && /^(https?:|\.\/|\.\.\/|\/|data:image\/(?:png|jpeg|gif|webp);base64,)/i.test(value) && !/^\s*javascript:/i.test(value)) return;
                 if (node.tagName === "IMG" && ["alt", "width", "height", "loading"].indexOf(name) >= 0 && (name !== "loading" || /^(lazy|eager)$/i.test(value))) return;
                 if (node.tagName === "A" && name === "href" && /^(https?:|mailto:|\.\/|\.\.\/|\/|#)/i.test(value)) return;
                 node.removeAttribute(attr.name);
             });
+            if (node.tagName === "IFRAME" && node.hasAttribute("src")) {
+                node.setAttribute("sandbox", "allow-scripts allow-same-origin allow-presentation");
+                node.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+            }
             if (node.tagName === "A" && node.hasAttribute("href")) {
                 node.setAttribute("rel", "noopener noreferrer");
                 if (/^https?:/i.test(node.getAttribute("href"))) node.setAttribute("target", "_blank");
