@@ -776,7 +776,7 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
                 if (property === "text-align" && /^(left|center|right|justify)$/.test(setting)) safe.push(property + ":" + setting);
                 else if (property === "font-size" && /^(?:[8-9]|[1-3][0-9]|4[0-8])(?:px|pt)$/.test(setting)) safe.push(property + ":" + setting);
                 else if (property === "font-family" && /^(arial|calibri|georgia|times new roman|verdana)$/.test(setting.replace(/["']/g, ""))) safe.push(property + ":" + setting.replace(/["']/g, ""));
-                else if ((property === "color" || property === "background-color") && /^#[0-9a-f]{3}(?:[0-9a-f]{3})?(?:[0-9a-f]{2})?$/i.test(setting)) safe.push(property + ":" + setting);
+                else if ((property === "color" || property === "background-color") && (/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(setting) || /^rgb\(\s*(?:25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\s*,\s*(?:25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\s*,\s*(?:25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\s*\)$/.test(setting))) safe.push(property + ":" + setting);
                 else if (property === "border-collapse" && /^(collapse|separate)$/.test(setting)) safe.push(property + ":" + setting);
                 else if ((property === "padding" || property === "margin") && /^(?:0|[0-3]?[0-9](?:px|pt))(?:\s+(?:0|[0-3]?[0-9](?:px|pt))){0,3}$/.test(setting)) safe.push(property + ":" + setting);
                 else if ((property === "width" || property === "max-width") && /^(?:100%|[0-9]{1,3}(?:px|%))$/.test(setting)) safe.push(property + ":" + setting);
