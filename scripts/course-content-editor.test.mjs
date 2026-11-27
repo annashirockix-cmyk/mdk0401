@@ -11,7 +11,7 @@ test("custom lecture and test content has one student rendering path", () => {
  const editor = read("course-admin.js");
  const html = read("index.html");
  const sw = read("service-worker.js"); const css = read("style.css"); const enrichment = read("lecture-enrichment.js");
- assert.ok(html.includes("course-admin.js?v=35"));
+ assert.ok(html.includes("course-admin.js?v=36"));
  assert.ok(app.includes("customTopicLectures"));
  assert.ok(app.includes("customTopicTests"));
  assert.ok(app.includes("window.startCustomInlineTest"));
@@ -216,7 +216,7 @@ test("custom content deletion is scoped to the requested course", () => {
  assert.match(remove, /editor_\(data, courseId\)/);
  assert.match(remove, /String\(values\[i\]\[0\]\) === id && sameCourseId_\(values\[i\]\[1\], courseId\)/);
  assert.match(api, /deleteCustomContent:function\(id,courseId\)/);
- assert.equal((editor.match(/deleteCustomContent\(id,courseSel\.value\)/g) || []).length, 2);
+ assert.equal((editor.match(/deleteCustomContent\(id,courseSel\.value\)/g) || []).length, 3);
 });
 
 test("settings upserts serialize lookup and writes", () => {
@@ -433,4 +433,23 @@ test("custom true/false questions use fixed labels and retain server-side answer
  assert.ok(server.includes('if(type==="tf"||type==="true_false")'));
  assert.ok(server.includes("return Number(answer)===target;"));
  assert.ok(server.includes("optionMaps[String(entry.questionIndex)]=order;"));
+});
+
+
+test("permanent lecture deletion cascades to linked files and unfinished video uploads", () => {
+ const server = read("Code.gs");
+ const editor = read("course-admin.js");
+ const start = server.indexOf("function deleteCustomContent_(data)");
+ const end = server.indexOf("\n/* ---------- Administrator", start);
+ const remove = server.slice(start, end);
+ assert.match(remove, /targetType === "lecture"/);
+ assert.match(remove, /String\(attachment\.lectureId \|\| ""\) === id/);
+ assert.match(remove, /trashCourseVideoFolder_\(folder\)/);
+ assert.match(remove, /teacherCloudDeleteFile_/);
+ assert.match(remove, /COURSE_VIDEO_UPLOAD_/);
+ assert.match(remove, /props\.deleteProperty\(key\)/);
+ assert.match(remove, /rowsToDelete\.sort\(function\(a, b\) \{ return b - a; \}\)/);
+ assert.match(editor, /delete-lecture-full/);
+ assert.match(editor, /Удалить полностью/);
+ assert.match(editor, /Ранее скачанные копии на устройствах студентов автоматически не удаляются/);
 });
