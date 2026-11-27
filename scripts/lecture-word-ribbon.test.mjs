@@ -48,8 +48,8 @@ test("student lecture rendering preserves safe Word formatting but strips unsafe
   assert.match(app, /text-align/);
   assert.match(app, /node\.removeAttribute\(attr\.name\)/);
   assert.match(app, /noopener noreferrer/);
-  assert.match(app, /www\\.youtube-nocookie\\.com\\/embed/);
-  assert.match(app, /node\\.tagName === "VIDEO"/);
-  assert.match(app, /node\\.tagName === "IFRAME"/);
+  assert.match(app, /www\.youtube-nocookie\.com\/embed/);
+  assert.match(app, /node\.tagName === "VIDEO"/);
+  assert.match(app, /node\.tagName === "IFRAME"/);
   assert.match(app, /sandbox.*allow-scripts allow-same-origin allow-presentation/);
 });
