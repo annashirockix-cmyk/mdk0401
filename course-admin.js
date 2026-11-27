@@ -429,23 +429,46 @@
         button.disabled=true;
         try{
           status.textContent="Подготовка загрузки видео…";
-          const session=await window.API.startCourseVideoUpload({courseId:courseSel.value,topicId:topicId,lectureId:lectureId,fileName:file.name,mimeType:mime,size:file.size});
-          if(!session||!session.success)throw new Error(session&&session.error||"Не удалось начать загрузку видео.");
+          const resumeKey="portal-video-upload:"+courseSel.value+":"+topicId+":"+lectureId;
+          const fileMeta={fileName:file.name,size:file.size,lastModified:file.lastModified,mimeType:mime};
+          let session=null,uploadedSet=new Set();
+          try{
+            const saved=JSON.parse(sessionStorage.getItem(resumeKey)||"null");
+            if(saved&&saved.uploadId&&saved.fileName===fileMeta.fileName&&saved.size===fileMeta.size&&saved.lastModified===fileMeta.lastModified&&saved.mimeType===fileMeta.mimeType){
+              status.textContent="Проверяем ранее загруженные части видео…";
+              const state=await window.API.getCourseVideoUploadStatus(saved.uploadId);
+              if(state&&state.success&&state.fileName===file.name&&Number(state.size)===file.size&&state.mimeType===mime){
+                session={uploadId:state.uploadId,chunkCount:state.chunkCount,chunkSize:state.chunkSize};
+                uploadedSet=new Set((state.uploadedChunks||[]).map(Number));
+              }else sessionStorage.removeItem(resumeKey);
+            }else if(saved)sessionStorage.removeItem(resumeKey);
+          }catch(error){try{sessionStorage.removeItem(resumeKey);}catch(ignore){}}
+          if(!session){
+            status.textContent="Подготовка новой загрузки видео…";
+            session=await window.API.startCourseVideoUpload({courseId:courseSel.value,topicId:topicId,lectureId:lectureId,fileName:file.name,mimeType:mime,size:file.size});
+            if(!session||!session.success)throw new Error(session&&session.error||"Не удалось начать загрузку видео.");
+            try{sessionStorage.setItem(resumeKey,JSON.stringify(Object.assign({},fileMeta,{uploadId:session.uploadId})));}catch(ignore){}
+          }
           const total=session.chunkCount,chunkSize=session.chunkSize;
           for(let index=0;index<total;index++){
+            if(uploadedSet.has(index)){
+              status.textContent="Продолжение загрузки: часть "+(index+1)+" из "+total+" уже сохранена на сервере.";
+              continue;
+            }
             const buffer=await file.slice(index*chunkSize,Math.min(file.size,(index+1)*chunkSize)).arrayBuffer(),bytes=new Uint8Array(buffer);
             let binary="";for(let i=0;i<bytes.length;i++)binary+=String.fromCharCode(bytes[i]);
             const encoded=btoa(binary);let uploaded=false,lastError=null;
             for(let attempt=0;attempt<3&&!uploaded;attempt++){
               try{await window.API.uploadCourseVideoChunk(session.uploadId,index,encoded);uploaded=true;}
-              catch(error){lastError=error;if(attempt<2)await new Promise(resolve=>setTimeout(resolve,700*(attempt+1)));}
+              catch(error){lastError=error;if(attempt<2)await new Promise(resolve=>setTimeout(resolve,900*Math.pow(2,attempt)));}
             }
-            if(!uploaded)throw lastError||new Error("Не удалось загрузить часть "+(index+1));
+            if(!uploaded)throw new Error("Не удалось загрузить часть "+(index+1)+" из "+total+": "+(lastError&&lastError.message||"ошибка соединения")+". Выберите тот же файл повторно, чтобы продолжить.");
             status.textContent="Загрузка видео: "+Math.round((index+1)/total*100)+"% ("+(index+1)+"/"+total+" частей)";
           }
           status.textContent="Проверяем видео и прикрепляем к лекции…";
           const result=await window.API.finishCourseVideoUpload(session.uploadId);
           if(!result||!result.success)throw new Error(result&&result.error||"Не удалось завершить загрузку видео.");
+          try{sessionStorage.removeItem(resumeKey);}catch(ignore){}
           await new Promise(resolve=>refreshContent(resolve));input.value="";
           status.textContent="Видео прикреплено к лекции ✓ ("+(file.size/1024/1024).toFixed(1)+" МБ)";
         }catch(error){status.textContent=error.message||"Ошибка загрузки видео.";}
