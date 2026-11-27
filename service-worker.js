@@ -1,5 +1,5 @@
 // sw.js / service-worker.js
-const CACHE_NAME = 'portal-cache-v451'; // Обновление подсказок хранилищ в редакторе лекций.
+const CACHE_NAME = 'portal-cache-v452'; // Обновление подсказок хранилищ в редакторе лекций.
 
 const STATIC_ASSETS = [
   './',

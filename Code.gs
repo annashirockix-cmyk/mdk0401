@@ -160,6 +160,7 @@ function handleRequest_(e) {
       case "getcoursevideochunk": result = getCourseVideoChunk_(data); break;
       case "getcoursefile": result = getCourseFile_(data); break;
       case "getwebinars": result = getWebinars_(data); break;
+      case "getwebinarattendance": result = getWebinarAttendance_(data); break;
       case "updatewebinarstatus": result = updateWebinarStatus_(data); break;
       case "getteachercloudstorage": result = getTeacherCloudStorage_(data); break;
       case "backupteachermaterials": result = backupTeacherMaterials_(data); break;
@@ -3396,6 +3397,19 @@ function joinWebinar_(data){
   if(!jwt&&!allowDemo)throw new Error("Защищённый вход не настроен: проверьте JITSI_APP_ID и JITSI_APP_SECRET. Публичный режим запрещён.");
   return {success:true,id:w.id,title:w.title,roomName:w.roomName,domain:domain,jwt:jwt||"",secure:!!jwt,isHost:isHost,displayName:user.name||user.email};
 }
+function getWebinarAttendance_(data){
+  const user=auth_(data),w=webinarById_(data.webinarId);
+  if(!w)throw new Error("Вебинар не найден.");
+  if(!(user.role==="admin"||(user.role==="teacher"&&w.createdBy===user.email)))throw new Error("Просматривать посещаемость может только создатель вебинара или администратор.");
+  const sh=webinarAttendanceSheet_(),values=sh.getDataRange().getValues(),map=headerMap_(sh),rows=[];
+  for(let i=1;i<values.length;i++){
+    const row=values[i];if(String(row[map.WebinarId]||"")!==w.id)continue;
+    rows.push({name:String(row[map.Name]||"Участник"),firstJoinedAt:String(row[map.FirstJoinedAt]||""),lastLeftAt:String(row[map.LastLeftAt]||""),event:String(row[map.Event]||"")});
+  }
+  rows.sort(function(a,b){return new Date(a.firstJoinedAt||0).getTime()-new Date(b.firstJoinedAt||0).getTime();});
+  return {success:true,data:rows};
+}
+
 function updateWebinarStatus_(data){
   const user=auth_(data),id=String(data.webinarId||""),next=String(data.status||"").toLowerCase();
   const w=webinarById_(id);
