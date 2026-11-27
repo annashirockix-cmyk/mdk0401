@@ -90,5 +90,11 @@ test("webinar lifecycle controls are shown only to the webinar owner/admin",()=>
 
 
 test("concurrent webinar attendance upserts are serialized to prevent duplicate participants",()=>{
- assert.match(gs,/function webinarAttendance_\(data\)[\\s\\S]*?const lock=LockService\\.getScriptLock\(\)[\\s\\S]*?lock\\.waitLock\(10000\)[\\s\\S]*?lock\\.releaseLock\(\)/);
+ const start=gs.indexOf("function webinarAttendance_");
+ const end=gs.indexOf("function saveCustomContent_",start);
+ const handler=gs.slice(start,end);
+ assert.ok(handler.includes("LockService.getScriptLock()"));
+ assert.ok(handler.includes("lock.waitLock(10000)"));
+ assert.ok(handler.includes("lock.releaseLock()"));
+ assert.ok(handler.includes("finally"));
 });
