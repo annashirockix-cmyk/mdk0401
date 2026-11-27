@@ -229,7 +229,7 @@
       if(!editor||!toolbar||editor.dataset.ready==="1")return;
       editor.dataset.ready="1";
       function focusEditor(){editor.focus();}
-      function updateCount(){if(count){const words=(editor.innerText||"").trim().split(/\\s+/).filter(Boolean).length;count.textContent=words+" слов";}}
+      function updateCount(){if(count){const words=(editor.innerText||"").trim().split(/\s+/).filter(Boolean).length;count.textContent=words+" слов";}}
       toolbar.querySelectorAll("[data-lec-command]").forEach(control=>{
         const run=()=>{focusEditor();document.execCommand(control.dataset.lecCommand,false,control.tagName==="SELECT"?control.value:null);updateCount();};
         control.addEventListener("mousedown",event=>{if(control.tagName!=="SELECT")event.preventDefault();});
