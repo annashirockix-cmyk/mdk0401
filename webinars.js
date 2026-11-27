@@ -7,11 +7,13 @@ const me=()=>window.state&&(window.state.staff||window.state.student);
 const isStaff=()=>!!(window.state&&window.state.staff);
 let api=null,current=null,refreshTimer=null;
 function dateLabel(v){const d=new Date(v);return isNaN(d)?"Дата не указана":d.toLocaleString("ru-RU",{dateStyle:"medium",timeStyle:"short"});}
-function statusLabel(w){if(w.status==="cancelled")return "Отменён";if(w.status==="live")return "Идёт сейчас";if(w.status==="draft")return "Черновик";if(new Date(w.startsAt).getTime()<Date.now())return "Завершён";return "Запланирован";}
+function statusLabel(w){if(w.status==="cancelled")return "Отменён";if(w.status==="completed")return "Завершён";if(w.status==="live")return "Идёт сейчас";if(w.status==="draft")return "Черновик";if(new Date(w.startsAt).getTime()<Date.now())return "Завершён";return "Запланирован";}
 function courseOptions(selected){return courses.map(c=>'<option value="'+c[0]+'" '+(selected===c[0]?"selected":"")+'>'+c[1]+'</option>').join("");}
 function renderCard(w){
- const canJoin=w.status!=="cancelled"&&w.status!=="draft";
- return '<article class="webinar-card"><div class="webinar-card-head"><span class="webinar-status">'+esc(statusLabel(w))+'</span><small>'+esc(courses.find(c=>c[0]===w.courseId)?.[1]||w.courseId)+'</small></div><h3>'+esc(w.title)+'</h3><p>'+esc(w.description||"Без описания")+'</p><div class="webinar-meta"><span>🗓 '+esc(dateLabel(w.startsAt))+'</span><span>👥 '+Number(w.participants||0)+' участников</span></div><div class="webinar-actions">'+(canJoin?'<button class="btn primary" data-join="'+esc(w.id)+'">Войти в вебинар</button>':"")+(isStaff()?'<button class="btn ghost" data-copy="'+esc(w.id)+'">Скопировать приглашение</button>':"")+'</div></article>';
+ const canJoin=w.status==="published"||w.status==="live";
+ const controls=w.status==="draft"?'<button class="btn ghost" data-status="published" data-webinar="'+esc(w.id)+'">Опубликовать</button>':w.status==="published"?'<button class="btn ghost" data-status="live" data-webinar="'+esc(w.id)+'">Начать</button>':w.status==="live"?'<button class="btn ghost" data-status="completed" data-webinar="'+esc(w.id)+'">Завершить</button>':"";
+ const cancel=["draft","published","live"].includes(w.status)?'<button class="btn ghost webinar-cancel" data-status="cancelled" data-webinar="'+esc(w.id)+'">Отменить</button>':"";
+ return '<article class="webinar-card"><div class="webinar-card-head"><span class="webinar-status">'+esc(statusLabel(w))+'</span><small>'+esc(courses.find(c=>c[0]===w.courseId)?.[1]||w.courseId)+'</small></div><h3>'+esc(w.title)+'</h3><p>'+esc(w.description||"Без описания")+'</p><div class="webinar-meta"><span>🗓 '+esc(dateLabel(w.startsAt))+'</span><span>👥 '+Number(w.participants||0)+' участников</span></div><div class="webinar-actions">'+(canJoin?'<button class="btn primary" data-join="'+esc(w.id)+'">Войти в вебинар</button>':"")+(isStaff()?'<button class="btn ghost" data-copy="'+esc(w.id)+'">Скопировать приглашение</button>'+controls+cancel:"")+'</div></article>';
 }
 async function load(){
  const host=$("webinarList");if(!host)return;
@@ -21,9 +23,16 @@ async function load(){
  host.innerHTML=list.length?list.map(renderCard).join(""):'<div class="webinar-empty">Пока нет вебинаров. Преподаватель может создать первый.</div>';
  host.querySelectorAll("[data-join]").forEach(b=>b.onclick=()=>join(b.dataset.join));
  host.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>copyInvite(b.dataset.copy,list));
+ host.querySelectorAll("[data-status]").forEach(b=>b.onclick=()=>changeStatus(b.dataset.webinar,b.dataset.status));
  }catch(e){host.innerHTML='<div class="webinar-error">'+esc(e.message)+'</div>';}
 }
 async function copyInvite(id,list){const w=list.find(x=>x.id===id);if(!w)return;const url=location.origin+location.pathname+"#/webinars?join="+encodeURIComponent(id);try{await navigator.clipboard.writeText(url);window.showToast&&showToast("Ссылка-приглашение скопирована");}catch(e){prompt("Скопируйте ссылку",url);}}
+async function changeStatus(id,status){
+ const labels={published:"опубликовать",live:"начать вебинар",completed:"завершить вебинар",cancelled:"отменить вебинар"};
+ if(!confirm("Вы действительно хотите "+(labels[status]||"изменить состояние")+"?"))return;
+ try{const r=await API.updateWebinarStatus(id,status);if(!r||!r.success)throw new Error(r?.error||"Не удалось изменить состояние вебинара");await load();window.showToast&&showToast("Состояние вебинара обновлено");}
+ catch(e){window.showToast?showToast(e.message):alert(e.message);}
+}
 async function create(e){
  e.preventDefault();const status=$("webinarCreateStatus"),btn=$("webinarCreateBtn");btn.disabled=true;status.textContent="Сохраняем вебинар…";
  const data={title:$("webinarTitle").value.trim(),courseId:$("webinarCourse").value,startsAt:$("webinarDate").value,description:$("webinarDescription").value.trim(),status:$("webinarPublish").checked?"published":"draft"};
