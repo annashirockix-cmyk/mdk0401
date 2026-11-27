@@ -3130,7 +3130,7 @@ function getCourseVideoUploadStatus_(data) {
   const files = folder.getFiles(), uploaded = [], expectedPrefix = "chunk-";
   while (files.hasNext()) {
     const file = files.next(), name = file.getName();
-    if (!/^chunk-\\d{5}\\.bin$/.test(name)) continue;
+    if (!/^chunk-\d{5}\.bin$/.test(name)) continue;
     const index = Number(name.slice(expectedPrefix.length, expectedPrefix.length + 5));
     if (!Number.isInteger(index) || index < 0 || index >= session.chunkCount) continue;
     const expectedBytes = Math.min(session.chunkSize, session.size - index * session.chunkSize);
