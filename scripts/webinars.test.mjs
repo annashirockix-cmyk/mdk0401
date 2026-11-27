@@ -62,3 +62,15 @@ test("webinar lifecycle changes are restricted to creator/admin and valid transi
  assert.ok(js.includes("data-status=\"completed\""));
  assert.ok(api.includes("updateWebinarStatus"));
 });
+
+
+test("completed and cancelled webinars cannot be joined through direct API calls",()=>{
+ assert.match(gs,/function joinWebinar_\(data\)[\s\S]*?w\.status!=="published"&&w\.status!=="live"/);
+ assert.match(gs,/event==="join"&&w\.status!=="published"&&w\.status!=="live"/);
+});
+
+test("insecure public Jitsi demo is opt-in and disabled by default",()=>{
+ assert.match(gs,/JITSI_ALLOW_INSECURE_DEMO/);
+ assert.match(gs,/if\(!domain\)throw new Error\([\s\S]*?Демонстрационный режим выключен/);
+ assert.match(gs,/if\(!jwt&&!allowDemo\)throw new Error\([\s\S]*?Публичный режим запрещён/);
+});
