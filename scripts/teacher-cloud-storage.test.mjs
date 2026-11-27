@@ -7,6 +7,7 @@ const page=fs.readFileSync(new URL("../teacher-storage.js",import.meta.url),"utf
 const courseAdmin=fs.readFileSync(new URL("../course-admin.js",import.meta.url),"utf8");
 const app=fs.readFileSync(new URL("../app.js",import.meta.url),"utf8");
 const html=fs.readFileSync(new URL("../index.html",import.meta.url),"utf8");
+const setup=fs.readFileSync(new URL("../TEACHER_CLOUD_STORAGE_SETUP.md",import.meta.url),"utf8");
 test("teacher cloud storage supports four allowlisted providers and app-folder scopes",()=>{
  for(const key of ["google","yandex","onedrive","dropbox"])assert.match(gs,new RegExp(key+": \\{ name:"));
  assert.match(gs,/drive\.file/);assert.match(gs,/disk\.app_folder/);assert.match(gs,/Files\.ReadWrite\.AppFolder/);assert.match(gs,/files\.content\.write/);
@@ -169,4 +170,11 @@ test("large lecture videos upload in private chunks and stream through access-ch
  assert.ok(courseAdmin.includes("uploadCourseVideoChunk"));
  assert.match(app,/getCourseVideoChunk/);
  assert.match(app,/createElement\("video"\)/);
+});
+
+test("lecture attachment UI and setup docs distinguish cloud documents from portal-hosted videos",()=>{
+ assert.match(courseAdmin,/личный диск для видео пока не поддерживается/);
+ assert.match(courseAdmin,/Хранилище для документов к темам и лекциям/);
+ assert.match(setup,/Видео MP4, WEBM и MOV \(до 150 МБ\) пока загружаются частями в закрытое хранилище Google Drive портала/);
+ assert.match(setup,/Восстановление доступно через кнопку «Проверить и восстановить»/);
 });
