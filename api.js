@@ -137,6 +137,7 @@ window.API = {
  beginTeacherCloudOAuth:function(provider){return fetchAPI("beginTeacherCloudOAuth",{provider:provider},"POST");},
  disconnectTeacherCloudStorage:function(provider){return fetchAPI("disconnectTeacherCloudStorage",{provider:provider},"POST");},
  getWebinars:function(){return fetchAPI("getWebinars",{},"GET");},
+ getWebinarAttendance:function(id){return fetchAPI("getWebinarAttendance",{webinarId:id},"POST");},
  updateWebinarStatus:function(id,status){return fetchAPI("updateWebinarStatus",{webinarId:id,status:status},"POST");},
  createWebinar:function(data){return fetchAPI("createWebinar",data||{},"POST");},
  joinWebinar:function(id){return fetchAPI("joinWebinar",{webinarId:id},"POST");},
