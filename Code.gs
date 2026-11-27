@@ -3514,8 +3514,8 @@ function deleteCustomContent_(data) {
     }
 
     // Remove all linked stored files before deleting their sheet records.
-    rowsToDelete.forEach(function(index) {
-      const row = values[index];
+    rowsToDelete.forEach(function(i) {
+      const row = values[i];
       if (String(row[3] || "") !== "file") return;
       let payload = {};
       try { payload = JSON.parse(row[5] || "{}"); } catch (e) {}
@@ -3539,7 +3539,7 @@ function deleteCustomContent_(data) {
           throw new Error("Не удалось удалить видео из защищённого хранилища. Лекция и записи материалов сохранены.");
         }
       } else if (cloudMatch) {
-        try { teacherCloudDeleteFile_(cloudMatch[1], email_(row[6] || ""), cloudMatch[2]); }
+        try { teacherCloudDeleteFile_(cloudMatch[1], email_(values[i][6] || ""), cloudMatch[2]); }
         catch (fileError) {
           throw new Error("Не удалось удалить файл из личного облака. Лекция и записи материалов сохранены: " + String(fileError.message || fileError).slice(0, 180));
         }
