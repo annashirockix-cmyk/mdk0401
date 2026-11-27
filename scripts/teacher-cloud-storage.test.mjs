@@ -108,7 +108,7 @@ test("teacher cloud backup API exports only owned accessible course content and 
 test("teacher cloud backup controls refresh cached storage assets",()=>{
  assert.match(html,/teacher-storage\.js\?v=4/);
  assert.match(html,/teacher-storage\.css\?v=4/);
- assert.match(html,/service-worker\.js\?v=451/);
+ assert.match(html,/service-worker\.js\?v=452/);
  assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v452/);
 });
 
@@ -150,7 +150,7 @@ test("restored attachments are validated and stored privately in portal Drive",(
 test("teacher storage restore UI uses refreshed cached assets",()=>{
  assert.match(html,/teacher-storage\.js\?v=4/);
  assert.match(html,/teacher-storage\.css\?v=4/);
- assert.match(html,/service-worker\.js\?v=451/);
+ assert.match(html,/service-worker\.js\?v=452/);
  assert.match(fs.readFileSync(new URL("../service-worker.js",import.meta.url),"utf8"),/portal-cache-v452/);
 });
 
