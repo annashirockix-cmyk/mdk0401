@@ -74,3 +74,16 @@ test("insecure public Jitsi demo is opt-in and disabled by default",()=>{
  assert.match(gs,/if\(!domain\)throw new Error\([\s\S]*?Демонстрационный режим выключен/);
  assert.match(gs,/if\(!jwt&&!allowDemo\)throw new Error\([\s\S]*?Публичный режим запрещён/);
 });
+
+ 
+test("attendance report is returned only to webinar creator or admin",()=>{
+ assert.ok(api.includes("getWebinarAttendance"));
+ assert.ok(gs.includes('case "getwebinarattendance"'));
+ assert.match(gs,/function getWebinarAttendance_\(data\)[\s\S]*?user\.role==="admin"[\s\S]*?w\.createdBy===user\.email/);
+ assert.match(gs,/rows\.push\(\{name:String\(row\[map\.Name\]/);
+ assert.ok(js.includes("data-attendance"));
+});
+
+test("webinar lifecycle controls are shown only to the webinar owner/admin",()=>{
+ assert.match(js,/function canManageWebinar\(w\)[\s\S]*?staff\.role==="admin"[\s\S]*?w\.createdBy/);
+});
