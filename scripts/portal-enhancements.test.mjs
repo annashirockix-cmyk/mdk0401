@@ -1919,3 +1919,19 @@ test("registration requires surname and first name and group matching is case- a
   assert.match(reports, /const normGroup=x=>/);
   assert.match(reports, /normGroup\(x\.group\)/);
 });
+
+test("lecture video uploads can resume only from owner-checked server chunks", () => {
+  const backend = read("Code.gs");
+  const api = read("api.js");
+  const admin = read("course-admin.js");
+  assert.match(backend, /case "getcoursevideouploadstatus": result = getCourseVideoUploadStatus_\(data\)/);
+  assert.match(backend, /function getCourseVideoUploadStatus_\(data\)[\s\S]*courseVideoSession_\(data\)[\s\S]*assertPortalPrivateFolder_/);
+  assert.match(backend, /uploadedChunks: uploaded/);
+  assert.match(api, /getCourseVideoUploadStatus:function\(uploadId\)[\s\S]*fetchAPI\("getCourseVideoUploadStatus"/);
+  assert.match(admin, /portal-video-upload:/);
+  assert.match(admin, /sessionStorage\.setItem\(resumeKey/);
+  assert.match(admin, /getCourseVideoUploadStatus\(saved\.uploadId\)/);
+  assert.match(admin, /uploadedSet\.has\(index\)/);
+  assert.match(admin, /Выберите тот же файл повторно, чтобы продолжить/);
+  assert.match(admin, /sessionStorage\.removeItem\(resumeKey\)/);
+});
