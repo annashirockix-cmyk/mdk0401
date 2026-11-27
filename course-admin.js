@@ -338,14 +338,14 @@
       const additionalLectures=ls.filter(x=>x.isBuiltInOverride!==true);
       $("lectureExisting").innerHTML='<option value="">— Новая дополнительная лекция —</option>'+builtInLectures.map((x,i)=>'<option value="builtin:'+i+'">Основная: '+esc(x.code||"")+' '+esc(x.title||"")+'</option>').join("")+additionalLectures.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+'</option>').join("");
       $("testExisting").innerHTML='<option value="">— Новый тест —</option>'+ts.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.title)+' ('+((x.questions||[]).length)+' вопр.)</option>').join("");
-      $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4><p style="font-size:12px;color:var(--muted)">Полное удаление также удаляет прикреплённые документы и видео из хранилищ.</p>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button> <button class="btn ghost delete-lecture-full" data-id="'+esc(x.id)+'" data-title="'+esc(x.title)+'">Удалить полностью</button></div>').join(""):'<p>Лекций пока нет.</p>')+
+      $("savedMaterials").innerHTML='<h4>Лекции ('+ls.length+')</h4><p style="font-size:12px;color:var(--muted)">Удаление убирает вложения из портала и активного хранилища; файлы Google Drive перемещаются в корзину.</p>'+(ls.length?ls.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> <button class="btn ghost pick-lecture" data-id="'+esc(x.id)+'">Открыть для изменения</button> <button class="btn ghost delete-lecture-full" data-id="'+esc(x.id)+'" data-title="'+esc(x.title)+'">Удалить полностью</button></div>').join(""):'<p>Лекций пока нет.</p>')+
         '<h4 style="margin-top:16px">Тесты ('+ts.length+')</h4>'+(ts.length?ts.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.questions||[]).length)+' заданий <button class="btn ghost pick-test" data-id="'+esc(x.id)+'">Открыть / просмотреть</button></div>').join(""):'<p>Тестов пока нет.</p>')+
         '<h4 style="margin-top:16px">Файлы темы ('+docs.length+')</h4>'+(docs.length?docs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+esc(x.fileName||"файл")+' <button class="btn ghost delete-course-file" data-id="'+esc(x.id)+'">Удалить</button></div>').join(""):'<p>Файлов пока нет.</p>')+
         '<h4 style="margin-top:16px">Карточки ('+fs.length+')</h4>'+(fs.length?fs.map(x=>'<div style="padding:8px;border-bottom:1px solid var(--border)"><b>'+esc(x.title)+'</b> · '+((x.cards||[]).length)+' карточек · '+esc(x.track||"all")+' <button class="btn ghost pick-flashcards" data-id="'+esc(x.id)+'">Открыть конструктор</button></div>').join(""):'<p>Наборов карточек пока нет.</p>');
       $("savedMaterials").querySelectorAll(".pick-lecture").forEach(b=>b.onclick=()=>{ $("lectureExisting").value=b.dataset.id;loadLecture();});
        $("savedMaterials").querySelectorAll(".delete-lecture-full").forEach(b=>b.onclick=async()=>{
          const title=b.dataset.title||"эту лекцию";
-         if(!confirm("Полностью удалить лекцию «"+title+"»? Будут удалены сама лекция, прикреплённые документы, видео и незавершённые загрузки из хранилища. Ранее скачанные копии на устройствах студентов автоматически не удаляются."))return;
+         if(!confirm("Полностью удалить лекцию «"+title+"»? Лекция и связанные файлы будут удалены из портала; файлы Google Drive попадут в корзину, а не будут безвозвратно стёрты. Ранее скачанные копии на устройствах студентов автоматически не удаляются."))return;
          b.disabled=true;
          try{
            const result=await window.API.deleteCustomContent(b.dataset.id,courseSel.value);
@@ -543,7 +543,7 @@
       }).catch(e=>status.textContent=e.message);
     };
     $("deleteLectureBtn").onclick=function(){
-      if(!lectureId||!confirm("Полностью удалить выбранную лекцию? Будут удалены сама лекция, прикреплённые документы, видео и незавершённые загрузки из хранилища. Ранее скачанные копии на устройствах студентов автоматически не удаляются."))return;
+      if(!lectureId||!confirm("Полностью удалить выбранную лекцию? Лекция и связанные файлы будут удалены из портала; файлы Google Drive попадут в корзину, а не будут безвозвратно стёрты. Ранее скачанные копии на устройствах студентов автоматически не удаляются."))return;
       const id=lectureId;$("lectureStatus").textContent="Полное удаление лекции и вложений…";
       window.API.deleteCustomContent(id,courseSel.value).then(r=>{if(!r.success)throw new Error(r.error||"Ошибка удаления");resetLecture();return new Promise(resolve=>refreshContent(resolve));}).then(()=>$("lectureStatus").textContent="Лекция и связанные файлы удалены.").catch(e=>$("lectureStatus").textContent=e.message);
     };
