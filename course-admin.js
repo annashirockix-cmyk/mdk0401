@@ -392,7 +392,7 @@
       const title=$("testTitle").value.trim()||"Предварительный просмотр теста";
       $("testPreview").innerHTML='<h3>'+esc(title)+' — просмотр заданий</h3>'+(draft.length?draft.map((q,i)=>{const matching=q.kind==="matching"||q.kind==="match",ordering=q.kind==="order"||q.kind==="ordering",numeric=q.kind==="numeric"||q.kind==="num"||q.kind==="number",shortText=q.kind==="short_text"||q.kind==="text";const detail=matching?'<ul>'+(q.pairs||[]).map(pair=>'<li>'+esc(pair.left)+' → '+esc(pair.right)+'</li>').join("")+'</ul>':ordering?'<ol>'+(q.items||[]).map(item=>'<li>'+esc(item)+'</li>').join("")+'</ol>':numeric?'<p>Числовой ответ: '+esc(q.correctAnswer)+'; допуск: '+esc(q.tolerance)+'</p>':shortText?'<p>Эталонный текст: '+esc(q.correctAnswer)+'</p>':'<ol type="A">'+(q.options||[]).map((o,j)=>'<li>'+esc(o)+(j===+q.correct?' <b style="color:var(--accent)">✓ Правильный ответ</b>':'')+'</li>').join("")+'</ol>';return '<div class="module" style="padding:12px;margin:8px 0"><b>Задание '+(i+1)+'. '+esc(q.q)+'</b>'+(q.imageData?'<img src="'+esc(q.imageData)+'" alt="Иллюстрация к вопросу" style="display:block;max-width:100%;max-height:280px;object-fit:contain;margin:10px 0;border-radius:8px">':'')+detail+'</div>';}).join(""):'<p>В тесте пока нет заданий.</p>');
     }
-    fillTopics();
+        fillTopics();
     courseSel.onchange=()=>{resetLecture();resetTest();fillTopics();loadExamBank();};
     mainTopicSel.onchange=loadMainTopic;
     $("saveMainTopicBtn").onclick=async function(){

@@ -6,6 +6,7 @@ const js = readFileSync(new URL("../lecture-word-ribbon.js", import.meta.url), "
 const css = readFileSync(new URL("../lecture-word-ribbon.css", import.meta.url), "utf8");
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("../service-worker.js", import.meta.url), "utf8");
+const app = readFileSync(new URL("../app.js", import.meta.url), "utf8");
 
 test("lecture editor adds Word-like Home, Insert and Layout ribbon tabs", () => {
   for (const tab of ["Главная", "Вставка", "Макет и правка"]) assert.ok(js.includes(tab));
@@ -36,4 +37,19 @@ test("Word-like document page has readable paper layout and responsive styles", 
   assert.match(css, /overflow-wrap:anywhere/);
   assert.match(css, /\.lecture-video/);
   assert.match(css, /\.ler-recorder/);
+});
+
+test("student lecture rendering preserves safe Word formatting but strips unsafe styles", () => {
+  assert.match(app, /function safeLectureHtml|function safeCustomLectureHtml/);
+  assert.match(app, /function safeLectureStyle/);
+  assert.match(app, /font-size/);
+  assert.match(app, /font-family/);
+  assert.match(app, /background-color/);
+  assert.match(app, /text-align/);
+  assert.match(app, /node\.removeAttribute\(attr\.name\)/);
+  assert.match(app, /noopener noreferrer/);
+  assert.ok(app.includes("youtube-nocookie") && app.includes("embed"));
+  assert.match(app, /node\.tagName === "VIDEO"/);
+  assert.match(app, /node\.tagName === "IFRAME"/);
+  assert.match(app, /sandbox.*allow-scripts allow-same-origin allow-presentation/);
 });

@@ -766,7 +766,36 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
     function safeCustomLectureHtml(html) {
         var box = document.createElement("div");
         box.innerHTML = String(html || "");
-        var allowed = ["P","BR","HR","H1","H2","H3","H4","H5","H6","DIV","SPAN","B","STRONG","I","EM","U","S","UL","OL","LI","TABLE","THEAD","TBODY","TFOOT","TR","TH","TD","CAPTION","BLOCKQUOTE","PRE","CODE","SUB","SUP","FIGURE","FIGCAPTION","IMG","A"];
+        // Preserve only narrowly allowlisted presentation styles from the rich-text editor.
+        function safeLectureStyle(value) {
+            var safe = [];
+            String(value || "").split(";").forEach(function (declaration) {
+                var parts = declaration.split(":");
+                if (parts.length < 2) return;
+                var property = parts.shift().trim().toLowerCase(), setting = parts.join(":").trim().toLowerCase();
+                if (property === "text-align" && /^(left|center|right|justify)$/.test(setting)) safe.push(property + ":" + setting);
+                else if (property === "font-size" && /^(?:[8-9]|[1-3][0-9]|4[0-8])(?:px|pt)$/.test(setting)) safe.push(property + ":" + setting);
+                else if (property === "font-family" && /^(arial|calibri|georgia|times new roman|verdana)$/.test(setting.replace(/["']/g, ""))) safe.push(property + ":" + setting.replace(/["']/g, ""));
+                else if ((property === "color" || property === "background-color") && (/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(setting) || /^rgb\(\s*(?:25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\s*,\s*(?:25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\s*,\s*(?:25[0-5]|2[0-4][0-9]|1?[0-9]?[0-9])\s*\)$/.test(setting))) safe.push(property + ":" + setting);
+                else if (property === "border-collapse" && /^(collapse|separate)$/.test(setting)) safe.push(property + ":" + setting);
+                else if ((property === "padding" || property === "margin") && /^(?:0|[0-3]?[0-9](?:px|pt))(?:\s+(?:0|[0-3]?[0-9](?:px|pt))){0,3}$/.test(setting)) safe.push(property + ":" + setting);
+                else if ((property === "width" || property === "max-width") && /^(?:100%|[0-9]{1,3}(?:px|%))$/.test(setting)) safe.push(property + ":" + setting);
+                else if (property === "border" && /^(?:0|[1-3]px solid (?:#[0-9a-f]{3,8}|black|gray|grey|white))$/.test(setting)) safe.push(property + ":" + setting);
+            });
+            return safe.join(";");
+        }
+        Array.from(box.querySelectorAll("font")).forEach(function (node) {
+            var sizes = {"1":"10px","2":"13px","3":"16px","4":"18px","5":"24px","6":"32px","7":"40px"};
+            var span = document.createElement("span"), size = sizes[node.getAttribute("size") || "3"];
+            span.style.fontSize = size;
+            var face = String(node.getAttribute("face") || "").replace(/["']/g, "").toLowerCase();
+            if (/^(arial|calibri|georgia|times new roman|verdana)$/.test(face)) span.style.fontFamily = face;
+            var color = String(node.getAttribute("color") || "");
+            if (/^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(color)) span.style.color = color;
+            while (node.firstChild) span.appendChild(node.firstChild);
+            node.parentNode.replaceChild(span, node);
+        });
+        var allowed = ["P","BR","HR","H1","H2","H3","H4","H5","H6","DIV","SPAN","B","STRONG","I","EM","U","S","UL","OL","LI","TABLE","THEAD","TBODY","TFOOT","TR","TH","TD","CAPTION","BLOCKQUOTE","PRE","CODE","SUB","SUP","FIGURE","FIGCAPTION","IMG","A","IFRAME","VIDEO","SOURCE"];
         Array.from(box.querySelectorAll("*")).reverse().forEach(function (node) {
             if (allowed.indexOf(node.tagName) < 0) {
                 var parent = node.parentNode;
@@ -777,11 +806,30 @@ window.renderTopicPage = function(courseId, topicId, activeTab) {
             Array.from(node.attributes).forEach(function (attr) {
                 var name = attr.name.toLowerCase(), value = attr.value;
                 if (name === "class" || name === "title" || name === "colspan" || name === "rowspan" || name === "scope") return;
+                if (name === "style") {
+                    var cleanedStyle = safeLectureStyle(value);
+                    if (cleanedStyle) node.setAttribute("style", cleanedStyle); else node.removeAttribute("style");
+                    return;
+                }
+                if (node.tagName === "IFRAME" && name === "src" && /^https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{6,20}$/.test(value)) return;
+                if (node.tagName === "IFRAME" && name === "title") return;
+                if (node.tagName === "IFRAME" && name === "loading" && value === "lazy") return;
+                if (node.tagName === "IFRAME" && name === "allow" && value === "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share") return;
+                if (node.tagName === "IFRAME" && name === "allowfullscreen") return;
+                if ((node.tagName === "VIDEO" || node.tagName === "SOURCE") && name === "src" && /^https:\/\/.+\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(value)) return;
+                if (node.tagName === "VIDEO" && name === "controls") return;
+                if (node.tagName === "VIDEO" && name === "playsinline") return;
+                if (node.tagName === "VIDEO" && name === "preload" && /^(metadata|none)$/.test(value)) return;
+                if (node.tagName === "SOURCE" && name === "type" && /^video\/(?:mp4|webm|ogg)$/.test(value)) return;
                 if (node.tagName === "IMG" && name === "src" && /^(https?:|\.\/|\.\.\/|\/|data:image\/(?:png|jpeg|gif|webp);base64,)/i.test(value) && !/^\s*javascript:/i.test(value)) return;
                 if (node.tagName === "IMG" && ["alt", "width", "height", "loading"].indexOf(name) >= 0 && (name !== "loading" || /^(lazy|eager)$/i.test(value))) return;
                 if (node.tagName === "A" && name === "href" && /^(https?:|mailto:|\.\/|\.\.\/|\/|#)/i.test(value)) return;
                 node.removeAttribute(attr.name);
             });
+            if (node.tagName === "IFRAME" && node.hasAttribute("src")) {
+                node.setAttribute("sandbox", "allow-scripts allow-same-origin allow-presentation");
+                node.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+            }
             if (node.tagName === "A" && node.hasAttribute("href")) {
                 node.setAttribute("rel", "noopener noreferrer");
                 if (/^https?:/i.test(node.getAttribute("href"))) node.setAttribute("target", "_blank");

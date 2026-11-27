@@ -986,7 +986,7 @@ test("English VPR chooser checks server bank availability and imports only missi
   assert.ok(engine.includes("Импортировать отсутствующие варианты"));
   assert.ok(engine.includes("Уже существующие банки не будут перезаписаны"));
   assert.ok(html.includes("english-vpr-engine.js?v=32"));
-  assert.ok(html.includes("service-worker.js?v=445"));
+  assert.ok(html.includes("service-worker.js?v=446"));
   assert.match(sw, /portal-cache-v\d+/);
 });
 
@@ -1242,7 +1242,7 @@ test("workbooks use curated photo, table and chart packs instead of generic meme
   assert.match(css, /\.wb-visual-table/);
   assert.match(css, /\.wb-visual-chart/);
   assert.match(html, /workbooks\.js\?v=[0-9]+/);
-  assert.match(html, /style\.css\?v=26/);
+  assert.match(html, /style\.css\?v=27/);
   assert.match(sw, /portal-cache-v[0-9]+/);
 });
 
