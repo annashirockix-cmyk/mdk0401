@@ -87,3 +87,14 @@ test("attendance report is returned only to webinar creator or admin",()=>{
 test("webinar lifecycle controls are shown only to the webinar owner/admin",()=>{
  assert.match(js,/function canManageWebinar\(w\)[\s\S]*?staff\.role==="admin"[\s\S]*?w\.createdBy/);
 });
+
+
+test("concurrent webinar attendance upserts are serialized to prevent duplicate participants",()=>{
+ const start=gs.indexOf("function webinarAttendance_");
+ const end=gs.indexOf("function saveCustomContent_",start);
+ const handler=gs.slice(start,end);
+ assert.ok(handler.includes("LockService.getScriptLock()"));
+ assert.ok(handler.includes("lock.waitLock(10000)"));
+ assert.ok(handler.includes("lock.releaseLock()"));
+ assert.ok(handler.includes("finally"));
+});
