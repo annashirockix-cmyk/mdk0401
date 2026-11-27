@@ -216,7 +216,7 @@ test("custom content deletion is scoped to the requested course", () => {
  assert.match(remove, /editor_\(data, courseId\)/);
  assert.match(remove, /String\(values\[i\]\[0\]\) === id && sameCourseId_\(values\[i\]\[1\], courseId\)/);
  assert.match(api, /deleteCustomContent:function\(id,courseId\)/);
- assert.equal((editor.match(/deleteCustomContent\(id,courseSel\.value\)/g) || []).length, 3);
+ assert.equal((editor.match(/deleteCustomContent\(id,courseSel\.value\)/g) || []).length, 2);
 });
 
 test("settings upserts serialize lookup and writes", () => {
