@@ -124,6 +124,7 @@ window.API = {
  getExamFile:function(attachmentId,examId){return fetchAPI("getExamFile",{attachmentId:attachmentId,examId:examId||""},"POST",60000);},
  deleteExamFile:function(courseId,attachmentId){return fetchAPI("deleteExamFile",{courseId:courseId,attachmentId:attachmentId},"POST",60000);},
  uploadCourseFile:function(courseId,topicId,title,fileName,dataUrl,lectureId,storageProvider){return fetchAPI("uploadCourseFile",{courseId:courseId,topicId:topicId,title:title,fileName:fileName,dataUrl:dataUrl,lectureId:lectureId||"",storageProvider:storageProvider||"portal"},"POST",60000);},
+ getCourseVideoUploadStatus:function(uploadId){return fetchAPI("getCourseVideoUploadStatus",{uploadId:uploadId},"POST",60000);},
  startCourseVideoUpload:function(data){return fetchAPI("startCourseVideoUpload",data||{},"POST",60000);},
  uploadCourseVideoChunk:function(uploadId,index,chunkBase64){return fetchAPI("uploadCourseVideoChunk",{uploadId:uploadId,index:index,chunkBase64:chunkBase64},"POST",60000);},
  finishCourseVideoUpload:function(uploadId){return fetchAPI("finishCourseVideoUpload",{uploadId:uploadId},"POST",120000);},
