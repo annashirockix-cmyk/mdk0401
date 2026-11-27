@@ -3383,12 +3383,17 @@ function webinarJwt_(domain,room,user,isHost){
 function joinWebinar_(data){
   const user=auth_(data),w=webinarById_(data.webinarId);
   if(!w)throw new Error("Вебинар не найден.");
-  if(w.status==="draft"||w.status==="cancelled")throw new Error("Вебинар ещё не опубликован или отменён.");
+  if(w.status!=="published"&&w.status!=="live")throw new Error("Вебинар не опубликован, уже завершён или отменён.");
   if(!hasCourseAccess_(user,w.courseId))throw new Error("У вас нет доступа к этой дисциплине.");
   const isHost=user.role==="admin"||(user.role==="teacher"&&w.createdBy===user.email);
   if(user.role==="teacher"&&w.createdBy!==user.email&&!hasCourseAccess_(user,w.courseId))throw new Error("Нет прав ведущего.");
-  const props=PropertiesService.getScriptProperties(),domain=String(props.getProperty("JITSI_DOMAIN")||"meet.jit.si").replace(/^https?:\/\//,"").replace(/\/.*$/,"");
+  const props=PropertiesService.getScriptProperties();
+  const configuredDomain=String(props.getProperty("JITSI_DOMAIN")||"").replace(/^https?:\/\//,"").replace(/\/.*$/,"");
+  const allowDemo=String(props.getProperty("JITSI_ALLOW_INSECURE_DEMO")||"").toLowerCase()==="true";
+  const domain=configuredDomain||(allowDemo?"meet.jit.si":"");
+  if(!domain)throw new Error("Видеосвязь не настроена: администратору нужно подключить Jitsi с JWT. Демонстрационный режим выключен.");
   const jwt=webinarJwt_(domain,w.roomName,user,isHost);
+  if(!jwt&&!allowDemo)throw new Error("Защищённый вход не настроен: проверьте JITSI_APP_ID и JITSI_APP_SECRET. Публичный режим запрещён.");
   return {success:true,id:w.id,title:w.title,roomName:w.roomName,domain:domain,jwt:jwt||"",secure:!!jwt,isHost:isHost,displayName:user.name||user.email};
 }
 function updateWebinarStatus_(data){
@@ -3409,6 +3414,7 @@ function webinarAttendance_(data){
   if(!hasCourseAccess_(user,w.courseId))throw new Error("Нет доступа к вебинару.");
   const event=String(data.event||"").toLowerCase();
   if(event!=="join"&&event!=="leave")throw new Error("Неизвестное событие посещения.");
+  if(event==="join"&&w.status!=="published"&&w.status!=="live")throw new Error("Регистрация входа доступна только для опубликованного или идущего вебинара.");
   const sh=webinarAttendanceSheet_(),values=sh.getDataRange().getValues(),map=headerMap_(sh);let rowNo=0;
   for(let i=1;i<values.length;i++)if(String(values[i][map.WebinarId]||"")===w.id&&email_(values[i][map.Email])===user.email){rowNo=i+1;break;}
   const now=new Date().toISOString();
