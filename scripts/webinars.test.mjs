@@ -9,8 +9,8 @@ const html=readFileSync(new URL("../index.html",import.meta.url),"utf8");
 const sw=readFileSync(new URL("../service-worker.js",import.meta.url),"utf8");
 
 test("webinar API routes are exposed through the authenticated API client",()=>{
- for(const action of ["getWebinars","createWebinar","joinWebinar","webinarAttendance"])assert.ok(api.includes(action));
- for(const route of ['case "getwebinars"','case "createwebinar"','case "joinwebinar"','case "webinarattendance"'])assert.ok(gs.includes(route));
+ for(const action of ["getWebinars","createWebinar","joinWebinar","webinarAttendance","updateWebinarStatus"])assert.ok(api.includes(action));
+ for(const route of ['case "getwebinars"','case "createwebinar"','case "joinwebinar"','case "webinarattendance"','case "updatewebinarstatus"'])assert.ok(gs.includes(route));
 });
 
 test("webinar records use dedicated schedule and attendance sheets",()=>{
@@ -51,4 +51,14 @@ test("webinar UI does not promise recording without a configured recording servi
  assert.ok(js.includes("требуется настройка сервера записи"));
  assert.ok(!js.includes("startRecording"));
  assert.ok(!js.includes('"recording"'));
+});
+
+
+test("webinar lifecycle changes are restricted to creator/admin and valid transitions",()=>{
+ assert.match(gs,/function updateWebinarStatus_\(data\)[\s\S]*?user\.role==="admin"[\s\S]*?w\.createdBy===user\.email/);
+ assert.match(gs,/draft:\["published","cancelled"\],published:\["live","cancelled"\],live:\["completed","cancelled"\]/);
+ assert.ok(js.includes("data-status=\"published\""));
+ assert.ok(js.includes("data-status=\"live\""));
+ assert.ok(js.includes("data-status=\"completed\""));
+ assert.ok(api.includes("updateWebinarStatus"));
 });
