@@ -214,7 +214,7 @@ test("custom content deletion is scoped to the requested course", () => {
  const remove = server.slice(start, end);
  assert.match(remove, /courseId = String\(data\.courseId \|\| data\.mdkId \|\| ""\)/);
  assert.match(remove, /editor_\(data, courseId\)/);
- assert.match(remove, /String\(values\[i\]\[0\]\) === id && sameCourseId_\(values\[i\]\[1\], courseId\)/);
+ assert.match(remove, /String\(values\[i\]\[0\] \|\| ""\) === id && sameCourseId_\(values\[i\]\[1\] \|\| "", courseId\)/);
  assert.match(api, /deleteCustomContent:function\(id,courseId\)/);
  assert.equal((editor.match(/deleteCustomContent\(id,courseSel\.value\)/g) || []).length, 2);
 });
