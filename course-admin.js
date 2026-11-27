@@ -250,7 +250,7 @@
       });
       toolbar.querySelector('[data-lec-action="link"]').addEventListener("click",()=>{
         const url=prompt("Введите адрес ссылки (https://…)");if(!url)return;
-        if(!/^https?:\\/\\//i.test(url)){alert("Для безопасности используйте ссылку с https:// или http://");return;}
+        if(!/^https?:\/\//i.test(url)){alert("Для безопасности используйте ссылку с https:// или http://");return;}
         focusEditor();document.execCommand("createLink",false,url);
       });
       editor.addEventListener("input",updateCount);editor.addEventListener("paste",()=>setTimeout(updateCount,0));updateCount();
