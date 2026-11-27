@@ -431,18 +431,16 @@
           status.textContent="Подготовка загрузки видео…";
           const resumeKey="portal-video-upload:"+courseSel.value+":"+topicId+":"+lectureId;
           const fileMeta={fileName:file.name,size:file.size,lastModified:file.lastModified,mimeType:mime};
-          let session=null,uploadedSet=new Set();
-          try{
-            const saved=JSON.parse(sessionStorage.getItem(resumeKey)||"null");
-            if(saved&&saved.uploadId&&saved.fileName===fileMeta.fileName&&saved.size===fileMeta.size&&saved.lastModified===fileMeta.lastModified&&saved.mimeType===fileMeta.mimeType){
-              status.textContent="Проверяем ранее загруженные части видео…";
-              const state=await window.API.getCourseVideoUploadStatus(saved.uploadId);
-              if(state&&state.success&&state.fileName===file.name&&Number(state.size)===file.size&&state.mimeType===mime){
-                session={uploadId:state.uploadId,chunkCount:state.chunkCount,chunkSize:state.chunkSize};
-                uploadedSet=new Set((state.uploadedChunks||[]).map(Number));
-              }else sessionStorage.removeItem(resumeKey);
-            }else if(saved)sessionStorage.removeItem(resumeKey);
-          }catch(error){try{sessionStorage.removeItem(resumeKey);}catch(ignore){}}
+          let session=null,uploadedSet=new Set(),saved=null;
+          try{saved=JSON.parse(sessionStorage.getItem(resumeKey)||"null");}catch(error){saved=null;}
+          if(saved&&saved.uploadId&&saved.fileName===fileMeta.fileName&&saved.size===fileMeta.size&&saved.lastModified===fileMeta.lastModified&&saved.mimeType===fileMeta.mimeType){
+            status.textContent="Проверяем ранее загруженные части видео…";
+            const state=await window.API.getCourseVideoUploadStatus(saved.uploadId);
+            if(!state||!state.success)throw new Error(state&&state.error||"Не удалось проверить сохранённую загрузку. Повторите попытку позже; начатые части сохранены.");
+            if(state.fileName!==file.name||Number(state.size)!==file.size||state.mimeType!==mime)throw new Error("Параметры файла не совпадают с сохранённым сеансом. Выберите исходный файл.");
+            session={uploadId:state.uploadId,chunkCount:state.chunkCount,chunkSize:state.chunkSize};
+            uploadedSet=new Set((state.uploadedChunks||[]).map(Number));
+          }else if(saved){try{sessionStorage.removeItem(resumeKey);}catch(ignore){}}
           if(!session){
             status.textContent="Подготовка новой загрузки видео…";
             session=await window.API.startCourseVideoUpload({courseId:courseSel.value,topicId:topicId,lectureId:lectureId,fileName:file.name,mimeType:mime,size:file.size});
